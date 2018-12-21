@@ -111,9 +111,9 @@ Always use [string resources](https://developer.android.com/guide/topics/resourc
 
 As much as possible to facilitate simpler, more modular and more testable components you should follow the Dependency Inversion principle in Collect Code. An example tutorial on this concept can be found [here](https://www.seadowg.com/dip-lesson/).
 
-Because many Android components don't allow us control over their constructors Collect uses [Dagger](https://google.github.io/dagger/) to 'inject' dependencies. The configuration for Dagger can be found in `AppDepdendencyComponent`.
+Because many Android components (Activity and Fragment for instance) don't allow us control over their constructors Collect uses [Dagger](https://google.github.io/dagger/) to 'inject' dependencies. The configuration for Dagger can be found in `AppDepdendencyComponent`.
 
-While it's important to also read the Dagger documentation we've provided some basic instructions on how to use Dagger within Collect below.
+While it's important to read the Dagger [documentation](https://google.github.io/dagger/users-guide) we've provided some basic instructions on how to use Dagger within Collect below.
 
 ### Providing dependencies
 
@@ -146,9 +146,20 @@ MyDependency dependency;
 To have Dagger inject the dependency you need to hook the injection into the Activity's `onCreate` (as this is the first part of the lifecycle we have access to):
 
 ```java
+@Override
 public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(bundle);
-    getComponent().inject(this);
+    super.onCreate(savedInstanceState);
+    DaggerUtils.getComponent(this).inject(this);
+}
+```
+
+For Fragment objects you should hook into the `onAttach` lifecycle method instead:
+
+```java
+@Override
+public void onAttach(Activity activity) {
+    super.onAttach(activity);
+    DaggerUtils.getComponent(activity).inject(this);
 }
 ```
 

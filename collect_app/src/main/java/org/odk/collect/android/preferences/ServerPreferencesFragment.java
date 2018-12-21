@@ -21,12 +21,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.preference.EditTextPreference;
 //import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.v7.content.res.AppCompatResources;
 import android.telephony.PhoneNumberUtils;
 import android.text.InputFilter;
@@ -44,6 +42,7 @@ import com.google.gson.reflect.TypeToken;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
@@ -94,7 +93,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Collect.getInstance().getComponent().inject(this);
+
     }
 
     /*
@@ -105,6 +104,8 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        DaggerUtils.getComponent(activity).inject(this);
+
         ((PreferencesActivity) activity).setOnBackPressedListener(this);
     }
 

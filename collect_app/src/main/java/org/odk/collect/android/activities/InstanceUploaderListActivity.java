@@ -43,6 +43,7 @@ import com.google.android.gms.analytics.Tracker;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -137,7 +138,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
         super.onCreate(savedInstanceState);
         Timber.i("onCreate");
 
-        getComponent().inject(this);
+        DaggerUtils.getComponent(this).inject(this);
 
         // set title
         setTitle(getString(R.string.send_data));
