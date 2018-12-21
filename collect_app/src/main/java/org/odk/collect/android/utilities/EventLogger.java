@@ -7,7 +7,7 @@ import android.os.SystemClock;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.logic.Audit;
-import org.odk.collect.android.tasks.TimerSaveTask;
+import org.odk.collect.android.tasks.EventSaveTask;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,15 +17,16 @@ import timber.log.Timber;
 import static org.odk.collect.android.logic.FormController.AUDIT_FILE_NAME;
 
 /**
- * Handle logging of timer events and pass them to an Async task to append to a file
+ * Handle logging of events (which contain time and might contain location coordinates),
+ * and pass them to an Async task to append to a file
  * Notes:
  * 1) If the user has saved the form, then resumes editing, then exits without saving then the timing data during the
  * second editing session will be saved.  This is OK as it records user activity.  However if the user exits
  * without saving and they have never saved the form then the timing data is lost as the form editing will be
  * restarted from scratch.
- * 2) The times for questions in a group are not shown.  Only the time for the group is shown.
+ * 2) The events for questions in a field-list group are not shown.  Only the event for the group is shown.
  */
-public class TimerLogger {
+public class EventLogger {
 
     public enum EventTypes {
         FEC,                // FEC, Real type defined in FormEntryController
@@ -156,47 +157,47 @@ public class TimerLogger {
     private static AsyncTask saveTask;
     private ArrayList<Event> events;
     private String filename;
-    private File timerlogFile;
+    private File auditFile;
     private long surveyOpenTime;
     private long surveyOpenElapsedTime;
-    private final boolean timerEnabled;              // Set true of the timer logger is enabled
+    private final boolean auditEnabled;              // Set true of the event logger is enabled
     private final Audit audit;
 
-    public TimerLogger(File instanceFile, Audit audit) {
+    public EventLogger(File instanceFile, Audit audit) {
         this.audit = audit;
 
         /*
-         * The timer logger is enabled if the meta section of the form contains a logging entry
+         * The event logger is enabled if the meta section of the form contains a logging entry
          *      <orx:audit />
          */
-        timerEnabled = audit != null;
+        auditEnabled = audit != null;
 
-        if (timerEnabled) {
+        if (auditEnabled) {
             filename = AUDIT_FILE_NAME;
             if (instanceFile != null) {
                 File instanceFolder = instanceFile.getParentFile();
-                timerlogFile = new File(instanceFolder.getPath() + File.separator + filename);
+                auditFile = new File(instanceFolder.getPath() + File.separator + filename);
             }
             events = new ArrayList<>();
         }
     }
 
     public void setPath(String instancePath) {
-        if (timerEnabled) {
-            timerlogFile = new File(instancePath + File.separator + filename);
+        if (auditEnabled) {
+            auditFile = new File(instancePath + File.separator + filename);
         }
     }
 
     /*
      * Log a new event
      */
-    public void logTimerEvent(EventTypes eventType,
-                              int fecType,
-                              TreeReference ref,
-                              boolean advancingPage,
-                              boolean writeImmediatelyToDisk) {
+    public void logEvent(EventTypes eventType,
+                         int fecType,
+                         TreeReference ref,
+                         boolean advancingPage,
+                         boolean writeImmediatelyToDisk) {
 
-        if (timerEnabled) {
+        if (auditEnabled) {
 
             Timber.i("Event recorded: %s : %s", eventType, fecType);
             // Calculate the time and add the event to the events array
@@ -266,7 +267,7 @@ public class TimerLogger {
      */
     public void exitView() {
 
-        if (timerEnabled) {
+        if (auditEnabled) {
 
             // Calculate the time and add the event to the events array
             long end = getEventTime();
@@ -283,15 +284,15 @@ public class TimerLogger {
         if (saveTask == null || saveTask.getStatus() == AsyncTask.Status.FINISHED) {
 
             Event[] eventArray = events.toArray(new Event[events.size()]);
-            if (timerlogFile != null) {
-                saveTask = new TimerSaveTask(timerlogFile, audit.collectLocationCoordinates()).execute(eventArray);
+            if (auditFile != null) {
+                saveTask = new EventSaveTask(auditFile, audit.collectLocationCoordinates()).execute(eventArray);
             } else {
-                Timber.e("timerlogFile null when attempting to write events.");
+                Timber.e("auditFile null when attempting to write events.");
             }
             events = new ArrayList<>();
 
         } else {
-            Timber.i("Queueing Timer Event");
+            Timber.i("Queueing Event");
         }
     }
 

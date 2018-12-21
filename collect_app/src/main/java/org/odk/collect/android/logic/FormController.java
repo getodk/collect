@@ -49,7 +49,7 @@ import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
-import org.odk.collect.android.utilities.TimerLogger;
+import org.odk.collect.android.utilities.EventLogger;
 import org.odk.collect.android.views.ODKView;
 
 import java.io.File;
@@ -88,9 +88,9 @@ public class FormController {
     public static final String AUDIT_FILE_NAME = "audit.csv";
 
     /*
-     * Store the timerLogger object with the form controller state
+     * Store the eventLogger object with the form controller state
      */
-    private TimerLogger timerLogger;
+    private EventLogger eventLogger;
 
     /**
      * OpenRosa metadata of a form instance.
@@ -176,15 +176,15 @@ public class FormController {
         return indexWaitingForData;
     }
 
-    public TimerLogger getTimerLogger() {
-        if (timerLogger == null) {
-            setTimerLogger(new TimerLogger(getInstanceFile(), getSubmissionMetadata().audit));
+    public EventLogger getEventLogger() {
+        if (eventLogger == null) {
+            setEventLogger(new EventLogger(getInstanceFile(), getSubmissionMetadata().audit));
         }
-        return timerLogger;
+        return eventLogger;
     }
 
-    private void setTimerLogger(TimerLogger logger) {
-        timerLogger = logger;
+    private void setEventLogger(EventLogger logger) {
+        eventLogger = logger;
     }
 
     /**
