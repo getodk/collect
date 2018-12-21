@@ -26,8 +26,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore.Images;
-import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -381,7 +379,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                 } catch (RuntimeException e) {
                     createErrorDialog(e.getMessage(), EXIT);
-                    Timber.e(e);
                     return;
                 }
             }
@@ -429,6 +426,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 readPhoneStatePermissionRequestNeeded = savedInstanceState.getBoolean(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED);
             }
         }
+
     }
 
     private void loadForm() {
@@ -463,10 +461,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     if(formInfo == null) { // smap
                         formInfo = Collect.getInstance().getFormInfo();
                     }
-                    mFormId = formInfo.getFormID();
 
-                    //formLoaderTask.execute(formPath, mFormId);    smap
-                    formLoaderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, formPath, mFormId);        // smap
+                    if(formInfo == null) {      // Smap formInfo might still be null
+                        mFormId = formInfo.getFormID();
+                    }
+                    formLoaderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, formPath, mFormId);        // smap execute on a different thread
                 }
                 return;
             }

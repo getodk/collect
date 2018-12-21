@@ -381,13 +381,15 @@ public class SmapTaskMapFragment extends Fragment
                 // Get closest marker
                 double minDistance = 1000;
                 Marker selMarker = null;
-                for(Marker marker : markers) {
-                    double roughDistance = Math.sqrt(
-                            Math.pow(marker.getPosition().latitude - latLng.latitude, 2) +
-                                    Math.pow(marker.getPosition().longitude - latLng.longitude, 2));
-                    if(roughDistance < minDistance) {
-                        minDistance = roughDistance;
-                        selMarker = marker;
+                if(markers != null) {
+                    for (Marker marker : markers) {
+                        double roughDistance = Math.sqrt(
+                                Math.pow(marker.getPosition().latitude - latLng.latitude, 2) +
+                                        Math.pow(marker.getPosition().longitude - latLng.longitude, 2));
+                        if (roughDistance < minDistance) {
+                            minDistance = roughDistance;
+                            selMarker = marker;
+                        }
                     }
                 }
                 if(selMarker != null) {
