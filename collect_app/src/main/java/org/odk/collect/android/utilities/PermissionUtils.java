@@ -52,7 +52,7 @@ public class PermissionUtils {
         this.activity = activity;
     }
 
-    public static boolean isStoragePermissionGranted(Context context) {
+    public static boolean areStoragePermissionsGranted(Context context) {
         return isPermissionGranted(context,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -62,13 +62,13 @@ public class PermissionUtils {
         return isPermissionGranted(context, Manifest.permission.CAMERA);
     }
 
-    public static boolean isLocationPermissionGranted(Context context) {
+    public static boolean areLocationPermissionsGranted(Context context) {
         return isPermissionGranted(context,
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
     }
 
-    public static boolean isCameraAndRecordAudioPermissionsGranted(Context context) {
+    public static boolean areCameraAndRecordAudioPermissionsGranted(Context context) {
         return isPermissionGranted(context,
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO);
