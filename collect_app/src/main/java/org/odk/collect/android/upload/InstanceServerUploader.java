@@ -71,7 +71,7 @@ public class InstanceServerUploader extends InstanceUploader {
 
         // Used to determine if attachments should be sent for Aggregate < 0.9x servers
         boolean openRosaServer = false;
-
+        openRosaServer = true;  // smap always assume open rosa sever even though smap does not return the submissionUri after a head request
         // We already issued a head request and got a response, so we know it was an
         // OpenRosa-compliant server. We also know the proper URL to send the submission to and
         // the proper scheme.
