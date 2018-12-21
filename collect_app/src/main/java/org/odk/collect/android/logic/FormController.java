@@ -178,7 +178,7 @@ public class FormController {
 
     public TimerLogger getTimerLogger() {
         if (timerLogger == null) {
-            setTimerLogger(new TimerLogger(getInstanceFile(), this));
+            setTimerLogger(new TimerLogger(getInstanceFile(), getSubmissionMetadata().audit));
         }
         return timerLogger;
     }
