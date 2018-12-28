@@ -4,6 +4,8 @@ import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.utilities.EventLogger;
 
 public class Event {
+    private static final String COMMA = ",";
+
     private final long start;
     public EventLogger.EventTypes eventType;
     public int fecType;
@@ -115,9 +117,9 @@ public class Event {
                 break;
         }
 
-        String log = textValue + "," + node + "," + start + "," + (end != 0 ? end : "");
+        String log = textValue + COMMA + node + COMMA + start + COMMA + (end != 0 ? end : "");
         if (collectLocationCoordinates) {
-            log += "," + latitude + "," + longitude + "," + accuracy;
+            log += COMMA + latitude + COMMA + longitude + COMMA + accuracy;
         }
         return log;
     }
