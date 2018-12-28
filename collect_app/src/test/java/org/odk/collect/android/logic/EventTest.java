@@ -32,6 +32,7 @@ import static org.odk.collect.android.utilities.EventLogger.EventTypes.FORM_FINA
 import static org.odk.collect.android.utilities.EventLogger.EventTypes.FORM_RESUME;
 import static org.odk.collect.android.utilities.EventLogger.EventTypes.FORM_SAVE;
 import static org.odk.collect.android.utilities.EventLogger.EventTypes.FORM_START;
+import static org.odk.collect.android.utilities.EventLogger.EventTypes.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE;
 import static org.odk.collect.android.utilities.EventLogger.EventTypes.HIERARCHY;
 import static org.odk.collect.android.utilities.EventLogger.EventTypes.SAVE_ERROR;
 
@@ -125,5 +126,10 @@ public class EventTest {
         assertNotNull(event);
         assertFalse(event.isIntervalViewEvent());
         assertEquals("delete repeat,,1545392727685,", event.toString());
+
+        event = new Event(START_TIME, GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, 0, "");
+        assertNotNull(event);
+        assertFalse(event.isIntervalViewEvent());
+        assertEquals("google play services not available,,1545392727685,", event.toString());
     }
 }

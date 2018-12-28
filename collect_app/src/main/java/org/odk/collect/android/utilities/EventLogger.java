@@ -45,7 +45,8 @@ public class EventLogger {
         SAVE_ERROR,         // Error in save
         FINALIZE_ERROR,     // Error in finalize
         CONSTRAINT_ERROR,   // Constraint or missing answer error on save
-        DELETE_REPEAT       // Delete a repeat group
+        DELETE_REPEAT,      // Delete a repeat group
+        GOOGLE_PLAY_SERVICES_NOT_AVAILABLE // Google Play Services are not available
     }
 
     private static AsyncTask saveTask;

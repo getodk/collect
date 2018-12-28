@@ -25,6 +25,8 @@ import io.reactivex.annotations.Nullable;
 
 public class Audit {
 
+    private static final long MIN_ALLOWED_LOCATION_INTERVAL = 1000;
+
     /**
      * The locationPriority of location requests
      */
@@ -33,7 +35,7 @@ public class Audit {
     /**
      * The desired minimum interval in seconds that the location will be fetched
      */
-    private final Integer locationInterval;
+    private final Long locationInterval;
 
     /**
      * The time in milliseconds that location will be valid
@@ -42,7 +44,7 @@ public class Audit {
 
     Audit(String mode, String locationInterval, String locationAge) {
         this.locationPriority = mode != null ? getMode(mode) : null;
-        this.locationInterval = locationInterval != null ? Integer.parseInt(locationInterval) : null;
+        this.locationInterval = locationInterval != null ? Long.parseLong(locationInterval) * 1000 : null;
         this.locationAge = locationAge != null ? Long.parseLong(locationAge) * 1000 : null;
     }
 
@@ -67,8 +69,12 @@ public class Audit {
     }
 
     @Nullable
-    public Integer getLocationInterval() {
-        return locationInterval > 0 ? locationInterval : 1;
+    public Long getLocationInterval() {
+        return locationInterval == null
+                ? null
+                : locationInterval > MIN_ALLOWED_LOCATION_INTERVAL
+                    ? locationInterval
+                    : MIN_ALLOWED_LOCATION_INTERVAL;
     }
 
     @Nullable

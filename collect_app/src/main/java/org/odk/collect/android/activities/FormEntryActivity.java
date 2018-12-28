@@ -98,6 +98,7 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.location.client.GoogleLocationClient;
 import org.odk.collect.android.location.client.LocationClient;
+import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.logic.Audit;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
@@ -601,7 +602,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         googleLocationClient = new GoogleLocationClient(this);
         googleLocationClient.setListener(this);
         googleLocationClient.setPriority(audit.getLocationPriority());
-        googleLocationClient.setUpdateIntervals((long) audit.getLocationInterval() * 1000, (long) audit.getLocationInterval() * 1000);
+        googleLocationClient.setUpdateIntervals((long) audit.getLocationInterval(), (long) audit.getLocationInterval());
         googleLocationClient.start();
     }
 
@@ -2126,7 +2127,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     protected void onStart() {
         super.onStart();
         FormController formController = getFormController();
-        if (collectLocationCoordinates(formController)) {
+        if (collectLocationCoordinates(formController) && LocationClients.areGooglePlayServicesAvailable(this)) {
             setUpLocationClient(formController.getSubmissionMetadata().audit);
         }
     }
@@ -2343,11 +2344,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         final FormController formController = task.getFormController();
         if (formController != null) {
             if (collectLocationCoordinates(formController)) {
-                setUpLocationClient(formController.getSubmissionMetadata().audit);
-                if (firstFormLoad) {
-                    new BackgroundLocationCollectingDialog().show(getSupportFragmentManager(), BackgroundLocationCollectingDialog.BACKGROUND_LOCATION_COLLECTING_DIALOG_TAG);
+                if (LocationClients.areGooglePlayServicesAvailable(this)) {
+                    setUpLocationClient(formController.getSubmissionMetadata().audit);
+                    if (firstFormLoad) {
+                        new BackgroundLocationCollectingDialog().show(getSupportFragmentManager(), BackgroundLocationCollectingDialog.BACKGROUND_LOCATION_COLLECTING_DIALOG_TAG);
+                    } else {
+                        SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_collecting_dialog__message), 10000);
+                    }
                 } else {
-                    SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_collecting_dialog__message), 10000);
+                    SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.google_play_services_not_available), 7000);
+                    formController.getEventLogger().logEvent(EventLogger.EventTypes.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, 0, null, true);
                 }
             }
 

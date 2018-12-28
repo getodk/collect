@@ -112,6 +112,9 @@ public class Event {
             case DELETE_REPEAT:
                 textValue = "delete repeat";
                 break;
+            case GOOGLE_PLAY_SERVICES_NOT_AVAILABLE:
+                textValue = "google play services not available";
+                break;
             default:
                 textValue = "Unknown Event Type: " + eventType;
                 break;
