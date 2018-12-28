@@ -194,7 +194,6 @@ public class EventLogger {
     public void logEvent(EventTypes eventType,
                          int fecType,
                          TreeReference ref,
-                         boolean advancingPage,
                          boolean writeImmediatelyToDisk) {
 
         if (auditEnabled) {

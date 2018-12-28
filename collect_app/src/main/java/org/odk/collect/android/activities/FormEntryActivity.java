@@ -994,7 +994,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (formController != null) {
                     formController.getEventLogger().exitView();
                     formController.getEventLogger().logEvent(EventLogger.EventTypes.HIERARCHY,
-                            0, null, false, true);
+                            0, null, true);
                 }
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);
@@ -1136,7 +1136,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         setTitle(formController.getFormTitle());
 
         formController.getEventLogger().logEvent(EventLogger.EventTypes.FEC,
-                event, formController.getFormIndex().getReference(), advancingPage, true);
+                event, formController.getFormIndex().getReference(), true);
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
@@ -1794,7 +1794,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 FormController formController = getFormController();
                 switch (i) {
                     case BUTTON_POSITIVE: // yes
-                        formController.getEventLogger().logEvent(EventLogger.EventTypes.DELETE_REPEAT, 0, null, false, true);
+                        formController.getEventLogger().logEvent(EventLogger.EventTypes.DELETE_REPEAT, 0, null, true);
                         formController.deleteRepeat();
                         showNextView();
                         break;
@@ -1888,7 +1888,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                     FormController formController = getFormController();
                     if (formController != null) {
-                        formController.getEventLogger().logEvent(EventLogger.EventTypes.FORM_EXIT, 0, null, false, true);
+                        formController.getEventLogger().logEvent(EventLogger.EventTypes.FORM_EXIT, 0, null, true);
                     }
                     removeTempInstance();
                     MediaManager.INSTANCE.revertChanges();
@@ -2386,7 +2386,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         formController.setInstanceFile(instanceFile);
                     }
 
-                    formController.getEventLogger().logEvent(EventLogger.EventTypes.FORM_START, 0, null, false, true);
+                    formController.getEventLogger().logEvent(EventLogger.EventTypes.FORM_START, 0, null, true);
                 } else {
                     Intent reqIntent = getIntent();
                     boolean showFirst = reqIntent.getBooleanExtra("start", false);
@@ -2405,8 +2405,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                         String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-                            formController.getEventLogger().logEvent(EventLogger.EventTypes.FORM_RESUME, 0, null, false, true);
-                            formController.getEventLogger().logEvent(EventLogger.EventTypes.HIERARCHY, 0, null, false, true);
+                            formController.getEventLogger().logEvent(EventLogger.EventTypes.FORM_RESUME, 0, null, true);
+                            formController.getEventLogger().logEvent(EventLogger.EventTypes.HIERARCHY, 0, null, true);
                             startActivity(new Intent(this, FormHierarchyActivity.class));
                             return; // so we don't show the intro screen before jumping to the hierarchy
                         } else {
@@ -2416,7 +2416,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             finish();
                         }
                     } else {
-                        formController.getEventLogger().logEvent(EventLogger.EventTypes.FORM_RESUME, 0, null, false, true);
+                        formController.getEventLogger().logEvent(EventLogger.EventTypes.FORM_RESUME, 0, null, true);
                     }
                 }
 
@@ -2454,15 +2454,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         switch (saveStatus) {
             case SaveToDiskTask.SAVED:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
-                formController.getEventLogger().logEvent(EventLogger.EventTypes.FORM_SAVE, 0, null, false, false);
+                formController.getEventLogger().logEvent(EventLogger.EventTypes.FORM_SAVE, 0, null, false);
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
-                formController.getEventLogger().logEvent(EventLogger.EventTypes.FORM_SAVE, 0, null, false, false);
+                formController.getEventLogger().logEvent(EventLogger.EventTypes.FORM_SAVE, 0, null, false);
                 if (saveResult.isComplete()) {
-                    formController.getEventLogger().logEvent(EventLogger.EventTypes.FORM_EXIT, 0, null, false, false);
+                    formController.getEventLogger().logEvent(EventLogger.EventTypes.FORM_EXIT, 0, null, false);
                     // Force writing of audit since we are exiting
-                    formController.getEventLogger().logEvent(EventLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);
+                    formController.getEventLogger().logEvent(EventLogger.EventTypes.FORM_FINALIZE, 0, null, true);
 
                     // Request auto-send if app-wide auto-send is enabled or the form that was just
                     // finalized specifies that it should always be auto-sent.
@@ -2472,14 +2472,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                 } else {
                     // Force writing of audit since we are exiting
-                    formController.getEventLogger().logEvent(EventLogger.EventTypes.FORM_EXIT, 0, null, false, true);
+                    formController.getEventLogger().logEvent(EventLogger.EventTypes.FORM_EXIT, 0, null, true);
                 }
 
                 finishReturnInstance();
                 break;
             case SaveToDiskTask.SAVE_ERROR:
                 String message;
-                formController.getEventLogger().logEvent(EventLogger.EventTypes.SAVE_ERROR, 0, null, false, true);
+                formController.getEventLogger().logEvent(EventLogger.EventTypes.SAVE_ERROR, 0, null, true);
                 if (saveResult.getSaveErrorMessage() != null) {
                     message = getString(R.string.data_saved_error) + ": "
                             + saveResult.getSaveErrorMessage();
@@ -2489,7 +2489,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 ToastUtils.showLongToast(message);
                 break;
             case SaveToDiskTask.ENCRYPTION_ERROR:
-                formController.getEventLogger().logEvent(EventLogger.EventTypes.FINALIZE_ERROR, 0, null, false, true);
+                formController.getEventLogger().logEvent(EventLogger.EventTypes.FINALIZE_ERROR, 0, null, true);
                 ToastUtils.showLongToast(String.format(getString(R.string.encryption_error_message),
                         saveResult.getSaveErrorMessage()));
                 finishReturnInstance();
@@ -2497,7 +2497,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
                 formController.getEventLogger().exitView();
-                formController.getEventLogger().logEvent(EventLogger.EventTypes.CONSTRAINT_ERROR, 0, null, false, true);
+                formController.getEventLogger().logEvent(EventLogger.EventTypes.CONSTRAINT_ERROR, 0, null, true);
                 refreshCurrentView();
 
                 // get constraint behavior preference value with appropriate default
