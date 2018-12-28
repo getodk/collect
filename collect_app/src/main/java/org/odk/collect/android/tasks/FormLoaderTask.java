@@ -123,15 +123,29 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         final String formPath = path[0];
         final File formXml = new File(formPath);
 
+        // set paths to /sdcard/odk/forms/formfilename-media/
+        final String formFileName = formXml.getName().substring(0, formXml.getName().lastIndexOf("."));
+        final File formMediaDir = new File(formXml.getParent(), formFileName + "-media");
+
+        final ReferenceManager referenceManager = ReferenceManager.instance();
+
+        // Remove previous forms
+        referenceManager.clearSession();
+
+        // This should get moved to the Application Class
+        if (referenceManager.getFactories().length == 0) {
+            // this is /sdcard/odk
+            referenceManager.addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
+        }
+
+        addSessionRootTranslators(formFileName, referenceManager,
+                "images", "image", "audio", "video", "file");
+
         final FormDef formDef = createFormDefFromCacheOrXml(formPath, formXml);
 
         if (errorMsg != null || formDef == null) {
             return null;
         }
-
-        // set paths to /sdcard/odk/forms/formfilename-media/
-        final String formFileName = formXml.getName().substring(0, formXml.getName().lastIndexOf("."));
-        final File formMediaDir = new File(formXml.getParent(), formFileName + "-media");
 
         externalDataManager = new ExternalDataManagerImpl(formMediaDir);
 
@@ -181,26 +195,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             }
         }
 
-        // Remove previous forms
-        ReferenceManager.instance().clearSession();
-
         processItemSets(formMediaDir);
-
-        // This should get moved to the Application Class
-        if (ReferenceManager.instance().getFactories().length == 0) {
-            // this is /sdcard/odk
-            ReferenceManager.instance().addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
-        }
-
-        // Set jr://... to point to /sdcard/odk/forms/filename-media/
-        ReferenceManager.instance().addSessionRootTranslator(
-                new RootTranslator("jr://images/", "jr://file/forms/" + formFileName + "-media/"));
-        ReferenceManager.instance().addSessionRootTranslator(
-                new RootTranslator("jr://image/", "jr://file/forms/" + formFileName + "-media/"));
-        ReferenceManager.instance().addSessionRootTranslator(
-                new RootTranslator("jr://audio/", "jr://file/forms/" + formFileName + "-media/"));
-        ReferenceManager.instance().addSessionRootTranslator(
-                new RootTranslator("jr://video/", "jr://file/forms/" + formFileName + "-media/"));
 
         final FormController fc = new FormController(formMediaDir, fec, instancePath == null ? null
                 : new File(instancePath));
@@ -216,6 +211,14 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
         data = new FECWrapper(fc, usedSavepoint);
         return data;
+    }
+
+    private void addSessionRootTranslators(String formFileName, ReferenceManager referenceManager, String... hostStrings) {
+        // Set jr://... to point to /sdcard/odk/forms/filename-media/
+        final String translatedPrefix = String.format("jr://file/forms/%s-media/", formFileName);
+        for (String t : hostStrings) {
+            referenceManager.addSessionRootTranslator(new RootTranslator(String.format("jr://%s/", t), translatedPrefix));
+        }
     }
 
     private FormDef createFormDefFromCacheOrXml(String formPath, File formXml) {
