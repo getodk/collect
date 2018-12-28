@@ -4,7 +4,7 @@ package org.odk.collect.android.tasks;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
-import org.odk.collect.android.utilities.EventLogger;
+import org.odk.collect.android.logic.Event;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -15,7 +15,7 @@ import timber.log.Timber;
 /**
  * Background task for appending events to the event log
  */
-public class EventSaveTask extends AsyncTask<EventLogger.Event, Void, Void> {
+public class EventSaveTask extends AsyncTask<Event, Void, Void> {
     private final @NonNull File file;
     private final boolean collectLocationCoordinates;
 
@@ -28,7 +28,7 @@ public class EventSaveTask extends AsyncTask<EventLogger.Event, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(EventLogger.Event... params) {
+    protected Void doInBackground(Event... params) {
 
         FileWriter fw = null;
         try {
@@ -38,7 +38,7 @@ public class EventSaveTask extends AsyncTask<EventLogger.Event, Void, Void> {
                 fw.write(getHeader());
             }
             if (params.length > 0) {
-                for (EventLogger.Event ev : params) {
+                for (Event ev : params) {
                     fw.write(ev.toString() + "\n");
                     Timber.i("Log audit Event: %s", ev.toString());
                 }
