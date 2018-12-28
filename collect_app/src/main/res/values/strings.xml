@@ -656,4 +656,6 @@
     <string name="sms_invalid_phone_number_description">Set a destination phone number for SMS submissions or change your transport type.</string>
     <string name="notification_channel_name">General notifications</string>
     <string name="corrupt_imported_preferences_error">Current settings are corrupt. From the admin settings, reset settings or import working ones.</string>
+    <string name="background_location_collecting_dialog_title">Background location collecting</string>
+    <string name="background_location_collecting_dialog__message">This form continuously collects your location in the background and includes it with the form data. Disable GPS or revoke location permissions to fill the form without any location data.</string>
 </resources>

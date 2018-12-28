@@ -86,6 +86,7 @@ import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
+import org.odk.collect.android.fragments.dialogs.BackgroundLocationCollectingDialog;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
@@ -2342,6 +2343,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (formController != null) {
             if (collectLocationCoordinates(formController)) {
                 setUpLocationClient(formController.getSubmissionMetadata().audit);
+                if (firstFormLoad) {
+                    new BackgroundLocationCollectingDialog().show(getSupportFragmentManager(), BackgroundLocationCollectingDialog.BACKGROUND_LOCATION_COLLECTING_DIALOG_TAG);
+                }
             }
 
             if (readPhoneStatePermissionRequestNeeded) {
