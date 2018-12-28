@@ -126,6 +126,7 @@ import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
@@ -2345,6 +2346,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 setUpLocationClient(formController.getSubmissionMetadata().audit);
                 if (firstFormLoad) {
                     new BackgroundLocationCollectingDialog().show(getSupportFragmentManager(), BackgroundLocationCollectingDialog.BACKGROUND_LOCATION_COLLECTING_DIALOG_TAG);
+                } else {
+                    SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_collecting_dialog__message), 10000);
                 }
             }
 
