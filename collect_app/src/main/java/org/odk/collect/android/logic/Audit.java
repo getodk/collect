@@ -68,7 +68,7 @@ public class Audit {
 
     @Nullable
     public Integer getLocationInterval() {
-        return locationInterval;
+        return locationInterval > 0 ? locationInterval : 1;
     }
 
     @Nullable
