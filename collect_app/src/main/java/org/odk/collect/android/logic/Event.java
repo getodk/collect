@@ -12,7 +12,6 @@ public class Event {
     private String longitude;
     private String accuracy;
     private boolean collectLocationCoordinates;
-
     private long end;
     public boolean endTimeSet;
 
@@ -24,9 +23,6 @@ public class Event {
         this.eventType = eventType;
         this.fecType = fecType;
         this.node = node;
-
-        end = 0;
-        endTimeSet = false;
     }
 
     /*
