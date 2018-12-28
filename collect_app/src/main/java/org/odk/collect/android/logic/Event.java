@@ -8,6 +8,10 @@ public class Event {
     public EventLogger.EventTypes eventType;
     public int fecType;
     private final String node;
+    private String latitude;
+    private String longitude;
+    private String accuracy;
+    private boolean collectLocationCoordinates;
 
     private long end;
     public boolean endTimeSet;
@@ -43,12 +47,17 @@ public class Event {
      * Mark the end of an interval event
      */
     public void setEnd(long endTime) {
-
         if (!endTimeSet && isIntervalViewEvent()) {
             this.end = endTime;
             this.endTimeSet = true;
         }
+    }
 
+    public void setLocationCoordinates(String latitude, String longitude, String accuracy) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.accuracy = accuracy;
+        collectLocationCoordinates = true;
     }
 
     /*
@@ -109,6 +118,11 @@ public class Event {
                 textValue = "Unknown Event Type: " + eventType;
                 break;
         }
-        return textValue + "," + node + "," + start + "," + (end != 0 ? end : "");
+
+        String log = textValue + "," + node + "," + start + "," + (end != 0 ? end : "");
+        if (collectLocationCoordinates) {
+            log += "," + latitude + "," + longitude + "," + accuracy;
+        }
+        return log;
     }
 }
