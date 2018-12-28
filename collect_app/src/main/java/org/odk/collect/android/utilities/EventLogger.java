@@ -32,7 +32,7 @@ import static org.odk.collect.android.logic.FormController.AUDIT_FILE_NAME;
  */
 public class EventLogger {
 
-    private final List<Location> locations = new ArrayList<>();
+    private List<Location> locations = new ArrayList<>();
 
     public enum EventTypes {
         FEC,                // FEC, Real type defined in FormEntryController
@@ -215,6 +215,8 @@ public class EventLogger {
 
     @Nullable
     private Location getMostAccurateLocation() {
+        removeExpiredLocations();
+
         Location bestLocation = null;
         if (!locations.isEmpty()) {
             for (Location location : locations) {
@@ -224,5 +226,21 @@ public class EventLogger {
             }
         }
         return bestLocation;
+    }
+
+    private void removeExpiredLocations() {
+        if (!locations.isEmpty()) {
+            List<Location> locationsTemporaryList = new ArrayList<>(locations);
+
+            for (int i = locations.size() - 1; i > 0; i--) {
+                if (System.currentTimeMillis() - locations.get(i).getTime() > (audit.getLocationAge() * 1000)) {
+                    locationsTemporaryList.remove(i);
+                } else {
+                    break;
+                }
+            }
+
+            locations = new ArrayList<>(locationsTemporaryList);
+        }
     }
 }
