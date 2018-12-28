@@ -36,14 +36,14 @@ public class Audit {
     private final Integer locationInterval;
 
     /**
-     * The time in seconds that location will be valid
+     * The time in milliseconds that location will be valid
      */
-    private final Integer locationAge;
+    private final Long locationAge;
 
     Audit(String mode, String locationInterval, String locationAge) {
         this.locationPriority = mode != null ? getMode(mode) : null;
         this.locationInterval = locationInterval != null ? Integer.parseInt(locationInterval) : null;
-        this.locationAge = locationAge != null ? Integer.parseInt(locationAge) : null;
+        this.locationAge = locationAge != null ? Long.parseLong(locationAge) * 1000 : null;
     }
 
     private LocationClient.Priority getMode(@NonNull String mode) {
@@ -72,7 +72,7 @@ public class Audit {
     }
 
     @Nullable
-    public Integer getLocationAge() {
+    public Long getLocationAge() {
         return locationAge;
     }
 
