@@ -15,6 +15,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.annotations.Nullable;
 import timber.log.Timber;
 
 import static org.odk.collect.android.logic.FormController.AUDIT_FILE_NAME;
@@ -107,6 +108,14 @@ public class EventLogger {
             }
 
             Event newEvent = new Event(start, eventType, fecType, node);
+
+            if (audit.collectLocationCoordinates()) {
+                Location location = getMostAccurateLocation();
+                String latitude = location != null ? Double.toString(location.getLatitude()) : "";
+                String longitude = location != null ? Double.toString(location.getLongitude()) : "";
+                String accuracy = location != null ? Double.toString(location.getAccuracy()) : "";
+                newEvent.setLocationCoordinates(latitude, longitude, accuracy);
+            }
 
             /*
              * Close any existing interval events if the view is being exited
@@ -202,5 +211,18 @@ public class EventLogger {
 
     public void addLocation(Location location) {
         locations.add(location);
+    }
+
+    @Nullable
+    private Location getMostAccurateLocation() {
+        Location bestLocation = null;
+        if (!locations.isEmpty()) {
+            for (Location location : locations) {
+                if (bestLocation == null || location.getAccuracy() < bestLocation.getAccuracy()) {
+                    bestLocation = location;
+                }
+            }
+        }
+        return bestLocation;
     }
 }
