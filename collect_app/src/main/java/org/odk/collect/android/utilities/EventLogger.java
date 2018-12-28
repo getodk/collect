@@ -1,6 +1,7 @@
 
 package org.odk.collect.android.utilities;
 
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 
@@ -12,6 +13,7 @@ import org.odk.collect.android.tasks.EventSaveTask;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -28,6 +30,8 @@ import static org.odk.collect.android.logic.FormController.AUDIT_FILE_NAME;
  * 2) The events for questions in a field-list group are not shown.  Only the event for the group is shown.
  */
 public class EventLogger {
+
+    private final List<Location> locations = new ArrayList<>();
 
     public enum EventTypes {
         FEC,                // FEC, Real type defined in FormEntryController
@@ -196,4 +200,7 @@ public class EventLogger {
         return surveyOpenTime + (SystemClock.elapsedRealtime() - surveyOpenElapsedTime);
     }
 
+    public void addLocation(Location location) {
+        locations.add(location);
+    }
 }

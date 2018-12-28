@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -58,6 +59,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.location.LocationListener;
 import com.google.common.collect.ImmutableList;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -93,6 +95,9 @@ import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.SavePointListener;
+import org.odk.collect.android.location.client.GoogleLocationClient;
+import org.odk.collect.android.location.client.LocationClient;
+import org.odk.collect.android.logic.Audit;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
 import org.odk.collect.android.logic.FormInfo;
@@ -172,7 +177,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         DependencyProvider<ActivityAvailability>,
         CustomDatePickerDialog.CustomDatePickerDialogListener,
         RankingWidgetDialog.RankingListener,
-        SaveFormIndexTask.SaveFormIndexListener {
+        SaveFormIndexTask.SaveFormIndexListener, LocationClient.LocationClientListener, LocationListener {
 
     // save with every swipe forward or back. Timings indicate this takes .25
     // seconds.
@@ -280,6 +285,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private boolean showNavigationButtons;
+    private GoogleLocationClient googleLocationClient;
 
     private Bundle state;
 
@@ -587,6 +593,21 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(getString(R.string.loading_form));
+    }
+
+    private void setUpLocationClient(Audit audit) {
+        googleLocationClient = new GoogleLocationClient(this);
+        googleLocationClient.setListener(this);
+        googleLocationClient.setPriority(audit.getLocationPriority());
+        googleLocationClient.setUpdateIntervals((long) audit.getLocationInterval() * 1000, (long) audit.getLocationInterval() * 1000);
+        googleLocationClient.start();
+    }
+
+    private boolean collectLocationCoordinates(FormController formController) {
+        return formController != null
+                && formController.getSubmissionMetadata() != null
+                && formController.getSubmissionMetadata().audit != null
+                && formController.getSubmissionMetadata().audit.collectLocationCoordinates();
     }
 
     /**
@@ -2100,6 +2121,23 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        FormController formController = getFormController();
+        if (collectLocationCoordinates(formController)) {
+            setUpLocationClient(formController.getSubmissionMetadata().audit);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        if (googleLocationClient != null) {
+            googleLocationClient.stop();
+        }
+        super.onStop();
+    }
+
+    @Override
     protected void onPause() {
         FormController formController = getFormController();
         dismissDialogs();
@@ -2302,6 +2340,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         final FormController formController = task.getFormController();
         if (formController != null) {
+            if (collectLocationCoordinates(formController)) {
+                setUpLocationClient(formController.getSubmissionMetadata().audit);
+            }
+
             if (readPhoneStatePermissionRequestNeeded) {
                 new PermissionUtils(this).requestReadPhoneStatePermission(new PermissionListener() {
                     @Override
@@ -2419,7 +2461,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         formController.getEventLogger().logEvent(EventLogger.EventTypes.FORM_RESUME, 0, null, true);
                     }
                 }
-
                 refreshCurrentView();
             }
         } else {
@@ -2696,6 +2737,27 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         ODKView odkView = getCurrentViewIfODKView();
         if (odkView != null) {
             odkView.setBinaryData(values);
+        }
+    }
+
+    @Override
+    public void onClientStart() {
+        googleLocationClient.requestLocationUpdates(this);
+    }
+
+    @Override
+    public void onClientStartFailure() {
+    }
+
+    @Override
+    public void onClientStop() {
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        FormController formController = getFormController();
+        if (formController != null) {
+            formController.getEventLogger().addLocation(location);
         }
     }
 
