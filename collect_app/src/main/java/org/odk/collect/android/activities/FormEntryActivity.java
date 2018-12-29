@@ -2358,20 +2358,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                 }, true);
             } else {
-                if (collectLocationCoordinates(formController)) {
-                    if (LocationClients.areGooglePlayServicesAvailable(this)) {
-                        setUpLocationClient(formController.getSubmissionMetadata().audit);
-                        if (firstFormLoad) {
-                            new BackgroundLocationCollectingDialog().show(getSupportFragmentManager(), BackgroundLocationCollectingDialog.BACKGROUND_LOCATION_COLLECTING_DIALOG_TAG);
-                        } else {
-                            SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_collecting_dialog__message), 10000);
-                        }
-                    } else {
-                        SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.google_play_services_not_available), 7000);
-                        formController.getEventLogger().logEvent(EventLogger.EventTypes.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, 0, null, true);
-                    }
-                }
-
                 formLoaderTask.setFormLoaderListener(null);
                 FormLoaderTask t = formLoaderTask;
                 formLoaderTask = null;
@@ -2474,6 +2460,21 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         formController.getEventLogger().logEvent(EventLogger.EventTypes.FORM_RESUME, 0, null, true);
                     }
                 }
+
+                if (collectLocationCoordinates(formController)) {
+                    if (LocationClients.areGooglePlayServicesAvailable(this)) {
+                        setUpLocationClient(formController.getSubmissionMetadata().audit);
+                        if (firstFormLoad) {
+                            new BackgroundLocationCollectingDialog().show(getSupportFragmentManager(), BackgroundLocationCollectingDialog.BACKGROUND_LOCATION_COLLECTING_DIALOG_TAG);
+                        } else {
+                            SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_collecting_dialog__message), 10000);
+                        }
+                    } else {
+                        SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.google_play_services_not_available), 7000);
+                        formController.getEventLogger().logEvent(EventLogger.EventTypes.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, 0, null, true);
+                    }
+                }
+
                 refreshCurrentView();
             }
         } else {
