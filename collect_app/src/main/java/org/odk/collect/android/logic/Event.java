@@ -115,6 +115,9 @@ public class Event {
             case GOOGLE_PLAY_SERVICES_NOT_AVAILABLE:
                 textValue = "google play services not available";
                 break;
+            case LOCATION_PERMISSIONS_NOT_GRANTED:
+                textValue = "location permissions not granted";
+                break;
             default:
                 textValue = "Unknown Event Type: " + eventType;
                 break;

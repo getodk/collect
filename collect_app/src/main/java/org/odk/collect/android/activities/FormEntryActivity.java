@@ -2472,6 +2472,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                         @Override
                         public void denied() {
+                            formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PERMISSIONS_NOT_GRANTED, 0, null, true);
                         }
                     });
                 }

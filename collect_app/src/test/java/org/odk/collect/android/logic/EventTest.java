@@ -34,6 +34,7 @@ import static org.odk.collect.android.utilities.EventLogger.EventTypes.FORM_SAVE
 import static org.odk.collect.android.utilities.EventLogger.EventTypes.FORM_START;
 import static org.odk.collect.android.utilities.EventLogger.EventTypes.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE;
 import static org.odk.collect.android.utilities.EventLogger.EventTypes.HIERARCHY;
+import static org.odk.collect.android.utilities.EventLogger.EventTypes.LOCATION_PERMISSIONS_NOT_GRANTED;
 import static org.odk.collect.android.utilities.EventLogger.EventTypes.SAVE_ERROR;
 
 public class EventTest {
@@ -131,5 +132,10 @@ public class EventTest {
         assertNotNull(event);
         assertFalse(event.isIntervalViewEvent());
         assertEquals("google play services not available,,1545392727685,", event.toString());
+
+        event = new Event(START_TIME, LOCATION_PERMISSIONS_NOT_GRANTED, 0, "");
+        assertNotNull(event);
+        assertFalse(event.isIntervalViewEvent());
+        assertEquals("location permissions not granted,,1545392727685,", event.toString());
     }
 }
