@@ -658,4 +658,6 @@
     <string name="corrupt_imported_preferences_error">Current settings are corrupt. From the admin settings, reset settings or import working ones.</string>
     <string name="background_location_collecting_message">This form continuously collects your location in the background and includes it with the form data. Disable GPS or revoke location permissions to fill the form without any location data.</string>
     <string name="google_play_services_not_available">The form tries to collect location coordinates in the background but it\'s not possible because Google Play Services are not available.</string>
+    <string name="location_not_available_dialog_message">The form tries to collect location coordinates in the background but location is not available. Go to settings in order to turn it on.</string>
+    <string name="go_to_settings">Go to settings</string>
 </resources>

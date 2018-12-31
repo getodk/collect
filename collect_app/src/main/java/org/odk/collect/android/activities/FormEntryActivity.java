@@ -87,6 +87,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
+import org.odk.collect.android.fragments.dialogs.LocationNotAvailableDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
@@ -2454,7 +2455,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (collectLocationCoordinates(formController)) {
                     if (LocationClients.areGooglePlayServicesAvailable(this)) {
                         setUpLocationClient(formController.getSubmissionMetadata().audit);
-                        SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_collecting_message), 10000);
+                        if (googleLocationClient.isLocationAvailable()) {
+                            SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_collecting_message), 10000);
+                        } else {
+                            new LocationNotAvailableDialog().show(getSupportFragmentManager(), LocationNotAvailableDialog.LOCATION_NOT_AVAILABLE_DIALOG_TAG);
+                        }
                     } else {
                         SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.google_play_services_not_available), 7000);
                         formController.getEventLogger().logEvent(EventLogger.EventTypes.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, 0, null, true);
