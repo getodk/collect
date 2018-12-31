@@ -102,7 +102,7 @@ public class FormDefCache {
      * @param formXml the File containing the XML form
      * @return a File object
      */
-    public static File getCacheFile(File formXml) {
+    private static File getCacheFile(File formXml) {
         return new File(Collect.CACHE_PATH + File.separator +
                 FileUtils.getMd5Hash(formXml) + ".formdef");
     }
