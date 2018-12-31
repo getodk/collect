@@ -2334,8 +2334,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         final FormController formController = task.getFormController();
         if (formController != null) {
+            PermissionUtils permissionUtils = new PermissionUtils(this);
             if (readPhoneStatePermissionRequestNeeded) {
-                new PermissionUtils(this).requestReadPhoneStatePermission(new PermissionListener() {
+                permissionUtils.requestReadPhoneStatePermission(new PermissionListener() {
                     @Override
                     public void granted() {
                         readPhoneStatePermissionRequestNeeded = false;
@@ -2453,17 +2454,26 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
 
                 if (collectLocationCoordinates(formController)) {
-                    if (LocationClients.areGooglePlayServicesAvailable(this)) {
-                        setUpLocationClient(formController.getSubmissionMetadata().audit);
-                        if (googleLocationClient.isLocationAvailable()) {
-                            SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_collecting_message), 10000);
-                        } else {
-                            new LocationNotAvailableDialog().show(getSupportFragmentManager(), LocationNotAvailableDialog.LOCATION_NOT_AVAILABLE_DIALOG_TAG);
+                    permissionUtils.requestLocationPermissions(new PermissionListener() {
+                        @Override
+                        public void granted() {
+                            if (LocationClients.areGooglePlayServicesAvailable(FormEntryActivity.this)) {
+                                setUpLocationClient(formController.getSubmissionMetadata().audit);
+                                if (googleLocationClient.isLocationAvailable()) {
+                                    SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_collecting_message), 10000);
+                                } else {
+                                    new LocationNotAvailableDialog().show(getSupportFragmentManager(), LocationNotAvailableDialog.LOCATION_NOT_AVAILABLE_DIALOG_TAG);
+                                }
+                            } else {
+                                SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.google_play_services_not_available), 7000);
+                                formController.getEventLogger().logEvent(EventLogger.EventTypes.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, 0, null, true);
+                            }
                         }
-                    } else {
-                        SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.google_play_services_not_available), 7000);
-                        formController.getEventLogger().logEvent(EventLogger.EventTypes.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, 0, null, true);
-                    }
+
+                        @Override
+                        public void denied() {
+                        }
+                    });
                 }
 
                 refreshCurrentView();
