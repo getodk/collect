@@ -660,4 +660,5 @@
     <string name="google_play_services_not_available">The form tries to collect location coordinates in the background but it\'s not possible because Google Play Services are not available.</string>
     <string name="location_not_available_dialog_message">The form tries to collect location coordinates in the background but location is not available. Go to settings in order to turn it on.</string>
     <string name="go_to_settings">Go to settings</string>
+    <string name="settings">Settings</string>
 </resources>

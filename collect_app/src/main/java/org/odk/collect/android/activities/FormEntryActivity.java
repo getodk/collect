@@ -2460,7 +2460,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             if (LocationClients.areGooglePlayServicesAvailable(FormEntryActivity.this)) {
                                 setUpLocationClient(formController.getSubmissionMetadata().audit);
                                 if (googleLocationClient.isLocationAvailable()) {
-                                    SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_collecting_message), 10000);
+                                    SnackbarUtils.showLocationSnackbar(FormEntryActivity.this, findViewById(R.id.llParent));
                                 } else {
                                     new LocationNotAvailableDialog().show(getSupportFragmentManager(), LocationNotAvailableDialog.LOCATION_NOT_AVAILABLE_DIALOG_TAG);
                                 }
