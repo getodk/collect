@@ -33,7 +33,7 @@ public class Audit {
     private final LocationClient.Priority locationPriority;
 
     /**
-     * The desired minimum interval in seconds that the location will be fetched
+     * The desired minimum interval in milliseconds that the location will be fetched
      */
     private final Long locationInterval;
 
