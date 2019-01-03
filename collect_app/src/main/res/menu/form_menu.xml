@@ -28,6 +28,13 @@
         app:showAsAction="always"/>
 
     <item
+        android:id="@+id/background_location"
+        android:icon="@drawable/ic_place"
+        android:title="@string/background_location"
+        android:visible="false"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/menu_languages"
         android:title="@string/change_language"
         app:showAsAction="never"/>

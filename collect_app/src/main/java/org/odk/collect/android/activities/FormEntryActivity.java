@@ -161,6 +161,7 @@ import timber.log.Timber;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.PermissionUtils.isStoragePermissionGranted;
@@ -605,6 +606,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 && formController.getSubmissionMetadata().audit.collectLocationCoordinates();
     }
 
+    private boolean isBackgroundLocationEnabled() {
+        return GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true);
+    }
+
     /**
      * Create save-points asynchronously in order to not affect swiping performance
      * on larger forms.
@@ -986,6 +991,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         menu.findItem(R.id.menu_preferences).setVisible(useability)
                 .setEnabled(useability);
+
+        if (collectLocationCoordinates(getFormController())) {
+            menu.findItem(R.id.background_location).setVisible(true);
+            if (!isBackgroundLocationEnabled()) {
+                menu.findItem(R.id.background_location).setIcon(R.drawable.ic_location_off);
+            }
+        }
+
         return true;
     }
 
@@ -1018,6 +1031,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case R.id.menu_preferences:
                 Intent pref = new Intent(this, PreferencesActivity.class);
                 startActivity(pref);
+                return true;
+            case R.id.background_location:
+                boolean currentValue = isBackgroundLocationEnabled();
+                GeneralSharedPreferences.getInstance().save(KEY_BACKGROUND_LOCATION, !currentValue);
+                item.setIcon(currentValue ? R.drawable.ic_location_off : R.drawable.ic_place);
                 return true;
         }
         return super.onOptionsItemSelected(item);
