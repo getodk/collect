@@ -1001,7 +1001,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         menu.findItem(R.id.menu_preferences).setVisible(useability)
                 .setEnabled(useability);
 
-        if (collectLocationCoordinates(getFormController())) {
+        if (collectLocationCoordinates(getFormController()) && LocationClients.areGooglePlayServicesAvailable(this)) {
             menu.findItem(R.id.background_location).setVisible(true);
             if (!isBackgroundLocationEnabled()) {
                 menu.findItem(R.id.background_location).setIcon(R.drawable.ic_location_off);
