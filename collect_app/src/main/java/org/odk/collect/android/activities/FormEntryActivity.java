@@ -122,6 +122,7 @@ import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.EventLogger;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FormDefCache;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -204,6 +205,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public static final String KEY_SUCCESS = "success";
     public static final String KEY_ERROR = "error";
     private static final String KEY_SAVE_NAME = "saveName";
+    private static final String KEY_FIRST_FORM_LOAD = "firstFormLoad";
 
     private static final String TAG_MEDIA_LOADING_FRAGMENT = "media_loading_fragment";
 
@@ -231,6 +233,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private boolean autoSaved;
     private boolean allowMovingBackwards;
+    private boolean firstFormLoad;
 
     // Random ID
     private static final int DELETE_REPEAT = 654321;
@@ -409,6 +412,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             if (savedInstanceState.containsKey(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED)) {
                 readPhoneStatePermissionRequestNeeded = savedInstanceState.getBoolean(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED);
             }
+            if (savedInstanceState.containsKey(KEY_FIRST_FORM_LOAD)) {
+                firstFormLoad = savedInstanceState.getBoolean(KEY_FIRST_FORM_LOAD);
+            }
         }
 
     }
@@ -532,6 +538,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                  * Savepoints for forms that were explicitly saved will be recovered when that
                  * explicitly saved instance is edited via edit-saved-form.
                  */
+                firstFormLoad = !FormDefCache.getCacheFile(new File(formPath)).exists();
+
                 final String filePrefix = formPath.substring(
                         formPath.lastIndexOf('/') + 1,
                         formPath.lastIndexOf('.'))
@@ -659,6 +667,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         outState.putString(KEY_SAVE_NAME, saveName);
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
         outState.putBoolean(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED, readPhoneStatePermissionRequestNeeded);
+        outState.putBoolean(KEY_FIRST_FORM_LOAD, firstFormLoad);
 
         if (currentView instanceof ODKView) {
             outState.putAll(((ODKView) currentView).getState());
