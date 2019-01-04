@@ -28,12 +28,12 @@ import org.odk.collect.android.R;
 
 import timber.log.Timber;
 
-public class LocationNotAvailableDialog extends DialogFragment {
+public class LocationProvidersDisabledDialog extends DialogFragment {
 
-    public static final String LOCATION_NOT_AVAILABLE_DIALOG_TAG = "locationNotAvailableDialogTag";
+    public static final String LOCATION_PROVIDERS_DISABLED_DIALOG_TAG = "locationProvidersDisabledDialogTag";
 
-    public static LocationNotAvailableDialog newInstance() {
-        return new LocationNotAvailableDialog();
+    public static LocationProvidersDisabledDialog newInstance() {
+        return new LocationProvidersDisabledDialog();
     }
 
     /*
@@ -60,7 +60,7 @@ public class LocationNotAvailableDialog extends DialogFragment {
         return new AlertDialog.Builder(getActivity())
                 .setIcon(R.drawable.ic_place_black)
                 .setTitle(R.string.provider_disabled_error)
-                .setMessage(R.string.location_not_available_dialog_message)
+                .setMessage(R.string.location_providers_disabled_dialog_message)
                 .setPositiveButton(R.string.go_to_settings, (dialog, id) -> {
                     startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                 })
