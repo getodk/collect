@@ -318,7 +318,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
         if (transport.equals(Transport.Sms) || buttonId == R.id.sms_upload_button) {
             // https://issuetracker.google.com/issues/66979952
             if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
-                new PermissionUtils(this).requestSendSMSAndReadPhoneStatePermissions(this, new PermissionListener() {
+                new PermissionUtils(this).requestSendSMSAndReadPhoneStatePermissions(new PermissionListener() {
                     @Override
                     public void granted() {
                         smsService.submitForms(instanceIds);
@@ -329,7 +329,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
                     }
                 });
             } else {
-                new PermissionUtils(this).requestSendSMSPermission(this, new PermissionListener() {
+                new PermissionUtils(this).requestSendSMSPermission(new PermissionListener() {
                     @Override
                     public void granted() {
                         smsService.submitForms(instanceIds);
