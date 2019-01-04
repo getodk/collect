@@ -1049,10 +1049,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             googleLocationClient.stop();
                         }
                     } else {
-                        formController.getEventLogger().logEvent(EventLogger.EventTypes.BACKGROUND_LOCATION_ENABLED, 0, null, true);
-                        if (PermissionUtils.isLocationPermissionGranted(this)) {
-                            setUpLocationClient(formController.getSubmissionMetadata().audit);
-                        }
+                        backgroundLocationEnabled(formController);
                     }
                 }
                 GeneralSharedPreferences.getInstance().save(KEY_BACKGROUND_LOCATION, !previousValue);
@@ -2376,9 +2373,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         final FormController formController = task.getFormController();
         if (formController != null) {
-            PermissionUtils permissionUtils = new PermissionUtils(this);
             if (readPhoneStatePermissionRequestNeeded) {
-                permissionUtils.requestReadPhoneStatePermission(new PermissionListener() {
+                new PermissionUtils(this).requestReadPhoneStatePermission(new PermissionListener() {
                     @Override
                     public void granted() {
                         readPhoneStatePermissionRequestNeeded = false;
@@ -2498,23 +2494,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (collectLocationCoordinates(formController)) {
                     if (LocationClients.areGooglePlayServicesAvailable(this)) {
                         if (isBackgroundLocationEnabled()) {
-                            permissionUtils.requestLocationPermissions(new PermissionListener() {
-                                @Override
-                                public void granted() {
-                                    setUpLocationClient(formController.getSubmissionMetadata().audit);
-                                    if (googleLocationClient.isLocationAvailable()) {
-                                        SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_enabled));
-                                    } else {
-                                        new LocationProvidersDisabledDialog().show(getSupportFragmentManager(), LocationProvidersDisabledDialog.LOCATION_PROVIDERS_DISABLED_DIALOG_TAG);
-                                    }
-                                }
-
-                                @Override
-                                public void denied() {
-                                    formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PERMISSIONS_NOT_GRANTED, 0, null, true);
-                                }
-                            });
-                            formController.getEventLogger().logEvent(EventLogger.EventTypes.BACKGROUND_LOCATION_ENABLED, 0, null, true);
+                            backgroundLocationEnabled(formController);
                         } else {
                             SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_disabled));
                             formController.getEventLogger().logEvent(EventLogger.EventTypes.BACKGROUND_LOCATION_DISABLED, 0, null, true);
@@ -2532,6 +2512,26 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             ToastUtils.showLongToast(R.string.loading_form_failed);
             finish();
         }
+    }
+
+    private void backgroundLocationEnabled(FormController formController) {
+        new PermissionUtils(this).requestLocationPermissions(new PermissionListener() {
+            @Override
+            public void granted() {
+                setUpLocationClient(formController.getSubmissionMetadata().audit);
+                if (googleLocationClient.isLocationAvailable()) {
+                    SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_enabled));
+                } else {
+                    new LocationProvidersDisabledDialog().show(getSupportFragmentManager(), LocationProvidersDisabledDialog.LOCATION_PROVIDERS_DISABLED_DIALOG_TAG);
+                }
+            }
+
+            @Override
+            public void denied() {
+                formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PERMISSIONS_NOT_GRANTED, 0, null, true);
+            }
+        });
+        formController.getEventLogger().logEvent(EventLogger.EventTypes.BACKGROUND_LOCATION_ENABLED, 0, null, true);
     }
 
     /**
