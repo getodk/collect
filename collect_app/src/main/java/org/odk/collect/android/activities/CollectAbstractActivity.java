@@ -22,15 +22,15 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.config.AppComponent;
-import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.ThemeUtils;
 
-import static org.odk.collect.android.utilities.PermissionUtils.checkIfStoragePermissionsGranted;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.PermissionUtils.isEntryPointActivity;
+import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 
 public abstract class CollectAbstractActivity extends AppCompatActivity {
 
@@ -51,7 +51,7 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
          * This code won't run on activities that are entry points to the app because those activities
          * are able to handle permission checks and requests by themselves.
          */
-        if (!checkIfStoragePermissionsGranted(this) && !isEntryPointActivity(this)) {
+        if (!areStoragePermissionsGranted(this) && !isEntryPointActivity(this)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog);
 
             builder.setTitle(R.string.storage_runtime_permission_denied_title)

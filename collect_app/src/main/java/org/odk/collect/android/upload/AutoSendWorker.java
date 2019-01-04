@@ -39,13 +39,13 @@ import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.http.HttpClientConnection;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.odk.collect.android.utilities.InstanceUploaderUtils;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.io.IOException;
@@ -114,7 +114,7 @@ public class AutoSendWorker extends Worker {
         boolean anyFailure = false;
 
         if (protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets))) {
-            if (PermissionUtils.checkIfGetAccountsPermissionGranted(getApplicationContext())) {
+            if (PermissionUtils.isGetAccountsPermissionGranted(getApplicationContext())) {
                 GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
                 String googleUsername = accountsManager.getSelectedAccount();
                 if (googleUsername.isEmpty()) {

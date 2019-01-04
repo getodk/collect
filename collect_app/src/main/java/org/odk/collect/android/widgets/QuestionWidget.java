@@ -51,6 +51,7 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.AnimateUtils;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -82,6 +83,7 @@ public abstract class QuestionWidget
     private final View guidanceTextLayout;
     private final View textLayout;
     private final TextView warningText;
+    private PermissionUtils permissionUtils;
     private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
     private AtomicBoolean expanded;
     private Bundle state;
@@ -96,6 +98,7 @@ public abstract class QuestionWidget
 
         if (context instanceof FormEntryActivity) {
             state = ((FormEntryActivity) context).getState();
+            permissionUtils = new PermissionUtils((FormEntryActivity) getContext());
         }
 
         if (context instanceof DependencyProvider) {
@@ -667,5 +670,9 @@ public abstract class QuestionWidget
 
     public int getPlayColor() {
         return playColor;
+    }
+
+    public PermissionUtils getPermissionUtils() {
+        return permissionUtils;
     }
 }

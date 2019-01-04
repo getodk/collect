@@ -20,19 +20,11 @@ import android.support.annotation.Nullable;
 
 import org.javarosa.core.model.FormIndex;
 
-import java.util.ArrayList;
-
 /**
  * Represents a question or repeat to be shown in
  * {@link org.odk.collect.android.activities.FormHierarchyActivity}.
  */
 public class HierarchyElement {
-    /**
-     * Repeat instances (always of type {@link Type#CHILD}) if this element is a repeat
-     * ({@link Type#COLLAPSED} or {@link Type#EXPANDED}). Not relevant otherwise.
-     */
-    private final ArrayList<HierarchyElement> children = new ArrayList<>();
-
     /**
      * The type and state of this element. See {@link Type}.
      */
@@ -58,8 +50,7 @@ public class HierarchyElement {
     private final String secondaryText;
 
     /**
-     * The collapsed or expanded icon if this element is a repeat ({@link Type#COLLAPSED} or
-     * {@link Type#EXPANDED}). Not relevant otherwise.
+     * An optional icon.
      */
     @Nullable
     private Drawable icon;
@@ -106,36 +97,12 @@ public class HierarchyElement {
         type = newType;
     }
 
-    public ArrayList<HierarchyElement> getChildren() {
-        return children;
-    }
-
-    public void addChild(HierarchyElement h) {
-        children.add(h);
-    }
-
     /**
      * The type and state of this element.
      */
     public enum Type {
-        /**
-         * A repeat instance.
-         */
-        CHILD,
-
-        /**
-         * A repeat that should be displayed as expanded.
-         */
-        EXPANDED,
-
-        /**
-         * A repeat that should be displayed as collapsed.
-         */
-        COLLAPSED,
-
-        /**
-         * A question.
-         */
-        QUESTION;
+        QUESTION,
+        REPEATABLE_GROUP,
+        REPEAT_INSTANCE
     }
 }

@@ -33,8 +33,6 @@ import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
-import static org.odk.collect.android.utilities.PermissionUtils.requestCameraPermission;
-
 /**
  * Widget that allows user to scan barcodes and add them to the form.
  *
@@ -108,7 +106,7 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onButtonClick(int buttonId) {
-        requestCameraPermission((FormEntryActivity) getContext(), new PermissionListener() {
+        getPermissionUtils().requestCameraPermission(new PermissionListener() {
             @Override
             public void granted() {
                 waitForData();

@@ -54,6 +54,7 @@ import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.upload.AutoSendWorker;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -73,10 +74,6 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.tasks.sms.SmsSender.SMS_INSTANCE_ID;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
-import static org.odk.collect.android.utilities.PermissionUtils.requestReadPhoneStatePermission;
-import static org.odk.collect.android.utilities.PermissionUtils.requestSendSMSAndReadPhoneStatePermissions;
-import static org.odk.collect.android.utilities.PermissionUtils.requestSendSMSPermission;
-import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -142,7 +139,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
             showAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
         }
 
-        requestStoragePermissions(this, new PermissionListener() {
+        new PermissionUtils(this).requestStoragePermissions(new PermissionListener() {
             @Override
             public void granted() {
                 init();
@@ -321,7 +318,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
         if (transport.equals(Transport.Sms) || buttonId == R.id.sms_upload_button) {
             // https://issuetracker.google.com/issues/66979952
             if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
-                requestSendSMSAndReadPhoneStatePermissions(this, new PermissionListener() {
+                new PermissionUtils(this).requestSendSMSAndReadPhoneStatePermissions(this, new PermissionListener() {
                     @Override
                     public void granted() {
                         smsService.submitForms(instanceIds);
@@ -332,7 +329,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
                     }
                 });
             } else {
-                requestSendSMSPermission(this, new PermissionListener() {
+                new PermissionUtils(this).requestSendSMSPermission(this, new PermissionListener() {
                     @Override
                     public void granted() {
                         smsService.submitForms(instanceIds);
@@ -363,7 +360,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
                 Intent i = new Intent(this, InstanceUploaderActivity.class);
                 i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
                 // Not required but without this permission a Device ID attached to a request will be empty.
-                requestReadPhoneStatePermission(this, new PermissionListener() {
+                new PermissionUtils(this).requestReadPhoneStatePermission(new PermissionListener() {
                     @Override
                     public void granted() {
                         startActivityForResult(i, INSTANCE_UPLOADER);
