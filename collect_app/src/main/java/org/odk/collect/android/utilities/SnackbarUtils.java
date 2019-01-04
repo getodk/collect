@@ -14,25 +14,16 @@ limitations under the License.
 
 package org.odk.collect.android.utilities;
 
-import android.content.Context;
-import android.content.Intent;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.TextView;
 
-import org.odk.collect.android.R;
-
 public final class SnackbarUtils {
-    private static final int DURATION_3500_MS = 3500;
+    private static final int DURATION = 3500;
 
     private SnackbarUtils() {
 
-    }
-
-    public static void showSnackbar(@NonNull View view, @NonNull String message) {
-        showSnackbar(view, message, DURATION_3500_MS);
     }
 
     /**
@@ -42,21 +33,12 @@ public final class SnackbarUtils {
      * @param view    The view to find a parent from.
      * @param message The text to show.  Can be formatted text.
      */
-    public static void showSnackbar(@NonNull View view, @NonNull String message, int duration) {
+    public static void showSnackbar(@NonNull View view, @NonNull String message) {
         if (message.isEmpty()) {
             return;
         }
 
-        Snackbar snackbar = Snackbar.make(view, message.trim(), duration);
-        TextView textView = snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-        textView.setSingleLine(false);
-        snackbar.show();
-    }
-
-    public static void showLocationSnackbar(@NonNull Context context, @NonNull View view) {
-        Snackbar snackbar
-                = Snackbar.make(view, R.string.background_location_collecting_message, 10000)
-                .setAction(R.string.settings, v -> context.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)));
+        Snackbar snackbar = Snackbar.make(view, message.trim(), DURATION);
         TextView textView = snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
         textView.setSingleLine(false);
         snackbar.show();

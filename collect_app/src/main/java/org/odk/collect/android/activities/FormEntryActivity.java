@@ -2484,24 +2484,30 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 if (collectLocationCoordinates(formController)) {
                     if (LocationClients.areGooglePlayServicesAvailable(this)) {
-                        permissionUtils.requestLocationPermissions(new PermissionListener() {
-                            @Override
-                            public void granted() {
-                                setUpLocationClient(formController.getSubmissionMetadata().audit);
-                                if (googleLocationClient.isLocationAvailable()) {
-                                    SnackbarUtils.showLocationSnackbar(FormEntryActivity.this, findViewById(R.id.llParent));
-                                } else {
-                                    new LocationNotAvailableDialog().show(getSupportFragmentManager(), LocationNotAvailableDialog.LOCATION_NOT_AVAILABLE_DIALOG_TAG);
+                        if (isBackgroundLocationEnabled()) {
+                            permissionUtils.requestLocationPermissions(new PermissionListener() {
+                                @Override
+                                public void granted() {
+                                    setUpLocationClient(formController.getSubmissionMetadata().audit);
+                                    if (googleLocationClient.isLocationAvailable()) {
+                                        SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_enabled));
+                                    } else {
+                                        new LocationNotAvailableDialog().show(getSupportFragmentManager(), LocationNotAvailableDialog.LOCATION_NOT_AVAILABLE_DIALOG_TAG);
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void denied() {
-                                formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PERMISSIONS_NOT_GRANTED, 0, null, true);
-                            }
-                        });
+                                @Override
+                                public void denied() {
+                                    formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PERMISSIONS_NOT_GRANTED, 0, null, true);
+                                }
+                            });
+                            formController.getEventLogger().logEvent(EventLogger.EventTypes.BACKGROUND_LOCATION_ENABLED, 0, null, true);
+                        } else {
+                            SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_disabled));
+                            formController.getEventLogger().logEvent(EventLogger.EventTypes.BACKGROUND_LOCATION_DISABLED, 0, null, true);
+                        }
                     } else {
-                        SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.google_play_services_not_available), 7000);
+                        SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.google_play_services_not_available));
                         formController.getEventLogger().logEvent(EventLogger.EventTypes.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, 0, null, true);
                     }
                 }
