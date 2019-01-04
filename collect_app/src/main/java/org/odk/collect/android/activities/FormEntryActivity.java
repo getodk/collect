@@ -1002,10 +1002,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .setEnabled(useability);
 
         if (collectLocationCoordinates(getFormController()) && LocationClients.areGooglePlayServicesAvailable(this)) {
-            menu.findItem(R.id.background_location).setVisible(true);
-            if (!isBackgroundLocationEnabled()) {
-                menu.findItem(R.id.background_location).setIcon(R.drawable.ic_location_off);
-            }
+            MenuItem backgroundLocation = menu.findItem(R.id.background_location);
+            backgroundLocation.setVisible(true);
+            backgroundLocation.setIcon(isBackgroundLocationEnabled() ? R.drawable.ic_place : R.drawable.ic_location_off);
         }
 
         return true;
@@ -1042,9 +1041,22 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 startActivity(pref);
                 return true;
             case R.id.background_location:
-                boolean currentValue = isBackgroundLocationEnabled();
-                GeneralSharedPreferences.getInstance().save(KEY_BACKGROUND_LOCATION, !currentValue);
-                item.setIcon(currentValue ? R.drawable.ic_location_off : R.drawable.ic_place);
+                boolean previousValue = isBackgroundLocationEnabled();
+                if (formController != null) {
+                    if (previousValue) {
+                        formController.getEventLogger().logEvent(EventLogger.EventTypes.BACKGROUND_LOCATION_DISABLED, 0, null, true);
+                        if (googleLocationClient != null) {
+                            googleLocationClient.stop();
+                        }
+                    } else {
+                        formController.getEventLogger().logEvent(EventLogger.EventTypes.BACKGROUND_LOCATION_ENABLED, 0, null, true);
+                        if (PermissionUtils.isLocationPermissionGranted(this)) {
+                            setUpLocationClient(formController.getSubmissionMetadata().audit);
+                        }
+                    }
+                }
+                GeneralSharedPreferences.getInstance().save(KEY_BACKGROUND_LOCATION, !previousValue);
+                item.setIcon(previousValue ? R.drawable.ic_location_off : R.drawable.ic_place);
                 return true;
         }
         return super.onOptionsItemSelected(item);
