@@ -2147,6 +2147,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         FormController formController = getFormController();
         if (collectLocationCoordinates(formController)
                 && LocationClients.areGooglePlayServicesAvailable(this)
+                && isBackgroundLocationEnabled()
                 && PermissionUtils.isLocationPermissionGranted(this)) {
             setUpLocationClient(formController.getSubmissionMetadata().audit);
         }
