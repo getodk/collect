@@ -147,6 +147,9 @@ public class DateTimeUtils {
             } else if (appearance.contains("bikram-sambat")) {
                 datePickerType = DatePickerDetails.DatePickerType.BIKRAM_SAMBAT;
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
+            } else if (appearance.contains("myanmar")) {
+                datePickerType = DatePickerDetails.DatePickerType.MYANMAR;
+                datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
             } else if (appearance.contains("no-calendar")) {
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
             }

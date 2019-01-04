@@ -74,6 +74,8 @@ public class WidgetFactory {
                             questionWidget = new IslamicDateWidget(context, fep);
                         } else if (appearance.contains("bikram-sambat")) {
                             questionWidget = new BikramSambatDateWidget(context, fep);
+                        } else if (appearance.contains("myanmar")) {
+                            questionWidget = new MyanmarDateWidget(context, fep);
                         } else {
                             questionWidget = new DateWidget(context, fep);
                         }
