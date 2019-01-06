@@ -259,6 +259,21 @@ public class PermissionUtils {
         }, Manifest.permission.READ_PHONE_STATE);
     }
 
+    public void requestSendSMSAndReadPhoneStatePermissions(@NonNull PermissionListener action) {
+        requestPermissions(new PermissionListener() {
+            @Override
+            public void granted() {
+                action.granted();
+            }
+
+            @Override
+            public void denied() {
+                showAdditionalExplanation(R.string.send_sms_runtime_permission_denied_title,
+                        R.string.send_sms_runtime_permission_denied_desc, R.drawable.ic_sms, action);
+            }
+        }, Manifest.permission.SEND_SMS, Manifest.permission.READ_PHONE_STATE);
+    }
+
     private void requestPermissions(@NonNull PermissionListener listener, String... permissions) {
         DexterBuilder builder = null;
 
