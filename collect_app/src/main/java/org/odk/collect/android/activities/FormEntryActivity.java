@@ -2522,6 +2522,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (googleLocationClient.isLocationAvailable()) {
                     SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_enabled));
                 } else {
+                    formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PROVIDERS_DISABLED, 0, null, true);
                     new LocationProvidersDisabledDialog().show(getSupportFragmentManager(), LocationProvidersDisabledDialog.LOCATION_PROVIDERS_DISABLED_DIALOG_TAG);
                 }
             }

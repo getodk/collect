@@ -49,7 +49,8 @@ public class EventLogger {
         GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, // Google Play Services are not available
         LOCATION_PERMISSIONS_NOT_GRANTED, // Location permissions are not granted
         BACKGROUND_LOCATION_ENABLED, // Background location option is enabled
-        BACKGROUND_LOCATION_DISABLED // Background location option is disabled
+        BACKGROUND_LOCATION_DISABLED, // Background location option is disabled
+        LOCATION_PROVIDERS_DISABLED // Location providers are disabled
     }
 
     private static AsyncTask saveTask;

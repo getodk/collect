@@ -134,6 +134,9 @@ public class Event {
             case LOCATION_PERMISSIONS_NOT_GRANTED:
                 textValue = "location permissions not granted";
                 break;
+            case LOCATION_PROVIDERS_DISABLED:
+                textValue = "location providers disabled";
+                break;
             default:
                 textValue = "Unknown Event Type: " + eventType;
                 break;

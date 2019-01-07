@@ -35,6 +35,7 @@ import static org.odk.collect.android.utilities.EventLogger.EventTypes.FORM_STAR
 import static org.odk.collect.android.utilities.EventLogger.EventTypes.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE;
 import static org.odk.collect.android.utilities.EventLogger.EventTypes.HIERARCHY;
 import static org.odk.collect.android.utilities.EventLogger.EventTypes.LOCATION_PERMISSIONS_NOT_GRANTED;
+import static org.odk.collect.android.utilities.EventLogger.EventTypes.LOCATION_PROVIDERS_DISABLED;
 import static org.odk.collect.android.utilities.EventLogger.EventTypes.SAVE_ERROR;
 
 public class EventTest {
@@ -137,5 +138,10 @@ public class EventTest {
         assertNotNull(event);
         assertFalse(event.isIntervalViewEvent());
         assertEquals("location permissions not granted,,1545392727685,", event.toString());
+
+        event = new Event(START_TIME, LOCATION_PROVIDERS_DISABLED, 0, "");
+        assertNotNull(event);
+        assertFalse(event.isIntervalViewEvent());
+        assertEquals("location providers disabled,,1545392727685,", event.toString());
     }
 }
