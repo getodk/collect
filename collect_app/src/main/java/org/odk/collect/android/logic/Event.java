@@ -134,6 +134,12 @@ public class Event {
             case LOCATION_PERMISSIONS_NOT_GRANTED:
                 textValue = "location permissions not granted";
                 break;
+            case BACKGROUND_LOCATION_ENABLED:
+                textValue = "background location enabled";
+                break;
+            case BACKGROUND_LOCATION_DISABLED:
+                textValue = "background location disabled";
+                break;
             case LOCATION_PROVIDERS_DISABLED:
                 textValue = "location providers disabled";
                 break;

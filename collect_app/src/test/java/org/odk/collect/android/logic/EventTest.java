@@ -23,6 +23,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.odk.collect.android.utilities.EventLogger.EventTypes.BACKGROUND_LOCATION_DISABLED;
+import static org.odk.collect.android.utilities.EventLogger.EventTypes.BACKGROUND_LOCATION_ENABLED;
 import static org.odk.collect.android.utilities.EventLogger.EventTypes.CONSTRAINT_ERROR;
 import static org.odk.collect.android.utilities.EventLogger.EventTypes.DELETE_REPEAT;
 import static org.odk.collect.android.utilities.EventLogger.EventTypes.FEC;
@@ -138,6 +140,16 @@ public class EventTest {
         assertNotNull(event);
         assertFalse(event.isIntervalViewEvent());
         assertEquals("location permissions not granted,,1545392727685,", event.toString());
+
+        event = new Event(START_TIME, BACKGROUND_LOCATION_ENABLED, 0, "");
+        assertNotNull(event);
+        assertFalse(event.isIntervalViewEvent());
+        assertEquals("background location enabled,,1545392727685,", event.toString());
+
+        event = new Event(START_TIME, BACKGROUND_LOCATION_DISABLED, 0, "");
+        assertNotNull(event);
+        assertFalse(event.isIntervalViewEvent());
+        assertEquals("background location disabled,,1545392727685,", event.toString());
 
         event = new Event(START_TIME, LOCATION_PROVIDERS_DISABLED, 0, "");
         assertNotNull(event);
