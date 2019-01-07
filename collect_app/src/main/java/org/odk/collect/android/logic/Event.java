@@ -143,6 +143,9 @@ public class Event {
             case BACKGROUND_LOCATION_DISABLED:
                 textValue = "background location disabled";
                 break;
+            case LOCATION_PROVIDERS_ENABLED:
+                textValue = "location providers enabled";
+                break;
             case LOCATION_PROVIDERS_DISABLED:
                 textValue = "location providers disabled";
                 break;

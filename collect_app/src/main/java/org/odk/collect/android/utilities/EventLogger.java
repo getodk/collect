@@ -51,6 +51,7 @@ public class EventLogger {
         LOCATION_PERMISSIONS_NOT_GRANTED, // Location permissions are not granted
         BACKGROUND_LOCATION_ENABLED, // Background location option is enabled
         BACKGROUND_LOCATION_DISABLED, // Background location option is disabled
+        LOCATION_PROVIDERS_ENABLED, // Location providers are enabled
         LOCATION_PROVIDERS_DISABLED // Location providers are disabled
     }
 

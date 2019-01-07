@@ -39,6 +39,7 @@ import static org.odk.collect.android.utilities.EventLogger.EventTypes.HIERARCHY
 import static org.odk.collect.android.utilities.EventLogger.EventTypes.LOCATION_PERMISSIONS_GRANTED;
 import static org.odk.collect.android.utilities.EventLogger.EventTypes.LOCATION_PERMISSIONS_NOT_GRANTED;
 import static org.odk.collect.android.utilities.EventLogger.EventTypes.LOCATION_PROVIDERS_DISABLED;
+import static org.odk.collect.android.utilities.EventLogger.EventTypes.LOCATION_PROVIDERS_ENABLED;
 import static org.odk.collect.android.utilities.EventLogger.EventTypes.SAVE_ERROR;
 
 public class EventTest {
@@ -156,6 +157,11 @@ public class EventTest {
         assertNotNull(event);
         assertFalse(event.isIntervalViewEvent());
         assertEquals("background location disabled,,1545392727685,", event.toString());
+
+        event = new Event(START_TIME, LOCATION_PROVIDERS_ENABLED, 0, "");
+        assertNotNull(event);
+        assertFalse(event.isIntervalViewEvent());
+        assertEquals("location providers enabled,,1545392727685,", event.toString());
 
         event = new Event(START_TIME, LOCATION_PROVIDERS_DISABLED, 0, "");
         assertNotNull(event);
