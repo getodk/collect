@@ -192,7 +192,7 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
         // dialog displayed while fetching gps location
         locationDialog = new ProgressDialog(this);
 
-        locationDialog.setCancelable(false); // taping outside the dialog doesn't cancel
+        locationDialog.setCancelable(false); // tapping outside the dialog doesn't cancel
         locationDialog.setIndeterminate(true);
         locationDialog.setIcon(android.R.drawable.ic_dialog_info);
         locationDialog.setTitle(getString(R.string.getting_location));

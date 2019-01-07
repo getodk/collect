@@ -4,8 +4,8 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-//import com.google.android.gms.common.ConnectionResult;
-//import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 /**
  * A helper class for getting a LocationClient based on whether or not Google Play Services are
@@ -27,6 +27,8 @@ public class LocationClients {
      * 3/14/2018 - GoogleLocationClient removed because of user reports that accuracy does not get
      * better than 10m.
      *
+     * 1/3/2019 - GoogleLocationClient implemented because accuracy has improved to 3m
+     *
      * @param context The Context the LocationClient will be used within.
      * @return An implementation of LocationClient.
      */
@@ -34,7 +36,9 @@ public class LocationClients {
 
         return testClient != null
                 ? testClient
-                : new AndroidLocationClient(context);
+                : areGooglePlayServicesAvailable(context)
+                    ? new GoogleLocationClient(context)
+                    : new AndroidLocationClient(context);
     }
 
     /**
@@ -45,10 +49,10 @@ public class LocationClients {
         LocationClients.testClient = testClient;
     }
 
-    //    private static boolean areGooglePlayServicesAvailable(@NonNull Context context) {
-    //        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
-    //        int status = googleApiAvailability.isGooglePlayServicesAvailable(context);
-    //
-    //        return status == ConnectionResult.SUCCESS;
-    //    }
+        private static boolean areGooglePlayServicesAvailable(@NonNull Context context) {
+            GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+            int status = googleApiAvailability.isGooglePlayServicesAvailable(context);
+
+            return status == ConnectionResult.SUCCESS;
+        }
 }
