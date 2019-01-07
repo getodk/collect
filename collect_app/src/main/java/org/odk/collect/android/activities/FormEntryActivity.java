@@ -2506,6 +2506,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void backgroundLocationEnabled(FormController formController) {
+        formController.getEventLogger().logEvent(EventLogger.EventTypes.BACKGROUND_LOCATION_ENABLED, 0, null, true);
         new PermissionUtils(this).requestLocationPermissions(new PermissionListener() {
             @Override
             public void granted() {
@@ -2523,7 +2524,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PERMISSIONS_NOT_GRANTED, 0, null, true);
             }
         });
-        formController.getEventLogger().logEvent(EventLogger.EventTypes.BACKGROUND_LOCATION_ENABLED, 0, null, true);
     }
 
     /**
