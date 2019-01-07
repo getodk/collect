@@ -47,6 +47,7 @@ public class EventLogger {
         CONSTRAINT_ERROR,   // Constraint or missing answer error on save
         DELETE_REPEAT,      // Delete a repeat group
         GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, // Google Play Services are not available
+        LOCATION_PERMISSIONS_GRANTED, // Location permissions are granted
         LOCATION_PERMISSIONS_NOT_GRANTED, // Location permissions are not granted
         BACKGROUND_LOCATION_ENABLED, // Background location option is enabled
         BACKGROUND_LOCATION_DISABLED, // Background location option is disabled

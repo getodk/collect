@@ -204,6 +204,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public static final String KEY_SUCCESS = "success";
     public static final String KEY_ERROR = "error";
     private static final String KEY_SAVE_NAME = "saveName";
+    private static final String KEY_LOCATION_PERMISSIONS_GRANTED = "location_permissions_granted";
 
     private static final String TAG_MEDIA_LOADING_FRAGMENT = "media_loading_fragment";
 
@@ -254,6 +255,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     // used to limit forward/backward swipes to one per question
     private boolean beenSwiped;
+    private boolean locationPermissionsGranted;
 
     private final Object saveDialogLock = new Object();
     private int viewCount;
@@ -408,6 +410,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
             if (savedInstanceState.containsKey(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED)) {
                 readPhoneStatePermissionRequestNeeded = savedInstanceState.getBoolean(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED);
+            }
+            if (savedInstanceState.containsKey(KEY_LOCATION_PERMISSIONS_GRANTED)) {
+                locationPermissionsGranted = savedInstanceState.getBoolean(KEY_LOCATION_PERMISSIONS_GRANTED);
             }
         }
 
@@ -659,6 +664,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         outState.putString(KEY_SAVE_NAME, saveName);
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
         outState.putBoolean(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED, readPhoneStatePermissionRequestNeeded);
+        outState.putBoolean(KEY_LOCATION_PERMISSIONS_GRANTED, locationPermissionsGranted);
 
         if (currentView instanceof ODKView) {
             outState.putAll(((ODKView) currentView).getState());
@@ -2147,9 +2153,17 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         FormController formController = getFormController();
         if (collectLocationCoordinates(formController)
                 && LocationClients.areGooglePlayServicesAvailable(this)
-                && isBackgroundLocationEnabled()
-                && PermissionUtils.isLocationPermissionGranted(this)) {
-            setUpLocationClient(formController.getSubmissionMetadata().audit);
+                && isBackgroundLocationEnabled()) {
+            if (PermissionUtils.isLocationPermissionGranted(this)) {
+                if (!locationPermissionsGranted) {
+                    locationPermissionsGranted = true;
+                    formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PERMISSIONS_GRANTED, 0, null, true);
+                }
+                setUpLocationClient(formController.getSubmissionMetadata().audit);
+            } else if (locationPermissionsGranted) {
+                locationPermissionsGranted = false;
+                formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PERMISSIONS_NOT_GRANTED, 0, null, true);
+            }
         }
     }
 
@@ -2510,6 +2524,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         new PermissionUtils(this).requestLocationPermissions(new PermissionListener() {
             @Override
             public void granted() {
+                locationPermissionsGranted = true;
                 setUpLocationClient(formController.getSubmissionMetadata().audit);
                 if (googleLocationClient.isLocationAvailable()) {
                     SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_enabled));
