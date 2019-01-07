@@ -57,6 +57,10 @@ public class IslamicDatePickerDialog extends CustomDatePickerDialog {
         return getCurrentIslamicDate();
     }
 
+    @Override
+    protected void yearUpdated() {
+    }
+
     private void setUpDatePicker() {
         LocalDateTime islamicDate = DateTimeUtils
                 .skipDaylightSavingGapIfExists(getDate())

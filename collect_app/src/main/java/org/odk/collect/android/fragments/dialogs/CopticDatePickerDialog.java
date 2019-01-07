@@ -56,6 +56,10 @@ public class CopticDatePickerDialog extends CustomDatePickerDialog {
         return getCurrentCopticDate();
     }
 
+    @Override
+    protected void yearUpdated() {
+    }
+
     private void setUpDatePicker() {
         LocalDateTime copticDate = DateTimeUtils
                 .skipDaylightSavingGapIfExists(getDate())

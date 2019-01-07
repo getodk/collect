@@ -55,6 +55,10 @@ public class DatePickerDetails implements Serializable {
         return datePickerType.equals(DatePickerType.BIKRAM_SAMBAT);
     }
 
+    public boolean isMyanmarType() {
+        return datePickerType.equals(DatePickerType.MYANMAR);
+    }
+
     public boolean isCalendarMode() {
         return datePickerMode.equals(DatePickerMode.CALENDAR);
     }

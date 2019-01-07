@@ -60,6 +60,10 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
         return getCurrentEthiopianDate();
     }
 
+    @Override
+    protected void yearUpdated() {
+    }
+
     private void setUpDatePicker() {
         LocalDateTime ethiopianDate = DateTimeUtils
                 .skipDaylightSavingGapIfExists(getDate())
