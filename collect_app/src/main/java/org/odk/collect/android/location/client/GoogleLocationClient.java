@@ -180,7 +180,7 @@ public class GoogleLocationClient
         locationRequest.setPriority(getPriority().getValue());
 
         locationRequest.setInterval(updateInterval);
-        locationRequest.setInterval(fastestUpdateInterval);
+        locationRequest.setFastestInterval(fastestUpdateInterval);
 
         return locationRequest;
     }
