@@ -206,6 +206,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private static final String KEY_SAVE_NAME = "saveName";
     private static final String KEY_LOCATION_PERMISSIONS_GRANTED = "location_permissions_granted";
     private static final String KEY_LOCATION_PROVIDERS_ENABLED = "location_providers_enabled";
+    private static final String SAVED_FORM_START = "saved_form_start";
 
     private static final String TAG_MEDIA_LOADING_FRAGMENT = "media_loading_fragment";
 
@@ -276,6 +277,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private boolean newForm = true;
     private boolean onResumeWasCalledWithoutPermissions;
     private boolean readPhoneStatePermissionRequestNeeded;
+    private boolean savedFormStart;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -418,6 +420,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
             if (savedInstanceState.containsKey(KEY_LOCATION_PROVIDERS_ENABLED)) {
                 locationProvidersEnabled = savedInstanceState.getBoolean(KEY_LOCATION_PROVIDERS_ENABLED);
+            }
+            if (savedInstanceState.containsKey(SAVED_FORM_START)) {
+                savedFormStart = savedInstanceState.getBoolean(SAVED_FORM_START, false);
             }
         }
 
@@ -671,6 +676,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         outState.putBoolean(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED, readPhoneStatePermissionRequestNeeded);
         outState.putBoolean(KEY_LOCATION_PERMISSIONS_GRANTED, locationPermissionsGranted);
         outState.putBoolean(KEY_LOCATION_PROVIDERS_ENABLED, locationProvidersEnabled);
+        outState.putBoolean(SAVED_FORM_START, savedFormStart);
 
         if (currentView instanceof ODKView) {
             outState.putAll(((ODKView) currentView).getState());
@@ -2157,7 +2163,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     protected void onStart() {
         super.onStart();
         FormController formController = getFormController();
-        if (collectLocationCoordinates(formController)
+        if (savedFormStart) {
+            savedFormStart = false;
+            initBackgroundLocationIfNeeded(formController);
+        } else if (collectLocationCoordinates(formController)
                 && LocationClients.areGooglePlayServicesAvailable(this)
                 && isBackgroundLocationEnabled()) {
             if (PermissionUtils.isLocationPermissionGranted(this)) {
@@ -2494,6 +2503,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                         String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
+                            savedFormStart = true;
                             formController.getEventLogger().logEvent(EventLogger.EventTypes.FORM_RESUME, 0, null, true);
                             formController.getEventLogger().logEvent(EventLogger.EventTypes.HIERARCHY, 0, null, true);
                             startActivity(new Intent(this, FormHierarchyActivity.class));
@@ -2509,19 +2519,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                 }
 
-                if (collectLocationCoordinates(formController)) {
-                    if (LocationClients.areGooglePlayServicesAvailable(this)) {
-                        if (isBackgroundLocationEnabled()) {
-                            backgroundLocationEnabled(formController);
-                        } else {
-                            SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_disabled));
-                            formController.getEventLogger().logEvent(EventLogger.EventTypes.BACKGROUND_LOCATION_DISABLED, 0, null, true);
-                        }
-                    } else {
-                        SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.google_play_services_not_available));
-                        formController.getEventLogger().logEvent(EventLogger.EventTypes.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, 0, null, true);
-                    }
-                }
+                initBackgroundLocationIfNeeded(formController);
 
                 refreshCurrentView();
             }
@@ -2529,6 +2527,22 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             Timber.e("FormController is null");
             ToastUtils.showLongToast(R.string.loading_form_failed);
             finish();
+        }
+    }
+
+    private void initBackgroundLocationIfNeeded(FormController formController) {
+        if (collectLocationCoordinates(formController)) {
+            if (LocationClients.areGooglePlayServicesAvailable(this)) {
+                if (isBackgroundLocationEnabled()) {
+                    backgroundLocationEnabled(formController);
+                } else {
+                    SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_disabled));
+                    formController.getEventLogger().logEvent(EventLogger.EventTypes.BACKGROUND_LOCATION_DISABLED, 0, null, true);
+                }
+            } else {
+                SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.google_play_services_not_available));
+                formController.getEventLogger().logEvent(EventLogger.EventTypes.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, 0, null, true);
+            }
         }
     }
 
