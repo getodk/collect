@@ -239,7 +239,7 @@ public class EventLogger {
         if (!locations.isEmpty()) {
             List<Location> locationsTemporaryList = new ArrayList<>(locations);
 
-            for (int i = locations.size() - 1; i > 0; i--) {
+            for (int i = locations.size() - 1; i >= 0; i--) {
                 if (System.currentTimeMillis() - locations.get(i).getTime() > audit.getLocationAge()) {
                     locationsTemporaryList.remove(i);
                 } else {
