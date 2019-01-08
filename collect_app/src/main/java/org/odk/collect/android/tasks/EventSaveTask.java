@@ -6,7 +6,9 @@ import android.support.annotation.NonNull;
 
 import org.odk.collect.android.logic.Event;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -36,6 +38,11 @@ public class EventSaveTask extends AsyncTask<Event, Void, Void> {
             fw = new FileWriter(file, true);
             if (newFile) {
                 fw.write(getHeader());
+            } else if (collectLocationCoordinates) {
+                if (updateHeaderIfNeeded()) {
+                    fw.close();
+                    fw = new FileWriter(file.getAbsolutePath(), true);
+                }
             }
             if (params.length > 0) {
                 for (Event ev : params) {
@@ -57,6 +64,45 @@ public class EventSaveTask extends AsyncTask<Event, Void, Void> {
             }
         }
         return null;
+    }
+
+    private boolean updateHeaderIfNeeded() {
+        boolean headerUpdated = false;
+        FileWriter tfw = null;
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader(file));
+            String header = br.readLine();
+            if (header != null && header.equals(CSV_HEADER)) { // update header
+                File temporaryFile = new File(file.getParentFile().getAbsolutePath() + "/temporaryAudit.csv");
+                tfw = new FileWriter(temporaryFile, true);
+                tfw.write(CSV_HEADER_WITH_LOCATION_COORDINATES + "\n");
+                String line;
+                while ((line = br.readLine()) != null) {
+                    tfw.write(line + "\n");
+                }
+                temporaryFile.renameTo(file);
+                headerUpdated = true;
+            }
+        } catch (IOException e) {
+            Timber.e(e);
+        } finally {
+            try {
+                if (tfw != null) {
+                    tfw.close();
+                } else {
+                    Timber.e("Attempt to close null FileWriter for EventLogger.");
+                }
+                if (br != null) {
+                    br.close();
+                } else {
+                    Timber.e("Attempt to close null BufferedReader for EventLogger.");
+                }
+            } catch (Exception e) {
+                Timber.e(e);
+            }
+        }
+        return headerUpdated;
     }
 
     private String getHeader() {
