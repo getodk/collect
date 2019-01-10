@@ -63,6 +63,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     protected PointListener clickListener;
     protected PointListener longPressListener;
     protected PointListener gpsLocationListener;
+    protected FeatureListener dragEndListener;
     protected LocationClient locationClient;
     protected MapPoint lastLocationFix;
     protected int nextFeatureId = 1;
@@ -264,6 +265,10 @@ public class GoogleMapFragment extends SupportMapFragment implements
         longPressListener = listener;
     }
 
+    @Override public void setDragEndListener(@Nullable FeatureListener listener) {
+        dragEndListener = listener;
+    }
+
     @Override public void setGpsLocationListener(@Nullable PointListener listener) {
         gpsLocationListener = listener;
     }
@@ -318,20 +323,22 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    @Override public void onMarkerDragStart(Marker marker) {
-        updateFeatures();
-    }
+    @Override public void onMarkerDragStart(Marker marker) { }
 
     @Override public void onMarkerDrag(Marker marker) {
         // When a marker is manually dragged, the position is no longer
         // obtained from a GPS reading, so the altitude and standard deviation
         // fields are no longer meaningful; reset them to zero.
         marker.setSnippet("0;0");
-        updateFeatures();
+        updateFeature(findFeature(marker));
     }
 
     @Override public void onMarkerDragEnd(Marker marker) {
-        updateFeatures();
+        int featureId = findFeature(marker);
+        updateFeature(featureId);
+        if (dragEndListener != null && featureId != -1) {
+            dragEndListener.onFeature(featureId);
+        }
     }
 
     @Override public void onClientStart() {
@@ -361,8 +368,19 @@ public class GoogleMapFragment extends SupportMapFragment implements
         gpsErrorDialog.show();
     }
 
-    protected void updateFeatures() {
-        for (MapFeature feature : features.values()) {
+    /** Finds the feature to which the given marker belongs. */
+    protected int findFeature(Marker marker) {
+        for (int featureId : features.keySet()) {
+            if (features.get(featureId).ownsMarker(marker)) {
+                return featureId;
+            }
+        }
+        return -1;  // not found
+    }
+
+    protected void updateFeature(int featureId) {
+        MapFeature feature = features.get(featureId);
+        if (feature != null) {
             feature.update();
         }
     }
@@ -422,6 +440,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
      * (e.g. geometric elements, handles for manipulation, etc.).
      */
     interface MapFeature {
+        /** Returns true if the given marker belongs to this feature. */
+        boolean ownsMarker(Marker marker);
+
         /** Updates the feature's geometry after any UI handles have moved. */
         void update();
 
@@ -440,6 +461,10 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
         public MapPoint getPoint() {
             return fromMarker(marker);
+        }
+
+        public boolean ownsMarker(Marker givenMarker) {
+            return marker.equals(givenMarker);
         }
 
         public void update() { }
@@ -467,6 +492,10 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 markers.add(createMarker(map, point, true));
             }
             update();
+        }
+
+        public boolean ownsMarker(Marker givenMarker) {
+            return markers.contains(givenMarker);
         }
 
         public void update() {

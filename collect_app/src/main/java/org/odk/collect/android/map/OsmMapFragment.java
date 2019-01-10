@@ -244,6 +244,10 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         longPressListener = listener;
     }
 
+    @Override public void setDragEndListener(@Nullable FeatureListener listener) {
+        dragEndListener = listener;
+    }
+
     @Override public void setGpsLocationListener(@Nullable PointListener listener) {
         gpsLocationListener = listener;
     }
@@ -397,11 +401,15 @@ public class OsmMapFragment extends Fragment implements MapFragment,
                 // obtained from a GPS reading, so the standard deviation field
                 // is no longer meaningful; reset it to zero.
                 marker.setSubDescription("0");
-                feature.update();
+                updateFeature(findFeature(marker));
             }
 
             @Override public void onMarkerDragEnd(Marker marker) {
-                feature.update();
+                int featureId = findFeature(marker);
+                updateFeature(featureId);
+                if (dragEndListener != null && featureId != -1) {
+                    dragEndListener.onFeature(featureId);
+                }
             }
         });
 
@@ -410,6 +418,23 @@ public class OsmMapFragment extends Fragment implements MapFragment,
 
         map.getOverlays().add(marker);
         return marker;
+    }
+
+    /** Finds the feature to which the given marker belongs. */
+    protected int findFeature(Marker marker) {
+        for (int featureId : features.keySet()) {
+            if (features.get(featureId).ownsMarker(marker)) {
+                return featureId;
+            }
+        }
+        return -1;  // not found
+    }
+
+    protected void updateFeature(int featureId) {
+        MapFeature feature = features.get(featureId);
+        if (feature != null) {
+            feature.update();
+        }
     }
 
     @VisibleForTesting public boolean isGpsErrorDialogShowing() {
@@ -423,6 +448,9 @@ public class OsmMapFragment extends Fragment implements MapFragment,
      * (e.g. geometric elements, handles for manipulation, etc.).
      */
     interface MapFeature {
+        /** Returns true if the given marker belongs to this feature. */
+        boolean ownsMarker(Marker marker);
+
         /** Updates the feature's geometry after any UI handles have moved. */
         void update();
 
@@ -442,6 +470,10 @@ public class OsmMapFragment extends Fragment implements MapFragment,
 
         public MapPoint getPoint() {
             return fromMarker(marker);
+        }
+
+        public boolean ownsMarker(Marker givenMarker) {
+            return marker.equals(givenMarker);
         }
 
         public void update() { }
@@ -472,6 +504,10 @@ public class OsmMapFragment extends Fragment implements MapFragment,
                 markers.add(createMarker(map, point, this));
             }
             update();
+        }
+
+        public boolean ownsMarker(Marker givenMarker) {
+            return markers.contains(givenMarker);
         }
 
         public void update() {

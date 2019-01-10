@@ -124,6 +124,9 @@ public interface MapFragment {
     /** Sets or clears the callback for a long press on the map. */
     void setLongPressListener(@Nullable PointListener listener);
 
+    /** Sets or clears the callback for when a drag is completed. */
+    void setDragEndListener(@Nullable FeatureListener listener);
+
     /**
      * Enables/disables GPS tracking.  While enabled, the GPS location is shown
      * on the map, the first GPS fix will trigger any pending callbacks set by
