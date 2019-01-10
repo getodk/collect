@@ -58,20 +58,23 @@ public interface MapFragment {
      */
     double getZoom();
 
-    /** Centers the map view on the given point, leaving zoom level unchanged. */
-    void setCenter(@Nullable MapPoint center);
+    /**
+     * Centers the map view on the given point, leaving zoom level unchanged,
+     * possibly with animation.
+     */
+    void setCenter(@Nullable MapPoint center, boolean animate);
 
     /**
      * Centers the map view on the given point, zooming in to a close-up level
      * deemed appropriate by the implementation, possibly with animation.
      */
-    void zoomToPoint(@Nullable MapPoint center);
+    void zoomToPoint(@Nullable MapPoint center, boolean animate);
 
     /**
      * Centers the map view on the given point with a zoom level as close as
      * possible to the given zoom level, possibly with animation.
      */
-    void zoomToPoint(@Nullable MapPoint center, double zoom);
+    void zoomToPoint(@Nullable MapPoint center, double zoom, boolean animate);
 
     /**
      * Adjusts the map's viewport to enclose all of the given points, possibly
@@ -81,7 +84,7 @@ public interface MapFragment {
      * to occupy at most 80% of the width and 80% of the height of the viewport,
      * ensuring a margin of at least 10% on all sides.
      */
-    void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor);
+    void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor, boolean animate);
 
     /**
      * Adds a polyline or polygon to the map with the given sequence of vertices.

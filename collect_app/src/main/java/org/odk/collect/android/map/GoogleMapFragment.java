@@ -27,6 +27,7 @@ import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -123,12 +124,12 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return new MapPoint(target.latitude, target.longitude);
     }
 
-    @Override public void setCenter(@Nullable MapPoint center) {
+    @Override public void setCenter(@Nullable MapPoint center, boolean animate) {
         if (map == null) {  // during Robolectric tests, map will be null
             return;
         }
         if (center != null) {
-            map.moveCamera(CameraUpdateFactory.newLatLng(toLatLng(center)));
+            moveOrAnimateCamera(CameraUpdateFactory.newLatLng(toLatLng(center)), animate);
         }
     }
 
@@ -139,20 +140,21 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return map.getCameraPosition().zoom;
     }
 
-    @Override public void zoomToPoint(@Nullable MapPoint center) {
-        zoomToPoint(center, POINT_ZOOM);
+    @Override public void zoomToPoint(@Nullable MapPoint center, boolean animate) {
+        zoomToPoint(center, POINT_ZOOM, animate);
     }
 
-    @Override public void zoomToPoint(@Nullable MapPoint center, double zoom) {
+    @Override public void zoomToPoint(@Nullable MapPoint center, double zoom, boolean animate) {
         if (map == null) {  // during Robolectric tests, map will be null
             return;
         }
         if (center != null) {
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(toLatLng(center), (float) zoom));
+            moveOrAnimateCamera(
+                CameraUpdateFactory.newLatLngZoom(toLatLng(center), (float) zoom), animate);
         }
     }
 
-    @Override public void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor) {
+    @Override public void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor, boolean animate) {
         if (map == null) {  // during Robolectric tests, map will be null
             return;
         }
@@ -166,11 +168,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 count++;
             }
             if (count == 1) {
-                zoomToPoint(lastPoint);
+                zoomToPoint(lastPoint, animate);
             } else if (count > 1) {
                 final LatLngBounds bounds = expandBounds(builder.build(), 1 / scaleFactor);
                 new Handler().postDelayed(() -> {
-                    map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
+                    moveOrAnimateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), animate);
                 }, 100);
             }
         }
@@ -195,6 +197,14 @@ public class GoogleMapFragment extends SupportMapFragment implements
         west = lonCenter - lonRadius;
 
         return new LatLngBounds(new LatLng(south, west), new LatLng(north, east));
+    }
+
+    protected void moveOrAnimateCamera(CameraUpdate movement, boolean animate) {
+        if (animate) {
+            map.animateCamera(movement);
+        } else {
+            map.moveCamera(movement);
+        }
     }
 
     @Override public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {

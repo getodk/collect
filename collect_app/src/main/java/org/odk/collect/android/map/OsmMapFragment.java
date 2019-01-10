@@ -130,9 +130,13 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         return fromGeoPoint(map.getMapCenter());
     }
 
-    @Override public void setCenter(@Nullable MapPoint center) {
+    @Override public void setCenter(@Nullable MapPoint center, boolean animate) {
         if (center != null) {
-            map.getController().setCenter(toGeoPoint(center));
+            if (animate) {
+                map.getController().animateTo(toGeoPoint(center));
+            } else {
+                map.getController().setCenter(toGeoPoint(center));
+            }
         }
     }
 
@@ -140,11 +144,13 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         return map.getZoomLevel();
     }
 
-    @Override public void zoomToPoint(@Nullable MapPoint center) {
-        zoomToPoint(center, POINT_ZOOM);
+    @Override public void zoomToPoint(@Nullable MapPoint center, boolean animate) {
+        zoomToPoint(center, POINT_ZOOM, animate);
     }
 
-    @Override public void zoomToPoint(@Nullable MapPoint center, double zoom) {
+    @Override public void zoomToPoint(@Nullable MapPoint center, double zoom, boolean animate) {
+        // We're ignoring the 'animate' flag because OSMDroid doesn't provide
+        // support for simultaneously animating the viewport center and zoom level.
         if (center != null) {
             // setCenter() must be done last; setZoom() does not preserve the center.
             map.getController().setZoom((int) Math.round(zoom));
@@ -152,7 +158,7 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         }
     }
 
-    @Override public void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor) {
+    @Override public void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor, boolean animate) {
         if (points != null) {
             int count = 0;
             List<GeoPoint> geoPoints = new ArrayList<>();
@@ -163,7 +169,7 @@ public class OsmMapFragment extends Fragment implements MapFragment,
                 count++;
             }
             if (count == 1) {
-                zoomToPoint(lastPoint);
+                zoomToPoint(lastPoint, animate);
             } else if (count > 1) {
                 // TODO(ping): Find a better solution.
                 // zoomToBoundingBox sometimes fails to zoom correctly, either
@@ -174,7 +180,7 @@ public class OsmMapFragment extends Fragment implements MapFragment,
                 // did it, not because it's known to be the best solution.
                 final BoundingBox box = BoundingBox.fromGeoPoints(geoPoints)
                     .increaseByScale((float) (1 / scaleFactor));
-                new Handler().postDelayed(() -> map.zoomToBoundingBox(box, false), 100);
+                new Handler().postDelayed(() -> map.zoomToBoundingBox(box, animate), 100);
             }
         }
     }

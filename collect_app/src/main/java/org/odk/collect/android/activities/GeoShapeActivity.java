@@ -162,21 +162,21 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
 
         zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(v -> {
-            map.zoomToPoint(map.getGpsLocation());
+            map.zoomToPoint(map.getGpsLocation(), true);
             zoomDialog.dismiss();
         });
 
         zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
         zoomPointButton.setOnClickListener(v -> {
-            map.zoomToBoundingBox(map.getPointsOfPoly(featureId), 0.6);
+            map.zoomToBoundingBox(map.getPointsOfPoly(featureId), 0.6, true);
             zoomDialog.dismiss();
         });
 
         map.setGpsLocationEnabled(true);
         if (restoredMapCenter != null && restoredMapZoom != null) {
-            map.zoomToPoint(restoredMapCenter, restoredMapZoom);
+            map.zoomToPoint(restoredMapCenter, restoredMapZoom, false);
         } else if (!points.isEmpty()) {
-            map.zoomToBoundingBox(points, 0.6);
+            map.zoomToBoundingBox(points, 0.6, false);
         } else {
             map.runOnGpsLocationReady(this::onGpsLocationReady);
         }
