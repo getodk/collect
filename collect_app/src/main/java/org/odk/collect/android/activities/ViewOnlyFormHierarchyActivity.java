@@ -47,12 +47,12 @@ public class ViewOnlyFormHierarchyActivity extends FormHierarchyActivity {
     }
 
     @Override
-    protected void toggleDeleteButton(boolean isEnabled) {
+    protected void showDeleteButton(boolean shouldShow) {
         // Disabled.
     }
 
     @Override
-    protected void toggleAddButton(boolean isEnabled) {
+    protected void showAddButton(boolean shouldShow) {
         // Disabled.
     }
 

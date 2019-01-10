@@ -221,28 +221,28 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         boolean isInRepeat = !isAtBeginning && screenIndex != null && formController.getEvent(screenIndex) == FormEntryController.EVENT_REPEAT;
 
         boolean shouldShowDelete = isInRepeat && !shouldShowPicker;
-        toggleDeleteButton(shouldShowDelete);
+        showDeleteButton(shouldShowDelete);
 
         boolean shouldShowAdd = shouldShowPicker;
-        toggleAddButton(shouldShowAdd);
+        showAddButton(shouldShowAdd);
 
         boolean shouldShowGoUp = !isAtBeginning || shouldShowPicker;
-        toggleGoUpButton(shouldShowGoUp);
+        showGoUpButton(shouldShowGoUp);
     }
 
     /** Override to disable this button. */
-    protected void toggleDeleteButton(boolean isEnabled) {
-        optionsMenu.findItem(R.id.menu_delete_child).setVisible(isEnabled).setEnabled(isEnabled);
+    protected void showDeleteButton(boolean shouldShow) {
+        optionsMenu.findItem(R.id.menu_delete_child).setVisible(shouldShow);
     }
 
     /** Override to disable this button. */
-    protected void toggleAddButton(boolean isEnabled) {
-        optionsMenu.findItem(R.id.menu_add_child).setVisible(isEnabled).setEnabled(isEnabled);
+    protected void showAddButton(boolean shouldShow) {
+        optionsMenu.findItem(R.id.menu_add_child).setVisible(shouldShow);
     }
 
     /** Override to disable this button. */
-    protected void toggleGoUpButton(boolean isEnabled) {
-        optionsMenu.findItem(R.id.menu_go_up).setVisible(isEnabled).setEnabled(isEnabled);
+    protected void showGoUpButton(boolean shouldShow) {
+        optionsMenu.findItem(R.id.menu_go_up).setVisible(shouldShow);
     }
 
     @Override
