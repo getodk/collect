@@ -218,7 +218,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         FormController formController = Collect.getInstance().getFormController();
         boolean isAtBeginning = formController.isCurrentQuestionFirstInForm() && !shouldShowRepeatGroupPicker();
         boolean shouldShowPicker = shouldShowRepeatGroupPicker();
-        boolean isInRepeat = !isAtBeginning && screenIndex != null && formController.getEvent(screenIndex) == FormEntryController.EVENT_REPEAT;
+        boolean isInRepeat = !isAtBeginning && formController.getEvent(screenIndex) == FormEntryController.EVENT_REPEAT;
 
         boolean shouldShowDelete = isInRepeat && !shouldShowPicker;
         showDeleteButton(shouldShowDelete);
@@ -409,14 +409,14 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
             screenIndex = potentialStartIndex;
 
-            if (potentialStartIndex == null) {
-                // check to see if the question is at the first level of the hierarchy. If it
-                // is, display the root level from the beginning.
-                formController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
-            } else {
-                // otherwise we're at a displayable group
-                formController.jumpToIndex(potentialStartIndex);
+            // Check to see if the question is at the first level of the hierarchy.
+            // If it is, display the root level from the beginning.
+            // Otherwise we're at a displayable group.
+            if (screenIndex == null) {
+                screenIndex = FormIndex.createBeginningOfFormIndex();
             }
+
+            formController.jumpToIndex(screenIndex);
 
             // Now test again. This should be true at this point or we're at the beginning.
             if (formController.isDisplayableGroup(formController.getFormIndex())) {
