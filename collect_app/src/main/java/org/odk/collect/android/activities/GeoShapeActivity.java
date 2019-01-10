@@ -124,7 +124,7 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
         }
 
         map = newMapFragment;
-        map.setLongPressListener(this::addVertex);
+        map.setLongPressListener(this::onLongPress);
 
         if (map instanceof GoogleMapFragment) {
             helper = new MapHelper(this, ((GoogleMapFragment) map).getGoogleMap(), selectedLayer);
@@ -190,7 +190,7 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
         }
     }
 
-    private void addVertex(MapPoint point) {
+    private void onLongPress(MapPoint point) {
         map.appendPointToPoly(featureId, point);
         clearButton.setEnabled(true);
         zoomButton.setEnabled(true);
