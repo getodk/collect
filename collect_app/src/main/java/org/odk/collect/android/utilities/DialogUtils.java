@@ -85,9 +85,9 @@ public final class DialogUtils {
     }
 
     /**
-     * Creates a confirm/cancel dialog for deleting repeats.
+     * Shows a confirm/cancel dialog for deleting the current repeat group.
      */
-    public static void createDeleteRepeatConfirmDialog(Context context, Runnable onDeleted, Runnable onCanceled) {
+    public static void showDeleteRepeatConfirmDialog(Context context, Runnable onDeleted, Runnable onCanceled) {
         FormController formController = Collect.getInstance().getFormController();
         String name = formController.getLastRepeatedGroupName();
         int repeatcount = formController.getLastRepeatedGroupRepeatCount();

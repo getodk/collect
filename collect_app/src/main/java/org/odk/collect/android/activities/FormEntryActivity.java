@@ -1834,7 +1834,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * Creates a confirm/cancel dialog for deleting repeats.
      */
     private void createDeleteRepeatConfirmDialog() {
-        DialogUtils.createDeleteRepeatConfirmDialog(this, () -> {
+        DialogUtils.showDeleteRepeatConfirmDialog(this, () -> {
             showNextView();
         }, () -> {
             refreshCurrentView();

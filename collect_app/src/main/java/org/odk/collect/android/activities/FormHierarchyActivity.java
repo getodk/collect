@@ -249,7 +249,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_delete_child:
-                DialogUtils.createDeleteRepeatConfirmDialog(this, () -> {
+                DialogUtils.showDeleteRepeatConfirmDialog(this, () -> {
                     goUpLevel();
                 }, null);
                 return true;
