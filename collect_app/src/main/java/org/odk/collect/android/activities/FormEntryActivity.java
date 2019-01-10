@@ -16,12 +16,15 @@ package org.odk.collect.android.activities;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -205,7 +208,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public static final String KEY_ERROR = "error";
     private static final String KEY_SAVE_NAME = "saveName";
     private static final String KEY_LOCATION_PERMISSIONS_GRANTED = "location_permissions_granted";
-    private static final String KEY_LOCATION_PROVIDERS_ENABLED = "location_providers_enabled";
     private static final String SAVED_FORM_START = "saved_form_start";
 
     private static final String TAG_MEDIA_LOADING_FRAGMENT = "media_loading_fragment";
@@ -258,7 +260,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     // used to limit forward/backward swipes to one per question
     private boolean beenSwiped;
     private boolean locationPermissionsGranted;
-    private boolean locationProvidersEnabled;
 
     private final Object saveDialogLock = new Object();
     private int viewCount;
@@ -303,6 +304,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     RxEventBus eventBus;
+
+    private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     /**
      * Called when the activity is first created.
@@ -417,9 +420,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
             if (savedInstanceState.containsKey(KEY_LOCATION_PERMISSIONS_GRANTED)) {
                 locationPermissionsGranted = savedInstanceState.getBoolean(KEY_LOCATION_PERMISSIONS_GRANTED);
-            }
-            if (savedInstanceState.containsKey(KEY_LOCATION_PROVIDERS_ENABLED)) {
-                locationProvidersEnabled = savedInstanceState.getBoolean(KEY_LOCATION_PROVIDERS_ENABLED);
             }
             if (savedInstanceState.containsKey(SAVED_FORM_START)) {
                 savedFormStart = savedInstanceState.getBoolean(SAVED_FORM_START, false);
@@ -675,7 +675,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
         outState.putBoolean(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED, readPhoneStatePermissionRequestNeeded);
         outState.putBoolean(KEY_LOCATION_PERMISSIONS_GRANTED, locationPermissionsGranted);
-        outState.putBoolean(KEY_LOCATION_PROVIDERS_ENABLED, locationProvidersEnabled);
         outState.putBoolean(SAVED_FORM_START, savedFormStart);
 
         if (currentView instanceof ODKView) {
@@ -2167,24 +2166,19 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             savedFormStart = false;
             initBackgroundLocationIfNeeded(formController);
         } else if (collectLocationCoordinates(formController)
-                && LocationClients.areGooglePlayServicesAvailable(this)
-                && isBackgroundLocationEnabled()) {
-            if (PermissionUtils.isLocationPermissionGranted(this)) {
-                if (!locationPermissionsGranted) {
-                    locationPermissionsGranted = true;
-                    formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PERMISSIONS_GRANTED, 0, null, true);
+                && LocationClients.areGooglePlayServicesAvailable(this)) {
+            registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+            if (isBackgroundLocationEnabled()) {
+                if (PermissionUtils.isLocationPermissionGranted(this)) {
+                    if (!locationPermissionsGranted) {
+                        locationPermissionsGranted = true;
+                        formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PERMISSIONS_GRANTED, 0, null, true);
+                    }
+                    setUpLocationClient(formController.getSubmissionMetadata().audit);
+                } else if (locationPermissionsGranted) {
+                    locationPermissionsGranted = false;
+                    formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PERMISSIONS_NOT_GRANTED, 0, null, true);
                 }
-                setUpLocationClient(formController.getSubmissionMetadata().audit);
-                if (googleLocationClient.isLocationAvailable() && !locationProvidersEnabled) {
-                    locationProvidersEnabled = true;
-                    formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PROVIDERS_ENABLED, 0, null, true);
-                } else if (!googleLocationClient.isLocationAvailable() && locationProvidersEnabled) {
-                    locationProvidersEnabled = false;
-                    formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PROVIDERS_DISABLED, 0, null, true);
-                }
-            } else if (locationPermissionsGranted) {
-                locationPermissionsGranted = false;
-                formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PERMISSIONS_NOT_GRANTED, 0, null, true);
             }
         }
     }
@@ -2346,6 +2340,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
         releaseOdkView();
         compositeDisposable.dispose();
+
+        try {
+            unregisterReceiver(locationProvidersReceiver);
+        } catch (IllegalArgumentException e) {
+            Timber.i(e);
+        }
         super.onDestroy();
 
     }
@@ -2533,6 +2533,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private void initBackgroundLocationIfNeeded(FormController formController) {
         if (collectLocationCoordinates(formController)) {
             if (LocationClients.areGooglePlayServicesAvailable(this)) {
+                registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
                 if (isBackgroundLocationEnabled()) {
                     backgroundLocationEnabled(formController);
                 } else {
@@ -2555,7 +2556,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PERMISSIONS_GRANTED, 0, null, true);
                 setUpLocationClient(formController.getSubmissionMetadata().audit);
                 if (googleLocationClient.isLocationAvailable()) {
-                    locationProvidersEnabled = true;
                     formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PROVIDERS_ENABLED, 0, null, true);
                     SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_enabled));
                 } else {
@@ -2894,6 +2894,23 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         EmptyView(Context context) {
             super(context);
+        }
+    }
+
+    private class LocationProvidersReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction() != null
+                    && intent.getAction().matches(LocationManager.PROVIDERS_CHANGED_ACTION)) {
+                FormController formController = getFormController();
+                if (formController != null && googleLocationClient != null) {
+                    if (googleLocationClient.isLocationAvailable()) {
+                        formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PROVIDERS_ENABLED, 0, null, false);
+                    } else {
+                        formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PROVIDERS_DISABLED, 0, null, false);
+                    }
+                }
+            }
         }
     }
 

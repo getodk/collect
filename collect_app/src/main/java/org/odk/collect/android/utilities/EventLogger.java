@@ -19,6 +19,8 @@ import io.reactivex.annotations.Nullable;
 import timber.log.Timber;
 
 import static org.odk.collect.android.logic.FormController.AUDIT_FILE_NAME;
+import static org.odk.collect.android.utilities.EventLogger.EventTypes.LOCATION_PROVIDERS_DISABLED;
+import static org.odk.collect.android.utilities.EventLogger.EventTypes.LOCATION_PROVIDERS_ENABLED;
 
 /**
  * Handle logging of events (which contain time and might contain location coordinates),
@@ -97,7 +99,7 @@ public class EventLogger {
                          TreeReference ref,
                          boolean writeImmediatelyToDisk) {
 
-        if (auditEnabled) {
+        if (auditEnabled && !duplicatedLocationProvidersLog(eventType)) {
 
             Timber.i("Event recorded: %s : %s", eventType, fecType);
             // Calculate the time and add the event to the events array
@@ -168,6 +170,13 @@ public class EventLogger {
             }
         }
 
+    }
+
+    // If location provider are enabled/disabled it sometimes fires the BroadcastReceiver multiple
+    // times what tries to add duplicated logs
+    private boolean duplicatedLocationProvidersLog(EventLogger.EventTypes eventType) {
+        return (eventType.equals(LOCATION_PROVIDERS_ENABLED) || eventType.equals(LOCATION_PROVIDERS_DISABLED))
+                && !events.isEmpty() && eventType.equals(events.get(events.size() - 1).eventType);
     }
 
     /*
