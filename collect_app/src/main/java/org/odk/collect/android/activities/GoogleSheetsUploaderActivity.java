@@ -285,7 +285,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
             }
 
             Cursor results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
-            if (results.getCount() > 0) {
+            if (results != null && results.getCount() > 0) {
                 message = InstanceUploaderUtils.getUploadResultMessage(results, result);
             } else {
                 if (instanceGoogleSheetsUploaderTask.isAuthFailed()) {
