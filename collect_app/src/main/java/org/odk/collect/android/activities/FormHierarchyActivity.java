@@ -349,12 +349,14 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     }
 
     /**
-     * Return the index of the "prompt" to add a new child to the given repeat group.
+     * Return the index of the "prompt" to add a new child to the given repeat group,
+     * without changing the current index.
      */
     private FormIndex getRepeatPromptIndex(FormIndex repeatIndex) {
         FormController formController = Collect.getInstance().getFormController();
         FormIndex originalIndex = formController.getFormIndex();
 
+        // Temporarily jump to the specified repeat group.
         formController.jumpToIndex(repeatIndex);
         String repeatRef = getGroupRef(repeatIndex).toString(false);
         String testRef = "";
