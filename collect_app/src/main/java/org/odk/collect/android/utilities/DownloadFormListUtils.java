@@ -420,7 +420,12 @@ public class DownloadFormListUtils {
     }
 
     private static boolean isNewerFormVersionAvailable(String md5Hash) {
-        return md5Hash != null && new FormsDao().getFormsCursorForMd5Hash(md5Hash).getCount() == 0;
+        if (md5Hash == null) {
+            return false;
+        }
+        try (Cursor cursor = new FormsDao().getFormsCursorForMd5Hash(md5Hash)) {
+            return cursor != null && cursor.getCount() == 0;
+        }
     }
 
     private static boolean areNewerMediaFilesAvailable(String formId, String formVersion, List<MediaFile> newMediaFiles) {
