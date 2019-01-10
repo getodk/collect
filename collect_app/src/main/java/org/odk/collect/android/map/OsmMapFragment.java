@@ -286,6 +286,11 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         return fromLocation(myLocationOverlay);
     }
 
+    @Override public @Nullable String getLocationProvider() {
+        Location fix = myLocationOverlay.getLastFix();
+        return fix != null ? fix.getProvider() : null;
+    }
+
     @Override public void onLocationChanged(Location location) {
         if (gpsLocationListener != null) {
             MapPoint point = fromLocation(myLocationOverlay);

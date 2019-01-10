@@ -138,6 +138,9 @@ public interface MapFragment {
     /** Gets the last GPS location fix, or null if there hasn't been one. */
     @Nullable MapPoint getGpsLocation();
 
+    /** Gets the provider of the last fix, or null if there hasn't been one. */
+    @Nullable String getLocationProvider();
+
     /**
      * Queues a callback to be invoked on the UI thread as soon as a GPS fix is
      * available.  If there already is a location fix, the callback is invoked

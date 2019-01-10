@@ -66,6 +66,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     protected FeatureListener dragEndListener;
     protected LocationClient locationClient;
     protected MapPoint lastLocationFix;
+    protected String lastLocationProvider;
     protected int nextFeatureId = 1;
     protected Map<Integer, MapFeature> features = new HashMap<>();
     protected AlertDialog gpsErrorDialog;
@@ -298,6 +299,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public void onLocationChanged(Location location) {
         lastLocationFix = fromLocation(location);
+        lastLocationProvider = location.getProvider();
         for (ReadyListener listener : gpsLocationReadyListeners) {
             listener.onReady(this);
         }
@@ -309,6 +311,10 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public @Nullable MapPoint getGpsLocation() {
         return lastLocationFix;
+    }
+
+    @Override public @Nullable String getLocationProvider() {
+        return lastLocationProvider;
     }
 
     @Override public void onMapClick(LatLng latLng) {
