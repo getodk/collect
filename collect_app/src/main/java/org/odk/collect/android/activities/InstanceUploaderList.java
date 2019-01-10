@@ -301,7 +301,11 @@ public class InstanceUploaderList extends InstanceListActivity implements
         }
         super.onPause();
 
-        unregisterReceiver(smsForegroundReceiver);
+        try {
+            unregisterReceiver(smsForegroundReceiver);
+        } catch (IllegalArgumentException e) {
+            Timber.w(e);
+        }
     }
 
     @Override
