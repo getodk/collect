@@ -24,7 +24,6 @@ public class BitmapScaledToDisplayTest {
         runScaleTest(1000,   1000,    500,    500,    500,    500,    false);
         runScaleTest( 600,    800,    600,    200,    150,    200,    false);
         runScaleTest( 500,    400,    250,    200,    250,    200,    false);
-        runScaleTest(2000,    800,    300,    400,    500,    200,    false);
     }
 
     @Test
