@@ -79,7 +79,7 @@ public class MediaUtils {
                     .getContentResolver()
                     .query(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                             projection, selection, selectArgs, null);
-            if (c.getCount() > 0) {
+            if (c != null && c.getCount() > 0) {
                 c.moveToFirst();
                 String id = c.getString(c
                         .getColumnIndex(Images.ImageColumns._ID));
