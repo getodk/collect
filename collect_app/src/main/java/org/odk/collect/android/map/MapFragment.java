@@ -87,6 +87,16 @@ public interface MapFragment {
     void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor, boolean animate);
 
     /**
+     * Adds a marker to the map at the given location.  If draggable is true,
+     * the user will be able to drag the marker to change its location.
+     * Returns a positive integer, the featureId for the newly added shape.
+     */
+    int addMarker(MapPoint point, boolean draggable);
+
+    /** Gets the location of an existing marker. */
+    MapPoint getMarkerPoint(int featureId);
+
+    /**
      * Adds a polyline or polygon to the map with the given sequence of vertices.
      * The vertices will have handles that can be dragged by the user.
      * Returns a positive integer, the featureId for the newly added shape.
@@ -102,11 +112,17 @@ public interface MapFragment {
      */
     @NonNull List<MapPoint> getPolyPoints(int featureId);
 
-    /** Removes a specified map feature from the map. */
+    /** Removes a specified map feature from the map, leaving its featureId invalid. */
     void removeFeature(int featureId);
 
     /** Removes all map features from the map. */
     void clearFeatures();
+
+    /** Sets or clears the callback for a click on the map. */
+    void setClickListener(@Nullable PointListener listener);
+
+    /** Sets or clears the callback for a long press on the map. */
+    void setLongPressListener(@Nullable PointListener listener);
 
     /**
      * Enables/disables GPS tracking.  While enabled, the GPS location is shown
@@ -135,17 +151,15 @@ public interface MapFragment {
      */
     void setGpsLocationListener(@Nullable PointListener listener);
 
-    /** Sets or clears the callback for a click on the map. */
-    void setClickListener(@Nullable PointListener listener);
-
-    /** Sets or clears the callback for a long press on the map. */
-    void setLongPressListener(@Nullable PointListener listener);
-
     interface ReadyListener {
         void onReady(@Nullable MapFragment mapFragment);
     }
 
     interface PointListener {
         void onPoint(@NonNull MapPoint point);
+    }
+
+    interface FeatureListener {
+        void onFeature(@NonNull int featureId);
     }
 }

@@ -65,9 +65,10 @@ public class OsmMapFragment extends Fragment implements MapFragment,
 
     protected MapView map;
     protected ReadyListener readyListener;
-    protected MapFragment.PointListener clickListener;
-    protected MapFragment.PointListener longPressListener;
-    protected MapFragment.PointListener gpsLocationListener;
+    protected PointListener clickListener;
+    protected PointListener longPressListener;
+    protected PointListener gpsLocationListener;
+    protected FeatureListener dragEndListener;
     protected MyLocationNewOverlay myLocationOverlay;
     protected LocationClient locationClient;
     protected int nextFeatureId = 1;
@@ -183,6 +184,20 @@ public class OsmMapFragment extends Fragment implements MapFragment,
                 new Handler().postDelayed(() -> map.zoomToBoundingBox(box, animate), 100);
             }
         }
+    }
+
+    @Override public int addMarker(MapPoint point, boolean draggable) {
+        int featureId = nextFeatureId++;
+        features.put(featureId, new MarkerFeature(map, point, draggable));
+        return featureId;
+    }
+
+    @Override public @Nullable MapPoint getMarkerPoint(int featureId) {
+        MapFeature feature = features.get(featureId);
+        if (feature instanceof MarkerFeature) {
+            return ((MarkerFeature) feature).getPoint();
+        }
+        return null;
     }
 
     @Override public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
@@ -333,7 +348,10 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         if (geoPoint == null) {
             return null;
         }
-        return fromGeoPoint(geoPoint, overlay.getLastFix().getAccuracy());
+        return new MapPoint(
+            geoPoint.getLatitude(), geoPoint.getLongitude(),
+            geoPoint.getAltitude(), overlay.getLastFix().getAccuracy()
+        );
     }
 
     protected static @NonNull MapPoint fromGeoPoint(@NonNull IGeoPoint geoPoint) {
@@ -344,12 +362,58 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         return new MapPoint(geoPoint.getLatitude(), geoPoint.getLongitude(), geoPoint.getAltitude());
     }
 
-    protected static @NonNull MapPoint fromGeoPoint(@NonNull GeoPoint geoPoint, double sd) {
-        return new MapPoint(geoPoint.getLatitude(), geoPoint.getLongitude(), geoPoint.getAltitude(), sd);
+    protected static @NonNull MapPoint fromMarker(@NonNull Marker marker) {
+        GeoPoint geoPoint = marker.getPosition();
+        double sd = 0;
+        try {
+            sd = Double.parseDouble(marker.getSubDescription());
+        } catch (NumberFormatException e) { /* ignore */ }
+        return new MapPoint(
+            geoPoint.getLatitude(), geoPoint.getLongitude(),
+            geoPoint.getAltitude(), sd
+        );
     }
 
     protected static @NonNull GeoPoint toGeoPoint(@NonNull MapPoint point) {
         return new GeoPoint(point.lat, point.lon, point.alt);
+    }
+
+    protected Marker createMarker(MapView map, MapPoint point, MapFeature feature) {
+        // A Marker's position is a GeoPoint with latitude, longitude, and
+        // altitude fields.  We need to store the standard deviation value
+        // somewhere, so it goes in the marker's sub-description field.
+        Marker marker = new Marker(map);
+        marker.setPosition(toGeoPoint(point));
+        marker.setSubDescription(Double.toString(point.sd));
+        marker.setDraggable(feature != null);
+        marker.setIcon(ContextCompat.getDrawable(map.getContext(), R.drawable.ic_place_black));
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+
+        marker.setOnMarkerDragListener(new Marker.OnMarkerDragListener() {
+            @Override public void onMarkerDragStart(Marker marker) { }
+
+            @Override public void onMarkerDrag(Marker marker) {
+                // When a marker is manually dragged, the position is no longer
+                // obtained from a GPS reading, so the standard deviation field
+                // is no longer meaningful; reset it to zero.
+                marker.setSubDescription("0");
+                feature.update();
+            }
+
+            @Override public void onMarkerDragEnd(Marker marker) {
+                feature.update();
+            }
+        });
+
+        // Prevent the text bubble from appearing when a marker is clicked.
+        marker.setOnMarkerClickListener((unusedMarker, unusedMap) -> false);
+
+        map.getOverlays().add(marker);
+        return marker;
+    }
+
+    @VisibleForTesting public boolean isGpsErrorDialogShowing() {
+        return gpsErrorDialog != null && gpsErrorDialog.isShowing();
     }
 
     /**
@@ -366,8 +430,30 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         void dispose();
     }
 
+    /** A marker that can optionally be dragged by the user. */
+    protected class MarkerFeature implements MapFeature {
+        final MapView map;
+        Marker marker;
+
+        public MarkerFeature(MapView map, MapPoint point, boolean draggable) {
+            this.map = map;
+            this.marker = createMarker(map, point, draggable ? this : null);
+        }
+
+        public MapPoint getPoint() {
+            return fromMarker(marker);
+        }
+
+        public void update() { }
+
+        public void dispose() {
+            map.getOverlays().remove(marker);
+            marker = null;
+        }
+    }
+
     /** A polyline or polygon that can be manipulated by dragging markers at its vertices. */
-    protected static class PolyFeature implements MapFeature, Marker.OnMarkerClickListener, Marker.OnMarkerDragListener {
+    protected class PolyFeature implements MapFeature {
         final MapView map;
         final List<Marker> markers = new ArrayList<>();
         final Polyline polyline;
@@ -383,7 +469,7 @@ public class OsmMapFragment extends Fragment implements MapFragment,
             paint.setStrokeWidth(STROKE_WIDTH);
             map.getOverlays().add(polyline);
             for (MapPoint point : points) {
-                addMarker(point);
+                markers.add(createMarker(map, point, this));
             }
             update();
         }
@@ -411,55 +497,14 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         public List<MapPoint> getPoints() {
             List<MapPoint> points = new ArrayList<>();
             for (Marker marker : markers) {
-                points.add(fromGeoPoint(
-                    marker.getPosition(), Double.valueOf(marker.getSubDescription())));
+                points.add(fromMarker(marker));
             }
             return points;
         }
 
         public void addPoint(MapPoint point) {
-            addMarker(point);
+            markers.add(createMarker(map, point, this));
             update();
         }
-
-        protected void addMarker(MapPoint point) {
-            // A Marker's position is a GeoPoint with latitude, longitude, and
-            // altitude fields.  We need to store the standard deviation value
-            // somewhere, so it goes in the marker's sub-description field.
-            Marker marker = new Marker(map);
-            marker.setPosition(toGeoPoint(point));
-            marker.setSubDescription(Double.toString(point.sd));
-            marker.setDraggable(true);
-            marker.setIcon(ContextCompat.getDrawable(map.getContext(), R.drawable.ic_place_black));
-            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            marker.setOnMarkerClickListener(this);
-            marker.setOnMarkerDragListener(this);
-            map.getOverlays().add(marker);
-            markers.add(marker);
-        }
-
-        @Override public void onMarkerDragStart(Marker marker) {
-        }
-
-        @Override public void onMarkerDragEnd(Marker marker) {
-            update();
-        }
-
-        @Override public void onMarkerDrag(Marker marker) {
-            // When a marker is manually dragged, the position is no longer
-            // obtained from a GPS reading, so the standard deviation field
-            // is no longer meaningful; reset it to zero.
-            marker.setSubDescription("0");
-            update();
-        }
-
-        @Override public boolean onMarkerClick(Marker marker, MapView map) {
-            // Prevent the text bubble from appearing when a marker is clicked.
-            return false;
-        }
-    }
-
-    @VisibleForTesting public boolean isGpsErrorDialogShowing() {
-        return gpsErrorDialog != null && gpsErrorDialog.isShowing();
     }
 }

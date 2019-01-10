@@ -59,10 +59,10 @@ public class GoogleMapFragment extends SupportMapFragment implements
     public static final float POINT_ZOOM = 16;
 
     protected GoogleMap map;
-    protected List<MapFragment.ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
-    protected MapFragment.PointListener clickListener;
-    protected MapFragment.PointListener longPressListener;
-    protected MapFragment.PointListener gpsLocationListener;
+    protected List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
+    protected PointListener clickListener;
+    protected PointListener longPressListener;
+    protected PointListener gpsLocationListener;
     protected LocationClient locationClient;
     protected MapPoint lastLocationFix;
     protected int nextFeatureId = 1;
@@ -205,6 +205,20 @@ public class GoogleMapFragment extends SupportMapFragment implements
         } else {
             map.moveCamera(movement);
         }
+    }
+
+    @Override public int addMarker(MapPoint point, boolean draggable) {
+        int featureId = nextFeatureId++;
+        features.put(featureId, new MarkerFeature(map, point, draggable));
+        return featureId;
+    }
+
+    @Override public @Nullable MapPoint getMarkerPoint(int featureId) {
+        MapFeature feature = features.get(featureId);
+        if (feature instanceof MarkerFeature) {
+            return ((MarkerFeature) feature).getPoint();
+        }
+        return null;
     }
 
     @Override public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
@@ -386,6 +400,21 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return new LatLng(point.lat, point.lon);
     }
 
+    protected static Marker createMarker(GoogleMap map, MapPoint point, boolean draggable) {
+        // A Marker's position is a LatLng with just latitude and longitude
+        // fields.  We need to store the point's altitude and standard
+        // deviation values somewhere, so they go in the marker's snippet.
+        return map.addMarker(new MarkerOptions()
+            .position(toLatLng(point))
+            .snippet(point.alt + ";" + point.sd)
+            .draggable(draggable)
+        );
+    }
+
+    @VisibleForTesting public boolean isGpsErrorDialogShowing() {
+        return gpsErrorDialog != null && gpsErrorDialog.isShowing();
+    }
+
     /**
      * A MapFeature is a physical feature on a map, such as a point, a road,
      * a building, a region, etc.  It is presented to the user as one editable
@@ -398,6 +427,27 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
         /** Removes the feature from the map, leaving it no longer usable. */
         void dispose();
+    }
+
+    protected static class MarkerFeature implements MapFeature {
+        final GoogleMap map;
+        Marker marker;
+
+        public MarkerFeature(GoogleMap map, MapPoint point, boolean draggable) {
+            this.map = map;
+            this.marker = createMarker(map, point, draggable);
+        }
+
+        public MapPoint getPoint() {
+            return fromMarker(marker);
+        }
+
+        public void update() { }
+
+        public void dispose() {
+            marker.remove();
+            marker = null;
+        }
     }
 
     /** A polyline or polygon that can be manipulated by dragging markers at its vertices. */
@@ -414,7 +464,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 return;
             }
             for (MapPoint point : points) {
-                addMarker(point);
+                markers.add(createMarker(map, point, true));
             }
             update();
         }
@@ -460,19 +510,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
             if (map == null) {  // during Robolectric tests, map will be null
                 return;
             }
-            addMarker(point);
+            markers.add(createMarker(map, point, true));
             update();
-        }
-
-        protected void addMarker(MapPoint point) {
-            // A Marker's position is a LatLng with just latitude and longitude
-            // fields.  We need to store the point's altitude and standard
-            // deviation values somewhere, so they go in the marker's snippet.
-            markers.add(map.addMarker(new MarkerOptions()
-                .position(toLatLng(point))
-                .snippet(point.alt + ";" + point.sd)
-                .draggable(true)
-            ));
         }
 
         protected void clearPolyline() {
@@ -481,9 +520,5 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 polyline = null;
             }
         }
-    }
-
-    @VisibleForTesting public boolean isGpsErrorDialogShowing() {
-        return gpsErrorDialog != null && gpsErrorDialog.isShowing();
     }
 }
