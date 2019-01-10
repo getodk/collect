@@ -80,7 +80,7 @@ public final class ContentResolverHelper {
      */
     public static String getFileExtensionFromUri(Uri fileUri) {
         try (Cursor returnCursor = getContentResolver().query(fileUri, null, null, null, null)) {
-            if (returnCursor != null) {
+            if (returnCursor != null && returnCursor.getCount() > 0) {
                 int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
                 returnCursor.moveToFirst();
                 String filename = returnCursor.getString(nameIndex);
