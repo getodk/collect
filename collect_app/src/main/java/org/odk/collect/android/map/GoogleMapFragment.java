@@ -209,21 +209,21 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new DraggablePoly(map, points, closedPolygon));
+        features.put(featureId, new PolyFeature(map, points, closedPolygon));
         return featureId;
     }
 
     @Override public void appendPointToPoly(int featureId, @NonNull MapPoint point) {
         MapFeature feature = features.get(featureId);
-        if (feature instanceof DraggablePoly) {
-            ((DraggablePoly) feature).addPoint(point);
+        if (feature instanceof PolyFeature) {
+            ((PolyFeature) feature).addPoint(point);
         }
     }
 
-    @Override public @NonNull List<MapPoint> getPointsOfPoly(int featureId) {
+    @Override public @NonNull List<MapPoint> getPolyPoints(int featureId) {
         MapFeature feature = features.get(featureId);
-        if (feature instanceof DraggablePoly) {
-            return ((DraggablePoly) feature).getPoints();
+        if (feature instanceof PolyFeature) {
+            return ((PolyFeature) feature).getPoints();
         }
         return new ArrayList<>();
     }
@@ -401,13 +401,13 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     /** A polyline or polygon that can be manipulated by dragging markers at its vertices. */
-    protected static class DraggablePoly implements MapFeature {
+    protected static class PolyFeature implements MapFeature {
         final GoogleMap map;
         final List<Marker> markers = new ArrayList<>();
         final boolean closedPolygon;
         Polyline polyline;
 
-        public DraggablePoly(GoogleMap map, Iterable<MapPoint> points, boolean closedPolygon) {
+        public PolyFeature(GoogleMap map, Iterable<MapPoint> points, boolean closedPolygon) {
             this.map = map;
             this.closedPolygon = closedPolygon;
             if (map == null) {  // during Robolectric tests, map will be null

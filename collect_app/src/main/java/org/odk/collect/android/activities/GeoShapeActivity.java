@@ -104,11 +104,11 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
         super.onSaveInstanceState(state);
         state.putParcelable(MAP_CENTER_KEY, map.getCenter());
         state.putDouble(MAP_ZOOM_KEY, map.getZoom());
-        state.putParcelableArrayList(POINTS_KEY, new ArrayList<>(map.getPointsOfPoly(featureId)));
+        state.putParcelableArrayList(POINTS_KEY, new ArrayList<>(map.getPolyPoints(featureId)));
     }
 
     @Override public void onBackPressed() {
-        if (!formatPoints(map.getPointsOfPoly(featureId)).equals(originalShapeString)) {
+        if (!formatPoints(map.getPolyPoints(featureId)).equals(originalShapeString)) {
             showBackDialog();
         } else {
             finish();
@@ -168,7 +168,7 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
 
         zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
         zoomPointButton.setOnClickListener(v -> {
-            map.zoomToBoundingBox(map.getPointsOfPoly(featureId), 0.6, true);
+            map.zoomToBoundingBox(map.getPolyPoints(featureId), 0.6, true);
             zoomDialog.dismiss();
         });
 
@@ -203,7 +203,7 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
     }
 
     private void showClearDialog() {
-        if (!map.getPointsOfPoly(featureId).isEmpty()) {
+        if (!map.getPolyPoints(featureId).isEmpty()) {
             new AlertDialog.Builder(this)
                 .setMessage(R.string.geo_clear_warning)
                 .setPositiveButton(R.string.clear, (dialog, id) -> clear())
@@ -222,7 +222,7 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
     }
 
     private void finishWithResult() {
-        List<MapPoint> points = map.getPointsOfPoly(featureId);
+        List<MapPoint> points = map.getPolyPoints(featureId);
 
         // Allow an empty result (no points), or a polygon with at least
         // 3 points, but no degenerate 1-point or 2-point polygons.
@@ -308,7 +308,7 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
             zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
         }
 
-        if (!map.getPointsOfPoly(featureId).isEmpty()) {
+        if (!map.getPolyPoints(featureId).isEmpty()) {
             zoomPointButton.setEnabled(true);
             zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
             zoomPointButton.setTextColor(themeUtils.getPrimaryTextColor());

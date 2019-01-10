@@ -100,7 +100,7 @@ public interface MapFragment {
      * Returns the vertices of the polyline or polygon specified by featureId, or an
      * empty list if the featureId does not identify an existing polyline or polygon.
      */
-    @NonNull List<MapPoint> getPointsOfPoly(int featureId);
+    @NonNull List<MapPoint> getPolyPoints(int featureId);
 
     /** Removes a specified map feature from the map. */
     void removeFeature(int featureId);

@@ -187,21 +187,21 @@ public class OsmMapFragment extends Fragment implements MapFragment,
 
     @Override public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new DraggablePoly(map, points, closedPolygon));
+        features.put(featureId, new PolyFeature(map, points, closedPolygon));
         return featureId;
     }
 
     @Override public void appendPointToPoly(int featureId, @NonNull MapPoint point) {
         MapFeature feature = features.get(featureId);
-        if (feature != null && feature instanceof DraggablePoly) {
-            ((DraggablePoly) feature).addPoint(point);
+        if (feature != null && feature instanceof PolyFeature) {
+            ((PolyFeature) feature).addPoint(point);
         }
     }
 
-    @Override public @NonNull List<MapPoint> getPointsOfPoly(int featureId) {
+    @Override public @NonNull List<MapPoint> getPolyPoints(int featureId) {
         MapFeature feature = features.get(featureId);
-        if (feature instanceof DraggablePoly) {
-            return ((DraggablePoly) feature).getPoints();
+        if (feature instanceof PolyFeature) {
+            return ((PolyFeature) feature).getPoints();
         }
         return new ArrayList<>();
     }
@@ -367,14 +367,14 @@ public class OsmMapFragment extends Fragment implements MapFragment,
     }
 
     /** A polyline or polygon that can be manipulated by dragging markers at its vertices. */
-    protected static class DraggablePoly implements MapFeature, Marker.OnMarkerClickListener, Marker.OnMarkerDragListener {
+    protected static class PolyFeature implements MapFeature, Marker.OnMarkerClickListener, Marker.OnMarkerDragListener {
         final MapView map;
         final List<Marker> markers = new ArrayList<>();
         final Polyline polyline;
         final boolean closedPolygon;
         public static final int STROKE_WIDTH = 5;
 
-        public DraggablePoly(MapView map, Iterable<MapPoint> points, boolean closedPolygon) {
+        public PolyFeature(MapView map, Iterable<MapPoint> points, boolean closedPolygon) {
             this.map = map;
             this.closedPolygon = closedPolygon;
             polyline = new Polyline();
