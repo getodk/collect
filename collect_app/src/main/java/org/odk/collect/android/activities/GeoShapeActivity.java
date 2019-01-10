@@ -104,11 +104,11 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
         super.onSaveInstanceState(state);
         state.putParcelable(MAP_CENTER_KEY, map.getCenter());
         state.putDouble(MAP_ZOOM_KEY, map.getZoom());
-        state.putParcelableArrayList(POINTS_KEY, new ArrayList<>(map.getPointsOfPoly(featureId)));
+        state.putParcelableArrayList(POINTS_KEY, new ArrayList<>(map.getPolyPoints(featureId)));
     }
 
     @Override public void onBackPressed() {
-        if (!formatPoints(map.getPointsOfPoly(featureId)).equals(originalShapeString)) {
+        if (!formatPoints(map.getPolyPoints(featureId)).equals(originalShapeString)) {
             showBackDialog();
         } else {
             finish();
@@ -124,7 +124,7 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
         }
 
         map = newMapFragment;
-        map.setLongPressListener(this::addVertex);
+        map.setLongPressListener(this::onLongPress);
 
         if (map instanceof GoogleMapFragment) {
             helper = new MapHelper(this, ((GoogleMapFragment) map).getGoogleMap(), selectedLayer);
@@ -162,21 +162,21 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
 
         zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(v -> {
-            map.zoomToPoint(map.getGpsLocation());
+            map.zoomToPoint(map.getGpsLocation(), true);
             zoomDialog.dismiss();
         });
 
         zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
         zoomPointButton.setOnClickListener(v -> {
-            map.zoomToBoundingBox(map.getPointsOfPoly(featureId), 0.6);
+            map.zoomToBoundingBox(map.getPolyPoints(featureId), 0.6, true);
             zoomDialog.dismiss();
         });
 
         map.setGpsLocationEnabled(true);
         if (restoredMapCenter != null && restoredMapZoom != null) {
-            map.zoomToPoint(restoredMapCenter, restoredMapZoom);
+            map.zoomToPoint(restoredMapCenter, restoredMapZoom, false);
         } else if (!points.isEmpty()) {
-            map.zoomToBoundingBox(points, 0.6);
+            map.zoomToBoundingBox(points, 0.6, false);
         } else {
             map.runOnGpsLocationReady(this::onGpsLocationReady);
         }
@@ -190,7 +190,7 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
         }
     }
 
-    private void addVertex(MapPoint point) {
+    private void onLongPress(MapPoint point) {
         map.appendPointToPoly(featureId, point);
         clearButton.setEnabled(true);
         zoomButton.setEnabled(true);
@@ -203,7 +203,7 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
     }
 
     private void showClearDialog() {
-        if (!map.getPointsOfPoly(featureId).isEmpty()) {
+        if (!map.getPolyPoints(featureId).isEmpty()) {
             new AlertDialog.Builder(this)
                 .setMessage(R.string.geo_clear_warning)
                 .setPositiveButton(R.string.clear, (dialog, id) -> clear())
@@ -222,7 +222,7 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
     }
 
     private void finishWithResult() {
-        List<MapPoint> points = map.getPointsOfPoly(featureId);
+        List<MapPoint> points = map.getPolyPoints(featureId);
 
         // Allow an empty result (no points), or a polygon with at least
         // 3 points, but no degenerate 1-point or 2-point polygons.
@@ -308,7 +308,7 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
             zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
         }
 
-        if (!map.getPointsOfPoly(featureId).isEmpty()) {
+        if (!map.getPolyPoints(featureId).isEmpty()) {
             zoomPointButton.setEnabled(true);
             zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
             zoomPointButton.setTextColor(themeUtils.getPrimaryTextColor());

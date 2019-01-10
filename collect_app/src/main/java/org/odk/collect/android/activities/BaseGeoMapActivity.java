@@ -36,7 +36,9 @@ public abstract class BaseGeoMapActivity extends CollectAbstractActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt(MAP_LAYER_KEY, helper.getSelectedLayer());
+        if (helper != null) {
+            outState.putInt(MAP_LAYER_KEY, helper.getSelectedLayer());
+        }
         super.onSaveInstanceState(outState);
     }
 }

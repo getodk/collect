@@ -58,20 +58,23 @@ public interface MapFragment {
      */
     double getZoom();
 
-    /** Centers the map view on the given point, leaving zoom level unchanged. */
-    void setCenter(@Nullable MapPoint center);
+    /**
+     * Centers the map view on the given point, leaving zoom level unchanged,
+     * possibly with animation.
+     */
+    void setCenter(@Nullable MapPoint center, boolean animate);
 
     /**
      * Centers the map view on the given point, zooming in to a close-up level
      * deemed appropriate by the implementation, possibly with animation.
      */
-    void zoomToPoint(@Nullable MapPoint center);
+    void zoomToPoint(@Nullable MapPoint center, boolean animate);
 
     /**
      * Centers the map view on the given point with a zoom level as close as
      * possible to the given zoom level, possibly with animation.
      */
-    void zoomToPoint(@Nullable MapPoint center, double zoom);
+    void zoomToPoint(@Nullable MapPoint center, double zoom, boolean animate);
 
     /**
      * Adjusts the map's viewport to enclose all of the given points, possibly
@@ -81,7 +84,17 @@ public interface MapFragment {
      * to occupy at most 80% of the width and 80% of the height of the viewport,
      * ensuring a margin of at least 10% on all sides.
      */
-    void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor);
+    void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor, boolean animate);
+
+    /**
+     * Adds a marker to the map at the given location.  If draggable is true,
+     * the user will be able to drag the marker to change its location.
+     * Returns a positive integer, the featureId for the newly added shape.
+     */
+    int addMarker(MapPoint point, boolean draggable);
+
+    /** Gets the location of an existing marker. */
+    MapPoint getMarkerPoint(int featureId);
 
     /**
      * Adds a polyline or polygon to the map with the given sequence of vertices.
@@ -97,13 +110,22 @@ public interface MapFragment {
      * Returns the vertices of the polyline or polygon specified by featureId, or an
      * empty list if the featureId does not identify an existing polyline or polygon.
      */
-    @NonNull List<MapPoint> getPointsOfPoly(int featureId);
+    @NonNull List<MapPoint> getPolyPoints(int featureId);
 
-    /** Removes a specified map feature from the map. */
+    /** Removes a specified map feature from the map, leaving its featureId invalid. */
     void removeFeature(int featureId);
 
     /** Removes all map features from the map. */
     void clearFeatures();
+
+    /** Sets or clears the callback for a click on the map. */
+    void setClickListener(@Nullable PointListener listener);
+
+    /** Sets or clears the callback for a long press on the map. */
+    void setLongPressListener(@Nullable PointListener listener);
+
+    /** Sets or clears the callback for when a drag is completed. */
+    void setDragEndListener(@Nullable FeatureListener listener);
 
     /**
      * Enables/disables GPS tracking.  While enabled, the GPS location is shown
@@ -115,6 +137,9 @@ public interface MapFragment {
 
     /** Gets the last GPS location fix, or null if there hasn't been one. */
     @Nullable MapPoint getGpsLocation();
+
+    /** Gets the provider of the last fix, or null if there hasn't been one. */
+    @Nullable String getLocationProvider();
 
     /**
      * Queues a callback to be invoked on the UI thread as soon as a GPS fix is
@@ -132,17 +157,15 @@ public interface MapFragment {
      */
     void setGpsLocationListener(@Nullable PointListener listener);
 
-    /** Sets or clears the callback for a click on the map. */
-    void setClickListener(@Nullable PointListener listener);
-
-    /** Sets or clears the callback for a long press on the map. */
-    void setLongPressListener(@Nullable PointListener listener);
-
     interface ReadyListener {
         void onReady(@Nullable MapFragment mapFragment);
     }
 
     interface PointListener {
         void onPoint(@NonNull MapPoint point);
+    }
+
+    interface FeatureListener {
+        void onFeature(@NonNull int featureId);
     }
 }

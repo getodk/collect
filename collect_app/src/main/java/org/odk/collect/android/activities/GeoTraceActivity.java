@@ -150,7 +150,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         super.onSaveInstanceState(state);
         state.putParcelable(MAP_CENTER_KEY, map.getCenter());
         state.putDouble(MAP_ZOOM_KEY, map.getZoom());
-        state.putParcelableArrayList(POINTS_KEY, new ArrayList<>(map.getPointsOfPoly(featureId)));
+        state.putParcelableArrayList(POINTS_KEY, new ArrayList<>(map.getPolyPoints(featureId)));
         state.putBoolean(BEEN_PAUSED_KEY, beenPaused);
         state.putBoolean(MODE_ACTIVE_KEY, modeActive);
         state.putInt(TRACE_MODE_KEY, traceMode);
@@ -198,7 +198,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         pauseButton = findViewById(R.id.pause);
         pauseButton.setOnClickListener(v -> {
             playButton.setVisibility(View.VISIBLE);
-            if (!map.getPointsOfPoly(featureId).isEmpty()) {
+            if (!map.getPolyPoints(featureId).isEmpty()) {
                 clearButton.setEnabled(true);
             }
             pauseButton.setVisibility(View.GONE);
@@ -214,7 +214,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
         ImageButton saveButton = findViewById(R.id.geotrace_save);
         saveButton.setOnClickListener(v -> {
-            if (!map.getPointsOfPoly(featureId).isEmpty()) {
+            if (!map.getPolyPoints(featureId).isEmpty()) {
                 polygonOrPolylineDialog.show();
             } else {
                 finishWithResult();
@@ -250,9 +250,9 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
         Button polygonSave = polygonOrPolylineView.findViewById(R.id.polygon_save);
         polygonSave.setOnClickListener(v -> {
-            if (map.getPointsOfPoly(featureId).size() > 2) {
+            if (map.getPolyPoints(featureId).size() > 2) {
                 // Close the polygon.
-                map.appendPointToPoly(featureId, map.getPointsOfPoly(featureId).get(0));
+                map.appendPointToPoly(featureId, map.getPolyPoints(featureId).get(0));
                 polygonOrPolylineDialog.dismiss();
                 finishWithResult();
             } else {
@@ -263,7 +263,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
         Button polylineSave = polygonOrPolylineView.findViewById(R.id.polyline_save);
         polylineSave.setOnClickListener(v -> {
-            if (map.getPointsOfPoly(featureId).size() > 1) {
+            if (map.getPolyPoints(featureId).size() > 1) {
                 polygonOrPolylineDialog.dismiss();
                 finishWithResult();
             } else {
@@ -302,16 +302,16 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         map.setGpsLocationEnabled(true);
         map.setGpsLocationListener(this::onGpsLocation);
         if (restoredMapCenter != null && restoredMapZoom != null) {
-            map.zoomToPoint(restoredMapCenter, restoredMapZoom);
+            map.zoomToPoint(restoredMapCenter, restoredMapZoom, false);
         } else if (!points.isEmpty()) {
-            map.zoomToBoundingBox(points, 0.6);
+            map.zoomToBoundingBox(points, 0.6, false);
         } else {
             map.runOnGpsLocationReady(this::onGpsLocationReady);
         }
     }
 
     private void finishWithResult() {
-        List<MapPoint> points = map.getPointsOfPoly(featureId);
+        List<MapPoint> points = map.getPolyPoints(featureId);
         setResult(RESULT_OK, new Intent().putExtra(
             FormEntryActivity.GEOTRACE_RESULTS, formatPoints(points)));
         finish();
@@ -391,13 +391,13 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
         zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(v -> {
-            map.zoomToPoint(map.getGpsLocation());
+            map.zoomToPoint(map.getGpsLocation(), true);
             zoomDialog.dismiss();
         });
 
         zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
         zoomPointButton.setOnClickListener(v -> {
-            map.zoomToBoundingBox(map.getPointsOfPoly(featureId), 0.6);
+            map.zoomToBoundingBox(map.getPolyPoints(featureId), 0.6, true);
             zoomDialog.dismiss();
         });
     }
@@ -487,7 +487,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
     private void onGpsLocation(MapPoint point) {
         if (modeActive) {
-            map.setCenter(point);
+            map.setCenter(point, false);
         }
     }
 
@@ -512,7 +512,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     }
 
     private void showClearDialog() {
-        if (!map.getPointsOfPoly(featureId).isEmpty()) {
+        if (!map.getPolyPoints(featureId).isEmpty()) {
             new AlertDialog.Builder(this)
                 .setMessage(R.string.geo_clear_warning)
                 .setPositiveButton(R.string.clear, (dialog, id) -> clear())
@@ -543,7 +543,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
             zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
         }
-        if (!map.getPointsOfPoly(featureId).isEmpty()) {
+        if (!map.getPolyPoints(featureId).isEmpty()) {
             zoomPointButton.setEnabled(true);
             zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
             zoomPointButton.setTextColor(themeUtils.getPrimaryTextColor());
