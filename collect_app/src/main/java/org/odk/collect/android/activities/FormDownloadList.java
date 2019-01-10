@@ -815,7 +815,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         alertTitle = title;
         alertShowing = true;
         this.shouldExit = shouldExit;
-        alertDialog.show();
+        DialogUtils.showDialog(alertDialog, this);
     }
 
     @Override
