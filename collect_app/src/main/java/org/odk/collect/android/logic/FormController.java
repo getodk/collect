@@ -522,23 +522,10 @@ public class FormController {
     }
 
     /**
-     * Same as {@link #stepToNextEvent stepToNextEvent(false)}, but ignores question types.
-     * It always steps over the group.
-     */
-    public int forceStepOverGroup() {
-        if (getEvent() == FormEntryController.EVENT_GROUP
-                || getEvent() == FormEntryController.EVENT_REPEAT) {
-            return stepOverGroup();
-        } else {
-            return formEntryController.stepToNextEvent();
-        }
-    }
-
-    /**
      * If using a view like HierarchyView that doesn't support multi-question per screen, step over
      * the group represented by the FormIndex.
      */
-    private int stepOverGroup() {
+    public int stepOverGroup() {
         GroupDef gd =
                 (GroupDef) formEntryController.getModel().getForm()
                         .getChild(getFormIndex());

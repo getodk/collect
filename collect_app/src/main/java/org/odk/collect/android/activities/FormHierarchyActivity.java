@@ -450,7 +450,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                             elementsToDisplay.add(groupElement);
 
                             // Skip to the next item outside the group.
-                            formController.forceStepOverGroup();
+                            formController.stepOverGroup();
                         }
 
                         break;
