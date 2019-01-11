@@ -23,10 +23,11 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.tasks.sms.SmsSender.SMS_INSTANCE_ID;
 import static org.odk.collect.android.tasks.sms.SmsSender.SMS_RESULT_CODE;
+import static org.odk.collect.android.utilities.NotificationUtils.CHANNEL_ID;
 
 public class SmsNotificationReceiver extends BroadcastReceiver {
     public static final String SMS_NOTIFICATION_ACTION = "org.odk.collect.android.COLLECT_SMS_NOTIFICATION_ACTION";
-    public static final String SMS_NOTIFICATION_GROUP = "org.odk.collect.android.COLLECT_SMS_NOTIFICATION_GROUP";
+    private static final String SMS_NOTIFICATION_GROUP = "org.odk.collect.android.COLLECT_SMS_NOTIFICATION_GROUP";
     private static final int SUMMARY_ID = 4324;
     private int resultCode;
 
@@ -70,7 +71,7 @@ public class SmsNotificationReceiver extends BroadcastReceiver {
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        return new NotificationCompat.Builder(context)
+        return new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setContentTitle(smsSubmission.getDisplayName())
                 .setContentText(getContentText())
                 .setWhen(smsSubmission.getLastUpdated().getTime())
@@ -91,7 +92,7 @@ public class SmsNotificationReceiver extends BroadcastReceiver {
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        return new NotificationCompat.Builder(context)
+        return new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setContentTitle(context.getString(R.string.sms_submissions_notif_title))
                 .setContentText(context.getString(R.string.sms_submissions_notif_description))
                 .setWhen(smsSubmission.getLastUpdated().getTime())
