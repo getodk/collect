@@ -17,6 +17,7 @@ package org.odk.collect.android.logic;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import android.text.TextUtils;
 import com.google.android.gms.analytics.HitBuilders;
 
 import org.javarosa.core.model.CoreModelModule;
@@ -85,12 +86,6 @@ public class FormController {
      */
     private static final String AUDIT = "audit";
     public static final String AUDIT_FILE_NAME = "audit.csv";
-
-    /**
-     * XML 'appearance' attribute that denotes a group as being displayed
-     * in the hierarchy (rather than invisible).
-     */
-    public static final String VISIBLE_GROUP_APPEARANCE = "hierarchy-visible";
 
     /*
      * Store the timerLogger object with the form controller state
@@ -692,8 +687,16 @@ public class FormController {
      */
     public boolean isDisplayableGroup(FormIndex index) {
         return getEvent(index) == FormEntryController.EVENT_REPEAT ||
-                (getEvent(index) == FormEntryController.EVENT_GROUP
-                && VISIBLE_GROUP_APPEARANCE.equals(getAppearanceAttr(index)));
+                (getEvent(index) == FormEntryController.EVENT_GROUP && groupIsLabeled(index));
+    }
+
+    /**
+     * Returns true if the group has a displayable label.
+     */
+    private boolean groupIsLabeled(FormIndex groupIndex) {
+        IFormElement group = formEntryController.getModel().getForm().getChild(groupIndex);
+        String label = group.getLabelInnerText();
+        return !TextUtils.isEmpty(label);
     }
 
     public static class FailedConstraint {
