@@ -643,16 +643,10 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             return true;
         }
 
-        Cursor formCursor = null;
-        try {
-            formCursor = new FormsDao().getFormsCursorForFormId(formId);
-            return formCursor.getCount() == 0 // form does not already exist locally
+        try (Cursor formCursor = new FormsDao().getFormsCursorForFormId(formId)) {
+            return formCursor != null && formCursor.getCount() == 0 // form does not already exist locally
                     || formNamesAndURLs.get(formId).isNewerFormVersionAvailable() // or a newer version of this form is available
                     || formNamesAndURLs.get(formId).areNewerMediaFilesAvailable(); // or newer versions of media files are available
-        } finally {
-            if (formCursor != null) {
-                formCursor.close();
-            }
         }
     }
 
