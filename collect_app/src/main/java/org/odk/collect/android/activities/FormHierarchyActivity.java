@@ -451,6 +451,13 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
                             // Skip to the next item outside the group.
                             formController.stepOverGroup();
+
+                            // As long as we're not at the end yet, go back one.
+                            // This puts us in the right spot to continue the while loop,
+                            // which increments the index automatically.
+                            if (!formController.getFormIndex().isEndOfFormIndex()) {
+                                formController.stepToPreviousEvent();
+                            }
                         }
 
                         break;
