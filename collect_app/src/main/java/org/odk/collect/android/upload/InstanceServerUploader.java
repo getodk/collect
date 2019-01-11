@@ -72,6 +72,8 @@ public class InstanceServerUploader extends InstanceUploader {
         // Used to determine if attachments should be sent for Aggregate < 0.9x servers
         boolean openRosaServer = false;
 
+        long contentLength = 10000000L;
+
         // We already issued a head request and got a response, so we know it was an
         // OpenRosa-compliant server. We also know the proper URL to send the submission to and
         // the proper scheme.
@@ -100,6 +102,16 @@ public class InstanceServerUploader extends InstanceUploader {
             try {
                 headResult = httpInterface.head(uri, webCredentialsUtils.getCredentials(uri));
                 responseHeaders = headResult.getHeaders();
+
+                if (responseHeaders.containsKey("X-OpenRosa-Accept-Content-Length")) {
+                    String contentLengthString = responseHeaders.get("X-OpenRosa-Accept-Content-Length");
+                    try {
+                        contentLength = Long.parseLong(contentLengthString);
+                    } catch (Exception e) {
+                        Timber.e(e, "Exception thrown parsing contentLength %s", contentLengthString);
+                    }
+                }
+
             } catch (Exception e) {
                 saveFailedStatusToDatabase(instance);
                 throw new UploadException(FAIL
@@ -181,7 +193,7 @@ public class InstanceServerUploader extends InstanceUploader {
             URI uri = URI.create(submissionUri.toString());
 
             messageParser = httpInterface.uploadSubmissionFile(files, submissionFile, uri,
-                    webCredentialsUtils.getCredentials(uri));
+                    webCredentialsUtils.getCredentials(uri), contentLength);
 
             int responseCode = messageParser.getResponseCode();
 
