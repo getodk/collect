@@ -446,7 +446,10 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         FormIndex index = formController.getFormIndex();
                         if (formController.isDisplayableGroup(index)) {
                             FormEntryCaption caption = formController.getCaptionPrompt();
-                            HierarchyElement groupElement = new HierarchyElement(getLabel(caption), getString(R.string.group_label), null, HierarchyElement.Type.VISIBLE_GROUP, caption.getIndex());
+                            HierarchyElement groupElement = new HierarchyElement(
+                                    getLabel(caption), getString(R.string.group_label),
+                                    ContextCompat.getDrawable(this, R.drawable.ic_folder_open),
+                                    HierarchyElement.Type.VISIBLE_GROUP, caption.getIndex());
                             elementsToDisplay.add(groupElement);
 
                             // Skip to the next item outside the group.
