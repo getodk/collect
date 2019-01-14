@@ -35,8 +35,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GoogleDriveActivity;
 import org.odk.collect.android.activities.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -134,10 +134,8 @@ public class GoogleAccountsManager {
 
                 @Override
                 public void denied() {
-                    if (activity != null) {
-                        if (activity instanceof GoogleSheetsUploaderActivity || activity instanceof GoogleDriveActivity) {
-                            activity.finish();
-                        }
+                    if (activity != null && (activity instanceof GoogleSheetsUploaderActivity || activity instanceof GoogleDriveActivity)) {
+                        activity.finish();
                     }
                 }
             });
