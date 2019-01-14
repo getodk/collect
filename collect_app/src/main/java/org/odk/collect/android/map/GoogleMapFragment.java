@@ -457,11 +457,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     protected static class MarkerFeature implements MapFeature {
-        final GoogleMap map;
         Marker marker;
 
         public MarkerFeature(GoogleMap map, MapPoint point, boolean draggable) {
-            this.map = map;
             this.marker = createMarker(map, point, draggable);
         }
 
