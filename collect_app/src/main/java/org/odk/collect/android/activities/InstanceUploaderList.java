@@ -276,6 +276,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     @Override
     protected void onResume() {
+        super.onResume();
         if (instanceSyncTask != null) {
             instanceSyncTask.setDiskSyncListener(this);
             if (instanceSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
@@ -283,7 +284,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
             }
 
         }
-        super.onResume();
 
         IntentFilter filter = new IntentFilter(SmsNotificationReceiver.SMS_NOTIFICATION_ACTION);
         // The default priority is 0. Positive values will be before
@@ -299,13 +299,12 @@ public class InstanceUploaderList extends InstanceListActivity implements
         if (instanceSyncTask != null) {
             instanceSyncTask.setDiskSyncListener(null);
         }
-        super.onPause();
-
         try {
             unregisterReceiver(smsForegroundReceiver);
         } catch (IllegalArgumentException e) {
             Timber.w(e);
         }
+        super.onPause();
     }
 
     @Override
