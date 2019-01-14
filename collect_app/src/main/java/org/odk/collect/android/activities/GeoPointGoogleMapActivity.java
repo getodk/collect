@@ -119,7 +119,7 @@ public class GeoPointGoogleMapActivity extends BaseGeoMapActivity implements OnM
         }
 
         try {
-            setContentView(R.layout.geopoint_layout);
+            setContentView(R.layout.geopoint_google_layout);
 
         } catch (NoClassDefFoundError e) {
             Timber.e(e, "Google maps not accessible due to: %s ", e.getMessage());

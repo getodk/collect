@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.GeoPointMapActivity;
+import org.odk.collect.android.activities.GeoPointGoogleMapActivity;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.robolectric.Robolectric;
@@ -31,14 +31,14 @@ import static org.odk.collect.android.location.activities.GeoPointActivityTest.n
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-public class GeoPointMapActivityTest extends BaseGeoActivityTest {
+public class GeoPointGoogleMapActivityTest extends BaseGeoActivityTest {
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
 
-    private ActivityController<GeoPointMapActivity> activityController;
+    private ActivityController<GeoPointGoogleMapActivity> activityController;
 
-    private GeoPointMapActivity activity;
+    private GeoPointGoogleMapActivity activity;
     private ShadowActivity shadowActivity;
 
     @Mock
@@ -50,7 +50,7 @@ public class GeoPointMapActivityTest extends BaseGeoActivityTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        activityController = Robolectric.buildActivity(GeoPointMapActivity.class);
+        activityController = Robolectric.buildActivity(GeoPointGoogleMapActivity.class);
         activity = activityController.get();
         shadowActivity = shadowOf(activity);
 
