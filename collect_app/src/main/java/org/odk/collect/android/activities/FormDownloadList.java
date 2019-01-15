@@ -96,7 +96,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     public static final String DISPLAY_ONLY_UPDATED_FORMS = "displayOnlyUpdatedForms";
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
-    private static final String FORM_IDS_TO_DOWNLOAD = "formIdsToDownload";
     private static final String FORMS_FOUND = "formsFound";
 
     public static final String FORMNAME = "formname";
@@ -122,7 +121,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     private boolean displayOnlyUpdatedForms;
 
-    private String[] formIdsToDownload;
     private ArrayList<String> formsFound;
 
     private FormDownloadListViewModel viewModel;
@@ -174,9 +172,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
             if (bundle.containsKey(ApplicationConstants.BundleKeys.FORM_IDS)) {
                 viewModel.setDownloadOnlyMode(true);
-                formIdsToDownload = bundle.getStringArray(ApplicationConstants.BundleKeys.FORM_IDS);
+                viewModel.setFormIdsToDownload(bundle.getStringArray(ApplicationConstants.BundleKeys.FORM_IDS));
 
-                if (formIdsToDownload == null) {
+                if (viewModel.getFormIdsToDownload() == null) {
                     setReturnResult(false, "Form Ids is null", null);
                     finish();
                 }
@@ -239,7 +237,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             }
 
             if (viewModel.isDownloadOnlyMode()) {
-                formIdsToDownload = savedInstanceState.getStringArray(FORM_IDS_TO_DOWNLOAD);
                 formsFound = savedInstanceState.getStringArrayList(FORMS_FOUND);
                 formsFound = formsFound == null ? new ArrayList<>() : formsFound;
             }
@@ -357,7 +354,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
         if (viewModel.isDownloadOnlyMode()) {
             // String can be stored and retrieved
-            outState.putStringArray(FORM_IDS_TO_DOWNLOAD, formIdsToDownload);
             outState.putStringArrayList(FORMS_FOUND, formsFound);
         }
     }
@@ -676,7 +672,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             if (viewModel.isDownloadOnlyMode()) {
                 //1. First check if all form IDS could be found on the server - Register forms that could not be found
 
-                for (String formId: formIdsToDownload) {
+                for (String formId: viewModel.getFormIdsToDownload()) {
                     viewModel.putFormResult(formId, false);
                 }
 

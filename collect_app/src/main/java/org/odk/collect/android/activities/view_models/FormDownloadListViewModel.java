@@ -32,6 +32,8 @@ public class FormDownloadListViewModel extends ViewModel {
 
     private LinkedHashSet<String> selectedForms = new LinkedHashSet<>();
 
+    private String[] formIdsToDownload;
+
     private String alertTitle;
     private String alertMsg;
     private String url;
@@ -161,5 +163,13 @@ public class FormDownloadListViewModel extends ViewModel {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String[] getFormIdsToDownload() {
+        return formIdsToDownload;
+    }
+
+    public void setFormIdsToDownload(String[] formIdsToDownload) {
+        this.formIdsToDownload = formIdsToDownload;
     }
 }
