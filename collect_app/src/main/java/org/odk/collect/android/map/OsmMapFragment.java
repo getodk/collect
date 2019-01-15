@@ -57,6 +57,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import timber.log.Timber;
+
 public class OsmMapFragment extends Fragment implements MapFragment,
     MapEventsReceiver, LocationListener, LocationClient.LocationClientListener {
     public static final GeoPoint INITIAL_CENTER = new GeoPoint(0.0, -30.0);
@@ -376,7 +378,9 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         double sd = 0;
         try {
             sd = Double.parseDouble(marker.getSubDescription());
-        } catch (NumberFormatException e) { /* ignore */ }
+        } catch (NumberFormatException e) {
+            Timber.w("Assertion violated: Marker.getSubDescription() did not contain a number");
+        }
         return new MapPoint(
             geoPoint.getLatitude(), geoPoint.getLongitude(),
             geoPoint.getAltitude(), sd

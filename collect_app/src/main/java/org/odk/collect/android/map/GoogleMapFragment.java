@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import timber.log.Timber;
 
 public class GoogleMapFragment extends SupportMapFragment implements
     MapFragment, LocationListener, LocationClient.LocationClientListener,
@@ -416,7 +417,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
             if (parts.length >= 2) {
                 sd = Double.parseDouble(parts[1]);
             }
-        } catch (NumberFormatException e) { /* ignore */ }
+        } catch (NumberFormatException e) {
+            Timber.w("Assertion violated: Marker.getSnippet() did not contain two numbers");
+        }
         return new MapPoint(position.latitude, position.longitude, alt, sd);
     }
 
