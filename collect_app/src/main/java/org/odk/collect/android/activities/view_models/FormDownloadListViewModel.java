@@ -36,6 +36,8 @@ public class FormDownloadListViewModel extends ViewModel {
 
     private boolean alertShowing;
     private boolean shouldExit;
+    // Variables for the external app intent call
+    private boolean isDownloadOnlyMode;
 
     public HashMap<String, FormDetails> getFormNamesAndURLs() {
         return formNamesAndURLs;
@@ -115,5 +117,13 @@ public class FormDownloadListViewModel extends ViewModel {
 
     public void clearSelectedForms() {
         selectedForms.clear();
+    }
+
+    public boolean isDownloadOnlyMode() {
+        return isDownloadOnlyMode;
+    }
+
+    public void setDownloadOnlyMode(boolean downloadOnlyMode) {
+        isDownloadOnlyMode = downloadOnlyMode;
     }
 }

@@ -96,7 +96,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     public static final String DISPLAY_ONLY_UPDATED_FORMS = "displayOnlyUpdatedForms";
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
-    private static final String IS_DOWNLOAD_ONLY_MODE = "isDownloadOnlyMode";
     private static final String FORM_IDS_TO_DOWNLOAD = "formIdsToDownload";
     private static final String URL = "url";
     private static final String USERNAME = "username";
@@ -127,8 +126,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     private boolean displayOnlyUpdatedForms;
 
-    // Variables for the external app intent call
-    private boolean isDownloadOnlyMode;
     private String[] formIdsToDownload;
     private String url;
     private String username;
@@ -185,7 +182,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             }
 
             if (bundle.containsKey(ApplicationConstants.BundleKeys.FORM_IDS)) {
-                isDownloadOnlyMode = true;
+                viewModel.setDownloadOnlyMode(true);
                 formIdsToDownload = bundle.getStringArray(ApplicationConstants.BundleKeys.FORM_IDS);
 
                 if (formIdsToDownload == null) {
@@ -250,9 +247,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 downloadButton.setEnabled(savedInstanceState.getInt(BUNDLE_SELECTED_COUNT) > 0);
             }
 
-            if (savedInstanceState.containsKey(IS_DOWNLOAD_ONLY_MODE) && savedInstanceState.getBoolean(IS_DOWNLOAD_ONLY_MODE)) {
-                isDownloadOnlyMode = true;
-
+            if (viewModel.isDownloadOnlyMode()) {
                 formIdsToDownload = savedInstanceState.getStringArray(FORM_IDS_TO_DOWNLOAD);
                 url = savedInstanceState.getString(URL);
                 username = savedInstanceState.getString(USERNAME);
@@ -328,7 +323,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         if (ni == null || !ni.isConnected()) {
             ToastUtils.showShortToast(R.string.no_connection);
 
-            if (isDownloadOnlyMode) {
+            if (viewModel.isDownloadOnlyMode()) {
                 setReturnResult(false, getString(R.string.no_connection), formResult);
                 finish();
             }
@@ -352,7 +347,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             downloadFormListTask = new DownloadFormListTask();
             downloadFormListTask.setDownloaderListener(this);
 
-            if (isDownloadOnlyMode) {
+            if (viewModel.isDownloadOnlyMode()) {
                 // Pass over the nulls -> They have no effect if even one of them is a null
                 downloadFormListTask.setAlternateCredentials(url, username, password);
             }
@@ -375,8 +370,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
         // Download mode variables
 
-        outState.putBoolean(IS_DOWNLOAD_ONLY_MODE, isDownloadOnlyMode);
-        if (isDownloadOnlyMode) {
+        if (viewModel.isDownloadOnlyMode()) {
             // String can be stored and retrieved
             outState.putStringArray(FORM_IDS_TO_DOWNLOAD, formIdsToDownload);
             outState.putString(URL, url);
@@ -407,7 +401,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                                     // Only explicitly exit if DownloadFormListTask is running since
                                     // DownloadFormTask has a callback when cancelled and has code to handle
                                     // cancellation when in download mode only
-                                    if (isDownloadOnlyMode) {
+                                    if (viewModel.isDownloadOnlyMode()) {
                                         setReturnResult(false, "User cancelled the operation", formResult);
                                         finish();
                                     }
@@ -630,7 +624,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         if (result == null) {
             Timber.e("Formlist Downloading returned null.  That shouldn't happen");
             // Just displayes "error occured" to the user, but this should never happen.
-            if (isDownloadOnlyMode) {
+            if (viewModel.isDownloadOnlyMode()) {
                 setReturnResult(false, "Formlist Downloading returned null.  That shouldn't happen", null);
             }
 
@@ -649,7 +643,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                             result.get(DL_ERROR_MSG).getErrorStr());
             String dialogTitle = getString(R.string.load_remote_form_error);
 
-            if (isDownloadOnlyMode) {
+            if (viewModel.isDownloadOnlyMode()) {
                 setReturnResult(false, getString(R.string.load_remote_form_error), formResult);
             }
 
@@ -698,7 +692,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             toggleButton.setEnabled(listView.getCount() > 0);
             toggleButtonLabel(toggleButton, listView);
 
-            if (isDownloadOnlyMode) {
+            if (viewModel.isDownloadOnlyMode()) {
                 //1. First check if all form IDS could be found on the server - Register forms that could not be found
 
                 for (String formId: formIdsToDownload) {
@@ -746,7 +740,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                         viewModel.setAlertShowing(false);
                         // successful download, so quit
                         // Also quit if in download_mode only(called by another app/activity just to download)
-                        if (shouldExit || isDownloadOnlyMode) {
+                        if (shouldExit || viewModel.isDownloadOnlyMode()) {
                             finish();
                         }
                         break;
@@ -785,7 +779,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         createAlertDialog(getString(R.string.download_forms_result), getDownloadResultMessage(result), EXIT);
 
         // Set result to true for forms which were downloaded
-        if (isDownloadOnlyMode) {
+        if (viewModel.isDownloadOnlyMode()) {
             for (FormDetails formDetails: result.keySet()) {
                 String successKey = result.get(formDetails);
                 if (Collect.getInstance().getString(R.string.success).equals(successKey)) {
@@ -826,7 +820,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             cancelDialog.dismiss();
         }
 
-        if (isDownloadOnlyMode) {
+        if (viewModel.isDownloadOnlyMode()) {
             setReturnResult(false, "Download cancelled", null);
             finish();
         }
