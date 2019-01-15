@@ -134,7 +134,7 @@ public class GoogleAccountsManager {
 
                 @Override
                 public void denied() {
-                    if (activity != null && (activity instanceof GoogleSheetsUploaderActivity || activity instanceof GoogleDriveActivity)) {
+                    if (activity instanceof GoogleSheetsUploaderActivity || activity instanceof GoogleDriveActivity) {
                         activity.finish();
                     }
                 }
