@@ -19,7 +19,6 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.BaseImageWidget;
-import org.odk.collect.android.widgets.ImageWebViewWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 
 import java.io.File;
@@ -64,8 +63,7 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
                         QuestionWidget questionWidget = formEntryActivity.get().getWidgetWaitingForBinaryData();
 
                         // apply image conversion if the widget is an image widget
-                        if (questionWidget instanceof BaseImageWidget ||
-                                questionWidget instanceof ImageWebViewWidget) {
+                        if (questionWidget instanceof BaseImageWidget) {
                             ImageConverter.execute(newFile.getPath(), questionWidget, formEntryActivity.get());
                         }
 

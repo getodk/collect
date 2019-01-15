@@ -4,7 +4,6 @@
   <string name="activity_not_found">%s:के नियंत्रण के लिए कोई गतिविधि नहीं  मिली</string>
   <string name="view_image">इमेज देखें</string>
   <string name="annotate_image">इमेज पर टिप्पणी करें</string>
-  <string name="aligned_image_capture">संरेखित छवि कैद</string>
   <string name="view_video">वीडियो देखें</string>
   <string name="choose_audio">ऑडियो चुनें</string>
   <string name="add_another"> समूह जोड़ें</string>

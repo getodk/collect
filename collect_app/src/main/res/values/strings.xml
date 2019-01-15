@@ -14,7 +14,6 @@
     <string name="activity_not_found">No activity found to handle: %s</string>
     <string name="view_image">View Image</string>
     <string name="annotate_image">Annotate Image</string>
-    <string name="aligned_image_capture">Aligned Image Capture</string>
     <string name="signature_capture">Signature Capture</string>
     <string name="view_video">View Video</string>
     <string name="choose_audio">Choose Audio</string>

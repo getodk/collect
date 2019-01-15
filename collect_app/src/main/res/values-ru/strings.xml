@@ -4,7 +4,6 @@
   <string name="activity_not_found">Случилось что-то страшное: %s</string>
   <string name="view_image">Просмотреть изображение</string>
   <string name="annotate_image">Добавить примечание</string>
-  <string name="aligned_image_capture">Выровненный захват изображения</string>
   <string name="signature_capture">Подпись</string>
   <string name="view_video">Просмотреть видео</string>
   <string name="choose_audio">Выбрать аудиозапись</string>
