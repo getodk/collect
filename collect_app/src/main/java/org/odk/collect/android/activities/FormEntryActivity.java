@@ -1057,7 +1057,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             googleLocationClient.stop();
                         }
                     } else {
-                        backgroundLocationEnabled(formController);
+                        backgroundLocationEnabled(formController, false);
                     }
                 }
                 GeneralSharedPreferences.getInstance().save(KEY_BACKGROUND_LOCATION, !previousValue);
@@ -2535,7 +2535,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             if (LocationClients.areGooglePlayServicesAvailable(this)) {
                 registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
                 if (isBackgroundLocationEnabled()) {
-                    backgroundLocationEnabled(formController);
+                    backgroundLocationEnabled(formController, true);
                 } else {
                     SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_disabled));
                     formController.getEventLogger().logEvent(EventLogger.EventTypes.BACKGROUND_LOCATION_DISABLED, 0, null, false);
@@ -2547,7 +2547,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    private void backgroundLocationEnabled(FormController formController) {
+    private void backgroundLocationEnabled(FormController formController, boolean calledJustAfterFormStart) {
         formController.getEventLogger().logEvent(EventLogger.EventTypes.BACKGROUND_LOCATION_ENABLED, 0, null, false);
         new PermissionUtils(this).requestLocationPermissions(new PermissionListener() {
             @Override
@@ -2557,7 +2557,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 setUpLocationClient(formController.getSubmissionMetadata().audit);
                 if (googleLocationClient.isLocationAvailable()) {
                     formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PROVIDERS_ENABLED, 0, null, false);
-                    SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_enabled));
+                    if (calledJustAfterFormStart) {
+                        SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_enabled));
+                    }
                 } else {
                     formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PROVIDERS_DISABLED, 0, null, false);
                     new LocationProvidersDisabledDialog().show(getSupportFragmentManager(), LocationProvidersDisabledDialog.LOCATION_PROVIDERS_DISABLED_DIALOG_TAG);
