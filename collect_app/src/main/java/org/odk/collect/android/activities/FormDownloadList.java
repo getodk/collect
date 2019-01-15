@@ -15,7 +15,6 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -88,10 +87,6 @@ import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_ERROR_M
 public class FormDownloadList extends FormListActivity implements FormListDownloaderListener,
         DownloadFormsTaskListener, AuthDialogUtility.AuthDialogUtilityResultListener, AdapterView.OnItemClickListener {
     private static final String FORM_DOWNLOAD_LIST_SORTING_ORDER = "formDownloadListSortingOrder";
-
-    private static final int PROGRESS_DIALOG = 1;
-    private static final int AUTH_DIALOG = 2;
-    private static final int CANCELLATION_DIALOG = 3;
 
     public static final String DISPLAY_ONLY_UPDATED_FORMS = "displayOnlyUpdatedForms";
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
@@ -237,7 +232,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             downloadFormListTask = (DownloadFormListTask) getLastCustomNonConfigurationInstance();
             if (downloadFormListTask.getStatus() == AsyncTask.Status.FINISHED) {
                 try {
-                    dismissDialog(PROGRESS_DIALOG);
+                    progressDialog.dismiss();
                 } catch (IllegalArgumentException e) {
                     Timber.i("Attempting to close a dialog that was not previously opened");
                 }
@@ -247,7 +242,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             downloadFormsTask = (DownloadFormsTask) getLastCustomNonConfigurationInstance();
             if (downloadFormsTask.getStatus() == AsyncTask.Status.FINISHED) {
                 try {
-                    dismissDialog(PROGRESS_DIALOG);
+                    progressDialog.dismiss();
                 } catch (IllegalArgumentException e) {
                     Timber.i("Attempting to close a dialog that was not previously opened");
                 }
@@ -304,7 +299,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 // This is needed because onPrepareDialog() is broken in 1.6.
                 progressDialog.setMessage(getString(R.string.please_wait));
             }
-            showDialog(PROGRESS_DIALOG);
+            createProgressDialog();
 
             if (downloadFormListTask != null
                     && downloadFormListTask.getStatus() != AsyncTask.Status.FINISHED) {
@@ -338,67 +333,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(BUNDLE_SELECTED_COUNT, listView.getCheckedItemCount());
-    }
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case PROGRESS_DIALOG:
-                progressDialog = new ProgressDialog(this);
-                DialogInterface.OnClickListener loadingButtonListener =
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // we use the same progress dialog for both
-                                // so whatever isn't null is running
-                                dialog.dismiss();
-                                if (downloadFormListTask != null) {
-                                    downloadFormListTask.setDownloaderListener(null);
-                                    downloadFormListTask.cancel(true);
-                                    downloadFormListTask = null;
-
-                                    // Only explicitly exit if DownloadFormListTask is running since
-                                    // DownloadFormTask has a callback when cancelled and has code to handle
-                                    // cancellation when in download mode only
-                                    if (viewModel.isDownloadOnlyMode()) {
-                                        setReturnResult(false, "User cancelled the operation", viewModel.getFormResult());
-                                        finish();
-                                    }
-                                }
-
-                                if (downloadFormsTask != null) {
-                                    showDialog(CANCELLATION_DIALOG);
-                                    downloadFormsTask.cancel(true);
-                                }
-                            }
-                        };
-                progressDialog.setTitle(getString(R.string.downloading_data));
-                progressDialog.setMessage(viewModel.getAlertMsg());
-                progressDialog.setIcon(android.R.drawable.ic_dialog_info);
-                progressDialog.setIndeterminate(true);
-                progressDialog.setCancelable(false);
-                progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
-                return progressDialog;
-            case AUTH_DIALOG:
-                viewModel.setAlertShowing(false);
-
-                AuthDialogUtility authDialogUtility = new AuthDialogUtility();
-                if (viewModel.getUrl() != null && viewModel.getUsername() != null && viewModel.getPassword() != null) {
-                    authDialogUtility.setCustomUsername(viewModel.getUsername());
-                    authDialogUtility.setCustomPassword(viewModel.getPassword());
-                }
-
-                return authDialogUtility.createDialog(this, this, viewModel.getUrl());
-            case CANCELLATION_DIALOG:
-                cancelDialog = new ProgressDialog(this);
-                cancelDialog.setTitle(getString(R.string.canceling));
-                cancelDialog.setMessage(getString(R.string.please_wait));
-                cancelDialog.setIcon(android.R.drawable.ic_dialog_info);
-                cancelDialog.setIndeterminate(true);
-                cancelDialog.setCancelable(false);
-                return cancelDialog;
-        }
-        return null;
     }
 
     @Override
@@ -480,7 +414,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         int totalCount = filesToDownload.size();
         if (totalCount > 0) {
             // show dialog box
-            showDialog(PROGRESS_DIALOG);
+            createProgressDialog();
 
             downloadFormsTask = new DownloadFormsTask();
             downloadFormsTask.setDownloaderListener(this);
@@ -576,7 +510,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
      * <formname, formdetails> tuples, or one tuple of DL.ERROR.MSG and the associated message.
      */
     public void formListDownloadingComplete(HashMap<String, FormDetails> result) {
-        dismissDialog(PROGRESS_DIALOG);
+        progressDialog.dismiss();
         downloadFormListTask.setDownloaderListener(null);
         downloadFormListTask = null;
 
@@ -594,7 +528,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
         if (result.containsKey(DL_AUTH_REQUIRED)) {
             // need authorization
-            showDialog(AUTH_DIALOG);
+            createAuthDialog();
         } else if (result.containsKey(DL_ERROR_MSG)) {
             // Download failed
             String dialogMessage =
@@ -713,6 +647,65 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         viewModel.setAlertShowing(true);
         viewModel.setShouldExit(shouldExit);
         DialogUtils.showDialog(alertDialog, this);
+    }
+
+    private void createProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        DialogInterface.OnClickListener loadingButtonListener =
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // we use the same progress dialog for both
+                        // so whatever isn't null is running
+                        dialog.dismiss();
+                        if (downloadFormListTask != null) {
+                            downloadFormListTask.setDownloaderListener(null);
+                            downloadFormListTask.cancel(true);
+                            downloadFormListTask = null;
+
+                            // Only explicitly exit if DownloadFormListTask is running since
+                            // DownloadFormTask has a callback when cancelled and has code to handle
+                            // cancellation when in download mode only
+                            if (viewModel.isDownloadOnlyMode()) {
+                                setReturnResult(false, "User cancelled the operation", viewModel.getFormResult());
+                                finish();
+                            }
+                        }
+
+                        if (downloadFormsTask != null) {
+                            createCancelDialog();
+                            downloadFormsTask.cancel(true);
+                        }
+                    }
+                };
+        progressDialog.setTitle(getString(R.string.downloading_data));
+        progressDialog.setMessage(viewModel.getAlertMsg());
+        progressDialog.setIcon(android.R.drawable.ic_dialog_info);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
+        DialogUtils.showDialog(progressDialog, this);
+    }
+
+    private void createAuthDialog() {
+        viewModel.setAlertShowing(false);
+
+        AuthDialogUtility authDialogUtility = new AuthDialogUtility();
+        if (viewModel.getUrl() != null && viewModel.getUsername() != null && viewModel.getPassword() != null) {
+            authDialogUtility.setCustomUsername(viewModel.getUsername());
+            authDialogUtility.setCustomPassword(viewModel.getPassword());
+        }
+        DialogUtils.showDialog(authDialogUtility.createDialog(this, this, viewModel.getUrl()), this);
+    }
+
+    private void createCancelDialog() {
+        cancelDialog = new ProgressDialog(this);
+        cancelDialog.setTitle(getString(R.string.canceling));
+        cancelDialog.setMessage(getString(R.string.please_wait));
+        cancelDialog.setIcon(android.R.drawable.ic_dialog_info);
+        cancelDialog.setIndeterminate(true);
+        cancelDialog.setCancelable(false);
+        DialogUtils.showDialog(cancelDialog, this);
     }
 
     @Override
