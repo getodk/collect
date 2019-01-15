@@ -128,8 +128,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
-    private boolean shouldExit;
-    private static final String SHOULD_EXIT = "shouldexit";
 
     private boolean displayOnlyUpdatedForms;
 
@@ -256,9 +254,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 downloadButton.setEnabled(savedInstanceState.getInt(BUNDLE_SELECTED_COUNT) > 0);
             }
 
-            if (savedInstanceState.containsKey(SHOULD_EXIT)) {
-                shouldExit = savedInstanceState.getBoolean(SHOULD_EXIT);
-            }
             if (savedInstanceState.containsKey(SELECTED_FORMS)) {
                 selectedForms = (LinkedHashSet<String>) savedInstanceState.getSerializable(SELECTED_FORMS);
             }
@@ -393,7 +388,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(BUNDLE_SELECTED_COUNT, listView.getCheckedItemCount());
-        outState.putBoolean(SHOULD_EXIT, shouldExit);
         outState.putSerializable(FORMLIST, formList);
         outState.putSerializable(SELECTED_FORMS, selectedForms);
 
@@ -599,7 +593,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             downloadFormsTask.setDownloaderListener(this);
         }
         if (viewModel.isAlertShowing()) {
-            createAlertDialog(viewModel.getAlertTitle(), viewModel.getAlertMsg(), shouldExit);
+            createAlertDialog(viewModel.getAlertTitle(), viewModel.getAlertMsg(), viewModel.shouldExit());
         }
         super.onResume();
     }
@@ -783,7 +777,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         viewModel.setAlertMsg(message);
         viewModel.setAlertTitle(title);
         viewModel.setAlertShowing(true);
-        this.shouldExit = shouldExit;
+        viewModel.setShouldExit(shouldExit);
         DialogUtils.showDialog(alertDialog, this);
     }
 

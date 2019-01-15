@@ -29,6 +29,7 @@ public class FormDownloadListViewModel extends ViewModel {
     private String alertMsg;
 
     private boolean alertShowing;
+    private boolean shouldExit;
 
     public HashMap<String, FormDetails> getFormNamesAndURLs() {
         return formNamesAndURLs;
@@ -64,5 +65,13 @@ public class FormDownloadListViewModel extends ViewModel {
 
     public void setAlertShowing(boolean alertShowing) {
         this.alertShowing = alertShowing;
+    }
+
+    public boolean shouldExit() {
+        return shouldExit;
+    }
+
+    public void setShouldExit(boolean shouldExit) {
+        this.shouldExit = shouldExit;
     }
 }
