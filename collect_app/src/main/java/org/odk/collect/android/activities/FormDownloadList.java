@@ -664,7 +664,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                     String formId = formDetails.getFormID();
 
                     if (viewModel.getFormResult().containsKey(formId)) {
-                        viewModel.addFormsFound(formId);
                         filesToDownload.add(formDetails);
                     }
                 }
