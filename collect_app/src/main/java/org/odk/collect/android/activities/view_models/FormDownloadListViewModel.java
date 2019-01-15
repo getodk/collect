@@ -34,6 +34,7 @@ public class FormDownloadListViewModel extends ViewModel {
 
     private String alertTitle;
     private String alertMsg;
+    private String url;
     private String username;
     private String password;
 
@@ -152,5 +153,13 @@ public class FormDownloadListViewModel extends ViewModel {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
