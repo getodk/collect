@@ -61,10 +61,14 @@ public class Event {
      * Mark the end of an interval event
      */
     public void setEnd(long endTime) {
-        if (!endTimeSet && isIntervalViewEvent()) {
-            this.end = endTime;
-            this.endTimeSet = true;
-        }
+        this.end = endTime;
+        this.endTimeSet = true;
+    }
+
+    public boolean areLocationCoordinatesSet() {
+        return latitude != null && !latitude.isEmpty()
+                && longitude != null && !longitude.isEmpty()
+                && accuracy != null && !accuracy.isEmpty();
     }
 
     public void setLocationCoordinates(String latitude, String longitude, String accuracy) {

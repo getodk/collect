@@ -117,21 +117,16 @@ public class EventLogger {
             }
 
             Event newEvent = new Event(start, eventType, fecType, node);
-
-            if (audit.collectLocationCoordinates()) {
-                Location location = getMostAccurateLocation();
-                String latitude = location != null ? Double.toString(location.getLatitude()) : "";
-                String longitude = location != null ? Double.toString(location.getLongitude()) : "";
-                String accuracy = location != null ? Double.toString(location.getAccuracy()) : "";
-                newEvent.setLocationCoordinates(latitude, longitude, accuracy);
-            }
+            addLocationCoordinatesToEventIfNeeded(newEvent);
 
             /*
              * Close any existing interval events if the view is being exited
              */
             if (newEvent.eventType == EventTypes.FORM_EXIT) {
                 for (Event ev : events) {
-                    ev.setEnd(start);
+                    if (!ev.endTimeSet && ev.isIntervalViewEvent()) {
+                        ev.setEnd(start);
+                    }
                 }
             }
 
@@ -172,6 +167,18 @@ public class EventLogger {
 
     }
 
+    private void addLocationCoordinatesToEventIfNeeded(Event event) {
+        if (audit.collectLocationCoordinates()) {
+            Location location = getMostAccurateLocation();
+            String latitude = location != null ? Double.toString(location.getLatitude()) : "";
+            String longitude = location != null ? Double.toString(location.getLongitude()) : "";
+            String accuracy = location != null ? Double.toString(location.getAccuracy()) : "";
+            if (!event.areLocationCoordinatesSet()) {
+                event.setLocationCoordinates(latitude, longitude, accuracy);
+            }
+        }
+    }
+
     // If location provider are enabled/disabled it sometimes fires the BroadcastReceiver multiple
     // times what tries to add duplicated logs
     private boolean duplicatedLocationProvidersLog(EventLogger.EventTypes eventType) {
@@ -189,7 +196,10 @@ public class EventLogger {
             // Calculate the time and add the event to the events array
             long end = getEventTime();
             for (Event ev : events) {
-                ev.setEnd(end);
+                if (!ev.endTimeSet && ev.isIntervalViewEvent()) {
+                    addLocationCoordinatesToEventIfNeeded(ev);
+                    ev.setEnd(end);
+                }
             }
 
             writeEvents();
