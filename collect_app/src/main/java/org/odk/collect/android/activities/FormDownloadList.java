@@ -96,7 +96,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     public static final String DISPLAY_ONLY_UPDATED_FORMS = "displayOnlyUpdatedForms";
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
-    private static final String SELECTED_FORMS = "selectedForms";
     private static final String IS_DOWNLOAD_ONLY_MODE = "isDownloadOnlyMode";
     private static final String FORM_IDS_TO_DOWNLOAD = "formIdsToDownload";
     private static final String URL = "url";
@@ -122,7 +121,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private Button toggleButton;
 
     private final ArrayList<HashMap<String, String>> filteredFormList = new ArrayList<>();
-    private LinkedHashSet<String> selectedForms = new LinkedHashSet<>();
 
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
@@ -225,10 +223,10 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             public void onClick(View v) {
                 downloadButton.setEnabled(toggleChecked(listView));
                 toggleButtonLabel(toggleButton, listView);
-                selectedForms.clear();
+                viewModel.clearSelectedForms();
                 if (listView.getCheckedItemCount() == listView.getCount()) {
                     for (HashMap<String, String> map : viewModel.getFormList()) {
-                        selectedForms.add(map.get(FORMDETAIL_KEY));
+                        viewModel.addSelectedForm(map.get(FORMDETAIL_KEY));
                     }
                 }
             }
@@ -250,10 +248,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             // Android should keep track of this, but broken on rotate...
             if (savedInstanceState.containsKey(BUNDLE_SELECTED_COUNT)) {
                 downloadButton.setEnabled(savedInstanceState.getInt(BUNDLE_SELECTED_COUNT) > 0);
-            }
-
-            if (savedInstanceState.containsKey(SELECTED_FORMS)) {
-                selectedForms = (LinkedHashSet<String>) savedInstanceState.getSerializable(SELECTED_FORMS);
             }
 
             if (savedInstanceState.containsKey(IS_DOWNLOAD_ONLY_MODE) && savedInstanceState.getBoolean(IS_DOWNLOAD_ONLY_MODE)) {
@@ -317,9 +311,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
 
         if (listView.isItemChecked(position)) {
-            selectedForms.add(((HashMap<String, String>) listView.getAdapter().getItem(position)).get(FORMDETAIL_KEY));
+            viewModel.addSelectedForm(((HashMap<String, String>) listView.getAdapter().getItem(position)).get(FORMDETAIL_KEY));
         } else {
-            selectedForms.remove(((HashMap<String, String>) listView.getAdapter().getItem(position)).get(FORMDETAIL_KEY));
+            viewModel.removeSelectedForm(((HashMap<String, String>) listView.getAdapter().getItem(position)).get(FORMDETAIL_KEY));
         }
     }
 
@@ -378,7 +372,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(BUNDLE_SELECTED_COUNT, listView.getCheckedItemCount());
-        outState.putSerializable(SELECTED_FORMS, selectedForms);
 
         // Download mode variables
 
@@ -492,7 +485,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         for (int i = 0; i < listView.getCount(); i++) {
             HashMap<String, String> item =
                     (HashMap<String, String>) listView.getAdapter().getItem(i);
-            if (selectedForms.contains(item.get(FORMDETAIL_KEY))) {
+            if (viewModel.getSelectedForms().contains(item.get(FORMDETAIL_KEY))) {
                 listView.setItemChecked(i, true);
             }
         }
@@ -620,7 +613,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             HashMap<String, String> item = filteredFormList.get(idx);
             if (isLocalFormSuperseded(item.get(FORM_ID_KEY))) {
                 ls.setItemChecked(idx, true);
-                selectedForms.add(item.get(FORMDETAIL_KEY));
+                viewModel.addSelectedForm(item.get(FORMDETAIL_KEY));
             }
         }
     }

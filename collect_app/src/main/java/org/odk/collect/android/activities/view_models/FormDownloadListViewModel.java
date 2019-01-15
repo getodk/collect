@@ -22,11 +22,14 @@ import org.odk.collect.android.logic.FormDetails;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 
 public class FormDownloadListViewModel extends ViewModel {
     private HashMap<String, FormDetails> formNamesAndURLs = new HashMap<>();
 
     private ArrayList<HashMap<String, String>> formList = new ArrayList<>();
+
+    private LinkedHashSet<String> selectedForms = new LinkedHashSet<>();
 
     private String alertTitle;
     private String alertMsg;
@@ -92,5 +95,25 @@ public class FormDownloadListViewModel extends ViewModel {
 
     public void addFormList(int index, HashMap<String, String> item) {
         formList.add(index, item);
+    }
+
+    public LinkedHashSet<String> getSelectedForms() {
+        return selectedForms;
+    }
+
+    public void setSelectedForms(LinkedHashSet<String> selectedForms) {
+        this.selectedForms = selectedForms;
+    }
+
+    public void addSelectedForm(String form) {
+        selectedForms.add(form);
+    }
+
+    public void removeSelectedForm(String form) {
+        selectedForms.remove(form);
+    }
+
+    public void clearSelectedForms() {
+        selectedForms.clear();
     }
 }
