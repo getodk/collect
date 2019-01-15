@@ -34,6 +34,7 @@ public class FormDownloadListViewModel extends ViewModel {
 
     private String alertTitle;
     private String alertMsg;
+    private String password;
 
     private boolean alertShowing;
     private boolean shouldExit;
@@ -134,5 +135,13 @@ public class FormDownloadListViewModel extends ViewModel {
 
     public void putFormResult(String form, boolean reasult) {
         formResult.put(form, reasult);
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

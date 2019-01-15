@@ -99,7 +99,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private static final String FORM_IDS_TO_DOWNLOAD = "formIdsToDownload";
     private static final String URL = "url";
     private static final String USERNAME = "username";
-    private static final String PASSWORD = "password";
     private static final String FORMS_FOUND = "formsFound";
 
     public static final String FORMNAME = "formname";
@@ -128,7 +127,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private String[] formIdsToDownload;
     private String url;
     private String username;
-    private String password;
     private ArrayList<String> formsFound;
 
     private FormDownloadListViewModel viewModel;
@@ -193,7 +191,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                     if (bundle.containsKey(ApplicationConstants.BundleKeys.USERNAME)
                             && bundle.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
                         username = bundle.getString(ApplicationConstants.BundleKeys.USERNAME);
-                        password = bundle.getString(ApplicationConstants.BundleKeys.PASSWORD);
+                        viewModel.setPassword(bundle.getString(ApplicationConstants.BundleKeys.PASSWORD));
                     }
                 }
             }
@@ -248,7 +246,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 formIdsToDownload = savedInstanceState.getStringArray(FORM_IDS_TO_DOWNLOAD);
                 url = savedInstanceState.getString(URL);
                 username = savedInstanceState.getString(USERNAME);
-                password = savedInstanceState.getString(PASSWORD);
                 formsFound = savedInstanceState.getStringArrayList(FORMS_FOUND);
                 formsFound = formsFound == null ? new ArrayList<>() : formsFound;
             }
@@ -343,7 +340,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
             if (viewModel.isDownloadOnlyMode()) {
                 // Pass over the nulls -> They have no effect if even one of them is a null
-                downloadFormListTask.setAlternateCredentials(url, username, password);
+                downloadFormListTask.setAlternateCredentials(url, username, viewModel.getPassword());
             }
 
             downloadFormListTask.execute();
@@ -369,7 +366,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             outState.putStringArray(FORM_IDS_TO_DOWNLOAD, formIdsToDownload);
             outState.putString(URL, url);
             outState.putString(USERNAME, username);
-            outState.putString(PASSWORD, password);
             outState.putStringArrayList(FORMS_FOUND, formsFound);
         }
     }
@@ -417,9 +413,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 viewModel.setAlertShowing(false);
 
                 AuthDialogUtility authDialogUtility = new AuthDialogUtility();
-                if (url != null && username != null && password != null) {
+                if (url != null && username != null && viewModel.getPassword() != null) {
                     authDialogUtility.setCustomUsername(username);
-                    authDialogUtility.setCustomPassword(password);
+                    authDialogUtility.setCustomPassword(viewModel.getPassword());
                 }
 
                 return authDialogUtility.createDialog(this, this, url);
@@ -520,8 +516,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             downloadFormsTask.setDownloaderListener(this);
 
             if (url != null) {
-                if (username != null && password != null) {
-                    webCredentialsUtils.saveCredentials(url, username, password);
+                if (username != null && viewModel.getPassword() != null) {
+                    webCredentialsUtils.saveCredentials(url, username, viewModel.getPassword());
                 } else {
                     webCredentialsUtils.clearCredentials(url);
                 }
@@ -828,7 +824,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
             if (httpCredentials != null) {
                 username = httpCredentials.getUsername();
-                password = httpCredentials.getPassword();
+                viewModel.setPassword(httpCredentials.getPassword());
             }
         }
 
