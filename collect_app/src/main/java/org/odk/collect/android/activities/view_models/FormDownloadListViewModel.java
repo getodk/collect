@@ -18,5 +18,22 @@ package org.odk.collect.android.activities.view_models;
 
 import android.arch.lifecycle.ViewModel;
 
+import org.odk.collect.android.logic.FormDetails;
+
+import java.util.HashMap;
+
 public class FormDownloadListViewModel extends ViewModel {
+    private HashMap<String, FormDetails> formNamesAndURLs = new HashMap<>();
+
+    public HashMap<String, FormDetails> getFormNamesAndURLs() {
+        return formNamesAndURLs;
+    }
+
+    public void setFormNamesAndURLs(HashMap<String, FormDetails> formNamesAndURLs) {
+        this.formNamesAndURLs = formNamesAndURLs;
+    }
+
+    public void clearFormNamesAndURLs() {
+        formNamesAndURLs.clear();
+    }
 }

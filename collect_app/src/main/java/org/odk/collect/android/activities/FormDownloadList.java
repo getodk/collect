@@ -96,7 +96,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     public static final String DISPLAY_ONLY_UPDATED_FORMS = "displayOnlyUpdatedForms";
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
-    private static final String BUNDLE_FORM_MAP = "formmap";
     private static final String DIALOG_TITLE = "dialogtitle";
     private static final String DIALOG_MSG = "dialogmsg";
     private static final String DIALOG_SHOWING = "dialogshowing";
@@ -130,7 +129,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private DownloadFormsTask downloadFormsTask;
     private Button toggleButton;
 
-    private HashMap<String, FormDetails> formNamesAndURLs = new HashMap<String, FormDetails>();
     private ArrayList<HashMap<String, String>> formList;
     private final ArrayList<HashMap<String, String>> filteredFormList = new ArrayList<>();
     private LinkedHashSet<String> selectedForms = new LinkedHashSet<>();
@@ -259,13 +257,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         });
 
         if (savedInstanceState != null) {
-            // If the screen has rotated, the hashmap with the form ids and urls is passed here.
-            if (savedInstanceState.containsKey(BUNDLE_FORM_MAP)) {
-                formNamesAndURLs =
-                        (HashMap<String, FormDetails>) savedInstanceState
-                                .getSerializable(BUNDLE_FORM_MAP);
-            }
-
             // how many items we've selected
             // Android should keep track of this, but broken on rotate...
             if (savedInstanceState.containsKey(BUNDLE_SELECTED_COUNT)) {
@@ -334,7 +325,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 }
                 downloadFormsTask = null;
             }
-        } else if (formNamesAndURLs.isEmpty() && getLastCustomNonConfigurationInstance() == null) {
+        } else if (viewModel.getFormNamesAndURLs().isEmpty() && getLastCustomNonConfigurationInstance() == null) {
             // first time, so get the formlist
             downloadFormList();
         }
@@ -380,8 +371,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 finish();
             }
         } else {
-
-            formNamesAndURLs = new HashMap<String, FormDetails>();
+            viewModel.clearFormNamesAndURLs();
             if (progressDialog != null) {
                 // This is needed because onPrepareDialog() is broken in 1.6.
                 progressDialog.setMessage(getString(R.string.please_wait));
@@ -420,7 +410,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(BUNDLE_SELECTED_COUNT, listView.getCheckedItemCount());
-        outState.putSerializable(BUNDLE_FORM_MAP, formNamesAndURLs);
         outState.putString(DIALOG_TITLE, alertTitle);
         outState.putString(DIALOG_MSG, alertMsg);
         outState.putBoolean(DIALOG_SHOWING, alertShowing);
@@ -523,10 +512,10 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         }
         sortList();
         if (listView.getAdapter() == null) {
-            listView.setAdapter(new FormDownloadListAdapter(this, filteredFormList, formNamesAndURLs));
+            listView.setAdapter(new FormDownloadListAdapter(this, filteredFormList, viewModel.getFormNamesAndURLs()));
         } else {
             FormDownloadListAdapter formDownloadListAdapter = (FormDownloadListAdapter) listView.getAdapter();
-            formDownloadListAdapter.setFromIdsToDetails(formNamesAndURLs);
+            formDownloadListAdapter.setFromIdsToDetails(viewModel.getFormNamesAndURLs());
             formDownloadListAdapter.notifyDataSetChanged();
         }
         toggleButton.setEnabled(!filteredFormList.isEmpty());
@@ -570,7 +559,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             if (sba.get(i, false)) {
                 HashMap<String, String> item =
                         (HashMap<String, String>) listView.getAdapter().getItem(i);
-                filesToDownload.add(formNamesAndURLs.get(item.get(FORMDETAIL_KEY)));
+                filesToDownload.add(viewModel.getFormNamesAndURLs().get(item.get(FORMDETAIL_KEY)));
             }
         }
 
@@ -651,8 +640,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
         try (Cursor formCursor = new FormsDao().getFormsCursorForFormId(formId)) {
             return formCursor != null && formCursor.getCount() == 0 // form does not already exist locally
-                    || formNamesAndURLs.get(formId).isNewerFormVersionAvailable() // or a newer version of this form is available
-                    || formNamesAndURLs.get(formId).areNewerMediaFilesAvailable(); // or newer versions of media files are available
+                    || viewModel.getFormNamesAndURLs().get(formId).isNewerFormVersionAvailable() // or a newer version of this form is available
+                    || viewModel.getFormNamesAndURLs().get(formId).areNewerMediaFilesAvailable(); // or newer versions of media files are available
         }
     }
 
@@ -711,14 +700,14 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             createAlertDialog(dialogTitle, dialogMessage, DO_NOT_EXIT);
         } else {
             // Everything worked. Clear the list and add the results.
-            formNamesAndURLs = result;
+            viewModel.setFormNamesAndURLs(result);
 
             formList.clear();
 
-            ArrayList<String> ids = new ArrayList<String>(formNamesAndURLs.keySet());
+            ArrayList<String> ids = new ArrayList<String>(viewModel.getFormNamesAndURLs().keySet());
             for (int i = 0; i < result.size(); i++) {
                 String formDetailsKey = ids.get(i);
-                FormDetails details = formNamesAndURLs.get(formDetailsKey);
+                FormDetails details = viewModel.getFormNamesAndURLs().get(formDetailsKey);
 
                 if (!displayOnlyUpdatedForms || (details.isNewerFormVersionAvailable() || details.areNewerMediaFilesAvailable())) {
                     HashMap<String, String> item = new HashMap<String, String>();
@@ -738,7 +727,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                         for (j = 0; j < formList.size(); j++) {
                             HashMap<String, String> compareMe = formList.get(j);
                             String name = compareMe.get(FORMNAME);
-                            if (name.compareTo(formNamesAndURLs.get(ids.get(i)).getFormName()) > 0) {
+                            if (name.compareTo(viewModel.getFormNamesAndURLs().get(ids.get(i)).getFormName()) > 0) {
                                 break;
                             }
                         }
@@ -762,7 +751,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
                 ArrayList<FormDetails> filesToDownload  = new ArrayList<>();
 
-                for (FormDetails formDetails: formNamesAndURLs.values()) {
+                for (FormDetails formDetails: viewModel.getFormNamesAndURLs().values()) {
                     String formId = formDetails.getFormID();
 
                     if (formResult.containsKey(formId)) {
