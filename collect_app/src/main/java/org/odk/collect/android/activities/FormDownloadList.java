@@ -17,6 +17,7 @@ package org.odk.collect.android.activities;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,6 +37,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.view_models.FormDownloadListViewModel;
 import org.odk.collect.android.adapters.FormDownloadListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
@@ -149,6 +151,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private ArrayList<String> formsFound;
     private HashMap<String, Boolean> formResult;
 
+    private FormDownloadListViewModel viewModel;
+
     @Inject
     WebCredentialsUtils webCredentialsUtils;
 
@@ -159,6 +163,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         setContentView(R.layout.form_download_list);
         getComponent().inject(this);
         setTitle(getString(R.string.get_forms));
+
+        viewModel = ViewModelProviders.of(this).get(FormDownloadListViewModel.class);
 
         // This activity is accessed directly externally
         new PermissionUtils(this).requestStoragePermissions(new PermissionListener() {
