@@ -2537,11 +2537,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (isBackgroundLocationEnabled()) {
                     backgroundLocationEnabled(formController);
                 } else {
-                    SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_disabled));
+                    SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_disabled));
                     formController.getEventLogger().logEvent(EventLogger.EventTypes.BACKGROUND_LOCATION_DISABLED, 0, null, false);
                 }
             } else {
-                SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.google_play_services_not_available));
+                SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.google_play_services_not_available));
                 formController.getEventLogger().logEvent(EventLogger.EventTypes.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, 0, null, false);
             }
         }
@@ -2557,7 +2557,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 setUpLocationClient(formController.getSubmissionMetadata().audit);
                 if (googleLocationClient.isLocationAvailable()) {
                     formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PROVIDERS_ENABLED, 0, null, false);
-                    SnackbarUtils.showSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_enabled));
+                    SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_enabled));
                 } else {
                     formController.getEventLogger().logEvent(EventLogger.EventTypes.LOCATION_PROVIDERS_DISABLED, 0, null, false);
                     new LocationProvidersDisabledDialog().show(getSupportFragmentManager(), LocationProvidersDisabledDialog.LOCATION_PROVIDERS_DISABLED_DIALOG_TAG);
