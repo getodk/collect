@@ -218,10 +218,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public @Nullable MapPoint getMarkerPoint(int featureId) {
         MapFeature feature = features.get(featureId);
-        if (feature instanceof MarkerFeature) {
-            return ((MarkerFeature) feature).getPoint();
-        }
-        return null;
+        return feature instanceof MarkerFeature ? ((MarkerFeature) feature).getPoint() : null;
     }
 
     @Override public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
