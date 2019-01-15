@@ -25,6 +25,8 @@ import java.util.HashMap;
 public class FormDownloadListViewModel extends ViewModel {
     private HashMap<String, FormDetails> formNamesAndURLs = new HashMap<>();
 
+    private String alertTitle;
+
     public HashMap<String, FormDetails> getFormNamesAndURLs() {
         return formNamesAndURLs;
     }
@@ -35,5 +37,13 @@ public class FormDownloadListViewModel extends ViewModel {
 
     public void clearFormNamesAndURLs() {
         formNamesAndURLs.clear();
+    }
+
+    public String getAlertTitle() {
+        return alertTitle;
+    }
+
+    public void setAlertTitle(String alertTitle) {
+        this.alertTitle = alertTitle;
     }
 }

@@ -96,7 +96,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     public static final String DISPLAY_ONLY_UPDATED_FORMS = "displayOnlyUpdatedForms";
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
-    private static final String DIALOG_TITLE = "dialogtitle";
     private static final String DIALOG_MSG = "dialogmsg";
     private static final String DIALOG_SHOWING = "dialogshowing";
     private static final String FORMLIST = "formlist";
@@ -118,7 +117,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     private String alertMsg;
     private boolean alertShowing;
-    private String alertTitle;
 
     private AlertDialog alertDialog;
     private ProgressDialog progressDialog;
@@ -263,10 +261,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 downloadButton.setEnabled(savedInstanceState.getInt(BUNDLE_SELECTED_COUNT) > 0);
             }
 
-            // to restore alert dialog.
-            if (savedInstanceState.containsKey(DIALOG_TITLE)) {
-                alertTitle = savedInstanceState.getString(DIALOG_TITLE);
-            }
             if (savedInstanceState.containsKey(DIALOG_MSG)) {
                 alertMsg = savedInstanceState.getString(DIALOG_MSG);
             }
@@ -410,7 +404,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(BUNDLE_SELECTED_COUNT, listView.getCheckedItemCount());
-        outState.putString(DIALOG_TITLE, alertTitle);
         outState.putString(DIALOG_MSG, alertMsg);
         outState.putBoolean(DIALOG_SHOWING, alertShowing);
         outState.putBoolean(SHOULD_EXIT, shouldExit);
@@ -619,7 +612,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             downloadFormsTask.setDownloaderListener(this);
         }
         if (alertShowing) {
-            createAlertDialog(alertTitle, alertMsg, shouldExit);
+            createAlertDialog(viewModel.getAlertTitle(), alertMsg, shouldExit);
         }
         super.onResume();
     }
@@ -801,7 +794,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         alertDialog.setButton(getString(R.string.ok), quitListener);
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         alertMsg = message;
-        alertTitle = title;
+        viewModel.setAlertTitle(title);
         alertShowing = true;
         this.shouldExit = shouldExit;
         DialogUtils.showDialog(alertDialog, this);
