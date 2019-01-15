@@ -41,8 +41,11 @@ public class FormDownloadListViewModel extends ViewModel {
     private String username;
     private String password;
 
+    private boolean progressDialogShowing;
     private boolean alertShowing;
+    private boolean cancelDialogShowing;
     private boolean shouldExit;
+    private boolean loadingCanceled;
     // Variables for the external app intent call
     private boolean isDownloadOnlyMode;
 
@@ -168,5 +171,29 @@ public class FormDownloadListViewModel extends ViewModel {
 
     public void setFormIdsToDownload(String[] formIdsToDownload) {
         this.formIdsToDownload = formIdsToDownload;
+    }
+
+    public boolean isProgressDialogShowing() {
+        return progressDialogShowing;
+    }
+
+    public void setProgressDialogShowing(boolean progressDialogShowing) {
+        this.progressDialogShowing = progressDialogShowing;
+    }
+
+    public boolean isCancelDialogShowing() {
+        return cancelDialogShowing;
+    }
+
+    public void setCancelDialogShowing(boolean cancelDialogShowing) {
+        this.cancelDialogShowing = cancelDialogShowing;
+    }
+
+    public boolean wasLoadingCanceled() {
+        return loadingCanceled;
+    }
+
+    public void setLoadingCanceled(boolean loadingCanceled) {
+        this.loadingCanceled = loadingCanceled;
     }
 }

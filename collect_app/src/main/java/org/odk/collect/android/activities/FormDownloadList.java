@@ -211,6 +211,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         refreshButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                viewModel.setLoadingCanceled(false);
                 viewModel.clearFormList();
                 updateAdapter();
                 clearChoices();
@@ -233,6 +234,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             if (downloadFormListTask.getStatus() == AsyncTask.Status.FINISHED) {
                 try {
                     progressDialog.dismiss();
+                    viewModel.setProgressDialogShowing(false);
                 } catch (IllegalArgumentException e) {
                     Timber.i("Attempting to close a dialog that was not previously opened");
                 }
@@ -243,12 +245,15 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             if (downloadFormsTask.getStatus() == AsyncTask.Status.FINISHED) {
                 try {
                     progressDialog.dismiss();
+                    viewModel.setProgressDialogShowing(false);
                 } catch (IllegalArgumentException e) {
                     Timber.i("Attempting to close a dialog that was not previously opened");
                 }
                 downloadFormsTask = null;
             }
-        } else if (viewModel.getFormNamesAndURLs().isEmpty() && getLastCustomNonConfigurationInstance() == null) {
+        } else if (viewModel.getFormNamesAndURLs().isEmpty()
+                && getLastCustomNonConfigurationInstance() == null
+                && !viewModel.wasLoadingCanceled()) {
             // first time, so get the formlist
             downloadFormList();
         }
@@ -464,6 +469,12 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         if (viewModel.isAlertShowing()) {
             createAlertDialog(viewModel.getAlertTitle(), viewModel.getAlertMsg(), viewModel.shouldExit());
         }
+        if (viewModel.isProgressDialogShowing() && (progressDialog == null || !progressDialog.isShowing())) {
+            createProgressDialog();
+        }
+        if (viewModel.isCancelDialogShowing()) {
+            createCancelDialog();
+        }
         super.onResume();
     }
 
@@ -511,6 +522,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
      */
     public void formListDownloadingComplete(HashMap<String, FormDetails> result) {
         progressDialog.dismiss();
+        viewModel.setProgressDialogShowing(false);
         downloadFormListTask.setDownloaderListener(null);
         downloadFormListTask = null;
 
@@ -676,6 +688,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                             createCancelDialog();
                             downloadFormsTask.cancel(true);
                         }
+                        viewModel.setLoadingCanceled(true);
+                        viewModel.setProgressDialogShowing(false);
                     }
                 };
         progressDialog.setTitle(getString(R.string.downloading_data));
@@ -684,6 +698,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
         progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
+        viewModel.setProgressDialogShowing(true);
         DialogUtils.showDialog(progressDialog, this);
     }
 
@@ -705,6 +720,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         cancelDialog.setIcon(android.R.drawable.ic_dialog_info);
         cancelDialog.setIndeterminate(true);
         cancelDialog.setCancelable(false);
+        viewModel.setCancelDialogShowing(true);
         DialogUtils.showDialog(cancelDialog, this);
     }
 
@@ -725,6 +741,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         if (progressDialog.isShowing()) {
             // should always be true here
             progressDialog.dismiss();
+            viewModel.setProgressDialogShowing(false);
         }
 
         createAlertDialog(getString(R.string.download_forms_result), getDownloadResultMessage(result), EXIT);
@@ -769,6 +786,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
         if (cancelDialog != null && cancelDialog.isShowing()) {
             cancelDialog.dismiss();
+            viewModel.setCancelDialogShowing(false);
         }
 
         if (viewModel.isDownloadOnlyMode()) {
