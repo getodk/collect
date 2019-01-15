@@ -26,6 +26,7 @@ import java.util.LinkedHashSet;
 
 public class FormDownloadListViewModel extends ViewModel {
     private HashMap<String, FormDetails> formNamesAndURLs = new HashMap<>();
+    private HashMap<String, Boolean> formResult = new HashMap<>();
 
     private ArrayList<HashMap<String, String>> formList = new ArrayList<>();
 
@@ -125,5 +126,13 @@ public class FormDownloadListViewModel extends ViewModel {
 
     public void setDownloadOnlyMode(boolean downloadOnlyMode) {
         isDownloadOnlyMode = downloadOnlyMode;
+    }
+
+    public HashMap<String, Boolean> getFormResult() {
+        return formResult;
+    }
+
+    public void putFormResult(String form, boolean reasult) {
+        formResult.put(form, reasult);
     }
 }

@@ -101,7 +101,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
     private static final String FORMS_FOUND = "formsFound";
-    private static final String FORM_RESULT = "formResult";
 
     public static final String FORMNAME = "formname";
     private static final String FORMDETAIL_KEY = "formdetailkey";
@@ -131,7 +130,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private String username;
     private String password;
     private ArrayList<String> formsFound;
-    private HashMap<String, Boolean> formResult;
 
     private FormDownloadListViewModel viewModel;
 
@@ -173,7 +171,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     private void init(Bundle savedInstanceState) {
         formsFound = new ArrayList<>();
-        formResult = new HashMap<>();
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -253,10 +250,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 username = savedInstanceState.getString(USERNAME);
                 password = savedInstanceState.getString(PASSWORD);
                 formsFound = savedInstanceState.getStringArrayList(FORMS_FOUND);
-                formResult = (HashMap<String, Boolean>) savedInstanceState.getSerializable(FORM_RESULT);
-
                 formsFound = formsFound == null ? new ArrayList<>() : formsFound;
-                formResult = formResult == null ? new HashMap<>() : formResult;
             }
         }
 
@@ -324,7 +318,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             ToastUtils.showShortToast(R.string.no_connection);
 
             if (viewModel.isDownloadOnlyMode()) {
-                setReturnResult(false, getString(R.string.no_connection), formResult);
+                setReturnResult(false, getString(R.string.no_connection), viewModel.getFormResult());
                 finish();
             }
         } else {
@@ -377,7 +371,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             outState.putString(USERNAME, username);
             outState.putString(PASSWORD, password);
             outState.putStringArrayList(FORMS_FOUND, formsFound);
-            outState.putSerializable(FORM_RESULT, formResult);
         }
     }
 
@@ -402,7 +395,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                                     // DownloadFormTask has a callback when cancelled and has code to handle
                                     // cancellation when in download mode only
                                     if (viewModel.isDownloadOnlyMode()) {
-                                        setReturnResult(false, "User cancelled the operation", formResult);
+                                        setReturnResult(false, "User cancelled the operation", viewModel.getFormResult());
                                         finish();
                                     }
                                 }
@@ -644,7 +637,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             String dialogTitle = getString(R.string.load_remote_form_error);
 
             if (viewModel.isDownloadOnlyMode()) {
-                setReturnResult(false, getString(R.string.load_remote_form_error), formResult);
+                setReturnResult(false, getString(R.string.load_remote_form_error), viewModel.getFormResult());
             }
 
             createAlertDialog(dialogTitle, dialogMessage, DO_NOT_EXIT);
@@ -696,7 +689,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 //1. First check if all form IDS could be found on the server - Register forms that could not be found
 
                 for (String formId: formIdsToDownload) {
-                    formResult.put(formId, false);
+                    viewModel.putFormResult(formId, false);
                 }
 
                 ArrayList<FormDetails> filesToDownload  = new ArrayList<>();
@@ -704,7 +697,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 for (FormDetails formDetails: viewModel.getFormNamesAndURLs().values()) {
                     String formId = formDetails.getFormID();
 
-                    if (formResult.containsKey(formId)) {
+                    if (viewModel.getFormResult().containsKey(formId)) {
                         formsFound.add(formId);
                         filesToDownload.add(formDetails);
                     }
@@ -715,7 +708,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                     startFormsDownload(filesToDownload);
                 } else {
                     // None of the forms was found
-                    setReturnResult(false, "Forms not found on server", formResult);
+                    setReturnResult(false, "Forms not found on server", viewModel.getFormResult());
                     finish();
                 }
 
@@ -783,13 +776,13 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             for (FormDetails formDetails: result.keySet()) {
                 String successKey = result.get(formDetails);
                 if (Collect.getInstance().getString(R.string.success).equals(successKey)) {
-                    if (formResult.containsKey(formDetails.getFormID())) {
-                        formResult.put(formDetails.getFormID(), true);
+                    if (viewModel.getFormResult().containsKey(formDetails.getFormID())) {
+                        viewModel.putFormResult(formDetails.getFormID(), true);
                     }
                 }
             }
 
-            setReturnResult(true, null, formResult);
+            setReturnResult(true, null, viewModel.getFormResult());
         }
     }
 
