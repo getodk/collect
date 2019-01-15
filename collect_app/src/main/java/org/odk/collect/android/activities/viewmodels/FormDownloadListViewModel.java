@@ -134,8 +134,8 @@ public class FormDownloadListViewModel extends ViewModel {
         return formResult;
     }
 
-    public void putFormResult(String form, boolean reasult) {
-        formResult.put(form, reasult);
+    public void putFormResult(String formId, boolean result) {
+        formResult.put(formId, result);
     }
 
     public String getPassword() {
