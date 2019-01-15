@@ -96,7 +96,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     public static final String DISPLAY_ONLY_UPDATED_FORMS = "displayOnlyUpdatedForms";
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
-    private static final String FORMLIST = "formlist";
     private static final String SELECTED_FORMS = "selectedForms";
     private static final String IS_DOWNLOAD_ONLY_MODE = "isDownloadOnlyMode";
     private static final String FORM_IDS_TO_DOWNLOAD = "formIdsToDownload";
@@ -122,7 +121,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private DownloadFormsTask downloadFormsTask;
     private Button toggleButton;
 
-    private ArrayList<HashMap<String, String>> formList;
     private final ArrayList<HashMap<String, String>> filteredFormList = new ArrayList<>();
     private LinkedHashSet<String> selectedForms = new LinkedHashSet<>();
 
@@ -229,7 +227,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 toggleButtonLabel(toggleButton, listView);
                 selectedForms.clear();
                 if (listView.getCheckedItemCount() == listView.getCount()) {
-                    for (HashMap<String, String> map : formList) {
+                    for (HashMap<String, String> map : viewModel.getFormList()) {
                         selectedForms.add(map.get(FORMDETAIL_KEY));
                     }
                 }
@@ -240,7 +238,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         refreshButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                formList.clear();
+                viewModel.clearFormList();
                 updateAdapter();
                 clearChoices();
                 downloadFormList();
@@ -273,15 +271,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             }
         }
 
-        if (savedInstanceState != null && savedInstanceState.containsKey(FORMLIST)) {
-            formList =
-                    (ArrayList<HashMap<String, String>>) savedInstanceState.getSerializable(
-                            FORMLIST);
-        } else {
-            formList = new ArrayList<HashMap<String, String>>();
-        }
-
-        filteredFormList.addAll(formList);
+        filteredFormList.addAll(viewModel.getFormList());
 
         if (getLastCustomNonConfigurationInstance() instanceof DownloadFormListTask) {
             downloadFormListTask = (DownloadFormListTask) getLastCustomNonConfigurationInstance();
@@ -388,7 +378,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(BUNDLE_SELECTED_COUNT, listView.getCheckedItemCount());
-        outState.putSerializable(FORMLIST, formList);
         outState.putSerializable(SELECTED_FORMS, selectedForms);
 
         // Download mode variables
@@ -476,13 +465,13 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         CharSequence charSequence = getFilterText();
         filteredFormList.clear();
         if (charSequence.length() > 0) {
-            for (HashMap<String, String> form : formList) {
+            for (HashMap<String, String> form : viewModel.getFormList()) {
                 if (form.get(FORMNAME).toLowerCase(Locale.US).contains(charSequence.toString().toLowerCase(Locale.US))) {
                     filteredFormList.add(form);
                 }
             }
         } else {
-            filteredFormList.addAll(formList);
+            filteredFormList.addAll(viewModel.getFormList());
         }
         sortList();
         if (listView.getAdapter() == null) {
@@ -676,7 +665,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             // Everything worked. Clear the list and add the results.
             viewModel.setFormNamesAndURLs(result);
 
-            formList.clear();
+            viewModel.clearFormList();
 
             ArrayList<String> ids = new ArrayList<String>(viewModel.getFormNamesAndURLs().keySet());
             for (int i = 0; i < result.size(); i++) {
@@ -694,22 +683,22 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                     item.put(FORM_VERSION_KEY, details.getFormVersion());
 
                     // Insert the new form in alphabetical order.
-                    if (formList.isEmpty()) {
-                        formList.add(item);
+                    if (viewModel.getFormList().isEmpty()) {
+                        viewModel.addFormList(item);
                     } else {
                         int j;
-                        for (j = 0; j < formList.size(); j++) {
-                            HashMap<String, String> compareMe = formList.get(j);
+                        for (j = 0; j < viewModel.getFormList().size(); j++) {
+                            HashMap<String, String> compareMe = viewModel.getFormList().get(j);
                             String name = compareMe.get(FORMNAME);
                             if (name.compareTo(viewModel.getFormNamesAndURLs().get(ids.get(i)).getFormName()) > 0) {
                                 break;
                             }
                         }
-                        formList.add(j, item);
+                        viewModel.addFormList(j, item);
                     }
                 }
             }
-            filteredFormList.addAll(formList);
+            filteredFormList.addAll(viewModel.getFormList());
             updateAdapter();
             selectSupersededForms();
             downloadButton.setEnabled(listView.getCheckedItemCount() > 0);

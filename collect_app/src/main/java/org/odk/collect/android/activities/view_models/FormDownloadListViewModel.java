@@ -20,10 +20,13 @@ import android.arch.lifecycle.ViewModel;
 
 import org.odk.collect.android.logic.FormDetails;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FormDownloadListViewModel extends ViewModel {
     private HashMap<String, FormDetails> formNamesAndURLs = new HashMap<>();
+
+    private ArrayList<HashMap<String, String>> formList = new ArrayList<>();
 
     private String alertTitle;
     private String alertMsg;
@@ -73,5 +76,21 @@ public class FormDownloadListViewModel extends ViewModel {
 
     public void setShouldExit(boolean shouldExit) {
         this.shouldExit = shouldExit;
+    }
+
+    public ArrayList<HashMap<String, String>> getFormList() {
+        return formList;
+    }
+
+    public void clearFormList() {
+        formList.clear();
+    }
+
+    public void addFormList(HashMap<String, String> item) {
+        formList.add(item);
+    }
+
+    public void addFormList(int index, HashMap<String, String> item) {
+        formList.add(index, item);
     }
 }
