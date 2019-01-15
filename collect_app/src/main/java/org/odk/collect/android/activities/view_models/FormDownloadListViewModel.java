@@ -29,6 +29,7 @@ public class FormDownloadListViewModel extends ViewModel {
     private HashMap<String, Boolean> formResult = new HashMap<>();
 
     private ArrayList<HashMap<String, String>> formList = new ArrayList<>();
+    private ArrayList<String> formsFound = new ArrayList<>();
 
     private LinkedHashSet<String> selectedForms = new LinkedHashSet<>();
 
@@ -171,5 +172,9 @@ public class FormDownloadListViewModel extends ViewModel {
 
     public void setFormIdsToDownload(String[] formIdsToDownload) {
         this.formIdsToDownload = formIdsToDownload;
+    }
+
+    public void addFormsFound(String formId) {
+        formsFound.add(formId);
     }
 }

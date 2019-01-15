@@ -96,7 +96,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     public static final String DISPLAY_ONLY_UPDATED_FORMS = "displayOnlyUpdatedForms";
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
-    private static final String FORMS_FOUND = "formsFound";
 
     public static final String FORMNAME = "formname";
     private static final String FORMDETAIL_KEY = "formdetailkey";
@@ -120,8 +119,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private static final boolean DO_NOT_EXIT = false;
 
     private boolean displayOnlyUpdatedForms;
-
-    private ArrayList<String> formsFound;
 
     private FormDownloadListViewModel viewModel;
 
@@ -162,8 +159,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     }
 
     private void init(Bundle savedInstanceState) {
-        formsFound = new ArrayList<>();
-
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             if (bundle.containsKey(DISPLAY_ONLY_UPDATED_FORMS)) {
@@ -234,11 +229,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             // Android should keep track of this, but broken on rotate...
             if (savedInstanceState.containsKey(BUNDLE_SELECTED_COUNT)) {
                 downloadButton.setEnabled(savedInstanceState.getInt(BUNDLE_SELECTED_COUNT) > 0);
-            }
-
-            if (viewModel.isDownloadOnlyMode()) {
-                formsFound = savedInstanceState.getStringArrayList(FORMS_FOUND);
-                formsFound = formsFound == null ? new ArrayList<>() : formsFound;
             }
         }
 
@@ -349,13 +339,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(BUNDLE_SELECTED_COUNT, listView.getCheckedItemCount());
-
-        // Download mode variables
-
-        if (viewModel.isDownloadOnlyMode()) {
-            // String can be stored and retrieved
-            outState.putStringArrayList(FORMS_FOUND, formsFound);
-        }
     }
 
     @Override
@@ -682,7 +665,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                     String formId = formDetails.getFormID();
 
                     if (viewModel.getFormResult().containsKey(formId)) {
-                        formsFound.add(formId);
+                        viewModel.addFormsFound(formId);
                         filesToDownload.add(formDetails);
                     }
                 }
