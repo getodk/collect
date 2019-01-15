@@ -97,17 +97,17 @@ JavaRosa is the form engine that powers Collect. If you want to debug or change 
 1. Get the code from the [JavaRosa repo](https://github.com/opendatakit/javarosa)
 1. In Android Studio, select `File` -> `New` -> `New Module` -> `Import Gradle Project` and choose the project
 1. In Collect's `build.gradle` file, find the JavaRosa section:
-```gradle
-implementation(group: 'org.opendatakit', name: 'opendatakit-javarosa', version: 'x.y.z') {
-	exclude module: 'joda-time'
-}
-```
-1. Replace the JavaRosa section with this: 
-```gradle
-implementation (project(path: ':javarosa-master')) {
-	exclude module: 'joda-time'
-}
-```
+    ```gradle
+    implementation("org.opendatakit:opendatakit-javarosa:x.y.z") {
+        ...
+    }
+    ```
+1. Replace the first line like this, using `javarosa` or whatever name you specified when importing:
+    ```gradle
+    implementation (project(path: ':javarosa')) {
+        ...
+    }
+    ```
 
 **Jar file**
 
