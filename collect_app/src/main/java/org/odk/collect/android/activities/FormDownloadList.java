@@ -37,7 +37,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.view_models.FormDownloadListViewModel;
+import org.odk.collect.android.activities.viewmodels.FormDownloadListViewModel;
 import org.odk.collect.android.adapters.FormDownloadListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;

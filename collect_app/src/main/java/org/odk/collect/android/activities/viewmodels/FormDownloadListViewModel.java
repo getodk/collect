@@ -14,24 +14,25 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.activities.view_models;
+package org.odk.collect.android.activities.viewmodels;
 
 import android.arch.lifecycle.ViewModel;
 
 import org.odk.collect.android.logic.FormDetails;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
 public class FormDownloadListViewModel extends ViewModel {
     private HashMap<String, FormDetails> formNamesAndURLs = new HashMap<>();
-    private HashMap<String, Boolean> formResult = new HashMap<>();
+    private final HashMap<String, Boolean> formResult = new HashMap<>();
 
-    private ArrayList<HashMap<String, String>> formList = new ArrayList<>();
-    private ArrayList<String> formsFound = new ArrayList<>();
+    private final ArrayList<HashMap<String, String>> formList = new ArrayList<>();
+    private final ArrayList<String> formsFound = new ArrayList<>();
 
-    private LinkedHashSet<String> selectedForms = new LinkedHashSet<>();
+    private final LinkedHashSet<String> selectedForms = new LinkedHashSet<>();
 
     private String[] formIdsToDownload;
 
@@ -163,7 +164,7 @@ public class FormDownloadListViewModel extends ViewModel {
     }
 
     public String[] getFormIdsToDownload() {
-        return formIdsToDownload;
+        return Arrays.copyOf(formIdsToDownload, formIdsToDownload.length);
     }
 
     public void setFormIdsToDownload(String[] formIdsToDownload) {
