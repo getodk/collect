@@ -110,10 +110,6 @@ public class FormDownloadListViewModel extends ViewModel {
         return selectedForms;
     }
 
-    public void setSelectedForms(LinkedHashSet<String> selectedForms) {
-        this.selectedForms = selectedForms;
-    }
-
     public void addSelectedForm(String form) {
         selectedForms.add(form);
     }
