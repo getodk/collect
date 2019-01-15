@@ -96,7 +96,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     public static final String DISPLAY_ONLY_UPDATED_FORMS = "displayOnlyUpdatedForms";
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
-    private static final String DIALOG_SHOWING = "dialogshowing";
     private static final String FORMLIST = "formlist";
     private static final String SELECTED_FORMS = "selectedForms";
     private static final String IS_DOWNLOAD_ONLY_MODE = "isDownloadOnlyMode";
@@ -113,8 +112,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     public static final String FORM_ID_KEY = "formid";
     private static final String FORM_VERSION_KEY = "formversion";
-
-    private boolean alertShowing;
 
     private AlertDialog alertDialog;
     private ProgressDialog progressDialog;
@@ -259,9 +256,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 downloadButton.setEnabled(savedInstanceState.getInt(BUNDLE_SELECTED_COUNT) > 0);
             }
 
-            if (savedInstanceState.containsKey(DIALOG_SHOWING)) {
-                alertShowing = savedInstanceState.getBoolean(DIALOG_SHOWING);
-            }
             if (savedInstanceState.containsKey(SHOULD_EXIT)) {
                 shouldExit = savedInstanceState.getBoolean(SHOULD_EXIT);
             }
@@ -399,7 +393,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(BUNDLE_SELECTED_COUNT, listView.getCheckedItemCount());
-        outState.putBoolean(DIALOG_SHOWING, alertShowing);
         outState.putBoolean(SHOULD_EXIT, shouldExit);
         outState.putSerializable(FORMLIST, formList);
         outState.putSerializable(SELECTED_FORMS, selectedForms);
@@ -458,7 +451,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
                 return progressDialog;
             case AUTH_DIALOG:
-                alertShowing = false;
+                viewModel.setAlertShowing(false);
 
                 AuthDialogUtility authDialogUtility = new AuthDialogUtility();
                 if (url != null && username != null && password != null) {
@@ -605,7 +598,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         if (downloadFormsTask != null) {
             downloadFormsTask.setDownloaderListener(this);
         }
-        if (alertShowing) {
+        if (viewModel.isAlertShowing()) {
             createAlertDialog(viewModel.getAlertTitle(), viewModel.getAlertMsg(), shouldExit);
         }
         super.onResume();
@@ -774,7 +767,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 switch (i) {
                     case DialogInterface.BUTTON_POSITIVE: // ok
                         // just close the dialog
-                        alertShowing = false;
+                        viewModel.setAlertShowing(false);
                         // successful download, so quit
                         // Also quit if in download_mode only(called by another app/activity just to download)
                         if (shouldExit || isDownloadOnlyMode) {
@@ -789,7 +782,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         viewModel.setAlertMsg(message);
         viewModel.setAlertTitle(title);
-        alertShowing = true;
+        viewModel.setAlertShowing(true);
         this.shouldExit = shouldExit;
         DialogUtils.showDialog(alertDialog, this);
     }
