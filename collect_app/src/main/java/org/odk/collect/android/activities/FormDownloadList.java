@@ -96,7 +96,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     public static final String DISPLAY_ONLY_UPDATED_FORMS = "displayOnlyUpdatedForms";
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
-    private static final String DIALOG_MSG = "dialogmsg";
     private static final String DIALOG_SHOWING = "dialogshowing";
     private static final String FORMLIST = "formlist";
     private static final String SELECTED_FORMS = "selectedForms";
@@ -115,7 +114,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     public static final String FORM_ID_KEY = "formid";
     private static final String FORM_VERSION_KEY = "formversion";
 
-    private String alertMsg;
     private boolean alertShowing;
 
     private AlertDialog alertDialog;
@@ -216,7 +214,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             }
         }
 
-        alertMsg = getString(R.string.please_wait);
+        viewModel.setAlertMsg(getString(R.string.please_wait));
 
         downloadButton = findViewById(R.id.add_button);
         downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
@@ -261,9 +259,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 downloadButton.setEnabled(savedInstanceState.getInt(BUNDLE_SELECTED_COUNT) > 0);
             }
 
-            if (savedInstanceState.containsKey(DIALOG_MSG)) {
-                alertMsg = savedInstanceState.getString(DIALOG_MSG);
-            }
             if (savedInstanceState.containsKey(DIALOG_SHOWING)) {
                 alertShowing = savedInstanceState.getBoolean(DIALOG_SHOWING);
             }
@@ -404,7 +399,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(BUNDLE_SELECTED_COUNT, listView.getCheckedItemCount());
-        outState.putString(DIALOG_MSG, alertMsg);
         outState.putBoolean(DIALOG_SHOWING, alertShowing);
         outState.putBoolean(SHOULD_EXIT, shouldExit);
         outState.putSerializable(FORMLIST, formList);
@@ -457,7 +451,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                             }
                         };
                 progressDialog.setTitle(getString(R.string.downloading_data));
-                progressDialog.setMessage(alertMsg);
+                progressDialog.setMessage(viewModel.getAlertMsg());
                 progressDialog.setIcon(android.R.drawable.ic_dialog_info);
                 progressDialog.setIndeterminate(true);
                 progressDialog.setCancelable(false);
@@ -612,7 +606,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             downloadFormsTask.setDownloaderListener(this);
         }
         if (alertShowing) {
-            createAlertDialog(viewModel.getAlertTitle(), alertMsg, shouldExit);
+            createAlertDialog(viewModel.getAlertTitle(), viewModel.getAlertMsg(), shouldExit);
         }
         super.onResume();
     }
@@ -793,7 +787,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         alertDialog.setCancelable(false);
         alertDialog.setButton(getString(R.string.ok), quitListener);
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
-        alertMsg = message;
+        viewModel.setAlertMsg(message);
         viewModel.setAlertTitle(title);
         alertShowing = true;
         this.shouldExit = shouldExit;
@@ -802,8 +796,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     @Override
     public void progressUpdate(String currentFile, int progress, int total) {
-        alertMsg = getString(R.string.fetching_file, currentFile, String.valueOf(progress), String.valueOf(total));
-        progressDialog.setMessage(alertMsg);
+        viewModel.setAlertMsg(getString(R.string.fetching_file, currentFile, String.valueOf(progress), String.valueOf(total)));
+        progressDialog.setMessage(viewModel.getAlertMsg());
     }
 
     @Override
