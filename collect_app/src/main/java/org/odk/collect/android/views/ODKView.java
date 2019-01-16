@@ -291,6 +291,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
     /**
      * @see #getGroupsPath(FormEntryCaption[], boolean)
      */
+    @NonNull
     public static String getGroupsPath(FormEntryCaption[] groups) {
         return getGroupsPath(groups, false);
     }
