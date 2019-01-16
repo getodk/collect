@@ -614,11 +614,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         googleLocationClient.start();
     }
 
-    private boolean collectLocationCoordinates(FormController formController) {
+    private boolean shouldLocationCoordinatesBeCollected(FormController formController) {
         return formController != null
                 && formController.getSubmissionMetadata() != null
                 && formController.getSubmissionMetadata().audit != null
-                && formController.getSubmissionMetadata().audit.collectLocationCoordinates();
+                && formController.getSubmissionMetadata().audit.isLocationEnabled();
     }
 
     private boolean isBackgroundLocationEnabled() {
@@ -1009,7 +1009,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         menu.findItem(R.id.menu_preferences).setVisible(useability)
                 .setEnabled(useability);
 
-        if (collectLocationCoordinates(getFormController()) && LocationClients.areGooglePlayServicesAvailable(this)) {
+        if (shouldLocationCoordinatesBeCollected(getFormController()) && LocationClients.areGooglePlayServicesAvailable(this)) {
             MenuItem backgroundLocation = menu.findItem(R.id.background_location);
             backgroundLocation.setVisible(true);
             backgroundLocation.setIcon(isBackgroundLocationEnabled() ? R.drawable.ic_place : R.drawable.ic_location_off);
@@ -2164,7 +2164,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (savedFormStart) {
             savedFormStart = false;
             initBackgroundLocationIfNeeded(formController);
-        } else if (collectLocationCoordinates(formController)
+        } else if (shouldLocationCoordinatesBeCollected(formController)
                 && LocationClients.areGooglePlayServicesAvailable(this)) {
             registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
             if (isBackgroundLocationEnabled()) {
@@ -2530,7 +2530,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void initBackgroundLocationIfNeeded(FormController formController) {
-        if (collectLocationCoordinates(formController)) {
+        if (shouldLocationCoordinatesBeCollected(formController)) {
             if (LocationClients.areGooglePlayServicesAvailable(this)) {
                 registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
                 if (isBackgroundLocationEnabled()) {

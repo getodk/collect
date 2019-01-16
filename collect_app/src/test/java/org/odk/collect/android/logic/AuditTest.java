@@ -33,14 +33,14 @@ public class AuditTest {
     public void testParameters() {
         Audit audit = new Audit("high-accuracy", "10", "60");
 
-        assertTrue(audit.collectLocationCoordinates());
+        assertTrue(audit.isLocationEnabled());
         assertEquals(PRIORITY_HIGH_ACCURACY, audit.getLocationPriority());
         assertEquals(10000, audit.getLocationInterval().intValue());
         assertEquals(60000, audit.getLocationAge().intValue());
 
         audit = new Audit("high-accuracy", "0", "60");
 
-        assertTrue(audit.collectLocationCoordinates());
+        assertTrue(audit.isLocationEnabled());
         assertEquals(PRIORITY_HIGH_ACCURACY, audit.getLocationPriority());
         assertEquals(1000, audit.getLocationInterval().intValue());
         assertEquals(60000, audit.getLocationAge().intValue());
@@ -49,21 +49,21 @@ public class AuditTest {
     @Test
     public void logLocationCoordinatesOnlyIfAllParametersAreSet() {
         Audit audit = new Audit("high-accuracy", "10", "60");
-        assertTrue(audit.collectLocationCoordinates());
+        assertTrue(audit.isLocationEnabled());
         audit = new Audit(null, "10", "60");
-        assertFalse(audit.collectLocationCoordinates());
+        assertFalse(audit.isLocationEnabled());
         audit = new Audit(null, null, "60");
-        assertFalse(audit.collectLocationCoordinates());
+        assertFalse(audit.isLocationEnabled());
         audit = new Audit(null, null, null);
-        assertFalse(audit.collectLocationCoordinates());
+        assertFalse(audit.isLocationEnabled());
         audit = new Audit("balanced", null, null);
-        assertFalse(audit.collectLocationCoordinates());
+        assertFalse(audit.isLocationEnabled());
         audit = new Audit("balanced", "10", null);
-        assertFalse(audit.collectLocationCoordinates());
+        assertFalse(audit.isLocationEnabled());
         audit = new Audit("balanced", null, "60");
-        assertFalse(audit.collectLocationCoordinates());
+        assertFalse(audit.isLocationEnabled());
         audit = new Audit(null, null, "60");
-        assertFalse(audit.collectLocationCoordinates());
+        assertFalse(audit.isLocationEnabled());
     }
 
     @Test

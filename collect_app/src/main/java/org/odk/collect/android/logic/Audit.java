@@ -82,7 +82,7 @@ public class Audit {
         return locationAge;
     }
 
-    public boolean collectLocationCoordinates() {
+    public boolean isLocationEnabled() {
         return locationPriority != null && locationInterval != null && locationAge != null;
     }
 }

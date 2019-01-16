@@ -162,7 +162,7 @@ public class EventLogger {
     }
 
     private void addLocationCoordinatesToEventIfNeeded(Event event) {
-        if (audit.collectLocationCoordinates()) {
+        if (audit.isLocationEnabled()) {
             Location location = getMostAccurateLocation();
             String latitude = location != null ? Double.toString(location.getLatitude()) : "";
             String longitude = location != null ? Double.toString(location.getLongitude()) : "";
@@ -206,7 +206,7 @@ public class EventLogger {
 
             Event[] eventArray = events.toArray(new Event[events.size()]);
             if (auditFile != null) {
-                saveTask = new EventSaveTask(auditFile, audit.collectLocationCoordinates()).execute(eventArray);
+                saveTask = new EventSaveTask(auditFile, audit.isLocationEnabled()).execute(eventArray);
             } else {
                 Timber.e("auditFile null when attempting to write events.");
             }
