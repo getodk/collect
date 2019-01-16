@@ -479,7 +479,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                                 String itemLabel = getLabel(formController.getCaptionPrompt());
                                 if (itemLabel != null) {
                                     // e.g. `1. Alice`
-                                    repeatLabel = itemNumber + ". " + itemLabel;
+                                    repeatLabel = itemNumber + ".\u200E " + itemLabel;
                                 }
                             }
 
