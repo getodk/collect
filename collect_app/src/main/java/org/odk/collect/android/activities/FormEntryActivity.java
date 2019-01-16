@@ -2604,7 +2604,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.FORM_SAVE, null, false);
                 if (saveResult.isComplete()) {
                     formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.FORM_EXIT, null, false);
-                    // Force writing of auditConfig since we are exiting
+                    // Force writing of audit since we are exiting
                     formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.FORM_FINALIZE, null, true);
 
                     // Request auto-send if app-wide auto-send is enabled or the form that was just
@@ -2614,7 +2614,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         requestAutoSend();
                     }
                 } else {
-                    // Force writing of auditConfig since we are exiting
+                    // Force writing of audit since we are exiting
                     formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.FORM_EXIT, null, true);
                 }
 

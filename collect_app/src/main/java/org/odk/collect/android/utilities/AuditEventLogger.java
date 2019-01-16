@@ -211,7 +211,7 @@ public class AuditEventLogger {
 
     /*
      * The event logger is enabled if the meta section of the form contains a logging entry
-     *      <orx:auditConfig />
+     *      <orx:audit />
      */
     private boolean isAuditEnabled() {
         return auditConfig != null;

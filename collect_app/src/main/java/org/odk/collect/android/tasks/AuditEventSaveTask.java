@@ -46,7 +46,7 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
             if (params.length > 0) {
                 for (AuditEvent aev : params) {
                     fw.write(aev.toString() + "\n");
-                    Timber.i("Log auditConfig AuditEvent: %s", aev.toString());
+                    Timber.i("Log audit event: %s", aev.toString());
                 }
             }
         } catch (IOException e) {
