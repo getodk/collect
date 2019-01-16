@@ -154,10 +154,8 @@ public class Event {
                 break;
         }
 
-        String log = textValue + "," + node + "," + start + "," + (end != 0 ? end : "");
-        if (hasLocation()) {
-            log += "," + latitude + "," + longitude + "," + accuracy;
-        }
-        return log;
+        return hasLocation()
+                ? String.format("%s,%s,%s,%s,%s,%s,%s", textValue, node, start, end != 0 ? end : "", latitude, longitude, accuracy)
+                : String.format("%s,%s,%s,%s", textValue, node, start, end != 0 ? end : "");
     }
 }
