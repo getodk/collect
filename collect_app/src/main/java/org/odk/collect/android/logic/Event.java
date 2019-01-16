@@ -121,9 +121,10 @@ public class Event {
                 : String.format("%s,%s,%s,%s", eventType.getValue(), node, start, end != 0 ? end : "");
     }
 
-    public static EventTypes getEventType(int event) {
+    // Get event type based on a Form Controller event
+    public static EventTypes getEventType(int fcEvent) {
         EventTypes eventType;
-        switch (event) {
+        switch (fcEvent) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
                 eventType = EventTypes.BEGINNING_OF_FORM;
                 break;
