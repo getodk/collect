@@ -7,8 +7,8 @@ import android.os.SystemClock;
 
 import org.javarosa.core.model.instance.TreeReference;
 import org.odk.collect.android.logic.AuditConfig;
-import org.odk.collect.android.logic.Event;
-import org.odk.collect.android.tasks.EventSaveTask;
+import org.odk.collect.android.logic.AuditEvent;
+import org.odk.collect.android.tasks.AuditEventSaveTask;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,32 +17,32 @@ import java.util.List;
 import io.reactivex.annotations.Nullable;
 import timber.log.Timber;
 
-import static org.odk.collect.android.logic.Event.EventTypes.LOCATION_PROVIDERS_DISABLED;
-import static org.odk.collect.android.logic.Event.EventTypes.LOCATION_PROVIDERS_ENABLED;
+import static org.odk.collect.android.logic.AuditEvent.AuditEventTypes.LOCATION_PROVIDERS_DISABLED;
+import static org.odk.collect.android.logic.AuditEvent.AuditEventTypes.LOCATION_PROVIDERS_ENABLED;
 import static org.odk.collect.android.logic.FormController.AUDIT_FILE_NAME;
 
 /**
- * Handle logging of events (which contain time and might contain location coordinates),
+ * Handle logging of auditEvents (which contain time and might contain location coordinates),
  * and pass them to an Async task to append to a file
  * Notes:
  * 1) If the user has saved the form, then resumes editing, then exits without saving then the timing data during the
  * second editing session will be saved.  This is OK as it records user activity.  However if the user exits
  * without saving and they have never saved the form then the timing data is lost as the form editing will be
  * restarted from scratch.
- * 2) The events for questions in a field-list group are not shown.  Only the event for the group is shown.
+ * 2) The auditEvents for questions in a field-list group are not shown.  Only the event for the group is shown.
  */
-public class EventLogger {
+public class AuditEventLogger {
 
     private List<Location> locations = new ArrayList<>();
 
     private static AsyncTask saveTask;
-    private ArrayList<Event> events = new ArrayList<>();
+    private ArrayList<AuditEvent> auditEvents = new ArrayList<>();
     private File auditFile;
     private long surveyOpenTime;
     private long surveyOpenElapsedTime;
     private final AuditConfig auditConfig;
 
-    public EventLogger(File instanceFile, AuditConfig auditConfig) {
+    public AuditEventLogger(File instanceFile, AuditConfig auditConfig) {
         this.auditConfig = auditConfig;
 
         if (isAuditEnabled() && instanceFile != null) {
@@ -53,31 +53,31 @@ public class EventLogger {
     /*
      * Log a new event
      */
-    public void logEvent(Event.EventTypes eventType, TreeReference ref, boolean writeImmediatelyToDisk) {
-        if (isAuditEnabled() && !isDuplicateOfLastEvent(eventType)) {
-            Timber.i("Event recorded: %s", eventType);
-            // Calculate the time and add the event to the events array
+    public void logEvent(AuditEvent.AuditEventTypes eventType, TreeReference ref, boolean writeImmediatelyToDisk) {
+        if (isAuditEnabled() && !isDuplicateOfLastAuditEvent(eventType)) {
+            Timber.i("AuditEvent recorded: %s", eventType);
+            // Calculate the time and add the event to the auditEvents array
             long start = getEventTime();
 
             // Set the node value from the question reference
             String node = ref == null ? "" : ref.toString();
-            if (eventType == Event.EventTypes.QUESTION || eventType == Event.EventTypes.GROUP) {
+            if (eventType == AuditEvent.AuditEventTypes.QUESTION || eventType == AuditEvent.AuditEventTypes.GROUP) {
                 int idx = node.lastIndexOf('[');
                 if (idx > 0) {
                     node = node.substring(0, idx);
                 }
             }
 
-            Event newEvent = new Event(start, eventType, node);
-            addLocationCoordinatesToEventIfNeeded(newEvent);
+            AuditEvent newAuditEvent = new AuditEvent(start, eventType, node);
+            addLocationCoordinatesToAuditEventIfNeeded(newAuditEvent);
 
             /*
              * Close any existing interval events if the view is being exited
              */
-            if (newEvent.eventType == Event.EventTypes.FORM_EXIT) {
-                for (Event ev : events) {
-                    if (!ev.endTimeSet && ev.isIntervalViewEvent()) {
-                        ev.setEnd(start);
+            if (newAuditEvent.auditEventType == AuditEvent.AuditEventTypes.FORM_EXIT) {
+                for (AuditEvent aev : auditEvents) {
+                    if (!aev.endTimeSet && aev.isIntervalViewEvent()) {
+                        aev.setEnd(start);
                     }
                 }
             }
@@ -87,9 +87,9 @@ public class EventLogger {
              * This can happen if the user is on a question page and the page gets refreshed
              * The exception is hierarchy events since they interrupt an existing interval event
              */
-            if (newEvent.isIntervalViewEvent()) {
-                for (Event ev : events) {
-                    if (ev.isIntervalViewEvent() && !ev.endTimeSet) {
+            if (newAuditEvent.isIntervalViewEvent()) {
+                for (AuditEvent aev : auditEvents) {
+                    if (aev.isIntervalViewEvent() && !aev.endTimeSet) {
                         return;
                     }
                 }
@@ -98,41 +98,41 @@ public class EventLogger {
             /*
              * Ignore beginning of form events and repeat events
              */
-            if (newEvent.eventType == Event.EventTypes.BEGINNING_OF_FORM || newEvent.eventType == Event.EventTypes.REPEAT) {
+            if (newAuditEvent.auditEventType == AuditEvent.AuditEventTypes.BEGINNING_OF_FORM || newAuditEvent.auditEventType == AuditEvent.AuditEventTypes.REPEAT) {
                 return;
             }
 
             /*
              * Having got to this point we are going to keep the event
              */
-            events.add(newEvent);
+            auditEvents.add(newAuditEvent);
 
             /*
              * Write the event unless it is an interval event in which case we need to wait for the end of that event
              */
-            if (writeImmediatelyToDisk && !newEvent.isIntervalViewEvent()) {
+            if (writeImmediatelyToDisk && !newAuditEvent.isIntervalViewEvent()) {
                 writeEvents();
             }
         }
     }
 
-    private void addLocationCoordinatesToEventIfNeeded(Event event) {
+    private void addLocationCoordinatesToAuditEventIfNeeded(AuditEvent auditEvent) {
         if (auditConfig.isLocationEnabled()) {
             Location location = getMostAccurateLocation();
             String latitude = location != null ? Double.toString(location.getLatitude()) : "";
             String longitude = location != null ? Double.toString(location.getLongitude()) : "";
             String accuracy = location != null ? Double.toString(location.getAccuracy()) : "";
-            if (!event.hasLocation()) {
-                event.setLocationCoordinates(latitude, longitude, accuracy);
+            if (!auditEvent.hasLocation()) {
+                auditEvent.setLocationCoordinates(latitude, longitude, accuracy);
             }
         }
     }
 
     // If location provider are enabled/disabled it sometimes fires the BroadcastReceiver multiple
     // times what tries to add duplicated logs
-    private boolean isDuplicateOfLastEvent(Event.EventTypes eventType) {
+    private boolean isDuplicateOfLastAuditEvent(AuditEvent.AuditEventTypes eventType) {
         return (eventType.equals(LOCATION_PROVIDERS_ENABLED) || eventType.equals(LOCATION_PROVIDERS_DISABLED))
-                && !events.isEmpty() && eventType.equals(events.get(events.size() - 1).eventType);
+                && !auditEvents.isEmpty() && eventType.equals(auditEvents.get(auditEvents.size() - 1).auditEventType);
     }
 
     /*
@@ -140,12 +140,12 @@ public class EventLogger {
      */
     public void exitView() {
         if (isAuditEnabled()) {
-            // Calculate the time and add the event to the events array
+            // Calculate the time and add the event to the auditEvents array
             long end = getEventTime();
-            for (Event ev : events) {
-                if (!ev.endTimeSet && ev.isIntervalViewEvent()) {
-                    addLocationCoordinatesToEventIfNeeded(ev);
-                    ev.setEnd(end);
+            for (AuditEvent aev : auditEvents) {
+                if (!aev.endTimeSet && aev.isIntervalViewEvent()) {
+                    addLocationCoordinatesToAuditEventIfNeeded(aev);
+                    aev.setEnd(end);
                 }
             }
 
@@ -155,15 +155,15 @@ public class EventLogger {
 
     private void writeEvents() {
         if (saveTask == null || saveTask.getStatus() == AsyncTask.Status.FINISHED) {
-            Event[] eventArray = events.toArray(new Event[events.size()]);
+            AuditEvent[] auditEventArray = auditEvents.toArray(new AuditEvent[auditEvents.size()]);
             if (auditFile != null) {
-                saveTask = new EventSaveTask(auditFile, auditConfig.isLocationEnabled()).execute(eventArray);
+                saveTask = new AuditEventSaveTask(auditFile, auditConfig.isLocationEnabled()).execute(auditEventArray);
             } else {
-                Timber.e("auditFile null when attempting to write events.");
+                Timber.e("auditFile null when attempting to write auditEvents.");
             }
-            events = new ArrayList<>();
+            auditEvents = new ArrayList<>();
         } else {
-            Timber.i("Queueing Event");
+            Timber.i("Queueing AuditEvent");
         }
     }
 

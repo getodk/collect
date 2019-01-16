@@ -4,7 +4,7 @@ package org.odk.collect.android.tasks;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
-import org.odk.collect.android.logic.Event;
+import org.odk.collect.android.logic.AuditEvent;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,21 +17,20 @@ import timber.log.Timber;
 /**
  * Background task for appending events to the event log
  */
-public class EventSaveTask extends AsyncTask<Event, Void, Void> {
+public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
     private final @NonNull File file;
     private final boolean isLocationEnabled;
 
     private static final String CSV_HEADER = "event, node, start, end";
     private static final String CSV_HEADER_WITH_LOCATION_COORDINATES = CSV_HEADER + ", latitude, longitude, accuracy";
 
-    public EventSaveTask(@NonNull File file, boolean isLocationEnabled) {
+    public AuditEventSaveTask(@NonNull File file, boolean isLocationEnabled) {
         this.file = file;
         this.isLocationEnabled = isLocationEnabled;
     }
 
     @Override
-    protected Void doInBackground(Event... params) {
-
+    protected Void doInBackground(AuditEvent... params) {
         FileWriter fw = null;
         try {
             boolean newFile = !file.exists();
@@ -45,9 +44,9 @@ public class EventSaveTask extends AsyncTask<Event, Void, Void> {
                 }
             }
             if (params.length > 0) {
-                for (Event ev : params) {
-                    fw.write(ev.toString() + "\n");
-                    Timber.i("Log auditConfig Event: %s", ev.toString());
+                for (AuditEvent aev : params) {
+                    fw.write(aev.toString() + "\n");
+                    Timber.i("Log auditConfig AuditEvent: %s", aev.toString());
                 }
             }
         } catch (IOException e) {
@@ -57,7 +56,7 @@ public class EventSaveTask extends AsyncTask<Event, Void, Void> {
                 if (fw != null) {
                     fw.close();
                 } else {
-                    Timber.e("Attempt to close null FileWriter for EventLogger.");
+                    Timber.e("Attempt to close null FileWriter for AuditEventLogger.");
                 }
             } catch (Exception e) {
                 Timber.e(e);
@@ -91,12 +90,12 @@ public class EventSaveTask extends AsyncTask<Event, Void, Void> {
                 if (tfw != null) {
                     tfw.close();
                 } else {
-                    Timber.e("Attempt to close null FileWriter for EventLogger.");
+                    Timber.e("Attempt to close null FileWriter for AuditEventLogger.");
                 }
                 if (br != null) {
                     br.close();
                 } else {
-                    Timber.e("Attempt to close null BufferedReader for EventLogger.");
+                    Timber.e("Attempt to close null BufferedReader for AuditEventLogger.");
                 }
             } catch (Exception e) {
                 Timber.e(e);

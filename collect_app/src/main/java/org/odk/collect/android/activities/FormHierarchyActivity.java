@@ -193,7 +193,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         jumpPreviousButton.setOnClickListener(v -> goUpLevel());
 
         jumpBeginningButton.setOnClickListener(v -> {
-            formController.getEventLogger().exitView();
+            formController.getAuditEventLogger().exitView();
             formController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
 
             setResult(RESULT_OK);
@@ -201,7 +201,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         });
 
         jumpEndButton.setOnClickListener(v -> {
-            formController.getEventLogger().exitView();
+            formController.getAuditEventLogger().exitView();
             formController.jumpToIndex(FormIndex.createEndOfFormIndex());
 
             setResult(RESULT_OK);
@@ -555,7 +555,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     public void onBackPressed() {
         FormController formController = Collect.getInstance().getFormController();
         if (formController != null) {
-            formController.getEventLogger().exitView();
+            formController.getAuditEventLogger().exitView();
             formController.jumpToIndex(startIndex);
         }
 

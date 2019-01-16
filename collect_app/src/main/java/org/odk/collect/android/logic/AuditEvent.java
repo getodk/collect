@@ -20,9 +20,9 @@ import android.support.annotation.NonNull;
 
 import org.javarosa.form.api.FormEntryController;
 
-public class Event {
+public class AuditEvent {
 
-    public enum EventTypes {
+    public enum AuditEventTypes {
         BEGINNING_OF_FORM("beginning of form"),                                     // Beginning of the form
         QUESTION("question"),                                                       // Create a question
         GROUP("group questions"),                                                   // Create a group
@@ -46,11 +46,11 @@ public class Event {
         BACKGROUND_LOCATION_DISABLED("background location disabled"),               // Background location option is disabled
         LOCATION_PROVIDERS_ENABLED("location providers enabled"),                   // Location providers are enabled
         LOCATION_PROVIDERS_DISABLED("location providers disabled"),                 // Location providers are disabled
-        UNKNOWN_EVENT_TYPE("Unknown Event Type");                                   // Unknown event type
+        UNKNOWN_EVENT_TYPE("Unknown AuditEvent Type");                                   // Unknown event type
 
         private final String value;
 
-        EventTypes(String value) {
+        AuditEventTypes(String value) {
             this.value = value;
         }
 
@@ -60,7 +60,7 @@ public class Event {
     }
 
     private final long start;
-    public EventTypes eventType;
+    public AuditEventTypes auditEventType;
     private final String node;
     private String latitude;
     private String longitude;
@@ -71,9 +71,9 @@ public class Event {
     /*
      * Create a new event
      */
-    public Event(long start, EventTypes eventType, String node) {
+    public AuditEvent(long start, AuditEventTypes auditEventType, String node) {
         this.start = start;
-        this.eventType = eventType;
+        this.auditEventType = auditEventType;
         this.node = node;
     }
 
@@ -84,11 +84,11 @@ public class Event {
      *  Prompt for repeat
      */
     public boolean isIntervalViewEvent() {
-        return eventType == EventTypes.HIERARCHY
-                || eventType == EventTypes.QUESTION
-                || eventType == EventTypes.GROUP
-                || eventType == EventTypes.END_OF_FORM
-                || eventType == EventTypes.PROMPT_NEW_REPEAT;
+        return auditEventType == AuditEventTypes.HIERARCHY
+                || auditEventType == AuditEventTypes.QUESTION
+                || auditEventType == AuditEventTypes.GROUP
+                || auditEventType == AuditEventTypes.END_OF_FORM
+                || auditEventType == AuditEventTypes.PROMPT_NEW_REPEAT;
     }
 
     /*
@@ -117,35 +117,35 @@ public class Event {
     @NonNull
     public String toString() {
         return hasLocation()
-                ? String.format("%s,%s,%s,%s,%s,%s,%s", eventType.getValue(), node, start, end != 0 ? end : "", latitude, longitude, accuracy)
-                : String.format("%s,%s,%s,%s", eventType.getValue(), node, start, end != 0 ? end : "");
+                ? String.format("%s,%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", latitude, longitude, accuracy)
+                : String.format("%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "");
     }
 
     // Get event type based on a Form Controller event
-    public static EventTypes getEventType(int fcEvent) {
-        EventTypes eventType;
+    public static AuditEventTypes getAuditEventType(int fcEvent) {
+        AuditEventTypes auditEventType;
         switch (fcEvent) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
-                eventType = EventTypes.BEGINNING_OF_FORM;
+                auditEventType = AuditEventTypes.BEGINNING_OF_FORM;
                 break;
             case FormEntryController.EVENT_QUESTION:
-                eventType = EventTypes.QUESTION;
+                auditEventType = AuditEventTypes.QUESTION;
                 break;
             case FormEntryController.EVENT_GROUP:
-                eventType = EventTypes.GROUP;
+                auditEventType = AuditEventTypes.GROUP;
                 break;
             case FormEntryController.EVENT_REPEAT:
-                eventType = EventTypes.REPEAT;
+                auditEventType = AuditEventTypes.REPEAT;
                 break;
             case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
-                eventType = EventTypes.PROMPT_NEW_REPEAT;
+                auditEventType = AuditEventTypes.PROMPT_NEW_REPEAT;
                 break;
             case FormEntryController.EVENT_END_OF_FORM:
-                eventType = EventTypes.END_OF_FORM;
+                auditEventType = AuditEventTypes.END_OF_FORM;
                 break;
             default:
-                eventType = EventTypes.UNKNOWN_EVENT_TYPE;
+                auditEventType = AuditEventTypes.UNKNOWN_EVENT_TYPE;
         }
-        return eventType;
+        return auditEventType;
     }
 }

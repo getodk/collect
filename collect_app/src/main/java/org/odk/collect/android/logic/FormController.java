@@ -49,7 +49,7 @@ import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
-import org.odk.collect.android.utilities.EventLogger;
+import org.odk.collect.android.utilities.AuditEventLogger;
 import org.odk.collect.android.views.ODKView;
 
 import java.io.File;
@@ -88,9 +88,9 @@ public class FormController {
     public static final String AUDIT_FILE_NAME = "audit.csv";
 
     /*
-     * Store the eventLogger object with the form controller state
+     * Store the auditEventLogger object with the form controller state
      */
-    private EventLogger eventLogger;
+    private AuditEventLogger auditEventLogger;
 
     /**
      * OpenRosa metadata of a form instance.
@@ -176,15 +176,15 @@ public class FormController {
         return indexWaitingForData;
     }
 
-    public EventLogger getEventLogger() {
-        if (eventLogger == null) {
-            setEventLogger(new EventLogger(getInstanceFile(), getSubmissionMetadata().auditConfig));
+    public AuditEventLogger getAuditEventLogger() {
+        if (auditEventLogger == null) {
+            setAuditEventLogger(new AuditEventLogger(getInstanceFile(), getSubmissionMetadata().auditConfig));
         }
-        return eventLogger;
+        return auditEventLogger;
     }
 
-    private void setEventLogger(EventLogger logger) {
-        eventLogger = logger;
+    private void setAuditEventLogger(AuditEventLogger logger) {
+        auditEventLogger = logger;
     }
 
     /**
