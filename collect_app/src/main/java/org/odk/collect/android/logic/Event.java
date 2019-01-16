@@ -21,29 +21,39 @@ import org.javarosa.form.api.FormEntryController;
 public class Event {
 
     public enum EventTypes {
-        BEGINNING_OF_FORM,                  // Beginning of the form
-        QUESTION,                           // Create a question
-        GROUP,                              // Create a group
-        PROMPT_NEW_REPEAT,                  // Prompt do add a new group
-        REPEAT,                             // Repeat group
-        END_OF_FORM,                        // Show the "end of form" view
-        FORM_START,                         // Start filling in the form
-        FORM_EXIT,                          // Exit the form
-        FORM_RESUME,                        // Resume filling in the form after previously exiting
-        FORM_SAVE,                          // Save the form
-        FORM_FINALIZE,                      // Finalize the form
-        HIERARCHY,                          // Jump to a question
-        SAVE_ERROR,                         // Error in save
-        FINALIZE_ERROR,                     // Error in finalize
-        CONSTRAINT_ERROR,                   // Constraint or missing answer error on save
-        DELETE_REPEAT,                      // Delete a repeat group
-        GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, // Google Play Services are not available
-        LOCATION_PERMISSIONS_GRANTED,       // Location permissions are granted
-        LOCATION_PERMISSIONS_NOT_GRANTED,   // Location permissions are not granted
-        BACKGROUND_LOCATION_ENABLED,        // Background location option is enabled
-        BACKGROUND_LOCATION_DISABLED,       // Background location option is disabled
-        LOCATION_PROVIDERS_ENABLED,         // Location providers are enabled
-        LOCATION_PROVIDERS_DISABLED         // Location providers are disabled
+        BEGINNING_OF_FORM("beginning of form"),                                     // Beginning of the form
+        QUESTION("question"),                                                       // Create a question
+        GROUP("group questions"),                                                   // Create a group
+        PROMPT_NEW_REPEAT("add repeat"),                                            // Prompt do add a new group
+        REPEAT("repeat"),                                                           // Repeat group
+        END_OF_FORM("end screen"),                                                  // Show the "end of form" view
+        FORM_START("form start"),                                                   // Start filling in the form
+        FORM_EXIT("form exit"),                                                     // Exit the form
+        FORM_RESUME("form resume"),                                                 // Resume filling in the form after previously exiting
+        FORM_SAVE("form save"),                                                     // Save the form
+        FORM_FINALIZE("form finalize"),                                             // Finalize the form
+        HIERARCHY("jump"),                                                          // Jump to a question
+        SAVE_ERROR("save error"),                                                   // Error in save
+        FINALIZE_ERROR("finalize error"),                                           // Error in finalize
+        CONSTRAINT_ERROR("constraint error"),                                       // Constraint or missing answer error on save
+        DELETE_REPEAT("delete repeat"),                                             // Delete a repeat group
+        GOOGLE_PLAY_SERVICES_NOT_AVAILABLE("google play services not available"),   // Google Play Services are not available
+        LOCATION_PERMISSIONS_GRANTED("location permissions granted"),               // Location permissions are granted
+        LOCATION_PERMISSIONS_NOT_GRANTED("location permissions not granted"),       // Location permissions are not granted
+        BACKGROUND_LOCATION_ENABLED("background location enabled"),                 // Background location option is enabled
+        BACKGROUND_LOCATION_DISABLED("background location disabled"),               // Background location option is disabled
+        LOCATION_PROVIDERS_ENABLED("location providers enabled"),                   // Location providers are enabled
+        LOCATION_PROVIDERS_DISABLED("location providers disabled");                 // Location providers are disabled
+
+        private final String value;
+
+        EventTypes(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
     }
 
     private final long start;
@@ -102,79 +112,13 @@ public class Event {
      * convert the event into a record to write to the CSV file
      */
     public String toString() {
-        String textValue;
-        switch (eventType) {
-            case QUESTION:
-                textValue = "question";
-                break;
-            case GROUP:
-                textValue = "group questions";
-                break;
-            case PROMPT_NEW_REPEAT:
-                textValue = "add repeat";
-                break;
-            case END_OF_FORM:
-                textValue = "end screen";
-                break;
-            case FORM_START:
-                textValue = "form start";
-                break;
-            case FORM_EXIT:
-                textValue = "form exit";
-                break;
-            case FORM_RESUME:
-                textValue = "form resume";
-                break;
-            case FORM_SAVE:
-                textValue = "form save";
-                break;
-            case FORM_FINALIZE:
-                textValue = "form finalize";
-                break;
-            case HIERARCHY:
-                textValue = "jump";
-                break;
-            case SAVE_ERROR:
-                textValue = "save error";
-                break;
-            case FINALIZE_ERROR:
-                textValue = "finalize error";
-                break;
-            case CONSTRAINT_ERROR:
-                textValue = "constraint error";
-                break;
-            case DELETE_REPEAT:
-                textValue = "delete repeat";
-                break;
-            case GOOGLE_PLAY_SERVICES_NOT_AVAILABLE:
-                textValue = "google play services not available";
-                break;
-            case LOCATION_PERMISSIONS_GRANTED:
-                textValue = "location permissions granted";
-                break;
-            case LOCATION_PERMISSIONS_NOT_GRANTED:
-                textValue = "location permissions not granted";
-                break;
-            case BACKGROUND_LOCATION_ENABLED:
-                textValue = "background location enabled";
-                break;
-            case BACKGROUND_LOCATION_DISABLED:
-                textValue = "background location disabled";
-                break;
-            case LOCATION_PROVIDERS_ENABLED:
-                textValue = "location providers enabled";
-                break;
-            case LOCATION_PROVIDERS_DISABLED:
-                textValue = "location providers disabled";
-                break;
-            default:
-                textValue = "Unknown Event Type: " + eventType;
-                break;
-        }
+        String eventName = eventType.getValue() != null
+                ? eventType.getValue()
+                : "Unknown Event Type: " + eventType;
 
         return hasLocation()
-                ? String.format("%s,%s,%s,%s,%s,%s,%s", textValue, node, start, end != 0 ? end : "", latitude, longitude, accuracy)
-                : String.format("%s,%s,%s,%s", textValue, node, start, end != 0 ? end : "");
+                ? String.format("%s,%s,%s,%s,%s,%s,%s", eventName, node, start, end != 0 ? end : "", latitude, longitude, accuracy)
+                : String.format("%s,%s,%s,%s", eventName, node, start, end != 0 ? end : "");
     }
 
     public static EventTypes getEventType(int event) {
