@@ -250,17 +250,13 @@ public class EventLogger {
 
     private void removeExpiredLocations() {
         if (!locations.isEmpty()) {
-            List<Location> locationsTemporaryList = new ArrayList<>(locations);
-
-            for (int i = locations.size() - 1; i >= 0; i--) {
-                if (System.currentTimeMillis() - locations.get(i).getTime() > audit.getLocationAge()) {
-                    locationsTemporaryList.remove(i);
-                } else {
-                    break;
+            List<Location> unexpiredLocations = new ArrayList<>();
+            for (Location location : locations) {
+                if (System.currentTimeMillis() <= location.getTime() + audit.getLocationAge()) {
+                    unexpiredLocations.add(location);
                 }
             }
-
-            locations = new ArrayList<>(locationsTemporaryList);
+            locations = unexpiredLocations;
         }
     }
 }
