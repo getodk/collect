@@ -23,7 +23,11 @@ import java.util.Locale;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.annotations.Nullable;
 
-public class Audit {
+/**
+ * This class is responsible for storing the current audit configuration, which contains three
+ * parameters: locationPriority, locationMinInterval and locationMaxAge.
+ */
+public class AuditConfig {
 
     private static final long MIN_ALLOWED_LOCATION_MIN_INTERVAL = 1000;
 
@@ -42,7 +46,7 @@ public class Audit {
      */
     private final Long locationMaxAge;
 
-    Audit(String mode, String locationMinInterval, String locationMaxAge) {
+    AuditConfig(String mode, String locationMinInterval, String locationMaxAge) {
         this.locationPriority = mode != null ? getMode(mode) : null;
         this.locationMinInterval = locationMinInterval != null ? Long.parseLong(locationMinInterval) * 1000 : null;
         this.locationMaxAge = locationMaxAge != null ? Long.parseLong(locationMaxAge) * 1000 : null;

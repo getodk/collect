@@ -47,7 +47,7 @@ public class EventSaveTask extends AsyncTask<Event, Void, Void> {
             if (params.length > 0) {
                 for (Event ev : params) {
                     fw.write(ev.toString() + "\n");
-                    Timber.i("Log audit Event: %s", ev.toString());
+                    Timber.i("Log auditConfig Event: %s", ev.toString());
                 }
             }
         } catch (IOException e) {

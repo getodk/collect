@@ -55,7 +55,7 @@ public class ViewOnlyFormHierarchyActivity extends FormHierarchyActivity {
     }
 
     /**
-     * Prevents logging an audit event when the user exits the activity.
+     * Prevents logging an auditConfig event when the user exits the activity.
      */
     @Override
     public void onBackPressed() {

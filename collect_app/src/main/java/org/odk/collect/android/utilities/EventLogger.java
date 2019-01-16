@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.os.SystemClock;
 
 import org.javarosa.core.model.instance.TreeReference;
-import org.odk.collect.android.logic.Audit;
+import org.odk.collect.android.logic.AuditConfig;
 import org.odk.collect.android.logic.Event;
 import org.odk.collect.android.tasks.EventSaveTask;
 
@@ -40,10 +40,10 @@ public class EventLogger {
     private File auditFile;
     private long surveyOpenTime;
     private long surveyOpenElapsedTime;
-    private final Audit audit;
+    private final AuditConfig auditConfig;
 
-    public EventLogger(File instanceFile, Audit audit) {
-        this.audit = audit;
+    public EventLogger(File instanceFile, AuditConfig auditConfig) {
+        this.auditConfig = auditConfig;
 
         if (isAuditEnabled() && instanceFile != null) {
             auditFile = new File(instanceFile.getParentFile().getPath() + File.separator + AUDIT_FILE_NAME);
@@ -117,7 +117,7 @@ public class EventLogger {
     }
 
     private void addLocationCoordinatesToEventIfNeeded(Event event) {
-        if (audit.isLocationEnabled()) {
+        if (auditConfig.isLocationEnabled()) {
             Location location = getMostAccurateLocation();
             String latitude = location != null ? Double.toString(location.getLatitude()) : "";
             String longitude = location != null ? Double.toString(location.getLongitude()) : "";
@@ -157,7 +157,7 @@ public class EventLogger {
         if (saveTask == null || saveTask.getStatus() == AsyncTask.Status.FINISHED) {
             Event[] eventArray = events.toArray(new Event[events.size()]);
             if (auditFile != null) {
-                saveTask = new EventSaveTask(auditFile, audit.isLocationEnabled()).execute(eventArray);
+                saveTask = new EventSaveTask(auditFile, auditConfig.isLocationEnabled()).execute(eventArray);
             } else {
                 Timber.e("auditFile null when attempting to write events.");
             }
@@ -201,7 +201,7 @@ public class EventLogger {
         if (!locations.isEmpty()) {
             List<Location> unexpiredLocations = new ArrayList<>();
             for (Location location : locations) {
-                if (System.currentTimeMillis() <= location.getTime() + audit.getLocationMaxAge()) {
+                if (System.currentTimeMillis() <= location.getTime() + auditConfig.getLocationMaxAge()) {
                     unexpiredLocations.add(location);
                 }
             }
@@ -211,9 +211,9 @@ public class EventLogger {
 
     /*
      * The event logger is enabled if the meta section of the form contains a logging entry
-     *      <orx:audit />
+     *      <orx:auditConfig />
      */
     private boolean isAuditEnabled() {
-        return audit != null;
+        return auditConfig != null;
     }
 }

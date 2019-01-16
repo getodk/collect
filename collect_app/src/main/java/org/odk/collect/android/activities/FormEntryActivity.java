@@ -102,7 +102,7 @@ import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.location.client.GoogleLocationClient;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
-import org.odk.collect.android.logic.Audit;
+import org.odk.collect.android.logic.AuditConfig;
 import org.odk.collect.android.logic.Event;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
@@ -606,19 +606,19 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         setTitle(getString(R.string.loading_form));
     }
 
-    private void setUpLocationClient(Audit audit) {
+    private void setUpLocationClient(AuditConfig auditConfig) {
         googleLocationClient = new GoogleLocationClient(this);
         googleLocationClient.setListener(this);
-        googleLocationClient.setPriority(audit.getLocationPriority());
-        googleLocationClient.setUpdateIntervals(audit.getLocationMinInterval(), audit.getLocationMinInterval());
+        googleLocationClient.setPriority(auditConfig.getLocationPriority());
+        googleLocationClient.setUpdateIntervals(auditConfig.getLocationMinInterval(), auditConfig.getLocationMinInterval());
         googleLocationClient.start();
     }
 
     private boolean shouldLocationCoordinatesBeCollected(FormController formController) {
         return formController != null
                 && formController.getSubmissionMetadata() != null
-                && formController.getSubmissionMetadata().audit != null
-                && formController.getSubmissionMetadata().audit.isLocationEnabled();
+                && formController.getSubmissionMetadata().auditConfig != null
+                && formController.getSubmissionMetadata().auditConfig.isLocationEnabled();
     }
 
     private boolean isBackgroundLocationEnabled() {
@@ -2173,7 +2173,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         locationPermissionsGranted = true;
                         formController.getEventLogger().logEvent(Event.EventTypes.LOCATION_PERMISSIONS_GRANTED, null, false);
                     }
-                    setUpLocationClient(formController.getSubmissionMetadata().audit);
+                    setUpLocationClient(formController.getSubmissionMetadata().auditConfig);
                 } else if (locationPermissionsGranted) {
                     locationPermissionsGranted = false;
                     formController.getEventLogger().logEvent(Event.EventTypes.LOCATION_PERMISSIONS_NOT_GRANTED, null, false);
@@ -2553,7 +2553,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             public void granted() {
                 locationPermissionsGranted = true;
                 formController.getEventLogger().logEvent(Event.EventTypes.LOCATION_PERMISSIONS_GRANTED, null, false);
-                setUpLocationClient(formController.getSubmissionMetadata().audit);
+                setUpLocationClient(formController.getSubmissionMetadata().auditConfig);
                 if (googleLocationClient.isLocationAvailable()) {
                     formController.getEventLogger().logEvent(Event.EventTypes.LOCATION_PROVIDERS_ENABLED, null, false);
                     if (calledJustAfterFormStart) {
@@ -2604,7 +2604,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 formController.getEventLogger().logEvent(Event.EventTypes.FORM_SAVE, null, false);
                 if (saveResult.isComplete()) {
                     formController.getEventLogger().logEvent(Event.EventTypes.FORM_EXIT, null, false);
-                    // Force writing of audit since we are exiting
+                    // Force writing of auditConfig since we are exiting
                     formController.getEventLogger().logEvent(Event.EventTypes.FORM_FINALIZE, null, true);
 
                     // Request auto-send if app-wide auto-send is enabled or the form that was just
@@ -2614,7 +2614,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         requestAutoSend();
                     }
                 } else {
-                    // Force writing of audit since we are exiting
+                    // Force writing of auditConfig since we are exiting
                     formController.getEventLogger().logEvent(Event.EventTypes.FORM_EXIT, null, true);
                 }
 

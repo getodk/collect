@@ -103,12 +103,12 @@ public class FormController {
     public static final class InstanceMetadata {
         public final String instanceId;
         public final String instanceName;
-        public final Audit audit;
+        public final AuditConfig auditConfig;
 
-        public InstanceMetadata(String instanceId, String instanceName, Audit audit) {
+        public InstanceMetadata(String instanceId, String instanceName, AuditConfig auditConfig) {
             this.instanceId = instanceId;
             this.instanceName = instanceName;
-            this.audit = audit;
+            this.auditConfig = auditConfig;
         }
     }
 
@@ -178,7 +178,7 @@ public class FormController {
 
     public EventLogger getEventLogger() {
         if (eventLogger == null) {
-            setEventLogger(new EventLogger(getInstanceFile(), getSubmissionMetadata().audit));
+            setEventLogger(new EventLogger(getInstanceFile(), getSubmissionMetadata().auditConfig));
         }
         return eventLogger;
     }
@@ -1121,7 +1121,7 @@ public class FormController {
 
         String instanceId = null;
         String instanceName = null;
-        Audit audit = null;
+        AuditConfig auditConfig = null;
 
         if (e != null) {
             List<TreeElement> v;
@@ -1160,7 +1160,7 @@ public class FormController {
                 String locationMinInterval = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-min-interval");
                 String locationMaxAge = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-max-age");
 
-                audit = new Audit(locationPriority, locationMinInterval, locationMaxAge);
+                auditConfig = new AuditConfig(locationPriority, locationMinInterval, locationMaxAge);
 
                 IAnswerData answerData = new StringData();
                 answerData.setValue(AUDIT_FILE_NAME);
@@ -1168,7 +1168,7 @@ public class FormController {
             }
         }
 
-        return new InstanceMetadata(instanceId, instanceName, audit);
+        return new InstanceMetadata(instanceId, instanceName, auditConfig);
     }
 
     /**
