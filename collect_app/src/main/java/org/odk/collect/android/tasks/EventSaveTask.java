@@ -24,7 +24,7 @@ public class EventSaveTask extends AsyncTask<Event, Void, Void> {
     private static final String CSV_HEADER = "event, node, start, end";
     private static final String CSV_HEADER_WITH_LOCATION_COORDINATES = CSV_HEADER + ", latitude, longitude, accuracy";
 
-    public EventSaveTask(File file, boolean isLocationEnabled) {
+    public EventSaveTask(@NonNull File file, boolean isLocationEnabled) {
         this.file = file;
         this.isLocationEnabled = isLocationEnabled;
     }
