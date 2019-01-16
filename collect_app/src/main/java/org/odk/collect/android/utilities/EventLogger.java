@@ -93,7 +93,7 @@ public class EventLogger {
                          TreeReference ref,
                          boolean writeImmediatelyToDisk) {
 
-        if (auditEnabled && !duplicatedLocationProvidersLog(eventType)) {
+        if (auditEnabled && !isDuplicateOfLastEvent(eventType)) {
 
             Timber.i("Event recorded: %s : %s", eventType, fecType);
             // Calculate the time and add the event to the events array
@@ -175,7 +175,7 @@ public class EventLogger {
 
     // If location provider are enabled/disabled it sometimes fires the BroadcastReceiver multiple
     // times what tries to add duplicated logs
-    private boolean duplicatedLocationProvidersLog(EventLogger.EventTypes eventType) {
+    private boolean isDuplicateOfLastEvent(EventLogger.EventTypes eventType) {
         return (eventType.equals(LOCATION_PROVIDERS_ENABLED) || eventType.equals(LOCATION_PROVIDERS_DISABLED))
                 && !events.isEmpty() && eventType.equals(events.get(events.size() - 1).eventType);
     }
