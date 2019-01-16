@@ -84,8 +84,8 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
      */
     private boolean setClear;
 
-    /** True if the current marker location came from the intent. */
-    private boolean locationFromIntent;
+    /** True if the current point came from the intent. */
+    private boolean pointFromIntent;
 
     /** True if the intent requested for the point to be read-only. */
     private boolean intentReadOnly;
@@ -139,7 +139,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
 
         if (setClear || (intentReadOnly && featureId == -1)) {
             result = "";
-        } else if (isDragged || intentReadOnly || locationFromIntent) {
+        } else if (isDragged || intentReadOnly || pointFromIntent) {
             Timber.i("IsDragged !!!");
             MapPoint point = map.getMarkerPoint(featureId);
             result = point.lat + " " + point.lon + " " + 0 + " " + 0;
@@ -213,7 +213,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
             // placeMarkerButton.setEnabled(true);
             locationInfo.setVisibility(View.VISIBLE);
             locationStatus.setVisibility(View.VISIBLE);
-            locationFromIntent = false;
+            pointFromIntent = false;
         });
 
         Intent intent = getIntent();
@@ -231,16 +231,16 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
             }
 
             if (intent.hasExtra(GeoPointWidget.LOCATION)) {
-                double[] location = intent.getDoubleArrayExtra(GeoPointWidget.LOCATION);
+                double[] point = intent.getDoubleArrayExtra(GeoPointWidget.LOCATION);
 
-                // If the location is initially set from the intent, both dragging
+                // If the point is initially set from the intent, both dragging
                 // and the "place marker" button are initially disabled.  To enable
                 // them, the user must clear the marker and add a new one.
-                placeMarker(new MapPoint(location[0], location[1]), false);
+                placeMarker(new MapPoint(point[0], point[1]), false);
                 placeMarkerButton.setEnabled(false);
 
                 captureLocation = true;
-                locationFromIntent = true;
+                pointFromIntent = true;
                 locationInfo.setVisibility(View.GONE);
                 locationStatus.setVisibility(View.GONE);
                 zoomButton.setEnabled(true);
