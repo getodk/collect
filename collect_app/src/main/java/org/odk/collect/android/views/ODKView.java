@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.NestedScrollView;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -62,6 +63,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -287,44 +289,43 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
     }
 
     /**
+     * @see #getGroupsPath(FormEntryCaption[], boolean)
+     */
+    public static String getGroupsPath(FormEntryCaption[] groups) {
+        return getGroupsPath(groups, false);
+    }
+
+    /**
      * Builds a string representing the 'path' of the list of groups.
      * Each level is separated by `>`.
+     *
+     * Some views (e.g. the repeat picker) may want to hide the multiplicity of the last item,
+     * i.e. show `Friends` instead of `Friends > 1`.
      */
     @NonNull
-    public static String getGroupsPath(FormEntryCaption[] groups) {
-        StringBuilder path = new StringBuilder("");
-        if (groups != null) {
-            String longText;
-            int multiplicity;
-            int nextMultiplicity = -1;
-            int index = 1;
-            // list all groups in one string
-            for (FormEntryCaption group : groups) {
-                multiplicity = group.getMultiplicity() + 1;
-                longText = group.getLongText();
-                if (longText != null) {
-                    path.append(longText);
-                    if (nextMultiplicity > 0) {
-                        path
-                                .append(" (")
-                                .append(nextMultiplicity)
-                                .append(")\u200E");
-
-                        nextMultiplicity = -1;
-                    }
-                    if (group.repeats() && multiplicity > 0) {
-                        // Display the multiplicity on the next group (child instance).
-                        nextMultiplicity = multiplicity;
-                    }
-                    if (index < groups.length) {
-                        path.append(" > ");
-                    }
-                    index++;
-                }
-            }
+    public static String getGroupsPath(FormEntryCaption[] groups, boolean hideLastMultiplicity) {
+        if (groups == null) {
+            return "";
         }
 
-        return path.toString();
+        List<String> segments = new ArrayList<>();
+        int index = 1;
+        for (FormEntryCaption group : groups) {
+            String text = group.getLongText();
+
+            if (text != null) {
+                segments.add(text);
+
+                boolean isMultiplicityAllowed = !(hideLastMultiplicity && index == groups.length);
+                if (group.repeats() && isMultiplicityAllowed) {
+                    segments.add(Integer.toString(group.getMultiplicity() + 1));
+                }
+            }
+
+            index++;
+        }
+
+        return TextUtils.join(" > ", segments);
     }
 
     public void setFocus(Context context) {

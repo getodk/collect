@@ -256,7 +256,10 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             index = formController.stepIndexOut(index);
         }
 
-        return ODKView.getGroupsPath(groups.toArray(new FormEntryCaption[groups.size()]));
+        // If the repeat picker is showing, don't show an item number for the current index.
+        boolean hideLastMultiplicity = shouldShowRepeatGroupPicker();
+
+        return ODKView.getGroupsPath(groups.toArray(new FormEntryCaption[groups.size()]), hideLastMultiplicity);
     }
 
     /**
