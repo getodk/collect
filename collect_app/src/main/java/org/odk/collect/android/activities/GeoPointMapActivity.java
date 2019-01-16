@@ -93,6 +93,9 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
     /** True if the intent requested for the marker to be draggable. */
     private boolean intentDraggable;
 
+    /** While true, the point cannot be moved by dragging or long-pressing. */
+    private boolean isPointLocked;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -177,7 +180,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
 
         placeMarkerButton.setEnabled(false);
         placeMarkerButton.setOnClickListener(v -> {
-            placeMarker(map.getGpsLocation(), intentDraggable && !intentReadOnly);
+            placeMarker(map.getGpsLocation());
             zoomToMarker(true);
         });
 
@@ -233,10 +236,11 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
             if (intent.hasExtra(GeoPointWidget.LOCATION)) {
                 double[] point = intent.getDoubleArrayExtra(GeoPointWidget.LOCATION);
 
-                // If the point is initially set from the intent, both dragging
-                // and the "place marker" button are initially disabled.  To enable
-                // them, the user must clear the marker and add a new one.
-                placeMarker(new MapPoint(point[0], point[1], point[2], point[3]), false);
+                // If the point is initially set from the intent, the "place marker"
+                // button, dragging, and long-pressing are all initially disabled.
+                // To enable them, the user must clear the marker and add a new one.
+                isPointLocked = true;
+                placeMarker(new MapPoint(point[0], point[1], point[2], point[3]));
                 placeMarkerButton.setEnabled(false);
 
                 captureLocation = true;
@@ -270,7 +274,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
                 enableZoomButton(true);
 
                 if (!captureLocation && !setClear) {
-                    placeMarker(point, intentDraggable && !intentReadOnly);
+                    placeMarker(point);
                     placeMarkerButton.setEnabled(true);
                 }
 
@@ -301,8 +305,8 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
     }
 
     public void onLongPress(MapPoint point) {
-        if (intentDraggable && !intentReadOnly) {
-            placeMarker(point, true);
+        if (intentDraggable && !intentReadOnly && !isPointLocked) {
+            placeMarker(point);
             enableZoomButton(true);
             isDragged = true;
         }
@@ -361,15 +365,16 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
         featureId = -1;
         clearButton.setEnabled(false);
 
+        isPointLocked = false;
         isDragged = false;
         captureLocation = false;
         setClear = true;
     }
 
     /** Places the marker and enables the button to remove it. */
-    private void placeMarker(MapPoint point, boolean draggable) {
+    private void placeMarker(MapPoint point) {
         map.clearFeatures();
-        featureId = map.addMarker(point, draggable);
+        featureId = map.addMarker(point, intentDraggable && !intentReadOnly && !isPointLocked);
         clearButton.setEnabled(true);
         captureLocation = true;
         setClear = false;
