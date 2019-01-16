@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.logic;
 
+import android.support.annotation.NonNull;
+
 import org.javarosa.form.api.FormEntryController;
 
 public class Event {
@@ -112,14 +114,11 @@ public class Event {
     /*
      * convert the event into a record to write to the CSV file
      */
+    @NonNull
     public String toString() {
-        String eventName = eventType.getValue() != null
-                ? eventType.getValue()
-                : "Unknown Event Type: " + eventType;
-
         return hasLocation()
-                ? String.format("%s,%s,%s,%s,%s,%s,%s", eventName, node, start, end != 0 ? end : "", latitude, longitude, accuracy)
-                : String.format("%s,%s,%s,%s", eventName, node, start, end != 0 ? end : "");
+                ? String.format("%s,%s,%s,%s,%s,%s,%s", eventType.getValue(), node, start, end != 0 ? end : "", latitude, longitude, accuracy)
+                : String.format("%s,%s,%s,%s", eventType.getValue(), node, start, end != 0 ? end : "");
     }
 
     public static EventTypes getEventType(int event) {
