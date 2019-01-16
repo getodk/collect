@@ -40,7 +40,7 @@ public class EventLogger {
     private File auditFile;
     private long surveyOpenTime;
     private long surveyOpenElapsedTime;
-    private final boolean auditEnabled;              // Set true of the event logger is enabled
+    private final boolean auditEnabled; // Set true of the event logger is enabled
     private final Audit audit;
 
     public EventLogger(File instanceFile, Audit audit) {
@@ -60,10 +60,7 @@ public class EventLogger {
     /*
      * Log a new event
      */
-    public void logEvent(Event.EventTypes eventType,
-                         TreeReference ref,
-                         boolean writeImmediatelyToDisk) {
-
+    public void logEvent(Event.EventTypes eventType, TreeReference ref, boolean writeImmediatelyToDisk) {
         if (auditEnabled && !isDuplicateOfLastEvent(eventType)) {
 
             Timber.i("Event recorded: %s", eventType);
@@ -125,7 +122,6 @@ public class EventLogger {
                 writeEvents();
             }
         }
-
     }
 
     private void addLocationCoordinatesToEventIfNeeded(Event event) {
@@ -151,9 +147,7 @@ public class EventLogger {
      * Exit a question
      */
     public void exitView() {
-
         if (auditEnabled) {
-
             // Calculate the time and add the event to the events array
             long end = getEventTime();
             for (Event ev : events) {
@@ -168,9 +162,7 @@ public class EventLogger {
     }
 
     private void writeEvents() {
-
         if (saveTask == null || saveTask.getStatus() == AsyncTask.Status.FINISHED) {
-
             Event[] eventArray = events.toArray(new Event[events.size()]);
             if (auditFile != null) {
                 saveTask = new EventSaveTask(auditFile, audit.isLocationEnabled()).execute(eventArray);
@@ -178,7 +170,6 @@ public class EventLogger {
                 Timber.e("auditFile null when attempting to write events.");
             }
             events = new ArrayList<>();
-
         } else {
             Timber.i("Queueing Event");
         }
@@ -192,7 +183,6 @@ public class EventLogger {
             surveyOpenTime = System.currentTimeMillis();
             surveyOpenElapsedTime = SystemClock.elapsedRealtime();
         }
-
         return surveyOpenTime + (SystemClock.elapsedRealtime() - surveyOpenElapsedTime);
     }
 
