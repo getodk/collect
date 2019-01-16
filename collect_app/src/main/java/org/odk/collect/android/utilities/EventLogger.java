@@ -58,7 +58,7 @@ public class EventLogger {
     }
 
     private static AsyncTask saveTask;
-    private ArrayList<Event> events;
+    private ArrayList<Event> events = new ArrayList<>();
     private File auditFile;
     private long surveyOpenTime;
     private long surveyOpenElapsedTime;
@@ -79,7 +79,6 @@ public class EventLogger {
                 File instanceFolder = instanceFile.getParentFile();
                 auditFile = new File(instanceFolder.getPath() + File.separator + AUDIT_FILE_NAME);
             }
-            events = new ArrayList<>();
         }
     }
 
