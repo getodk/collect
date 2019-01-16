@@ -27,7 +27,6 @@ public class Event {
     private String latitude;
     private String longitude;
     private String accuracy;
-    private boolean collectLocationCoordinates;
     private long end;
     public boolean endTimeSet;
 
@@ -63,7 +62,7 @@ public class Event {
         this.endTimeSet = true;
     }
 
-    public boolean areLocationCoordinatesSet() {
+    public boolean hasLocation() {
         return latitude != null && !latitude.isEmpty()
                 && longitude != null && !longitude.isEmpty()
                 && accuracy != null && !accuracy.isEmpty();
@@ -73,7 +72,6 @@ public class Event {
         this.latitude = latitude;
         this.longitude = longitude;
         this.accuracy = accuracy;
-        collectLocationCoordinates = true;
     }
 
     /*
@@ -157,7 +155,7 @@ public class Event {
         }
 
         String log = textValue + "," + node + "," + start + "," + (end != 0 ? end : "");
-        if (collectLocationCoordinates) {
+        if (hasLocation()) {
             log += "," + latitude + "," + longitude + "," + accuracy;
         }
         return log;
