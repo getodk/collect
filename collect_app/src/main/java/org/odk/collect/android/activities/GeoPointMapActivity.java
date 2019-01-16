@@ -19,6 +19,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.VisibleForTesting;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -146,11 +147,10 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
             result = "";
         } else if (isDragged || intentReadOnly || pointFromIntent) {
             Timber.i("IsDragged !!!");
-            MapPoint point = map.getMarkerPoint(featureId);
-            result = String.format("%s %s %s %s", point.lat, point.lon, point.alt, point.sd);
+            result = formatResult(map.getMarkerPoint(featureId));
         } else if (location != null) {
             Timber.i("IsNotDragged !!!");
-            result = String.format("%s %s %s %s", location.lat, location.lon, location.alt, location.sd);
+            result = formatResult(location);
         }
 
         if (result != null) {
@@ -285,16 +285,24 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
                     foundFirstLocation = true;
                 }
 
-                locationStatus.setText(getString(
-                    R.string.location_provider_accuracy,
-                    GeoPointUtils.capitalizeGps(map.getLocationProvider()),
-                    new DecimalFormat("#.##").format(point.sd)
-                ));
+                locationStatus.setText(formatLocationStatus(map.getLocationProvider(), point.sd));
             }
 
         } else {
             Timber.i("onLocationChanged: null location");
         }
+    }
+
+    public String formatResult(MapPoint point) {
+        return String.format("%s %s %s %s", point.lat, point.lon, point.alt, point.sd);
+    }
+
+    public String formatLocationStatus(String provider, double sd) {
+        return getString(
+            R.string.location_provider_accuracy,
+            GeoPointUtils.capitalizeGps(provider),
+            new DecimalFormat("#.##").format(sd)
+        );
     }
 
     public void onDragEnd(int draggedFeatureId) {
@@ -386,11 +394,15 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
         this.captureLocation = captureLocation;
     }
 
-    public String getLocationStatus() {
+    @VisibleForTesting public String getLocationStatus() {
         return locationStatus.getText().toString();
     }
 
-    public AlertDialog getZoomDialog() {
+    @VisibleForTesting public AlertDialog getZoomDialog() {
         return zoomDialog;
+    }
+
+    @VisibleForTesting public MapFragment getMapFragment() {
+        return map;
     }
 }
