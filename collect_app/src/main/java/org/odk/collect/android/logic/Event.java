@@ -21,29 +21,33 @@ import org.javarosa.form.api.FormEntryController;
 public class Event {
 
     public enum EventTypes {
-        FEC,                // FEC, Real type defined in FormEntryController
-        FORM_START,         // Start filling in the form
-        FORM_EXIT,          // Exit the form
-        FORM_RESUME,        // Resume filling in the form after previously exiting
-        FORM_SAVE,          // Save the form
-        FORM_FINALIZE,      // Finalize the form
-        HIERARCHY,          // Jump to a question
-        SAVE_ERROR,         // Error in save
-        FINALIZE_ERROR,     // Error in finalize
-        CONSTRAINT_ERROR,   // Constraint or missing answer error on save
-        DELETE_REPEAT,      // Delete a repeat group
+        BEGINNING_OF_FORM,                  // Beginning of the form
+        QUESTION,                           // Create a question
+        GROUP,                              // Create a group
+        PROMPT_NEW_REPEAT,                  // Prompt do add a new group
+        REPEAT,                             // Repeat group
+        END_OF_FORM,                        // Show the "end of form" view
+        FORM_START,                         // Start filling in the form
+        FORM_EXIT,                          // Exit the form
+        FORM_RESUME,                        // Resume filling in the form after previously exiting
+        FORM_SAVE,                          // Save the form
+        FORM_FINALIZE,                      // Finalize the form
+        HIERARCHY,                          // Jump to a question
+        SAVE_ERROR,                         // Error in save
+        FINALIZE_ERROR,                     // Error in finalize
+        CONSTRAINT_ERROR,                   // Constraint or missing answer error on save
+        DELETE_REPEAT,                      // Delete a repeat group
         GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, // Google Play Services are not available
-        LOCATION_PERMISSIONS_GRANTED, // Location permissions are granted
-        LOCATION_PERMISSIONS_NOT_GRANTED, // Location permissions are not granted
-        BACKGROUND_LOCATION_ENABLED, // Background location option is enabled
-        BACKGROUND_LOCATION_DISABLED, // Background location option is disabled
-        LOCATION_PROVIDERS_ENABLED, // Location providers are enabled
-        LOCATION_PROVIDERS_DISABLED // Location providers are disabled
+        LOCATION_PERMISSIONS_GRANTED,       // Location permissions are granted
+        LOCATION_PERMISSIONS_NOT_GRANTED,   // Location permissions are not granted
+        BACKGROUND_LOCATION_ENABLED,        // Background location option is enabled
+        BACKGROUND_LOCATION_DISABLED,       // Background location option is disabled
+        LOCATION_PROVIDERS_ENABLED,         // Location providers are enabled
+        LOCATION_PROVIDERS_DISABLED         // Location providers are disabled
     }
 
     private final long start;
     public EventTypes eventType;
-    public int fecType;
     private final String node;
     private String latitude;
     private String longitude;
@@ -54,10 +58,9 @@ public class Event {
     /*
      * Create a new event
      */
-    public Event(long start, EventTypes eventType, int fecType, String node) {
+    public Event(long start, EventTypes eventType, String node) {
         this.start = start;
         this.eventType = eventType;
-        this.fecType = fecType;
         this.node = node;
     }
 
@@ -68,11 +71,11 @@ public class Event {
      *  Prompt for repeat
      */
     public boolean isIntervalViewEvent() {
-        return eventType == EventTypes.HIERARCHY || eventType == EventTypes.FEC
-                && (fecType == FormEntryController.EVENT_QUESTION
-                || fecType == FormEntryController.EVENT_GROUP
-                || fecType == FormEntryController.EVENT_END_OF_FORM
-                || fecType == FormEntryController.EVENT_PROMPT_NEW_REPEAT);
+        return eventType == EventTypes.HIERARCHY
+                || eventType == EventTypes.QUESTION
+                || eventType == EventTypes.GROUP
+                || eventType == EventTypes.END_OF_FORM
+                || eventType == EventTypes.PROMPT_NEW_REPEAT;
     }
 
     /*
@@ -101,23 +104,17 @@ public class Event {
     public String toString() {
         String textValue;
         switch (eventType) {
-            case FEC:
-                switch (fecType) {
-                    case FormEntryController.EVENT_QUESTION:
-                        textValue = "question";
-                        break;
-                    case FormEntryController.EVENT_GROUP:
-                        textValue = "group questions";
-                        break;
-                    case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
-                        textValue = "add repeat";
-                        break;
-                    case FormEntryController.EVENT_END_OF_FORM:
-                        textValue = "end screen";
-                        break;
-                    default:
-                        textValue = "Unknown FEC: " + fecType;
-                }
+            case QUESTION:
+                textValue = "question";
+                break;
+            case GROUP:
+                textValue = "group questions";
+                break;
+            case PROMPT_NEW_REPEAT:
+                textValue = "add repeat";
+                break;
+            case END_OF_FORM:
+                textValue = "end screen";
                 break;
             case FORM_START:
                 textValue = "form start";
@@ -178,5 +175,30 @@ public class Event {
         return hasLocation()
                 ? String.format("%s,%s,%s,%s,%s,%s,%s", textValue, node, start, end != 0 ? end : "", latitude, longitude, accuracy)
                 : String.format("%s,%s,%s,%s", textValue, node, start, end != 0 ? end : "");
+    }
+
+    public static EventTypes getEventType(int event) {
+        EventTypes eventType = null;
+        switch (event) {
+            case FormEntryController.EVENT_BEGINNING_OF_FORM:
+                eventType = EventTypes.BEGINNING_OF_FORM;
+                break;
+            case FormEntryController.EVENT_QUESTION:
+                eventType = EventTypes.QUESTION;
+                break;
+            case FormEntryController.EVENT_GROUP:
+                eventType = EventTypes.GROUP;
+                break;
+            case FormEntryController.EVENT_REPEAT:
+                eventType = EventTypes.REPEAT;
+                break;
+            case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
+                eventType = EventTypes.PROMPT_NEW_REPEAT;
+                break;
+            case FormEntryController.EVENT_END_OF_FORM:
+                eventType = EventTypes.END_OF_FORM;
+                break;
+        }
+        return eventType;
     }
 }

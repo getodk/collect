@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.SystemClock;
 
 import org.javarosa.core.model.instance.TreeReference;
-import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.logic.Audit;
 import org.odk.collect.android.logic.Event;
 import org.odk.collect.android.tasks.EventSaveTask;
@@ -58,38 +57,29 @@ public class EventLogger {
         }
     }
 
-    public void logEvent(Event.EventTypes eventType,
-                         TreeReference ref,
-                         boolean writeImmediatelyToDisk) {
-        logEvent(eventType, 0, ref, writeImmediatelyToDisk);
-    }
-
     /*
      * Log a new event
      */
     public void logEvent(Event.EventTypes eventType,
-                         int fecType,
                          TreeReference ref,
                          boolean writeImmediatelyToDisk) {
 
         if (auditEnabled && !isDuplicateOfLastEvent(eventType)) {
 
-            Timber.i("Event recorded: %s : %s", eventType, fecType);
+            Timber.i("Event recorded: %s", eventType);
             // Calculate the time and add the event to the events array
             long start = getEventTime();
 
             // Set the node value from the question reference
             String node = ref == null ? "" : ref.toString();
-            if (eventType == Event.EventTypes.FEC
-                    && (fecType == FormEntryController.EVENT_QUESTION
-                    || fecType == FormEntryController.EVENT_GROUP)) {
+            if (eventType == Event.EventTypes.QUESTION || eventType == Event.EventTypes.GROUP) {
                 int idx = node.lastIndexOf('[');
                 if (idx > 0) {
                     node = node.substring(0, idx);
                 }
             }
 
-            Event newEvent = new Event(start, eventType, fecType, node);
+            Event newEvent = new Event(start, eventType, node);
             addLocationCoordinatesToEventIfNeeded(newEvent);
 
             /*
@@ -119,9 +109,7 @@ public class EventLogger {
             /*
              * Ignore beginning of form events and repeat events
              */
-            if (newEvent.eventType == Event.EventTypes.FEC
-                    && (newEvent.fecType == FormEntryController.EVENT_BEGINNING_OF_FORM
-                    || newEvent.fecType == FormEntryController.EVENT_REPEAT)) {
+            if (newEvent.eventType == Event.EventTypes.BEGINNING_OF_FORM || newEvent.eventType == Event.EventTypes.REPEAT) {
                 return;
             }
 
