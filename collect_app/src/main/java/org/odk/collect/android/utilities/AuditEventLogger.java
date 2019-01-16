@@ -155,7 +155,7 @@ public class AuditEventLogger {
 
     private void writeEvents() {
         if (saveTask == null || saveTask.getStatus() == AsyncTask.Status.FINISHED) {
-            AuditEvent[] auditEventArray = auditEvents.toArray(new AuditEvent[auditEvents.size()]);
+            AuditEvent[] auditEventArray = auditEvents.toArray(new AuditEvent[0]);
             if (auditFile != null) {
                 saveTask = new AuditEventSaveTask(auditFile, auditConfig.isLocationEnabled()).execute(auditEventArray);
             } else {
