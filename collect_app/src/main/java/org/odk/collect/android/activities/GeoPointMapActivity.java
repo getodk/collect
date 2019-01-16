@@ -267,7 +267,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
             Timber.i("onLocationChanged: location = %s", point);
 
             if (previousLocation != null) {
-                enableShowLocation(true);
+                enableZoomButton(true);
 
                 if (!captureLocation && !setClear) {
                     placeMarker(point, intentDraggable && !intentReadOnly);
@@ -303,12 +303,12 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
     public void onLongPress(MapPoint point) {
         if (intentDraggable && !intentReadOnly) {
             placeMarker(point, true);
-            enableShowLocation(true);
+            enableZoomButton(true);
             isDragged = true;
         }
     }
 
-    private void enableShowLocation(boolean shouldEnable) {
+    private void enableZoomButton(boolean shouldEnable) {
         if (zoomButton != null) {
             zoomButton.setEnabled(shouldEnable);
         }
