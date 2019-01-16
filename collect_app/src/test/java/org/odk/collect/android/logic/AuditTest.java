@@ -16,9 +16,9 @@
 
 package org.odk.collect.android.logic;
 
-import org.junit.Assert;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -34,16 +34,16 @@ public class AuditTest {
         Audit audit = new Audit("high-accuracy", "10", "60");
 
         assertTrue(audit.collectLocationCoordinates());
-        Assert.assertEquals(PRIORITY_HIGH_ACCURACY, audit.getLocationPriority());
-        Assert.assertEquals(10000, audit.getLocationInterval().intValue());
-        Assert.assertEquals(60000, audit.getLocationAge().intValue());
+        assertEquals(PRIORITY_HIGH_ACCURACY, audit.getLocationPriority());
+        assertEquals(10000, audit.getLocationInterval().intValue());
+        assertEquals(60000, audit.getLocationAge().intValue());
 
         audit = new Audit("high-accuracy", "0", "60");
 
         assertTrue(audit.collectLocationCoordinates());
-        Assert.assertEquals(PRIORITY_HIGH_ACCURACY, audit.getLocationPriority());
-        Assert.assertEquals(1000, audit.getLocationInterval().intValue());
-        Assert.assertEquals(60000, audit.getLocationAge().intValue());
+        assertEquals(PRIORITY_HIGH_ACCURACY, audit.getLocationPriority());
+        assertEquals(1000, audit.getLocationInterval().intValue());
+        assertEquals(60000, audit.getLocationAge().intValue());
     }
 
     @Test
@@ -69,31 +69,31 @@ public class AuditTest {
     @Test
     public void testPriorities() {
         Audit audit = new Audit("high_accuracy", null, null);
-        Assert.assertEquals(PRIORITY_HIGH_ACCURACY, audit.getLocationPriority());
+        assertEquals(PRIORITY_HIGH_ACCURACY, audit.getLocationPriority());
         audit = new Audit("high-accuracy", null, null);
-        Assert.assertEquals(PRIORITY_HIGH_ACCURACY, audit.getLocationPriority());
+        assertEquals(PRIORITY_HIGH_ACCURACY, audit.getLocationPriority());
         audit = new Audit("HIGH_ACCURACY", null, null);
-        Assert.assertEquals(PRIORITY_HIGH_ACCURACY, audit.getLocationPriority());
+        assertEquals(PRIORITY_HIGH_ACCURACY, audit.getLocationPriority());
         audit = new Audit("balanced", null, null);
-        Assert.assertEquals(PRIORITY_BALANCED_POWER_ACCURACY, audit.getLocationPriority());
+        assertEquals(PRIORITY_BALANCED_POWER_ACCURACY, audit.getLocationPriority());
         audit = new Audit("BALANCED", null, null);
-        Assert.assertEquals(PRIORITY_BALANCED_POWER_ACCURACY, audit.getLocationPriority());
+        assertEquals(PRIORITY_BALANCED_POWER_ACCURACY, audit.getLocationPriority());
         audit = new Audit("low_power", null, null);
-        Assert.assertEquals(PRIORITY_LOW_POWER, audit.getLocationPriority());
+        assertEquals(PRIORITY_LOW_POWER, audit.getLocationPriority());
         audit = new Audit("low-power", null, null);
-        Assert.assertEquals(PRIORITY_LOW_POWER, audit.getLocationPriority());
+        assertEquals(PRIORITY_LOW_POWER, audit.getLocationPriority());
         audit = new Audit("low_POWER", null, null);
-        Assert.assertEquals(PRIORITY_LOW_POWER, audit.getLocationPriority());
+        assertEquals(PRIORITY_LOW_POWER, audit.getLocationPriority());
         audit = new Audit("no_power", null, null);
-        Assert.assertEquals(PRIORITY_NO_POWER, audit.getLocationPriority());
+        assertEquals(PRIORITY_NO_POWER, audit.getLocationPriority());
         audit = new Audit("no-power", null, null);
-        Assert.assertEquals(PRIORITY_NO_POWER, audit.getLocationPriority());
+        assertEquals(PRIORITY_NO_POWER, audit.getLocationPriority());
         audit = new Audit("NO_power", null, null);
-        Assert.assertEquals(PRIORITY_NO_POWER, audit.getLocationPriority());
+        assertEquals(PRIORITY_NO_POWER, audit.getLocationPriority());
         audit = new Audit("qwerty", null, null);
-        Assert.assertEquals(PRIORITY_HIGH_ACCURACY, audit.getLocationPriority());
+        assertEquals(PRIORITY_HIGH_ACCURACY, audit.getLocationPriority());
         audit = new Audit("", null, null);
-        Assert.assertEquals(PRIORITY_HIGH_ACCURACY, audit.getLocationPriority());
+        assertEquals(PRIORITY_HIGH_ACCURACY, audit.getLocationPriority());
         audit = new Audit(null, null, null);
         assertNull(audit.getLocationPriority());
     }
