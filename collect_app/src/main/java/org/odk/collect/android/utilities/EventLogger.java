@@ -18,9 +18,9 @@ import java.util.List;
 import io.reactivex.annotations.Nullable;
 import timber.log.Timber;
 
+import static org.odk.collect.android.logic.Event.EventTypes.LOCATION_PROVIDERS_DISABLED;
+import static org.odk.collect.android.logic.Event.EventTypes.LOCATION_PROVIDERS_ENABLED;
 import static org.odk.collect.android.logic.FormController.AUDIT_FILE_NAME;
-import static org.odk.collect.android.utilities.EventLogger.EventTypes.LOCATION_PROVIDERS_DISABLED;
-import static org.odk.collect.android.utilities.EventLogger.EventTypes.LOCATION_PROVIDERS_ENABLED;
 
 /**
  * Handle logging of events (which contain time and might contain location coordinates),
@@ -35,27 +35,6 @@ import static org.odk.collect.android.utilities.EventLogger.EventTypes.LOCATION_
 public class EventLogger {
 
     private List<Location> locations = new ArrayList<>();
-
-    public enum EventTypes {
-        FEC,                // FEC, Real type defined in FormEntryController
-        FORM_START,         // Start filling in the form
-        FORM_EXIT,          // Exit the form
-        FORM_RESUME,        // Resume filling in the form after previously exiting
-        FORM_SAVE,          // Save the form
-        FORM_FINALIZE,      // Finalize the form
-        HIERARCHY,          // Jump to a question
-        SAVE_ERROR,         // Error in save
-        FINALIZE_ERROR,     // Error in finalize
-        CONSTRAINT_ERROR,   // Constraint or missing answer error on save
-        DELETE_REPEAT,      // Delete a repeat group
-        GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, // Google Play Services are not available
-        LOCATION_PERMISSIONS_GRANTED, // Location permissions are granted
-        LOCATION_PERMISSIONS_NOT_GRANTED, // Location permissions are not granted
-        BACKGROUND_LOCATION_ENABLED, // Background location option is enabled
-        BACKGROUND_LOCATION_DISABLED, // Background location option is disabled
-        LOCATION_PROVIDERS_ENABLED, // Location providers are enabled
-        LOCATION_PROVIDERS_DISABLED // Location providers are disabled
-    }
 
     private static AsyncTask saveTask;
     private ArrayList<Event> events = new ArrayList<>();
@@ -79,7 +58,7 @@ public class EventLogger {
         }
     }
 
-    public void logEvent(EventTypes eventType,
+    public void logEvent(Event.EventTypes eventType,
                          TreeReference ref,
                          boolean writeImmediatelyToDisk) {
         logEvent(eventType, 0, ref, writeImmediatelyToDisk);
@@ -88,7 +67,7 @@ public class EventLogger {
     /*
      * Log a new event
      */
-    public void logEvent(EventTypes eventType,
+    public void logEvent(Event.EventTypes eventType,
                          int fecType,
                          TreeReference ref,
                          boolean writeImmediatelyToDisk) {
@@ -101,7 +80,7 @@ public class EventLogger {
 
             // Set the node value from the question reference
             String node = ref == null ? "" : ref.toString();
-            if (eventType == EventTypes.FEC
+            if (eventType == Event.EventTypes.FEC
                     && (fecType == FormEntryController.EVENT_QUESTION
                     || fecType == FormEntryController.EVENT_GROUP)) {
                 int idx = node.lastIndexOf('[');
@@ -116,7 +95,7 @@ public class EventLogger {
             /*
              * Close any existing interval events if the view is being exited
              */
-            if (newEvent.eventType == EventTypes.FORM_EXIT) {
+            if (newEvent.eventType == Event.EventTypes.FORM_EXIT) {
                 for (Event ev : events) {
                     if (!ev.endTimeSet && ev.isIntervalViewEvent()) {
                         ev.setEnd(start);
@@ -140,7 +119,7 @@ public class EventLogger {
             /*
              * Ignore beginning of form events and repeat events
              */
-            if (newEvent.eventType == EventTypes.FEC
+            if (newEvent.eventType == Event.EventTypes.FEC
                     && (newEvent.fecType == FormEntryController.EVENT_BEGINNING_OF_FORM
                     || newEvent.fecType == FormEntryController.EVENT_REPEAT)) {
                 return;
@@ -175,7 +154,7 @@ public class EventLogger {
 
     // If location provider are enabled/disabled it sometimes fires the BroadcastReceiver multiple
     // times what tries to add duplicated logs
-    private boolean isDuplicateOfLastEvent(EventLogger.EventTypes eventType) {
+    private boolean isDuplicateOfLastEvent(Event.EventTypes eventType) {
         return (eventType.equals(LOCATION_PROVIDERS_ENABLED) || eventType.equals(LOCATION_PROVIDERS_DISABLED))
                 && !events.isEmpty() && eventType.equals(events.get(events.size() - 1).eventType);
     }

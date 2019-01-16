@@ -17,11 +17,32 @@
 package org.odk.collect.android.logic;
 
 import org.javarosa.form.api.FormEntryController;
-import org.odk.collect.android.utilities.EventLogger;
 
 public class Event {
+
+    public enum EventTypes {
+        FEC,                // FEC, Real type defined in FormEntryController
+        FORM_START,         // Start filling in the form
+        FORM_EXIT,          // Exit the form
+        FORM_RESUME,        // Resume filling in the form after previously exiting
+        FORM_SAVE,          // Save the form
+        FORM_FINALIZE,      // Finalize the form
+        HIERARCHY,          // Jump to a question
+        SAVE_ERROR,         // Error in save
+        FINALIZE_ERROR,     // Error in finalize
+        CONSTRAINT_ERROR,   // Constraint or missing answer error on save
+        DELETE_REPEAT,      // Delete a repeat group
+        GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, // Google Play Services are not available
+        LOCATION_PERMISSIONS_GRANTED, // Location permissions are granted
+        LOCATION_PERMISSIONS_NOT_GRANTED, // Location permissions are not granted
+        BACKGROUND_LOCATION_ENABLED, // Background location option is enabled
+        BACKGROUND_LOCATION_DISABLED, // Background location option is disabled
+        LOCATION_PROVIDERS_ENABLED, // Location providers are enabled
+        LOCATION_PROVIDERS_DISABLED // Location providers are disabled
+    }
+
     private final long start;
-    public EventLogger.EventTypes eventType;
+    public EventTypes eventType;
     public int fecType;
     private final String node;
     private String latitude;
@@ -33,7 +54,7 @@ public class Event {
     /*
      * Create a new event
      */
-    public Event(long start, EventLogger.EventTypes eventType, int fecType, String node) {
+    public Event(long start, EventTypes eventType, int fecType, String node) {
         this.start = start;
         this.eventType = eventType;
         this.fecType = fecType;
@@ -47,7 +68,7 @@ public class Event {
      *  Prompt for repeat
      */
     public boolean isIntervalViewEvent() {
-        return eventType == EventLogger.EventTypes.HIERARCHY || eventType == EventLogger.EventTypes.FEC
+        return eventType == EventTypes.HIERARCHY || eventType == EventTypes.FEC
                 && (fecType == FormEntryController.EVENT_QUESTION
                 || fecType == FormEntryController.EVENT_GROUP
                 || fecType == FormEntryController.EVENT_END_OF_FORM
