@@ -142,7 +142,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
         } else if (isDragged || intentReadOnly || pointFromIntent) {
             Timber.i("IsDragged !!!");
             MapPoint point = map.getMarkerPoint(featureId);
-            result = point.lat + " " + point.lon + " " + 0 + " " + 0;
+            result = String.format("%s %s %s %s", point.lat, point.lon, point.alt, point.sd);
         } else if (location != null) {
             Timber.i("IsNotDragged !!!");
             result = String.format("%s %s %s %s", location.lat, location.lon, location.alt, location.sd);
@@ -236,7 +236,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
                 // If the point is initially set from the intent, both dragging
                 // and the "place marker" button are initially disabled.  To enable
                 // them, the user must clear the marker and add a new one.
-                placeMarker(new MapPoint(point[0], point[1]), false);
+                placeMarker(new MapPoint(point[0], point[1], point[2], point[3]), false);
                 placeMarkerButton.setEnabled(false);
 
                 captureLocation = true;
