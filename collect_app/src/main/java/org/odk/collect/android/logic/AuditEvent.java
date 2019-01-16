@@ -83,7 +83,7 @@ public class AuditEvent {
      *  Question
      *  Prompt for repeat
      */
-    public boolean isIntervalViewEvent() {
+    public boolean isIntervalAuditEventType() {
         return auditEventType == AuditEventTypes.HIERARCHY
                 || auditEventType == AuditEventTypes.QUESTION
                 || auditEventType == AuditEventTypes.GROUP

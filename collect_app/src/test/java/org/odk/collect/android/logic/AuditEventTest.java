@@ -50,7 +50,7 @@ public class AuditEventTest {
     public void testToString() {
         AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, "/data/text1");
         assertNotNull(auditEvent);
-        assertTrue(auditEvent.isIntervalViewEvent());
+        assertTrue(auditEvent.isIntervalAuditEventType());
         assertEquals("question,/data/text1,1545392727685,", auditEvent.toString());
         auditEvent.setEnd(END_TIME);
         assertEquals("question,/data/text1,1545392727685,1545392728527", auditEvent.toString());
@@ -62,7 +62,7 @@ public class AuditEventTest {
         auditEvent.setLocationCoordinates("54.35202520000001", "18.64663840000003", "10");
         auditEvent.setEnd(END_TIME);
         assertNotNull(auditEvent);
-        assertTrue(auditEvent.isIntervalViewEvent());
+        assertTrue(auditEvent.isIntervalAuditEventType());
         assertEquals("question,/data/text1,1545392727685,1545392728527,54.35202520000001,18.64663840000003,10", auditEvent.toString());
     }
 
@@ -71,7 +71,7 @@ public class AuditEventTest {
         AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, null);
         auditEvent.setLocationCoordinates(null, null, null);
         assertNotNull(auditEvent);
-        assertTrue(auditEvent.isIntervalViewEvent());
+        assertTrue(auditEvent.isIntervalAuditEventType());
         auditEvent.setEnd(END_TIME);
         assertEquals("question,null,1545392727685,1545392728527", auditEvent.toString());
     }
@@ -80,97 +80,97 @@ public class AuditEventTest {
     public void testEventTypes() {
         AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, "");
         assertNotNull(auditEvent);
-        assertTrue(auditEvent.isIntervalViewEvent());
+        assertTrue(auditEvent.isIntervalAuditEventType());
         assertEquals("question,,1545392727685,", auditEvent.toString());
 
         auditEvent = new AuditEvent(START_TIME, FORM_START, "");
         assertNotNull(auditEvent);
-        assertFalse(auditEvent.isIntervalViewEvent());
+        assertFalse(auditEvent.isIntervalAuditEventType());
         assertEquals("form start,,1545392727685,", auditEvent.toString());
 
         auditEvent = new AuditEvent(START_TIME, FORM_EXIT, "");
         assertNotNull(auditEvent);
-        assertFalse(auditEvent.isIntervalViewEvent());
+        assertFalse(auditEvent.isIntervalAuditEventType());
         assertEquals("form exit,,1545392727685,", auditEvent.toString());
 
         auditEvent = new AuditEvent(START_TIME, FORM_RESUME, "");
         assertNotNull(auditEvent);
-        assertFalse(auditEvent.isIntervalViewEvent());
+        assertFalse(auditEvent.isIntervalAuditEventType());
         assertEquals("form resume,,1545392727685,", auditEvent.toString());
 
         auditEvent = new AuditEvent(START_TIME, FORM_SAVE, "");
         assertNotNull(auditEvent);
-        assertFalse(auditEvent.isIntervalViewEvent());
+        assertFalse(auditEvent.isIntervalAuditEventType());
         assertEquals("form save,,1545392727685,", auditEvent.toString());
 
         auditEvent = new AuditEvent(START_TIME, FORM_FINALIZE, "");
         assertNotNull(auditEvent);
-        assertFalse(auditEvent.isIntervalViewEvent());
+        assertFalse(auditEvent.isIntervalAuditEventType());
         assertEquals("form finalize,,1545392727685,", auditEvent.toString());
 
         auditEvent = new AuditEvent(START_TIME, HIERARCHY, "");
         assertNotNull(auditEvent);
-        assertTrue(auditEvent.isIntervalViewEvent());
+        assertTrue(auditEvent.isIntervalAuditEventType());
         assertEquals("jump,,1545392727685,", auditEvent.toString());
 
         auditEvent = new AuditEvent(START_TIME, SAVE_ERROR, "");
         assertNotNull(auditEvent);
-        assertFalse(auditEvent.isIntervalViewEvent());
+        assertFalse(auditEvent.isIntervalAuditEventType());
         assertEquals("save error,,1545392727685,", auditEvent.toString());
 
         auditEvent = new AuditEvent(START_TIME, FINALIZE_ERROR, "");
         assertNotNull(auditEvent);
-        assertFalse(auditEvent.isIntervalViewEvent());
+        assertFalse(auditEvent.isIntervalAuditEventType());
         assertEquals("finalize error,,1545392727685,", auditEvent.toString());
 
         auditEvent = new AuditEvent(START_TIME, CONSTRAINT_ERROR, "");
         assertNotNull(auditEvent);
-        assertFalse(auditEvent.isIntervalViewEvent());
+        assertFalse(auditEvent.isIntervalAuditEventType());
         assertEquals("constraint error,,1545392727685,", auditEvent.toString());
 
         auditEvent = new AuditEvent(START_TIME, DELETE_REPEAT, "");
         assertNotNull(auditEvent);
-        assertFalse(auditEvent.isIntervalViewEvent());
+        assertFalse(auditEvent.isIntervalAuditEventType());
         assertEquals("delete repeat,,1545392727685,", auditEvent.toString());
 
         auditEvent = new AuditEvent(START_TIME, GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, "");
         assertNotNull(auditEvent);
-        assertFalse(auditEvent.isIntervalViewEvent());
+        assertFalse(auditEvent.isIntervalAuditEventType());
         assertEquals("google play services not available,,1545392727685,", auditEvent.toString());
 
         auditEvent = new AuditEvent(START_TIME, LOCATION_PERMISSIONS_GRANTED, "");
         assertNotNull(auditEvent);
-        assertFalse(auditEvent.isIntervalViewEvent());
+        assertFalse(auditEvent.isIntervalAuditEventType());
         assertEquals("location permissions granted,,1545392727685,", auditEvent.toString());
 
         auditEvent = new AuditEvent(START_TIME, LOCATION_PERMISSIONS_NOT_GRANTED,  "");
         assertNotNull(auditEvent);
-        assertFalse(auditEvent.isIntervalViewEvent());
+        assertFalse(auditEvent.isIntervalAuditEventType());
         assertEquals("location permissions not granted,,1545392727685,", auditEvent.toString());
 
         auditEvent = new AuditEvent(START_TIME, BACKGROUND_LOCATION_ENABLED, "");
         assertNotNull(auditEvent);
-        assertFalse(auditEvent.isIntervalViewEvent());
+        assertFalse(auditEvent.isIntervalAuditEventType());
         assertEquals("background location enabled,,1545392727685,", auditEvent.toString());
 
         auditEvent = new AuditEvent(START_TIME, BACKGROUND_LOCATION_DISABLED, "");
         assertNotNull(auditEvent);
-        assertFalse(auditEvent.isIntervalViewEvent());
+        assertFalse(auditEvent.isIntervalAuditEventType());
         assertEquals("background location disabled,,1545392727685,", auditEvent.toString());
 
         auditEvent = new AuditEvent(START_TIME, LOCATION_PROVIDERS_ENABLED, "");
         assertNotNull(auditEvent);
-        assertFalse(auditEvent.isIntervalViewEvent());
+        assertFalse(auditEvent.isIntervalAuditEventType());
         assertEquals("location providers enabled,,1545392727685,", auditEvent.toString());
 
         auditEvent = new AuditEvent(START_TIME, LOCATION_PROVIDERS_DISABLED, "");
         assertNotNull(auditEvent);
-        assertFalse(auditEvent.isIntervalViewEvent());
+        assertFalse(auditEvent.isIntervalAuditEventType());
         assertEquals("location providers disabled,,1545392727685,", auditEvent.toString());
 
         auditEvent = new AuditEvent(START_TIME, UNKNOWN_EVENT_TYPE, "");
         assertNotNull(auditEvent);
-        assertFalse(auditEvent.isIntervalViewEvent());
+        assertFalse(auditEvent.isIntervalAuditEventType());
         assertEquals("Unknown AuditEvent Type,,1545392727685,", auditEvent.toString());
     }
 }

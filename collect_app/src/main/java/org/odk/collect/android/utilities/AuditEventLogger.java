@@ -76,7 +76,7 @@ public class AuditEventLogger {
              */
             if (newAuditEvent.auditEventType == AuditEvent.AuditEventTypes.FORM_EXIT) {
                 for (AuditEvent aev : auditEvents) {
-                    if (!aev.endTimeSet && aev.isIntervalViewEvent()) {
+                    if (!aev.endTimeSet && aev.isIntervalAuditEventType()) {
                         aev.setEnd(start);
                     }
                 }
@@ -87,9 +87,9 @@ public class AuditEventLogger {
              * This can happen if the user is on a question page and the page gets refreshed
              * The exception is hierarchy events since they interrupt an existing interval event
              */
-            if (newAuditEvent.isIntervalViewEvent()) {
+            if (newAuditEvent.isIntervalAuditEventType()) {
                 for (AuditEvent aev : auditEvents) {
-                    if (aev.isIntervalViewEvent() && !aev.endTimeSet) {
+                    if (aev.isIntervalAuditEventType() && !aev.endTimeSet) {
                         return;
                     }
                 }
@@ -110,7 +110,7 @@ public class AuditEventLogger {
             /*
              * Write the event unless it is an interval event in which case we need to wait for the end of that event
              */
-            if (writeImmediatelyToDisk && !newAuditEvent.isIntervalViewEvent()) {
+            if (writeImmediatelyToDisk && !newAuditEvent.isIntervalAuditEventType()) {
                 writeEvents();
             }
         }
@@ -143,7 +143,7 @@ public class AuditEventLogger {
             // Calculate the time and add the event to the auditEvents array
             long end = getEventTime();
             for (AuditEvent aev : auditEvents) {
-                if (!aev.endTimeSet && aev.isIntervalViewEvent()) {
+                if (!aev.endTimeSet && aev.isIntervalAuditEventType()) {
                     addLocationCoordinatesToAuditEventIfNeeded(aev);
                     aev.setEnd(end);
                 }
