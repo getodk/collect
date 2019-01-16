@@ -468,15 +468,20 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                                 break;
                             }
 
-                            String repeatLabel = getLabel(fc);
+                            int itemNumber = fc.getMultiplicity() + 1;
+
+                            // e.g. `friends > 1`
+                            String repeatLabel = getLabel(fc) + " > " + itemNumber;
+
+                            // If the child of the group has a more descriptive label, use that instead.
                             if (fc.getFormElement().getChildren().size() == 1 && fc.getFormElement().getChild(0) instanceof GroupDef) {
                                 formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-                                FormEntryCaption fc2 = formController.getCaptionPrompt();
-                                if (getLabel(fc2) != null) {
-                                    repeatLabel = getLabel(fc2);
+                                String itemLabel = getLabel(formController.getCaptionPrompt());
+                                if (itemLabel != null) {
+                                    // e.g. `1. Alice`
+                                    repeatLabel = itemNumber + ". " + itemLabel;
                                 }
                             }
-                            repeatLabel += " (" + (fc.getMultiplicity() + 1) + ")\u200E";
 
                             HierarchyElement instance = new HierarchyElement(
                                     repeatLabel, null,
