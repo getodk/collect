@@ -40,6 +40,7 @@ import static org.odk.collect.android.logic.Event.EventTypes.LOCATION_PROVIDERS_
 import static org.odk.collect.android.logic.Event.EventTypes.LOCATION_PROVIDERS_ENABLED;
 import static org.odk.collect.android.logic.Event.EventTypes.QUESTION;
 import static org.odk.collect.android.logic.Event.EventTypes.SAVE_ERROR;
+import static org.odk.collect.android.logic.Event.EventTypes.UNKNOWN_EVENT_TYPE;
 
 public class EventTest {
     private static final long START_TIME = 1545392727685L;
@@ -166,5 +167,10 @@ public class EventTest {
         assertNotNull(event);
         assertFalse(event.isIntervalViewEvent());
         assertEquals("location providers disabled,,1545392727685,", event.toString());
+
+        event = new Event(START_TIME, UNKNOWN_EVENT_TYPE, "");
+        assertNotNull(event);
+        assertFalse(event.isIntervalViewEvent());
+        assertEquals("Unknown Event Type,,1545392727685,", event.toString());
     }
 }

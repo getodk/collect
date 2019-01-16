@@ -43,7 +43,8 @@ public class Event {
         BACKGROUND_LOCATION_ENABLED("background location enabled"),                 // Background location option is enabled
         BACKGROUND_LOCATION_DISABLED("background location disabled"),               // Background location option is disabled
         LOCATION_PROVIDERS_ENABLED("location providers enabled"),                   // Location providers are enabled
-        LOCATION_PROVIDERS_DISABLED("location providers disabled");                 // Location providers are disabled
+        LOCATION_PROVIDERS_DISABLED("location providers disabled"),                 // Location providers are disabled
+        UNKNOWN_EVENT_TYPE("Unknown Event Type");                                   // Unknown event type
 
         private final String value;
 
@@ -122,7 +123,7 @@ public class Event {
     }
 
     public static EventTypes getEventType(int event) {
-        EventTypes eventType = null;
+        EventTypes eventType;
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
                 eventType = EventTypes.BEGINNING_OF_FORM;
@@ -142,6 +143,8 @@ public class Event {
             case FormEntryController.EVENT_END_OF_FORM:
                 eventType = EventTypes.END_OF_FORM;
                 break;
+            default:
+                eventType = EventTypes.UNKNOWN_EVENT_TYPE;
         }
         return eventType;
     }
