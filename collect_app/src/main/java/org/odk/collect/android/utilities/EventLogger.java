@@ -74,11 +74,8 @@ public class EventLogger {
          */
         auditEnabled = audit != null;
 
-        if (auditEnabled) {
-            if (instanceFile != null) {
-                File instanceFolder = instanceFile.getParentFile();
-                auditFile = new File(instanceFolder.getPath() + File.separator + AUDIT_FILE_NAME);
-            }
+        if (auditEnabled && instanceFile != null) {
+            auditFile = new File(instanceFile.getParentFile().getPath() + File.separator + AUDIT_FILE_NAME);
         }
     }
 
