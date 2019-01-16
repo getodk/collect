@@ -95,7 +95,7 @@ public class EventLogger {
 
             // Set the node value from the question reference
             String node = ref == null ? "" : ref.toString();
-            if (node != null && eventType == EventTypes.FEC
+            if (eventType == EventTypes.FEC
                     && (fecType == FormEntryController.EVENT_QUESTION
                     || fecType == FormEntryController.EVENT_GROUP)) {
                 int idx = node.lastIndexOf('[');
