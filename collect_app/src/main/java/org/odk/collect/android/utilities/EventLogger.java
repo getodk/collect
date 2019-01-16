@@ -59,7 +59,6 @@ public class EventLogger {
 
     private static AsyncTask saveTask;
     private ArrayList<Event> events;
-    private String filename;
     private File auditFile;
     private long surveyOpenTime;
     private long surveyOpenElapsedTime;
@@ -76,18 +75,11 @@ public class EventLogger {
         auditEnabled = audit != null;
 
         if (auditEnabled) {
-            filename = AUDIT_FILE_NAME;
             if (instanceFile != null) {
                 File instanceFolder = instanceFile.getParentFile();
-                auditFile = new File(instanceFolder.getPath() + File.separator + filename);
+                auditFile = new File(instanceFolder.getPath() + File.separator + AUDIT_FILE_NAME);
             }
             events = new ArrayList<>();
-        }
-    }
-
-    public void setPath(String instancePath) {
-        if (auditEnabled) {
-            auditFile = new File(instancePath + File.separator + filename);
         }
     }
 
