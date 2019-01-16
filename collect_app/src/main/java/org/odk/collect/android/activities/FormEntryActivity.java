@@ -610,7 +610,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         googleLocationClient = new GoogleLocationClient(this);
         googleLocationClient.setListener(this);
         googleLocationClient.setPriority(audit.getLocationPriority());
-        googleLocationClient.setUpdateIntervals(audit.getLocationInterval(), audit.getLocationInterval());
+        googleLocationClient.setUpdateIntervals(audit.getLocationMinInterval(), audit.getLocationMinInterval());
         googleLocationClient.start();
     }
 

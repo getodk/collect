@@ -201,7 +201,7 @@ public class EventLogger {
         if (!locations.isEmpty()) {
             List<Location> unexpiredLocations = new ArrayList<>();
             for (Location location : locations) {
-                if (System.currentTimeMillis() <= location.getTime() + audit.getLocationAge()) {
+                if (System.currentTimeMillis() <= location.getTime() + audit.getLocationMaxAge()) {
                     unexpiredLocations.add(location);
                 }
             }

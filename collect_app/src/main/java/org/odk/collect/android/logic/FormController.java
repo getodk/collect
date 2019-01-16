@@ -1157,10 +1157,10 @@ public class FormController {
                 TreeElement auditElement = v.get(0);
 
                 String locationPriority = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-priority");
-                String locationInterval = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-interval");
-                String locationAge = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-age");
+                String locationMinInterval = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-min-interval");
+                String locationMaxAge = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-max-age");
 
-                audit = new Audit(locationPriority, locationInterval, locationAge);
+                audit = new Audit(locationPriority, locationMinInterval, locationMaxAge);
 
                 IAnswerData answerData = new StringData();
                 answerData.setValue(AUDIT_FILE_NAME);

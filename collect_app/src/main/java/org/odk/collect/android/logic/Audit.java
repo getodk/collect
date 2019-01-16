@@ -25,7 +25,7 @@ import io.reactivex.annotations.Nullable;
 
 public class Audit {
 
-    private static final long MIN_ALLOWED_LOCATION_INTERVAL = 1000;
+    private static final long MIN_ALLOWED_LOCATION_MIN_INTERVAL = 1000;
 
     /**
      * The locationPriority of location requests
@@ -35,17 +35,17 @@ public class Audit {
     /**
      * The desired minimum interval in milliseconds that the location will be fetched
      */
-    private final Long locationInterval;
+    private final Long locationMinInterval;
 
     /**
      * The time in milliseconds that location will be valid
      */
-    private final Long locationAge;
+    private final Long locationMaxAge;
 
-    Audit(String mode, String locationInterval, String locationAge) {
+    Audit(String mode, String locationMinInterval, String locationMaxAge) {
         this.locationPriority = mode != null ? getMode(mode) : null;
-        this.locationInterval = locationInterval != null ? Long.parseLong(locationInterval) * 1000 : null;
-        this.locationAge = locationAge != null ? Long.parseLong(locationAge) * 1000 : null;
+        this.locationMinInterval = locationMinInterval != null ? Long.parseLong(locationMinInterval) * 1000 : null;
+        this.locationMaxAge = locationMaxAge != null ? Long.parseLong(locationMaxAge) * 1000 : null;
     }
 
     private LocationClient.Priority getMode(@NonNull String mode) {
@@ -69,20 +69,20 @@ public class Audit {
     }
 
     @Nullable
-    public Long getLocationInterval() {
-        return locationInterval == null
+    public Long getLocationMinInterval() {
+        return locationMinInterval == null
                 ? null
-                : locationInterval > MIN_ALLOWED_LOCATION_INTERVAL
-                    ? locationInterval
-                    : MIN_ALLOWED_LOCATION_INTERVAL;
+                : locationMinInterval > MIN_ALLOWED_LOCATION_MIN_INTERVAL
+                    ? locationMinInterval
+                    : MIN_ALLOWED_LOCATION_MIN_INTERVAL;
     }
 
     @Nullable
-    public Long getLocationAge() {
-        return locationAge;
+    public Long getLocationMaxAge() {
+        return locationMaxAge;
     }
 
     public boolean isLocationEnabled() {
-        return locationPriority != null && locationInterval != null && locationAge != null;
+        return locationPriority != null && locationMinInterval != null && locationMaxAge != null;
     }
 }

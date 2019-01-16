@@ -35,15 +35,15 @@ public class AuditTest {
 
         assertTrue(audit.isLocationEnabled());
         assertEquals(PRIORITY_HIGH_ACCURACY, audit.getLocationPriority());
-        assertEquals(10000, audit.getLocationInterval().intValue());
-        assertEquals(60000, audit.getLocationAge().intValue());
+        assertEquals(10000, audit.getLocationMinInterval().intValue());
+        assertEquals(60000, audit.getLocationMaxAge().intValue());
 
         audit = new Audit("high-accuracy", "0", "60");
 
         assertTrue(audit.isLocationEnabled());
         assertEquals(PRIORITY_HIGH_ACCURACY, audit.getLocationPriority());
-        assertEquals(1000, audit.getLocationInterval().intValue());
-        assertEquals(60000, audit.getLocationAge().intValue());
+        assertEquals(1000, audit.getLocationMinInterval().intValue());
+        assertEquals(60000, audit.getLocationMaxAge().intValue());
     }
 
     @Test
