@@ -79,6 +79,12 @@ public class EventLogger {
         }
     }
 
+    public void logEvent(EventTypes eventType,
+                         TreeReference ref,
+                         boolean writeImmediatelyToDisk) {
+        logEvent(eventType, 0, ref, writeImmediatelyToDisk);
+    }
+
     /*
      * Log a new event
      */
