@@ -324,8 +324,8 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
         return zoomButton != null && zoomButton.isEnabled();
     }
 
-    @VisibleForTesting public boolean isZoomDialogShowing() {
-        return zoomDialog != null && zoomDialog.isShowing();
+    @VisibleForTesting public AlertDialog getZoomDialog() {
+        return zoomDialog;
     }
 
     @VisibleForTesting public MapFragment getMapFragment() {

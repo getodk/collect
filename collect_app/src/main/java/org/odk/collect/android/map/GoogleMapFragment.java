@@ -430,6 +430,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
         // A Marker's position is a LatLng with just latitude and longitude
         // fields.  We need to store the point's altitude and standard
         // deviation values somewhere, so they go in the marker's snippet.
+        if (map == null) {
+            return null;
+        }
         return map.addMarker(new MarkerOptions()
             .position(toLatLng(point))
             .snippet(point.alt + ";" + point.sd)
