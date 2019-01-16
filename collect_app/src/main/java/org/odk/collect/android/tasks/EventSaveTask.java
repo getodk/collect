@@ -19,14 +19,14 @@ import timber.log.Timber;
  */
 public class EventSaveTask extends AsyncTask<Event, Void, Void> {
     private final @NonNull File file;
-    private final boolean collectLocationCoordinates;
+    private final boolean isLocationEnabled;
 
     private static final String CSV_HEADER = "event, node, start, end";
     private static final String CSV_HEADER_WITH_LOCATION_COORDINATES = CSV_HEADER + ", latitude, longitude, accuracy";
 
-    public EventSaveTask(File file, boolean collectLocationCoordinates) {
+    public EventSaveTask(File file, boolean isLocationEnabled) {
         this.file = file;
-        this.collectLocationCoordinates = collectLocationCoordinates;
+        this.isLocationEnabled = isLocationEnabled;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class EventSaveTask extends AsyncTask<Event, Void, Void> {
             fw = new FileWriter(file, true);
             if (newFile) {
                 fw.write(getHeader());
-            } else if (collectLocationCoordinates) {
+            } else if (isLocationEnabled) {
                 if (updateHeaderIfNeeded()) {
                     fw.close();
                     fw = new FileWriter(file.getAbsolutePath(), true);
@@ -106,7 +106,7 @@ public class EventSaveTask extends AsyncTask<Event, Void, Void> {
     }
 
     private String getHeader() {
-        return collectLocationCoordinates
+        return isLocationEnabled
                 ? CSV_HEADER_WITH_LOCATION_COORDINATES + "\n"
                 : CSV_HEADER + "\n";
     }
