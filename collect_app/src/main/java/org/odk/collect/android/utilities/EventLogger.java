@@ -40,19 +40,12 @@ public class EventLogger {
     private File auditFile;
     private long surveyOpenTime;
     private long surveyOpenElapsedTime;
-    private final boolean auditEnabled; // Set true of the event logger is enabled
     private final Audit audit;
 
     public EventLogger(File instanceFile, Audit audit) {
         this.audit = audit;
 
-        /*
-         * The event logger is enabled if the meta section of the form contains a logging entry
-         *      <orx:audit />
-         */
-        auditEnabled = audit != null;
-
-        if (auditEnabled && instanceFile != null) {
+        if (isAuditEnabled() && instanceFile != null) {
             auditFile = new File(instanceFile.getParentFile().getPath() + File.separator + AUDIT_FILE_NAME);
         }
     }
@@ -61,8 +54,7 @@ public class EventLogger {
      * Log a new event
      */
     public void logEvent(Event.EventTypes eventType, TreeReference ref, boolean writeImmediatelyToDisk) {
-        if (auditEnabled && !isDuplicateOfLastEvent(eventType)) {
-
+        if (isAuditEnabled() && !isDuplicateOfLastEvent(eventType)) {
             Timber.i("Event recorded: %s", eventType);
             // Calculate the time and add the event to the events array
             long start = getEventTime();
@@ -147,7 +139,7 @@ public class EventLogger {
      * Exit a question
      */
     public void exitView() {
-        if (auditEnabled) {
+        if (isAuditEnabled()) {
             // Calculate the time and add the event to the events array
             long end = getEventTime();
             for (Event ev : events) {
@@ -215,5 +207,13 @@ public class EventLogger {
             }
             locations = unexpiredLocations;
         }
+    }
+
+    /*
+     * The event logger is enabled if the meta section of the form contains a logging entry
+     *      <orx:audit />
+     */
+    private boolean isAuditEnabled() {
+        return audit != null;
     }
 }
