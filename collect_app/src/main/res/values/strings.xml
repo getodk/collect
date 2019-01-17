@@ -656,10 +656,10 @@
     <string name="sms_invalid_phone_number_description">Set a destination phone number for SMS submissions or change your transport type.</string>
     <string name="notification_channel_name">General notifications</string>
     <string name="corrupt_imported_preferences_error">Current settings are corrupt. From the admin settings, reset settings or import working ones.</string>
-    <string name="google_play_services_not_available">This form needs to collect your location in the background, but it\'s not possible because Google Play Services are not available.</string>
-    <string name="location_providers_disabled_dialog_message">This form needs to collect your location in the background, but location providers are disabled. You may enable this feature in the settings.</string>
+    <string name="google_play_services_not_available">This form wants to track your location but Google Play Services are not available.</string>
+    <string name="location_providers_disabled_dialog_message">This form wants to track your location but location providers are disabled. Please enable in Android settings.</string>
     <string name="go_to_settings">Go to settings</string>
     <string name="background_location">Background location</string>
-    <string name="background_location_disabled">This form needs to collect your location in the background, but the background location option is disabled. You may enable this feature in the menu.</string>
-    <string name="background_location_enabled">This form collects your location continuously in the background. You may disable this feature in the menu.</string>
+    <string name="background_location_disabled">This form wants to track your location but tracking is disabled. Please enable in the \u0020\u0020⋮\u0020\u0020 menu above.</string>
+    <string name="background_location_enabled">This form tracks your location. You can disable tracking in the \u0020\u0020⋮\u0020\u0020 menu above.</string>
 </resources>
