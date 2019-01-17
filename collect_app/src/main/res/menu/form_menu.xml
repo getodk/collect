@@ -31,7 +31,9 @@
         android:id="@+id/background_location"
         android:title="@string/background_location"
         android:visible="false"
-        app:showAsAction="always"/>
+        android:checkable="true"
+        app:actionViewClass="android.widget.CheckBox"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/menu_languages"

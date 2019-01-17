@@ -1012,7 +1012,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (shouldLocationCoordinatesBeCollected(getFormController()) && LocationClients.areGooglePlayServicesAvailable(this)) {
             MenuItem backgroundLocation = menu.findItem(R.id.background_location);
             backgroundLocation.setVisible(true);
-            backgroundLocation.setIcon(isBackgroundLocationEnabled() ? R.drawable.ic_place : R.drawable.ic_location_off);
+            backgroundLocation.setChecked(isBackgroundLocationEnabled());
         }
 
         return true;
@@ -1060,7 +1060,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                 }
                 GeneralSharedPreferences.getInstance().save(KEY_BACKGROUND_LOCATION, !previousValue);
-                item.setIcon(previousValue ? R.drawable.ic_location_off : R.drawable.ic_place);
                 return true;
         }
         return super.onOptionsItemSelected(item);
