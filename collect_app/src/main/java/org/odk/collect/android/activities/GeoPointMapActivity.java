@@ -64,8 +64,6 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
     private boolean isDragged;
     private ImageButton zoomButton;
 
-    private MapHelper helper;
-
     private AlertDialog errorDialog;
 
     private AlertDialog zoomDialog;
