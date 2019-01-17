@@ -1192,7 +1192,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         setTitle(formController.getFormTitle());
 
-        formController.getAuditEventLogger().logEvent(AuditEvent.getAuditEventType(event),
+        formController.getAuditEventLogger().logEvent(AuditEvent.getAuditEventTypeFromFecType(event),
                 formController.getFormIndex().getReference(), true);
 
         switch (event) {

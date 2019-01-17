@@ -74,9 +74,9 @@ public class AuditEventLogger {
             /*
              * Close any existing interval events if the view is being exited
              */
-            if (newAuditEvent.auditEventType == AuditEvent.AuditEventType.FORM_EXIT) {
+            if (eventType == AuditEvent.AuditEventType.FORM_EXIT) {
                 for (AuditEvent aev : auditEvents) {
-                    if (!aev.endTimeSet && aev.isIntervalAuditEventType()) {
+                    if (!aev.isEndTimeSet() && aev.isIntervalAuditEventType()) {
                         aev.setEnd(start);
                     }
                 }
@@ -89,7 +89,7 @@ public class AuditEventLogger {
              */
             if (newAuditEvent.isIntervalAuditEventType()) {
                 for (AuditEvent aev : auditEvents) {
-                    if (aev.isIntervalAuditEventType() && !aev.endTimeSet) {
+                    if (aev.isIntervalAuditEventType() && !aev.isEndTimeSet()) {
                         return;
                     }
                 }
@@ -98,7 +98,7 @@ public class AuditEventLogger {
             /*
              * Ignore beginning of form events and repeat events
              */
-            if (newAuditEvent.auditEventType == AuditEvent.AuditEventType.BEGINNING_OF_FORM || newAuditEvent.auditEventType == AuditEvent.AuditEventType.REPEAT) {
+            if (eventType == AuditEvent.AuditEventType.BEGINNING_OF_FORM || eventType == AuditEvent.AuditEventType.REPEAT) {
                 return;
             }
 
@@ -132,7 +132,7 @@ public class AuditEventLogger {
     // times what tries to add duplicated logs
     private boolean isDuplicateOfLastAuditEvent(AuditEvent.AuditEventType eventType) {
         return (eventType.equals(LOCATION_PROVIDERS_ENABLED) || eventType.equals(LOCATION_PROVIDERS_DISABLED))
-                && !auditEvents.isEmpty() && eventType.equals(auditEvents.get(auditEvents.size() - 1).auditEventType);
+                && !auditEvents.isEmpty() && eventType.equals(auditEvents.get(auditEvents.size() - 1).getAuditEventType());
     }
 
     /*
@@ -143,7 +143,7 @@ public class AuditEventLogger {
             // Calculate the time and add the event to the auditEvents array
             long end = getEventTime();
             for (AuditEvent aev : auditEvents) {
-                if (!aev.endTimeSet && aev.isIntervalAuditEventType()) {
+                if (!aev.isEndTimeSet() && aev.isIntervalAuditEventType()) {
                     addLocationCoordinatesToAuditEventIfNeeded(aev);
                     aev.setEnd(end);
                 }

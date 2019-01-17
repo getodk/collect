@@ -46,7 +46,7 @@ public class AuditEvent {
         BACKGROUND_LOCATION_DISABLED("background location disabled"),               // Background location option is disabled
         LOCATION_PROVIDERS_ENABLED("location providers enabled"),                   // Location providers are enabled
         LOCATION_PROVIDERS_DISABLED("location providers disabled"),                 // Location providers are disabled
-        UNKNOWN_EVENT_TYPE("Unknown AuditEvent Type");                                   // Unknown event type
+        UNKNOWN_EVENT_TYPE("Unknown AuditEvent Type");                              // Unknown event type
 
         private final String value;
 
@@ -60,13 +60,13 @@ public class AuditEvent {
     }
 
     private final long start;
-    public AuditEventType auditEventType;
+    private AuditEventType auditEventType;
     private final String node;
     private String latitude;
     private String longitude;
     private String accuracy;
     private long end;
-    public boolean endTimeSet;
+    private boolean endTimeSet;
 
     /*
      * Create a new event
@@ -99,6 +99,14 @@ public class AuditEvent {
         this.endTimeSet = true;
     }
 
+    public boolean isEndTimeSet() {
+        return endTimeSet;
+    }
+
+    public AuditEventType getAuditEventType() {
+        return auditEventType;
+    }
+
     public boolean hasLocation() {
         return latitude != null && !latitude.isEmpty()
                 && longitude != null && !longitude.isEmpty()
@@ -122,7 +130,7 @@ public class AuditEvent {
     }
 
     // Get event type based on a Form Controller event
-    public static AuditEventType getAuditEventType(int fcEvent) {
+    public static AuditEventType getAuditEventTypeFromFecType(int fcEvent) {
         AuditEventType auditEventType;
         switch (fcEvent) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
