@@ -32,6 +32,8 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.GoogleDriveActivity;
+import org.odk.collect.android.activities.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -132,6 +134,9 @@ public class GoogleAccountsManager {
 
                 @Override
                 public void denied() {
+                    if (activity instanceof GoogleSheetsUploaderActivity || activity instanceof GoogleDriveActivity) {
+                        activity.finish();
+                    }
                 }
             });
         }
