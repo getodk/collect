@@ -130,6 +130,13 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
             new GoogleMapFragment() : new OsmMapFragment();
     }
 
+    @Override protected void onStart() {
+        super.onStart();
+        if (map != null) {
+            map.setGpsLocationEnabled(true);
+        }
+    }
+
     @Override protected void onStop() {
         map.setGpsLocationEnabled(false);
         super.onStop();
