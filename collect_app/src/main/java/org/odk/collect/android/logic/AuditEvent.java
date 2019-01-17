@@ -22,7 +22,7 @@ import org.javarosa.form.api.FormEntryController;
 
 public class AuditEvent {
 
-    public enum AuditEventTypes {
+    public enum AuditEventType {
         BEGINNING_OF_FORM("beginning of form"),                                     // Beginning of the form
         QUESTION("question"),                                                       // Create a question
         GROUP("group questions"),                                                   // Create a group
@@ -50,7 +50,7 @@ public class AuditEvent {
 
         private final String value;
 
-        AuditEventTypes(String value) {
+        AuditEventType(String value) {
             this.value = value;
         }
 
@@ -60,7 +60,7 @@ public class AuditEvent {
     }
 
     private final long start;
-    public AuditEventTypes auditEventType;
+    public AuditEventType auditEventType;
     private final String node;
     private String latitude;
     private String longitude;
@@ -71,7 +71,7 @@ public class AuditEvent {
     /*
      * Create a new event
      */
-    public AuditEvent(long start, AuditEventTypes auditEventType, String node) {
+    public AuditEvent(long start, AuditEventType auditEventType, String node) {
         this.start = start;
         this.auditEventType = auditEventType;
         this.node = node;
@@ -84,11 +84,11 @@ public class AuditEvent {
      *  Prompt for repeat
      */
     public boolean isIntervalAuditEventType() {
-        return auditEventType == AuditEventTypes.HIERARCHY
-                || auditEventType == AuditEventTypes.QUESTION
-                || auditEventType == AuditEventTypes.GROUP
-                || auditEventType == AuditEventTypes.END_OF_FORM
-                || auditEventType == AuditEventTypes.PROMPT_NEW_REPEAT;
+        return auditEventType == AuditEventType.HIERARCHY
+                || auditEventType == AuditEventType.QUESTION
+                || auditEventType == AuditEventType.GROUP
+                || auditEventType == AuditEventType.END_OF_FORM
+                || auditEventType == AuditEventType.PROMPT_NEW_REPEAT;
     }
 
     /*
@@ -122,29 +122,29 @@ public class AuditEvent {
     }
 
     // Get event type based on a Form Controller event
-    public static AuditEventTypes getAuditEventType(int fcEvent) {
-        AuditEventTypes auditEventType;
+    public static AuditEventType getAuditEventType(int fcEvent) {
+        AuditEventType auditEventType;
         switch (fcEvent) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
-                auditEventType = AuditEventTypes.BEGINNING_OF_FORM;
+                auditEventType = AuditEventType.BEGINNING_OF_FORM;
                 break;
             case FormEntryController.EVENT_QUESTION:
-                auditEventType = AuditEventTypes.QUESTION;
+                auditEventType = AuditEventType.QUESTION;
                 break;
             case FormEntryController.EVENT_GROUP:
-                auditEventType = AuditEventTypes.GROUP;
+                auditEventType = AuditEventType.GROUP;
                 break;
             case FormEntryController.EVENT_REPEAT:
-                auditEventType = AuditEventTypes.REPEAT;
+                auditEventType = AuditEventType.REPEAT;
                 break;
             case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
-                auditEventType = AuditEventTypes.PROMPT_NEW_REPEAT;
+                auditEventType = AuditEventType.PROMPT_NEW_REPEAT;
                 break;
             case FormEntryController.EVENT_END_OF_FORM:
-                auditEventType = AuditEventTypes.END_OF_FORM;
+                auditEventType = AuditEventType.END_OF_FORM;
                 break;
             default:
-                auditEventType = AuditEventTypes.UNKNOWN_EVENT_TYPE;
+                auditEventType = AuditEventType.UNKNOWN_EVENT_TYPE;
         }
         return auditEventType;
     }

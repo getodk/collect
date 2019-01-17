@@ -1037,7 +1037,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 if (formController != null) {
                     formController.getAuditEventLogger().exitView();
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.HIERARCHY, null, true);
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, null, true);
                 }
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);
@@ -1051,7 +1051,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 boolean previousValue = isBackgroundLocationEnabled();
                 if (formController != null) {
                     if (previousValue) {
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.BACKGROUND_LOCATION_DISABLED, null, false);
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.BACKGROUND_LOCATION_DISABLED, null, false);
                         if (googleLocationClient != null) {
                             googleLocationClient.stop();
                         }
@@ -1852,7 +1852,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 FormController formController = getFormController();
                 switch (i) {
                     case BUTTON_POSITIVE: // yes
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.DELETE_REPEAT, null, true);
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.DELETE_REPEAT, null, true);
                         formController.deleteRepeat();
                         showNextView();
                         break;
@@ -1946,7 +1946,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                     FormController formController = getFormController();
                     if (formController != null) {
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.FORM_EXIT, null, true);
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, null, true);
                     }
                     removeTempInstance();
                     MediaManager.INSTANCE.revertChanges();
@@ -2171,12 +2171,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (PermissionUtils.isLocationPermissionGranted(this)) {
                     if (!locationPermissionsGranted) {
                         locationPermissionsGranted = true;
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.LOCATION_PERMISSIONS_GRANTED, null, false);
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED, null, false);
                     }
                     setUpLocationClient(formController.getSubmissionMetadata().auditConfig);
                 } else if (locationPermissionsGranted) {
                     locationPermissionsGranted = false;
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.LOCATION_PERMISSIONS_NOT_GRANTED, null, false);
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_NOT_GRANTED, null, false);
                 }
             }
         }
@@ -2483,7 +2483,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         formController.setInstanceFile(instanceFile);
                     }
 
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.FORM_START, null, true);
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_START, null, true);
                 } else {
                     Intent reqIntent = getIntent();
                     boolean showFirst = reqIntent.getBooleanExtra("start", false);
@@ -2503,8 +2503,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
                             savedFormStart = true;
-                            formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.FORM_RESUME, null, true);
-                            formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.HIERARCHY, null, true);
+                            formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, null, true);
+                            formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, null, true);
                             startActivity(new Intent(this, FormHierarchyActivity.class));
                             return; // so we don't show the intro screen before jumping to the hierarchy
                         } else {
@@ -2514,7 +2514,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             finish();
                         }
                     } else {
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.FORM_RESUME, null, true);
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, null, true);
                     }
                 }
 
@@ -2537,37 +2537,37 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     backgroundLocationEnabled(formController, true);
                 } else {
                     SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_disabled));
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.BACKGROUND_LOCATION_DISABLED, null, false);
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.BACKGROUND_LOCATION_DISABLED, null, false);
                 }
             } else {
                 SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.google_play_services_not_available));
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, null, false);
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, null, false);
             }
         }
     }
 
     private void backgroundLocationEnabled(FormController formController, boolean calledJustAfterFormStart) {
-        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.BACKGROUND_LOCATION_ENABLED, null, false);
+        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.BACKGROUND_LOCATION_ENABLED, null, false);
         new PermissionUtils(this).requestLocationPermissions(new PermissionListener() {
             @Override
             public void granted() {
                 locationPermissionsGranted = true;
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.LOCATION_PERMISSIONS_GRANTED, null, false);
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED, null, false);
                 setUpLocationClient(formController.getSubmissionMetadata().auditConfig);
                 if (googleLocationClient.isLocationAvailable()) {
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.LOCATION_PROVIDERS_ENABLED, null, false);
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED, null, false);
                     if (calledJustAfterFormStart) {
                         SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_enabled));
                     }
                 } else {
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.LOCATION_PROVIDERS_DISABLED, null, false);
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED, null, false);
                     new LocationProvidersDisabledDialog().show(getSupportFragmentManager(), LocationProvidersDisabledDialog.LOCATION_PROVIDERS_DISABLED_DIALOG_TAG);
                 }
             }
 
             @Override
             public void denied() {
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.LOCATION_PERMISSIONS_NOT_GRANTED, null, false);
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_NOT_GRANTED, null, false);
             }
         });
     }
@@ -2597,15 +2597,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         switch (saveStatus) {
             case SaveToDiskTask.SAVED:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.FORM_SAVE, null, false);
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_SAVE, null, false);
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.FORM_SAVE, null, false);
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_SAVE, null, false);
                 if (saveResult.isComplete()) {
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.FORM_EXIT, null, false);
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, null, false);
                     // Force writing of audit since we are exiting
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.FORM_FINALIZE, null, true);
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, null, true);
 
                     // Request auto-send if app-wide auto-send is enabled or the form that was just
                     // finalized specifies that it should always be auto-sent.
@@ -2615,14 +2615,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                 } else {
                     // Force writing of audit since we are exiting
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.FORM_EXIT, null, true);
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, null, true);
                 }
 
                 finishReturnInstance();
                 break;
             case SaveToDiskTask.SAVE_ERROR:
                 String message;
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.SAVE_ERROR, null, true);
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.SAVE_ERROR, null, true);
                 if (saveResult.getSaveErrorMessage() != null) {
                     message = getString(R.string.data_saved_error) + ": "
                             + saveResult.getSaveErrorMessage();
@@ -2632,7 +2632,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 ToastUtils.showLongToast(message);
                 break;
             case SaveToDiskTask.ENCRYPTION_ERROR:
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.FINALIZE_ERROR, null, true);
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, null, true);
                 ToastUtils.showLongToast(String.format(getString(R.string.encryption_error_message),
                         saveResult.getSaveErrorMessage()));
                 finishReturnInstance();
@@ -2640,7 +2640,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
                 formController.getAuditEventLogger().exitView();
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.CONSTRAINT_ERROR, null, true);
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.CONSTRAINT_ERROR, null, true);
                 refreshCurrentView();
 
                 // get constraint behavior preference value with appropriate default
@@ -2906,9 +2906,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 FormController formController = getFormController();
                 if (formController != null && googleLocationClient != null) {
                     if (googleLocationClient.isLocationAvailable()) {
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.LOCATION_PROVIDERS_ENABLED, null, false);
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED, null, false);
                     } else {
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventTypes.LOCATION_PROVIDERS_DISABLED, null, false);
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED, null, false);
                     }
                 }
             }

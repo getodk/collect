@@ -17,8 +17,8 @@ import java.util.List;
 import io.reactivex.annotations.Nullable;
 import timber.log.Timber;
 
-import static org.odk.collect.android.logic.AuditEvent.AuditEventTypes.LOCATION_PROVIDERS_DISABLED;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventTypes.LOCATION_PROVIDERS_ENABLED;
+import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED;
+import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED;
 import static org.odk.collect.android.logic.FormController.AUDIT_FILE_NAME;
 
 /**
@@ -53,7 +53,7 @@ public class AuditEventLogger {
     /*
      * Log a new event
      */
-    public void logEvent(AuditEvent.AuditEventTypes eventType, TreeReference ref, boolean writeImmediatelyToDisk) {
+    public void logEvent(AuditEvent.AuditEventType eventType, TreeReference ref, boolean writeImmediatelyToDisk) {
         if (isAuditEnabled() && !isDuplicateOfLastAuditEvent(eventType)) {
             Timber.i("AuditEvent recorded: %s", eventType);
             // Calculate the time and add the event to the auditEvents array
@@ -61,7 +61,7 @@ public class AuditEventLogger {
 
             // Set the node value from the question reference
             String node = ref == null ? "" : ref.toString();
-            if (eventType == AuditEvent.AuditEventTypes.QUESTION || eventType == AuditEvent.AuditEventTypes.GROUP) {
+            if (eventType == AuditEvent.AuditEventType.QUESTION || eventType == AuditEvent.AuditEventType.GROUP) {
                 int idx = node.lastIndexOf('[');
                 if (idx > 0) {
                     node = node.substring(0, idx);
@@ -74,7 +74,7 @@ public class AuditEventLogger {
             /*
              * Close any existing interval events if the view is being exited
              */
-            if (newAuditEvent.auditEventType == AuditEvent.AuditEventTypes.FORM_EXIT) {
+            if (newAuditEvent.auditEventType == AuditEvent.AuditEventType.FORM_EXIT) {
                 for (AuditEvent aev : auditEvents) {
                     if (!aev.endTimeSet && aev.isIntervalAuditEventType()) {
                         aev.setEnd(start);
@@ -98,7 +98,7 @@ public class AuditEventLogger {
             /*
              * Ignore beginning of form events and repeat events
              */
-            if (newAuditEvent.auditEventType == AuditEvent.AuditEventTypes.BEGINNING_OF_FORM || newAuditEvent.auditEventType == AuditEvent.AuditEventTypes.REPEAT) {
+            if (newAuditEvent.auditEventType == AuditEvent.AuditEventType.BEGINNING_OF_FORM || newAuditEvent.auditEventType == AuditEvent.AuditEventType.REPEAT) {
                 return;
             }
 
@@ -130,7 +130,7 @@ public class AuditEventLogger {
 
     // If location provider are enabled/disabled it sometimes fires the BroadcastReceiver multiple
     // times what tries to add duplicated logs
-    private boolean isDuplicateOfLastAuditEvent(AuditEvent.AuditEventTypes eventType) {
+    private boolean isDuplicateOfLastAuditEvent(AuditEvent.AuditEventType eventType) {
         return (eventType.equals(LOCATION_PROVIDERS_ENABLED) || eventType.equals(LOCATION_PROVIDERS_DISABLED))
                 && !auditEvents.isEmpty() && eventType.equals(auditEvents.get(auditEvents.size() - 1).auditEventType);
     }
