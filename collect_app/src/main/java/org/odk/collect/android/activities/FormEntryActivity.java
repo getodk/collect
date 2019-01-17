@@ -1010,7 +1010,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .setEnabled(useability);
 
         if (shouldLocationCoordinatesBeCollected(getFormController()) && LocationClients.areGooglePlayServicesAvailable(this)) {
-            MenuItem backgroundLocation = menu.findItem(R.id.background_location);
+            MenuItem backgroundLocation = menu.findItem(R.id.track_location);
             backgroundLocation.setVisible(true);
             backgroundLocation.setChecked(isBackgroundLocationEnabled());
         }
@@ -1047,16 +1047,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 Intent pref = new Intent(this, PreferencesActivity.class);
                 startActivity(pref);
                 return true;
-            case R.id.background_location:
+            case R.id.track_location:
                 boolean previousValue = isBackgroundLocationEnabled();
                 if (formController != null) {
                     if (previousValue) {
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.BACKGROUND_LOCATION_DISABLED, null, false);
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_TRACKING_DISABLED, null, false);
                         if (googleLocationClient != null) {
                             googleLocationClient.stop();
                         }
                     } else {
-                        backgroundLocationEnabled(formController, false);
+                        locationTrackingEnabled(formController, false);
                     }
                 }
                 GeneralSharedPreferences.getInstance().save(KEY_BACKGROUND_LOCATION, !previousValue);
@@ -2533,10 +2533,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             if (LocationClients.areGooglePlayServicesAvailable(this)) {
                 registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
                 if (isBackgroundLocationEnabled()) {
-                    backgroundLocationEnabled(formController, true);
+                    locationTrackingEnabled(formController, true);
                 } else {
                     SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_disabled));
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.BACKGROUND_LOCATION_DISABLED, null, false);
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_TRACKING_DISABLED, null, false);
                 }
             } else {
                 SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.google_play_services_not_available));
@@ -2545,8 +2545,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    private void backgroundLocationEnabled(FormController formController, boolean calledJustAfterFormStart) {
-        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.BACKGROUND_LOCATION_ENABLED, null, false);
+    private void locationTrackingEnabled(FormController formController, boolean calledJustAfterFormStart) {
+        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_TRACKING_ENABLED, null, false);
         new PermissionUtils(this).requestLocationPermissions(new PermissionListener() {
             @Override
             public void granted() {

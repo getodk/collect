@@ -22,8 +22,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.BACKGROUND_LOCATION_DISABLED;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.BACKGROUND_LOCATION_ENABLED;
+import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_TRACKING_DISABLED;
+import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_TRACKING_ENABLED;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.CONSTRAINT_ERROR;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.DELETE_REPEAT;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FINALIZE_ERROR;
@@ -148,15 +148,15 @@ public class AuditEventTest {
         assertFalse(auditEvent.isIntervalAuditEventType());
         assertEquals("location permissions not granted,,1545392727685,", auditEvent.toString());
 
-        auditEvent = new AuditEvent(START_TIME, BACKGROUND_LOCATION_ENABLED, "");
+        auditEvent = new AuditEvent(START_TIME, LOCATION_TRACKING_ENABLED, "");
         assertNotNull(auditEvent);
         assertFalse(auditEvent.isIntervalAuditEventType());
-        assertEquals("background location enabled,,1545392727685,", auditEvent.toString());
+        assertEquals("location tracking enabled,,1545392727685,", auditEvent.toString());
 
-        auditEvent = new AuditEvent(START_TIME, BACKGROUND_LOCATION_DISABLED, "");
+        auditEvent = new AuditEvent(START_TIME, LOCATION_TRACKING_DISABLED, "");
         assertNotNull(auditEvent);
         assertFalse(auditEvent.isIntervalAuditEventType());
-        assertEquals("background location disabled,,1545392727685,", auditEvent.toString());
+        assertEquals("location tracking disabled,,1545392727685,", auditEvent.toString());
 
         auditEvent = new AuditEvent(START_TIME, LOCATION_PROVIDERS_ENABLED, "");
         assertNotNull(auditEvent);

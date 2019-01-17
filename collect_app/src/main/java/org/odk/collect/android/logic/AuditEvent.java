@@ -42,8 +42,8 @@ public class AuditEvent {
         GOOGLE_PLAY_SERVICES_NOT_AVAILABLE("google play services not available"),   // Google Play Services are not available
         LOCATION_PERMISSIONS_GRANTED("location permissions granted"),               // Location permissions are granted
         LOCATION_PERMISSIONS_NOT_GRANTED("location permissions not granted"),       // Location permissions are not granted
-        BACKGROUND_LOCATION_ENABLED("background location enabled"),                 // Background location option is enabled
-        BACKGROUND_LOCATION_DISABLED("background location disabled"),               // Background location option is disabled
+        LOCATION_TRACKING_ENABLED("location tracking enabled"),                     // Location tracking option is enabled
+        LOCATION_TRACKING_DISABLED("location tracking disabled"),                   // Location tracking option is disabled
         LOCATION_PROVIDERS_ENABLED("location providers enabled"),                   // Location providers are enabled
         LOCATION_PROVIDERS_DISABLED("location providers disabled"),                 // Location providers are disabled
         UNKNOWN_EVENT_TYPE("Unknown AuditEvent Type");                              // Unknown event type

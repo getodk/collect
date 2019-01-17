@@ -28,8 +28,8 @@
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/background_location"
-        android:title="@string/background_location"
+        android:id="@+id/track_location"
+        android:title="@string/track_location"
         android:visible="false"
         android:checkable="true"
         app:actionViewClass="android.widget.CheckBox"
