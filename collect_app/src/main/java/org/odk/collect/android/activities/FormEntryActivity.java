@@ -2550,12 +2550,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         new PermissionUtils(this).requestLocationPermissions(new PermissionListener() {
             @Override
             public void granted() {
-                locationPermissionsGranted = true;
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED, null, false);
+                if (!locationPermissionsGranted) {
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED, null, false);
+                    locationPermissionsGranted = true;
+                }
                 setUpLocationClient(formController.getSubmissionMetadata().auditConfig);
                 if (googleLocationClient.isLocationAvailable()) {
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED, null, false);
                     if (calledJustAfterFormStart) {
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED, null, false);
                         SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_enabled));
                     }
                 } else {
