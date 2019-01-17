@@ -62,13 +62,10 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
     private ImageButton placeMarkerButton;
 
     private boolean isDragged;
+
     private ImageButton zoomButton;
-
-    private AlertDialog errorDialog;
-
     private AlertDialog zoomDialog;
     private View zoomDialogView;
-
     private Button zoomPointButton;
     private Button zoomLocationButton;
     private ImageButton clearButton;
@@ -387,10 +384,6 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
 
     public void setCaptureLocation(boolean captureLocation) {
         this.captureLocation = captureLocation;
-    }
-
-    public AlertDialog getErrorDialog() {
-        return errorDialog;
     }
 
     public String getLocationStatus() {
