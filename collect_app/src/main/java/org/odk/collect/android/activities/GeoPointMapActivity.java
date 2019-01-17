@@ -50,8 +50,28 @@ import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermi
  * at the current location (obtained from GPS or other location sensors).
  */
 public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegisterReceiver {
-
     public static final String PREF_VALUE_GOOGLE_MAPS = "google_maps";
+    public static final String MAP_CENTER_KEY = "map_center";
+    public static final String MAP_ZOOM_KEY = "map_zoom";
+    public static final String POINT_KEY = "point";
+
+    public static final String IS_DRAGGED_KEY = "is_dragged";
+    public static final String CAPTURE_LOCATION_KEY = "capture_location";
+    public static final String FOUND_FIRST_LOCATION_KEY = "found_first_location";
+    public static final String SET_CLEAR_KEY = "set_clear";
+    public static final String POINT_FROM_INTENT_KEY = "point_from_intent";
+    public static final String INTENT_READ_ONLY_KEY = "intent_read_only";
+    public static final String INTENT_DRAGGABLE_KEY = "intent_draggable";
+    public static final String IS_POINT_LOCKED_KEY = "is_point_locked";
+
+    public static final String PLACE_MARKER_BUTTON_ENABLED_KEY = "place_marker_button_enabled";
+    public static final String ZOOM_BUTTON_ENABLED_KEY = "zoom_button_enabled";
+    public static final String CLEAR_BUTTON_ENABLED_KEY = "clear_button_enabled";
+    public static final String LOCATION_STATUS_VISIBILITY_KEY = "location_status_visibility";
+    public static final String LOCATION_INFO_VISIBILITY_KEY = "location_info_visibility";
+    public static final String ZOOM_DIALOG_SHOWING_KEY = "zoom_dialog_showing";
+    public static final String ZOOM_POINT_BUTTON_ENABLED_KEY = "zoom_point_button";
+    public static final String ZOOM_LOCATION_BUTTON_ENABLED_KEY = "zoom_location_button";
 
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
@@ -92,9 +112,12 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
     /** While true, the point cannot be moved by dragging or long-pressing. */
     private boolean isPointLocked;
 
+    private Bundle instanceState;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instanceState = savedInstanceState;
 
         if (!areLocationPermissionsGranted(this)) {
             finish();
@@ -134,8 +157,46 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
     }
 
     @Override protected void onStop() {
-        map.setGpsLocationEnabled(false);
+        if (zoomDialog != null && zoomDialog.isShowing()) {
+            zoomDialog.dismiss();  // necessary to prevent a memory leak
+        }
+
+        // To avoid a memory leak, we have to shut down GPS when the activity
+        // quits for good. But if it's only a screen rotation, we don't want to
+        // stop/start GPS and make the user wait to get a GPS lock again.
+        if (!isChangingConfigurations()) {
+            map.setGpsLocationEnabled(false);
+        }
         super.onStop();
+    }
+
+    @Override protected void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        state.putParcelable(MAP_CENTER_KEY, map.getCenter());
+        state.putDouble(MAP_ZOOM_KEY, map.getZoom());
+        state.putParcelable(POINT_KEY, map.getMarkerPoint(featureId));
+
+        // Flags
+        state.putBoolean(IS_DRAGGED_KEY, isDragged);
+        state.putBoolean(CAPTURE_LOCATION_KEY, captureLocation);
+        state.putBoolean(FOUND_FIRST_LOCATION_KEY, foundFirstLocation);
+        state.putBoolean(SET_CLEAR_KEY, setClear);
+        state.putBoolean(POINT_FROM_INTENT_KEY, pointFromIntent);
+        state.putBoolean(INTENT_READ_ONLY_KEY, intentReadOnly);
+        state.putBoolean(INTENT_DRAGGABLE_KEY, intentDraggable);
+        state.putBoolean(IS_POINT_LOCKED_KEY, isPointLocked);
+
+        // UI state
+        state.putBoolean(PLACE_MARKER_BUTTON_ENABLED_KEY, placeMarkerButton.isEnabled());
+        state.putBoolean(ZOOM_BUTTON_ENABLED_KEY, zoomButton.isEnabled());
+        state.putBoolean(CLEAR_BUTTON_ENABLED_KEY, clearButton.isEnabled());
+        state.putInt(LOCATION_STATUS_VISIBILITY_KEY, locationStatus.getVisibility());
+        state.putInt(LOCATION_INFO_VISIBILITY_KEY, locationInfo.getVisibility());
+        state.putBoolean(ZOOM_DIALOG_SHOWING_KEY, zoomDialog != null && zoomDialog.isShowing());
+        state.putBoolean(ZOOM_LOCATION_BUTTON_ENABLED_KEY,
+            zoomLocationButton != null && zoomLocationButton.isEnabled());
+        state.putBoolean(ZOOM_POINT_BUTTON_ENABLED_KEY,
+            zoomPointButton != null && zoomPointButton.isEnabled());
     }
 
     @Override public void destroy() { }
@@ -259,6 +320,63 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
 
         map.setGpsLocationListener(this::onLocationChanged);
         map.setGpsLocationEnabled(true);
+
+        if (instanceState != null) {
+            restoreFromInstanceState(instanceState);
+        }
+    }
+
+    protected void restoreFromInstanceState(Bundle state) {
+        isDragged = state.getBoolean(IS_DRAGGED_KEY, false);
+        captureLocation = state.getBoolean(CAPTURE_LOCATION_KEY, false);
+        foundFirstLocation = state.getBoolean(FOUND_FIRST_LOCATION_KEY, false);
+        setClear = state.getBoolean(SET_CLEAR_KEY, false);
+        pointFromIntent = state.getBoolean(POINT_FROM_INTENT_KEY, false);
+        intentReadOnly = state.getBoolean(INTENT_READ_ONLY_KEY, false);
+        intentDraggable = state.getBoolean(INTENT_DRAGGABLE_KEY, false);
+        isPointLocked = state.getBoolean(IS_POINT_LOCKED_KEY, false);
+
+        // Restore the marker and dialog after the flags, because they use some of them.
+        MapPoint point = state.getParcelable(POINT_KEY);
+        if (point != null) {
+            placeMarker(point);
+        } else {
+            clear();
+        }
+
+        // Restore the flags again, because placeMarker() and clear() modify some of them.
+        isDragged = state.getBoolean(IS_DRAGGED_KEY, false);
+        captureLocation = state.getBoolean(CAPTURE_LOCATION_KEY, false);
+        foundFirstLocation = state.getBoolean(FOUND_FIRST_LOCATION_KEY, false);
+        setClear = state.getBoolean(SET_CLEAR_KEY, false);
+        pointFromIntent = state.getBoolean(POINT_FROM_INTENT_KEY, false);
+        intentReadOnly = state.getBoolean(INTENT_READ_ONLY_KEY, false);
+        intentDraggable = state.getBoolean(INTENT_DRAGGABLE_KEY, false);
+        isPointLocked = state.getBoolean(IS_POINT_LOCKED_KEY, false);
+
+        // Restore the rest of the UI state.
+        MapPoint mapCenter = state.getParcelable(MAP_CENTER_KEY);
+        Double mapZoom = state.getDouble(MAP_ZOOM_KEY);
+        if (mapCenter != null && mapZoom != null) {
+            map.zoomToPoint(mapCenter, mapZoom, false);
+        }
+
+        placeMarkerButton.setEnabled(state.getBoolean(PLACE_MARKER_BUTTON_ENABLED_KEY, false));
+        zoomButton.setEnabled(state.getBoolean(ZOOM_BUTTON_ENABLED_KEY, false));
+        clearButton.setEnabled(state.getBoolean(CLEAR_BUTTON_ENABLED_KEY, false));
+
+        locationInfo.setVisibility(state.getInt(LOCATION_INFO_VISIBILITY_KEY, View.GONE));
+        locationStatus.setVisibility(state.getInt(LOCATION_STATUS_VISIBILITY_KEY, View.GONE));
+
+        if (state.getBoolean(ZOOM_DIALOG_SHOWING_KEY, false)) {
+            showZoomDialog();
+        }
+        if (zoomLocationButton != null) {
+            zoomLocationButton.setEnabled(state.getBoolean(ZOOM_LOCATION_BUTTON_ENABLED_KEY));
+        }
+        if (zoomPointButton != null) {
+            zoomPointButton.setEnabled(state.getBoolean(ZOOM_POINT_BUTTON_ENABLED_KEY));
+        }
     }
 
     public void onLocationChanged(MapPoint point) {
@@ -273,7 +391,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
             Timber.i("onLocationChanged: location = %s", point);
 
             if (previousLocation != null) {
-                enableZoomButton(true);
+                enableZoomButtons(true);
 
                 if (!captureLocation && !setClear) {
                     placeMarker(point);
@@ -317,14 +435,17 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
     public void onLongPress(MapPoint point) {
         if (intentDraggable && !intentReadOnly && !isPointLocked) {
             placeMarker(point);
-            enableZoomButton(true);
+            enableZoomButtons(true);
             isDragged = true;
         }
     }
 
-    private void enableZoomButton(boolean shouldEnable) {
+    private void enableZoomButtons(boolean shouldEnable) {
         if (zoomButton != null) {
             zoomButton.setEnabled(shouldEnable);
+        }
+        if (zoomLocationButton != null) {
+            zoomLocationButton.setEnabled(shouldEnable);
         }
     }
 
