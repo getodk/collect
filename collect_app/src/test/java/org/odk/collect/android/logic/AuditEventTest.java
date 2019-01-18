@@ -16,12 +16,16 @@
 
 package org.odk.collect.android.logic;
 
+import org.javarosa.form.api.FormEntryController;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.odk.collect.android.logic.AuditEvent.AuditEventType.BEGINNING_OF_FORM;
+import static org.odk.collect.android.logic.AuditEvent.AuditEventType.END_OF_FORM;
+import static org.odk.collect.android.logic.AuditEvent.AuditEventType.GROUP;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_TRACKING_DISABLED;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_TRACKING_ENABLED;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.CONSTRAINT_ERROR;
@@ -38,7 +42,9 @@ import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_P
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_PERMISSIONS_NOT_GRANTED;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED;
+import static org.odk.collect.android.logic.AuditEvent.AuditEventType.PROMPT_NEW_REPEAT;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.QUESTION;
+import static org.odk.collect.android.logic.AuditEvent.AuditEventType.REPEAT;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.SAVE_ERROR;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.UNKNOWN_EVENT_TYPE;
 
@@ -52,27 +58,36 @@ public class AuditEventTest {
         assertNotNull(auditEvent);
         assertTrue(auditEvent.isIntervalAuditEventType());
         assertEquals("question,/data/text1,1545392727685,", auditEvent.toString());
+        assertFalse(auditEvent.isEndTimeSet());
         auditEvent.setEnd(END_TIME);
+        assertTrue(auditEvent.isEndTimeSet());
+        assertFalse(auditEvent.hasLocation());
         assertEquals("question,/data/text1,1545392727685,1545392728527", auditEvent.toString());
     }
 
     @Test
     public void testToStringWithLocationCoordinates() {
         AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, "/data/text1");
-        auditEvent.setLocationCoordinates("54.35202520000001", "18.64663840000003", "10");
-        auditEvent.setEnd(END_TIME);
         assertNotNull(auditEvent);
+        auditEvent.setLocationCoordinates("54.35202520000001", "18.64663840000003", "10");
         assertTrue(auditEvent.isIntervalAuditEventType());
+        assertFalse(auditEvent.isEndTimeSet());
+        auditEvent.setEnd(END_TIME);
+        assertTrue(auditEvent.isEndTimeSet());
+        assertTrue(auditEvent.hasLocation());
         assertEquals("question,/data/text1,1545392727685,1545392728527,54.35202520000001,18.64663840000003,10", auditEvent.toString());
     }
 
     @Test
     public void testToStringNullValues() {
         AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, null);
-        auditEvent.setLocationCoordinates(null, null, null);
         assertNotNull(auditEvent);
+        auditEvent.setLocationCoordinates(null, null, null);
         assertTrue(auditEvent.isIntervalAuditEventType());
+        assertFalse(auditEvent.isEndTimeSet());
         auditEvent.setEnd(END_TIME);
+        assertTrue(auditEvent.isEndTimeSet());
+        assertFalse(auditEvent.hasLocation());
         assertEquals("question,null,1545392727685,1545392728527", auditEvent.toString());
     }
 
@@ -87,6 +102,31 @@ public class AuditEventTest {
         assertNotNull(auditEvent);
         assertFalse(auditEvent.isIntervalAuditEventType());
         assertEquals("form start,,1545392727685,", auditEvent.toString());
+
+        auditEvent = new AuditEvent(START_TIME, END_OF_FORM, "");
+        assertNotNull(auditEvent);
+        assertTrue(auditEvent.isIntervalAuditEventType());
+        assertEquals("end screen,,1545392727685,", auditEvent.toString());
+
+        auditEvent = new AuditEvent(START_TIME, REPEAT, "");
+        assertNotNull(auditEvent);
+        assertFalse(auditEvent.isIntervalAuditEventType());
+        assertEquals("repeat,,1545392727685,", auditEvent.toString());
+
+        auditEvent = new AuditEvent(START_TIME, PROMPT_NEW_REPEAT, "");
+        assertNotNull(auditEvent);
+        assertTrue(auditEvent.isIntervalAuditEventType());
+        assertEquals("add repeat,,1545392727685,", auditEvent.toString());
+
+        auditEvent = new AuditEvent(START_TIME, GROUP, "");
+        assertNotNull(auditEvent);
+        assertTrue(auditEvent.isIntervalAuditEventType());
+        assertEquals("group questions,,1545392727685,", auditEvent.toString());
+
+        auditEvent = new AuditEvent(START_TIME, BEGINNING_OF_FORM, "");
+        assertNotNull(auditEvent);
+        assertFalse(auditEvent.isIntervalAuditEventType());
+        assertEquals("beginning of form,,1545392727685,", auditEvent.toString());
 
         auditEvent = new AuditEvent(START_TIME, FORM_EXIT, "");
         assertNotNull(auditEvent);
@@ -172,5 +212,16 @@ public class AuditEventTest {
         assertNotNull(auditEvent);
         assertFalse(auditEvent.isIntervalAuditEventType());
         assertEquals("Unknown AuditEvent Type,,1545392727685,", auditEvent.toString());
+    }
+
+    @Test
+    public void getAuditEventTypeFromFecTypeTest() {
+        assertEquals(BEGINNING_OF_FORM, AuditEvent.getAuditEventTypeFromFecType(FormEntryController.EVENT_BEGINNING_OF_FORM));
+        assertEquals(QUESTION, AuditEvent.getAuditEventTypeFromFecType(FormEntryController.EVENT_QUESTION));
+        assertEquals(GROUP, AuditEvent.getAuditEventTypeFromFecType(FormEntryController.EVENT_GROUP));
+        assertEquals(REPEAT, AuditEvent.getAuditEventTypeFromFecType(FormEntryController.EVENT_REPEAT));
+        assertEquals(PROMPT_NEW_REPEAT, AuditEvent.getAuditEventTypeFromFecType(FormEntryController.EVENT_PROMPT_NEW_REPEAT));
+        assertEquals(END_OF_FORM, AuditEvent.getAuditEventTypeFromFecType(FormEntryController.EVENT_END_OF_FORM));
+        assertEquals(UNKNOWN_EVENT_TYPE, AuditEvent.getAuditEventTypeFromFecType(100));
     }
 }
