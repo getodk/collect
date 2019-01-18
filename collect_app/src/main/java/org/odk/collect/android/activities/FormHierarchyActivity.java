@@ -240,8 +240,11 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         FormController formController = Collect.getInstance().getFormController();
         FormIndex index = formController.getFormIndex();
 
-        if (formController.getEvent(index) == FormEntryController.EVENT_QUESTION) {
-            // move to enclosing group...
+        // Step out to the enclosing group if the current index is something
+        // we don't want to display in the path (e.g. a question name or the
+        // very first group in a form which is auto-entered).
+        if (formController.getEvent(index) == FormEntryController.EVENT_QUESTION
+                || formController.stepIndexOut(index) == null) {
             index = formController.stepIndexOut(index);
         }
 
