@@ -446,6 +446,8 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                             break;
                         }
 
+                        visibleGroupRef = currentRef;
+
                         FormEntryCaption caption = formController.getCaptionPrompt();
                         HierarchyElement groupElement = new HierarchyElement(
                                 getLabel(caption), getString(R.string.group_label),
