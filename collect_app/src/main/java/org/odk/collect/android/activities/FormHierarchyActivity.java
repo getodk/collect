@@ -442,25 +442,28 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         break;
                     }
                     case FormEntryController.EVENT_GROUP: {
-                        // Only display groups with a specific appearance attribute.
                         FormIndex index = formController.getFormIndex();
-                        if (formController.isDisplayableGroup(index)) {
-                            FormEntryCaption caption = formController.getCaptionPrompt();
-                            HierarchyElement groupElement = new HierarchyElement(
-                                    getLabel(caption), getString(R.string.group_label),
-                                    ContextCompat.getDrawable(this, R.drawable.ic_folder_open),
-                                    HierarchyElement.Type.VISIBLE_GROUP, caption.getIndex());
-                            elementsToDisplay.add(groupElement);
 
-                            // Skip to the next item outside the group.
-                            formController.stepOverGroup();
+                        // Only display groups with a specific appearance attribute.
+                        if (!formController.isDisplayableGroup(index)) {
+                            break;
+                        }
 
-                            // As long as we're not at the end yet, go back one.
-                            // This puts us in the right spot to continue the while loop,
-                            // which increments the index automatically.
-                            if (!formController.getFormIndex().isEndOfFormIndex()) {
-                                formController.stepToPreviousEvent();
-                            }
+                        FormEntryCaption caption = formController.getCaptionPrompt();
+                        HierarchyElement groupElement = new HierarchyElement(
+                                getLabel(caption), getString(R.string.group_label),
+                                ContextCompat.getDrawable(this, R.drawable.ic_folder_open),
+                                HierarchyElement.Type.VISIBLE_GROUP, caption.getIndex());
+                        elementsToDisplay.add(groupElement);
+
+                        // Skip to the next item outside the group.
+                        formController.stepOverGroup();
+
+                        // As long as we're not at the end yet, go back one.
+                        // This puts us in the right spot to continue the while loop,
+                        // which increments the index automatically.
+                        if (!formController.getFormIndex().isEndOfFormIndex()) {
+                            formController.stepToPreviousEvent();
                         }
 
                         break;
