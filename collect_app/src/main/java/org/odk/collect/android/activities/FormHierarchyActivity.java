@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
+import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -82,7 +83,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
      * A ref to the current context group.
      * Useful to make sure we only render items inside of the group.
      */
-    private String contextGroupRef;
+    private TreeReference contextGroupRef;
 
     /**
      * If this index is non-null, we will render an intermediary "picker" view
@@ -275,7 +276,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
         // If we're not at the first level, we're inside a repeated group so we want to only
         // display everything enclosed within that group.
-        contextGroupRef = "";
+        contextGroupRef = null;
 
         // Save the index to the screen itself, before potentially moving into it.
         screenIndex = startIndex;
@@ -324,20 +325,16 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         return formController.isDisplayableGroup(index);
     }
 
-    private String getGroupRef(FormController formController) {
-        return formController.getFormIndex().getReference().toString();
+    private TreeReference getGroupRef(FormController formController) {
+        return getGroupRef(formController.getFormIndex());
     }
 
-    private String getParentGroupRef(FormController formController) {
-        return formController.getFormIndex().getReference().getParentRef().toString();
+    private TreeReference getGroupRef(FormIndex index) {
+        return index.getReference();
     }
 
-    private String getUnindexedGroupRef(FormController formController) {
-        return getUnindexedGroupRef(formController.getFormIndex());
-    }
-
-    private String getUnindexedGroupRef(FormIndex index) {
-        return index.getReference().toString(false);
+    private TreeReference getParentGroupRef(FormController formController) {
+        return formController.getFormIndex().getReference().getParentRef();
     }
 
     private boolean shouldShowRepeatGroupPicker() {
@@ -385,23 +382,16 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             //
             // Because of the guard conditions below, we will skip
             // everything until we exit this group.
-            //
-            // Note that currentRef includes the multiplicity of the
-            // repeat (e.g., [0], [1], ...), so every repeat will be
-            // detected as different and reach this case statement.
-            // Only the [0] emits the repeat header.
-            // Every one displays the descend-into action element.
-            String visibleGroupRef = null;
+            TreeReference visibleGroupRef = null;
 
             while (event != FormEntryController.EVENT_END_OF_FORM) {
                 // get the ref to this element
-                String currentRef = getGroupRef(formController);
-                String currentUnindexedRef = getUnindexedGroupRef(formController);
+                TreeReference currentRef = getGroupRef(formController);
 
                 // retrieve the current group
-                String curGroup = (visibleGroupRef == null) ? contextGroupRef : visibleGroupRef;
+                TreeReference curGroup = (visibleGroupRef == null) ? contextGroupRef : visibleGroupRef;
 
-                if (!currentRef.startsWith(curGroup)) {
+                if (!curGroup.isParentOf(currentRef, false)) {
                     // We have left the current group
                     if (visibleGroupRef == null) {
                         // We are done.
@@ -479,8 +469,8 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
                         if (shouldShowRepeatGroupPicker()) {
                             // Don't render other groups' instances.
-                            String repeatGroupPickerRef = getUnindexedGroupRef(repeatGroupPickerIndex);
-                            if (!currentUnindexedRef.startsWith(repeatGroupPickerRef)) {
+                            String repeatGroupPickerRef = getGroupRef(repeatGroupPickerIndex).toString(false);
+                            if (!currentRef.toString(false).startsWith(repeatGroupPickerRef)) {
                                 break;
                             }
 
