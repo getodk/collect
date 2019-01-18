@@ -381,42 +381,39 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             // Refresh the current event in case we did step forward.
             event = formController.getEvent();
 
-            // Big change from prior implementation:
+            // Ref to the parent group that's currently being displayed.
             //
-            // The ref strings now include the instance number designations
-            // i.e., [0], [1], etc. of the repeat groups (and also [1] for
-            // non-repeat elements).
+            // Because of the guard conditions below, we will skip
+            // everything until we exit this group.
             //
-            // The contextGroupRef is now also valid for the top-level form.
-            //
-            // The repeatGroupRef is null if we are not skipping a repeat
-            // section.
-            //
-            String repeatGroupRef = null;
+            // Note that currentRef includes the multiplicity of the
+            // repeat (e.g., [0], [1], ...), so every repeat will be
+            // detected as different and reach this case statement.
+            // Only the [0] emits the repeat header.
+            // Every one displays the descend-into action element.
+            String visibleGroupRef = null;
 
-            event_search:
             while (event != FormEntryController.EVENT_END_OF_FORM) {
-
                 // get the ref to this element
                 String currentRef = getGroupRef(formController);
                 String currentUnindexedRef = getUnindexedGroupRef(formController);
 
                 // retrieve the current group
-                String curGroup = (repeatGroupRef == null) ? contextGroupRef : repeatGroupRef;
+                String curGroup = (visibleGroupRef == null) ? contextGroupRef : visibleGroupRef;
 
                 if (!currentRef.startsWith(curGroup)) {
                     // We have left the current group
-                    if (repeatGroupRef == null) {
+                    if (visibleGroupRef == null) {
                         // We are done.
                         break;
                     } else {
-                        // exit the inner repeat group
-                        repeatGroupRef = null;
+                        // exit the inner group
+                        visibleGroupRef = null;
                     }
                 }
 
-                if (repeatGroupRef != null) {
-                    // We're in a repeat group within the one we want to list
+                if (visibleGroupRef != null) {
+                    // We're in a group within the one we want to list
                     // skip this question/group/repeat and move to the next index.
                     event =
                             formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
@@ -474,17 +471,9 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         break;
                     }
                     case FormEntryController.EVENT_REPEAT: {
+                        visibleGroupRef = currentRef;
+
                         FormEntryCaption fc = formController.getCaptionPrompt();
-                        // push this repeat onto the stack.
-                        repeatGroupRef = currentRef;
-                        // Because of the guard conditions above, we will skip
-                        // everything until we exit this repeat.
-                        //
-                        // Note that currentRef includes the multiplicity of the
-                        // repeat (e.g., [0], [1], ...), so every repeat will be
-                        // detected as different and reach this case statement.
-                        // Only the [0] emits the repeat header.
-                        // Every one displays the descend-into action element.
 
                         if (shouldShowRepeatGroupPicker()) {
                             // Don't render other groups' instances.
