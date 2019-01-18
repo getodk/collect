@@ -25,10 +25,12 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.common.collect.ObjectArrays;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -251,6 +253,13 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
 
                 // setting image path
                 setSplashPath(sourceMediaPath);
+
+                Collect.getInstance().getDefaultTracker()
+                        .send(new HitBuilders.EventBuilder()
+                                .setCategory("SplashScreen")
+                                .setAction("newImageSelected")
+                                .setLabel(Collect.getCurrentFormIdentifierHash())
+                                .build());
                 break;
         }
     }
