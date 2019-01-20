@@ -305,11 +305,12 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             repeatGroupPickerIndex = null;
         } else {
             // Enter the picker if coming from a repeat group.
-            if (formController.getEvent(screenIndex) == FormEntryController.EVENT_REPEAT) {
+            int event = formController.getEvent(screenIndex);
+            if (event == FormEntryController.EVENT_REPEAT || event == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
                 repeatGroupPickerIndex = screenIndex;
             }
 
-            Collect.getInstance().getFormController().stepToOuterScreenEvent();
+            formController.stepToOuterScreenEvent();
         }
 
         refreshView(true);
