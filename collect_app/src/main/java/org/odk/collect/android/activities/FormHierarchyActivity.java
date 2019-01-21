@@ -22,7 +22,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -234,29 +233,36 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     }
 
     /**
-     * Builds a string representing the path of the current group. Each level is separated by `>`.
+     * Returns a string representing the 'path' of the current screen.
+     * Each level is separated by `>`.
      */
     private String getCurrentPath() {
         FormController formController = Collect.getInstance().getFormController();
         FormIndex index = formController.getFormIndex();
-        // move to enclosing group...
-        index = formController.stepIndexOut(index);
+
+        // Step out to the enclosing group if the current index is something
+        // we don't want to display in the path (e.g. a question name or the
+        // very first group in a form which is auto-entered).
+        if (formController.getEvent(index) == FormEntryController.EVENT_QUESTION
+                || formController.stepIndexOut(index) == null) {
+            index = formController.stepIndexOut(index);
+        }
 
         List<FormEntryCaption> groups = new ArrayList<>();
+
+        if (shouldShowRepeatGroupPicker()) {
+            groups.add(formController.getCaptionPrompt(repeatGroupPickerIndex));
+        }
+
         while (index != null) {
             groups.add(0, formController.getCaptionPrompt(index));
             index = formController.stepIndexOut(index);
         }
 
-        String path = ODKView.getGroupsPath(groups.toArray(new FormEntryCaption[groups.size()]));
+        // If the repeat picker is showing, don't show an item number for the current index.
+        boolean hideLastMultiplicity = shouldShowRepeatGroupPicker();
 
-        if (shouldShowRepeatGroupPicker()) {
-            FormEntryCaption fc = formController.getCaptionPrompt(repeatGroupPickerIndex);
-            String label = getLabel(fc);
-            return TextUtils.isEmpty(path) ? label : path + " > " + label;
-        } else {
-            return path;
-        }
+        return ODKView.getGroupsPath(groups.toArray(new FormEntryCaption[groups.size()]), hideLastMultiplicity);
     }
 
     /**
@@ -465,15 +471,20 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                                 break;
                             }
 
-                            String repeatLabel = getLabel(fc);
+                            int itemNumber = fc.getMultiplicity() + 1;
+
+                            // e.g. `friends > 1`
+                            String repeatLabel = getLabel(fc) + " > " + itemNumber;
+
+                            // If the child of the group has a more descriptive label, use that instead.
                             if (fc.getFormElement().getChildren().size() == 1 && fc.getFormElement().getChild(0) instanceof GroupDef) {
                                 formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-                                FormEntryCaption fc2 = formController.getCaptionPrompt();
-                                if (getLabel(fc2) != null) {
-                                    repeatLabel = getLabel(fc2);
+                                String itemLabel = getLabel(formController.getCaptionPrompt());
+                                if (itemLabel != null) {
+                                    // e.g. `1. Alice`
+                                    repeatLabel = itemNumber + ".\u200E " + itemLabel;
                                 }
                             }
-                            repeatLabel += " (" + (fc.getMultiplicity() + 1) + ")\u200E";
 
                             HierarchyElement instance = new HierarchyElement(
                                     repeatLabel, null,
