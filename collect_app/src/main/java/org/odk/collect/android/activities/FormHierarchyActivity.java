@@ -250,7 +250,17 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         switch (item.getItemId()) {
             case R.id.menu_delete_child:
                 DialogUtils.showDeleteRepeatConfirmDialog(this, () -> {
-                    goUpLevel();
+                    if (didDeleteLastRepeatItem()) {
+                        // goUpLevel would put us in a weird state after deleting the last item;
+                        // just go back one event instead.
+                        //
+                        // TODO: This works well in most cases, but if there are 2 repeats in a row,
+                        //   and you delete an item from the second repeat, it will send you into the
+                        //   first repeat instead of going back a level as expected.
+                        goToPreviousEvent();
+                    } else {
+                        goUpLevel();
+                    }
                 }, null);
                 return true;
 
@@ -289,6 +299,39 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             setResult(RESULT_OK);
             finish();
         });
+    }
+
+    /**
+     * After having deleted the current index,
+     * returns true if the current index was the only item in the repeat group.
+     */
+    private boolean didDeleteLastRepeatItem() {
+        FormController formController = Collect.getInstance().getFormController();
+        FormIndex index = formController.getFormIndex();
+        int event = formController.getEvent(index);
+
+        // If we're on item 0, but we will be prompted to add another item next,
+        // it must be the last remaining item.
+        return event == FormEntryController.EVENT_PROMPT_NEW_REPEAT
+                && index.getElementMultiplicity() == 0;
+    }
+
+    /**
+     * Similar to {@link #goUpLevel}, but makes a less significant step backward.
+     * This is only used when the caller knows where to go back to,
+     * e.g. after deleting the final remaining item in a repeat group.
+     */
+    private void goToPreviousEvent() {
+        FormController formController = Collect.getInstance().getFormController();
+        try {
+            formController.stepToPreviousScreenEvent();
+        } catch (JavaRosaException e) {
+            Timber.d(e);
+            createErrorDialog(e.getCause().getMessage());
+            return;
+        }
+
+        refreshView();
     }
 
     /**
