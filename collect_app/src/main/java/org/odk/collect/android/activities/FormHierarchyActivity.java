@@ -436,6 +436,11 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                             break;
                         }
 
+                        // Don't render other groups' instances.
+                        if (!contextGroupRef.isParentOf(currentRef, false)) {
+                            break;
+                        }
+
                         visibleGroupRef = currentRef;
 
                         FormEntryCaption caption = formController.getCaptionPrompt();
