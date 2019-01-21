@@ -470,7 +470,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         if (shouldShowRepeatGroupPicker()) {
                             // Don't render other groups' instances.
                             String repeatGroupPickerRef = getGroupRef(repeatGroupPickerIndex).toString(false);
-                            if (!currentRef.toString(false).startsWith(repeatGroupPickerRef)) {
+                            if (!currentRef.toString(false).equals(repeatGroupPickerRef)) {
                                 break;
                             }
 
