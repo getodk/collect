@@ -31,7 +31,7 @@
   <string name="clear_answer">Borrar respuesta</string>
   <string name="clear_answer_ask">¿Borrar esta respuesta?</string>
   <string name="clear_answer_no">Cancelar</string>
-  <string name="data">F. LLENOS</string>
+  <string name="data">F. GUARDADOS</string>
   <string name="data_saved_error">¡Atención, el formulario no se ha guardado correctamente!</string>
   <string name="data_saved_ok">Formulario guardado correctamente</string>
   <string name="save_point_error">Error al guardar punto de recuperación: %s</string>
@@ -106,6 +106,7 @@
   <string name="quit_application">Salir %s</string>
   <string name="quit_entry">Guardar Formulario y Salir</string>
   <string name="refresh">Actualizar</string>
+  <string name="repeatable_group_label">Grupo Repetible</string>
   <string name="replace_barcode">Reemplazar el Codigo de Barras</string>
   <string name="required_answer_error">¡Respuesta obligatoria!</string>
   <string name="review_data">Editar Formulario Guardado</string>
@@ -645,4 +646,6 @@
   <string name="missing_google_account_dialog_desc">Para enviar formularios vía Google Sheets debe definir una cuenta de Google en ajustes de servidor.</string>
   <string name="sms_invalid_phone_number_description">Especifique un número telefónico para el envío de SMS o cambie el tipo de transporte</string>
   <string name="notification_channel_name">Notificaciones generales</string>
+  <string name="corrupt_imported_preferences_error">Los ajustes actuales están corruptos. Desde la configuración de administrador, restablecer la configuración o importar.</string>
+  <string name="open_file">Abrir archivo</string>
 </resources>

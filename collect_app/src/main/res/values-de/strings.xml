@@ -106,6 +106,7 @@
   <string name="quit_application">%s beenden</string>
   <string name="quit_entry">Formular speichern und beenden</string>
   <string name="refresh">Aktualisieren</string>
+  <string name="repeatable_group_label">Wiederholbare Gruppe</string>
   <string name="replace_barcode">Strichcode ersetzen</string>
   <string name="required_answer_error">Diese Antwort ist erforderlich!</string>
   <string name="review_data">Gespeichertes Formular ändern</string>
@@ -643,4 +644,6 @@
   <string name="missing_google_account_dialog_desc">Um Formulare über Google Tabellen einzureichen, müssen Sie ihr Google-Konto bei den Server-Einstellungen einrichten.</string>
   <string name="sms_invalid_phone_number_description">Ziel-Telefonnummer für SMS-Versand einstellen oder Übertragungsart ändern.</string>
   <string name="notification_channel_name">Allgemeine Benachrichtigungen</string>
+  <string name="corrupt_imported_preferences_error">Die aktuellen Einstellungen sind beschädigt. Setze die Einstellungen in den Admin-Einstellungen zurück oder importiere funktionierende.</string>
+  <string name="open_file">Datei öffnen</string>
 </resources>

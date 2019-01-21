@@ -2,6 +2,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Visa lösenordet</string>
   <string name="activity_not_found">Ingen aktivitet finns för att hantera: %s</string>
+  <string name="view_image">Visa bild</string>
+  <string name="annotate_image">Lägg till text på bild</string>
+  <string name="view_video">Visa video</string>
+  <string name="choose_audio">Välj ljud</string>
   <string name="add_another">Lägg till grupp</string>
   <string name="add_another_repeat">Lägga till ytterligare en \"%s\" grupp?</string>
   <string name="add_repeat">Lägga till en ny \"%s\" grupp?</string>
@@ -42,6 +46,7 @@
   <string name="discard_answer">Ta bort svar</string>
   <string name="discard_group">Ta bort grupp</string>
   <string name="download">Hämta valda</string>
+  <string name="download_forms_result">Nedladdningsresultat</string>
   <string name="downloading_data">Ansluter till server</string>
   <string name="do_not_change">Avbryt</string>
   <string name="do_not_exit">Avbryt</string>
@@ -66,6 +71,8 @@
   <string name="get_location">Spara position</string>
   <string name="provider_disabled_error">Tyvärr, platstjänster är inaktiverade!</string>
   <string name="invalid_answer_error">Tyvärr, detta svar är ogiltigt!</string>
+  <string name="invalid_space_in_answer_singular">Varning: bakomliggande värde %s innehåller mellanslag</string>
+  <string name="invalid_space_in_answer_plural">Varning: bakomliggande värden %s innehåller mellanslag</string>
   <string name="jump_to_beginning">Gå till början</string>
   <string name="jump_to_end">Gå till slutet</string>
   <string name="jump_to_previous">Flytta upp</string>
@@ -97,6 +104,7 @@
   <string name="quit_application">Avsluta %s</string>
   <string name="quit_entry">Spara formulär och avsluta</string>
   <string name="refresh">Uppdatera</string>
+  <string name="repeatable_group_label">Repeterande grupp</string>
   <string name="replace_barcode">Ersätt streckkod</string>
   <string name="required_answer_error">Tyvärr, detta svar är obligatoriskt!</string>
   <string name="review_data">Redigera sparat formulär</string>
@@ -108,6 +116,8 @@
   <string name="send_data">Skicka avslutat formulär</string>
   <string name="send_data_button">Skicka avslutat formulär (%s)</string>
   <string name="send_selected_data">Skicka valt</string>
+  <string name="send_selected_data_internet">Skicka (internet)</string>
+  <string name="send_selected_data_sms">Skicka (SMS)</string>
   <string name="view_sent_forms">Visa skickat formulär</string>
   <string name="view_sent_forms_button">Visa skickat formulär (%s)</string>
   <string name="server_auth_credentials">Ogiltigt användarnamn eller lösenord för servern: %s</string>
@@ -144,9 +154,11 @@
   <string name="file_fetch_failed">Fel: %2$s (%3$s) vid %1$s</string>
   <string name="fetching_manifest">%s. Hämtar manifest </string>
   <string name="success">Lyckades</string>
+  <string name="failures">Fel</string>
   <string name="no_forms_uploaded">Tyvärr, inga formulär laddades upp</string>
   <string name="upload_results">Uppladdningsresultat</string>
   <string name="xform_parse_error">XForm fel vid tolkning av %1$s: %2$s saknas eller är ogiltig</string>
+  <string name="choose_file">Välj fil</string>
   <string name="choose_sound">Välj ljud</string>
   <string name="choose_video">Välj film</string>
   <string name="choose_image">Välj bild</string>
@@ -215,6 +227,7 @@
   <string name="constraint_behavior_on_swipe">Validera vid svepning framåt</string>
   <string name="constraint_behavior_on_finalize">Validera vid avslutning</string>
   <string name="view_change_location">Visa eller ändra position</string>
+  <string name="change_location">Ändra plats</string>
   <string name="open_url">Öppna URL</string>
   <string name="get_bearing">Lagra riktning</string>
   <string name="replace_bearing">Ersätt riktning</string>
@@ -230,6 +243,7 @@
   <string name="ext_search_return_error">Sök-handler returnerade ett objekt av typen \'%s\'.</string>
   <string name="ext_import_generic_error">Kan inte importera data från %1$s. Orsak: %2$s</string>
   <string name="ext_import_progress_message">Förladdar data från \'%1$s\', vänligen vänta… %2$s</string>
+  <string name="ext_import_cancelled_message">Datainläsning avbruten!</string>
   <string name="ext_import_finalizing_message">Avslutar förladdade data…</string>
   <string name="ext_import_completed_message">Inläsning av data slutförd!</string>
   <string name="ext_not_initialized_error">ExternalDataManager har inte initialiserats.</string>
@@ -256,12 +270,14 @@
   <string name="go_shared">Delat med mig</string>
   <string name="modified_on_date_at_time">\'Ändrad\' yyyy-MM-dd (EEE) \'kl\' HH:mm</string>
   <string name="aggregate_preferences">ODK Aggregate inställningar</string>
+  <string name="sms_submission_preferences">Inställningar för att skicka SMS</string>
   <string name="other_preferences">Övriga plattformsinställningar</string>
   <string name="google_preferences">Google Sheets inställningar</string>
   <string name="google_sheets_url_hint">Formulären måste ange en uppladdnings-URL. Om dem inte gör det används denna URL.</string>
   <string name="drive_get_file">Hämtar %1$s och mediafiler.</string>
   <string name="no_google_account">Inget Google-konto valt!</string>
   <string name="google_set_account">Du har valt Google Sheets som din server, vänligen välj motsvarande Google-konto under allmänna inställningar innan du fortsätter</string>
+  <string name="media_upload_error">Fel vid uppladdning av mediafil som inte finns: %1$s</string>
   <string name="notification_error">Fel vid visning av notifikationstext</string>
   <string name="delete_after_send">Radera efter sändning</string>
   <string name="delete_after_send_summary">Raderar avslutade formulär och media efter dessa sänts till servern</string>
@@ -277,6 +293,11 @@
   <string name="username_error_whitespace">Inledande eller avslutande blanksteg är inte tillåtet i användarnamn</string>
   <string name="google_play_services_error_occured">Åtkomst till Google Maps ej möjlig. Är Google Play Services installerad?</string>
   <string name="about_preferences">Om</string>
+  <string name="tell_your_friends">Dela ODK Collect</string>
+  <string name="tell_your_friends_msg">Samlar dina kollegor fortfarande data på papper?
+Dela ODK Collect med dem.</string>
+  <string name="leave_a_review">Lämna ett omdöme på Play Store</string>
+  <string name="leave_a_review_msg">Din (förhoppningsvis positiva) recension ökar synligheten av Appen i Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Kartor</string>
   <string name="map_sdk_selector_title">SDK för kartor</string>
@@ -316,6 +337,7 @@
   <string name="geo_clear_warning">Objekt redan skapat. Vill du rensa objektet?</string>
   <string name="geo_exit_warning">Ignorera ändringar och återgå till ODK?</string>
   <string name="polygon_validator">Minst tre punkter krävs för att skapa en polygon</string>
+  <string name="polyline_validator">Det behövs minst 2 punkter för att skapa en polyline</string>
   <string name="clear">Rensa</string>
   <string name="manual_mode">Manuellt läge</string>
   <string name="automatic_mode">Automatiskt läge</string>
@@ -350,9 +372,13 @@
   <string name="parser_exception">XPathParser undantag: \"%s\"</string>
   <string name="selected_answer">Vald: %s</string>
   <string name="version_number">Version: %s</string>
+  <string name="id_number">ID: 1%s</string>
   <string name="odk_website">Besök ODKs hemsida</string>
   <string name="odk_website_summary">Open Data Kit (ODK) används för att samla in data för socialt arbete i utmanande miljöer</string>
   <string name="odk_forum">Gå med i ODK forumet</string>
+  <string name="odk_forum_summary">Gå med i forumet för få hjälp, föreslå nya funktioner eller bidra med kod och översättningar!</string>
+  <string name="all_open_source_licenses">Bibliotek/licenser för öppen källkod</string>
+  <string name="all_open_source_licenses_msg">Vi står på jättarnas axlar!</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">V %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -457,6 +483,8 @@
   <string name="autosend_selector_title">Skicka automatiskt</string>
   <string name="off">Av</string>
   <string name="guidance_no">Nej</string>
+  <string name="guidance_yes">Ja - visa alltid</string>
+  <string name="guidance_yes_collapsed">Ja - komprimerad</string>
   <string name="wifi_autosend">Endast WiFi</string>
   <string name="cellular_autosend">Endast mobilt nätverk</string>
   <string name="wifi_cellular_autosend">WiFi eller mobilt nätverk</string>
@@ -541,5 +569,22 @@
   <string name="yes">Ja</string>
   <string name="no">Nej</string>
   <string name="svg_file_does_not_exist">SVG-fil finns inte!</string>
+  <string name="camera_runtime_permission_denied_title">Kamerabehörigheter</string>
+  <string name="record_audio_runtime_permission_denied_title">Behörigheter för att spela in ljud</string>
+  <string name="send_sms_runtime_permission_denied_title">Behörigheter för att skicka SMS</string>
+  <string name="read_phone_state_runtime_permission_denied_title">Behörigheter för att läsa telefonstatus</string>
+  <string name="form_update_category">Uppdatera formulär</string>
+  <string name="app_theme">Tema</string>
+  <string name="theme_light">Ljust tema</string>
+  <string name="theme_dark">Mörkt tema</string>
+  <string name="sms_invalid_phone_number">Ogiltigt telefonnummer!</string>
   <!--Sms submission-->
+  <string name="sms_no_message">Detta formulär saknar frågor med SMS-taggar.</string>
+  <string name="sms_encrypted_message">Krypterade formulär kan inte skickas in med SMS.</string>
+  <string name="sms_sent_on_date_at_time">Skickat som SMS\' EEE, MMM dd, yyyy \'kl\' HH:mm</string>
+  <string name="transport_type_sms">SMS</string>
+  <string name="seconds">Sekunder</string>
+  <string name="loading_form_failed">Ett fel uppstod vid laddning av formuläret. Var vänlig och försök igen.</string>
+  <string name="missing_google_account_dialog_title">Google-konto är inte inställt</string>
+  <string name="notification_channel_name">Allmäna notifieringar</string>
 </resources>
