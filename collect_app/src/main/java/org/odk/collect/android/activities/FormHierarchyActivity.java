@@ -230,7 +230,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             Collect.getInstance().getFormController().stepToOuterScreenEvent();
         }
 
-        refreshView();
+        refreshView(true);
     }
 
     /**
@@ -347,6 +347,13 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
      * mutated by {@link #onElementClick(HierarchyElement)} if a repeat instance was tapped.
      */
     public void refreshView() {
+        refreshView(false);
+    }
+
+    /**
+     * @see #refreshView()
+     */
+    private void refreshView(boolean isGoingUp) {
         try {
             FormController formController = Collect.getInstance().getFormController();
 
@@ -517,10 +524,31 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             recyclerView.setAdapter(new HierarchyListAdapter(elementsToDisplay, this::onElementClick));
 
             formController.jumpToIndex(currentIndex);
+
+            // Prevent a redundant middle screen (common on some forms).
+            if (isDisplayingSingleGroup()) {
+                if (isGoingUp) {
+                    // Back out once more.
+                    goUpLevel();
+                } else {
+                    // Enter automatically.
+                    formController.jumpToIndex(elementsToDisplay.get(0).getFormIndex());
+                    refreshView();
+                }
+            }
         } catch (Exception e) {
             Timber.e(e);
             createErrorDialog(e.getMessage());
         }
+    }
+
+    /**
+     * Returns true if there's only one item being displayed, and it's a group.
+     * Groups like this are often used to display a label in the hierarchy path.
+     */
+    private boolean isDisplayingSingleGroup() {
+        return elementsToDisplay.size() == 1
+                && elementsToDisplay.get(0).getType() == HierarchyElement.Type.VISIBLE_GROUP;
     }
 
     /**
