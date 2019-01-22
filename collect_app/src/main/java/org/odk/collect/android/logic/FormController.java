@@ -17,7 +17,6 @@ package org.odk.collect.android.logic;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import android.text.TextUtils;
 import com.google.android.gms.analytics.HitBuilders;
 
 import org.javarosa.core.model.CoreModelModule;
@@ -691,11 +690,12 @@ public class FormController {
     }
 
     /**
-     * Returns true if the group has a displayable label.
+     * Returns true if the group has a displayable label,
+     * i.e. it's a "presentation group".
      */
     private boolean isPresentationGroup(FormIndex groupIndex) {
         String label = getCaptionPrompt(groupIndex).getShortText();
-        return !TextUtils.isEmpty(label);
+        return label != null;
     }
 
     public static class FailedConstraint {
