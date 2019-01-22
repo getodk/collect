@@ -458,16 +458,8 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         elementsToDisplay.add(groupElement);
 
                         // Skip to the next item outside the group.
-                        formController.stepOverGroup();
-
-                        // As long as we're not at the end yet, go back one.
-                        // This puts us in the right spot to continue the while loop,
-                        // which increments the index automatically.
-                        if (!formController.getFormIndex().isEndOfFormIndex()) {
-                            formController.stepToPreviousEvent();
-                        }
-
-                        break;
+                        event = formController.stepOverGroup();
+                        continue;
                     }
                     case FormEntryController.EVENT_PROMPT_NEW_REPEAT: {
                         // this would display the 'add new repeat' dialog
@@ -517,8 +509,8 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         break;
                     }
                 }
-                event =
-                        formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+
+                event = formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
             }
 
             recyclerView.setAdapter(new HierarchyListAdapter(elementsToDisplay, this::onElementClick));
