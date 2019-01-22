@@ -30,6 +30,7 @@ import android.widget.TextView;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
+import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
@@ -219,15 +220,27 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         boolean isAtBeginning = screenIndex.isBeginningOfFormIndex() && !shouldShowRepeatGroupPicker();
         boolean shouldShowPicker = shouldShowRepeatGroupPicker();
         boolean isInRepeat = !isAtBeginning && formController.getEvent(screenIndex) == FormEntryController.EVENT_REPEAT;
+        boolean isGroupSizeLocked = shouldShowPicker
+                ? isGroupSizeLocked(repeatGroupPickerIndex) : isGroupSizeLocked(screenIndex);
 
-        boolean shouldShowDelete = isInRepeat && !shouldShowPicker;
+        boolean shouldShowDelete = isInRepeat && !shouldShowPicker && !isGroupSizeLocked;
         showDeleteButton(shouldShowDelete);
 
-        boolean shouldShowAdd = shouldShowPicker;
+        boolean shouldShowAdd = shouldShowPicker && !isGroupSizeLocked;
         showAddButton(shouldShowAdd);
 
         boolean shouldShowGoUp = !isAtBeginning;
         showGoUpButton(shouldShowGoUp);
+    }
+
+    /**
+     * Returns true if the current index is a group that's designated as `noAddRemove`
+     * (e.g. if `jr:count` is explicitly set).
+     */
+    private boolean isGroupSizeLocked(FormIndex index) {
+        FormController formController = Collect.getInstance().getFormController();
+        IFormElement element = formController.getCaptionPrompt(index).getFormElement();
+        return element instanceof GroupDef && ((GroupDef) element).noAddRemove;
     }
 
     /** Override to disable this button. */
