@@ -424,7 +424,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         }
 
                         FormEntryPrompt fp = formController.getQuestionPrompt();
-                        String label = getLabel(fp);
+                        String label = fp.getShortText();
                         if (!fp.isReadOnly() || (label != null && label.length() > 0)) {
                             // show the question if it is an editable field.
                             // or if it is read-only and the label is not blank.
@@ -452,7 +452,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
                         FormEntryCaption caption = formController.getCaptionPrompt();
                         HierarchyElement groupElement = new HierarchyElement(
-                                getLabel(caption), getString(R.string.group_label),
+                                caption.getShortText(), getString(R.string.group_label),
                                 ContextCompat.getDrawable(this, R.drawable.ic_folder_open),
                                 HierarchyElement.Type.VISIBLE_GROUP, caption.getIndex());
                         elementsToDisplay.add(groupElement);
@@ -489,12 +489,12 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                             int itemNumber = fc.getMultiplicity() + 1;
 
                             // e.g. `friends > 1`
-                            String repeatLabel = getLabel(fc) + " > " + itemNumber;
+                            String repeatLabel = fc.getShortText() + " > " + itemNumber;
 
                             // If the child of the group has a more descriptive label, use that instead.
                             if (fc.getFormElement().getChildren().size() == 1 && fc.getFormElement().getChild(0) instanceof GroupDef) {
                                 formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-                                String itemLabel = getLabel(formController.getCaptionPrompt());
+                                String itemLabel = formController.getCaptionPrompt().getShortText();
                                 if (itemLabel != null) {
                                     // e.g. `1. Alice`
                                     repeatLabel = itemNumber + ".\u200E " + itemLabel;
@@ -508,7 +508,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         } else if (fc.getMultiplicity() == 0) {
                             // Display the repeat header for the group.
                             HierarchyElement group = new HierarchyElement(
-                                    getLabel(fc), getString(R.string.repeatable_group_label),
+                                    fc.getShortText(), getString(R.string.repeatable_group_label),
                                     ContextCompat.getDrawable(this, R.drawable.ic_repeat),
                                     HierarchyElement.Type.REPEATABLE_GROUP, fc.getIndex());
                             elementsToDisplay.add(group);
@@ -638,10 +638,5 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         alertDialog.setCancelable(false);
         alertDialog.setButton(getString(R.string.ok), errorListener);
         alertDialog.show();
-    }
-
-    private String getLabel(FormEntryCaption formEntryCaption) {
-        return formEntryCaption.getShortText() != null && !formEntryCaption.getShortText().isEmpty()
-                ? formEntryCaption.getShortText() : formEntryCaption.getLongText();
     }
 }
