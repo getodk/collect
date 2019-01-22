@@ -130,7 +130,7 @@ public class AuditEventLogger {
 
     // If location provider are enabled/disabled it sometimes fires the BroadcastReceiver multiple
     // times what tries to add duplicated logs
-    private boolean isDuplicateOfLastAuditEvent(AuditEvent.AuditEventType eventType) {
+    boolean isDuplicateOfLastAuditEvent(AuditEvent.AuditEventType eventType) {
         return (eventType.equals(LOCATION_PROVIDERS_ENABLED) || eventType.equals(LOCATION_PROVIDERS_DISABLED))
                 && !auditEvents.isEmpty() && eventType.equals(auditEvents.get(auditEvents.size() - 1).getAuditEventType());
     }
@@ -183,7 +183,7 @@ public class AuditEventLogger {
     }
 
     @Nullable
-    private Location getMostAccurateLocation() {
+    Location getMostAccurateLocation() {
         removeExpiredLocations();
 
         Location bestLocation = null;
@@ -213,7 +213,15 @@ public class AuditEventLogger {
      * The event logger is enabled if the meta section of the form contains a logging entry
      *      <orx:audit />
      */
-    private boolean isAuditEnabled() {
+    boolean isAuditEnabled() {
         return auditConfig != null;
+    }
+
+    ArrayList<AuditEvent> getAuditEvents() {
+        return auditEvents;
+    }
+
+    List<Location> getLocations() {
+        return locations;
     }
 }

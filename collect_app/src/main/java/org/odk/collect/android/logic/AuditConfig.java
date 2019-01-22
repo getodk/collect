@@ -46,7 +46,7 @@ public class AuditConfig {
      */
     private final Long locationMaxAge;
 
-    AuditConfig(String mode, String locationMinInterval, String locationMaxAge) {
+    public AuditConfig(String mode, String locationMinInterval, String locationMaxAge) {
         this.locationPriority = mode != null ? getMode(mode) : null;
         this.locationMinInterval = locationMinInterval != null ? Long.parseLong(locationMinInterval) * 1000 : null;
         this.locationMaxAge = locationMaxAge != null ? Long.parseLong(locationMaxAge) * 1000 : null;
