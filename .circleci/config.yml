@@ -36,7 +36,10 @@ references:
   accept_licenses : &accept_licenses
     run:
       name: Accept licenses
-      command: yes | sdkmanager --licenses || true
+      command: yes | sdkmanager --licenses 
+    run:
+      name: Update installed packages
+      command: yes | sdkmanager --update || exit 0
 
   ## Workspace
 
