@@ -33,6 +33,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.model.instance.TreeElement;
+import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.PrototypeManager;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
@@ -686,7 +687,7 @@ public class FormController {
      */
     public boolean isDisplayableGroup(FormIndex index) {
         return getEvent(index) == FormEntryController.EVENT_REPEAT ||
-                (getEvent(index) == FormEntryController.EVENT_GROUP && isPresentationGroup(index));
+                (getEvent(index) == FormEntryController.EVENT_GROUP && isPresentationGroup(index) && isLogicalGroup(index));
     }
 
     /**
@@ -696,6 +697,21 @@ public class FormController {
     private boolean isPresentationGroup(FormIndex groupIndex) {
         String label = getCaptionPrompt(groupIndex).getShortText();
         return label != null;
+    }
+
+    /**
+     * Returns true if the group has an XML `ref` attribute,
+     * i.e. it's a "logical group".
+     *
+     * TODO: Improve this nasty way to recreate what XFormParser#parseGroup does for nodes without a `ref`.
+     */
+    private boolean isLogicalGroup(FormIndex groupIndex) {
+        TreeReference groupRef = groupIndex.getReference();
+        TreeReference parentRef = groupRef.getParentRef();
+        IDataReference absRef = FormDef.getAbsRef(new XPathReference(groupRef), parentRef);
+        IDataReference bindRef = getCaptionPrompt(groupIndex).getFormElement().getBind();
+        // If the group's bind is equal to what it would have been set to during parsing, it must not have a ref.
+        return !absRef.equals(bindRef);
     }
 
     public static class FailedConstraint {
