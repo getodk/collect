@@ -694,8 +694,7 @@ public class FormController {
      * Returns true if the group has a displayable label.
      */
     private boolean isGroupLabeled(FormIndex groupIndex) {
-        IFormElement group = formEntryController.getModel().getForm().getChild(groupIndex);
-        String label = group.getLabelInnerText();
+        String label = getCaptionPrompt(groupIndex).getShortText();
         return !TextUtils.isEmpty(label);
     }
 
