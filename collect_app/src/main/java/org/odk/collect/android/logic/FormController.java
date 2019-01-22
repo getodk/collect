@@ -687,13 +687,13 @@ public class FormController {
      */
     public boolean isDisplayableGroup(FormIndex index) {
         return getEvent(index) == FormEntryController.EVENT_REPEAT ||
-                (getEvent(index) == FormEntryController.EVENT_GROUP && isGroupLabeled(index));
+                (getEvent(index) == FormEntryController.EVENT_GROUP && isPresentationGroup(index));
     }
 
     /**
      * Returns true if the group has a displayable label.
      */
-    private boolean isGroupLabeled(FormIndex groupIndex) {
+    private boolean isPresentationGroup(FormIndex groupIndex) {
         String label = getCaptionPrompt(groupIndex).getShortText();
         return !TextUtils.isEmpty(label);
     }
