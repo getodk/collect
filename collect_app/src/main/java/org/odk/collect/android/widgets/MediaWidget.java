@@ -28,6 +28,14 @@ public abstract class MediaWidget extends QuestionWidget {
         }
     }
 
+    public void playVideo() {
+        getQuestionMediaLayout().playVideo();
+    }
+
+    public void playAudio() {
+        playAllPromptText();
+    }
+
     public void stopAudio() {
         if (player != null && player.isPlaying()) {
             player.stop();

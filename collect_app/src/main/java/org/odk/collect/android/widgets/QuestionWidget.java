@@ -292,14 +292,6 @@ public abstract class QuestionWidget
         return helpTextView;
     }
 
-    public void playAudio() {
-        playAllPromptText();
-    }
-
-    public void playVideo() {
-        getQuestionMediaLayout().playVideo();
-    }
-
     public FormEntryPrompt getFormEntryPrompt() {
         return formEntryPrompt;
     }
