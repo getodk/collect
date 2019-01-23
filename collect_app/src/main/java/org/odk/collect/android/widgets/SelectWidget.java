@@ -140,8 +140,6 @@ public abstract class SelectWidget extends MediaWidget {
      * Pull media from the current item and add it to the media layout.
      */
     public void addMediaFromChoice(MediaLayout mediaLayout, int index, TextView textView) {
-        String audioURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_AUDIO);
-
         String imageURI;
         if (items.get(index) instanceof ExternalSelectChoice) {
             imageURI = ((ExternalSelectChoice) items.get(index)).getImage();
@@ -152,6 +150,7 @@ public abstract class SelectWidget extends MediaWidget {
 
         textView.setGravity(Gravity.CENTER_VERTICAL);
 
+        String audioURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_AUDIO);
         String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "video");
         String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
 

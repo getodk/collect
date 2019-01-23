@@ -218,7 +218,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
         // see if there is an autoplay option.
         // Only execute it during forward swipes through the form
         if (advancingPage && widgets.size() == 1 && widgets.get(0) instanceof MediaWidget) {
-            MediaWidget mediaWidget = ((MediaWidget) widgets.get(0));
+            MediaWidget mediaWidget = (MediaWidget) widgets.get(0);
             final String playOption = mediaWidget.getFormEntryPrompt().getFormElement().getAdditionalAttribute(null, "autoplay");
             if (playOption != null) {
                 new Handler().postDelayed(() -> {
