@@ -69,7 +69,7 @@ references:
     docker:
       # This needs to be in line with the configuration from gradle file.
       # Otherwise an unnecessary platform update is performed on every build
-      - image: circleci/android:api-27-alpha
+      - image: circleci/android:api-27
   gcloud_config: &gcloud_config
     working_directory: *workspace
     docker:

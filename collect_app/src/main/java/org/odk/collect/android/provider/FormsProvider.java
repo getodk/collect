@@ -44,7 +44,7 @@ import java.util.Map;
 import timber.log.Timber;
 
 import static org.odk.collect.android.database.helpers.FormsDatabaseHelper.FORMS_TABLE_NAME;
-import static org.odk.collect.android.utilities.PermissionUtils.isStoragePermissionGranted;
+import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 
 public class FormsProvider extends ContentProvider {
     private static HashMap<String, String> sFormsProjectionMap;
@@ -76,7 +76,7 @@ public class FormsProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
 
-        if (!isStoragePermissionGranted(getContext())) {
+        if (!areStoragePermissionsGranted(getContext())) {
             Timber.i("Read and write permissions are required for this content provider to function.");
             return false;
         }
@@ -90,7 +90,7 @@ public class FormsProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
 
-        if (!isStoragePermissionGranted(getContext())) {
+        if (!areStoragePermissionsGranted(getContext())) {
             return null;
         }
 
@@ -155,7 +155,7 @@ public class FormsProvider extends ContentProvider {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        if (!isStoragePermissionGranted(getContext())) {
+        if (!areStoragePermissionsGranted(getContext())) {
             return null;
         }
 
@@ -245,6 +245,7 @@ public class FormsProvider extends ContentProvider {
                 Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI,
                         rowId);
                 getContext().getContentResolver().notifyChange(formUri, null);
+                getContext().getContentResolver().notifyChange(FormsProviderAPI.FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
                 return formUri;
             }
         }
@@ -290,7 +291,7 @@ public class FormsProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
-        if (!isStoragePermissionGranted(getContext())) {
+        if (!areStoragePermissionsGranted(getContext())) {
             return 0;
         }
         int count = 0;
@@ -376,6 +377,7 @@ public class FormsProvider extends ContentProvider {
             }
 
             getContext().getContentResolver().notifyChange(uri, null);
+            getContext().getContentResolver().notifyChange(FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
         }
 
         return count;
@@ -385,7 +387,7 @@ public class FormsProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String where,
                       String[] whereArgs) {
 
-        if (!isStoragePermissionGranted(getContext())) {
+        if (!areStoragePermissionsGranted(getContext())) {
             return 0;
         }
 
@@ -534,6 +536,7 @@ public class FormsProvider extends ContentProvider {
             }
 
             getContext().getContentResolver().notifyChange(uri, null);
+            getContext().getContentResolver().notifyChange(FormsProviderAPI.FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
         }
 
         return count;

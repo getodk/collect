@@ -24,6 +24,7 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
@@ -275,6 +276,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     @Override
     protected void onResume() {
+        super.onResume();
         if (instanceSyncTask != null) {
             instanceSyncTask.setDiskSyncListener(this);
             if (instanceSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
@@ -282,7 +284,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
             }
 
         }
-        super.onResume();
 
         IntentFilter filter = new IntentFilter(SmsNotificationReceiver.SMS_NOTIFICATION_ACTION);
         // The default priority is 0. Positive values will be before
@@ -298,9 +299,12 @@ public class InstanceUploaderList extends InstanceListActivity implements
         if (instanceSyncTask != null) {
             instanceSyncTask.setDiskSyncListener(null);
         }
+        try {
+            unregisterReceiver(smsForegroundReceiver);
+        } catch (IllegalArgumentException e) {
+            Timber.w(e);
+        }
         super.onPause();
-
-        unregisterReceiver(smsForegroundReceiver);
     }
 
     @Override
@@ -315,16 +319,30 @@ public class InstanceUploaderList extends InstanceListActivity implements
         Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
 
         if (transport.equals(Transport.Sms) || buttonId == R.id.sms_upload_button) {
-            new PermissionUtils(this).requestSendSMSPermission(new PermissionListener() {
-                @Override
-                public void granted() {
-                    smsService.submitForms(instanceIds);
-                }
+            // https://issuetracker.google.com/issues/66979952
+            if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
+                new PermissionUtils(this).requestSendSMSAndReadPhoneStatePermissions(new PermissionListener() {
+                    @Override
+                    public void granted() {
+                        smsService.submitForms(instanceIds);
+                    }
 
-                @Override
-                public void denied() {
-                }
-            });
+                    @Override
+                    public void denied() {
+                    }
+                });
+            } else {
+                new PermissionUtils(this).requestSendSMSPermission(new PermissionListener() {
+                    @Override
+                    public void granted() {
+                        smsService.submitForms(instanceIds);
+                    }
+
+                    @Override
+                    public void denied() {
+                    }
+                });
+            }
         } else {
 
             String server = (String) GeneralSharedPreferences.getInstance().get(KEY_PROTOCOL);

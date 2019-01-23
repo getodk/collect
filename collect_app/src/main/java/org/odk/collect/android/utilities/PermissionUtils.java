@@ -52,7 +52,7 @@ public class PermissionUtils {
         this.activity = activity;
     }
 
-    public static boolean isStoragePermissionGranted(Context context) {
+    public static boolean areStoragePermissionsGranted(Context context) {
         return isPermissionGranted(context,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -62,13 +62,13 @@ public class PermissionUtils {
         return isPermissionGranted(context, Manifest.permission.CAMERA);
     }
 
-    public static boolean isLocationPermissionGranted(Context context) {
+    public static boolean areLocationPermissionsGranted(Context context) {
         return isPermissionGranted(context,
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
     }
 
-    public static boolean isCameraAndRecordAudioPermissionsGranted(Context context) {
+    public static boolean areCameraAndRecordAudioPermissionsGranted(Context context) {
         return isPermissionGranted(context,
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO);
@@ -257,6 +257,21 @@ public class PermissionUtils {
                 }
             }
         }, Manifest.permission.READ_PHONE_STATE);
+    }
+
+    public void requestSendSMSAndReadPhoneStatePermissions(@NonNull PermissionListener action) {
+        requestPermissions(new PermissionListener() {
+            @Override
+            public void granted() {
+                action.granted();
+            }
+
+            @Override
+            public void denied() {
+                showAdditionalExplanation(R.string.send_sms_runtime_permission_denied_title,
+                        R.string.send_sms_runtime_permission_denied_desc, R.drawable.ic_sms, action);
+            }
+        }, Manifest.permission.SEND_SMS, Manifest.permission.READ_PHONE_STATE);
     }
 
     private void requestPermissions(@NonNull PermissionListener listener, String... permissions) {

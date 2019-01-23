@@ -28,9 +28,8 @@ import org.odk.collect.android.application.Collect;
 
 public class NotificationUtils {
 
-    private static final String CHANNEL_ID = "collect_notification_channel";
+    public static final String CHANNEL_ID = "collect_notification_channel";
     public static final int FORM_UPDATE_NOTIFICATION_ID = 0;
-    public static final int AUTO_SEND_NOTIFICATION_ID = 1328974928;
 
     private NotificationUtils() {
     }
@@ -55,14 +54,13 @@ public class NotificationUtils {
                                         String contentText) {
         Context context = Collect.getInstance();
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context).setContentIntent(contentIntent);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID).setContentIntent(contentIntent);
 
         builder
                 .setContentTitle(context.getString(title))
                 .setContentText(contentText)
                 .setSmallIcon(IconUtils.getNotificationAppIcon())
-                .setAutoCancel(true)
-                .setChannelId(CHANNEL_ID);
+                .setAutoCancel(true);
 
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (manager != null) {

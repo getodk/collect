@@ -284,15 +284,16 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
                 }
             }
 
-            Cursor results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
-            if (results.getCount() > 0) {
-                message = InstanceUploaderUtils.getUploadResultMessage(results, result);
-            } else {
-                if (instanceGoogleSheetsUploaderTask.isAuthFailed()) {
-                    message = getString(R.string.google_auth_io_exception_msg);
-                    instanceGoogleSheetsUploaderTask.setAuthFailedToFalse();
+            try (Cursor results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs)) {
+                if (results != null && results.getCount() > 0) {
+                    message = InstanceUploaderUtils.getUploadResultMessage(results, result);
                 } else {
-                    message = getString(R.string.no_forms_uploaded);
+                    if (instanceGoogleSheetsUploaderTask.isAuthFailed()) {
+                        message = getString(R.string.google_auth_io_exception_msg);
+                        instanceGoogleSheetsUploaderTask.setAuthFailedToFalse();
+                    } else {
+                        message = getString(R.string.no_forms_uploaded);
+                    }
                 }
             }
         }

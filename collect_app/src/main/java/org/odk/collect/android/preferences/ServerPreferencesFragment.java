@@ -85,6 +85,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     private List<String> urlList;
     private Preference selectedGoogleAccountPreference;
     private GoogleAccountsManager accountsManager;
+    private boolean allowClickSelectedGoogleAccountPreference = true;
 
     @Inject
     CollectServerClient collectServerClient;
@@ -249,10 +250,13 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
         selectedGoogleAccountPreference.setSummary(accountsManager.getSelectedAccount());
         selectedGoogleAccountPreference.setOnPreferenceClickListener(preference -> {
-            if (PlayServicesUtil.isGooglePlayServicesAvailable(getActivity())) {
-                accountsManager.chooseAccountAndRequestPermissionIfNeeded();
-            } else {
-                PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getActivity());
+            if (allowClickSelectedGoogleAccountPreference) {
+                if (PlayServicesUtil.isGooglePlayServicesAvailable(getActivity())) {
+                    allowClickSelectedGoogleAccountPreference = false;
+                    accountsManager.chooseAccountAndRequestPermissionIfNeeded();
+                } else {
+                    PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getActivity());
+                }
             }
             return true;
         });
@@ -450,6 +454,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     accountsManager.setSelectedAccountName(accountName);
                 }
+                allowClickSelectedGoogleAccountPreference = true;
                 break;
         }
     }

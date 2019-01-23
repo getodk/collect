@@ -72,28 +72,22 @@ public class MediaUtils {
         String selection = Images.ImageColumns.DATA + "=?";
         String[] selectArgs = {imageFile};
         String[] projection = {Images.ImageColumns._ID};
-        Cursor c = null;
-        try {
-            c = Collect
-                    .getInstance()
-                    .getContentResolver()
-                    .query(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                            projection, selection, selectArgs, null);
-            if (c.getCount() > 0) {
+        try (Cursor c = Collect
+                .getInstance()
+                .getContentResolver()
+                .query(Images.Media.EXTERNAL_CONTENT_URI,
+                        projection, selection, selectArgs, null)) {
+            if (c != null && c.getCount() > 0) {
                 c.moveToFirst();
                 String id = c.getString(c
                         .getColumnIndex(Images.ImageColumns._ID));
 
                 return Uri
                         .withAppendedPath(
-                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                                Images.Media.EXTERNAL_CONTENT_URI,
                                 id);
             }
             return null;
-        } finally {
-            if (c != null) {
-                c.close();
-            }
         }
     }
 

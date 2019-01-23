@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static org.odk.collect.android.utilities.PermissionUtils.isLocationPermissionGranted;
+import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
 
 /** Activity for entering or editing a polygon on a map. */
 public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterReceiver {
@@ -71,7 +71,7 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
             restoredPoints = savedInstanceState.getParcelableArrayList(POINTS_KEY);
         }
 
-        if (!isLocationPermissionGranted(this)) {
+        if (!areLocationPermissionsGranted(this)) {
             finish();
             return;
         }
