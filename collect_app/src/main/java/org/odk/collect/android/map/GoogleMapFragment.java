@@ -322,7 +322,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
         showGpsDisabledAlert();
     }
 
-    @Override public void onClientStop() { }
+    @Override public void onClientStop() {
+        locationClient.stopLocationUpdates();
+    }
 
     protected void showGpsDisabledAlert() {
         gpsErrorDialog = new AlertDialog.Builder(getActivity())
