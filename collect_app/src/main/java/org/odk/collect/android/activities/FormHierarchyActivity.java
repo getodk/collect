@@ -592,6 +592,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
                 switch (event) {
                     case FormEntryController.EVENT_QUESTION: {
+                        // Nothing but repeat group instances should show up in the picker.
                         if (shouldShowRepeatGroupPicker()) {
                             break;
                         }
@@ -609,6 +610,11 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         break;
                     }
                     case FormEntryController.EVENT_GROUP: {
+                        // Nothing but repeat group instances should show up in the picker.
+                        if (shouldShowRepeatGroupPicker()) {
+                            break;
+                        }
+
                         FormIndex index = formController.getFormIndex();
 
                         // Only display groups with a specific appearance attribute.
