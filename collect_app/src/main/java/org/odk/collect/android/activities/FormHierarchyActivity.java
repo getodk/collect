@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
+import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -82,7 +83,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
      * A ref to the current context group.
      * Useful to make sure we only render items inside of the group.
      */
-    private String contextGroupRef;
+    private TreeReference contextGroupRef;
 
     /**
      * If this index is non-null, we will render an intermediary "picker" view
@@ -229,7 +230,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             Collect.getInstance().getFormController().stepToOuterScreenEvent();
         }
 
-        refreshView();
+        refreshView(true);
     }
 
     /**
@@ -275,19 +276,19 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
         // If we're not at the first level, we're inside a repeated group so we want to only
         // display everything enclosed within that group.
-        contextGroupRef = "";
+        contextGroupRef = null;
 
         // Save the index to the screen itself, before potentially moving into it.
         screenIndex = startIndex;
 
-        // If we're currently at a repeat node, record the name of the node and step to the next
+        // If we're currently at a displayable group, record the name of the node and step to the next
         // node to display.
-        if (formController.getEvent() == FormEntryController.EVENT_REPEAT) {
+        if (formController.isDisplayableGroup(startIndex)) {
             contextGroupRef = getGroupRef(formController);
             formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
         } else {
             FormIndex potentialStartIndex = formController.stepIndexOut(startIndex);
-            // Step back until we hit a repeat or the beginning.
+            // Step back until we hit a displayable group or the beginning.
             while (!isScreenEvent(formController, potentialStartIndex)) {
                 potentialStartIndex = formController.stepIndexOut(potentialStartIndex);
             }
@@ -299,15 +300,12 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 // is, display the root level from the beginning.
                 formController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
             } else {
-                // otherwise we're at a repeated group
+                // otherwise we're at a displayable group
                 formController.jumpToIndex(potentialStartIndex);
             }
 
-            int event = formController.getEvent();
-
-            // now test again for repeat. This should be true at this point or we're at the
-            // beginning
-            if (event == FormEntryController.EVENT_REPEAT) {
+            // Now test again. This should be true at this point or we're at the beginning.
+            if (formController.isDisplayableGroup(formController.getFormIndex())) {
                 contextGroupRef = getGroupRef(formController);
                 formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
             }
@@ -315,7 +313,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     }
 
     /**
-     * Returns true if the event is an enclosing repeat or the start of the form.
+     * Returns true if the event is a displayable group or the start of the form.
      * See {@link FormController#stepToOuterScreenEvent} for more context.
      */
     private boolean isScreenEvent(FormController formController, FormIndex index) {
@@ -324,24 +322,19 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             return true;
         }
 
-        int event = formController.getEvent(index);
-        return event == FormEntryController.EVENT_REPEAT;
+        return formController.isDisplayableGroup(index);
     }
 
-    private String getGroupRef(FormController formController) {
-        return formController.getFormIndex().getReference().toString();
+    private TreeReference getGroupRef(FormController formController) {
+        return getGroupRef(formController.getFormIndex());
     }
 
-    private String getParentGroupRef(FormController formController) {
-        return formController.getFormIndex().getReference().getParentRef().toString();
+    private TreeReference getGroupRef(FormIndex index) {
+        return index.getReference();
     }
 
-    private String getUnindexedGroupRef(FormController formController) {
-        return getUnindexedGroupRef(formController.getFormIndex());
-    }
-
-    private String getUnindexedGroupRef(FormIndex index) {
-        return index.getReference().toString(false);
+    private TreeReference getParentGroupRef(FormController formController) {
+        return formController.getFormIndex().getReference().getParentRef();
     }
 
     private boolean shouldShowRepeatGroupPicker() {
@@ -354,6 +347,13 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
      * mutated by {@link #onElementClick(HierarchyElement)} if a repeat instance was tapped.
      */
     public void refreshView() {
+        refreshView(false);
+    }
+
+    /**
+     * @see #refreshView()
+     */
+    private void refreshView(boolean isGoingUp) {
         try {
             FormController formController = Collect.getInstance().getFormController();
 
@@ -385,42 +385,32 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             // Refresh the current event in case we did step forward.
             event = formController.getEvent();
 
-            // Big change from prior implementation:
+            // Ref to the parent group that's currently being displayed.
             //
-            // The ref strings now include the instance number designations
-            // i.e., [0], [1], etc. of the repeat groups (and also [1] for
-            // non-repeat elements).
-            //
-            // The contextGroupRef is now also valid for the top-level form.
-            //
-            // The repeatGroupRef is null if we are not skipping a repeat
-            // section.
-            //
-            String repeatGroupRef = null;
+            // Because of the guard conditions below, we will skip
+            // everything until we exit this group.
+            TreeReference visibleGroupRef = null;
 
-            event_search:
             while (event != FormEntryController.EVENT_END_OF_FORM) {
-
                 // get the ref to this element
-                String currentRef = getGroupRef(formController);
-                String currentUnindexedRef = getUnindexedGroupRef(formController);
+                TreeReference currentRef = getGroupRef(formController);
 
                 // retrieve the current group
-                String curGroup = (repeatGroupRef == null) ? contextGroupRef : repeatGroupRef;
+                TreeReference curGroup = (visibleGroupRef == null) ? contextGroupRef : visibleGroupRef;
 
-                if (!currentRef.startsWith(curGroup)) {
+                if (!curGroup.isParentOf(currentRef, false)) {
                     // We have left the current group
-                    if (repeatGroupRef == null) {
+                    if (visibleGroupRef == null) {
                         // We are done.
                         break;
                     } else {
-                        // exit the inner repeat group
-                        repeatGroupRef = null;
+                        // exit the inner group
+                        visibleGroupRef = null;
                     }
                 }
 
-                if (repeatGroupRef != null) {
-                    // We're in a repeat group within the one we want to list
+                if (visibleGroupRef != null) {
+                    // We're in a group within the one we want to list
                     // skip this question/group/repeat and move to the next index.
                     event =
                             formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
@@ -428,13 +418,13 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 }
 
                 switch (event) {
-                    case FormEntryController.EVENT_QUESTION:
+                    case FormEntryController.EVENT_QUESTION: {
                         if (shouldShowRepeatGroupPicker()) {
                             break;
                         }
 
                         FormEntryPrompt fp = formController.getQuestionPrompt();
-                        String label = getLabel(fp);
+                        String label = fp.getShortText();
                         if (!fp.isReadOnly() || (label != null && label.length() > 0)) {
                             // show the question if it is an editable field.
                             // or if it is read-only and the label is not blank.
@@ -444,42 +434,59 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                                             HierarchyElement.Type.QUESTION, fp.getIndex()));
                         }
                         break;
-                    case FormEntryController.EVENT_GROUP:
-                        // ignore group events
-                        break;
-                    case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
+                    }
+                    case FormEntryController.EVENT_GROUP: {
+                        FormIndex index = formController.getFormIndex();
+
+                        // Only display groups with a specific appearance attribute.
+                        if (!formController.isDisplayableGroup(index)) {
+                            break;
+                        }
+
+                        // Don't render other groups' instances.
+                        if (!contextGroupRef.isParentOf(currentRef, false)) {
+                            break;
+                        }
+
+                        visibleGroupRef = currentRef;
+
+                        FormEntryCaption caption = formController.getCaptionPrompt();
+                        HierarchyElement groupElement = new HierarchyElement(
+                                caption.getShortText(), getString(R.string.group_label),
+                                ContextCompat.getDrawable(this, R.drawable.ic_folder_open),
+                                HierarchyElement.Type.VISIBLE_GROUP, caption.getIndex());
+                        elementsToDisplay.add(groupElement);
+
+                        // Skip to the next item outside the group.
+                        event = formController.stepOverGroup();
+                        continue;
+                    }
+                    case FormEntryController.EVENT_PROMPT_NEW_REPEAT: {
                         // this would display the 'add new repeat' dialog
                         // ignore it.
                         break;
-                    case FormEntryController.EVENT_REPEAT:
+                    }
+                    case FormEntryController.EVENT_REPEAT: {
+                        visibleGroupRef = currentRef;
+
                         FormEntryCaption fc = formController.getCaptionPrompt();
-                        // push this repeat onto the stack.
-                        repeatGroupRef = currentRef;
-                        // Because of the guard conditions above, we will skip
-                        // everything until we exit this repeat.
-                        //
-                        // Note that currentRef includes the multiplicity of the
-                        // repeat (e.g., [0], [1], ...), so every repeat will be
-                        // detected as different and reach this case statement.
-                        // Only the [0] emits the repeat header.
-                        // Every one displays the descend-into action element.
 
                         if (shouldShowRepeatGroupPicker()) {
                             // Don't render other groups' instances.
-                            String repeatGroupPickerRef = getUnindexedGroupRef(repeatGroupPickerIndex);
-                            if (!currentUnindexedRef.startsWith(repeatGroupPickerRef)) {
+                            String repeatGroupPickerRef = getGroupRef(repeatGroupPickerIndex).toString(false);
+                            if (!currentRef.toString(false).equals(repeatGroupPickerRef)) {
                                 break;
                             }
 
                             int itemNumber = fc.getMultiplicity() + 1;
 
                             // e.g. `friends > 1`
-                            String repeatLabel = getLabel(fc) + " > " + itemNumber;
+                            String repeatLabel = fc.getShortText() + " > " + itemNumber;
 
                             // If the child of the group has a more descriptive label, use that instead.
                             if (fc.getFormElement().getChildren().size() == 1 && fc.getFormElement().getChild(0) instanceof GroupDef) {
                                 formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-                                String itemLabel = getLabel(formController.getCaptionPrompt());
+                                String itemLabel = formController.getCaptionPrompt().getShortText();
                                 if (itemLabel != null) {
                                     // e.g. `1. Alice`
                                     repeatLabel = itemNumber + ".\u200E " + itemLabel;
@@ -493,25 +500,47 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         } else if (fc.getMultiplicity() == 0) {
                             // Display the repeat header for the group.
                             HierarchyElement group = new HierarchyElement(
-                                    getLabel(fc), getString(R.string.repeatable_group_label),
+                                    fc.getShortText(), getString(R.string.repeatable_group_label),
                                     ContextCompat.getDrawable(this, R.drawable.ic_repeat),
                                     HierarchyElement.Type.REPEATABLE_GROUP, fc.getIndex());
                             elementsToDisplay.add(group);
                         }
 
                         break;
+                    }
                 }
-                event =
-                        formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+
+                event = formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
             }
 
             recyclerView.setAdapter(new HierarchyListAdapter(elementsToDisplay, this::onElementClick));
 
             formController.jumpToIndex(currentIndex);
+
+            // Prevent a redundant middle screen (common on some forms).
+            if (isDisplayingSingleGroup()) {
+                if (isGoingUp) {
+                    // Back out once more.
+                    goUpLevel();
+                } else {
+                    // Enter automatically.
+                    formController.jumpToIndex(elementsToDisplay.get(0).getFormIndex());
+                    refreshView();
+                }
+            }
         } catch (Exception e) {
             Timber.e(e);
             createErrorDialog(e.getMessage());
         }
+    }
+
+    /**
+     * Returns true if there's only one item being displayed, and it's a group.
+     * Groups like this are often used to display a label in the hierarchy path.
+     */
+    private boolean isDisplayingSingleGroup() {
+        return elementsToDisplay.size() == 1
+                && elementsToDisplay.get(0).getType() == HierarchyElement.Type.VISIBLE_GROUP;
     }
 
     /**
@@ -529,6 +558,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 repeatGroupPickerIndex = index;
                 refreshView();
                 break;
+            case VISIBLE_GROUP:
             case REPEAT_INSTANCE:
                 // Hide the picker.
                 repeatGroupPickerIndex = null;
@@ -600,10 +630,5 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         alertDialog.setCancelable(false);
         alertDialog.setButton(getString(R.string.ok), errorListener);
         alertDialog.show();
-    }
-
-    private String getLabel(FormEntryCaption formEntryCaption) {
-        return formEntryCaption.getShortText() != null && !formEntryCaption.getShortText().isEmpty()
-                ? formEntryCaption.getShortText() : formEntryCaption.getLongText();
     }
 }

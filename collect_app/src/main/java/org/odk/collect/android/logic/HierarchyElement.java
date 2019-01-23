@@ -102,6 +102,7 @@ public class HierarchyElement {
      */
     public enum Type {
         QUESTION,
+        VISIBLE_GROUP,
         REPEATABLE_GROUP,
         REPEAT_INSTANCE
     }
