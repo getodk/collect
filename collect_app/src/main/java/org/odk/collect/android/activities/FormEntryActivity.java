@@ -1834,39 +1834,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * Creates a confirm/cancel dialog for deleting repeats.
      */
     private void createDeleteRepeatConfirmDialog() {
-        FormController formController = getFormController();
-
-        alertDialog = new AlertDialog.Builder(this).create();
-        String name = formController.getLastRepeatedGroupName();
-        int repeatcount = formController.getLastRepeatedGroupRepeatCount();
-        if (repeatcount != -1) {
-            name += " (" + (repeatcount + 1) + ")";
-        }
-        alertDialog.setTitle(getString(R.string.delete_repeat_ask));
-        alertDialog
-                .setMessage(getString(R.string.delete_repeat_confirm, name));
-        DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                FormController formController = getFormController();
-                switch (i) {
-                    case BUTTON_POSITIVE: // yes
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.DELETE_REPEAT, null, true);
-                        formController.deleteRepeat();
-                        showNextView();
-                        break;
-
-                    case BUTTON_NEGATIVE: // no
-                        refreshCurrentView();
-                        break;
-                }
-            }
-        };
-        alertDialog.setCancelable(false);
-        alertDialog.setButton(BUTTON_POSITIVE, getString(R.string.discard_group), quitListener);
-        alertDialog.setButton(BUTTON_NEGATIVE, getString(R.string.delete_repeat_no),
-                quitListener);
-        alertDialog.show();
+        DialogUtils.showDeleteRepeatConfirmDialog(this, () -> {
+            showNextView();
+        }, () -> {
+            refreshCurrentView();
+        });
     }
 
     /**
