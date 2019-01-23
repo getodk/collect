@@ -688,32 +688,10 @@ public class FormController {
      * Returns true if the index is either a repeatable group or a visible group.
      */
     public boolean isDisplayableGroup(FormIndex index) {
+        FormEntryCaption caption = getCaptionPrompt(index);
+
         return getEvent(index) == FormEntryController.EVENT_REPEAT ||
-                (getEvent(index) == FormEntryController.EVENT_GROUP && isPresentationGroup(index) && isLogicalGroup(index));
-    }
-
-    /**
-     * Returns true if the group has a displayable label,
-     * i.e. it's a "presentation group".
-     */
-    private boolean isPresentationGroup(FormIndex groupIndex) {
-        String label = getCaptionPrompt(groupIndex).getShortText();
-        return label != null;
-    }
-
-    /**
-     * Returns true if the group has an XML `ref` attribute,
-     * i.e. it's a "logical group".
-     *
-     * TODO: Improve this nasty way to recreate what XFormParser#parseGroup does for nodes without a `ref`.
-     */
-    private boolean isLogicalGroup(FormIndex groupIndex) {
-        TreeReference groupRef = groupIndex.getReference();
-        TreeReference parentRef = groupRef.getParentRef();
-        IDataReference absRef = FormDef.getAbsRef(new XPathReference(groupRef), parentRef);
-        IDataReference bindRef = getCaptionPrompt(groupIndex).getFormElement().getBind();
-        // If the group's bind is equal to what it would have been set to during parsing, it must not have a ref.
-        return !absRef.equals(bindRef);
+                (caption.isPresentationGroup() && caption.isLogicalGroup());
     }
 
     public static class FailedConstraint {
