@@ -272,7 +272,8 @@ public abstract class QuestionWidget
         // Create the layout for audio, image, text
         MediaLayout questionMediaLayout = new MediaLayout(getContext());
         questionMediaLayout.setId(ViewIds.generateViewId()); // assign random id
-        questionMediaLayout.setAVT(questionText, audioURI, imageURI, videoURI, bigImageURI, player);
+        questionMediaLayout.setLabelTextView(questionText);
+        questionMediaLayout.setAVT(audioURI, imageURI, videoURI, bigImageURI, player);
         questionMediaLayout.setAudioListener(this);
 
         String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");

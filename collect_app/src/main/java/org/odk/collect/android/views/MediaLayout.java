@@ -178,15 +178,18 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         }
     }
 
-    public void setAVT(TextView text, String audioURI, String imageURI, String videoURI,
-                       String bigImageURI, MediaPlayer player) {
-        this.bigImageURI = bigImageURI;
-        this.player = player;
-        this.videoURI = videoURI;
-
+    public void setLabelTextView(TextView text) {
         viewText = text;
         originalText = text.getText();
         viewText.setId(ViewIds.generateViewId());
+        flContainer.removeAllViews();
+        flContainer.addView(viewText);
+    }
+
+    public void setAVT(String audioURI, String imageURI, String videoURI, String bigImageURI, MediaPlayer player) {
+        this.bigImageURI = bigImageURI;
+        this.player = player;
+        this.videoURI = videoURI;
 
         // Setup audio button
         if (audioURI != null) {
@@ -237,9 +240,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
                 Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
             }
         }
-
-        flContainer.removeAllViews();
-        flContainer.addView(viewText);
     }
 
     public TextView getView_Text() {

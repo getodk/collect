@@ -42,7 +42,6 @@ public class MediaLayoutTest {
     private AudioButton audioButton;
     private AppCompatImageButton videoButton;
     private ImageView imageView;
-    private TextView textView;
     private TextView missingImage;
     private ImageView divider;
     private boolean isReferenceManagerStubbed;
@@ -72,7 +71,6 @@ public class MediaLayoutTest {
         mediaPlayer = mock(MediaPlayer.class);
         reference = mock(FileReference.class);
         referenceManager = mock(ReferenceManager.class);
-        textView = new TextView(RuntimeEnvironment.application);
 
         mediaLayout = new MediaLayout(RuntimeEnvironment.application);
 
@@ -97,7 +95,7 @@ public class MediaLayoutTest {
         Assert.assertEquals(VISIBLE, mediaLayout.getVisibility());
         assertVisibility(GONE, audioButton, videoButton, imageView, missingImage, divider);
 
-        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, null, mediaPlayer);
+        mediaLayout.setAVT(audioURI, imageURI, videoURI, null, mediaPlayer);
 
         // we do not check for the validity of the URIs for the audio and video while loading MediaLayout
         assertVisibility(audioURI == null ? GONE : VISIBLE, audioButton);

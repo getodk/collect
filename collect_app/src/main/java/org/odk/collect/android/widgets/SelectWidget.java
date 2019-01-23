@@ -155,7 +155,8 @@ public abstract class SelectWidget extends MediaWidget {
         String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "video");
         String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
 
-        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI, getPlayer());
+        mediaLayout.setLabelTextView(textView);
+        mediaLayout.setAVT(audioURI, imageURI, videoURI, bigImageURI, getPlayer());
     }
 
     protected RecyclerView setUpRecyclerView() {
