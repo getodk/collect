@@ -88,6 +88,17 @@ public class BasePreferenceFragment extends PreferenceFragment {
                 image_size.setEnabled(true);
             }
         }
+
+        // smap backward navigation
+        Preference back_nav = getPreferenceScreen().findPreference(AdminKeys.KEY_MOVING_BACKWARDS);
+        if(back_nav != null) {
+            boolean override_back_nav = (Boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SMAP_OVERRIDE_MOVING_BACKWARDS);
+            if (override_back_nav) {
+                back_nav.setEnabled(false);
+            } else {
+                back_nav.setEnabled(true);
+            }
+        }
     }
 
     // inflates toolbar in the preference fragments

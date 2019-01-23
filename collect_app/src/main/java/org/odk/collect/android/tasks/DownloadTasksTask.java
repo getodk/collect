@@ -678,53 +678,6 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 throw new Exception(e.getMessage());
             }
 
-            // Call the service
-            //HttpContext localContext = Collect.getInstance().getHttpContext();
-            //HttpClient client = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-            //URI u = URI.create(taskURL);
-            //if (username != null && password != null) {
-            //    WebUtils.addCredentials(username, password, u.getHost());
-            //}
-
-            /*
-             * Use a head request as per instance uploader
-             * This will set the authentication as digest and set the nonce
-             *
-             * There must be a more efficient way to do this!
-             */
-            //HttpHead httpHead = WebUtils.createOpenRosaHttpHead(u);
-            //try {
-            //    client.execute(httpHead, localContext);
-            //} catch (Exception e) {
-            //
-            //}
-
-            //HttpPost postRequest = new HttpPost(URI.create(u.toString()));
-
-            //Gson gson = new GsonBuilder().disableHtmlEscaping().setDateFormat("yyyy-MM-dd").create();
-            //String resp = gson.toJson(updateResponse);
-
-            //ArrayList<NameValuePair> dataToSend = new ArrayList<>();
-            //dataToSend.add(new BasicNameValuePair("assignInput", resp));
-            //postRequest.setEntity(new UrlEncodedFormEntity(dataToSend));
-
-            //HttpResponse response = null;
-            //int statusCode = 0;
-            //try {
-            //    response = client.execute(postRequest, localContext);
-            //    statusCode = response.getStatusLine().getStatusCode();
-            //} catch (Exception e) {
-
-            //}
-
-            //if (statusCode != HttpStatus.SC_OK) {
-            //    Timber.e("Error:" + statusCode + " for URL " + taskURL);
-            //    results.put(Collect.getInstance().getString(R.string.smap_get_tasks),
-            //            Utilities.translateMsg(null, response.getStatusLine().getReasonPhrase()));
-            //    WebUtils.discardEntityBytes(response);
-            //    throw new Exception(response.getStatusLine().getReasonPhrase());
-            //}
-            //WebUtils.discardEntityBytes(response);
 
             for (TaskAssignment ta : updateResponse.taskAssignments) {
                 Utilities.setTaskSynchronized((long) ta.assignment.dbId);        // Mark the task status as synchronised
