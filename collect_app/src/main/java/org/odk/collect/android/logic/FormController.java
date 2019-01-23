@@ -49,7 +49,7 @@ import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
-import org.odk.collect.android.utilities.TimerLogger;
+import org.odk.collect.android.utilities.AuditEventLogger;
 import org.odk.collect.android.views.ODKView;
 
 import java.io.File;
@@ -59,6 +59,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.XML_OPENDATAKIT_NAMESPACE;
 
 /**
  * This class is a wrapper for Javarosa's FormEntryController. In theory, if you wanted to replace
@@ -86,9 +88,9 @@ public class FormController {
     public static final String AUDIT_FILE_NAME = "audit.csv";
 
     /*
-     * Store the timerLogger object with the form controller state
+     * Store the auditEventLogger object with the form controller state
      */
-    private TimerLogger timerLogger;
+    private AuditEventLogger auditEventLogger;
 
     /**
      * OpenRosa metadata of a form instance.
@@ -101,12 +103,12 @@ public class FormController {
     public static final class InstanceMetadata {
         public final String instanceId;
         public final String instanceName;
-        public final boolean audit;
+        public final AuditConfig auditConfig;
 
-        public InstanceMetadata(String instanceId, String instanceName, boolean audit) {
+        public InstanceMetadata(String instanceId, String instanceName, AuditConfig auditConfig) {
             this.instanceId = instanceId;
             this.instanceName = instanceName;
-            this.audit = audit;
+            this.auditConfig = auditConfig;
         }
     }
 
@@ -174,15 +176,15 @@ public class FormController {
         return indexWaitingForData;
     }
 
-    public TimerLogger getTimerLogger() {
-        if (timerLogger == null) {
-            setTimerLogger(new TimerLogger(getInstanceFile(), this));
+    public AuditEventLogger getAuditEventLogger() {
+        if (auditEventLogger == null) {
+            setAuditEventLogger(new AuditEventLogger(getInstanceFile(), getSubmissionMetadata().auditConfig));
         }
-        return timerLogger;
+        return auditEventLogger;
     }
 
-    private void setTimerLogger(TimerLogger logger) {
-        timerLogger = logger;
+    private void setAuditEventLogger(AuditEventLogger logger) {
+        auditEventLogger = logger;
     }
 
     /**
@@ -1119,7 +1121,7 @@ public class FormController {
 
         String instanceId = null;
         String instanceName = null;
-        boolean audit = false;
+        AuditConfig auditConfig = null;
 
         if (e != null) {
             List<TreeElement> v;
@@ -1152,14 +1154,21 @@ public class FormController {
                                 .setLabel(Collect.getCurrentFormIdentifierHash())
                                 .build());
 
-                audit = true;
+                TreeElement auditElement = v.get(0);
+
+                String locationPriority = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-priority");
+                String locationMinInterval = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-min-interval");
+                String locationMaxAge = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-max-age");
+
+                auditConfig = new AuditConfig(locationPriority, locationMinInterval, locationMaxAge);
+
                 IAnswerData answerData = new StringData();
                 answerData.setValue(AUDIT_FILE_NAME);
-                v.get(0).setValue(answerData);
+                auditElement.setValue(answerData);
             }
         }
 
-        return new InstanceMetadata(instanceId, instanceName, audit);
+        return new InstanceMetadata(instanceId, instanceName, auditConfig);
     }
 
     /**

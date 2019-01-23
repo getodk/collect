@@ -16,11 +16,15 @@ package org.odk.collect.android.activities;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -58,6 +62,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.location.LocationListener;
 import com.google.common.collect.ImmutableList;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -85,6 +90,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
+import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
@@ -93,6 +99,11 @@ import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.SavePointListener;
+import org.odk.collect.android.location.client.GoogleLocationClient;
+import org.odk.collect.android.location.client.LocationClient;
+import org.odk.collect.android.location.client.LocationClients;
+import org.odk.collect.android.logic.AuditConfig;
+import org.odk.collect.android.logic.AuditEvent;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
 import org.odk.collect.android.logic.FormInfo;
@@ -118,8 +129,8 @@ import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
-import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.DateTimeWidget;
@@ -153,6 +164,7 @@ import timber.log.Timber;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
@@ -171,7 +183,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         DependencyProvider<ActivityAvailability>,
         CustomDatePickerDialog.CustomDatePickerDialogListener,
         RankingWidgetDialog.RankingListener,
-        SaveFormIndexTask.SaveFormIndexListener {
+        SaveFormIndexTask.SaveFormIndexListener, LocationClient.LocationClientListener, LocationListener {
 
     // save with every swipe forward or back. Timings indicate this takes .25
     // seconds.
@@ -195,6 +207,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public static final String KEY_SUCCESS = "success";
     public static final String KEY_ERROR = "error";
     private static final String KEY_SAVE_NAME = "saveName";
+    private static final String KEY_LOCATION_PERMISSIONS_GRANTED = "location_permissions_granted";
+    private static final String SAVED_FORM_START = "saved_form_start";
 
     private static final String TAG_MEDIA_LOADING_FRAGMENT = "media_loading_fragment";
 
@@ -245,6 +259,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     // used to limit forward/backward swipes to one per question
     private boolean beenSwiped;
+    private boolean locationPermissionsGranted;
 
     private final Object saveDialogLock = new Object();
     private int viewCount;
@@ -263,6 +278,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private boolean newForm = true;
     private boolean onResumeWasCalledWithoutPermissions;
     private boolean readPhoneStatePermissionRequestNeeded;
+    private boolean savedFormStart;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -277,6 +293,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private boolean showNavigationButtons;
+    private GoogleLocationClient googleLocationClient;
 
     private Bundle state;
 
@@ -287,6 +304,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     RxEventBus eventBus;
+
+    private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     /**
      * Called when the activity is first created.
@@ -398,6 +417,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
             if (savedInstanceState.containsKey(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED)) {
                 readPhoneStatePermissionRequestNeeded = savedInstanceState.getBoolean(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED);
+            }
+            if (savedInstanceState.containsKey(KEY_LOCATION_PERMISSIONS_GRANTED)) {
+                locationPermissionsGranted = savedInstanceState.getBoolean(KEY_LOCATION_PERMISSIONS_GRANTED);
+            }
+            if (savedInstanceState.containsKey(SAVED_FORM_START)) {
+                savedFormStart = savedInstanceState.getBoolean(SAVED_FORM_START, false);
             }
         }
 
@@ -581,6 +606,25 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         setTitle(getString(R.string.loading_form));
     }
 
+    private void setUpLocationClient(AuditConfig auditConfig) {
+        googleLocationClient = new GoogleLocationClient(this);
+        googleLocationClient.setListener(this);
+        googleLocationClient.setPriority(auditConfig.getLocationPriority());
+        googleLocationClient.setUpdateIntervals(auditConfig.getLocationMinInterval(), auditConfig.getLocationMinInterval());
+        googleLocationClient.start();
+    }
+
+    private boolean shouldLocationCoordinatesBeCollected(FormController formController) {
+        return formController != null
+                && formController.getSubmissionMetadata() != null
+                && formController.getSubmissionMetadata().auditConfig != null
+                && formController.getSubmissionMetadata().auditConfig.isLocationEnabled();
+    }
+
+    private boolean isBackgroundLocationEnabled() {
+        return GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true);
+    }
+
     /**
      * Create save-points asynchronously in order to not affect swiping performance
      * on larger forms.
@@ -630,6 +674,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         outState.putString(KEY_SAVE_NAME, saveName);
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
         outState.putBoolean(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED, readPhoneStatePermissionRequestNeeded);
+        outState.putBoolean(KEY_LOCATION_PERMISSIONS_GRANTED, locationPermissionsGranted);
+        outState.putBoolean(SAVED_FORM_START, savedFormStart);
 
         if (currentView instanceof ODKView) {
             outState.putAll(((ODKView) currentView).getState());
@@ -962,6 +1008,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         menu.findItem(R.id.menu_preferences).setVisible(useability)
                 .setEnabled(useability);
+
+        if (shouldLocationCoordinatesBeCollected(getFormController()) && LocationClients.areGooglePlayServicesAvailable(this)) {
+            MenuItem backgroundLocation = menu.findItem(R.id.track_location);
+            backgroundLocation.setVisible(true);
+            backgroundLocation.setChecked(isBackgroundLocationEnabled());
+        }
+
         return true;
     }
 
@@ -983,9 +1036,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
 
                 if (formController != null) {
-                    formController.getTimerLogger().exitView();
-                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.HIERARCHY,
-                            0, null, false, true);
+                    formController.getAuditEventLogger().exitView();
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, null, true);
                 }
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);
@@ -994,6 +1046,20 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case R.id.menu_preferences:
                 Intent pref = new Intent(this, PreferencesActivity.class);
                 startActivity(pref);
+                return true;
+            case R.id.track_location:
+                boolean previousValue = isBackgroundLocationEnabled();
+                if (formController != null) {
+                    if (previousValue) {
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_TRACKING_DISABLED, null, false);
+                        if (googleLocationClient != null) {
+                            googleLocationClient.stop();
+                        }
+                    } else {
+                        locationTrackingEnabled(formController, false);
+                    }
+                }
+                GeneralSharedPreferences.getInstance().save(KEY_BACKGROUND_LOCATION, !previousValue);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -1126,8 +1192,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         setTitle(formController.getFormTitle());
 
-        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FEC,
-                event, formController.getFormIndex().getReference(), advancingPage, true);
+        formController.getAuditEventLogger().logEvent(AuditEvent.getAuditEventTypeFromFecType(event),
+                formController.getFormIndex().getReference(), true);
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
@@ -1403,7 +1469,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return;
             }
 
-            formController.getTimerLogger().exitView();    // Close timer events waiting for an end time
+            formController.getAuditEventLogger().exitView();    // Close events waiting for an end time
 
             switch (event) {
                 case FormEntryController.EVENT_QUESTION:
@@ -1474,7 +1540,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                 nonblockingCreateSavePointData();
                             }
                         }
-                        formController.getTimerLogger().exitView();    // Close timer events
+                        formController.getAuditEventLogger().exitView();    // Close events
                         View next = createView(event, false);
                         showView(next, AnimationType.LEFT);
                     } else {
@@ -1785,7 +1851,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 FormController formController = getFormController();
                 switch (i) {
                     case BUTTON_POSITIVE: // yes
-                        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.DELETE_REPEAT, 0, null, false, true);
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.DELETE_REPEAT, null, true);
                         formController.deleteRepeat();
                         showNextView();
                         break;
@@ -1879,7 +1945,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                     FormController formController = getFormController();
                     if (formController != null) {
-                        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, null, true);
                     }
                     removeTempInstance();
                     MediaManager.INSTANCE.revertChanges();
@@ -2091,6 +2157,39 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        FormController formController = getFormController();
+        if (savedFormStart) {
+            savedFormStart = false;
+            initBackgroundLocationIfNeeded(formController);
+        } else if (shouldLocationCoordinatesBeCollected(formController)
+                && LocationClients.areGooglePlayServicesAvailable(this)) {
+            registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+            if (isBackgroundLocationEnabled()) {
+                if (PermissionUtils.areLocationPermissionsGranted(this)) {
+                    if (!locationPermissionsGranted) {
+                        locationPermissionsGranted = true;
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED, null, false);
+                    }
+                    setUpLocationClient(formController.getSubmissionMetadata().auditConfig);
+                } else if (locationPermissionsGranted) {
+                    locationPermissionsGranted = false;
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_NOT_GRANTED, null, false);
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        if (googleLocationClient != null) {
+            googleLocationClient.stop();
+        }
+        super.onStop();
+    }
+
+    @Override
     protected void onPause() {
         FormController formController = getFormController();
         dismissDialogs();
@@ -2239,6 +2338,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
         releaseOdkView();
         compositeDisposable.dispose();
+
+        try {
+            unregisterReceiver(locationProvidersReceiver);
+        } catch (IllegalArgumentException e) {
+            Timber.i(e);
+        }
         super.onDestroy();
 
     }
@@ -2377,7 +2482,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         formController.setInstanceFile(instanceFile);
                     }
 
-                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null, false, true);
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_START, null, true);
                 } else {
                     Intent reqIntent = getIntent();
                     boolean showFirst = reqIntent.getBooleanExtra("start", false);
@@ -2396,8 +2501,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                         String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-                            formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
-                            formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
+                            savedFormStart = true;
+                            formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, null, true);
+                            formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, null, true);
                             startActivity(new Intent(this, FormHierarchyActivity.class));
                             return; // so we don't show the intro screen before jumping to the hierarchy
                         } else {
@@ -2407,9 +2513,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             finish();
                         }
                     } else {
-                        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, null, true);
                     }
                 }
+
+                initBackgroundLocationIfNeeded(formController);
 
                 refreshCurrentView();
             }
@@ -2418,6 +2526,51 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             ToastUtils.showLongToast(R.string.loading_form_failed);
             finish();
         }
+    }
+
+    private void initBackgroundLocationIfNeeded(FormController formController) {
+        if (shouldLocationCoordinatesBeCollected(formController)) {
+            if (LocationClients.areGooglePlayServicesAvailable(this)) {
+                registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+                if (isBackgroundLocationEnabled()) {
+                    locationTrackingEnabled(formController, true);
+                } else {
+                    SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_disabled));
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_TRACKING_DISABLED, null, false);
+                }
+            } else {
+                SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.google_play_services_not_available));
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, null, false);
+            }
+        }
+    }
+
+    private void locationTrackingEnabled(FormController formController, boolean calledJustAfterFormStart) {
+        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_TRACKING_ENABLED, null, false);
+        new PermissionUtils(this).requestLocationPermissions(new PermissionListener() {
+            @Override
+            public void granted() {
+                if (!locationPermissionsGranted) {
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED, null, false);
+                    locationPermissionsGranted = true;
+                }
+                setUpLocationClient(formController.getSubmissionMetadata().auditConfig);
+                if (googleLocationClient.isLocationAvailable()) {
+                    if (calledJustAfterFormStart) {
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED, null, false);
+                        SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_enabled));
+                    }
+                } else {
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED, null, false);
+                    new LocationProvidersDisabledDialog().show(getSupportFragmentManager(), LocationProvidersDisabledDialog.LOCATION_PROVIDERS_DISABLED_DIALOG_TAG);
+                }
+            }
+
+            @Override
+            public void denied() {
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_NOT_GRANTED, null, false);
+            }
+        });
     }
 
     /**
@@ -2445,15 +2598,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         switch (saveStatus) {
             case SaveToDiskTask.SAVED:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
-                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_SAVE, null, false);
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
-                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_SAVE, null, false);
                 if (saveResult.isComplete()) {
-                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, null, false);
                     // Force writing of audit since we are exiting
-                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, null, true);
 
                     // Request auto-send if app-wide auto-send is enabled or the form that was just
                     // finalized specifies that it should always be auto-sent.
@@ -2463,14 +2616,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                 } else {
                     // Force writing of audit since we are exiting
-                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, null, true);
                 }
 
                 finishReturnInstance();
                 break;
             case SaveToDiskTask.SAVE_ERROR:
                 String message;
-                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.SAVE_ERROR, 0, null, false, true);
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.SAVE_ERROR, null, true);
                 if (saveResult.getSaveErrorMessage() != null) {
                     message = getString(R.string.data_saved_error) + ": "
                             + saveResult.getSaveErrorMessage();
@@ -2480,15 +2633,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 ToastUtils.showLongToast(message);
                 break;
             case SaveToDiskTask.ENCRYPTION_ERROR:
-                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FINALIZE_ERROR, 0, null, false, true);
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, null, true);
                 ToastUtils.showLongToast(String.format(getString(R.string.encryption_error_message),
                         saveResult.getSaveErrorMessage()));
                 finishReturnInstance();
                 break;
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
-                formController.getTimerLogger().exitView();
-                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.CONSTRAINT_ERROR, 0, null, false, true);
+                formController.getAuditEventLogger().exitView();
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.CONSTRAINT_ERROR, null, true);
                 refreshCurrentView();
 
                 // get constraint behavior preference value with appropriate default
@@ -2690,6 +2843,27 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
+    @Override
+    public void onClientStart() {
+        googleLocationClient.requestLocationUpdates(this);
+    }
+
+    @Override
+    public void onClientStartFailure() {
+    }
+
+    @Override
+    public void onClientStop() {
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        FormController formController = getFormController();
+        if (formController != null) {
+            formController.getAuditEventLogger().addLocation(location);
+        }
+    }
+
     /**
      * getter for currentView variable. This method should always be used
      * to access currentView as an ODKView object to avoid inconsistency
@@ -2722,6 +2896,23 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         EmptyView(Context context) {
             super(context);
+        }
+    }
+
+    private class LocationProvidersReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction() != null
+                    && intent.getAction().matches(LocationManager.PROVIDERS_CHANGED_ACTION)) {
+                FormController formController = getFormController();
+                if (formController != null && googleLocationClient != null) {
+                    if (googleLocationClient.isLocationAvailable()) {
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED, null, false);
+                    } else {
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED, null, false);
+                    }
+                }
+            }
         }
     }
 

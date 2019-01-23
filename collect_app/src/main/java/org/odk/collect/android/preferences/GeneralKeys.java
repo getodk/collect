@@ -26,6 +26,7 @@ public final class GeneralKeys {
     public static final String KEY_PERIODIC_FORM_UPDATES_CHECK = "periodic_form_updates_check";
     public static final String KEY_AUTOMATIC_UPDATE         = "automatic_update";
     public static final String KEY_HIDE_OLD_FORM_VERSIONS   = "hide_old_form_versions";
+    public static final String KEY_BACKGROUND_LOCATION      = "background_location";
 
     // form_metadata_preferences.xml
     public static final String KEY_METADATA_USERNAME        = "metadata_username";
@@ -98,6 +99,7 @@ public final class GeneralKeys {
         hashMap.put(KEY_PERIODIC_FORM_UPDATES_CHECK, "never");
         hashMap.put(KEY_AUTOMATIC_UPDATE,           false);
         hashMap.put(KEY_HIDE_OLD_FORM_VERSIONS,     true);
+        hashMap.put(KEY_BACKGROUND_LOCATION,        true);
         // form_metadata_preferences.xml
         hashMap.put(KEY_METADATA_USERNAME,          "");
         hashMap.put(KEY_METADATA_PHONENUMBER,       "");

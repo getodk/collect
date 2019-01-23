@@ -147,6 +147,6 @@ public abstract class FileManagerFragment extends AppListFragment implements Loa
     }
 
     protected void showSnackbar(@NonNull String result) {
-        SnackbarUtils.showSnackbar(llParent, result);
+        SnackbarUtils.showShortSnackbar(llParent, result);
     }
 }

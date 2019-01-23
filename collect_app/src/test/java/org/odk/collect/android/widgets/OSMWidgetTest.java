@@ -65,7 +65,7 @@ public class OSMWidgetTest extends BinaryWidgetTest<OSMWidget, StringData> {
 
         when(formController.getMediaFolder()).thenReturn(mediaFolder);
         when(formController.getSubmissionMetadata()).thenReturn(
-                new FormController.InstanceMetadata("", "", false)
+                new FormController.InstanceMetadata("", "", null)
         );
 
         when(formController.getFormDef()).thenReturn(formDef);

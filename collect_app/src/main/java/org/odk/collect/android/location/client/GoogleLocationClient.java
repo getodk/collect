@@ -28,7 +28,7 @@ import timber.log.Timber;
  * Package-private, use {@link LocationClients} to retrieve the correct
  * {@link LocationClient}.
  */
-class GoogleLocationClient
+public class GoogleLocationClient
         extends BaseLocationClient
         implements LocationClient, ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 
@@ -65,7 +65,7 @@ class GoogleLocationClient
      *
      * @param context The Context where the GoogleLocationClient will be running.
      */
-    GoogleLocationClient(@NonNull Context context) {
+    public GoogleLocationClient(@NonNull Context context) {
         this(locationServicesClientForContext(context), LocationServices.FusedLocationApi,
                 (LocationManager) context.getSystemService(Context.LOCATION_SERVICE));
     }
@@ -180,7 +180,7 @@ class GoogleLocationClient
         locationRequest.setPriority(getPriority().getValue());
 
         locationRequest.setInterval(updateInterval);
-        locationRequest.setInterval(fastestUpdateInterval);
+        locationRequest.setFastestInterval(fastestUpdateInterval);
 
         return locationRequest;
     }
