@@ -16,7 +16,6 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -89,13 +88,11 @@ public abstract class QuestionWidget
     private AtomicBoolean expanded;
     private Bundle state;
     protected ThemeUtils themeUtils;
-    private int playColor;
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
 
         themeUtils = new ThemeUtils(context);
-        playColor = themeUtils.getAccentColor();
 
         if (context instanceof FormEntryActivity) {
             state = ((FormEntryActivity) context).getState();
@@ -132,7 +129,7 @@ public abstract class QuestionWidget
         setGravity(Gravity.TOP);
         setPadding(0, 7, 0, 0);
 
-        questionMediaLayout = createQuestionMediaLayout(prompt);
+        questionMediaLayout = createQuestionLayout(prompt);
         helpTextLayout = createHelpTextLayout();
         helpTextLayout.setId(ViewIds.generateViewId());
         guidanceTextLayout = helpTextLayout.findViewById(R.id.guidance_text_layout);
@@ -243,7 +240,7 @@ public abstract class QuestionWidget
         //dependencies for the widget will be wired here.
     }
 
-    private MediaLayout createQuestionMediaLayout(FormEntryPrompt prompt) {
+    private MediaLayout createQuestionLayout(FormEntryPrompt prompt) {
         String promptText = prompt.getLongText();
         // Add the text view. Textview always exists, regardless of whether there's text.
         TextView questionText = new TextView(getContext());
@@ -262,29 +259,10 @@ public abstract class QuestionWidget
             questionText.setVisibility(GONE);
         }
 
-        String imageURI = this instanceof SelectImageMapWidget ? null : prompt.getImageText();
-        String audioURI = prompt.getAudioText();
-        String videoURI = prompt.getSpecialFormQuestionText("video");
-
-        // shown when image is clicked
-        String bigImageURI = prompt.getSpecialFormQuestionText("big-image");
-
         // Create the layout for audio, image, text
         MediaLayout questionMediaLayout = new MediaLayout(getContext());
         questionMediaLayout.setId(ViewIds.generateViewId()); // assign random id
         questionMediaLayout.setLabelTextView(questionText);
-        questionMediaLayout.setAVT(audioURI, imageURI, videoURI, bigImageURI, player);
-        questionMediaLayout.setAudioListener(this);
-
-        String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
-        if (playColorString != null) {
-            try {
-                playColor = Color.parseColor(playColorString);
-            } catch (IllegalArgumentException e) {
-                Timber.e(e, "Argument %s is incorrect", playColorString);
-            }
-        }
-        questionMediaLayout.setPlayTextColor(getPlayColor());
 
         return questionMediaLayout;
     }
@@ -630,10 +608,6 @@ public abstract class QuestionWidget
 
     public MediaLayout getQuestionMediaLayout() {
         return questionMediaLayout;
-    }
-
-    public int getPlayColor() {
-        return playColor;
     }
 
     public PermissionUtils getPermissionUtils() {
