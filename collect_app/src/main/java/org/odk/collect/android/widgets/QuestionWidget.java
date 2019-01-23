@@ -495,21 +495,6 @@ public abstract class QuestionWidget
         warningText.setText(warningBody);
     }
 
-    @Override
-    protected void onWindowVisibilityChanged(int visibility) {
-        if (visibility == INVISIBLE || visibility == GONE) {
-            stopAudio();
-        }
-    }
-
-    public void stopAudio() {
-        if (player != null && player.isPlaying()) {
-            Timber.i("stopAudio " + player);
-            player.stop();
-            player.reset();
-        }
-    }
-
     protected Button getSimpleButton(String text, @IdRes final int withId) {
         final Button button = new Button(getContext());
 

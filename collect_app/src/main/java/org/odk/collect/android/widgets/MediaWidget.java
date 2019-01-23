@@ -21,6 +21,20 @@ public abstract class MediaWidget extends QuestionWidget {
         }
     }
 
+    @Override
+    protected void onWindowVisibilityChanged(int visibility) {
+        if (visibility == INVISIBLE || visibility == GONE) {
+            stopAudio();
+        }
+    }
+
+    public void stopAudio() {
+        if (player != null && player.isPlaying()) {
+            player.stop();
+            player.reset();
+        }
+    }
+
     public MediaPlayer getPlayer() {
         return player;
     }
