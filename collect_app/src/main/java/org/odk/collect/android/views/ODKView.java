@@ -222,10 +222,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
             final String playOption = mediaWidget.getFormEntryPrompt().getFormElement().getAdditionalAttribute(null, "autoplay");
             if (playOption != null) {
                 new Handler().postDelayed(() -> {
-                    if (playOption.equalsIgnoreCase("audio")) {
-                        mediaWidget.playAudio();
-                    } else if (playOption.equalsIgnoreCase("video")) {
-                        mediaWidget.playVideo();
+                    if (playOption.equalsIgnoreCase("audio") || playOption.equalsIgnoreCase("video")) {
+                        mediaWidget.playAllPromptText(playOption);
                     }
                 }, 150);
             }

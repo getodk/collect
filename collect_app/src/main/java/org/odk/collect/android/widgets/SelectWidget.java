@@ -84,16 +84,19 @@ public abstract class SelectWidget extends MediaWidget {
     }
 
     @Override
-    public void playAllPromptText() {
-        // set up to play the items when the
-        // question text is finished
-        getPlayer().setOnCompletionListener(mediaPlayer -> {
-            resetQuestionTextColor();
-            mediaPlayer.reset();
-            playNextSelectItem();
-        });
-        // plays the question text
-        super.playAllPromptText();
+    public void playAllPromptText(String playOption) {
+        if (playOption.equalsIgnoreCase("audio")) {
+
+            // set up to play the items when the question text is finished
+            getPlayer().setOnCompletionListener(mediaPlayer -> {
+                resetQuestionTextColor();
+                mediaPlayer.reset();
+                playNextSelectItem();
+            });
+
+            // plays the question text
+            super.playAllPromptText(playOption);
+        }
     }
 
     protected void readItems() {

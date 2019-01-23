@@ -467,13 +467,6 @@ public abstract class QuestionWidget
         }
     }
 
-    /*
-     * Prompts with items must override this
-     */
-    public void playAllPromptText() {
-        getQuestionMediaLayout().playAudio();
-    }
-
     public void resetQuestionTextColor() {
         getQuestionMediaLayout().resetTextFormatting();
     }

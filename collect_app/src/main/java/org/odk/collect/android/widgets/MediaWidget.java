@@ -2,6 +2,7 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.support.annotation.CallSuper;
 
 import org.javarosa.form.api.FormEntryPrompt;
 
@@ -28,12 +29,16 @@ public abstract class MediaWidget extends QuestionWidget {
         }
     }
 
-    public void playVideo() {
-        getQuestionMediaLayout().playVideo();
-    }
-
-    public void playAudio() {
-        playAllPromptText();
+    /*
+     * Prompts with items must override this
+     */
+    @CallSuper
+    public void playAllPromptText(String playOption) {
+        if (playOption.equalsIgnoreCase("audio")) {
+            getQuestionMediaLayout().playAudio();
+        } else if (playOption.equalsIgnoreCase("video")) {
+            getQuestionMediaLayout().playVideo();
+        }
     }
 
     public void stopAudio() {
