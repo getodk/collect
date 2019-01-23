@@ -9,4 +9,14 @@ public abstract class MediaWidget extends QuestionWidget {
     public MediaWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
     }
+
+    @Override
+    public void release() {
+        super.release();
+
+        if (player != null) {
+            player.release();
+            player = null;
+        }
+    }
 }
