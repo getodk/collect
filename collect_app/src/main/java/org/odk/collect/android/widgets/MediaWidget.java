@@ -13,21 +13,38 @@ import timber.log.Timber;
 public abstract class MediaWidget extends QuestionWidget implements AudioPlayListener {
 
     private int playColor;
+    private MediaPlayer player;
 
     public MediaWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        String imageURI = this instanceof SelectImageMapWidget ? null : prompt.getImageText();
-        String audioURI = prompt.getAudioText();
-        String videoURI = prompt.getSpecialFormQuestionText("video");
+        initMediaPlayer();
+        attachMediaToLayout();
+        initPlayColor();
+    }
+
+    private void initMediaPlayer() {
+        player = new MediaPlayer();
+        player.setOnCompletionListener(mediaPlayer -> {
+            getQuestionMediaLayout().resetTextFormatting();
+            mediaPlayer.reset();
+        });
+        player.setOnErrorListener((mp, what, extra) -> {
+            Timber.e("Error occurred in MediaPlayer. what = %d, extra = %d", what, extra);
+            return false;
+        });
+    }
+
+    private void attachMediaToLayout() {
+        String imageURI = this instanceof SelectImageMapWidget ? null : getFormEntryPrompt().getImageText();
+        String audioURI = getFormEntryPrompt().getAudioText();
+        String videoURI = getFormEntryPrompt().getSpecialFormQuestionText("video");
 
         // shown when image is clicked
-        String bigImageURI = prompt.getSpecialFormQuestionText("big-image");
+        String bigImageURI = getFormEntryPrompt().getSpecialFormQuestionText("big-image");
 
         getQuestionMediaLayout().setAVT(audioURI, imageURI, videoURI, bigImageURI, player);
         getQuestionMediaLayout().setAudioListener(this);
-
-        initPlayColor();
     }
 
     private void initPlayColor() {
