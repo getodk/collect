@@ -293,6 +293,7 @@
   <string name="send_in_progress">Odesílání na pozadí běží, zkuste to znovu</string>
   <string name="sheets_max_columns">Maximální počet sloupců je 255, váš formulář má %s. Nelze nahrát do tabulky.</string>
   <string name="invalid_sheet_id">neplatné ID listu: %1$s</string>
+  <string name="missing_submission_url">Chybí URL pro odeslání</string>
   <string name="google_sheets_access_denied">Přístup odepřen. Ujistěte se, že vám vlastník tabulky udělil oprávnění ke změnám.</string>
   <string name="google_sheets_missing_columns">V tabulce chybí následující sloupce: %1$s</string>
   <string name="password_error_whitespace">Počáteční nebo koncové mezery v heslech nejsou povoleny </string>
@@ -624,6 +625,12 @@
   <string name="sms_no_message">Tento formulář nemá žádné dotazy se značkami SMS.</string>
   <string name="sms_encrypted_message">Šifrované formuláře nelze odeslat jako SMS.</string>
   <string name="sms_last_submission_on_date_at_time">\"Poslední pokus o podání\" EEE, MMM dd, yyyy\"na\" HH:mm</string>
+  <plurals name="sms_sending">
+    <item quantity="one">Odeslání formuláře jako jediné zprávy.</item>
+    <item quantity="few">Odeslání formuláře, odeslání zprávy %1$d z %2$d</item>
+    <item quantity="many">Odeslání formuláře, odeslání zpráv %1$d z %2$d</item>
+    <item quantity="other">Odeslání formuláře, odeslání zprávy %1$d z %2$d</item>
+  </plurals>
   <string name="sms_sent_on_date_at_time">\"Odesláno jako SMS na\" EEE, MMM dd, rrrr \"v\" HH: mm</string>
   <string name="sms_submission_queued">Čekající k odeslání.</string>
   <string name="sms_submissions_notif_title">Odesílání SMS</string>
@@ -637,4 +644,6 @@
   <string name="missing_google_account_dialog_title">Účet Google není nastaven</string>
   <string name="missing_google_account_dialog_desc">Chcete-li odeslat formuláře prostřednictvím tabulek Google, musíte nastavit účet Google v nastavení serveru.</string>
   <string name="sms_invalid_phone_number_description">Nastavte cílové telefonní číslo pro odesílání SMS nebo změňte typ transportu.</string>
+  <string name="notification_channel_name">Obecná upozornění</string>
+  <string name="corrupt_imported_preferences_error">Aktuální nastavení je poškozeno. Z nastavení administrátora obnovte nastavení nebo importujte pracovní nastavení.</string>
 </resources>

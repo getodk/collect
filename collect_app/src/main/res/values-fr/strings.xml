@@ -293,6 +293,7 @@
   <string name="send_in_progress">L\'envoi s\'exécute en tâche de fond, essayer plus tard.</string>
   <string name="sheets_max_columns">Il est impossible de télécharger votre feuille de calcul. Le nombre maximum de colonnes est de 255. Votre formulaire en a %s. </string>
   <string name="invalid_sheet_id">Identifiant %1$s du tableur n\'est pas valable.</string>
+  <string name="missing_submission_url">URL de soumission manquante</string>
   <string name="google_sheets_access_denied">Accès refusé. Assurez-vous que le propriétaire de la feuille de calcul vous a accordé la permission de modification.</string>
   <string name="google_sheets_missing_columns">La feuille de calcul manque des colonnes suivantes : %1$s</string>
   <string name="password_error_whitespace">Les espaces ne sont pas permis au début ou à la fin du mot de passe</string>
@@ -587,6 +588,7 @@
   <string name="record_audio_runtime_permission_denied_title">Autorisation d\'enregistrement audio</string>
   <string name="record_audio_runtime_permission_denied_desc">Sans cette permission, Collect ne peut pas accéder au microphone. Veuillez réessayer lorsque vous êtes prêt à l\'accorder.</string>
   <string name="get_accounts_runtime_permission_denied_title">Obtenir la permission des comptes</string>
+  <string name="get_accounts_runtime_permission_denied_desc">Sans cette autorisation, Collect ne peut pas accéder aux comptes. Veuillez réessayer lorsque vous êtes prêt à l’accorder.</string>
   <string name="send_sms_runtime_permission_denied_title">Envoyer la permission SMS</string>
   <string name="send_sms_runtime_permission_denied_desc">Sans cette permission, Collect ne peut pas envoyer de SMS. Veuillez réessayer lorsque vous êtes prêt à l’accorder.</string>
   <string name="read_phone_state_runtime_permission_denied_title">Lire la permission de l\'état du téléphone</string>
@@ -615,12 +617,18 @@
   <string name="sms_pref_title">Numéro de téléphone de la destination</string>
   <string name="sms_invalid_phone_number">Numéro de téléphone invalide!</string>
   <!--Sms submission-->
+  <string name="sms_no_reception">\'Échec de\' EEE, MMM dd, yyyy \'à\' HH: mm \'en raison de l\'absence de réception\'</string>
+  <string name="sms_no_number">\'Échec de\' EEE, MMM dd, yyyy \'à\' HH: mm \'faute de numéro de téléphone\'</string>
+  <string name="sms_fatal_error">\'Échec de\' EEE, MMM dd, yyyy \'à\' HH: mm </string>
+  <string name="sms_airplane_mode">\'Échec de\' EEE, MMM dd, yyyy \'à\' HH: mm \'en raison du mode avion activé.\'</string>
   <string name="sms_no_message">Ce formulaire n\'a aucune question avec \"tag\" SMS</string>
   <string name="sms_encrypted_message">Les formulaires encryptés ne peuvent pas êtres envoyés par SMS.</string>
+  <string name="sms_last_submission_on_date_at_time">\'Dernière tentative de soumission à\' EEE, MMM dd, yyyy \'à\' HH: mm</string>
   <plurals name="sms_sending">
     <item quantity="one" tools:ignore="ImpliedQuantity">Envoi du formulaire en un seul message.</item>
     <item quantity="other">Envoi du formulaire, envoi du message %1$d de %2$d</item>
   </plurals>
+  <string name="sms_sent_on_date_at_time">\'Envoyé par SMS sur\' EEE, MMM dd, yyyy \'à\' HH: mm</string>
   <string name="sms_submission_queued">En file d\'attente pour la soumission.</string>
   <string name="sms_submissions_notif_title">Soumissions SMS</string>
   <string name="sms_submissions_notif_description">Plusieurs formulaires sont en train d\'être envoyés.</string>
@@ -633,4 +641,6 @@
   <string name="missing_google_account_dialog_title">Compte Google non sélectionné</string>
   <string name="missing_google_account_dialog_desc">Pour envoyer des formulaires via Google Sheets, vous devez configurer votre compte Google dans les paramètres du serveur.</string>
   <string name="sms_invalid_phone_number_description">Définissez un numéro de téléphone de destination pour l\'envoi de SMS ou modifiez votre type de transport.</string>
+  <string name="notification_channel_name">Notifications générales</string>
+  <string name="corrupt_imported_preferences_error">Les paramètres actuels sont corrompus. À partir des paramètres d’administrateur, réinitialisez les paramètres ou importez ceux qui fonctionnent.</string>
 </resources>

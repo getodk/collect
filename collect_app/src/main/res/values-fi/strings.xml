@@ -106,6 +106,7 @@
   <string name="quit_application">Poistu täältä: %s</string>
   <string name="quit_entry">Tallenna lomake ja lopeta</string>
   <string name="refresh">Päivitä</string>
+  <string name="repeatable_group_label">Toistettava ryhmä</string>
   <string name="replace_barcode">Korvaa viivakoodi</string>
   <string name="required_answer_error">Pahoittelut, tämä vastaus on pakollinen!</string>
   <string name="review_data">Muokkaa tallennettua lomaketta</string>
@@ -643,4 +644,6 @@
   <string name="missing_google_account_dialog_desc">Lähettääksesi lomakkeita Google Sheets -palvelun kautta sinun on asetettava Google-tili palvelinasetuksissa.</string>
   <string name="sms_invalid_phone_number_description">Aseta vastaanottopuhelinnumero SMS-lähetyksille tai vaihda siirtotapaa.</string>
   <string name="notification_channel_name">Yleiset ilmoitukset</string>
+  <string name="corrupt_imported_preferences_error">Tämänhetkiset asetukset ovat vialliset. Pääkäyttäjän asetuksissa voit palauttaa oletusasetukset tai touda toimivat.</string>
+  <string name="open_file">Avaa tiedosto</string>
 </resources>
