@@ -29,7 +29,7 @@ import bikramsambat.BsGregorianDate;
 import timber.log.Timber;
 
 public class BikramSambatDatePickerDialog extends CustomDatePickerDialog {
-    private static final int MIN_SUPPORTED_YEAR = 2008; //1951 in Gregorian calendar
+    private static final int MIN_SUPPORTED_YEAR = 1970; //1913 in Gregorian calendar
     private static final int MAX_SUPPORTED_YEAR = 2090; //2033 in Gregorian calendar
 
     private final String[] monthsArray = BsCalendar.MONTH_NAMES.toArray(new String[BsCalendar.MONTH_NAMES.size()]);
