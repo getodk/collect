@@ -63,7 +63,11 @@ public final class AdminKeys {
 
     private static final String KEY_ANALYTICS                   = "analytics";
     public static final String KEY_MOVING_BACKWARDS             = "moving_backwards";
-    static final String ALLOW_OTHER_WAYS_OF_EDITING_FORM        = "allow_other_ways_of_editing_form";
+    public static final String ALLOW_OTHER_WAYS_OF_EDITING_FORM        = "allow_other_ways_of_editing_form";    // smap made public
+
+    // start smap
+    public static final String KEY_SMAP_OVERRIDE_MOVING_BACKWARDS = "smap_override_moving_backwards";  // Override the local settings for moving backwards
+    // end smap
 
     /**
      * The admin preferences allow removing general preferences. This array contains

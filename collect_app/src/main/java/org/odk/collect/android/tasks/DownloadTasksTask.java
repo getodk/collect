@@ -14,21 +14,15 @@
 
 package org.odk.collect.android.tasks;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -46,12 +40,13 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.database.Assignment;
 import org.odk.collect.android.database.TaskAssignment;
-import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.preferences.AdminKeys;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI;
@@ -63,7 +58,6 @@ import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.taskModel.FormLocator;
 import org.odk.collect.android.taskModel.TaskCompletionInfo;
 import org.odk.collect.android.taskModel.TaskResponse;
-import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.ManageForm.ManageFormDetails;
 import org.odk.collect.android.utilities.ManageFormResponse;
@@ -72,7 +66,6 @@ import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.TraceUtilities;
 import org.odk.collect.android.utilities.Utilities;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.opendatakit.httpclientandroidlib.HttpResponse;
 
 import java.io.File;
 import java.io.InputStream;
@@ -91,9 +84,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static android.content.Context.NOTIFICATION_SERVICE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SMAP_USER_LOCATION;
+
 
 /**
  * Background task for downloading tasks 
@@ -102,16 +93,13 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SMAP_USER_L
  */
 public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, String>> {
 
-    static String TAG = "DownloadTasksTask";
 	private TaskDownloaderListener mStateListener;
 	HashMap<String, String> results = null;
     SharedPreferences sharedPreferences = null;
     ArrayList<TaskEntry> tasks = new ArrayList<TaskEntry>();
     HashMap<Long, TaskStatus> taskMap = new HashMap<Long, TaskStatus>();
-    HttpResponse getResponse = null;
     Gson gson = null;
     TaskResponse tr = null;                         // Data returned from the server
-    int statusCode;
     String serverUrl = null;                        // Current server
     String source = null;                           // Server name
     String taskURL = null;                          // Url to get tasks
@@ -378,10 +366,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                      * Override the user trail setting if this is set from the server
                      */
                     if(tr.settings.ft_send_location == null || tr.settings.ft_send_location.equals("off")) {
-                        editor.putBoolean(KEY_SMAP_USER_LOCATION, false);
+                        editor.putBoolean(PreferenceKeys.KEY_SMAP_USER_LOCATION, false);
                         editor.putBoolean(PreferenceKeys.KEY_SMAP_OVERRIDE_LOCATION, true);
                     } else if(tr.settings.ft_send_location.equals("on")) {
-                        editor.putBoolean(KEY_SMAP_USER_LOCATION, true);
+                        editor.putBoolean(PreferenceKeys.KEY_SMAP_USER_LOCATION, true);
                         editor.putBoolean(PreferenceKeys.KEY_SMAP_OVERRIDE_LOCATION, true);
                     } else {
                         editor.putBoolean(PreferenceKeys.KEY_SMAP_OVERRIDE_LOCATION, false);
@@ -402,7 +390,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                         }
                     } else {
                         // Support legacy servers / settings
-                        String autoSend = (String) GeneralSharedPreferences.getInstance().get(KEY_AUTOSEND);
+                        String autoSend = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_AUTOSEND);
                         if (tr.settings.ft_send_wifi_cell) {
                             autoSend = "wifi_and_cellular";
                         } else if (tr.settings.ft_send_wifi) {
@@ -447,6 +435,37 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                     } else {
                         // Leave the local settings as they are and enable for local editing
                         editor.putBoolean(PreferenceKeys.KEY_SMAP_OVERRIDE_IMAGE_SIZE, false);
+                    }
+
+                    /*
+                     * Override backward navigation setting
+                     */
+                    if(tr.settings.ft_backward_navigation != null) {
+                        if(tr.settings.ft_backward_navigation.equals("disable")) {
+                            // Disable moving backwards
+                            AdminSharedPreferences.getInstance().save(AdminKeys.KEY_MOVING_BACKWARDS, false);
+                            AdminSharedPreferences.getInstance().save(AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM, false);
+                            AdminSharedPreferences.getInstance().save(AdminKeys.KEY_EDIT_SAVED, false);
+                            AdminSharedPreferences.getInstance().save(AdminKeys.KEY_SAVE_MID, false);
+                            AdminSharedPreferences.getInstance().save(AdminKeys.KEY_JUMP_TO, false);
+                            GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR, PreferenceKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE);
+
+                            AdminSharedPreferences.getInstance().getInstance().save(AdminKeys.KEY_SMAP_OVERRIDE_MOVING_BACKWARDS, true);
+                        } else if(tr.settings.ft_backward_navigation.equals("enable")) {
+                            // Enable moving backwards
+                            AdminSharedPreferences.getInstance().save(AdminKeys.KEY_MOVING_BACKWARDS, true);
+                            AdminSharedPreferences.getInstance().save(AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM, true);
+                            AdminSharedPreferences.getInstance().save(AdminKeys.KEY_JUMP_TO, true);
+                            AdminSharedPreferences.getInstance().save(AdminKeys.KEY_SAVE_MID, true);
+
+                            AdminSharedPreferences.getInstance().getInstance().save(AdminKeys.KEY_SMAP_OVERRIDE_MOVING_BACKWARDS, true);
+                        } else {
+                            // Leave the local settings as they are and enable for local editing
+                            AdminSharedPreferences.getInstance().getInstance().save(AdminKeys.KEY_SMAP_OVERRIDE_MOVING_BACKWARDS, false);
+                        }
+                    } else {
+                        // Leave the local settings as they are and enable for local editing
+                        AdminSharedPreferences.getInstance().getInstance().save(AdminKeys.KEY_SMAP_OVERRIDE_MOVING_BACKWARDS, false);
                     }
 
 
@@ -619,7 +638,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         /*
          * Set details on submitted tasks
          */
-        boolean sendLocation = (Boolean) GeneralSharedPreferences.getInstance().get(KEY_SMAP_USER_LOCATION);
+        boolean sendLocation = (Boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_USER_LOCATION);
         if(tr.settings != null && sendLocation) {
             updateResponse.taskCompletionInfo = new ArrayList<TaskCompletionInfo>();   // Details on completed tasks
 
