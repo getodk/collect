@@ -66,13 +66,14 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import timber.log.Timber;
 
+import static android.text.TextUtils.isEmpty;
+
 public abstract class QuestionWidget extends RelativeLayout implements Widget {
 
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
     private final MediaLayout questionMediaLayout;
     private final TextView helpTextView;
-    private final TextView guidanceTextView;
     private final View helpTextLayout;
     private final View guidanceTextLayout;
     private final View textLayout;
@@ -111,34 +112,33 @@ public abstract class QuestionWidget extends RelativeLayout implements Widget {
         textLayout = helpTextLayout.findViewById(R.id.text_layout);
         warningText = helpTextLayout.findViewById(R.id.warning_text);
         helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), prompt);
-        guidanceTextView = setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), prompt);
+        setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), prompt);
 
         addQuestionMediaLayout(getQuestionMediaLayout());
         addHelpTextLayout(getHelpTextLayout());
     }
 
-    private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
+    private void setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
 
-        TextView guidance = null;
         GuidanceHint setting = GuidanceHint.get((String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_GUIDANCE_HINT));
 
         if (setting.equals(GuidanceHint.No)) {
-            return null;
+            return;
         }
 
         String guidanceHint = prompt.getSpecialFormQuestionText(prompt.getQuestion().getHelpTextID(), "guidance");
 
-        if (android.text.TextUtils.isEmpty(guidanceHint)) {
-            return null;
+        if (isEmpty(guidanceHint)) {
+            return;
         }
 
-        guidance = configureGuidanceTextView(guidanceTextView, guidanceHint);
+        configureGuidanceTextView(guidanceTextView, guidanceHint);
 
         expanded = new AtomicBoolean(false);
 
         if (getState() != null) {
             if (getState().containsKey(GUIDANCE_EXPANDED_STATE + getFormEntryPrompt().getIndex())) {
-                Boolean result = getState().getBoolean(GUIDANCE_EXPANDED_STATE + getFormEntryPrompt().getIndex());
+                boolean result = getState().getBoolean(GUIDANCE_EXPANDED_STATE + getFormEntryPrompt().getIndex());
                 expanded = new AtomicBoolean(result);
             }
         }
@@ -152,7 +152,7 @@ public abstract class QuestionWidget extends RelativeLayout implements Widget {
             View icon = textLayout.findViewById(R.id.help_icon);
             icon.setVisibility(VISIBLE);
 
-            /**
+            /*
              * Added click listeners to the individual views because the TextView
              * intercepts click events when they are being passed to the parent layout.
              */
@@ -164,7 +164,7 @@ public abstract class QuestionWidget extends RelativeLayout implements Widget {
                 }
             });
 
-            getHelpTextView().setOnClickListener(v -> {
+            helpTextView.setOnClickListener(v -> {
                 if (!expanded.get()) {
                     AnimateUtils.expand(guidanceTextLayout, result -> expanded.set(true));
                 } else {
@@ -172,11 +172,9 @@ public abstract class QuestionWidget extends RelativeLayout implements Widget {
                 }
             });
         }
-
-        return guidance;
     }
 
-    private TextView configureGuidanceTextView(TextView guidanceTextView, String guidance) {
+    private void configureGuidanceTextView(TextView guidanceTextView, String guidance) {
         guidanceTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize() - 3);
         //noinspection ResourceType
         guidanceTextView.setPadding(0, -5, 0, 7);
@@ -188,7 +186,6 @@ public abstract class QuestionWidget extends RelativeLayout implements Widget {
 
         guidanceTextView.setTextColor(themeUtils.getPrimaryTextColor());
         guidanceTextView.setMovementMethod(LinkMovementMethod.getInstance());
-        return guidanceTextView;
     }
 
     @CallSuper
@@ -203,7 +200,7 @@ public abstract class QuestionWidget extends RelativeLayout implements Widget {
     }
 
     private static boolean isRTL(Locale locale) {
-        if (locale == null || locale.getDisplayName() == null || locale.getDisplayName().isEmpty()) {
+        if (locale == null || isEmpty(locale.getDisplayName())) {
             return false;
         }
         final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
@@ -217,7 +214,6 @@ public abstract class QuestionWidget extends RelativeLayout implements Widget {
 
     private MediaLayout createQuestionLayout(FormEntryPrompt prompt) {
         String promptText = prompt.getLongText();
-        // Add the text view. Textview always exists, regardless of whether there's text.
         TextView questionText = new TextView(getContext());
         questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize());
         questionText.setTypeface(null, Typeface.BOLD);
@@ -229,21 +225,18 @@ public abstract class QuestionWidget extends RelativeLayout implements Widget {
         // Wrap to the size of the parent view
         questionText.setHorizontallyScrolling(false);
 
-        if ((promptText == null || promptText.isEmpty())
-                && !(prompt.isRequired() && (prompt.getHelpText() == null || prompt.getHelpText().isEmpty()))) {
+        if (isEmpty(promptText) && !(prompt.isRequired() && isEmpty(prompt.getHelpText()))) {
             questionText.setVisibility(GONE);
         }
 
         // Create the layout for audio, image, text
         MediaLayout questionMediaLayout = new MediaLayout(getContext());
         questionMediaLayout.setId(ViewIds.generateViewId()); // assign random id
+
+        // Add the text view. TextView always exists, regardless of whether there's text.
         questionMediaLayout.setLabelTextView(questionText);
 
         return questionMediaLayout;
-    }
-
-    public TextView getHelpTextView() {
-        return helpTextView;
     }
 
     public FormEntryPrompt getFormEntryPrompt() {
@@ -372,7 +365,7 @@ public abstract class QuestionWidget extends RelativeLayout implements Widget {
             // wrap to the widget of view
             helpText.setHorizontallyScrolling(false);
             helpText.setTypeface(null, Typeface.ITALIC);
-            if (prompt.getLongText() == null || prompt.getLongText().isEmpty()) {
+            if (isEmpty(prompt.getLongText())) {
                 helpText.setText(TextUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(s, prompt.isRequired())));
             } else {
                 helpText.setText(TextUtils.textToHtml(s));
@@ -416,8 +409,8 @@ public abstract class QuestionWidget extends RelativeLayout implements Widget {
         if (getQuestionMediaLayout() != null) {
             getQuestionMediaLayout().cancelLongPress();
         }
-        if (getHelpTextView() != null) {
-            getHelpTextView().cancelLongPress();
+        if (helpTextView != null) {
+            helpTextView.cancelLongPress();
         }
     }
 
@@ -563,10 +556,6 @@ public abstract class QuestionWidget extends RelativeLayout implements Widget {
 
     public int getAnswerFontSize() {
         return questionFontSize + 2;
-    }
-
-    public TextView getGuidanceTextView() {
-        return guidanceTextView;
     }
 
     public View getHelpTextLayout() {
