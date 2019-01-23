@@ -2167,7 +2167,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 && LocationClients.areGooglePlayServicesAvailable(this)) {
             registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
             if (isBackgroundLocationEnabled()) {
-                if (PermissionUtils.isLocationPermissionGranted(this)) {
+                if (PermissionUtils.areLocationPermissionsGranted(this)) {
                     if (!locationPermissionsGranted) {
                         locationPermissionsGranted = true;
                         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED, null, false);
