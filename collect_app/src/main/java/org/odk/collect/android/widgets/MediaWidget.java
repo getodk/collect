@@ -6,10 +6,11 @@ import android.media.MediaPlayer;
 import android.support.annotation.CallSuper;
 
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.listeners.AudioPlayListener;
 
 import timber.log.Timber;
 
-public abstract class MediaWidget extends QuestionWidget {
+public abstract class MediaWidget extends QuestionWidget implements AudioPlayListener {
 
     private int playColor;
 
@@ -42,6 +43,16 @@ public abstract class MediaWidget extends QuestionWidget {
         }
 
         getQuestionMediaLayout().setPlayTextColor(playColor);
+    }
+
+    @Override
+    public void resetQuestionTextColor() {
+        getQuestionMediaLayout().resetTextFormatting();
+    }
+
+    @Override
+    public void resetAudioButtonImage() {
+        getQuestionMediaLayout().resetAudioButtonBitmap();
     }
 
     @Override

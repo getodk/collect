@@ -43,7 +43,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -69,9 +68,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import timber.log.Timber;
 
-public abstract class QuestionWidget
-        extends RelativeLayout
-        implements Widget, AudioPlayListener {
+public abstract class QuestionWidget extends RelativeLayout implements Widget {
 
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
@@ -444,14 +441,6 @@ public abstract class QuestionWidget
         if (getHelpTextView() != null) {
             getHelpTextView().cancelLongPress();
         }
-    }
-
-    public void resetQuestionTextColor() {
-        getQuestionMediaLayout().resetTextFormatting();
-    }
-
-    public void resetAudioButtonImage() {
-        getQuestionMediaLayout().resetAudioButtonBitmap();
     }
 
     public void showWarning(String warningBody) {
