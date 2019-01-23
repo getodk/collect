@@ -64,7 +64,7 @@ import timber.log.Timber;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 @SuppressLint("ViewConstructor")
-public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget {
+public class GridMultiWidget extends MediaWidget implements MultiChoiceWidget {
 
     private final int bgOrange = getResources().getColor(R.color.highContrastHighlight);
 

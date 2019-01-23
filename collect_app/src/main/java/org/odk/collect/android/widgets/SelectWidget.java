@@ -39,7 +39,7 @@ import org.odk.collect.android.views.MediaLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class SelectWidget extends QuestionWidget {
+public abstract class SelectWidget extends MediaWidget {
 
     /**
      * A list of choices can have thousands of items. To increase loading and scrolling performance,
