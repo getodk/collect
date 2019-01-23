@@ -49,7 +49,7 @@ public class BikramSambatDatePickerDialog extends CustomDatePickerDialog {
 
     @Override
     protected void updateDays() {
-        BikramSambatDate bikramSambatDate = new BikramSambatDate(getYear(), Arrays.asList(monthsArray).indexOf(getMonth()), getDay());
+        BikramSambatDate bikramSambatDate = new BikramSambatDate(getYear(), Arrays.asList(monthsArray).indexOf(getMonth()) + 1, getDay());
         int daysInMonth = 0;
         try {
             daysInMonth = BsCalendar.getInstance().daysInMonth(bikramSambatDate.year, bikramSambatDate.month);
