@@ -690,11 +690,14 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
             formController.jumpToIndex(currentIndex);
 
-            // Prevent a redundant middle screen (common on some forms).
+            // Prevent a redundant middle screen (common on many forms
+            // that use presentation groups to display labels).
             if (isDisplayingSingleGroup()) {
                 if (isGoingUp) {
-                    // Back out once more.
-                    goUpLevel();
+                    if (!screenIndex.isBeginningOfFormIndex()) {
+                        // Back out once more.
+                        goUpLevel();
+                    }
                 } else {
                     // Enter automatically.
                     formController.jumpToIndex(elementsToDisplay.get(0).getFormIndex());
