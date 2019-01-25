@@ -202,12 +202,6 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.GeoPointMapActivity"
             android:configChanges="orientation" />
         <activity
-            android:name=".activities.GeoPointGoogleMapActivity"
-            android:configChanges="orientation" />
-        <activity
-            android:name=".activities.GeoPointOsmMapActivity"
-            android:configChanges="orientation" />
-        <activity
             android:name=".activities.GeoShapeActivity"
             android:configChanges="orientation" />
         <activity
