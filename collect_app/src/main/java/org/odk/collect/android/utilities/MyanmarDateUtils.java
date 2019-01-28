@@ -62,7 +62,7 @@ public class MyanmarDateUtils {
     public static String[] getMyanmarMonthsArray(int myanmarYear) {
         return MyanmarDateKernel
                 .getMyanmarMonth(myanmarYear, 1)
-                .getMonthNameList()
+                .getMonthNameList(new LanguageCatalog(Language.MYANMAR))
                 .toArray(new String[0]);
     }
 
