@@ -50,7 +50,7 @@ public class MockHttpClientConnection implements OpenRosaHttpInterface {
 
     @NonNull
     @Override
-    public ResponseMessageParser uploadSubmissionFile(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws IOException {
+    public ResponseMessageParser uploadSubmissionFile(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri, @Nullable HttpCredentialsInterface credentials, @NonNull long contentLength) throws IOException {
         return null;
     }
 }
