@@ -53,6 +53,7 @@ import java.util.Map;
 
 import timber.log.Timber;
 
+import static android.content.Intent.ACTION_SENDTO;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -274,8 +275,12 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
                         getFormEntryPrompt().getIndex().getReference());
 
                 waitForData();
-                fireActivity(i);
-
+                // ACTION_SENDTO used for sending text messages or emails doesn't require any results
+                if (ACTION_SENDTO.equals(i.getAction())) {
+                    getContext().startActivity(i);
+                } else {
+                    fireActivity(i);
+                }
             } catch (ExternalParamsException | ActivityNotFoundException e) {
                 Timber.d(e);
                 onException(e.getMessage());
