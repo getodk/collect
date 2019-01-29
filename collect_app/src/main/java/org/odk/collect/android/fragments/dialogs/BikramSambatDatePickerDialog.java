@@ -78,10 +78,6 @@ public class BikramSambatDatePickerDialog extends CustomDatePickerDialog {
                 .withMillisOfSecond(0);
     }
 
-    @Override
-    protected void yearUpdated() {
-    }
-
     private void setUpDatePicker() {
         LocalDateTime localDateTime = getDate();
         try {

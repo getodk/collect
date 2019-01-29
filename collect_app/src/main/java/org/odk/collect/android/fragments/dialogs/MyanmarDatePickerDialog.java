@@ -52,8 +52,7 @@ public class MyanmarDatePickerDialog extends CustomDatePickerDialog {
     protected void yearUpdated() {
         MyanmarDate myanmarDate = getCurrentMyanmarDate();
         setUpMonthPicker(MyanmarDateUtils.getMonthId(myanmarDate) + 1, MyanmarDateUtils.getMyanmarMonthsArray(myanmarDate.getYearInt()));
-        updateDays();
-        updateGregorianDateLabel();
+        super.yearUpdated();
     }
 
     @Override

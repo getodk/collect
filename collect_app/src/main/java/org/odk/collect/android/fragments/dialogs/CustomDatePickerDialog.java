@@ -220,6 +220,11 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
         updateGregorianDateLabel();
     }
 
+    protected void yearUpdated() {
+        updateDays();
+        updateGregorianDateLabel();
+    }
+
     public int getDay() {
         return dayPicker.getValue();
     }
@@ -250,6 +255,4 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     protected abstract void updateDays();
 
     protected abstract LocalDateTime getOriginalDate();
-
-    protected abstract void yearUpdated();
 }
