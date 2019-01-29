@@ -55,6 +55,7 @@ public interface OpenRosaHttpInterface {
      * @param fileList List of Files to be uploaded
      * @param submissionFile The main file to be uploaded (Form file)
      * @param uri where to send the submissionFile and fileList
+     * @param contentLength contentLength requested by the server
      * @return ResponseMessageParser object that contains the response XML
      * @throws IOException can be thrown if files do not exist
      */
@@ -62,6 +63,7 @@ public interface OpenRosaHttpInterface {
     ResponseMessageParser uploadSubmissionFile(@NonNull List<File> fileList,
                                                @NonNull File submissionFile,
                                                @NonNull URI uri,
-                                               @Nullable HttpCredentialsInterface credentials) throws IOException;
+                                               @Nullable HttpCredentialsInterface credentials,
+                                               @NonNull long contentLength) throws IOException;
 
 }
