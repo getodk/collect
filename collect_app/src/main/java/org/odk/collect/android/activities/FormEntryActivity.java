@@ -858,7 +858,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                     + File.separator
                                     + System.currentTimeMillis()
                                     + "."
-                                    + ContentResolverHelper.getFileExtensionFromUri(mediaUri);
+                                    + ContentResolverHelper.getFileExtensionFromUri(this, mediaUri);
                     try {
                         InputStream inputStream = getContentResolver().openInputStream(mediaUri);
                         if (inputStream != null) {
