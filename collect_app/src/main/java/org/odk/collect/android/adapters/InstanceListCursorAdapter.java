@@ -73,36 +73,50 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
             }
         }
 
-        TextView titleText = view.findViewById(R.id.text1);
-        TextView subtitleText = view.findViewById(R.id.text2);
-        TextView visibilityOffCause = view.findViewById(R.id.text4);
         Long date = getCursor().getLong(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE));
 
         if (date != 0 || !formExists || isFormEncrypted) {
-            view.setEnabled(false);
-            visibilityOffCause.setVisibility(View.VISIBLE);
-
-            // Material design "disabled" opacity is 38%.
-            titleText.setAlpha(0.38f);
-            subtitleText.setAlpha(0.38f);
-            visibilityOffCause.setAlpha(0.38f);
-            imageView.setAlpha(0.38f);
+            String disabledCause;
 
             if (date != 0) {
-                visibilityOffCause.setText(
-                        new SimpleDateFormat(context.getString(R.string.deleted_on_date_at_time),
-                                Locale.getDefault()).format(new Date(date)));
+                String deletedTime = context.getString(R.string.deleted_on_date_at_time);
+                disabledCause = new SimpleDateFormat(deletedTime, Locale.getDefault()).format(new Date(date));
             } else if (!formExists) {
-                visibilityOffCause.setText(context.getString(R.string.deleted_form));
+                disabledCause = context.getString(R.string.deleted_form);
             } else {
-                visibilityOffCause.setText(context.getString(R.string.encrypted_form));
+                disabledCause = context.getString(R.string.encrypted_form);
             }
+
+            setDisabled(view, disabledCause);
         } else {
-            view.setEnabled(true);
-            visibilityOffCause.setVisibility(View.GONE);
+            setEnabled(view);
         }
 
         return view;
+    }
+
+    private void setEnabled(View view) {
+        TextView visibilityOffCause = view.findViewById(R.id.text4);
+
+        view.setEnabled(true);
+        visibilityOffCause.setVisibility(View.GONE);
+    }
+
+    private void setDisabled(View view, String disabledCause) {
+        TextView titleText = view.findViewById(R.id.text1);
+        TextView subtitleText = view.findViewById(R.id.text2);
+        TextView disabledCauseText = view.findViewById(R.id.text4);
+        ImageView imageView = view.findViewById(R.id.image);
+
+        view.setEnabled(false);
+        disabledCauseText.setVisibility(View.VISIBLE);
+        disabledCauseText.setText(disabledCause);
+
+        // Material design "disabled" opacity is 38%.
+        titleText.setAlpha(0.38f);
+        subtitleText.setAlpha(0.38f);
+        disabledCauseText.setAlpha(0.38f);
+        imageView.setAlpha(0.38f);
     }
 
     private void setImageFromStatus(ImageView imageView) {
