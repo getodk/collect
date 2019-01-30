@@ -481,7 +481,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
     public void setGeoTraceScheduler(long delay, TimeUnit units) {
         schedulerHandler = scheduler.scheduleAtFixedRate(
-            () -> runOnUiThread(() -> addVertex()), delay, delay, units);
+            () -> runOnUiThread(() -> addVertex()), 0, delay, units);
     }
 
     @SuppressWarnings("unused")  // the "map" parameter is intentionally unused
