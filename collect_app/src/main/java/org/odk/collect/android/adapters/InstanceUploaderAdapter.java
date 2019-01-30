@@ -78,7 +78,7 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         viewHolder.progressBar.setVisibility(View.VISIBLE);
         viewHolder.progressBar.setProgressPercent(0, false);
 
-        viewHolder.displayName.setText(cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME)));
+        viewHolder.formTitle.setText(cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME)));
         viewHolder.displaySubtext.setText(cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT)));
 
         long instanceId = cursor.getLong(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
@@ -178,8 +178,8 @@ public class InstanceUploaderAdapter extends CursorAdapter {
     }
 
     static class ViewHolder {
-        @BindView(R.id.text1)
-        TextView displayName;
+        @BindView(R.id.form_title)
+        TextView formTitle;
         @BindView(R.id.text2)
         TextView displaySubtext;
         @BindView(R.id.checkbox)

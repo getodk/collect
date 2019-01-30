@@ -47,13 +47,13 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
 
     private class ViewHolder {
         ImageView imageView;
-        TextView text1;
+        TextView formTitle;
         TextView text2;
         CheckBox checkBox;
 
         ViewHolder(View view) {
             imageView = view.findViewById(R.id.image);
-            text1 = view.findViewById(R.id.text1);
+            formTitle = view.findViewById(R.id.form_title);
             text2 = view.findViewById(R.id.text2);
             checkBox = view.findViewById(R.id.checkbox);
         }
@@ -76,7 +76,7 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
                 checkBox.setVisibility(View.GONE);
             }
 
-            text1.setText(item.getName());
+            formTitle.setText(item.getName());
             text2.setText(dateModified);
             checkBox.setChecked(item.isSelected());
         }

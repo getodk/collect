@@ -51,7 +51,7 @@ public class FormDownloadListAdapter extends ArrayAdapter {
     }
 
     private static class ViewHolder {
-        TextView text1;
+        TextView formTitle;
         TextView text2;
         TextView updateInfo;
     }
@@ -64,7 +64,7 @@ public class FormDownloadListAdapter extends ArrayAdapter {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.form_chooser_list_item_multiple_choice, parent, false);
 
-            holder.text1 = row.findViewById(R.id.text1);
+            holder.formTitle = row.findViewById(R.id.form_title);
             holder.text2 = row.findViewById(R.id.text2);
             holder.updateInfo = row.findViewById(R.id.update_info);
             row.setTag(holder);
@@ -75,7 +75,7 @@ public class FormDownloadListAdapter extends ArrayAdapter {
         final HashMap<String, String> formAtPosition = filteredFormList.get(position);
         final String formIDAtPosition = formAtPosition.get(FORM_ID_KEY);
 
-        holder.text1.setText(formAtPosition.get(FORMNAME));
+        holder.formTitle.setText(formAtPosition.get(FORMNAME));
         holder.text2.setText(formAtPosition.get(FORMID_DISPLAY));
 
         if (formIdsToDetails.get(formIDAtPosition) != null

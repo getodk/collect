@@ -9,7 +9,7 @@
     <!-- Material Design reference: https://material.io/design/components/lists.html#specs -->
 
     <TextView
-            android:id="@+id/text1"
+            android:id="@+id/form_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/ListItemPrimaryTextStyle"/>
