@@ -53,7 +53,7 @@ public class FormDownloadListAdapter extends ArrayAdapter {
     private static class ViewHolder {
         TextView formTitle;
         TextView formSubtitle;
-        TextView updateInfo;
+        TextView formUpdateAlert;
     }
 
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -66,7 +66,7 @@ public class FormDownloadListAdapter extends ArrayAdapter {
 
             holder.formTitle = row.findViewById(R.id.form_title);
             holder.formSubtitle = row.findViewById(R.id.form_subtitle);
-            holder.updateInfo = row.findViewById(R.id.update_info);
+            holder.formUpdateAlert = row.findViewById(R.id.form_update_alert);
             row.setTag(holder);
         } else {
             holder = (ViewHolder) row.getTag();
@@ -81,9 +81,9 @@ public class FormDownloadListAdapter extends ArrayAdapter {
         if (formIdsToDetails.get(formIDAtPosition) != null
                 && (formIdsToDetails.get(formIDAtPosition).isNewerFormVersionAvailable()
                 || formIdsToDetails.get(formIDAtPosition).areNewerMediaFilesAvailable())) {
-            holder.updateInfo.setVisibility(View.VISIBLE);
+            holder.formUpdateAlert.setVisibility(View.VISIBLE);
         } else {
-            holder.updateInfo.setVisibility(View.GONE);
+            holder.formUpdateAlert.setVisibility(View.GONE);
         }
         
         return row;

@@ -28,7 +28,7 @@
             android:visibility="gone"/>
 
     <TextView
-            android:id="@+id/update_info"
+            android:id="@+id/form_update_alert"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/newer_version_of_a_form_info"
