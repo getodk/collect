@@ -119,7 +119,7 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
                 imageView.setImageResource(R.drawable.form_state_submitted);
                 break;
             case InstanceProviderAPI.STATUS_SUBMISSION_FAILED:
-                imageView.setImageResource(R.drawable.form_state_failed);
+                imageView.setImageResource(R.drawable.form_state_submission_failed);
                 break;
         }
     }
