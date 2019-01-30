@@ -455,8 +455,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                             // Enable moving backwards
                             AdminSharedPreferences.getInstance().save(AdminKeys.KEY_MOVING_BACKWARDS, true);
                             AdminSharedPreferences.getInstance().save(AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM, true);
-                            AdminSharedPreferences.getInstance().save(AdminKeys.KEY_JUMP_TO, true);
+                            AdminSharedPreferences.getInstance().save(AdminKeys.KEY_EDIT_SAVED, true);
                             AdminSharedPreferences.getInstance().save(AdminKeys.KEY_SAVE_MID, true);
+                            AdminSharedPreferences.getInstance().save(AdminKeys.KEY_JUMP_TO, true);
+                            GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR, "");
 
                             AdminSharedPreferences.getInstance().getInstance().save(AdminKeys.KEY_SMAP_OVERRIDE_MOVING_BACKWARDS, true);
                         } else {
