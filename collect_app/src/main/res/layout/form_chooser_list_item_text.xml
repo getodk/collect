@@ -12,7 +12,6 @@
             android:id="@+id/text1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
             android:textAppearance="@style/ListItemPrimaryTextStyle"/>
 
     <TextView
@@ -26,14 +25,12 @@
             android:id="@+id/text2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
             android:textAppearance="@style/ListItemSecondaryTextStyle"/>
 
     <TextView
             android:id="@+id/text4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
             android:textAppearance="@style/ListItemSecondaryTextStyle"
             android:visibility="gone"/>
 
