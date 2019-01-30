@@ -317,6 +317,14 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         finish();
     }
 
+    @Override public void onBackPressed() {
+        if (!formatPoints(map.getPolyPoints(featureId)).equals(originalTraceString)) {
+            showBackDialog();
+        } else {
+            finish();
+        }
+    }
+
     /**
      * Parses a form result string, as previously formatted by formatPoints,
      * into a list of polyline vertices.
@@ -519,6 +527,15 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
                 .setNegativeButton(R.string.cancel, null)
                 .show();
         }
+    }
+
+    private void showBackDialog() {
+        new AlertDialog.Builder(this)
+            .setMessage(getString(R.string.geo_exit_warning))
+            .setPositiveButton(R.string.discard, (dialog, id) -> finish())
+            .setNegativeButton(R.string.cancel, null)
+            .show();
+
     }
 
     public void showZoomDialog() {
