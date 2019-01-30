@@ -9,6 +9,7 @@
   <string name="view_video">ビデオを表示</string>
   <string name="choose_audio">音声を選択</string>
   <string name="add_another">グループを追加</string>
+  <string name="add_another_menu">別の追加…</string>
   <string name="add_another_repeat">別の \"%s\" グループを追加しますか?</string>
   <string name="add_repeat">新しい \"%s\" グループを追加しますか?</string>
   <string name="add_repeat_no">追加しない</string>
@@ -106,6 +107,7 @@
   <string name="quit_application">%s を終了</string>
   <string name="quit_entry">フォームを保存して終了</string>
   <string name="refresh">更新</string>
+  <string name="group_label">グループ</string>
   <string name="repeatable_group_label">繰り返し可能グループ</string>
   <string name="replace_barcode">バーコードを置き換え</string>
   <string name="required_answer_error">申し訳ありません、この回答は必須です!</string>
@@ -644,5 +646,11 @@
   <string name="sms_invalid_phone_number_description">SMS 送信の宛先電話番号を設定するか、送信の種類を変更してください。</string>
   <string name="notification_channel_name">全般通知</string>
   <string name="corrupt_imported_preferences_error">現在の設定が間違っています。 管理の設定から、設定をリセットするか、有効なものをインポートしてください。</string>
+  <string name="google_play_services_not_available">このフォームは位置を追跡しようとしますが、Google Play サービスが利用できません。</string>
+  <string name="location_providers_disabled_dialog_message">このフォームは場所を追跡しようとしますが、位置情報プロバイダーが無効になっています。 Android の設定で有効にしてください。</string>
+  <string name="go_to_settings">設定に移動</string>
+  <string name="track_location">位置情報を追跡</string>
+  <string name="background_location_disabled">このフォームは位置を追跡しようとしますが、追跡が無効になっています。 上の \u0020\u0020⋮\u0020\u0020 メニューで有効にしてください。</string>
+  <string name="background_location_enabled">このフォームは位置を追跡します。 上の \u0020\u0020⋮\u0020\u0020 メニューで追跡を無効にすることができます。</string>
   <string name="open_file">ファイルを開く</string>
 </resources>

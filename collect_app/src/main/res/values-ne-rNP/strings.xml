@@ -4,9 +4,11 @@
   <string name="activity_not_found">प्रयोग गर्न कुनै पनि क्रियाकलाप भेटिएन: %s </string>
   <string name="view_image">तस्विर हेर्नुहोस्।</string>
   <string name="annotate_image">तस्विर एनोटेट गर्नुहोस्।</string>
+  <string name="signature_capture">हस्ताक्षर गर्नुहोस्</string>
   <string name="view_video">भिडियो हेर्नुहोस्।</string>
   <string name="choose_audio">अडियो रोज्नुहोस्।</string>
   <string name="add_another">समूह थप्नुहोस् </string>
+  <string name="add_another_menu">अर्को थप्नुहोस्</string>
   <string name="add_another_repeat">के अर्को \"%s\" समूह थप्नु हुन्छ ?</string>
   <string name="add_repeat">नयाँ \"%s\" समूह थप्न चाहनु हुन्छ ?</string>
   <string name="add_repeat_no">नथप्नु होला !</string>
@@ -101,6 +103,8 @@
   <string name="quit_application">बाहिर निस्कनुहोस् %s </string>
   <string name="quit_entry">फारम संचित गरी बाहिर निस्कनुहोस् </string>
   <string name="refresh">रिफ्रेश/n/गर्नुहोस् </string>
+  <string name="group_label">समूह</string>
+  <string name="repeatable_group_label">दोहोरिने समूह</string>
   <string name="replace_barcode">बारकोड बदल्नुहोस् </string>
   <string name="required_answer_error">माफ गर्नुहोला, यो उत्तर अनिवार्य चाहिन्छ !</string>
   <string name="review_data">संचित फारम सम्पादन गर्न</string>
