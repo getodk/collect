@@ -96,7 +96,7 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
     }
 
     private void setEnabled(View view) {
-        final TextView visibilityOffCause = view.findViewById(R.id.text4);
+        final TextView visibilityOffCause = view.findViewById(R.id.text3);
 
         view.setEnabled(true);
         visibilityOffCause.setVisibility(View.GONE);
@@ -105,7 +105,7 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
     private void setDisabled(View view, String disabledCause) {
         final TextView formTitle = view.findViewById(R.id.form_title);
         final TextView formSubtitle = view.findViewById(R.id.form_subtitle);
-        final TextView disabledCauseText = view.findViewById(R.id.text4);
+        final TextView disabledCauseText = view.findViewById(R.id.text3);
         final ImageView imageView = view.findViewById(R.id.image);
 
         view.setEnabled(false);

@@ -28,13 +28,6 @@
             android:visibility="gone"/>
 
     <TextView
-            android:id="@+id/text4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/ListItemSecondaryTextStyle"
-            android:visibility="gone"/>
-
-    <TextView
             android:id="@+id/update_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
