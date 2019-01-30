@@ -4,13 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_go_up"
-        android:icon="@drawable/arrow_up"
-        android:title="@string/jump_to_previous"
-        android:visible="false"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/menu_delete_child"
         android:icon="@drawable/ic_delete"
         android:title="@string/delete_repeat"
@@ -21,6 +14,13 @@
         android:id="@+id/menu_add_child"
         android:icon="@drawable/ic_add_circle"
         android:title="@string/add_another_menu"
+        android:visible="false"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_go_up"
+        android:icon="@drawable/arrow_up"
+        android:title="@string/jump_to_previous"
         android:visible="false"
         app:showAsAction="always" />
 

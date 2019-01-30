@@ -119,7 +119,6 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
      */
     private Menu optionsMenu;
 
-    protected Button jumpPreviousButton;
     protected Button jumpBeginningButton;
     protected Button jumpEndButton;
     protected RecyclerView recyclerView;
@@ -152,7 +151,6 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
         groupPathTextView = findViewById(R.id.pathtext);
 
-        jumpPreviousButton = findViewById(R.id.jumpPreviousButton);
         jumpBeginningButton = findViewById(R.id.jumpBeginningButton);
         jumpEndButton = findViewById(R.id.jumpEndButton);
 
@@ -219,7 +217,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         FormController formController = Collect.getInstance().getFormController();
         boolean isAtBeginning = screenIndex.isBeginningOfFormIndex() && !shouldShowRepeatGroupPicker();
         boolean shouldShowPicker = shouldShowRepeatGroupPicker();
-        boolean isInRepeat = !isAtBeginning && formController.getEvent(screenIndex) == FormEntryController.EVENT_REPEAT;
+        boolean isInRepeat = formController.indexContainsRepeatableGroup();
         boolean isGroupSizeLocked = shouldShowPicker
                 ? isGroupSizeLocked(repeatGroupPickerIndex) : isGroupSizeLocked(screenIndex);
 
@@ -295,8 +293,6 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
      * Configure the navigation buttons at the bottom of the screen.
      */
     void configureButtons(FormController formController) {
-        jumpPreviousButton.setOnClickListener(v -> goUpLevel());
-
         jumpBeginningButton.setOnClickListener(v -> {
             formController.getAuditEventLogger().exitView();
             formController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
@@ -548,11 +544,9 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             if (event == FormEntryController.EVENT_BEGINNING_OF_FORM && !shouldShowRepeatGroupPicker()) {
                 // The beginning of form has no valid prompt to display.
                 groupPathTextView.setVisibility(View.GONE);
-                jumpPreviousButton.setEnabled(false);
             } else {
                 groupPathTextView.setVisibility(View.VISIBLE);
                 groupPathTextView.setText(getCurrentPath());
-                jumpPreviousButton.setEnabled(true);
             }
 
             // Refresh the current event in case we did step forward.
@@ -592,6 +586,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
                 switch (event) {
                     case FormEntryController.EVENT_QUESTION: {
+                        // Nothing but repeat group instances should show up in the picker.
                         if (shouldShowRepeatGroupPicker()) {
                             break;
                         }
@@ -609,6 +604,11 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         break;
                     }
                     case FormEntryController.EVENT_GROUP: {
+                        // Nothing but repeat group instances should show up in the picker.
+                        if (shouldShowRepeatGroupPicker()) {
+                            break;
+                        }
+
                         FormIndex index = formController.getFormIndex();
 
                         // Only display groups with a specific appearance attribute.
@@ -690,8 +690,9 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
             formController.jumpToIndex(currentIndex);
 
-            // Prevent a redundant middle screen (common on some forms).
-            if (isDisplayingSingleGroup()) {
+            // Prevent a redundant middle screen (common on many forms
+            // that use presentation groups to display labels).
+            if (isDisplayingSingleGroup() && !screenIndex.isBeginningOfFormIndex()) {
                 if (isGoingUp) {
                     // Back out once more.
                     goUpLevel();
