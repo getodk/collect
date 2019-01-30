@@ -52,7 +52,7 @@ public class FormDownloadListAdapter extends ArrayAdapter {
 
     private static class ViewHolder {
         TextView formTitle;
-        TextView text2;
+        TextView formSubtitle;
         TextView updateInfo;
     }
 
@@ -65,7 +65,7 @@ public class FormDownloadListAdapter extends ArrayAdapter {
             row = inflater.inflate(R.layout.form_chooser_list_item_multiple_choice, parent, false);
 
             holder.formTitle = row.findViewById(R.id.form_title);
-            holder.text2 = row.findViewById(R.id.text2);
+            holder.formSubtitle = row.findViewById(R.id.form_subtitle);
             holder.updateInfo = row.findViewById(R.id.update_info);
             row.setTag(holder);
         } else {
@@ -76,7 +76,7 @@ public class FormDownloadListAdapter extends ArrayAdapter {
         final String formIDAtPosition = formAtPosition.get(FORM_ID_KEY);
 
         holder.formTitle.setText(formAtPosition.get(FORMNAME));
-        holder.text2.setText(formAtPosition.get(FORMID_DISPLAY));
+        holder.formSubtitle.setText(formAtPosition.get(FORMID_DISPLAY));
 
         if (formIdsToDetails.get(formIDAtPosition) != null
                 && (formIdsToDetails.get(formIDAtPosition).isNewerFormVersionAvailable()

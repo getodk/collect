@@ -104,7 +104,7 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
 
     private void setDisabled(View view, String disabledCause) {
         final TextView formTitle = view.findViewById(R.id.form_title);
-        final TextView subtitleText = view.findViewById(R.id.text2);
+        final TextView formSubtitle = view.findViewById(R.id.form_subtitle);
         final TextView disabledCauseText = view.findViewById(R.id.text4);
         final ImageView imageView = view.findViewById(R.id.image);
 
@@ -114,7 +114,7 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
 
         // Material design "disabled" opacity is 38%.
         formTitle.setAlpha(0.38f);
-        subtitleText.setAlpha(0.38f);
+        formSubtitle.setAlpha(0.38f);
         disabledCauseText.setAlpha(0.38f);
         imageView.setAlpha(0.38f);
     }

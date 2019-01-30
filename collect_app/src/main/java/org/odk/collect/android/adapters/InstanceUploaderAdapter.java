@@ -79,7 +79,7 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         viewHolder.progressBar.setProgressPercent(0, false);
 
         viewHolder.formTitle.setText(cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME)));
-        viewHolder.displaySubtext.setText(cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT)));
+        viewHolder.formSubtitle.setText(cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT)));
 
         long instanceId = cursor.getLong(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
 
@@ -173,15 +173,15 @@ public class InstanceUploaderAdapter extends CursorAdapter {
     private void setDisplaySubTextView(SmsRxEvent event, ViewHolder viewHolder) {
         String text = getDisplaySubtext(event.getResultCode(), event.getLastUpdated(), event.getProgress(), context);
         if (text != null) {
-            viewHolder.displaySubtext.setText(text);
+            viewHolder.formSubtitle.setText(text);
         }
     }
 
     static class ViewHolder {
         @BindView(R.id.form_title)
         TextView formTitle;
-        @BindView(R.id.text2)
-        TextView displaySubtext;
+        @BindView(R.id.form_subtitle)
+        TextView formSubtitle;
         @BindView(R.id.checkbox)
         CheckBox checkbox;
         @BindView(R.id.progress_bar)
