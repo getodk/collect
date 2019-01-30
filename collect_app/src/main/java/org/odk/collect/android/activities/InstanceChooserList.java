@@ -163,8 +163,8 @@ public class InstanceChooserList extends InstanceListActivity implements
                 }
                 finish();
             } else {
-                TextView visibilityOffCause = view.findViewById(R.id.text3);
-                Toast.makeText(this, visibilityOffCause.getText(), Toast.LENGTH_SHORT).show();
+                TextView disabledCause = view.findViewById(R.id.form_subtitle2);
+                Toast.makeText(this, disabledCause.getText(), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -200,7 +200,7 @@ public class InstanceChooserList extends InstanceListActivity implements
                 InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT, InstanceColumns.DELETED_DATE
         };
         int[] view = new int[]{
-                R.id.form_title, R.id.form_subtitle, R.id.text3
+                R.id.form_title, R.id.form_subtitle, R.id.form_subtitle2
         };
 
         boolean shouldCheckDisabled = !editMode;

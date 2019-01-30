@@ -174,7 +174,7 @@ public class FormChooserList extends FormListActivity implements
                 FormsColumns.DISPLAY_NAME, FormsColumns.JR_VERSION, FormsColumns.DISPLAY_SUBTEXT
         };
         int[] view = new int[]{
-                R.id.form_title, R.id.form_subtitle, R.id.text3
+                R.id.form_title, R.id.form_subtitle, R.id.form_subtitle2
         };
 
         listAdapter = new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.form_chooser_list_item, null, data, view);

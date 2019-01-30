@@ -21,7 +21,7 @@
             android:textAppearance="@style/ListItemSecondaryTextStyle"/>
 
     <TextView
-            android:id="@+id/text3"
+            android:id="@+id/form_subtitle2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/ListItemSecondaryTextStyle"

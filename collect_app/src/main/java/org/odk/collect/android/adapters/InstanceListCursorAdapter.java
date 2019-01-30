@@ -76,18 +76,18 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
         Long date = getCursor().getLong(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE));
 
         if (date != 0 || !formExists || isFormEncrypted) {
-            String disabledCause;
+            String disabledMessage;
 
             if (date != 0) {
                 String deletedTime = context.getString(R.string.deleted_on_date_at_time);
-                disabledCause = new SimpleDateFormat(deletedTime, Locale.getDefault()).format(new Date(date));
+                disabledMessage = new SimpleDateFormat(deletedTime, Locale.getDefault()).format(new Date(date));
             } else if (!formExists) {
-                disabledCause = context.getString(R.string.deleted_form);
+                disabledMessage = context.getString(R.string.deleted_form);
             } else {
-                disabledCause = context.getString(R.string.encrypted_form);
+                disabledMessage = context.getString(R.string.encrypted_form);
             }
 
-            setDisabled(view, disabledCause);
+            setDisabled(view, disabledMessage);
         } else {
             setEnabled(view);
         }
@@ -96,26 +96,26 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
     }
 
     private void setEnabled(View view) {
-        final TextView visibilityOffCause = view.findViewById(R.id.text3);
+        final TextView disabledCause = view.findViewById(R.id.form_subtitle2);
 
         view.setEnabled(true);
-        visibilityOffCause.setVisibility(View.GONE);
+        disabledCause.setVisibility(View.GONE);
     }
 
-    private void setDisabled(View view, String disabledCause) {
+    private void setDisabled(View view, String disabledMessage) {
         final TextView formTitle = view.findViewById(R.id.form_title);
         final TextView formSubtitle = view.findViewById(R.id.form_subtitle);
-        final TextView disabledCauseText = view.findViewById(R.id.text3);
+        final TextView disabledCause = view.findViewById(R.id.form_subtitle2);
         final ImageView imageView = view.findViewById(R.id.image);
 
         view.setEnabled(false);
-        disabledCauseText.setVisibility(View.VISIBLE);
-        disabledCauseText.setText(disabledCause);
+        disabledCause.setVisibility(View.VISIBLE);
+        disabledCause.setText(disabledMessage);
 
         // Material design "disabled" opacity is 38%.
         formTitle.setAlpha(0.38f);
         formSubtitle.setAlpha(0.38f);
-        disabledCauseText.setAlpha(0.38f);
+        disabledCause.setAlpha(0.38f);
         imageView.setAlpha(0.38f);
     }
 
