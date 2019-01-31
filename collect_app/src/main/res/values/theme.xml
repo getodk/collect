@@ -25,7 +25,7 @@
         <item name="dividerColor">@color/darkDividerColor</item>
         <item name="rankItemColor">@color/darkRankItemColor</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
-        <item name="warningColor">@color/red</item>
+        <item name="warningColor">@color/red_500</item>
         <item name="divider">@android:drawable/divider_horizontal_dark</item>
     </style>
 
@@ -68,7 +68,7 @@
         <item name="dividerColor">@color/lightDividerColor</item>
         <item name="rankItemColor">@color/lightRankItemColor</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
-        <item name="warningColor">@color/red</item>
+        <item name="warningColor">@color/red_500</item>
         <item name="divider">@android:drawable/divider_horizontal_bright</item>
     </style>
 
