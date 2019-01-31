@@ -9,6 +9,7 @@
   <string name="view_video">Video anzeigen</string>
   <string name="choose_audio">Audio auswählen</string>
   <string name="add_another">Gruppe hinzufügen</string>
+  <string name="add_another_menu">Weitere hinzufügen</string>
   <string name="add_another_repeat">Weitere \"%s\"-Gruppe hinzufügen?</string>
   <string name="add_repeat">Neue Gruppe \"%s\" hinzufügen?</string>
   <string name="add_repeat_no">Nicht hinzufügen</string>
@@ -106,6 +107,7 @@
   <string name="quit_application">%s beenden</string>
   <string name="quit_entry">Formular speichern und beenden</string>
   <string name="refresh">Aktualisieren</string>
+  <string name="group_label">Gruppe</string>
   <string name="repeatable_group_label">Wiederholbare Gruppe</string>
   <string name="replace_barcode">Strichcode ersetzen</string>
   <string name="required_answer_error">Diese Antwort ist erforderlich!</string>
@@ -645,5 +647,11 @@
   <string name="sms_invalid_phone_number_description">Ziel-Telefonnummer für SMS-Versand einstellen oder Übertragungsart ändern.</string>
   <string name="notification_channel_name">Allgemeine Benachrichtigungen</string>
   <string name="corrupt_imported_preferences_error">Die aktuellen Einstellungen sind beschädigt. Setze die Einstellungen in den Admin-Einstellungen zurück oder importiere funktionierende.</string>
+  <string name="google_play_services_not_available">Dieses Formular möchte ihren Standort aufzeichnen aber die Google Play-Dienste sind nicht verfügbar.</string>
+  <string name="location_providers_disabled_dialog_message">Dieses Formular möchte ihren Standort aufzeichnen aber die Standortdienste sind deaktiviert. Bitte den Standortzugriff in den Android-Einstellungen aktivieren.</string>
+  <string name="go_to_settings">Zu den Einstellungen wechseln</string>
+  <string name="track_location">Standort nachverfolgen</string>
+  <string name="background_location_disabled">Dieses Formular möchte ihren Standort aufzeichnen aber die Standortaufzeichnung ist deaktiviert. Bitte oben im \u0020\u0020⋮\u0020\u0020 Menü aktivieren.</string>
+  <string name="background_location_enabled">Dieses Formular zeichnet Ihren Standort auf. Sie können die Standortaufzeichnung oben im \u0020\u0020⋮\u0020\u0020 Menü deaktivieren.</string>
   <string name="open_file">Datei öffnen</string>
 </resources>
