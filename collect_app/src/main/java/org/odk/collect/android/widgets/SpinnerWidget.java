@@ -32,14 +32,10 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
-import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.views.ScrolledToTopSpinner;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
-
-import java.util.List;
 
 /**
  * SpinnerWidget handles select-one fields. Instead of a list of buttons it uses a spinner, wherein
@@ -49,8 +45,7 @@ import java.util.List;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 @SuppressLint("ViewConstructor")
-public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
-    List<SelectChoice> items;
+public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
     ScrolledToTopSpinner spinner;
     String[] choices;
 
@@ -62,15 +57,6 @@ public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
 
         if (context instanceof AdvanceToNextListener) {
             listener = (AdvanceToNextListener) context;
-        }
-
-        // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
-                prompt.getAppearanceHint());
-        if (xpathFuncExpr != null) {
-            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
-        } else {
-            items = prompt.getSelectChoices();
         }
 
         View view = inflate(context, R.layout.spinner_layout, null);
