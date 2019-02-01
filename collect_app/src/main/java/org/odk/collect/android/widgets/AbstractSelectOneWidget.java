@@ -89,8 +89,6 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
     }
 
     protected void createLayout() {
-        readItems();
-
         adapter = new SelectOneListAdapter(items, selectedValue, this);
 
         if (items != null) {
