@@ -40,9 +40,7 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
-import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.FileUtils;
@@ -51,7 +49,6 @@ import org.odk.collect.android.views.ExpandedHeightGridView;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.io.File;
-import java.util.List;
 
 import timber.log.Timber;
 
@@ -64,7 +61,7 @@ import timber.log.Timber;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 @SuppressLint("ViewConstructor")
-public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
+public class GridWidget extends ItemsWidget implements MultiChoiceWidget {
 
     private final int bgOrange = getResources().getColor(R.color.highContrastHighlight);
 
@@ -73,8 +70,6 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
     private static final int SPACING = 2;
     private static final int IMAGE_PADDING = 8;
     private static final int SCROLL_WIDTH = 16;
-
-    List<SelectChoice> items;
 
     // The possible select choices
     String[] choices;
@@ -97,15 +92,6 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
     public GridWidget(Context context, FormEntryPrompt prompt, int numColumns,
                       final boolean quickAdvance) {
         super(context, prompt);
-
-        // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
-                prompt.getAppearanceHint());
-        if (xpathFuncExpr != null) {
-            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
-        } else {
-            items = prompt.getSelectChoices();
-        }
 
         if (context instanceof AdvanceToNextListener) {
             listener = (AdvanceToNextListener) context;
