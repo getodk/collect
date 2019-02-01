@@ -116,8 +116,6 @@ public abstract class SelectImageMapWidget extends SelectWidget {
     }
 
     private void createLayout() {
-        readItems();
-
         webView = new CustomWebView(getContext());
 
         selectedAreasLabel = getAnswerTextView();

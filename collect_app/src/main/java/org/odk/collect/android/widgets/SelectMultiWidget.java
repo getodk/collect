@@ -60,8 +60,6 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
     }
 
     private void createLayout() {
-        readItems();
-
         adapter = new SelectMultipleListAdapter(items, ve, this);
 
         if (items != null) {

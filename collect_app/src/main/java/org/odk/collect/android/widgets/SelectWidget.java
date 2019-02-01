@@ -25,21 +25,17 @@ import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.javarosa.core.model.SelectChoice;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
-import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.views.MediaLayout;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public abstract class SelectWidget extends QuestionWidget {
+public abstract class SelectWidget extends ItemsWidget {
 
     /**
      * A list of choices can have thousands of items. To increase loading and scrolling performance,
@@ -50,7 +46,6 @@ public abstract class SelectWidget extends QuestionWidget {
      */
     private static final int MAX_ITEMS_WITHOUT_SCREEN_BOUND = 40;
 
-    protected List<SelectChoice> items;
     protected ArrayList<MediaLayout> playList;
     protected LinearLayout answerLayout;
     private int playcounter;
@@ -94,16 +89,6 @@ public abstract class SelectWidget extends QuestionWidget {
         });
         // plays the question text
         super.playAllPromptText();
-    }
-
-    protected void readItems() {
-        // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(getFormEntryPrompt().getAppearanceHint());
-        if (xpathFuncExpr != null) {
-            items = ExternalDataUtil.populateExternalChoices(getFormEntryPrompt(), xpathFuncExpr);
-        } else {
-            items = getFormEntryPrompt().getSelectChoices();
-        }
     }
 
     private void playNextSelectItem() {
