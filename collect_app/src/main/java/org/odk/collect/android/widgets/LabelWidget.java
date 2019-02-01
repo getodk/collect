@@ -28,22 +28,18 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
-import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.io.File;
-import java.util.List;
 
 import timber.log.Timber;
 
@@ -56,22 +52,12 @@ import timber.log.Timber;
  * @author Jeff Beorse
  */
 @SuppressLint("ViewConstructor")
-public class LabelWidget extends QuestionWidget {
+public class LabelWidget extends ItemsWidget {
 
-    List<SelectChoice> items;
     View center;
 
     public LabelWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-
-        // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
-                prompt.getAppearanceHint());
-        if (xpathFuncExpr != null) {
-            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
-        } else {
-            items = prompt.getSelectChoices();
-        }
 
         // Layout holds the horizontal list of buttons
         LinearLayout buttonLayout = new LinearLayout(context);
