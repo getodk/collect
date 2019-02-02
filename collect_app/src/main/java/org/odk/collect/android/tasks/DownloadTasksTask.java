@@ -301,34 +301,13 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 if(taskURL.startsWith("null")) {
                     throw new Exception(Collect.getInstance().getString(R.string.smap_no_server));
                 }
-                //HttpContext localContext = Collect.getInstance().getHttpContext();
-                //HttpClient client = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
+
                 Uri u = Uri.parse(taskURL);
-                //if(username != null && password != null) {
-                //    WebUtils.addCredentials(username, password, u.getHost());
-                //}
-
-                //URL url = new URL(taskURL);
-                //URI uri = url.toURI();
-                //HttpGet req = new HttpGet();
-                //req.setURI(uri);
-
-                //HttpResponse response = client.execute(req, localContext);
-                //int statusCode = response.getStatusLine().getStatusCode();
-
                 InputStream is = null;
-                //if(statusCode != HttpStatus.SC_OK) {
-                //    Timber.w("Error:" + statusCode + " for URL " + taskURL);
-                //    results.put(Collect.getInstance().getString(R.string.smap_get_tasks),
-                //            Utilities.translateMsg(null, response.getStatusLine().getReasonPhrase()));
-                //    throw new Exception(response.getStatusLine().getReasonPhrase());
-                //}
 
                 try {
-                    //HttpEntity entity = response.getEntity();
                     URI uri = URI.create(taskURL);
                     is = httpInterface.get(uri, null, webCredentialsUtils.getCredentials(uri)).getInputStream();
-                    //is = entity.getContent();
                     // De-serialise
                     GsonBuilder gb = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer());
                     gson = gb.create();
@@ -802,7 +781,6 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         				form.manifestUrl = serverUrl + "/xformsManifest?key=" + form.ident;
         			}
 
-        			//FormDetails fd = new FormDetails(form.name, form.url, form.manifestUrl, form.ident, formVersionString, form.tasks_only);
                     FormDetails fd = new FormDetails(form.name, form.url, form.manifestUrl, form.ident, formVersionString,
                             null,               // form hash
                             null,      // manifest hash

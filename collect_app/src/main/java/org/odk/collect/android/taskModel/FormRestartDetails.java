@@ -6,7 +6,6 @@ public class FormRestartDetails {
 	
 	public FormIndex initiatingQuestion;
 	public String launchedFormStatus;
-	//public String launchedFormIdent;
 	public String launchedFormInstanceId;
     public String launchedFormURI;
 }
