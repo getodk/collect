@@ -1950,7 +1950,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     updatedSaveName, mTaskId, formPath, surveyNotes, mCanUpdate, formInfo, saveMessage);    // smap added mTaskId, mFormPath, surveyNotes, saveMessage
             saveToDiskTask.setFormSavedListener(this);
             autoSaved = true;
-            showDialog(SAVING_DIALOG);
+            if(!this.isFinishing()) {   // smap
+                showDialog(SAVING_DIALOG);
+            }
             // show dialog before we execute...
             saveToDiskTask.execute();
         }
