@@ -73,8 +73,8 @@ public class DateTimeUtilsTest {
         assertEquals("9 Paopi 1708 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(date, copticDatePickerDetails, false, context));
         assertEquals("9 Paopi 1708, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(date, copticDatePickerDetails, true, context));
 
-        assertEquals("11 Rabī‘ ath-thānī 1412 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(date, islamicDatePickerDetails, false, context));
-        assertEquals("11 Rabī‘ ath-thānī 1412, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(date, islamicDatePickerDetails, true, context));
+        assertEquals("11 Rabi' al-thani 1412 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(date, islamicDatePickerDetails, false, context));
+        assertEquals("11 Rabi' al-thani 1412, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(date, islamicDatePickerDetails, true, context));
 
         assertEquals("3 कार्तिक 2048 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(date, bikramSambatDatePickerDetails, false, context));
         assertEquals("3 कार्तिक 2048, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(date, bikramSambatDatePickerDetails, true, context));
