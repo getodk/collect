@@ -27,6 +27,7 @@ import org.odk.collect.android.logic.DatePickerDetails;
 
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import static org.junit.Assert.assertEquals;
 
@@ -55,6 +56,7 @@ public class DateTimeUtilsTest {
     @Test
     public void getDateTimeLabelTest() {
         Locale.setDefault(Locale.ENGLISH);
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
 
         long dateInMilliseconds = 687967200000L; // 20 Oct 1991 14:00
         Date date = new Date(dateInMilliseconds);
