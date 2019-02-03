@@ -25,6 +25,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.DatePickerDetails;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -58,8 +59,10 @@ public class DateTimeUtilsTest {
         Locale.setDefault(Locale.ENGLISH);
         TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
 
-        long dateInMilliseconds = 687967200000L; // 20 Oct 1991 14:00
-        Date date = new Date(dateInMilliseconds);
+        // 20 Oct 1991 14:00 GMT
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(1991, 9, 20, 14, 0, 0);
+        Date date = calendar.getTime();
 
         assertEquals("Oct 20, 1991", DateTimeUtils.getDateTimeLabel(date, gregorianDatePickerDetails, false, context));
         assertEquals("Oct 20, 1991, 14:00", DateTimeUtils.getDateTimeLabel(date, gregorianDatePickerDetails, true, context));
