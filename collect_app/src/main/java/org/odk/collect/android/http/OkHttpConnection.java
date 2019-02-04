@@ -287,6 +287,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
         DispatchingAuthenticator authenticator = daBuilder.build();
 
+        initializeHttpClient(); // Need to initalise the http client again to get rid of the cached credentials
+
         httpClient = httpClient.newBuilder().authenticator(new CachingAuthenticatorDecorator(authenticator, authCache))
                 .addInterceptor(new AuthenticationCacheInterceptor(authCache)).build();
 
