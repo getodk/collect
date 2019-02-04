@@ -124,6 +124,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
 
         File instanceFile = new File(instance.getInstanceFilePath());
+        if (!instanceFile.exists()) {
+            throw new UploadException(FAIL + "instance XML file does not exist!");
+        }
 
         // Get corresponding blank form and verify there is exactly 1
         FormsDao dao = new FormsDao();
