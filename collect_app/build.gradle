@@ -190,7 +190,7 @@ dependencies {
     implementation "com.android.support:cardview-v7:${rootProject.supportLibraryVersion}"
     implementation "com.android.support:exifinterface:${rootProject.supportLibraryVersion}"
     implementation "com.android.support:multidex:1.0.3"
-    
+
     implementation "com.google.android.gms:play-services-analytics:16.0.1"
     implementation "com.google.android.gms:play-services-auth:16.0.0"
     implementation "com.google.android.gms:play-services-maps:15.0.1"
@@ -211,6 +211,9 @@ dependencies {
     implementation("com.google.oauth-client:google-oauth-client:1.22.0") {
         exclude group: 'org.apache.httpcomponents'
     }
+
+    implementation "com.squareup.okhttp3:okhttp:${rootProject.okhttp3Version}"
+    implementation 'com.burgstaller:okhttp-digest:1.18'
 
     implementation 'bikramsambat:bikram-sambat:1.1.0'
     implementation "com.evernote:android-job:1.2.5"
@@ -317,7 +320,7 @@ dependencies {
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
 
-    androidTestImplementation "com.squareup.okhttp3:mockwebserver:3.9.0"
+    androidTestImplementation "com.squareup.okhttp3:mockwebserver:${rootProject.okhttp3Version}"
 
     androidTestImplementation "android.arch.work:work-testing:${rootProject.workManagerVersion}"
 }
