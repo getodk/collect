@@ -33,21 +33,23 @@ public interface OpenRosaHttpInterface {
      *
      * @param uri of the stream
      * @param contentType check the returned Mime Type to ensure it matches. "text/xml" causes a Hash to be calculated
+     * @param credentials to use for this executeGetRequest request
      * @return HttpGetResult - An object containing the Stream, Hash and Headers
-     * @throws Exception a multitude of Exceptions such as IOException can be thrown
+     * @throws Exception various Exceptions such as IOException can be thrown
      */
     @NonNull
-    HttpGetResult get(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception;
+    HttpGetResult executeGetRequest(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception;
 
     /**
      * Performs a Http Head request.
      *
      * @param uri of which to perform a Http head
+     * @param credentials to use for this head request
      * @return HttpHeadResult containing status code and headers
-     * @throws Exception a multitude of Exceptions such as IOException can be thrown
+     * @throws Exception various Exceptions such as IOException can be thrown
      */
     @NonNull
-    HttpHeadResult head(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception;
+    HttpHeadResult executeHeadRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception;
 
     /**
      * Uploads files to a Server.

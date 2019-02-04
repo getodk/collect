@@ -100,7 +100,7 @@ public class InstanceServerUploader extends InstanceUploader {
             HttpHeadResult headResult;
             Map<String, String> responseHeaders;
             try {
-                headResult = httpInterface.head(uri, webCredentialsUtils.getCredentials(uri));
+                headResult = httpInterface.executeHeadRequest(uri, webCredentialsUtils.getCredentials(uri));
                 responseHeaders = headResult.getHeaders();
 
                 if (responseHeaders.containsKey("X-OpenRosa-Accept-Content-Length")) {

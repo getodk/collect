@@ -66,7 +66,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
     @NonNull
     @Override
-    public HttpGetResult get(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
+    public HttpGetResult executeGetRequest(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
         OkHttpClient client = createOkHttpClient(credentials);
         Request request = getRequest(uri);
 
@@ -126,7 +126,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
     @NonNull
     @Override
-    public HttpHeadResult head(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
+    public HttpHeadResult executeHeadRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
         Map<String, String> responseHeaders = new HashMap<>();
 
         int statusCode;

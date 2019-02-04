@@ -23,15 +23,15 @@ public class MockHttpClientConnection implements OpenRosaHttpInterface {
 
     @Override
     @NonNull
-    public HttpGetResult get(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
+    public HttpGetResult executeGetRequest(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
 
         String xml =
-        "<forms>" +
-        "<form url=\"https://opendatakit.appspot.com/formXml?formId=CascadingSelect\">Cascading Select Form</form>" +
-        "<form url=\"https://opendatakit.appspot.com/formXml?formId=widgets\">Widgets</form>" +
-        "<form url=\"https://opendatakit.appspot.com/formXml?formId=NewWidgets\">New Widgets</form>" +
-        "<form url=\"https://opendatakit.appspot.com/formXml?formId=sample\">sample</form>" +
-        "</forms>";
+                "<forms>" +
+                        "<form url=\"https://opendatakit.appspot.com/formXml?formId=CascadingSelect\">Cascading Select Form</form>" +
+                        "<form url=\"https://opendatakit.appspot.com/formXml?formId=widgets\">Widgets</form>" +
+                        "<form url=\"https://opendatakit.appspot.com/formXml?formId=NewWidgets\">New Widgets</form>" +
+                        "<form url=\"https://opendatakit.appspot.com/formXml?formId=sample\">sample</form>" +
+                        "</forms>";
 
         InputStream is = new ByteArrayInputStream(xml.getBytes());
 
@@ -44,7 +44,7 @@ public class MockHttpClientConnection implements OpenRosaHttpInterface {
 
     @NonNull
     @Override
-    public HttpHeadResult head(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
+    public HttpHeadResult executeHeadRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
         return new HttpHeadResult(0, new HashMap<String, String>());
     }
 
