@@ -46,8 +46,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import okio.GzipSource;
-import okio.InflaterSource;
 import timber.log.Timber;
 
 public class OkHttpConnection implements OpenRosaHttpInterface {
@@ -119,10 +117,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         Map<String, String> responseHeaders = new HashMap<>();
         Headers headers = response.headers();
 
-        if (headers.size() > 0) {
-            for (int i = 0; i < headers.size(); i++) {
-                responseHeaders.put(headers.name(i), headers.value(i));
-            }
+        for (int i = 0; i < headers.size(); i++) {
+            responseHeaders.put(headers.name(i), headers.value(i));
         }
 
         return new HttpGetResult(downloadStream, responseHeaders, hash, statusCode);
@@ -261,7 +257,9 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         OkHttpClient.Builder builder;
 
         if (httpClient != null) {
-            if (sameCredentials(credentials)) { return httpClient; }
+            if (sameCredentials(credentials)) {
+                return httpClient;
+            }
             builder = httpClient.newBuilder();
         } else {
             builder = new OkHttpClient.Builder();
