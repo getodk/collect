@@ -67,8 +67,9 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     @NonNull
     @Override
     public HttpGetResult executeGetRequest(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        OkHttpClient client = createOkHttpClient(credentials);
-        Request request = getRequest(uri);
+        OkHttpClient client = createOkHttpClient(credentials, uri);
+        Request request = buildGetRequest(uri);
+
 
         Response response = client.newCall(request).execute();
         int statusCode = response.code();
@@ -127,8 +128,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     @NonNull
     @Override
     public HttpHeadResult executeHeadRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        OkHttpClient client = createOkHttpClient(credentials);
-        Request request = headRequest(uri);
+        OkHttpClient client = createOkHttpClient(credentials, uri);
+        Request request = buildHeadRequest(uri);
 
         Timber.i("Issuing HEAD request to: %s", uri.toString());
         Response response = client.newCall(request).execute();
@@ -153,8 +154,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     @Override
     public HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
         HttpPostResult postResult;
-        OkHttpClient client = createOkHttpClient(credentials);
-        Request request = postRequest(uri, multipartBody);
+        OkHttpClient client = createOkHttpClient(credentials, uri);
+        Request request = buildPostRequest(uri, multipartBody);
         Response response = client.newCall(request).execute();
 
         postResult = new HttpPostResult(
@@ -231,7 +232,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         return postResult;
     }
 
-    private OkHttpClient createOkHttpClient(@Nullable HttpCredentialsInterface credentials) {
+    private OkHttpClient createOkHttpClient(@Nullable HttpCredentialsInterface credentials, URI uri) {
         OkHttpClient.Builder builder;
 
         if (httpClient != null) {
@@ -243,7 +244,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
             builder = new OkHttpClient.Builder();
         }
 
-        addCredentials(builder, credentials);
+        addCredentials(builder, credentials, uri.getScheme().equalsIgnoreCase("https"));
         httpCredentials = credentials;
 
         httpClient = builder
@@ -268,25 +269,27 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         return false;
     }
 
-    private void addCredentials(OkHttpClient.Builder builder, @Nullable HttpCredentialsInterface credentials) {
+    private void addCredentials(OkHttpClient.Builder builder, @Nullable HttpCredentialsInterface credentials, Boolean sslEnabled) {
         if (credentials != null) {
             final Map<String, CachingAuthenticator> authCache = new ConcurrentHashMap<>();
             Credentials cred = new Credentials(credentials.getUsername(), credentials.getPassword());
 
-            BasicAuthenticator basicAuthenticator = new BasicAuthenticator(cred);
-            DigestAuthenticator digestAuthenticator = new DigestAuthenticator(cred);
+            DispatchingAuthenticator.Builder daBuilder = new DispatchingAuthenticator.Builder();
 
-            DispatchingAuthenticator authenticator = new DispatchingAuthenticator.Builder()
-                    .with("digest", digestAuthenticator)
-                    .with("basic", basicAuthenticator)
-                    .build();
+            if (sslEnabled) {
+                daBuilder.with("basic", new BasicAuthenticator(cred));
+            }
+
+            daBuilder.with("digest", new DigestAuthenticator(cred));
+
+            DispatchingAuthenticator authenticator = daBuilder.build();
 
             builder.authenticator(new CachingAuthenticatorDecorator(authenticator, authCache))
                     .addInterceptor(new AuthenticationCacheInterceptor(authCache));
         }
     }
 
-    private Request getRequest(@NonNull URI uri) throws MalformedURLException {
+    private Request buildGetRequest(@NonNull URI uri) throws MalformedURLException {
         return new Request.Builder()
                 .url(uri.toURL())
                 .addHeader(ACCEPT_ENCODING_HEADER, CONTENT_ENCODING)
@@ -297,7 +300,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                 .build();
     }
 
-    private Request headRequest(@NonNull URI uri) throws MalformedURLException {
+    private Request buildHeadRequest(@NonNull URI uri) throws MalformedURLException {
         return new Request.Builder()
                 .url(uri.toURL())
                 .addHeader(ACCEPT_ENCODING_HEADER, CONTENT_ENCODING)
@@ -308,7 +311,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                 .build();
     }
 
-    private Request postRequest(@NonNull URI uri, RequestBody body) throws MalformedURLException {
+    private Request buildPostRequest(@NonNull URI uri, RequestBody body) throws MalformedURLException {
         return new Request.Builder()
                 .url(uri.toURL())
                 .addHeader(ACCEPT_ENCODING_HEADER, CONTENT_ENCODING)
