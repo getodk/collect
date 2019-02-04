@@ -16,11 +16,9 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.ResponseMessageParser;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -63,6 +61,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
     private static OkHttpClient httpClient;
     private static HttpCredentialsInterface httpCredentials;
+
+    MultipartBody multipartBody;
 
     @NonNull
     @Override
@@ -151,8 +151,26 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
     @NonNull
     @Override
-    public ResponseMessageParser uploadSubmissionFile(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri, @Nullable HttpCredentialsInterface credentials, @NonNull long contentLength) throws IOException {
-        ResponseMessageParser messageParser = null;
+    public HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
+        HttpPostResult postResult;
+        OkHttpClient client = createOkHttpClient(credentials);
+        Request request = postRequest(uri, multipartBody);
+        Response response = client.newCall(request).execute();
+
+        postResult = new HttpPostResult(
+                response.toString(),
+                response.code(),
+                response.message());
+
+        discardEntityBytes(response);
+
+        return postResult;
+    }
+
+    @NonNull
+    @Override
+    public HttpPostResult uploadSubmissionFile(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri, @Nullable HttpCredentialsInterface credentials, @NonNull long contentLength) throws Exception {
+        HttpPostResult postResult = null;
 
         boolean first = true;
         int fileIndex = 0;
@@ -199,35 +217,18 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                 }
             }
 
-            MultipartBody multipartBody = multipartBuilder.build();
+            multipartBody = multipartBuilder.build();
+            postResult = executePostRequest(uri, credentials);
+            multipartBody = null;
 
-            try {
-                OkHttpClient client = createOkHttpClient(credentials);
-                Request request = postRequest(uri, multipartBody);
-                Response response = client.newCall(request).execute();
-
-                messageParser = new ResponseMessageParser(
-                        response.toString(),
-                        response.code(),
-                        response.message());
-
-                discardEntityBytes(response);
-
-                if (response.code() != HttpURLConnection.HTTP_CREATED && response.code() != HttpURLConnection.HTTP_ACCEPTED) {
-                    return messageParser;
-                }
-            } catch (IOException e) {
-                Timber.e(e);
-                String msg = e.getMessage();
-                if (msg == null) {
-                    msg = e.toString();
-                }
-
-                throw new IOException(msg);
+            if (postResult.getResponseCode() != HttpURLConnection.HTTP_CREATED &&
+                    postResult.getResponseCode() != HttpURLConnection.HTTP_ACCEPTED) {
+                return postResult;
             }
+
         }
 
-        return messageParser;
+        return postResult;
     }
 
     private OkHttpClient createOkHttpClient(@Nullable HttpCredentialsInterface credentials) {

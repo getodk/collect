@@ -23,6 +23,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.http.HttpHeadResult;
+import org.odk.collect.android.http.HttpPostResult;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.FileUtils;
@@ -187,28 +188,31 @@ public class InstanceServerUploader extends InstanceUploader {
             throw new UploadException("Error reading files to upload");
         }
 
-        ResponseMessageParser messageParser;
+        HttpPostResult postResult;
+        ResponseMessageParser messageParser = new ResponseMessageParser();
 
         try {
             URI uri = URI.create(submissionUri.toString());
 
-            messageParser = httpInterface.uploadSubmissionFile(files, submissionFile, uri,
+            postResult = httpInterface.uploadSubmissionFile(files, submissionFile, uri,
                     webCredentialsUtils.getCredentials(uri), contentLength);
 
-            int responseCode = messageParser.getResponseCode();
+
+            int responseCode = postResult.getResponseCode();
+            messageParser.setMessageResponse(postResult.getHttpResponse());
 
             if (responseCode != HttpsURLConnection.HTTP_CREATED && responseCode != HttpsURLConnection.HTTP_ACCEPTED) {
                 UploadException exception;
                 if (responseCode == HttpsURLConnection.HTTP_OK) {
                     exception = new UploadException(FAIL + "Network login failure? Again?");
                 } else if (responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                    exception = new UploadException(FAIL + messageParser.getReasonPhrase()
+                    exception = new UploadException(FAIL + postResult.getReasonPhrase()
                             + " (" + responseCode + ") at " + urlString);
                 } else {
                     if (messageParser.isValid()) {
                         exception = new UploadException(FAIL + messageParser.getMessageResponse());
                     } else {
-                        exception = new UploadException(FAIL + messageParser.getReasonPhrase()
+                        exception = new UploadException(FAIL + postResult.getReasonPhrase()
                                 + " (" + responseCode + ") at " + urlString);
                     }
 
@@ -217,7 +221,7 @@ public class InstanceServerUploader extends InstanceUploader {
                 throw exception;
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             saveFailedStatusToDatabase(instance);
             throw new UploadException(FAIL + "Generic Exception: "
                     + (e.getMessage() != null ? e.getMessage() : e.toString()));
