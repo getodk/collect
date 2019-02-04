@@ -127,47 +127,24 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     @NonNull
     @Override
     public HttpHeadResult executeHeadRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
+        OkHttpClient client = createOkHttpClient(credentials);
+        Request request = headRequest(uri);
+
+        Timber.i("Issuing HEAD request to: %s", uri.toString());
+        Response response = client.newCall(request).execute();
+        int statusCode = response.code();
+
         Map<String, String> responseHeaders = new HashMap<>();
 
-        int statusCode;
+        if (statusCode == HttpURLConnection.HTTP_NO_CONTENT) {
+            Headers headers = response.headers();
 
-        try {
-            Timber.i("Issuing HEAD request to: %s", uri.toString());
-
-            OkHttpClient client = createOkHttpClient(credentials);
-            Request request = headRequest(uri);
-
-            Response response = client.newCall(request).execute();
-            statusCode = response.code();
-
-            if (statusCode == HttpURLConnection.HTTP_NO_CONTENT) {
-                Headers headers = response.headers();
-
-                for (String headerName : headers.names()) {
-                    responseHeaders.put(headerName, headers.get(headerName));
-                }
+            for (String headerName : headers.names()) {
+                responseHeaders.put(headerName, headers.get(headerName));
             }
-
-            discardEntityBytes(response);
-
-        } catch (IOException | IllegalStateException e) {
-            String errorMessage = "";
-
-            if (e instanceof MalformedURLException) {
-                errorMessage = "Malformed URL Exception";
-            } else if (e instanceof IllegalStateException) {
-                errorMessage = "Illegal State Exception";
-            }
-
-            throw new Exception(errorMessage);
-        } catch (Exception e) {
-            String msg = e.getMessage();
-            if (msg == null) {
-                msg = e.toString();
-            }
-
-            throw new Exception("Generic Exception: " + msg);
         }
+
+        discardEntityBytes(response);
 
         return new HttpHeadResult(statusCode, responseHeaders);
     }
