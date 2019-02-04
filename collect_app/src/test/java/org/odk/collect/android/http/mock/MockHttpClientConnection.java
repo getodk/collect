@@ -58,7 +58,8 @@ public class MockHttpClientConnection implements OpenRosaHttpInterface {
     @NonNull
     @Override
     public HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        return new HttpPostResult("",0,"");
+        return new HttpPostResult("", 0, "");
+
     }
 
 
