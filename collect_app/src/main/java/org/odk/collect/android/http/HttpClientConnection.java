@@ -26,7 +26,6 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpHost;
@@ -383,7 +382,7 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
                 HttpEntity httpEntity = response.getEntity();
                 Timber.i("Response code:%d", responseCode);
 
-                postResult = new HttpPostResult(EntityUtils.toString(httpEntity),responseCode,response.getStatusLine().getReasonPhrase());
+                postResult = new HttpPostResult(EntityUtils.toString(httpEntity), responseCode, response.getStatusLine().getReasonPhrase());
 
                 discardEntityBytes(response);
 
@@ -419,13 +418,12 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
      * HttpPostResult - This is just stubbed out for now, implemented when we move to OkHttpConnection
      * @param uri of which to post
      * @param credentials to use on this post request
-     * @return
-     * @throws Exception
+     * @return null
+     * @throws Exception not used
      */
     public HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        return null;
+        return new HttpPostResult("", 0, "");
     }
-
 
     private void addCredentialsForHost(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) {
         if (credentials != null) {

@@ -237,7 +237,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                 // we've added at least one attachment to the request...
                 if (fileIndex + 1 < fileList.size()) {
                     if ((fileIndex - lastFileIndex + 1 > 100) || (byteCount + fileList.get(fileIndex + 1).length()
-                            > 10000000L)) {
+                            > contentLength)) {
                         // the next file would exceed the 10MB threshold...
                         Timber.i("Extremely long post is being split into multiple posts");
                         multipartBuilder.addPart(MultipartBody.Part.createFormData("*isIncomplete*", "yes"));
