@@ -21,9 +21,21 @@ public class HttpCredentials implements HttpCredentialsInterface {
     }
 
     @Override
-    public boolean equals(HttpCredentialsInterface credentialsInterface) {
-        return getUsername().equals(credentialsInterface.getUsername()) &&
-                getPassword().equals(credentialsInterface.getPassword());
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (super.equals(obj)) {
+            return true;
+        }
+
+        return (((HttpCredentials)obj).getUsername().equals(getUsername()) &&
+                ((HttpCredentials)obj).getPassword().equals(getPassword()));
     }
 
+    @Override
+    public int hashCode() {
+        return (getUsername() + getPassword()).hashCode();
+    }
 }
