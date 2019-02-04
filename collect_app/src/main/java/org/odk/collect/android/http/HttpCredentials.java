@@ -6,8 +6,8 @@ public class HttpCredentials implements HttpCredentialsInterface {
     private final String password;
 
     public HttpCredentials(String username, String password) {
-        this.username = username;
-        this.password = password;
+        this.username = (username == null) ? "" : username;
+        this.password = (password == null) ? "" : password;
     }
 
     @Override
@@ -19,4 +19,11 @@ public class HttpCredentials implements HttpCredentialsInterface {
     public String getPassword() {
         return password;
     }
+
+    @Override
+    public boolean equals(HttpCredentialsInterface credentialsInterface) {
+        return getUsername().equals(credentialsInterface.getUsername()) &&
+                getPassword().equals(credentialsInterface.getPassword());
+    }
+
 }

@@ -4,4 +4,6 @@ public interface HttpCredentialsInterface {
     String getUsername();
 
     String getPassword();
+
+    boolean equals(HttpCredentialsInterface credentialsInterface);
 }
