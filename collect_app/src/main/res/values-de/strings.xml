@@ -4,7 +4,6 @@
   <string name="activity_not_found">Folgende Applikation wurde nicht gefunden: %s</string>
   <string name="view_image">Bild anzeigen</string>
   <string name="annotate_image">Bild beschreiben</string>
-  <string name="aligned_image_capture">Ausgerichtetes Bild erfassen</string>
   <string name="signature_capture">Unterschrift erfassen</string>
   <string name="view_video">Video anzeigen</string>
   <string name="choose_audio">Audio auswählen</string>

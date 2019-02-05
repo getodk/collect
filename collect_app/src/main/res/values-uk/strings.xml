@@ -4,7 +4,6 @@
   <string name="activity_not_found">Не знайдено жодного процесу для: %s</string>
   <string name="view_image">Переглянути Зображення</string>
   <string name="annotate_image">Додати Анотацію</string>
-  <string name="aligned_image_capture">Сфотографувати Вирівняне Зображення</string>
   <string name="signature_capture">Сфотографувати Підпис</string>
   <string name="view_video">Переглянути Відео</string>
   <string name="choose_audio">Обрати Аудіо</string>

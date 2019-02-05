@@ -4,7 +4,6 @@
   <string name="activity_not_found">Nenalezena žádná aktivita k řešení: %s</string>
   <string name="view_image">Zobrazit obrázek</string>
   <string name="annotate_image">Přidat popisek obrázku</string>
-  <string name="aligned_image_capture">Zarovnané načtení obrázku</string>
   <string name="signature_capture">Zachycení podpisu</string>
   <string name="view_video">Zobrazit video</string>
   <string name="choose_audio">Vybrat zvuk</string>

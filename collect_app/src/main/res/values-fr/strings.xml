@@ -4,7 +4,6 @@
   <string name="activity_not_found">Aucune activité à gérer: %s</string>
   <string name="view_image">Afficher l\'image</string>
   <string name="annotate_image">Annoter l\'image</string>
-  <string name="aligned_image_capture">Capture d\'image alignée</string>
   <string name="signature_capture">Capture d\'une signature</string>
   <string name="view_video">Visionner la vidéo</string>
   <string name="choose_audio">Choisir l\'audio</string>

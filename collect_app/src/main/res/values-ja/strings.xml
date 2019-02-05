@@ -4,7 +4,6 @@
   <string name="activity_not_found">取り扱うアクティビティがありません: %s</string>
   <string name="view_image">画像を表示</string>
   <string name="annotate_image">画像に注釈をつける</string>
-  <string name="aligned_image_capture">整列した画像キャプチャ</string>
   <string name="signature_capture">署名キャプチャ</string>
   <string name="view_video">ビデオを表示</string>
   <string name="choose_audio">音声を選択</string>

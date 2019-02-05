@@ -4,7 +4,6 @@
   <string name="activity_not_found">Ei toimintoa tunnuksella: %s</string>
   <string name="view_image">Katso kuva</string>
   <string name="annotate_image">Lisää merkinnät kuvaan</string>
-  <string name="aligned_image_capture">Kohdistettu kuvankaappaus</string>
   <string name="signature_capture">Allekirjoituksen kuvankaappaus</string>
   <string name="view_video">Katso video</string>
   <string name="choose_audio">Valitse ääni</string>
