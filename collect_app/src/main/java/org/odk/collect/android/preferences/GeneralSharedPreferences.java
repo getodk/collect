@@ -16,6 +16,7 @@ package org.odk.collect.android.preferences;
 
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.tasks.ServerPollingJob;
@@ -25,8 +26,8 @@ import java.util.Set;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.PreferenceKeys.GENERAL_KEYS;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
+import static org.odk.collect.android.preferences.GeneralKeys.GENERAL_KEYS;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 
 public class GeneralSharedPreferences {
 
@@ -69,6 +70,7 @@ public class GeneralSharedPreferences {
         } else if (defaultValue instanceof Float) {
             value = sharedPreferences.getFloat(key, (Float) defaultValue);
         }
+
         return value;
     }
 
@@ -77,7 +79,7 @@ public class GeneralSharedPreferences {
         save(key, defaultValue);
     }
 
-    public GeneralSharedPreferences save(String key, Object value) {
+    public GeneralSharedPreferences save(String key, @Nullable Object value) {
         Editor editor = sharedPreferences.edit();
 
         if (value == null || value instanceof String) {
@@ -109,7 +111,7 @@ public class GeneralSharedPreferences {
     public void clear() {
         for (Map.Entry<String, ?> prefs : getAll().entrySet()) {
             String key = prefs.getKey();
-            if (!PreferenceKeys.KEYS_WE_SHOULD_NOT_RESET.contains(key)) {
+            if (!GeneralKeys.KEYS_WE_SHOULD_NOT_RESET.contains(key)) {
                 reset(key);
             }
         }
@@ -125,12 +127,15 @@ public class GeneralSharedPreferences {
     }
 
     public void reloadPreferences() {
-        for (Map.Entry<String, Object> keyValuePair : PreferenceKeys.GENERAL_KEYS.entrySet()) {
+        for (Map.Entry<String, Object> keyValuePair : GeneralKeys.GENERAL_KEYS.entrySet()) {
             save(keyValuePair.getKey(), get(keyValuePair.getKey()));
         }
     }
 
     public static boolean isAutoSendEnabled() {
-        return !getInstance().get(PreferenceKeys.KEY_AUTOSEND).equals("off");
+        return !getInstance().get(GeneralKeys.KEY_AUTOSEND).equals("off");
+    }
+
+    public static class ValidationException extends RuntimeException {
     }
 }

@@ -40,10 +40,10 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_EMAIL;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_PHONENUMBER;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_USERNAME;
-import static org.odk.collect.android.utilities.PermissionUtils.checkIfReadPhoneStatePermissionGranted;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_EMAIL;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_PHONENUMBER;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_USERNAME;
+import static org.odk.collect.android.utilities.PermissionUtils.isReadPhoneStatePermissionGranted;
 
 /**
  * Returns device properties and metadata to JavaRosa
@@ -92,7 +92,6 @@ public class PropertyManager implements IPropertyManager {
         Timber.i("calling constructor");
 
         Collect.getInstance().getComponent().inject(this);
-
         try {
             // Device-defined properties
             TelephonyManager telMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -112,7 +111,8 @@ public class PropertyManager implements IPropertyManager {
         initUserDefined(prefs, KEY_METADATA_EMAIL,       PROPMGR_EMAIL,         SCHEME_MAILTO);
     }
 
-    private IdAndPrefix findDeviceId(Context context, TelephonyManager telephonyManager) {
+    // telephonyManager.getDeviceId() requires permission READ_PHONE_STATE (ISSUE #2506). Permission should be handled or exception caught.
+    private IdAndPrefix findDeviceId(Context context, TelephonyManager telephonyManager) throws SecurityException {
         final String androidIdName = Settings.Secure.ANDROID_ID;
         String deviceId = null;
         // start smap - this will result in deviceId not being set first time it is called
@@ -180,7 +180,7 @@ public class PropertyManager implements IPropertyManager {
 
     @Override
     public String getSingularProperty(String propertyName) {
-        if (!checkIfReadPhoneStatePermissionGranted(Collect.getInstance()) && isPropertyDangerous(propertyName)) {
+        if (!isReadPhoneStatePermissionGranted(Collect.getInstance()) && isPropertyDangerous(propertyName)) {
             eventBus.post(new ReadPhoneStatePermissionRxEvent());
         }
 

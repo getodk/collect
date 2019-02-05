@@ -287,16 +287,21 @@ public class WidgetFactory {
                 questionWidget = new TriggerWidget(context, fep);
                 break;
             case Constants.CONTROL_RANGE:
-                switch (fep.getDataType()) {
-                    case Constants.DATATYPE_INTEGER:
-                        questionWidget = new RangeIntegerWidget(context, fep);
-                        break;
-                    case Constants.DATATYPE_DECIMAL:
-                        questionWidget = new RangeDecimalWidget(context, fep);
-                        break;
-                    default:
-                        questionWidget = new StringWidget(context, fep, readOnlyOverride);
-                        break;
+
+                if (appearance.startsWith("rating")) {
+                    questionWidget = new RatingWidget(context, fep);
+                } else {
+                    switch (fep.getDataType()) {
+                        case Constants.DATATYPE_INTEGER:
+                            questionWidget = new RangeIntegerWidget(context, fep);
+                            break;
+                        case Constants.DATATYPE_DECIMAL:
+                            questionWidget = new RangeDecimalWidget(context, fep);
+                            break;
+                        default:
+                            questionWidget = new StringWidget(context, fep, readOnlyOverride);
+                            break;
+                    }
                 }
                 break;
             default:

@@ -27,9 +27,10 @@ import com.google.zxing.WriterException;
 import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferenceSaver;
 import org.odk.collect.android.utilities.QRCodeUtils;
-import org.odk.collect.android.utilities.SharedPreferencesUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,10 +43,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.odk.collect.android.preferences.PreferenceKeys.GENERAL_KEYS;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SHOW_SPLASH;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
+import static org.odk.collect.android.preferences.GeneralKeys.GENERAL_KEYS;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_SHOW_SPLASH;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_USERNAME;
 
 @RunWith(AndroidJUnit4.class)
 public class QrCodeTest {
@@ -91,7 +92,7 @@ public class QrCodeTest {
         assertNotEquals(resultIfAllSharedPreferencesAreDefault, result);
 
         // update shared preferences using the QrCode
-        SharedPreferencesUtils.savePreferencesFromString(result, null);
+        new PreferenceSaver(GeneralSharedPreferences.getInstance(), AdminSharedPreferences.getInstance()).fromJSON(result, null);
 
         // assert that values have updated properly
         assertPreferenceHaveDefaultValue(keys, false);

@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 
-public final class PreferenceKeys {
+public final class GeneralKeys {
 
     // aggregate_preferences.xml
     public static final String KEY_SERVER_URL               = "server_url";
@@ -26,6 +26,7 @@ public final class PreferenceKeys {
     public static final String KEY_PERIODIC_FORM_UPDATES_CHECK = "periodic_form_updates_check";
     public static final String KEY_AUTOMATIC_UPDATE         = "automatic_update";
     public static final String KEY_HIDE_OLD_FORM_VERSIONS   = "hide_old_form_versions";
+    public static final String KEY_BACKGROUND_LOCATION      = "background_location";
 
     // form_metadata_preferences.xml
     public static final String KEY_METADATA_USERNAME        = "metadata_username";
@@ -101,6 +102,7 @@ public final class PreferenceKeys {
         // aggregate_preferences.xml
         hashMap.put(KEY_SERVER_URL,                 Collect.getInstance().getString(R.string.default_server_url));
         hashMap.put(KEY_USERNAME,                   "");
+        hashMap.put(KEY_PASSWORD,                   "");
         // form_management_preferences.xml
         hashMap.put(KEY_AUTOSEND,                   AUTOSEND_OFF);
         hashMap.put(KEY_GUIDANCE_HINT,              GUIDANCE_HINT_OFF);
@@ -113,6 +115,7 @@ public final class PreferenceKeys {
         hashMap.put(KEY_PERIODIC_FORM_UPDATES_CHECK, "never");
         hashMap.put(KEY_AUTOMATIC_UPDATE,           false);
         hashMap.put(KEY_HIDE_OLD_FORM_VERSIONS,     true);
+        hashMap.put(KEY_BACKGROUND_LOCATION,        true);
         // form_metadata_preferences.xml
         hashMap.put(KEY_METADATA_USERNAME,          "");
         hashMap.put(KEY_METADATA_PHONENUMBER,       "");
@@ -169,7 +172,7 @@ public final class PreferenceKeys {
 
     public static final HashMap<String, Object> GENERAL_KEYS = getHashMap();
 
-    private PreferenceKeys() {
+    private GeneralKeys() {
 
     }
 

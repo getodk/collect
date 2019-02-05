@@ -47,6 +47,7 @@
   <string name="discard_answer">Verwijder antwoord</string>
   <string name="discard_group">Verwijder groep</string>
   <string name="download">Download selectie</string>
+  <string name="download_forms_result">Download resultaten</string>
   <string name="downloading_data">Verbinden met server</string>
   <string name="do_not_change">Annuleer</string>
   <string name="do_not_exit">Annuleer</string>
@@ -70,6 +71,8 @@
   <string name="get_location">Positie vastleggen</string>
   <string name="provider_disabled_error">Sorry, GPS is uitgeschakeld!</string>
   <string name="invalid_answer_error">Sorry, dit antwoord is ongeldig!</string>
+  <string name="invalid_space_in_answer_singular">Waarschuwing: de onderliggende waarde, %s, heeft spaties</string>
+  <string name="invalid_space_in_answer_plural">Waarschuwing: de onderliggende waardes, %s, hebben spaties</string>
   <string name="jump_to_beginning">Naar begin</string>
   <string name="jump_to_end">Naar einde</string>
   <string name="jump_to_previous">Ga terug</string>
@@ -267,12 +270,22 @@
   <string name="delete_after_send_summary">Verwijderd afgeronde formulieren en media na verzending</string>
   <string name="change_server_url">Server URL</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="manual_mode">Handmatig</string>
+  <string name="automatic_mode">Automatisch</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="main_menu_settings">Hoofdmenu instellingen</string>
   <string name="autosend_selector_title">Automatisch versturen</string>
+  <string name="off">Uit</string>
+  <string name="guidance_no">Nee</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="no">Nee</string>
   <!--Sms submission-->
+  <string name="transport_type_sms">SMS</string>
+  <string name="seconds">Seconden</string>
+  <string name="notification_channel_name">Algemene notificaties</string>
+  <string name="open_file">Open bestand</string>
 </resources>

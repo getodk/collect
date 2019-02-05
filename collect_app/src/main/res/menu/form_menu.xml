@@ -28,6 +28,14 @@
         app:showAsAction="always"/>
 
     <item
+        android:id="@+id/track_location"
+        android:title="@string/track_location"
+        android:visible="false"
+        android:checkable="true"
+        app:actionViewClass="android.widget.CheckBox"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/menu_languages"
         android:title="@string/change_language"
         app:showAsAction="never"/>

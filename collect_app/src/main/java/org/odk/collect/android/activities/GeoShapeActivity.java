@@ -29,7 +29,7 @@ import org.odk.collect.android.map.GoogleMapFragment;
 import org.odk.collect.android.map.MapFragment;
 import org.odk.collect.android.map.MapPoint;
 import org.odk.collect.android.map.OsmMapFragment;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoShapeWidget;
@@ -39,10 +39,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationPermissionsGranted;
+import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
 
 /** Activity for entering or editing a polygon on a map. */
-public class GeoShapeActivity extends CollectAbstractActivity implements IRegisterReceiver {
+public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterReceiver {
     public static final String PREF_VALUE_GOOGLE_MAPS = "google_maps";
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
@@ -52,7 +52,6 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
     private int featureId = -1;  // will be a positive featureId once map is ready
     private ImageButton zoomButton;
     private ImageButton clearButton;
-    private MapHelper helper;
     private AlertDialog zoomDialog;
     private View zoomDialogView;
     private Button zoomPointButton;
@@ -72,7 +71,7 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
             restoredPoints = savedInstanceState.getParcelableArrayList(POINTS_KEY);
         }
 
-        if (!checkIfLocationPermissionsGranted(this)) {
+        if (!areLocationPermissionsGranted(this)) {
             finish();
             return;
         }
@@ -84,7 +83,7 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
     }
 
     public MapFragment createMapFragment() {
-        String mapSdk = getIntent().getStringExtra(PreferenceKeys.KEY_MAP_SDK);
+        String mapSdk = getIntent().getStringExtra(GeneralKeys.KEY_MAP_SDK);
         return (mapSdk == null || mapSdk.equals(PREF_VALUE_GOOGLE_MAPS)) ?
             new GoogleMapFragment() : new OsmMapFragment();
     }
@@ -128,9 +127,9 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
         map.setLongPressListener(this::addVertex);
 
         if (map instanceof GoogleMapFragment) {
-            helper = new MapHelper(this, ((GoogleMapFragment) map).getGoogleMap());
+            helper = new MapHelper(this, ((GoogleMapFragment) map).getGoogleMap(), selectedLayer);
         } else if (map instanceof OsmMapFragment) {
-            helper = new MapHelper(this, ((OsmMapFragment) map).getMapView(), this);
+            helper = new MapHelper(this, ((OsmMapFragment) map).getMapView(), this, selectedLayer);
         }
         helper.setBasemap();
 

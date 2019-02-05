@@ -21,7 +21,6 @@ import android.media.MediaPlayer;
 import android.support.v7.widget.AppCompatImageButton;
 import android.util.AttributeSet;
 
-import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
@@ -60,9 +59,9 @@ public class AudioButton extends AppCompatImageButton {
         resetBitmap();
     }
 
-    public void init(FormIndex index, String selectionDesignator, String uri, MediaPlayer player) {
+    public void init(String uri, MediaPlayer player) {
         this.player = player;
-        handler = new AudioHandler(index, selectionDesignator, uri, player);
+        handler = new AudioHandler(uri, player);
     }
 
     public void resetBitmap() {
@@ -91,17 +90,12 @@ public class AudioButton extends AppCompatImageButton {
      * @author mitchellsundt@gmail.com
      */
     public static class AudioHandler {
-        private final FormIndex index;
-        private final String selectionDesignator;
         private final String uri;
         private final MediaPlayer mediaPlayer;
 
-        public AudioHandler(FormIndex index, String selectionDesignator, String uri,
-                            MediaPlayer player) {
-            this.index = index;
-            this.selectionDesignator = selectionDesignator;
+        public AudioHandler(String uri, MediaPlayer mediaPlayer) {
             this.uri = uri;
-            mediaPlayer = player;
+            this.mediaPlayer = mediaPlayer;
         }
 
         public void playAudio(Context c) {

@@ -17,6 +17,7 @@ package org.odk.collect.android.application;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -60,6 +61,8 @@ import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
+import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.NotificationUtils;
@@ -80,9 +83,11 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
 import static org.odk.collect.android.logic.PropertyManager.SCHEME_USERNAME;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_LANGUAGE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_LANGUAGE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_USERNAME;
+import static org.odk.collect.android.tasks.sms.SmsNotificationReceiver.SMS_NOTIFICATION_ACTION;
+import static org.odk.collect.android.tasks.sms.SmsSender.SMS_SEND_ACTION;
 
 /**
  * The Open Data Kit Collect application.
@@ -251,8 +256,10 @@ public class Collect extends Application implements HasActivityInjector {
                 .build();
 
         applicationComponent.inject(this);
-
         NotificationUtils.createNotificationChannel(singleton);
+
+        registerReceiver(new SmsSentBroadcastReceiver(), new IntentFilter(SMS_SEND_ACTION));
+        registerReceiver(new SmsNotificationReceiver(), new IntentFilter(SMS_NOTIFICATION_ACTION));
 
         try {
             JobManager

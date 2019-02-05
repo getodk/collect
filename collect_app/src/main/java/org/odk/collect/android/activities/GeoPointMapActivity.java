@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -49,7 +50,7 @@ import java.text.DecimalFormat;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationPermissionsGranted;
+import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
 
 /**
  * Version of the GeoPointMapActivity that uses the new Maps v2 API and Fragments to enable
@@ -58,7 +59,7 @@ import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationP
  * @author guisalmon@gmail.com
  * @author jonnordling@gmail.com
  */
-public class GeoPointMapActivity extends CollectAbstractActivity implements OnMarkerDragListener, OnMapLongClickListener,
+public class GeoPointMapActivity extends BaseGeoMapActivity implements OnMarkerDragListener, OnMapLongClickListener,
         LocationClient.LocationClientListener, LocationListener {
 
     private static final String LOCATION_COUNT = "locationCount";
@@ -81,7 +82,6 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
 
     private int locationCount;
 
-    private MapHelper helper;
     //private KmlLayer kk;
 
     private AlertDialog errorDialog;
@@ -107,7 +107,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!checkIfLocationPermissionsGranted(this)) {
+        if (!areLocationPermissionsGranted(this)) {
             finish();
             return;
         }
@@ -182,6 +182,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
         return new DecimalFormat("#.##").format(f);
     }
 
+    @SuppressLint("MissingPermission") // Permission handled in Constructor
     private void setupMap(GoogleMap googleMap) {
         map = googleMap;
         if (map == null) {
@@ -189,14 +190,14 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
             finish();
             return;
         }
-        helper = new MapHelper(this, map);
+        helper = new MapHelper(this, map, selectedLayer);
         map.setMyLocationEnabled(true);
         map.getUiSettings().setCompassEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(false);
         map.getUiSettings().setZoomControlsEnabled(false);
 
         markerOptions = new MarkerOptions();
-        helper = new MapHelper(this, map);
+        helper = new MapHelper(this, map, selectedLayer);
 
         ImageButton acceptLocation = findViewById(R.id.accept_location);
 

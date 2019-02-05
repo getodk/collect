@@ -34,16 +34,16 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
 
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
-import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores the path to
@@ -66,7 +66,7 @@ public class FormChooserList extends FormListActivity implements
 
         setTitle(getString(R.string.enter_data));
 
-        requestStoragePermissions(this, new PermissionListener() {
+        new PermissionUtils(this).requestStoragePermissions(new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
@@ -227,7 +227,7 @@ public class FormChooserList extends FormListActivity implements
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         showProgressBar();
 
-        boolean newestByFormId = GeneralSharedPreferences.getInstance().getBoolean(PreferenceKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
+        boolean newestByFormId = GeneralSharedPreferences.getInstance().getBoolean(GeneralKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
         return new FormsDao().getFormsCursorLoader(getFilterText(), getSortingOrder(), newestByFormId);
     }
 

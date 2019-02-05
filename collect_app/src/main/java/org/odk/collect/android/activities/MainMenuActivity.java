@@ -50,7 +50,7 @@ import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -180,7 +180,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
                     SharedPreferences sharedPreferences = PreferenceManager
                             .getDefaultSharedPreferences(MainMenuActivity.this);
                     String protocol = sharedPreferences.getString(
-                            PreferenceKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
+                            GeneralKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
                     Intent i = null;
                     if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
                         if (PlayServicesUtil.isGooglePlayServicesAvailable(MainMenuActivity.this)) {
@@ -524,7 +524,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
     private void setupGoogleAnalytics() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
                 .getInstance());
-        //boolean isAnalyticsEnabled = settings.getBoolean(PreferencesActivity.KEY_ANALYTICS, true);        smap disable
+        //boolean isAnalyticsEnabled = settings.getBoolean(GeneralKeys.KEY_ANALYTICS, true);        // smap disable
         boolean isAnalyticsEnabled = false;                                                                 // smap disable
         GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getApplicationContext());
         googleAnalytics.setAppOptOut(!isAnalyticsEnabled);

@@ -26,4 +26,10 @@ public class FileReferenceFactory extends PrefixedRootFactory {
         return new FileReference(localRoot, terminal);
     }
 
+    @Override
+    public String toString() {
+        return "FileReferenceFactory{" +
+                "localRoot='" + localRoot + '\'' +
+                "} " + super.toString();
+    }
 }

@@ -15,9 +15,11 @@
 package org.odk.collect.android.dao.helpers;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.OpenableColumns;
+import android.webkit.MimeTypeMap;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormInfo;
@@ -82,15 +84,21 @@ public final class ContentResolverHelper {
      * @param fileUri Whose name we want to get
      * @return The file's extension
      */
-    public static String getFileExtensionFromUri(Uri fileUri) {
+    public static String getFileExtensionFromUri(Context context, Uri fileUri) {
         try (Cursor returnCursor = getContentResolver().query(fileUri, null, null, null, null)) {
-            if (returnCursor != null) {
+            if (returnCursor != null && returnCursor.getCount() > 0) {
+                String filename = null;
                 int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                returnCursor.moveToFirst();
-                String filename = returnCursor.getString(nameIndex);
-                // If the file's name contains extension , we cut it down for latter use (copy a new file).
-                if (filename.lastIndexOf('.') != -1) {
+                if (nameIndex != -1) {
+                    returnCursor.moveToFirst();
+                    filename = returnCursor.getString(nameIndex);
+                }
+                if (filename != null && filename.lastIndexOf('.') != -1) {
                     return filename.substring(filename.lastIndexOf('.'));
+                } else {
+                    return fileUri.getScheme() != null && fileUri.getScheme().equals(ContentResolver.SCHEME_CONTENT)
+                            ? MimeTypeMap.getSingleton().getExtensionFromMimeType(context.getContentResolver().getType(fileUri))
+                            : MimeTypeMap.getFileExtensionFromUrl(fileUri.toString());
                 }
             }
         }

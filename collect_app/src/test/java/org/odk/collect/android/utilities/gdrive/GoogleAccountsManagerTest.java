@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -65,7 +65,7 @@ public class GoogleAccountsManagerTest {
      */
 
     private void stubSavedAccount(String accountName) {
-        when(mockPreferences.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT)).thenReturn(accountName);
+        when(mockPreferences.get(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT)).thenReturn(accountName);
         stubAccount(accountName);
     }
 
@@ -95,7 +95,7 @@ public class GoogleAccountsManagerTest {
 
     private void stubPreferences() {
         doAnswer(invocation -> {
-            if (invocation.getArgument(0).equals(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT)) {
+            if (invocation.getArgument(0).equals(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT)) {
                 savedAccount = invocation.getArgument(1);
             }
             return null;

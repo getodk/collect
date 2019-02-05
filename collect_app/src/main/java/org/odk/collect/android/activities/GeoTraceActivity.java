@@ -32,7 +32,7 @@ import org.odk.collect.android.map.GoogleMapFragment;
 import org.odk.collect.android.map.MapFragment;
 import org.odk.collect.android.map.MapPoint;
 import org.odk.collect.android.map.OsmMapFragment;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoTraceWidget;
@@ -46,9 +46,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationPermissionsGranted;
+import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
 
-public class GeoTraceActivity extends CollectAbstractActivity implements IRegisterReceiver {
+public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterReceiver {
     public static final String PREF_VALUE_GOOGLE_MAPS = "google_maps";
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
@@ -64,7 +64,6 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
     private ScheduledFuture schedulerHandler;
 
     private MapFragment map;
-    private MapHelper helper;
     private int featureId = -1;  // will be a positive featureId once map is ready
     private String originalTraceString = "";
 
@@ -113,7 +112,7 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
             restoredTimeUnitsIndex = savedInstanceState.getInt(TIME_UNITS_KEY, 0);
         }
 
-        if (!checkIfLocationPermissionsGranted(this)) {
+        if (!areLocationPermissionsGranted(this)) {
             finish();
             return;
         }
@@ -130,7 +129,7 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
     }
 
     public MapFragment createMapFragment() {
-        String mapSdk = getIntent().getStringExtra(PreferenceKeys.KEY_MAP_SDK);
+        String mapSdk = getIntent().getStringExtra(GeneralKeys.KEY_MAP_SDK);
         return (mapSdk == null || mapSdk.equals(PREF_VALUE_GOOGLE_MAPS)) ?
             new GoogleMapFragment() : new OsmMapFragment();
     }
@@ -177,9 +176,9 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
 
         map = newMapFragment;
         if (map instanceof GoogleMapFragment) {
-            helper = new MapHelper(this, ((GoogleMapFragment) map).getGoogleMap());
+            helper = new MapHelper(this, ((GoogleMapFragment) map).getGoogleMap(), selectedLayer);
         } else if (map instanceof OsmMapFragment) {
-            helper = new MapHelper(this, ((OsmMapFragment) map).getMapView(), this);
+            helper = new MapHelper(this, ((OsmMapFragment) map).getMapView(), this, selectedLayer);
         }
         helper.setBasemap();
 

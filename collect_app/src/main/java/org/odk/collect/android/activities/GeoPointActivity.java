@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -42,7 +43,7 @@ import java.util.TimerTask;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationPermissionsGranted;
+import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
 
 public class GeoPointActivity extends CollectAbstractActivity implements LocationListener,
         LocationClient.LocationClientListener, GpsStatus.Listener {
@@ -73,7 +74,7 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!checkIfLocationPermissionsGranted(this)) {
+        if (!areLocationPermissionsGranted(this)) {
             finish();
             return;
         }
@@ -155,6 +156,7 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
     // LocationClientListener:
 
+    @SuppressLint("MissingPermission") // Checking Permissions handled in constructor
     @Override
     public void onClientStart() {
         locationClient.requestLocationUpdates(this);
@@ -277,6 +279,7 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     }
 
     @Override
+    @SuppressLint("MissingPermission")
     public void onGpsStatusChanged(int event) {
         if (event == GpsStatus.GPS_EVENT_SATELLITE_STATUS) {
             LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);

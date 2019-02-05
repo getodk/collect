@@ -15,7 +15,6 @@
 package org.odk.collect.android.upload;
 
 import android.annotation.SuppressLint;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +24,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.analytics.HitBuilders;
 
@@ -39,13 +37,13 @@ import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.http.HttpClientConnection;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.InstanceUploaderUtils;
+import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.odk.collect.android.utilities.InstanceUploaderUtils;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.io.IOException;
@@ -106,7 +104,7 @@ public class AutoSendWorker extends Worker {
         }
 
         GeneralSharedPreferences settings = GeneralSharedPreferences.getInstance();
-        String protocol = (String) settings.get(PreferenceKeys.KEY_PROTOCOL);
+        String protocol = (String) settings.get(GeneralKeys.KEY_PROTOCOL);
 
         InstanceUploader uploader;
         Map<String, String> resultMessagesByInstanceId = new HashMap<>();
@@ -114,7 +112,7 @@ public class AutoSendWorker extends Worker {
         boolean anyFailure = false;
 
         if (protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets))) {
-            if (PermissionUtils.checkIfGetAccountsPermissionGranted(getApplicationContext())) {
+            if (PermissionUtils.isGetAccountsPermissionGranted(getApplicationContext())) {
                 GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
                 String googleUsername = accountsManager.getSelectedAccount();
                 if (googleUsername.isEmpty()) {
@@ -155,7 +153,7 @@ public class AutoSendWorker extends Worker {
                 // perhaps another worker. It also feels like this could fail and if so should be
                 // communicated to the user. Maybe successful delete should also be communicated?
                 if (InstanceUploader.formShouldBeAutoDeleted(instance.getJrFormId(),
-                        (boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_DELETE_AFTER_SEND))) {
+                        (boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_DELETE_AFTER_SEND))) {
                     Uri deleteForm = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, instance.getDatabaseId().toString());
                     Collect.getInstance().getContentResolver().delete(deleteForm, null, null);
                 }
@@ -186,7 +184,7 @@ public class AutoSendWorker extends Worker {
             return false;
         }
 
-        String autosend = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_AUTOSEND);
+        String autosend = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_AUTOSEND);
         boolean sendwifi = autosend.equals("wifi_only");
         boolean sendnetwork = autosend.equals("cellular_only");
         if (autosend.equals("wifi_and_cellular")) {
@@ -297,16 +295,12 @@ public class AutoSendWorker extends Worker {
         PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), FORMS_UPLOADED_NOTIFICATION,
                 notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(Collect.getInstance())
-                .setSmallIcon(IconUtils.getNotificationAppIcon())
-                .setContentTitle(Collect.getInstance().getString(R.string.odk_auto_note))
-                .setContentIntent(pendingNotify)
-                .setContentText(anyFailure ? Collect.getInstance().getString(R.string.failures)
-                        : Collect.getInstance().getString(R.string.success))
-                .setAutoCancel(true);
+        NotificationUtils.showNotification(
+                pendingNotify,
+                AUTO_SEND_RESULT_NOTIFICATION_ID,
+                R.string.odk_auto_note,
+                anyFailure ? Collect.getInstance().getString(R.string.failures)
+                        : Collect.getInstance().getString(R.string.success));
 
-        NotificationManager notificationManager = (NotificationManager) Collect.getInstance()
-                .getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(AUTO_SEND_RESULT_NOTIFICATION_ID, builder.build());
     }
 }

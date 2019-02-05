@@ -40,11 +40,11 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.PermissionUtils;
 
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
-import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.
@@ -89,7 +89,7 @@ public class InstanceChooserList extends InstanceListActivity implements
             ((TextView) findViewById(android.R.id.empty)).setText(R.string.no_items_display_sent_forms);
         }
 
-        requestStoragePermissions(this, new PermissionListener() {
+        new PermissionUtils(this).requestStoragePermissions(new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent

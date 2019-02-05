@@ -314,7 +314,7 @@ abstract class AppListActivity extends CollectAbstractActivity {
     }
 
     protected void showSnackbar(@NonNull String result) {
-        SnackbarUtils.showSnackbar(llParent, result);
+        SnackbarUtils.showShortSnackbar(llParent, result);
     }
 
     protected void hideProgressBarIfAllowed() {

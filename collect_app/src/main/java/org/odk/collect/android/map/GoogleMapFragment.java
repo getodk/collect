@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.map;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -73,6 +74,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL", justification = "This flag is exposed for Robolectric tests to set")
     @VisibleForTesting public static boolean testMode;
 
+    @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     @Override public void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener) {
         activity.getSupportFragmentManager()
             .beginTransaction().add(containerId, this).commitNow();
@@ -320,7 +322,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
         showGpsDisabledAlert();
     }
 
-    @Override public void onClientStop() { }
+    @Override public void onClientStop() {
+        locationClient.stopLocationUpdates();
+    }
 
     protected void showGpsDisabledAlert() {
         gpsErrorDialog = new AlertDialog.Builder(getActivity())

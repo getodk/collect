@@ -106,6 +106,7 @@
   <string name="quit_application">Вийти з %s</string>
   <string name="quit_entry">Зберегти анкету та вийти</string>
   <string name="refresh">Оновити</string>
+  <string name="repeatable_group_label">Повторюєма Група</string>
   <string name="replace_barcode">Змінити штрих-код</string>
   <string name="required_answer_error">Вибачте, але ця відповідь обов`язкова!</string>
   <string name="review_data">Виправити збережену анкету</string>
@@ -645,4 +646,6 @@
   <string name="missing_google_account_dialog_desc">Щоб надіслати анкету через Google Таблиці Ви повинні налаштувати обліковий запис Google в налаштуваннях сервера.</string>
   <string name="sms_invalid_phone_number_description">Вкажіть номер телефону для надсиланнячерез повідомлення або замініть тип відправки.</string>
   <string name="notification_channel_name">Загальні сповіщення</string>
+  <string name="corrupt_imported_preferences_error">Ці налаштування пошкоджені. Через адміністративні налаштування стиньте налаштування програми або імпортуйте непошкоджені.</string>
+  <string name="open_file">Відкрити файл</string>
 </resources>

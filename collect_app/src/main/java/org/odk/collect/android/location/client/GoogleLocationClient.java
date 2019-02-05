@@ -1,5 +1,6 @@
 package org.odk.collect.android.location.client;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
@@ -27,7 +28,7 @@ import timber.log.Timber;
  * Package-private, use {@link LocationClients} to retrieve the correct
  * {@link LocationClient}.
  */
-class GoogleLocationClient
+public class GoogleLocationClient
         extends BaseLocationClient
         implements LocationClient, ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 
@@ -64,7 +65,7 @@ class GoogleLocationClient
      *
      * @param context The Context where the GoogleLocationClient will be running.
      */
-    GoogleLocationClient(@NonNull Context context) {
+    public GoogleLocationClient(@NonNull Context context) {
         this(locationServicesClientForContext(context), LocationServices.FusedLocationApi,
                 (LocationManager) context.getSystemService(Context.LOCATION_SERVICE));
     }
@@ -112,6 +113,7 @@ class GoogleLocationClient
         }
     }
 
+    @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     public void requestLocationUpdates(@NonNull LocationListener locationListener) {
         if (!isMonitoringLocation()) {
             fusedLocationProviderApi.requestLocationUpdates(googleApiClient, createLocationRequest(), this);
@@ -135,6 +137,7 @@ class GoogleLocationClient
     }
 
     @Override
+    @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     public Location getLastLocation() {
         // We need to block if the Client isn't already connected:
         if (!googleApiClient.isConnected()) {
@@ -177,7 +180,7 @@ class GoogleLocationClient
         locationRequest.setPriority(getPriority().getValue());
 
         locationRequest.setInterval(updateInterval);
-        locationRequest.setInterval(fastestUpdateInterval);
+        locationRequest.setFastestInterval(fastestUpdateInterval);
 
         return locationRequest;
     }

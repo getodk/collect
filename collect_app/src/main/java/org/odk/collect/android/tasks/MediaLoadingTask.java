@@ -53,7 +53,7 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
             instanceFile = formController.getInstanceFile();
             if (instanceFile != null) {
                 String instanceFolder = instanceFile.getParent();
-                String extension = ContentResolverHelper.getFileExtensionFromUri(uris[0]);
+                String extension = ContentResolverHelper.getFileExtensionFromUri(formEntryActivity.get(), uris[0]);
                 String destMediaPath = instanceFolder + File.separator + System.currentTimeMillis() + extension;
 
                 try {

@@ -23,17 +23,16 @@ import java.util.HashMap;
 
 public class ApplicationConstants {
 
-    public static final String XML_OPENROSA_NAMESPACE = "http://openrosa.org/xforms";
-
     // based on http://www.sqlite.org/limits.html
     public static final int SQLITE_MAX_VARIABLE_NUMBER = 999;
 
-    public static final String[] TRANSLATIONS_AVAILABLE = {"af", "am", "ar", "bn",
-            "ca", "cs", "de", "en", "es", "et", "fa", "fi", "fr", "ha",
-            "hi", "hu", "in", "it", "ja", "ka", "km", "ln", "lo_LA", "lt", "mg", "ml", "mr",
-            "my", "nb", "ne_NP", "nl", "no", "pl", "ps", "pt", "ro", "ru", "si", "sl", "so",
-            "sq", "sv_SE", "sw", "sw_KE", "ta", "th_TH", "ti", "tl", "tr", "uk", "ur",
-            "ur_PK", "uz", "vi", "zh", "zu"};
+    public static final String[] TRANSLATIONS_AVAILABLE = {"af", "am", "ar",
+            "bn", "ca", "cs", "de", "en", "es", "et", "fa", "fi", "fr", "ha",
+            "hi", "hu", "in", "it", "ja", "ka", "km", "ln", "lo_LA", "lt",
+            "mg", "ml", "mr", "my", "nb", "ne_NP", "nl", "no", "pl", "ps",
+            "pt", "ro", "ru", "si", "sl", "so", "sq", "sv_SE", "sw", "sw_KE",
+            "ta", "th_TH", "ti", "tl", "tr", "uk", "ur", "ur_PK", "uz", "vi",
+            "zh", "zu"};
 
     private ApplicationConstants() {
 
@@ -104,5 +103,10 @@ public class ApplicationConstants {
         public static final int FORMS_UPLOADED_NOTIFICATION = 97;
         public static final int FORMS_DOWNLOADED_NOTIFICATION = 98;
         public static final int FORM_UPDATES_AVAILABLE_NOTIFICATION = 99;
+    }
+
+    public abstract static class Namespaces {
+        static final String XML_OPENROSA_NAMESPACE = "http://openrosa.org/xforms";
+        public static final String XML_OPENDATAKIT_NAMESPACE = "http://www.opendatakit.org/xforms";
     }
 }

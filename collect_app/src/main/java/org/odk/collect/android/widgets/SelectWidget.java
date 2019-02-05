@@ -20,6 +20,7 @@ import android.content.Context;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -146,11 +147,12 @@ public abstract class SelectWidget extends QuestionWidget {
                     FormEntryCaption.TEXT_FORM_IMAGE);
         }
 
+        textView.setGravity(Gravity.CENTER_VERTICAL);
+
         String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "video");
         String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
 
-        mediaLayout.setAVT(getFormEntryPrompt().getIndex(), "." + Integer.toString(index), textView, audioURI,
-                imageURI, videoURI, bigImageURI, getPlayer());
+        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI, getPlayer());
     }
 
     protected RecyclerView setUpRecyclerView() {

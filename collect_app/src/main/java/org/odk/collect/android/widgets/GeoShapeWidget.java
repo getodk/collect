@@ -27,15 +27,13 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoShapeActivity;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.utilities.PermissionUtils.requestLocationPermissions;
 
 /**
  * GeoShapeWidget is the widget that allows the user to get Collect multiple GPS points.
@@ -57,7 +55,7 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
         // assemble the widget...
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        mapSDK = sharedPreferences.getString(PreferenceKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
+        mapSDK = sharedPreferences.getString(GeneralKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
 
         answerDisplay = getCenteredAnswerTextView();
 
@@ -86,7 +84,7 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
         }
         Intent intent = new Intent(getContext(), GeoShapeActivity.class)
             .putExtra(SHAPE_LOCATION, answerDisplay.getText().toString())
-            .putExtra(PreferenceKeys.KEY_MAP_SDK, mapSDK);
+            .putExtra(GeneralKeys.KEY_MAP_SDK, mapSDK);
         ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOSHAPE_CAPTURE);
     }
 
@@ -128,7 +126,7 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onButtonClick(int buttonId) {
-        requestLocationPermissions((FormEntryActivity) getContext(), new PermissionListener() {
+        getPermissionUtils().requestLocationPermissions(new PermissionListener() {
             @Override
             public void granted() {
                 waitForData();

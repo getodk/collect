@@ -19,6 +19,7 @@
     <string name="view_video">View Video</string>
     <string name="choose_audio">Choose Audio</string>
     <string name="add_another">Add Group</string>
+    <string name="add_another_menu">Add another</string>
     <string name="add_another_repeat">Add another \"%s\" group?</string>
     <string name="add_repeat">Add a new \"%s\" group?</string>
     <string name="add_repeat_no">Do Not Add</string>
@@ -116,6 +117,8 @@
     <string name="quit_application">Exit %s</string>
     <string name="quit_entry">Save Form and Exit</string>
     <string name="refresh">Refresh</string>
+    <string name="group_label">Group</string>
+    <string name="repeatable_group_label">Repeatable Group</string>
     <string name="replace_barcode">Replace Barcode</string>
     <string name="required_answer_error">Sorry, this response is required!</string>
     <string name="review_data">Edit Saved Form</string>
@@ -654,4 +657,12 @@
     <string name="missing_google_account_dialog_desc">To submit forms via Google Sheets you have to set up your Google account in the Server settings.</string>
     <string name="sms_invalid_phone_number_description">Set a destination phone number for SMS submissions or change your transport type.</string>
     <string name="notification_channel_name">General notifications</string>
+    <string name="corrupt_imported_preferences_error">Current settings are corrupt. From the admin settings, reset settings or import working ones.</string>
+    <string name="google_play_services_not_available">This form wants to track your location but Google Play Services are not available.</string>
+    <string name="location_providers_disabled_dialog_message">This form wants to track your location but location providers are disabled. Please enable in Android settings.</string>
+    <string name="go_to_settings">Go to settings</string>
+    <string name="track_location">Track location</string>
+    <string name="background_location_disabled">This form wants to track your location but tracking is disabled. Please enable in the \u0020\u0020⋮\u0020\u0020 menu above.</string>
+    <string name="background_location_enabled">This form tracks your location. You can disable tracking in the \u0020\u0020⋮\u0020\u0020 menu above.</string>
+    <string name="open_file">Open file</string>
 </resources>

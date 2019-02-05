@@ -29,9 +29,8 @@ import org.odk.collect.android.application.Collect;
 
 public class NotificationUtils {
 
-    private static final String CHANNEL_ID = "smap_notification_channel";   // smap changed channel id
+    public static final String CHANNEL_ID = "smap_notification_channel";   // smap changed channel id
     public static final int FORM_UPDATE_NOTIFICATION_ID = 0;
-    public static final int AUTO_SEND_NOTIFICATION_ID = 1328974928;
 
     private NotificationUtils() {
     }
@@ -57,7 +56,6 @@ public class NotificationUtils {
                                         boolean start) {    // smap add start/end of notification
         Context context = Collect.getInstance();
 
-        // smap add CHANNEL_ID
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID).setContentIntent(contentIntent);
 
         builder

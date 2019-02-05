@@ -50,6 +50,7 @@ import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
@@ -68,7 +69,6 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_AUTH_REQUIRED;
 import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_ERROR_MSG;
-import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the forms directory. One
@@ -162,7 +162,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         setTitle(getString(R.string.get_forms));
 
         // This activity is accessed directly externally
-        requestStoragePermissions(this, new PermissionListener() {
+        new PermissionUtils(this).requestStoragePermissions(new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
@@ -644,16 +644,10 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             return true;
         }
 
-        Cursor formCursor = null;
-        try {
-            formCursor = new FormsDao().getFormsCursorForFormId(formId);
-            return formCursor.getCount() == 0 // form does not already exist locally
+        try (Cursor formCursor = new FormsDao().getFormsCursorForFormId(formId)) {
+            return formCursor != null && formCursor.getCount() == 0 // form does not already exist locally
                     || formNamesAndURLs.get(formId).isNewerFormVersionAvailable() // or a newer version of this form is available
                     || formNamesAndURLs.get(formId).areNewerMediaFilesAvailable(); // or newer versions of media files are available
-        } finally {
-            if (formCursor != null) {
-                formCursor.close();
-            }
         }
     }
 
@@ -818,7 +812,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         alertTitle = title;
         alertShowing = true;
         this.shouldExit = shouldExit;
-        alertDialog.show();
+        DialogUtils.showDialog(alertDialog, this);
     }
 
     @Override

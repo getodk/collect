@@ -21,7 +21,7 @@ import org.odk.collect.android.events.SmsRxEvent;
 import org.odk.collect.android.jobs.SmsSenderJob;
 import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
@@ -44,6 +44,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 import static android.app.Activity.RESULT_OK;
+import static android.telephony.SmsManager.RESULT_ERROR_GENERIC_FAILURE;
 import static android.telephony.SmsManager.RESULT_ERROR_NO_SERVICE;
 import static android.telephony.SmsManager.RESULT_ERROR_RADIO_OFF;
 import static org.odk.collect.android.tasks.sms.SmsNotificationReceiver.SMS_NOTIFICATION_ACTION;
@@ -335,7 +336,7 @@ public class SmsService {
         try (Cursor cursor = instancesDao.getInstancesCursorForId(instanceId)) {
             cursor.moveToPosition(-1);
 
-            boolean isFormAutoDeleteOptionEnabled = (boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_DELETE_AFTER_SEND);
+            boolean isFormAutoDeleteOptionEnabled = (boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_DELETE_AFTER_SEND);
             String formId;
             while (cursor.moveToNext()) {
                 formId = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
@@ -375,6 +376,7 @@ public class SmsService {
 
         try {
             switch (resultCode) {
+                case RESULT_ERROR_GENERIC_FAILURE:
                 case RESULT_ERROR_NO_SERVICE:
                     return new SimpleDateFormat(context.getString(R.string.sms_no_reception), Locale.getDefault()).format(date);
                 case RESULT_ERROR_RADIO_OFF:

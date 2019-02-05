@@ -41,6 +41,8 @@ import java.util.Locale;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.PermissionUtils.checkIfStoragePermissionsGranted;
+import static org.odk.collect.android.database.helpers.InstancesDatabaseHelper.INSTANCES_TABLE_NAME;
+import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 
 public class InstanceProvider extends ContentProvider {
 
@@ -239,7 +241,7 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        if (!checkIfStoragePermissionsGranted(getContext())) {
+        if (!areStoragePermissionsGranted(getContext())) {
             Timber.i("Read and write permissions are required for this content provider to function.");
             return false;
         }
@@ -253,7 +255,7 @@ public class InstanceProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
 
-        if (!checkIfStoragePermissionsGranted(getContext())) {
+        if (!areStoragePermissionsGranted(getContext())) {
             return null;
         }
 
@@ -304,7 +306,7 @@ public class InstanceProvider extends ContentProvider {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        if (!checkIfStoragePermissionsGranted(getContext())) {
+        if (!areStoragePermissionsGranted(getContext())) {
             return null;
         }
 
@@ -405,7 +407,7 @@ public class InstanceProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
-        if (!checkIfStoragePermissionsGranted(getContext())) {
+        if (!areStoragePermissionsGranted(getContext())) {
             return 0;
         }
         int count = 0;
@@ -491,7 +493,7 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String where, String[] whereArgs) {
-        if (!checkIfStoragePermissionsGranted(getContext())) {
+        if (!areStoragePermissionsGranted(getContext())) {
             return 0;
         }
         int count = 0;

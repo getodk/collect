@@ -31,7 +31,7 @@ import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.ManifestFile;
 import org.odk.collect.android.logic.MediaFile;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 
 import java.io.File;
 import java.net.HttpURLConnection;
@@ -80,14 +80,14 @@ public class DownloadFormListUtils {
         }
 
         String downloadListUrl = url != null ? url :
-                settings.getString(PreferenceKeys.KEY_SERVER_URL,
+                settings.getString(GeneralKeys.KEY_SERVER_URL,
                         Collect.getInstance().getString(R.string.default_server_url));
         // NOTE: /formlist must not be translated! It is the well-known path on the server.
         String formListUrl = Collect.getInstance().getApplicationContext().getString(
                 R.string.default_odk_formlist);
 
         // When a url is supplied, we will use the default formList url
-        String downloadPath = (url != null) ? formListUrl : settings.getString(PreferenceKeys.KEY_FORMLIST_URL, formListUrl);
+        String downloadPath = (url != null) ? formListUrl : settings.getString(GeneralKeys.KEY_FORMLIST_URL, formListUrl);
         downloadListUrl += downloadPath;
 
         // We populate this with available forms from the specified server.
@@ -422,7 +422,12 @@ public class DownloadFormListUtils {
     }
 
     private static boolean isNewerFormVersionAvailable(String md5Hash) {
-        return md5Hash != null && new FormsDao().getFormsCursorForMd5Hash(md5Hash).getCount() == 0;
+        if (md5Hash == null) {
+            return false;
+        }
+        try (Cursor cursor = new FormsDao().getFormsCursorForMd5Hash(md5Hash)) {
+            return cursor != null && cursor.getCount() == 0;
+        }
     }
 
     private static boolean areNewerMediaFilesAvailable(String formId, String formVersion, List<MediaFile> newMediaFiles) {
