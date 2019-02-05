@@ -61,6 +61,8 @@ import static org.odk.collect.android.utilities.FileUtil.getSmsInstancePath;
  */
 public class SmsService {
 
+    private static List<String> formsToSend = new ArrayList<>();
+
     private final SmsManager smsManager;
     private final SmsSubmissionManagerContract smsSubmissionManager;
     private final Context context;
@@ -118,6 +120,7 @@ public class SmsService {
 
                     FormInfo info = new FormInfo(filePath, formId, formVersion);
 
+                    formsToSend.add(instanceId);
                     submitForm(instanceId, info, displayName);
                 }
             }
@@ -246,6 +249,7 @@ public class SmsService {
 
         rxEventBus.post(event);
 
+        formsToSend.remove(instanceId);
         return true;
     }
 
@@ -289,6 +293,8 @@ public class SmsService {
         } else if (resultCode != RESULT_OK && resultCode != RESULT_OK_OTHERS_PENDING) {
             updateInstanceStatusFailedText(instanceId, event);
         }
+
+        formsToSend.remove(instanceId);
     }
 
     /***
@@ -407,5 +413,9 @@ public class SmsService {
         }
 
         return "";
+    }
+
+    public static boolean isRunning() {
+        return !formsToSend.isEmpty();
     }
 }

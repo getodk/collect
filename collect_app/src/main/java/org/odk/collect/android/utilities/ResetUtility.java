@@ -24,6 +24,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.osmdroid.config.Configuration;
 
@@ -104,8 +105,10 @@ public class ResetUtility {
     }
 
     private void resetSMSSubmissionsHistory() {
-        smsSubmissionManager.clearSubmissions();
-        failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_SMS_SUBMISSIONS_HISTORY));
+        if (!SmsService.isRunning()) {
+            smsSubmissionManager.clearSubmissions();
+            failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_SMS_SUBMISSIONS_HISTORY));
+        }
     }
 
     private void resetInstances() {
