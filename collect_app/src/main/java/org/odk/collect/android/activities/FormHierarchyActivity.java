@@ -209,8 +209,9 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     }
 
     private void updateOptionsMenu() {
-        // Not ready yet. Menu will be updated automatically once it's been prepared.
-        if (optionsMenu == null) {
+        // Not ready yet.
+        // Menu will be updated automatically once it's been prepared, or during refreshView.
+        if (optionsMenu == null || screenIndex == null) {
             return;
         }
 
