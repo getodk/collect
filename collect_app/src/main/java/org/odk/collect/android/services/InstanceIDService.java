@@ -24,7 +24,7 @@ import com.google.android.gms.iid.InstanceIDListenerService;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 
 import java.util.ArrayList;
 
@@ -44,7 +44,7 @@ public class InstanceIDService extends InstanceIDListenerService {
         // Clear the existing token
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(PreferenceKeys.KEY_SMAP_REGISTRATION_ID, null);
+        editor.putString(GeneralKeys.KEY_SMAP_REGISTRATION_ID, null);
 
         // Request and register a new token
         Intent intent = new Intent(this, NotificationRegistrationService.class);

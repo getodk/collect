@@ -200,7 +200,7 @@ public class InstanceServerUploader extends InstanceUploader {
                     instance.getLocationTrigger(),  // smap
                     instance.getSurveyNotes(),      // smap
                     instance.getAssignmentId(),      // smap
-                    webCredentialsUtils.getCredentials(uri), contentLength);
+                    contentLength);
 
             int responseCode = messageParser.getResponseCode();
 

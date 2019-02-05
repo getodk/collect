@@ -40,8 +40,6 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.PermissionUtils.checkIfStoragePermissionsGranted;
-import static org.odk.collect.android.database.helpers.InstancesDatabaseHelper.INSTANCES_TABLE_NAME;
 import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 
 public class InstanceProvider extends ContentProvider {

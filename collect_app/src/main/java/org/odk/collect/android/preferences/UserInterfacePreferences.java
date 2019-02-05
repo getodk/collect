@@ -263,12 +263,14 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
                 // setting image path
                 setSplashPath(sourceMediaPath);
 
+                /*
                 Collect.getInstance().getDefaultTracker()
                         .send(new HitBuilders.EventBuilder()
                                 .setCategory("PreferenceChange")
                                 .setAction("Selected splash image")
                                 .setLabel(sourceMediaPathHash)
                                 .build());
+                                */
                 break;
         }
     }

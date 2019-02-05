@@ -57,7 +57,7 @@ import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.loaders.TaskLoader;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.InstanceSyncTask;
@@ -273,7 +273,7 @@ public class SmapTaskListFragment extends ListFragment
 
         boolean odkMenus = PreferenceManager
                 .getDefaultSharedPreferences(getContext())
-                .getBoolean(PreferenceKeys.KEY_SMAP_ODK_STYLE_MENUS, true);
+                .getBoolean(GeneralKeys.KEY_SMAP_ODK_STYLE_MENUS, true);
 
         if(odkMenus) {
             menu
@@ -299,7 +299,7 @@ public class SmapTaskListFragment extends ListFragment
 
         boolean adminMenu = PreferenceManager
                 .getDefaultSharedPreferences(getContext())
-                .getBoolean(PreferenceKeys.KEY_SMAP_ODK_ADMIN_MENU, false);
+                .getBoolean(GeneralKeys.KEY_SMAP_ODK_ADMIN_MENU, false);
 
         if(adminMenu) {
             menu

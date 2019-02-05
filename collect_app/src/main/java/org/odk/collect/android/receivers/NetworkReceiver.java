@@ -23,7 +23,7 @@ import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.tasks.DownloadTasksTask;
 
@@ -88,7 +88,7 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
 
     private boolean isFormAutoSendOptionEnabled(NetworkInfo currentNetworkInfo) {
         // make sure autosend is enabled on the given connected interface
-        String autosend = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_AUTOSEND);
+        String autosend = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_AUTOSEND);
         boolean sendwifi = autosend.equals("wifi_only");
         boolean sendnetwork = autosend.equals("cellular_only");
         if (autosend.equals("wifi_and_cellular")) {

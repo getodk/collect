@@ -29,7 +29,7 @@ import org.javarosa.core.model.condition.IFunctionHandler;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,7 +51,7 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
 
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(Collect.getInstance().getBaseContext());
-        mServerUrlBase = sharedPreferences.getString(PreferenceKeys.KEY_SERVER_URL, null) +
+        mServerUrlBase = sharedPreferences.getString(GeneralKeys.KEY_SERVER_URL, null) +
                 "/lookup/" + ident + "/";
     }
 

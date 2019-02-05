@@ -46,9 +46,9 @@ public class BasePreferenceFragment extends PreferenceFragment {
         // start smap disable preferences overridden by the server
 
         // Send Locations
-        Preference location = getPreferenceScreen().findPreference(PreferenceKeys.KEY_SMAP_USER_LOCATION);
+        Preference location = getPreferenceScreen().findPreference(GeneralKeys.KEY_SMAP_USER_LOCATION);
         if(location != null) {
-            boolean override_location = (Boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_OVERRIDE_LOCATION);
+            boolean override_location = (Boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_OVERRIDE_LOCATION);
             if (override_location) {
                 location.setEnabled(false);
             } else {
@@ -57,9 +57,9 @@ public class BasePreferenceFragment extends PreferenceFragment {
         }
 
         // Auto Sync
-        Preference autosend = getPreferenceScreen().findPreference(PreferenceKeys.KEY_AUTOSEND);
+        Preference autosend = getPreferenceScreen().findPreference(GeneralKeys.KEY_AUTOSEND);
         if(autosend != null) {
-            boolean override_sync = (Boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_OVERRIDE_SYNC);
+            boolean override_sync = (Boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_OVERRIDE_SYNC);
             if (override_sync) {
                 autosend.setEnabled(false);
             } else {
@@ -68,9 +68,9 @@ public class BasePreferenceFragment extends PreferenceFragment {
         }
 
         // smap Delete after send
-        Preference del = getPreferenceScreen().findPreference(PreferenceKeys.KEY_DELETE_AFTER_SEND);
+        Preference del = getPreferenceScreen().findPreference(GeneralKeys.KEY_DELETE_AFTER_SEND);
         if(del != null) {
-            boolean override_delete = (Boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_OVERRIDE_DELETE);
+            boolean override_delete = (Boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_OVERRIDE_DELETE);
             if (override_delete) {
                 del.setEnabled(false);
             } else {
@@ -79,9 +79,9 @@ public class BasePreferenceFragment extends PreferenceFragment {
         }
 
         // smap image size
-        Preference image_size = getPreferenceScreen().findPreference(PreferenceKeys.KEY_IMAGE_SIZE);
+        Preference image_size = getPreferenceScreen().findPreference(GeneralKeys.KEY_IMAGE_SIZE);
         if(image_size != null) {
-            boolean override_image_size = (Boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_OVERRIDE_IMAGE_SIZE);
+            boolean override_image_size = (Boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_OVERRIDE_IMAGE_SIZE);
             if (override_image_size) {
                 image_size.setEnabled(false);
             } else {

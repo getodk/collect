@@ -17,10 +17,8 @@
 package org.odk.collect.android.utilities;
 
 import android.content.ContentValues;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
@@ -32,7 +30,6 @@ import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI;
 
 import java.io.File;

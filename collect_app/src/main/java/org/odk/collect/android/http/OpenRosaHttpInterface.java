@@ -65,11 +65,11 @@ public interface OpenRosaHttpInterface {
                                                @NonNull File submissionFile,
                                                @NonNull URI uri,
                                                @Nullable HttpCredentialsInterface credentials,
-                                               @NonNull long contentLength;
-                                               String status,              // smap
-                                               String location_trigger,    // smap
+                                               String status,               // smap
+                                               String location_trigger,     // smap
                                                String survey_notes,         // smap
-                                               String assignment_id) throws IOException;   // smap
+                                               String assignment_id,        // smap
+                                               @NonNull long contentLength) throws IOException;
 
     /**
      * smap

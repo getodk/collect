@@ -38,7 +38,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.TraceUtilities;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.Constants;
 import org.odk.collect.android.utilities.NotificationUtils;
 
@@ -95,7 +95,7 @@ public class LocationService extends Service implements LocationListener, Locati
                 @Override
                 public void run() {
                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-                    boolean enabled = sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_USER_LOCATION, false);
+                    boolean enabled = sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
 
                     if (enabled == isRecordingLocation) {
                         // No change
@@ -170,7 +170,7 @@ public class LocationService extends Service implements LocationListener, Locati
     public void onLocationChanged(Location location) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-        boolean enabledTracking = sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_USER_LOCATION, false);
+        boolean enabledTracking = sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
         boolean enabledGPS = false;
 
         if(isValidLocation(location) && isAccurateLocation(location)) {

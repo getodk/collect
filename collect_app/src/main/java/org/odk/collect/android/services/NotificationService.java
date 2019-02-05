@@ -36,7 +36,7 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.tasks.DownloadTasksTask;
 import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.Utilities;
@@ -99,7 +99,7 @@ public class NotificationService extends GcmListenerService {
 
     private boolean isFormAutoSendOptionEnabled(NetworkInfo currentNetworkInfo) {
         // make sure autosend is enabled on the given connected interface
-        String autosend = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_AUTOSEND);
+        String autosend = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_AUTOSEND);
         boolean sendwifi = autosend.equals("wifi_only");
         boolean sendnetwork = autosend.equals("cellular_only");
         if (autosend.equals("wifi_and_cellular")) {

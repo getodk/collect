@@ -31,7 +31,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.TaskAssignment;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.loaders.TaskEntry;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.taskModel.InstanceXML;
@@ -53,7 +53,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.zip.GZIPInputStream;
 
 import javax.inject.Inject;
 
@@ -86,7 +85,7 @@ public class Utilities {
                 .getDefaultSharedPreferences(Collect.getInstance()
                         .getBaseContext());
         String serverUrl = sharedPreferences.getString(
-                PreferenceKeys.KEY_SERVER_URL, null);
+                GeneralKeys.KEY_SERVER_URL, null);
         String source = STFileUtils.getSource(serverUrl);
 
 

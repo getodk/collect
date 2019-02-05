@@ -28,7 +28,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
@@ -59,7 +58,7 @@ import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.receivers.NetworkReceiver;
@@ -230,7 +229,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         SharedPreferences sharedPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
-        if (sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_LOCATION_TRIGGER, true)) {
+        if (sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_LOCATION_TRIGGER, true)) {
             if(mNfcAdapter == null) {
                 mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
             }
@@ -686,7 +685,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         boolean isSubmitted = Utilities.isSubmitted(status);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean reviewFinal = sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_REVIEW_FINAL, true);
+        boolean reviewFinal = sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_REVIEW_FINAL, true);
 
         if(isSubmitted) {
             Toast.makeText(

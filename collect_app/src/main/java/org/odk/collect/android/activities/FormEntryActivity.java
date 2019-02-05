@@ -1325,7 +1325,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 boolean showInstanceName = PreferenceManager        // smap
                         .getDefaultSharedPreferences(this)
-                        .getBoolean(PreferenceKeys.KEY_SMAP_ODK_INSTANCENAME, false);
+                        .getBoolean(GeneralKeys.KEY_SMAP_ODK_INSTANCENAME, false);
 
                 if (formController.getSubmissionMetadata().instanceName == null) {
                     // no meta/instanceName field in the form -- see if we have a
@@ -2748,8 +2748,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, null, true);
                 }
                 */
-                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);  // smap
-                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, null, false);    // smap
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, null, true); // smap
                 sendBroadcast(new Intent("org.odk.collect.android.FormSaved"));     // smap - use network receiver to sync
 
                 finishReturnInstance(saveResult.isComplete());  // smap add isComplete
@@ -3045,7 +3045,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-<<<<<<< HEAD
     /*
      * smap start
      * Handle remote service calls

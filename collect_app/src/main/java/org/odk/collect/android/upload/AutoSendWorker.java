@@ -300,7 +300,8 @@ public class AutoSendWorker extends Worker {
                 AUTO_SEND_RESULT_NOTIFICATION_ID,
                 R.string.odk_auto_note,
                 anyFailure ? Collect.getInstance().getString(R.string.failures)
-                        : Collect.getInstance().getString(R.string.success));
+                        : Collect.getInstance().getString(R.string.success),
+                true);      // smap add true (start of notification)
 
     }
 }

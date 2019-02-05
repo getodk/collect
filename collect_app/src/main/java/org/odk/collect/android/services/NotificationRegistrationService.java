@@ -29,7 +29,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.amazonaws.mobile.AWSMobileClient;
 import org.odk.collect.android.amazonaws.models.nosql.DevicesDO;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.Utilities;
 
 import timber.log.Timber;
@@ -63,21 +63,21 @@ public class NotificationRegistrationService extends IntentService {
 
             boolean notifyServer = false;
             // Get the token
-            String token = sharedPreferences.getString(PreferenceKeys.KEY_SMAP_REGISTRATION_ID, null);
+            String token = sharedPreferences.getString(GeneralKeys.KEY_SMAP_REGISTRATION_ID, null);
             if(token == null || token.trim().length() == 0) {
                 token = instanceID.getToken(BuildConfig.SENDER_ID, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-                editor.putString(PreferenceKeys.KEY_SMAP_REGISTRATION_ID, token);
+                editor.putString(GeneralKeys.KEY_SMAP_REGISTRATION_ID, token);
                 notifyServer = true;
             }
             Timber.i("Registration Token: " + token);
 
-            String username = sharedPreferences.getString(PreferenceKeys.KEY_USERNAME, null);
+            String username = sharedPreferences.getString(GeneralKeys.KEY_USERNAME, null);
             String server = Utilities.getSource();
 
             if(username != null && server != null && token != null) {
 
-                String registeredServer = sharedPreferences.getString(PreferenceKeys.KEY_SMAP_REGISTRATION_SERVER, null);
-                String registeredUser = sharedPreferences.getString(PreferenceKeys.KEY_SMAP_REGISTRATION_USER, null);
+                String registeredServer = sharedPreferences.getString(GeneralKeys.KEY_SMAP_REGISTRATION_SERVER, null);
+                String registeredUser = sharedPreferences.getString(GeneralKeys.KEY_SMAP_REGISTRATION_USER, null);
 
                 // We can notify the server if we need to
                 // Update the server if the registrationId is new or the server or username's have changed
@@ -96,8 +96,8 @@ public class NotificationRegistrationService extends IntentService {
                     devices.setUserIdent(username);
                     mapper.save(devices);
 
-                    editor.putString(PreferenceKeys.KEY_SMAP_REGISTRATION_SERVER, server);
-                    editor.putString(PreferenceKeys.KEY_SMAP_REGISTRATION_USER, username);
+                    editor.putString(GeneralKeys.KEY_SMAP_REGISTRATION_SERVER, server);
+                    editor.putString(GeneralKeys.KEY_SMAP_REGISTRATION_USER, username);
                 } else {
                     Timber.i("================================================== Notification not required");
                 }

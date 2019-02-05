@@ -33,7 +33,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -62,7 +62,7 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
 
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(Collect.getInstance().getBaseContext());
-        mServerUrlBase = sharedPreferences.getString(PreferenceKeys.KEY_SERVER_URL, null) +
+        mServerUrlBase = sharedPreferences.getString(GeneralKeys.KEY_SERVER_URL, null) +
                 "/lookup/choices/" + ident + "/";
 
         this.valueColumn = valueColumn;

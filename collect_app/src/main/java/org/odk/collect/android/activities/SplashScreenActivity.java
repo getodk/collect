@@ -32,7 +32,6 @@ import android.widget.LinearLayout;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -45,8 +44,6 @@ import java.io.IOException;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
-import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SPLASH_PATH;
 
 public class SplashScreenActivity extends Activity {

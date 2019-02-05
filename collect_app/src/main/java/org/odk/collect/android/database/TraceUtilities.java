@@ -24,7 +24,7 @@ import android.preference.PreferenceManager;
 
 import org.odk.collect.android.database.TraceProviderAPI.TraceColumns;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.STFileUtils;
 
@@ -54,7 +54,7 @@ public class TraceUtilities {
                 .getDefaultSharedPreferences(Collect.getInstance()
                         .getBaseContext());
         String serverUrl = settings.getString(
-                PreferenceKeys.KEY_SERVER_URL, null);
+                GeneralKeys.KEY_SERVER_URL, null);
         return STFileUtils.getSource(serverUrl);
     }
 

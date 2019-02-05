@@ -296,7 +296,7 @@ public class SmapTaskMapFragment extends Fragment
 
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
-        mHelper = new MapHelper(getActivity(),mMap);
+        mHelper = new MapHelper(getActivity(), mMap, 0);    // Default selected layer
         mHelper.setBasemap();
 
         userLocationIcon = BitmapDescriptorFactory.fromResource(R.drawable.ic_userlocation);
