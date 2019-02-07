@@ -89,6 +89,9 @@ public class FormController {
     private static final String AUDIT = "audit";
     public static final String AUDIT_FILE_NAME = "audit.csv";
 
+    /** Filename of the last-saved instance data. */
+    public static final String LAST_SAVED_FILENAME = "last-saved.xml";
+
     /*
      * Store the auditEventLogger object with the form controller state
      */
@@ -168,6 +171,11 @@ public class FormController {
     @Nullable
     public String getAbsoluteInstancePath() {
         return instanceFile != null ? instanceFile.getAbsolutePath() : null;
+    }
+
+    @Nullable
+    public String getLastSavedPath() {
+        return mediaFolder != null ? mediaFolder.getAbsolutePath() + File.separator + LAST_SAVED_FILENAME : null;
     }
 
     public void setIndexWaitingForData(FormIndex index) {
