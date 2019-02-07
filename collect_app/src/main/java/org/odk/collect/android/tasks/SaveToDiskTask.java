@@ -270,9 +270,13 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
         writeFile(payload, instancePath);
 
+        // Write SMS data
         final ByteArrayPayload payloadSms = formController.getFilledInFormSMS();
-        // Write SMS to card
         writeFile(payloadSms, getSmsInstancePath(instancePath));
+
+        // Write last-saved instance
+        String lastSavedPath = formController.getLastSavedPath();
+        writeFile(payload, lastSavedPath);
 
         // update the uri. We have exported the reloadable instance, so update status...
         // Since we saved a reloadable instance, it is flagged as re-openable so that if any error
