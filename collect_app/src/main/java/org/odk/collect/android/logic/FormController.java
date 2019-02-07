@@ -63,6 +63,7 @@ import java.util.List;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.XML_OPENDATAKIT_NAMESPACE;
+import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
 
 /**
  * This class is a wrapper for Javarosa's FormEntryController. In theory, if you wanted to replace
@@ -88,9 +89,6 @@ public class FormController {
      */
     private static final String AUDIT = "audit";
     public static final String AUDIT_FILE_NAME = "audit.csv";
-
-    /** Filename of the last-saved instance data. */
-    public static final String LAST_SAVED_FILENAME = "last-saved.xml";
 
     /*
      * Store the auditEventLogger object with the form controller state

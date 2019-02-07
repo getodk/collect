@@ -51,8 +51,6 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.logic.FormController.LAST_SAVED_FILENAME;
-
 /**
  * Static methods used for common file operations.
  *
@@ -69,6 +67,10 @@ public class FileUtils {
     public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
     public static final String AUTO_DELETE = "autoDelete";
     public static final String AUTO_SEND = "autoSend";
+
+    /** Filename of the last-saved instance data. */
+    public static final String LAST_SAVED_FILENAME = "last-saved.xml";
+
     static int bufSize = 16 * 1024; // May be set by unit test
 
     private FileUtils() {

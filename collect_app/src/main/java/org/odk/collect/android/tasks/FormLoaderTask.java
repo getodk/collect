@@ -61,7 +61,7 @@ import java.util.Map;
 import au.com.bytecode.opencsv.CSVReader;
 import timber.log.Timber;
 
-import static org.odk.collect.android.logic.FormController.LAST_SAVED_FILENAME;
+import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
 
 /**
  * Background task for loading a form.
