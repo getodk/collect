@@ -51,6 +51,8 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.logic.FormController.LAST_SAVED_FILENAME;
+
 /**
  * Static methods used for common file operations.
  *
@@ -400,9 +402,25 @@ public class FileUtils {
         }
     }
 
+    public static String getFormFileName(File formXml) {
+        return getFormFileName(formXml.getName());
+    }
+
+    public static String getFormFileName(String formFilePath) {
+        return formFilePath.substring(0, formFilePath.lastIndexOf('.'));
+    }
+
     public static String constructMediaPath(String formFilePath) {
-        String pathNoExtension = formFilePath.substring(0, formFilePath.lastIndexOf('.'));
-        return pathNoExtension + "-media";
+        return getFormFileName(formFilePath) + "-media";
+    }
+
+    public static File getFormMediaDir(File formXml) {
+        final String formFileName = getFormFileName(formXml);
+        return new File(formXml.getParent(), formFileName + "-media");
+    }
+
+    public static File getLastSavedFile(File formXml) {
+        return new File(getFormMediaDir(formXml), LAST_SAVED_FILENAME);
     }
 
     /**

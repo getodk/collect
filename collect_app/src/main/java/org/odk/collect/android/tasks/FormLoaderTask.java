@@ -126,8 +126,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         final File formXml = new File(formPath);
 
         // set paths to /sdcard/odk/forms/formfilename-media/
-        final String formFileName = getFormFileName(formXml);
-        final File formMediaDir = getFormMediaDir(formXml);
+        final String formFileName = FileUtils.getFormFileName(formXml);
+        final File formMediaDir = FileUtils.getFormMediaDir(formXml);
 
         final ReferenceManager referenceManager = ReferenceManager.instance();
 
@@ -215,15 +215,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         return data;
     }
 
-    private String getFormFileName(File formXml) {
-        return formXml.getName().substring(0, formXml.getName().lastIndexOf("."));
-    }
-
-    private File getFormMediaDir(File formXml) {
-        final String formFileName = getFormFileName(formXml);
-        return new File(formXml.getParent(), formFileName + "-media");
-    }
-
     private void addSessionRootTranslators(String formFileName, ReferenceManager referenceManager, String... hostStrings) {
         // Set jr://... to point to /sdcard/odk/forms/filename-media/
         final String translatedPrefix = String.format("jr://file/forms/%s-media/", formFileName);
@@ -242,8 +233,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
 
         // Get the last-saved instance, if it exists.
-        String lastSavedPath = getFormMediaDir(formXml).getAbsoluteFile() + File.separator + LAST_SAVED_FILENAME;
-        File lastSavedFile = new File(lastSavedPath);
+        File lastSavedFile = FileUtils.getLastSavedFile(formXml);
         String lastSavedSrc = lastSavedFile.exists() ? "jr://file/" + LAST_SAVED_FILENAME : null;
 
         FileInputStream fis = null;
