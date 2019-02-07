@@ -321,9 +321,6 @@
   <string name="geopoint_instruction">Długo naciśnij aby umieścić znacznik lub dotknij przycisk Dodaj znacznik.</string>
   <string name="geopoint_no_draggable_instruction">Dotknij przycisk Dodaj znacznik.</string>
   <string name="discard">Usuń</string>
-  <string name="zoom_to_where">Przybliż do…</string>
-  <string name="zoom_to_location">Zbliżenie na bieżącą lokalizację</string>
-  <string name="zoom_to_feature">Zbliżenie na zapisaną właściwość</string>
   <string name="geoshape_view_change_location">Pokaż lub Zmień GeoShape</string>
   <string name="geotrace_view_change_location">Pokaż lub Zmień GeoTrace</string>
   <string name="bearing">Namiar: %.3f</string>

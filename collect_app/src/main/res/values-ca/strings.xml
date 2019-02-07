@@ -309,8 +309,6 @@
   <string name="geopoint_instruction">Prem una estona o toca el botó d\'afegir fita.</string>
   <string name="geopoint_no_draggable_instruction">Toca el botó afegir fita</string>
   <string name="discard">Descarta</string>
-  <string name="zoom_to_location">Zoom a posició actual</string>
-  <string name="zoom_to_feature">Zoom a característica desada</string>
   <string name="geoshape_view_change_location">Visualitza o modifica GeoShape</string>
   <string name="geotrace_view_change_location">Visualitza o modifica GeoShape</string>
   <string name="bearing">Rumb: %.3f</string>

@@ -29,7 +29,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
@@ -47,7 +46,7 @@ public class GeoShapeActivityTest extends BaseGeoActivityTest {
         controller = Robolectric.buildActivity(GeoShapeActivity.class);
     }
 
-    @Test public void shouldShowZoomDialogOnFirstLocationFix() {
+    @Test public void shouldEnableZoomButtonOnFirstLocationFix() {
         // Starting the activity should start the location client.
         activity = controller.create().start().resume().visible().get();
         assertTrue(fakeLocationClient.isRunning());
