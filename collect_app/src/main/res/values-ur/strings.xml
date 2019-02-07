@@ -350,9 +350,6 @@
   <string name="geopoint_instruction">پلیس مارک کرنے کے لیے طویل دبائیں یا ایڈ مارکر بٹن ٹیپ کریں</string>
   <string name="geopoint_no_draggable_instruction"> مارکر بٹن پر کلک کریں.</string>
   <string name="discard">ختم کر دینا</string>
-  <string name="zoom_to_where">زوم ٹو </string>
-  <string name="zoom_to_location">موجودہ مقام پر زوم </string>
-  <string name="zoom_to_feature">محفوظ کردہ فیچر پر زوم</string>
   <string name="geoshape_view_change_location">جیو شیپ دیکھیں یا تبدیل کریں</string>
   <string name="geotrace_view_change_location">جیو ٹریس دیکھیں یا تبدیل کریں</string>
   <string name="bearing">بیؑرنگ:%.3f</string>

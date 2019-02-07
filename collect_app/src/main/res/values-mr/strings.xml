@@ -321,9 +321,6 @@
   <string name="geopoint_instruction">चिन्ह ठेवण्यासाठी जास्त वेळ दाबा किंवा जोडा मार्कर बटण टॅप करा</string>
   <string name="geopoint_no_draggable_instruction">जोडा मार्कर बटण टॅप करा</string>
   <string name="discard">टाकून द्या</string>
-  <string name="zoom_to_where">झूम टु …</string>
-  <string name="zoom_to_location">वर्तमान स्थानावर झूम</string>
-  <string name="zoom_to_feature">जतन केलेल्या वैशिष्ट्य पर्यंत झूम करा</string>
   <string name="geoshape_view_change_location">जिओ शेप पहा किंवा बदला</string>
   <string name="geotrace_view_change_location">जिओ ट्रेस पहा किंवा बदला</string>
   <string name="bearing">असणारा:%.3f</string>

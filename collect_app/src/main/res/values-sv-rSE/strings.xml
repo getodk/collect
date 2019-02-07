@@ -346,9 +346,6 @@ Dela ODK Collect med dem.</string>
   <string name="geopoint_instruction">Lång tryckning för att placera markör eller knacka på knappen \'lägg till markör\'</string>
   <string name="geopoint_no_draggable_instruction">Knacka på knappen \'lägg till markör\'.</string>
   <string name="discard">Ignorera</string>
-  <string name="zoom_to_where">Zooma till…</string>
-  <string name="zoom_to_location">Zooma till nuvarande position</string>
-  <string name="zoom_to_feature">Zooma till sparat objekt</string>
   <string name="geoshape_view_change_location">Visa eller redigera GeoShape</string>
   <string name="geotrace_view_change_location">Visa eller redigera GeoTrace</string>
   <string name="bearing">Riktning: %.3f</string>
