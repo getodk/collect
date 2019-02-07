@@ -19,7 +19,6 @@ public class MyanmarDateUtilsTest {
     public void convertDatesTest() {
         DateTimeZone.setProvider(new UTCProvider());
 
-        // 28/01/1900 ->
         LocalDateTime gregorianDateForConverting = new LocalDateTime()
                 .withYear(1900)
                 .withMonthOfYear(1)
@@ -27,14 +26,13 @@ public class MyanmarDateUtilsTest {
 
         MyanmarDate myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(gregorianDateForConverting);
         assertEquals(1261, myanmarDate.getYearInt());
-        assertEquals("Pyatho", myanmarDate.getMonthName(new LanguageCatalog(Language.ENGLISH)));
+        assertEquals("ပြာသို", myanmarDate.getMonthName(new LanguageCatalog(Language.MYANMAR)));
         assertEquals(29, myanmarDate.getMonthDay());
 
         assertGregorianDatesAreEqual(gregorianDateForConverting, MyanmarDateUtils.myanmarDateToGregorianDate(myanmarDate));
         int monthIndex = MyanmarDateKernel.getMyanmarMonth(myanmarDate.getYearInt(), 1).getIndex().get(MyanmarDateUtils.getMonthId(myanmarDate));
         assertMyanmarDatesAreEqual(myanmarDate, MyanmarDateUtils.createMyanmarDate(myanmarDate.getYearInt(), monthIndex, myanmarDate.getMonthDay()));
 
-        // 15/02/1912 ->
         gregorianDateForConverting = new LocalDateTime()
                 .withYear(1912)
                 .withMonthOfYear(2)
@@ -42,14 +40,13 @@ public class MyanmarDateUtilsTest {
 
         myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(gregorianDateForConverting);
         assertEquals(1273, myanmarDate.getYearInt());
-        assertEquals("Tabodwe", myanmarDate.getMonthName(new LanguageCatalog(Language.ENGLISH)));
+        assertEquals("တပို့တွဲ", myanmarDate.getMonthName(new LanguageCatalog(Language.MYANMAR)));
         assertEquals(28, myanmarDate.getMonthDay());
 
         assertGregorianDatesAreEqual(gregorianDateForConverting, MyanmarDateUtils.myanmarDateToGregorianDate(myanmarDate));
         monthIndex = MyanmarDateKernel.getMyanmarMonth(myanmarDate.getYearInt(), 1).getIndex().get(MyanmarDateUtils.getMonthId(myanmarDate));
         assertMyanmarDatesAreEqual(myanmarDate, MyanmarDateUtils.createMyanmarDate(myanmarDate.getYearInt(), monthIndex, myanmarDate.getMonthDay()));
 
-        // 07/03/1924 ->
         gregorianDateForConverting = new LocalDateTime()
                 .withYear(1924)
                 .withMonthOfYear(3)
@@ -57,14 +54,13 @@ public class MyanmarDateUtilsTest {
 
         myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(gregorianDateForConverting);
         assertEquals(1285, myanmarDate.getYearInt());
-        assertEquals("Tabaung", myanmarDate.getMonthName(new LanguageCatalog(Language.ENGLISH)));
+        assertEquals("တပေါင်း", myanmarDate.getMonthName(new LanguageCatalog(Language.MYANMAR)));
         assertEquals(3, myanmarDate.getMonthDay());
 
         assertGregorianDatesAreEqual(gregorianDateForConverting, MyanmarDateUtils.myanmarDateToGregorianDate(myanmarDate));
         monthIndex = MyanmarDateKernel.getMyanmarMonth(myanmarDate.getYearInt(), 1).getIndex().get(MyanmarDateUtils.getMonthId(myanmarDate));
         assertMyanmarDatesAreEqual(myanmarDate, MyanmarDateUtils.createMyanmarDate(myanmarDate.getYearInt(), monthIndex, myanmarDate.getMonthDay()));
 
-        // 10/04/1938 ->
         gregorianDateForConverting = new LocalDateTime()
                 .withYear(1938)
                 .withMonthOfYear(4)
@@ -72,14 +68,13 @@ public class MyanmarDateUtilsTest {
 
         myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(gregorianDateForConverting);
         assertEquals(1299, myanmarDate.getYearInt());
-        //assertEquals("ှောင်းTagu", myanmarDate.getMonthName(new LanguageCatalog(Language.ENGLISH)));
+        assertEquals("နှောင်းတန်ခူး", myanmarDate.getMonthName(new LanguageCatalog(Language.MYANMAR)));
         assertEquals(11, myanmarDate.getMonthDay());
 
         assertGregorianDatesAreEqual(gregorianDateForConverting, MyanmarDateUtils.myanmarDateToGregorianDate(myanmarDate));
         monthIndex = MyanmarDateKernel.getMyanmarMonth(myanmarDate.getYearInt(), 1).getIndex().get(MyanmarDateUtils.getMonthId(myanmarDate));
         assertMyanmarDatesAreEqual(myanmarDate, MyanmarDateUtils.createMyanmarDate(myanmarDate.getYearInt(), monthIndex, myanmarDate.getMonthDay()));
 
-        // 29/05/1944 ->
         gregorianDateForConverting = new LocalDateTime()
                 .withYear(1944)
                 .withMonthOfYear(5)
@@ -87,14 +82,13 @@ public class MyanmarDateUtilsTest {
 
         myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(gregorianDateForConverting);
         assertEquals(1306, myanmarDate.getYearInt());
-        assertEquals("Nayon", myanmarDate.getMonthName(new LanguageCatalog(Language.ENGLISH)));
+        assertEquals("နယုန်", myanmarDate.getMonthName(new LanguageCatalog(Language.MYANMAR)));
         assertEquals(8, myanmarDate.getMonthDay());
 
         assertGregorianDatesAreEqual(gregorianDateForConverting, MyanmarDateUtils.myanmarDateToGregorianDate(myanmarDate));
         monthIndex = MyanmarDateKernel.getMyanmarMonth(myanmarDate.getYearInt(), 1).getIndex().get(MyanmarDateUtils.getMonthId(myanmarDate));
         assertMyanmarDatesAreEqual(myanmarDate, MyanmarDateUtils.createMyanmarDate(myanmarDate.getYearInt(), monthIndex, myanmarDate.getMonthDay()));
 
-        // 01/06/1959 ->
         gregorianDateForConverting = new LocalDateTime()
                 .withYear(1959)
                 .withMonthOfYear(6)
@@ -102,14 +96,13 @@ public class MyanmarDateUtilsTest {
 
         myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(gregorianDateForConverting);
         assertEquals(1321, myanmarDate.getYearInt());
-        assertEquals("Kason", myanmarDate.getMonthName(new LanguageCatalog(Language.ENGLISH)));
+        assertEquals("ကဆုန်", myanmarDate.getMonthName(new LanguageCatalog(Language.MYANMAR)));
         assertEquals(26, myanmarDate.getMonthDay());
 
         assertGregorianDatesAreEqual(gregorianDateForConverting, MyanmarDateUtils.myanmarDateToGregorianDate(myanmarDate));
         monthIndex = MyanmarDateKernel.getMyanmarMonth(myanmarDate.getYearInt(), 1).getIndex().get(MyanmarDateUtils.getMonthId(myanmarDate));
         assertMyanmarDatesAreEqual(myanmarDate, MyanmarDateUtils.createMyanmarDate(myanmarDate.getYearInt(), monthIndex, myanmarDate.getMonthDay()));
 
-        // 11/07/1963 ->
         gregorianDateForConverting = new LocalDateTime()
                 .withYear(1963)
                 .withMonthOfYear(7)
@@ -117,14 +110,13 @@ public class MyanmarDateUtilsTest {
 
         myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(gregorianDateForConverting);
         assertEquals(1325, myanmarDate.getYearInt());
-        assertEquals("Waso", myanmarDate.getMonthName(new LanguageCatalog(Language.ENGLISH)));
+        assertEquals("ဝါဆို", myanmarDate.getMonthName(new LanguageCatalog(Language.MYANMAR)));
         assertEquals(21, myanmarDate.getMonthDay());
 
         assertGregorianDatesAreEqual(gregorianDateForConverting, MyanmarDateUtils.myanmarDateToGregorianDate(myanmarDate));
         monthIndex = MyanmarDateKernel.getMyanmarMonth(myanmarDate.getYearInt(), 1).getIndex().get(MyanmarDateUtils.getMonthId(myanmarDate));
         assertMyanmarDatesAreEqual(myanmarDate, MyanmarDateUtils.createMyanmarDate(myanmarDate.getYearInt(), monthIndex, myanmarDate.getMonthDay()));
 
-        // 16/08/1972 ->
         gregorianDateForConverting = new LocalDateTime()
                 .withYear(1972)
                 .withMonthOfYear(8)
@@ -132,14 +124,13 @@ public class MyanmarDateUtilsTest {
 
         myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(gregorianDateForConverting);
         assertEquals(1334, myanmarDate.getYearInt());
-        assertEquals("Wagaung", myanmarDate.getMonthName(new LanguageCatalog(Language.ENGLISH)));
+        assertEquals("ဝါခေါင်", myanmarDate.getMonthName(new LanguageCatalog(Language.MYANMAR)));
         assertEquals(7, myanmarDate.getMonthDay());
 
         assertGregorianDatesAreEqual(gregorianDateForConverting, MyanmarDateUtils.myanmarDateToGregorianDate(myanmarDate));
         monthIndex = MyanmarDateKernel.getMyanmarMonth(myanmarDate.getYearInt(), 1).getIndex().get(MyanmarDateUtils.getMonthId(myanmarDate));
         assertMyanmarDatesAreEqual(myanmarDate, MyanmarDateUtils.createMyanmarDate(myanmarDate.getYearInt(), monthIndex, myanmarDate.getMonthDay()));
 
-        // 20/09/1986 ->
         gregorianDateForConverting = new LocalDateTime()
                 .withYear(1986)
                 .withMonthOfYear(9)
@@ -147,14 +138,13 @@ public class MyanmarDateUtilsTest {
 
         myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(gregorianDateForConverting);
         assertEquals(1348, myanmarDate.getYearInt());
-        assertEquals("Tawthalin", myanmarDate.getMonthName(new LanguageCatalog(Language.ENGLISH)));
+        assertEquals("တော်သလင်း", myanmarDate.getMonthName(new LanguageCatalog(Language.MYANMAR)));
         assertEquals(17, myanmarDate.getMonthDay());
 
         assertGregorianDatesAreEqual(gregorianDateForConverting, MyanmarDateUtils.myanmarDateToGregorianDate(myanmarDate));
         monthIndex = MyanmarDateKernel.getMyanmarMonth(myanmarDate.getYearInt(), 1).getIndex().get(MyanmarDateUtils.getMonthId(myanmarDate));
         assertMyanmarDatesAreEqual(myanmarDate, MyanmarDateUtils.createMyanmarDate(myanmarDate.getYearInt(), monthIndex, myanmarDate.getMonthDay()));
 
-        // 20/10/1991 ->
         gregorianDateForConverting = new LocalDateTime()
                 .withYear(1991)
                 .withMonthOfYear(10)
@@ -162,14 +152,13 @@ public class MyanmarDateUtilsTest {
 
         myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(gregorianDateForConverting);
         assertEquals(1353, myanmarDate.getYearInt());
-        assertEquals("Thadingyut", myanmarDate.getMonthName(new LanguageCatalog(Language.ENGLISH)));
+        assertEquals("သီတင်းကျွတ်", myanmarDate.getMonthName(new LanguageCatalog(Language.MYANMAR)));
         assertEquals(12, myanmarDate.getMonthDay());
 
         assertGregorianDatesAreEqual(gregorianDateForConverting, MyanmarDateUtils.myanmarDateToGregorianDate(myanmarDate));
         monthIndex = MyanmarDateKernel.getMyanmarMonth(myanmarDate.getYearInt(), 1).getIndex().get(MyanmarDateUtils.getMonthId(myanmarDate));
         assertMyanmarDatesAreEqual(myanmarDate, MyanmarDateUtils.createMyanmarDate(myanmarDate.getYearInt(), monthIndex, myanmarDate.getMonthDay()));
 
-        // 25/11/2000 ->
         gregorianDateForConverting = new LocalDateTime()
                 .withYear(2000)
                 .withMonthOfYear(11)
@@ -177,14 +166,13 @@ public class MyanmarDateUtilsTest {
 
         myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(gregorianDateForConverting);
         assertEquals(1362, myanmarDate.getYearInt());
-        assertEquals("Tazaungmon", myanmarDate.getMonthName(new LanguageCatalog(Language.ENGLISH)));
+        assertEquals("တန်ဆောင်မုန်း", myanmarDate.getMonthName(new LanguageCatalog(Language.MYANMAR)));
         assertEquals(30, myanmarDate.getMonthDay());
 
         assertGregorianDatesAreEqual(gregorianDateForConverting, MyanmarDateUtils.myanmarDateToGregorianDate(myanmarDate));
         monthIndex = MyanmarDateKernel.getMyanmarMonth(myanmarDate.getYearInt(), 1).getIndex().get(MyanmarDateUtils.getMonthId(myanmarDate));
         assertMyanmarDatesAreEqual(myanmarDate, MyanmarDateUtils.createMyanmarDate(myanmarDate.getYearInt(), monthIndex, myanmarDate.getMonthDay()));
 
-        // 30/12/2013 ->
         gregorianDateForConverting = new LocalDateTime()
                 .withYear(2013)
                 .withMonthOfYear(12)
@@ -192,14 +180,13 @@ public class MyanmarDateUtilsTest {
 
         myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(gregorianDateForConverting);
         assertEquals(1375, myanmarDate.getYearInt());
-        assertEquals("Nadaw", myanmarDate.getMonthName(new LanguageCatalog(Language.ENGLISH)));
+        assertEquals("နတ်တော်", myanmarDate.getMonthName(new LanguageCatalog(Language.MYANMAR)));
         assertEquals(28, myanmarDate.getMonthDay());
 
         assertGregorianDatesAreEqual(gregorianDateForConverting, MyanmarDateUtils.myanmarDateToGregorianDate(myanmarDate));
         monthIndex = MyanmarDateKernel.getMyanmarMonth(myanmarDate.getYearInt(), 1).getIndex().get(MyanmarDateUtils.getMonthId(myanmarDate));
         assertMyanmarDatesAreEqual(myanmarDate, MyanmarDateUtils.createMyanmarDate(myanmarDate.getYearInt(), monthIndex, myanmarDate.getMonthDay()));
 
-        // 02/01/2027 ->
         gregorianDateForConverting = new LocalDateTime()
                 .withYear(2027)
                 .withMonthOfYear(1)
@@ -207,14 +194,13 @@ public class MyanmarDateUtilsTest {
 
         myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(gregorianDateForConverting);
         assertEquals(1388, myanmarDate.getYearInt());
-        assertEquals("Nadaw", myanmarDate.getMonthName(new LanguageCatalog(Language.ENGLISH)));
+        assertEquals("နတ်တော်", myanmarDate.getMonthName(new LanguageCatalog(Language.MYANMAR)));
         assertEquals(24, myanmarDate.getMonthDay());
 
         assertGregorianDatesAreEqual(gregorianDateForConverting, MyanmarDateUtils.myanmarDateToGregorianDate(myanmarDate));
         monthIndex = MyanmarDateKernel.getMyanmarMonth(myanmarDate.getYearInt(), 1).getIndex().get(MyanmarDateUtils.getMonthId(myanmarDate));
         assertMyanmarDatesAreEqual(myanmarDate, MyanmarDateUtils.createMyanmarDate(myanmarDate.getYearInt(), monthIndex, myanmarDate.getMonthDay()));
 
-        // 12/02/2033 ->
         gregorianDateForConverting = new LocalDateTime()
                 .withYear(2033)
                 .withMonthOfYear(2)
@@ -222,14 +208,13 @@ public class MyanmarDateUtilsTest {
 
         myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(gregorianDateForConverting);
         assertEquals(1394, myanmarDate.getYearInt());
-        assertEquals("Tabodwe", myanmarDate.getMonthName(new LanguageCatalog(Language.ENGLISH)));
+        assertEquals("တပို့တွဲ", myanmarDate.getMonthName(new LanguageCatalog(Language.MYANMAR)));
         assertEquals(13, myanmarDate.getMonthDay());
 
         assertGregorianDatesAreEqual(gregorianDateForConverting, MyanmarDateUtils.myanmarDateToGregorianDate(myanmarDate));
         monthIndex = MyanmarDateKernel.getMyanmarMonth(myanmarDate.getYearInt(), 1).getIndex().get(MyanmarDateUtils.getMonthId(myanmarDate));
         assertMyanmarDatesAreEqual(myanmarDate, MyanmarDateUtils.createMyanmarDate(myanmarDate.getYearInt(), monthIndex, myanmarDate.getMonthDay()));
 
-        // 15/03/2048 ->
         gregorianDateForConverting = new LocalDateTime()
                 .withYear(2048)
                 .withMonthOfYear(3)
@@ -237,14 +222,13 @@ public class MyanmarDateUtilsTest {
 
         myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(gregorianDateForConverting);
         assertEquals(1409, myanmarDate.getYearInt());
-        //assertEquals("Late Tagu", myanmarDate.getMonthName(new LanguageCatalog(Language.ENGLISH)));
+        assertEquals("နှောင်းတန်ခူး", myanmarDate.getMonthName(new LanguageCatalog(Language.MYANMAR)));
         assertEquals(2, myanmarDate.getMonthDay());
 
         assertGregorianDatesAreEqual(gregorianDateForConverting, MyanmarDateUtils.myanmarDateToGregorianDate(myanmarDate));
         monthIndex = MyanmarDateKernel.getMyanmarMonth(myanmarDate.getYearInt(), 1).getIndex().get(MyanmarDateUtils.getMonthId(myanmarDate));
         assertMyanmarDatesAreEqual(myanmarDate, MyanmarDateUtils.createMyanmarDate(myanmarDate.getYearInt(), monthIndex, myanmarDate.getMonthDay()));
 
-        // 21/04/2059 ->
         gregorianDateForConverting = new LocalDateTime()
                 .withYear(2059)
                 .withMonthOfYear(4)
@@ -252,14 +236,13 @@ public class MyanmarDateUtilsTest {
 
         myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(gregorianDateForConverting);
         assertEquals(1421, myanmarDate.getYearInt());
-        assertEquals("Tagu", myanmarDate.getMonthName(new LanguageCatalog(Language.ENGLISH)));
+        assertEquals("တန်ခူး", myanmarDate.getMonthName(new LanguageCatalog(Language.MYANMAR)));
         assertEquals(9, myanmarDate.getMonthDay());
 
         assertGregorianDatesAreEqual(gregorianDateForConverting, MyanmarDateUtils.myanmarDateToGregorianDate(myanmarDate));
         monthIndex = MyanmarDateKernel.getMyanmarMonth(myanmarDate.getYearInt(), 1).getIndex().get(MyanmarDateUtils.getMonthId(myanmarDate));
         assertMyanmarDatesAreEqual(myanmarDate, MyanmarDateUtils.createMyanmarDate(myanmarDate.getYearInt(), monthIndex, myanmarDate.getMonthDay()));
 
-        // 24/05/2064 ->
         gregorianDateForConverting = new LocalDateTime()
                 .withYear(2064)
                 .withMonthOfYear(5)
@@ -267,14 +250,13 @@ public class MyanmarDateUtilsTest {
 
         myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(gregorianDateForConverting);
         assertEquals(1426, myanmarDate.getYearInt());
-        assertEquals("Nayon", myanmarDate.getMonthName(new LanguageCatalog(Language.ENGLISH)));
+        assertEquals("နယုန်", myanmarDate.getMonthName(new LanguageCatalog(Language.MYANMAR)));
         assertEquals(10, myanmarDate.getMonthDay());
 
         assertGregorianDatesAreEqual(gregorianDateForConverting, MyanmarDateUtils.myanmarDateToGregorianDate(myanmarDate));
         monthIndex = MyanmarDateKernel.getMyanmarMonth(myanmarDate.getYearInt(), 1).getIndex().get(MyanmarDateUtils.getMonthId(myanmarDate));
         assertMyanmarDatesAreEqual(myanmarDate, MyanmarDateUtils.createMyanmarDate(myanmarDate.getYearInt(), monthIndex, myanmarDate.getMonthDay()));
 
-        // 04/06/2077 ->
         gregorianDateForConverting = new LocalDateTime()
                 .withYear(2077)
                 .withMonthOfYear(6)
@@ -282,14 +264,13 @@ public class MyanmarDateUtilsTest {
 
         myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(gregorianDateForConverting);
         assertEquals(1439, myanmarDate.getYearInt());
-        assertEquals("Nayon", myanmarDate.getMonthName(new LanguageCatalog(Language.ENGLISH)));
+        assertEquals("နယုန်", myanmarDate.getMonthName(new LanguageCatalog(Language.MYANMAR)));
         assertEquals(14, myanmarDate.getMonthDay());
 
         assertGregorianDatesAreEqual(gregorianDateForConverting, MyanmarDateUtils.myanmarDateToGregorianDate(myanmarDate));
         monthIndex = MyanmarDateKernel.getMyanmarMonth(myanmarDate.getYearInt(), 1).getIndex().get(MyanmarDateUtils.getMonthId(myanmarDate));
         assertMyanmarDatesAreEqual(myanmarDate, MyanmarDateUtils.createMyanmarDate(myanmarDate.getYearInt(), monthIndex, myanmarDate.getMonthDay()));
 
-        // 19/07/2085 ->
         gregorianDateForConverting = new LocalDateTime()
                 .withYear(2085)
                 .withMonthOfYear(7)
@@ -297,14 +278,13 @@ public class MyanmarDateUtilsTest {
 
         myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(gregorianDateForConverting);
         assertEquals(1447, myanmarDate.getYearInt());
-        assertEquals("Waso", myanmarDate.getMonthName(new LanguageCatalog(Language.ENGLISH)));
+        assertEquals("ဝါဆို", myanmarDate.getMonthName(new LanguageCatalog(Language.MYANMAR)));
         assertEquals(28, myanmarDate.getMonthDay());
 
         assertGregorianDatesAreEqual(gregorianDateForConverting, MyanmarDateUtils.myanmarDateToGregorianDate(myanmarDate));
         monthIndex = MyanmarDateKernel.getMyanmarMonth(myanmarDate.getYearInt(), 1).getIndex().get(MyanmarDateUtils.getMonthId(myanmarDate));
         assertMyanmarDatesAreEqual(myanmarDate, MyanmarDateUtils.createMyanmarDate(myanmarDate.getYearInt(), monthIndex, myanmarDate.getMonthDay()));
 
-        // 22/08/2097 ->
         gregorianDateForConverting = new LocalDateTime()
                 .withYear(2097)
                 .withMonthOfYear(8)
@@ -312,7 +292,7 @@ public class MyanmarDateUtilsTest {
 
         myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(gregorianDateForConverting);
         assertEquals(1459, myanmarDate.getYearInt());
-        assertEquals("Wagaung", myanmarDate.getMonthName(new LanguageCatalog(Language.ENGLISH)));
+        assertEquals("ဝါခေါင်", myanmarDate.getMonthName(new LanguageCatalog(Language.MYANMAR)));
         assertEquals(15, myanmarDate.getMonthDay());
 
         assertGregorianDatesAreEqual(gregorianDateForConverting, MyanmarDateUtils.myanmarDateToGregorianDate(myanmarDate));
