@@ -52,15 +52,12 @@ public class GeoShapeActivityTest extends BaseGeoActivityTest {
         activity = controller.create().start().resume().visible().get();
         assertTrue(fakeLocationClient.isRunning());
 
-        // Initially, there should be no zoom dialog.
+        // Initially, the location button should be disabled.
         assertFalse(activity.isGpsButtonEnabled());
-        assertNull(activity.getZoomDialog());
 
-        // A location fix should cause the zoom dialog to appear.
+        // A location fix should enable the location button.
         fakeLocationClient.receiveFix(createLocation("GPS", 1, 2, 3, 4f));
         assertTrue(activity.isGpsButtonEnabled());
-        assertTrue(activity.getZoomDialog().isShowing());
-        activity.getZoomDialog().dismiss();
 
         // Stopping the activity should stop the location client.
         controller.stop();

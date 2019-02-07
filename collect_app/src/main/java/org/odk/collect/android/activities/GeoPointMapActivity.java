@@ -15,14 +15,11 @@
 package org.odk.collect.android.activities;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.VisibleForTesting;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -69,9 +66,6 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
     public static final String CLEAR_BUTTON_ENABLED_KEY = "clear_button_enabled";
     public static final String LOCATION_STATUS_VISIBILITY_KEY = "location_status_visibility";
     public static final String LOCATION_INFO_VISIBILITY_KEY = "location_info_visibility";
-    public static final String ZOOM_DIALOG_SHOWING_KEY = "zoom_dialog_showing";
-    public static final String ZOOM_POINT_BUTTON_ENABLED_KEY = "zoom_point_button";
-    public static final String ZOOM_LOCATION_BUTTON_ENABLED_KEY = "zoom_location_button";
 
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
@@ -85,10 +79,6 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
     private boolean isDragged;
 
     private ImageButton zoomButton;
-    private AlertDialog zoomDialog;
-    private View zoomDialogView;
-    private Button zoomPointButton;
-    private Button zoomLocationButton;
     private ImageButton clearButton;
 
     private boolean captureLocation;
@@ -157,10 +147,6 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
     }
 
     @Override protected void onStop() {
-        if (zoomDialog != null && zoomDialog.isShowing()) {
-            zoomDialog.dismiss();  // necessary to prevent a memory leak
-        }
-
         // To avoid a memory leak, we have to shut down GPS when the activity
         // quits for good. But if it's only a screen rotation, we don't want to
         // stop/start GPS and make the user wait to get a GPS lock again.
@@ -192,11 +178,6 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
         state.putBoolean(CLEAR_BUTTON_ENABLED_KEY, clearButton.isEnabled());
         state.putInt(LOCATION_STATUS_VISIBILITY_KEY, locationStatus.getVisibility());
         state.putInt(LOCATION_INFO_VISIBILITY_KEY, locationInfo.getVisibility());
-        state.putBoolean(ZOOM_DIALOG_SHOWING_KEY, zoomDialog != null && zoomDialog.isShowing());
-        state.putBoolean(ZOOM_LOCATION_BUTTON_ENABLED_KEY,
-            zoomLocationButton != null && zoomLocationButton.isEnabled());
-        state.putBoolean(ZOOM_POINT_BUTTON_ENABLED_KEY,
-            zoomPointButton != null && zoomPointButton.isEnabled());
     }
 
     @Override public void destroy() { }
@@ -249,24 +230,11 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
 
         // Focuses on marked location
         zoomButton.setEnabled(false);
-        zoomButton.setOnClickListener(v -> showZoomDialog());
+        zoomButton.setOnClickListener(v -> map.zoomToPoint(map.getGpsLocation(), true));
 
         // Menu Layer Toggle
         ImageButton layers = findViewById(R.id.layer_menu);
         layers.setOnClickListener(v -> helper.showLayersDialog());
-
-        zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
-        zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
-        zoomLocationButton.setOnClickListener(v -> {
-            map.zoomToPoint(map.getGpsLocation(), true);
-            zoomDialog.dismiss();
-        });
-
-        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
-        zoomPointButton.setOnClickListener(v -> {
-            zoomToMarker(true);
-            zoomDialog.dismiss();
-        });
 
         clearButton = findViewById(R.id.clear);
         clearButton.setEnabled(false);
@@ -367,16 +335,6 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
 
         locationInfo.setVisibility(state.getInt(LOCATION_INFO_VISIBILITY_KEY, View.GONE));
         locationStatus.setVisibility(state.getInt(LOCATION_STATUS_VISIBILITY_KEY, View.GONE));
-
-        if (state.getBoolean(ZOOM_DIALOG_SHOWING_KEY, false)) {
-            showZoomDialog();
-        }
-        if (zoomLocationButton != null) {
-            zoomLocationButton.setEnabled(state.getBoolean(ZOOM_LOCATION_BUTTON_ENABLED_KEY));
-        }
-        if (zoomPointButton != null) {
-            zoomPointButton.setEnabled(state.getBoolean(ZOOM_POINT_BUTTON_ENABLED_KEY));
-        }
     }
 
     public void onLocationChanged(MapPoint point) {
@@ -391,7 +349,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
             Timber.i("onLocationChanged: location = %s", point);
 
             if (previousLocation != null) {
-                enableZoomButtons(true);
+                enableZoomButton(true);
 
                 if (!captureLocation && !setClear) {
                     placeMarker(point);
@@ -399,7 +357,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
                 }
 
                 if (!foundFirstLocation) {
-                    showZoomDialog();
+                    map.zoomToPoint(map.getGpsLocation(), true);
                     foundFirstLocation = true;
                 }
 
@@ -435,60 +393,19 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
     public void onLongPress(MapPoint point) {
         if (intentDraggable && !intentReadOnly && !isPointLocked) {
             placeMarker(point);
-            enableZoomButtons(true);
+            enableZoomButton(true);
             isDragged = true;
         }
     }
 
-    private void enableZoomButtons(boolean shouldEnable) {
+    private void enableZoomButton(boolean shouldEnable) {
         if (zoomButton != null) {
             zoomButton.setEnabled(shouldEnable);
-        }
-        if (zoomLocationButton != null) {
-            zoomLocationButton.setEnabled(shouldEnable);
         }
     }
 
     public void zoomToMarker(boolean animate) {
         map.zoomToPoint(map.getMarkerPoint(featureId), animate);
-    }
-
-    public void showZoomDialog() {
-        if (zoomDialog == null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(getString(R.string.zoom_to_where));
-            builder.setView(zoomDialogView)
-                    .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel())
-                    .setOnCancelListener(dialog -> {
-                        dialog.cancel();
-                        zoomDialog.dismiss();
-                    });
-            zoomDialog = builder.create();
-        }
-        //If feature enable zoom to button else disable
-        if (zoomLocationButton != null) {
-            if (map.getGpsLocation() != null) {
-                zoomLocationButton.setEnabled(true);
-                zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-                zoomLocationButton.setTextColor(themeUtils.getPrimaryTextColor());
-            } else {
-                zoomLocationButton.setEnabled(false);
-                zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
-                zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
-            }
-
-            if (featureId != -1 && !setClear) {
-                zoomPointButton.setEnabled(true);
-                zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-                zoomPointButton.setTextColor(themeUtils.getPrimaryTextColor());
-            } else {
-                zoomPointButton.setEnabled(false);
-                zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
-                zoomPointButton.setTextColor(Color.parseColor("#FF979797"));
-            }
-        }
-
-        zoomDialog.show();
     }
 
     private void clear() {
@@ -517,10 +434,6 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
 
     @VisibleForTesting public String getLocationStatus() {
         return locationStatus.getText().toString();
-    }
-
-    @VisibleForTesting public AlertDialog getZoomDialog() {
-        return zoomDialog;
     }
 
     @VisibleForTesting public MapFragment getMapFragment() {

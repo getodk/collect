@@ -16,7 +16,6 @@ package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.VisibleForTesting;
 import android.view.View;
@@ -85,11 +84,6 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private boolean playCheck;
     private Spinner timeUnits;
     private Spinner timeDelay;
-
-    private AlertDialog zoomDialog;
-    private View zoomDialogView;
-    private Button zoomPointButton;
-    private Button zoomLocationButton;
 
     // restored from savedInstanceState
     private MapPoint restoredMapCenter;
@@ -279,7 +273,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         zoomButton = findViewById(R.id.zoom);
         zoomButton.setOnClickListener(v -> {
             playCheck = false;
-            showZoomDialog();
+            map.zoomToPoint(map.getGpsLocation(), true);
         });
 
         List<MapPoint> points = new ArrayList<>();
@@ -394,20 +388,6 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
                 traceSettingsDialog.dismiss();
             })
             .create();
-
-        zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
-
-        zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
-        zoomLocationButton.setOnClickListener(v -> {
-            map.zoomToPoint(map.getGpsLocation(), true);
-            zoomDialog.dismiss();
-        });
-
-        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
-        zoomPointButton.setOnClickListener(v -> {
-            map.zoomToBoundingBox(map.getPolyPoints(featureId), 0.6, true);
-            zoomDialog.dismiss();
-        });
     }
 
     private void startGeoTrace() {
@@ -489,7 +469,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         zoomButton.setEnabled(true);
         playButton.setEnabled(true);
         if (getWindow().isActive()) {
-            showZoomDialog();
+            map.zoomToPoint(map.getGpsLocation(), true);
         }
     }
 
@@ -536,40 +516,6 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             .setNegativeButton(R.string.cancel, null)
             .show();
 
-    }
-
-    public void showZoomDialog() {
-        if (zoomDialog == null) {
-            zoomDialog = new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.zoom_to_where))
-                .setView(zoomDialogView)
-                .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel())
-                .setOnCancelListener(dialog -> {
-                    dialog.cancel();
-                    zoomDialog.dismiss();
-                })
-                .create();
-        }
-
-        if (map.getGpsLocation() != null) {
-            zoomLocationButton.setEnabled(true);
-            zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomLocationButton.setTextColor(themeUtils.getPrimaryTextColor());
-        } else {
-            zoomLocationButton.setEnabled(false);
-            zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
-            zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
-        }
-        if (!map.getPolyPoints(featureId).isEmpty()) {
-            zoomPointButton.setEnabled(true);
-            zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomPointButton.setTextColor(themeUtils.getPrimaryTextColor());
-        } else {
-            zoomPointButton.setEnabled(false);
-            zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
-            zoomPointButton.setTextColor(Color.parseColor("#FF979797"));
-        }
-        zoomDialog.show();
     }
 
     @VisibleForTesting public ImageButton getPlayButton() {

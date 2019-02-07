@@ -16,12 +16,9 @@ package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.VisibleForTesting;
-import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import org.odk.collect.android.R;
@@ -52,10 +49,6 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
     private int featureId = -1;  // will be a positive featureId once map is ready
     private ImageButton zoomButton;
     private ImageButton clearButton;
-    private AlertDialog zoomDialog;
-    private View zoomDialogView;
-    private Button zoomPointButton;
-    private Button zoomLocationButton;
     private String originalShapeString = "";
 
     // restored from savedInstanceState
@@ -134,7 +127,7 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
         helper.setBasemap();
 
         zoomButton = findViewById(R.id.gps);
-        zoomButton.setOnClickListener(v -> showZoomDialog());
+        zoomButton.setOnClickListener(v -> map.zoomToPoint(map.getGpsLocation(), true));
 
         clearButton = findViewById(R.id.clear);
         clearButton.setOnClickListener(v -> showClearDialog());
@@ -158,20 +151,6 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
         zoomButton.setEnabled(!points.isEmpty());
         clearButton.setEnabled(!points.isEmpty());
 
-        zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
-
-        zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
-        zoomLocationButton.setOnClickListener(v -> {
-            map.zoomToPoint(map.getGpsLocation(), true);
-            zoomDialog.dismiss();
-        });
-
-        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
-        zoomPointButton.setOnClickListener(v -> {
-            map.zoomToBoundingBox(map.getPolyPoints(featureId), 0.6, true);
-            zoomDialog.dismiss();
-        });
-
         map.setGpsLocationEnabled(true);
         if (restoredMapCenter != null && restoredMapZoom != null) {
             map.zoomToPoint(restoredMapCenter, restoredMapZoom, false);
@@ -186,7 +165,7 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
     private void onGpsLocationReady(MapFragment map) {
         zoomButton.setEnabled(true);
         if (getWindow().isActive()) {
-            showZoomDialog();
+            map.zoomToPoint(map.getGpsLocation(), true);
         }
     }
 
@@ -285,47 +264,8 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
         return result.trim();
     }
 
-    private void showZoomDialog() {
-        if (zoomDialog == null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(getString(R.string.zoom_to_where));
-            builder.setView(zoomDialogView)
-                .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel())
-                .setOnCancelListener(dialog -> {
-                    dialog.cancel();
-                    zoomDialog.dismiss();
-                });
-            zoomDialog = builder.create();
-        }
-
-        if (map.getGpsLocation() != null) {
-            zoomLocationButton.setEnabled(true);
-            zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomLocationButton.setTextColor(themeUtils.getPrimaryTextColor());
-        } else {
-            zoomLocationButton.setEnabled(false);
-            zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
-            zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
-        }
-
-        if (!map.getPolyPoints(featureId).isEmpty()) {
-            zoomPointButton.setEnabled(true);
-            zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomPointButton.setTextColor(themeUtils.getPrimaryTextColor());
-        } else {
-            zoomPointButton.setEnabled(false);
-            zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
-            zoomPointButton.setTextColor(Color.parseColor("#FF979797"));
-        }
-        zoomDialog.show();
-    }
-
     @VisibleForTesting public boolean isGpsButtonEnabled() {
         return zoomButton != null && zoomButton.isEnabled();
-    }
-
-    @VisibleForTesting public AlertDialog getZoomDialog() {
-        return zoomDialog;
     }
 
     @VisibleForTesting public MapFragment getMapFragment() {
