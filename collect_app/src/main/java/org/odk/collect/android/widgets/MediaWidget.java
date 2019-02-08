@@ -69,7 +69,7 @@ public abstract class MediaWidget extends QuestionWidget implements AudioPlayLis
             try {
                 playColor = Color.parseColor(playColorString);
             } catch (IllegalArgumentException e) {
-                Timber.e(e, "Argument %s is incorrect", playColorString);
+                Timber.e(e, "Argument %s to Color.parseColor is incorrect", playColorString);
             }
         }
 
