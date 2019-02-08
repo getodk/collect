@@ -21,6 +21,8 @@ import org.joda.time.LocalDateTime;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.MyanmarDateUtils;
 
+import java.util.List;
+
 import mmcalendar.MyanmarDate;
 import mmcalendar.MyanmarDateKernel;
 
@@ -45,7 +47,7 @@ public class MyanmarDatePickerDialog extends CustomDatePickerDialog {
     @Override
     protected void updateDays() {
         MyanmarDate myanmarDate = getCurrentMyanmarDate();
-        setUpDayPicker(MyanmarDateUtils.getFirstDayOfCurrentMonth(myanmarDate), myanmarDate.getMonthDay(), myanmarDate.getMonthLength());
+        setUpDayPicker(MyanmarDateUtils.getFirstMonthDay(myanmarDate), myanmarDate.getMonthDay(), MyanmarDateUtils.getMonthLength(myanmarDate));
     }
 
     @Override
@@ -63,15 +65,17 @@ public class MyanmarDatePickerDialog extends CustomDatePickerDialog {
     private void setUpDatePicker() {
         MyanmarDate myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(getDateWithSkippedDaylightSavingGapIfExists());
 
-        setUpDayPicker(MyanmarDateUtils.getFirstDayOfCurrentMonth(myanmarDate), myanmarDate.getMonthDay(), myanmarDate.getMonthLength());
+        setUpDayPicker(MyanmarDateUtils.getFirstMonthDay(myanmarDate), myanmarDate.getMonthDay(), MyanmarDateUtils.getMonthLength(myanmarDate));
         setUpMonthPicker(MyanmarDateUtils.getMonthId(myanmarDate) + 1, MyanmarDateUtils.getMyanmarMonthsArray(myanmarDate.getYearInt()));
         setUpYearPicker(myanmarDate.getYearInt(), MIN_SUPPORTED_YEAR, MAX_SUPPORTED_YEAR);
     }
 
     private MyanmarDate getCurrentMyanmarDate() {
-        return MyanmarDateUtils.createMyanmarDate(
-                getYear(),
-                MyanmarDateKernel.getMyanmarMonth(getYear(), 1).getIndex().get(getMonthId()),
-                getDay());
+        List<Integer> monthIndexes = MyanmarDateKernel.getMyanmarMonth(getYear(), 1).getIndex();
+        int monthIndex = getMonthId() < monthIndexes.size() ? monthIndexes.get(getMonthId()) : monthIndexes.get(monthIndexes.size() - 1);
+        int monthLength = MyanmarDateUtils.getMonthLength(getYear(), monthIndex);
+        int dayOfMonth = getDay() > monthLength ? monthLength : getDay();
+
+        return MyanmarDateUtils.createMyanmarDate(getYear(), monthIndex, dayOfMonth);
     }
 }

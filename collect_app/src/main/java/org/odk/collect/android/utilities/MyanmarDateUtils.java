@@ -23,7 +23,6 @@ import mmcalendar.LanguageCatalog;
 import mmcalendar.MyanmarDate;
 import mmcalendar.MyanmarDateConverter;
 import mmcalendar.MyanmarDateKernel;
-import mmcalendar.Thingyan;
 import mmcalendar.ThingyanCalculator;
 import mmcalendar.WesternDate;
 import mmcalendar.WesternDateConverter;
@@ -66,17 +65,12 @@ public class MyanmarDateUtils {
                 .toArray(new String[0]);
     }
 
-    public static int getFirstDayOfCurrentMonth(MyanmarDate myanmarDate) {
-        int day = 1;
-        // New year date is based on the solar year, therefore, we need to find a new year day for the first month.
-        if (isFirstMonthInYear(myanmarDate)) {
-            Thingyan thingyan = ThingyanCalculator.getThingyan(myanmarDate.getYearInt());
-            day = MyanmarDateKernel
-                    .j2m(thingyan.getMyanmarNewYearDay())
-                    .getMonthDay();
-        }
+    public static int getFirstMonthDay(MyanmarDate myanmarDate) {
+        return isFirstYearMonth(myanmarDate) ? getNewYearsDay(myanmarDate.getYearInt()) : 1;
+    }
 
-        return day;
+    private static int getFirstMonthDay(int myanmarYear, int monthIndex) {
+        return isFirstYearMonth(myanmarYear, monthIndex) ? getNewYearsDay(myanmarYear) : 1;
     }
 
     public static int getMonthId(MyanmarDate myanmarDate) {
@@ -86,7 +80,33 @@ public class MyanmarDateUtils {
                 .indexOf(myanmarDate.getMonthName(new LanguageCatalog(Language.MYANMAR)));
     }
 
-    private static boolean isFirstMonthInYear(MyanmarDate myanmarDate) {
+    public static int getMonthLength(MyanmarDate myanmarDate) {
+        int newYearsDayOfNextYear = getNewYearsDay(myanmarDate.getYearInt() + 1);
+        return isLastMonthInYear(myanmarDate) && newYearsDayOfNextYear > 1
+                ? newYearsDayOfNextYear - 1
+                : myanmarDate.getMonthLength();
+    }
+
+    public static int getMonthLength(int myanmarYear, int monthIndex) {
+        MyanmarDate myanmarDate = MyanmarDateUtils.createMyanmarDate(myanmarYear, monthIndex, MyanmarDateUtils.getFirstMonthDay(myanmarYear, monthIndex));
+        return getMonthLength(myanmarDate);
+    }
+
+    private static int getNewYearsDay(int myanmarYear) {
+        return MyanmarDateKernel
+                .j2m(ThingyanCalculator.getThingyan(myanmarYear).getMyanmarNewYearDay())
+                .getMonthDay();
+    }
+
+    private static boolean isLastMonthInYear(MyanmarDate myanmarDate) {
+        return getMonthId(myanmarDate) == getMyanmarMonthsArray(myanmarDate.getYearInt()).length - 1;
+    }
+
+    private static boolean isFirstYearMonth(MyanmarDate myanmarDate) {
         return getMonthId(myanmarDate) == 0;
+    }
+
+    private static boolean isFirstYearMonth(int myanmarYear, int monthIndex) {
+        return monthIndex == MyanmarDateKernel.getMyanmarMonth(myanmarYear, 1).getIndex().get(0);
     }
 }
