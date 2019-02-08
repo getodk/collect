@@ -137,7 +137,7 @@ public class GoogleAccountsManager {
                     if (activity instanceof GoogleSheetsUploaderActivity || activity instanceof GoogleDriveActivity) {
                         activity.finish();
                     }
-                    if(fragment instanceof ServerPreferencesFragment){
+                    if (fragment instanceof ServerPreferencesFragment) {
                         ((ServerPreferencesFragment) fragment).setAllowClickSelectedGoogleAccountPreference(true);
                     }
                 }
