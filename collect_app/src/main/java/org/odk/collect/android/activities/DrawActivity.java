@@ -124,6 +124,13 @@ public class DrawActivity extends CollectAbstractActivity {
                     AnimateUtils.scaleInAnimation(cardViewSaveAndClose, 100, 150, new OvershootInterpolator(), true);
                     AnimateUtils.scaleInAnimation(fabClear, 150, 150, new OvershootInterpolator(), true);
                     AnimateUtils.scaleInAnimation(cardViewClear, 150, 150, new OvershootInterpolator(), true);
+
+                    fabSetColor.show();
+                    cardViewSetColor.setVisibility(View.VISIBLE);
+                    fabSaveAndClose.show();
+                    cardViewSaveAndClose.setVisibility(View.VISIBLE);
+                    fabClear.show();
+                    cardViewClear.setVisibility(View.VISIBLE);
                 } else {
                     status = 0;
                     fabActions.animate().rotation(0).setInterpolator(new AccelerateDecelerateInterpolator())
