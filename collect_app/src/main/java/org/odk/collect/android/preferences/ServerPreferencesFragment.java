@@ -85,6 +85,11 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     private List<String> urlList;
     private Preference selectedGoogleAccountPreference;
     private GoogleAccountsManager accountsManager;
+
+    public void setAllowClickSelectedGoogleAccountPreference(boolean allowClickSelectedGoogleAccountPreference) {
+        this.allowClickSelectedGoogleAccountPreference = allowClickSelectedGoogleAccountPreference;
+    }
+
     private boolean allowClickSelectedGoogleAccountPreference = true;
 
     @Inject
