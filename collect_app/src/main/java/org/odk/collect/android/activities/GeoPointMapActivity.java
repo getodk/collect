@@ -289,8 +289,6 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements OnMarkerD
         }
         /*Zoom only if there's a previous location*/
         if (latLng != null) {
-            locationInfo.setVisibility(View.GONE);
-            locationStatus.setVisibility(View.GONE);
             showLocation.setEnabled(true);
             addMarker();
             foundFirstLocation = true;
