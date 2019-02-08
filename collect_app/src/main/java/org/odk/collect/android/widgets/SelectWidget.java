@@ -140,22 +140,22 @@ public abstract class SelectWidget extends MediaWidget {
      * Pull media from the current item and add it to the media layout.
      */
     public void addMediaFromChoice(MediaLayout mediaLayout, int index, TextView textView) {
-        String imageURI;
+        String imageUri;
         if (items.get(index) instanceof ExternalSelectChoice) {
-            imageURI = ((ExternalSelectChoice) items.get(index)).getImage();
+            imageUri = ((ExternalSelectChoice) items.get(index)).getImage();
         } else {
-            imageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index),
+            imageUri = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index),
                     FormEntryCaption.TEXT_FORM_IMAGE);
         }
 
         textView.setGravity(Gravity.CENTER_VERTICAL);
 
-        String audioURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_AUDIO);
-        String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "video");
-        String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
+        String audioUri = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_AUDIO);
+        String videoUri = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "video");
+        String bigImageUri = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
 
         mediaLayout.setLabelTextView(textView);
-        mediaLayout.setAVT(audioURI, imageURI, videoURI, bigImageURI, getPlayer());
+        mediaLayout.setAVT(audioUri, imageUri, videoUri, bigImageUri, getPlayer());
     }
 
     protected RecyclerView setUpRecyclerView() {

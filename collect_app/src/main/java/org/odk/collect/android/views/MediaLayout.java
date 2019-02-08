@@ -186,20 +186,20 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         flContainer.addView(viewText);
     }
 
-    public void setAVT(String audioURI, String imageURI, String videoURI, String bigImageURI, MediaPlayer player) {
-        this.bigImageURI = bigImageURI;
+    public void setAVT(String audioUri, String imageUri, String videoUri, String bigImageUri, MediaPlayer player) {
+        this.bigImageURI = bigImageUri;
         this.player = player;
-        this.videoURI = videoURI;
+        this.videoURI = videoUri;
 
         // Setup audio button
-        if (audioURI != null) {
+        if (audioUri != null) {
             audioButton.setVisibility(VISIBLE);
-            audioButton.init(audioURI, player);
+            audioButton.init(audioUri, player);
             audioButton.setOnClickListener(this);
         }
 
         // Setup video button
-        if (videoURI != null) {
+        if (videoUri != null) {
             videoButton.setVisibility(VISIBLE);
             Bitmap b = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_media_play);
             videoButton.setImageBitmap(b);
@@ -208,9 +208,9 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
 
         // Setup image view
         String errorMsg = null;
-        if (imageURI != null) {
+        if (imageUri != null) {
             try {
-                String imageFilename = referenceManager.DeriveReference(imageURI).getLocalURI();
+                String imageFilename = referenceManager.DeriveReference(imageUri).getLocalURI();
                 final File imageFile = new File(imageFilename);
                 if (imageFile.exists()) {
                     DisplayMetrics metrics = getResources().getDisplayMetrics();

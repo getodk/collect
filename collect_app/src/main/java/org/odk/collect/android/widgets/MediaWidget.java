@@ -50,14 +50,14 @@ public abstract class MediaWidget extends QuestionWidget implements AudioPlayLis
     }
 
     private void attachMediaToLayout() {
-        String imageURI = this instanceof SelectImageMapWidget ? null : getFormEntryPrompt().getImageText();
-        String audioURI = getFormEntryPrompt().getAudioText();
-        String videoURI = getFormEntryPrompt().getSpecialFormQuestionText("video");
+        String imageUri = this instanceof SelectImageMapWidget ? null : getFormEntryPrompt().getImageText();
+        String audioUri = getFormEntryPrompt().getAudioText();
+        String videoUri = getFormEntryPrompt().getSpecialFormQuestionText("video");
 
         // shown when image is clicked
-        String bigImageURI = getFormEntryPrompt().getSpecialFormQuestionText("big-image");
+        String bigImageUri = getFormEntryPrompt().getSpecialFormQuestionText("big-image");
 
-        getQuestionMediaLayout().setAVT(audioURI, imageURI, videoURI, bigImageURI, player);
+        getQuestionMediaLayout().setAVT(audioUri, imageUri, videoUri, bigImageUri, player);
         getQuestionMediaLayout().setAudioListener(this);
     }
 
