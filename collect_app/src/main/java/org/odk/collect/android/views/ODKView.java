@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2011 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -55,6 +55,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.MediaWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
@@ -86,7 +87,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
     public static final String FIELD_LIST = "field-list";
 
     public ODKView(Context context, final FormEntryPrompt[] questionPrompts,
-            FormEntryCaption[] groups, boolean advancingPage) {
+                   FormEntryCaption[] groups, boolean advancingPage) {
         super(context);
 
         inflate(getContext(), R.layout.nested_scroll_view, this); // keep in an xml file to enable the vertical scrollbar
@@ -216,19 +217,13 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
 
         // see if there is an autoplay option.
         // Only execute it during forward swipes through the form
-        if (advancingPage && widgets.size() == 1) {
-            final String playOption = widgets.get(
-                    0).getFormEntryPrompt().getFormElement().getAdditionalAttribute(null, "autoplay");
+        if (advancingPage && widgets.size() == 1 && widgets.get(0) instanceof MediaWidget) {
+            MediaWidget mediaWidget = (MediaWidget) widgets.get(0);
+            final String playOption = mediaWidget.getFormEntryPrompt().getFormElement().getAdditionalAttribute(null, "autoplay");
             if (playOption != null) {
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (playOption.equalsIgnoreCase("audio")) {
-                            widgets.get(0).playAudio();
-                        } else if (playOption.equalsIgnoreCase("video")) {
-                            widgets.get(0).playVideo();
-                        }
+                new Handler().postDelayed(() -> {
+                    if (playOption.equalsIgnoreCase("audio") || playOption.equalsIgnoreCase("video")) {
+                        mediaWidget.playAllPromptText(playOption);
                     }
                 }, 150);
             }
@@ -299,7 +294,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
     /**
      * Builds a string representing the 'path' of the list of groups.
      * Each level is separated by `>`.
-     *
+     * <p>
      * Some views (e.g. the repeat picker) may want to hide the multiplicity of the last item,
      * i.e. show `Friends` instead of `Friends > 1`.
      */
@@ -350,7 +345,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
                     } catch (Exception e) {
                         Timber.e(e);
                         ToastUtils.showLongToast(getContext().getString(R.string.error_attaching_binary_file,
-                                        e.getMessage()));
+                                e.getMessage()));
                     }
                     set = true;
                     break;
@@ -415,12 +410,12 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
 
         if (count != 1) {
             Timber.w("Attempting to cancel waiting for binary data to a widget or set of widgets "
-                            + "not looking for data");
+                    + "not looking for data");
         }
     }
 
     public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX,
-            float velocityY) {
+                                        float velocityY) {
         for (QuestionWidget q : widgets) {
             if (q.suppressFlingGesture(e1, e2, velocityX, velocityY)) {
                 return true;
@@ -469,7 +464,9 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
     }
 
     public void stopAudio() {
-        widgets.get(0).stopAudio();
+        if (widgets.get(0) instanceof MediaWidget) {
+            ((MediaWidget) widgets.get(0)).stopAudio();
+        }
     }
 
     /**

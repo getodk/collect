@@ -16,13 +16,11 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.text.method.LinkMovementMethod;
@@ -43,11 +41,10 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
-import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.AnimateUtils;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
@@ -69,16 +66,14 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import timber.log.Timber;
 
-public abstract class QuestionWidget
-        extends RelativeLayout
-        implements Widget, AudioPlayListener {
+import static android.text.TextUtils.isEmpty;
+
+public abstract class QuestionWidget extends RelativeLayout implements Widget {
 
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
     private final MediaLayout questionMediaLayout;
-    private MediaPlayer player;
     private final TextView helpTextView;
-    private final TextView guidanceTextView;
     private final View helpTextLayout;
     private final View guidanceTextLayout;
     private final View textLayout;
@@ -88,13 +83,11 @@ public abstract class QuestionWidget
     private AtomicBoolean expanded;
     private Bundle state;
     protected ThemeUtils themeUtils;
-    private int playColor;
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
 
         themeUtils = new ThemeUtils(context);
-        playColor = themeUtils.getAccentColor();
 
         if (context instanceof FormEntryActivity) {
             state = ((FormEntryActivity) context).getState();
@@ -105,25 +98,6 @@ public abstract class QuestionWidget
             injectDependencies((DependencyProvider) context);
         }
 
-        player = new MediaPlayer();
-        getPlayer().setOnCompletionListener(new OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                getQuestionMediaLayout().resetTextFormatting();
-                mediaPlayer.reset();
-            }
-
-        });
-
-        player.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                Timber.e("Error occured in MediaPlayer. what = %d, extra = %d",
-                        what, extra);
-                return false;
-            }
-        });
-
         questionFontSize = Collect.getQuestionFontsize();
 
         formEntryPrompt = prompt;
@@ -131,41 +105,40 @@ public abstract class QuestionWidget
         setGravity(Gravity.TOP);
         setPadding(0, 7, 0, 0);
 
-        questionMediaLayout = createQuestionMediaLayout(prompt);
+        questionMediaLayout = createQuestionLayout(prompt);
         helpTextLayout = createHelpTextLayout();
         helpTextLayout.setId(ViewIds.generateViewId());
         guidanceTextLayout = helpTextLayout.findViewById(R.id.guidance_text_layout);
         textLayout = helpTextLayout.findViewById(R.id.text_layout);
         warningText = helpTextLayout.findViewById(R.id.warning_text);
         helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), prompt);
-        guidanceTextView = setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), prompt);
+        setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), prompt);
 
         addQuestionMediaLayout(getQuestionMediaLayout());
         addHelpTextLayout(getHelpTextLayout());
     }
 
-    private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
+    private void setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
 
-        TextView guidance = null;
         GuidanceHint setting = GuidanceHint.get((String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_GUIDANCE_HINT));
 
         if (setting.equals(GuidanceHint.No)) {
-            return null;
+            return;
         }
 
         String guidanceHint = prompt.getSpecialFormQuestionText(prompt.getQuestion().getHelpTextID(), "guidance");
 
-        if (android.text.TextUtils.isEmpty(guidanceHint)) {
-            return null;
+        if (isEmpty(guidanceHint)) {
+            return;
         }
 
-        guidance = configureGuidanceTextView(guidanceTextView, guidanceHint);
+        configureGuidanceTextView(guidanceTextView, guidanceHint);
 
         expanded = new AtomicBoolean(false);
 
         if (getState() != null) {
             if (getState().containsKey(GUIDANCE_EXPANDED_STATE + getFormEntryPrompt().getIndex())) {
-                Boolean result = getState().getBoolean(GUIDANCE_EXPANDED_STATE + getFormEntryPrompt().getIndex());
+                boolean result = getState().getBoolean(GUIDANCE_EXPANDED_STATE + getFormEntryPrompt().getIndex());
                 expanded = new AtomicBoolean(result);
             }
         }
@@ -179,7 +152,7 @@ public abstract class QuestionWidget
             View icon = textLayout.findViewById(R.id.help_icon);
             icon.setVisibility(VISIBLE);
 
-            /**
+            /*
              * Added click listeners to the individual views because the TextView
              * intercepts click events when they are being passed to the parent layout.
              */
@@ -191,7 +164,7 @@ public abstract class QuestionWidget
                 }
             });
 
-            getHelpTextView().setOnClickListener(v -> {
+            helpTextView.setOnClickListener(v -> {
                 if (!expanded.get()) {
                     AnimateUtils.expand(guidanceTextLayout, result -> expanded.set(true));
                 } else {
@@ -199,11 +172,9 @@ public abstract class QuestionWidget
                 }
             });
         }
-
-        return guidance;
     }
 
-    private TextView configureGuidanceTextView(TextView guidanceTextView, String guidance) {
+    private void configureGuidanceTextView(TextView guidanceTextView, String guidance) {
         guidanceTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize() - 3);
         //noinspection ResourceType
         guidanceTextView.setPadding(0, -5, 0, 7);
@@ -215,17 +186,12 @@ public abstract class QuestionWidget
 
         guidanceTextView.setTextColor(themeUtils.getPrimaryTextColor());
         guidanceTextView.setMovementMethod(LinkMovementMethod.getInstance());
-        return guidanceTextView;
     }
 
-    /**
-     * Releases resources held by this widget
-     */
+    @CallSuper
+    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
     public void release() {
-        if (player != null) {
-            player.release();
-            player = null;
-        }
+        // Release resources held by this widget
     }
 
     //source::https://stackoverflow.com/questions/18996183/identifying-rtl-language-in-android/23203698#23203698
@@ -234,7 +200,7 @@ public abstract class QuestionWidget
     }
 
     private static boolean isRTL(Locale locale) {
-        if (locale == null || locale.getDisplayName() == null || locale.getDisplayName().isEmpty()) {
+        if (locale == null || isEmpty(locale.getDisplayName())) {
             return false;
         }
         final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
@@ -246,9 +212,8 @@ public abstract class QuestionWidget
         //dependencies for the widget will be wired here.
     }
 
-    private MediaLayout createQuestionMediaLayout(FormEntryPrompt prompt) {
+    private MediaLayout createQuestionLayout(FormEntryPrompt prompt) {
         String promptText = prompt.getLongText();
-        // Add the text view. Textview always exists, regardless of whether there's text.
         TextView questionText = new TextView(getContext());
         questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize());
         questionText.setTypeface(null, Typeface.BOLD);
@@ -260,47 +225,18 @@ public abstract class QuestionWidget
         // Wrap to the size of the parent view
         questionText.setHorizontallyScrolling(false);
 
-        if ((promptText == null || promptText.isEmpty())
-                && !(prompt.isRequired() && (prompt.getHelpText() == null || prompt.getHelpText().isEmpty()))) {
+        if (isEmpty(promptText) && !(prompt.isRequired() && isEmpty(prompt.getHelpText()))) {
             questionText.setVisibility(GONE);
         }
-
-        String imageURI = this instanceof SelectImageMapWidget ? null : prompt.getImageText();
-        String audioURI = prompt.getAudioText();
-        String videoURI = prompt.getSpecialFormQuestionText("video");
-
-        // shown when image is clicked
-        String bigImageURI = prompt.getSpecialFormQuestionText("big-image");
 
         // Create the layout for audio, image, text
         MediaLayout questionMediaLayout = new MediaLayout(getContext());
         questionMediaLayout.setId(ViewIds.generateViewId()); // assign random id
-        questionMediaLayout.setAVT(questionText, audioURI, imageURI, videoURI, bigImageURI, getPlayer());
-        questionMediaLayout.setAudioListener(this);
 
-        String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
-        if (playColorString != null) {
-            try {
-                playColor = Color.parseColor(playColorString);
-            } catch (IllegalArgumentException e) {
-                Timber.e(e, "Argument %s is incorrect", playColorString);
-            }
-        }
-        questionMediaLayout.setPlayTextColor(getPlayColor());
+        // Add the text view. TextView always exists, regardless of whether there's text.
+        questionMediaLayout.setLabelTextView(questionText);
 
         return questionMediaLayout;
-    }
-
-    public TextView getHelpTextView() {
-        return helpTextView;
-    }
-
-    public void playAudio() {
-        playAllPromptText();
-    }
-
-    public void playVideo() {
-        getQuestionMediaLayout().playVideo();
     }
 
     public FormEntryPrompt getFormEntryPrompt() {
@@ -429,7 +365,7 @@ public abstract class QuestionWidget
             // wrap to the widget of view
             helpText.setHorizontallyScrolling(false);
             helpText.setTypeface(null, Typeface.ITALIC);
-            if (prompt.getLongText() == null || prompt.getLongText().isEmpty()) {
+            if (isEmpty(prompt.getLongText())) {
                 helpText.setText(TextUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(s, prompt.isRequired())));
             } else {
                 helpText.setText(TextUtils.textToHtml(s));
@@ -473,44 +409,14 @@ public abstract class QuestionWidget
         if (getQuestionMediaLayout() != null) {
             getQuestionMediaLayout().cancelLongPress();
         }
-        if (getHelpTextView() != null) {
-            getHelpTextView().cancelLongPress();
+        if (helpTextView != null) {
+            helpTextView.cancelLongPress();
         }
-    }
-
-    /*
-     * Prompts with items must override this
-     */
-    public void playAllPromptText() {
-        getQuestionMediaLayout().playAudio();
-    }
-
-    public void resetQuestionTextColor() {
-        getQuestionMediaLayout().resetTextFormatting();
-    }
-
-    public void resetAudioButtonImage() {
-        getQuestionMediaLayout().resetAudioButtonBitmap();
     }
 
     public void showWarning(String warningBody) {
         warningText.setVisibility(View.VISIBLE);
         warningText.setText(warningBody);
-    }
-
-    @Override
-    protected void onWindowVisibilityChanged(int visibility) {
-        if (visibility == INVISIBLE || visibility == GONE) {
-            stopAudio();
-        }
-    }
-
-    public void stopAudio() {
-        if (player != null && player.isPlaying()) {
-            Timber.i("stopAudio " + player);
-            player.stop();
-            player.reset();
-        }
     }
 
     protected Button getSimpleButton(String text, @IdRes final int withId) {
@@ -652,24 +558,12 @@ public abstract class QuestionWidget
         return questionFontSize + 2;
     }
 
-    public TextView getGuidanceTextView() {
-        return guidanceTextView;
-    }
-
     public View getHelpTextLayout() {
         return helpTextLayout;
     }
 
     public MediaLayout getQuestionMediaLayout() {
         return questionMediaLayout;
-    }
-
-    public MediaPlayer getPlayer() {
-        return player;
-    }
-
-    public int getPlayColor() {
-        return playColor;
     }
 
     public PermissionUtils getPermissionUtils() {
