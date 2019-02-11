@@ -41,7 +41,6 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
 
     public static final int MEDIA_PREPARED = 100;
     public static final int MEDIA_COMPLETED = 101;
-    public static final int MEDIA_ERROR = 102;
 
     @Inject
     Context context;
@@ -63,19 +62,20 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
+        Timber.i("Media prepared");
         rxEventBus.post(new MediaEvent(MEDIA_PREPARED));
     }
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
+        Timber.i("Media completed");
         mediaPlayer.reset();
         rxEventBus.post(new MediaEvent(MEDIA_COMPLETED));
     }
 
     @Override
     public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
-        Timber.e("Error occured in MediaPlayer. what = %d, extra = %d", what, extra);
-        rxEventBus.post(new MediaEvent(MEDIA_ERROR));
+        Timber.e("Error occurred : what = %d, extra = %d", what, extra);
         return false;
     }
 
