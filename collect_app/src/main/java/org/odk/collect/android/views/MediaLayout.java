@@ -124,7 +124,12 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
             audioPlayListener.resetAudioButtonImage();
         }
 
-        audioButton.onClick();
+        if (mediaController.isPlaying()) {
+            mediaController.stopAudio();
+            audioButton.resetBitmap();
+        } else {
+            audioButton.playAudio();
+        }
 
         // have to call toString() to remove the html formatting
         // (it's a spanned thing...)

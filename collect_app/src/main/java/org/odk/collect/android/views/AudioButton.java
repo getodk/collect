@@ -63,13 +63,4 @@ public class AudioButton extends AppCompatImageButton {
         mediaController.playAudio(uri);
         setImageBitmap(bitmapStop);
     }
-
-    public void onClick() {
-        if (mediaController.isPlaying()) {
-            mediaController.stopAudio();
-            resetBitmap();
-        } else {
-            playAudio();
-        }
-    }
 }
