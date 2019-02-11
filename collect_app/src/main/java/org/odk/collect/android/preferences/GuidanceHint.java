@@ -1,7 +1,5 @@
 package org.odk.collect.android.preferences;
 
-import android.support.annotation.NonNull;
-
 public enum GuidanceHint {
     Yes("yes"),
     YesCollapsed("yes_collapsed"),
@@ -13,7 +11,6 @@ public enum GuidanceHint {
         name = s;
     }
 
-    @NonNull
     public static GuidanceHint get(String name) {
         for (GuidanceHint hint : GuidanceHint.values()) {
             if (hint.name.equals(name)) {
@@ -21,10 +18,9 @@ public enum GuidanceHint {
             }
         }
 
-        return No;
+        return null;
     }
 
-    @NonNull
     public String toString() {
         return this.name;
     }
