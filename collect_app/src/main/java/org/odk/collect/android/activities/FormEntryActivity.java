@@ -1387,10 +1387,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private void releaseOdkView() {
         mediaController.releaseResources();
-
-        if (odkView != null) {
-            odkView = null;
-        }
+        odkView = null;
     }
 
     private View createViewForFormBeginning(int event, boolean advancingPage,
