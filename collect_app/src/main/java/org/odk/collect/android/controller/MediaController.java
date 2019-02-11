@@ -17,11 +17,20 @@ package org.odk.collect.android.controller;
 
 import android.media.MediaPlayer;
 
+import org.odk.collect.android.events.MediaEvent;
+import org.odk.collect.android.events.RxEventBus;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
 public final class MediaController implements MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
+
+    public static final int MEDIA_COMPLETED = 100;
+    public static final int MEDIA_ERROR = 101;
+
+    @Inject
+    RxEventBus rxEventBus;
 
     private MediaPlayer player;
 
@@ -34,11 +43,12 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-
+        rxEventBus.post(new MediaEvent(MEDIA_COMPLETED));
     }
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
+        rxEventBus.post(new MediaEvent(MEDIA_ERROR));
         return false;
     }
 }
