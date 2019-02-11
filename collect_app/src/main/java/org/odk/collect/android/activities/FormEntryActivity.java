@@ -80,6 +80,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.controller.MediaController;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.dao.helpers.FormsDaoHelper;
@@ -168,8 +169,8 @@ import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
+import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating
@@ -299,6 +300,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     RxEventBus eventBus;
+
+    @Inject
+    MediaController mediaController;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -2135,7 +2139,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
         if (getCurrentViewIfODKView() != null) {
             // stop audio if it's playing
-            getCurrentViewIfODKView().stopAudio();
+            mediaController.stopAndResetAudio();
         }
 
         super.onPause();

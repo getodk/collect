@@ -468,10 +468,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
         }
     }
 
-    public void stopAudio() {
-        widgets.get(0).stopAudio();
-    }
-
     /**
      * Releases widget resources, such as {@link android.media.MediaPlayer}s
      */

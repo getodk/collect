@@ -111,6 +111,13 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
         }
     }
 
+    public void stopAndResetAudio() {
+        if (player.isPlaying()) {
+            player.stop();
+            player.reset();
+        }
+    }
+
     public void stopAudio() {
         player.stop();
     }

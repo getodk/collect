@@ -272,12 +272,12 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
                     selected[position] = false;
                     imageViews[position].setBackgroundColor(0);
                     if (uris.get(position) != null) {
-                        stopAudio();
+                        mediaController.stopAndResetAudio();
                     }
                 } else {
                     selected[position] = true;
                     if (uris.get(lastClickPosition) != null) {
-                        stopAudio();
+                        mediaController.stopAndResetAudio();
                     }
                     imageViews[position].setBackgroundColor(bgOrange);
                     if (uris.get(position) != null) {

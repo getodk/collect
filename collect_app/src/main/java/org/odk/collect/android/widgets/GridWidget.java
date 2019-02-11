@@ -280,7 +280,7 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
                 for (int i = 0; i < selected.length; i++) {
                     // if we have an audio handler, be sure audio is stopped.
                     if (selected[i] && (uris.get(i) != null)) {
-                        stopAudio();
+                        mediaController.stopAndResetAudio();
                     }
                     selected[i] = false;
                     imageViews[i].setBackgroundColor(0);
