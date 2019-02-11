@@ -223,16 +223,6 @@ public abstract class QuestionWidget
         return guidanceTextView;
     }
 
-    /**
-     * Releases resources held by this widget
-     */
-    public void release() {
-        if (player != null) {
-            player.release();
-            player = null;
-        }
-    }
-
     //source::https://stackoverflow.com/questions/18996183/identifying-rtl-language-in-android/23203698#23203698
     public static boolean isRTL() {
         return isRTL(Locale.getDefault());

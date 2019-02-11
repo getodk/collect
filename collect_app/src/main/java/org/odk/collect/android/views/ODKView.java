@@ -468,15 +468,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
         }
     }
 
-    /**
-     * Releases widget resources, such as {@link android.media.MediaPlayer}s
-     */
-    public void releaseWidgetResources() {
-        for (QuestionWidget w : widgets) {
-            w.release();
-        }
-    }
-
     public void highlightWidget(FormIndex formIndex) {
         QuestionWidget qw = getQuestionWidget(formIndex);
 

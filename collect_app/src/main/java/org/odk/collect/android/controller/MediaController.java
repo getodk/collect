@@ -147,4 +147,8 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
     public void startAudio() {
         player.start();
     }
+
+    public void releaseResources() {
+        player.release();
+    }
 }
