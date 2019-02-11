@@ -60,7 +60,6 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     SeekBar seekBar;
 
     private View view;
-    private State state;
     private Context context;
     private Disposable disposable;
     private MediaController mediaController;
@@ -123,10 +122,8 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     void playClicked() {
         if (mediaController.isPlaying()) {
             pause();
-            state = State.PAUSED;
         } else {
             play();
-            state = State.PLAYING;
         }
     }
 
@@ -178,7 +175,7 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     public void onStartTrackingTouch(SeekBar seekBar) {
         ((FormEntryActivity) context).allowSwiping(false);
 
-        if (state == State.PLAYING) {
+        if (mediaController.getState() == MediaController.State.PLAYING) {
             pause();
         }
     }
@@ -191,7 +188,7 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
         ((FormEntryActivity) context).allowSwiping(true);
 
         seekTo(seekBar.getProgress());
-        if (state == State.PLAYING) {
+        if (mediaController.getState() == MediaController.State.PLAYING) {
             play();
         }
     }
@@ -216,7 +213,6 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     public void setMedia(File file) {
         try {
             mediaController.setMedia(file);
-            state = State.IDLE;
         } catch (IOException e) {
             Timber.e(e);
         }
@@ -229,9 +225,5 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     View getPlayerLayout(ViewGroup parent) {
         initControlsLayout(parent);
         return view;
-    }
-
-    private enum State {
-        PAUSED, PLAYING, IDLE
     }
 }
