@@ -65,8 +65,11 @@ import timber.log.Timber;
  */
 public class MediaLayout extends RelativeLayout implements View.OnClickListener {
 
+    private final Bitmap bitmapPlay = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_lock_silent_mode_off);
+    private final Bitmap bitmapStop = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_media_pause);
+
     @BindView(R.id.audioButton)
-    AudioButton audioButton;
+    AppCompatImageButton audioButton;
 
     @BindView(R.id.videoButton)
     AppCompatImageButton videoButton;
@@ -127,10 +130,10 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
 
         if (mediaController.isPlaying()) {
             mediaController.stopAudio();
-            audioButton.resetBitmap();
+            resetAudioButtonBitmap();
         } else {
             mediaController.playAudio(audioURI);
-            audioButton.playAudio();
+            audioButton.setImageBitmap(bitmapStop);
         }
 
         // have to call toString() to remove the html formatting
@@ -149,7 +152,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
                 .filter(mediaEvent -> mediaEvent.getResultCode() == MediaController.MEDIA_COMPLETED)
                 .subscribe(mediaEvent -> {
                     resetTextFormatting();
-                    audioButton.resetBitmap();
+                    resetAudioButtonBitmap();
                 }, Timber::e);
     }
 
@@ -169,7 +172,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     }
 
     public void resetAudioButtonBitmap() {
-        audioButton.resetBitmap();
+        audioButton.setImageBitmap(bitmapPlay);
     }
 
     public void playVideo() {
@@ -189,7 +192,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
             return;
         }
 
-        Intent intent = new Intent("android.intent.action.VIEW");
+        Intent intent = new Intent(Intent.ACTION_VIEW);
         Uri uri =
                 FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", videoFile);
         FileUtils.grantFileReadPermissions(intent, uri, getContext());
@@ -214,13 +217,15 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         if (audioURI != null) {
             audioButton.setVisibility(VISIBLE);
             audioButton.setOnClickListener(this);
+
+            resetAudioButtonBitmap();
         }
 
         // Setup video button
         if (videoURI != null) {
             videoButton.setVisibility(VISIBLE);
-            Bitmap b = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_media_play);
-            videoButton.setImageBitmap(b);
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_media_play);
+            videoButton.setImageBitmap(bitmap);
             videoButton.setOnClickListener(this);
         }
 

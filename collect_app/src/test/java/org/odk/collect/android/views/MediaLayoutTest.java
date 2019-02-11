@@ -37,7 +37,7 @@ public class MediaLayoutTest {
     private FileReference reference;
 
     private MediaLayout mediaLayout;
-    private AudioButton audioButton;
+    private AppCompatImageButton audioButton;
     private AppCompatImageButton videoButton;
     private ImageView imageView;
     private TextView textView;
