@@ -20,7 +20,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
@@ -82,7 +81,6 @@ public abstract class QuestionWidget
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
     private final MediaLayout questionMediaLayout;
-    private MediaPlayer player;
     private final TextView helpTextView;
     private final TextView guidanceTextView;
     private final View helpTextLayout;
@@ -120,8 +118,6 @@ public abstract class QuestionWidget
         if (context instanceof DependencyProvider) {
             injectDependencies((DependencyProvider) context);
         }
-
-        player = new MediaPlayer();
 
         disposable = rxEventBus.register(MediaEvent.class)
                 .subscribeOn(Schedulers.io())
@@ -649,10 +645,6 @@ public abstract class QuestionWidget
 
     public MediaLayout getQuestionMediaLayout() {
         return questionMediaLayout;
-    }
-
-    public MediaPlayer getPlayer() {
-        return player;
     }
 
     public int getPlayColor() {
