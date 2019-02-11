@@ -57,7 +57,8 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
     }
 
     @Override
-    public void onCompletion(MediaPlayer mp) {
+    public void onCompletion(MediaPlayer mediaPlayer) {
+        mediaPlayer.reset();
         rxEventBus.post(new MediaEvent(MEDIA_COMPLETED));
     }
 
