@@ -32,12 +32,18 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
+import org.odk.collect.android.controller.MediaController;
+import org.odk.collect.android.events.MediaEvent;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.views.MediaLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 public abstract class SelectWidget extends QuestionWidget {
 
@@ -85,13 +91,16 @@ public abstract class SelectWidget extends QuestionWidget {
 
     @Override
     public void playAllPromptText() {
-        // set up to play the items when the
-        // question text is finished
-        getPlayer().setOnCompletionListener(mediaPlayer -> {
-            resetQuestionTextColor();
-            mediaPlayer.reset();
-            playNextSelectItem();
-        });
+        // set up to play the items when the question text is finished
+        disposable = rxEventBus.register(MediaEvent.class)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(mediaEvent -> mediaEvent.getResultCode() == MediaController.MEDIA_COMPLETED)
+                .subscribe(mediaEvent -> {
+                    resetQuestionTextColor();
+                    playNextSelectItem();
+                }, Timber::e);
+
         // plays the question text
         super.playAllPromptText();
     }

@@ -82,7 +82,6 @@ public abstract class QuestionWidget
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
     private final MediaLayout questionMediaLayout;
-    private final Disposable disposable;
     private MediaPlayer player;
     private final TextView helpTextView;
     private final TextView guidanceTextView;
@@ -94,6 +93,7 @@ public abstract class QuestionWidget
     private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
     private AtomicBoolean expanded;
     private Bundle state;
+    protected Disposable disposable;
     protected ThemeUtils themeUtils;
     private int playColor;
 
