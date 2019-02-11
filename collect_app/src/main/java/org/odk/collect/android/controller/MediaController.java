@@ -24,17 +24,17 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.events.MediaEvent;
 import org.odk.collect.android.events.RxEventBus;
+import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 import java.io.IOException;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import timber.log.Timber;
 
-@Singleton
+@PerApplication
 public final class MediaController implements MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
 
     public static final int MEDIA_COMPLETED = 100;
@@ -46,6 +46,7 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
     @Inject
     RxEventBus rxEventBus;
 
+    @NonNull
     private MediaPlayer player;
 
     @Inject
@@ -64,6 +65,10 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
     public boolean onError(MediaPlayer mp, int what, int extra) {
         rxEventBus.post(new MediaEvent(MEDIA_ERROR));
         return false;
+    }
+
+    public boolean isPlaying() {
+        return player.isPlaying();
     }
 
     public void playAudio(@NonNull String uri) {
@@ -91,5 +96,9 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
             Timber.e(errorMsg);
             ToastUtils.showLongToast(errorMsg);
         }
+    }
+
+    public void stopAudio() {
+        player.stop();
     }
 }

@@ -30,7 +30,6 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -40,6 +39,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.controller.MediaController;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -197,7 +197,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         // Setup audio button
         if (audioURI != null) {
             audioButton.setVisibility(VISIBLE);
-            audioButton.init(audioURI, player);
+            audioButton.init(audioURI, mediaController);
             audioButton.setOnClickListener(this);
         }
 

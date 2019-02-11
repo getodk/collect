@@ -24,6 +24,7 @@ import android.util.AttributeSet;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
+import org.odk.collect.android.controller.MediaController;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
@@ -37,10 +38,10 @@ import timber.log.Timber;
  */
 public class AudioButton extends AppCompatImageButton {
 
-    private AudioHandler handler;
-    private MediaPlayer player;
     private Bitmap bitmapPlay;
     private Bitmap bitmapStop;
+    private MediaController mediaController;
+    private String uri;
 
     public AudioButton(Context context) {
         super(context);
@@ -59,9 +60,9 @@ public class AudioButton extends AppCompatImageButton {
         resetBitmap();
     }
 
-    public void init(String uri, MediaPlayer player) {
-        this.player = player;
-        handler = new AudioHandler(uri, player);
+    public void init(String uri, MediaController mediaController) {
+        this.uri = uri;
+        this.mediaController = mediaController;
     }
 
     public void resetBitmap() {
@@ -69,13 +70,13 @@ public class AudioButton extends AppCompatImageButton {
     }
 
     public void playAudio() {
-        handler.playAudio(getContext());
+        mediaController.playAudio(uri);
         setImageBitmap(bitmapStop);
     }
 
     public void onClick() {
-        if (player.isPlaying()) {
-            player.stop();
+        if (mediaController.isPlaying()) {
+            mediaController.stopAudio();
             resetBitmap();
         } else {
             playAudio();
