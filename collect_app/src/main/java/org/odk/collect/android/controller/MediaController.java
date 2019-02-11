@@ -52,9 +52,6 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
     @NonNull
     private MediaPlayer player;
 
-    @NonNull
-    private State state = State.NONE;
-
     @Inject
     MediaController() {
         player = new MediaPlayer();
@@ -134,24 +131,13 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
         player.reset();
         player.setDataSource(context, Uri.fromFile(file));
         player.prepareAsync();
-        state = State.IDLE;
     }
 
     public void pauseAudio() {
         player.pause();
-        state = State.PAUSED;
     }
 
     public void startAudio() {
         player.start();
-        state = State.PLAYING;
-    }
-
-    public State getState() {
-        return state;
-    }
-
-    public enum State {
-        NONE, PAUSED, PLAYING, IDLE
     }
 }

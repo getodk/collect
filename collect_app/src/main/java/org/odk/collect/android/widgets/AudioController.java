@@ -175,7 +175,7 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     public void onStartTrackingTouch(SeekBar seekBar) {
         ((FormEntryActivity) context).allowSwiping(false);
 
-        if (mediaController.getState() == MediaController.State.PLAYING) {
+        if (mediaController.isPlaying()) {
             pause();
         }
     }
@@ -188,7 +188,7 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
         ((FormEntryActivity) context).allowSwiping(true);
 
         seekTo(seekBar.getProgress());
-        if (mediaController.getState() == MediaController.State.PLAYING) {
+        if (mediaController.isPlaying()) {
             play();
         }
     }
