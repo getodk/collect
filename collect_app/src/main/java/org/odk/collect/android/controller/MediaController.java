@@ -16,7 +16,9 @@
 package org.odk.collect.android.controller;
 
 import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import org.javarosa.core.reference.InvalidReferenceException;
@@ -35,10 +37,11 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 @PerApplication
-public final class MediaController implements MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
+public final class MediaController implements MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener {
 
-    public static final int MEDIA_COMPLETED = 100;
-    public static final int MEDIA_ERROR = 101;
+    public static final int MEDIA_PREPARED = 100;
+    public static final int MEDIA_COMPLETED = 101;
+    public static final int MEDIA_ERROR = 102;
 
     @Inject
     Context context;
@@ -52,8 +55,15 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
     @Inject
     MediaController() {
         player = new MediaPlayer();
+        player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        player.setOnPreparedListener(this);
         player.setOnCompletionListener(this);
         player.setOnErrorListener(this);
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mediaPlayer) {
+        rxEventBus.post(new MediaEvent(MEDIA_PREPARED));
     }
 
     @Override
@@ -63,7 +73,7 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
     }
 
     @Override
-    public boolean onError(MediaPlayer mp, int what, int extra) {
+    public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
         Timber.e("Error occured in MediaPlayer. what = %d, extra = %d", what, extra);
         rxEventBus.post(new MediaEvent(MEDIA_ERROR));
         return false;
@@ -84,6 +94,7 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
         File audioFile = new File(audioFilename);
         if (audioFile.exists()) {
             try {
+                setMedia(audioFile);
                 player.reset();
                 player.setDataSource(audioFilename);
                 player.prepare();
@@ -102,5 +113,31 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
 
     public void stopAudio() {
         player.stop();
+    }
+
+    public int getDuration() {
+        return player.getDuration();
+    }
+
+    public int getCurrentPosition() {
+        return player.getCurrentPosition();
+    }
+
+    public void seekTo(int duration) {
+        player.seekTo(duration);
+    }
+
+    public void setMedia(File file) throws IOException {
+        player.reset();
+        player.setDataSource(context, Uri.fromFile(file));
+        player.prepareAsync();
+    }
+
+    public void pauseAudio() {
+        player.pause();
+    }
+
+    public void startAudio() {
+        player.start();
     }
 }
