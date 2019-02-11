@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.AppCompatImageButton;
@@ -195,8 +194,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         }
     }
 
-    public void setAVT(TextView text, String audioURI, String imageURI, String videoURI,
-                       String bigImageURI, MediaPlayer player) {
+    public void setAVT(TextView text, String audioURI, String imageURI, String videoURI, String bigImageURI) {
         this.bigImageURI = bigImageURI;
         this.videoURI = videoURI;
 
