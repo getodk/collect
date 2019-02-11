@@ -64,6 +64,7 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
+        Timber.e("Error occured in MediaPlayer. what = %d, extra = %d", what, extra);
         rxEventBus.post(new MediaEvent(MEDIA_ERROR));
         return false;
     }

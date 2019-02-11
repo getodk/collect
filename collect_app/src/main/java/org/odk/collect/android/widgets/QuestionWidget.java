@@ -21,7 +21,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
@@ -44,6 +43,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.controller.MediaController;
+import org.odk.collect.android.events.MediaEvent;
+import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -69,6 +70,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public abstract class QuestionWidget
@@ -78,6 +82,7 @@ public abstract class QuestionWidget
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
     private final MediaLayout questionMediaLayout;
+    private final Disposable disposable;
     private MediaPlayer player;
     private final TextView helpTextView;
     private final TextView guidanceTextView;
@@ -94,6 +99,10 @@ public abstract class QuestionWidget
 
     @Inject
     MediaController mediaController;
+
+    @Inject
+    RxEventBus rxEventBus;
+
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
@@ -113,23 +122,12 @@ public abstract class QuestionWidget
         }
 
         player = new MediaPlayer();
-        getPlayer().setOnCompletionListener(new OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                getQuestionMediaLayout().resetTextFormatting();
-                mediaPlayer.reset();
-            }
 
-        });
-
-        player.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                Timber.e("Error occured in MediaPlayer. what = %d, extra = %d",
-                        what, extra);
-                return false;
-            }
-        });
+        disposable = rxEventBus.register(MediaEvent.class)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(mediaEvent -> mediaEvent.getResultCode() == MediaController.MEDIA_COMPLETED)
+                .subscribe(mediaEvent -> getQuestionMediaLayout().resetTextFormatting(), Timber::e);
 
         questionFontSize = Collect.getQuestionFontsize();
 
