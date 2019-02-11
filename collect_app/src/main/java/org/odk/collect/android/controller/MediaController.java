@@ -20,6 +20,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
@@ -48,16 +49,22 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
     @Inject
     RxEventBus rxEventBus;
 
-    @NonNull
+    @Nullable
     private MediaPlayer player;
 
     @Inject
     MediaController() {
-        player = new MediaPlayer();
-        player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        player.setOnPreparedListener(this);
-        player.setOnCompletionListener(this);
-        player.setOnErrorListener(this);
+    }
+
+    @NonNull
+    private MediaPlayer getPlayer() {
+        if (player == null) {
+            player = new MediaPlayer();
+            player.setOnPreparedListener(this);
+            player.setOnCompletionListener(this);
+            player.setOnErrorListener(this);
+        }
+        return player;
     }
 
     @Override
@@ -80,7 +87,7 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
     }
 
     public boolean isPlaying() {
-        return player.isPlaying();
+        return player != null && player.isPlaying();
     }
 
     public void playAudio(@NonNull String uri) {
@@ -95,10 +102,7 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
         if (audioFile.exists()) {
             try {
                 setMedia(audioFile);
-                player.reset();
-                player.setDataSource(audioFilename);
-                player.prepare();
-                player.start();
+                startAudio();
             } catch (IOException e) {
                 String errorMsg = context.getString(R.string.audio_file_invalid, audioFilename);
                 Timber.e(errorMsg);
@@ -111,44 +115,48 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
         }
     }
 
-    public void stopAndResetAudio() {
-        if (player.isPlaying()) {
-            player.stop();
-            player.reset();
-        }
-    }
-
-    public void stopAudio() {
-        player.stop();
-    }
-
-    public int getDuration() {
-        return player.getDuration();
-    }
-
-    public int getCurrentPosition() {
-        return player.getCurrentPosition();
-    }
-
-    public void seekTo(int duration) {
-        player.seekTo(duration);
-    }
-
-    public void setMedia(File file) throws IOException {
-        player.reset();
-        player.setDataSource(context, Uri.fromFile(file));
-        player.prepareAsync();
+    public void startAudio() {
+        getPlayer().start();
     }
 
     public void pauseAudio() {
-        player.pause();
+        getPlayer().pause();
     }
 
-    public void startAudio() {
-        player.start();
+    public void stopAudio() {
+        getPlayer().stop();
+    }
+
+    public void stopAndResetAudio() {
+        if (isPlaying()) {
+            getPlayer().stop();
+            getPlayer().reset();
+        }
+    }
+
+    public int getDuration() {
+        return getPlayer().getDuration();
+    }
+
+    public int getCurrentPosition() {
+        return getPlayer().getCurrentPosition();
+    }
+
+    public void seekTo(int duration) {
+        getPlayer().seekTo(duration);
+    }
+
+    public void setMedia(File file) throws IOException {
+        stopAndResetAudio();
+        getPlayer().setAudioStreamType(AudioManager.STREAM_MUSIC);
+        getPlayer().setDataSource(context, Uri.fromFile(file));
+        getPlayer().prepare();
     }
 
     public void releaseResources() {
-        player.release();
+        if (player != null) {
+            player.release();
+            player = null;
+        }
     }
 }
