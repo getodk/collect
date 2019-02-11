@@ -30,9 +30,9 @@ public class MediaLayoutTest {
 
     private static final String RANDOM_URI = "randomMediaURI";
 
-    private final String audioUri;
-    private final String imageUri;
-    private final String videoUri;
+    private final String audioURI;
+    private final String imageURI;
+    private final String videoURI;
 
     private MediaPlayer mediaPlayer;
     private ReferenceManager referenceManager;
@@ -42,14 +42,15 @@ public class MediaLayoutTest {
     private AudioButton audioButton;
     private AppCompatImageButton videoButton;
     private ImageView imageView;
+    private TextView textView;
     private TextView missingImage;
     private ImageView divider;
     private boolean isReferenceManagerStubbed;
 
-    public MediaLayoutTest(String audioUri, String imageUri, String videoUri) {
-        this.audioUri = audioUri;
-        this.imageUri = imageUri;
-        this.videoUri = videoUri;
+    public MediaLayoutTest(String audioURI, String imageURI, String videoURI) {
+        this.audioURI = audioURI;
+        this.imageURI = imageURI;
+        this.videoURI = videoURI;
     }
 
     @ParameterizedRobolectricTestRunner.Parameters()
@@ -71,6 +72,7 @@ public class MediaLayoutTest {
         mediaPlayer = mock(MediaPlayer.class);
         reference = mock(FileReference.class);
         referenceManager = mock(ReferenceManager.class);
+        textView = new TextView(RuntimeEnvironment.application);
 
         mediaLayout = new MediaLayout(RuntimeEnvironment.application);
 
@@ -95,13 +97,13 @@ public class MediaLayoutTest {
         Assert.assertEquals(VISIBLE, mediaLayout.getVisibility());
         assertVisibility(GONE, audioButton, videoButton, imageView, missingImage, divider);
 
-        mediaLayout.setAVT(audioUri, imageUri, videoUri, null, mediaPlayer);
+        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, null, mediaPlayer);
 
         // we do not check for the validity of the URIs for the audio and video while loading MediaLayout
-        assertVisibility(audioUri == null ? GONE : VISIBLE, audioButton);
-        assertVisibility(videoUri == null ? GONE : VISIBLE, videoButton);
+        assertVisibility(audioURI == null ? GONE : VISIBLE, audioButton);
+        assertVisibility(videoURI == null ? GONE : VISIBLE, videoButton);
 
-        if (imageUri == null || !isReferenceManagerStubbed) {
+        if (imageURI == null || !isReferenceManagerStubbed) {
             // either the URI wasn't provided or it encountered InvalidReferenceException
             assertVisibility(GONE, imageView, missingImage);
         } else {

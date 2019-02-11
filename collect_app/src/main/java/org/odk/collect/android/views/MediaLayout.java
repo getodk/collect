@@ -178,28 +178,25 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         }
     }
 
-    public void setLabelTextView(TextView text) {
+    public void setAVT(TextView text, String audioURI, String imageURI, String videoURI,
+                       String bigImageURI, MediaPlayer player) {
+        this.bigImageURI = bigImageURI;
+        this.player = player;
+        this.videoURI = videoURI;
+
         viewText = text;
         originalText = text.getText();
         viewText.setId(ViewIds.generateViewId());
-        flContainer.removeAllViews();
-        flContainer.addView(viewText);
-    }
-
-    public void setAVT(String audioUri, String imageUri, String videoUri, String bigImageUri, MediaPlayer player) {
-        this.bigImageURI = bigImageUri;
-        this.player = player;
-        this.videoURI = videoUri;
 
         // Setup audio button
-        if (audioUri != null) {
+        if (audioURI != null) {
             audioButton.setVisibility(VISIBLE);
-            audioButton.init(audioUri, player);
+            audioButton.init(audioURI, player);
             audioButton.setOnClickListener(this);
         }
 
         // Setup video button
-        if (videoUri != null) {
+        if (videoURI != null) {
             videoButton.setVisibility(VISIBLE);
             Bitmap b = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_media_play);
             videoButton.setImageBitmap(b);
@@ -208,9 +205,9 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
 
         // Setup image view
         String errorMsg = null;
-        if (imageUri != null) {
+        if (imageURI != null) {
             try {
-                String imageFilename = referenceManager.DeriveReference(imageUri).getLocalURI();
+                String imageFilename = referenceManager.DeriveReference(imageURI).getLocalURI();
                 final File imageFile = new File(imageFilename);
                 if (imageFile.exists()) {
                     DisplayMetrics metrics = getResources().getDisplayMetrics();
@@ -240,6 +237,9 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
                 Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
             }
         }
+
+        flContainer.removeAllViews();
+        flContainer.addView(viewText);
     }
 
     public TextView getView_Text() {

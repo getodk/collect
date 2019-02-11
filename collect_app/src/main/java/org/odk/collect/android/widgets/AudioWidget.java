@@ -54,7 +54,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  */
 
 @SuppressLint("ViewConstructor")
-public class AudioWidget extends MediaWidget implements FileWidget {
+public class AudioWidget extends QuestionWidget implements FileWidget {
 
     @NonNull
     private FileUtil fileUtil;
