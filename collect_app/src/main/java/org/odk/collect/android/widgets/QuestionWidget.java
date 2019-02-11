@@ -489,13 +489,6 @@ public abstract class QuestionWidget
         warningText.setText(warningBody);
     }
 
-    @Override
-    protected void onWindowVisibilityChanged(int visibility) {
-        if (visibility == INVISIBLE || visibility == GONE) {
-            mediaController.stopAndResetAudio();
-        }
-    }
-
     protected Button getSimpleButton(String text, @IdRes final int withId) {
         final Button button = new Button(getContext());
 
