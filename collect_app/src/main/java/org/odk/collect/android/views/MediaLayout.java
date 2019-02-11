@@ -90,11 +90,12 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     RxEventBus rxEventBus;
 
     private TextView viewText;
+    private String audioURI;
+    private String bigImageURI;
     private String videoURI;
     private AudioPlayListener audioPlayListener;
     private int playTextColor = Color.BLUE;
     private CharSequence originalText;
-    private String bigImageURI;
     private ReferenceManager referenceManager = ReferenceManager.instance();
     private Disposable disposable;
 
@@ -128,6 +129,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
             mediaController.stopAudio();
             audioButton.resetBitmap();
         } else {
+            mediaController.playAudio(audioURI);
             audioButton.playAudio();
         }
 
@@ -200,6 +202,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     }
 
     public void setAVT(TextView text, String audioURI, String imageURI, String videoURI, String bigImageURI) {
+        this.audioURI = audioURI;
         this.bigImageURI = bigImageURI;
         this.videoURI = videoURI;
 
@@ -210,7 +213,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         // Setup audio button
         if (audioURI != null) {
             audioButton.setVisibility(VISIBLE);
-            audioButton.init(audioURI, mediaController);
             audioButton.setOnClickListener(this);
         }
 

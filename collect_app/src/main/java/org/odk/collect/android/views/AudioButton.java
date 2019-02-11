@@ -20,8 +20,6 @@ import android.graphics.BitmapFactory;
 import android.support.v7.widget.AppCompatImageButton;
 import android.util.AttributeSet;
 
-import org.odk.collect.android.controller.MediaController;
-
 /**
  * @author ctsims
  * @author carlhartung
@@ -30,8 +28,6 @@ public class AudioButton extends AppCompatImageButton {
 
     private Bitmap bitmapPlay;
     private Bitmap bitmapStop;
-    private MediaController mediaController;
-    private String uri;
 
     public AudioButton(Context context) {
         super(context);
@@ -50,17 +46,11 @@ public class AudioButton extends AppCompatImageButton {
         resetBitmap();
     }
 
-    public void init(String uri, MediaController mediaController) {
-        this.uri = uri;
-        this.mediaController = mediaController;
-    }
-
     public void resetBitmap() {
         setImageBitmap(bitmapPlay);
     }
 
     public void playAudio() {
-        mediaController.playAudio(uri);
         setImageBitmap(bitmapStop);
     }
 }
