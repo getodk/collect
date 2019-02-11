@@ -65,14 +65,14 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget {
 
-    private final int bgOrange = getResources().getColor(R.color.highContrastHighlight);
-    private final List<String> uris;
-
     private static final int HORIZONTAL_PADDING = 7;
     private static final int VERTICAL_PADDING = 5;
     private static final int SPACING = 2;
     private static final int IMAGE_PADDING = 8;
     private static final int SCROLL_WIDTH = 16;
+
+    private final int bgOrange = getResources().getColor(R.color.highContrastHighlight);
+    private final List<String> uris;
 
     List<SelectChoice> items;
 
@@ -140,14 +140,7 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
 
             int curHeight = -1;
 
-            // Create an audioHandler iff there is an audio prompt associated with this selection.
-            String audioURI =
-                    prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_AUDIO);
-            if (audioURI != null) {
-                uris.add(audioURI);
-            } else {
-                uris.add(null);
-            }
+            uris.add(prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_AUDIO));
 
             // Read the image sizes and set maxColumnWidth. This allows us to make sure all of our
             // columns are going to fit
