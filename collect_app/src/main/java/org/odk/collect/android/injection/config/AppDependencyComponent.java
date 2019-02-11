@@ -22,11 +22,13 @@ import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.FormDownloader;
+import org.odk.collect.android.views.MediaLayout;
 
 import javax.inject.Singleton;
 
 import dagger.BindsInstance;
 import dagger.Component;
+
 
 /**
  * Dagger component for the application. Should include
@@ -98,9 +100,12 @@ public interface AppDependencyComponent {
 
     void inject(InstanceUploaderListActivity activity);
 
+    void inject(MediaLayout mediaLayout);
+
     SmsManager smsManager();
 
     SmsSubmissionManagerContract smsSubmissionManagerContract();
 
     RxEventBus rxEventBus();
+
 }

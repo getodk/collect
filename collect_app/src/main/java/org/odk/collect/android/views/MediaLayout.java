@@ -30,6 +30,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -38,6 +39,7 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -45,6 +47,8 @@ import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 
 import java.io.File;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -75,6 +79,9 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     @BindView(R.id.select_container)
     FrameLayout flContainer;
 
+    @Inject
+    MediaController mediaController;
+
     private TextView viewText;
     private String videoURI;
     private AudioPlayListener audioPlayListener;
@@ -85,10 +92,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     private ReferenceManager referenceManager = ReferenceManager.instance();
 
     public MediaLayout(Context context) {
-        super(context);
-
-        View.inflate(context, R.layout.media_layout, this);
-        ButterKnife.bind(this);
+        this(context, null);
     }
 
     public MediaLayout(Context context, AttributeSet attrs) {
@@ -96,6 +100,8 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
 
         View.inflate(context, R.layout.media_layout, this);
         ButterKnife.bind(this);
+
+        ((Collect) context.getApplicationContext()).getComponent().inject(this);
     }
 
     /**
