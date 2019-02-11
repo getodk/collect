@@ -46,11 +46,11 @@ import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.views.AudioButton.AudioHandler;
 import org.odk.collect.android.views.ExpandedHeightGridView;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
@@ -73,6 +73,7 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
     private static final int SPACING = 2;
     private static final int IMAGE_PADDING = 8;
     private static final int SCROLL_WIDTH = 16;
+    private final List<String> uris;
 
     List<SelectChoice> items;
 
@@ -87,7 +88,6 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
 
     // The image views for each of the icons
     View[] imageViews;
-    AudioHandler[] audioHandlers;
 
     @Nullable
     private AdvanceToNextListener listener;
@@ -115,7 +115,7 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
         choices = new String[items.size()];
         gridview = new ExpandedHeightGridView(context);
         imageViews = new View[items.size()];
-        audioHandlers = new AudioHandler[items.size()];
+        uris = new ArrayList<>(items.size());
         // The max width of an icon in a given column. Used to line
         // up the columns and automatically fit the columns in when
         // they are chosen automatically
@@ -149,9 +149,9 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
             String audioURI =
                     prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_AUDIO);
             if (audioURI != null) {
-                audioHandlers[i] = new AudioHandler(audioURI, getPlayer());
+                uris.add(audioURI);
             } else {
-                audioHandlers[i] = null;
+                uris.add(null);
             }
             // Read the image sizes and set maxColumnWidth. This allows us to make sure all of our
             // columns are going to fit
@@ -287,7 +287,7 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
                 // background color accordingly
                 for (int i = 0; i < selected.length; i++) {
                     // if we have an audio handler, be sure audio is stopped.
-                    if (selected[i] && (audioHandlers[i] != null)) {
+                    if (selected[i] && (uris.get(i) != null)) {
                         stopAudio();
                     }
                     selected[i] = false;
@@ -299,8 +299,8 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
                 if (quickAdvance && listener != null) {
                     listener.advance();
 
-                } else if (audioHandlers[position] != null) {
-                    audioHandlers[position].playAudio(getContext());
+                } else if (uris.get(position) != null) {
+                    mediaController.playAudio(uris.get(position));
                 }
             }
         });
