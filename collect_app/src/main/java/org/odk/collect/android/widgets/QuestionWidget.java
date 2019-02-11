@@ -43,11 +43,12 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.controller.MediaController;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
-import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.AnimateUtils;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
@@ -66,6 +67,7 @@ import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -90,8 +92,13 @@ public abstract class QuestionWidget
     protected ThemeUtils themeUtils;
     private int playColor;
 
+    @Inject
+    MediaController mediaController;
+
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
+
+        ((Collect) context.getApplicationContext()).getComponent().inject(this);
 
         themeUtils = new ThemeUtils(context);
         playColor = themeUtils.getAccentColor();
