@@ -15,15 +15,30 @@
  */
 package org.odk.collect.android.controller;
 
+import android.media.MediaPlayer;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public final class MediaController {
+public final class MediaController implements MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
+
+    private MediaPlayer player;
 
     @Inject
     MediaController() {
+        player = new MediaPlayer();
+        player.setOnCompletionListener(this);
+        player.setOnErrorListener(this);
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
 
     }
 
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        return false;
+    }
 }
