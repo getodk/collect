@@ -19,6 +19,8 @@ the specific language governing permissions and limitations under the License.
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:padding="10dp">
 
         <View
@@ -53,7 +55,7 @@ the specific language governing permissions and limitations under the License.
             android:id="@+id/save_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
+            android:inputType="textMultiLine"
             android:textSize="21sp" />
 
         <CheckBox
