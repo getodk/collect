@@ -95,7 +95,8 @@ public abstract class SelectWidget extends QuestionWidget {
         disposable = rxEventBus.register(MediaEvent.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .filter(mediaEvent -> mediaEvent.getResultCode() == MediaController.MEDIA_COMPLETED)
+                .filter(mediaEvent -> playcounter < playList.size() &&
+                        mediaEvent.getResultCode() == MediaController.MEDIA_COMPLETED)
                 .subscribe(mediaEvent -> {
                     resetQuestionTextColor();
                     playNextSelectItem();
@@ -119,19 +120,11 @@ public abstract class SelectWidget extends QuestionWidget {
         if (isShown()) {
             // if there's more, set up to play the next item
             if (playcounter < playList.size()) {
-                getPlayer().setOnCompletionListener(mediaPlayer -> {
-                    resetQuestionTextColor();
-                    mediaPlayer.reset();
-                    playNextSelectItem();
-                });
                 // play the current item
                 playList.get(playcounter).playAudio();
                 playcounter++;
-
             } else {
                 playcounter = 0;
-                getPlayer().setOnCompletionListener(null);
-                getPlayer().reset();
             }
         }
     }
