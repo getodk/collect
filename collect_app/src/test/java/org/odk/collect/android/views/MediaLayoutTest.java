@@ -29,9 +29,9 @@ public class MediaLayoutTest {
 
     private static final String RANDOM_URI = "randomMediaURI";
 
-    private final String audioURI;
-    private final String imageURI;
-    private final String videoURI;
+    private final String audioUri;
+    private final String imageUri;
+    private final String videoUri;
 
     private ReferenceManager referenceManager;
     private FileReference reference;
@@ -45,10 +45,10 @@ public class MediaLayoutTest {
     private ImageView divider;
     private boolean isReferenceManagerStubbed;
 
-    public MediaLayoutTest(String audioURI, String imageURI, String videoURI) {
-        this.audioURI = audioURI;
-        this.imageURI = imageURI;
-        this.videoURI = videoURI;
+    public MediaLayoutTest(String audioUri, String imageUri, String videoUri) {
+        this.audioUri = audioUri;
+        this.imageUri = imageUri;
+        this.videoUri = videoUri;
     }
 
     @ParameterizedRobolectricTestRunner.Parameters()
@@ -94,13 +94,13 @@ public class MediaLayoutTest {
         Assert.assertEquals(VISIBLE, mediaLayout.getVisibility());
         assertVisibility(GONE, audioButton, videoButton, imageView, missingImage, divider);
 
-        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, null);
+        mediaLayout.setAVT(textView, audioUri, imageUri, videoUri, null);
 
         // we do not check for the validity of the URIs for the audio and video while loading MediaLayout
-        assertVisibility(audioURI == null ? GONE : VISIBLE, audioButton);
-        assertVisibility(videoURI == null ? GONE : VISIBLE, videoButton);
+        assertVisibility(audioUri == null ? GONE : VISIBLE, audioButton);
+        assertVisibility(videoUri == null ? GONE : VISIBLE, videoButton);
 
-        if (imageURI == null || !isReferenceManagerStubbed) {
+        if (imageUri == null || !isReferenceManagerStubbed) {
             // either the URI wasn't provided or it encountered InvalidReferenceException
             assertVisibility(GONE, imageView, missingImage);
         } else {

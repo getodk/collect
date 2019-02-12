@@ -84,9 +84,9 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     MediaController mediaController;
 
     private TextView viewText;
-    private String audioURI;
-    private String bigImageURI;
-    private String videoURI;
+    private String audioUri;
+    private String bigImageUri;
+    private String videoUri;
     private int playTextColor = Color.BLUE;
     private CharSequence originalText;
     private ReferenceManager referenceManager = ReferenceManager.instance();
@@ -117,11 +117,11 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     }
 
     public void playAudio() {
-        if (mediaController.isPlayingMediaUri(audioURI)) {
+        if (mediaController.isPlayingMediaUri(audioUri)) {
             mediaController.stopAndResetAudio();
             resetUI();
         } else {
-            mediaController.playAudio(audioURI);
+            mediaController.playAudio(audioUri);
             audioButton.setImageBitmap(bitmapStop);
             viewText.setTextColor(playTextColor);
         }
@@ -153,7 +153,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     public void playVideo() {
         String videoFilename = "";
         try {
-            videoFilename = referenceManager.DeriveReference(videoURI).getLocalURI();
+            videoFilename = referenceManager.DeriveReference(videoUri).getLocalURI();
         } catch (InvalidReferenceException e) {
             Timber.e(e, "Invalid reference exception due to %s ", e.getMessage());
         }
@@ -179,17 +179,17 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         }
     }
 
-    public void setAVT(TextView text, String audioURI, String imageURI, String videoURI, String bigImageURI) {
-        this.audioURI = audioURI;
-        this.bigImageURI = bigImageURI;
-        this.videoURI = videoURI;
+    public void setAVT(TextView text, String audioUri, String imageURI, String videoUri, String bigImageUri) {
+        this.audioUri = audioUri;
+        this.bigImageUri = bigImageUri;
+        this.videoUri = videoUri;
 
         viewText = text;
         originalText = text.getText();
         viewText.setId(ViewIds.generateViewId());
 
         // Setup audio button
-        if (audioURI != null) {
+        if (audioUri != null) {
             audioButton.setVisibility(VISIBLE);
             audioButton.setOnClickListener(this);
 
@@ -197,7 +197,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         }
 
         // Setup video button
-        if (videoURI != null) {
+        if (videoUri != null) {
             videoButton.setVisibility(VISIBLE);
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_media_play);
             videoButton.setImageBitmap(bitmap);
@@ -263,9 +263,9 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     }
 
     private void openImage() {
-        if (bigImageURI != null) {
+        if (bigImageUri != null) {
             try {
-                File bigImage = new File(referenceManager.DeriveReference(bigImageURI).getLocalURI());
+                File bigImage = new File(referenceManager.DeriveReference(bigImageUri).getLocalURI());
                 Intent intent = new Intent("android.intent.action.VIEW");
                 Uri uri =
                         FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", bigImage);
@@ -289,8 +289,8 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         }
     }
 
-    public String getAudioURI() {
-        return audioURI;
+    public String getAudioUri() {
+        return audioUri;
     }
 
     public void addDivider() {

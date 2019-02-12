@@ -73,7 +73,7 @@ public abstract class SelectWidget extends QuestionWidget {
         super.mediaPrepared();
 
         for (MediaLayout mediaLayout : playList) {
-            if (!mediaController.isPlayingMediaUri(mediaLayout.getAudioURI())) {
+            if (!mediaController.isPlayingMediaUri(mediaLayout.getAudioUri())) {
                 mediaLayout.resetUI();
             }
         }
@@ -84,7 +84,7 @@ public abstract class SelectWidget extends QuestionWidget {
         super.mediaCompleted();
 
         for (MediaLayout mediaLayout : playList) {
-            if (mediaController.isPlayingMediaUri(mediaLayout.getAudioURI())) {
+            if (mediaController.isPlayingMediaUri(mediaLayout.getAudioUri())) {
                 mediaLayout.resetUI();
             }
         }
@@ -135,22 +135,22 @@ public abstract class SelectWidget extends QuestionWidget {
      * Pull media from the current item and add it to the media layout.
      */
     public void addMediaFromChoice(MediaLayout mediaLayout, int index, TextView textView) {
-        String audioURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_AUDIO);
+        String audioUri = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_AUDIO);
 
-        String imageURI;
+        String imageUri;
         if (items.get(index) instanceof ExternalSelectChoice) {
-            imageURI = ((ExternalSelectChoice) items.get(index)).getImage();
+            imageUri = ((ExternalSelectChoice) items.get(index)).getImage();
         } else {
-            imageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index),
+            imageUri = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index),
                     FormEntryCaption.TEXT_FORM_IMAGE);
         }
 
         textView.setGravity(Gravity.CENTER_VERTICAL);
 
-        String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "video");
-        String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
+        String videoUri = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "video");
+        String bigImageUri = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
 
-        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI);
+        mediaLayout.setAVT(textView, audioUri, imageUri, videoUri, bigImageUri);
     }
 
     protected RecyclerView setUpRecyclerView() {

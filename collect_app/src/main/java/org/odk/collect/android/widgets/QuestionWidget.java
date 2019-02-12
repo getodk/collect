@@ -156,7 +156,7 @@ public abstract class QuestionWidget extends RelativeLayout implements Widget {
 
     @CallSuper
     protected void mediaPrepared() {
-        if (!mediaController.isPlayingMediaUri(getQuestionMediaLayout().getAudioURI())) {
+        if (!mediaController.isPlayingMediaUri(getQuestionMediaLayout().getAudioUri())) {
             getQuestionMediaLayout().resetUI();
         }
     }
@@ -277,17 +277,17 @@ public abstract class QuestionWidget extends RelativeLayout implements Widget {
             questionText.setVisibility(GONE);
         }
 
-        String imageURI = this instanceof SelectImageMapWidget ? null : prompt.getImageText();
-        String audioURI = prompt.getAudioText();
-        String videoURI = prompt.getSpecialFormQuestionText("video");
+        String imageUri = this instanceof SelectImageMapWidget ? null : prompt.getImageText();
+        String audioUri = prompt.getAudioText();
+        String videoUri = prompt.getSpecialFormQuestionText("video");
 
         // shown when image is clicked
-        String bigImageURI = prompt.getSpecialFormQuestionText("big-image");
+        String bigImageUri = prompt.getSpecialFormQuestionText("big-image");
 
         // Create the layout for audio, image, text
         MediaLayout questionMediaLayout = new MediaLayout(getContext());
         questionMediaLayout.setId(ViewIds.generateViewId()); // assign random id
-        questionMediaLayout.setAVT(questionText, audioURI, imageURI, videoURI, bigImageURI);
+        questionMediaLayout.setAVT(questionText, audioUri, imageUri, videoUri, bigImageUri);
 
         String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
         if (playColorString != null) {
