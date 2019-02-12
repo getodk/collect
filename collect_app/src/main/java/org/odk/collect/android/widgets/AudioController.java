@@ -167,9 +167,7 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
         ((FormEntryActivity) context).allowSwiping(true);
 
         seekTo(seekBar.getProgress());
-        if (mediaController.isPlaying()) {
-            play();
-        }
+        play();
     }
 
     private void play() {
