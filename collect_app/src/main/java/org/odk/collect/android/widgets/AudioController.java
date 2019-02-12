@@ -28,8 +28,6 @@ import org.joda.time.DateTimeZone;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.controller.MediaController;
-import org.odk.collect.android.events.MediaEvent;
-import org.odk.collect.android.events.RxEventBus;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,9 +35,6 @@ import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 import static android.view.View.GONE;
@@ -61,7 +56,6 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
 
     private View view;
     private Context context;
-    private Disposable disposable;
     private MediaController mediaController;
 
     /**
@@ -93,11 +87,9 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
         return new DateTime(millis, DateTimeZone.UTC).toString("mm:ss");
     }
 
-    void init(Context context, MediaController mediaController, RxEventBus rxEventBus) {
+    void init(Context context, MediaController mediaController) {
         this.context = context;
         this.mediaController = mediaController;
-
-        initMediaPlayer(rxEventBus);
     }
 
     @OnClick(R.id.fastForwardBtn)
@@ -139,19 +131,6 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
         view = LayoutInflater.from(context).inflate(R.layout.media_player_layout, parent, false);
         ButterKnife.bind(this, view);
         seekBar.setOnSeekBarChangeListener(this);
-    }
-
-    private void initMediaPlayer(RxEventBus rxEventBus) {
-        disposable = rxEventBus.register(MediaEvent.class)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mediaEvent -> {
-                    if (mediaEvent.getResultCode() == MediaController.MEDIA_PREPARED) {
-                        updateTimer();
-                    } else if (mediaEvent.getResultCode() == MediaController.MEDIA_COMPLETED) {
-                        playButton.setImageResource(R.drawable.ic_play_arrow_24dp);
-                    }
-                }, Timber::e);
     }
 
     /**
@@ -225,5 +204,13 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     View getPlayerLayout(ViewGroup parent) {
         initControlsLayout(parent);
         return view;
+    }
+
+    void onMediaPrepared() {
+        updateTimer();
+    }
+
+    void onMediaCompleted() {
+        playButton.setImageResource(R.drawable.ic_play_arrow_24dp);
     }
 }
