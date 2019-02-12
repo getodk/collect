@@ -39,7 +39,6 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.controller.MediaController;
-import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -51,7 +50,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 /**
@@ -85,9 +83,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     @Inject
     MediaController mediaController;
 
-    @Inject
-    RxEventBus rxEventBus;
-
     private TextView viewText;
     private String audioURI;
     private String bigImageURI;
@@ -95,7 +90,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     private int playTextColor = Color.BLUE;
     private CharSequence originalText;
     private ReferenceManager referenceManager = ReferenceManager.instance();
-    private Disposable disposable;
 
     public MediaLayout(Context context) {
         this(context, null);
