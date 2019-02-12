@@ -21,6 +21,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.text.method.LinkMovementMethod;
@@ -91,7 +92,7 @@ public abstract class QuestionWidget
     private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
     private AtomicBoolean expanded;
     private Bundle state;
-    protected Disposable disposable;
+    private Disposable disposable;
     protected ThemeUtils themeUtils;
     private int playColor;
 
@@ -119,12 +120,6 @@ public abstract class QuestionWidget
             injectDependencies((DependencyProvider) context);
         }
 
-        disposable = rxEventBus.register(MediaEvent.class)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .filter(mediaEvent -> mediaEvent.getResultCode() == MediaController.MEDIA_COMPLETED)
-                .subscribe(mediaEvent -> getQuestionMediaLayout().resetTextFormatting(), Timber::e);
-
         questionFontSize = Collect.getQuestionFontsize();
 
         formEntryPrompt = prompt;
@@ -143,6 +138,35 @@ public abstract class QuestionWidget
 
         addQuestionMediaLayout(getQuestionMediaLayout());
         addHelpTextLayout(getHelpTextLayout());
+
+        disposable = rxEventBus.register(MediaEvent.class)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mediaEvent -> {
+                    if (mediaEvent.getResultCode() == MediaController.MEDIA_PREPARED) {
+                        mediaPrepared(mediaEvent.getMediaSource());
+                    } else if (mediaEvent.getResultCode() == MediaController.MEDIA_COMPLETED) {
+                        mediaCompleted(mediaEvent.getMediaSource());
+                    }
+                }, Timber::e);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        disposable.dispose();
+    }
+
+    @CallSuper
+    protected void mediaPrepared(String mediaSource) {
+        if (getQuestionMediaLayout().getAudioURI() != null && !getQuestionMediaLayout().getAudioURI().contains(mediaSource)) {
+            getQuestionMediaLayout().resetUI();
+        }
+    }
+
+    @CallSuper
+    protected void mediaCompleted(String mediaSource) {
+        getQuestionMediaLayout().resetUI();
     }
 
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
