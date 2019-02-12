@@ -4,7 +4,6 @@
   <string name="activity_not_found">လုပ္ေဆာင္ရန္ အလုပ္ မေတြ့ပါ 1%s</string>
   <string name="view_image">ပုံၾကည့္ပါ</string>
   <string name="annotate_image">ပုံတြင္ မွတ္ခ်က္ေရးပါ</string>
-  <string name="aligned_image_capture">ဘက္ညီပုံရိုက္ျခင္း</string>
   <string name="signature_capture">လက္မွတ္ရယူျခင္း</string>
   <string name="view_video">ဗီဒီယိုကြည့်ပါ</string>
   <string name="choose_audio">ဗီဒီယိုရွေးပါ</string>

@@ -4,7 +4,6 @@
   <string name="activity_not_found">គ្មានសកម្មភាពដើម្បីដោះស្រាយបាន : %s</string>
   <string name="view_image">បង្ហាញរូបថត</string>
   <string name="annotate_image">Annotate Image</string>
-  <string name="aligned_image_capture">ការចាប់យករូបភាពតម្រឹម</string>
   <string name="signature_capture">ថតហត្ថលេខា</string>
   <string name="view_video">បង្ហាញវីដេអូ</string>
   <string name="choose_audio">ជ្រើសរើសសម្លេង</string>

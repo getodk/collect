@@ -2,7 +2,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">lakisa kombo ebombami</string>
   <string name="view_image">lakisa bilili</string>
-  <string name="aligned_image_capture">bongisa bilili</string>
   <string name="view_video">lakisa video</string>
   <string name="choose_audio">pona elili</string>
   <string name="add_another">bakisa lingomba</string>

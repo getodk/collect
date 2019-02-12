@@ -593,14 +593,10 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
                         FormEntryPrompt fp = formController.getQuestionPrompt();
                         String label = fp.getShortText();
-                        if (!fp.isReadOnly() || (label != null && label.length() > 0)) {
-                            // show the question if it is an editable field.
-                            // or if it is read-only and the label is not blank.
-                            String answerDisplay = FormEntryPromptUtils.getAnswerText(fp, this, formController);
-                            elementsToDisplay.add(
-                                    new HierarchyElement(FormEntryPromptUtils.markQuestionIfIsRequired(label, fp.isRequired()), answerDisplay, null,
-                                            HierarchyElement.Type.QUESTION, fp.getIndex()));
-                        }
+                        String answerDisplay = FormEntryPromptUtils.getAnswerText(fp, this, formController);
+                        elementsToDisplay.add(
+                                new HierarchyElement(FormEntryPromptUtils.markQuestionIfIsRequired(label, fp.isRequired()), answerDisplay, null,
+                                        HierarchyElement.Type.QUESTION, fp.getIndex()));
                         break;
                     }
                     case FormEntryController.EVENT_GROUP: {

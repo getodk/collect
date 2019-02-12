@@ -4,7 +4,6 @@
   <string name="activity_not_found">Ne najdem aktivnosti za obravnavo %s</string>
   <string name="view_image">Poglej sliko</string>
   <string name="annotate_image">Označi na sliki</string>
-  <string name="aligned_image_capture">Poravnan zajem slike</string>
   <string name="signature_capture">Zajem podpisa</string>
   <string name="view_video">Poglej video</string>
   <string name="choose_audio">Izberi audio</string>
