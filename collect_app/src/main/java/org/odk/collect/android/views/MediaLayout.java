@@ -39,7 +39,6 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.controller.MediaController;
-import org.odk.collect.android.events.MediaEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.FileUtils;
@@ -53,9 +52,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -122,38 +119,29 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         this.referenceManager = referenceManager;
     }
 
+    public void resetUI() {
+        resetTextFormatting();
+        resetAudioButtonBitmap();
+    }
+
     public void playAudio() {
         if (audioPlayListener != null) {
             audioPlayListener.resetQuestionTextColor();
             audioPlayListener.resetAudioButtonImage();
         }
 
-        if (mediaController.isPlaying()) {
-            mediaController.stopAudio();
-            resetAudioButtonBitmap();
+        if (mediaController.isPlayingMedia(audioURI)) {
+            mediaController.stopAndResetAudio();
+            resetUI();
         } else {
             mediaController.playAudio(audioURI);
             audioButton.setImageBitmap(bitmapStop);
+            viewText.setTextColor(playTextColor);
         }
 
         // have to call toString() to remove the html formatting
         // (it's a spanned thing...)
         viewText.setText(viewText.getText().toString());
-
-        if (mediaController.isPlaying()) {
-            viewText.setTextColor(playTextColor);
-        } else {
-            resetTextFormatting();
-        }
-
-        disposable = rxEventBus.register(MediaEvent.class)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .filter(mediaEvent -> mediaEvent.getResultCode() == MediaController.MEDIA_COMPLETED)
-                .subscribe(mediaEvent -> {
-                    resetTextFormatting();
-                    resetAudioButtonBitmap();
-                }, Timber::e);
     }
 
     public void setPlayTextColor(int textColor) {
@@ -316,6 +304,10 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
 
     public void setAudioListener(AudioPlayListener listener) {
         audioPlayListener = listener;
+    }
+
+    public String getAudioURI() {
+        return audioURI;
     }
 
     public void addDivider() {
