@@ -51,6 +51,7 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
 
     @Nullable
     private MediaPlayer player;
+    private String mediaSource;
 
     @Inject
     MediaController() {
@@ -70,14 +71,14 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         Timber.i("Media prepared");
-        rxEventBus.post(new MediaEvent(MEDIA_PREPARED));
+        rxEventBus.post(new MediaEvent(MEDIA_PREPARED, mediaSource));
     }
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
         Timber.i("Media completed");
         mediaPlayer.reset();
-        rxEventBus.post(new MediaEvent(MEDIA_COMPLETED));
+        rxEventBus.post(new MediaEvent(MEDIA_COMPLETED, mediaSource));
     }
 
     @Override
@@ -91,6 +92,8 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
     }
 
     public void playAudio(@NonNull String uri) {
+        mediaSource = uri;
+
         String audioFilename = "";
         try {
             audioFilename = ReferenceManager.instance().deriveReference(uri).getLocalURI();
@@ -123,10 +126,6 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
         getPlayer().pause();
     }
 
-    public void stopAudio() {
-        getPlayer().stop();
-    }
-
     public void stopAndResetAudio() {
         if (isPlaying()) {
             getPlayer().stop();
@@ -147,6 +146,8 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
     }
 
     public void setMedia(File file) throws IOException {
+        mediaSource = file.getName();
+
         stopAndResetAudio();
         getPlayer().setAudioStreamType(AudioManager.STREAM_MUSIC);
         getPlayer().setDataSource(context, Uri.fromFile(file));
@@ -157,6 +158,11 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
         if (player != null) {
             player.release();
             player = null;
+            mediaSource = null;
         }
+    }
+
+    public boolean isPlayingMedia(String uri) {
+        return isPlaying() && uri != null && uri.contains(mediaSource);
     }
 }
