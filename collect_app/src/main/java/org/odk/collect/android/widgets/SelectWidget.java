@@ -73,7 +73,7 @@ public abstract class SelectWidget extends QuestionWidget {
         super.mediaPrepared();
 
         for (MediaLayout mediaLayout : playList) {
-            if (!mediaController.isPlayingMediaUri(mediaLayout.getAudioUri())) {
+            if (!getQuestionMediaLayout().isAudioPlaying()) {
                 mediaLayout.resetUI();
             }
         }
@@ -84,7 +84,7 @@ public abstract class SelectWidget extends QuestionWidget {
         super.mediaCompleted();
 
         for (MediaLayout mediaLayout : playList) {
-            if (mediaController.isPlayingMediaUri(mediaLayout.getAudioUri())) {
+            if (getQuestionMediaLayout().isAudioPlaying()) {
                 mediaLayout.resetUI();
             }
         }

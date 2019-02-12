@@ -156,7 +156,7 @@ public abstract class QuestionWidget extends RelativeLayout implements Widget {
 
     @CallSuper
     protected void mediaPrepared() {
-        if (!mediaController.isPlayingMediaUri(getQuestionMediaLayout().getAudioUri())) {
+        if (!getQuestionMediaLayout().isAudioPlaying()) {
             getQuestionMediaLayout().resetUI();
         }
     }

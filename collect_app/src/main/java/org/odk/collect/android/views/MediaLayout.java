@@ -289,8 +289,8 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         }
     }
 
-    public String getAudioUri() {
-        return audioUri;
+    public boolean isAudioPlaying() {
+        return mediaController.isPlayingMediaUri(audioUri);
     }
 
     public void addDivider() {
