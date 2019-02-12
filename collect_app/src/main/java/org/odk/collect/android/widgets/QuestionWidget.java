@@ -85,11 +85,11 @@ public abstract class QuestionWidget extends RelativeLayout implements Widget {
     private final View guidanceTextLayout;
     private final View textLayout;
     private final TextView warningText;
+    private final Disposable disposable;
     private PermissionUtils permissionUtils;
     private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
     private AtomicBoolean expanded;
     private Bundle state;
-    private Disposable disposable;
     protected ThemeUtils themeUtils;
     private int playColor;
 
@@ -98,7 +98,6 @@ public abstract class QuestionWidget extends RelativeLayout implements Widget {
 
     @Inject
     RxEventBus rxEventBus;
-
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);

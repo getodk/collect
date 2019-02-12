@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.odk.collect.android.controller;
 
 import android.content.Context;
@@ -57,7 +58,6 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
     MediaController() {
     }
 
-    @NonNull
     private MediaPlayer getPlayer() {
         if (player == null) {
             player = new MediaPlayer();
@@ -65,6 +65,7 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
             player.setOnCompletionListener(this);
             player.setOnErrorListener(this);
         }
+
         return player;
     }
 

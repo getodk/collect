@@ -120,10 +120,14 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         if (mediaController.isPlayingMediaUri(audioUri)) {
             mediaController.stopAndResetAudio();
             resetUI();
-        } else {
+        } else if (audioUri != null) {
             mediaController.playAudio(audioUri);
             audioButton.setImageBitmap(bitmapStop);
             viewText.setTextColor(playTextColor);
+        } else {
+            // No audio file specified
+            Timber.e("No audio file was specified");
+            ToastUtils.showLongToast(R.string.audio_file_error);
         }
 
         // have to call toString() to remove the html formatting
