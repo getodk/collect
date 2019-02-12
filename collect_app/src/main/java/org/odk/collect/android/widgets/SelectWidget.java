@@ -32,8 +32,6 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
-import org.odk.collect.android.controller.MediaController;
-import org.odk.collect.android.events.MediaEvent;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.views.MediaLayout;
@@ -41,8 +39,6 @@ import org.odk.collect.android.views.MediaLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public abstract class SelectWidget extends QuestionWidget {
@@ -60,6 +56,7 @@ public abstract class SelectWidget extends QuestionWidget {
     protected ArrayList<MediaLayout> playList;
     protected LinearLayout answerLayout;
     private int playcounter;
+    private boolean isAutoPlayEnabled;
 
     public SelectWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -90,17 +87,37 @@ public abstract class SelectWidget extends QuestionWidget {
     }
 
     @Override
+    protected void mediaPrepared(String mediaSource) {
+        super.mediaPrepared(mediaSource);
+
+        for (MediaLayout mediaLayout : playList) {
+            if (mediaLayout.getAudioURI() != null && !mediaLayout.getAudioURI().contains(mediaSource)) {
+                mediaLayout.resetUI();
+            }
+        }
+    }
+
+    @Override
+    protected void mediaCompleted(String mediaSource) {
+        super.mediaCompleted(mediaSource);
+
+        for (MediaLayout mediaLayout : playList) {
+            Timber.d(mediaLayout.getAudioURI());
+
+            if (mediaLayout.getAudioURI() != null && mediaLayout.getAudioURI().contains(mediaSource)) {
+                mediaLayout.resetUI();
+            }
+        }
+
+        if (isAutoPlayEnabled && playcounter < playList.size()) {
+            playNextSelectItem();
+        }
+    }
+
+    @Override
     public void playAllPromptText() {
         // set up to play the items when the question text is finished
-        disposable = rxEventBus.register(MediaEvent.class)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .filter(mediaEvent -> playcounter < playList.size() &&
-                        mediaEvent.getResultCode() == MediaController.MEDIA_COMPLETED)
-                .subscribe(mediaEvent -> {
-                    resetQuestionTextColor();
-                    playNextSelectItem();
-                }, Timber::e);
+        isAutoPlayEnabled = true;
 
         // plays the question text
         super.playAllPromptText();
