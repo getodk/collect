@@ -76,6 +76,8 @@ import timber.log.Timber;
 
 public abstract class QuestionWidget extends RelativeLayout implements Widget {
 
+    private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
+
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
     private final MediaLayout questionMediaLayout;
@@ -86,18 +88,19 @@ public abstract class QuestionWidget extends RelativeLayout implements Widget {
     private final View textLayout;
     private final TextView warningText;
     private final Disposable disposable;
-    private PermissionUtils permissionUtils;
-    private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
-    private AtomicBoolean expanded;
-    private Bundle state;
+
     protected ThemeUtils themeUtils;
-    private int playColor;
 
     @Inject
     MediaController mediaController;
 
     @Inject
     RxEventBus rxEventBus;
+
+    private PermissionUtils permissionUtils;
+    private AtomicBoolean expanded;
+    private Bundle state;
+    private int playColor;
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
