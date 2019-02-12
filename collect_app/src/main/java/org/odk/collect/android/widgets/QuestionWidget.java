@@ -141,9 +141,9 @@ public abstract class QuestionWidget extends RelativeLayout implements Widget {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mediaEvent -> {
                     if (mediaEvent.getResultCode() == MediaController.MEDIA_PREPARED) {
-                        mediaPrepared(mediaEvent.getMediaSource());
+                        mediaPrepared();
                     } else if (mediaEvent.getResultCode() == MediaController.MEDIA_COMPLETED) {
-                        mediaCompleted(mediaEvent.getMediaSource());
+                        mediaCompleted();
                     }
                 }, Timber::e);
     }
@@ -155,14 +155,14 @@ public abstract class QuestionWidget extends RelativeLayout implements Widget {
     }
 
     @CallSuper
-    protected void mediaPrepared(String mediaSource) {
-        if (getQuestionMediaLayout().getAudioURI() != null && !getQuestionMediaLayout().getAudioURI().contains(mediaSource)) {
+    protected void mediaPrepared() {
+        if (!mediaController.isPlayingMediaUri(getQuestionMediaLayout().getAudioURI())) {
             getQuestionMediaLayout().resetUI();
         }
     }
 
     @CallSuper
-    protected void mediaCompleted(String mediaSource) {
+    protected void mediaCompleted() {
         getQuestionMediaLayout().resetUI();
     }
 

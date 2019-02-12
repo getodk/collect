@@ -105,14 +105,14 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     }
 
     @Override
-    protected void mediaPrepared(String mediaSource) {
-        super.mediaPrepared(mediaSource);
+    protected void mediaPrepared() {
+        super.mediaPrepared();
         audioController.onMediaPrepared();
     }
 
     @Override
-    protected void mediaCompleted(String mediaSource) {
-        super.mediaCompleted(mediaSource);
+    protected void mediaCompleted() {
+        super.mediaCompleted();
         audioController.onMediaCompleted();
     }
 

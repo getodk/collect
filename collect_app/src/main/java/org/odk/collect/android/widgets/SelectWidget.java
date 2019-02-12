@@ -69,22 +69,22 @@ public abstract class SelectWidget extends QuestionWidget {
     }
 
     @Override
-    protected void mediaPrepared(String mediaSource) {
-        super.mediaPrepared(mediaSource);
+    protected void mediaPrepared() {
+        super.mediaPrepared();
 
         for (MediaLayout mediaLayout : playList) {
-            if (mediaLayout.getAudioURI() != null && !mediaLayout.getAudioURI().contains(mediaSource)) {
+            if (!mediaController.isPlayingMediaUri(mediaLayout.getAudioURI())) {
                 mediaLayout.resetUI();
             }
         }
     }
 
     @Override
-    protected void mediaCompleted(String mediaSource) {
-        super.mediaCompleted(mediaSource);
+    protected void mediaCompleted() {
+        super.mediaCompleted();
 
         for (MediaLayout mediaLayout : playList) {
-            if (mediaLayout.getAudioURI() != null && mediaLayout.getAudioURI().contains(mediaSource)) {
+            if (mediaController.isPlayingMediaUri(mediaLayout.getAudioURI())) {
                 mediaLayout.resetUI();
             }
         }

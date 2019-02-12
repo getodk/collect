@@ -51,7 +51,7 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
 
     @Nullable
     private MediaPlayer player;
-    private String mediaSource;
+    private String mediaUri;
 
     @Inject
     MediaController() {
@@ -71,14 +71,14 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         Timber.i("Media prepared");
-        rxEventBus.post(new MediaEvent(MEDIA_PREPARED, mediaSource));
+        rxEventBus.post(new MediaEvent(MEDIA_PREPARED));
     }
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
         Timber.i("Media completed");
         mediaPlayer.reset();
-        rxEventBus.post(new MediaEvent(MEDIA_COMPLETED, mediaSource));
+        rxEventBus.post(new MediaEvent(MEDIA_COMPLETED));
     }
 
     @Override
@@ -92,7 +92,7 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
     }
 
     public void playAudio(@NonNull String uri) {
-        mediaSource = uri;
+        mediaUri = uri;
 
         String audioFilename = "";
         try {
@@ -146,8 +146,6 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
     }
 
     public void setMedia(File file) throws IOException {
-        mediaSource = file.getName();
-
         stopAndResetAudio();
         getPlayer().setAudioStreamType(AudioManager.STREAM_MUSIC);
         getPlayer().setDataSource(context, Uri.fromFile(file));
@@ -158,11 +156,11 @@ public final class MediaController implements MediaPlayer.OnCompletionListener, 
         if (player != null) {
             player.release();
             player = null;
-            mediaSource = null;
+            mediaUri = null;
         }
     }
 
-    public boolean isPlayingMedia(String uri) {
-        return isPlaying() && uri != null && uri.contains(mediaSource);
+    public boolean isPlayingMediaUri(String uri) {
+        return isPlaying() && uri != null && uri.equals(mediaUri);
     }
 }

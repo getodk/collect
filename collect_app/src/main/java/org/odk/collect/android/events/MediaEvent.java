@@ -18,18 +18,12 @@ package org.odk.collect.android.events;
 public class MediaEvent extends RxEvent {
 
     private final int resultCode;
-    private final String mediaSource;
 
-    public MediaEvent(int resultCode, String mediaSource) {
+    public MediaEvent(int resultCode) {
         this.resultCode = resultCode;
-        this.mediaSource = mediaSource;
     }
 
     public int getResultCode() {
         return resultCode;
-    }
-
-    public String getMediaSource() {
-        return mediaSource;
     }
 }

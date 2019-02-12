@@ -117,7 +117,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     }
 
     public void playAudio() {
-        if (mediaController.isPlayingMedia(audioURI)) {
+        if (mediaController.isPlayingMediaUri(audioURI)) {
             mediaController.stopAndResetAudio();
             resetUI();
         } else {
