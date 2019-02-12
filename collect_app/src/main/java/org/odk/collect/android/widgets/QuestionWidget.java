@@ -45,7 +45,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.controller.MediaController;
 import org.odk.collect.android.events.MediaEvent;
 import org.odk.collect.android.events.RxEventBus;
-import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -75,9 +74,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-public abstract class QuestionWidget
-        extends RelativeLayout
-        implements Widget, AudioPlayListener {
+public abstract class QuestionWidget extends RelativeLayout implements Widget {
 
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
@@ -291,7 +288,6 @@ public abstract class QuestionWidget
         MediaLayout questionMediaLayout = new MediaLayout(getContext());
         questionMediaLayout.setId(ViewIds.generateViewId()); // assign random id
         questionMediaLayout.setAVT(questionText, audioURI, imageURI, videoURI, bigImageURI);
-        questionMediaLayout.setAudioListener(this);
 
         String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
         if (playColorString != null) {
@@ -498,14 +494,6 @@ public abstract class QuestionWidget
      */
     public void playAllPromptText() {
         getQuestionMediaLayout().playAudio();
-    }
-
-    public void resetQuestionTextColor() {
-        getQuestionMediaLayout().resetTextFormatting();
-    }
-
-    public void resetAudioButtonImage() {
-        getQuestionMediaLayout().resetAudioButtonBitmap();
     }
 
     public void showWarning(String warningBody) {

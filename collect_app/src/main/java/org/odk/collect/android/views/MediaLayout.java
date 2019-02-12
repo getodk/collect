@@ -40,7 +40,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.controller.MediaController;
 import org.odk.collect.android.events.RxEventBus;
-import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -93,7 +92,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     private String audioURI;
     private String bigImageURI;
     private String videoURI;
-    private AudioPlayListener audioPlayListener;
     private int playTextColor = Color.BLUE;
     private CharSequence originalText;
     private ReferenceManager referenceManager = ReferenceManager.instance();
@@ -125,11 +123,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     }
 
     public void playAudio() {
-        if (audioPlayListener != null) {
-            audioPlayListener.resetQuestionTextColor();
-            audioPlayListener.resetAudioButtonImage();
-        }
-
         if (mediaController.isPlayingMedia(audioURI)) {
             mediaController.stopAndResetAudio();
             resetUI();
@@ -300,10 +293,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
                 checkbox.setChecked(!checkbox.isChecked());
             }
         }
-    }
-
-    public void setAudioListener(AudioPlayListener listener) {
-        audioPlayListener = listener;
     }
 
     public String getAudioURI() {

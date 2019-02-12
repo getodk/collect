@@ -39,8 +39,6 @@ import org.odk.collect.android.views.MediaLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import timber.log.Timber;
-
 public abstract class SelectWidget extends QuestionWidget {
 
     /**
@@ -71,22 +69,6 @@ public abstract class SelectWidget extends QuestionWidget {
     }
 
     @Override
-    public void resetQuestionTextColor() {
-        super.resetQuestionTextColor();
-        for (MediaLayout layout : playList) {
-            layout.resetTextFormatting();
-        }
-    }
-
-    @Override
-    public void resetAudioButtonImage() {
-        super.resetAudioButtonImage();
-        for (MediaLayout layout : playList) {
-            layout.resetAudioButtonBitmap();
-        }
-    }
-
-    @Override
     protected void mediaPrepared(String mediaSource) {
         super.mediaPrepared(mediaSource);
 
@@ -102,8 +84,6 @@ public abstract class SelectWidget extends QuestionWidget {
         super.mediaCompleted(mediaSource);
 
         for (MediaLayout mediaLayout : playList) {
-            Timber.d(mediaLayout.getAudioURI());
-
             if (mediaLayout.getAudioURI() != null && mediaLayout.getAudioURI().contains(mediaSource)) {
                 mediaLayout.resetUI();
             }
@@ -147,7 +127,6 @@ public abstract class SelectWidget extends QuestionWidget {
     }
 
     public void initMediaLayoutSetUp(MediaLayout mediaLayout) {
-        mediaLayout.setAudioListener(this);
         mediaLayout.setPlayTextColor(getPlayColor());
         playList.add(mediaLayout);
     }
