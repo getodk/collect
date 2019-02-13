@@ -114,7 +114,7 @@ public class AutoSendWorker extends Worker {
         if (protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets))) {
             if (PermissionUtils.isGetAccountsPermissionGranted(getApplicationContext())) {
                 GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
-                String googleUsername = accountsManager.getSelectedAccount();
+                String googleUsername = accountsManager.getLastSelectedAccountIfValid();
                 if (googleUsername.isEmpty()) {
                     showUploadStatusNotification(true, Collect.getInstance().getString(R.string.google_set_account));
                     return Result.FAILURE;

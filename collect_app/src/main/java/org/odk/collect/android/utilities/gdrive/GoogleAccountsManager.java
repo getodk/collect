@@ -32,13 +32,8 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.GoogleDriveActivity;
-import org.odk.collect.android.activities.GoogleSheetsUploaderActivity;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.ServerPreferencesFragment;
-import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.Collections;
@@ -51,8 +46,6 @@ public class GoogleAccountsManager {
     public static final int REQUEST_ACCOUNT_PICKER = 1000;
     public static final int REQUEST_AUTHORIZATION = 1001;
 
-    @Nullable
-    private Fragment fragment;
     @Nullable
     private Activity activity;
     @Nullable
@@ -69,7 +62,6 @@ public class GoogleAccountsManager {
     private GoogleAccountCredential credential;
     private GeneralSharedPreferences preferences;
     private ThemeUtils themeUtils;
-    private boolean autoChooseAccount = true;
 
     @Inject
     public GoogleAccountsManager(@NonNull Context context) {
@@ -90,7 +82,6 @@ public class GoogleAccountsManager {
         this.preferences = preferences;
         this.intentChooseAccount = intentChooseAccount;
         this.themeUtils = themeUtils;
-        this.fragment = fragment;
         this.activity = activity;
     }
 
@@ -116,39 +107,8 @@ public class GoogleAccountsManager {
         }
     }
 
-    public void chooseAccountAndRequestPermissionIfNeeded() {
-        if (activity != null) {
-            new PermissionUtils().requestGetAccountsPermission(activity, new PermissionListener() {
-                @Override
-                public void granted() {
-                    chooseAccount();
-                }
-
-                @Override
-                public void denied() {
-                    if (activity instanceof GoogleSheetsUploaderActivity || activity instanceof GoogleDriveActivity) {
-                        activity.finish();
-                    }
-                }
-            });
-        }
-    }
-
-    private void chooseAccount() {
-        String accountName = getSelectedAccount();
-        if (autoChooseAccount && !accountName.isEmpty()) {
-            selectAccount(accountName);
-        } else {
-            if (fragment != null && fragment instanceof ServerPreferencesFragment) {
-                showAccountPickerDialog();
-            } else {
-                showSettingsDialog(activity);
-            }
-        }
-    }
-
     @NonNull
-    public String getSelectedAccount() {
+    public String getLastSelectedAccountIfValid() {
         Account[] googleAccounts = credential.getAllAccounts();
         String account = (String) preferences.get(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
 
@@ -163,11 +123,6 @@ public class GoogleAccountsManager {
         }
 
         return "";
-    }
-
-    @NonNull
-    public String getLastSelectedAccountIfValid() {
-        return getSelectedAccount();
     }
 
     public static void showSettingsDialog(Activity activity) {
@@ -190,17 +145,6 @@ public class GoogleAccountsManager {
         showDialog(alertDialog, activity);
     }
 
-    public void showAccountPickerDialog() {
-        Account selectedAccount = getAccountPickerCurrentAccount();
-        intentChooseAccount.putExtra("selectedAccount", selectedAccount);
-        intentChooseAccount.putExtra("overrideTheme", themeUtils.getAccountPickerTheme());
-        intentChooseAccount.putExtra("overrideCustomTheme", 0);
-
-        if (fragment != null) {
-            fragment.startActivityForResult(intentChooseAccount, REQUEST_ACCOUNT_PICKER);
-        }
-    }
-
     public void selectAccount(String accountName) {
         credential.setSelectedAccountName(accountName);
         if (listener != null) {
@@ -209,7 +153,7 @@ public class GoogleAccountsManager {
     }
 
     private Account getAccountPickerCurrentAccount() {
-        String selectedAccountName = getSelectedAccount();
+        String selectedAccountName = getLastSelectedAccountIfValid();
         if (selectedAccountName.isEmpty()) {
             Account[] googleAccounts = credential.getAllAccounts();
             if (googleAccounts != null && googleAccounts.length > 0) {
@@ -251,10 +195,6 @@ public class GoogleAccountsManager {
 
     public GoogleAccountCredential getCredential() {
         return credential;
-    }
-
-    public void disableAutoChooseAccount() {
-        autoChooseAccount = false;
     }
 
     public void setListener(@Nullable GoogleAccountSelectionListener listener) {
