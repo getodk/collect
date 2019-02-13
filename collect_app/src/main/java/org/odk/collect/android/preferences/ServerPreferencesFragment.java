@@ -43,9 +43,11 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -251,20 +253,32 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     }
 
     public void initAccountPreferences() {
-        accountsManager.setListener(this);
-        accountsManager.disableAutoChooseAccount();
-
         selectedGoogleAccountPreference.setSummary(accountsManager.getSelectedAccount());
         selectedGoogleAccountPreference.setOnPreferenceClickListener(preference -> {
             if (allowClickSelectedGoogleAccountPreference) {
                 if (PlayServicesUtil.isGooglePlayServicesAvailable(getActivity())) {
                     allowClickSelectedGoogleAccountPreference = false;
-                    accountsManager.chooseAccountAndRequestPermissionIfNeeded();
+                    requestAccountsPermission();
                 } else {
                     PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getActivity());
                 }
             }
             return true;
+        });
+    }
+
+    private void requestAccountsPermission() {
+        new PermissionUtils(getActivity()).requestGetAccountsPermission(new PermissionListener() {
+            @Override
+            public void granted() {
+                Intent intent = accountsManager.getAccountChooserIntent();
+                startActivityForResult(intent, REQUEST_ACCOUNT_PICKER);
+            }
+
+            @Override
+            public void denied() {
+                // do nothing
+            }
         });
     }
 
