@@ -27,6 +27,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -2507,7 +2508,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (isBackgroundLocationEnabled()) {
                     locationTrackingEnabled(formController, true);
                 } else {
-                    SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_disabled));
+                    if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                        SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_disabled), ""));
+                    } else {
+                        SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_disabled), "⋮"));
+                    }
                     formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_TRACKING_DISABLED, null, false);
                 }
             } else {
@@ -2530,7 +2535,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (googleLocationClient.isLocationAvailable()) {
                     if (calledJustAfterFormStart) {
                         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED, null, false);
-                        SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_enabled));
+                        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                            SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_enabled), ""));
+                        } else {
+                            SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_enabled), "⋮"));
+                        }
                     }
                 } else {
                     formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED, null, false);
