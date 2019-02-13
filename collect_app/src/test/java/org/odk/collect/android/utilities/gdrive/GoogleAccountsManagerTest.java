@@ -106,7 +106,7 @@ public class GoogleAccountsManagerTest {
     public void setup() {
         googleAccountsManager = spy(new GoogleAccountsManager(mockedCredential, mockPreferences, mockIntent, mockThemeUtils, activity, fragment));
         listener = new TestGoogleAccountSelectionListener();
-        googleAccountsManager.setListener(listener);
+//        googleAccountsManager.setListener(listener);
 
         stubCredential();
         stubPreferences();

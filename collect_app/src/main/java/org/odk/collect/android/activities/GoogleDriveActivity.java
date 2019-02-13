@@ -71,8 +71,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.showSettingsDialog;
 
 public class GoogleDriveActivity extends FormListActivity implements View.OnClickListener,
-        TaskListener, GoogleDriveFormDownloadListener, GoogleAccountsManager.GoogleAccountSelectionListener,
-        AdapterView.OnItemClickListener {
+        TaskListener, GoogleDriveFormDownloadListener, AdapterView.OnItemClickListener {
 
     private static final String DRIVE_DOWNLOAD_LIST_SORTING_ORDER = "driveDownloadListSortingOrder";
     public static final int AUTHORIZATION_REQUEST_CODE = 4322;
@@ -204,7 +203,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc)
         };
 
-        accountsManager.setListener(this);
         driveHelper = accountsManager.getDriveHelper();
         getResultsFromApi();
     }
@@ -248,6 +246,9 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 String account = accountsManager.getLastSelectedAccountIfValid();
                 if (!account.isEmpty()) {
                     accountsManager.selectAccount(account);
+
+                    // re-attempt to list google drive files
+                    getResultsFromApi();
                 } else {
                     showSettingsDialog(GoogleDriveActivity.this);
                 }
@@ -579,11 +580,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 getFiles();
                 break;
         }
-    }
-
-    @Override
-    public void onGoogleAccountSelected(String accountName) {
-        getResultsFromApi();
     }
 
     @Override

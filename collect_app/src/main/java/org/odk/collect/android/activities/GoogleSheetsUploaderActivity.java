@@ -59,8 +59,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_AUTHORIZATION;
 import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.showSettingsDialog;
 
-public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener,
-        GoogleAccountsManager.GoogleAccountSelectionListener {
+public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener {
     private static final int PROGRESS_DIALOG = 1;
     private static final int GOOGLE_USER_DIALOG = 3;
     private static final String ALERT_MSG = "alertmsg";
@@ -119,8 +118,6 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
             Timber.i("onCreate: Beginning upload of %d instances!", instancesToSend.length);
         }
 
-        accountsManager.setListener(this);
-
         getResultsFromApi();
     }
 
@@ -172,6 +169,9 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
                 String account = accountsManager.getLastSelectedAccountIfValid();
                 if (!account.isEmpty()) {
                     accountsManager.selectAccount(account);
+
+                    // re-attempt to list google drive files
+                    getResultsFromApi();
                 } else {
                     showSettingsDialog(GoogleSheetsUploaderActivity.this);
                 }
@@ -397,10 +397,5 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
         // in interface, but not needed
-    }
-
-    @Override
-    public void onGoogleAccountSelected(String accountName) {
-        getResultsFromApi();
     }
 }
