@@ -48,7 +48,6 @@ public class TriggerWidget extends QuestionWidget {
         setUpTriggerButton();
         setUpStringAnswer();
 
-        // finish complex layout
         addAnswerView(triggerButton);
     }
 
