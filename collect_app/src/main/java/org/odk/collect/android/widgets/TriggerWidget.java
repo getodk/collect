@@ -98,8 +98,6 @@ public class TriggerWidget extends QuestionWidget {
         stringAnswer.setId(ViewIds.generateViewId());
         stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         stringAnswer.setGravity(Gravity.CENTER);
-        if (getFormEntryPrompt().getAnswerText() != null) {
-            stringAnswer.setText(getFormEntryPrompt().getAnswerText());
-        }
+        stringAnswer.setText(getFormEntryPrompt().getAnswerText());
     }
 }
