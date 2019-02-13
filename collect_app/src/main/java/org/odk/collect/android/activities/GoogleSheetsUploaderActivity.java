@@ -38,11 +38,13 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploaderTask;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
@@ -55,6 +57,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_AUTHORIZATION;
+import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.showSettingsDialog;
 
 public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener,
         GoogleAccountsManager.GoogleAccountSelectionListener {
@@ -154,12 +157,31 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
      */
     private void getResultsFromApi() {
         if (!accountsManager.isGoogleAccountSelected()) {
-            accountsManager.chooseAccountAndRequestPermissionIfNeeded();
+            selectAccount();
         } else if (!isDeviceOnline()) {
             ToastUtils.showShortToast("No network connection available.");
         } else {
             runTask();
         }
+    }
+
+    private void selectAccount() {
+        new PermissionUtils(this).requestGetAccountsPermission(new PermissionListener() {
+            @Override
+            public void granted() {
+                String account = accountsManager.getLastSelectedAccountIfValid();
+                if (!account.isEmpty()) {
+                    accountsManager.selectAccount(account);
+                } else {
+                    showSettingsDialog(GoogleSheetsUploaderActivity.this);
+                }
+            }
+
+            @Override
+            public void denied() {
+                finish();
+            }
+        });
     }
 
     /**
