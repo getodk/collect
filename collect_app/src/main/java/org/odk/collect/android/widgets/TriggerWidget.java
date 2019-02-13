@@ -40,17 +40,13 @@ public class TriggerWidget extends QuestionWidget {
     public static final String OK_TEXT = "OK";
 
     private AppCompatCheckBox triggerButton;
-    private final TextView stringAnswer;
+    private TextView stringAnswer;
 
     public TriggerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
         setUpTriggerButton();
-
-        stringAnswer = new TextView(getContext());
-        stringAnswer.setId(ViewIds.generateViewId());
-        stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        stringAnswer.setGravity(Gravity.CENTER);
+        setUpStringAnswer();
 
         String s = prompt.getAnswerText();
         if (s != null) {
@@ -100,5 +96,12 @@ public class TriggerWidget extends QuestionWidget {
         triggerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         triggerButton.setEnabled(!getFormEntryPrompt().isReadOnly());
         triggerButton.setOnClickListener(v -> stringAnswer.setText(triggerButton.isChecked() ? OK_TEXT : null));
+    }
+
+    private void setUpStringAnswer() {
+        stringAnswer = new TextView(getContext());
+        stringAnswer.setId(ViewIds.generateViewId());
+        stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+        stringAnswer.setGravity(Gravity.CENTER);
     }
 }
