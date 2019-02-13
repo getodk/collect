@@ -219,7 +219,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
      * https://developers.google.com/drive/v3/web/quickstart/android
      */
     private void getResultsFromApi() {
-        if (!accountsManager.isGoogleAccountSelected()) {
+        if (!accountsManager.isAccountSelected()) {
             selectAccount();
         } else {
             if (isDeviceOnline()) {

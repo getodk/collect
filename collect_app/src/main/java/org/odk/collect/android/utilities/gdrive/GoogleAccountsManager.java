@@ -93,24 +93,6 @@ public class GoogleAccountsManager {
         themeUtils = new ThemeUtils(context);
     }
 
-    @NonNull
-    public String getLastSelectedAccountIfValid() {
-        Account[] googleAccounts = credential.getAllAccounts();
-        String account = (String) preferences.get(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
-
-        if (googleAccounts != null && googleAccounts.length > 0) {
-            for (Account googleAccount : googleAccounts) {
-                if (googleAccount.name.equals(account)) {
-                    return account;
-                }
-            }
-
-            preferences.reset(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
-        }
-
-        return "";
-    }
-
     public static void showSettingsDialog(Activity activity) {
         AlertDialog alertDialog = new AlertDialog.Builder(activity)
                 .setIcon(android.R.drawable.ic_dialog_info)
@@ -131,6 +113,28 @@ public class GoogleAccountsManager {
         showDialog(alertDialog, activity);
     }
 
+    public boolean isAccountSelected() {
+        return credential.getSelectedAccountName() != null;
+    }
+
+    @NonNull
+    public String getLastSelectedAccountIfValid() {
+        Account[] googleAccounts = credential.getAllAccounts();
+        String account = (String) preferences.get(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+
+        if (googleAccounts != null && googleAccounts.length > 0) {
+            for (Account googleAccount : googleAccounts) {
+                if (googleAccount.name.equals(account)) {
+                    return account;
+                }
+            }
+
+            preferences.reset(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+        }
+
+        return "";
+    }
+
     public void selectAccount(String accountName) {
         if (accountName != null) {
             preferences.save(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
@@ -149,10 +153,6 @@ public class GoogleAccountsManager {
             }
         }
         return new Account(selectedAccountName, "com.google");
-    }
-
-    public boolean isGoogleAccountSelected() {
-        return credential.getSelectedAccountName() != null;
     }
 
     public DriveHelper getDriveHelper() {
