@@ -70,13 +70,8 @@ public class TriggerWidget extends QuestionWidget {
 
         String s = prompt.getAnswerText();
         if (s != null) {
-            if (s.equals(OK_TEXT)) {
-                triggerButton.setChecked(true);
-            } else {
-                triggerButton.setChecked(false);
-            }
+            triggerButton.setChecked(s.equals(OK_TEXT));
             stringAnswer.setText(s);
-
         }
 
         // finish complex layout
