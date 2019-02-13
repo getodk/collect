@@ -142,6 +142,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         if (formController == null) {
             finish();
             Timber.w("FormController is null");
+            Collect.getInstance().logNullFormControllerEvent("FormHierarchyActivity");
             return;
         }
 

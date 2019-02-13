@@ -33,6 +33,7 @@ import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobManagerCreateException;
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -372,6 +373,14 @@ public class Collect extends Application implements HasActivityInjector {
 
         return FileUtils.getMd5Hash(
                 new ByteArrayInputStream(formIdentifier.getBytes()));
+    }
+
+    public void logNullFormControllerEvent(String action) {
+        Collect.getInstance().getDefaultTracker()
+                .send(new HitBuilders.EventBuilder()
+                        .setCategory("NullFormControllerEvent")
+                        .setAction(action)
+                        .build());
     }
 
     @Override

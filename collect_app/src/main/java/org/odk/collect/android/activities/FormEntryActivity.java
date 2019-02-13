@@ -446,7 +446,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             saveToDiskTask = (SaveToDiskTask) data;
         } else if (data == null) {
             if (!newForm) {
-                if (getFormController() != null) {
+                if (getFormController(true) != null) {
                     refreshCurrentView();
                 } else {
                     Timber.w("Reloading form and restoring state.");
@@ -643,7 +643,17 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Nullable
     private FormController getFormController() {
-        return Collect.getInstance().getFormController();
+        return getFormController(false);
+    }
+
+    @Nullable
+    private FormController getFormController(boolean formReloading) {
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
+            Collect.getInstance().logNullFormControllerEvent(formReloading ? "FormReloading" : "OtherInFormEntryActivity");
+        }
+
+        return formController;
     }
 
     @Override
