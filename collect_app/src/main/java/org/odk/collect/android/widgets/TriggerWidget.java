@@ -55,11 +55,7 @@ public class TriggerWidget extends QuestionWidget {
         triggerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (triggerButton.isChecked()) {
-                    stringAnswer.setText(OK_TEXT);
-                } else {
-                    stringAnswer.setText(null);
-                }
+                stringAnswer.setText(triggerButton.isChecked() ? OK_TEXT : null);
             }
         });
 
