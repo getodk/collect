@@ -71,17 +71,6 @@ public class GoogleAccountsManager {
     private ThemeUtils themeUtils;
     private boolean autoChooseAccount = true;
 
-    public GoogleAccountsManager(@NonNull Activity activity) {
-        this.activity = activity;
-        initCredential(activity);
-    }
-
-    public GoogleAccountsManager(@NonNull Fragment fragment) {
-        this.fragment = fragment;
-        activity = fragment.getActivity();
-        initCredential(activity);
-    }
-
     @Inject
     public GoogleAccountsManager(@NonNull Context context) {
         initCredential(context);
