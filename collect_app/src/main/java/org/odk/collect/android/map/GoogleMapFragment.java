@@ -417,7 +417,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 sd = Double.parseDouble(parts[1]);
             }
         } catch (NumberFormatException e) {
-            Timber.w("Assertion violated: Marker.getSnippet() did not contain two numbers");
+            Timber.w("Marker.getSnippet() did not contain two numbers");
         }
         return new MapPoint(position.latitude, position.longitude, alt, sd);
     }
@@ -427,12 +427,12 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     protected static Marker createMarker(GoogleMap map, MapPoint point, boolean draggable) {
-        // A Marker's position is a LatLng with just latitude and longitude
-        // fields.  We need to store the point's altitude and standard
-        // deviation values somewhere, so they go in the marker's snippet.
         if (map == null) {
             return null;
         }
+        // A Marker's position is a LatLng with just latitude and longitude
+        // fields.  We need to store the point's altitude and standard
+        // deviation values somewhere, so they go in the marker's snippet.
         return map.addMarker(new MarkerOptions()
             .position(toLatLng(point))
             .snippet(point.alt + ";" + point.sd)

@@ -376,11 +376,10 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         try {
             sd = Double.parseDouble(marker.getSubDescription());
         } catch (NumberFormatException e) {
-            Timber.w("Assertion violated: Marker.getSubDescription() did not contain a number");
+            Timber.w("Marker.getSubDescription() did not contain a number");
         }
         return new MapPoint(
-            geoPoint.getLatitude(), geoPoint.getLongitude(),
-            geoPoint.getAltitude(), sd
+            geoPoint.getLatitude(), geoPoint.getLongitude(), geoPoint.getAltitude(), sd
         );
     }
 

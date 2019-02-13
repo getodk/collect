@@ -188,10 +188,8 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
         if (setClear || (intentReadOnly && featureId == -1)) {
             result = "";
         } else if (isDragged || intentReadOnly || pointFromIntent) {
-            Timber.i("IsDragged !!!");
             result = formatResult(map.getMarkerPoint(featureId));
         } else if (location != null) {
-            Timber.i("IsNotDragged !!!");
             result = formatResult(location);
         }
 
@@ -216,6 +214,8 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
             helper = new MapHelper(this, ((GoogleMapFragment) map).getGoogleMap(), selectedLayer);
         } else if (map instanceof OsmMapFragment) {
             helper = new MapHelper(this, ((OsmMapFragment) map).getMapView(), this, selectedLayer);
+        } else {
+            throw new AssertionError("newMapFragment has unknown type");
         }
         helper.setBasemap();
 
