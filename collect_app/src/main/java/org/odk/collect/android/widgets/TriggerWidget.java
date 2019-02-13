@@ -88,9 +88,7 @@ public class TriggerWidget extends QuestionWidget {
         triggerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         triggerButton.setEnabled(!getFormEntryPrompt().isReadOnly());
         triggerButton.setOnClickListener(v -> stringAnswer.setText(triggerButton.isChecked() ? OK_TEXT : null));
-        if (getFormEntryPrompt().getAnswerText() != null) {
-            triggerButton.setChecked(getFormEntryPrompt().getAnswerText().equals(OK_TEXT));
-        }
+        triggerButton.setChecked(OK_TEXT.equals(getFormEntryPrompt().getAnswerText()));
     }
 
     private void setUpStringAnswer() {
