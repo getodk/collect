@@ -305,10 +305,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private TreeElement getInstanceElement(String formFilePath, File instanceFile) throws UploadException {
         FormDef formDef;
 
-        // Get the last-saved instance, if it exists.
         File formXml = new File(formFilePath);
-        File lastSavedFile = FileUtils.getLastSavedFile(formXml);
-        String lastSavedSrc = lastSavedFile.exists() ? "jr://file/" + LAST_SAVED_FILENAME : null;
+        String lastSavedSrc = FileUtils.getLastSavedSrcIfExists(formXml);
 
         try {
             formDef = XFormUtils.getFormFromInputStream(new FileInputStream(formXml), lastSavedSrc);

@@ -232,16 +232,13 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             return formDefFromCache;
         }
 
-        // Get the last-saved instance, if it exists.
-        File lastSavedFile = FileUtils.getLastSavedFile(formXml);
-        String lastSavedSrc = lastSavedFile.exists() ? "jr://file/" + LAST_SAVED_FILENAME : null;
-
         FileInputStream fis = null;
         // no binary, read from xml
         try {
             Timber.i("Attempting to load from: %s", formXml.getAbsolutePath());
             final long start = System.currentTimeMillis();
             fis = new FileInputStream(formXml);
+            String lastSavedSrc = FileUtils.getLastSavedSrcIfExists(formXml);
             FormDef formDefFromXml = XFormUtils.getFormFromInputStream(fis, lastSavedSrc);
             if (formDefFromXml == null) {
                 errorMsg = "Error reading XForm file";

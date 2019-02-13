@@ -23,6 +23,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 
+import android.support.annotation.Nullable;
 import org.apache.commons.io.IOUtils;
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Document;
@@ -426,6 +427,12 @@ public class FileUtils {
 
     public static File getLastSavedFile(File formXml) {
         return new File(getFormMediaDir(formXml), LAST_SAVED_FILENAME);
+    }
+
+    @Nullable
+    public static String getLastSavedSrcIfExists(File formXml) {
+        File lastSavedFile = getLastSavedFile(formXml);
+        return lastSavedFile.exists() ? "jr://file/" + LAST_SAVED_FILENAME : null;
     }
 
     /**
