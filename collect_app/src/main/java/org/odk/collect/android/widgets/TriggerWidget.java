@@ -41,11 +41,9 @@ public class TriggerWidget extends QuestionWidget {
 
     private final AppCompatCheckBox triggerButton;
     private final TextView stringAnswer;
-    private final FormEntryPrompt prompt;
 
     public TriggerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        this.prompt = prompt;
 
         triggerButton = new AppCompatCheckBox(getContext());
         triggerButton.setId(ViewIds.generateViewId());
@@ -83,10 +81,6 @@ public class TriggerWidget extends QuestionWidget {
 
         // finish complex layout
         addAnswerView(triggerButton);
-    }
-
-    public FormEntryPrompt getFormEntryPrompt() {
-        return prompt;
     }
 
     @Override
