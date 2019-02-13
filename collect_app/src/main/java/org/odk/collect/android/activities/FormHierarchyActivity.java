@@ -503,10 +503,6 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         return index.getReference();
     }
 
-    private TreeReference getParentGroupRef(FormController formController) {
-        return formController.getFormIndex().getReference().getParentRef();
-    }
-
     private boolean shouldShowRepeatGroupPicker() {
         return repeatGroupPickerIndex != null;
     }
