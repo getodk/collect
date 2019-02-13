@@ -98,9 +98,7 @@ public class TriggerWidget extends QuestionWidget {
         triggerButton.setId(ViewIds.generateViewId());
         triggerButton.setText(getContext().getString(R.string.trigger));
         triggerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        // mActionButton.setPadding(20, 20, 20, 20);
         triggerButton.setEnabled(!getFormEntryPrompt().isReadOnly());
-
         triggerButton.setOnClickListener(v -> stringAnswer.setText(triggerButton.isChecked() ? OK_TEXT : null));
     }
 }
