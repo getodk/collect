@@ -450,13 +450,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     refreshCurrentView();
                 } else {
                     Timber.w("Reloading form and restoring state.");
-                    // we need to launch the form loader to load the form
-                    // controller...
-                    formLoaderTask = new FormLoaderTask(instancePath,
-                            startingXPath, waitingXPath);
-                    // TODO: this doesn' work (dialog does not get removed):
-                    // showDialog(PROGRESS_DIALOG);
-                    // show dialog before we execute...
+                    // we need to launch the form loader to load the form controller...
+                    formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath);
+                    showDialog(PROGRESS_DIALOG);
                     formLoaderTask.execute(formPath);
                 }
                 return;
