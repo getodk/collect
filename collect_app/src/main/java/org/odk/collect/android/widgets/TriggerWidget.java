@@ -18,7 +18,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -34,13 +33,13 @@ public class TriggerWidget extends QuestionWidget {
     public static final String OK_TEXT = "OK";
 
     private AppCompatCheckBox triggerButton;
-    private TextView stringAnswer;
+    private final TextView stringAnswer;
 
     public TriggerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
         setUpTriggerButton();
-        setUpStringAnswer();
+        stringAnswer = getCenteredAnswerTextView(getFormEntryPrompt().getAnswerText());
 
         addAnswerView(triggerButton);
     }
@@ -84,13 +83,5 @@ public class TriggerWidget extends QuestionWidget {
         triggerButton.setEnabled(!getFormEntryPrompt().isReadOnly());
         triggerButton.setOnClickListener(v -> stringAnswer.setText(triggerButton.isChecked() ? OK_TEXT : null));
         triggerButton.setChecked(OK_TEXT.equals(getFormEntryPrompt().getAnswerText()));
-    }
-
-    private void setUpStringAnswer() {
-        stringAnswer = new TextView(getContext());
-        stringAnswer.setId(ViewIds.generateViewId());
-        stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        stringAnswer.setGravity(Gravity.CENTER);
-        stringAnswer.setText(getFormEntryPrompt().getAnswerText());
     }
 }
