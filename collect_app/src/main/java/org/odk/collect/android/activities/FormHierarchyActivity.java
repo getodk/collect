@@ -476,6 +476,8 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             if (formController.isDisplayableGroup(formController.getFormIndex())) {
                 contextGroupRef = getGroupRef(formController);
                 formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+            } else {
+                // Let contextGroupRef be null.
             }
         }
     }
@@ -536,11 +538,6 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
             int event = formController.getEvent();
 
-            if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
-                formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-                contextGroupRef = getParentGroupRef(formController);
-            }
-
             if (event == FormEntryController.EVENT_BEGINNING_OF_FORM && !shouldShowRepeatGroupPicker()) {
                 // The beginning of form has no valid prompt to display.
                 groupPathTextView.setVisibility(View.GONE);
@@ -565,7 +562,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 // retrieve the current group
                 TreeReference curGroup = (visibleGroupRef == null) ? contextGroupRef : visibleGroupRef;
 
-                if (!curGroup.isParentOf(currentRef, false)) {
+                if (curGroup != null && !curGroup.isParentOf(currentRef, false)) {
                     // We have left the current group
                     if (visibleGroupRef == null) {
                         // We are done.
