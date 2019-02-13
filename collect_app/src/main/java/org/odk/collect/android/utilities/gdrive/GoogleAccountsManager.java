@@ -142,7 +142,7 @@ public class GoogleAccountsManager {
             if (fragment != null && fragment instanceof ServerPreferencesFragment) {
                 showAccountPickerDialog();
             } else {
-                showSettingsDialog();
+                showSettingsDialog(activity);
             }
         }
     }
@@ -165,8 +165,13 @@ public class GoogleAccountsManager {
         return "";
     }
 
-    private void showSettingsDialog() {
-        AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+    @NonNull
+    public String getLastSelectedAccountIfValid() {
+        return getSelectedAccount();
+    }
+
+    public static void showSettingsDialog(Activity activity) {
+        AlertDialog alertDialog = new AlertDialog.Builder(activity)
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setTitle(R.string.missing_google_account_dialog_title)
                 .setMessage(R.string.missing_google_account_dialog_desc)
@@ -176,15 +181,13 @@ public class GoogleAccountsManager {
                         activity.finish();
                     }
                 })
-                .setPositiveButton(context.getString(R.string.ok), (dialog, which) -> {
+                .setPositiveButton(activity.getString(R.string.ok), (dialog, which) -> {
                     dialog.dismiss();
-                    if (activity != null) {
-                        activity.finish();
-                    }
+                    activity.finish();
                 })
                 .create();
 
-        showDialog(alertDialog, getActivity());
+        showDialog(alertDialog, activity);
     }
 
     public void showAccountPickerDialog() {

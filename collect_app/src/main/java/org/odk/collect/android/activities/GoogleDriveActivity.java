@@ -46,10 +46,12 @@ import org.odk.collect.android.adapters.FileArrayAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.TaskListener;
 import org.odk.collect.android.logic.DriveListItem;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.gdrive.DriveHelper;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
@@ -65,6 +67,8 @@ import java.util.Stack;
 import javax.inject.Inject;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.showSettingsDialog;
 
 public class GoogleDriveActivity extends FormListActivity implements View.OnClickListener,
         TaskListener, GoogleDriveFormDownloadListener, GoogleAccountsManager.GoogleAccountSelectionListener,
@@ -218,7 +222,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
      */
     private void getResultsFromApi() {
         if (!accountsManager.isGoogleAccountSelected()) {
-            accountsManager.chooseAccountAndRequestPermissionIfNeeded();
+            selectAccount();
         } else {
             if (isDeviceOnline()) {
                 toDownload.clear();
@@ -235,6 +239,25 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             currentPath.clear();
             currentPath.add(rootButton.getText().toString());
         }
+    }
+
+    private void selectAccount() {
+        new PermissionUtils(this).requestGetAccountsPermission(new PermissionListener() {
+            @Override
+            public void granted() {
+                String account = accountsManager.getLastSelectedAccountIfValid();
+                if (!account.isEmpty()) {
+                    accountsManager.selectAccount(account);
+                } else {
+                    showSettingsDialog(GoogleDriveActivity.this);
+                }
+            }
+
+            @Override
+            public void denied() {
+                finish();
+            }
+        });
     }
 
     /**
