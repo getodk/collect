@@ -215,6 +215,11 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             return;
         }
 
+        // onCreate() can call finish() if it finds the FormController to be null.
+        if (isFinishing()) {
+            return;
+        }
+
         FormController formController = Collect.getInstance().getFormController();
         boolean isAtBeginning = screenIndex.isBeginningOfFormIndex() && !shouldShowRepeatGroupPicker();
         boolean shouldShowPicker = shouldShowRepeatGroupPicker();
