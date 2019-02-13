@@ -258,6 +258,14 @@ public class GoogleAccountsManager {
         this.listener = listener;
     }
 
+    public Intent getAccountChooserIntent() {
+        Account selectedAccount = getAccountPickerCurrentAccount();
+        intentChooseAccount.putExtra("selectedAccount", selectedAccount);
+        intentChooseAccount.putExtra("overrideTheme", themeUtils.getAccountPickerTheme());
+        intentChooseAccount.putExtra("overrideCustomTheme", 0);
+        return intentChooseAccount;
+    }
+
     public interface GoogleAccountSelectionListener {
         void onGoogleAccountSelected(String accountName);
     }
