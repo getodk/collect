@@ -17,7 +17,6 @@ package org.odk.collect.android.tasks;
 import android.database.Cursor;
 
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.auth.GoogleAuthException;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -28,7 +27,6 @@ import org.odk.collect.android.upload.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.upload.UploadException;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
-import java.io.IOException;
 import java.util.List;
 
 import timber.log.Timber;
@@ -48,16 +46,6 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
     protected Outcome doInBackground(Long... instanceIdsToUpload) {
         InstanceGoogleSheetsUploader uploader = new InstanceGoogleSheetsUploader(accountsManager);
         final Outcome outcome = new Outcome();
-
-        try {
-            // User-recoverable auth error
-            if (uploader.getAuthToken() == null) {
-                return null;
-            }
-        } catch (IOException | GoogleAuthException e) {
-            Timber.d(e);
-            authFailed = true;
-        }
 
         // TODO: check this behavior against master -- is there an error message shown?
         if (!uploader.submissionsFolderExistsAndIsUnique()) {

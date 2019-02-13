@@ -34,6 +34,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableAuthException;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
@@ -48,6 +52,7 @@ import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -132,17 +137,35 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
                     GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
             if (googleUsername == null || googleUsername.equals("")) {
                 showDialog(GOOGLE_USER_DIALOG);
-                return;
+            } else if (isCollectAuthorized()) {
+                showDialog(PROGRESS_DIALOG);
+
+                instanceGoogleSheetsUploaderTask.setUploaderListener(this);
+                instanceGoogleSheetsUploaderTask.execute(instancesToSend);
             }
-
-            showDialog(PROGRESS_DIALOG);
-
-            instanceGoogleSheetsUploaderTask.setUploaderListener(this);
-            instanceGoogleSheetsUploaderTask.execute(instancesToSend);
         } else {
             // it's not null, so we have a task running
             // progress dialog is handled by the system
         }
+    }
+
+    /**
+     * @return true if Collect is authorized to access selected account via APIs otherwise false
+     */
+    private boolean isCollectAuthorized() {
+        try {
+            String token = accountsManager.getCredential().getToken();
+            // Immediately invalidate so we get a different one if we have to try again
+            GoogleAuthUtil.invalidateToken(accountsManager.getContext(), token);
+
+            return true;
+        } catch (UserRecoverableAuthException e) {
+            startActivityForResult(e.getIntent(), GoogleAccountsManager.REQUEST_AUTHORIZATION);
+        } catch (IOException | GoogleAuthException e) {
+            Timber.d(e);
+        }
+
+        return false;
     }
 
     /*
