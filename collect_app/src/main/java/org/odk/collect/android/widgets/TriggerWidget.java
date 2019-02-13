@@ -39,25 +39,13 @@ public class TriggerWidget extends QuestionWidget {
 
     public static final String OK_TEXT = "OK";
 
-    private final AppCompatCheckBox triggerButton;
+    private AppCompatCheckBox triggerButton;
     private final TextView stringAnswer;
 
     public TriggerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        triggerButton = new AppCompatCheckBox(getContext());
-        triggerButton.setId(ViewIds.generateViewId());
-        triggerButton.setText(getContext().getString(R.string.trigger));
-        triggerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        // mActionButton.setPadding(20, 20, 20, 20);
-        triggerButton.setEnabled(!prompt.isReadOnly());
-
-        triggerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stringAnswer.setText(triggerButton.isChecked() ? OK_TEXT : null);
-            }
-        });
+        setUpTriggerButton();
 
         stringAnswer = new TextView(getContext());
         stringAnswer.setId(ViewIds.generateViewId());
@@ -103,5 +91,21 @@ public class TriggerWidget extends QuestionWidget {
 
     public CheckBox getTriggerButton() {
         return triggerButton;
+    }
+
+    private void setUpTriggerButton() {
+        triggerButton = new AppCompatCheckBox(getContext());
+        triggerButton.setId(ViewIds.generateViewId());
+        triggerButton.setText(getContext().getString(R.string.trigger));
+        triggerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+        // mActionButton.setPadding(20, 20, 20, 20);
+        triggerButton.setEnabled(!getFormEntryPrompt().isReadOnly());
+
+        triggerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stringAnswer.setText(triggerButton.isChecked() ? OK_TEXT : null);
+            }
+        });
     }
 }
