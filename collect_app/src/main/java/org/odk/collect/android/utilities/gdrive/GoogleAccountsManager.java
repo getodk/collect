@@ -17,7 +17,6 @@ package org.odk.collect.android.utilities.gdrive;
 import android.accounts.Account;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -47,8 +46,6 @@ public class GoogleAccountsManager {
     public static final int REQUEST_AUTHORIZATION = 1001;
 
     @Nullable
-    private Activity activity;
-    @Nullable
     private HttpTransport transport;
     @Nullable
     private JsonFactory jsonFactory;
@@ -72,15 +69,12 @@ public class GoogleAccountsManager {
     public GoogleAccountsManager(@NonNull GoogleAccountCredential credential,
                                  @NonNull GeneralSharedPreferences preferences,
                                  @NonNull Intent intentChooseAccount,
-                                 @NonNull ThemeUtils themeUtils,
-                                 @NonNull Activity activity,
-                                 @NonNull Fragment fragment
+                                 @NonNull ThemeUtils themeUtils
     ) {
         this.credential = credential;
         this.preferences = preferences;
         this.intentChooseAccount = intentChooseAccount;
         this.themeUtils = themeUtils;
-        this.activity = activity;
     }
 
     private void initCredential(@NonNull Context context) {
@@ -176,11 +170,6 @@ public class GoogleAccountsManager {
             sheetsHelper = new SheetsHelper(credential, transport, jsonFactory);
         }
         return sheetsHelper;
-    }
-
-    @Nullable
-    public Activity getActivity() {
-        return activity;
     }
 
     @NonNull
