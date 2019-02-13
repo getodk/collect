@@ -101,11 +101,6 @@ public class TriggerWidget extends QuestionWidget {
         // mActionButton.setPadding(20, 20, 20, 20);
         triggerButton.setEnabled(!getFormEntryPrompt().isReadOnly());
 
-        triggerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stringAnswer.setText(triggerButton.isChecked() ? OK_TEXT : null);
-            }
-        });
+        triggerButton.setOnClickListener(v -> stringAnswer.setText(triggerButton.isChecked() ? OK_TEXT : null));
     }
 }
