@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.android.utilities.FileUtils.MEDIA_SUFFIX;
 
 /**
  * Widget that allows the user to launch OpenMapKit to get an OSM Feature with a
@@ -70,7 +71,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
          * has the substring of the file name in it, so I extract the file name
          * from here. Awkward...
          */
-        formFileName = formController.getMediaFolder().getName().split("-media")[0];
+        formFileName = formController.getMediaFolder().getName().split(MEDIA_SUFFIX)[0];
 
         instanceDirectory = formController.getInstanceFile().getParent();
         instanceId = formController.getSubmissionMetadata().instanceId;

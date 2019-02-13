@@ -68,6 +68,9 @@ public class FileUtils {
     public static final String AUTO_DELETE = "autoDelete";
     public static final String AUTO_SEND = "autoSend";
 
+    /** Suffix for the form media directory. */
+    public static final String MEDIA_SUFFIX = "-media";
+
     /** Filename of the last-saved instance data. */
     public static final String LAST_SAVED_FILENAME = "last-saved.xml";
 
@@ -413,12 +416,12 @@ public class FileUtils {
     }
 
     public static String constructMediaPath(String formFilePath) {
-        return getFormFileName(formFilePath) + "-media";
+        return getFormFileName(formFilePath) + MEDIA_SUFFIX;
     }
 
     public static File getFormMediaDir(File formXml) {
         final String formFileName = getFormFileName(formXml);
-        return new File(formXml.getParent(), formFileName + "-media");
+        return new File(formXml.getParent(), formFileName + MEDIA_SUFFIX);
     }
 
     public static File getLastSavedFile(File formXml) {
