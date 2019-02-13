@@ -5,6 +5,8 @@ import android.telephony.SmsManager;
 
 import org.odk.collect.android.activities.FormDownloadList;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.activities.GoogleDriveActivity;
+import org.odk.collect.android.activities.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderListActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.application.Collect;
@@ -64,6 +66,8 @@ public interface AppDependencyComponent {
         AppDependencyComponent build();
     }
 
+    void inject(GoogleDriveActivity googleDriveActivity);
+
     void inject(Collect collect);
 
     void inject(SmsService smsService);
@@ -93,10 +97,12 @@ public interface AppDependencyComponent {
     void inject(DownloadFormListUtils downloadFormListUtils);
 
     void inject(AuthDialogUtility authDialogUtility);
-  
+
     void inject(FormDownloadList formDownloadList);
 
     void inject(InstanceUploaderListActivity activity);
+
+    void inject(GoogleSheetsUploaderActivity googleSheetsUploaderActivity);
 
     SmsManager smsManager();
 

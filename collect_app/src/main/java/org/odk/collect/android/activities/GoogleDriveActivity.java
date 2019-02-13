@@ -62,6 +62,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class GoogleDriveActivity extends FormListActivity implements View.OnClickListener,
@@ -99,7 +101,9 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     private List<DriveListItem> filteredList;
     private List<DriveListItem> driveList;
     private DriveHelper driveHelper;
-    private GoogleAccountsManager accountsManager;
+
+    @Inject
+    GoogleAccountsManager accountsManager;
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -112,6 +116,8 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.google_drive_list);
+
+        ((Collect) getApplicationContext()).getComponent().inject(this);
 
         setProgressBarVisibility(true);
         initToolbar();
@@ -194,7 +200,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc)
         };
 
-        accountsManager = new GoogleAccountsManager(this);
         accountsManager.setListener(this);
         driveHelper = accountsManager.getDriveHelper();
         getResultsFromApi();

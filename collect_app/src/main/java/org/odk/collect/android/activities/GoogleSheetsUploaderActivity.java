@@ -35,6 +35,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -49,8 +50,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-import timber.log.Timber;
+import javax.inject.Inject;
 
+import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_AUTHORIZATION;
 
@@ -67,12 +69,15 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     private Long[] instancesToSend;
     private InstanceGoogleSheetsUploaderTask instanceGoogleSheetsUploaderTask;
 
-    private GoogleAccountsManager accountsManager;
+    @Inject
+    GoogleAccountsManager accountsManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Timber.i("onCreate: %s", savedInstanceState == null ? "creating" : "re-initializing");
+
+        ((Collect) getApplicationContext()).getComponent().inject(this);
 
         // if we start this activity, the following must be true:
         // 1) Google Sheets is selected in preferences
@@ -111,7 +116,6 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
             Timber.i("onCreate: Beginning upload of %d instances!", instancesToSend.length);
         }
 
-        accountsManager = new GoogleAccountsManager(this);
         accountsManager.setListener(this);
 
         getResultsFromApi();

@@ -35,13 +35,15 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GoogleDriveActivity;
 import org.odk.collect.android.activities.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.Collections;
+
+import javax.inject.Inject;
 
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
@@ -80,6 +82,7 @@ public class GoogleAccountsManager {
         initCredential(activity);
     }
 
+    @Inject
     public GoogleAccountsManager(@NonNull Context context) {
         initCredential(context);
     }
