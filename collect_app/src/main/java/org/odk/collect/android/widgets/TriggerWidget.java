@@ -28,11 +28,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.ViewIds;
 
-/**
- * Widget that allows user to scan barcodes and add them to the form.
- *
- * @author Yaw Anokwa (yanokwa@gmail.com)
- */
 @SuppressLint("ViewConstructor")
 public class TriggerWidget extends QuestionWidget {
 
