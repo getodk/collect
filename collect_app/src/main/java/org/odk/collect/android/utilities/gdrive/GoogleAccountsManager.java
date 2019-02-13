@@ -22,6 +22,8 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
@@ -35,6 +37,7 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.ThemeUtils;
 
+import java.io.IOException;
 import java.util.Collections;
 
 import javax.inject.Inject;
@@ -92,13 +95,6 @@ public class GoogleAccountsManager {
         themeUtils = new ThemeUtils(context);
     }
 
-    public void setSelectedAccountName(String accountName) {
-        if (accountName != null) {
-            preferences.save(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
-            selectAccount(accountName);
-        }
-    }
-
     @NonNull
     public String getLastSelectedAccountIfValid() {
         Account[] googleAccounts = credential.getAllAccounts();
@@ -138,7 +134,10 @@ public class GoogleAccountsManager {
     }
 
     public void selectAccount(String accountName) {
-        credential.setSelectedAccountName(accountName);
+        if (accountName != null) {
+            preferences.save(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
+            credential.setSelectedAccountName(accountName);
+        }
     }
 
     private Account getAccountPickerCurrentAccount() {
@@ -172,13 +171,12 @@ public class GoogleAccountsManager {
         return sheetsHelper;
     }
 
-    @NonNull
-    public Context getContext() {
-        return context;
-    }
+    public String getToken() throws IOException, GoogleAuthException {
+        String token = credential.getToken();
 
-    public GoogleAccountCredential getCredential() {
-        return credential;
+        // Immediately invalidate so we get a different one if we have to try again
+        GoogleAuthUtil.invalidateToken(context, token);
+        return token;
     }
 
     public Intent getAccountChooserIntent() {

@@ -35,7 +35,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
 import org.odk.collect.android.R;
@@ -154,11 +153,9 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
      */
     private boolean isCollectAuthorized() {
         try {
-            String token = accountsManager.getCredential().getToken();
-            // Immediately invalidate so we get a different one if we have to try again
-            GoogleAuthUtil.invalidateToken(accountsManager.getContext(), token);
-
-            return true;
+            if (accountsManager.getToken() != null) {
+                return true;
+            }
         } catch (UserRecoverableAuthException e) {
             startActivityForResult(e.getIntent(), GoogleAccountsManager.REQUEST_AUTHORIZATION);
         } catch (IOException | GoogleAuthException e) {

@@ -119,7 +119,7 @@ public class AutoSendWorker extends Worker {
                     showUploadStatusNotification(true, Collect.getInstance().getString(R.string.google_set_account));
                     return Result.FAILURE;
                 }
-                accountsManager.getCredential().setSelectedAccountName(googleUsername);
+                accountsManager.selectAccount(googleUsername);
                 uploader = new InstanceGoogleSheetsUploader(accountsManager);
 
                 try {

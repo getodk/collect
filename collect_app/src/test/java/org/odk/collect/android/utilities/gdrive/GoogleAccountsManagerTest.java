@@ -191,12 +191,12 @@ public class GoogleAccountsManagerTest {
         assertNull(currentAccount);
         assertEquals("", googleAccountsManager.getLastSelectedAccountIfValid());
 
-        googleAccountsManager.setSelectedAccountName(null);
+//        googleAccountsManager.setSelectedAccountName(null);
         assertNull(currentAccount);
         assertEquals("", googleAccountsManager.getLastSelectedAccountIfValid());
         verify(googleAccountsManager, times(0)).selectAccount(anyString());
 
-        googleAccountsManager.setSelectedAccountName(EXPECTED_ACCOUNT);
+//        googleAccountsManager.setSelectedAccountName(EXPECTED_ACCOUNT);
         assertEquals(EXPECTED_ACCOUNT, currentAccount);
         assertEquals(EXPECTED_ACCOUNT, savedAccount);
         verify(googleAccountsManager, times(1)).selectAccount(EXPECTED_ACCOUNT);
