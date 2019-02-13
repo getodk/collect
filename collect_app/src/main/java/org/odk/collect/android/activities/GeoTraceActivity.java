@@ -250,9 +250,14 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
         Button polygonSave = polygonOrPolylineView.findViewById(R.id.polygon_save);
         polygonSave.setOnClickListener(v -> {
-            if (map.getPointsOfPoly(featureId).size() > 2) {
-                // Close the polygon.
-                map.appendPointToPoly(featureId, map.getPointsOfPoly(featureId).get(0));
+            List<MapPoint> points = map.getPointsOfPoly(featureId);
+            if (points.size() > 2) {
+                // Close the polygon, unless it's already closed.
+                MapPoint firstPoint = points.get(0);
+                MapPoint lastPoint = points.get(points.size() - 1);
+                if (!lastPoint.equals(firstPoint)) {
+                    map.appendPointToPoly(featureId, firstPoint);
+                }
                 polygonOrPolylineDialog.dismiss();
                 finishWithResult();
             } else {
