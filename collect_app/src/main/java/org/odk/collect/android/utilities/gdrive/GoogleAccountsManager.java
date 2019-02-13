@@ -46,8 +46,6 @@ import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
 public class GoogleAccountsManager {
 
-    public static final int REQUEST_AUTHORIZATION = 1001;
-
     @Nullable
     private HttpTransport transport;
     @Nullable

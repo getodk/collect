@@ -60,10 +60,11 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_AUTHORIZATION;
 import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.showSettingsDialog;
 
 public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener {
+
+    private static final int REQUEST_AUTHORIZATION = 1001;
     private static final int PROGRESS_DIALOG = 1;
     private static final int GOOGLE_USER_DIALOG = 3;
     private static final String ALERT_MSG = "alertmsg";
@@ -157,9 +158,11 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
                 return true;
             }
         } catch (UserRecoverableAuthException e) {
-            startActivityForResult(e.getIntent(), GoogleAccountsManager.REQUEST_AUTHORIZATION);
+            // Collect is not yet authorized to access current account, so request for authorization
+            startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
         } catch (IOException | GoogleAuthException e) {
-            Timber.d(e);
+            // authorization failed
+            createAlertDialog(getString(R.string.google_auth_io_exception_msg));
         }
 
         return false;
@@ -310,12 +313,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         String message;
 
         if (keys.isEmpty()) {
-            if (instanceGoogleSheetsUploaderTask.isAuthFailed()) {
-                message = getString(R.string.google_auth_io_exception_msg);
-                instanceGoogleSheetsUploaderTask.setAuthFailedToFalse();
-            } else {
-                message = getString(R.string.no_forms_uploaded);
-            }
+            message = getString(R.string.no_forms_uploaded);
         } else {
             Iterator<String> it = keys.iterator();
 
@@ -334,12 +332,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
                 if (results != null && results.getCount() > 0) {
                     message = InstanceUploaderUtils.getUploadResultMessage(results, result);
                 } else {
-                    if (instanceGoogleSheetsUploaderTask.isAuthFailed()) {
-                        message = getString(R.string.google_auth_io_exception_msg);
-                        instanceGoogleSheetsUploaderTask.setAuthFailedToFalse();
-                    } else {
-                        message = getString(R.string.no_forms_uploaded);
-                    }
+                    message = getString(R.string.no_forms_uploaded);
                 }
             }
         }

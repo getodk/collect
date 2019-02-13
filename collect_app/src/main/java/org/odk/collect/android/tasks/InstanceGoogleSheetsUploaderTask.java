@@ -36,8 +36,6 @@ import static org.odk.collect.android.utilities.InstanceUploaderUtils.DEFAULT_SU
 public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
     private final GoogleAccountsManager accountsManager;
 
-    private boolean authFailed;
-
     public InstanceGoogleSheetsUploaderTask(GoogleAccountsManager accountsManager) {
         this.accountsManager = accountsManager;
     }
@@ -94,13 +92,5 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
             }
         }
         return outcome;
-    }
-
-    public boolean isAuthFailed() {
-        return authFailed;
-    }
-
-    public void setAuthFailedToFalse() {
-        authFailed = false;
     }
 }
