@@ -48,12 +48,6 @@ public class TriggerWidget extends QuestionWidget {
         setUpTriggerButton();
         setUpStringAnswer();
 
-        String s = prompt.getAnswerText();
-        if (s != null) {
-            triggerButton.setChecked(s.equals(OK_TEXT));
-            stringAnswer.setText(s);
-        }
-
         // finish complex layout
         addAnswerView(triggerButton);
     }
@@ -96,6 +90,9 @@ public class TriggerWidget extends QuestionWidget {
         triggerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         triggerButton.setEnabled(!getFormEntryPrompt().isReadOnly());
         triggerButton.setOnClickListener(v -> stringAnswer.setText(triggerButton.isChecked() ? OK_TEXT : null));
+        if (getFormEntryPrompt().getAnswerText() != null) {
+            triggerButton.setChecked(getFormEntryPrompt().getAnswerText().equals(OK_TEXT));
+        }
     }
 
     private void setUpStringAnswer() {
@@ -103,5 +100,8 @@ public class TriggerWidget extends QuestionWidget {
         stringAnswer.setId(ViewIds.generateViewId());
         stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         stringAnswer.setGravity(Gravity.CENTER);
+        if (getFormEntryPrompt().getAnswerText() != null) {
+            stringAnswer.setText(getFormEntryPrompt().getAnswerText());
+        }
     }
 }
