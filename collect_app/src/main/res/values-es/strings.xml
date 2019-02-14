@@ -652,7 +652,7 @@
   <string name="location_providers_disabled_dialog_message">Este formulario quiere rastrear su ubicación pero los proveedores de ubicación están deshabilitados Por favor, habilite en la configuración de Android.</string>
   <string name="go_to_settings">Ir a ajustes</string>
   <string name="track_location">Rastrear ubicación</string>
-  <string name="background_location_disabled">Este formulario quiere rastrear su ubicación pero el seguimiento está deshabilitado. Por favor habilite en el \u0020\u0020⋮\u0020\u0020 menú arriba.</string>
-  <string name="background_location_enabled">Este formulario rastrea tu ubicación. Puede deshabilitar el seguimiento en la \u0020\u0020⋮\u0020\u0020 menú arriba.</string>
+  <string name="background_location_disabled">Este formulario quiere rastrear su ubicación pero el seguimiento está deshabilitado. Por favor habilite en el%1$s menú arriba.</string>
+  <string name="background_location_enabled">Este formulario rastrea tu ubicación. Puede deshabilitar el seguimiento en la%1$s menú arriba.</string>
   <string name="open_file">Abrir archivo</string>
 </resources>

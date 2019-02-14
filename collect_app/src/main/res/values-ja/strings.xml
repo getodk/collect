@@ -649,7 +649,7 @@
   <string name="location_providers_disabled_dialog_message">このフォームは場所を追跡しようとしますが、位置情報プロバイダーが無効になっています。 Android の設定で有効にしてください。</string>
   <string name="go_to_settings">設定に移動</string>
   <string name="track_location">位置情報を追跡</string>
-  <string name="background_location_disabled">このフォームは位置を追跡しようとしますが、追跡が無効になっています。 上の \u0020\u0020⋮\u0020\u0020 メニューで有効にしてください。</string>
-  <string name="background_location_enabled">このフォームは位置を追跡します。 上の \u0020\u0020⋮\u0020\u0020 メニューで追跡を無効にすることができます。</string>
+  <string name="background_location_disabled">このフォームは位置を追跡しようとしますが、追跡が無効になっています。 上の%1$s メニューで有効にしてください。</string>
+  <string name="background_location_enabled">このフォームは位置を追跡します。 上の%1$s メニューで追跡を無効にすることができます。</string>
   <string name="open_file">ファイルを開く</string>
 </resources>

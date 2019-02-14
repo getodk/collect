@@ -650,7 +650,7 @@
   <string name="location_providers_disabled_dialog_message">Tämä lomake haluaa seurata sijaintiasi mutta sijaintipalvelut (location providers) eivät ole käytettävissä. Ole hyvä ja aktivoi ne Androidin asetuksissa.</string>
   <string name="go_to_settings">Asetuksiin</string>
   <string name="track_location">Sijainnin jäljittäminen</string>
-  <string name="background_location_disabled">Tämä lomake haluaa jäljittää sijaintiasi, mutta jäljittäminen on kytketty pois päältä. Ole hyvä ja aktivoi se valikossa \u0020\u0020⋮\u0020\u0020 yllä.</string>
-  <string name="background_location_enabled">Tämä lomake jäljittää sijaintiasi. Voit kytkeä jäljittämisen pois päältä valikossa \u0020\u0020⋮\u0020\u0020 yllä.</string>
+  <string name="background_location_disabled">Tämä lomake haluaa jäljittää sijaintiasi, mutta jäljittäminen on kytketty pois päältä. Ole hyvä ja aktivoi se valikossa%1$s yllä.</string>
+  <string name="background_location_enabled">Tämä lomake jäljittää sijaintiasi. Voit kytkeä jäljittämisen pois päältä valikossa%1$s yllä.</string>
   <string name="open_file">Avaa tiedosto</string>
 </resources>
