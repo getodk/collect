@@ -60,6 +60,8 @@ public class LocationService extends Service implements LocationListener, Locati
     private Timer mTimer;
     private LocationService mLocationService = null;
     String TAG = "Location Service";
+    Location lastLocation = null;
+    long lastTime = 0;
 
 
     public LocationService(Context applicationContext) {
@@ -176,14 +178,22 @@ public class LocationService extends Service implements LocationListener, Locati
         if(isValidLocation(location) && isAccurateLocation(location)) {
             Collect.getInstance().setLocation(location);
 
-            // Notify any activity interested that there is a new location
-            if (enabledGPS || enabledTracking) {
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("locationChanged"));
-            }
-
             // Save the location in the database
             if (enabledTracking) {
-                TraceUtilities.insertPoint(location);
+                long newTime = System.currentTimeMillis();
+                if(lastLocation != null) {
+                    Log.i(TAG, "=================== Inserting point: " + (newTime - lastTime) + " ; "
+                            + location.distanceTo(lastLocation));
+                }
+                if(lastLocation == null ||
+                        (location.distanceTo(lastLocation) > Constants.GPS_DISTANCE
+                                && (newTime - lastTime)  > Constants.GPS_INTERVAL )) {
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("locationChanged"));
+                    TraceUtilities.insertPoint(location);
+                    lastLocation = location;
+                    lastTime = newTime;
+                }
+
             }
         }
     }

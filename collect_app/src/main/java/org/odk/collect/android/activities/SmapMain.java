@@ -415,8 +415,10 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     @Override
     // Download tasks progress update
     public void progressUpdate(String progress) {
-        mProgressMsg = progress;
-        mProgressDialog.setMessage(mProgressMsg);
+        if(mProgressMsg != null && mProgressDialog != null) {
+            mProgressMsg = progress;
+            mProgressDialog.setMessage(mProgressMsg);
+        }
     }
 
     public void taskDownloadingComplete(HashMap<String, String> result) {

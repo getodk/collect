@@ -68,7 +68,7 @@ public class ResetUtility {
                     }
                     break;
                 case ResetAction.SMAP_RESET_LOCATIONS:  // smap
-                    if (TraceUtilities.deleteSource()) {
+                    if (TraceUtilities.deleteSource(0)) {
                         Intent intent = new Intent("org.smap.smapTask.refresh");
                         LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
                         failedResetActions.remove(failedResetActions.indexOf(ResetAction.SMAP_RESET_LOCATIONS));

@@ -620,8 +620,9 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
          * Set details on submitted tasks
          */
         boolean sendLocation = (Boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_USER_LOCATION);
+        long lastTraceIdSent = 0;
         if(tr.settings != null && sendLocation) {
-            updateResponse.taskCompletionInfo = new ArrayList<TaskCompletionInfo>();   // Details on completed tasks
+            updateResponse.taskCompletionInfo = new ArrayList<>();   // Details on completed tasks
 
             for (TaskEntry t : nonSynchTasks) {
                 if ((t.taskStatus.equals(Utilities.STATUS_T_SUBMITTED) || t.taskStatus.equals(Utilities.STATUS_T_CLOSED))
@@ -638,8 +639,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             }
 
             // Get Points
-            updateResponse.userTrail = new ArrayList<PointEntry>(100);
-            TraceUtilities.getPoints(updateResponse.userTrail);
+            updateResponse.userTrail = new ArrayList<>(100);
+            lastTraceIdSent = TraceUtilities.getPoints(updateResponse.userTrail);
         }
 
         if(updateResponse.taskAssignments.size() > 0 ||
@@ -648,11 +649,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
             publishProgress(Collect.getInstance().getString(R.string.smap_update_task_status));
 
-            ResponseMessageParser messageParser;
             URI uri = URI.create(taskURL);
             try {
-                messageParser = httpInterface.uploadTaskStatus(updateResponse,  uri,
-                        webCredentialsUtils.getCredentials(uri));
+                // OOM
+                httpInterface.uploadTaskStatus(updateResponse, uri, webCredentialsUtils.getCredentials(uri));
             } catch (Exception e) {
                 results.put(Collect.getInstance().getString(R.string.smap_get_tasks),
                         e.getMessage());
@@ -663,7 +663,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             for (TaskAssignment ta : updateResponse.taskAssignments) {
                 Utilities.setTaskSynchronized((long) ta.assignment.dbId);        // Mark the task status as synchronised
             }
-            TraceUtilities.deleteSource();
+            TraceUtilities.deleteSource(lastTraceIdSent);
         }
 	}
 	

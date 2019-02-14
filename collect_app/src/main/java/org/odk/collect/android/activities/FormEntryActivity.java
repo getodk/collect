@@ -676,11 +676,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void setUpLocationClient(AuditConfig auditConfig) {
-        googleLocationClient = new GoogleLocationClient(this);
-        googleLocationClient.setListener(this);
-        googleLocationClient.setPriority(auditConfig.getLocationPriority());
-        googleLocationClient.setUpdateIntervals(auditConfig.getLocationMinInterval(), auditConfig.getLocationMinInterval());
-        googleLocationClient.start();
+        if(auditConfig != null) {   // smap though I suspect a null audit may be a collect issue
+            googleLocationClient = new GoogleLocationClient(this);
+            googleLocationClient.setListener(this);
+            googleLocationClient.setPriority(auditConfig.getLocationPriority());
+            googleLocationClient.setUpdateIntervals(auditConfig.getLocationMinInterval(), auditConfig.getLocationMinInterval());
+            googleLocationClient.start();
+        }
     }
 
     private boolean shouldLocationCoordinatesBeCollected(FormController formController) {
