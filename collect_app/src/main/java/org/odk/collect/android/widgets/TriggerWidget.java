@@ -32,25 +32,22 @@ public class TriggerWidget extends QuestionWidget {
     public static final String OK_TEXT = "OK";
 
     private AppCompatCheckBox triggerButton;
-    private String answer;
 
     public TriggerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        answer = getFormEntryPrompt().getAnswerText();
         setUpTriggerButton();
         addAnswerView(triggerButton);
     }
 
     @Override
     public void clearAnswer() {
-        answer = null;
         triggerButton.setChecked(false);
     }
 
     @Override
     public IAnswerData getAnswer() {
-        return answer == null ? null : new StringData(answer);
+        return triggerButton.isChecked() ? new StringData(OK_TEXT) : null;
     }
 
     @Override
@@ -74,7 +71,6 @@ public class TriggerWidget extends QuestionWidget {
         triggerButton.setText(getContext().getString(R.string.trigger));
         triggerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         triggerButton.setEnabled(!getFormEntryPrompt().isReadOnly());
-        triggerButton.setOnClickListener(v -> answer = triggerButton.isChecked() ? OK_TEXT : null);
-        triggerButton.setChecked(OK_TEXT.equals(answer));
+        triggerButton.setChecked(OK_TEXT.equals(getFormEntryPrompt().getAnswerText()));
     }
 }
