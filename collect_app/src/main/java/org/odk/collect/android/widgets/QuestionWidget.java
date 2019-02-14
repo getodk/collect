@@ -548,11 +548,7 @@ public abstract class QuestionWidget
     }
 
     protected TextView getCenteredAnswerTextView() {
-        return getCenteredAnswerTextView("");
-    }
-
-    protected TextView getCenteredAnswerTextView(String text) {
-        TextView textView = getAnswerTextView(text);
+        TextView textView = getAnswerTextView();
         textView.setGravity(Gravity.CENTER);
 
         return textView;
