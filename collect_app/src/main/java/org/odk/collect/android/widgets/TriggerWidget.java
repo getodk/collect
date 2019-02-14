@@ -36,8 +36,7 @@ public class TriggerWidget extends QuestionWidget {
     public TriggerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        setUpTriggerButton();
-        addAnswerView(triggerButton);
+        setUpWidget();
     }
 
     @Override
@@ -65,12 +64,14 @@ public class TriggerWidget extends QuestionWidget {
         return triggerButton;
     }
 
-    private void setUpTriggerButton() {
+    private void setUpWidget() {
         triggerButton = new AppCompatCheckBox(getContext());
         triggerButton.setId(ViewIds.generateViewId());
         triggerButton.setText(getContext().getString(R.string.trigger));
         triggerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         triggerButton.setEnabled(!getFormEntryPrompt().isReadOnly());
         triggerButton.setChecked(OK_TEXT.equals(getFormEntryPrompt().getAnswerText()));
+
+        addAnswerView(triggerButton);
     }
 }
