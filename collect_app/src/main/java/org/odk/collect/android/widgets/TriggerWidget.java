@@ -19,7 +19,6 @@ import android.content.Context;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.util.TypedValue;
 import android.widget.CheckBox;
-import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -33,42 +32,39 @@ public class TriggerWidget extends QuestionWidget {
     public static final String OK_TEXT = "OK";
 
     private AppCompatCheckBox triggerButton;
-    private final TextView stringAnswer;
+    private String stringAnswer;
 
     public TriggerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
         setUpTriggerButton();
-        stringAnswer = getCenteredAnswerTextView(getFormEntryPrompt().getAnswerText());
+        stringAnswer = getFormEntryPrompt().getAnswerText();
 
         addAnswerView(triggerButton);
     }
 
     @Override
     public void clearAnswer() {
-        stringAnswer.setText(null);
+        stringAnswer = null;
         triggerButton.setChecked(false);
     }
 
     @Override
     public IAnswerData getAnswer() {
-        String s = stringAnswer.getText().toString();
-        return !s.isEmpty()
-                ? new StringData(s)
+        return !stringAnswer.isEmpty()
+                ? new StringData(stringAnswer)
                 : null;
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         triggerButton.setOnLongClickListener(l);
-        stringAnswer.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
         triggerButton.cancelLongPress();
-        stringAnswer.cancelLongPress();
     }
 
     public CheckBox getTriggerButton() {
@@ -81,7 +77,7 @@ public class TriggerWidget extends QuestionWidget {
         triggerButton.setText(getContext().getString(R.string.trigger));
         triggerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         triggerButton.setEnabled(!getFormEntryPrompt().isReadOnly());
-        triggerButton.setOnClickListener(v -> stringAnswer.setText(triggerButton.isChecked() ? OK_TEXT : null));
+        triggerButton.setOnClickListener(v -> stringAnswer = triggerButton.isChecked() ? OK_TEXT : null);
         triggerButton.setChecked(OK_TEXT.equals(getFormEntryPrompt().getAnswerText()));
     }
 }
