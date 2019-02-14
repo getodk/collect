@@ -51,9 +51,7 @@ public class TriggerWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return !answer.isEmpty()
-                ? new StringData(answer)
-                : null;
+        return answer == null ? null : new StringData(answer);
     }
 
     @Override
