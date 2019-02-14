@@ -2511,7 +2511,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
                         SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_disabled), ""));
                     } else {
-                        SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_disabled), "⋮"));
+                        SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_disabled), " ⋮"));
                     }
                     formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_TRACKING_DISABLED, null, false);
                 }
@@ -2538,7 +2538,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
                             SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_enabled), ""));
                         } else {
-                            SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_enabled), "⋮"));
+                            SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_enabled), " ⋮"));
                         }
                     }
                 } else {
