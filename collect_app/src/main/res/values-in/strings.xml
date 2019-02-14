@@ -649,7 +649,7 @@
   <string name="location_providers_disabled_dialog_message">Formulir ini ingin merekam pergerakan lokasi anda tapi pengaturan lokasi tidak aktif. Silahkan aktiftan terlebih dahulu.</string>
   <string name="go_to_settings">Pergi ke pengaturan</string>
   <string name="track_location">Rekam pergerakan lokasi</string>
-  <string name="background_location_disabled">Formulir ini ingin merekam pergerakan lokasi anda tapi perekaman lokasi tidak aktif. Silahkan aktifkan di%1$s menu di atas.</string>
-  <string name="background_location_enabled">Formulir ini ingin merekam pergerakan lokasi anda. Anda dapat menonaktifkan perekaman di%1$s menu di atas.</string>
+  <string name="background_location_disabled">Formulir ini ingin merekam pergerakan lokasi anda tapi perekaman lokasi tidak aktif. Silahkan aktifkan di %1$s menu di atas.</string>
+  <string name="background_location_enabled">Formulir ini ingin merekam pergerakan lokasi anda. Anda dapat menonaktifkan perekaman di %1$s menu di atas.</string>
   <string name="open_file">Buka berkas</string>
 </resources>
