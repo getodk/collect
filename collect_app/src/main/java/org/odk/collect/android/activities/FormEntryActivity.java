@@ -2509,9 +2509,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     locationTrackingEnabled(formController, true);
                 } else {
                     if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                        SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_disabled), ""));
+                        SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_disabled), "").replace("  ", " "));
                     } else {
-                        SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_disabled), " ⋮"));
+                        SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_disabled), "⋮"));
                     }
                     formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_TRACKING_DISABLED, null, false);
                 }
@@ -2536,9 +2536,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     if (calledJustAfterFormStart) {
                         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED, null, false);
                         if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                            SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_enabled), ""));
+                            SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_enabled), "").replace("  ", " "));
                         } else {
-                            SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_enabled), " ⋮"));
+                            SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_enabled), "⋮"));
                         }
                     }
                 } else {
