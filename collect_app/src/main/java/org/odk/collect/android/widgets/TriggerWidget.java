@@ -37,9 +37,8 @@ public class TriggerWidget extends QuestionWidget {
     public TriggerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        setUpTriggerButton();
         answer = getFormEntryPrompt().getAnswerText();
-
+        setUpTriggerButton();
         addAnswerView(triggerButton);
     }
 
@@ -76,6 +75,6 @@ public class TriggerWidget extends QuestionWidget {
         triggerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         triggerButton.setEnabled(!getFormEntryPrompt().isReadOnly());
         triggerButton.setOnClickListener(v -> answer = triggerButton.isChecked() ? OK_TEXT : null);
-        triggerButton.setChecked(OK_TEXT.equals(getFormEntryPrompt().getAnswerText()));
+        triggerButton.setChecked(OK_TEXT.equals(answer));
     }
 }
