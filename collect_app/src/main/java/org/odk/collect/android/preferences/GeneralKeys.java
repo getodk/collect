@@ -73,6 +73,7 @@ public final class GeneralKeys {
     // values
     public static final String NAVIGATION_SWIPE             = "swipe";
     public static final String CONSTRAINT_BEHAVIOR_ON_SWIPE = "on_swipe";
+    public static final String CONSTRAINT_BEHAVIOR_ON_FINALIZE = "on_finalize";       // smap
     public static final String NAVIGATION_BUTTONS           = "buttons";
     public static final String GOOGLE_MAPS                 = "google_maps";     // smap make public
     private static final String AUTOSEND_OFF                = "off";

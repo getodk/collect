@@ -437,7 +437,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                             AdminSharedPreferences.getInstance().save(AdminKeys.KEY_EDIT_SAVED, true);
                             AdminSharedPreferences.getInstance().save(AdminKeys.KEY_SAVE_MID, true);
                             AdminSharedPreferences.getInstance().save(AdminKeys.KEY_JUMP_TO, true);
-                            GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR, "");
+                            GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR, GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE);
 
                             AdminSharedPreferences.getInstance().getInstance().save(AdminKeys.KEY_SMAP_OVERRIDE_MOVING_BACKWARDS, true);
                         } else {

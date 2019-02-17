@@ -2712,7 +2712,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     @Override
     public void savingComplete(SaveResult saveResult, long taskId, boolean showSaveMsg) {        // smap added taskId and showSaveMsg
-        dismissDialog(SAVING_DIALOG);
+        try {
+            dismissDialog(SAVING_DIALOG);
+        } catch (Exception e) {
+            // smap - added try catch
+        }
 
         mTaskId = taskId;                // smap
         int saveStatus = saveResult.getSaveResult();
