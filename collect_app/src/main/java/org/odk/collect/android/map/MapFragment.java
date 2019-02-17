@@ -30,8 +30,8 @@ import java.util.List;
  *   - Displaying and getting the current GPS location
  *   - Requesting a callback on the first GPS location fix
  *   - Requesting callbacks for short clicks and long presses on the map
- *   - (to do) Adding editable points to the map
- *   - (to do) Adding editable traces (polylines) to the map
+ *   - Adding editable points to the map
+ *   - Adding editable traces (polylines) to the map
  *   - Adding editable shapes (closed polygons) to the map
  *
  * Editable points, traces, and shapes are called "map features" in this API.
