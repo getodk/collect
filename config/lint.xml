@@ -36,6 +36,7 @@
     <issue id="UnusedResources" severity="error">
         <ignore path="res/values/dimens.xml"/>
         <ignore regexp="ga_trackingId|google_crash_reporting_api_key|project_id"/>
+        <ignore regexp="sms_invalid_phone_number_description"/>
     </issue>
 
     <issue id="TimberExceptionLogging" severity="error"/>
