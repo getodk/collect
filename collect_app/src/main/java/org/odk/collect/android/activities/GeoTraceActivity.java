@@ -85,6 +85,8 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private Spinner timeUnits;
     private Spinner timeDelay;
 
+    private Bundle previousState;
+
     // restored from savedInstanceState
     private MapPoint restoredMapCenter;
     private Double restoredMapZoom;
@@ -94,6 +96,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        previousState = savedInstanceState;
         if (savedInstanceState != null) {
             restoredMapCenter = savedInstanceState.getParcelable(MAP_CENTER_KEY);
             restoredMapZoom = savedInstanceState.getDouble(MAP_ZOOM_KEY);
@@ -130,18 +133,37 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
     @Override protected void onStart() {
         super.onStart();
+        // initMap() is called asynchronously, so map might not be initialized yet.
         if (map != null) {
             map.setGpsLocationEnabled(true);
         }
     }
 
     @Override protected void onStop() {
-        map.setGpsLocationEnabled(false);
+        // To avoid a memory leak, we have to shut down GPS when the activity
+        // quits for good. But if it's only a screen rotation, we don't want to
+        // stop/start GPS and make the user wait to get a GPS lock again.
+        if (!isChangingConfigurations()) {
+            // initMap() is called asynchronously, so map can be null if the activity
+            // is stopped (e.g. by screen rotation) before initMap() gets to run.
+            if (map != null) {
+                map.setGpsLocationEnabled(false);
+            }
+        }
         super.onStop();
     }
 
     @Override protected void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
+        if (map == null) {
+            // initMap() is called asynchronously, so map can be null if the activity
+            // is stopped (e.g. by screen rotation) before initMap() gets to run.
+            // In this case, preserve any provided instance state.
+            if (previousState != null) {
+                state.putAll(previousState);
+            }
+            return;
+        }
         state.putParcelable(MAP_CENTER_KEY, map.getCenter());
         state.putDouble(MAP_ZOOM_KEY, map.getZoom());
         state.putParcelableArrayList(POINTS_KEY, new ArrayList<>(map.getPolyPoints(featureId)));
@@ -163,8 +185,16 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     @Override public void destroy() { }
 
     public void initMap(MapFragment newMapFragment) {
-        if (newMapFragment == null) {
+        if (newMapFragment == null) {  // could not create the map
             finish();
+            return;
+        }
+        if (newMapFragment.getFragment().getActivity() == null) {
+            // If the screen is rotated just after the activity starts but
+            // before initMap() is called, then when the activity is re-created
+            // in the new orientation, initMap() can sometimes be called on the
+            // old, dead Fragment that used to be attached to the old activity.
+            // Touching the dead Fragment will cause a crash; discard it.
             return;
         }
 
