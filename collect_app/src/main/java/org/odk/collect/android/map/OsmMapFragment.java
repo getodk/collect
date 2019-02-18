@@ -228,6 +228,13 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         return new ArrayList<>();
     }
 
+    @Override public void removePolyLastPoint(int featureId) {
+        MapFeature feature = features.get(featureId);
+        if (feature instanceof PolyFeature) {
+            ((PolyFeature) feature).removeLastPoint();
+        }
+    }
+
     @Override public void removeFeature(int featureId) {
         MapFeature feature = features.get(featureId);
         if (feature != null) {
@@ -554,6 +561,15 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         public void addPoint(MapPoint point) {
             markers.add(createMarker(map, point, this));
             update();
+        }
+
+        public void removeLastPoint() {
+            if (!markers.isEmpty()) {
+                int last = markers.size() - 1;
+                map.getOverlays().remove(markers.get(last));
+                markers.remove(last);
+                update();
+            }
         }
     }
 }

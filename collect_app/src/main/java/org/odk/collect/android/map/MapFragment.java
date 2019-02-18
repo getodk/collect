@@ -111,6 +111,12 @@ public interface MapFragment {
     void appendPointToPoly(int featureId, @NonNull MapPoint point);
 
     /**
+     * Removes the last vertex of the polyline or polygon specified by featureId.
+     * If there are no vertices, does nothing.
+     */
+    void removePolyLastPoint(int featureId);
+
+    /**
      * Returns the vertices of the polyline or polygon specified by featureId, or an
      * empty list if the featureId does not identify an existing polyline or polygon.
      */
