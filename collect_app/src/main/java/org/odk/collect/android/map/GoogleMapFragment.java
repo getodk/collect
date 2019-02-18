@@ -251,6 +251,13 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return new ArrayList<>();
     }
 
+    @Override public void removePolyLastPoint(int featureId) {
+        MapFeature feature = features.get(featureId);
+        if (feature instanceof PolyFeature) {
+            ((PolyFeature) feature).removeLastPoint();
+        }
+    }
+
     @Override public void removeFeature(int featureId) {
         MapFeature feature = features.get(featureId);
         if (feature != null) {
@@ -559,6 +566,15 @@ public class GoogleMapFragment extends SupportMapFragment implements
             }
             markers.add(createMarker(map, point, true));
             update();
+        }
+
+        public void removeLastPoint() {
+            if (!markers.isEmpty()) {
+                int last = markers.size() - 1;
+                markers.get(last).remove();
+                markers.remove(last);
+                update();
+            }
         }
 
         protected void clearPolyline() {

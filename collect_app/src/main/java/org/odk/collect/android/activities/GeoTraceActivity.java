@@ -69,6 +69,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private ImageButton clearButton;
     private Button manualButton;
     private ImageButton pauseButton;
+    private ImageButton backspaceButton;
 
     private View traceSettingsView;
     private View polygonOrPolylineView;
@@ -217,6 +218,9 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             updateUi();
         });
 
+        backspaceButton = findViewById(R.id.backspace);
+        backspaceButton.setOnClickListener(v -> removeLastPoint());
+
         ImageButton saveButton = findViewById(R.id.geotrace_save);
         saveButton.setOnClickListener(v -> {
             if (!map.getPolyPoints(featureId).isEmpty()) {
@@ -236,7 +240,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         });
 
         manualButton = findViewById(R.id.manual_button);
-        manualButton.setOnClickListener(v -> addVertex());
+        manualButton.setOnClickListener(v -> appendPoint());
 
         Button polygonSave = polygonOrPolylineView.findViewById(R.id.polygon_save);
         polygonSave.setOnClickListener(v -> {
@@ -440,7 +444,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
     public void startScheduler(long delay, TimeUnit units) {
         schedulerHandler = scheduler.scheduleAtFixedRate(
-            () -> runOnUiThread(this::addVertex), 0, delay, units);
+            () -> runOnUiThread(this::appendPoint), 0, delay, units);
     }
 
     @SuppressWarnings("unused")  // the "map" parameter is intentionally unused
@@ -457,10 +461,17 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         }
     }
 
-    private void addVertex() {
+    private void appendPoint() {
         MapPoint point = map.getGpsLocation();
         if (point != null) {
             map.appendPointToPoly(featureId, point);
+            updateUi();
+        }
+    }
+
+    private void removeLastPoint() {
+        if (featureId != -1) {
+            map.removePolyLastPoint(featureId);
             updateUi();
         }
     }
@@ -485,6 +496,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         // Enabled state
         zoomButton.setEnabled(location != null);
         playButton.setEnabled(location != null);
+        backspaceButton.setEnabled(numPoints > 0);
         clearButton.setEnabled(!recordingActive && numPoints > 0);
     }
 
