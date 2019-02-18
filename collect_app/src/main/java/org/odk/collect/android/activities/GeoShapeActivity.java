@@ -49,6 +49,7 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
     private int featureId = -1;  // will be a positive featureId once map is ready
     private ImageButton zoomButton;
     private ImageButton clearButton;
+    private ImageButton backspaceButton;
     private String originalShapeString = "";
 
     private Bundle previousState;
@@ -159,6 +160,10 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
         zoomButton = findViewById(R.id.gps);
         zoomButton.setOnClickListener(v -> map.zoomToPoint(map.getGpsLocation(), true));
 
+        backspaceButton = findViewById(R.id.backspace);
+        backspaceButton.setEnabled(false);
+        backspaceButton.setOnClickListener(v -> removeLastPoint());
+
         clearButton = findViewById(R.id.clear);
         clearButton.setOnClickListener(v -> showClearDialog());
 
@@ -201,8 +206,16 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
 
     private void onLongPress(MapPoint point) {
         map.appendPointToPoly(featureId, point);
+        backspaceButton.setEnabled(true);
         clearButton.setEnabled(true);
         zoomButton.setEnabled(true);
+    }
+
+    private void removeLastPoint() {
+        if (featureId != -1) {
+            map.removePolyLastPoint(featureId);
+            backspaceButton.setEnabled(!map.getPolyPoints(featureId).isEmpty());
+        }
     }
 
     private void clear() {
