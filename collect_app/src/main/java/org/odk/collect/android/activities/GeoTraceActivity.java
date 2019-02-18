@@ -117,11 +117,6 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setTitle(getString(R.string.geotrace_title));
         setContentView(R.layout.geotrace_layout);
-        if (savedInstanceState == null) {
-            // UI initialization that should only occur on start, not on restore
-            playButton = findViewById(R.id.play);
-            playButton.setEnabled(false);
-        }
         createMapFragment().addTo(this, R.id.map_container, this::initMap);
     }
 
@@ -221,12 +216,6 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
         pauseButton = findViewById(R.id.pause);
         pauseButton.setOnClickListener(v -> {
-            playButton.setVisibility(View.VISIBLE);
-            if (!map.getPolyPoints(featureId).isEmpty()) {
-                clearButton.setEnabled(true);
-            }
-            pauseButton.setVisibility(View.GONE);
-            manualButton.setVisibility(View.GONE);
             playCheck = true;
             modeActive = false;
             try {
@@ -234,6 +223,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             } catch (Exception e) {
                 // Do nothing
             }
+            updateUi();
         });
 
         ImageButton saveButton = findViewById(R.id.geotrace_save);
@@ -316,8 +306,6 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             points = restoredPoints;
         }
         featureId = map.addDraggablePoly(points, false);
-        zoomButton.setEnabled(!points.isEmpty());
-        clearButton.setEnabled(!points.isEmpty());
 
         if (modeActive) {
             startGeoTrace();
@@ -332,6 +320,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         } else {
             map.runOnGpsLocationReady(this::onGpsLocationReady);
         }
+        updateUi();
     }
 
     private void finishWithResult() {
@@ -433,20 +422,14 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         } else {
             playCheck = false;
         }
-        playButton.setVisibility(View.GONE);
-        clearButton.setEnabled(false);
-        pauseButton.setVisibility(View.VISIBLE);
+        updateUi();
     }
 
     private void setupManualMode() {
-
-        manualButton.setVisibility(View.VISIBLE);
         modeActive = true;
-
     }
 
     private void setupAutomaticMode() {
-        manualButton.setVisibility(View.VISIBLE);
         String delay = timeDelay.getSelectedItem().toString();
         String units = timeUnits.getSelectedItem().toString();
         Long timeDelay;
@@ -496,11 +479,10 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
     @SuppressWarnings("unused")  // the "map" parameter is intentionally unused
     private void onGpsLocationReady(MapFragment map) {
-        zoomButton.setEnabled(true);
-        playButton.setEnabled(true);
         if (getWindow().isActive()) {
             map.zoomToPoint(map.getGpsLocation(), true);
         }
+        updateUi();
     }
 
     private void onGpsLocation(MapPoint point) {
@@ -513,20 +495,33 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         MapPoint point = map.getGpsLocation();
         if (point != null) {
             map.appendPointToPoly(featureId, point);
+            updateUi();
         }
     }
 
     private void clear() {
         map.clearFeatures();
         featureId = map.addDraggablePoly(new ArrayList<>(), false);
-        clearButton.setEnabled(false);
-        pauseButton.setVisibility(View.GONE);
-        manualButton.setVisibility(View.GONE);
-        playButton.setVisibility(View.VISIBLE);
-        playButton.setEnabled(true);
         modeActive = false;
         playCheck = false;
         beenPaused = false;
+        updateUi();
+    }
+
+    /** Updates the visibility and enabled state of buttons to reflect internal state. */
+    private void updateUi() {
+        final int numPoints = map.getPolyPoints(featureId).size();
+        final MapPoint location = map.getGpsLocation();
+
+        // Visibility state
+        playButton.setVisibility(modeActive ? View.GONE : View.VISIBLE);
+        pauseButton.setVisibility(modeActive ? View.VISIBLE : View.GONE);
+        manualButton.setVisibility(modeActive ? View.VISIBLE : View.GONE);
+
+        // Enabled state
+        zoomButton.setEnabled(location != null);
+        playButton.setEnabled(location != null);
+        clearButton.setEnabled(!modeActive && numPoints > 0);
     }
 
     private void showClearDialog() {
