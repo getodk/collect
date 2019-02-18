@@ -52,10 +52,9 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
     public static final String POINTS_KEY = "points";
-    public static final String BEEN_PAUSED_KEY = "been_paused";
     public static final String RECORDING_ACTIVE_KEY = "recording_active";
     public static final String RECORDING_MODE_KEY = "recording_mode";
-    public static final String PLAY_CHECK_KEY = "play_check";
+    public static final String SETTINGS_ENTERED_KEY = "settings_entered";
     public static final String TIME_DELAY_KEY = "time_delay";
     public static final String TIME_UNITS_KEY = "time_units";
 
@@ -78,10 +77,9 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private AlertDialog traceSettingsDialog;
     private AlertDialog polygonOrPolylineDialog;
 
-    private boolean beenPaused;
     private boolean recordingActive;
     private int recordingMode; // 0 manual, 1 is automatic
-    private boolean playCheck;
+    private boolean settingsEntered; // user has entered recording settings
     private Spinner timeUnits;
     private Spinner timeDelay;
 
@@ -101,10 +99,9 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             restoredMapCenter = savedInstanceState.getParcelable(MAP_CENTER_KEY);
             restoredMapZoom = savedInstanceState.getDouble(MAP_ZOOM_KEY);
             restoredPoints = savedInstanceState.getParcelableArrayList(POINTS_KEY);
-            beenPaused = savedInstanceState.getBoolean(BEEN_PAUSED_KEY, false);
             recordingActive = savedInstanceState.getBoolean(RECORDING_ACTIVE_KEY, false);
             recordingMode = savedInstanceState.getInt(RECORDING_MODE_KEY, 0);
-            playCheck = savedInstanceState.getBoolean(PLAY_CHECK_KEY, false);
+            settingsEntered = savedInstanceState.getBoolean(SETTINGS_ENTERED_KEY, false);
             restoredTimeDelayIndex = savedInstanceState.getInt(TIME_DELAY_KEY, 3);
             restoredTimeUnitsIndex = savedInstanceState.getInt(TIME_UNITS_KEY, 0);
         }
@@ -162,10 +159,9 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         state.putParcelable(MAP_CENTER_KEY, map.getCenter());
         state.putDouble(MAP_ZOOM_KEY, map.getZoom());
         state.putParcelableArrayList(POINTS_KEY, new ArrayList<>(map.getPolyPoints(featureId)));
-        state.putBoolean(BEEN_PAUSED_KEY, beenPaused);
         state.putBoolean(RECORDING_ACTIVE_KEY, recordingActive);
         state.putInt(RECORDING_MODE_KEY, recordingMode);
-        state.putBoolean(PLAY_CHECK_KEY, playCheck);
+        state.putBoolean(SETTINGS_ENTERED_KEY, settingsEntered);
         state.putInt(TIME_DELAY_KEY, timeDelay.getSelectedItemPosition());
         state.putInt(TIME_UNITS_KEY, timeUnits.getSelectedItemPosition());
     }
@@ -216,7 +212,6 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
         pauseButton = findViewById(R.id.pause);
         pauseButton.setOnClickListener(v -> {
-            playCheck = true;
             recordingActive = false;
             try {
                 schedulerHandler.cancel(true);
@@ -237,24 +232,9 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
         playButton = findViewById(R.id.play);
         playButton.setOnClickListener(v -> {
-            if (!playCheck) {
-                if (!beenPaused) {
-                    traceSettingsDialog.show();
-                } else {
-                    RadioGroup rb = traceSettingsView.findViewById(R.id.radio_group);
-                    View radioButton = rb.findViewById(rb.getCheckedRadioButtonId());
-                    recordingMode = rb.indexOfChild(radioButton);
-                    if (recordingMode == 0) {
-                        setupManualMode();
-                    } else if (recordingMode == 1) {
-                        setupAutomaticMode();
-                    } else {
-                        //Do nothing
-                    }
-                }
-                playCheck = true;
+            if (!settingsEntered) {
+                traceSettingsDialog.show();
             } else {
-                playCheck = false;
                 startGeoTrace();
             }
         });
@@ -291,10 +271,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         findViewById(R.id.layers).setOnClickListener(v -> helper.showLayersDialog());
 
         zoomButton = findViewById(R.id.zoom);
-        zoomButton.setOnClickListener(v -> {
-            playCheck = false;
-            map.zoomToPoint(map.getGpsLocation(), true);
-        });
+        zoomButton.setOnClickListener(v -> map.zoomToPoint(map.getGpsLocation(), true));
 
         List<MapPoint> points = new ArrayList<>();
         Intent intent = getIntent();
@@ -385,6 +362,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             .setTitle(getString(R.string.select_geotrace_mode))
             .setView(traceSettingsView)
             .setPositiveButton(getString(R.string.start), (dialog, id) -> {
+                settingsEntered = true;
                 startGeoTrace();
                 dialog.cancel();
                 traceSettingsDialog.dismiss();
@@ -392,10 +370,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             .setNegativeButton(R.string.cancel, (dialog, id) -> {
                 dialog.cancel();
                 traceSettingsDialog.dismiss();
-                playCheck = false;
-
             })
-            .setOnCancelListener(dialog -> playCheck = false)
             .create();
 
         polygonOrPolylineDialog = new AlertDialog.Builder(this)
@@ -412,14 +387,13 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private void startGeoTrace() {
         RadioGroup rb = traceSettingsView.findViewById(R.id.radio_group);
         View radioButton = rb.findViewById(rb.getCheckedRadioButtonId());
-        beenPaused = true;
         recordingMode = rb.indexOfChild(radioButton);
         if (recordingMode == 0) {
             setupManualMode();
         } else if (recordingMode == 1) {
             setupAutomaticMode();
         } else {
-            playCheck = false;
+            settingsEntered = false;
         }
         updateButtons();
     }
@@ -502,8 +476,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         map.clearFeatures();
         featureId = map.addDraggablePoly(new ArrayList<>(), false);
         recordingActive = false;
-        playCheck = false;
-        beenPaused = false;
+        settingsEntered = false;
         updateButtons();
     }
 
