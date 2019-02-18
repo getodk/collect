@@ -102,12 +102,12 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
     /** While true, the point cannot be moved by dragging or long-pressing. */
     private boolean isPointLocked;
 
-    private Bundle instanceState;
+    private Bundle previousState;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        instanceState = savedInstanceState;
+        previousState = savedInstanceState;
 
         if (!areLocationPermissionsGranted(this)) {
             finish();
@@ -141,6 +141,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
 
     @Override protected void onStart() {
         super.onStart();
+        // initMap() is called asynchronously, so map might not be initialized yet.
         if (map != null) {
             map.setGpsLocationEnabled(true);
         }
@@ -151,13 +152,26 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
         // quits for good. But if it's only a screen rotation, we don't want to
         // stop/start GPS and make the user wait to get a GPS lock again.
         if (!isChangingConfigurations()) {
-            map.setGpsLocationEnabled(false);
+            // initMap() is called asynchronously, so map can be null if the activity
+            // is stopped (e.g. by screen rotation) before initMap() gets to run.
+            if (map != null) {
+                map.setGpsLocationEnabled(false);
+            }
         }
         super.onStop();
     }
 
     @Override protected void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
+        if (map == null) {
+            // initMap() is called asynchronously, so map can be null if the activity
+            // is stopped (e.g. by screen rotation) before initMap() gets to run.
+            // In this case, preserve any provided instance state.
+            if (previousState != null) {
+                state.putAll(previousState);
+            }
+            return;
+        }
         state.putParcelable(MAP_CENTER_KEY, map.getCenter());
         state.putDouble(MAP_ZOOM_KEY, map.getZoom());
         state.putParcelable(POINT_KEY, map.getMarkerPoint(featureId));
@@ -201,8 +215,16 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
 
     @SuppressLint("MissingPermission") // Permission handled in Constructor
     public void initMap(MapFragment newMapFragment) {
-        if (newMapFragment == null) {
+        if (newMapFragment == null) {  // could not create the map
             finish();
+            return;
+        }
+        if (newMapFragment.getFragment().getActivity() == null) {
+            // If the screen is rotated just after the activity starts but
+            // before initMap() is called, then when the activity is re-created
+            // in the new orientation, initMap() can sometimes be called on the
+            // old, dead Fragment that used to be attached to the old activity.
+            // Touching the dead Fragment will cause a crash; discard it.
             return;
         }
 
@@ -289,8 +311,8 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
         map.setGpsLocationListener(this::onLocationChanged);
         map.setGpsLocationEnabled(true);
 
-        if (instanceState != null) {
-            restoreFromInstanceState(instanceState);
+        if (previousState != null) {
+            restoreFromInstanceState(previousState);
         }
     }
 
