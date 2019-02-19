@@ -75,6 +75,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private ImageButton backspaceButton;
 
     private TextView locationStatus;
+    private TextView collectionStatus;
     private View traceSettingsView;
     private View polygonOrPolylineView;
 
@@ -214,6 +215,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         helper.setBasemap();
 
         locationStatus = findViewById(R.id.geotrace_location_status);
+        collectionStatus = findViewById(R.id.geotrace_collection_status);
         traceSettingsView = getLayoutInflater().inflate(R.layout.geotrace_dialog, null);
         radioGroup = traceSettingsView.findViewById(R.id.radio_group);
         radioGroup.setOnCheckedChangeListener(this::updateRecordingMode);
@@ -552,6 +554,8 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         // GPS status
         boolean usingThreshold = isAccuracyThresholdActive();
         boolean acceptable = location != null && isLocationAcceptable(location);
+        int intervalSeconds = INTERVAL_OPTIONS[intervalIndex];
+        int thresholdMeters = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
         locationStatus.setText(
             location == null ? getString(R.string.geotrace_location_status_searching) :
             !usingThreshold ? getString(R.string.geotrace_location_status_accuracy, location.sd) :
@@ -562,6 +566,12 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             location == null ? NO_LOCATION_COLOR :
                 acceptable ? ACCEPTABLE_LOCATION_COLOR : UNACCEPTABLE_LOCATION_COLOR
         ));
+        collectionStatus.setText(
+            !recordingActive ? getString(R.string.geotrace_collection_status_paused, numPoints) :
+            recordingMode == MANUAL_RECORDING ? getString(R.string.geotrace_collection_status_manual, numPoints) :
+            !usingThreshold ? getString(R.string.geotrace_collection_status_auto, numPoints, intervalSeconds) :
+                getString(R.string.geotrace_collection_status_auto_accuracy, numPoints, intervalSeconds, thresholdMeters)
+        );
     }
 
     private void showClearDialog() {

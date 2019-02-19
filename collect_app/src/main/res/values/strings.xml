@@ -377,6 +377,10 @@
     <string name="geotrace_location_status_accuracy">GPS location accuracy: %.1f m</string>
     <string name="geotrace_location_status_acceptable">GPS location accuracy: %.1f m (acceptable)</string>
     <string name="geotrace_location_status_unacceptable">GPS location accuracy: %.1f m (unacceptable)</string>
+    <string name="geotrace_collection_status_paused">Points recorded: %d</string>
+    <string name="geotrace_collection_status_manual">Points recorded: %d (manual recording)</string>
+    <string name="geotrace_collection_status_auto">Points recorded: %1$d (auto recording, %2$d s)</string>
+    <string name="geotrace_collection_status_auto_accuracy">Points recorded: %1$d (auto recording, %2$d s, %3$d m)</string>
     <string name="geopoint_instruction">Long press to place mark or tap add marker button.</string>
     <string name="geopoint_no_draggable_instruction">Tap add marker button.</string>
     <string name="discard">Discard</string>
