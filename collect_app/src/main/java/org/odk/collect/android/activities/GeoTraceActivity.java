@@ -56,6 +56,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     public static final String RECORDING_ACTIVE_KEY = "recording_active";
     public static final String RECORDING_MODE_KEY = "recording_mode";
     public static final String INTERVAL_INDEX_KEY = "interval_index";
+    public static final String ACCURACY_THRESHOLD_INDEX_KEY = "accuracy_threshold_index";
 
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
@@ -84,13 +85,19 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private final int MANUAL_RECORDING = 0;
     private final int AUTOMATIC_RECORDING = 1;
 
+    private final int[] ACCURACY_THRESHOLD_OPTIONS = {
+        0, 3, 5, 10, 15, 20
+    };
+    private final int DEFAULT_ACCURACY_THRESHOLD_INDEX = 3; // default is 10 meters
+
     private boolean recordingActive;
     private int recordingMode; // 0 manual, 1 is automatic
     private RadioGroup radioGroup;
     private View autoOptions;
     private Spinner autoInterval;
     private int intervalIndex = DEFAULT_INTERVAL_INDEX;
-    private double accuracyThreshold = -1;
+    private Spinner accuracyThreshold;
+    private int accuracyThresholdIndex = DEFAULT_ACCURACY_THRESHOLD_INDEX;
 
     // restored from savedInstanceState
     private MapPoint restoredMapCenter;
@@ -106,6 +113,8 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             recordingActive = savedInstanceState.getBoolean(RECORDING_ACTIVE_KEY, false);
             recordingMode = savedInstanceState.getInt(RECORDING_MODE_KEY, MANUAL_RECORDING);
             intervalIndex = savedInstanceState.getInt(INTERVAL_INDEX_KEY, DEFAULT_INTERVAL_INDEX);
+            accuracyThresholdIndex = savedInstanceState.getInt(
+                ACCURACY_THRESHOLD_INDEX_KEY, DEFAULT_ACCURACY_THRESHOLD_INDEX);
         }
 
         if (!areLocationPermissionsGranted(this)) {
@@ -164,6 +173,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         state.putBoolean(RECORDING_ACTIVE_KEY, recordingActive);
         state.putInt(RECORDING_MODE_KEY, recordingMode);
         state.putInt(INTERVAL_INDEX_KEY, intervalIndex);
+        state.putInt(ACCURACY_THRESHOLD_INDEX_KEY, accuracyThresholdIndex);
     }
 
     @Override protected void onDestroy() {
@@ -218,6 +228,24 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, options);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         autoInterval.setAdapter(adapter);
+
+        accuracyThreshold = traceSettingsView.findViewById(R.id.accuracy_threshold);
+        accuracyThreshold.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                accuracyThresholdIndex = position;
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> parent) { }
+        });
+
+        // Populate the accuracy_threshold spinner with the options in ACCURACY_THRESHOLD_OPTIONS.
+        options = new String[ACCURACY_THRESHOLD_OPTIONS.length];
+        for (int i = 0; i < ACCURACY_THRESHOLD_OPTIONS.length; i++) {
+            options[i] = formatAccuracyThreshold(ACCURACY_THRESHOLD_OPTIONS[i]);
+        }
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, options);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        accuracyThreshold.setAdapter(adapter);
 
         polygonOrPolylineView = getLayoutInflater().inflate(R.layout.polygon_polyline_dialog, null);
 
@@ -340,6 +368,13 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             getResources().getQuantityString(R.plurals.number_of_seconds, seconds, seconds);
     }
 
+    /** Formats an entry in the accuracy threshold dropdown. */
+    private String formatAccuracyThreshold(int meters) {
+        return meters > 0 ?
+            getResources().getQuantityString(R.plurals.number_of_meters, meters, meters) :
+            getString(R.string.none);
+    }
+
     /**
      * Parses a form result string, as previously formatted by formatPoints,
      * into a list of polyline vertices.
@@ -453,6 +488,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private void appendPoint() {
         MapPoint point = map.getGpsLocation();
         if (point != null) {
+            int accuracyThreshold = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
             if (recordingMode == AUTOMATIC_RECORDING && accuracyThreshold > 0 &&
                 point.sd > accuracyThreshold) {
                 return;
@@ -496,6 +532,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         radioGroup.check(recordingMode == AUTOMATIC_RECORDING ? R.id.trace_automatic : R.id.trace_manual);
         autoOptions.setVisibility((recordingMode == AUTOMATIC_RECORDING) ? View.VISIBLE : View.GONE);
         autoInterval.setSelection(intervalIndex);
+        accuracyThreshold.setSelection(accuracyThresholdIndex);
     }
 
     private void showClearDialog() {
