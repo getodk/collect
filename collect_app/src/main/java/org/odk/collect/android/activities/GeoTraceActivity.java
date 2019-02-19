@@ -80,12 +80,16 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private final int[] INTERVAL_OPTIONS = {
         1, 5, 10, 20, 30, 60, 300, 600, 1200, 1800
     };
+    private final int DEFAULT_INTERVAL_INDEX = 3; // default is 20 seconds
+    private final int MANUAL_RECORDING = 0;
+    private final int AUTOMATIC_RECORDING = 1;
+
     private boolean recordingActive;
     private int recordingMode; // 0 manual, 1 is automatic
     private RadioGroup radioGroup;
     private View autoOptions;
     private Spinner autoInterval;
-    private int intervalIndex = 3; // default is INTERVAL_OPTIONS[3] = 20 seconds
+    private int intervalIndex = DEFAULT_INTERVAL_INDEX;
 
     // restored from savedInstanceState
     private MapPoint restoredMapCenter;
@@ -99,8 +103,8 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             restoredMapZoom = savedInstanceState.getDouble(MAP_ZOOM_KEY);
             restoredPoints = savedInstanceState.getParcelableArrayList(POINTS_KEY);
             recordingActive = savedInstanceState.getBoolean(RECORDING_ACTIVE_KEY, false);
-            recordingMode = savedInstanceState.getInt(RECORDING_MODE_KEY, 0);
-            intervalIndex = savedInstanceState.getInt(INTERVAL_INDEX_KEY, 3);
+            recordingMode = savedInstanceState.getInt(RECORDING_MODE_KEY, MANUAL_RECORDING);
+            intervalIndex = savedInstanceState.getInt(INTERVAL_INDEX_KEY, DEFAULT_INTERVAL_INDEX);
         }
 
         if (!areLocationPermissionsGranted(this)) {
@@ -404,9 +408,10 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     }
 
     private void startGeoTrace() {
-        if (recordingMode == 0) {
+        if (recordingMode == MANUAL_RECORDING) {
             setupManualMode();
-        } else if (recordingMode == 1) {
+        }
+        if (recordingMode == AUTOMATIC_RECORDING) {
             setupAutomaticMode();
         }
         updateUi();
@@ -422,7 +427,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     }
 
     public void updateRecordingMode(RadioGroup group, int id) {
-        recordingMode = (id == R.id.trace_automatic) ? 1 : 0;
+        recordingMode = (id == R.id.trace_automatic) ? AUTOMATIC_RECORDING : MANUAL_RECORDING;
         updateUi();
     }
 
@@ -431,7 +436,6 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             () -> runOnUiThread(this::appendPoint), 0, intervalSeconds, TimeUnit.SECONDS);
     }
 
-    @SuppressWarnings("unused")  // the "map" parameter is intentionally unused
     private void onGpsLocationReady(MapFragment map) {
         if (getWindow().isActive()) {
             map.zoomToPoint(map.getGpsLocation(), true);
@@ -484,8 +488,8 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         clearButton.setEnabled(!recordingActive && numPoints > 0);
 
         // Trace settings dialog
-        radioGroup.check(recordingMode == 1 ? R.id.trace_automatic : R.id.trace_manual);
-        autoOptions.setVisibility((recordingMode == 1) ? View.VISIBLE : View.GONE);
+        radioGroup.check(recordingMode == AUTOMATIC_RECORDING ? R.id.trace_automatic : R.id.trace_manual);
+        autoOptions.setVisibility((recordingMode == AUTOMATIC_RECORDING) ? View.VISIBLE : View.GONE);
         autoInterval.setSelection(intervalIndex);
     }
 
