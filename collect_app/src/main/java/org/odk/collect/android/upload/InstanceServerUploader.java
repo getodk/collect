@@ -45,7 +45,6 @@ import timber.log.Timber;
 
 public class InstanceServerUploader extends InstanceUploader {
     private static final String URL_PATH_SEP = "/";
-    private static final String FAIL = "Error: ";
 
     private final OpenRosaHttpInterface httpInterface;
     private final WebCredentialsUtils webCredentialsUtils;

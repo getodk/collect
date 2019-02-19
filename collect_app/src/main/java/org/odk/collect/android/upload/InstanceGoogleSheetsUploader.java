@@ -118,7 +118,15 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     @Override
     public String uploadOneSubmission(Instance instance, String spreadsheetUrl) throws UploadException {
+        if (new FormsDao().isFormEncrypted(instance.getJrFormId(), instance.getJrVersion())) {
+            saveFailedStatusToDatabase(instance);
+            throw new UploadException(Collect.getInstance().getString(R.string.google_sheets_encrypted_message));
+        }
+
         File instanceFile = new File(instance.getInstanceFilePath());
+        if (!instanceFile.exists()) {
+            throw new UploadException(FAIL + "instance XML file does not exist!");
+        }
 
         // Get corresponding blank form and verify there is exactly 1
         FormsDao dao = new FormsDao();
