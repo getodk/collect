@@ -90,6 +90,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private View autoOptions;
     private Spinner autoInterval;
     private int intervalIndex = DEFAULT_INTERVAL_INDEX;
+    private double accuracyThreshold = -1;
 
     // restored from savedInstanceState
     private MapPoint restoredMapCenter;
@@ -452,6 +453,10 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private void appendPoint() {
         MapPoint point = map.getGpsLocation();
         if (point != null) {
+            if (recordingMode == AUTOMATIC_RECORDING && accuracyThreshold > 0 &&
+                point.sd > accuracyThreshold) {
+                return;
+            }
             map.appendPointToPoly(featureId, point);
             updateUi();
         }
