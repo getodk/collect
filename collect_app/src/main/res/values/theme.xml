@@ -26,7 +26,7 @@
         <item name="rankItemColor">@color/darkRankItemColor</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
         <item name="warningColor">@color/red_500</item>
-        <item name="divider">@android:drawable/divider_horizontal_dark</item>
+        <item name="dividerCompat">@android:drawable/divider_horizontal_dark</item>
     </style>
 
     <style name="AppTheme.SettingsTheme.Dark" parent="BaseDarkAppTheme">
@@ -68,7 +68,7 @@
         <item name="rankItemColor">@color/lightRankItemColor</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
         <item name="warningColor">@color/red_500</item>
-        <item name="divider">@android:drawable/divider_horizontal_bright</item>
+        <item name="dividerCompat">@android:drawable/divider_horizontal_bright</item>
     </style>
 
     <style name="AlertDialogTheme.Light" parent="Theme.AppCompat.Light.Dialog.Alert">
