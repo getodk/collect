@@ -42,11 +42,8 @@
     <!-- touch target -->
     <dimen name="touch_target_size">48dp</dimen>
     <dimen name="padding_touch_target_minimum">8dp</dimen>
+    <dimen name="divider_accidental_tap">8dp</dimen>
 
     <!-- corner radius -->
     <dimen name="corner_radius">2dp</dimen>
-
-    <!-- divider -->
-    <dimen name="divider_height">3dp</dimen>
-    <dimen name="divider_accidental_tap">8dp</dimen>
 </resources>
