@@ -2492,7 +2492,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private void locationTrackingEnabled(FormController formController, boolean calledJustAfterFormStart) {
         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_TRACKING_ENABLED, null, false);
-        new PermissionUtils(this).requestLocationPermissions(new PermissionListener() {
+        new PermissionUtils().requestLocationPermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 if (!locationPermissionsGranted) {
