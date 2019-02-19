@@ -293,7 +293,6 @@
   <string name="start">Začni</string>
   <string name="enable_gps">Omogoči GPS</string>
   <string name="gps_enable_message">GPS v napravi je onemogočen. Želite omogočiti?</string>
-  <string name="minutes">Minute</string>
   <string name="geo_clear_warning">Funkcija je že narejena. Želite izbrisati funkcijo?</string>
   <string name="geo_exit_warning">Želite zavreči spremembe in se vrniti v ODK?</string>
   <string name="clear">Počisti</string>
@@ -377,5 +376,4 @@
   <string name="sms_submissions_notif_description">Trenutno se oddaja več obrazcev.</string>
   <string name="transport_type_internet">WiFi / mobilno omrežje (priporočeno)</string>
   <string name="transport_type_sms">SMS sporočilo</string>
-  <string name="seconds">Sekunde</string>
 </resources>

@@ -293,7 +293,6 @@
   <string name="gps_enable_message">GPS ถูกปิดไว้ ต้องการเปิดใช้งานหรือไม่?</string>
   <string name="select_offline_layer">เลือกเลเยอร์ที่บันทึกไว้</string>
   <string name="polygon_or_polyline">บันทึก GeoTrace เป็น</string>
-  <string name="minutes">นาที</string>
   <string name="geo_exit_warning">ยกเลิกการเปลี่ยนแปลงและกลับไปที่ ODK?</string>
   <string name="polygon_validator">ต้องมีจุดพิกัด 3 จุดขึ้นไปเพื่อสร้าง Polygon</string>
   <string name="clear">ลบ</string>

@@ -337,7 +337,6 @@
   <string name="gps_enable_message">GPS kwenye kifaa chako imezimwa. Je ungependa kuiwasha?</string>
   <string name="select_offline_layer">Chagua tabaka la nje ya mtandao</string>
   <string name="polygon_or_polyline">Hifadhi Geotrace kama</string>
-  <string name="minutes">Dakika</string>
   <string name="geo_clear_warning">Umbo lishatengenezwa. Ungependa kufuta Umbo?</string>
   <string name="geo_exit_warning">Sitisha mabadiliko na rudi kwenye ODK?</string>
   <string name="polygon_validator">Lazima uwe na angalau  nukta 3 ili kutengeneza poligoni</string>
@@ -346,7 +345,6 @@
   <string name="manual_mode">Mfumo wa kawaida</string>
   <string name="automatic_mode">Mfumo wa moja kwa moja</string>
   <string name="geoshape_instruction">Bonyeza kwa mda kuweka alama.</string>
-  <string name="geotrace_instruction">Subiri kwa kifungio, kisha bofya kuongeza kitufe cha alama kuanza.</string>
   <string name="geopoint_instruction">Bonyeza kwa mda kuweka alama au bofya kitufe ongeza alama.</string>
   <string name="geopoint_no_draggable_instruction">Bofya kitufe cha kuongeza alama.</string>
   <string name="discard">Sitisha</string>
@@ -627,7 +625,6 @@
   <string name="transport_type_internet">WiFi/Simu (inapendekezwa)</string>
   <string name="transport_type_sms">Ujumbe wa maneno</string>
   <string name="transport_type_both">Chagua katika Kutuma</string>
-  <string name="seconds">Sekunde</string>
   <string name="rank_items">Pangilia vitu</string>
   <string name="loading_form_failed">Tatizo limetokea wakati wa kupakua fomu. Tafadhali jaribu tena.</string>
   <string name="missing_google_account_dialog_title">Akaunti ya Google haijawekwa sawa</string>

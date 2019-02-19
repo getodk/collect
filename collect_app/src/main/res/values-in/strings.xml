@@ -341,7 +341,6 @@
   <string name="gps_enable_message">GPS perangkatmu tidak aktif, apakah ingin menghidupkan?</string>
   <string name="select_offline_layer">Pilih layer offline</string>
   <string name="polygon_or_polyline">Simpan GeoTrace sebagai</string>
-  <string name="minutes">Menit</string>
   <string name="geo_clear_warning">Fitur sudah dibuat. Apakah anda ingin menghapus fitur ini?</string>
   <string name="geo_exit_warning">Abaikan perubahan dan kembali ke ODK?</string>
   <string name="polygon_validator">Minimal harus memiliki 3 poin untuk membuat Polygon</string>
@@ -350,7 +349,6 @@
   <string name="manual_mode">Mode manual</string>
   <string name="automatic_mode">Mode otomatis</string>
   <string name="geoshape_instruction">Tekan agak lama untuk menandai.</string>
-  <string name="geotrace_instruction">tunggu sebentar untuk mengunci, tap tombol tambah marker untuk memulai.</string>
   <string name="geopoint_instruction">tekan yang lama untuk menandai atau tap tombol tambah marker.</string>
   <string name="geopoint_no_draggable_instruction">Tap tombol tambah marker</string>
   <string name="discard">Buang</string>
@@ -634,7 +632,6 @@
   <string name="transport_type_internet">Wifi/sulular (direkomendasikan)</string>
   <string name="transport_type_sms">SMS</string>
   <string name="transport_type_both">Memilih saat mengirim</string>
-  <string name="seconds">Detik</string>
   <string name="rank_items">Urutkan</string>
   <string name="loading_form_failed">Kesalahan terjadi saat membuka formulir. Coba lagi.</string>
   <string name="missing_google_account_dialog_title">Akun Google belum diatur</string>

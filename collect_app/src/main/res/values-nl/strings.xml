@@ -285,7 +285,6 @@
   <string name="no">Nee</string>
   <!--Sms submission-->
   <string name="transport_type_sms">SMS</string>
-  <string name="seconds">Seconden</string>
   <string name="notification_channel_name">Algemene notificaties</string>
   <string name="open_file">Open bestand</string>
 </resources>

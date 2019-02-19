@@ -288,7 +288,6 @@
   <string name="gps_enable_message">GPS-i në telefonin tuaj është i ç\'aktivizuar. A do të donit ta aktivizonit?</string>
   <string name="select_offline_layer">Përzgjidh shtresë offline</string>
   <string name="polygon_or_polyline">Ruaj GeoTrace si</string>
-  <string name="minutes">Minuta</string>
   <string name="geo_clear_warning">Tipari është krijuar tanimë. A doni ta pastroni këtë tipar?</string>
   <string name="geo_exit_warning">Elimino ndryshimet dhe kthehu në ODK?</string>
   <string name="polygon_validator">Duhen së paku 3 pika për të krijuar Poligonin</string>
@@ -296,7 +295,6 @@
   <string name="manual_mode">Manuale</string>
   <string name="automatic_mode">Automatike</string>
   <string name="geoshape_instruction">Shtyp për pak sekonda për të vendosur shenjë.</string>
-  <string name="geotrace_instruction">Prit për identifikimin, pastaj shto butonin shenjues për të filluar.</string>
   <string name="geopoint_instruction">Shtyp për pak sekonda për të vendosur një shenjë ose shtuar buton shenjues</string>
   <string name="discard">Elimino</string>
   <string name="geoshape_view_change_location">Shih ose ndrysho GeoShape</string>
@@ -491,6 +489,5 @@
   <string name="sms_submissions_notif_description">Disa formularë janë duke u dërguar.</string>
   <string name="transport_type_internet">Wifi/Celular (e rekomanduar)</string>
   <string name="transport_type_sms">SMS</string>
-  <string name="seconds">Sekonda</string>
   <string name="rank_items">Rendit pohimet</string>
 </resources>

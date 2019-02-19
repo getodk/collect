@@ -343,7 +343,6 @@
   <string name="gps_enable_message">GPS esta deshabilitado. ¿Activar?</string>
   <string name="select_offline_layer">Seleccione la capa sin conexión</string>
   <string name="polygon_or_polyline">Guardar GeoLínea como</string>
-  <string name="minutes">Minutos</string>
   <string name="geo_clear_warning">Función ya creada. ¿Desea borrar la función?</string>
   <string name="geo_exit_warning">¿Ignorar los cambios y regresar?</string>
   <string name="polygon_validator">Debe tener al menos 3 puntos para crear un polígono</string>
@@ -352,7 +351,6 @@
   <string name="manual_mode">Modo Manual</string>
   <string name="automatic_mode">Modo Automático </string>
   <string name="geoshape_instruction">Mantenga presionado para colocar marcas.</string>
-  <string name="geotrace_instruction">Espere la ubicación, luego presione marcador + para iniciar.</string>
   <string name="geopoint_instruction">Pulsar prolongadamente para colocar la marca o tocar el botón marcador.</string>
   <string name="geopoint_no_draggable_instruction">Tap botón de agregar marker</string>
   <string name="discard">Descartar</string>
@@ -637,7 +635,6 @@
   <string name="transport_type_internet">Wifi/Datos (recomendado)</string>
   <string name="transport_type_sms">SMS</string>
   <string name="transport_type_both">Seleccionar al Enviar</string>
-  <string name="seconds">Segundos</string>
   <string name="rank_items">Ranking de Items</string>
   <string name="loading_form_failed">Ocurrió un error al cargar el formulario. Por favor intente de nuevo.</string>
   <string name="missing_google_account_dialog_title">No se ha definido una cuenta de Google</string>

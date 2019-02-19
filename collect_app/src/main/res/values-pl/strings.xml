@@ -341,7 +341,6 @@
   <string name="gps_enable_message">GPS jest jest wyłączony na twoim urządzeniu. Czy chciałbyś go włączyć?</string>
   <string name="select_offline_layer">Wybierz Warstwę Offline</string>
   <string name="polygon_or_polyline">Zapisz GeoTrace Jako</string>
-  <string name="minutes">Minuty</string>
   <string name="geo_clear_warning">Właściwość już stworzona. Chcesz usunąć właściwość?</string>
   <string name="geo_exit_warning">Usunąć zmiany i wrócić do ODK?</string>
   <string name="polygon_validator">Wymagane są przynajmniej 3 punkty aby utworzyć wielokąt</string>
@@ -350,7 +349,6 @@
   <string name="manual_mode">Tryb Ręczny</string>
   <string name="automatic_mode">Tryb Automatyczny</string>
   <string name="geoshape_instruction">Długo naciśnij aby umieścić znacznik.</string>
-  <string name="geotrace_instruction">Czekaj na blokadę, następnie dotknij przycisk Dodaj znacznik aby zacząć.</string>
   <string name="geopoint_instruction">Długo naciśnij aby umieścić znacznik lub dotknij przycisk Dodaj znacznik.</string>
   <string name="geopoint_no_draggable_instruction">Dotknij przycisk Dodaj znacznik.</string>
   <string name="discard">Usuń</string>
@@ -631,7 +629,6 @@
   <string name="transport_type_internet">Wifi/Dane pakietowe (zalecane)</string>
   <string name="transport_type_sms">SMS</string>
   <string name="transport_type_both">Wybierz przy wysyłaniu</string>
-  <string name="seconds">Sekundy</string>
   <string name="rank_items">Uszereguj pozycje</string>
   <string name="loading_form_failed">Wystąpił błąd w trakcie ładowania formularza. Spróbuj ponownie,</string>
   <string name="missing_google_account_dialog_title">Nie wybrano konta Google</string>
