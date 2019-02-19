@@ -15,7 +15,11 @@ limitations under the License.
 package org.odk.collect.android.fragments;
 
 import android.database.Cursor;
+import android.os.Build;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.ListFragment;
 import android.support.v4.view.MenuItemCompat;
@@ -92,6 +96,18 @@ abstract class AppListFragment extends ListFragment {
             toggleButton.setText(R.string.select_all);
         } else {
             toggleButton.setText(R.string.clear_all);
+        }
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // Use the nicer-looking drawable with Material Design insets.
+            ListView listView = getListView();
+            listView.setDivider(getResources().getDrawable(R.drawable.list_item_divider, getActivity().getTheme()));
+            listView.setDividerHeight(1);
         }
     }
 
