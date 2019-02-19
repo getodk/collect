@@ -23,11 +23,13 @@ import org.odk.collect.android.spatial.MapHelper;
 public abstract class BaseGeoMapActivity extends CollectAbstractActivity {
     private static final String MAP_LAYER_KEY = "map_layer_key";
     protected MapHelper helper;
+    protected Bundle previousState;
     protected Integer selectedLayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        previousState = savedInstanceState;
         if (savedInstanceState != null) {
             selectedLayer = savedInstanceState.getInt(MAP_LAYER_KEY);
         }

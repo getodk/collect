@@ -102,12 +102,9 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
     /** While true, the point cannot be moved by dragging or long-pressing. */
     private boolean isPointLocked;
 
-    private Bundle previousState;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        previousState = savedInstanceState;
 
         if (!areLocationPermissionsGranted(this)) {
             finish();

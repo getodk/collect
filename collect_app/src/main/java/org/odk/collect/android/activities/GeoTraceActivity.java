@@ -82,8 +82,6 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private Spinner timeUnits;
     private Spinner timeDelay;
 
-    private Bundle previousState;
-
     // restored from savedInstanceState
     private MapPoint restoredMapCenter;
     private Double restoredMapZoom;
@@ -93,7 +91,6 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        previousState = savedInstanceState;
         if (savedInstanceState != null) {
             restoredMapCenter = savedInstanceState.getParcelable(MAP_CENTER_KEY);
             restoredMapZoom = savedInstanceState.getDouble(MAP_ZOOM_KEY);
