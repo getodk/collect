@@ -4,7 +4,6 @@
   <string name="activity_not_found">取り扱うアクティビティがありません: %s</string>
   <string name="view_image">画像を表示</string>
   <string name="annotate_image">画像に注釈をつける</string>
-  <string name="aligned_image_capture">整列した画像キャプチャ</string>
   <string name="signature_capture">署名キャプチャ</string>
   <string name="view_video">ビデオを表示</string>
   <string name="choose_audio">音声を選択</string>
@@ -355,9 +354,6 @@
   <string name="geopoint_instruction">長押ししてマークするか、マーカーを追加ボタンをタップしてください。</string>
   <string name="geopoint_no_draggable_instruction">マーカーを追加ボタンをタップします。</string>
   <string name="discard">破棄</string>
-  <string name="zoom_to_where">ズーム…</string>
-  <string name="zoom_to_location">現在の場所にズーム</string>
-  <string name="zoom_to_feature">保存した機能にズーム</string>
   <string name="geoshape_view_change_location">GeoShape を表示または変更</string>
   <string name="geotrace_view_change_location">GeoTrace を表示または変更</string>
   <string name="bearing">方位: %.3f</string>

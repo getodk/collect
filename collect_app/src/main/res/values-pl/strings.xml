@@ -4,7 +4,6 @@
   <string name="activity_not_found">Nie znaleziono aktywności do obsługi: %s</string>
   <string name="view_image">Zobacz Obraz</string>
   <string name="annotate_image">Dodaj opis Obrazu</string>
-  <string name="aligned_image_capture">Wyrównaj Przechwytywanie Obrazu</string>
   <string name="signature_capture">Przechwytywanie Podpisu</string>
   <string name="view_video">Zobacz Wideo</string>
   <string name="choose_audio">Wybierz audio</string>
@@ -355,9 +354,6 @@
   <string name="geopoint_instruction">Długo naciśnij aby umieścić znacznik lub dotknij przycisk Dodaj znacznik.</string>
   <string name="geopoint_no_draggable_instruction">Dotknij przycisk Dodaj znacznik.</string>
   <string name="discard">Usuń</string>
-  <string name="zoom_to_where">Przybliż do…</string>
-  <string name="zoom_to_location">Zbliżenie na bieżącą lokalizację</string>
-  <string name="zoom_to_feature">Zbliżenie na zapisaną właściwość</string>
   <string name="geoshape_view_change_location">Pokaż lub Zmień GeoShape</string>
   <string name="geotrace_view_change_location">Pokaż lub Zmień GeoTrace</string>
   <string name="bearing">Namiar: %.3f</string>

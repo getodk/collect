@@ -4,7 +4,6 @@
   <string name="activity_not_found">Не знайдено жодного процесу для: %s</string>
   <string name="view_image">Переглянути Зображення</string>
   <string name="annotate_image">Додати Анотацію</string>
-  <string name="aligned_image_capture">Сфотографувати Вирівняне Зображення</string>
   <string name="signature_capture">Сфотографувати Підпис</string>
   <string name="view_video">Переглянути Відео</string>
   <string name="choose_audio">Обрати Аудіо</string>
@@ -353,9 +352,6 @@
   <string name="geopoint_instruction">Довго натисніть для розміщення позначки або натисніть кнопку Додати позначку.</string>
   <string name="geopoint_no_draggable_instruction">Натисніть кнопку Додати позначку.</string>
   <string name="discard">Скинути</string>
-  <string name="zoom_to_where">Маштабувати до…</string>
-  <string name="zoom_to_location">Маштабувати до поточного розташування</string>
-  <string name="zoom_to_feature">Маштабувати до збереженої ознаки</string>
   <string name="geoshape_view_change_location">Переглянути чи змінити ГеоФігуру</string>
   <string name="geotrace_view_change_location">Переглянути чи змінити ГеоМаршрут</string>
   <string name="bearing">Пеленг: %.3f</string>

@@ -4,7 +4,6 @@
   <string name="activity_not_found">Ei toimintoa tunnuksella: %s</string>
   <string name="view_image">Katso kuva</string>
   <string name="annotate_image">Lisää merkinnät kuvaan</string>
-  <string name="aligned_image_capture">Kohdistettu kuvankaappaus</string>
   <string name="signature_capture">Allekirjoituksen kuvankaappaus</string>
   <string name="view_video">Katso video</string>
   <string name="choose_audio">Valitse ääni</string>
@@ -355,9 +354,6 @@
   <string name="geopoint_instruction">Paina pitkään asettaaksesi merkin tai näpäytä merkkinäppäintä.</string>
   <string name="geopoint_no_draggable_instruction">Paina lisää merkki -näppäintä.</string>
   <string name="discard">Hylkää</string>
-  <string name="zoom_to_where">Zoomaa…</string>
-  <string name="zoom_to_location">Zoomaa nykysijaintiin</string>
-  <string name="zoom_to_feature">Zoomaa tallennettuun ominaisuuteen</string>
   <string name="geoshape_view_change_location">Tarkastele tai Muuta GeoShape</string>
   <string name="geotrace_view_change_location">Tarkastele tai Muuta GeoTrace</string>
   <string name="bearing">Suuntima: %.3f</string>

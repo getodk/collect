@@ -299,9 +299,6 @@
   <string name="geotrace_instruction">Prit për identifikimin, pastaj shto butonin shenjues për të filluar.</string>
   <string name="geopoint_instruction">Shtyp për pak sekonda për të vendosur një shenjë ose shtuar buton shenjues</string>
   <string name="discard">Elimino</string>
-  <string name="zoom_to_where">Afro në…</string>
-  <string name="zoom_to_location">Afro vendndodhjen aktuale</string>
-  <string name="zoom_to_feature">Afro tiparin e ruajtur</string>
   <string name="geoshape_view_change_location">Shih ose ndrysho GeoShape</string>
   <string name="geotrace_view_change_location">Shih ose ndrysho GeoTrace</string>
   <string name="direction">Drejtim: %s</string>

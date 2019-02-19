@@ -4,7 +4,6 @@
   <string name="activity_not_found">Folgende Applikation wurde nicht gefunden: %s</string>
   <string name="view_image">Bild anzeigen</string>
   <string name="annotate_image">Bild beschreiben</string>
-  <string name="aligned_image_capture">Ausgerichtetes Bild erfassen</string>
   <string name="signature_capture">Unterschrift erfassen</string>
   <string name="view_video">Video anzeigen</string>
   <string name="choose_audio">Audio auswählen</string>
@@ -355,9 +354,6 @@
   <string name="geopoint_instruction">Lange Drücken um eine Markierung zu platzieren oder Button Markierung hinzufügen antippen.</string>
   <string name="geopoint_no_draggable_instruction">Button Markierung hinzufügen antippen.</string>
   <string name="discard">Verwerfen</string>
-  <string name="zoom_to_where">Heranzoomen…</string>
-  <string name="zoom_to_location">Aktuellen Standort heranzoomen</string>
-  <string name="zoom_to_feature">Gespeicherten Punkt heranzoomen</string>
   <string name="geoshape_view_change_location">GeoShape anzeigen oder ändern</string>
   <string name="geotrace_view_change_location">GeoTrace anzeigen oder ändern</string>
   <string name="bearing">Kompass-Peilung: %.3f</string>

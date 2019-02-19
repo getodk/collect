@@ -4,7 +4,6 @@
   <string name="activity_not_found">Nenalezena žádná aktivita k řešení: %s</string>
   <string name="view_image">Zobrazit obrázek</string>
   <string name="annotate_image">Přidat popisek obrázku</string>
-  <string name="aligned_image_capture">Zarovnané načtení obrázku</string>
   <string name="signature_capture">Zachycení podpisu</string>
   <string name="view_video">Zobrazit video</string>
   <string name="choose_audio">Vybrat zvuk</string>
@@ -355,9 +354,6 @@
   <string name="geopoint_instruction">Dlouhým stisknutím označit značku nebo klepnutím na tlačítko přidat značku.</string>
   <string name="geopoint_no_draggable_instruction">Klepnutím na tlačítko přidat značku.</string>
   <string name="discard">Vyřadit</string>
-  <string name="zoom_to_where">Přiblížit na…</string>
-  <string name="zoom_to_location">Přiblížit na aktuální umístění</string>
-  <string name="zoom_to_feature">Přiblížit na uložené místo</string>
   <string name="geoshape_view_change_location">Zobrazit nebo změnit GeoShape</string>
   <string name="geotrace_view_change_location">Zobrazit nebo změnit GeoTrace</string>
   <string name="bearing">Orientace: %.3f</string>

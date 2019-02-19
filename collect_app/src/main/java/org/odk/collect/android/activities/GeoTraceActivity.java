@@ -16,7 +16,6 @@ package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.VisibleForTesting;
 import android.view.View;
@@ -86,11 +85,6 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private Spinner timeUnits;
     private Spinner timeDelay;
 
-    private AlertDialog zoomDialog;
-    private View zoomDialogView;
-    private Button zoomPointButton;
-    private Button zoomLocationButton;
-
     // restored from savedInstanceState
     private MapPoint restoredMapCenter;
     private Double restoredMapZoom;
@@ -150,7 +144,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         super.onSaveInstanceState(state);
         state.putParcelable(MAP_CENTER_KEY, map.getCenter());
         state.putDouble(MAP_ZOOM_KEY, map.getZoom());
-        state.putParcelableArrayList(POINTS_KEY, new ArrayList<>(map.getPointsOfPoly(featureId)));
+        state.putParcelableArrayList(POINTS_KEY, new ArrayList<>(map.getPolyPoints(featureId)));
         state.putBoolean(BEEN_PAUSED_KEY, beenPaused);
         state.putBoolean(MODE_ACTIVE_KEY, modeActive);
         state.putInt(TRACE_MODE_KEY, traceMode);
@@ -198,7 +192,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         pauseButton = findViewById(R.id.pause);
         pauseButton.setOnClickListener(v -> {
             playButton.setVisibility(View.VISIBLE);
-            if (!map.getPointsOfPoly(featureId).isEmpty()) {
+            if (!map.getPolyPoints(featureId).isEmpty()) {
                 clearButton.setEnabled(true);
             }
             pauseButton.setVisibility(View.GONE);
@@ -214,7 +208,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
         ImageButton saveButton = findViewById(R.id.geotrace_save);
         saveButton.setOnClickListener(v -> {
-            if (!map.getPointsOfPoly(featureId).isEmpty()) {
+            if (!map.getPolyPoints(featureId).isEmpty()) {
                 polygonOrPolylineDialog.show();
             } else {
                 finishWithResult();
@@ -250,9 +244,9 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
         Button polygonSave = polygonOrPolylineView.findViewById(R.id.polygon_save);
         polygonSave.setOnClickListener(v -> {
-            if (map.getPointsOfPoly(featureId).size() > 2) {
+            if (map.getPolyPoints(featureId).size() > 2) {
                 // Close the polygon.
-                map.appendPointToPoly(featureId, map.getPointsOfPoly(featureId).get(0));
+                map.appendPointToPoly(featureId, map.getPolyPoints(featureId).get(0));
                 polygonOrPolylineDialog.dismiss();
                 finishWithResult();
             } else {
@@ -263,7 +257,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
         Button polylineSave = polygonOrPolylineView.findViewById(R.id.polyline_save);
         polylineSave.setOnClickListener(v -> {
-            if (map.getPointsOfPoly(featureId).size() > 1) {
+            if (map.getPolyPoints(featureId).size() > 1) {
                 polygonOrPolylineDialog.dismiss();
                 finishWithResult();
             } else {
@@ -279,7 +273,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         zoomButton = findViewById(R.id.zoom);
         zoomButton.setOnClickListener(v -> {
             playCheck = false;
-            showZoomDialog();
+            map.zoomToPoint(map.getGpsLocation(), true);
         });
 
         List<MapPoint> points = new ArrayList<>();
@@ -302,19 +296,27 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         map.setGpsLocationEnabled(true);
         map.setGpsLocationListener(this::onGpsLocation);
         if (restoredMapCenter != null && restoredMapZoom != null) {
-            map.zoomToPoint(restoredMapCenter, restoredMapZoom);
+            map.zoomToPoint(restoredMapCenter, restoredMapZoom, false);
         } else if (!points.isEmpty()) {
-            map.zoomToBoundingBox(points, 0.6);
+            map.zoomToBoundingBox(points, 0.6, false);
         } else {
             map.runOnGpsLocationReady(this::onGpsLocationReady);
         }
     }
 
     private void finishWithResult() {
-        List<MapPoint> points = map.getPointsOfPoly(featureId);
+        List<MapPoint> points = map.getPolyPoints(featureId);
         setResult(RESULT_OK, new Intent().putExtra(
             FormEntryActivity.GEOTRACE_RESULTS, formatPoints(points)));
         finish();
+    }
+
+    @Override public void onBackPressed() {
+        if (!formatPoints(map.getPolyPoints(featureId)).equals(originalTraceString)) {
+            showBackDialog();
+        } else {
+            finish();
+        }
     }
 
     /**
@@ -386,20 +388,6 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
                 traceSettingsDialog.dismiss();
             })
             .create();
-
-        zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
-
-        zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
-        zoomLocationButton.setOnClickListener(v -> {
-            map.zoomToPoint(map.getGpsLocation());
-            zoomDialog.dismiss();
-        });
-
-        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
-        zoomPointButton.setOnClickListener(v -> {
-            map.zoomToBoundingBox(map.getPointsOfPoly(featureId), 0.6);
-            zoomDialog.dismiss();
-        });
     }
 
     private void startGeoTrace() {
@@ -473,7 +461,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
     public void setGeoTraceScheduler(long delay, TimeUnit units) {
         schedulerHandler = scheduler.scheduleAtFixedRate(
-            () -> runOnUiThread(() -> addVertex()), delay, delay, units);
+            () -> runOnUiThread(() -> addVertex()), 0, delay, units);
     }
 
     @SuppressWarnings("unused")  // the "map" parameter is intentionally unused
@@ -481,13 +469,13 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         zoomButton.setEnabled(true);
         playButton.setEnabled(true);
         if (getWindow().isActive()) {
-            showZoomDialog();
+            map.zoomToPoint(map.getGpsLocation(), true);
         }
     }
 
     private void onGpsLocation(MapPoint point) {
         if (modeActive) {
-            map.setCenter(point);
+            map.setCenter(point, false);
         }
     }
 
@@ -512,7 +500,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     }
 
     private void showClearDialog() {
-        if (!map.getPointsOfPoly(featureId).isEmpty()) {
+        if (!map.getPolyPoints(featureId).isEmpty()) {
             new AlertDialog.Builder(this)
                 .setMessage(R.string.geo_clear_warning)
                 .setPositiveButton(R.string.clear, (dialog, id) -> clear())
@@ -521,38 +509,13 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         }
     }
 
-    public void showZoomDialog() {
-        if (zoomDialog == null) {
-            zoomDialog = new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.zoom_to_where))
-                .setView(zoomDialogView)
-                .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel())
-                .setOnCancelListener(dialog -> {
-                    dialog.cancel();
-                    zoomDialog.dismiss();
-                })
-                .create();
-        }
+    private void showBackDialog() {
+        new AlertDialog.Builder(this)
+            .setMessage(getString(R.string.geo_exit_warning))
+            .setPositiveButton(R.string.discard, (dialog, id) -> finish())
+            .setNegativeButton(R.string.cancel, null)
+            .show();
 
-        if (map.getGpsLocation() != null) {
-            zoomLocationButton.setEnabled(true);
-            zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomLocationButton.setTextColor(themeUtils.getPrimaryTextColor());
-        } else {
-            zoomLocationButton.setEnabled(false);
-            zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
-            zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
-        }
-        if (!map.getPointsOfPoly(featureId).isEmpty()) {
-            zoomPointButton.setEnabled(true);
-            zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomPointButton.setTextColor(themeUtils.getPrimaryTextColor());
-        } else {
-            zoomPointButton.setEnabled(false);
-            zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
-            zoomPointButton.setTextColor(Color.parseColor("#FF979797"));
-        }
-        zoomDialog.show();
     }
 
     @VisibleForTesting public ImageButton getPlayButton() {

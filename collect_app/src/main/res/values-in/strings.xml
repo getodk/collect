@@ -4,7 +4,6 @@
   <string name="activity_not_found">Tidak ditemukan aktivitas untuk menyelesaikan: %s</string>
   <string name="view_image">Lihat gambar</string>
   <string name="annotate_image">Tandai gambar</string>
-  <string name="aligned_image_capture">Atur gambar yang telah diambil</string>
   <string name="signature_capture">Ambil tanda tangan</string>
   <string name="view_video">Lihat video</string>
   <string name="choose_audio">Pilih suara</string>
@@ -355,9 +354,6 @@
   <string name="geopoint_instruction">tekan yang lama untuk menandai atau tap tombol tambah marker.</string>
   <string name="geopoint_no_draggable_instruction">Tap tombol tambah marker</string>
   <string name="discard">Buang</string>
-  <string name="zoom_to_where">Zoom ke…</string>
-  <string name="zoom_to_location">Zoom ke lokasi saat ini</string>
-  <string name="zoom_to_feature">Zoom ke fitur yang tersimpan</string>
   <string name="geoshape_view_change_location">Tampilkan atau Ubah GeoShape</string>
   <string name="geotrace_view_change_location">Tampilkan atau Ubah GeoTrace</string>
   <string name="bearing">Bantalan: %.3f</string>

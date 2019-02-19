@@ -4,7 +4,6 @@
   <string name="activity_not_found">%s:के नियंत्रण के लिए कोई गतिविधि नहीं  मिली</string>
   <string name="view_image">इमेज देखें</string>
   <string name="annotate_image">इमेज पर टिप्पणी करें</string>
-  <string name="aligned_image_capture">संरेखित छवि कैद</string>
   <string name="view_video">वीडियो देखें</string>
   <string name="choose_audio">ऑडियो चुनें</string>
   <string name="add_another"> समूह जोड़ें</string>
@@ -327,9 +326,6 @@
   <string name="geopoint_instruction">प्लेस मार्क के लिए लंबे समय तक दबाएं या मार्कर बटन जोड़ने के लिए टैप करें।</string>
   <string name="geopoint_no_draggable_instruction">मार्कर बटन जोड़ें पर टैप करें</string>
   <string name="discard">छोड़ दें </string>
-  <string name="zoom_to_where">पर ज़ूम करें …</string>
-  <string name="zoom_to_location">वर्तमान लोकेशन पर ज़ूम करें</string>
-  <string name="zoom_to_feature">संरक्षित फीचर पर ज़ूम करें</string>
   <string name="geoshape_view_change_location">जिओ शेप देखें या बदलें </string>
   <string name="geotrace_view_change_location">जिओ ट्रेस देखें या बदलें </string>
   <string name="bearing">बीअरिंग: %.3f</string>

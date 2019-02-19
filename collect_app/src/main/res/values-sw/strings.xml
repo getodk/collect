@@ -4,7 +4,6 @@
   <string name="activity_not_found">Hakuna shughuli ya kushughulikiwa: %s</string>
   <string name="view_image">Onesha picha</string>
   <string name="annotate_image">Elezea picha</string>
-  <string name="aligned_image_capture">Piga picha isiyopinda</string>
   <string name="signature_capture">Chukua sahihi</string>
   <string name="view_video">Onesha video</string>
   <string name="choose_audio">Chagua sauti</string>
@@ -351,9 +350,6 @@
   <string name="geopoint_instruction">Bonyeza kwa mda kuweka alama au bofya kitufe ongeza alama.</string>
   <string name="geopoint_no_draggable_instruction">Bofya kitufe cha kuongeza alama.</string>
   <string name="discard">Sitisha</string>
-  <string name="zoom_to_where">Kuza kufika…</string>
-  <string name="zoom_to_location">Kuza kwenye eneo la sasa</string>
-  <string name="zoom_to_feature">Kuza katika taarifa zilizohifadhiwa</string>
   <string name="geoshape_view_change_location">Onesha au badilisha umbo la Kijografia</string>
   <string name="geotrace_view_change_location">Onesha au badili Mfuatilio wa Kijografia</string>
   <string name="bearing">Uelekeo: \"Bearing\"%.3f</string>

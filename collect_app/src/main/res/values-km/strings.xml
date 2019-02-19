@@ -4,7 +4,6 @@
   <string name="activity_not_found">គ្មានសកម្មភាពដើម្បីដោះស្រាយបាន : %s</string>
   <string name="view_image">បង្ហាញរូបថត</string>
   <string name="annotate_image">Annotate Image</string>
-  <string name="aligned_image_capture">ការចាប់យករូបភាពតម្រឹម</string>
   <string name="signature_capture">ថតហត្ថលេខា</string>
   <string name="view_video">បង្ហាញវីដេអូ</string>
   <string name="choose_audio">ជ្រើសរើសសម្លេង</string>
@@ -344,9 +343,6 @@
   <string name="geopoint_instruction">ចុចយូរដើម្បីដាក់ស្លាកកន្លែង ឬប៉ះប៊ូតុងបន្ថែមស្លាក</string>
   <string name="geopoint_no_draggable_instruction">ប៉ះដើម្បីបន្ថែមប៊ូតុងសម្គាល់</string>
   <string name="discard">បោះបង់</string>
-  <string name="zoom_to_where">ពង្រីកទៅ…</string>
-  <string name="zoom_to_location">ពង្រីក/បង្រួមទៅកាន់ទីតាំងរបស់អ្នក</string>
-  <string name="zoom_to_feature">ពង្រីក/បង្រួមទៅកាន់លក្ខណៈពិសេសដែលរក្សាទុក</string>
   <string name="geoshape_view_change_location">មើល ឬផ្លាស់ប្តូរ GeoShape</string>
   <string name="geotrace_view_change_location">មើល ឬផ្លាស់ប្តូរ GeoTrace</string>
   <string name="bearing">ទ្រង់ទ្រាយ៖ %.3f</string>

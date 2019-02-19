@@ -4,7 +4,6 @@
   <string name="activity_not_found">Aucune activité à gérer: %s</string>
   <string name="view_image">Afficher l\'image</string>
   <string name="annotate_image">Annoter l\'image</string>
-  <string name="aligned_image_capture">Capture d\'image alignée</string>
   <string name="signature_capture">Capture d\'une signature</string>
   <string name="view_video">Visionner la vidéo</string>
   <string name="choose_audio">Choisir l\'audio</string>
@@ -355,9 +354,6 @@
   <string name="geopoint_instruction">Appuyez longuement sur la carte pour placer un marqueur ou appuyez sur le bouton \"ajouter un marqueur\".</string>
   <string name="geopoint_no_draggable_instruction">Appuyez sur le bouton \"ajouter un marqueur\".</string>
   <string name="discard">Annuler</string>
-  <string name="zoom_to_where">Zoom sur…</string>
-  <string name="zoom_to_location">Zoomer sur l\'emplacement courant</string>
-  <string name="zoom_to_feature">Zoomer sur l\'objet enregistré</string>
   <string name="geoshape_view_change_location">Voir ou Modifier la FormeGéo</string>
   <string name="geotrace_view_change_location">Voir ou Modifier le TracéGéo</string>
   <string name="bearing">Palier: %.3f</string>
