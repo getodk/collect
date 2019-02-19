@@ -373,6 +373,10 @@
     </plurals>
     <string name="geoshape_instruction">Long press to place marks.</string>
     <string name="geotrace_instruction">Wait for lock, then tap add marker button to start.</string>
+    <string name="geotrace_location_status_searching">Searching for GPS location...</string>
+    <string name="geotrace_location_status_accuracy">GPS location accuracy: %.1f m</string>
+    <string name="geotrace_location_status_acceptable">GPS location accuracy: %.1f m (acceptable)</string>
+    <string name="geotrace_location_status_unacceptable">GPS location accuracy: %.1f m (unacceptable)</string>
     <string name="geopoint_instruction">Long press to place mark or tap add marker button.</string>
     <string name="geopoint_no_draggable_instruction">Tap add marker button.</string>
     <string name="discard">Discard</string>

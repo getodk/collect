@@ -8,16 +8,16 @@
                 android:padding="0dip">
 
     <TextView
-        android:id="@+id/geotrace_instruction"
-        android:text="@string/geotrace_instruction"
+        android:id="@+id/geotrace_location_status"
+        android:text="@string/geotrace_location_status_searching"
         android:textColor="#FFFFFF"
         android:layout_width="match_parent"
-        android:gravity="center_horizontal"
+        android:gravity="start|center_vertical"
         android:layout_height="wrap_content"
         android:paddingTop="5dip"
         android:paddingLeft="5dip"
         android:paddingRight="5dip"
-        android:paddingBottom="5dip" />
+        android:paddingBottom="5dip"/>
 
     <FrameLayout
         android:id="@+id/map_container"
@@ -43,7 +43,7 @@
         android:layout_alignParentStart="true"
         android:layout_toLeftOf="@+id/scroller"
         android:layout_toStartOf="@+id/scroller"
-        android:layout_below="@+id/geotrace_instruction"/>
+        android:layout_below="@+id/geotrace_location_status"/>
 
     <ScrollView
         android:id="@+id/scroller"
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/geotrace_instruction">
+        android:layout_below="@+id/geotrace_location_status">
 
         <LinearLayout
             android:orientation="vertical"

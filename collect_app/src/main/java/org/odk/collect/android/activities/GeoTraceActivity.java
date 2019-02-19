@@ -16,6 +16,7 @@ package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.VisibleForTesting;
 import android.view.View;
@@ -26,6 +27,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.map.GoogleMapFragment;
@@ -72,6 +74,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private ImageButton pauseButton;
     private ImageButton backspaceButton;
 
+    private TextView locationStatus;
     private View traceSettingsView;
     private View polygonOrPolylineView;
 
@@ -89,6 +92,9 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         0, 3, 5, 10, 15, 20
     };
     private final int DEFAULT_ACCURACY_THRESHOLD_INDEX = 3; // default is 10 meters
+    private final String NO_LOCATION_COLOR = "#333333";
+    private final String ACCEPTABLE_LOCATION_COLOR = "#337733";
+    private final String UNACCEPTABLE_LOCATION_COLOR = "#773333";
 
     private boolean recordingActive;
     private int recordingMode; // 0 manual, 1 is automatic
@@ -207,6 +213,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         }
         helper.setBasemap();
 
+        locationStatus = findViewById(R.id.geotrace_location_status);
         traceSettingsView = getLayoutInflater().inflate(R.layout.geotrace_dialog, null);
         radioGroup = traceSettingsView.findViewById(R.id.radio_group);
         radioGroup.setOnCheckedChangeListener(this::updateRecordingMode);
@@ -483,19 +490,27 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         if (recordingActive) {
             map.setCenter(point, false);
         }
+        updateUi();
     }
 
     private void appendPoint() {
         MapPoint point = map.getGpsLocation();
-        if (point != null) {
-            int accuracyThreshold = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
-            if (recordingMode == AUTOMATIC_RECORDING && accuracyThreshold > 0 &&
-                point.sd > accuracyThreshold) {
-                return;
-            }
+        if (point != null && isLocationAcceptable(point)) {
             map.appendPointToPoly(featureId, point);
             updateUi();
         }
+    }
+
+    private boolean isLocationAcceptable(MapPoint point) {
+        if (!isAccuracyThresholdActive()) {
+            return true;
+        }
+        return point.sd <= ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
+    }
+
+    private boolean isAccuracyThresholdActive() {
+        int meters = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
+        return recordingMode == AUTOMATIC_RECORDING && meters > 0;
     }
 
     private void removeLastPoint() {
@@ -533,6 +548,20 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         autoOptions.setVisibility((recordingMode == AUTOMATIC_RECORDING) ? View.VISIBLE : View.GONE);
         autoInterval.setSelection(intervalIndex);
         accuracyThreshold.setSelection(accuracyThresholdIndex);
+
+        // GPS status
+        boolean usingThreshold = isAccuracyThresholdActive();
+        boolean acceptable = location != null && isLocationAcceptable(location);
+        locationStatus.setText(
+            location == null ? getString(R.string.geotrace_location_status_searching) :
+            !usingThreshold ? getString(R.string.geotrace_location_status_accuracy, location.sd) :
+            acceptable ? getString(R.string.geotrace_location_status_acceptable, location.sd) :
+                getString(R.string.geotrace_location_status_unacceptable, location.sd)
+        );
+        locationStatus.setBackgroundColor(Color.parseColor(
+            location == null ? NO_LOCATION_COLOR :
+                acceptable ? ACCEPTABLE_LOCATION_COLOR : UNACCEPTABLE_LOCATION_COLOR
+        ));
     }
 
     private void showClearDialog() {
