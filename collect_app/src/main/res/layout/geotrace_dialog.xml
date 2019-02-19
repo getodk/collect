@@ -38,6 +38,7 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:paddingLeft="42dp"
+              android:paddingStart="42dp"
               android:text="@string/recording_interval" />
           <Spinner
               android:id="@+id/auto_interval"
@@ -52,6 +53,7 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:paddingLeft="42dp"
+              android:paddingStart="42dp"
               android:text="@string/accuracy_requirement" />
           <Spinner
               android:id="@+id/accuracy_threshold"

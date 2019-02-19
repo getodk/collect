@@ -82,20 +82,20 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private AlertDialog traceSettingsDialog;
     private AlertDialog polygonOrPolylineDialog;
 
-    private final int[] INTERVAL_OPTIONS = {
+    private static final int[] INTERVAL_OPTIONS = {
         1, 5, 10, 20, 30, 60, 300, 600, 1200, 1800
     };
-    private final int DEFAULT_INTERVAL_INDEX = 3; // default is 20 seconds
-    private final int MANUAL_RECORDING = 0;
-    private final int AUTOMATIC_RECORDING = 1;
+    private static final int DEFAULT_INTERVAL_INDEX = 3; // default is 20 seconds
+    private static final int MANUAL_RECORDING = 0;
+    private static final int AUTOMATIC_RECORDING = 1;
 
-    private final int[] ACCURACY_THRESHOLD_OPTIONS = {
+    private static final int[] ACCURACY_THRESHOLD_OPTIONS = {
         0, 3, 5, 10, 15, 20
     };
-    private final int DEFAULT_ACCURACY_THRESHOLD_INDEX = 3; // default is 10 meters
-    private final String NO_LOCATION_COLOR = "#333333";
-    private final String ACCEPTABLE_LOCATION_COLOR = "#337733";
-    private final String UNACCEPTABLE_LOCATION_COLOR = "#773333";
+    private static final int DEFAULT_ACCURACY_THRESHOLD_INDEX = 3; // default is 10 meters
+    private static final String NO_LOCATION_COLOR = "#333333";
+    private static final String ACCEPTABLE_LOCATION_COLOR = "#337733";
+    private static final String UNACCEPTABLE_LOCATION_COLOR = "#773333";
 
     private boolean recordingActive;
     private int recordingMode; // 0 manual, 1 is automatic
