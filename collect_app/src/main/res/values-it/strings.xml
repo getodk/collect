@@ -343,9 +343,6 @@
   <string name="geopoint_instruction">Premi a lungo per posizionare il segno altrimenti tocca su Aggiungi Posizione.</string>
   <string name="geopoint_no_draggable_instruction">Tocca Aggiungi Posizione.</string>
   <string name="discard">Annulla</string>
-  <string name="zoom_to_where">Ingrandisci su…</string>
-  <string name="zoom_to_location">Ingrandisci la posizione corrente</string>
-  <string name="zoom_to_feature">Ingrandisci l\'elemento salvato</string>
   <string name="geoshape_view_change_location">Guarda o Cambia Geo-contorno</string>
   <string name="geotrace_view_change_location">Guarda o Cambia Geo-tracciatura</string>
   <string name="bearing">Orientamento: %.3f </string>

@@ -27,6 +27,7 @@ import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -48,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import timber.log.Timber;
 
 public class GoogleMapFragment extends SupportMapFragment implements
     MapFragment, LocationListener, LocationClient.LocationClientListener,
@@ -58,12 +60,14 @@ public class GoogleMapFragment extends SupportMapFragment implements
     public static final float POINT_ZOOM = 16;
 
     protected GoogleMap map;
-    protected List<MapFragment.ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
-    protected MapFragment.PointListener clickListener;
-    protected MapFragment.PointListener longPressListener;
-    protected MapFragment.PointListener gpsLocationListener;
+    protected List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
+    protected PointListener clickListener;
+    protected PointListener longPressListener;
+    protected PointListener gpsLocationListener;
+    protected FeatureListener dragEndListener;
     protected LocationClient locationClient;
     protected MapPoint lastLocationFix;
+    protected String lastLocationProvider;
     protected int nextFeatureId = 1;
     protected Map<Integer, MapFeature> features = new HashMap<>();
     protected AlertDialog gpsErrorDialog;
@@ -123,12 +127,12 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return new MapPoint(target.latitude, target.longitude);
     }
 
-    @Override public void setCenter(@Nullable MapPoint center) {
+    @Override public void setCenter(@Nullable MapPoint center, boolean animate) {
         if (map == null) {  // during Robolectric tests, map will be null
             return;
         }
         if (center != null) {
-            map.moveCamera(CameraUpdateFactory.newLatLng(toLatLng(center)));
+            moveOrAnimateCamera(CameraUpdateFactory.newLatLng(toLatLng(center)), animate);
         }
     }
 
@@ -139,20 +143,21 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return map.getCameraPosition().zoom;
     }
 
-    @Override public void zoomToPoint(@Nullable MapPoint center) {
-        zoomToPoint(center, POINT_ZOOM);
+    @Override public void zoomToPoint(@Nullable MapPoint center, boolean animate) {
+        zoomToPoint(center, POINT_ZOOM, animate);
     }
 
-    @Override public void zoomToPoint(@Nullable MapPoint center, double zoom) {
+    @Override public void zoomToPoint(@Nullable MapPoint center, double zoom, boolean animate) {
         if (map == null) {  // during Robolectric tests, map will be null
             return;
         }
         if (center != null) {
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(toLatLng(center), (float) zoom));
+            moveOrAnimateCamera(
+                CameraUpdateFactory.newLatLngZoom(toLatLng(center), (float) zoom), animate);
         }
     }
 
-    @Override public void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor) {
+    @Override public void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor, boolean animate) {
         if (map == null) {  // during Robolectric tests, map will be null
             return;
         }
@@ -166,11 +171,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 count++;
             }
             if (count == 1) {
-                zoomToPoint(lastPoint);
+                zoomToPoint(lastPoint, animate);
             } else if (count > 1) {
                 final LatLngBounds bounds = expandBounds(builder.build(), 1 / scaleFactor);
                 new Handler().postDelayed(() -> {
-                    map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
+                    moveOrAnimateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), animate);
                 }, 100);
             }
         }
@@ -197,23 +202,42 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return new LatLngBounds(new LatLng(south, west), new LatLng(north, east));
     }
 
+    protected void moveOrAnimateCamera(CameraUpdate movement, boolean animate) {
+        if (animate) {
+            map.animateCamera(movement);
+        } else {
+            map.moveCamera(movement);
+        }
+    }
+
+    @Override public int addMarker(MapPoint point, boolean draggable) {
+        int featureId = nextFeatureId++;
+        features.put(featureId, new MarkerFeature(map, point, draggable));
+        return featureId;
+    }
+
+    @Override public @Nullable MapPoint getMarkerPoint(int featureId) {
+        MapFeature feature = features.get(featureId);
+        return feature instanceof MarkerFeature ? ((MarkerFeature) feature).getPoint() : null;
+    }
+
     @Override public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new DraggablePoly(map, points, closedPolygon));
+        features.put(featureId, new PolyFeature(map, points, closedPolygon));
         return featureId;
     }
 
     @Override public void appendPointToPoly(int featureId, @NonNull MapPoint point) {
         MapFeature feature = features.get(featureId);
-        if (feature instanceof DraggablePoly) {
-            ((DraggablePoly) feature).addPoint(point);
+        if (feature instanceof PolyFeature) {
+            ((PolyFeature) feature).addPoint(point);
         }
     }
 
-    @Override public @NonNull List<MapPoint> getPointsOfPoly(int featureId) {
+    @Override public @NonNull List<MapPoint> getPolyPoints(int featureId) {
         MapFeature feature = features.get(featureId);
-        if (feature instanceof DraggablePoly) {
-            return ((DraggablePoly) feature).getPoints();
+        if (feature instanceof PolyFeature) {
+            return ((PolyFeature) feature).getPoints();
         }
         return new ArrayList<>();
     }
@@ -238,6 +262,10 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public void setLongPressListener(@Nullable PointListener listener) {
         longPressListener = listener;
+    }
+
+    @Override public void setDragEndListener(@Nullable FeatureListener listener) {
+        dragEndListener = listener;
     }
 
     @Override public void setGpsLocationListener(@Nullable PointListener listener) {
@@ -269,6 +297,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public void onLocationChanged(Location location) {
         lastLocationFix = fromLocation(location);
+        lastLocationProvider = location.getProvider();
         for (ReadyListener listener : gpsLocationReadyListeners) {
             listener.onReady(this);
         }
@@ -280,6 +309,10 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public @Nullable MapPoint getGpsLocation() {
         return lastLocationFix;
+    }
+
+    @Override public @Nullable String getLocationProvider() {
+        return lastLocationProvider;
     }
 
     @Override public void onMapClick(LatLng latLng) {
@@ -294,20 +327,22 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    @Override public void onMarkerDragStart(Marker marker) {
-        updateFeatures();
-    }
+    @Override public void onMarkerDragStart(Marker marker) { }
 
     @Override public void onMarkerDrag(Marker marker) {
         // When a marker is manually dragged, the position is no longer
         // obtained from a GPS reading, so the altitude and standard deviation
         // fields are no longer meaningful; reset them to zero.
         marker.setSnippet("0;0");
-        updateFeatures();
+        updateFeature(findFeature(marker));
     }
 
     @Override public void onMarkerDragEnd(Marker marker) {
-        updateFeatures();
+        int featureId = findFeature(marker);
+        updateFeature(featureId);
+        if (dragEndListener != null && featureId != -1) {
+            dragEndListener.onFeature(featureId);
+        }
     }
 
     @Override public void onClientStart() {
@@ -339,8 +374,19 @@ public class GoogleMapFragment extends SupportMapFragment implements
         gpsErrorDialog.show();
     }
 
-    protected void updateFeatures() {
-        for (MapFeature feature : features.values()) {
+    /** Finds the feature to which the given marker belongs. */
+    protected int findFeature(Marker marker) {
+        for (int featureId : features.keySet()) {
+            if (features.get(featureId).ownsMarker(marker)) {
+                return featureId;
+            }
+        }
+        return -1;  // not found
+    }
+
+    protected void updateFeature(int featureId) {
+        MapFeature feature = features.get(featureId);
+        if (feature != null) {
             feature.update();
         }
     }
@@ -370,12 +416,32 @@ public class GoogleMapFragment extends SupportMapFragment implements
             if (parts.length >= 2) {
                 sd = Double.parseDouble(parts[1]);
             }
-        } catch (NumberFormatException e) { /* ignore */ }
+        } catch (NumberFormatException e) {
+            Timber.w("Marker.getSnippet() did not contain two numbers");
+        }
         return new MapPoint(position.latitude, position.longitude, alt, sd);
     }
 
     protected static @NonNull LatLng toLatLng(@NonNull MapPoint point) {
         return new LatLng(point.lat, point.lon);
+    }
+
+    protected static Marker createMarker(GoogleMap map, MapPoint point, boolean draggable) {
+        if (map == null) {
+            return null;
+        }
+        // A Marker's position is a LatLng with just latitude and longitude
+        // fields.  We need to store the point's altitude and standard
+        // deviation values somewhere, so they go in the marker's snippet.
+        return map.addMarker(new MarkerOptions()
+            .position(toLatLng(point))
+            .snippet(point.alt + ";" + point.sd)
+            .draggable(draggable)
+        );
+    }
+
+    @VisibleForTesting public boolean isGpsErrorDialogShowing() {
+        return gpsErrorDialog != null && gpsErrorDialog.isShowing();
     }
 
     /**
@@ -385,6 +451,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
      * (e.g. geometric elements, handles for manipulation, etc.).
      */
     interface MapFeature {
+        /** Returns true if the given marker belongs to this feature. */
+        boolean ownsMarker(Marker marker);
+
         /** Updates the feature's geometry after any UI handles have moved. */
         void update();
 
@@ -392,23 +461,50 @@ public class GoogleMapFragment extends SupportMapFragment implements
         void dispose();
     }
 
+    protected static class MarkerFeature implements MapFeature {
+        Marker marker;
+
+        public MarkerFeature(GoogleMap map, MapPoint point, boolean draggable) {
+            this.marker = createMarker(map, point, draggable);
+        }
+
+        public MapPoint getPoint() {
+            return fromMarker(marker);
+        }
+
+        public boolean ownsMarker(Marker givenMarker) {
+            return marker.equals(givenMarker);
+        }
+
+        public void update() { }
+
+        public void dispose() {
+            marker.remove();
+            marker = null;
+        }
+    }
+
     /** A polyline or polygon that can be manipulated by dragging markers at its vertices. */
-    protected static class DraggablePoly implements MapFeature {
+    protected static class PolyFeature implements MapFeature {
         final GoogleMap map;
         final List<Marker> markers = new ArrayList<>();
         final boolean closedPolygon;
         Polyline polyline;
 
-        public DraggablePoly(GoogleMap map, Iterable<MapPoint> points, boolean closedPolygon) {
+        public PolyFeature(GoogleMap map, Iterable<MapPoint> points, boolean closedPolygon) {
             this.map = map;
             this.closedPolygon = closedPolygon;
             if (map == null) {  // during Robolectric tests, map will be null
                 return;
             }
             for (MapPoint point : points) {
-                addMarker(point);
+                markers.add(createMarker(map, point, true));
             }
             update();
+        }
+
+        public boolean ownsMarker(Marker givenMarker) {
+            return markers.contains(givenMarker);
         }
 
         public void update() {
@@ -452,19 +548,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
             if (map == null) {  // during Robolectric tests, map will be null
                 return;
             }
-            addMarker(point);
+            markers.add(createMarker(map, point, true));
             update();
-        }
-
-        protected void addMarker(MapPoint point) {
-            // A Marker's position is a LatLng with just latitude and longitude
-            // fields.  We need to store the point's altitude and standard
-            // deviation values somewhere, so they go in the marker's snippet.
-            markers.add(map.addMarker(new MarkerOptions()
-                .position(toLatLng(point))
-                .snippet(point.alt + ";" + point.sd)
-                .draggable(true)
-            ));
         }
 
         protected void clearPolyline() {
@@ -473,9 +558,5 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 polyline = null;
             }
         }
-    }
-
-    @VisibleForTesting public boolean isGpsErrorDialogShowing() {
-        return gpsErrorDialog != null && gpsErrorDialog.isShowing();
     }
 }

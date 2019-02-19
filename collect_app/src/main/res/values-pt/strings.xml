@@ -341,9 +341,6 @@ Escolher Imagem</string>
   <string name="geopoint_instruction">Pressione por mais tempo para colocar marcador ou selecione o botão Adicionar Marcador.</string>
   <string name="geopoint_no_draggable_instruction">Selecione o botão Adicionar Marcador.</string>
   <string name="discard">Descartar</string>
-  <string name="zoom_to_where">Aproximar para…</string>
-  <string name="zoom_to_location">Aproximar para a localização atual</string>
-  <string name="zoom_to_feature">Aproximar para a feição salva</string>
   <string name="geoshape_view_change_location">Visualizar ou Modificar GeoShape</string>
   <string name="geotrace_view_change_location">Visualizar ou Modificar GeoTrace</string>
   <string name="bearing">Rumo: %.3f</string>

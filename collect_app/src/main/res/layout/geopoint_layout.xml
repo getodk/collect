@@ -31,9 +31,8 @@
 
     </LinearLayout>
 
-    <fragment
-        android:id="@+id/map"
-        class="com.google.android.gms.maps.SupportMapFragment"
+    <FrameLayout
+        android:id="@+id/map_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/linearlayout" />
@@ -59,7 +58,7 @@
             <!--android:layout_weight="1"/>-->
 
             <android.support.v7.widget.AppCompatImageButton
-                android:id="@+id/reload_location"
+                android:id="@+id/place_marker"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
@@ -68,7 +67,7 @@
                 android:padding="15dp" />
 
             <android.support.v7.widget.AppCompatImageButton
-                android:id="@+id/show_location"
+                android:id="@+id/zoom"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"

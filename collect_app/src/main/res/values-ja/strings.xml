@@ -354,9 +354,6 @@
   <string name="geopoint_instruction">長押ししてマークするか、マーカーを追加ボタンをタップしてください。</string>
   <string name="geopoint_no_draggable_instruction">マーカーを追加ボタンをタップします。</string>
   <string name="discard">破棄</string>
-  <string name="zoom_to_where">ズーム…</string>
-  <string name="zoom_to_location">現在の場所にズーム</string>
-  <string name="zoom_to_feature">保存した機能にズーム</string>
   <string name="geoshape_view_change_location">GeoShape を表示または変更</string>
   <string name="geotrace_view_change_location">GeoTrace を表示または変更</string>
   <string name="bearing">方位: %.3f</string>

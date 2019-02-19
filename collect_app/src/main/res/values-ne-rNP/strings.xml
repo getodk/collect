@@ -322,9 +322,6 @@
   <string name="minutes">मिनेट</string>
   <string name="clear">मेटाउनुहोस्</string>
   <string name="discard">त्याग्नुहोस्</string>
-  <string name="zoom_to_where">जुम गर्नुहोस्।</string>
-  <string name="zoom_to_location">हालको स्थानमा जुम गर्नुहोस्।</string>
-  <string name="zoom_to_feature">बचत गरिएको स्थानमा फर्कनुहोस्।</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="alert">सावधान</string>
   <string name="install_openmapkit">कृपया ओपन म्याप स्ट्रीट इन्सटल गर्नुहोस् !</string>
