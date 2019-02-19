@@ -127,17 +127,6 @@ the specific language governing permissions and limitations under the License. -
         <item>@string/openmap_cartodb_positron</item>
         <item>@string/openmap_cartodb_darkmatter</item>
     </string-array>
-    <string-array name="delay_scale" translatable="false">
-        <item>1</item>
-        <item>5</item>
-        <item>10</item>
-        <item>20</item>
-        <item>30</item>
-    </string-array>
-    <string-array name="time_scale" translatable="false">
-        <item>@string/seconds</item>
-        <item>@string/minutes</item>
-    </string-array>
     <string-array name="autosend_selector_entries">
         <item>@string/off</item>
         <item>@string/wifi_autosend</item>
