@@ -279,7 +279,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
             @Override
             public void denied() {
-                // do nothing
+                allowClickSelectedGoogleAccountPreference = true;
             }
         });
     }
