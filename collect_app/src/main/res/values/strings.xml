@@ -371,7 +371,7 @@
         <item quantity="other">%d meters</item>
     </plurals>
     <string name="geoshape_instruction">Long press to place marks.</string>
-    <string name="geotrace_location_status_searching">Searching for GPS location&#8230;</string>
+    <string name="geotrace_location_status_searching">Searching for GPS location, please wait&#8230;</string>
     <string name="geotrace_location_status_accuracy">GPS location accuracy: %.1f m</string>
     <string name="geotrace_location_status_acceptable">GPS location accuracy: %.1f m (acceptable)</string>
     <string name="geotrace_location_status_unacceptable">GPS location accuracy: %.1f m (unacceptable)</string>
