@@ -17,20 +17,20 @@
 package org.odk.collect.android.preferences;
 
 import android.accounts.AccountManager;
-import android.app.Activity;
-import android.app.AlertDialog;
+//import android.app.Activity;
+//import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
-import android.preference.ListPreference;
+//import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.content.res.AppCompatResources;
 import android.telephony.PhoneNumberUtils;
 import android.text.InputFilter;
-import android.text.TextUtils;
+//import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -44,7 +44,7 @@ import com.google.gson.reflect.TypeToken;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.http.CollectServerClient;
-import org.odk.collect.android.listeners.OnBackPressedListener;
+//import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.utilities.FileUtils;
@@ -63,22 +63,23 @@ import javax.inject.Inject;
 
 import static android.app.Activity.RESULT_OK;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORMLIST_URL;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
+//import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SMS_GATEWAY;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SMS_PREFERENCE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
+//import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_URL;
-import static org.odk.collect.android.utilities.DialogUtils.showDialog;
+//import static org.odk.collect.android.utilities.DialogUtils.showDialog;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_TRANSPORT_PREFERENCE;
 import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
 
 public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener,
-        GoogleAccountsManager.GoogleAccountSelectionListener, OnBackPressedListener {
+        GoogleAccountsManager.GoogleAccountSelectionListener {
     private static final String KNOWN_URL_LIST = "knownUrlList";
     protected EditTextPreference serverUrlPreference;
     protected EditTextPreference usernamePreference;
     protected EditTextPreference passwordPreference;
-    protected ExtendedEditTextPreference smsGatewayPreference;
+    //protected ExtendedEditTextPreference smsGatewayPreference;
     protected EditTextPreference submissionUrlPreference;
     protected EditTextPreference formListUrlPreference;
     private ListPopupWindow listPopupWindow;
@@ -96,6 +97,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         Collect.getInstance().getComponent().inject(this);
     }
 
+    /*
     private ListPreference transportPreference;
     private ExtendedPreferenceCategory smsPreferenceCategory;
 
@@ -104,6 +106,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         super.onAttach(activity);
         ((PreferencesActivity) activity).setOnBackPressedListener(this);
     }
+    */
 
     public void addAggregatePreferences() {
         if (!new AggregatePreferencesAdder(this).add()) {
@@ -149,9 +152,12 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         passwordPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
 
-        setupTransportPreferences();
+        //setupTransportPreferences();
+        getPreferenceScreen().removePreference(findPreference(KEY_TRANSPORT_PREFERENCE));
+        getPreferenceScreen().removePreference(findPreference(KEY_SMS_PREFERENCE));
     }
 
+    /*
     public void setupTransportPreferences() {
         transportPreference = (ListPreference) findPreference(KEY_SUBMISSION_TRANSPORT_TYPE);
         transportPreference.setOnPreferenceChangeListener(createTransportChangeListener());
@@ -201,6 +207,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
             return true;
         };
     }
+    */
 
     public void addGooglePreferences() {
         addPreferencesFromResource(R.xml.google_preferences);
@@ -220,7 +227,9 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 new ControlCharacterFilter(), new WhitespaceFilter()
         });
         initAccountPreferences();
-        setupTransportPreferences();
+        //setupTransportPreferences();
+        getPreferenceScreen().removePreference(findPreference(KEY_TRANSPORT_PREFERENCE));
+        getPreferenceScreen().removePreference(findPreference(KEY_SMS_PREFERENCE));
     }
 
     public void addOtherPreferences() {
@@ -467,6 +476,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     /**
      * Shows a dialog if SMS submission is enabled but the phone number isn't set.
      */
+    /*
     private void runSmsPhoneNumberValidation() {
         Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
 
@@ -521,4 +531,5 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     public void doBack() {
         runSmsPhoneNumberValidation();
     }
+    */
 }
