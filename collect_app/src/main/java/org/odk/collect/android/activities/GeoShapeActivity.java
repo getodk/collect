@@ -158,7 +158,6 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
         zoomButton.setOnClickListener(v -> map.zoomToPoint(map.getGpsLocation(), true));
 
         backspaceButton = findViewById(R.id.backspace);
-        backspaceButton.setEnabled(false);
         backspaceButton.setOnClickListener(v -> removeLastPoint());
 
         clearButton = findViewById(R.id.clear);
@@ -181,6 +180,7 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
         }
         featureId = map.addDraggablePoly(points, true);
         zoomButton.setEnabled(!points.isEmpty());
+        backspaceButton.setEnabled(!points.isEmpty());
         clearButton.setEnabled(!points.isEmpty());
 
         map.setGpsLocationEnabled(true);
@@ -218,6 +218,7 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
     private void clear() {
         map.clearFeatures();
         featureId = map.addDraggablePoly(new ArrayList<>(), true);
+        backspaceButton.setEnabled(false);
         clearButton.setEnabled(false);
     }
 
