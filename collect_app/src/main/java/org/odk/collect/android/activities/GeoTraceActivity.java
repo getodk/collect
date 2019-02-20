@@ -93,9 +93,6 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         0, 3, 5, 10, 15, 20
     };
     private static final int DEFAULT_ACCURACY_THRESHOLD_INDEX = 3; // default is 10 meters
-    private static final String NO_LOCATION_COLOR = "#333333";
-    private static final String ACCEPTABLE_LOCATION_COLOR = "#337733";
-    private static final String UNACCEPTABLE_LOCATION_COLOR = "#773333";
 
     private boolean recordingActive;
     private int recordingMode; // 0 manual, 1 is automatic
@@ -562,9 +559,9 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             acceptable ? getString(R.string.geotrace_location_status_acceptable, location.sd) :
                 getString(R.string.geotrace_location_status_unacceptable, location.sd)
         );
-        locationStatus.setBackgroundColor(Color.parseColor(
-            location == null ? NO_LOCATION_COLOR :
-                acceptable ? ACCEPTABLE_LOCATION_COLOR : UNACCEPTABLE_LOCATION_COLOR
+        locationStatus.setBackgroundColor(getResources().getColor(
+            location == null ? R.color.locationStatusSearching :
+                acceptable ? R.color.locationStatusAcceptable : R.color.locationStatusUnacceptable
         ));
         collectionStatus.setText(
             !recordingActive ? getString(R.string.geotrace_collection_status_paused, numPoints) :
