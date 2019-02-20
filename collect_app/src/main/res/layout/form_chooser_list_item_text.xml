@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+    <!-- Material Design reference: https://material.io/design/components/lists.html#specs -->
+
+    <TextView
+            android:id="@+id/form_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/ListItemPrimaryTextStyle"/>
+
+    <TextView
+            android:id="@+id/form_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/ListItemSecondaryTextStyle"/>
+
+    <TextView
+            android:id="@+id/form_subtitle2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/ListItemSecondaryTextStyle"
+            android:visibility="gone"/>
+
+    <TextView
+            android:id="@+id/form_update_alert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/newer_version_of_a_form_info"
+            android:textAppearance="@style/ListItemSecondaryTextStyle"
+            android:textColor="@color/displaySubtextColor"
+            android:visibility="gone"/>
+
+    <org.odk.collect.android.views.ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:visibility="gone"/>
+
+</LinearLayout>

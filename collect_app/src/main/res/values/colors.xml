@@ -14,24 +14,33 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 <resources>
-    <color name="red">#F44336</color>
+    <!-- Material Design color palette -->
+    <color name="red_500">#F44336</color>
+    <color name="blue_500">#2196F3</color>
+    <color name="green_500">#4CAF50</color>
+    <color name="deep_purple_500">#673AB7</color>
+    <color name="amber_500">#FFC107</color>
 
     <!-- Dark Theme Palette -->
-    <color name="darkPrimaryTextColor">@android:color/white</color>
+    <color name="darkPrimaryTextColor">#deffffff</color>
+    <color name="darkSecondaryTextColor">#99ffffff</color>
     <color name="darkPopupDialogColor">#3f3f3f</color>
-    <color name="defaultDarkIconColor">@android:color/white</color>
+    <color name="defaultDarkIconColor">#deffffff</color>
+    <color name="darkDividerColor">#1effffff</color>
     <color name="darkRankItemColor">@android:color/black</color>
-    <color name="darkIconColorDisabled">#aaaaaa</color>
-    <color name="darkIconColorEnabled">@android:color/white</color>
+    <color name="darkIconColorDisabled">#61ffffff</color>
+    <color name="darkIconColorEnabled">#deffffff</color>
 
     <!-- Light Theme Palette -->
-    <color name="lightPrimaryTextColor">@android:color/black</color>
-    <color name="defaultLightIconColor">@android:color/black</color>
+    <color name="lightPrimaryTextColor">#de000000</color>
+    <color name="lightSecondaryTextColor">#99000000</color>
+    <color name="defaultLightIconColor">#de000000</color>
+    <color name="lightDividerColor">#1e000000</color>
     <color name="lightRankItemColor">#EEEEEE</color>
-    <color name="lightAccentColor">#2196F3</color>
-    <color name="lightIconColorDisabled">#aaaaaa</color>
-    <color name="lightIconColorEnabled">@android:color/black</color>
+    <color name="lightAccentColor">@color/blue_500</color>
+    <color name="lightIconColorDisabled">#61000000</color>
+    <color name="lightIconColorEnabled">#de000000</color>
 
     <color name="highContrastHighlight">#ff8c00</color>
-    <color name="displaySubtextColor">#4CAF50</color>
+    <color name="displaySubtextColor">@color/green_500</color>
 </resources>

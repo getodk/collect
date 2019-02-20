@@ -17,6 +17,7 @@
 package org.odk.collect.android.activities;
 
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.LayoutRes;
@@ -126,6 +127,12 @@ abstract class AppListActivity extends CollectAbstractActivity {
         listView.setEmptyView(findViewById(android.R.id.empty));
         progressBar = findViewById(R.id.progressBar);
         llParent = findViewById(R.id.llParent);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // Use the nicer-looking drawable with Material Design insets.
+            listView.setDivider(getResources().getDrawable(R.drawable.list_item_divider, getTheme()));
+            listView.setDividerHeight(1);
+        }
 
         setSupportActionBar(findViewById(R.id.toolbar));
     }

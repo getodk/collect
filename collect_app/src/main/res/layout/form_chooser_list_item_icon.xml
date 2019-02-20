@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Material Design reference: https://material.io/design/components/lists.html#specs -->
+
+    <ImageView
+            android:id="@+id/image"
+            app:srcCompat="@drawable/form_state_blank"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"/>
+
+</merge>
