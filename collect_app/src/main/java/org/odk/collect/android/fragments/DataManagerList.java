@@ -26,9 +26,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
@@ -135,10 +135,10 @@ public class DataManagerList extends InstanceListFragment
 
     private void setupAdapter() {
         String[] data = new String[]{InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT};
-        int[] view = new int[]{R.id.text1, R.id.text2};
+        int[] view = new int[]{R.id.form_title, R.id.form_subtitle};
 
-        listAdapter = new SimpleCursorAdapter(getActivity(),
-                R.layout.two_item_multiple_choice, null, data, view);
+        listAdapter = new InstanceListCursorAdapter(getActivity(),
+                R.layout.form_chooser_list_item_multiple_choice, null, data, view, false);
         setListAdapter(listAdapter);
         checkPreviouslyCheckedItems();
     }

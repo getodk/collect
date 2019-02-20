@@ -361,9 +361,6 @@
     <string name="geopoint_instruction">Long press to place mark or tap add marker button.</string>
     <string name="geopoint_no_draggable_instruction">Tap add marker button.</string>
     <string name="discard">Discard</string>
-    <string name="zoom_to_where">Zoom to…</string>
-    <string name="zoom_to_location">Zoom to current location</string>
-    <string name="zoom_to_feature">Zoom to saved feature</string>
     <string name="geoshape_view_change_location">View or Change GeoShape</string>
     <string name="geotrace_view_change_location">View or Change GeoTrace</string>
     <string name="bearing">Bearing: %.3f</string>
@@ -667,4 +664,6 @@
     <string name="sms_feature_disabled_dialog_title">Sending via SMS Disabled</string>
     <string name="sms_feature_disabled_dialog_message">Sending submissions via SMS has been disabled due to Google Play Store restrictions.\n\nPlease make sure the person who configured this device reads the details below and takes action.</string>
     <string name="read_details">Read details</string>
+    <string name="google_sheets_encrypted_message">Encrypted forms can\'t be submitted to Google Sheets.</string>
+    <string name="number_picker_title">Number Picker</string>
 </resources>

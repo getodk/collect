@@ -27,11 +27,11 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import android.widget.Toast;
 import org.odk.collect.android.R;
-import org.odk.collect.android.adapters.ViewSentListAdapter;
+import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
@@ -67,7 +67,7 @@ public class InstanceChooserList extends InstanceListActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chooser_list_layout);
+        setContentView(R.layout.form_chooser_list);
 
         String formMode = getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
@@ -130,7 +130,7 @@ public class InstanceChooserList extends InstanceListActivity implements
                     ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,
                             c.getLong(c.getColumnIndex(InstanceColumns._ID)));
 
-            if (view.findViewById(R.id.visible_off).getVisibility() != View.VISIBLE) {
+            if (view.isEnabled()) {
                 String action = getIntent().getAction();
                 if (Intent.ACTION_PICK.equals(action)) {
                     // caller is waiting on a picked form
@@ -162,6 +162,9 @@ public class InstanceChooserList extends InstanceListActivity implements
                     startActivity(intent);
                 }
                 finish();
+            } else {
+                TextView disabledCause = view.findViewById(R.id.form_subtitle2);
+                Toast.makeText(this, disabledCause.getText(), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -197,14 +200,12 @@ public class InstanceChooserList extends InstanceListActivity implements
                 InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT, InstanceColumns.DELETED_DATE
         };
         int[] view = new int[]{
-                R.id.text1, R.id.text2, R.id.text4
+                R.id.form_title, R.id.form_subtitle, R.id.form_subtitle2
         };
 
-        if (editMode) {
-            listAdapter = new SimpleCursorAdapter(this, R.layout.two_item, null, data, view);
-        } else {
-            listAdapter = new ViewSentListAdapter(this, R.layout.two_item, null, data, view);
-        }
+        boolean shouldCheckDisabled = !editMode;
+        listAdapter = new InstanceListCursorAdapter(
+                this, R.layout.form_chooser_list_item, null, data, view, shouldCheckDisabled);
         listView.setAdapter(listAdapter);
     }
 

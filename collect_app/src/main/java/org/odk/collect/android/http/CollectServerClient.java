@@ -99,7 +99,7 @@ public class CollectServerClient {
             throw new Exception("Invalid server URL (no hostname): " + downloadUrl);
         }
 
-        return httpInterface.get(uri, contentType, webCredentialsUtils.getCredentials(uri));
+        return httpInterface.executeGetRequest(uri, contentType, webCredentialsUtils.getCredentials(uri));
     }
 
     public static String getPlainTextMimeType() {

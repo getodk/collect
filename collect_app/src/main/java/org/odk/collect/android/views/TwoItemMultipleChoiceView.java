@@ -18,11 +18,11 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.CheckBox;
 import android.widget.Checkable;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 import org.odk.collect.android.R;
 
-public class TwoItemMultipleChoiceView extends RelativeLayout implements Checkable {
+public class TwoItemMultipleChoiceView extends LinearLayout implements Checkable {
 
     public TwoItemMultipleChoiceView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);

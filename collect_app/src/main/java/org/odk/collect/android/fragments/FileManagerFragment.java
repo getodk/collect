@@ -45,7 +45,7 @@ public abstract class FileManagerFragment extends AppListFragment implements Loa
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.tab_layout, container, false);
+        rootView = inflater.inflate(R.layout.file_manager_list, container, false);
         deleteButton = rootView.findViewById(R.id.delete_button);
         deleteButton.setText(getString(R.string.delete_file));
         toggleButton = rootView.findViewById(R.id.toggle_button);

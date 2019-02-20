@@ -354,9 +354,6 @@
   <string name="geopoint_instruction">Dlouhým stisknutím označit značku nebo klepnutím na tlačítko přidat značku.</string>
   <string name="geopoint_no_draggable_instruction">Klepnutím na tlačítko přidat značku.</string>
   <string name="discard">Vyřadit</string>
-  <string name="zoom_to_where">Přiblížit na…</string>
-  <string name="zoom_to_location">Přiblížit na aktuální umístění</string>
-  <string name="zoom_to_feature">Přiblížit na uložené místo</string>
   <string name="geoshape_view_change_location">Zobrazit nebo změnit GeoShape</string>
   <string name="geotrace_view_change_location">Zobrazit nebo změnit GeoTrace</string>
   <string name="bearing">Orientace: %.3f</string>
