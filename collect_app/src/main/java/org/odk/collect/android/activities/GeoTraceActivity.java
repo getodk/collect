@@ -16,7 +16,6 @@ package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.VisibleForTesting;
 import android.view.View;
@@ -222,36 +221,28 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 intervalIndex = position;
             }
-
             @Override public void onNothingSelected(AdapterView<?> parent) { }
         });
 
-        // Populate the auto_interval spinner with the options in INTERVAL_OPTIONS.
         String[] options = new String[INTERVAL_OPTIONS.length];
         for (int i = 0; i < INTERVAL_OPTIONS.length; i++) {
             options[i] = formatInterval(INTERVAL_OPTIONS[i]);
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, options);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        autoInterval.setAdapter(adapter);
+        populateSpinner(autoInterval, options);
 
         accuracyThreshold = traceSettingsView.findViewById(R.id.accuracy_threshold);
         accuracyThreshold.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 accuracyThresholdIndex = position;
             }
-
             @Override public void onNothingSelected(AdapterView<?> parent) { }
         });
 
-        // Populate the accuracy_threshold spinner with the options in ACCURACY_THRESHOLD_OPTIONS.
         options = new String[ACCURACY_THRESHOLD_OPTIONS.length];
         for (int i = 0; i < ACCURACY_THRESHOLD_OPTIONS.length; i++) {
             options[i] = formatAccuracyThreshold(ACCURACY_THRESHOLD_OPTIONS[i]);
         }
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, options);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        accuracyThreshold.setAdapter(adapter);
+        populateSpinner(accuracyThreshold, options);
 
         polygonOrPolylineView = getLayoutInflater().inflate(R.layout.polygon_polyline_dialog, null);
 
@@ -364,6 +355,14 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         } else {
             finish();
         }
+    }
+
+    /** Populates a Spinner with the option labels in the given array. */
+    private void populateSpinner(Spinner spinner, String[] options) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+            this, android.R.layout.simple_spinner_item, options);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
     }
 
     /** Formats a time interval as a whole number of seconds or minutes. */
