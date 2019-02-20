@@ -179,9 +179,6 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
             points = restoredPoints;
         }
         featureId = map.addDraggablePoly(points, true);
-        zoomButton.setEnabled(!points.isEmpty());
-        backspaceButton.setEnabled(!points.isEmpty());
-        clearButton.setEnabled(!points.isEmpty());
 
         map.setGpsLocationEnabled(true);
         if (restoredMapCenter != null && restoredMapZoom != null) {
@@ -191,35 +188,33 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
         } else {
             map.runOnGpsLocationReady(this::onGpsLocationReady);
         }
+        updateUi();
     }
 
     @SuppressWarnings("unused")  // the "map" parameter is intentionally unused
     private void onGpsLocationReady(MapFragment map) {
-        zoomButton.setEnabled(true);
         if (getWindow().isActive()) {
             map.zoomToPoint(map.getGpsLocation(), true);
+            updateUi();
         }
     }
 
     private void onLongPress(MapPoint point) {
         map.appendPointToPoly(featureId, point);
-        backspaceButton.setEnabled(true);
-        clearButton.setEnabled(true);
-        zoomButton.setEnabled(true);
+        updateUi();
     }
 
     private void removeLastPoint() {
         if (featureId != -1) {
             map.removePolyLastPoint(featureId);
-            backspaceButton.setEnabled(!map.getPolyPoints(featureId).isEmpty());
+            updateUi();
         }
     }
 
     private void clear() {
         map.clearFeatures();
         featureId = map.addDraggablePoly(new ArrayList<>(), true);
-        backspaceButton.setEnabled(false);
-        clearButton.setEnabled(false);
+        updateUi();
     }
 
     private void showClearDialog() {
@@ -254,6 +249,16 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
         setResult(RESULT_OK, new Intent().putExtra(
             FormEntryActivity.GEOSHAPE_RESULTS, formatPoints(points)));
         finish();
+    }
+
+    /** Updates the state of various UI widgets to reflect internal state. */
+    private void updateUi() {
+        final int numPoints = map.getPolyPoints(featureId).size();
+        final MapPoint location = map.getGpsLocation();
+
+        zoomButton.setEnabled(location != null);
+        backspaceButton.setEnabled(numPoints > 0);
+        clearButton.setEnabled(numPoints > 0);
     }
 
     /**
@@ -305,7 +310,7 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
         return result.trim();
     }
 
-    @VisibleForTesting public boolean isGpsButtonEnabled() {
+    @VisibleForTesting public boolean isZoomButtonEnabled() {
         return zoomButton != null && zoomButton.isEnabled();
     }
 

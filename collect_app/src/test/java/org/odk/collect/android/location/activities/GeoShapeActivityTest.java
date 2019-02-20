@@ -52,11 +52,11 @@ public class GeoShapeActivityTest extends BaseGeoActivityTest {
         assertTrue(fakeLocationClient.isRunning());
 
         // Initially, the location button should be disabled.
-        assertFalse(activity.isGpsButtonEnabled());
+        assertFalse(activity.isZoomButtonEnabled());
 
         // A location fix should enable the location button.
         fakeLocationClient.receiveFix(createLocation("GPS", 1, 2, 3, 4f));
-        assertTrue(activity.isGpsButtonEnabled());
+        assertTrue(activity.isZoomButtonEnabled());
 
         // Stopping the activity should stop the location client.
         controller.stop();
