@@ -28,6 +28,7 @@
     </style>
 
     <style name="AppTheme.SettingsTheme.Dark" parent="BaseDarkAppTheme">
+        <item name="android:textColor">?primaryTextColor</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
         <item name="android:textSize">18sp</item>
         <item name="android:listDivider">@null</item>
@@ -72,6 +73,7 @@
     </style>
 
     <style name="AppTheme.SettingsTheme.Light" parent="BaseLightAppTheme">
+        <item name="android:textColor">?primaryTextColor</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
         <item name="android:textSize">18sp</item>
         <item name="android:listDivider">@null</item>
