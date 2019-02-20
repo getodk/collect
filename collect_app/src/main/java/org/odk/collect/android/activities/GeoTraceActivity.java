@@ -221,6 +221,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 intervalIndex = position;
             }
+
             @Override public void onNothingSelected(AdapterView<?> parent) { }
         });
 
@@ -235,6 +236,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 accuracyThresholdIndex = position;
             }
+
             @Override public void onNothingSelected(AdapterView<?> parent) { }
         });
 
@@ -551,8 +553,9 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         // GPS status
         boolean usingThreshold = isAccuracyThresholdActive();
         boolean acceptable = location != null && isLocationAcceptable(location);
-        int intervalSeconds = INTERVAL_OPTIONS[intervalIndex];
-        int thresholdMeters = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
+        int seconds = INTERVAL_OPTIONS[intervalIndex];
+        int minutes = seconds / 60;
+        int meters = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
         locationStatus.setText(
             location == null ? getString(R.string.geotrace_location_status_searching)
                 : !usingThreshold ? getString(R.string.geotrace_location_status_accuracy, location.sd)
@@ -567,8 +570,16 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         collectionStatus.setText(
             !recordingActive ? getString(R.string.geotrace_collection_status_paused, numPoints)
                 : recordingMode == MANUAL_RECORDING ? getString(R.string.geotrace_collection_status_manual, numPoints)
-                : !usingThreshold ? getString(R.string.geotrace_collection_status_auto, numPoints, intervalSeconds)
-                : getString(R.string.geotrace_collection_status_auto_accuracy, numPoints, intervalSeconds, thresholdMeters)
+                : !usingThreshold ? (
+                    minutes > 0 ?
+                        getString(R.string.geotrace_collection_status_auto_minutes, numPoints, minutes) :
+                        getString(R.string.geotrace_collection_status_auto_seconds, numPoints, seconds)
+                )
+                : (
+                    minutes > 0 ?
+                        getString(R.string.geotrace_collection_status_auto_minutes_accuracy, numPoints, minutes, meters) :
+                        getString(R.string.geotrace_collection_status_auto_seconds_accuracy, numPoints, seconds, meters)
+                )
         );
     }
 
