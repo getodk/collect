@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:layout_margin="5dp"
-            app:srcCompat="@drawable/ic_backspace_arrow_selector" />
+            app:srcCompat="@drawable/ic_backspace" />
 
         <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/gps"
