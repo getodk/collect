@@ -451,8 +451,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private void startGeoTrace() {
         if (recordingMode == MANUAL_RECORDING) {
             setupManualMode();
-        }
-        if (recordingMode == AUTOMATIC_RECORDING) {
+        } else if (recordingMode == AUTOMATIC_RECORDING) {
             setupAutomaticMode();
         }
         updateUi();
@@ -542,8 +541,10 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         clearButton.setEnabled(!recordingActive && numPoints > 0);
 
         // Trace settings dialog
-        radioGroup.check(recordingMode == AUTOMATIC_RECORDING ? R.id.trace_automatic : R.id.trace_manual);
-        autoOptions.setVisibility((recordingMode == AUTOMATIC_RECORDING) ? View.VISIBLE : View.GONE);
+        radioGroup.check(
+            recordingMode == AUTOMATIC_RECORDING ? R.id.trace_automatic : R.id.trace_manual);
+        autoOptions.setVisibility(
+            recordingMode == AUTOMATIC_RECORDING ? View.VISIBLE : View.GONE);
         autoInterval.setSelection(intervalIndex);
         accuracyThreshold.setSelection(accuracyThresholdIndex);
 
@@ -553,20 +554,21 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         int intervalSeconds = INTERVAL_OPTIONS[intervalIndex];
         int thresholdMeters = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
         locationStatus.setText(
-            location == null ? getString(R.string.geotrace_location_status_searching) :
-            !usingThreshold ? getString(R.string.geotrace_location_status_accuracy, location.sd) :
-            acceptable ? getString(R.string.geotrace_location_status_acceptable, location.sd) :
-                getString(R.string.geotrace_location_status_unacceptable, location.sd)
+            location == null ? getString(R.string.geotrace_location_status_searching)
+                : !usingThreshold ? getString(R.string.geotrace_location_status_accuracy, location.sd)
+                : acceptable ? getString(R.string.geotrace_location_status_acceptable, location.sd)
+                : getString(R.string.geotrace_location_status_unacceptable, location.sd)
         );
         locationStatus.setBackgroundColor(getResources().getColor(
-            location == null ? R.color.locationStatusSearching :
-                acceptable ? R.color.locationStatusAcceptable : R.color.locationStatusUnacceptable
+            location == null ? R.color.locationStatusSearching
+                : acceptable ? R.color.locationStatusAcceptable
+                : R.color.locationStatusUnacceptable
         ));
         collectionStatus.setText(
-            !recordingActive ? getString(R.string.geotrace_collection_status_paused, numPoints) :
-            recordingMode == MANUAL_RECORDING ? getString(R.string.geotrace_collection_status_manual, numPoints) :
-            !usingThreshold ? getString(R.string.geotrace_collection_status_auto, numPoints, intervalSeconds) :
-                getString(R.string.geotrace_collection_status_auto_accuracy, numPoints, intervalSeconds, thresholdMeters)
+            !recordingActive ? getString(R.string.geotrace_collection_status_paused, numPoints)
+                : recordingMode == MANUAL_RECORDING ? getString(R.string.geotrace_collection_status_manual, numPoints)
+                : !usingThreshold ? getString(R.string.geotrace_collection_status_auto, numPoints, intervalSeconds)
+                : getString(R.string.geotrace_collection_status_auto_accuracy, numPoints, intervalSeconds, thresholdMeters)
         );
     }
 
