@@ -629,4 +629,5 @@
   <string name="missing_google_account_dialog_title">Akaunti ya Google haijawekwa sawa</string>
   <string name="missing_google_account_dialog_desc">Kuwasilisha  fomu kupitia karatasi ya Google , unatakiwa kurekebisha  akaunti yako ya Google kwenye mpangilio wa seva. </string>
   <string name="sms_invalid_phone_number_description">Weka namba ya simu itakayotumiwa ujumbe au badilisha aina yako ya usafirishaji</string>
+  <string name="read_details">Soma maelezo</string>
 </resources>

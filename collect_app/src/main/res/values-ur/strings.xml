@@ -633,4 +633,5 @@
   <string name="missing_google_account_dialog_title">گوگل اکاؤنٹ سیٹ نہیں ہے</string>
   <string name="missing_google_account_dialog_desc">گوگل شیٹس  کے ذریعے فارم جمع کرنے کے لئے آپ کو سرور کی سیٹنگنزمیں اپناگوگل اکاؤنٹ بنانا ہوگا.</string>
   <string name="sms_invalid_phone_number_description">ایس ایم ایس جمع کرانے کے لۓ ایک ڈیسٹی نیشن فون نمبر مقرر کریں یا اپنے ٹرانسپورٹ کی قسم  تبدیل کریں.</string>
+  <string name="read_details">تفصیلات پڑھیں</string>
 </resources>

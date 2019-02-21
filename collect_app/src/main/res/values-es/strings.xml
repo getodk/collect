@@ -648,4 +648,9 @@
   <string name="background_location_disabled">Este formulario quiere rastrear su ubicación pero el seguimiento está deshabilitado. Por favor habilite en el \u0020\u0020⋮\u0020\u0020 menú arriba.</string>
   <string name="background_location_enabled">Este formulario rastrea tu ubicación. Puede deshabilitar el seguimiento en la \u0020\u0020⋮\u0020\u0020 menú arriba.</string>
   <string name="open_file">Abrir archivo</string>
+  <string name="sms_feature_disabled_dialog_title">Envíos via SMS Deshabilitado</string>
+  <string name="sms_feature_disabled_dialog_message">Envio de datos via SMS  se ha deshabilitado por restricciones de Google Play Store .\n\nPor favor asegúrese que la persona que configuró el dispositivo lea los detalles abajo y tome la acción que corresponda.</string>
+  <string name="read_details">Leer detalles</string>
+  <string name="google_sheets_encrypted_message">Los formularios encriptados no pueden ser enviados a Google Sheets</string>
+  <string name="number_picker_title">Selector de números</string>
 </resources>

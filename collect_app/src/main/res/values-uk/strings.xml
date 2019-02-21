@@ -640,4 +640,5 @@
   <string name="notification_channel_name">Загальні сповіщення</string>
   <string name="corrupt_imported_preferences_error">Ці налаштування пошкоджені. Через адміністративні налаштування стиньте налаштування програми або імпортуйте непошкоджені.</string>
   <string name="open_file">Відкрити файл</string>
+  <string name="read_details">Прочитайте докладну інформацію</string>
 </resources>

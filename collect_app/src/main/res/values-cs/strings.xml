@@ -648,4 +648,5 @@
   <string name="background_location_disabled">Tento formulář chce sledovat vaši polohu, ale sledování je zakázáno. Aktivujte prosím výše uvedené menu \u0020\u0020⋮\u0020\u0020</string>
   <string name="background_location_enabled">Tento formulář sleduje vaši polohu. V menu \u0020\u0020⋮\u0020\u0020 můžete vypnout sledování.</string>
   <string name="open_file">Otevřít soubor</string>
+  <string name="read_details">Přečtěte si podrobnosti</string>
 </resources>

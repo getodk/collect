@@ -646,4 +646,7 @@
   <string name="background_location_disabled">Dieses Formular möchte ihren Standort aufzeichnen aber die Standortaufzeichnung ist deaktiviert. Bitte oben im \u0020\u0020⋮\u0020\u0020 Menü aktivieren.</string>
   <string name="background_location_enabled">Dieses Formular zeichnet Ihren Standort auf. Sie können die Standortaufzeichnung oben im \u0020\u0020⋮\u0020\u0020 Menü deaktivieren.</string>
   <string name="open_file">Datei öffnen</string>
+  <string name="read_details">Details lesen</string>
+  <string name="google_sheets_encrypted_message">Verschlüsselte Formulare können nicht an Google Sheets gesendet werden.</string>
+  <string name="number_picker_title">Zahlenwähler</string>
 </resources>

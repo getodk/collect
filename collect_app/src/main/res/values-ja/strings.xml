@@ -645,4 +645,7 @@
   <string name="background_location_disabled">このフォームは位置を追跡しようとしますが、追跡が無効になっています。 上の \u0020\u0020⋮\u0020\u0020 メニューで有効にしてください。</string>
   <string name="background_location_enabled">このフォームは位置を追跡します。 上の \u0020\u0020⋮\u0020\u0020 メニューで追跡を無効にすることができます。</string>
   <string name="open_file">ファイルを開く</string>
+  <string name="read_details">詳細を読む</string>
+  <string name="google_sheets_encrypted_message">暗号化されたフォームは Google スプレッドに送信できません。</string>
+  <string name="number_picker_title">数値選択</string>
 </resources>

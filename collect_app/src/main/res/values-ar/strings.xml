@@ -45,6 +45,7 @@
   <string name="discard_answer">حذف الإجابة</string>
   <string name="discard_group">حذف المجموعة</string>
   <string name="download">الحصول على الاستمارات المحددة</string>
+  <string name="download_forms_result">تحميل النتيجة</string>
   <string name="downloading_data">الإتصال بالخادم</string>
   <string name="do_not_change">إلغاء</string>
   <string name="do_not_exit">إلغاء</string>
@@ -100,6 +101,7 @@
   <string name="quit_application">خروج %s</string>
   <string name="quit_entry">حفظ الاستمارة والخروج</string>
   <string name="refresh">تحديث</string>
+  <string name="group_label">مجموعة</string>
   <string name="replace_barcode">استبدال الباركود</string>
   <string name="required_answer_error">عذرًا، يجب الإجابة على هذا السؤال!</string>
   <string name="review_data">تعديل الاستمارة المحفوظة</string>
@@ -111,6 +113,8 @@
   <string name="send_data">إرسال الاستمارة النهائية</string>
   <string name="send_data_button">إرسال الاستمارة المكتملة (%s)</string>
   <string name="send_selected_data">إرسال الاستمارات المُختارة</string>
+  <string name="send_selected_data_internet">إرسال (عبر الانترنات)</string>
+  <string name="send_selected_data_sms">إرسال (عبر الSMS)</string>
   <string name="view_sent_forms">عرض الاستمارات المرسلة</string>
   <string name="view_sent_forms_button">عرض الاستمارات المرسلة : (%s)</string>
   <string name="server_auth_credentials">%sكلمة المرور أو اسم المستخدم غير صحيح:</string>
@@ -147,6 +151,7 @@
   <string name="file_fetch_failed">خطأ: %2$s بمعنى %3$s عند %1$s</string>
   <string name="fetching_manifest">%s. الحصول على القائمة </string>
   <string name="success">نجاح</string>
+  <string name="failures">فشل</string>
   <string name="no_forms_uploaded">عذرا، لا يوجد استمارة للتحميل.</string>
   <string name="upload_results">تحميل النتائج</string>
   <string name="xform_parse_error">خطأ في محلل XForm من أجل %1$s: %2$s مفقود أو غير صالح.</string>
@@ -262,6 +267,7 @@
   <string name="go_shared">مشاركة معي</string>
   <string name="modified_on_date_at_time">\'تم التعديل ب \' yyyy, dd MMM, EEE  \'في الساعة\' mm:HH</string>
   <string name="aggregate_preferences">اعدادات  ODK Aggregate</string>
+  <string name="submission_transport_types_title">ارسل التقديم عبر</string>
   <string name="other_preferences">اعدادات البرنامج الاخرى</string>
   <string name="google_preferences">اعدادات صفحات الجوجل</string>
   <string name="google_sheets_url_hint">إشارة عنوان أوراق جوجل</string>
@@ -276,6 +282,7 @@
   <string name="google_sheets_url">رابط اوراق جوجل</string>
   <string name="send_in_progress">خلفية الارسال تعمل. يرجى المحاولة مرة أخرى في وقت قريب</string>
   <string name="invalid_sheet_id">رقم تعرفة الصفحة غير صحيح: %1$s</string>
+  <string name="missing_submission_url">رابط التقديم مفقود</string>
   <string name="google_sheets_access_denied">تم رفض الوصول. الرجاء التأكد من منح مالك الجدول إذن الوصول لك.</string>
   <string name="google_sheets_missing_columns">الأعمدة التالية مفقودة من الجدول: %1$s </string>
   <string name="password_error_whitespace">الزيادات في البداية أو الفراغات غير مسموح بها في كلمات المرور</string>
@@ -318,6 +325,7 @@
   <string name="geo_clear_warning">الميزة تم انشائها مسبقاً</string>
   <string name="geo_exit_warning">تجاهل التعديلات والعودة الى ODK؟</string>
   <string name="polygon_validator">يجب توفر 3 نقاط GeoPoint لانشاء Polygon</string>
+  <string name="polyline_validator">يجب توفر 2 نقاط لانشاء إحداث Polyline</string>
   <string name="clear">الغاء</string>
   <string name="manual_mode">الوضع اليدوي</string>
   <string name="automatic_mode">الوضع الآلي</string>
@@ -351,6 +359,7 @@
   <string name="odk_website">موقع ODK</string>
   <string name="odk_website_summary">ملخص موقع ODK</string>
   <string name="odk_forum">نقاشات ODK</string>
+  <string name="all_open_source_licenses_msg">نقف على أكتاف العمالقة!</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">غرب %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -440,6 +449,7 @@
   <string name="invalid_qrcode">كود QR غير صحيح</string>
   <string name="share_qrcode">مشاركة كود QR</string>
   <string name="take_picture_instruction">التقط صورة</string>
+  <string name="error_front_camera_unavailable">الكاميرا الأمامية غير متوفرة على هذا الجهاز</string>
   <string name="camera_error">خطأ في الكاميرا</string>
   <string name="invalid_range_widget">هذة الميزة غير موجودة</string>
   <string name="form_entry_setting">إعدادات تعبئة الاستمارة</string>
@@ -460,6 +470,7 @@
   <string name="form_submission_category">خيارات الارسال</string>
   <string name="form_filling_category">تعبئة الاستمارة</string>
   <string name="high_resolution_title">دقة عالية للواسائط</string>
+  <string name="image_size_title">حجم الصورة</string>
   <string name="form_import_category">استيراد الاستمارات</string>
   <string name="user_and_device_identity_title">معرف المستخدم والجهاز</string>
   <string name="constraint_behavior_title">القيود</string>
@@ -472,6 +483,7 @@
   <string name="invalid_email_address">البريد الالكتروني غير صحيح</string>
   <string name="sort_by">ترتيب حسب</string>
   <string name="server">الخادم</string>
+  <string name="submission_transport_admin_setting">نقل التقديم</string>
   <string name="select_value">اختر</string>
   <string name="edit_value">غير</string>
   <string name="no_value_selected">لم يتم اختيار قيمة</string>
@@ -497,12 +509,15 @@
   <string name="islamic_month_10">شوال</string>
   <string name="islamic_month_11">ذو القعدة</string>
   <string name="islamic_month_12">ذو الحجة</string>
+  <string name="moving_backwards_enabled_title">التحرك إلى الوراء مكنت</string>
   <string name="yes">نعم</string>
   <string name="no">لا</string>
   <string name="newer_version_of_a_form_info">هذا تحديث للإستمارة التي لديك</string>
   <string name="svg_file_does_not_exist">ملف SVG غير موجود!</string>
   <string name="start_video_capture_instruction">إنقر على الشاشة لبدء التسجيل</string>
   <string name="stop_video_capture_instruction">بدأ التسجيل. إنقر مجددا للتوقف</string>
+  <string name="location_runtime_permissions_denied_title">الاذون بالموقع</string>
+  <string name="camera_runtime_permission_denied_title">إذن الكاميرا</string>
   <string name="form_update_category">تحديث الاستمارة</string>
   <string name="never">إطلاقا</string>
   <string name="every_fifteen_minutes">كل 15 دقيقة</string>
@@ -512,5 +527,7 @@
   <string name="form_updates_available">تحديثات الاستمارة متاحة</string>
   <string name="automatic_download">تحميل آلي</string>
   <string name="hide_old_form_versions_setting_title">إخفاء الإصدارات القديمة من الاستمارة</string>
+  <string name="sms_invalid_phone_number">رقم هاتف غير صحيح!</string>
   <!--Sms submission-->
+  <string name="sms_submissions_notif_title">تقديم عبر الSMS</string>
 </resources>

@@ -638,7 +638,10 @@
   <string name="sms_invalid_phone_number_description">Définissez un numéro de téléphone de destination pour l\'envoi de SMS ou modifiez votre type de transport.</string>
   <string name="notification_channel_name">Notifications générales</string>
   <string name="corrupt_imported_preferences_error">Les paramètres actuels sont corrompus. À partir des paramètres d’administrateur, réinitialisez les paramètres ou importez ceux qui fonctionnent.</string>
+  <string name="google_play_services_not_available">Ce formulaire souhaite suivre votre localisation, mais les Services de Google Play ne sont pas disponible</string>
+  <string name="location_providers_disabled_dialog_message">Ce formulaire souhaite suivre votre localisation, mais les fournisseurs d\'emplacements sont désactivés. Merci de vérifier les paramétres Android</string>
   <string name="go_to_settings">Aller aux paramètres</string>
   <string name="track_location">Localisation du trajet</string>
   <string name="open_file">Ouvrir fichier</string>
+  <string name="read_details">Lire les details</string>
 </resources>
