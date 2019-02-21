@@ -293,7 +293,6 @@
   <string name="google_search_browse">Vyhledat formuláře. Nebo zvolit \"Můj disk\" pro procházení.</string>
   <string name="google_sheets_url">Záložní odesílací URL</string>
   <string name="send_in_progress">Odesílání na pozadí běží, zkuste to znovu</string>
-  <string name="sheets_max_columns">Maximální počet sloupců je 255, váš formulář má %s. Nelze nahrát do tabulky.</string>
   <string name="invalid_sheet_id">neplatné ID listu: %1$s</string>
   <string name="missing_submission_url">Chybí URL pro odeslání</string>
   <string name="google_sheets_access_denied">Přístup odepřen. Ujistěte se, že vám vlastník tabulky udělil oprávnění ke změnám.</string>

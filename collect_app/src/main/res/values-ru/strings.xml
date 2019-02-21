@@ -289,7 +289,6 @@
   <string name="google_search_browse">Поиск опросников. Или выберите \'Мой диск\' ниже для просмотра.</string>
   <string name="google_sheets_url">Резервный URL-отправки</string>
   <string name="send_in_progress">Выполняется отправка в фоне, попробуйте снова через некоторое время.</string>
-  <string name="sheets_max_columns">Наибольшее допустимое количество столбцов 255 - в вашем опросе их %s. Не удалось загрузить в таблицу.</string>
   <string name="invalid_sheet_id">Неверный идентификатор листа: %1$s</string>
   <string name="google_sheets_access_denied">Доступ запрещен. Пожалуйста, удостоверьтесь, что владелец таблицы выдал вам разрешение на редактирование.</string>
   <string name="google_sheets_missing_columns">Таблица не содержит следующие столбцы: %1$s</string>

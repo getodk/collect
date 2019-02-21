@@ -254,7 +254,6 @@
   <string name="change_server_url">Server URL</string>
   <string name="google_search_browse">Søk etter skjemaer.  Eller velg \'Min disk\' nedenfor for å bla igjennom.</string>
   <string name="send_in_progress">Bakgrunnssending kjører, vennligst prøv igjen senere</string>
-  <string name="sheets_max_columns">Maks antall kolonner er 255, ditt skjema har %s. Det er ikke mulig å laste opp dette regnearket.</string>
   <string name="invalid_sheet_id">Ugyldig ark id: %1$s</string>
   <string name="google_sheets_missing_columns">Regnearket mangler følgende kolonner: %1$s</string>
   <string name="password_error_whitespace">Mellomrom er ikke tillatt før eller etter passord</string>

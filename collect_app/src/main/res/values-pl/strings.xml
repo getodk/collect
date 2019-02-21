@@ -293,7 +293,6 @@
   <string name="google_search_browse">Wyszukaj formularze. Lub wybierz poniżej \'Mój Dysk\' by przejrzeć</string>
   <string name="google_sheets_url">Alternatywny URL przesyłania</string>
   <string name="send_in_progress">Trwa wysyłka w tle, spróbuj wkrótce ponownie</string>
-  <string name="sheets_max_columns">Maksymalna liczba kolumn wynosi 255, twój formularz posiada %s. Nie można załadować do arkusza kalkulacyjnego.</string>
   <string name="invalid_sheet_id">niepoprawne id arkusza: %1$s</string>
   <string name="missing_submission_url">Brak URL przesyłania</string>
   <string name="google_sheets_access_denied">Odmowa dostępu. Upewnij się, że właścicieil arkusza nadał Ci uprawnienia do edytowania.</string>

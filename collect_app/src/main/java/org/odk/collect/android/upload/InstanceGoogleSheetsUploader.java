@@ -568,11 +568,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         if (numberOfColumns == 0) {
             throw new UploadException(Collect.getInstance().getString(R.string.no_columns_to_upload));
         }
-
-        if (numberOfColumns > 256) {
-            throw new UploadException(Collect.getInstance().getString(R.string.sheets_max_columns,
-                    String.valueOf(numberOfColumns)));
-        }
     }
 
     private Integer getSheetId(String sheetTitle) {

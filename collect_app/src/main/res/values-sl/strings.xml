@@ -282,7 +282,6 @@
   <string name="notification_error">Napaka pri prikazu obvestila</string>
   <string name="google_sheets_url">URL za nadomestno predložitev</string>
   <string name="send_in_progress">Pošiljanja se izvaja v ozadju, prosim poskusite znova cez malo časa</string>
-  <string name="sheets_max_columns">Največje število stolpcev je 255, obrazec pa ima %s. Ni mogoče prenesti v preglednico.</string>
   <string name="google_sheets_access_denied">Dostop zavrnjen. Prosim, prepričajte se, da je lastnik preglednice odobril urejanje.</string>
   <string name="google_sheets_missing_columns">Preglednici manjkajo naslednji stolpci: %1$s</string>
   <string name="password_error_whitespace">Presledki na začetku ali na koncu gesla niso dovoljeni</string>

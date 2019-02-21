@@ -290,7 +290,6 @@
   <string name="google_search_browse">فارم تلاش کریں. یا  \'مائی ڈرائیو\' کو منتخب کریں.</string>
   <string name="google_sheets_url">فال بیک  جمع کرانے کی یو آر ایل</string>
   <string name="send_in_progress">پس منظر چل رہا ہے، براہ مہربانی دوبارہ کوشش کریں</string>
-  <string name="sheets_max_columns">کالموں کی زیادہ سے زیادہ تعداد 255 ہے، آپ کا فارم کے کالم%s۔ اسپریڈ شیٹ میں اپ لوڈ کرنے میں ناکام</string>
   <string name="invalid_sheet_id">غلط شیٹ ID:%1$s</string>
   <string name="google_sheets_access_denied">رسائی مسترد کر دی . براہ کرم یقینی بنائیں کہ اسپریڈ شیٹ مالک نے آپ کو ترمیم کی  اجازت دی ہے</string>
   <string name="google_sheets_missing_columns">اسپریڈ شیٹ میں مندرجہ بالا کالم غائب ہیں:%1$s</string>

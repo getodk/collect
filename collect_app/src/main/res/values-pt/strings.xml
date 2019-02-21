@@ -284,7 +284,6 @@ Escolher Imagem</string>
   <string name="google_search_browse">Procure pelos formulários. Ou selecione \'My Drive\' para procurar.</string>
   <string name="google_sheets_url">Retornou da submissão da URL</string>
   <string name="send_in_progress">Envio automático em segundo plano sendo executado, por favor tente novamente em alguns instantes</string>
-  <string name="sheets_max_columns">O número máximo de colunas é 255, seu formulário possui %s. Não foi possível carregar para planilha.</string>
   <string name="invalid_sheet_id">Nome do id: %1$s da guia incorreto</string>
   <string name="google_sheets_access_denied">Acesso negado. Por favor, certifique-se que o proprietário da planilha possui a permissão de edição.</string>
   <string name="google_sheets_missing_columns">Estão faltando as seguintes colunas na planilha: %1$s</string>
