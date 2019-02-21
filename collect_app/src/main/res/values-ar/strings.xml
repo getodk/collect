@@ -275,7 +275,6 @@
   <string name="google_search_browse">ابحث عن الاستمارات. أو اختار  \'My Drive\' من الاسفل لكي تتصفح</string>
   <string name="google_sheets_url">رابط اوراق جوجل</string>
   <string name="send_in_progress">خلفية الارسال تعمل. يرجى المحاولة مرة أخرى في وقت قريب</string>
-  <string name="sheets_max_columns">الحد الأقصى لعدد الأعمدة هو 255، استماراتك تحتوي على %s. غير قادر على تحميل الجدول.</string>
   <string name="invalid_sheet_id">رقم تعرفة الصفحة غير صحيح: %1$s</string>
   <string name="google_sheets_access_denied">تم رفض الوصول. الرجاء التأكد من منح مالك الجدول إذن الوصول لك.</string>
   <string name="google_sheets_missing_columns">الأعمدة التالية مفقودة من الجدول: %1$s </string>

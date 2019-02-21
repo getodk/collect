@@ -290,7 +290,6 @@
   <string name="google_search_browse">Tafuta fomu. Au chagua \'Hifadhi yangu\' hapa chini kuzipekua.</string>
   <string name="google_sheets_url">Uwasilishaji wa URL ulio chelewa</string>
   <string name="send_in_progress">Utumaji unaendelea kwa nyuma, jaribu tena baada ya muda mfupi</string>
-  <string name="sheets_max_columns">Namba ya juu ya safu ni 255, fomu yako ina %s. Haiwezi kupakia lahajedwali \"spreadsheet\".</string>
   <string name="invalid_sheet_id">KItambulisho cha karatasi ni batilii%1$s</string>
   <string name="google_sheets_access_denied">Ruhusa imekatazwa. Tafadhali hakikisha mwenye programu ya lahajedwali \"spreadsheet\" amekuruhusu kufanya mabadiliko.</string>
   <string name="google_sheets_missing_columns">Lahajedwali \"Spreadsheet\" zinakosa safu zifuatazo: %1$s</string>

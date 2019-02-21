@@ -261,7 +261,6 @@
   <string name="change_server_url">Serveri veebiaadress</string>
   <string name="google_search_browse">Otsi vorme. Või vali sirvimiseks \"Minu Drive\".</string>
   <string name="send_in_progress">Taustal jookseb andmete saatmine. Palun proovige varsti uuesti</string>
-  <string name="sheets_max_columns">Maksimum tulpade arv on 255, teie vormis on %s. Arvutustabeli üleslaadimine keelatud.</string>
   <string name="invalid_sheet_id">Vale lehe id: %1$s</string>
   <string name="google_sheets_missing_columns">Arvutustabelist on puudu järgmised tulbad: %1$s</string>
   <string name="password_error_whitespace">Salasõna alguses või lõpus ei ole lubatud kasutada tühikut</string>

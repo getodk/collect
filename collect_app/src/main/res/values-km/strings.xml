@@ -284,7 +284,6 @@
   <string name="google_search_browse">ការ​​ស្វែង​​រក​​សម្រាប់​​សំណុំ​​​បែប​​​បទ​។ ឬ​​រើស​ \'ថាស​​របស់​​ខ្ញុំ\' ខាង​​ក្រោម​​ដើម្បី​​រក​មើល</string>
   <string name="google_sheets_url">URL ដែលបានដាក់ស្នើ Fallback</string>
   <string name="send_in_progress">កំពុងផ្ញើផ្នែកខាងក្រោយ, សូមព្យាយាមម្តងទៀតក្នុងរយះពេលខ្លី</string>
-  <string name="sheets_max_columns">ចំនួន​​អតិបរមា​​នៃ​​ជួរ​​ឈរ​​គឺ 255, សំណុំ​​​បែប​​​បទ​​របស់​​អ្នក​​មាន​ %s​ ។ មិន​អាច​ផ្ទុក​ ទៅ​សៀវ​ភៅ​បញ្ជី​បាន​ទេ។</string>
   <string name="invalid_sheet_id">លេខសម្គាល់សន្លឹកកិច្ចការមិនត្រឹមត្រូវ៖ %1$s</string>
   <string name="google_sheets_access_denied">ដំណើរ​ការ​ត្រូវ​បាន​បដិសេធ។ សូមធ្វើឱ្យប្រាកដថាម្ចាស់សៀវភៅបញ្ជីប្រោសប្រណីអនុញ្ញាតឲ្យអ្នកកែសម្រួល។</string>
   <string name="google_sheets_missing_columns">សៀវភៅបញ្ជីគឺបាត់បង់ជួរឈ: %1$s</string>

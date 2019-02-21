@@ -291,7 +291,6 @@
   <string name="google_search_browse">Шукайте анкети. Або натисніть \'Мій диск\' для навігації.</string>
   <string name="google_sheets_url">Запасний URL для надсилання</string>
   <string name="send_in_progress">Зпущений тіньовий процес відправки, будь ласка, спробуйте знову пізніше</string>
-  <string name="sheets_max_columns">Максимальна кількість колонок - 255, ваша анкета містить %s. Неможливо вивантажити в Сторінки.</string>
   <string name="invalid_sheet_id">пошкоджена сторінка id: %1$s</string>
   <string name="missing_submission_url">Відсутній URL для надсилання</string>
   <string name="google_sheets_access_denied">Відмова доступу. Будь ласка, переконайтесь, що власник Сторінок надав вам дозвіл на внесення змін.</string>
