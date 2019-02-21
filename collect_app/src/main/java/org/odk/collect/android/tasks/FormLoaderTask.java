@@ -61,6 +61,8 @@ import java.util.Map;
 import au.com.bytecode.opencsv.CSVReader;
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.FileUtils.MEDIA_SUFFIX;
+
 /**
  * Background task for loading a form.
  *
@@ -215,7 +217,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     private void addSessionRootTranslators(String formBasename, ReferenceManager referenceManager, String... hostStrings) {
         // Set jr://... to point to /sdcard/odk/forms/formBasename-media/
-        final String translatedPrefix = String.format("jr://file/forms/%s-media/", formBasename);
+        final String translatedPrefix = String.format("jr://file/forms/%s" + MEDIA_SUFFIX + "/", formBasename);
         for (String t : hostStrings) {
             referenceManager.addSessionRootTranslator(new RootTranslator(String.format("jr://%s/", t), translatedPrefix));
         }
