@@ -282,6 +282,7 @@
   <string name="notification_error">Napaka pri prikazu obvestila</string>
   <string name="google_sheets_url">URL za nadomestno predložitev</string>
   <string name="send_in_progress">Pošiljanja se izvaja v ozadju, prosim poskusite znova cez malo časa</string>
+  <string name="sheets_max_columns">Največje število stolpcev je 255, obrazec pa ima %s. Ni mogoče prenesti v preglednico.</string>
   <string name="google_sheets_access_denied">Dostop zavrnjen. Prosim, prepričajte se, da je lastnik preglednice odobril urejanje.</string>
   <string name="google_sheets_missing_columns">Preglednici manjkajo naslednji stolpci: %1$s</string>
   <string name="password_error_whitespace">Presledki na začetku ali na koncu gesla niso dovoljeni</string>
@@ -292,6 +293,7 @@
   <string name="start">Začni</string>
   <string name="enable_gps">Omogoči GPS</string>
   <string name="gps_enable_message">GPS v napravi je onemogočen. Želite omogočiti?</string>
+  <string name="minutes">Minute</string>
   <string name="geo_clear_warning">Funkcija je že narejena. Želite izbrisati funkcijo?</string>
   <string name="geo_exit_warning">Želite zavreči spremembe in se vrniti v ODK?</string>
   <string name="clear">Počisti</string>
@@ -375,4 +377,5 @@
   <string name="sms_submissions_notif_description">Trenutno se oddaja več obrazcev.</string>
   <string name="transport_type_internet">WiFi / mobilno omrežje (priporočeno)</string>
   <string name="transport_type_sms">SMS sporočilo</string>
+  <string name="seconds">Sekunde</string>
 </resources>

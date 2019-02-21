@@ -215,6 +215,7 @@
   <string name="satellite">ሳተላይት</string>
   <string name="start">ይጀምሩ</string>
   <string name="enable_gps">GPSን አንቃ</string>
+  <string name="minutes">ደቂቃዎች</string>
   <string name="clear">አጽዳ</string>
   <string name="automatic_mode">ራስ-ሰር ሁኔታ</string>
   <string name="discard">አስወግድ</string>

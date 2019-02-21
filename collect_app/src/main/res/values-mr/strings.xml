@@ -268,6 +268,7 @@
   <string name="google_search_browse">फॉर्म शोधा किंवा ब्राउझ करण्यासाठी खालील \'माझे ड्राइव्ह\' निवडा.</string>
   <string name="google_sheets_url">फॉलबॅक सबमिशन युरएल</string>
   <string name="send_in_progress">पार्श्वभूमी पाठविणे चालू आहे, कृपया लवकरच पुन्हा प्रयत्न करा</string>
+  <string name="sheets_max_columns">स्तंभांची कमाल संख्या 255 आहे, आपल्या फॉर्ममध्ये  %s आहे. स्प्रेडशीटवर अपलोड करण्यास अक्षम</string>
   <string name="invalid_sheet_id">अवैध पत्रक id: %1$s</string>
   <string name="google_sheets_access_denied">प्रवेश नाकारला. कृपया स्प्रेडशीटच्या मालकास आपल्याला संपादन परवानगी मंजूर केल्याची खात्री करा.</string>
   <string name="google_sheets_missing_columns">स्प्रेडशीटमध्ये खालील स्तंभ गहाळ आहेत:%1$s</string>
@@ -308,6 +309,7 @@
   <string name="gps_enable_message">आपल्या डिव्हाइसमध्ये जीपीएस अक्षम केले आहे आपण ते सक्षम करू इच्छिता?</string>
   <string name="select_offline_layer">ऑफलाइन स्तर निवडा</string>
   <string name="polygon_or_polyline">जिओ ट्रेस जतन हे प्रमाणे करा</string>
+  <string name="minutes">मिनिटे</string>
   <string name="geo_clear_warning">वैशिष्ट्य आधीच तयार केले आपण वैशिष्ट्य साफ करू इच्छिता?</string>
   <string name="geo_exit_warning">बदल टाकून ओडीके कडे परत जा?</string>
   <string name="polygon_validator">बहुभुज तयार करण्यासाठी किमान 3 गुण असणे आवश्यक आहे</string>
@@ -315,6 +317,7 @@
   <string name="manual_mode">मॅन्युअल माध्यम</string>
   <string name="automatic_mode">स्वयंचलित माध्यम</string>
   <string name="geoshape_instruction">ठिकाणाच्या ठिकाणी ठेवण्यासाठी जास्त वेळ दाबा</string>
+  <string name="geotrace_instruction">लॉकची प्रतीक्षा करा, नंतर प्रारंभ करण्यासाठी जोडा मार्कर बटण टॅप करा.</string>
   <string name="geopoint_instruction">चिन्ह ठेवण्यासाठी जास्त वेळ दाबा किंवा जोडा मार्कर बटण टॅप करा</string>
   <string name="geopoint_no_draggable_instruction">जोडा मार्कर बटण टॅप करा</string>
   <string name="discard">टाकून द्या</string>

@@ -284,6 +284,7 @@ Escolher Imagem</string>
   <string name="google_search_browse">Procure pelos formulários. Ou selecione \'My Drive\' para procurar.</string>
   <string name="google_sheets_url">Retornou da submissão da URL</string>
   <string name="send_in_progress">Envio automático em segundo plano sendo executado, por favor tente novamente em alguns instantes</string>
+  <string name="sheets_max_columns">O número máximo de colunas é 255, seu formulário possui %s. Não foi possível carregar para planilha.</string>
   <string name="invalid_sheet_id">Nome do id: %1$s da guia incorreto</string>
   <string name="google_sheets_access_denied">Acesso negado. Por favor, certifique-se que o proprietário da planilha possui a permissão de edição.</string>
   <string name="google_sheets_missing_columns">Estão faltando as seguintes colunas na planilha: %1$s</string>
@@ -327,6 +328,7 @@ Escolher Imagem</string>
   <string name="gps_enable_message">O GPS está desabilitado em seu aparelho. Gostaria de habilitá-lo?</string>
   <string name="select_offline_layer">Selecionar Layer Desligado</string>
   <string name="polygon_or_polyline">Salvar GeoTrace Como</string>
+  <string name="minutes">Minutos</string>
   <string name="geo_clear_warning">A feature já foi criada. Gostaria de limpar a feature?</string>
   <string name="geo_exit_warning">Descartar mudanças e retornar ao ODK?</string>
   <string name="polygon_validator">Precisa ter pelo menos 3 pontos para criar Polígono</string>
@@ -335,6 +337,7 @@ Escolher Imagem</string>
   <string name="manual_mode">Modo manual</string>
   <string name="automatic_mode">Modo automático</string>
   <string name="geoshape_instruction">Pressione por mais tempo para colocar marcador.</string>
+  <string name="geotrace_instruction">Aguarde o bloqueio e toque no botão Adicionar Marcador para iniciar.</string>
   <string name="geopoint_instruction">Pressione por mais tempo para colocar marcador ou selecione o botão Adicionar Marcador.</string>
   <string name="geopoint_no_draggable_instruction">Selecione o botão Adicionar Marcador.</string>
   <string name="discard">Descartar</string>

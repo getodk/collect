@@ -291,6 +291,7 @@
   <string name="google_search_browse">Шукайте анкети. Або натисніть \'Мій диск\' для навігації.</string>
   <string name="google_sheets_url">Запасний URL для надсилання</string>
   <string name="send_in_progress">Зпущений тіньовий процес відправки, будь ласка, спробуйте знову пізніше</string>
+  <string name="sheets_max_columns">Максимальна кількість колонок - 255, ваша анкета містить %s. Неможливо вивантажити в Сторінки.</string>
   <string name="invalid_sheet_id">пошкоджена сторінка id: %1$s</string>
   <string name="missing_submission_url">Відсутній URL для надсилання</string>
   <string name="google_sheets_access_denied">Відмова доступу. Будь ласка, переконайтесь, що власник Сторінок надав вам дозвіл на внесення змін.</string>
@@ -338,6 +339,7 @@
   <string name="gps_enable_message">GPS на Вашому пристрої вимкнено. Бажаєте увімкнути?</string>
   <string name="select_offline_layer">Обрати офлайн шар</string>
   <string name="polygon_or_polyline">Зберегти ГеоМаршрут як</string>
+  <string name="minutes">Хвилини</string>
   <string name="geo_clear_warning">Ознака вже створена. Бажаєте очистити ознаку?</string>
   <string name="geo_exit_warning">Скасувати зміни і повернутись до ODK?</string>
   <string name="polygon_validator">Для багатокутника необхідно мінімум 3 точки</string>
@@ -346,6 +348,7 @@
   <string name="manual_mode">Ручний режим</string>
   <string name="automatic_mode">Автоматичний режим</string>
   <string name="geoshape_instruction">Довге натискання для розміщення позначок.</string>
+  <string name="geotrace_instruction">Дочекайтесь захоплення, потім натисніть кнопку Додати позначку для початку.</string>
   <string name="geopoint_instruction">Довго натисніть для розміщення позначки або натисніть кнопку Додати позначку.</string>
   <string name="geopoint_no_draggable_instruction">Натисніть кнопку Додати позначку.</string>
   <string name="discard">Скинути</string>
@@ -620,7 +623,7 @@
   <string name="sms_encrypted_message">Зашифровані анкети не можуть бути відправлені як повідомлення.</string>
   <string name="sms_last_submission_on_date_at_time">\'Остання спроба відправки\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
   <plurals name="sms_sending">
-    <item quantity="one" tools:ignore="ImpliedQuantity">Надсилання анкети як повдомлення.</item>
+    <item quantity="one">Надсилання анкети як повдомлення.</item>
     <item quantity="few">Надсилання анкети, повдомлення %1$d з %2$d</item>
     <item quantity="many">Надсилання анкети, повдомлення %1$d з %2$d</item>
     <item quantity="other">Надсилання анкети, повдомлення %1$d з %2$d</item>
@@ -632,6 +635,7 @@
   <string name="transport_type_internet">Wifi/Мобільна мережа (рекомендовано)</string>
   <string name="transport_type_sms">Повідомлення</string>
   <string name="transport_type_both">Обрати та надіслати</string>
+  <string name="seconds">Секунди</string>
   <string name="rank_items">Засоби оцінки</string>
   <string name="loading_form_failed">Під час завантаження анкети виникла помилка. Будь ласка спробуйте знову.</string>
   <string name="missing_google_account_dialog_title">Нема облікового запису Google</string>
@@ -640,4 +644,5 @@
   <string name="notification_channel_name">Загальні сповіщення</string>
   <string name="corrupt_imported_preferences_error">Ці налаштування пошкоджені. Через адміністративні налаштування стиньте налаштування програми або імпортуйте непошкоджені.</string>
   <string name="open_file">Відкрити файл</string>
+  <string name="read_details">Прочитайте докладну інформацію</string>
 </resources>

@@ -262,6 +262,7 @@
   <string name="change_server_url">URL Servidor</string>
   <string name="google_search_browse">Cerca de formularis. O selecciona \'Meu Drive\' a sota per visualitzar.</string>
   <string name="send_in_progress">Enviament funcionant, si us plau, re-intenteu en un moment.</string>
+  <string name="sheets_max_columns">Numero max de columnes = 255, el vostre formulari en te %s. No es pot carregar la fulla de càlcul.</string>
   <string name="invalid_sheet_id">id de fulla invàlid: %1$s</string>
   <string name="google_sheets_missing_columns">Falten de la fulla de càlcul les columnes: %1$s</string>
   <string name="password_error_whitespace">No es permeten espais davant o darrera una clau d\'accés</string>
@@ -296,6 +297,7 @@
   <string name="gps_enable_message">El GPS esta desactivat al teu dispositiu. Vols activar-lo?</string>
   <string name="select_offline_layer">Selecciona capa autònoma</string>
   <string name="polygon_or_polyline">Desa GeoTraça com</string>
+  <string name="minutes">Minuts</string>
   <string name="geo_clear_warning">Característica ja creada. Vols netejar-la?</string>
   <string name="geo_exit_warning">Descartar canvis i tornar a ODK?</string>
   <string name="polygon_validator">Per crear un polígon calen mínim 3 punts </string>
@@ -303,6 +305,7 @@
   <string name="manual_mode">Mòdus Manual</string>
   <string name="automatic_mode">Mòdus Automàtic</string>
   <string name="geoshape_instruction">Prem una estona per situar marques.</string>
+  <string name="geotrace_instruction">Espera el posicionament, després prem botó d\'afegir fita per començar.</string>
   <string name="geopoint_instruction">Prem una estona o toca el botó d\'afegir fita.</string>
   <string name="geopoint_no_draggable_instruction">Toca el botó afegir fita</string>
   <string name="discard">Descarta</string>
