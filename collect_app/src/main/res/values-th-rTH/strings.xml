@@ -252,7 +252,6 @@
   <string name="change_server_url">URL ของเซิร์ฟเวอร์</string>
   <string name="google_search_browse">ค้นหาแบบฟอร์ม หรือเลือก \'My Drive\' ด้านล่างเพื่อค้นหา</string>
   <string name="send_in_progress">กำลังส่งข้อมูล โปรดลองใหม่อีกครั้ง</string>
-  <string name="sheets_max_columns">จำนวนคอลัมน์สูงสุดคือ 255 แบบฟอร์มของคุณมี %s ไม่สามารถอัพโหลดไปที่  spreadsheet ได้</string>
   <string name="invalid_sheet_id">หมายเลขชีทไม่ถุกต้อง: %1$s</string>
   <string name="google_sheets_missing_columns">ไม่มี Spreadsheet ของคอลัมภ์: %1$s</string>
   <string name="password_error_whitespace">ไม่สามารถใช้ช่องว่างนำหน้าและตามหลังรหัสผ่าน</string>
@@ -293,7 +292,6 @@
   <string name="gps_enable_message">GPS ถูกปิดไว้ ต้องการเปิดใช้งานหรือไม่?</string>
   <string name="select_offline_layer">เลือกเลเยอร์ที่บันทึกไว้</string>
   <string name="polygon_or_polyline">บันทึก GeoTrace เป็น</string>
-  <string name="minutes">นาที</string>
   <string name="geo_exit_warning">ยกเลิกการเปลี่ยนแปลงและกลับไปที่ ODK?</string>
   <string name="polygon_validator">ต้องมีจุดพิกัด 3 จุดขึ้นไปเพื่อสร้าง Polygon</string>
   <string name="clear">ลบ</string>

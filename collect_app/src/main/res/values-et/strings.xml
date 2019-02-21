@@ -261,7 +261,6 @@
   <string name="change_server_url">Serveri veebiaadress</string>
   <string name="google_search_browse">Otsi vorme. Või vali sirvimiseks \"Minu Drive\".</string>
   <string name="send_in_progress">Taustal jookseb andmete saatmine. Palun proovige varsti uuesti</string>
-  <string name="sheets_max_columns">Maksimum tulpade arv on 255, teie vormis on %s. Arvutustabeli üleslaadimine keelatud.</string>
   <string name="invalid_sheet_id">Vale lehe id: %1$s</string>
   <string name="google_sheets_missing_columns">Arvutustabelist on puudu järgmised tulbad: %1$s</string>
   <string name="password_error_whitespace">Salasõna alguses või lõpus ei ole lubatud kasutada tühikut</string>
@@ -301,7 +300,6 @@
   <string name="gps_enable_message">Teie seadmel on GPS keelatud. Kas te soovite lubada?</string>
   <string name="select_offline_layer">Vali offline kiht</string>
   <string name="polygon_or_polyline">Salvesta rada kui</string>
-  <string name="minutes">Minutid</string>
   <string name="geo_clear_warning">Kujutis on juba loodud. Kas soovite kujutise eemaldada?</string>
   <string name="geo_exit_warning">Loobu muudatustest ja ava ODK?</string>
   <string name="polygon_validator">Polügooni loomiseks on vaja vähemalt 3 punkti</string>
@@ -309,7 +307,6 @@
   <string name="manual_mode">Käsitsi sisestusviis</string>
   <string name="automatic_mode">Automaatne sisestusviis</string>
   <string name="geoshape_instruction">Märke paigutamiseks hoia pikalt soovitud asukohal.</string>
-  <string name="geotrace_instruction">Alustamiseks oota lukustust, seejärel puuduta markeri lisamise nuppu.</string>
   <string name="geopoint_instruction">Markeri paigutamiseks tuleb teha pikk hoidmine või valida marker nupp.</string>
   <string name="geopoint_no_draggable_instruction">Puuduta lisa marke nuppu.</string>
   <string name="discard">Loobu</string>

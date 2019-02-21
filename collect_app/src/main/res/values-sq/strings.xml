@@ -265,7 +265,6 @@
   <string name="change_server_url">URL e serverit</string>
   <string name="google_search_browse">Kërko për formularë. Ose përzgjidh \'My Drive\' më poshtë dhe kërkoni manualisht.</string>
   <string name="send_in_progress">Një dërgim po ekzekutohet në background, lutemi provoni sërish pas pak.</string>
-  <string name="sheets_max_columns">Numri maksimal i kolonave është 255, formulari juaj ka %s. Spreadsheet nuk mund të ngarkohet.</string>
   <string name="invalid_sheet_id">Numri i identifikimit të tabelës: %1$s i pavlefshëm.</string>
   <string name="google_sheets_access_denied">Ju është mohuar aksesi. Lutemi, sigurohuni që zotëruesi i spreadsheet-it ju ka dhënë të drejtën për të modifikuar.</string>
   <string name="google_play_services_error_occured">E pamundur të aksesohen Google Maps. A është i instaluar Google Play Services?</string>
@@ -296,7 +295,6 @@
   <string name="gps_enable_message">GPS-i në telefonin tuaj është i ç\'aktivizuar. A do të donit ta aktivizonit?</string>
   <string name="select_offline_layer">Përzgjidh shtresë offline</string>
   <string name="polygon_or_polyline">Ruaj GeoTrace si</string>
-  <string name="minutes">Minuta</string>
   <string name="geo_clear_warning">Tipari është krijuar tanimë. A doni ta pastroni këtë tipar?</string>
   <string name="geo_exit_warning">Elimino ndryshimet dhe kthehu në ODK?</string>
   <string name="polygon_validator">Duhen së paku 3 pika për të krijuar Poligonin</string>
@@ -304,7 +302,6 @@
   <string name="manual_mode">Manuale</string>
   <string name="automatic_mode">Automatike</string>
   <string name="geoshape_instruction">Shtyp për pak sekonda për të vendosur shenjë.</string>
-  <string name="geotrace_instruction">Prit për identifikimin, pastaj shto butonin shenjues për të filluar.</string>
   <string name="geopoint_instruction">Shtyp për pak sekonda për të vendosur një shenjë ose shtuar buton shenjues</string>
   <string name="discard">Elimino</string>
   <string name="geoshape_view_change_location">Shih ose ndrysho GeoShape</string>
@@ -513,7 +510,6 @@
   <string name="sms_submissions_notif_description">Disa formularë janë duke u dërguar.</string>
   <string name="transport_type_internet">Wifi/Celular (e rekomanduar)</string>
   <string name="transport_type_sms">SMS</string>
-  <string name="seconds">Sekonda</string>
   <string name="rank_items">Rendit pohimet</string>
   <string name="missing_google_account_dialog_title">Llogaria në Google nuk është përcaktuar</string>
   <string name="go_to_settings">Shko tek parametrat</string>

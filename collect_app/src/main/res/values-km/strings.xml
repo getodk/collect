@@ -284,7 +284,6 @@
   <string name="google_search_browse">ការ​​ស្វែង​​រក​​សម្រាប់​​សំណុំ​​​បែប​​​បទ​។ ឬ​​រើស​ \'ថាស​​របស់​​ខ្ញុំ\' ខាង​​ក្រោម​​ដើម្បី​​រក​មើល</string>
   <string name="google_sheets_url">URL ដែលបានដាក់ស្នើ Fallback</string>
   <string name="send_in_progress">កំពុងផ្ញើផ្នែកខាងក្រោយ, សូមព្យាយាមម្តងទៀតក្នុងរយះពេលខ្លី</string>
-  <string name="sheets_max_columns">ចំនួន​​អតិបរមា​​នៃ​​ជួរ​​ឈរ​​គឺ 255, សំណុំ​​​បែប​​​បទ​​របស់​​អ្នក​​មាន​ %s​ ។ មិន​អាច​ផ្ទុក​ ទៅ​សៀវ​ភៅ​បញ្ជី​បាន​ទេ។</string>
   <string name="invalid_sheet_id">លេខសម្គាល់សន្លឹកកិច្ចការមិនត្រឹមត្រូវ៖ %1$s</string>
   <string name="google_sheets_access_denied">ដំណើរ​ការ​ត្រូវ​បាន​បដិសេធ។ សូមធ្វើឱ្យប្រាកដថាម្ចាស់សៀវភៅបញ្ជីប្រោសប្រណីអនុញ្ញាតឲ្យអ្នកកែសម្រួល។</string>
   <string name="google_sheets_missing_columns">សៀវភៅបញ្ជីគឺបាត់បង់ជួរឈ: %1$s</string>
@@ -331,7 +330,6 @@
   <string name="gps_enable_message">ប្រព័ន្ធ​ចាប់​ទី​តាំង​ក្នុងឧបករណ៍​របស់​អ្នក​បានបិទ។ តើ​អ្នក​ចង់​បើក​ដំណើរ​ការ​វា​ដែរ​ឬ​ទេ?</string>
   <string name="select_offline_layer">ជ្រើសរើសស្រទាប់ក្រៅបណ្តាញ</string>
   <string name="polygon_or_polyline">រក្សាទុក GeoTrace ជា</string>
-  <string name="minutes">នាទី</string>
   <string name="geo_clear_warning">លក្ខណះ​ពិសេស​ត្រូវ​បាន​បង្កើត។ តើ​អ្នក​ចង់​លុប​លក្ខណះ​នេះ​ដែរ​ឬ​ទេ?</string>
   <string name="geo_exit_warning">បោះបង់​ការផ្លាស់​ប្តូរ និងត្រឡប់ទៅកាន់ ODK វិញ?</string>
   <string name="polygon_validator">ត្រូវការចំនុចយ៉ាងតិច 3 ដើម្បី​បង្កើតពហុកោណ</string>
@@ -339,7 +337,6 @@
   <string name="manual_mode">របៀបធ្វើដោយដៃ</string>
   <string name="automatic_mode">របៀបធ្វើដោយស័្វយប្រវត្តិ</string>
   <string name="geoshape_instruction">ចុចយូរដើម្បីដាក់ស្លាកកន្លែង</string>
-  <string name="geotrace_instruction">រង​ចាំ​សម្រាប់​ចាក់​សោរ​, បន្ទាប់​មក​ប៉ះ​ប៊ូតុងបន្ថែម​ស្លាក​ដើម្បី​ចាប់​ផ្តើម។</string>
   <string name="geopoint_instruction">ចុចយូរដើម្បីដាក់ស្លាកកន្លែង ឬប៉ះប៊ូតុងបន្ថែមស្លាក</string>
   <string name="geopoint_no_draggable_instruction">ប៉ះដើម្បីបន្ថែមប៊ូតុងសម្គាល់</string>
   <string name="discard">បោះបង់</string>
@@ -590,7 +587,6 @@
   <!--Sms submission-->
   <string name="transport_type_sms">សារ</string>
   <string name="transport_type_both">ជ្រើសរើសនៅពេលផ្ញើ</string>
-  <string name="seconds">វិនាទី</string>
   <string name="rank_items">ចំណាត់ថ្នាក់ធាតុ</string>
   <string name="missing_google_account_dialog_title">មិនទាន់ដាក់គណនី Google</string>
 </resources>

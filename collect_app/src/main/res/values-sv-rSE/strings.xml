@@ -285,7 +285,6 @@
   <string name="google_search_browse">Sök efter formulär eller välj \'My Drive\' nedan för att bläddra.</string>
   <string name="google_sheets_url">Reserv-URL för uppladdning</string>
   <string name="send_in_progress">Sändning pågår i bakgrunden, vänligen försök igen senare</string>
-  <string name="sheets_max_columns">Max tillåtet antal kolumner är 255, ditt formulär har %s. Uppladdning till kalkylark är inte möjligt.</string>
   <string name="invalid_sheet_id">Ogiltigt ID för ark: %1$s</string>
   <string name="google_sheets_access_denied">Åtkomst nekad. Vänligen se till att kalkylarkets ägare har gett dig åtkomsträttigheter.</string>
   <string name="google_sheets_missing_columns">Kalkylarket saknar följande kolumner: %1$s</string>
@@ -333,7 +332,6 @@ Dela ODK Collect med dem.</string>
   <string name="gps_enable_message">GPS är inaktiverat på din enhet. Vill du aktivera den?</string>
   <string name="select_offline_layer">Välj offline-lager</string>
   <string name="polygon_or_polyline">Spara GeoTrace som</string>
-  <string name="minutes">Minuter</string>
   <string name="geo_clear_warning">Objekt redan skapat. Vill du rensa objektet?</string>
   <string name="geo_exit_warning">Ignorera ändringar och återgå till ODK?</string>
   <string name="polygon_validator">Minst tre punkter krävs för att skapa en polygon</string>
@@ -342,7 +340,6 @@ Dela ODK Collect med dem.</string>
   <string name="manual_mode">Manuellt läge</string>
   <string name="automatic_mode">Automatiskt läge</string>
   <string name="geoshape_instruction">Lång tryckning för att placera markör.</string>
-  <string name="geotrace_instruction">Vänta på låsning, därefter tryck på markören för att starta.</string>
   <string name="geopoint_instruction">Lång tryckning för att placera markör eller knacka på knappen \'lägg till markör\'</string>
   <string name="geopoint_no_draggable_instruction">Knacka på knappen \'lägg till markör\'.</string>
   <string name="discard">Ignorera</string>
@@ -580,7 +577,6 @@ Dela ODK Collect med dem.</string>
   <string name="sms_encrypted_message">Krypterade formulär kan inte skickas in med SMS.</string>
   <string name="sms_sent_on_date_at_time">Skickat som SMS\' EEE, MMM dd, yyyy \'kl\' HH:mm</string>
   <string name="transport_type_sms">SMS</string>
-  <string name="seconds">Sekunder</string>
   <string name="loading_form_failed">Ett fel uppstod vid laddning av formuläret. Var vänlig och försök igen.</string>
   <string name="missing_google_account_dialog_title">Google-konto är inte inställt</string>
   <string name="notification_channel_name">Allmäna notifieringar</string>

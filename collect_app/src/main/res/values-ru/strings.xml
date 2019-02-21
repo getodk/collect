@@ -289,7 +289,6 @@
   <string name="google_search_browse">Поиск опросников. Или выберите \'Мой диск\' ниже для просмотра.</string>
   <string name="google_sheets_url">Резервный URL-отправки</string>
   <string name="send_in_progress">Выполняется отправка в фоне, попробуйте снова через некоторое время.</string>
-  <string name="sheets_max_columns">Наибольшее допустимое количество столбцов 255 - в вашем опросе их %s. Не удалось загрузить в таблицу.</string>
   <string name="invalid_sheet_id">Неверный идентификатор листа: %1$s</string>
   <string name="google_sheets_access_denied">Доступ запрещен. Пожалуйста, удостоверьтесь, что владелец таблицы выдал вам разрешение на редактирование.</string>
   <string name="google_sheets_missing_columns">Таблица не содержит следующие столбцы: %1$s</string>
@@ -335,7 +334,6 @@
   <string name="gps_enable_message">На вашем устройстве отключен GPS. Хотите включить его?</string>
   <string name="select_offline_layer">Выберите оффлайн-слой</string>
   <string name="polygon_or_polyline">Сохранить геослед как</string>
-  <string name="minutes">Минуты</string>
   <string name="geo_exit_warning">Отказаться от изменений и вернуться к ODK?</string>
   <string name="polygon_validator">В многоугольнике должно быть как минимум 3 точки</string>
   <string name="polyline_validator">Должно быть как минимум 2 точки, что бы создать ломаную линию</string>
@@ -343,7 +341,6 @@
   <string name="manual_mode">Ручной режим</string>
   <string name="automatic_mode">Автоматический режим</string>
   <string name="geoshape_instruction">Используйте продолжительное нажатие, чтобы расставлять отметки.</string>
-  <string name="geotrace_instruction">Чтобы начать, подождите до блокировки, затем нажмите кнопку \"добавить отметку\".</string>
   <string name="geopoint_instruction">Используйте продолжительное нажатие, чтобы расставлять отметки или нажмите кнопку \"добавить отметку\".</string>
   <string name="geopoint_no_draggable_instruction">Нажмите кнопку \"добавить отметку\".</string>
   <string name="discard">Отменить</string>
@@ -612,7 +609,6 @@
   <string name="transport_type_internet">Интернет (рекомендуется)</string>
   <string name="transport_type_sms">SMS</string>
   <string name="transport_type_both">Выбрать при выгрузке</string>
-  <string name="seconds">Секунд</string>
   <string name="loading_form_failed">Ошибка загрузки. Попробуйте ещё раз.</string>
   <string name="missing_google_account_dialog_title">Учётная запись Google не установлена</string>
   <string name="missing_google_account_dialog_desc">Для отправки ответов через Google таблицы необходимо указать учётную запись через которую это будет происходить</string>

@@ -276,7 +276,6 @@
   <string name="change_server_url">सर्भर URL</string>
   <string name="google_search_browse">फारम सर्च गर्नुहोस् वा ब्राउज गर्न तल \'My Drive\' मा सेलेक्ट गर्नुहोस्</string>
   <string name="send_in_progress">पृष्‍ठभूमीमा send सन्चालित हुँदै , कृपया फेरी प्रयास गर्नुहोस् ।</string>
-  <string name="sheets_max_columns">अधिकतम पंक्ती (column) संख्या २५५ हो , तपाईंको फारममा %s छ । स्प्रेडसिट मा अपलोड गर्न असमर्थ ।</string>
   <string name="invalid_sheet_id">अमान्य शीट नम्बर 1 %1$s</string>
   <string name="google_sheets_access_denied">अस्वीकृत । स्प्रेडशीट धनीबाट तपाईंले सम्पादन गर्ने अनुमति प्राप्त गर्नुपर्दछ । </string>
   <string name="google_sheets_missing_columns">स्प्रेडशीटमा निम्न पंक्ती (column) हरु छैनन् : %1$s</string>
@@ -319,7 +318,6 @@
   <string name="polygon_save">बहुभुज सुरक्षित गर्नुहोस्। </string>
   <string name="gps_enable_message">तपाईंको यन्त्रमा GPS बन्द छ । यसलाई अन गर्न चाहनु हुन्छ ?</string>
   <string name="select_offline_layer">अफलाइन तह चयन गर्नुहोस्।</string>
-  <string name="minutes">मिनेट</string>
   <string name="clear">मेटाउनुहोस्</string>
   <string name="discard">त्याग्नुहोस्</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->

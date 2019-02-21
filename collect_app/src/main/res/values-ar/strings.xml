@@ -281,7 +281,6 @@
   <string name="google_search_browse">ابحث عن الاستمارات. أو اختار  \'My Drive\' من الاسفل لكي تتصفح</string>
   <string name="google_sheets_url">رابط اوراق جوجل</string>
   <string name="send_in_progress">خلفية الارسال تعمل. يرجى المحاولة مرة أخرى في وقت قريب</string>
-  <string name="sheets_max_columns">الحد الأقصى لعدد الأعمدة هو 255، استماراتك تحتوي على %s. غير قادر على تحميل الجدول.</string>
   <string name="invalid_sheet_id">رقم تعرفة الصفحة غير صحيح: %1$s</string>
   <string name="missing_submission_url">رابط التقديم مفقود</string>
   <string name="google_sheets_access_denied">تم رفض الوصول. الرجاء التأكد من منح مالك الجدول إذن الوصول لك.</string>
@@ -323,7 +322,6 @@
   <string name="gps_enable_message">خاصية الـ GPS غير مفعلة في جهازك هل تريد تفعيلها ؟</string>
   <string name="select_offline_layer">طبقة غير متصلة</string>
   <string name="polygon_or_polyline">حفظ GeoTrace كـ</string>
-  <string name="minutes">دقائق</string>
   <string name="geo_clear_warning">الميزة تم انشائها مسبقاً</string>
   <string name="geo_exit_warning">تجاهل التعديلات والعودة الى ODK؟</string>
   <string name="polygon_validator">يجب توفر 3 نقاط GeoPoint لانشاء Polygon</string>
@@ -332,7 +330,6 @@
   <string name="manual_mode">الوضع اليدوي</string>
   <string name="automatic_mode">الوضع الآلي</string>
   <string name="geoshape_instruction">انقر مطولاً لانشاء علامة</string>
-  <string name="geotrace_instruction">انتظر للقفل. ثم اضغط على زر إضافة علامة للبداء.</string>
   <string name="geopoint_instruction">انقر مطولاً لانشاء علامة او انقر على زر إضافة علامة</string>
   <string name="geopoint_no_draggable_instruction">إضافة علامة</string>
   <string name="discard">تجاهل</string>

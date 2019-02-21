@@ -287,7 +287,6 @@
   <string name="start">Start</string>
   <string name="polygon_save">Bewaar als Polygoon</string>
   <string name="polyline_save">Bewaar als Lijnstuk</string>
-  <string name="minutes">Minuten</string>
   <string name="manual_mode">Handmatig</string>
   <string name="automatic_mode">Automatisch</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
@@ -353,7 +352,6 @@
   <!--Sms submission-->
   <string name="sms_no_message">Dit formulier heeft geen vragen met SMS tags. </string>
   <string name="transport_type_sms">SMS</string>
-  <string name="seconds">Seconden</string>
   <string name="notification_channel_name">Algemene notificaties</string>
   <string name="go_to_settings">Ga naar instellingen</string>
   <string name="open_file">Open bestand</string>
