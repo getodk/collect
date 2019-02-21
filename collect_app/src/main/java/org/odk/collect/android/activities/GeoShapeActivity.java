@@ -49,6 +49,7 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
     private int featureId = -1;  // will be a positive featureId once map is ready
     private ImageButton zoomButton;
     private ImageButton clearButton;
+    private ImageButton backspaceButton;
     private String originalShapeString = "";
 
     // restored from savedInstanceState
@@ -83,18 +84,37 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
 
     @Override protected void onStart() {
         super.onStart();
+        // initMap() is called asynchronously, so map might not be initialized yet.
         if (map != null) {
             map.setGpsLocationEnabled(true);
         }
     }
 
     @Override protected void onStop() {
-        map.setGpsLocationEnabled(false);
+        // To avoid a memory leak, we have to shut down GPS when the activity
+        // quits for good. But if it's only a screen rotation, we don't want to
+        // stop/start GPS and make the user wait to get a GPS lock again.
+        if (!isChangingConfigurations()) {
+            // initMap() is called asynchronously, so map can be null if the activity
+            // is stopped (e.g. by screen rotation) before initMap() gets to run.
+            if (map != null) {
+                map.setGpsLocationEnabled(false);
+            }
+        }
         super.onStop();
     }
 
     @Override protected void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
+        if (map == null) {
+            // initMap() is called asynchronously, so map can be null if the activity
+            // is stopped (e.g. by screen rotation) before initMap() gets to run.
+            // In this case, preserve any provided instance state.
+            if (previousState != null) {
+                state.putAll(previousState);
+            }
+            return;
+        }
         state.putParcelable(MAP_CENTER_KEY, map.getCenter());
         state.putDouble(MAP_ZOOM_KEY, map.getZoom());
         state.putParcelableArrayList(POINTS_KEY, new ArrayList<>(map.getPolyPoints(featureId)));
@@ -111,8 +131,16 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
     @Override public void destroy() { }
 
     private void initMap(MapFragment newMapFragment) {
-        if (newMapFragment == null) {
+        if (newMapFragment == null) {  // could not create the map
             finish();
+            return;
+        }
+        if (newMapFragment.getFragment().getActivity() == null) {
+            // If the screen is rotated just after the activity starts but
+            // before initMap() is called, then when the activity is re-created
+            // in the new orientation, initMap() can sometimes be called on the
+            // old, dead Fragment that used to be attached to the old activity.
+            // Touching the dead Fragment will cause a crash; discard it.
             return;
         }
 
@@ -128,6 +156,9 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
 
         zoomButton = findViewById(R.id.gps);
         zoomButton.setOnClickListener(v -> map.zoomToPoint(map.getGpsLocation(), true));
+
+        backspaceButton = findViewById(R.id.backspace);
+        backspaceButton.setOnClickListener(v -> removeLastPoint());
 
         clearButton = findViewById(R.id.clear);
         clearButton.setOnClickListener(v -> showClearDialog());
@@ -149,6 +180,7 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
         }
         featureId = map.addDraggablePoly(points, true);
         zoomButton.setEnabled(!points.isEmpty());
+        backspaceButton.setEnabled(!points.isEmpty());
         clearButton.setEnabled(!points.isEmpty());
 
         map.setGpsLocationEnabled(true);
@@ -171,13 +203,22 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
 
     private void onLongPress(MapPoint point) {
         map.appendPointToPoly(featureId, point);
+        backspaceButton.setEnabled(true);
         clearButton.setEnabled(true);
         zoomButton.setEnabled(true);
+    }
+
+    private void removeLastPoint() {
+        if (featureId != -1) {
+            map.removePolyLastPoint(featureId);
+            backspaceButton.setEnabled(!map.getPolyPoints(featureId).isEmpty());
+        }
     }
 
     private void clear() {
         map.clearFeatures();
         featureId = map.addDraggablePoly(new ArrayList<>(), true);
+        backspaceButton.setEnabled(false);
         clearButton.setEnabled(false);
     }
 

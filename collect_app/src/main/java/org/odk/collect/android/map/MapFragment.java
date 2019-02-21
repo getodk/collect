@@ -16,6 +16,7 @@ package org.odk.collect.android.map;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
 import java.util.List;
@@ -41,6 +42,9 @@ import java.util.List;
  * even though the geo widgets only use one kind of feature at a time.
  */
 public interface MapFragment {
+    /** Gets the MapFragment as a Fragment. */
+    Fragment getFragment();
+
     /**
      * Adds the map Fragment to an activity.  The containerId should be the
      * resource ID of a View, into which the map view will be placed.  The
@@ -105,6 +109,12 @@ public interface MapFragment {
 
     /** Appends a vertex to the polyline or polygon specified by featureId. */
     void appendPointToPoly(int featureId, @NonNull MapPoint point);
+
+    /**
+     * Removes the last vertex of the polyline or polygon specified by featureId.
+     * If there are no vertices, does nothing.
+     */
+    void removePolyLastPoint(int featureId);
 
     /**
      * Returns the vertices of the polyline or polygon specified by featureId, or an

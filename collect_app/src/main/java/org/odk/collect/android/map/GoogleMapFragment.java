@@ -24,6 +24,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.location.LocationListener;
@@ -78,10 +79,18 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL", justification = "This flag is exposed for Robolectric tests to set")
     @VisibleForTesting public static boolean testMode;
 
+    @Override public Fragment getFragment() {
+        return this;
+    }
+
     @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     @Override public void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener) {
+        // If the containing activity is being re-created upon screen rotation,
+        // the FragmentManager will have also re-created a copy of the previous
+        // OsmMapFragment.  We don't want these useless copies of old fragments
+        // to linger, so the following line calls .replace() instead of .add().
         activity.getSupportFragmentManager()
-            .beginTransaction().add(containerId, this).commitNow();
+            .beginTransaction().replace(containerId, this).commitNow();
         getMapAsync((GoogleMap map) -> {
             if (map == null) {
                 ToastUtils.showShortToast(R.string.google_play_services_error_occured);
@@ -240,6 +249,13 @@ public class GoogleMapFragment extends SupportMapFragment implements
             return ((PolyFeature) feature).getPoints();
         }
         return new ArrayList<>();
+    }
+
+    @Override public void removePolyLastPoint(int featureId) {
+        MapFeature feature = features.get(featureId);
+        if (feature instanceof PolyFeature) {
+            ((PolyFeature) feature).removeLastPoint();
+        }
     }
 
     @Override public void removeFeature(int featureId) {
@@ -550,6 +566,15 @@ public class GoogleMapFragment extends SupportMapFragment implements
             }
             markers.add(createMarker(map, point, true));
             update();
+        }
+
+        public void removeLastPoint() {
+            if (!markers.isEmpty()) {
+                int last = markers.size() - 1;
+                markers.get(last).remove();
+                markers.remove(last);
+                update();
+            }
         }
 
         protected void clearPolyline() {

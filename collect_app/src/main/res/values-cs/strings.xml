@@ -340,7 +340,6 @@
   <string name="gps_enable_message">GPS je v přístroji zakázáno. Chcete jej povolit?</string>
   <string name="select_offline_layer">Vybrat Offline Layer</string>
   <string name="polygon_or_polyline">Uložit GeoTrace jako</string>
-  <string name="minutes">Minuty</string>
   <string name="geo_clear_warning">Funkce již vytvořena. Chcete tuto funkci vymazat?</string>
   <string name="geo_exit_warning">Zrušit změny a vrátit se do ODK?</string>
   <string name="polygon_validator">Musí mít alespoň 3 body pro vytvoření polygonu</string>
@@ -349,7 +348,6 @@
   <string name="manual_mode">Ruční režim</string>
   <string name="automatic_mode">Automatický režim</string>
   <string name="geoshape_instruction">Dlouhým stisknutím umístěte značky.</string>
-  <string name="geotrace_instruction">Počkejte na zamknutí a pak klepnutím na tlačítko přidat značku spusťte.</string>
   <string name="geopoint_instruction">Dlouhým stisknutím označit značku nebo klepnutím na tlačítko přidat značku.</string>
   <string name="geopoint_no_draggable_instruction">Klepnutím na tlačítko přidat značku.</string>
   <string name="discard">Vyřadit</string>
@@ -636,7 +634,6 @@
   <string name="transport_type_internet">Wifi / GSM (doporučeno)</string>
   <string name="transport_type_sms">SMS</string>
   <string name="transport_type_both">Vybrat možnost odeslání</string>
-  <string name="seconds">Vteřin</string>
   <string name="rank_items">Pořadí položek</string>
   <string name="loading_form_failed">Během načítání formuláře došlo k chybě. Prosím zkuste to znovu.</string>
   <string name="missing_google_account_dialog_title">Účet Google není nastaven</string>

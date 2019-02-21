@@ -347,16 +347,39 @@
     <string name="gps_enable_message">GPS is disabled in your device. Would you like to enable it?</string>
     <string name="select_offline_layer">Select Offline Layer</string>
     <string name="polygon_or_polyline">"Save GeoTrace As"</string>
-    <string name="minutes">Minutes</string>
     <string name="geo_clear_warning">Feature already created. Would you like to clear the feature?</string>
     <string name="geo_exit_warning">Discard changes and return to ODK?</string>
     <string name="polygon_validator">Must have at least 3 points to create Polygon</string>
     <string name="polyline_validator">Must have at least 2 points to create Polyline</string>
     <string name="clear">Clear</string>
-    <string name="manual_mode">Manual Mode</string>
-    <string name="automatic_mode">Automatic Mode</string>
+    <string name="manual_mode">Manual recording</string>
+    <string name="automatic_mode">Automatic recording</string>
+    <string name="recording_interval">Recording interval:</string>
+    <plurals name="number_of_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
+    <plurals name="number_of_minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <string name="accuracy_requirement">Accuracy requirement:</string>
+    <string name="none">None</string>
+    <plurals name="number_of_meters">
+        <item quantity="one">%d meter</item>
+        <item quantity="other">%d meters</item>
+    </plurals>
     <string name="geoshape_instruction">Long press to place marks.</string>
-    <string name="geotrace_instruction">Wait for lock, then tap add marker button to start.</string>
+    <string name="geotrace_location_status_searching">Searching for GPS location, please wait&#8230;</string>
+    <string name="geotrace_location_status_accuracy">GPS location accuracy: %.1f m</string>
+    <string name="geotrace_location_status_acceptable">GPS location accuracy: %.1f m (acceptable)</string>
+    <string name="geotrace_location_status_unacceptable">GPS location accuracy: %.1f m (unacceptable)</string>
+    <string name="geotrace_collection_status_paused">Points recorded: %d</string>
+    <string name="geotrace_collection_status_manual">Points recorded: %d (manual recording)</string>
+    <string name="geotrace_collection_status_auto_seconds">Points recorded: %1$d (recording every %2$d sec)</string>
+    <string name="geotrace_collection_status_auto_minutes">Points recorded: %1$d (recording every %2$d min)</string>
+    <string name="geotrace_collection_status_auto_seconds_accuracy">Points recorded: %1$d (recording every %2$d sec, accuracy %3$d m)</string>
+    <string name="geotrace_collection_status_auto_minutes_accuracy">Points recorded: %1$d (recording every %2$d min, accuracy %3$d m)</string>
     <string name="geopoint_instruction">Long press to place mark or tap add marker button.</string>
     <string name="geopoint_no_draggable_instruction">Tap add marker button.</string>
     <string name="discard">Discard</string>
@@ -645,7 +668,6 @@
     <string name="transport_type_internet">Wifi/Cellular (recommended)</string>
     <string name="transport_type_sms">SMS</string>
     <string name="transport_type_both">Select on send</string>
-    <string name="seconds">Seconds</string>
     <string name="rank_items">Rank items</string>
     <string name="loading_form_failed">An error occurred while loading the form. Please try again.</string>
     <string name="missing_google_account_dialog_title">Google account not set</string>

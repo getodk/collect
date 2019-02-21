@@ -20,11 +20,13 @@ import android.os.Bundle;
 import android.support.annotation.VisibleForTesting;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.map.GoogleMapFragment;
@@ -52,12 +54,10 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
     public static final String POINTS_KEY = "points";
-    public static final String BEEN_PAUSED_KEY = "been_paused";
-    public static final String MODE_ACTIVE_KEY = "mode_active";
-    public static final String TRACE_MODE_KEY = "trace_mode";
-    public static final String PLAY_CHECK_KEY = "play_check";
-    public static final String TIME_DELAY_KEY = "time_delay";
-    public static final String TIME_UNITS_KEY = "time_units";
+    public static final String RECORDING_ACTIVE_KEY = "recording_active";
+    public static final String RECORDING_MODE_KEY = "recording_mode";
+    public static final String INTERVAL_INDEX_KEY = "interval_index";
+    public static final String ACCURACY_THRESHOLD_INDEX_KEY = "accuracy_threshold_index";
 
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
@@ -71,26 +71,41 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private ImageButton clearButton;
     private Button manualButton;
     private ImageButton pauseButton;
+    private ImageButton backspaceButton;
 
+    private TextView locationStatus;
+    private TextView collectionStatus;
     private View traceSettingsView;
     private View polygonOrPolylineView;
 
     private AlertDialog traceSettingsDialog;
     private AlertDialog polygonOrPolylineDialog;
 
-    private boolean beenPaused;
-    private boolean modeActive;
-    private Integer traceMode = 0; // 0 manual, 1 is automatic
-    private boolean playCheck;
-    private Spinner timeUnits;
-    private Spinner timeDelay;
+    private static final int[] INTERVAL_OPTIONS = {
+        1, 5, 10, 20, 30, 60, 300, 600, 1200, 1800
+    };
+    private static final int DEFAULT_INTERVAL_INDEX = 3; // default is 20 seconds
+    private static final int MANUAL_RECORDING = 0;
+    private static final int AUTOMATIC_RECORDING = 1;
+
+    private static final int[] ACCURACY_THRESHOLD_OPTIONS = {
+        0, 3, 5, 10, 15, 20
+    };
+    private static final int DEFAULT_ACCURACY_THRESHOLD_INDEX = 3; // default is 10 meters
+
+    private boolean recordingActive;
+    private int recordingMode; // 0 manual, 1 is automatic
+    private RadioGroup radioGroup;
+    private View autoOptions;
+    private Spinner autoInterval;
+    private int intervalIndex = DEFAULT_INTERVAL_INDEX;
+    private Spinner accuracyThreshold;
+    private int accuracyThresholdIndex = DEFAULT_ACCURACY_THRESHOLD_INDEX;
 
     // restored from savedInstanceState
     private MapPoint restoredMapCenter;
     private Double restoredMapZoom;
     private List<MapPoint> restoredPoints;
-    private int restoredTimeDelayIndex = 3;
-    private int restoredTimeUnitsIndex;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,12 +113,11 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             restoredMapCenter = savedInstanceState.getParcelable(MAP_CENTER_KEY);
             restoredMapZoom = savedInstanceState.getDouble(MAP_ZOOM_KEY);
             restoredPoints = savedInstanceState.getParcelableArrayList(POINTS_KEY);
-            beenPaused = savedInstanceState.getBoolean(BEEN_PAUSED_KEY, false);
-            modeActive = savedInstanceState.getBoolean(MODE_ACTIVE_KEY, false);
-            traceMode = savedInstanceState.getInt(TRACE_MODE_KEY, 0);
-            playCheck = savedInstanceState.getBoolean(PLAY_CHECK_KEY, false);
-            restoredTimeDelayIndex = savedInstanceState.getInt(TIME_DELAY_KEY, 3);
-            restoredTimeUnitsIndex = savedInstanceState.getInt(TIME_UNITS_KEY, 0);
+            recordingActive = savedInstanceState.getBoolean(RECORDING_ACTIVE_KEY, false);
+            recordingMode = savedInstanceState.getInt(RECORDING_MODE_KEY, MANUAL_RECORDING);
+            intervalIndex = savedInstanceState.getInt(INTERVAL_INDEX_KEY, DEFAULT_INTERVAL_INDEX);
+            accuracyThresholdIndex = savedInstanceState.getInt(
+                ACCURACY_THRESHOLD_INDEX_KEY, DEFAULT_ACCURACY_THRESHOLD_INDEX);
         }
 
         if (!areLocationPermissionsGranted(this)) {
@@ -114,11 +128,6 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setTitle(getString(R.string.geotrace_title));
         setContentView(R.layout.geotrace_layout);
-        if (savedInstanceState == null) {
-            // UI initialization that should only occur on start, not on restore
-            playButton = findViewById(R.id.play);
-            playButton.setEnabled(false);
-        }
         createMapFragment().addTo(this, R.id.map_container, this::initMap);
     }
 
@@ -130,27 +139,44 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
     @Override protected void onStart() {
         super.onStart();
+        // initMap() is called asynchronously, so map might not be initialized yet.
         if (map != null) {
             map.setGpsLocationEnabled(true);
         }
     }
 
     @Override protected void onStop() {
-        map.setGpsLocationEnabled(false);
+        // To avoid a memory leak, we have to shut down GPS when the activity
+        // quits for good. But if it's only a screen rotation, we don't want to
+        // stop/start GPS and make the user wait to get a GPS lock again.
+        if (!isChangingConfigurations()) {
+            // initMap() is called asynchronously, so map can be null if the activity
+            // is stopped (e.g. by screen rotation) before initMap() gets to run.
+            if (map != null) {
+                map.setGpsLocationEnabled(false);
+            }
+        }
         super.onStop();
     }
 
     @Override protected void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
+        if (map == null) {
+            // initMap() is called asynchronously, so map can be null if the activity
+            // is stopped (e.g. by screen rotation) before initMap() gets to run.
+            // In this case, preserve any provided instance state.
+            if (previousState != null) {
+                state.putAll(previousState);
+            }
+            return;
+        }
         state.putParcelable(MAP_CENTER_KEY, map.getCenter());
         state.putDouble(MAP_ZOOM_KEY, map.getZoom());
         state.putParcelableArrayList(POINTS_KEY, new ArrayList<>(map.getPolyPoints(featureId)));
-        state.putBoolean(BEEN_PAUSED_KEY, beenPaused);
-        state.putBoolean(MODE_ACTIVE_KEY, modeActive);
-        state.putInt(TRACE_MODE_KEY, traceMode);
-        state.putBoolean(PLAY_CHECK_KEY, playCheck);
-        state.putInt(TIME_DELAY_KEY, timeDelay.getSelectedItemPosition());
-        state.putInt(TIME_UNITS_KEY, timeUnits.getSelectedItemPosition());
+        state.putBoolean(RECORDING_ACTIVE_KEY, recordingActive);
+        state.putInt(RECORDING_MODE_KEY, recordingMode);
+        state.putInt(INTERVAL_INDEX_KEY, intervalIndex);
+        state.putInt(ACCURACY_THRESHOLD_INDEX_KEY, accuracyThresholdIndex);
     }
 
     @Override protected void onDestroy() {
@@ -163,8 +189,16 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     @Override public void destroy() { }
 
     public void initMap(MapFragment newMapFragment) {
-        if (newMapFragment == null) {
+        if (newMapFragment == null) {  // could not create the map
             finish();
+            return;
+        }
+        if (newMapFragment.getFragment().getActivity() == null) {
+            // If the screen is rotated just after the activity starts but
+            // before initMap() is called, then when the activity is re-created
+            // in the new orientation, initMap() can sometimes be called on the
+            // old, dead Fragment that used to be attached to the old activity.
+            // Touching the dead Fragment will cause a crash; discard it.
             return;
         }
 
@@ -176,13 +210,41 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         }
         helper.setBasemap();
 
+        locationStatus = findViewById(R.id.geotrace_location_status);
+        collectionStatus = findViewById(R.id.geotrace_collection_status);
         traceSettingsView = getLayoutInflater().inflate(R.layout.geotrace_dialog, null);
-        RadioGroup group = traceSettingsView.findViewById(R.id.radio_group);
-        group.check(group.getChildAt(traceMode).getId());
-        timeDelay = traceSettingsView.findViewById(R.id.trace_delay);
-        timeDelay.setSelection(restoredTimeDelayIndex);
-        timeUnits = traceSettingsView.findViewById(R.id.trace_scale);
-        timeUnits.setSelection(restoredTimeUnitsIndex);
+        radioGroup = traceSettingsView.findViewById(R.id.radio_group);
+        radioGroup.setOnCheckedChangeListener(this::updateRecordingMode);
+        autoOptions = traceSettingsView.findViewById(R.id.auto_options);
+        autoInterval = traceSettingsView.findViewById(R.id.auto_interval);
+        autoInterval.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                intervalIndex = position;
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> parent) { }
+        });
+
+        String[] options = new String[INTERVAL_OPTIONS.length];
+        for (int i = 0; i < INTERVAL_OPTIONS.length; i++) {
+            options[i] = formatInterval(INTERVAL_OPTIONS[i]);
+        }
+        populateSpinner(autoInterval, options);
+
+        accuracyThreshold = traceSettingsView.findViewById(R.id.accuracy_threshold);
+        accuracyThreshold.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                accuracyThresholdIndex = position;
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> parent) { }
+        });
+
+        options = new String[ACCURACY_THRESHOLD_OPTIONS.length];
+        for (int i = 0; i < ACCURACY_THRESHOLD_OPTIONS.length; i++) {
+            options[i] = formatAccuracyThreshold(ACCURACY_THRESHOLD_OPTIONS[i]);
+        }
+        populateSpinner(accuracyThreshold, options);
 
         polygonOrPolylineView = getLayoutInflater().inflate(R.layout.polygon_polyline_dialog, null);
 
@@ -191,20 +253,17 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
         pauseButton = findViewById(R.id.pause);
         pauseButton.setOnClickListener(v -> {
-            playButton.setVisibility(View.VISIBLE);
-            if (!map.getPolyPoints(featureId).isEmpty()) {
-                clearButton.setEnabled(true);
-            }
-            pauseButton.setVisibility(View.GONE);
-            manualButton.setVisibility(View.GONE);
-            playCheck = true;
-            modeActive = false;
+            recordingActive = false;
             try {
                 schedulerHandler.cancel(true);
             } catch (Exception e) {
                 // Do nothing
             }
+            updateUi();
         });
+
+        backspaceButton = findViewById(R.id.backspace);
+        backspaceButton.setOnClickListener(v -> removeLastPoint());
 
         ImageButton saveButton = findViewById(R.id.geotrace_save);
         saveButton.setOnClickListener(v -> {
@@ -217,30 +276,15 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
         playButton = findViewById(R.id.play);
         playButton.setOnClickListener(v -> {
-            if (!playCheck) {
-                if (!beenPaused) {
-                    traceSettingsDialog.show();
-                } else {
-                    RadioGroup rb = traceSettingsView.findViewById(R.id.radio_group);
-                    View radioButton = rb.findViewById(rb.getCheckedRadioButtonId());
-                    traceMode = rb.indexOfChild(radioButton);
-                    if (traceMode == 0) {
-                        setupManualMode();
-                    } else if (traceMode == 1) {
-                        setupAutomaticMode();
-                    } else {
-                        //Do nothing
-                    }
-                }
-                playCheck = true;
+            if (map.getPolyPoints(featureId).isEmpty()) {
+                traceSettingsDialog.show();
             } else {
-                playCheck = false;
                 startGeoTrace();
             }
         });
 
         manualButton = findViewById(R.id.manual_button);
-        manualButton.setOnClickListener(v -> addVertex());
+        manualButton.setOnClickListener(v -> appendPoint());
 
         Button polygonSave = polygonOrPolylineView.findViewById(R.id.polygon_save);
         polygonSave.setOnClickListener(v -> {
@@ -271,10 +315,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         findViewById(R.id.layers).setOnClickListener(v -> helper.showLayersDialog());
 
         zoomButton = findViewById(R.id.zoom);
-        zoomButton.setOnClickListener(v -> {
-            playCheck = false;
-            map.zoomToPoint(map.getGpsLocation(), true);
-        });
+        zoomButton.setOnClickListener(v -> map.zoomToPoint(map.getGpsLocation(), true));
 
         List<MapPoint> points = new ArrayList<>();
         Intent intent = getIntent();
@@ -286,10 +327,8 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             points = restoredPoints;
         }
         featureId = map.addDraggablePoly(points, false);
-        zoomButton.setEnabled(!points.isEmpty());
-        clearButton.setEnabled(!points.isEmpty());
 
-        if (modeActive) {
+        if (recordingActive) {
             startGeoTrace();
         }
 
@@ -302,6 +341,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         } else {
             map.runOnGpsLocationReady(this::onGpsLocationReady);
         }
+        updateUi();
     }
 
     private void finishWithResult() {
@@ -317,6 +357,29 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         } else {
             finish();
         }
+    }
+
+    /** Populates a Spinner with the option labels in the given array. */
+    private void populateSpinner(Spinner spinner, String[] options) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+            this, android.R.layout.simple_spinner_item, options);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+    }
+
+    /** Formats a time interval as a whole number of seconds or minutes. */
+    private String formatInterval(int seconds) {
+        int minutes = seconds / 60;
+        return minutes > 0 ?
+            getResources().getQuantityString(R.plurals.number_of_minutes, minutes, minutes) :
+            getResources().getQuantityString(R.plurals.number_of_seconds, seconds, seconds);
+    }
+
+    /** Formats an entry in the accuracy threshold dropdown. */
+    private String formatAccuracyThreshold(int meters) {
+        return meters > 0 ?
+            getResources().getQuantityString(R.plurals.number_of_meters, meters, meters) :
+            getString(R.string.none);
     }
 
     /**
@@ -373,10 +436,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             .setNegativeButton(R.string.cancel, (dialog, id) -> {
                 dialog.cancel();
                 traceSettingsDialog.dismiss();
-                playCheck = false;
-
             })
-            .setOnCancelListener(dialog -> playCheck = false)
             .create();
 
         polygonOrPolylineDialog = new AlertDialog.Builder(this)
@@ -391,112 +451,136 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     }
 
     private void startGeoTrace() {
-        RadioGroup rb = traceSettingsView.findViewById(R.id.radio_group);
-        View radioButton = rb.findViewById(rb.getCheckedRadioButtonId());
-        int idx = rb.indexOfChild(radioButton);
-        beenPaused = true;
-        traceMode = idx;
-        if (traceMode == 0) {
+        if (recordingMode == MANUAL_RECORDING) {
             setupManualMode();
-        } else if (traceMode == 1) {
+        } else if (recordingMode == AUTOMATIC_RECORDING) {
             setupAutomaticMode();
-        } else {
-            playCheck = false;
         }
-        playButton.setVisibility(View.GONE);
-        clearButton.setEnabled(false);
-        pauseButton.setVisibility(View.VISIBLE);
+        updateUi();
     }
 
     private void setupManualMode() {
-
-        manualButton.setVisibility(View.VISIBLE);
-        modeActive = true;
-
+        recordingActive = true;
     }
 
     private void setupAutomaticMode() {
-        manualButton.setVisibility(View.VISIBLE);
-        String delay = timeDelay.getSelectedItem().toString();
-        String units = timeUnits.getSelectedItem().toString();
-        Long timeDelay;
-        TimeUnit timeUnitsValue;
-        if (units.equals(getString(R.string.minutes))) {
-            timeDelay = Long.parseLong(delay) * 60;
-            timeUnitsValue = TimeUnit.SECONDS;
-
-        } else {
-            //in Seconds
-            timeDelay = Long.parseLong(delay);
-            timeUnitsValue = TimeUnit.SECONDS;
-        }
-
-        setGeoTraceScheduler(timeDelay, timeUnitsValue);
-        modeActive = true;
+        startScheduler(INTERVAL_OPTIONS[intervalIndex]);
+        recordingActive = true;
     }
 
-    public void setGeoTraceMode(View view) {
-        boolean checked = ((RadioButton) view).isChecked();
-        switch (view.getId()) {
-            case R.id.trace_manual:
-                if (checked) {
-                    traceMode = 0;
-                    timeUnits.setVisibility(View.GONE);
-                    timeDelay.setVisibility(View.GONE);
-                    timeDelay.invalidate();
-                    timeUnits.invalidate();
-                }
-                break;
-            case R.id.trace_automatic:
-                if (checked) {
-                    traceMode = 1;
-                    timeUnits.setVisibility(View.VISIBLE);
-                    timeDelay.setVisibility(View.VISIBLE);
-                    timeDelay.invalidate();
-                    timeUnits.invalidate();
-                }
-                break;
-        }
+    public void updateRecordingMode(RadioGroup group, int id) {
+        recordingMode = (id == R.id.trace_automatic) ? AUTOMATIC_RECORDING : MANUAL_RECORDING;
+        updateUi();
     }
 
-    public void setGeoTraceScheduler(long delay, TimeUnit units) {
+    public void startScheduler(int intervalSeconds) {
         schedulerHandler = scheduler.scheduleAtFixedRate(
-            () -> runOnUiThread(() -> addVertex()), 0, delay, units);
+            () -> runOnUiThread(this::appendPoint), 0, intervalSeconds, TimeUnit.SECONDS);
     }
 
-    @SuppressWarnings("unused")  // the "map" parameter is intentionally unused
     private void onGpsLocationReady(MapFragment map) {
-        zoomButton.setEnabled(true);
-        playButton.setEnabled(true);
         if (getWindow().isActive()) {
             map.zoomToPoint(map.getGpsLocation(), true);
         }
+        updateUi();
     }
 
     private void onGpsLocation(MapPoint point) {
-        if (modeActive) {
+        if (recordingActive) {
             map.setCenter(point, false);
+        }
+        updateUi();
+    }
+
+    private void appendPoint() {
+        MapPoint point = map.getGpsLocation();
+        if (point != null && isLocationAcceptable(point)) {
+            map.appendPointToPoly(featureId, point);
+            updateUi();
         }
     }
 
-    private void addVertex() {
-        MapPoint point = map.getGpsLocation();
-        if (point != null) {
-            map.appendPointToPoly(featureId, point);
+    private boolean isLocationAcceptable(MapPoint point) {
+        if (!isAccuracyThresholdActive()) {
+            return true;
+        }
+        return point.sd <= ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
+    }
+
+    private boolean isAccuracyThresholdActive() {
+        int meters = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
+        return recordingMode == AUTOMATIC_RECORDING && meters > 0;
+    }
+
+    private void removeLastPoint() {
+        if (featureId != -1) {
+            map.removePolyLastPoint(featureId);
+            updateUi();
         }
     }
 
     private void clear() {
         map.clearFeatures();
         featureId = map.addDraggablePoly(new ArrayList<>(), false);
-        clearButton.setEnabled(false);
-        pauseButton.setVisibility(View.GONE);
-        manualButton.setVisibility(View.GONE);
-        playButton.setVisibility(View.VISIBLE);
-        playButton.setEnabled(true);
-        modeActive = false;
-        playCheck = false;
-        beenPaused = false;
+        recordingActive = false;
+        updateUi();
+    }
+
+    /** Updates the visibility and enabled state of buttons to reflect internal state. */
+    private void updateUi() {
+        final int numPoints = map.getPolyPoints(featureId).size();
+        final MapPoint location = map.getGpsLocation();
+
+        // Visibility state
+        playButton.setVisibility(recordingActive ? View.GONE : View.VISIBLE);
+        pauseButton.setVisibility(recordingActive ? View.VISIBLE : View.GONE);
+        manualButton.setVisibility(recordingActive ? View.VISIBLE : View.GONE);
+
+        // Enabled state
+        zoomButton.setEnabled(location != null);
+        playButton.setEnabled(location != null);
+        backspaceButton.setEnabled(numPoints > 0);
+        clearButton.setEnabled(!recordingActive && numPoints > 0);
+
+        // Trace settings dialog
+        radioGroup.check(
+            recordingMode == AUTOMATIC_RECORDING ? R.id.trace_automatic : R.id.trace_manual);
+        autoOptions.setVisibility(
+            recordingMode == AUTOMATIC_RECORDING ? View.VISIBLE : View.GONE);
+        autoInterval.setSelection(intervalIndex);
+        accuracyThreshold.setSelection(accuracyThresholdIndex);
+
+        // GPS status
+        boolean usingThreshold = isAccuracyThresholdActive();
+        boolean acceptable = location != null && isLocationAcceptable(location);
+        int seconds = INTERVAL_OPTIONS[intervalIndex];
+        int minutes = seconds / 60;
+        int meters = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
+        locationStatus.setText(
+            location == null ? getString(R.string.geotrace_location_status_searching)
+                : !usingThreshold ? getString(R.string.geotrace_location_status_accuracy, location.sd)
+                : acceptable ? getString(R.string.geotrace_location_status_acceptable, location.sd)
+                : getString(R.string.geotrace_location_status_unacceptable, location.sd)
+        );
+        locationStatus.setBackgroundColor(getResources().getColor(
+            location == null ? R.color.locationStatusSearching
+                : acceptable ? R.color.locationStatusAcceptable
+                : R.color.locationStatusUnacceptable
+        ));
+        collectionStatus.setText(
+            !recordingActive ? getString(R.string.geotrace_collection_status_paused, numPoints)
+                : recordingMode == MANUAL_RECORDING ? getString(R.string.geotrace_collection_status_manual, numPoints)
+                : !usingThreshold ? (
+                    minutes > 0 ?
+                        getString(R.string.geotrace_collection_status_auto_minutes, numPoints, minutes) :
+                        getString(R.string.geotrace_collection_status_auto_seconds, numPoints, seconds)
+                )
+                : (
+                    minutes > 0 ?
+                        getString(R.string.geotrace_collection_status_auto_minutes_accuracy, numPoints, minutes, meters) :
+                        getString(R.string.geotrace_collection_status_auto_seconds_accuracy, numPoints, seconds, meters)
+                )
+        );
     }
 
     private void showClearDialog() {

@@ -313,7 +313,6 @@
   <string name="gps_enable_message">आपके डिवाइस में जीपीएस सक्षम नही है. क्या आप इसे सक्षम करना चाहेंगे?</string>
   <string name="select_offline_layer">ऑफ़लाइन लेयर चुनें</string>
   <string name="polygon_or_polyline"> जिओ ट्रेस संरक्षित करे </string>
-  <string name="minutes">मिनट</string>
   <string name="geo_clear_warning">फीचर पहले से ही बना है. क्या आप फीचर को क्लियर करना चाहेंगे?</string>
   <string name="geo_exit_warning">परिवर्तनों को रद्द करें और वापस ODK पर लौटें?</string>
   <string name="polygon_validator">बहुभुज बनाने के लिए कम से कम 3 पॉइंट होने चाहिए</string>
@@ -321,7 +320,6 @@
   <string name="manual_mode">मैन्युअल मोड</string>
   <string name="automatic_mode">स्वचालित मोड</string>
   <string name="geoshape_instruction">प्लेस मार्क के लिए लंबे समय तक दबाएं</string>
-  <string name="geotrace_instruction">लॉक होने के लिए प्रतीक्षा करें, तब शुरू करने के लिए मार्कर बटन जोड़ें पर टैप करें।</string>
   <string name="geopoint_instruction">प्लेस मार्क के लिए लंबे समय तक दबाएं या मार्कर बटन जोड़ने के लिए टैप करें।</string>
   <string name="geopoint_no_draggable_instruction">मार्कर बटन जोड़ें पर टैप करें</string>
   <string name="discard">छोड़ दें </string>

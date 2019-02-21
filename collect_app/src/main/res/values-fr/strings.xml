@@ -340,7 +340,6 @@
   <string name="gps_enable_message">Le GPS est désactivé. Voulez vous l\'activer ?</string>
   <string name="select_offline_layer">Sélectionner le fond de carte hors ligne </string>
   <string name="polygon_or_polyline">Enregistrer le TracéGéo sous</string>
-  <string name="minutes">Minutes</string>
   <string name="geo_clear_warning">Objet déjà créé. Souhaitez-vous l\'effacer ?</string>
   <string name="geo_exit_warning">Annuler les changements et revenir à ODK</string>
   <string name="polygon_validator">3 points minimum sont nécessaires pour créer un Polygone</string>
@@ -349,7 +348,6 @@
   <string name="manual_mode">Mode Manuel</string>
   <string name="automatic_mode">Mode Automatique</string>
   <string name="geoshape_instruction">Appuyer longtemps pour placer le marqueur</string>
-  <string name="geotrace_instruction">Patientez durant le verrouillage, puis appuyez sur le bouton marqueur pour commencer.</string>
   <string name="geopoint_instruction">Appuyez longuement sur la carte pour placer un marqueur ou appuyez sur le bouton \"ajouter un marqueur\".</string>
   <string name="geopoint_no_draggable_instruction">Appuyez sur le bouton \"ajouter un marqueur\".</string>
   <string name="discard">Annuler</string>
@@ -633,7 +631,6 @@
   <string name="transport_type_internet">Wifi/cellulaire (recommandé)</string>
   <string name="transport_type_sms">SMS</string>
   <string name="transport_type_both">Choisir à l\'envoi</string>
-  <string name="seconds">Secondes</string>
   <string name="rank_items">Choisir l\'ordre des éléments</string>
   <string name="loading_form_failed">Une erreur s\'est produite lors du chargement du formulaire. Veuillez réessayer.</string>
   <string name="missing_google_account_dialog_title">Compte Google non sélectionné</string>

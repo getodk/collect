@@ -308,7 +308,6 @@
   <string name="gps_enable_message">आपल्या डिव्हाइसमध्ये जीपीएस अक्षम केले आहे आपण ते सक्षम करू इच्छिता?</string>
   <string name="select_offline_layer">ऑफलाइन स्तर निवडा</string>
   <string name="polygon_or_polyline">जिओ ट्रेस जतन हे प्रमाणे करा</string>
-  <string name="minutes">मिनिटे</string>
   <string name="geo_clear_warning">वैशिष्ट्य आधीच तयार केले आपण वैशिष्ट्य साफ करू इच्छिता?</string>
   <string name="geo_exit_warning">बदल टाकून ओडीके कडे परत जा?</string>
   <string name="polygon_validator">बहुभुज तयार करण्यासाठी किमान 3 गुण असणे आवश्यक आहे</string>
@@ -316,7 +315,6 @@
   <string name="manual_mode">मॅन्युअल माध्यम</string>
   <string name="automatic_mode">स्वयंचलित माध्यम</string>
   <string name="geoshape_instruction">ठिकाणाच्या ठिकाणी ठेवण्यासाठी जास्त वेळ दाबा</string>
-  <string name="geotrace_instruction">लॉकची प्रतीक्षा करा, नंतर प्रारंभ करण्यासाठी जोडा मार्कर बटण टॅप करा.</string>
   <string name="geopoint_instruction">चिन्ह ठेवण्यासाठी जास्त वेळ दाबा किंवा जोडा मार्कर बटण टॅप करा</string>
   <string name="geopoint_no_draggable_instruction">जोडा मार्कर बटण टॅप करा</string>
   <string name="discard">टाकून द्या</string>

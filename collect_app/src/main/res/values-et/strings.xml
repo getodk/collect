@@ -300,7 +300,6 @@
   <string name="gps_enable_message">Teie seadmel on GPS keelatud. Kas te soovite lubada?</string>
   <string name="select_offline_layer">Vali offline kiht</string>
   <string name="polygon_or_polyline">Salvesta rada kui</string>
-  <string name="minutes">Minutid</string>
   <string name="geo_clear_warning">Kujutis on juba loodud. Kas soovite kujutise eemaldada?</string>
   <string name="geo_exit_warning">Loobu muudatustest ja ava ODK?</string>
   <string name="polygon_validator">Polügooni loomiseks on vaja vähemalt 3 punkti</string>
@@ -308,7 +307,6 @@
   <string name="manual_mode">Käsitsi sisestusviis</string>
   <string name="automatic_mode">Automaatne sisestusviis</string>
   <string name="geoshape_instruction">Märke paigutamiseks hoia pikalt soovitud asukohal.</string>
-  <string name="geotrace_instruction">Alustamiseks oota lukustust, seejärel puuduta markeri lisamise nuppu.</string>
   <string name="geopoint_instruction">Markeri paigutamiseks tuleb teha pikk hoidmine või valida marker nupp.</string>
   <string name="geopoint_no_draggable_instruction">Puuduta lisa marke nuppu.</string>
   <string name="discard">Loobu</string>

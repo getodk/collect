@@ -340,7 +340,6 @@
   <string name="gps_enable_message">お使いのデバイスで GPS は無効になっています。有効にしますか?</string>
   <string name="select_offline_layer">オフライン レイヤーを選択</string>
   <string name="polygon_or_polyline">名前を付けて GeoTrace を保存</string>
-  <string name="minutes">分</string>
   <string name="geo_clear_warning">機能は既に作成済です。機能をクリアしますか?</string>
   <string name="geo_exit_warning">変更を破棄して ODK の戻りますか?</string>
   <string name="polygon_validator">ポリゴンを作成するには、少なくとも 3 点指定する必要があります</string>
@@ -349,7 +348,6 @@
   <string name="manual_mode">手動モード</string>
   <string name="automatic_mode">自動モード</string>
   <string name="geoshape_instruction">場所をマークするには長押ししてください。</string>
-  <string name="geotrace_instruction">ロックを待って、その後マーカーを追加ボタンをタップして、開始します。</string>
   <string name="geopoint_instruction">長押ししてマークするか、マーカーを追加ボタンをタップしてください。</string>
   <string name="geopoint_no_draggable_instruction">マーカーを追加ボタンをタップします。</string>
   <string name="discard">破棄</string>
@@ -633,7 +631,6 @@
   <string name="transport_type_internet">Wifi/データ通信 (推奨)</string>
   <string name="transport_type_sms">SMS</string>
   <string name="transport_type_both">送信時に選択</string>
-  <string name="seconds">秒</string>
   <string name="rank_items">ランキングアイテム</string>
   <string name="loading_form_failed">フォームの読み込み時にエラーが発生しました。もう一度やり直してください。</string>
   <string name="missing_google_account_dialog_title">Google アカウントが設定されていません</string>

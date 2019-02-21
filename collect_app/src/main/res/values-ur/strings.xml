@@ -336,7 +336,6 @@
   <string name="gps_enable_message">آپ کے آلے میں جی پی ایس غیر فعال ہے. کیا آپ اسے فعال کرنا چاہتے ہیں؟ </string>
   <string name="select_offline_layer">آف لائن لیئر منتخب کریں</string>
   <string name="polygon_or_polyline">جیو ٹریس کے طور پر محفوظ کریں</string>
-  <string name="minutes">منٹیس </string>
   <string name="geo_clear_warning">فیچر پہلے سے ہی بنائی گئی ہے. کیا آپ کو فیچرکو ختم کرنا چاہیں گے؟</string>
   <string name="geo_exit_warning">تبدیلیوں کو ختم کریں اور او ڈی کے  کے پاس واپس جائیں؟</string>
   <string name="polygon_validator">قطبون بنانے کے لئے کم از کم 3 پوائنٹس لازمی ہیں</string>
@@ -345,7 +344,6 @@
   <string name="manual_mode">مینول موڈ</string>
   <string name="automatic_mode">آٹومیٹک موڈ</string>
   <string name="geoshape_instruction">پوائنٹس پلیس کرنے کے لئے طویل دبائیں.</string>
-  <string name="geotrace_instruction">لاک کا انتظار کریں، پھر شروع کرنے کیلئے  ایڈ مارکر بٹن دبائیں.</string>
   <string name="geopoint_instruction">پلیس مارک کرنے کے لیے طویل دبائیں یا ایڈ مارکر بٹن ٹیپ کریں</string>
   <string name="geopoint_no_draggable_instruction"> مارکر بٹن پر کلک کریں.</string>
   <string name="discard">ختم کر دینا</string>
@@ -630,7 +628,6 @@
   <string name="transport_type_internet">وائی فائی / سیلولر (سفارش کردہ)</string>
   <string name="transport_type_sms">ایس ایم ایس </string>
   <string name="transport_type_both">بھیجنے پر منتخب کریں</string>
-  <string name="seconds">سیکنڈز </string>
   <string name="rank_items"> رینک آئٹمز</string>
   <string name="loading_form_failed">فارم لوڈ کرتے ہوئے ایک خرابی واقع ہوئی. دوبارہ کوشش کریں.</string>
   <string name="missing_google_account_dialog_title">گوگل اکاؤنٹ سیٹ نہیں ہے</string>

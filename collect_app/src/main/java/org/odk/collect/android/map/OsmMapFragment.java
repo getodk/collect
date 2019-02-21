@@ -79,10 +79,18 @@ public class OsmMapFragment extends Fragment implements MapFragment,
     protected boolean gpsLocationEnabled;
     protected IGeoPoint lastMapCenter;
 
+    @Override public Fragment getFragment() {
+        return this;
+    }
+
     @Override public void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener) {
         readyListener = listener;
+        // If the containing activity is being re-created upon screen rotation,
+        // the FragmentManager will have also re-created a copy of the previous
+        // OsmMapFragment.  We don't want these useless copies of old fragments
+        // to linger, so the following line calls .replace() instead of .add().
         activity.getSupportFragmentManager()
-            .beginTransaction().add(containerId, this).commit();
+            .beginTransaction().replace(containerId, this).commit();
     }
 
     // TOOD(ping): This method is only used by MapHelper.  Remove this after
@@ -218,6 +226,13 @@ public class OsmMapFragment extends Fragment implements MapFragment,
             return ((PolyFeature) feature).getPoints();
         }
         return new ArrayList<>();
+    }
+
+    @Override public void removePolyLastPoint(int featureId) {
+        MapFeature feature = features.get(featureId);
+        if (feature instanceof PolyFeature) {
+            ((PolyFeature) feature).removeLastPoint();
+        }
     }
 
     @Override public void removeFeature(int featureId) {
@@ -546,6 +561,15 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         public void addPoint(MapPoint point) {
             markers.add(createMarker(map, point, this));
             update();
+        }
+
+        public void removeLastPoint() {
+            if (!markers.isEmpty()) {
+                int last = markers.size() - 1;
+                map.getOverlays().remove(markers.get(last));
+                markers.remove(last);
+                update();
+            }
         }
     }
 }
