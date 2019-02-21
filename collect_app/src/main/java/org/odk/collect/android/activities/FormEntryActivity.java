@@ -2676,14 +2676,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     locationPermissionsGranted = true;
                 }
                 setUpLocationClient(formController.getSubmissionMetadata().auditConfig);
-                if (googleLocationClient.isLocationAvailable()) {
-                    if (calledJustAfterFormStart) {
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED, null, false);
-                        SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_enabled));
+                if(googleLocationClient != null) {  // smap
+                    if (googleLocationClient.isLocationAvailable()) {
+                        if (calledJustAfterFormStart) {
+                            formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED, null, false);
+                            SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.background_location_enabled));
+                        }
+                    } else {
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED, null, false);
+                        new LocationProvidersDisabledDialog().show(getSupportFragmentManager(), LocationProvidersDisabledDialog.LOCATION_PROVIDERS_DISABLED_DIALOG_TAG);
                     }
-                } else {
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED, null, false);
-                    new LocationProvidersDisabledDialog().show(getSupportFragmentManager(), LocationProvidersDisabledDialog.LOCATION_PROVIDERS_DISABLED_DIALOG_TAG);
                 }
             }
 

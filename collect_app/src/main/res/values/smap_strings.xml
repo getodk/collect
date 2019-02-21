@@ -97,4 +97,5 @@
     <string name="smap_starting_form">"Launching form \"%s\""</string>
     <string name="smap_restarting_form">"Re-launching form \"%s\""</string>
     <string name="smap_form_completed">"The form \"%s\" has already been saved as finalised"</string>
+    <string name="smap_show_incomplete">"Show incomplete forms"</string>
 </resources>

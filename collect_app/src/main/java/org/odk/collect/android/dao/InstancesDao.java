@@ -25,6 +25,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -166,6 +167,39 @@ public class InstancesDao {
         }
 
         return cursorLoader;
+    }
+
+    /*
+     * smap get incomplete instances with a filter
+     */
+    public CursorLoader getIncompleteInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
+        CursorLoader cursorLoader;
+        if (charSequence.length() == 0) {
+            cursorLoader = getIncompleteInstancesCursorLoader(sortOrder);
+        } else {
+            String selection =
+                    "(" + InstanceProviderAPI.InstanceColumns.T_TASK_STATUS + "=? and "
+                            + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ? and "
+                            + InstanceProviderAPI.InstanceColumns.DELETED_DATE + " is null";    // smap
+            String[] selectionArgs = {
+                    Utilities.STATUS_T_ACCEPTED,
+                    "%" + charSequence + "%"};
+
+            cursorLoader = getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
+        }
+
+        return cursorLoader;
+    }
+
+    /*
+     * smap get incomplete instances without a filter
+     */
+    public CursorLoader getIncompleteInstancesCursorLoader(String sortOrder) {
+        String selection = InstanceProviderAPI.InstanceColumns.DELETED_DATE + " IS NULL and "  // smap
+                + InstanceProviderAPI.InstanceColumns.T_TASK_STATUS + "=? ";
+        String[] selectionArgs = {Utilities.STATUS_T_ACCEPTED};
+
+        return getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
     }
 
     public Cursor getInstancesCursorForFilePath(String path) {

@@ -85,6 +85,7 @@ import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivit
 public class InstanceUploaderList extends InstanceListActivity implements
         OnLongClickListener, DiskSyncListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String SHOW_ALL_MODE = "showAllMode";
+    private static final String SHOW_INCOMPLETE = "showIncomplete";     // smap
     private static final String INSTANCE_UPLOADER_LIST_SORTING_ORDER = "instanceUploaderListSortingOrder";
 
     private static final int INSTANCE_UPLOADER = 0;
@@ -101,6 +102,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
     private InstanceSyncTask instanceSyncTask;
 
     private boolean showAllMode;
+    private boolean showIncomplete;     // smap
 
     // Default to true so the send button is disabled until the worker status is updated by the
     // observer
@@ -136,6 +138,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
         if (savedInstanceState != null) {
             showAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
+            showIncomplete = savedInstanceState.getBoolean(SHOW_INCOMPLETE);        // smap
         }
 
         new PermissionUtils(this).requestStoragePermissions(new PermissionListener() {
@@ -419,6 +422,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(SHOW_ALL_MODE, showAllMode);
+        outState.putBoolean(SHOW_INCOMPLETE, showIncomplete);       // smap
     }
 
     @Override
@@ -463,6 +467,8 @@ public class InstanceUploaderList extends InstanceListActivity implements
         showProgressBar();
         if (showAllMode) {
             return instancesDao.getCompletedUndeletedInstancesCursorLoader(getFilterText(), getSortingOrder());
+        } else if (showIncomplete) {        // smap
+            return instancesDao.getIncompleteInstancesCursorLoader(getFilterText(), getSortingOrder());
         } else {
             return instancesDao.getFinalizedInstancesCursorLoader(getFilterText(), getSortingOrder());
         }
@@ -492,7 +498,8 @@ public class InstanceUploaderList extends InstanceListActivity implements
      */
     private boolean showSentAndUnsentChoices() {
         String[] items = {getString(R.string.show_unsent_forms),
-                getString(R.string.show_sent_and_unsent_forms)};
+                getString(R.string.show_sent_and_unsent_forms),
+                getString(R.string.smap_show_incomplete)};
 
         AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_info)
@@ -519,7 +526,13 @@ public class InstanceUploaderList extends InstanceListActivity implements
                                             */
                             break;
 
-                        case 2:// do nothing
+                        case 2:// smap Show incomplete forms
+                            showAllMode = false;
+                            showIncomplete = true;
+                            updateAdapter();
+                            break;
+
+                        case 3:// do nothing
                             break;
                     }
                 }).create();
