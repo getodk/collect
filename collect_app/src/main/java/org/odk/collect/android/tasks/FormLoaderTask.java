@@ -61,8 +61,6 @@ import java.util.Map;
 import au.com.bytecode.opencsv.CSVReader;
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.FileUtils.MEDIA_SUFFIX;
-
 /**
  * Background task for loading a form.
  *
@@ -124,9 +122,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         final String formPath = path[0];
         final File formXml = new File(formPath);
-
-        // set paths to /sdcard/odk/forms/formBasename-media/
-        final String formBasename = FileUtils.getFormBasename(formXml);
         final File formMediaDir = FileUtils.getFormMediaDir(formXml);
 
         final ReferenceManager referenceManager = ReferenceManager.instance();
@@ -140,7 +135,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             referenceManager.addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
         }
 
-        addSessionRootTranslators(formBasename, referenceManager,
+        addSessionRootTranslators(formMediaDir.getName(), referenceManager,
                 "images", "image", "audio", "video", "file");
 
         final FormDef formDef = createFormDefFromCacheOrXml(formPath, formXml);
@@ -215,9 +210,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         return data;
     }
 
-    private void addSessionRootTranslators(String formBasename, ReferenceManager referenceManager, String... hostStrings) {
+    private void addSessionRootTranslators(String formMediaDir, ReferenceManager referenceManager, String... hostStrings) {
         // Set jr://... to point to /sdcard/odk/forms/formBasename-media/
-        final String translatedPrefix = String.format("jr://file/forms/%s" + MEDIA_SUFFIX + "/", formBasename);
+        final String translatedPrefix = String.format("jr://file/forms/" + formMediaDir + "/");
         for (String t : hostStrings) {
             referenceManager.addSessionRootTranslator(new RootTranslator(String.format("jr://%s/", t), translatedPrefix));
         }

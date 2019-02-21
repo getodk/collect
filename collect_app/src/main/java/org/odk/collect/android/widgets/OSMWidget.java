@@ -25,6 +25,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
@@ -32,7 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.utilities.FileUtils.MEDIA_SUFFIX;
 
 /**
  * Widget that allows the user to launch OpenMapKit to get an OSM Feature with a
@@ -64,14 +64,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
 
         FormController formController = Collect.getInstance().getFormController();
 
-        /*
-         * NH: I'm trying to find the form xml file name, but this is neither
-         * in the formController nor the formDef. In fact, it doesn't seem to
-         * be saved into any object in JavaRosa. However, the mediaFolder
-         * has the substring of the file name in it, so I extract the file name
-         * from here. Awkward...
-         */
-        formFileName = formController.getMediaFolder().getName().split(MEDIA_SUFFIX)[0];
+        formFileName = FileUtils.getFormBasenameFromMediaFolder(formController.getMediaFolder());
 
         instanceDirectory = formController.getInstanceFile().getParent();
         instanceId = formController.getSubmissionMetadata().instanceId;

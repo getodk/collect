@@ -70,7 +70,7 @@ public class FileUtils {
     public static final String AUTO_SEND = "autoSend";
 
     /** Suffix for the form media directory. */
-    public static final String MEDIA_SUFFIX = "-media";
+    private static final String MEDIA_SUFFIX = "-media";
 
     /** Filename of the last-saved instance data. */
     public static final String LAST_SAVED_FILENAME = "last-saved.xml";
@@ -423,6 +423,17 @@ public class FileUtils {
     public static File getFormMediaDir(File formXml) {
         final String formFileName = getFormBasename(formXml);
         return new File(formXml.getParent(), formFileName + MEDIA_SUFFIX);
+    }
+
+    public static String getFormBasenameFromMediaFolder(File mediaFolder) {
+        /*
+         * TODO (from commit 37e3467): Apparently the form name is neither
+         * in the formController nor the formDef. In fact, it doesn't seem to
+         * be saved into any object in JavaRosa. However, the mediaFolder
+         * has the substring of the file name in it, so we extract the file name
+         * from here. Awkward...
+         */
+        return mediaFolder.getName().split(MEDIA_SUFFIX)[0];
     }
 
     public static File getLastSavedFile(File formXml) {

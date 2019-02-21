@@ -44,7 +44,6 @@ import java.util.Map;
 import timber.log.Timber;
 
 import static org.odk.collect.android.database.helpers.FormsDatabaseHelper.FORMS_TABLE_NAME;
-import static org.odk.collect.android.utilities.FileUtils.MEDIA_SUFFIX;
 import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 
 public class FormsProvider extends ContentProvider {
@@ -213,10 +212,7 @@ public class FormsProvider extends ContentProvider {
                 values.put(FormsColumns.JRCACHE_FILE_PATH, cachePath);
             }
             if (!values.containsKey(FormsColumns.FORM_MEDIA_PATH)) {
-                String pathNoExtension = filePath.substring(0,
-                        filePath.lastIndexOf('.'));
-                String mediaPath = pathNoExtension + MEDIA_SUFFIX;
-                values.put(FormsColumns.FORM_MEDIA_PATH, mediaPath);
+                values.put(FormsColumns.FORM_MEDIA_PATH, FileUtils.constructMediaPath(filePath));
             }
 
             SQLiteDatabase db = formsDatabaseHelper.getWritableDatabase();
