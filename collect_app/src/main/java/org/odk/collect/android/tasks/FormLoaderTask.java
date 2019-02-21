@@ -61,8 +61,6 @@ import java.util.Map;
 import au.com.bytecode.opencsv.CSVReader;
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
-
 /**
  * Background task for loading a form.
  *
@@ -125,8 +123,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         final String formPath = path[0];
         final File formXml = new File(formPath);
 
-        // set paths to /sdcard/odk/forms/formfilename-media/
-        final String formFileName = FileUtils.getFormFileName(formXml);
+        // set paths to /sdcard/odk/forms/formBasename-media/
+        final String formBasename = FileUtils.getFormBasename(formXml);
         final File formMediaDir = FileUtils.getFormMediaDir(formXml);
 
         final ReferenceManager referenceManager = ReferenceManager.instance();
@@ -140,7 +138,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             referenceManager.addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
         }
 
-        addSessionRootTranslators(formFileName, referenceManager,
+        addSessionRootTranslators(formBasename, referenceManager,
                 "images", "image", "audio", "video", "file");
 
         final FormDef formDef = createFormDefFromCacheOrXml(formPath, formXml);
@@ -215,9 +213,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         return data;
     }
 
-    private void addSessionRootTranslators(String formFileName, ReferenceManager referenceManager, String... hostStrings) {
-        // Set jr://... to point to /sdcard/odk/forms/filename-media/
-        final String translatedPrefix = String.format("jr://file/forms/%s-media/", formFileName);
+    private void addSessionRootTranslators(String formBasename, ReferenceManager referenceManager, String... hostStrings) {
+        // Set jr://... to point to /sdcard/odk/forms/formBasename-media/
+        final String translatedPrefix = String.format("jr://file/forms/%s-media/", formBasename);
         for (String t : hostStrings) {
             referenceManager.addSessionRootTranslator(new RootTranslator(String.format("jr://%s/", t), translatedPrefix));
         }

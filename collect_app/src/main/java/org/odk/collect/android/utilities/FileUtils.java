@@ -408,20 +408,20 @@ public class FileUtils {
         }
     }
 
-    public static String getFormFileName(File formXml) {
-        return getFormFileName(formXml.getName());
+    public static String getFormBasename(File formXml) {
+        return getFormBasename(formXml.getName());
     }
 
-    public static String getFormFileName(String formFilePath) {
+    public static String getFormBasename(String formFilePath) {
         return formFilePath.substring(0, formFilePath.lastIndexOf('.'));
     }
 
     public static String constructMediaPath(String formFilePath) {
-        return getFormFileName(formFilePath) + MEDIA_SUFFIX;
+        return getFormBasename(formFilePath) + MEDIA_SUFFIX;
     }
 
     public static File getFormMediaDir(File formXml) {
-        final String formFileName = getFormFileName(formXml);
+        final String formFileName = getFormBasename(formXml);
         return new File(formXml.getParent(), formFileName + MEDIA_SUFFIX);
     }
 
