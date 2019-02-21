@@ -66,7 +66,6 @@ import java.util.regex.Pattern;
 import timber.log.Timber;
 
 import static org.odk.collect.android.logic.FormController.INSTANCE_ID;
-import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
 
 public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private static final String PARENT_KEY = "PARENT_KEY";

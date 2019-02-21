@@ -440,6 +440,10 @@ public class FileUtils {
         return new File(getFormMediaDir(formXml), LAST_SAVED_FILENAME);
     }
 
+    public static String getLastSavedPath(File mediaFolder) {
+        return mediaFolder.getAbsolutePath() + File.separator + LAST_SAVED_FILENAME;
+    }
+
     @Nullable
     public static String getLastSavedSrcIfExists(File formXml) {
         File lastSavedFile = getLastSavedFile(formXml);

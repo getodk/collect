@@ -52,6 +52,7 @@ import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.utilities.AuditEventLogger;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.views.ODKView;
 
 import java.io.File;
@@ -63,7 +64,6 @@ import java.util.List;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.XML_OPENDATAKIT_NAMESPACE;
-import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
 
 /**
  * This class is a wrapper for Javarosa's FormEntryController. In theory, if you wanted to replace
@@ -173,7 +173,7 @@ public class FormController {
 
     @Nullable
     public String getLastSavedPath() {
-        return mediaFolder != null ? mediaFolder.getAbsolutePath() + File.separator + LAST_SAVED_FILENAME : null;
+        return mediaFolder != null ? FileUtils.getLastSavedPath(mediaFolder) : null;
     }
 
     public void setIndexWaitingForData(FormIndex index) {
