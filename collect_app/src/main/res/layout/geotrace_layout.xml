@@ -62,8 +62,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="0dip"
-                android:paddingBottom="60dip">
+                android:paddingTop="0dip">
 
                 <android.support.v7.widget.AppCompatImageButton
                     android:id="@+id/play"
