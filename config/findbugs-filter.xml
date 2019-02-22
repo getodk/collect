@@ -117,9 +117,6 @@
 
     <!-- Performance Warnings -->
     <Match>
-        <Bug pattern="SBSC_USE_STRINGBUFFER_CONCATENATION" />
-    </Match>
-    <Match>
         <Bug pattern="WMI_WRONG_MAP_ITERATOR" />
     </Match>
     <Match>
