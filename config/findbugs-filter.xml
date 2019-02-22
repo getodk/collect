@@ -106,9 +106,6 @@
     <Match>
         <Bug pattern="MS_CANNOT_BE_FINAL" />
     </Match>
-    <Match>
-        <Bug pattern="MS_FINAL_PKGPROTECT" />
-    </Match>
 
     <!-- Multithreaded correctness -->
     <Match>
