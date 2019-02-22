@@ -160,8 +160,4 @@
     <Match>
         <Bug pattern="FE_FLOATING_POINT_EQUALITY" />
     </Match>
-    <Match>
-        <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE" />
-    </Match>
-
 </FindBugsFilter>

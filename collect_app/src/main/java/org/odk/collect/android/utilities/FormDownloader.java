@@ -212,7 +212,7 @@ public class FormDownloader {
         } catch (IOException e) {
             Timber.e(e);
 
-            if (uriResult != null && uriResult.isNew() && fileResult.isNew()) {
+            if (uriResult.isNew() && fileResult.isNew()) {
                 // this means we should delete the entire form together with the metadata
                 Uri uri = uriResult.getUri();
                 Timber.w("The form is new. We should delete the entire form.");

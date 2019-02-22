@@ -237,10 +237,8 @@ public class DrawActivity extends CollectAbstractActivity {
             drawView.drawOnCanvas(canvas, 0, 0);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 70, fos);
             try {
-                if (fos != null) {
-                    fos.flush();
-                    fos.close();
-                }
+                fos.flush();
+                fos.close();
             } catch (Exception e) {
                 Timber.e(e);
             }

@@ -609,7 +609,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private boolean shouldLocationCoordinatesBeCollected(FormController formController) {
         return formController != null
-                && formController.getSubmissionMetadata() != null
                 && formController.getSubmissionMetadata().auditConfig != null
                 && formController.getSubmissionMetadata().auditConfig.isLocationEnabled();
     }
