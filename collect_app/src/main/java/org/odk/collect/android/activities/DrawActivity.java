@@ -269,11 +269,6 @@ public class DrawActivity extends CollectAbstractActivity {
                 createQuitDrawDialog();
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
-                if (event.isAltPressed()) {
-                    createQuitDrawDialog();
-                    return true;
-                }
-                break;
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 if (event.isAltPressed()) {
                     createQuitDrawDialog();
