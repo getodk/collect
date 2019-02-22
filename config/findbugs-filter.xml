@@ -73,9 +73,6 @@
         <Bug pattern="SE_COMPARATOR_SHOULD_BE_SERIALIZABLE" />
     </Match>
     <Match>
-        <Bug pattern="ES_COMPARING_STRINGS_WITH_EQ" />
-    </Match>
-    <Match>
         <Bug pattern="OS_OPEN_STREAM_EXCEPTION_PATH" />
     </Match>
     <Match>
