@@ -185,12 +185,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         RankingWidgetDialog.RankingListener,
         SaveFormIndexTask.SaveFormIndexListener, LocationClient.LocationClientListener, LocationListener {
 
-    // save with every swipe forward or back. Timings indicate this takes .25
-    // seconds.
-    // if it ever becomes an issue, this value can be changed to save every n'th
-    // screen.
-    private static final int SAVEPOINT_INTERVAL = 1;
-
     // Defines for FormEntryActivity
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
@@ -262,7 +256,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private boolean locationPermissionsGranted;
 
     private final Object saveDialogLock = new Object();
-    private int viewCount;
 
     private FormLoaderTask formLoaderTask;
     private SaveToDiskTask saveToDiskTask;
@@ -1475,9 +1468,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 case FormEntryController.EVENT_QUESTION:
                 case FormEntryController.EVENT_GROUP:
                     // create a savepoint
-                    if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
-                        nonblockingCreateSavePointData();
-                    }
+                    nonblockingCreateSavePointData();
                     next = createView(event, true);
                     showView(next, AnimationType.RIGHT);
                     break;
@@ -1536,9 +1527,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         if (event == FormEntryController.EVENT_GROUP
                                 || event == FormEntryController.EVENT_QUESTION) {
                             // create savepoint
-                            if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
-                                nonblockingCreateSavePointData();
-                            }
+                            nonblockingCreateSavePointData();
                         }
                         formController.getAuditEventLogger().exitView();    // Close events
                         View next = createView(event, false);
