@@ -155,9 +155,6 @@
         <Bug pattern="PZLA_PREFER_ZERO_LENGTH_ARRAYS" />
     </Match>
     <Match>
-        <Bug pattern="RI_REDUNDANT_INTERFACES" />
-    </Match>
-    <Match>
         <Bug pattern="Warnings_STYLE" />
     </Match>
     <Match>
