@@ -19,6 +19,7 @@ package org.odk.collect.android.utilities;
 import android.content.Context;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,6 +43,8 @@ public class DateTimeUtilsTest {
     private DatePickerDetails bikramSambatDatePickerDetails;
 
     private Context context;
+    private Locale defaultLocale;
+    private TimeZone defaultTimezone;
 
     @Before
     public void setUp() {
@@ -52,6 +55,8 @@ public class DateTimeUtilsTest {
         bikramSambatDatePickerDetails = new DatePickerDetails(DatePickerDetails.DatePickerType.BIKRAM_SAMBAT, DatePickerDetails.DatePickerMode.SPINNERS);
 
         context = Collect.getInstance();
+        defaultLocale = Locale.getDefault();
+        defaultTimezone = TimeZone.getDefault();
     }
 
     @Test
@@ -78,5 +83,11 @@ public class DateTimeUtilsTest {
 
         assertEquals("3 कार्तिक 2048 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(date, bikramSambatDatePickerDetails, false, context));
         assertEquals("3 कार्तिक 2048, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(date, bikramSambatDatePickerDetails, true, context));
+    }
+
+    @After
+    public void resetTimeZone() {
+        Locale.setDefault(defaultLocale);
+        TimeZone.setDefault(defaultTimezone);
     }
 }
