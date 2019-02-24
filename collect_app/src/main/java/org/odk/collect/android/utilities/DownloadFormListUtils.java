@@ -316,8 +316,9 @@ public class DownloadFormListUtils {
     }
 
     private static boolean isThisFormAlreadyDownloaded(String formId) {
-        Cursor cursor = new FormsDao().getFormsCursorForFormId(formId);
-        return cursor == null || cursor.getCount() > 0;
+        try (Cursor cursor = new FormsDao().getFormsCursorForFormId(formId)) {
+            return cursor == null || cursor.getCount() > 0;
+        }
     }
 
     private ManifestFile getManifestFile(String manifestUrl) {
