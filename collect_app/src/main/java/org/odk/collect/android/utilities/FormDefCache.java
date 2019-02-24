@@ -1,5 +1,7 @@
 package org.odk.collect.android.utilities;
 
+import android.support.annotation.Nullable;
+
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.util.externalizable.ExtUtil;
 import org.odk.collect.android.application.Collect;
@@ -107,23 +109,17 @@ public class FormDefCache {
                 FileUtils.getMd5Hash(formXml) + ".formdef");
     }
 
+    @Nullable
     private static FormDef deserializeFormDef(File serializedFormDef) {
-        FileInputStream fis;
-        FormDef fd;
-        try {
-            // create new form def
-            fd = new FormDef();
-            fis = new FileInputStream(serializedFormDef);
-            DataInputStream dis = new DataInputStream(fis);
-
+        try (DataInputStream dis = new DataInputStream(new FileInputStream(serializedFormDef))) {
+            FormDef fd = new FormDef();
             // read serialized formdef into new formdef
             fd.readExternal(dis, ExtUtil.defaultPrototypes());
-            dis.close();
+            return fd;
         } catch (Exception e) {
             Timber.e(e);
-            fd = null;
         }
 
-        return fd;
+        return null;
     }
 }
