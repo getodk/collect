@@ -36,7 +36,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
-import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.ContextMenu;
@@ -129,6 +128,7 @@ import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.utilities.RegexUtils;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -1218,18 +1218,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 final EditText saveAs = endView.findViewById(R.id.save_name);
 
                 // disallow carriage returns in the name
-                InputFilter returnFilter = new InputFilter() {
-                    public CharSequence filter(CharSequence source, int start,
-                                               int end, Spanned dest, int dstart, int dend) {
-                        String newText = source.toString().substring(start, end);
-                        String invalidCharRegex = "[\\p{Cntrl}]";
-
-                        // Replace invalid characters, only modifying the string if necessary.
-                        return newText.matches(invalidCharRegex)
-                                ? newText.replaceAll(invalidCharRegex, " ")
-                                : null;
-                    }
-                };
+                InputFilter returnFilter = (source, start, end, dest, dstart, dend)
+                        -> RegexUtils.normalizeFormName(source.toString().substring(start, end), true);
                 saveAs.setFilters(new InputFilter[]{returnFilter});
 
                 if (formController.getSubmissionMetadata().instanceName == null) {
