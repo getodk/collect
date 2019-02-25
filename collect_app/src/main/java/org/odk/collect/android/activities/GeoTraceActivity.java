@@ -526,7 +526,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         updateUi();
     }
 
-    /** Updates the visibility and enabled state of buttons to reflect internal state. */
+    /** Updates the state of various UI widgets to reflect internal state. */
     private void updateUi() {
         final int numPoints = map.getPolyPoints(featureId).size();
         final MapPoint location = map.getGpsLocation();
