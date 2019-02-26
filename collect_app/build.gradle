@@ -329,6 +329,7 @@ dependencies {
     testImplementation "org.mockito:mockito-core:2.22.0"
     testImplementation "org.robolectric:robolectric:4.0.1"
     testImplementation "org.robolectric:shadows-multidex:4.0-beta-1"
+    testImplementation "com.squareup.okhttp3:mockwebserver:${rootProject.okhttp3Version}"
 
     // power mock (for mocking final methods which is not handled by mockito)
     testImplementation "org.powermock:powermock-module-junit4:2.0.2"
