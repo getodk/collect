@@ -3,7 +3,9 @@ package org.odk.collect.android.http;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.ByteArrayInputStream;
@@ -50,6 +52,29 @@ public abstract class OpenRosaHttpInterfaceTest {
     }
 
     @Test
+    public void executeGetRequest_sendsCollectHeaders() throws Exception {
+        mockWebServer.enqueue(new MockResponse());
+
+        subject.executeGetRequest(mockWebServer.url("").uri(), null, null);
+
+        RecordedRequest request = mockWebServer.takeRequest();
+        assertThat(request.getHeader("User-Agent"), equalTo(String.format(
+                "null %s/%s",
+                BuildConfig.APPLICATION_ID,
+                BuildConfig.VERSION_NAME)));
+    }
+
+    @Test
+    public void executeGetRequest_sendsOpenRosaHeaders() throws Exception {
+        mockWebServer.enqueue(new MockResponse());
+
+        subject.executeGetRequest(mockWebServer.url("").uri(), null, null);
+
+        RecordedRequest request = mockWebServer.takeRequest();
+        assertThat(request.getHeader("X-OpenRosa-Version"), equalTo("1.0"));
+    }
+
+    @Test
     public void executeGetRequest_returnsBodyWithEmptyHash() throws Exception {
         mockWebServer.enqueue(new MockResponse()
                 .setBody("I AM BODY"));
@@ -68,6 +93,33 @@ public abstract class OpenRosaHttpInterfaceTest {
         HttpGetResult result = subject.executeGetRequest(mockWebServer.url("").uri(), "text/xml", null);
         assertThat(IOUtils.toString(result.getInputStream(), Charset.defaultCharset()), equalTo("I AM BODY"));
         assertThat(result.getHash(), equalTo(FileUtils.getMd5Hash(new ByteArrayInputStream("I AM BODY".getBytes()))));
+    }
+
+    @Test(expected = Exception.class)
+    public void executeGetRequest_withContentType_whenResponseHasDifferentContentType_throwsException() throws Exception {
+        mockWebServer.enqueue(new MockResponse()
+                .addHeader("Content-Type", "application/json"));
+
+        subject.executeGetRequest(mockWebServer.url("").uri(), "text/xml", null);
+    }
+
+    @Test(expected = Exception.class)
+    @Ignore("OkHttp doesn't recognize bogus content types")
+    public void executeGetRequest_withBogusContentType_whenResponseHasDifferentBogusContentType_throwsException() throws Exception {
+        mockWebServer.enqueue(new MockResponse()
+                .addHeader("Content-Type", "bad stuff"));
+
+        subject.executeGetRequest(mockWebServer.url("").uri(), "good stuff", null);
+    }
+
+    @Test
+    public void executeGetRequest_withContentType_whenResponseContainsContentType_returnsResult() throws Exception {
+        mockWebServer.enqueue(new MockResponse()
+                .addHeader("Content-Type", "application/json; charset=utf-8")
+                .setBody("I AM BODY"));
+
+        HttpGetResult result = subject.executeGetRequest(mockWebServer.url("").uri(), "application/json", null);
+        assertThat(IOUtils.toString(result.getInputStream(), Charset.defaultCharset()), equalTo("I AM BODY"));
     }
 
     @Test
