@@ -7,7 +7,7 @@ import org.robolectric.RobolectricTestRunner;
 public class OkHttpConnectionTest extends OpenRosaHttpInterfaceTest {
 
     @Override
-    protected OpenRosaHttpInterface subject() {
+    protected OpenRosaHttpInterface buildSubject() {
         return new OkHttpConnection();
     }
 }
