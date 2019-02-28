@@ -17,8 +17,4 @@ import dagger.Module;
  * @see Activity (PMD doesn't see Activity in the line above).
  */
 @Module
-public abstract class ActivityBuilder {
-
-    @PerActivity
-    abstract GeoActivity bindGeoActivity();
-}
+public abstract class ActivityBuilder { }
