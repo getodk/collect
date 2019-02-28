@@ -125,7 +125,6 @@ public class InstanceChooserList extends InstanceListActivity implements
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (Collect.allowClick(getClass().getName())) {
             Cursor c = (Cursor) listView.getAdapter().getItem(position);
-            startManagingCursor(c);
             Uri instanceUri =
                     ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,
                             c.getLong(c.getColumnIndex(InstanceColumns._ID)));
