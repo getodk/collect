@@ -164,8 +164,8 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 new InputFilter[]{new ControlCharacterFilter()});
 
         //setupTransportPreferences();
-        getPreferenceScreen().removePreference(findPreference(KEY_TRANSPORT_PREFERENCE));
-        getPreferenceScreen().removePreference(findPreference(KEY_SMS_PREFERENCE));
+        //getPreferenceScreen().removePreference(findPreference(KEY_TRANSPORT_PREFERENCE));  smap
+        //getPreferenceScreen().removePreference(findPreference(KEY_SMS_PREFERENCE));          smap
     }
 
     /*
