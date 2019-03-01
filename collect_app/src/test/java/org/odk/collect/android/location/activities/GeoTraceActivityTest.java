@@ -14,17 +14,14 @@
 
 package org.odk.collect.android.location.activities;
 
-import android.location.Location;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.activities.GeoTraceActivity;
-import org.odk.collect.android.location.client.LocationClient;
+import org.odk.collect.android.location.client.FakeLocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.map.GoogleMapFragment;
 import org.odk.collect.android.map.MapPoint;
@@ -32,81 +29,51 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.odk.collect.android.location.activities.GeoPointActivityTest.newMockLocation;
 
 @RunWith(RobolectricTestRunner.class)
 public class GeoTraceActivityTest extends BaseGeoActivityTest {
     @Rule public MockitoRule rule = MockitoJUnit.rule();
     private ActivityController<GeoTraceActivity> controller;
     private GeoTraceActivity activity;
-    private GoogleMapFragment map;
-    @Mock LocationClient locationClient;
+    private FakeLocationClient fakeLocationClient;
 
     @Before public void setUp() throws Exception {
         super.setUp();
-        LocationClients.setTestClient(locationClient);
+        fakeLocationClient = new FakeLocationClient();
+        LocationClients.setTestClient(fakeLocationClient);
         GoogleMapFragment.testMode = true;
         controller = Robolectric.buildActivity(GeoTraceActivity.class);
-        activity = controller.create().start().resume().visible().get();
-        map = (GoogleMapFragment) activity.getMapFragment();
     }
 
     @Test public void testLocationClientLifecycle() {
-        verify(locationClient).start();
+        // Starting the activity should start the location client.
+        activity = controller.create().start().resume().visible().get();
+        assertTrue(fakeLocationClient.isRunning());
 
-        when(locationClient.isLocationAvailable()).thenReturn(true);
+        // Acquiring a fix should set the location on the map.
+        fakeLocationClient.receiveFix(createLocation("GPS", 11, 12, 13, 14f));
+        assertEquals(new MapPoint(11, 12, 13, 14), activity.getMapFragment().getGpsLocation());
 
-        Location mockLocation = newMockLocation();
-        when(mockLocation.getLatitude()).thenReturn(11.0);
-        when(mockLocation.getLongitude()).thenReturn(12.0);
-        when(mockLocation.getAltitude()).thenReturn(13.0);
-        when(mockLocation.getAccuracy()).thenReturn(14f);
-        when(locationClient.getLastLocation()).thenReturn(mockLocation);
+        // Acquiring a second fix should update the map with the new location.
+        fakeLocationClient.receiveFix(createLocation("GPS", 21, 22, 23, 24f));
+        assertEquals(new MapPoint(21, 22, 23, 24), activity.getMapFragment().getGpsLocation());
 
-        map.onClientStart();
-        verify(locationClient).requestLocationUpdates(map);
-        verify(locationClient).getLastLocation();
-
-        MapPoint point = map.getGpsLocation();
-        assertEquals(mockLocation.getLatitude(), point.lat, 0);
-        assertEquals(mockLocation.getLongitude(), point.lon, 0);
-        assertEquals(mockLocation.getAltitude(), point.alt, 0);
-        assertEquals(mockLocation.getAccuracy(), point.sd, 0);
-
-        Location mockLocation2 = newMockLocation();
-        when(mockLocation2.getLatitude()).thenReturn(21.0);
-        when(mockLocation2.getLongitude()).thenReturn(22.0);
-        when(mockLocation2.getAltitude()).thenReturn(23.0);
-        when(mockLocation2.getAccuracy()).thenReturn(24f);
-
-        activity.getPlayButton().setEnabled(false);
-        map.onLocationChanged(mockLocation2);
-        assertTrue(activity.getPlayButton().isEnabled());
-        MapPoint point2 = map.getGpsLocation();
-        assertEquals(mockLocation2.getLatitude(), point2.lat, 0);
-        assertEquals(mockLocation2.getLongitude(), point2.lon, 0);
-        assertEquals(mockLocation2.getAltitude(), point2.alt, 0);
-        assertEquals(mockLocation2.getAccuracy(), point2.sd, 0);
-
+        // Stopping the activity should stop the location client.
         controller.stop();
-        verify(locationClient).stop();
+        assertFalse(fakeLocationClient.isRunning());
     }
 
-    @Test public void activityShouldShowErrorDialogOnClientError() {
-        assertFalse(map.isGpsErrorDialogShowing());
-        map.onClientStartFailure();
-        assertTrue(map.isGpsErrorDialogShowing());
-    }
+    @Test public void shouldEnablePlayButtonOnLocationFix() {
+        activity = controller.create().start().resume().visible().get();
 
-    @Test public void activityShouldShowErrorDialogIfLocationUnavailable() {
-        assertFalse(map.isGpsErrorDialogShowing());
-        when(locationClient.isLocationAvailable()).thenReturn(false);
-        map.onClientStart();
-        assertTrue(map.isGpsErrorDialogShowing());
+        // The "Play" button should be initially disabled.
+        assertFalse(activity.getPlayButton().isEnabled());
+
+        // Acquiring a fix should cause the "Play" button to become enabled.
+        fakeLocationClient.receiveFix(createLocation("GPS", 1, 2, 3, 4f));
+        assertTrue(activity.getPlayButton().isEnabled());
     }
 }

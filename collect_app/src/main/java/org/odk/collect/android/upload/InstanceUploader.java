@@ -33,6 +33,8 @@ import java.util.List;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
 
 public abstract class InstanceUploader {
+    static final String FAIL = "Error: ";
+
     /**
      * Uploads the specified instance to the specified destination URL. It may return a custom
      * success message on completion or null if none is available. Errors result in an UploadException.

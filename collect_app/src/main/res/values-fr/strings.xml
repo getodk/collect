@@ -4,7 +4,6 @@
   <string name="activity_not_found">Aucune activité à gérer: %s</string>
   <string name="view_image">Afficher l\'image</string>
   <string name="annotate_image">Annoter l\'image</string>
-  <string name="aligned_image_capture">Capture d\'image alignée</string>
   <string name="signature_capture">Capture d\'une signature</string>
   <string name="view_video">Visionner la vidéo</string>
   <string name="choose_audio">Choisir l\'audio</string>
@@ -294,7 +293,6 @@
   <string name="google_search_browse">Rechercher des formulaires ou sélectionner \'Mon Drive\' ci-dessous pour parcourir des formulaires.</string>
   <string name="google_sheets_url">URL de secours pour soumission de données</string>
   <string name="send_in_progress">L\'envoi s\'exécute en tâche de fond, essayer plus tard.</string>
-  <string name="sheets_max_columns">Il est impossible de télécharger votre feuille de calcul. Le nombre maximum de colonnes est de 255. Votre formulaire en a %s. </string>
   <string name="invalid_sheet_id">Identifiant %1$s du tableur n\'est pas valable.</string>
   <string name="missing_submission_url">URL de soumission manquante</string>
   <string name="google_sheets_access_denied">Accès refusé. Assurez-vous que le propriétaire de la feuille de calcul vous a accordé la permission de modification.</string>
@@ -342,7 +340,6 @@
   <string name="gps_enable_message">Le GPS est désactivé. Voulez vous l\'activer ?</string>
   <string name="select_offline_layer">Sélectionner le fond de carte hors ligne </string>
   <string name="polygon_or_polyline">Enregistrer le TracéGéo sous</string>
-  <string name="minutes">Minutes</string>
   <string name="geo_clear_warning">Objet déjà créé. Souhaitez-vous l\'effacer ?</string>
   <string name="geo_exit_warning">Annuler les changements et revenir à ODK</string>
   <string name="polygon_validator">3 points minimum sont nécessaires pour créer un Polygone</string>
@@ -351,13 +348,9 @@
   <string name="manual_mode">Mode Manuel</string>
   <string name="automatic_mode">Mode Automatique</string>
   <string name="geoshape_instruction">Appuyer longtemps pour placer le marqueur</string>
-  <string name="geotrace_instruction">Patientez durant le verrouillage, puis appuyez sur le bouton marqueur pour commencer.</string>
   <string name="geopoint_instruction">Appuyez longuement sur la carte pour placer un marqueur ou appuyez sur le bouton \"ajouter un marqueur\".</string>
   <string name="geopoint_no_draggable_instruction">Appuyez sur le bouton \"ajouter un marqueur\".</string>
   <string name="discard">Annuler</string>
-  <string name="zoom_to_where">Zoom sur…</string>
-  <string name="zoom_to_location">Zoomer sur l\'emplacement courant</string>
-  <string name="zoom_to_feature">Zoomer sur l\'objet enregistré</string>
   <string name="geoshape_view_change_location">Voir ou Modifier la FormeGéo</string>
   <string name="geotrace_view_change_location">Voir ou Modifier le TracéGéo</string>
   <string name="bearing">Palier: %.3f</string>
@@ -638,7 +631,6 @@
   <string name="transport_type_internet">Wifi/cellulaire (recommandé)</string>
   <string name="transport_type_sms">SMS</string>
   <string name="transport_type_both">Choisir à l\'envoi</string>
-  <string name="seconds">Secondes</string>
   <string name="rank_items">Choisir l\'ordre des éléments</string>
   <string name="loading_form_failed">Une erreur s\'est produite lors du chargement du formulaire. Veuillez réessayer.</string>
   <string name="missing_google_account_dialog_title">Compte Google non sélectionné</string>
@@ -646,7 +638,10 @@
   <string name="sms_invalid_phone_number_description">Définissez un numéro de téléphone de destination pour l\'envoi de SMS ou modifiez votre type de transport.</string>
   <string name="notification_channel_name">Notifications générales</string>
   <string name="corrupt_imported_preferences_error">Les paramètres actuels sont corrompus. À partir des paramètres d’administrateur, réinitialisez les paramètres ou importez ceux qui fonctionnent.</string>
+  <string name="google_play_services_not_available">Ce formulaire souhaite suivre votre localisation, mais les Services de Google Play ne sont pas disponible</string>
+  <string name="location_providers_disabled_dialog_message">Ce formulaire souhaite suivre votre localisation, mais les fournisseurs d\'emplacements sont désactivés. Merci de vérifier les paramétres Android</string>
   <string name="go_to_settings">Aller aux paramètres</string>
   <string name="track_location">Localisation du trajet</string>
   <string name="open_file">Ouvrir fichier</string>
+  <string name="read_details">Lire les details</string>
 </resources>

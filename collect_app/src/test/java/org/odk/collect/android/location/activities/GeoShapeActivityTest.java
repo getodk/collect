@@ -18,11 +18,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.activities.GeoShapeActivity;
-import org.odk.collect.android.location.client.LocationClient;
+import org.odk.collect.android.location.client.FakeLocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.map.GoogleMapFragment;
 import org.robolectric.Robolectric;
@@ -31,54 +30,48 @@ import org.robolectric.android.controller.ActivityController;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.odk.collect.android.location.activities.GeoPointActivityTest.newMockLocation;
 
 @RunWith(RobolectricTestRunner.class)
 public class GeoShapeActivityTest extends BaseGeoActivityTest {
     @Rule public MockitoRule rule = MockitoJUnit.rule();
     private ActivityController<GeoShapeActivity> controller;
     private GeoShapeActivity activity;
-    private GoogleMapFragment map;
-    @Mock LocationClient locationClient;
+    private FakeLocationClient fakeLocationClient;
 
     @Before public void setUp() throws Exception {
         super.setUp();
-        LocationClients.setTestClient(locationClient);
+        fakeLocationClient = new FakeLocationClient();
+        LocationClients.setTestClient(fakeLocationClient);
         GoogleMapFragment.testMode = true;
         controller = Robolectric.buildActivity(GeoShapeActivity.class);
+    }
+
+    @Test public void shouldEnableZoomButtonOnFirstLocationFix() {
+        // Starting the activity should start the location client.
         activity = controller.create().start().resume().visible().get();
-        map = (GoogleMapFragment) activity.getMapFragment();
-    }
+        assertTrue(fakeLocationClient.isRunning());
 
-    @Test public void activityShouldShowZoomDialogOnFirstLocation() {
-        verify(locationClient).start();
+        // Initially, the location button should be disabled.
+        assertFalse(activity.isZoomButtonEnabled());
 
-        when(locationClient.isLocationAvailable()).thenReturn(true);
-        map.onClientStart();
-        verify(locationClient).requestLocationUpdates(map);
+        // A location fix should enable the location button.
+        fakeLocationClient.receiveFix(createLocation("GPS", 1, 2, 3, 4f));
+        assertTrue(activity.isZoomButtonEnabled());
 
-        assertFalse(activity.isGpsButtonEnabled());
-        assertFalse(activity.isZoomDialogShowing());
-        map.onLocationChanged(newMockLocation());
-        assertTrue(activity.isGpsButtonEnabled());
-        assertTrue(activity.isZoomDialogShowing());
-
+        // Stopping the activity should stop the location client.
         controller.stop();
-        verify(locationClient).stop();
+        assertFalse(fakeLocationClient.isRunning());
     }
 
-    @Test public void activityShouldShowErrorDialogOnClientError() {
-        assertFalse(map.isGpsErrorDialogShowing());
-        map.onClientStartFailure();
-        assertTrue(map.isGpsErrorDialogShowing());
+    @Test public void shouldShowErrorDialogIfLocationClientFails() {
+        fakeLocationClient.setFailOnStart(true);
+        activity = controller.create().start().resume().visible().get();
+        assertTrue(((GoogleMapFragment) activity.getMapFragment()).isGpsErrorDialogShowing());
     }
 
-    @Test public void activityShouldShowErrorDialogIfLocationUnavailable() {
-        assertFalse(map.isGpsErrorDialogShowing());
-        when(locationClient.isLocationAvailable()).thenReturn(false);
-        map.onClientStart();
-        assertTrue(map.isGpsErrorDialogShowing());
+    @Test public void shouldShowErrorDialogIfLocationUnavailable() {
+        fakeLocationClient.setLocationAvailable(false);
+        activity = controller.create().start().resume().visible().get();
+        assertTrue(((GoogleMapFragment) activity.getMapFragment()).isGpsErrorDialogShowing());
     }
 }

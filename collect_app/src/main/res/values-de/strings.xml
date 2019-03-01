@@ -4,7 +4,6 @@
   <string name="activity_not_found">Folgende Applikation wurde nicht gefunden: %s</string>
   <string name="view_image">Bild anzeigen</string>
   <string name="annotate_image">Bild beschreiben</string>
-  <string name="aligned_image_capture">Ausgerichtetes Bild erfassen</string>
   <string name="signature_capture">Unterschrift erfassen</string>
   <string name="view_video">Video anzeigen</string>
   <string name="choose_audio">Audio auswählen</string>
@@ -294,7 +293,6 @@
   <string name="google_search_browse">Nach Formularen suchen. Oder \'My Drive\' wählen um zu browsen.</string>
   <string name="google_sheets_url">Ersatzspeicherort-URL</string>
   <string name="send_in_progress">Sendevorgang läuft im Hintergrund. Bitte versuchen Sie es später nochmal.</string>
-  <string name="sheets_max_columns">Max. Anzahl an Spalten ist 255. Ihr Formular hat %s Spalten. Tabelle konnte nicht hochgeladen werden.</string>
   <string name="invalid_sheet_id">Ungültige Sheet ID: %1$s</string>
   <string name="missing_submission_url">Fehlende Einsendungs-URL</string>
   <string name="google_sheets_access_denied">Zugriff verweigert. Bitte stellen Sie sicher, dass der Tabellen-Besitzer Ihnen eine Zugriffsberechtigung erteilt hat.</string>
@@ -342,7 +340,6 @@
   <string name="gps_enable_message">GPS ist auf ihrem Gerät deaktiviert. Möchten Sie es aktivieren?</string>
   <string name="select_offline_layer">Offline-Ebene auswählen</string>
   <string name="polygon_or_polyline">GeoTrace speichern als</string>
-  <string name="minutes">Minuten</string>
   <string name="geo_clear_warning">Merkmal bereits erzeugt. Möchten Sie das Merkmal löschen?</string>
   <string name="geo_exit_warning">Änderungen verwerfen und zu ODK zurückkehren?</string>
   <string name="polygon_validator">Min. 3 Punkte notwendig um ein Polygon zu erzeugen</string>
@@ -351,13 +348,9 @@
   <string name="manual_mode">Manueller Modus</string>
   <string name="automatic_mode">Automatischer Modus</string>
   <string name="geoshape_instruction">Lange Drücken um eine Markierung zu platzieren.</string>
-  <string name="geotrace_instruction">Auf Lock warten, dann Button Markierung hinzufügen antippen um zu starten.</string>
   <string name="geopoint_instruction">Lange Drücken um eine Markierung zu platzieren oder Button Markierung hinzufügen antippen.</string>
   <string name="geopoint_no_draggable_instruction">Button Markierung hinzufügen antippen.</string>
   <string name="discard">Verwerfen</string>
-  <string name="zoom_to_where">Heranzoomen…</string>
-  <string name="zoom_to_location">Aktuellen Standort heranzoomen</string>
-  <string name="zoom_to_feature">Gespeicherten Punkt heranzoomen</string>
   <string name="geoshape_view_change_location">GeoShape anzeigen oder ändern</string>
   <string name="geotrace_view_change_location">GeoTrace anzeigen oder ändern</string>
   <string name="bearing">Kompass-Peilung: %.3f</string>
@@ -639,7 +632,6 @@
   <string name="transport_type_internet">WLAN/Mobilfunk (empfohlen)</string>
   <string name="transport_type_sms">SMS</string>
   <string name="transport_type_both">Beim Senden auswählen</string>
-  <string name="seconds">Sekunden</string>
   <string name="rank_items">Rangfolge festlegen</string>
   <string name="loading_form_failed">Beim Laden des Formulars ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.</string>
   <string name="missing_google_account_dialog_title">Google-Konto nicht eingestellt</string>
@@ -654,4 +646,7 @@
   <string name="background_location_disabled">Dieses Formular möchte ihren Standort aufzeichnen aber die Standortaufzeichnung ist deaktiviert. Bitte oben im \u0020\u0020⋮\u0020\u0020 Menü aktivieren.</string>
   <string name="background_location_enabled">Dieses Formular zeichnet Ihren Standort auf. Sie können die Standortaufzeichnung oben im \u0020\u0020⋮\u0020\u0020 Menü deaktivieren.</string>
   <string name="open_file">Datei öffnen</string>
+  <string name="read_details">Details lesen</string>
+  <string name="google_sheets_encrypted_message">Verschlüsselte Formulare können nicht an Google Sheets gesendet werden.</string>
+  <string name="number_picker_title">Zahlenwähler</string>
 </resources>

@@ -533,15 +533,15 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
 
                 ValueAnimator va = new ValueAnimator();
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
-                    va.setIntValues(getResources().getColor(R.color.red), getDrawingCacheBackgroundColor());
+                    va.setIntValues(getResources().getColor(R.color.red_500), getDrawingCacheBackgroundColor());
                 } else {
                     // Avoid fading to black on certain devices and Android versions that may not support transparency
                     TypedValue typedValue = new TypedValue();
                     getContext().getTheme().resolveAttribute(android.R.attr.windowBackground, typedValue, true);
                     if (typedValue.type >= TypedValue.TYPE_FIRST_COLOR_INT && typedValue.type <= TypedValue.TYPE_LAST_COLOR_INT) {
-                        va.setIntValues(getResources().getColor(R.color.red), typedValue.data);
+                        va.setIntValues(getResources().getColor(R.color.red_500), typedValue.data);
                     } else {
-                        va.setIntValues(getResources().getColor(R.color.red), getDrawingCacheBackgroundColor());
+                        va.setIntValues(getResources().getColor(R.color.red_500), getDrawingCacheBackgroundColor());
                     }
                 }
 

@@ -62,7 +62,7 @@ public class FormChooserList extends FormListActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chooser_list_layout);
+        setContentView(R.layout.form_chooser_list);
 
         setTitle(getString(R.string.enter_data));
 
@@ -176,13 +176,13 @@ public class FormChooserList extends FormListActivity implements
 
     private void setupAdapter() {
         String[] data = new String[]{
-                FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT, FormsColumns.JR_VERSION
+                FormsColumns.DISPLAY_NAME, FormsColumns.JR_VERSION, FormsColumns.DISPLAY_SUBTEXT
         };
         int[] view = new int[]{
-                R.id.text1, R.id.text2, R.id.text3
+                R.id.form_title, R.id.form_subtitle, R.id.form_subtitle2
         };
 
-        listAdapter = new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.two_item, null, data, view);
+        listAdapter = new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.form_chooser_list_item, null, data, view);
         listView.setAdapter(listAdapter);
     }
 

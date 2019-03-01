@@ -23,6 +23,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.http.HttpHeadResult;
+import org.odk.collect.android.http.HttpPostResult;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.FileUtils;
@@ -30,7 +31,6 @@ import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
@@ -45,7 +45,6 @@ import timber.log.Timber;
 
 public class InstanceServerUploader extends InstanceUploader {
     private static final String URL_PATH_SEP = "/";
-    private static final String FAIL = "Error: ";
 
     private final OpenRosaHttpInterface httpInterface;
     private final WebCredentialsUtils webCredentialsUtils;
@@ -101,7 +100,7 @@ public class InstanceServerUploader extends InstanceUploader {
             HttpHeadResult headResult;
             Map<String, String> responseHeaders;
             try {
-                headResult = httpInterface.head(uri, webCredentialsUtils.getCredentials(uri));
+                headResult = httpInterface.executeHeadRequest(uri, webCredentialsUtils.getCredentials(uri));
                 responseHeaders = headResult.getHeaders();
 
                 if (responseHeaders.containsKey("X-OpenRosa-Accept-Content-Length")) {
@@ -189,12 +188,13 @@ public class InstanceServerUploader extends InstanceUploader {
             throw new UploadException("Error reading files to upload");
         }
 
-        ResponseMessageParser messageParser;
+        HttpPostResult postResult;
+        ResponseMessageParser messageParser = new ResponseMessageParser();
 
         try {
             URI uri = URI.create(submissionUri.toString());
 
-            messageParser = httpInterface.uploadSubmissionFile(files, submissionFile, uri,
+            postResult = httpInterface.uploadSubmissionFile(files, submissionFile, uri,
                     webCredentialsUtils.getCredentials(uri),
                     instance.getStatus(),           // smap
                     instance.getLocationTrigger(),  // smap
@@ -202,20 +202,21 @@ public class InstanceServerUploader extends InstanceUploader {
                     instance.getAssignmentId(),      // smap
                     contentLength);
 
-            int responseCode = messageParser.getResponseCode();
+            int responseCode = postResult.getResponseCode();
+            messageParser.setMessageResponse(postResult.getHttpResponse());
 
             if (responseCode != HttpsURLConnection.HTTP_CREATED && responseCode != HttpsURLConnection.HTTP_ACCEPTED) {
                 UploadException exception;
                 if (responseCode == HttpsURLConnection.HTTP_OK) {
                     exception = new UploadException(FAIL + "Network login failure? Again?");
                 } else if (responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                    exception = new UploadException(FAIL + messageParser.getReasonPhrase()
+                    exception = new UploadException(FAIL + postResult.getReasonPhrase()
                             + " (" + responseCode + ") at " + urlString);
                 } else {
                     if (messageParser.isValid()) {
                         exception = new UploadException(FAIL + messageParser.getMessageResponse());
                     } else {
-                        exception = new UploadException(FAIL + messageParser.getReasonPhrase()
+                        exception = new UploadException(FAIL + postResult.getReasonPhrase()
                                 + " (" + responseCode + ") at " + urlString);
                     }
 
@@ -224,7 +225,7 @@ public class InstanceServerUploader extends InstanceUploader {
                 throw exception;
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             saveFailedStatusToDatabase(instance);
             throw new UploadException(FAIL + "Generic Exception: "
                     + (e.getMessage() != null ? e.getMessage() : e.toString()));

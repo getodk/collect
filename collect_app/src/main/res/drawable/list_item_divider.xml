@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Material Design reference: https://material.io/design/components/dividers.html#specs -->
+
+    <item android:left="72dp"
+          android:right="0dp">
+
+        <shape android:shape="rectangle">
+            <solid android:color="?dividerColor"/>
+        </shape>
+
+    </item>
+
+</layer-list>

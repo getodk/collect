@@ -187,16 +187,12 @@ public class WidgetFactory {
                 questionWidget = new ArbitraryFileWidget(context, fep);
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
-                if (appearance.equals("web")) {
-                    questionWidget = new ImageWebViewWidget(context, fep);
-                } else if (appearance.contains("signature")) {            // smap change to contains rather than equals
+                if (appearance.contains("signature")) {            // smap change to contains rather than equals
                     questionWidget = new SignatureWidget(context, fep);
                 } else if (appearance.contains("annotate")) {
                     questionWidget = new AnnotateWidget(context, fep);
                 } else if (appearance.contains("draw")) {                 // smap change to contains rather than equals
                     questionWidget = new DrawWidget(context, fep);
-                } else if (appearance.contains("align:")) {                 // smap change to contains rather than equals
-                    questionWidget = new AlignedImageWidget(context, fep);
                 } else {
                     questionWidget = new ImageWidget(context, fep);
                 }

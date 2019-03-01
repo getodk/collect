@@ -4,7 +4,6 @@
   <string name="activity_not_found">Tidak ditemukan aktivitas untuk menyelesaikan: %s</string>
   <string name="view_image">Lihat gambar</string>
   <string name="annotate_image">Tandai gambar</string>
-  <string name="aligned_image_capture">Atur gambar yang telah diambil</string>
   <string name="signature_capture">Ambil tanda tangan</string>
   <string name="view_video">Lihat video</string>
   <string name="choose_audio">Pilih suara</string>
@@ -294,7 +293,6 @@
   <string name="google_search_browse">Mencari formulir. Atau memilih \'My Drive\' di bawah ini untuk browse.</string>
   <string name="google_sheets_url">URL kembali setelah pengiriman</string>
   <string name="send_in_progress">Pengiriman sedang berlangsung, cobalah beberapa saat lagi</string>
-  <string name="sheets_max_columns">Jumlah kolom maksimum adalah 255, formulir anda memiliki %s. Tidak dapat mengunggah pada spreadsheet.</string>
   <string name="invalid_sheet_id">id sheet tidak valid: %1$s</string>
   <string name="missing_submission_url">URL tujuan tidak ditemukan</string>
   <string name="google_sheets_access_denied">Akses ditolak. Pastikan kepemilikan spreadsheet mempunyai akses untuk mengubah.</string>
@@ -342,7 +340,6 @@
   <string name="gps_enable_message">GPS perangkatmu tidak aktif, apakah ingin menghidupkan?</string>
   <string name="select_offline_layer">Pilih layer offline</string>
   <string name="polygon_or_polyline">Simpan GeoTrace sebagai</string>
-  <string name="minutes">Menit</string>
   <string name="geo_clear_warning">Fitur sudah dibuat. Apakah anda ingin menghapus fitur ini?</string>
   <string name="geo_exit_warning">Abaikan perubahan dan kembali ke ODK?</string>
   <string name="polygon_validator">Minimal harus memiliki 3 poin untuk membuat Polygon</string>
@@ -351,13 +348,9 @@
   <string name="manual_mode">Mode manual</string>
   <string name="automatic_mode">Mode otomatis</string>
   <string name="geoshape_instruction">Tekan agak lama untuk menandai.</string>
-  <string name="geotrace_instruction">tunggu sebentar untuk mengunci, tap tombol tambah marker untuk memulai.</string>
   <string name="geopoint_instruction">tekan yang lama untuk menandai atau tap tombol tambah marker.</string>
   <string name="geopoint_no_draggable_instruction">Tap tombol tambah marker</string>
   <string name="discard">Buang</string>
-  <string name="zoom_to_where">Zoom ke…</string>
-  <string name="zoom_to_location">Zoom ke lokasi saat ini</string>
-  <string name="zoom_to_feature">Zoom ke fitur yang tersimpan</string>
   <string name="geoshape_view_change_location">Tampilkan atau Ubah GeoShape</string>
   <string name="geotrace_view_change_location">Tampilkan atau Ubah GeoTrace</string>
   <string name="bearing">Bantalan: %.3f</string>
@@ -638,7 +631,6 @@
   <string name="transport_type_internet">Wifi/sulular (direkomendasikan)</string>
   <string name="transport_type_sms">SMS</string>
   <string name="transport_type_both">Memilih saat mengirim</string>
-  <string name="seconds">Detik</string>
   <string name="rank_items">Urutkan</string>
   <string name="loading_form_failed">Kesalahan terjadi saat membuka formulir. Coba lagi.</string>
   <string name="missing_google_account_dialog_title">Akun Google belum diatur</string>

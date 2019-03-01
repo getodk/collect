@@ -240,7 +240,7 @@ public class Utilities {
             throw e;
         }
 
-        InputStream is = httpInterface.get(uri, null, webCredentialsUtils.getCredentials(uri)).getInputStream();
+        InputStream is = httpInterface.executeGetRequest(uri, null, webCredentialsUtils.getCredentials(uri)).getInputStream();
 
 
         HttpResponse response;

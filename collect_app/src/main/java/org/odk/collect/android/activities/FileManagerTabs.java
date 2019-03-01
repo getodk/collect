@@ -44,7 +44,7 @@ public class FileManagerTabs extends CollectAbstractActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.file_manager_layout);
+        setContentView(R.layout.file_manager_tabs);
         initToolbar();
 
         String[] tabNames = {getString(R.string.data), getString(R.string.forms)};

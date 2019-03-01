@@ -307,7 +307,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
                 try {
                     URI uri = URI.create(taskURL);
-                    is = httpInterface.get(uri, null, webCredentialsUtils.getCredentials(uri)).getInputStream();
+                    is = httpInterface.executeGetRequest(uri, null, webCredentialsUtils.getCredentials(uri)).getInputStream();
                     // De-serialise
                     GsonBuilder gb = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer());
                     gson = gb.create();

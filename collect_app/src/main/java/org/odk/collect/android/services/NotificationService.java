@@ -33,15 +33,11 @@ import com.google.android.gms.gcm.GcmListenerService;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
-import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.tasks.DownloadTasksTask;
 import org.odk.collect.android.utilities.NotificationUtils;
-import org.odk.collect.android.utilities.Utilities;
-
-import java.util.HashMap;
 
 import timber.log.Timber;
 
