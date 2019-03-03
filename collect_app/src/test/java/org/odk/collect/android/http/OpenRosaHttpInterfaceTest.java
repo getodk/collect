@@ -17,6 +17,7 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public abstract class OpenRosaHttpInterfaceTest {
@@ -72,6 +73,17 @@ public abstract class OpenRosaHttpInterfaceTest {
 
         RecordedRequest request = mockWebServer.takeRequest();
         assertThat(request.getHeader("X-OpenRosa-Version"), equalTo("1.0"));
+    }
+
+    @Test
+    @Ignore("OkHttpConnection sends 'gzip,inflate' not just 'gzip'")
+    public void executeGetRequest_sendsAcceptsGzipHeader() throws Exception {
+        mockWebServer.enqueue(new MockResponse());
+
+        subject.executeGetRequest(mockWebServer.url("").uri(), null, null);
+
+        RecordedRequest request = mockWebServer.takeRequest();
+        assertThat(request.getHeader("Accept-Encoding"), equalTo("gzip"));
     }
 
     @Test
@@ -134,5 +146,35 @@ public abstract class OpenRosaHttpInterfaceTest {
 
         HttpGetResult result2 = subject.executeGetRequest(mockWebServer.url("").uri(), null, null);
         assertThat(result2.isOpenRosaResponse(), equalTo(false));
+    }
+
+    @Test
+    public void executeGetRequest_whenStatusCodeIsNot200_returnsNullBodyAndStatusCode() throws Exception {
+        mockWebServer.enqueue(new MockResponse().setResponseCode(500));
+
+        HttpGetResult result = subject.executeGetRequest(mockWebServer.url("").uri(), null, null);
+        assertThat(result.getInputStream(), nullValue());
+        assertThat(result.getStatusCode(), equalTo(500));
+    }
+
+    /**
+     * The original {@link HttpClientConnection} implementation performs a null check on the response
+     * entity (body) and then throws exception if it is null. However, this should never actually happen
+     * as the 204/304 response that would cause a null body will return an empty result object with
+     * the status code before that check happen.
+     */
+    @Test
+    public void executeGetRequest_whenResponseBodyIsNull_returnsNullBodyAndStatusCode() throws Exception {
+        mockWebServer.enqueue(new MockResponse().setResponseCode(204));
+
+        HttpGetResult result1 = subject.executeGetRequest(mockWebServer.url("").uri(), null, null);
+        assertThat(result1.getInputStream(), nullValue());
+        assertThat(result1.getStatusCode(), equalTo(204));
+
+        mockWebServer.enqueue(new MockResponse().setResponseCode(304));
+
+        HttpGetResult result2 = subject.executeGetRequest(mockWebServer.url("").uri(), null, null);
+        assertThat(result2.getInputStream(), nullValue());
+        assertThat(result2.getStatusCode(), equalTo(304));
     }
 }
