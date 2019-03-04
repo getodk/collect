@@ -277,7 +277,15 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
         ImageButton saveButton = findViewById(R.id.save);
         saveButton.setOnClickListener(v -> {
             if (!map.getPolyPoints(featureId).isEmpty()) {
-                polygonOrPolylineDialog.show();
+                if (outputMode == OutputMode.GEOTRACE) {
+                    // This release shows a deprecation warning for the "Save
+                    // as Polygon" button.  After the deprecation period,
+                    // we plan to remove the dialog entirely; outputMode
+                    // determines whether a polyline or a polygon will be saved.
+                    polygonOrPolylineDialog.show();
+                } else {
+                    saveAsPolyline();
+                }
             } else {
                 finishWithResult();
             }
@@ -296,28 +304,10 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
         recordButton.setOnClickListener(v -> recordPoint());
 
         Button polygonSave = polygonOrPolylineView.findViewById(R.id.polygon_save);
-        polygonSave.setOnClickListener(v -> {
-            if (map.getPolyPoints(featureId).size() > 2) {
-                // Close the polygon.
-                map.appendPointToPoly(featureId, map.getPolyPoints(featureId).get(0));
-                polygonOrPolylineDialog.dismiss();
-                finishWithResult();
-            } else {
-                polygonOrPolylineDialog.dismiss();
-                ToastUtils.showShortToastInMiddle(getString(R.string.polygon_validator));
-            }
-        });
+        polygonSave.setOnClickListener(v -> saveAsPolygon());
 
         Button polylineSave = polygonOrPolylineView.findViewById(R.id.polyline_save);
-        polylineSave.setOnClickListener(v -> {
-            if (map.getPolyPoints(featureId).size() > 1) {
-                polygonOrPolylineDialog.dismiss();
-                finishWithResult();
-            } else {
-                polygonOrPolylineDialog.dismiss();
-                ToastUtils.showShortToastInMiddle(getString(R.string.polyline_validator));
-            }
-        });
+        polylineSave.setOnClickListener(v -> saveAsPolyline());
 
         buildDialogs();
 
@@ -352,6 +342,26 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
             map.runOnGpsLocationReady(this::onGpsLocationReady);
         }
         updateUi();
+    }
+
+    private void saveAsPolyline() {
+        polygonOrPolylineDialog.dismiss();
+        if (map.getPolyPoints(featureId).size() > 1) {
+            finishWithResult();
+        } else {
+            ToastUtils.showShortToastInMiddle(getString(R.string.polyline_validator));
+        }
+    }
+
+    private void saveAsPolygon() {
+        polygonOrPolylineDialog.dismiss();
+        if (map.getPolyPoints(featureId).size() > 2) {
+            // Close the polygon.
+            map.appendPointToPoly(featureId, map.getPolyPoints(featureId).get(0));
+            finishWithResult();
+        } else {
+            ToastUtils.showShortToastInMiddle(getString(R.string.polygon_validator));
+        }
     }
 
     private void finishWithResult() {
