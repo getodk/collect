@@ -333,7 +333,6 @@ Escolher Imagem</string>
   <string name="clear">Limpar</string>
   <string name="manual_mode">Modo manual</string>
   <string name="automatic_mode">Modo automático</string>
-  <string name="geoshape_instruction">Pressione por mais tempo para colocar marcador.</string>
   <string name="geopoint_instruction">Pressione por mais tempo para colocar marcador ou selecione o botão Adicionar Marcador.</string>
   <string name="geopoint_no_draggable_instruction">Selecione o botão Adicionar Marcador.</string>
   <string name="discard">Descartar</string>

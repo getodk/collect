@@ -346,7 +346,6 @@
   <string name="clear">Effacer</string>
   <string name="manual_mode">Mode Manuel</string>
   <string name="automatic_mode">Mode Automatique</string>
-  <string name="geoshape_instruction">Appuyer longtemps pour placer le marqueur</string>
   <string name="geopoint_instruction">Appuyez longuement sur la carte pour placer un marqueur ou appuyez sur le bouton \"ajouter un marqueur\".</string>
   <string name="geopoint_no_draggable_instruction">Appuyez sur le bouton \"ajouter un marqueur\".</string>
   <string name="discard">Annuler</string>

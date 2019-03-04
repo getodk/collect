@@ -346,7 +346,6 @@
   <string name="clear">Tyhjennä</string>
   <string name="manual_mode">Manuaalinen tila</string>
   <string name="automatic_mode">Automaattinen tila</string>
-  <string name="geoshape_instruction">Paina pitkään asettaaksesi merkkejä.</string>
   <string name="geopoint_instruction">Paina pitkään asettaaksesi merkin tai näpäytä merkkinäppäintä.</string>
   <string name="geopoint_no_draggable_instruction">Paina lisää merkki -näppäintä.</string>
   <string name="discard">Hylkää</string>

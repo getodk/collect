@@ -318,7 +318,6 @@
   <string name="clear">स्पष्ट</string>
   <string name="manual_mode">मैन्युअल मोड</string>
   <string name="automatic_mode">स्वचालित मोड</string>
-  <string name="geoshape_instruction">प्लेस मार्क के लिए लंबे समय तक दबाएं</string>
   <string name="geopoint_instruction">प्लेस मार्क के लिए लंबे समय तक दबाएं या मार्कर बटन जोड़ने के लिए टैप करें।</string>
   <string name="geopoint_no_draggable_instruction">मार्कर बटन जोड़ें पर टैप करें</string>
   <string name="discard">छोड़ दें </string>

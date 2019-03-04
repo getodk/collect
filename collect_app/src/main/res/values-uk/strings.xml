@@ -344,7 +344,6 @@
   <string name="clear">Очистити</string>
   <string name="manual_mode">Ручний режим</string>
   <string name="automatic_mode">Автоматичний режим</string>
-  <string name="geoshape_instruction">Довге натискання для розміщення позначок.</string>
   <string name="geopoint_instruction">Довго натисніть для розміщення позначки або натисніть кнопку Додати позначку.</string>
   <string name="geopoint_no_draggable_instruction">Натисніть кнопку Додати позначку.</string>
   <string name="discard">Скинути</string>

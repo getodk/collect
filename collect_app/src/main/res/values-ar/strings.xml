@@ -328,7 +328,6 @@
   <string name="clear">الغاء</string>
   <string name="manual_mode">الوضع اليدوي</string>
   <string name="automatic_mode">الوضع الآلي</string>
-  <string name="geoshape_instruction">انقر مطولاً لانشاء علامة</string>
   <string name="geopoint_instruction">انقر مطولاً لانشاء علامة او انقر على زر إضافة علامة</string>
   <string name="geopoint_no_draggable_instruction">إضافة علامة</string>
   <string name="discard">تجاهل</string>

@@ -305,7 +305,6 @@
   <string name="clear">Eemalda</string>
   <string name="manual_mode">Käsitsi sisestusviis</string>
   <string name="automatic_mode">Automaatne sisestusviis</string>
-  <string name="geoshape_instruction">Märke paigutamiseks hoia pikalt soovitud asukohal.</string>
   <string name="geopoint_instruction">Markeri paigutamiseks tuleb teha pikk hoidmine või valida marker nupp.</string>
   <string name="geopoint_no_draggable_instruction">Puuduta lisa marke nuppu.</string>
   <string name="discard">Loobu</string>

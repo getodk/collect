@@ -296,7 +296,6 @@
   <string name="clear">ลบ</string>
   <string name="manual_mode">โหมดตั้งค่าเอง</string>
   <string name="automatic_mode">โหมดอัตโนมัติ</string>
-  <string name="geoshape_instruction">กดแช่ไว้เพื่อวางเครื่องหมาย</string>
   <string name="geopoint_instruction">กดแช่ไว้เพื่อวางเครื่องหมายหรือแตะที่ปุ่มเพิ่มเครื่องหมาย</string>
   <string name="geopoint_no_draggable_instruction">แตะที่ปุ่มเพิ่มเครื่องหมาย</string>
   <string name="discard">ยกเลิก</string>

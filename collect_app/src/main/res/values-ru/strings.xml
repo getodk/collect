@@ -339,7 +339,6 @@
   <string name="clear">Очистить</string>
   <string name="manual_mode">Ручной режим</string>
   <string name="automatic_mode">Автоматический режим</string>
-  <string name="geoshape_instruction">Используйте продолжительное нажатие, чтобы расставлять отметки.</string>
   <string name="geopoint_instruction">Используйте продолжительное нажатие, чтобы расставлять отметки или нажмите кнопку \"добавить отметку\".</string>
   <string name="geopoint_no_draggable_instruction">Нажмите кнопку \"добавить отметку\".</string>
   <string name="discard">Отменить</string>

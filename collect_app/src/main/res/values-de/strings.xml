@@ -346,7 +346,6 @@
   <string name="clear">Löschen</string>
   <string name="manual_mode">Manueller Modus</string>
   <string name="automatic_mode">Automatischer Modus</string>
-  <string name="geoshape_instruction">Lange Drücken um eine Markierung zu platzieren.</string>
   <string name="geopoint_instruction">Lange Drücken um eine Markierung zu platzieren oder Button Markierung hinzufügen antippen.</string>
   <string name="geopoint_no_draggable_instruction">Button Markierung hinzufügen antippen.</string>
   <string name="discard">Verwerfen</string>

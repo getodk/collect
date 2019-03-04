@@ -346,7 +346,6 @@
   <string name="clear">Wyczyść</string>
   <string name="manual_mode">Tryb Ręczny</string>
   <string name="automatic_mode">Tryb Automatyczny</string>
-  <string name="geoshape_instruction">Długo naciśnij aby umieścić znacznik.</string>
   <string name="geopoint_instruction">Długo naciśnij aby umieścić znacznik lub dotknij przycisk Dodaj znacznik.</string>
   <string name="geopoint_no_draggable_instruction">Dotknij przycisk Dodaj znacznik.</string>
   <string name="discard">Usuń</string>

@@ -342,7 +342,6 @@
   <string name="clear">صاف کریں </string>
   <string name="manual_mode">مینول موڈ</string>
   <string name="automatic_mode">آٹومیٹک موڈ</string>
-  <string name="geoshape_instruction">پوائنٹس پلیس کرنے کے لئے طویل دبائیں.</string>
   <string name="geopoint_instruction">پلیس مارک کرنے کے لیے طویل دبائیں یا ایڈ مارکر بٹن ٹیپ کریں</string>
   <string name="geopoint_no_draggable_instruction"> مارکر بٹن پر کلک کریں.</string>
   <string name="discard">ختم کر دینا</string>

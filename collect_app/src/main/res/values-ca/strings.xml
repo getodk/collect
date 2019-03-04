@@ -301,7 +301,6 @@
   <string name="clear">Neteja</string>
   <string name="manual_mode">Mòdus Manual</string>
   <string name="automatic_mode">Mòdus Automàtic</string>
-  <string name="geoshape_instruction">Prem una estona per situar marques.</string>
   <string name="geopoint_instruction">Prem una estona o toca el botó d\'afegir fita.</string>
   <string name="geopoint_no_draggable_instruction">Toca el botó afegir fita</string>
   <string name="discard">Descarta</string>

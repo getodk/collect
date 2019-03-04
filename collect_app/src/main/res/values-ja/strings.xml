@@ -346,7 +346,6 @@
   <string name="clear">クリア</string>
   <string name="manual_mode">手動モード</string>
   <string name="automatic_mode">自動モード</string>
-  <string name="geoshape_instruction">場所をマークするには長押ししてください。</string>
   <string name="geopoint_instruction">長押ししてマークするか、マーカーを追加ボタンをタップしてください。</string>
   <string name="geopoint_no_draggable_instruction">マーカーを追加ボタンをタップします。</string>
   <string name="discard">破棄</string>

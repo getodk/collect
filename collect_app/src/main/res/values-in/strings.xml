@@ -346,7 +346,6 @@
   <string name="clear">Hapus</string>
   <string name="manual_mode">Mode manual</string>
   <string name="automatic_mode">Mode otomatis</string>
-  <string name="geoshape_instruction">Tekan agak lama untuk menandai.</string>
   <string name="geopoint_instruction">tekan yang lama untuk menandai atau tap tombol tambah marker.</string>
   <string name="geopoint_no_draggable_instruction">Tap tombol tambah marker</string>
   <string name="discard">Buang</string>

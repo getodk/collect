@@ -37,7 +37,6 @@ import static org.junit.Assert.assertTrue;
 public class GeoPolyActivityTest extends BaseGeoActivityTest {
     @Rule public MockitoRule rule = MockitoJUnit.rule();
     private ActivityController<GeoPolyActivity> controller;
-    private GeoPolyActivity activity;
     private FakeLocationClient fakeLocationClient;
 
     @Before public void setUp() throws Exception {
@@ -50,7 +49,7 @@ public class GeoPolyActivityTest extends BaseGeoActivityTest {
 
     @Test public void testLocationClientLifecycle() {
         // Starting the activity should start the location client.
-        activity = controller.create().start().resume().visible().get();
+        GeoPolyActivity activity = controller.create().start().resume().visible().get();
         assertTrue(fakeLocationClient.isRunning());
 
         // Acquiring a fix should set the location on the map.

@@ -348,7 +348,6 @@
   <string name="clear">Limpiar</string>
   <string name="manual_mode">Modo Manual</string>
   <string name="automatic_mode">Modo Automático </string>
-  <string name="geoshape_instruction">Mantenga presionado para colocar marcas.</string>
   <string name="geopoint_instruction">Pulsar prolongadamente para colocar la marca o tocar el botón marcador.</string>
   <string name="geopoint_no_draggable_instruction">Tap botón de agregar marker</string>
   <string name="discard">Descartar</string>

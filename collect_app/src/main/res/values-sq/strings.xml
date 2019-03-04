@@ -300,7 +300,6 @@
   <string name="clear">Pastro</string>
   <string name="manual_mode">Manuale</string>
   <string name="automatic_mode">Automatike</string>
-  <string name="geoshape_instruction">Shtyp për pak sekonda për të vendosur shenjë.</string>
   <string name="geopoint_instruction">Shtyp për pak sekonda për të vendosur një shenjë ose shtuar buton shenjues</string>
   <string name="discard">Elimino</string>
   <string name="geoshape_view_change_location">Shih ose ndrysho GeoShape</string>

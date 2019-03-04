@@ -335,7 +335,6 @@
   <string name="clear">Cancella</string>
   <string name="manual_mode">Modalità manuale</string>
   <string name="automatic_mode">Modalità automatica</string>
-  <string name="geoshape_instruction">Premi a lungo per posizionare il segno</string>
   <string name="geopoint_instruction">Premi a lungo per posizionare il segno altrimenti tocca su Aggiungi Posizione.</string>
   <string name="geopoint_no_draggable_instruction">Tocca Aggiungi Posizione.</string>
   <string name="discard">Annulla</string>

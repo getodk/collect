@@ -335,7 +335,6 @@
   <string name="clear">លុ​បចេញ</string>
   <string name="manual_mode">របៀបធ្វើដោយដៃ</string>
   <string name="automatic_mode">របៀបធ្វើដោយស័្វយប្រវត្តិ</string>
-  <string name="geoshape_instruction">ចុចយូរដើម្បីដាក់ស្លាកកន្លែង</string>
   <string name="geopoint_instruction">ចុចយូរដើម្បីដាក់ស្លាកកន្លែង ឬប៉ះប៊ូតុងបន្ថែមស្លាក</string>
   <string name="geopoint_no_draggable_instruction">ប៉ះដើម្បីបន្ថែមប៊ូតុងសម្គាល់</string>
   <string name="discard">បោះបង់</string>
