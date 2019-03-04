@@ -299,7 +299,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             adapter.notifyDataSetChanged();
         }
 
-        adapter.notifyDataSetChanged();
         checkPreviouslyCheckedItems();
     }
 
