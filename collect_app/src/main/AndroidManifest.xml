@@ -205,7 +205,7 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.GeoShapeActivity"
             android:configChanges="orientation" />
         <activity
-            android:name=".activities.GeoTraceActivity"
+            android:name=".activities.GeoPolyActivity"
             android:configChanges="orientation" />
         <activity android:name=".activities.BearingActivity" />
         <activity

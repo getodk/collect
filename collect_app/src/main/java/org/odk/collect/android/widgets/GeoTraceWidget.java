@@ -28,7 +28,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.GeoTraceActivity;
+import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
@@ -88,9 +88,9 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
             PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
             return;
         }
-        Intent intent = new Intent(getContext(), GeoTraceActivity.class)
+        Intent intent = new Intent(getContext(), GeoPolyActivity.class)
             .putExtra(ANSWER_KEY, answerDisplay.getText().toString())
-            .putExtra(GeoTraceActivity.OUTPUT_MODE_KEY, GeoTraceActivity.OutputMode.GEOTRACE)
+            .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOTRACE)
             .putExtra(GeneralKeys.KEY_MAP_SDK, mapSDK);
         ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOTRACE_CAPTURE);
     }

@@ -36,7 +36,6 @@ import org.odk.collect.android.map.OsmMapFragment;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.widgets.GeoTraceWidget;
 import org.osmdroid.tileprovider.IRegisterReceiver;
 
 import java.util.ArrayList;
@@ -49,8 +48,9 @@ import java.util.concurrent.TimeUnit;
 
 import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
 
-public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterReceiver {
+public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterReceiver {
     public static final String PREF_VALUE_GOOGLE_MAPS = "google_maps";
+    public static final String ANSWER_KEY = "answer";
     public static final String OUTPUT_MODE_KEY = "output_mode";
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
@@ -135,7 +135,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setTitle(getString(outputMode == OutputMode.GEOTRACE ?
             R.string.geotrace_title : R.string.geoshape_title));
-        setContentView(R.layout.geotrace_layout);
+        setContentView(R.layout.geopoly_layout);
         createMapFragment().addTo(this, R.id.map_container, this::initMap);
     }
 
@@ -221,7 +221,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
         locationStatus = findViewById(R.id.location_status);
         collectionStatus = findViewById(R.id.collection_status);
-        settingsView = getLayoutInflater().inflate(R.layout.geotrace_dialog, null);
+        settingsView = getLayoutInflater().inflate(R.layout.geopoly_dialog, null);
         radioGroup = settingsView.findViewById(R.id.radio_group);
         radioGroup.setOnCheckedChangeListener(this::updateRecordingMode);
         autoOptions = settingsView.findViewById(R.id.auto_options);
@@ -328,8 +328,8 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
         List<MapPoint> points = new ArrayList<>();
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra(GeoTraceWidget.ANSWER_KEY)) {
-            originalAnswerString = intent.getStringExtra(GeoTraceWidget.ANSWER_KEY);
+        if (intent != null && intent.hasExtra(ANSWER_KEY)) {
+            originalAnswerString = intent.getStringExtra(ANSWER_KEY);
             points = parsePoints(originalAnswerString);
         }
         if (restoredPoints != null) {

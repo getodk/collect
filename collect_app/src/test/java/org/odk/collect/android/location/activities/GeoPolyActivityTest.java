@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-import org.odk.collect.android.activities.GeoTraceActivity;
+import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.location.client.FakeLocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.map.GoogleMapFragment;
@@ -34,10 +34,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
-public class GeoTraceActivityTest extends BaseGeoActivityTest {
+public class GeoPolyActivityTest extends BaseGeoActivityTest {
     @Rule public MockitoRule rule = MockitoJUnit.rule();
-    private ActivityController<GeoTraceActivity> controller;
-    private GeoTraceActivity activity;
+    private ActivityController<GeoPolyActivity> controller;
+    private GeoPolyActivity activity;
     private FakeLocationClient fakeLocationClient;
 
     @Before public void setUp() throws Exception {
@@ -45,7 +45,7 @@ public class GeoTraceActivityTest extends BaseGeoActivityTest {
         fakeLocationClient = new FakeLocationClient();
         LocationClients.setTestClient(fakeLocationClient);
         GoogleMapFragment.testMode = true;
-        controller = Robolectric.buildActivity(GeoTraceActivity.class);
+        controller = Robolectric.buildActivity(GeoPolyActivity.class);
     }
 
     @Test public void testLocationClientLifecycle() {
