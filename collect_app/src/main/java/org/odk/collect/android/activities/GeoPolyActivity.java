@@ -357,7 +357,11 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
         polygonOrPolylineDialog.dismiss();
         if (map.getPolyPoints(featureId).size() > 2) {
             // Close the polygon.
-            map.appendPointToPoly(featureId, map.getPolyPoints(featureId).get(0));
+            List<MapPoint> points = map.getPolyPoints(featureId);
+            int count = points.size();
+            if (count > 1 && !points.get(0).equals(points.get(count - 1))) {
+                map.appendPointToPoly(featureId, points.get(0));
+            }
             finishWithResult();
         } else {
             ToastUtils.showShortToastInMiddle(getString(R.string.polygon_validator));
@@ -404,7 +408,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
 
     /**
      * Parses a form result string, as previously formatted by formatPoints,
-     * into a list of polyline vertices.
+     * into a list of vertices.
      */
     private List<MapPoint> parsePoints(String coords) {
         List<MapPoint> points = new ArrayList<>();
@@ -439,7 +443,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
     }
 
     /**
-     * Serializes a list of polyline vertices into a string, in the format
+     * Serializes a list of vertices into a string, in the format
      * appropriate for storing as the result of this form question.
      */
     private String formatPoints(List<MapPoint> points) {
