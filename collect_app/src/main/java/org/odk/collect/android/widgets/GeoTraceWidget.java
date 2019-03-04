@@ -90,7 +90,7 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
         }
         Intent intent = new Intent(getContext(), GeoTraceActivity.class)
             .putExtra(ANSWER, answerDisplay.getText().toString())
-            .putExtra(GeoTraceActivity.MODE_KEY, GeoTraceActivity.OutputMode.GEOTRACE)
+            .putExtra(GeoTraceActivity.OUTPUT_MODE_KEY, GeoTraceActivity.OutputMode.GEOTRACE)
             .putExtra(GeneralKeys.KEY_MAP_SDK, mapSDK);
         ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOTRACE_CAPTURE);
     }

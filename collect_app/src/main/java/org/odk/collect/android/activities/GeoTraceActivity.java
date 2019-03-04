@@ -51,12 +51,13 @@ import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermi
 
 public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterReceiver {
     public static final String PREF_VALUE_GOOGLE_MAPS = "google_maps";
-    public static final String MODE_KEY = "mode";
+    public static final String OUTPUT_MODE_KEY = "output_mode";
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
     public static final String POINTS_KEY = "points";
-    public static final String RECORDING_ACTIVE_KEY = "recording_active";
-    public static final String RECORDING_MODE_KEY = "recording_mode";
+    public static final String INPUT_ACTIVE_KEY = "input_active";
+    public static final String RECORDING_ENABLED_KEY = "recording_enabled";
+    public static final String RECORDING_AUTOMATIC_KEY = "recording_automatic";
     public static final String INTERVAL_INDEX_KEY = "interval_index";
     public static final String ACCURACY_THRESHOLD_INDEX_KEY = "accuracy_threshold_index";
 
@@ -64,7 +65,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private ScheduledFuture schedulerHandler;
 
     public enum OutputMode { GEOTRACE, GEOSHAPE };
-    private OutputMode mode;
+    private OutputMode outputMode;
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
     private String originalAnswerString = "";
@@ -88,16 +89,15 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         1, 5, 10, 20, 30, 60, 300, 600, 1200, 1800
     };
     private static final int DEFAULT_INTERVAL_INDEX = 3; // default is 20 seconds
-    private static final int MANUAL_RECORDING = 0;
-    private static final int AUTOMATIC_RECORDING = 1;
 
     private static final int[] ACCURACY_THRESHOLD_OPTIONS = {
         0, 3, 5, 10, 15, 20
     };
     private static final int DEFAULT_ACCURACY_THRESHOLD_INDEX = 3; // default is 10 meters
 
-    private boolean recordingActive;
-    private int recordingMode; // 0 manual, 1 is automatic
+    private boolean inputActive; // whether we are ready for the user to add points
+    private boolean recordingEnabled; // whether points are taken from GPS readings (if not, placed by tapping)
+    private boolean recordingAutomatic; // whether GPS readings are taken at regular intervals (if not, only when user-directed)
     private RadioGroup radioGroup;
     private View autoOptions;
     private Spinner autoInterval;
@@ -116,8 +116,9 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             restoredMapCenter = savedInstanceState.getParcelable(MAP_CENTER_KEY);
             restoredMapZoom = savedInstanceState.getDouble(MAP_ZOOM_KEY);
             restoredPoints = savedInstanceState.getParcelableArrayList(POINTS_KEY);
-            recordingActive = savedInstanceState.getBoolean(RECORDING_ACTIVE_KEY, false);
-            recordingMode = savedInstanceState.getInt(RECORDING_MODE_KEY, MANUAL_RECORDING);
+            inputActive = savedInstanceState.getBoolean(INPUT_ACTIVE_KEY, false);
+            recordingEnabled = savedInstanceState.getBoolean(RECORDING_ENABLED_KEY, false);
+            recordingAutomatic = savedInstanceState.getBoolean(RECORDING_AUTOMATIC_KEY, false);
             intervalIndex = savedInstanceState.getInt(INTERVAL_INDEX_KEY, DEFAULT_INTERVAL_INDEX);
             accuracyThresholdIndex = savedInstanceState.getInt(
                 ACCURACY_THRESHOLD_INDEX_KEY, DEFAULT_ACCURACY_THRESHOLD_INDEX);
@@ -128,10 +129,10 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             return;
         }
 
-        mode = (OutputMode) getIntent().getSerializableExtra(MODE_KEY);
+        outputMode = (OutputMode) getIntent().getSerializableExtra(OUTPUT_MODE_KEY);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setTitle(getString(mode == OutputMode.GEOTRACE ?
+        setTitle(getString(outputMode == OutputMode.GEOTRACE ?
             R.string.geotrace_title : R.string.geoshape_title));
         setContentView(R.layout.geotrace_layout);
         createMapFragment().addTo(this, R.id.map_container, this::initMap);
@@ -179,8 +180,9 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         state.putParcelable(MAP_CENTER_KEY, map.getCenter());
         state.putDouble(MAP_ZOOM_KEY, map.getZoom());
         state.putParcelableArrayList(POINTS_KEY, new ArrayList<>(map.getPolyPoints(featureId)));
-        state.putBoolean(RECORDING_ACTIVE_KEY, recordingActive);
-        state.putInt(RECORDING_MODE_KEY, recordingMode);
+        state.putBoolean(INPUT_ACTIVE_KEY, inputActive);
+        state.putBoolean(RECORDING_ENABLED_KEY, recordingEnabled);
+        state.putBoolean(RECORDING_AUTOMATIC_KEY, recordingAutomatic);
         state.putInt(INTERVAL_INDEX_KEY, intervalIndex);
         state.putInt(ACCURACY_THRESHOLD_INDEX_KEY, accuracyThresholdIndex);
     }
@@ -259,7 +261,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
         pauseButton = findViewById(R.id.pause);
         pauseButton.setOnClickListener(v -> {
-            recordingActive = false;
+            inputActive = false;
             try {
                 schedulerHandler.cancel(true);
             } catch (Exception e) {
@@ -334,10 +336,11 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         }
         featureId = map.addDraggablePoly(points, false);
 
-        if (recordingActive) {
+        if (inputActive) {
             startGeoTrace();
         }
 
+        map.setClickListener(this::onClick);
         map.setGpsLocationEnabled(true);
         map.setGpsLocationListener(this::onGpsLocation);
         if (restoredMapCenter != null && restoredMapZoom != null) {
@@ -412,7 +415,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
                 points.add(new MapPoint(lat, lon, alt, sd));
             }
         }
-        if (mode == OutputMode.GEOSHAPE) {
+        if (outputMode == OutputMode.GEOSHAPE) {
             // Closed polygons are stored with a last point that duplicates the
             // first point.  To prepare a polygon for display and editing, we
             // need to remove this duplicate point.
@@ -429,7 +432,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
      * appropriate for storing as the result of this form question.
      */
     private String formatPoints(List<MapPoint> points) {
-        if (mode == OutputMode.GEOSHAPE) {
+        if (outputMode == OutputMode.GEOSHAPE) {
             // Polygons are stored with a last point that duplicates the
             // first point.  Add this extra point if it's not already present.
             int count = points.size();
@@ -474,31 +477,29 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     }
 
     private void startGeoTrace() {
-        if (recordingMode == MANUAL_RECORDING) {
-            setupManualMode();
-        } else if (recordingMode == AUTOMATIC_RECORDING) {
-            setupAutomaticMode();
+        inputActive = true;
+        if (recordingEnabled && recordingAutomatic) {
+            startScheduler(INTERVAL_OPTIONS[intervalIndex]);
         }
         updateUi();
     }
 
-    private void setupManualMode() {
-        recordingActive = true;
-    }
-
-    private void setupAutomaticMode() {
-        startScheduler(INTERVAL_OPTIONS[intervalIndex]);
-        recordingActive = true;
-    }
-
     public void updateRecordingMode(RadioGroup group, int id) {
-        recordingMode = (id == R.id.trace_automatic) ? AUTOMATIC_RECORDING : MANUAL_RECORDING;
+        recordingEnabled = (id != R.id.trace_placement);
+        recordingAutomatic = (id == R.id.trace_automatic);
         updateUi();
     }
 
     public void startScheduler(int intervalSeconds) {
         schedulerHandler = scheduler.scheduleAtFixedRate(
             () -> runOnUiThread(this::appendPoint), 0, intervalSeconds, TimeUnit.SECONDS);
+    }
+
+    private void onClick(MapPoint point) {
+        if (inputActive && !recordingEnabled) {
+            map.appendPointToPoly(featureId, point);
+            updateUi();
+        }
     }
 
     private void onGpsLocationReady(MapFragment map) {
@@ -509,7 +510,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     }
 
     private void onGpsLocation(MapPoint point) {
-        if (recordingActive) {
+        if (inputActive) {
             map.setCenter(point, false);
         }
         updateUi();
@@ -532,7 +533,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
     private boolean isAccuracyThresholdActive() {
         int meters = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
-        return recordingMode == AUTOMATIC_RECORDING && meters > 0;
+        return recordingEnabled && recordingAutomatic && meters > 0;
     }
 
     private void removeLastPoint() {
@@ -545,7 +546,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private void clear() {
         map.clearFeatures();
         featureId = map.addDraggablePoly(new ArrayList<>(), false);
-        recordingActive = false;
+        inputActive = false;
         updateUi();
     }
 
@@ -555,21 +556,24 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         final MapPoint location = map.getGpsLocation();
 
         // Visibility state
-        playButton.setVisibility(recordingActive ? View.GONE : View.VISIBLE);
-        pauseButton.setVisibility(recordingActive ? View.VISIBLE : View.GONE);
-        manualButton.setVisibility(recordingActive ? View.VISIBLE : View.GONE);
+        playButton.setVisibility(inputActive ? View.GONE : View.VISIBLE);
+        pauseButton.setVisibility(inputActive ? View.VISIBLE : View.GONE);
+        manualButton.setVisibility(inputActive && recordingEnabled ? View.VISIBLE : View.GONE);
 
         // Enabled state
         zoomButton.setEnabled(location != null);
-        playButton.setEnabled(location != null);
         backspaceButton.setEnabled(numPoints > 0);
-        clearButton.setEnabled(!recordingActive && numPoints > 0);
+        clearButton.setEnabled(!inputActive && numPoints > 0);
+        traceSettingsView.findViewById(R.id.trace_manual).setEnabled(location != null);
+        traceSettingsView.findViewById(R.id.trace_automatic).setEnabled(location != null);
 
         // Trace settings dialog
-        radioGroup.check(
-            recordingMode == AUTOMATIC_RECORDING ? R.id.trace_automatic : R.id.trace_manual);
-        autoOptions.setVisibility(
-            recordingMode == AUTOMATIC_RECORDING ? View.VISIBLE : View.GONE);
+        if (recordingEnabled) {
+            radioGroup.check(recordingAutomatic ? R.id.trace_automatic : R.id.trace_manual);
+        } else {
+            radioGroup.check(R.id.trace_placement);
+        }
+        autoOptions.setVisibility(recordingEnabled && recordingAutomatic ? View.VISIBLE : View.GONE);
         autoInterval.setSelection(intervalIndex);
         accuracyThreshold.setSelection(accuracyThresholdIndex);
 
@@ -591,8 +595,9 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
                 : R.color.locationStatusUnacceptable
         ));
         collectionStatus.setText(
-            !recordingActive ? getString(R.string.geotrace_collection_status_paused, numPoints)
-                : recordingMode == MANUAL_RECORDING ? getString(R.string.geotrace_collection_status_manual, numPoints)
+            !inputActive ? getString(R.string.geotrace_collection_status_paused, numPoints)
+                : !recordingEnabled ? getString(R.string.geotrace_collection_status_placement, numPoints)
+                : !recordingAutomatic ? getString(R.string.geotrace_collection_status_manual, numPoints)
                 : !usingThreshold ? (
                     minutes > 0 ?
                         getString(R.string.geotrace_collection_status_auto_minutes, numPoints, minutes) :
@@ -623,10 +628,6 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             .setNegativeButton(R.string.cancel, null)
             .show();
 
-    }
-
-    @VisibleForTesting public ImageButton getPlayButton() {
-        return playButton;
     }
 
     @VisibleForTesting public MapFragment getMapFragment() {

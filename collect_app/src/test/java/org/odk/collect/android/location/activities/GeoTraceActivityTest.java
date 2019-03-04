@@ -65,15 +65,4 @@ public class GeoTraceActivityTest extends BaseGeoActivityTest {
         controller.stop();
         assertFalse(fakeLocationClient.isRunning());
     }
-
-    @Test public void shouldEnablePlayButtonOnLocationFix() {
-        activity = controller.create().start().resume().visible().get();
-
-        // The "Play" button should be initially disabled.
-        assertFalse(activity.getPlayButton().isEnabled());
-
-        // Acquiring a fix should cause the "Play" button to become enabled.
-        fakeLocationClient.receiveFix(createLocation("GPS", 1, 2, 3, 4f));
-        assertTrue(activity.getPlayButton().isEnabled());
-    }
 }
