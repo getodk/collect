@@ -643,8 +643,8 @@
   <string name="location_providers_disabled_dialog_message">Dieses Formular möchte ihren Standort aufzeichnen aber die Standortdienste sind deaktiviert. Bitte den Standortzugriff in den Android-Einstellungen aktivieren.</string>
   <string name="go_to_settings">Zu den Einstellungen wechseln</string>
   <string name="track_location">Standort nachverfolgen</string>
-  <string name="background_location_disabled">Dieses Formular möchte ihren Standort aufzeichnen aber die Standortaufzeichnung ist deaktiviert. Bitte oben im \u0020\u0020⋮\u0020\u0020 Menü aktivieren.</string>
-  <string name="background_location_enabled">Dieses Formular zeichnet Ihren Standort auf. Sie können die Standortaufzeichnung oben im \u0020\u0020⋮\u0020\u0020 Menü deaktivieren.</string>
+  <string name="background_location_disabled">Dieses Formular möchte ihren Standort aufzeichnen aber die Standortaufzeichnung ist deaktiviert. Bitte oben im %1$s Menü aktivieren.</string>
+  <string name="background_location_enabled">Dieses Formular zeichnet Ihren Standort auf. Sie können die Standortaufzeichnung oben im %1$s Menü deaktivieren.</string>
   <string name="open_file">Datei öffnen</string>
   <string name="read_details">Details lesen</string>
   <string name="google_sheets_encrypted_message">Verschlüsselte Formulare können nicht an Google Sheets gesendet werden.</string>

@@ -645,8 +645,8 @@
   <string name="location_providers_disabled_dialog_message">Tento formulář chce sledovat vaši polohu, ale poskytovatelé polohy jsou zakázáni. Zvolte prosím nastavení v systému Android.</string>
   <string name="go_to_settings">Jít do nastavení</string>
   <string name="track_location">Sledovat polohu</string>
-  <string name="background_location_disabled">Tento formulář chce sledovat vaši polohu, ale sledování je zakázáno. Aktivujte prosím výše uvedené menu \u0020\u0020⋮\u0020\u0020</string>
-  <string name="background_location_enabled">Tento formulář sleduje vaši polohu. V menu \u0020\u0020⋮\u0020\u0020 můžete vypnout sledování.</string>
+  <string name="background_location_disabled">Tento formulář chce sledovat vaši polohu, ale sledování je zakázáno. Aktivujte prosím výše uvedené menu %1$s</string>
+  <string name="background_location_enabled">Tento formulář sleduje vaši polohu. V menu %1$s můžete vypnout sledování.</string>
   <string name="open_file">Otevřít soubor</string>
   <string name="read_details">Přečtěte si podrobnosti</string>
 </resources>

@@ -679,8 +679,8 @@
     <string name="location_providers_disabled_dialog_message">This form wants to track your location but location providers are disabled. Please enable in Android settings.</string>
     <string name="go_to_settings">Go to settings</string>
     <string name="track_location">Track location</string>
-    <string name="background_location_disabled">This form wants to track your location but tracking is disabled. Please enable in the \u0020\u0020⋮\u0020\u0020 menu above.</string>
-    <string name="background_location_enabled">This form tracks your location. You can disable tracking in the \u0020\u0020⋮\u0020\u0020 menu above.</string>
+    <string name="background_location_disabled">This form wants to track your location but tracking is disabled. Please enable in the %1$s menu above.</string>
+    <string name="background_location_enabled">This form tracks your location. You can disable tracking in the %1$s menu above.</string>
     <string name="open_file">Open file</string>
     <string name="sms_feature_disabled_dialog_title">Sending via SMS Disabled</string>
     <string name="sms_feature_disabled_dialog_message">Sending submissions via SMS has been disabled due to Google Play Store restrictions.\n\nPlease make sure the person who configured this device reads the details below and takes action.</string>
