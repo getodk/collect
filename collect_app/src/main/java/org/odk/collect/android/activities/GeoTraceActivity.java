@@ -585,10 +585,10 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         int minutes = seconds / 60;
         int meters = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
         locationStatus.setText(
-            location == null ? getString(R.string.geotrace_location_status_searching)
-                : !usingThreshold ? getString(R.string.geotrace_location_status_accuracy, location.sd)
-                : acceptable ? getString(R.string.geotrace_location_status_acceptable, location.sd)
-                : getString(R.string.geotrace_location_status_unacceptable, location.sd)
+            location == null ? getString(R.string.location_status_searching)
+                : !usingThreshold ? getString(R.string.location_status_accuracy, location.sd)
+                : acceptable ? getString(R.string.location_status_acceptable, location.sd)
+                : getString(R.string.location_status_unacceptable, location.sd)
         );
         locationStatus.setBackgroundColor(getResources().getColor(
             location == null ? R.color.locationStatusSearching
@@ -596,18 +596,18 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
                 : R.color.locationStatusUnacceptable
         ));
         collectionStatus.setText(
-            !inputActive ? getString(R.string.geotrace_collection_status_paused, numPoints)
-                : !recordingEnabled ? getString(R.string.geotrace_collection_status_placement, numPoints)
-                : !recordingAutomatic ? getString(R.string.geotrace_collection_status_manual, numPoints)
+            !inputActive ? getString(R.string.collection_status_paused, numPoints)
+                : !recordingEnabled ? getString(R.string.collection_status_placement, numPoints)
+                : !recordingAutomatic ? getString(R.string.collection_status_manual, numPoints)
                 : !usingThreshold ? (
                     minutes > 0 ?
-                        getString(R.string.geotrace_collection_status_auto_minutes, numPoints, minutes) :
-                        getString(R.string.geotrace_collection_status_auto_seconds, numPoints, seconds)
+                        getString(R.string.collection_status_auto_minutes, numPoints, minutes) :
+                        getString(R.string.collection_status_auto_seconds, numPoints, seconds)
                 )
                 : (
                     minutes > 0 ?
-                        getString(R.string.geotrace_collection_status_auto_minutes_accuracy, numPoints, minutes, meters) :
-                        getString(R.string.geotrace_collection_status_auto_seconds_accuracy, numPoints, seconds, meters)
+                        getString(R.string.collection_status_auto_minutes_accuracy, numPoints, minutes, meters) :
+                        getString(R.string.collection_status_auto_seconds_accuracy, numPoints, seconds, meters)
                 )
         );
     }

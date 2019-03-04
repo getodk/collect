@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/location_status"
-        android:text="@string/geotrace_location_status_searching"
+        android:text="@string/location_status_searching"
         android:textColor="#FFFFFF"
         android:layout_width="match_parent"
         android:gravity="start|center_vertical"
