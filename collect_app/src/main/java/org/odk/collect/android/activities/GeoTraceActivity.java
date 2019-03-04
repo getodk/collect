@@ -51,6 +51,7 @@ import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermi
 
 public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterReceiver {
     public static final String PREF_VALUE_GOOGLE_MAPS = "google_maps";
+    public static final String MODE_KEY = "mode";
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
     public static final String POINTS_KEY = "points";
@@ -62,9 +63,11 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
 
+    public enum OutputMode { GEOTRACE, GEOSHAPE };
+    private OutputMode mode;
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
-    private String originalTraceString = "";
+    private String originalAnswerString = "";
 
     private ImageButton zoomButton;
     private ImageButton playButton;
@@ -125,8 +128,11 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             return;
         }
 
+        mode = (OutputMode) getIntent().getSerializableExtra(MODE_KEY);
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setTitle(getString(R.string.geotrace_title));
+        setTitle(getString(mode == OutputMode.GEOTRACE ?
+            R.string.geotrace_title : R.string.geoshape_title));
         setContentView(R.layout.geotrace_layout);
         createMapFragment().addTo(this, R.id.map_container, this::initMap);
     }
@@ -319,9 +325,9 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
         List<MapPoint> points = new ArrayList<>();
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra(GeoTraceWidget.TRACE_LOCATION)) {
-            originalTraceString = intent.getStringExtra(GeoTraceWidget.TRACE_LOCATION);
-            points = parsePoints(originalTraceString);
+        if (intent != null && intent.hasExtra(GeoTraceWidget.ANSWER)) {
+            originalAnswerString = intent.getStringExtra(GeoTraceWidget.ANSWER);
+            points = parsePoints(originalAnswerString);
         }
         if (restoredPoints != null) {
             points = restoredPoints;
@@ -352,7 +358,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     }
 
     @Override public void onBackPressed() {
-        if (!formatPoints(map.getPolyPoints(featureId)).equals(originalTraceString)) {
+        if (!formatPoints(map.getPolyPoints(featureId)).equals(originalAnswerString)) {
             showBackDialog();
         } else {
             finish();
@@ -406,6 +412,15 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
                 points.add(new MapPoint(lat, lon, alt, sd));
             }
         }
+        if (mode == OutputMode.GEOSHAPE) {
+            // Closed polygons are stored with a last point that duplicates the
+            // first point.  To prepare a polygon for display and editing, we
+            // need to remove this duplicate point.
+            int count = points.size();
+            if (count > 1 && points.get(0).equals(points.get(count - 1))) {
+                points.remove(count - 1);
+            }
+        }
         return points;
     }
 
@@ -414,6 +429,14 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
      * appropriate for storing as the result of this form question.
      */
     private String formatPoints(List<MapPoint> points) {
+        if (mode == OutputMode.GEOSHAPE) {
+            // Polygons are stored with a last point that duplicates the
+            // first point.  Add this extra point if it's not already present.
+            int count = points.size();
+            if (count > 1 && !points.get(0).equals(points.get(count - 1))) {
+                points.add(points.get(0));
+            }
+        }
         StringBuilder result = new StringBuilder();
         for (MapPoint point : points) {
             // TODO(ping): Remove excess precision when we're ready for the output to change.
