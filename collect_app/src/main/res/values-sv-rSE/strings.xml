@@ -323,7 +323,6 @@ Dela ODK Collect med dem.</string>
   <string name="get_shape">Starta GeoShape</string>
   <string name="get_trace">Starta GeoTrace</string>
   <string name="geoshape_title">GeoShape</string>
-  <string name="select_geotrace_mode">Välj GeoTrace-läge</string>
   <string name="start">Starta</string>
   <string name="enable_gps">Aktivera GPS</string>
   <string name="geotrace_title">GeoTrace</string>

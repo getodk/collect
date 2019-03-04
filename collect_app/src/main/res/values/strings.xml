@@ -338,7 +338,7 @@
     <string name="get_trace">Start GeoTrace</string>
 
     <string name="geoshape_title">GeoShape</string>
-    <string name="select_geotrace_mode">"Select GeoTrace Mode"</string>
+    <string name="data_entry_mode">Data entry mode</string>
     <string name="start">Start</string>
     <string name="enable_gps">Enable GPS</string>
     <string name="geotrace_title">GeoTrace</string>
@@ -353,8 +353,8 @@
     <string name="polyline_validator">Must have at least 2 points to create Polyline</string>
     <string name="clear">Clear</string>
     <string name="placement_mode">Tap to place points</string>
-    <string name="manual_mode">Manual recording</string>
-    <string name="automatic_mode">Automatic recording</string>
+    <string name="manual_mode">Manual GPS recording</string>
+    <string name="automatic_mode">Automatic GPS recording</string>
     <string name="recording_interval">Recording interval:</string>
     <plurals name="number_of_seconds">
         <item quantity="one">%d second</item>
@@ -375,13 +375,13 @@
     <string name="geotrace_location_status_accuracy">GPS location accuracy: %.1f m</string>
     <string name="geotrace_location_status_acceptable">GPS location accuracy: %.1f m (acceptable)</string>
     <string name="geotrace_location_status_unacceptable">GPS location accuracy: %.1f m (unacceptable)</string>
-    <string name="geotrace_collection_status_paused">Points recorded: %d</string>
-    <string name="geotrace_collection_status_placement">Points recorded: %d (tap to place points)</string>
-    <string name="geotrace_collection_status_manual">Points recorded: %d (manual recording)</string>
-    <string name="geotrace_collection_status_auto_seconds">Points recorded: %1$d (recording every %2$d sec)</string>
-    <string name="geotrace_collection_status_auto_minutes">Points recorded: %1$d (recording every %2$d min)</string>
-    <string name="geotrace_collection_status_auto_seconds_accuracy">Points recorded: %1$d (recording every %2$d sec, accuracy %3$d m)</string>
-    <string name="geotrace_collection_status_auto_minutes_accuracy">Points recorded: %1$d (recording every %2$d min, accuracy %3$d m)</string>
+    <string name="geotrace_collection_status_paused">Points entered: %d</string>
+    <string name="geotrace_collection_status_placement">Points entered: %d (tap to place points)</string>
+    <string name="geotrace_collection_status_manual">Points entered: %d (manual recording)</string>
+    <string name="geotrace_collection_status_auto_seconds">Points entered: %1$d (recording every %2$d sec)</string>
+    <string name="geotrace_collection_status_auto_minutes">Points entered: %1$d (recording every %2$d min)</string>
+    <string name="geotrace_collection_status_auto_seconds_accuracy">Points entered: %1$d (recording every %2$d sec, accuracy %3$d m)</string>
+    <string name="geotrace_collection_status_auto_minutes_accuracy">Points entered: %1$d (recording every %2$d min, accuracy %3$d m)</string>
     <string name="geopoint_instruction">Long press to place mark or tap add marker button.</string>
     <string name="geopoint_no_draggable_instruction">Tap add marker button.</string>
     <string name="discard">Discard</string>
@@ -403,7 +403,7 @@
     <string name="install_openmapkit">Please install OpenMapKit!</string>
     <string name="go_back">Go back</string>
     <string name="download_selected">Download Selected</string>
-    <string name="record_geopoint">Record GeoPoint</string>
+    <string name="record_geopoint">Record a point</string>
     <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nAccuracy: %4$sm</string>
     <string name="parser_exception">XPathParser Exception: \"%s\"</string>
     <string name="selected_answer">Selected: %s</string>

@@ -331,7 +331,6 @@
   <string name="get_shape">Začít GeoShape</string>
   <string name="get_trace">Začít GeoTrace</string>
   <string name="geoshape_title">GeoShape</string>
-  <string name="select_geotrace_mode">Vybrat GeoTrace mód</string>
   <string name="start">Začít</string>
   <string name="enable_gps">Zapnout GPS</string>
   <string name="geotrace_title">GeoTrace</string>

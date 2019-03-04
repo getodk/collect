@@ -333,7 +333,6 @@
   <string name="get_shape">Iniciar GeoArea</string>
   <string name="get_trace">Iniciar GeoLínea</string>
   <string name="geoshape_title">GeoArea</string>
-  <string name="select_geotrace_mode">Seleccione modo GeoLínea</string>
   <string name="start">Iniciar</string>
   <string name="enable_gps">Activar el GPS</string>
   <string name="geotrace_title">GeoLínea</string>

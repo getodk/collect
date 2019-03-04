@@ -283,7 +283,6 @@
   <string name="get_shape">เริ่มต้น GeoShape</string>
   <string name="get_trace">เริ่มต้น GeoTrace</string>
   <string name="geoshape_title">GeoShape</string>
-  <string name="select_geotrace_mode">เลือกโหมด GeoTrace</string>
   <string name="start">เริ่มต้น</string>
   <string name="enable_gps">เปิด GPS</string>
   <string name="geotrace_title">GeoTrace</string>

@@ -61,10 +61,11 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     public static final String INTERVAL_INDEX_KEY = "interval_index";
     public static final String ACCURACY_THRESHOLD_INDEX_KEY = "accuracy_threshold_index";
 
+    public enum OutputMode { GEOTRACE, GEOSHAPE }
+
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
 
-    public enum OutputMode { GEOTRACE, GEOSHAPE };
     private OutputMode outputMode;
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
@@ -452,7 +453,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
     private void buildDialogs() {
         traceSettingsDialog = new AlertDialog.Builder(this)
-            .setTitle(getString(R.string.select_geotrace_mode))
+            .setTitle(getString(R.string.data_entry_mode))
             .setView(traceSettingsView)
             .setPositiveButton(getString(R.string.start), (dialog, id) -> {
                 startGeoTrace();
@@ -485,8 +486,8 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     }
 
     public void updateRecordingMode(RadioGroup group, int id) {
-        recordingEnabled = (id != R.id.trace_placement);
-        recordingAutomatic = (id == R.id.trace_automatic);
+        recordingEnabled = id != R.id.trace_placement;
+        recordingAutomatic = id == R.id.trace_automatic;
         updateUi();
     }
 
