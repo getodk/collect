@@ -74,17 +74,17 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private ImageButton zoomButton;
     private ImageButton playButton;
     private ImageButton clearButton;
-    private Button manualButton;
+    private Button recordButton;
     private ImageButton pauseButton;
     private ImageButton backspaceButton;
 
     private TextView locationStatus;
     private TextView collectionStatus;
-    private View traceSettingsView;
-    private View polygonOrPolylineView;
 
-    private AlertDialog traceSettingsDialog;
+    private AlertDialog settingsDialog;
+    private View settingsView;
     private AlertDialog polygonOrPolylineDialog;
+    private View polygonOrPolylineView;
 
     private static final int[] INTERVAL_OPTIONS = {
         1, 5, 10, 20, 30, 60, 300, 600, 1200, 1800
@@ -219,13 +219,13 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         }
         helper.setBasemap();
 
-        locationStatus = findViewById(R.id.geotrace_location_status);
-        collectionStatus = findViewById(R.id.geotrace_collection_status);
-        traceSettingsView = getLayoutInflater().inflate(R.layout.geotrace_dialog, null);
-        radioGroup = traceSettingsView.findViewById(R.id.radio_group);
+        locationStatus = findViewById(R.id.location_status);
+        collectionStatus = findViewById(R.id.collection_status);
+        settingsView = getLayoutInflater().inflate(R.layout.geotrace_dialog, null);
+        radioGroup = settingsView.findViewById(R.id.radio_group);
         radioGroup.setOnCheckedChangeListener(this::updateRecordingMode);
-        autoOptions = traceSettingsView.findViewById(R.id.auto_options);
-        autoInterval = traceSettingsView.findViewById(R.id.auto_interval);
+        autoOptions = settingsView.findViewById(R.id.auto_options);
+        autoInterval = settingsView.findViewById(R.id.auto_interval);
         autoInterval.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 intervalIndex = position;
@@ -240,7 +240,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         }
         populateSpinner(autoInterval, options);
 
-        accuracyThreshold = traceSettingsView.findViewById(R.id.accuracy_threshold);
+        accuracyThreshold = settingsView.findViewById(R.id.accuracy_threshold);
         accuracyThreshold.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 accuracyThresholdIndex = position;
@@ -274,7 +274,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         backspaceButton = findViewById(R.id.backspace);
         backspaceButton.setOnClickListener(v -> removeLastPoint());
 
-        ImageButton saveButton = findViewById(R.id.geotrace_save);
+        ImageButton saveButton = findViewById(R.id.save);
         saveButton.setOnClickListener(v -> {
             if (!map.getPolyPoints(featureId).isEmpty()) {
                 polygonOrPolylineDialog.show();
@@ -286,14 +286,14 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         playButton = findViewById(R.id.play);
         playButton.setOnClickListener(v -> {
             if (map.getPolyPoints(featureId).isEmpty()) {
-                traceSettingsDialog.show();
+                settingsDialog.show();
             } else {
-                startGeoTrace();
+                startInput();
             }
         });
 
-        manualButton = findViewById(R.id.manual_button);
-        manualButton.setOnClickListener(v -> appendPoint());
+        recordButton = findViewById(R.id.record_button);
+        recordButton.setOnClickListener(v -> recordPoint());
 
         Button polygonSave = polygonOrPolylineView.findViewById(R.id.polygon_save);
         polygonSave.setOnClickListener(v -> {
@@ -328,8 +328,8 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
 
         List<MapPoint> points = new ArrayList<>();
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra(GeoTraceWidget.ANSWER)) {
-            originalAnswerString = intent.getStringExtra(GeoTraceWidget.ANSWER);
+        if (intent != null && intent.hasExtra(GeoTraceWidget.ANSWER_KEY)) {
+            originalAnswerString = intent.getStringExtra(GeoTraceWidget.ANSWER_KEY);
             points = parsePoints(originalAnswerString);
         }
         if (restoredPoints != null) {
@@ -338,7 +338,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         featureId = map.addDraggablePoly(points, false);
 
         if (inputActive) {
-            startGeoTrace();
+            startInput();
         }
 
         map.setClickListener(this::onClick);
@@ -357,7 +357,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     private void finishWithResult() {
         List<MapPoint> points = map.getPolyPoints(featureId);
         setResult(RESULT_OK, new Intent().putExtra(
-            FormEntryActivity.GEOTRACE_RESULTS, formatPoints(points)));
+            FormEntryActivity.ANSWER_KEY, formatPoints(points)));
         finish();
     }
 
@@ -452,17 +452,17 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     }
 
     private void buildDialogs() {
-        traceSettingsDialog = new AlertDialog.Builder(this)
+        settingsDialog = new AlertDialog.Builder(this)
             .setTitle(getString(R.string.data_entry_mode))
-            .setView(traceSettingsView)
+            .setView(settingsView)
             .setPositiveButton(getString(R.string.start), (dialog, id) -> {
-                startGeoTrace();
+                startInput();
                 dialog.cancel();
-                traceSettingsDialog.dismiss();
+                settingsDialog.dismiss();
             })
             .setNegativeButton(R.string.cancel, (dialog, id) -> {
                 dialog.cancel();
-                traceSettingsDialog.dismiss();
+                settingsDialog.dismiss();
             })
             .create();
 
@@ -472,12 +472,12 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
             .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel())
             .setOnCancelListener(dialog -> {
                 dialog.cancel();
-                traceSettingsDialog.dismiss();
+                settingsDialog.dismiss();
             })
             .create();
     }
 
-    private void startGeoTrace() {
+    private void startInput() {
         inputActive = true;
         if (recordingEnabled && recordingAutomatic) {
             startScheduler(INTERVAL_OPTIONS[intervalIndex]);
@@ -486,14 +486,14 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
     }
 
     public void updateRecordingMode(RadioGroup group, int id) {
-        recordingEnabled = id != R.id.trace_placement;
-        recordingAutomatic = id == R.id.trace_automatic;
+        recordingEnabled = id != R.id.placement_mode;
+        recordingAutomatic = id == R.id.automatic_mode;
         updateUi();
     }
 
     public void startScheduler(int intervalSeconds) {
         schedulerHandler = scheduler.scheduleAtFixedRate(
-            () -> runOnUiThread(this::appendPoint), 0, intervalSeconds, TimeUnit.SECONDS);
+            () -> runOnUiThread(this::recordPoint), 0, intervalSeconds, TimeUnit.SECONDS);
     }
 
     private void onClick(MapPoint point) {
@@ -517,7 +517,7 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         updateUi();
     }
 
-    private void appendPoint() {
+    private void recordPoint() {
         MapPoint point = map.getGpsLocation();
         if (point != null && isLocationAcceptable(point)) {
             map.appendPointToPoly(featureId, point);
@@ -559,20 +559,20 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
         // Visibility state
         playButton.setVisibility(inputActive ? View.GONE : View.VISIBLE);
         pauseButton.setVisibility(inputActive ? View.VISIBLE : View.GONE);
-        manualButton.setVisibility(inputActive && recordingEnabled ? View.VISIBLE : View.GONE);
+        recordButton.setVisibility(inputActive && recordingEnabled ? View.VISIBLE : View.GONE);
 
         // Enabled state
         zoomButton.setEnabled(location != null);
         backspaceButton.setEnabled(numPoints > 0);
         clearButton.setEnabled(!inputActive && numPoints > 0);
-        traceSettingsView.findViewById(R.id.trace_manual).setEnabled(location != null);
-        traceSettingsView.findViewById(R.id.trace_automatic).setEnabled(location != null);
+        settingsView.findViewById(R.id.manual_mode).setEnabled(location != null);
+        settingsView.findViewById(R.id.automatic_mode).setEnabled(location != null);
 
-        // Trace settings dialog
+        // Settings dialog
         if (recordingEnabled) {
-            radioGroup.check(recordingAutomatic ? R.id.trace_automatic : R.id.trace_manual);
+            radioGroup.check(recordingAutomatic ? R.id.automatic_mode : R.id.manual_mode);
         } else {
-            radioGroup.check(R.id.trace_placement);
+            radioGroup.check(R.id.placement_mode);
         }
         autoOptions.setVisibility(recordingEnabled && recordingAutomatic ? View.VISIBLE : View.GONE);
         autoInterval.setSelection(intervalIndex);

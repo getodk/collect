@@ -9,7 +9,7 @@
     android:padding="0dip">
 
     <TextView
-        android:id="@+id/geotrace_location_status"
+        android:id="@+id/location_status"
         android:text="@string/geotrace_location_status_searching"
         android:textColor="#FFFFFF"
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
 
         <android.support.v7.widget.AppCompatButton
             android:text="@string/record_geopoint"
-            android:id="@+id/manual_button"
+            android:id="@+id/record_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="15dp"
@@ -114,7 +114,7 @@
                     app:srcCompat="@drawable/ic_delete" />
 
                 <android.support.v7.widget.AppCompatImageButton
-                    android:id="@+id/geotrace_save"
+                    android:id="@+id/save"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="15dp"
@@ -125,7 +125,7 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/geotrace_collection_status"
+        android:id="@+id/collection_status"
         android:text=""
         android:textColor="#FFFFFF"
         android:gravity="start|center_vertical"
