@@ -73,9 +73,6 @@
         <Bug pattern="SE_COMPARATOR_SHOULD_BE_SERIALIZABLE" />
     </Match>
     <Match>
-        <Bug pattern="ES_COMPARING_STRINGS_WITH_EQ" />
-    </Match>
-    <Match>
         <Bug pattern="OS_OPEN_STREAM_EXCEPTION_PATH" />
     </Match>
     <Match>
@@ -109,12 +106,6 @@
     <Match>
         <Bug pattern="MS_CANNOT_BE_FINAL" />
     </Match>
-    <Match>
-        <Bug pattern="MS_PKGPROTECT" />
-    </Match>
-    <Match>
-        <Bug pattern="MS_FINAL_PKGPROTECT" />
-    </Match>
 
     <!-- Multithreaded correctness -->
     <Match>
@@ -125,9 +116,6 @@
     </Match>
 
     <!-- Performance Warnings -->
-    <Match>
-        <Bug pattern="SBSC_USE_STRINGBUFFER_CONCATENATION" />
-    </Match>
     <Match>
         <Bug pattern="WMI_WRONG_MAP_ITERATOR" />
     </Match>
@@ -141,9 +129,6 @@
     <!-- Dodgy code Warnings -->
     <Match>
         <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD" />
-    </Match>
-    <Match>
-        <Bug pattern="INT_BAD_REM_BY_1" />
     </Match>
     <Match>
         <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE" />
@@ -170,22 +155,9 @@
         <Bug pattern="PZLA_PREFER_ZERO_LENGTH_ARRAYS" />
     </Match>
     <Match>
-        <Bug pattern="NS_NON_SHORT_CIRCUIT" />
-    </Match>
-    <Match>
-        <Bug pattern="RI_REDUNDANT_INTERFACES" />
-    </Match>
-    <Match>
         <Bug pattern="Warnings_STYLE" />
     </Match>
     <Match>
         <Bug pattern="FE_FLOATING_POINT_EQUALITY" />
     </Match>
-    <Match>
-        <Bug pattern="DB_DUPLICATE_SWITCH_CLAUSES" />
-    </Match>
-    <Match>
-        <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE" />
-    </Match>
-
 </FindBugsFilter>

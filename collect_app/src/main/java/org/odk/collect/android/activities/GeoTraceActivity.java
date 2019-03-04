@@ -414,14 +414,14 @@ public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterRec
      * appropriate for storing as the result of this form question.
      */
     private String formatPoints(List<MapPoint> points) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (MapPoint point : points) {
             // TODO(ping): Remove excess precision when we're ready for the output to change.
-            result += String.format(Locale.US, "%s %s %s %s;",
-                Double.toString(point.lat), Double.toString(point.lon),
-                Double.toString(point.alt), Float.toString((float) point.sd));
+            result.append(String.format(Locale.US, "%s %s %s %s;",
+                    Double.toString(point.lat), Double.toString(point.lon),
+                    Double.toString(point.alt), Float.toString((float) point.sd)));
         }
-        return result.trim();
+        return result.toString().trim();
     }
 
     private void buildDialogs() {

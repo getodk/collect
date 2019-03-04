@@ -301,13 +301,13 @@ public class GeoShapeActivity extends BaseGeoMapActivity implements IRegisterRec
         if (points.size() > 1 && !points.get(0).equals(points.get(points.size() - 1))) {
             points.add(points.get(0));
         }
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (MapPoint point : points) {
             // TODO(ping): Remove excess precision when we're ready for the output to change.
-            result += String.format(Locale.US, "%s %s 0.0 0.0;",
-                Double.toString(point.lat), Double.toString(point.lon));
+            result.append(String.format(Locale.US, "%s %s 0.0 0.0;",
+                    Double.toString(point.lat), Double.toString(point.lon)));
         }
-        return result.trim();
+        return result.toString().trim();
     }
 
     @VisibleForTesting public boolean isZoomButtonEnabled() {

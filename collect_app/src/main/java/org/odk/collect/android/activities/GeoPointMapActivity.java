@@ -344,7 +344,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
         // Restore the rest of the UI state.
         MapPoint mapCenter = state.getParcelable(MAP_CENTER_KEY);
         Double mapZoom = state.getDouble(MAP_ZOOM_KEY);
-        if (mapCenter != null && mapZoom != null) {
+        if (mapCenter != null) {
             map.zoomToPoint(mapCenter, mapZoom, false);
         }
 
