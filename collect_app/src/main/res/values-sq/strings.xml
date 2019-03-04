@@ -514,6 +514,6 @@
   <string name="missing_google_account_dialog_title">Llogaria në Google nuk është përcaktuar</string>
   <string name="go_to_settings">Shko tek parametrat</string>
   <string name="track_location">Gjurmo vendndodhjen</string>
-  <string name="background_location_enabled">Kjo formë gjurmon vendndodhjen tuaj. Mund ta ç\'aktivizoni gjurmimin e vendndodhjes duke shkuar në menunë \u0020\u0020⋮\u0020\u0020 më sipër.</string>
+  <string name="background_location_enabled">Kjo formë gjurmon vendndodhjen tuaj. Mund ta ç\'aktivizoni gjurmimin e vendndodhjes duke shkuar në menunë %1$s më sipër.</string>
   <string name="open_file">Hap file</string>
 </resources>
