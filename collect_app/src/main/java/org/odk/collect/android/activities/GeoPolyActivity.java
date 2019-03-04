@@ -335,7 +335,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
         if (restoredPoints != null) {
             points = restoredPoints;
         }
-        featureId = map.addDraggablePoly(points, false);
+        featureId = map.addDraggablePoly(points, outputMode == OutputMode.GEOSHAPE);
 
         if (inputActive) {
             startInput();

@@ -47,18 +47,13 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
 
     public static final String GOOGLE_MAP_KEY = "google_maps";
-    public static final String ANSWER_KEY = "answer";
-
     public SharedPreferences sharedPreferences;
     public String mapSDK;
-
     private final Button createTraceButton;
     private final TextView answerDisplay;
 
     public GeoTraceWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        LinearLayout layout = new LinearLayout(getContext());
-        layout.setOrientation(LinearLayout.VERTICAL);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         mapSDK = sharedPreferences.getString(GeneralKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
@@ -89,7 +84,7 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
             return;
         }
         Intent intent = new Intent(getContext(), GeoPolyActivity.class)
-            .putExtra(ANSWER_KEY, answerDisplay.getText().toString())
+            .putExtra(GeoPolyActivity.ANSWER_KEY, answerDisplay.getText().toString())
             .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOTRACE)
             .putExtra(GeneralKeys.KEY_MAP_SDK, mapSDK);
         ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOTRACE_CAPTURE);
