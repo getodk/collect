@@ -75,9 +75,6 @@ public class InstanceUploaderAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        viewHolder.progressBar.setVisibility(View.VISIBLE);
-        viewHolder.progressBar.setProgressPercent(0, false);
-
         viewHolder.formTitle.setText(cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME)));
         viewHolder.formSubtitle.setText(cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT)));
 
@@ -105,6 +102,7 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         }
 
         if (isSmsSubmission) {
+            viewHolder.progressBar.setVisibility(View.VISIBLE);
             viewHolder.progressBar.setProgressPercent((int) model.getCompletion().getPercentage(), false);
 
             int smsStatus = submissionManager.checkNextMessageResultCode(String.valueOf(instanceId));
@@ -120,12 +118,6 @@ public class InstanceUploaderAdapter extends CursorAdapter {
 
             setupCloseButton(viewHolder, smsStatus);
             viewHolder.closeButton.setOnClickListener(v -> smsService.cancelFormSubmission(String.valueOf(instanceId)));
-        } else {
-            if (status.equals(STATUS_SUBMITTED)) {
-                viewHolder.progressBar.setProgressPercent(100, false);
-            } else if (status.equals(STATUS_SUBMISSION_FAILED)) {
-                viewHolder.progressBar.setProgressPercent(50, false);
-            }
         }
 
         compositeDisposable.add(eventBus.register(SmsRxEvent.class)
