@@ -18,6 +18,8 @@ package org.odk.collect.android.activities.viewmodels;
 
 import android.arch.lifecycle.ViewModel;
 
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormDetails;
 
 import java.util.ArrayList;
@@ -36,7 +38,8 @@ public class FormDownloadListViewModel extends ViewModel {
     private String[] formIdsToDownload;
 
     private String alertTitle;
-    private String alertMsg;
+    private String progressDialogMsg;
+    private String alertDialogMsg;
     private String url;
     private String username;
     private String password;
@@ -69,12 +72,20 @@ public class FormDownloadListViewModel extends ViewModel {
         this.alertTitle = alertTitle;
     }
 
-    public String getAlertMsg() {
-        return alertMsg;
+    public String getProgressDialogMsg() {
+        return progressDialogMsg == null ? Collect.getInstance().getString(R.string.please_wait) : progressDialogMsg;
     }
 
-    public void setAlertMsg(String alertMsg) {
-        this.alertMsg = alertMsg;
+    public void setProgressDialogMsg(String progressDialogMsg) {
+        this.progressDialogMsg = progressDialogMsg;
+    }
+
+    public String getAlertDialogMsg() {
+        return alertDialogMsg;
+    }
+
+    public void setAlertDialogMsg(String alertDialogMsg) {
+        this.alertDialogMsg = alertDialogMsg;
     }
 
     public boolean isAlertShowing() {

@@ -180,8 +180,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             }
         }
 
-        viewModel.setAlertMsg(getString(R.string.please_wait));
-
         downloadButton = findViewById(R.id.add_button);
         downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
         downloadButton.setOnClickListener(new OnClickListener() {
@@ -233,7 +231,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             downloadFormListTask = (DownloadFormListTask) getLastCustomNonConfigurationInstance();
             if (downloadFormListTask.getStatus() == AsyncTask.Status.FINISHED) {
                 try {
-                    progressDialog.dismiss();
+                    if (progressDialog != null && progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
                     viewModel.setProgressDialogShowing(false);
                 } catch (IllegalArgumentException e) {
                     Timber.i("Attempting to close a dialog that was not previously opened");
@@ -244,7 +244,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             downloadFormsTask = (DownloadFormsTask) getLastCustomNonConfigurationInstance();
             if (downloadFormsTask.getStatus() == AsyncTask.Status.FINISHED) {
                 try {
-                    progressDialog.dismiss();
+                    if (progressDialog != null && progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
                     viewModel.setProgressDialogShowing(false);
                 } catch (IllegalArgumentException e) {
                     Timber.i("Attempting to close a dialog that was not previously opened");
@@ -302,7 +304,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             viewModel.clearFormNamesAndURLs();
             if (progressDialog != null) {
                 // This is needed because onPrepareDialog() is broken in 1.6.
-                progressDialog.setMessage(getString(R.string.please_wait));
+                progressDialog.setMessage(viewModel.getProgressDialogMsg());
             }
             createProgressDialog();
 
@@ -467,7 +469,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             downloadFormsTask.setDownloaderListener(this);
         }
         if (viewModel.isAlertShowing()) {
-            createAlertDialog(viewModel.getAlertTitle(), viewModel.getAlertMsg(), viewModel.shouldExit());
+            createAlertDialog(viewModel.getAlertTitle(), viewModel.getAlertDialogMsg(), viewModel.shouldExit());
         }
         if (viewModel.isProgressDialogShowing() && (progressDialog == null || !progressDialog.isShowing())) {
             createProgressDialog();
@@ -654,7 +656,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         alertDialog.setCancelable(false);
         alertDialog.setButton(getString(R.string.ok), quitListener);
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
-        viewModel.setAlertMsg(message);
+        viewModel.setAlertDialogMsg(message);
         viewModel.setAlertTitle(title);
         viewModel.setAlertShowing(true);
         viewModel.setShouldExit(shouldExit);
@@ -693,7 +695,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                     }
                 };
         progressDialog.setTitle(getString(R.string.downloading_data));
-        progressDialog.setMessage(viewModel.getAlertMsg());
+        progressDialog.setMessage(viewModel.getProgressDialogMsg());
         progressDialog.setIcon(android.R.drawable.ic_dialog_info);
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
@@ -726,8 +728,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     @Override
     public void progressUpdate(String currentFile, int progress, int total) {
-        viewModel.setAlertMsg(getString(R.string.fetching_file, currentFile, String.valueOf(progress), String.valueOf(total)));
-        progressDialog.setMessage(viewModel.getAlertMsg());
+        viewModel.setProgressDialogMsg(getString(R.string.fetching_file, currentFile, String.valueOf(progress), String.valueOf(total)));
+        progressDialog.setMessage(viewModel.getProgressDialogMsg());
     }
 
     @Override
