@@ -61,6 +61,7 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.InstanceSyncTask;
+import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.LinkedHashSet;
@@ -184,6 +185,12 @@ public class SmapTaskListFragment extends ListFragment
 
         if (bottomSheetDialog == null) {
             setupBottomSheet();
+        }
+
+        // Notify the user if tracking is turned on
+        if(PreferenceManager
+                .getDefaultSharedPreferences(getContext()).getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false)) {
+            SnackbarUtils.showLongSnackbar(getActivity().findViewById(R.id.drawer_layout), getString(R.string.smap_location_tracking));
         }
     }
 

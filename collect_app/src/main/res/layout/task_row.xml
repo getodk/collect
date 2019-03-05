@@ -1,43 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
-    android:layout_marginTop="10dip"
-    android:paddingRight="6dip"
-    android:paddingLeft="6dip">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="56dp"
+    android:padding="16dp">
+
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginRight="6dip"
-        android:layout_marginTop="10dip"
-    	android:layout_marginBottom="10dip"
-        android:src="@drawable/notes" />
+        android:layout_centerVertical="true"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        />
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-         android:layout_weight="1">
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
         <TextView
             android:id="@+id/toptext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:textStyle="bold"
+            android:textAppearance="@style/ListItemPrimaryTextStyle"
+            android:layout_toRightOf="@id/icon"
         />
         <TextView
             android:id="@+id/middletext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:ellipsize="marquee"
+            android:textAppearance="@style/ListItemSecondaryTextStyle"
+            android:layout_toRightOf="@id/icon"
         />
         <TextView
             android:id="@+id/bottomtext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:ellipsize="marquee"
+            android:textAppearance="@style/ListItemSecondaryTextStyle"
+            android:layout_toRightOf="@id/icon"
+            android:visibility="gone"
         />
     </LinearLayout>
+
 </LinearLayout>

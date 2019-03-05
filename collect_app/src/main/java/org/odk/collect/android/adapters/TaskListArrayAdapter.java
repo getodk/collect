@@ -20,7 +20,8 @@
 package org.odk.collect.android.adapters;
 
 import android.content.Context;
-import android.util.Log;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,9 +36,7 @@ import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.utilities.KeyValueJsonFns;
 import org.odk.collect.android.utilities.Utilities;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.TimeZone;
 
 public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
     
@@ -69,24 +68,32 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
 
     	ImageView icon = (ImageView) view.findViewById(R.id.icon);
     	if(item.type.equals("form")) {
-    		icon.setImageResource(R.drawable.ic_form);
+            Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_blank);
+            icon.setImageDrawable(d);
     	} else if (item.taskStatus != null) {
     		if(item.taskStatus.equals(Utilities.STATUS_T_ACCEPTED)) {
 				if(item.locationTrigger != null && !item.repeat) {
-                    icon.setImageResource(R.drawable.ic_task_triggered);
+                    Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_triggered);
+                    icon.setImageDrawable(d);
                 } else if (item.locationTrigger != null && item.repeat) {
-                    icon.setImageResource(R.drawable.ic_task_triggered_repeat);
+                    Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_triggered_repeat);
+                    icon.setImageDrawable(d);
                 } else if(item.repeat) {
-					icon.setImageResource(R.drawable.ic_task_repeat);
+                    Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_repeat);
+                    icon.setImageDrawable(d);
 				} else {
-					icon.setImageResource(R.drawable.ic_task_open);
+                    Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_saved);
+                    icon.setImageDrawable(d);
 				}
     		} else if(item.taskStatus.equals(Utilities.STATUS_T_COMPLETE)) {
-    			icon.setImageResource(R.drawable.ic_task_done);
+                Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_finalized);
+                icon.setImageDrawable(d);
     		} else if(item.taskStatus.equals(Utilities.STATUS_T_REJECTED) || item.taskStatus.equals(Utilities.STATUS_T_CANCELLED)) {
-    			icon.setImageResource(R.drawable.ic_task_reject);
+                Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_rejected);
+                icon.setImageDrawable(d);
     		} else if(item.taskStatus.equals(Utilities.STATUS_T_SUBMITTED)) {
-    			icon.setImageResource(R.drawable.ic_task_submitted);
+                Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_submitted);
+                icon.setImageDrawable(d);
     		}
     	}
     	
@@ -108,12 +115,11 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
 
         TextView taskEndText = (TextView) view.findViewById(R.id.bottomtext);
         if(taskEndText != null) {
-
-            if(item.type.equals("form")) {
-                taskEndText.setText("");
-            } else {
+            taskEndText.setVisibility(View.GONE);
+            if(!item.type.equals("form")) {
                 String addressText = KeyValueJsonFns.getValues(item.taskAddress);
-                if (addressText != null) {
+                if (addressText != null && addressText.trim().length() > 0) {
+                    taskEndText.setVisibility(View.VISIBLE);
                     taskEndText.setText(addressText);
                 }
             }

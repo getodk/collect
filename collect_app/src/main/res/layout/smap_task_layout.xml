@@ -27,10 +27,15 @@ the License.
         <!--<include layout="@layout/search_box_layout" />-->
 
         <ListView
-            android:id="@android:id/list"
+            android:id="@id/android:list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:clipToPadding="false"
+            android:scrollbarStyle="outsideOverlay"
+            android:divider="?dividerCompat"/>
 
         <TextView
             android:id="@android:id/empty"

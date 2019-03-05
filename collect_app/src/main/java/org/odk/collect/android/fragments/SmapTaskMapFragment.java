@@ -19,15 +19,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -119,12 +121,10 @@ public class SmapTaskMapFragment extends Fragment
     HashMap<Marker, Integer> markerMap = null;
     ArrayList<LatLng> mPoints = new ArrayList<LatLng> ();
 
-    Marker userLocationMarker = null;
-    BitmapDescriptor userLocationIcon = null;
+    BitmapDescriptor complete = null;
     BitmapDescriptor accepted = null;
     BitmapDescriptor repeat = null;
     BitmapDescriptor rejected = null;
-    BitmapDescriptor complete = null;
     BitmapDescriptor submitted = null;
     BitmapDescriptor triggered = null;
     BitmapDescriptor triggered_repeat = null;
@@ -299,14 +299,13 @@ public class SmapTaskMapFragment extends Fragment
         mHelper = new MapHelper(getActivity(), mMap, 0);    // Default selected layer
         mHelper.setBasemap();
 
-        userLocationIcon = BitmapDescriptorFactory.fromResource(R.drawable.ic_userlocation);
-        accepted = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_open);
-        repeat = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_repeat);
-        rejected = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_reject);
-        complete = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_done);
-        submitted = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_submitted);
-        triggered = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_triggered);
-        triggered_repeat = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_triggered_repeat);
+        complete = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_saved));
+        accepted = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_finalized));
+        repeat = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_repeat));
+        rejected = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_rejected));
+        submitted = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_submitted));
+        triggered = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_triggered));
+        triggered_repeat = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_triggered));
 
         getLoaderManager().initLoader(MAP_LOADER_ID, null, this);       // Get the task locations
         mo = new MapLocationObserver(getContext(), this);
@@ -483,7 +482,6 @@ public class SmapTaskMapFragment extends Fragment
                             .snippet(taskTime + "\n" + addressText);
 
                     markerOptions.icon(getIcon(t.taskStatus, t.repeat, t.locationTrigger != null));
-
                     Marker m = mMap.addMarker(markerOptions);
                     markers.add(m);
                     markerMap.put(m, index);
@@ -581,6 +579,19 @@ public class SmapTaskMapFragment extends Fragment
             Timber.i("Unknown task status: " + status);
             return accepted;
         }
+    }
+
+    /*
+     * Convert an xml drawable to a bitmap
+     * From: https://stackoverflow.com/questions/18053156/set-image-from-drawable-as-marker-in-google-map-version-2
+     */
+    private BitmapDescriptor getMarkerIconFromDrawable(Drawable drawable) {
+        Canvas canvas = new Canvas();
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        canvas.setBitmap(bitmap);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        drawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
 }

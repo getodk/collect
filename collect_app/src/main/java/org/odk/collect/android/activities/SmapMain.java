@@ -72,6 +72,7 @@ import org.odk.collect.android.tasks.NdefReaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
+import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Utilities;
 import org.odk.collect.android.views.SlidingTabLayout;
@@ -255,6 +256,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
             }
         }
+
     }
 
     @Override

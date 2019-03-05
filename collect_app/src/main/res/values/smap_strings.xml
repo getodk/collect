@@ -84,18 +84,18 @@
     <string name="smap_server_changed">"Changes on server - refresh to update"</string>
     <string name="smap_version_changed">"The version of the form you are opening has just been updated. Please close and reopen."</string>
     <string name="smap_been_submitted">"This form has already been submitted and cannot be opened for review"</string>
-    <string name="smap_location_tracking">"Device location is being tracked"</string>
+    <string name="smap_location_tracking">Device location is being tracked.  You may be able to turn this off in the menu above, select General Settings and then Other. However it may be set on the server in which case you will need to close the app to stop the tracking.</string>
     <string name="smap_reset_locations">"Recorded GPS Trail"</string>
-    <string name="smap_reset_locations_result">"Recorded GPS Trail ::"</string>
-    <string name="smap_visit_website">"Visit the website"</string>
+    <string name="smap_reset_locations_result">Recorded GPS Trail ::</string>
+    <string name="smap_visit_website">Visit the website</string>
     <string name="smap_get_media">"Getting media file: %s"</string>
     <string name="smap_lookup">"Requesting remote data"</string>
     <string name="smap_unknown_error">"Unknown error"</string>
     <string name="smap_forbidden">"The upload of %s was not accepted. It may have been marked as blocked or deleted on the server."</string>
     <string name="smap_form_not_specified">"The form identifier has not been specified as a parameter."</string>
     <string name="smap_form_not_found">"The form with identifier \"%s\" was not found on this device."</string>
-    <string name="smap_starting_form">"Launching form \"%s\""</string>
-    <string name="smap_restarting_form">"Re-launching form \"%s\""</string>
-    <string name="smap_form_completed">"The form \"%s\" has already been saved as finalised"</string>
-    <string name="smap_show_incomplete">"Show incomplete forms"</string>
+    <string name="smap_starting_form">Launching form \"%s\"</string>
+    <string name="smap_restarting_form">Re-launching form \"%s\"</string>
+    <string name="smap_form_completed">The form \"%s\" has already been saved as finalised</string>
+    <string name="smap_show_incomplete">Show incomplete forms</string>
 </resources>
