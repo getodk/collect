@@ -23,6 +23,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -106,7 +108,6 @@ public class SmapTaskMapFragment extends Fragment
     protected LinearLayout searchBoxLayout;
     protected SimpleCursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
-    protected EditText inputSearch;
 
     private MapLocationObserver mo = null;
     private GoogleMap mMap;
@@ -134,9 +135,6 @@ public class SmapTaskMapFragment extends Fragment
     private double tasksEast;
     private double tasksWest;
 
-    DeleteInstancesTask deleteInstancesTask = null;
-    private AlertDialog alertDialog;
-    private InstanceSyncTask instanceSyncTask;
     private static final int TASK_LOADER_ID = 1;
     private static final int MAP_LOADER_ID = 2;
 
@@ -186,9 +184,6 @@ public class SmapTaskMapFragment extends Fragment
     @Override
     public void onPause() {
 
-        if (alertDialog != null && alertDialog.isShowing()) {
-            alertDialog.dismiss();
-        }
         super.onPause();
     }
 
@@ -555,7 +550,7 @@ public class SmapTaskMapFragment extends Fragment
     }
 
     /*
-     * Get the colour to represent the passed in task status
+     * Get the icon to represent the passed in task status
      */
     private BitmapDescriptor getIcon(String status, boolean isRepeat, boolean hasTrigger) {
 
@@ -586,11 +581,51 @@ public class SmapTaskMapFragment extends Fragment
      * From: https://stackoverflow.com/questions/18053156/set-image-from-drawable-as-marker-in-google-map-version-2
      */
     private BitmapDescriptor getMarkerIconFromDrawable(Drawable drawable) {
+        /*
         Canvas canvas = new Canvas();
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+
         canvas.setBitmap(bitmap);
-        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        double ratio = (double) drawable.getIntrinsicHeight() / (double) drawable.getIntrinsicWidth();
+        int width =   (int) Math.round(80 / ratio);
+        drawable.setBounds(0, 0, width, 80);
         drawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+        */
+
+        Bitmap bitmap = null;
+
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if(bitmapDrawable.getBitmap() != null) {
+                bitmap = bitmapDrawable.getBitmap();
+            }
+        }
+
+        if(bitmap == null) {
+            if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+                bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+            } else {
+                bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            }
+
+            DisplayMetrics displaymetrics = new DisplayMetrics();
+            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            float maxHeight = displaymetrics.heightPixels / 15;
+
+            int intHeight = drawable.getIntrinsicHeight();
+            if(bitmap.getHeight() > maxHeight) {
+                double ratio = (double) drawable.getIntrinsicHeight() / (double) drawable.getIntrinsicWidth();
+                int width =   (int) Math.round(maxHeight / ratio);
+                bitmap.setHeight((int)maxHeight);
+                bitmap.setWidth(width);
+            }
+
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+        }
+
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 

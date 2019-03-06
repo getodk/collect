@@ -13,7 +13,7 @@
   <string name="smap_finding_route">Enrutamiento</string>
   <string name="smap_found_route">Se ha encontrado una Ruta al destino!</string>
   <string name="smap_get_tasks">Actualizar</string>
-  <string name="smap_gps_trail">Recorrido del GPS</string>
+  <string name="smap_gps_trail">Registro de Ubicación GPS</string>
   <string name="smap_gps_trail_summary">Registrar la ruta tomada por el usuario</string>
   <string name="smap_menu_settings">Ajustes</string>
   <string name="smap_missed">: rechazado. </string>
@@ -68,7 +68,7 @@
   <string name="smap_server_changed">Actualizar - Hay Novedades</string>
   <string name="smap_version_changed">La versión del formulario que usted esta abriendo No es la más actualizada. Favor cerrar y volver a abrirla.</string>
   <string name="smap_been_submitted">Este formulario ya fué enviado al servidor y no puede ser editado</string>
-  <string name="smap_location_tracking">Registrando recorrido del GPS</string>
+  <string name="smap_location_tracking">La ubicación del dispositivo está siendo registrada. Puede desactivarlo en el menú de arriba, seleccione Cambiar la configuración y luego Otro. Si está configurado desde el servidor deberá comunicarse con su administrador. Deberá cerrar la aplicación para detener el seguimiento.</string>
   <string name="smap_reset_locations">Recorrido de GPS registrado</string>
   <string name="smap_reset_locations_result">Recorrido de GPS registrado ::</string>
   <string name="smap_visit_website">Visite el sitio web</string>
@@ -77,8 +77,9 @@
   <string name="smap_unknown_error">Error desconocido</string>
   <string name="smap_forbidden">No se pueden subir los datos de %s. El formulario está inactivo o fué borrado del servidor. Consulte al responsable en su Organización.</string>
   <string name="smap_form_not_specified">No se ha escrito el ID del formulario en parámetros.</string>
-  <string name="smap_form_not_found">Formulario \"%s\" no existe en este dispositivo.</string>
+  <string name="smap_form_not_found">El formulario con identificador \\"%s\\" no fué encontrado en este dispositivo.</string>
   <string name="smap_starting_form">Iniciando formulario \"%s\"</string>
-  <string name="smap_restarting_form">Regresando a formulario \"%s\"</string>
-  <string name="smap_form_completed">Formulario \"%s\" ya está finalizado.</string>
+  <string name="smap_restarting_form">Reiniciando formulario\"%s\"</string>
+  <string name="smap_form_completed">El formulario \"%s\" ya fué guardado como terminado.</string>
+  <string name="smap_show_incomplete">Mostrar formularios incompletos</string>
 </resources>
