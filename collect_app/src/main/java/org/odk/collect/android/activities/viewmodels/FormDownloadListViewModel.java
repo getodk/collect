@@ -29,28 +29,28 @@ import java.util.LinkedHashSet;
 
 public class FormDownloadListViewModel extends ViewModel {
     private HashMap<String, FormDetails> formNamesAndURLs = new HashMap<>();
-    private final HashMap<String, Boolean> formResult = new HashMap<>();
 
     private final ArrayList<HashMap<String, String>> formList = new ArrayList<>();
 
     private final LinkedHashSet<String> selectedForms = new LinkedHashSet<>();
 
-    private String[] formIdsToDownload;
-
     private String alertTitle;
     private String progressDialogMsg;
     private String alertDialogMsg;
-    private String url;
-    private String username;
-    private String password;
 
     private boolean progressDialogShowing;
     private boolean alertShowing;
     private boolean cancelDialogShowing;
     private boolean shouldExit;
     private boolean loadingCanceled;
-    // Variables for the external app intent call
+
+    // Variables used when the activity is called from an external app
     private boolean isDownloadOnlyMode;
+    private String[] formIdsToDownload;
+    private String url;
+    private String username;
+    private String password;
+    private final HashMap<String, Boolean> formResults = new HashMap<>();
 
     public HashMap<String, FormDetails> getFormNamesAndURLs() {
         return formNamesAndURLs;
@@ -112,11 +112,11 @@ public class FormDownloadListViewModel extends ViewModel {
         formList.clear();
     }
 
-    public void addFormList(HashMap<String, String> item) {
+    public void addForm(HashMap<String, String> item) {
         formList.add(item);
     }
 
-    public void addFormList(int index, HashMap<String, String> item) {
+    public void addForm(int index, HashMap<String, String> item) {
         formList.add(index, item);
     }
 
@@ -144,12 +144,12 @@ public class FormDownloadListViewModel extends ViewModel {
         isDownloadOnlyMode = downloadOnlyMode;
     }
 
-    public HashMap<String, Boolean> getFormResult() {
-        return formResult;
+    public HashMap<String, Boolean> getFormResults() {
+        return formResults;
     }
 
     public void putFormResult(String formId, boolean result) {
-        formResult.put(formId, result);
+        formResults.put(formId, result);
     }
 
     public String getPassword() {

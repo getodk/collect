@@ -297,7 +297,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             ToastUtils.showShortToast(R.string.no_connection);
 
             if (viewModel.isDownloadOnlyMode()) {
-                setReturnResult(false, getString(R.string.no_connection), viewModel.getFormResult());
+                setReturnResult(false, getString(R.string.no_connection), viewModel.getFormResults());
                 finish();
             }
         } else {
@@ -551,7 +551,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             String dialogTitle = getString(R.string.load_remote_form_error);
 
             if (viewModel.isDownloadOnlyMode()) {
-                setReturnResult(false, getString(R.string.load_remote_form_error), viewModel.getFormResult());
+                setReturnResult(false, getString(R.string.load_remote_form_error), viewModel.getFormResults());
             }
 
             createAlertDialog(dialogTitle, dialogMessage, DO_NOT_EXIT);
@@ -578,7 +578,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
                     // Insert the new form in alphabetical order.
                     if (viewModel.getFormList().isEmpty()) {
-                        viewModel.addFormList(item);
+                        viewModel.addForm(item);
                     } else {
                         int j;
                         for (j = 0; j < viewModel.getFormList().size(); j++) {
@@ -588,7 +588,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                                 break;
                             }
                         }
-                        viewModel.addFormList(j, item);
+                        viewModel.addForm(j, item);
                     }
                 }
             }
@@ -611,7 +611,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 for (FormDetails formDetails: viewModel.getFormNamesAndURLs().values()) {
                     String formId = formDetails.getFormID();
 
-                    if (viewModel.getFormResult().containsKey(formId)) {
+                    if (viewModel.getFormResults().containsKey(formId)) {
                         filesToDownload.add(formDetails);
                     }
                 }
@@ -621,7 +621,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                     startFormsDownload(filesToDownload);
                 } else {
                     // None of the forms was found
-                    setReturnResult(false, "Forms not found on server", viewModel.getFormResult());
+                    setReturnResult(false, "Forms not found on server", viewModel.getFormResults());
                     finish();
                 }
 
@@ -681,7 +681,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                             // DownloadFormTask has a callback when cancelled and has code to handle
                             // cancellation when in download mode only
                             if (viewModel.isDownloadOnlyMode()) {
-                                setReturnResult(false, "User cancelled the operation", viewModel.getFormResult());
+                                setReturnResult(false, "User cancelled the operation", viewModel.getFormResults());
                                 finish();
                             }
                         }
@@ -753,13 +753,13 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             for (FormDetails formDetails: result.keySet()) {
                 String successKey = result.get(formDetails);
                 if (Collect.getInstance().getString(R.string.success).equals(successKey)) {
-                    if (viewModel.getFormResult().containsKey(formDetails.getFormID())) {
+                    if (viewModel.getFormResults().containsKey(formDetails.getFormID())) {
                         viewModel.putFormResult(formDetails.getFormID(), true);
                     }
                 }
             }
 
-            setReturnResult(true, null, viewModel.getFormResult());
+            setReturnResult(true, null, viewModel.getFormResults());
         }
     }
 
