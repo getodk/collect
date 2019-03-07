@@ -4,6 +4,7 @@
         <attr name="primaryTextColor" format="color" />
         <attr name="secondaryTextColor" format="color" />
         <attr name="iconColor" format="color" />
+        <attr name="bottomMenuItemColor" format="color" />
         <attr name="dividerColor" format="color" />
         <attr name="warningColor" format="color" />
         <attr name="rankItemColor" format="color" />
