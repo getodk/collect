@@ -186,7 +186,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
             // items selected
             uploadSelectedFiles(button.getId());
             setAllToCheckedState(listView, false);
-            toggleButtonLabel(findViewById(R.id.toggle_button), listView);
+            toggleButtonLabel((Button) findViewById(R.id.toggle_button), listView);
             uploadButton.setEnabled(false);
             smsUploadButton.setEnabled(false);
         } else {
@@ -474,7 +474,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
         hideProgressBarIfAllowed();
         listAdapter.changeCursor(cursor);
         checkPreviouslyCheckedItems();
-        toggleButtonLabel(findViewById(R.id.toggle_button), listView);
+        toggleButtonLabel((Button) findViewById(R.id.toggle_button), listView);
     }
 
     @Override

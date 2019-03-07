@@ -58,7 +58,6 @@ the License.
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:visibility="gone"
             android:background="?colorPrimary"
             app:itemTextAppearanceActive="@style/TextAppearance.MaterialComponents.Body2"
             app:itemTextAppearanceInactive="@style/TextAppearance.MaterialComponents.Body2"

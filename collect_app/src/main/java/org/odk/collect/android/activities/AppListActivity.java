@@ -118,6 +118,16 @@ abstract class AppListActivity extends CollectAbstractActivity {
         }
     }
 
+    public static void toggleButtonLabel(MenuItem toggleButton, ListView lv) {
+        if (lv.getCheckedItemCount() != lv.getCount()) {
+            toggleButton.setTitle(R.string.select_all);
+            toggleButton.setIcon(R.drawable.ic_check_box_outline);
+        } else {
+            toggleButton.setTitle(R.string.clear_all);
+            toggleButton.setIcon(R.drawable.ic_check_box);
+        }
+    }
+
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(layoutResID);
