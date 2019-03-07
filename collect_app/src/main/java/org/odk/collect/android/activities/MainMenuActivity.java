@@ -132,7 +132,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             sslContext.createSSLEngine();
         } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException
                 | NoSuchAlgorithmException | KeyManagementException e) {
-            e.printStackTrace();
+            Timber.i("Failed enabling TLS v1.2");
         }
 
         disableSmsIfNeeded();
