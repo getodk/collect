@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.fragments;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -43,7 +42,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -63,12 +61,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import org.odk.collect.android.Manifest;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.adapters.TaskListArrayAdapter;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.loaders.MapDataLoader;
 import org.odk.collect.android.loaders.MapEntry;
 import org.odk.collect.android.loaders.MapLocationObserver;
@@ -78,8 +74,6 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.spatial.MapHelper;
-import org.odk.collect.android.tasks.DeleteInstancesTask;
-import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.KeyValueJsonFns;
 import org.odk.collect.android.utilities.Utilities;
 
@@ -282,15 +276,17 @@ public class SmapTaskMapFragment extends Fragment
 
     private void mapReadyPermissionGranted() {
 
-        if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED &&
+        boolean locationEnabled = ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED ||
                 ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
-            return;
+                    == PackageManager.PERMISSION_GRANTED;
+
+        if (locationEnabled){
+            mMap.setMyLocationEnabled(true);
+        } else {
+            mMap.getUiSettings().setMyLocationButtonEnabled(false);
         }
 
-        mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mHelper = new MapHelper(getActivity(), mMap, 0);    // Default selected layer
         mHelper.setBasemap();
 
@@ -303,22 +299,24 @@ public class SmapTaskMapFragment extends Fragment
         triggered_repeat = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_triggered));
 
         getLoaderManager().initLoader(MAP_LOADER_ID, null, this);       // Get the task locations
-        mo = new MapLocationObserver(getContext(), this);
 
-        location_button = getActivity().findViewById(R.id.show_location);
-        location_button.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Location location = mMap.getMyLocation();
+        if (locationEnabled) {
+            mo = new MapLocationObserver(getContext(), this);
+            location_button = getActivity().findViewById(R.id.show_location);
+            location_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Location location = mMap.getMyLocation();
 
-                if (location != null) {
-                    LatLng myLocation = new LatLng(location.getLatitude(),
-                            location.getLongitude());
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 17));
+                    if (location != null) {
+                        LatLng myLocation = new LatLng(location.getLatitude(),
+                                location.getLongitude());
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 17));
+                    }
+
                 }
-
-            }
-        });
+            });
+        }
 
 
         layers_button = getActivity().findViewById(R.id.layers);
