@@ -255,8 +255,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
         }
         populateSpinner(accuracyThreshold, options);
 
-        polygonOrPolylineView = getLayoutInflater().inflate(R.layout.polygon_polyline_dialog, null);
-
         clearButton = findViewById(R.id.clear);
         clearButton.setOnClickListener(v -> showClearDialog());
 
@@ -303,8 +301,13 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
         recordButton = findViewById(R.id.record_button);
         recordButton.setOnClickListener(v -> recordPoint());
 
+        // The polygonOrPolylineDialog will go away in the next release.
+        polygonOrPolylineView = getLayoutInflater().inflate(R.layout.polygon_polyline_dialog, null);
+
         Button polygonSave = polygonOrPolylineView.findViewById(R.id.polygon_save);
         polygonSave.setOnClickListener(v -> saveAsPolygon());
+        polygonSave.setText(polygonSave.getText() + "\n\n" +
+            getString(R.string.polygon_save_deprecation_warning));
 
         Button polylineSave = polygonOrPolylineView.findViewById(R.id.polyline_save);
         polylineSave.setOnClickListener(v -> saveAsPolyline());
