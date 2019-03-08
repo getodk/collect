@@ -22,7 +22,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.EditTextPreference;
-//import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v7.content.res.AppCompatResources;
@@ -66,11 +65,13 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SMS_GATEWAY;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SMS_PREFERENCE;
-//import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_URL;
-import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_TRANSPORT_PREFERENCE;
+import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
+
+//import android.preference.ListPreference;
+//import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 
 public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener,
         GoogleAccountsManager.GoogleAccountSelectionListener, OnBackPressedListener {
@@ -89,12 +90,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
     @Inject
     CollectServerClient collectServerClient;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
 
     /*
     private ListPreference transportPreference;
