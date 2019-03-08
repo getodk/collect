@@ -467,7 +467,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
 
     private void buildDialogs() {
         settingsDialog = new AlertDialog.Builder(this)
-            .setTitle(getString(R.string.data_entry_mode))
+            .setTitle(getString(R.string.input_method))
             .setView(settingsView)
             .setPositiveButton(getString(R.string.start), (dialog, id) -> {
                 startInput();
