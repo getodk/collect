@@ -32,7 +32,10 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -63,6 +66,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
     public static final float POINT_ZOOM = 16;
 
     protected GoogleMap map;
+    protected Marker locationCrosshairs;
+    protected Circle accuracyCircle;
     protected List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
     protected PointListener clickListener;
     protected PointListener longPressListener;
@@ -106,10 +111,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
             map.setOnMapLongClickListener(this);
             map.setOnMarkerDragListener(this);
             map.getUiSettings().setCompassEnabled(true);
-            // Show the blue dot on the map, but hide the Google-provided
-            // "go to my location" button; we have our own button for that.
-            map.setMyLocationEnabled(true);
-            map.getUiSettings().setMyLocationButtonEnabled(false);
+            // Don't show the blue dot on the map; we'll draw crosshairs instead.
+            map.setMyLocationEnabled(false);
             map.setMinZoomPreference(1);
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(INITIAL_CENTER, INITIAL_ZOOM));
             if (listener != null) {
@@ -323,6 +326,30 @@ public class GoogleMapFragment extends SupportMapFragment implements
         if (gpsLocationListener != null) {
             gpsLocationListener.onPoint(lastLocationFix);
         }
+        updateLocationIndicator(toLatLng(lastLocationFix), location.getAccuracy());
+    }
+
+    protected void updateLocationIndicator(LatLng loc, double radius) {
+        if (locationCrosshairs == null) {
+            locationCrosshairs = map.addMarker(new MarkerOptions()
+                .position(loc)
+                .icon(getBitmapDescriptor(R.drawable.ic_crosshairs))
+                .anchor(0.5f, 0.5f)  // center the crosshairs on the position
+            );
+        }
+        if (accuracyCircle == null) {
+            accuracyCircle = map.addCircle(new CircleOptions()
+                .center(loc)
+                .radius(radius)
+                .strokeWidth(1)
+                .strokeColor(0x800099ff) // matches the fillColor in ic_crosshairs.xml
+                .fillColor(0x200099ff)
+            );
+        }
+
+        locationCrosshairs.setPosition(loc);
+        accuracyCircle.setCenter(loc);
+        accuracyCircle.setRadius(radius);
     }
 
     @Override public @Nullable MapPoint getGpsLocation() {
@@ -455,9 +482,14 @@ public class GoogleMapFragment extends SupportMapFragment implements
             .position(toLatLng(point))
             .snippet(point.alt + ";" + point.sd)
             .draggable(draggable)
-            .icon(BitmapDescriptorFactory.fromBitmap(IconUtils.getBitmap(getActivity(), R.drawable.ic_red_point)))
+            .icon(getBitmapDescriptor(R.drawable.ic_red_point))
             .anchor(0.5f, 0.5f)  // center the icon on the position
         );
+    }
+
+    protected BitmapDescriptor getBitmapDescriptor(int drawableId) {
+        return BitmapDescriptorFactory.fromBitmap(
+            IconUtils.getBitmap(getActivity(), drawableId));
     }
 
     @VisibleForTesting public boolean isGpsErrorDialogShowing() {
