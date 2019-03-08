@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -197,6 +198,9 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
 
     @Override public void destroy() { }
 
+    // This is just for the polygonOrPolylineDialog deprecation warning,
+    // which will go away in the next release.
+    @SuppressLint("SetTextI18n")
     public void initMap(MapFragment newMapFragment) {
         if (newMapFragment == null) {  // could not create the map
             finish();
