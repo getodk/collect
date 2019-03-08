@@ -330,6 +330,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     protected void updateLocationIndicator(LatLng loc, double radius) {
+        if (map == null) {
+            return;
+        }
         if (locationCrosshairs == null) {
             locationCrosshairs = map.addMarker(new MarkerOptions()
                 .position(loc)
@@ -477,7 +480,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     protected Marker createMarker(GoogleMap map, MapPoint point, boolean draggable) {
-        if (map == null) {
+        if (map == null) {  // during Robolectric tests, map will be null
             return null;
         }
         // A Marker's position is a LatLng with just latitude and longitude
@@ -493,6 +496,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     protected BitmapDescriptor getBitmapDescriptor(int drawableId) {
+        if (testMode) {
+            return null; // during Robolectric tests, BitmapDescriptorFactory doesn't work
+        }
         return BitmapDescriptorFactory.fromBitmap(
             IconUtils.getBitmap(getActivity(), drawableId));
     }
