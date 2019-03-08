@@ -284,7 +284,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
                     // determines whether a polyline or a polygon will be saved.
                     polygonOrPolylineDialog.show();
                 } else {
-                    saveAsPolyline();
+                    saveAsPolygon();
                 }
             } else {
                 finishWithResult();
