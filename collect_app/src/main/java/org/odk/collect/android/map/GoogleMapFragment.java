@@ -372,7 +372,12 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    @Override public void onMarkerDragStart(Marker marker) { }
+    @Override public void onMarkerDragStart(Marker marker) {
+        // When dragging starts, GoogleMap makes the marker jump up to move it
+        // out from under the user's finger; whenever a marker moves, we have
+        // to update its corresponding feature.
+        updateFeature(findFeature(marker));
+    }
 
     @Override public void onMarkerDrag(Marker marker) {
         // When a marker is manually dragged, the position is no longer
@@ -542,6 +547,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         final List<Marker> markers = new ArrayList<>();
         final boolean closedPolygon;
         Polyline polyline;
+        public static final int STROKE_WIDTH = 5;
 
         public PolyFeature(GoogleMap map, Iterable<MapPoint> points, boolean closedPolygon) {
             this.map = map;
@@ -570,11 +576,12 @@ public class GoogleMapFragment extends SupportMapFragment implements
             if (markers.isEmpty()) {
                 clearPolyline();
             } else if (polyline == null) {
-                PolylineOptions options = new PolylineOptions();
-                options.color(Color.RED);
-                options.zIndex(1);
-                options.addAll(latLngs);
-                polyline = map.addPolyline(options);
+                polyline = map.addPolyline(new PolylineOptions()
+                    .color(Color.RED)
+                    .zIndex(1)
+                    .width(STROKE_WIDTH)
+                    .addAll(latLngs)
+                );
             } else {
                 polyline.setPoints(latLngs);
             }
