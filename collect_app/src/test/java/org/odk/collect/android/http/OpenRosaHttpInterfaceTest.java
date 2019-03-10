@@ -25,17 +25,21 @@ public abstract class OpenRosaHttpInterfaceTest {
     protected abstract OpenRosaHttpInterface buildSubject();
 
     private final MockWebServer mockWebServer = new MockWebServer();
+    private final MockWebServer httpsMockWebServer = new MockWebServer();
     private OpenRosaHttpInterface subject;
 
     @Before
     public void setup() throws Exception {
         mockWebServer.start();
+        httpsMockWebServer.start(8443);
+
         subject = buildSubject();
     }
 
     @After
     public void teardown() throws Exception {
         mockWebServer.shutdown();
+        httpsMockWebServer.shutdown();
     }
 
     @Test
@@ -84,6 +88,36 @@ public abstract class OpenRosaHttpInterfaceTest {
 
         RecordedRequest request = mockWebServer.takeRequest();
         assertThat(request.getHeader("Accept-Encoding"), equalTo("gzip"));
+    }
+
+    @Test
+    @Ignore("OkHttpConnection not fooled into https behaviour by port 8443 - scheme needs to be https")
+    public void executeGetRequest_withCredentials_whenHttps_retriesWithCredentials() throws Exception  {
+        httpsMockWebServer.enqueue(new MockResponse()
+                .setResponseCode(401)
+                .addHeader("WWW-Authenticate: Basic realm=\"protected area\"")
+                .setBody("Please authenticate."));
+        httpsMockWebServer.enqueue(new MockResponse());
+
+        subject.executeGetRequest(httpsMockWebServer.url("").uri(), null, new HttpCredentials("user", "pass"));
+
+        assertThat(httpsMockWebServer.getRequestCount(), equalTo(2));
+        httpsMockWebServer.takeRequest();
+        RecordedRequest request = httpsMockWebServer.takeRequest();
+        assertThat(request.getHeader("Authorization"), equalTo("Basic dXNlcjpwYXNz"));
+    }
+
+    @Test
+    public void executeGetRequest_withCredentials_whenHttp_doesNotRetryWithCredentials() throws Exception  {
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(401)
+                .addHeader("WWW-Authenticate: Basic realm=\"protected area\"")
+                .setBody("Please authenticate."));
+        mockWebServer.enqueue(new MockResponse());
+
+        subject.executeGetRequest(mockWebServer.url("").uri(), null, new HttpCredentials("user", "pass"));
+
+        assertThat(mockWebServer.getRequestCount(), equalTo(1));
     }
 
     @Test
