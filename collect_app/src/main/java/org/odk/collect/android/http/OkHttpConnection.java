@@ -53,7 +53,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     private static final int WRITE_CONNECTION_TIMEOUT = 60000; // it can take up to 27 seconds to spin up an Aggregate
     private static final int READ_CONNECTION_TIMEOUT = 60000; // it can take up to 27 seconds to spin up an Aggregate
     private static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
-    private static final String CONTENT_ENCODING = "gzip,deflate";
+    private static final String CONTENT_ENCODING = "gzip";
     private static final String OPEN_ROSA_VERSION_HEADER = "X-OpenRosa-Version";
     private static final String OPEN_ROSA_VERSION = "1.0";
     private static final String DATE_HEADER = "Date";

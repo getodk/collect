@@ -80,7 +80,6 @@ public abstract class OpenRosaHttpInterfaceTest {
     }
 
     @Test
-    @Ignore("OkHttpConnection sends 'gzip,inflate' not just 'gzip'")
     public void executeGetRequest_sendsAcceptsGzipHeader() throws Exception {
         mockWebServer.enqueue(new MockResponse());
 
