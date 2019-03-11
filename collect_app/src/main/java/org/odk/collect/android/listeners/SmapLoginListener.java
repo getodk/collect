@@ -14,11 +14,9 @@
 
 package org.odk.collect.android.listeners;
 
-import org.odk.collect.android.external.handler.SmapRemoteDataItem;
-
 /**
  * @author Smap
  */
-public interface SmapRemoteListener {
-    void remoteComplete(SmapRemoteDataItem item);
+public interface SmapLoginListener {
+    void loginComplete(String status);
 }

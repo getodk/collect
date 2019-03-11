@@ -915,6 +915,41 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
 
         return data;
     }
+
+    @Override
+    public @NonNull
+    String loginRequest(@NonNull URI uri, @Nullable final String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
+
+        addCredentialsForHost(uri, credentials);
+        clearCookieStore();
+
+        HttpClient httpclient = createHttpClient(CONNECTION_TIMEOUT);
+
+        // if https then enable preemptive basic auth...
+        if (uri.getScheme().equals("https")) {
+            enablePreemptiveBasicAuth(uri.getHost());
+        }
+
+        // set up request...
+        HttpGet req = new HttpGet();
+        req.setURI(uri);
+
+        // Make the call
+        HttpResponse response = httpclient.execute(req, httpContext);
+        int responseCode = response.getStatusLine().getStatusCode();
+
+        if (responseCode == HttpStatus.SC_UNAUTHORIZED) {
+            clearCookieStore();
+            return "unauthorized";
+        }
+
+
+        if (responseCode != HttpStatus.SC_OK) {
+            return "success";
+        }
+
+        return "error";
+    }
     /*
      * End smap
      */

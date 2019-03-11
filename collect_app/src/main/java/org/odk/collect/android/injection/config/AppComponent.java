@@ -15,6 +15,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.DownloadTasksTask;
+import org.odk.collect.android.tasks.SmapLoginTask;
 import org.odk.collect.android.tasks.SmapRemoteWebServicePostTask;
 import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
@@ -95,6 +96,8 @@ public interface AppComponent {
     void inject(SmapRemoteWebServiceTask smapRemoteWebServiceTask);             // smap
 
     void inject(SmapRemoteWebServicePostTask smapRemoteWebServicePostTask);     // smap
+
+    void inject(SmapLoginTask smapLoginTask);                                   // smap
 
     void inject(NetworkReceiver networkReceiver);                               // smap
 }

@@ -71,9 +71,9 @@ public class WebCredentialsUtils {
 
         // smap start - default password
         String password = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_PASSWORD);
-        if(password == null) {
-            password = Collect.getInstance().getString(R.string.default_password);
-        }
+        //if(password == null) {
+        //    password = Collect.getInstance().getString(R.string.default_password);
+        //}
         // smap end
 
         return password;    // smap default username
@@ -85,9 +85,9 @@ public class WebCredentialsUtils {
         }
         // smap start - default username
         String username = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_USERNAME);
-        if(username == null || username.equals("")) {   // cater for username getting set to "" on initial startup
-            username = Collect.getInstance().getString(R.string.default_username);
-        }
+        //if(username == null || username.equals("")) {   // cater for username getting set to "" on initial startup
+        //    username = Collect.getInstance().getString(R.string.default_username);
+        //}
         // smap end
 
         return username;    // smap default username

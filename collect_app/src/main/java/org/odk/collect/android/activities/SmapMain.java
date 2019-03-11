@@ -52,6 +52,7 @@ import org.odk.collect.android.fragments.SmapTaskMapFragment;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.NFCListener;
+import org.odk.collect.android.listeners.SmapLoginListener;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.logic.FormDetails;

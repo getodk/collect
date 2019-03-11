@@ -1,7 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:fitsSystemWindows="true">
 
-</LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="56dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp">
+
+        <ImageView android:src="@drawable/ic_launcher"
+                   android:layout_width="wrap_content"
+                   android:layout_height="72dp"
+                   android:layout_marginBottom="24dp"
+                   android:layout_gravity="center_horizontal" />
+
+        <!--  URL Label -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+            <EditText android:id="@+id/input_url"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:inputType="textUri"
+                      android:hint="@string/change_server_url"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <!--  Email Label -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+            <EditText android:id="@+id/input_username"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:inputType="text"
+                      android:hint="@string/username"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <!--  Password Label -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+            <EditText android:id="@+id/input_password"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:inputType="textPassword"
+                      android:hint="@string/password"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_login"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:padding="12dp"
+            android:text="@string/smap_login"/>
+
+    </LinearLayout>
+</ScrollView>

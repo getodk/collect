@@ -128,4 +128,8 @@ public interface OpenRosaHttpInterface {
     @NonNull
     String getRequest(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception;
 
+    // smap
+    @NonNull
+    String loginRequest(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception;
+
 }

@@ -116,13 +116,32 @@ public class SplashScreenActivity extends Activity {
             firstRun = true;
         }
 
-        // do all the first run things
-        if (firstRun || showSplash) {
-            editor.putBoolean(GeneralKeys.KEY_FIRST_RUN, false);
-            editor.commit();
-            startSplashScreen(splashPath);
+        // smap start - login screen
+        String url = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SERVER_URL);
+        String user = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_USERNAME);
+        String password = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_PASSWORD);
+
+        // Pobably won't use below in initial release - testing only
+        if(url.isEmpty() || user.isEmpty() || password.isEmpty()) {
+            startActivity(new Intent(SplashScreenActivity.this, SmapLoginActivity.class));  //smap
+            finish();
         } else {
-            endSplashScreen();
+
+            // smap end
+
+            // do all the first run things
+            if (firstRun || showSplash) {
+                editor.putBoolean(GeneralKeys.KEY_FIRST_RUN, false);
+                editor.commit();
+                if (url.isEmpty() || user.isEmpty() || password.isEmpty()) {
+                    startActivity(new Intent(SplashScreenActivity.this, SmapLoginActivity.class));  //smap
+                    finish();
+                } else {
+                    startSplashScreen(splashPath);
+                }
+            } else {
+                endSplashScreen();
+            }
         }
     }
 
