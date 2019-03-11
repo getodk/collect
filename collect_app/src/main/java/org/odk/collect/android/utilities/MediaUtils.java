@@ -502,7 +502,7 @@ public class MediaUtils {
                             return path;
                         }
                     } catch (Exception e) {
-                        Timber.w(e);
+                        Timber.i(e);
                     }
                 }
 
