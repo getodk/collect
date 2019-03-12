@@ -407,7 +407,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
     }
 
-    public static void importData(File instanceFile, FormEntryController fec) {
+    public static void importData(File instanceFile, FormEntryController fec) throws RuntimeException {
         // convert files into a byte array
         byte[] fileBytes = FileUtils.getFileAsBytes(instanceFile);
 

@@ -303,10 +303,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         FormDef formDef;
         try {
             formDef = XFormUtils.getFormFromInputStream(new FileInputStream(new File(formFilePath)));
-        } catch (FileNotFoundException e) {
+            FormLoaderTask.importData(instanceFile, new FormEntryController(new FormEntryModel(formDef)));
+        } catch (FileNotFoundException | RuntimeException e) {
             throw new UploadException(e);
         }
-        FormLoaderTask.importData(instanceFile, new FormEntryController(new FormEntryModel(formDef)));
         return formDef.getMainInstance().getRoot();
     }
 
