@@ -15,11 +15,9 @@ package org.odk.collect.android.activities;
  */
 
 import android.app.ProgressDialog;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-
 import android.content.Intent;
+import android.os.Bundle;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,21 +28,19 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.SmapLoginListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.SmapLoginTask;
 import org.odk.collect.android.utilities.Validator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class SmapLoginActivity extends CollectAbstractActivity implements SmapLoginListener {
-    private static final String TAG = "LoginActivity";
-    private static final int REQUEST_SIGNUP = 0;
 
-    @BindView(R.id.input_url) EditText _url;
-    @BindView(R.id.input_username) EditText _user;
-    @BindView(R.id.input_password) EditText _passwordText;
-    @BindView(R.id.btn_login) Button _loginButton;
+    @BindView(R.id.input_url) EditText urlText;
+    @BindView(R.id.input_username) EditText userText;
+    @BindView(R.id.input_password) EditText passwordText;
+    @BindView(R.id.btn_login) Button loginButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,10 +48,10 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
         setContentView(R.layout.smap_activity_login);
         ButterKnife.bind(this);
 
-        _url.setText((String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SERVER_URL));
-        _user.setText((String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_USERNAME));
+        urlText.setText((String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SERVER_URL));
+        userText.setText((String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_USERNAME));
 
-        _loginButton.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login();
@@ -65,18 +61,17 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
     }
 
     public void login() {
-        Log.d(TAG, "Login");
+        Timber.i("Login started");
 
-        String url = _url.getText().toString();
-        String username = _user.getText().toString();
-        String pw = _passwordText.getText().toString();
+        String url = urlText.getText().toString();
+        String username = userText.getText().toString();
+        String password = passwordText.getText().toString();
 
-        if (!validate(url, username, pw)) {
-            onLoginFailed();
+        if (!validate(url, username, password)) {
             return;
         }
 
-        _loginButton.setEnabled(false);
+        loginButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(SmapLoginActivity.this,
                 R.style.DarkAppTheme);
@@ -86,30 +81,54 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
 
         SmapLoginTask smapLoginTask = new SmapLoginTask();
         smapLoginTask.setListener(this);
-        smapLoginTask.execute(url, username, pw);
+        smapLoginTask.execute(url, username, password);
 
     }
 
     @Override
     public void loginComplete(String status) {
-        Log.d(TAG, "----------" + status);
+        Timber.i("----------" + status);
+
+        loginButton.setEnabled(true);
+
+        if(status == null || status.equals("failed")) {
+            loginFailed();
+        } else if(status.equals("success")) {
+            loginSuccess();
+        } else if (status.equals("unauthorized")) {
+            loginNotAuthorized();
+        } else {
+            loginFailed();
+        }
     }
 
-    @Override
-    public void onBackPressed() {
-        // Disable going back to the MainActivity
-        moveTaskToBack(true);
-    }
+    //@Override
+    //public void onBackPressed() {
+    //    // Disable going back to the MainActivity
+    //    moveTaskToBack(true);
+    //}
 
-    public void onLoginSuccess() {
-        _loginButton.setEnabled(true);
+    public void loginSuccess() {
+
+        // Update preferences with login values
+        GeneralSharedPreferences prefs = GeneralSharedPreferences.getInstance();
+        prefs.save(GeneralKeys.KEY_SERVER_URL, urlText.getText().toString());
+        prefs.save(GeneralKeys.KEY_USERNAME, userText.getText().toString());
+        prefs.save(GeneralKeys.KEY_PASSWORD, passwordText.getText().toString());
+
+        // Start Main Activity and initiate a refresh
+        Intent i = new Intent(SmapLoginActivity.this, SmapMain.class);
+        i.putExtra(SmapMain.EXTRA_REFRESH, "yes");
+        startActivity(i);  //smap
         finish();
     }
 
-    public void onLoginFailed() {
+    public void loginFailed() {
         Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+    }
 
-        _loginButton.setEnabled(true);
+    public void loginNotAuthorized() {
+        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
     }
 
     public boolean validate(String url, String username, String pw) {
@@ -121,24 +140,24 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
         }
 
         if (!Validator.isUrlValid(url)) {
-            _url.setError(Collect.getInstance().getString(R.string.url_error));
+            urlText.setError(Collect.getInstance().getString(R.string.url_error));
             valid = false;
         } else {
-            _url.setError(null);
+            urlText.setError(null);
         }
 
         if (pw.isEmpty() || !pw.equals(pw.trim())) {
-            _passwordText.setError(Collect.getInstance().getString(R.string.password_error_whitespace));
+            passwordText.setError(Collect.getInstance().getString(R.string.password_error_whitespace));
             valid = false;
         } else {
-            _passwordText.setError(null);
+            passwordText.setError(null);
         }
 
         if (username.isEmpty() || !username.equals(username.trim())) {
-            _user.setError(Collect.getInstance().getString(R.string.username_error_whitespace));
+            userText.setError(Collect.getInstance().getString(R.string.username_error_whitespace));
             valid = false;
         } else {
-            _user.setError(null);
+            userText.setError(null);
         }
 
         return valid;

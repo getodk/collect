@@ -121,8 +121,8 @@ public class SplashScreenActivity extends Activity {
         String user = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_USERNAME);
         String password = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_PASSWORD);
 
-        // Pobably won't use below in initial release - testing only
-        if(url.isEmpty() || user.isEmpty() || password.isEmpty()) {
+        // Always show login screen on startup.  TODO make configurable from server
+        if(true) {
             startActivity(new Intent(SplashScreenActivity.this, SmapLoginActivity.class));  //smap
             finish();
         } else {

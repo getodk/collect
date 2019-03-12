@@ -105,6 +105,8 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     private ProgressDialog mProgressDialog;
     private String mAlertMsg;
 
+    public static final String EXTRA_REFRESH = "refresh";
+
     private SmapTaskListFragment taskManagerList = SmapTaskListFragment.newInstance();
     private SmapTaskMapFragment taskManagerMap = SmapTaskMapFragment.newInstance();
 
@@ -169,6 +171,12 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         mLocationService = new LocationService(this);
         mLocationServiceIntent = new Intent(this, mLocationService.getClass());
         startService(mLocationServiceIntent);
+
+        // Initiate a refresh if requested in start parameters
+        String refresh = getIntent().getStringExtra(EXTRA_REFRESH);
+        if(refresh != null && refresh.equals("yes")) {
+            processGetTask();
+        }
 
         // Get settings if available in a file
         File f = new File(Collect.ODK_ROOT + "/collect.settings");

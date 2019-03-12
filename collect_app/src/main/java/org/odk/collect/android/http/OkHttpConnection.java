@@ -388,6 +388,12 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     }
 
     @Override
+    public @NonNull
+    String loginRequest(@NonNull URI uri, @Nullable final String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
+        return null;
+    }
+
+    @Override
     public @NonNull HttpPostResult uploadTaskStatus(@NonNull TaskResponse updateResponse,
                                                     @NonNull URI uri,
                                                     @Nullable HttpCredentialsInterface credentials
