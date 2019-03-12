@@ -91,6 +91,11 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     @Inject
     CollectServerClient collectServerClient;
 
+    /*
+    private ListPreference transportPreference;
+    private ExtendedPreferenceCategory smsPreferenceCategory;
+    */
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
