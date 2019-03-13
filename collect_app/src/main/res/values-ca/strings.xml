@@ -287,7 +287,6 @@
   <string name="get_shape">Comença GeoForma</string>
   <string name="get_trace">Comença GeoTraça</string>
   <string name="geoshape_title">GeoForma</string>
-  <string name="select_geotrace_mode">Selecciona Mòdus GeoTraça</string>
   <string name="start">Comença</string>
   <string name="enable_gps">Activa GPS</string>
   <string name="geotrace_title">GeoTraça</string>
@@ -302,7 +301,6 @@
   <string name="clear">Neteja</string>
   <string name="manual_mode">Mòdus Manual</string>
   <string name="automatic_mode">Mòdus Automàtic</string>
-  <string name="geoshape_instruction">Prem una estona per situar marques.</string>
   <string name="geopoint_instruction">Prem una estona o toca el botó d\'afegir fita.</string>
   <string name="geopoint_no_draggable_instruction">Toca el botó afegir fita</string>
   <string name="discard">Descarta</string>

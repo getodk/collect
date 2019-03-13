@@ -331,7 +331,6 @@
   <string name="get_shape">Aloita GeoShape</string>
   <string name="get_trace">Aloita GeoTrace</string>
   <string name="geoshape_title">GeoShape</string>
-  <string name="select_geotrace_mode">Valitse GeoTrace -tila</string>
   <string name="start">Aloita</string>
   <string name="enable_gps">Ota GPS käyttöön</string>
   <string name="geotrace_title">GeoTrace</string>
@@ -347,7 +346,6 @@
   <string name="clear">Tyhjennä</string>
   <string name="manual_mode">Manuaalinen tila</string>
   <string name="automatic_mode">Automaattinen tila</string>
-  <string name="geoshape_instruction">Paina pitkään asettaaksesi merkkejä.</string>
   <string name="geopoint_instruction">Paina pitkään asettaaksesi merkin tai näpäytä merkkinäppäintä.</string>
   <string name="geopoint_no_draggable_instruction">Paina lisää merkki -näppäintä.</string>
   <string name="discard">Hylkää</string>

@@ -286,7 +286,6 @@
   <string name="get_shape">Nis GeoShape</string>
   <string name="get_trace">Nis GeoTrace</string>
   <string name="geoshape_title">GeoShape</string>
-  <string name="select_geotrace_mode">Përzgjidh mënyrën GeoTrace</string>
   <string name="start">Fillo</string>
   <string name="enable_gps">Aktivizo GPS-in</string>
   <string name="geotrace_title">GeoTrace</string>
@@ -301,7 +300,6 @@
   <string name="clear">Pastro</string>
   <string name="manual_mode">Manuale</string>
   <string name="automatic_mode">Automatike</string>
-  <string name="geoshape_instruction">Shtyp për pak sekonda për të vendosur shenjë.</string>
   <string name="geopoint_instruction">Shtyp për pak sekonda për të vendosur një shenjë ose shtuar buton shenjues</string>
   <string name="discard">Elimino</string>
   <string name="geoshape_view_change_location">Shih ose ndrysho GeoShape</string>

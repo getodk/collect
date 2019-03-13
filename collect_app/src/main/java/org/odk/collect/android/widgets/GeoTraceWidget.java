@@ -28,7 +28,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.GeoTraceActivity;
+import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
@@ -47,18 +47,13 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
 
     public static final String GOOGLE_MAP_KEY = "google_maps";
-    public static final String TRACE_LOCATION = "gp";
-
     public SharedPreferences sharedPreferences;
     public String mapSDK;
-
     private final Button createTraceButton;
     private final TextView answerDisplay;
 
     public GeoTraceWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        LinearLayout layout = new LinearLayout(getContext());
-        layout.setOrientation(LinearLayout.VERTICAL);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         mapSDK = sharedPreferences.getString(GeneralKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
@@ -88,8 +83,9 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
             PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
             return;
         }
-        Intent intent = new Intent(getContext(), GeoTraceActivity.class)
-            .putExtra(TRACE_LOCATION, answerDisplay.getText().toString())
+        Intent intent = new Intent(getContext(), GeoPolyActivity.class)
+            .putExtra(GeoPolyActivity.ANSWER_KEY, answerDisplay.getText().toString())
+            .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOTRACE)
             .putExtra(GeneralKeys.KEY_MAP_SDK, mapSDK);
         ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOTRACE_CAPTURE);
     }

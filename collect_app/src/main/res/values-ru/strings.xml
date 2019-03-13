@@ -325,7 +325,6 @@
   <string name="get_shape">Начать геофигуру</string>
   <string name="get_trace">Начать геослед</string>
   <string name="geoshape_title">Геофигура</string>
-  <string name="select_geotrace_mode">Выбрать режим геоследа</string>
   <string name="start">Начать</string>
   <string name="enable_gps">Включить GPS</string>
   <string name="geotrace_title">Геослед</string>
@@ -340,7 +339,6 @@
   <string name="clear">Очистить</string>
   <string name="manual_mode">Ручной режим</string>
   <string name="automatic_mode">Автоматический режим</string>
-  <string name="geoshape_instruction">Используйте продолжительное нажатие, чтобы расставлять отметки.</string>
   <string name="geopoint_instruction">Используйте продолжительное нажатие, чтобы расставлять отметки или нажмите кнопку \"добавить отметку\".</string>
   <string name="geopoint_no_draggable_instruction">Нажмите кнопку \"добавить отметку\".</string>
   <string name="discard">Отменить</string>

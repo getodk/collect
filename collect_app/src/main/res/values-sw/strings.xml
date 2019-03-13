@@ -327,7 +327,6 @@
   <string name="get_shape">Anza umbo la kijografia</string>
   <string name="get_trace">Anza geotrace</string>
   <string name="geoshape_title">Umbo la kijografia</string>
-  <string name="select_geotrace_mode">Chagua aina ya geotrace </string>
   <string name="start">Anza</string>
   <string name="enable_gps">Wezesha GPS</string>
   <string name="geotrace_title">Fatilisha mstari kijografia</string>
@@ -343,7 +342,6 @@
   <string name="clear">Futa</string>
   <string name="manual_mode">Mfumo wa kawaida</string>
   <string name="automatic_mode">Mfumo wa moja kwa moja</string>
-  <string name="geoshape_instruction">Bonyeza kwa mda kuweka alama.</string>
   <string name="geopoint_instruction">Bonyeza kwa mda kuweka alama au bofya kitufe ongeza alama.</string>
   <string name="geopoint_no_draggable_instruction">Bofya kitufe cha kuongeza alama.</string>
   <string name="discard">Sitisha</string>

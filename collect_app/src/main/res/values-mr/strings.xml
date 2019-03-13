@@ -299,7 +299,6 @@
   <string name="get_shape">जिओ पॉईंट प्रारंभ करा</string>
   <string name="get_trace">जिओ ट्रेस प्रारंभ करा</string>
   <string name="geoshape_title">जिओ शेप</string>
-  <string name="select_geotrace_mode">जिओ ट्रेस च्या माध्यम निवडा</string>
   <string name="start">प्रारंभ करा</string>
   <string name="enable_gps">जीपीएस सक्षम करा</string>
   <string name="geotrace_title">जिओ ट्रेस</string>
@@ -314,7 +313,6 @@
   <string name="clear">साफ करा</string>
   <string name="manual_mode">मॅन्युअल माध्यम</string>
   <string name="automatic_mode">स्वयंचलित माध्यम</string>
-  <string name="geoshape_instruction">ठिकाणाच्या ठिकाणी ठेवण्यासाठी जास्त वेळ दाबा</string>
   <string name="geopoint_instruction">चिन्ह ठेवण्यासाठी जास्त वेळ दाबा किंवा जोडा मार्कर बटण टॅप करा</string>
   <string name="geopoint_no_draggable_instruction">जोडा मार्कर बटण टॅप करा</string>
   <string name="discard">टाकून द्या</string>

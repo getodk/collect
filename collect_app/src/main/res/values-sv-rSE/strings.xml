@@ -323,7 +323,6 @@ Dela ODK Collect med dem.</string>
   <string name="get_shape">Starta GeoShape</string>
   <string name="get_trace">Starta GeoTrace</string>
   <string name="geoshape_title">GeoShape</string>
-  <string name="select_geotrace_mode">Välj GeoTrace-läge</string>
   <string name="start">Starta</string>
   <string name="enable_gps">Aktivera GPS</string>
   <string name="geotrace_title">GeoTrace</string>
@@ -339,7 +338,6 @@ Dela ODK Collect med dem.</string>
   <string name="clear">Rensa</string>
   <string name="manual_mode">Manuellt läge</string>
   <string name="automatic_mode">Automatiskt läge</string>
-  <string name="geoshape_instruction">Lång tryckning för att placera markör.</string>
   <string name="geopoint_instruction">Lång tryckning för att placera markör eller knacka på knappen \'lägg till markör\'</string>
   <string name="geopoint_no_draggable_instruction">Knacka på knappen \'lägg till markör\'.</string>
   <string name="discard">Ignorera</string>
