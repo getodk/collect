@@ -106,6 +106,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     private String mAlertMsg;
 
     public static final String EXTRA_REFRESH = "refresh";
+    public static final String LOGIN_STATUS = "login_status";
 
     private SmapTaskListFragment taskManagerList = SmapTaskListFragment.newInstance();
     private SmapTaskMapFragment taskManagerMap = SmapTaskMapFragment.newInstance();
@@ -172,6 +173,15 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         mLocationServiceIntent = new Intent(this, mLocationService.getClass());
         startService(mLocationServiceIntent);
 
+        // Show login status if it was set
+        String login_status = getIntent().getStringExtra(LOGIN_STATUS);
+        if(login_status != null) {
+            if(login_status.equals("success")) {
+                SnackbarUtils.showShortSnackbar(findViewById(R.id.pager), Collect.getInstance().getString(R.string.smap_login_success));
+            } else if(login_status.equals("failed")) {
+                SnackbarUtils.showShortSnackbar(findViewById(R.id.pager), Collect.getInstance().getString(R.string.smap_login_failed));
+            }
+        }
         // Initiate a refresh if requested in start parameters
         String refresh = getIntent().getStringExtra(EXTRA_REFRESH);
         if(refresh != null && refresh.equals("yes")) {

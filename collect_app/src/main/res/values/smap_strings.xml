@@ -100,4 +100,7 @@
     <string name="smap_show_incomplete">Show incomplete forms</string>
     <string name="smap_login">Login</string>
     <string name="smap_authenticating">Authenticating...</string>
+    <string name="smap_login_success">Login succeeded</string>
+    <string name="smap_login_failed">Could not connect to server</string>
+    <string name="smap_login_unauthorized">Login failed</string>
 </resources>

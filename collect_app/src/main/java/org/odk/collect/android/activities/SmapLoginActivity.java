@@ -29,6 +29,7 @@ import org.odk.collect.android.listeners.SmapLoginListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.tasks.SmapLoginTask;
+import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.Validator;
 
 import butterknife.BindView;
@@ -45,6 +46,7 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.DarkAppTheme);     // override theme for login
         setContentView(R.layout.smap_activity_login);
         ButterKnife.bind(this);
 
@@ -102,12 +104,6 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
         }
     }
 
-    //@Override
-    //public void onBackPressed() {
-    //    // Disable going back to the MainActivity
-    //    moveTaskToBack(true);
-    //}
-
     public void loginSuccess() {
 
         // Update preferences with login values
@@ -116,15 +112,39 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
         prefs.save(GeneralKeys.KEY_USERNAME, userText.getText().toString());
         prefs.save(GeneralKeys.KEY_PASSWORD, passwordText.getText().toString());
 
+        // Save the login time in case the password policy is set to periodic
+        prefs.save(GeneralKeys.KEY_SMAP_LAST_LOGIN, String.valueOf(System.currentTimeMillis()));
+
         // Start Main Activity and initiate a refresh
         Intent i = new Intent(SmapLoginActivity.this, SmapMain.class);
         i.putExtra(SmapMain.EXTRA_REFRESH, "yes");
+        i.putExtra(SmapMain.LOGIN_STATUS, "success");
         startActivity(i);  //smap
         finish();
     }
 
     public void loginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+
+        // Attempt to login by comparing values agains stored preferences
+        String url = urlText.getText().toString();
+        String username = userText.getText().toString();
+        String password = passwordText.getText().toString();
+
+        String prefUrl = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SERVER_URL);
+        String prefUsername = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_USERNAME);
+        String prefPassword = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_PASSWORD);
+
+        if(url.equals(prefUrl) && username.equals(prefUsername) && password.equals(prefPassword)) {
+            // Start Main Activity no refresh as presumably there is no network
+            Intent i = new Intent(SmapLoginActivity.this, SmapMain.class);
+            i.putExtra(SmapMain.EXTRA_REFRESH, "no");
+            i.putExtra(SmapMain.LOGIN_STATUS, "failed");
+            startActivity(i);  //smap
+            finish();
+        } else {
+            loginNotAuthorized();   // Credentials do not match
+        }
+
     }
 
     public void loginNotAuthorized() {
