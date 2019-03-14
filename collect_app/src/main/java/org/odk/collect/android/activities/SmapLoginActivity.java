@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.odk.collect.android.R;
@@ -42,6 +43,7 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
     @BindView(R.id.input_username) EditText userText;
     @BindView(R.id.input_password) EditText passwordText;
     @BindView(R.id.btn_login) Button loginButton;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,12 +76,7 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
         }
 
         loginButton.setEnabled(false);
-
-        final ProgressDialog progressDialog = new ProgressDialog(SmapLoginActivity.this,
-                R.style.DarkAppTheme);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage(Collect.getInstance().getString(R.string.smap_authenticating));
-        progressDialog.show();
+        progressBar.setVisibility(View.VISIBLE);
 
         SmapLoginTask smapLoginTask = new SmapLoginTask();
         smapLoginTask.setListener(this);
@@ -91,9 +88,10 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
     public void loginComplete(String status) {
         Timber.i("----------" + status);
 
+        progressBar.setVisibility(View.GONE);
         loginButton.setEnabled(true);
 
-        if(status == null || status.equals("failed")) {
+        if(status == null || status.equals("error")) {
             loginFailed();
         } else if(status.equals("success")) {
             loginSuccess();
@@ -148,7 +146,7 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
     }
 
     public void loginNotAuthorized() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        SnackbarUtils.showShortSnackbar(findViewById(R.id.loginMain), Collect.getInstance().getString(R.string.smap_login_unauthorized));
     }
 
     public boolean validate(String url, String username, String pw) {

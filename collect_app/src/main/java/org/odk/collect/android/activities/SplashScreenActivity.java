@@ -121,18 +121,21 @@ public class SplashScreenActivity extends Activity {
         String user = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_USERNAME);
         String password = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_PASSWORD);
 
-        // Always show login screen on startup.  TODO make configurable from server
-        if(true) {
+        int pwPolicy = Integer.parseInt((String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_PASSWORD_POLICY));
+        long lastLogin = Long.parseLong((String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_LAST_LOGIN));
+        // Show the login screen if required by password policy 0 - always login, > 0 is number of days befoe login is required
+        if(pwPolicy == 0 || (pwPolicy > 0 &&  (System.currentTimeMillis() - lastLogin) > pwPolicy * 24 * 3600 * 1000)) {
             startActivity(new Intent(SplashScreenActivity.this, SmapLoginActivity.class));  //smap
             finish();
         } else {
-
             // smap end
 
             // do all the first run things
             if (firstRun || showSplash) {
                 editor.putBoolean(GeneralKeys.KEY_FIRST_RUN, false);
                 editor.commit();
+
+                // smap instead of the splash screen show the logon screen if there are missing credentials
                 if (url.isEmpty() || user.isEmpty() || password.isEmpty()) {
                     startActivity(new Intent(SplashScreenActivity.this, SmapLoginActivity.class));  //smap
                     finish();

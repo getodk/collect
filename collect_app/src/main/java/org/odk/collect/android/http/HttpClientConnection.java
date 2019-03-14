@@ -941,14 +941,22 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
         if (responseCode == HttpStatus.SC_UNAUTHORIZED) {
             clearCookieStore();
             return "unauthorized";
-        }
 
+        } else if (responseCode == HttpStatus.SC_NOT_FOUND) {
+            // Treat not found as "success" except for hosts that are known to support the login service
+            String host = uri.getHost();
+            if(host.equals("app.kontrolid.com") || host.endsWith("smap.com.au")) {
+                return "error";
+            } else {
+                return "success";
+            }
 
-        if (responseCode != HttpStatus.SC_OK) {
+        } else if (responseCode == HttpStatus.SC_OK) {
             return "success";
-        }
 
-        return "error";
+        } else {
+            return "error";
+        }
     }
     /*
      * End smap

@@ -417,6 +417,11 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                     }
 
                     /*
+                     * Set the password policy
+                     */
+                    editor.putString(GeneralKeys.KEY_SMAP_PASSWORD_POLICY, String.valueOf(tr.settings.ft_pw_policy));
+
+                    /*
                      * Override backward navigation setting
                      */
                     if(tr.settings.ft_backward_navigation != null) {
