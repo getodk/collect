@@ -271,7 +271,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public void clearFeatures() {
         if (map != null) {  // during Robolectric tests, map will be null
-            map.clear();
+            for (MapFeature feature : features.values()) {
+                feature.dispose();
+            }
         }
         features.clear();
     }
@@ -340,12 +342,14 @@ public class GoogleMapFragment extends SupportMapFragment implements
             );
         }
         if (accuracyCircle == null) {
+            int stroke = getResources().getColor(R.color.locationAccuracyCircle);
+            int fill = getResources().getColor(R.color.locationAccuracyFill);
             accuracyCircle = map.addCircle(new CircleOptions()
                 .center(loc)
                 .radius(radius)
                 .strokeWidth(1)
-                .strokeColor(R.color.locationAccuracyCircle)
-                .fillColor(R.color.locationAccuracyFill)
+                .strokeColor(stroke)
+                .fillColor(fill)
             );
         }
 
@@ -579,7 +583,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 clearPolyline();
             } else if (polyline == null) {
                 polyline = map.addPolyline(new PolylineOptions()
-                    .color(R.color.mapLine)
+                    .color(getResources().getColor(R.color.mapLine))
                     .zIndex(1)
                     .width(STROKE_WIDTH)
                     .addAll(latLngs)

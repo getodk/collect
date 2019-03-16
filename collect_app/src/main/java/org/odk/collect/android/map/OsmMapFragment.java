@@ -521,7 +521,7 @@ public class OsmMapFragment extends Fragment implements MapFragment,
             this.map = map;
             this.closedPolygon = closedPolygon;
             polyline = new Polyline();
-            polyline.setColor(R.color.mapLine);
+            polyline.setColor(getResources().getColor(R.color.mapLine));
             Paint paint = polyline.getPaint();
             paint.setStrokeWidth(STROKE_WIDTH);
             map.getOverlays().add(polyline);
