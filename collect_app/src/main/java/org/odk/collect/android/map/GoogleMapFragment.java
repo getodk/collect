@@ -17,7 +17,6 @@ package org.odk.collect.android.map;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Handler;
 import android.provider.Settings;
@@ -345,8 +344,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 .center(loc)
                 .radius(radius)
                 .strokeWidth(1)
-                .strokeColor(0x800099ff) // matches the fillColor in ic_crosshairs.xml
-                .fillColor(0x200099ff)
+                .strokeColor(R.color.locationAccuracyCircle)
+                .fillColor(R.color.locationAccuracyFill)
             );
         }
 
@@ -490,7 +489,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             .position(toLatLng(point))
             .snippet(point.alt + ";" + point.sd)
             .draggable(draggable)
-            .icon(getBitmapDescriptor(R.drawable.ic_red_point))
+            .icon(getBitmapDescriptor(R.drawable.ic_map_point))
             .anchor(0.5f, 0.5f)  // center the icon on the position
         );
     }
@@ -580,7 +579,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 clearPolyline();
             } else if (polyline == null) {
                 polyline = map.addPolyline(new PolylineOptions()
-                    .color(Color.RED)
+                    .color(R.color.mapLine)
                     .zIndex(1)
                     .width(STROKE_WIDTH)
                     .addAll(latLngs)
