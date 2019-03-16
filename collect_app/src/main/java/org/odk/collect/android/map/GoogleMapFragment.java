@@ -496,9 +496,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     protected BitmapDescriptor getBitmapDescriptor(int drawableId) {
-        if (testMode) {
-            return null; // during Robolectric tests, BitmapDescriptorFactory doesn't work
-        }
         return BitmapDescriptorFactory.fromBitmap(
             IconUtils.getBitmap(getActivity(), drawableId));
     }
