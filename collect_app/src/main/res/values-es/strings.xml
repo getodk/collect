@@ -295,7 +295,6 @@
   <string name="google_search_browse">Busca en formularios. O selecciona  \'My Drive\' debajo para visualizar.</string>
   <string name="google_sheets_url">URL alterno para envío</string>
   <string name="send_in_progress">Otro envío funcionando, reintentar en breve</string>
-  <string name="sheets_max_columns">Máximo de columnas = 255, su formulario tiene %s. No se puede subir la hoja.</string>
   <string name="invalid_sheet_id">id de hoja inválido:  %1$s</string>
   <string name="missing_submission_url">Falta URL para envío </string>
   <string name="google_sheets_access_denied">Acceso denegado. Por favor, asegúrese de que el propietario de la hoja de cálculo le ha concedido permisos de edición.</string>
@@ -334,7 +333,6 @@
   <string name="get_shape">Iniciar GeoArea</string>
   <string name="get_trace">Iniciar GeoLínea</string>
   <string name="geoshape_title">GeoArea</string>
-  <string name="select_geotrace_mode">Seleccione modo GeoLínea</string>
   <string name="start">Iniciar</string>
   <string name="enable_gps">Activar el GPS</string>
   <string name="geotrace_title">GeoLínea</string>
@@ -343,7 +341,6 @@
   <string name="gps_enable_message">GPS esta deshabilitado. ¿Activar?</string>
   <string name="select_offline_layer">Seleccione la capa sin conexión</string>
   <string name="polygon_or_polyline">Guardar GeoLínea como</string>
-  <string name="minutes">Minutos</string>
   <string name="geo_clear_warning">Función ya creada. ¿Desea borrar la función?</string>
   <string name="geo_exit_warning">¿Ignorar los cambios y regresar?</string>
   <string name="polygon_validator">Debe tener al menos 3 puntos para crear un polígono</string>
@@ -351,14 +348,9 @@
   <string name="clear">Limpiar</string>
   <string name="manual_mode">Modo Manual</string>
   <string name="automatic_mode">Modo Automático </string>
-  <string name="geoshape_instruction">Mantenga presionado para colocar marcas.</string>
-  <string name="geotrace_instruction">Espere la ubicación, luego presione marcador + para iniciar.</string>
   <string name="geopoint_instruction">Pulsar prolongadamente para colocar la marca o tocar el botón marcador.</string>
   <string name="geopoint_no_draggable_instruction">Tap botón de agregar marker</string>
   <string name="discard">Descartar</string>
-  <string name="zoom_to_where">Ampliar a…</string>
-  <string name="zoom_to_location">Zoom a la localización actual</string>
-  <string name="zoom_to_feature">Zoom a característica guardada</string>
   <string name="geoshape_view_change_location">Ver o cambiar GeoArea</string>
   <string name="geotrace_view_change_location">Ver o cambiar GeoLínea</string>
   <string name="bearing">Orientación: %.3f</string>
@@ -640,7 +632,6 @@
   <string name="transport_type_internet">Wifi/Datos (recomendado)</string>
   <string name="transport_type_sms">SMS</string>
   <string name="transport_type_both">Seleccionar al Enviar</string>
-  <string name="seconds">Segundos</string>
   <string name="rank_items">Ranking de Items</string>
   <string name="loading_form_failed">Ocurrió un error al cargar el formulario. Por favor intente de nuevo.</string>
   <string name="missing_google_account_dialog_title">No se ha definido una cuenta de Google</string>
@@ -652,7 +643,12 @@
   <string name="location_providers_disabled_dialog_message">Este formulario quiere rastrear su ubicación pero los proveedores de ubicación están deshabilitados Por favor, habilite en la configuración de Android.</string>
   <string name="go_to_settings">Ir a ajustes</string>
   <string name="track_location">Rastrear ubicación</string>
-  <string name="background_location_disabled">Este formulario quiere rastrear su ubicación pero el seguimiento está deshabilitado. Por favor habilite en el \u0020\u0020⋮\u0020\u0020 menú arriba.</string>
-  <string name="background_location_enabled">Este formulario rastrea tu ubicación. Puede deshabilitar el seguimiento en la \u0020\u0020⋮\u0020\u0020 menú arriba.</string>
+  <string name="background_location_disabled">Este formulario quiere rastrear su ubicación pero el seguimiento está deshabilitado. Por favor habilite en el %1$s menú arriba.</string>
+  <string name="background_location_enabled">Este formulario rastrea tu ubicación. Puede deshabilitar el seguimiento en la %1$s menú arriba.</string>
   <string name="open_file">Abrir archivo</string>
+  <string name="sms_feature_disabled_dialog_title">Envíos via SMS Deshabilitado</string>
+  <string name="sms_feature_disabled_dialog_message">Envio de datos via SMS  se ha deshabilitado por restricciones de Google Play Store .\n\nPor favor asegúrese que la persona que configuró el dispositivo lea los detalles abajo y tome la acción que corresponda.</string>
+  <string name="read_details">Leer detalles</string>
+  <string name="google_sheets_encrypted_message">Los formularios encriptados no pueden ser enviados a Google Sheets</string>
+  <string name="number_picker_title">Selector de números</string>
 </resources>

@@ -261,7 +261,7 @@ public class EncryptionUtils {
 
         Cursor formCursor = null;
         try {
-            if (cr.getType(uri) == InstanceColumns.CONTENT_ITEM_TYPE) {
+            if (InstanceColumns.CONTENT_ITEM_TYPE.equals(cr.getType(uri))) {
                 // chain back to the Form record...
                 String[] selectionArgs = null;
                 String selection = null;
@@ -301,7 +301,7 @@ public class EncryptionUtils {
                     throw new EncryptionException(msg, null);
                 }
                 formCursor.moveToFirst();
-            } else if (cr.getType(uri) == FormsColumns.CONTENT_ITEM_TYPE) {
+            } else if (FormsColumns.CONTENT_ITEM_TYPE.equals(cr.getType(uri))) {
                 formCursor = cr.query(uri, null, null, null, null);
                 if (formCursor.getCount() != 1) {
                     String msg = Collect.getInstance().getString(R.string.not_exactly_one_blank_form_for_this_form_id);

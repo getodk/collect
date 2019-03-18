@@ -234,7 +234,7 @@ public abstract class QuestionWidget
     }
 
     private static boolean isRTL(Locale locale) {
-        if (locale == null || locale.getDisplayName() == null || locale.getDisplayName().isEmpty()) {
+        if (locale.getDisplayName().isEmpty()) {
             return false;
         }
         final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));

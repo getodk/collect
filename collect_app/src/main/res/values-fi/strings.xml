@@ -293,7 +293,6 @@
   <string name="google_search_browse">Etsi lomakkeita. Tai valitse \'Oma Drive\' alla selataksesi.</string>
   <string name="google_sheets_url">Varalla oleva URL lähetystä varten</string>
   <string name="send_in_progress">Taustalähetys käynnissä, yritä hetken kuluttua uudestaan</string>
-  <string name="sheets_max_columns">Maksimimäärä sarakkeita on 255, lomakkeessasi on %s, eikä sitä voida lähettää työkirjaan. </string>
   <string name="invalid_sheet_id">Virheellinen lehden id: %1$s</string>
   <string name="missing_submission_url">Lähetykseen tarvittava URL puuttuu</string>
   <string name="google_sheets_access_denied">Pääsy estetty. Varmista että taulukon omistaja on myöntänyt muokkausoikeudet.</string>
@@ -332,7 +331,6 @@
   <string name="get_shape">Aloita GeoShape</string>
   <string name="get_trace">Aloita GeoTrace</string>
   <string name="geoshape_title">GeoShape</string>
-  <string name="select_geotrace_mode">Valitse GeoTrace -tila</string>
   <string name="start">Aloita</string>
   <string name="enable_gps">Ota GPS käyttöön</string>
   <string name="geotrace_title">GeoTrace</string>
@@ -341,7 +339,6 @@
   <string name="gps_enable_message">GPS on poistettu käytöstä laitteellasi. Haluaisitko ottaa sen käyttöön?</string>
   <string name="select_offline_layer">Valitse Offline-taso</string>
   <string name="polygon_or_polyline">Tallenna GeoTrace nimellä</string>
-  <string name="minutes">Minuutit</string>
   <string name="geo_clear_warning">Ominaisuus on jo luotu. Haluatko tyhjentää ominaisuuden?</string>
   <string name="geo_exit_warning">Hylätäänkö muutokset ja palataan ODK:hon?</string>
   <string name="polygon_validator">Monikulmion luomiseen tarvitaan vähintään 3 pistettä</string>
@@ -349,14 +346,9 @@
   <string name="clear">Tyhjennä</string>
   <string name="manual_mode">Manuaalinen tila</string>
   <string name="automatic_mode">Automaattinen tila</string>
-  <string name="geoshape_instruction">Paina pitkään asettaaksesi merkkejä.</string>
-  <string name="geotrace_instruction">Odota lukittumista, paina sitten merkkinäppäintä aloittaaksesi.</string>
   <string name="geopoint_instruction">Paina pitkään asettaaksesi merkin tai näpäytä merkkinäppäintä.</string>
   <string name="geopoint_no_draggable_instruction">Paina lisää merkki -näppäintä.</string>
   <string name="discard">Hylkää</string>
-  <string name="zoom_to_where">Zoomaa…</string>
-  <string name="zoom_to_location">Zoomaa nykysijaintiin</string>
-  <string name="zoom_to_feature">Zoomaa tallennettuun ominaisuuteen</string>
   <string name="geoshape_view_change_location">Tarkastele tai Muuta GeoShape</string>
   <string name="geotrace_view_change_location">Tarkastele tai Muuta GeoTrace</string>
   <string name="bearing">Suuntima: %.3f</string>
@@ -638,7 +630,6 @@
   <string name="transport_type_internet">Wifi/mobiilidata (suositeltu)</string>
   <string name="transport_type_sms">SMS-tekstiviesti</string>
   <string name="transport_type_both">Valitse lähettäessä</string>
-  <string name="seconds">Sekunteja</string>
   <string name="rank_items">Järjestä</string>
   <string name="loading_form_failed">Lomaketta ladatessa tapahtui virhe. Ole hyvä ja yritä uudestaan.</string>
   <string name="missing_google_account_dialog_title">Google-tiliä ei ole asetettu</string>
@@ -650,7 +641,8 @@
   <string name="location_providers_disabled_dialog_message">Tämä lomake haluaa seurata sijaintiasi mutta sijaintipalvelut (location providers) eivät ole käytettävissä. Ole hyvä ja aktivoi ne Androidin asetuksissa.</string>
   <string name="go_to_settings">Asetuksiin</string>
   <string name="track_location">Sijainnin jäljittäminen</string>
-  <string name="background_location_disabled">Tämä lomake haluaa jäljittää sijaintiasi, mutta jäljittäminen on kytketty pois päältä. Ole hyvä ja aktivoi se valikossa \u0020\u0020⋮\u0020\u0020 yllä.</string>
-  <string name="background_location_enabled">Tämä lomake jäljittää sijaintiasi. Voit kytkeä jäljittämisen pois päältä valikossa \u0020\u0020⋮\u0020\u0020 yllä.</string>
+  <string name="background_location_disabled">Tämä lomake haluaa jäljittää sijaintiasi, mutta jäljittäminen on kytketty pois päältä. Ole hyvä ja aktivoi se valikossa %1$s yllä.</string>
+  <string name="background_location_enabled">Tämä lomake jäljittää sijaintiasi. Voit kytkeä jäljittämisen pois päältä valikossa %1$s yllä.</string>
   <string name="open_file">Avaa tiedosto</string>
+  <string name="read_details">Lue yksityiskohdat</string>
 </resources>

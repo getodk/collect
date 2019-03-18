@@ -36,7 +36,7 @@ the specific language governing permissions and limitations under the License.
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.SEND_SMS" />
+    <!-- <uses-permission android:name="android.permission.SEND_SMS" /> -->
 
     <!-- Normal permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -202,13 +202,7 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.GeoPointMapActivity"
             android:configChanges="orientation" />
         <activity
-            android:name=".activities.GeoPointOsmMapActivity"
-            android:configChanges="orientation" />
-        <activity
-            android:name=".activities.GeoShapeActivity"
-            android:configChanges="orientation" />
-        <activity
-            android:name=".activities.GeoTraceActivity"
+            android:name=".activities.GeoPolyActivity"
             android:configChanges="orientation" />
         <activity android:name=".activities.BearingActivity" />
         <activity

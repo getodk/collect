@@ -74,11 +74,11 @@ public class ServerPollingJob extends Job {
         DownloadFormListUtils downloadFormListTask = new DownloadFormListUtils();
         HashMap<String, FormDetails> formList = downloadFormListTask.downloadFormList(true);
 
-        if (formList != null && !formList.containsKey(DL_ERROR_MSG)) {
+        if (!formList.containsKey(DL_ERROR_MSG)) {
             if (formList.containsKey(DL_AUTH_REQUIRED)) {
                 formList = downloadFormListTask.downloadFormList(true);
 
-                if (formList == null || formList.containsKey(DL_AUTH_REQUIRED) || formList.containsKey(DL_ERROR_MSG)) {
+                if (formList.containsKey(DL_AUTH_REQUIRED) || formList.containsKey(DL_ERROR_MSG)) {
                     return Result.FAILURE;
                 }
             }

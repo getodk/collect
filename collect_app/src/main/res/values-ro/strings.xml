@@ -256,7 +256,6 @@
   <string name="change_server_url">URL server</string>
   <string name="google_search_browse">Căutați formulare. Sau selectați mai jos \'Discul meu\' pentru a naviga. </string>
   <string name="send_in_progress">Trimiterea în fundal rulează, vă rugăm să încercați din nou mai târziu.</string>
-  <string name="sheets_max_columns">Numărul maxim de coloane este 255, formularul dumneavoastră are %s. Nu am putut încărca datele în tabel.</string>
   <string name="invalid_sheet_id">ID foaie invalid: %1$s</string>
   <string name="google_sheets_missing_columns">Din foaia de calcul lipsesc următoarele coloane: %1$s</string>
   <string name="password_error_whitespace">Nu sunt permise spații în parole</string>
@@ -282,14 +281,12 @@
   <string name="get_shape">Start GeoShape</string>
   <string name="get_trace">Start GeoTrace</string>
   <string name="geoshape_title">GeoShape</string>
-  <string name="select_geotrace_mode">Selectați modul GeoTrace</string>
   <string name="start">Start</string>
   <string name="enable_gps">Activați GPS</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="polygon_save">Salvare ca poligon</string>
   <string name="polyline_save">Salvare ca Polyline</string>
   <string name="gps_enable_message">GPS-ul este dezactivat în dispozitivul dumneavoastră. Doriți să-l activați?</string>
-  <string name="minutes">Minute</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="alert">Alertă</string>
   <string name="install_openmapkit">Vă rugăm instalați OpenMapKit!</string>

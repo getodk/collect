@@ -16,12 +16,22 @@
 
 package org.odk.collect.android.location.activities;
 
+import android.location.Location;
+
 import org.robolectric.shadows.ShadowApplication;
 
 public abstract class BaseGeoActivityTest {
-
     public void setUp() throws Exception {
         ShadowApplication.getInstance().grantPermissions("android.permission.ACCESS_FINE_LOCATION");
         ShadowApplication.getInstance().grantPermissions("android.permission.ACCESS_COARSE_LOCATION");
+    }
+
+    protected Location createLocation(String provider, double lat, double lon, double alt, float sd) {
+        Location location = new Location(provider);
+        location.setLatitude(lat);
+        location.setLongitude(lon);
+        location.setAltitude(alt);
+        location.setAccuracy(sd);
+        return location;
     }
 }

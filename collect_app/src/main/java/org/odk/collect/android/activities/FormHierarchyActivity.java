@@ -142,6 +142,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         if (formController == null) {
             finish();
             Timber.w("FormController is null");
+            Collect.getInstance().logNullFormControllerEvent("FormHierarchyActivity");
             return;
         }
 
@@ -209,12 +210,13 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     }
 
     private void updateOptionsMenu() {
+        FormController formController = Collect.getInstance().getFormController();
+
         // Not ready yet. Menu will be updated automatically once it's been prepared.
-        if (optionsMenu == null) {
+        if (optionsMenu == null || formController == null) {
             return;
         }
 
-        FormController formController = Collect.getInstance().getFormController();
         boolean isAtBeginning = screenIndex.isBeginningOfFormIndex() && !shouldShowRepeatGroupPicker();
         boolean shouldShowPicker = shouldShowRepeatGroupPicker();
         boolean isInRepeat = formController.indexContainsRepeatableGroup();

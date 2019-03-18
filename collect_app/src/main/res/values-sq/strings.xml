@@ -3,9 +3,11 @@
   <string name="show_password">Shfaq fjalëkalimin</string>
   <string name="activity_not_found">Nuk gjendet aktivitet për t\'u procesuar: %s</string>
   <string name="view_image">Shih Imazhin</string>
+  <string name="signature_capture">Firmos</string>
   <string name="view_video">Shih videon</string>
   <string name="choose_audio">Përzgjidh audio</string>
   <string name="add_another">Shto grup</string>
+  <string name="add_another_menu">Shto një tjetër</string>
   <string name="add_another_repeat">Shto një grup tjetër \"%s\"?</string>
   <string name="add_repeat">Shto një grup tjetër \"%s\"?</string>
   <string name="add_repeat_no">Mos shto</string>
@@ -31,6 +33,7 @@
   <string name="data">Formularët e ruajtur</string>
   <string name="data_saved_error">Ndjesë, ruajtja e formualrit dështoi!</string>
   <string name="data_saved_ok">Formulari u ruajt me sukses!</string>
+  <string name="save_point_error">Gabim në ruajtjen e pikës së shpëtimit: %s</string>
   <string name="default_completed">Parapërcaktoje të finalizuar</string>
   <string name="default_completed_summary">Shëno formularin automatikisht si të përfunduar</string>
   <string name="delete_confirm">Fshi %s formë(a)?</string>
@@ -98,6 +101,8 @@
   <string name="quit_application">Dil %s</string>
   <string name="quit_entry">Ruaj formën dhe dil</string>
   <string name="refresh">Rifresko</string>
+  <string name="group_label">Grup</string>
+  <string name="repeatable_group_label">Grup që përsëritet</string>
   <string name="replace_barcode">Zëvendëso barcode-in</string>
   <string name="required_answer_error">Kjo përgjigje duhet të plotësohet patjetër!</string>
   <string name="review_data">Modifiko formularin e ruajtur</string>
@@ -109,6 +114,8 @@
   <string name="send_data">Dërgo formularin e përfunduar</string>
   <string name="send_data_button">Dërgo formularin e përfunduar (%s)</string>
   <string name="send_selected_data">Dërgo të përzgjedhurat</string>
+  <string name="send_selected_data_internet">Dërgo (Internet)</string>
+  <string name="send_selected_data_sms">Dërgo (SMS)</string>
   <string name="view_sent_forms">Shih formularin e dërguar</string>
   <string name="view_sent_forms_button">Shih formularin e dërguar (%s)</string>
   <string name="server_auth_credentials">Emri i përdouresit ose fjalëkalimi janë të pavlefshëm për serverin: 1%s</string>
@@ -144,6 +151,7 @@
   <string name="no_forms_uploaded">Nuk është ngarkuar asnjë formular.</string>
   <string name="upload_results">Ngarko rezultatet</string>
   <string name="xform_parse_error">Gabim në dekodimin e XForm për %1$s: %2$s mungon ose i pavlefshëm.</string>
+  <string name="choose_file">Përzgjidh file</string>
   <string name="choose_sound">Zgjidh tingull</string>
   <string name="choose_video">Zgjidh video</string>
   <string name="choose_image">Zgjidh imazh</string>
@@ -257,7 +265,6 @@
   <string name="change_server_url">URL e serverit</string>
   <string name="google_search_browse">Kërko për formularë. Ose përzgjidh \'My Drive\' më poshtë dhe kërkoni manualisht.</string>
   <string name="send_in_progress">Një dërgim po ekzekutohet në background, lutemi provoni sërish pas pak.</string>
-  <string name="sheets_max_columns">Numri maksimal i kolonave është 255, formulari juaj ka %s. Spreadsheet nuk mund të ngarkohet.</string>
   <string name="invalid_sheet_id">Numri i identifikimit të tabelës: %1$s i pavlefshëm.</string>
   <string name="google_sheets_access_denied">Ju është mohuar aksesi. Lutemi, sigurohuni që zotëruesi i spreadsheet-it ju ka dhënë të drejtën për të modifikuar.</string>
   <string name="google_play_services_error_occured">E pamundur të aksesohen Google Maps. A është i instaluar Google Play Services?</string>
@@ -279,7 +286,6 @@
   <string name="get_shape">Nis GeoShape</string>
   <string name="get_trace">Nis GeoTrace</string>
   <string name="geoshape_title">GeoShape</string>
-  <string name="select_geotrace_mode">Përzgjidh mënyrën GeoTrace</string>
   <string name="start">Fillo</string>
   <string name="enable_gps">Aktivizo GPS-in</string>
   <string name="geotrace_title">GeoTrace</string>
@@ -288,20 +294,14 @@
   <string name="gps_enable_message">GPS-i në telefonin tuaj është i ç\'aktivizuar. A do të donit ta aktivizonit?</string>
   <string name="select_offline_layer">Përzgjidh shtresë offline</string>
   <string name="polygon_or_polyline">Ruaj GeoTrace si</string>
-  <string name="minutes">Minuta</string>
   <string name="geo_clear_warning">Tipari është krijuar tanimë. A doni ta pastroni këtë tipar?</string>
   <string name="geo_exit_warning">Elimino ndryshimet dhe kthehu në ODK?</string>
   <string name="polygon_validator">Duhen së paku 3 pika për të krijuar Poligonin</string>
   <string name="clear">Pastro</string>
   <string name="manual_mode">Manuale</string>
   <string name="automatic_mode">Automatike</string>
-  <string name="geoshape_instruction">Shtyp për pak sekonda për të vendosur shenjë.</string>
-  <string name="geotrace_instruction">Prit për identifikimin, pastaj shto butonin shenjues për të filluar.</string>
   <string name="geopoint_instruction">Shtyp për pak sekonda për të vendosur një shenjë ose shtuar buton shenjues</string>
   <string name="discard">Elimino</string>
-  <string name="zoom_to_where">Afro në…</string>
-  <string name="zoom_to_location">Afro vendndodhjen aktuale</string>
-  <string name="zoom_to_feature">Afro tiparin e ruajtur</string>
   <string name="geoshape_view_change_location">Shih ose ndrysho GeoShape</string>
   <string name="geotrace_view_change_location">Shih ose ndrysho GeoTrace</string>
   <string name="direction">Drejtim: %s</string>
@@ -372,6 +372,7 @@
   <string name="exit">Dil</string>
   <string name="instance_scan_completed">Skanimi përfundoi</string>
   <string name="instance_scan_count">%1$d formë/a u shtuan.</string>
+  <string name="instance_sync">Finalizo format në importim</string>
   <string name="sort_by_name_asc">Emër, A-Z</string>
   <string name="sort_by_name_desc">Emër, Z-A</string>
   <string name="sort_by_date_asc">Datë, më të rejat në fillim</string>
@@ -431,6 +432,7 @@
   <string name="autosend_selector_title">Dërgo automatikisht</string>
   <string name="off">Fikur</string>
   <string name="guidance_no">Jo</string>
+  <string name="guidance_yes">Po - gjithnjë e shfaqur</string>
   <string name="wifi_autosend">Vetëm wifi</string>
   <string name="cellular_autosend">Vetëm celular</string>
   <string name="wifi_cellular_autosend">Wifi ose celular</string>
@@ -439,6 +441,7 @@
   <string name="form_submission_category">Dërgimi i formularëve</string>
   <string name="form_filling_category">Plotësimi i formularëve</string>
   <string name="high_resolution_title">Video me rezolucion të lartë</string>
+  <string name="image_size_title">Madhësia e imazhit</string>
   <string name="form_import_category">Importimi i formularëve</string>
   <string name="user_and_device_identity_title">Identiteti i përdoruesit dhe aparatit</string>
   <string name="constraint_behavior_title">Kufizo procesimin</string>
@@ -462,19 +465,30 @@
   <string name="image_size_small">E vogël (1024px)</string>
   <string name="image_size_very_small">Shumë e vogël (640px)</string>
   <string name="image_size_original">Madhësia origjinale nga kamera (e parazgjedhur)</string>
+  <string name="image_size_dialog_title">Numri maksimal i pixel-ave në buzën e gjatë të imazhit</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="custom_date">%1$s (%2$s)</string>
   <string name="multiple_media_folders_detected_notification">U identifikua më tepër sesa një folder me media, lutemi hiqni një prej tyre dhe provoni sërish</string>
+  <string name="moving_backwards_title">Shko mbrapsht</string>
+  <string name="moving_backwards_disabled_title">Të shkuarit mbrapsht është ç\'aktivizuar</string>
+  <string name="moving_backwards_enabled_title">Të shkuarit mbrapsht është aktivizuar</string>
   <string name="yes">Po</string>
   <string name="no">Jo</string>
   <string name="newer_version_of_a_form_info">Ky është një përditësim i një formulari që e keni tanimë</string>
   <string name="svg_file_does_not_exist">File-i SVG nuk ekziston!</string>
   <string name="start_video_capture_instruction">Prekni ekranin për të nisur regjistrimin</string>
   <string name="stop_video_capture_instruction">Regjistrimi nisi. Prekni sërish ekranin për ta ndaluar</string>
+  <string name="storage_runtime_permission_denied_desc">Pa këto leje Collect nuk mund të aksesojë format tuaja apo të ruajë përgjigjet. Rihapeni applikacionin kur të të jeni gati të lejoni ato.</string>
+  <string name="location_runtime_permissions_denied_title">Lejo aksesin në vendndodhje</string>
+  <string name="camera_runtime_permission_denied_title">Lejo aksesin në kamera</string>
+  <string name="record_audio_runtime_permission_denied_title">Lejo aksesin në regjistrimin audio</string>
+  <string name="periodic_form_updates_check_title">Kontroll periodik për forma të rifreskuara</string>
   <string name="never">Asnjëherë</string>
   <string name="every_fifteen_minutes">Çdo pesëmbëdhjetë minuta</string>
   <string name="every_one_hour">Çdo një orë</string>
   <string name="every_six_hours">Çdo gjashtë orë</string>
   <string name="every_24_hours">Çdo 24 orë</string>
+  <string name="form_updates_available">Forma të rifreskuara janë gati</string>
   <string name="automatic_download">Shkarkim automatik</string>
   <string name="automatic_download_summary">Shkarko automatikisht variantet e vjetra të formularit</string>
   <string name="guidance_hint_title">Trego udhëzuesin për pyetjet</string>
@@ -494,6 +508,10 @@
   <string name="sms_submissions_notif_description">Disa formularë janë duke u dërguar.</string>
   <string name="transport_type_internet">Wifi/Celular (e rekomanduar)</string>
   <string name="transport_type_sms">SMS</string>
-  <string name="seconds">Sekonda</string>
   <string name="rank_items">Rendit pohimet</string>
+  <string name="missing_google_account_dialog_title">Llogaria në Google nuk është përcaktuar</string>
+  <string name="go_to_settings">Shko tek parametrat</string>
+  <string name="track_location">Gjurmo vendndodhjen</string>
+  <string name="background_location_enabled">Kjo formë gjurmon vendndodhjen tuaj. Mund ta ç\'aktivizoni gjurmimin e vendndodhjes duke shkuar në menunë %1$s më sipër.</string>
+  <string name="open_file">Hap file</string>
 </resources>

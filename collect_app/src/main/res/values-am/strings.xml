@@ -215,13 +215,9 @@
   <string name="satellite">ሳተላይት</string>
   <string name="start">ይጀምሩ</string>
   <string name="enable_gps">GPSን አንቃ</string>
-  <string name="minutes">ደቂቃዎች</string>
   <string name="clear">አጽዳ</string>
   <string name="automatic_mode">ራስ-ሰር ሁኔታ</string>
   <string name="discard">አስወግድ</string>
-  <string name="zoom_to_where">አጉላ ወደ …</string>
-  <string name="zoom_to_location">ወደ የአሁኑ አካባቢ አጉላ</string>
-  <string name="zoom_to_feature">ወደ የተቀመጠ ባህርይ አጉላ</string>
   <string name="geoshape_view_change_location">GeoShapeን ይመልከቱ ወይም ይቀይሩ</string>
   <string name="geotrace_view_change_location">GeoTraceን ይመልከቱ ወይም ይቀይሩ</string>
   <string name="direction">አቅጣጫ: 1 %s</string>

@@ -30,7 +30,7 @@ import timber.log.Timber;
  */
 public class GoogleLocationClient
         extends BaseLocationClient
-        implements LocationClient, ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
+        implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 
     /**
      * The default requested time between location updates, in milliseconds.

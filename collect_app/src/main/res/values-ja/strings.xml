@@ -293,7 +293,6 @@
   <string name="google_search_browse">フォームを検索するか、次の \'マイ ドライブ\' を選択して表示します。</string>
   <string name="google_sheets_url">フォールバック送信 URL</string>
   <string name="send_in_progress">バックグラウンド送信が実行中です。しばらくして再度お試しください</string>
-  <string name="sheets_max_columns">列の最大数は 255 ですが、フォームは %s あります。スプレッドシートにアップロードできません。</string>
   <string name="invalid_sheet_id">無効なシート ID: %1$s</string>
   <string name="missing_submission_url">送信 URL が見つかりません</string>
   <string name="google_sheets_access_denied">アクセスが拒否されました。スプレッドシートの所有者がアクセス許可を与えていることを確認してください。</string>
@@ -332,7 +331,6 @@
   <string name="get_shape">GeoShape を開始</string>
   <string name="get_trace">GeoTrace を開始</string>
   <string name="geoshape_title">GeoShape</string>
-  <string name="select_geotrace_mode">GeoTrace モードの選択</string>
   <string name="start">開始</string>
   <string name="enable_gps">GPS を有効にする</string>
   <string name="geotrace_title">GeoTrace</string>
@@ -341,7 +339,6 @@
   <string name="gps_enable_message">お使いのデバイスで GPS は無効になっています。有効にしますか?</string>
   <string name="select_offline_layer">オフライン レイヤーを選択</string>
   <string name="polygon_or_polyline">名前を付けて GeoTrace を保存</string>
-  <string name="minutes">分</string>
   <string name="geo_clear_warning">機能は既に作成済です。機能をクリアしますか?</string>
   <string name="geo_exit_warning">変更を破棄して ODK の戻りますか?</string>
   <string name="polygon_validator">ポリゴンを作成するには、少なくとも 3 点指定する必要があります</string>
@@ -349,14 +346,9 @@
   <string name="clear">クリア</string>
   <string name="manual_mode">手動モード</string>
   <string name="automatic_mode">自動モード</string>
-  <string name="geoshape_instruction">場所をマークするには長押ししてください。</string>
-  <string name="geotrace_instruction">ロックを待って、その後マーカーを追加ボタンをタップして、開始します。</string>
   <string name="geopoint_instruction">長押ししてマークするか、マーカーを追加ボタンをタップしてください。</string>
   <string name="geopoint_no_draggable_instruction">マーカーを追加ボタンをタップします。</string>
   <string name="discard">破棄</string>
-  <string name="zoom_to_where">ズーム…</string>
-  <string name="zoom_to_location">現在の場所にズーム</string>
-  <string name="zoom_to_feature">保存した機能にズーム</string>
   <string name="geoshape_view_change_location">GeoShape を表示または変更</string>
   <string name="geotrace_view_change_location">GeoTrace を表示または変更</string>
   <string name="bearing">方位: %.3f</string>
@@ -637,7 +629,6 @@
   <string name="transport_type_internet">Wifi/データ通信 (推奨)</string>
   <string name="transport_type_sms">SMS</string>
   <string name="transport_type_both">送信時に選択</string>
-  <string name="seconds">秒</string>
   <string name="rank_items">ランキングアイテム</string>
   <string name="loading_form_failed">フォームの読み込み時にエラーが発生しました。もう一度やり直してください。</string>
   <string name="missing_google_account_dialog_title">Google アカウントが設定されていません</string>
@@ -649,7 +640,10 @@
   <string name="location_providers_disabled_dialog_message">このフォームは場所を追跡しようとしますが、位置情報プロバイダーが無効になっています。 Android の設定で有効にしてください。</string>
   <string name="go_to_settings">設定に移動</string>
   <string name="track_location">位置情報を追跡</string>
-  <string name="background_location_disabled">このフォームは位置を追跡しようとしますが、追跡が無効になっています。 上の \u0020\u0020⋮\u0020\u0020 メニューで有効にしてください。</string>
-  <string name="background_location_enabled">このフォームは位置を追跡します。 上の \u0020\u0020⋮\u0020\u0020 メニューで追跡を無効にすることができます。</string>
+  <string name="background_location_disabled">このフォームは位置を追跡しようとしますが、追跡が無効になっています。 上の %1$s メニューで有効にしてください。</string>
+  <string name="background_location_enabled">このフォームは位置を追跡します。 上の %1$s メニューで追跡を無効にすることができます。</string>
   <string name="open_file">ファイルを開く</string>
+  <string name="read_details">詳細を読む</string>
+  <string name="google_sheets_encrypted_message">暗号化されたフォームは Google スプレッドに送信できません。</string>
+  <string name="number_picker_title">数値選択</string>
 </resources>

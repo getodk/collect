@@ -137,7 +137,6 @@ Translations are updated right before the first beta for a release and before th
 
 ## Contributing testing
 All pull requests are verified on the following devices (ordered by Android version):
-* [Samsung Galaxy Young GT-S6310](http://www.gsmarena.com/samsung_galaxy_young_s6310-5280.php) - Android 4.1.2
 * [Infinix Race Bolt Q X451](http://bestmobs.com/infinix-race-bolt-q-x451) - Android 4.2.1
 * [Samsung Galaxy J1 SM-J100H](http://www.gsmarena.com/samsung_galaxy_j1-6907.php) - Android 4.4.4
 * [Huawei Y560-L01](http://www.gsmarena.com/huawei_y560-7829.php) - Android 5.1.1
@@ -191,7 +190,7 @@ When cloning the project from Android Studio, click "No" when prompted to open t
 
 #### Execution failed for task ':collect_app:transformClassesWithInstantRunForDebug'.
 
-We are unsure why this problem occurs, but it seems to happen with IntelliJ IDEA and not with Android Studio. Try turning off [Instant Run](https://developer.android.com/studio/run/#set-up-ir) and see if that helps.
+We have seen this problem happen in both IntelliJ IDEA and Android Studio, and believe it to be due to a bug in the IDE, which we can't fix.  As a workaround, turning off [Instant Run](https://developer.android.com/studio/run/#set-up-ir) will usually avoid this problem.  We haven't yet found a way to use Instant Run with this project.
 
 #### Moving to the main view if user minimizes the app
 If you build the app on your own using Android Studio `(Build -> Build APK)` and then install it (from an `.apk` file), you might notice this strange behaviour thoroughly described: [#1280](https://github.com/opendatakit/collect/issues/1280) and [#1142](https://github.com/opendatakit/collect/issues/1142).

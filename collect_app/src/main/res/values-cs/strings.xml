@@ -293,7 +293,6 @@
   <string name="google_search_browse">Vyhledat formuláře. Nebo zvolit \"Můj disk\" pro procházení.</string>
   <string name="google_sheets_url">Záložní odesílací URL</string>
   <string name="send_in_progress">Odesílání na pozadí běží, zkuste to znovu</string>
-  <string name="sheets_max_columns">Maximální počet sloupců je 255, váš formulář má %s. Nelze nahrát do tabulky.</string>
   <string name="invalid_sheet_id">neplatné ID listu: %1$s</string>
   <string name="missing_submission_url">Chybí URL pro odeslání</string>
   <string name="google_sheets_access_denied">Přístup odepřen. Ujistěte se, že vám vlastník tabulky udělil oprávnění ke změnám.</string>
@@ -332,7 +331,6 @@
   <string name="get_shape">Začít GeoShape</string>
   <string name="get_trace">Začít GeoTrace</string>
   <string name="geoshape_title">GeoShape</string>
-  <string name="select_geotrace_mode">Vybrat GeoTrace mód</string>
   <string name="start">Začít</string>
   <string name="enable_gps">Zapnout GPS</string>
   <string name="geotrace_title">GeoTrace</string>
@@ -341,7 +339,6 @@
   <string name="gps_enable_message">GPS je v přístroji zakázáno. Chcete jej povolit?</string>
   <string name="select_offline_layer">Vybrat Offline Layer</string>
   <string name="polygon_or_polyline">Uložit GeoTrace jako</string>
-  <string name="minutes">Minuty</string>
   <string name="geo_clear_warning">Funkce již vytvořena. Chcete tuto funkci vymazat?</string>
   <string name="geo_exit_warning">Zrušit změny a vrátit se do ODK?</string>
   <string name="polygon_validator">Musí mít alespoň 3 body pro vytvoření polygonu</string>
@@ -349,14 +346,9 @@
   <string name="clear">Vymazat</string>
   <string name="manual_mode">Ruční režim</string>
   <string name="automatic_mode">Automatický režim</string>
-  <string name="geoshape_instruction">Dlouhým stisknutím umístěte značky.</string>
-  <string name="geotrace_instruction">Počkejte na zamknutí a pak klepnutím na tlačítko přidat značku spusťte.</string>
   <string name="geopoint_instruction">Dlouhým stisknutím označit značku nebo klepnutím na tlačítko přidat značku.</string>
   <string name="geopoint_no_draggable_instruction">Klepnutím na tlačítko přidat značku.</string>
   <string name="discard">Vyřadit</string>
-  <string name="zoom_to_where">Přiblížit na…</string>
-  <string name="zoom_to_location">Přiblížit na aktuální umístění</string>
-  <string name="zoom_to_feature">Přiblížit na uložené místo</string>
   <string name="geoshape_view_change_location">Zobrazit nebo změnit GeoShape</string>
   <string name="geotrace_view_change_location">Zobrazit nebo změnit GeoTrace</string>
   <string name="bearing">Orientace: %.3f</string>
@@ -640,7 +632,6 @@
   <string name="transport_type_internet">Wifi / GSM (doporučeno)</string>
   <string name="transport_type_sms">SMS</string>
   <string name="transport_type_both">Vybrat možnost odeslání</string>
-  <string name="seconds">Vteřin</string>
   <string name="rank_items">Pořadí položek</string>
   <string name="loading_form_failed">Během načítání formuláře došlo k chybě. Prosím zkuste to znovu.</string>
   <string name="missing_google_account_dialog_title">Účet Google není nastaven</string>
@@ -652,7 +643,8 @@
   <string name="location_providers_disabled_dialog_message">Tento formulář chce sledovat vaši polohu, ale poskytovatelé polohy jsou zakázáni. Zvolte prosím nastavení v systému Android.</string>
   <string name="go_to_settings">Jít do nastavení</string>
   <string name="track_location">Sledovat polohu</string>
-  <string name="background_location_disabled">Tento formulář chce sledovat vaši polohu, ale sledování je zakázáno. Aktivujte prosím výše uvedené menu \u0020\u0020⋮\u0020\u0020</string>
-  <string name="background_location_enabled">Tento formulář sleduje vaši polohu. V menu \u0020\u0020⋮\u0020\u0020 můžete vypnout sledování.</string>
+  <string name="background_location_disabled">Tento formulář chce sledovat vaši polohu, ale sledování je zakázáno. Aktivujte prosím výše uvedené menu %1$s</string>
+  <string name="background_location_enabled">Tento formulář sleduje vaši polohu. V menu %1$s můžete vypnout sledování.</string>
   <string name="open_file">Otevřít soubor</string>
+  <string name="read_details">Přečtěte si podrobnosti</string>
 </resources>

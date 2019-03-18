@@ -290,7 +290,6 @@
   <string name="google_search_browse">فارم تلاش کریں. یا  \'مائی ڈرائیو\' کو منتخب کریں.</string>
   <string name="google_sheets_url">فال بیک  جمع کرانے کی یو آر ایل</string>
   <string name="send_in_progress">پس منظر چل رہا ہے، براہ مہربانی دوبارہ کوشش کریں</string>
-  <string name="sheets_max_columns">کالموں کی زیادہ سے زیادہ تعداد 255 ہے، آپ کا فارم کے کالم%s۔ اسپریڈ شیٹ میں اپ لوڈ کرنے میں ناکام</string>
   <string name="invalid_sheet_id">غلط شیٹ ID:%1$s</string>
   <string name="google_sheets_access_denied">رسائی مسترد کر دی . براہ کرم یقینی بنائیں کہ اسپریڈ شیٹ مالک نے آپ کو ترمیم کی  اجازت دی ہے</string>
   <string name="google_sheets_missing_columns">اسپریڈ شیٹ میں مندرجہ بالا کالم غائب ہیں:%1$s</string>
@@ -328,7 +327,6 @@
   <string name="get_shape">جیوشیپ شروع کریں</string>
   <string name="get_trace">جیو ٹریس شروع کریں</string>
   <string name="geoshape_title">جیو شیپ </string>
-  <string name="select_geotrace_mode">جیو ٹریس موڈ منتخب کریں</string>
   <string name="start">شروع </string>
   <string name="enable_gps">جی پی ایس کو فعال  کریں</string>
   <string name="geotrace_title">جیو ٹریس </string>
@@ -337,7 +335,6 @@
   <string name="gps_enable_message">آپ کے آلے میں جی پی ایس غیر فعال ہے. کیا آپ اسے فعال کرنا چاہتے ہیں؟ </string>
   <string name="select_offline_layer">آف لائن لیئر منتخب کریں</string>
   <string name="polygon_or_polyline">جیو ٹریس کے طور پر محفوظ کریں</string>
-  <string name="minutes">منٹیس </string>
   <string name="geo_clear_warning">فیچر پہلے سے ہی بنائی گئی ہے. کیا آپ کو فیچرکو ختم کرنا چاہیں گے؟</string>
   <string name="geo_exit_warning">تبدیلیوں کو ختم کریں اور او ڈی کے  کے پاس واپس جائیں؟</string>
   <string name="polygon_validator">قطبون بنانے کے لئے کم از کم 3 پوائنٹس لازمی ہیں</string>
@@ -345,14 +342,9 @@
   <string name="clear">صاف کریں </string>
   <string name="manual_mode">مینول موڈ</string>
   <string name="automatic_mode">آٹومیٹک موڈ</string>
-  <string name="geoshape_instruction">پوائنٹس پلیس کرنے کے لئے طویل دبائیں.</string>
-  <string name="geotrace_instruction">لاک کا انتظار کریں، پھر شروع کرنے کیلئے  ایڈ مارکر بٹن دبائیں.</string>
   <string name="geopoint_instruction">پلیس مارک کرنے کے لیے طویل دبائیں یا ایڈ مارکر بٹن ٹیپ کریں</string>
   <string name="geopoint_no_draggable_instruction"> مارکر بٹن پر کلک کریں.</string>
   <string name="discard">ختم کر دینا</string>
-  <string name="zoom_to_where">زوم ٹو </string>
-  <string name="zoom_to_location">موجودہ مقام پر زوم </string>
-  <string name="zoom_to_feature">محفوظ کردہ فیچر پر زوم</string>
   <string name="geoshape_view_change_location">جیو شیپ دیکھیں یا تبدیل کریں</string>
   <string name="geotrace_view_change_location">جیو ٹریس دیکھیں یا تبدیل کریں</string>
   <string name="bearing">بیؑرنگ:%.3f</string>
@@ -634,10 +626,10 @@
   <string name="transport_type_internet">وائی فائی / سیلولر (سفارش کردہ)</string>
   <string name="transport_type_sms">ایس ایم ایس </string>
   <string name="transport_type_both">بھیجنے پر منتخب کریں</string>
-  <string name="seconds">سیکنڈز </string>
   <string name="rank_items"> رینک آئٹمز</string>
   <string name="loading_form_failed">فارم لوڈ کرتے ہوئے ایک خرابی واقع ہوئی. دوبارہ کوشش کریں.</string>
   <string name="missing_google_account_dialog_title">گوگل اکاؤنٹ سیٹ نہیں ہے</string>
   <string name="missing_google_account_dialog_desc">گوگل شیٹس  کے ذریعے فارم جمع کرنے کے لئے آپ کو سرور کی سیٹنگنزمیں اپناگوگل اکاؤنٹ بنانا ہوگا.</string>
   <string name="sms_invalid_phone_number_description">ایس ایم ایس جمع کرانے کے لۓ ایک ڈیسٹی نیشن فون نمبر مقرر کریں یا اپنے ٹرانسپورٹ کی قسم  تبدیل کریں.</string>
+  <string name="read_details">تفصیلات پڑھیں</string>
 </resources>

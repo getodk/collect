@@ -2,9 +2,11 @@
 <resources>
     <declare-styleable name="Collect">
         <attr name="primaryTextColor" format="color" />
+        <attr name="secondaryTextColor" format="color" />
         <attr name="iconColor" format="color" />
+        <attr name="dividerColor" format="color" />
         <attr name="warningColor" format="color" />
         <attr name="rankItemColor" format="color" />
-        <attr name="divider" format="reference" />
+        <attr name="dividerCompat" format="reference" />
     </declare-styleable>
 </resources>

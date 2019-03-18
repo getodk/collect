@@ -76,7 +76,7 @@ public class NumberPickerDialog extends DialogFragment {
         numberPicker.setValue(((String[]) getArguments().getSerializable(DISPLAYED_VALUES)).length - 1 - getArguments().getInt(PROGRESS));
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle("Number Picker")
+                .setTitle(R.string.number_picker_title)
                 .setView(view)
                 .setPositiveButton(R.string.ok,
                         new DialogInterface.OnClickListener() {

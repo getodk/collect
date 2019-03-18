@@ -293,7 +293,6 @@
   <string name="google_search_browse">Wyszukaj formularze. Lub wybierz poniżej \'Mój Dysk\' by przejrzeć</string>
   <string name="google_sheets_url">Alternatywny URL przesyłania</string>
   <string name="send_in_progress">Trwa wysyłka w tle, spróbuj wkrótce ponownie</string>
-  <string name="sheets_max_columns">Maksymalna liczba kolumn wynosi 255, twój formularz posiada %s. Nie można załadować do arkusza kalkulacyjnego.</string>
   <string name="invalid_sheet_id">niepoprawne id arkusza: %1$s</string>
   <string name="missing_submission_url">Brak URL przesyłania</string>
   <string name="google_sheets_access_denied">Odmowa dostępu. Upewnij się, że właścicieil arkusza nadał Ci uprawnienia do edytowania.</string>
@@ -332,7 +331,6 @@
   <string name="get_shape">Zacznij GeoShape</string>
   <string name="get_trace">Zacznij GeoShape</string>
   <string name="geoshape_title">GeoShape</string>
-  <string name="select_geotrace_mode">Wybierz Tryb GeoTrace</string>
   <string name="start">Zacznij</string>
   <string name="enable_gps">Włącz GPS</string>
   <string name="geotrace_title">GeoTrace</string>
@@ -341,7 +339,6 @@
   <string name="gps_enable_message">GPS jest jest wyłączony na twoim urządzeniu. Czy chciałbyś go włączyć?</string>
   <string name="select_offline_layer">Wybierz Warstwę Offline</string>
   <string name="polygon_or_polyline">Zapisz GeoTrace Jako</string>
-  <string name="minutes">Minuty</string>
   <string name="geo_clear_warning">Właściwość już stworzona. Chcesz usunąć właściwość?</string>
   <string name="geo_exit_warning">Usunąć zmiany i wrócić do ODK?</string>
   <string name="polygon_validator">Wymagane są przynajmniej 3 punkty aby utworzyć wielokąt</string>
@@ -349,14 +346,9 @@
   <string name="clear">Wyczyść</string>
   <string name="manual_mode">Tryb Ręczny</string>
   <string name="automatic_mode">Tryb Automatyczny</string>
-  <string name="geoshape_instruction">Długo naciśnij aby umieścić znacznik.</string>
-  <string name="geotrace_instruction">Czekaj na blokadę, następnie dotknij przycisk Dodaj znacznik aby zacząć.</string>
   <string name="geopoint_instruction">Długo naciśnij aby umieścić znacznik lub dotknij przycisk Dodaj znacznik.</string>
   <string name="geopoint_no_draggable_instruction">Dotknij przycisk Dodaj znacznik.</string>
   <string name="discard">Usuń</string>
-  <string name="zoom_to_where">Przybliż do…</string>
-  <string name="zoom_to_location">Zbliżenie na bieżącą lokalizację</string>
-  <string name="zoom_to_feature">Zbliżenie na zapisaną właściwość</string>
   <string name="geoshape_view_change_location">Pokaż lub Zmień GeoShape</string>
   <string name="geotrace_view_change_location">Pokaż lub Zmień GeoTrace</string>
   <string name="bearing">Namiar: %.3f</string>
@@ -634,7 +626,6 @@
   <string name="transport_type_internet">Wifi/Dane pakietowe (zalecane)</string>
   <string name="transport_type_sms">SMS</string>
   <string name="transport_type_both">Wybierz przy wysyłaniu</string>
-  <string name="seconds">Sekundy</string>
   <string name="rank_items">Uszereguj pozycje</string>
   <string name="loading_form_failed">Wystąpił błąd w trakcie ładowania formularza. Spróbuj ponownie,</string>
   <string name="missing_google_account_dialog_title">Nie wybrano konta Google</string>
@@ -646,7 +637,7 @@
   <string name="location_providers_disabled_dialog_message">Ten formularz chce śledzić twoją lokalizację, ale usługi dostawców systemu lokalizacji są wyłączone. Włącz je w ustawieniach Androida.</string>
   <string name="go_to_settings">Przejdź do ustawień</string>
   <string name="track_location">Śledź lokalizację</string>
-  <string name="background_location_disabled">Ten formularz chce śledzić twoją lokalizację, ale opcja śledzenia jest wyłączona. Włącz śledzenie używając \u0020\u0020⋮\u0020\u0020 w menu powyżej.</string>
-  <string name="background_location_enabled">Ten formularz śledzi twoją lokalizację. Możesz wyłączyć funkcję śledzenia korzystając z \u0020\u0020⋮\u0020\u0020 w menu powyżej.</string>
+  <string name="background_location_disabled">Ten formularz chce śledzić twoją lokalizację, ale opcja śledzenia jest wyłączona. Włącz śledzenie używając %1$s w menu powyżej.</string>
+  <string name="background_location_enabled">Ten formularz śledzi twoją lokalizację. Możesz wyłączyć funkcję śledzenia korzystając z %1$s w menu powyżej.</string>
   <string name="open_file">Otwórz plik</string>
 </resources>
