@@ -250,7 +250,7 @@ public class PermissionUtils {
         }, Manifest.permission.READ_PHONE_STATE);
     }
 
-    protected void requestSendSMSAndReadPhoneStatePermissions(Activity activity, @NonNull PermissionListener action) {
+    public void requestSendSMSAndReadPhoneStatePermissions(Activity activity, @NonNull PermissionListener action) {
         requestPermissions(activity, new PermissionListener() {
             @Override
             public void granted() {
@@ -265,7 +265,7 @@ public class PermissionUtils {
         }, Manifest.permission.SEND_SMS, Manifest.permission.READ_PHONE_STATE);
     }
 
-    private void requestPermissions(Activity activity, @NonNull PermissionListener listener, String... permissions) {
+    protected void requestPermissions(Activity activity, @NonNull PermissionListener listener, String... permissions) {
         DexterBuilder builder = null;
 
         if (permissions.length == 1) {

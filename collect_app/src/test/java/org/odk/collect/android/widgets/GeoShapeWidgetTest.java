@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.R;
 import org.odk.collect.android.ShadowPlayServicesUtil;
-import org.odk.collect.android.activities.GeoShapeActivity;
+import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
 import org.robolectric.annotation.Config;
 
@@ -118,7 +118,7 @@ public class GeoShapeWidgetTest extends BinaryWidgetTest<GeoShapeWidget, StringD
         stubAllRuntimePermissionsGranted(true);
 
         Intent intent = getIntentLaunchedByClick(R.id.simple_button);
-        assertComponentEquals(activity, GeoShapeActivity.class, intent);
+        assertComponentEquals(activity, GeoPolyActivity.class, intent);
     }
 
     @Test
