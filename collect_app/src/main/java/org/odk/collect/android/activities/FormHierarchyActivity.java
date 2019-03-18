@@ -608,7 +608,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         }
 
                         // Don't render other groups' instances.
-                        if (!contextGroupRef.isParentOf(currentRef, false)) {
+                        if (contextGroupRef != null && !contextGroupRef.isParentOf(currentRef, false)) {
                             break;
                         }
 
