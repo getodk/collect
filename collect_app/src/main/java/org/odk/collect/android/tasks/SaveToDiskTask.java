@@ -398,14 +398,13 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
         // read from data stream
         byte[] data = new byte[len];
-        // try {
         int read = is.read(data, 0, len);
         if (read > 0) {
+            // Make sure the directory path to this file exists.
+            file.getParentFile().mkdirs();
             // write xml file
             RandomAccessFile randomAccessFile = null;
             try {
-                // String filename = path + File.separator +
-                // path.substring(path.lastIndexOf(File.separator) + 1) + ".xml";
                 randomAccessFile = new RandomAccessFile(file, "rws");
                 randomAccessFile.write(data);
             } finally {
