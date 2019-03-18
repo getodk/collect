@@ -607,7 +607,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                             break;
                         }
 
-                        // Don't render other groups' instances.
+                        // Don't render other groups' children.
                         if (contextGroupRef != null && !contextGroupRef.isParentOf(currentRef, false)) {
                             break;
                         }
@@ -634,6 +634,11 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         visibleGroupRef = currentRef;
 
                         FormEntryCaption fc = formController.getCaptionPrompt();
+
+                        // Don't render other groups' children.
+                        if (contextGroupRef != null && !contextGroupRef.isParentOf(currentRef, false)) {
+                            break;
+                        }
 
                         if (shouldShowRepeatGroupPicker()) {
                             // Don't render other groups' instances.
