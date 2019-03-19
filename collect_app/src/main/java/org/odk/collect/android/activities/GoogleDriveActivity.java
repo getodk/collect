@@ -224,7 +224,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 backButton.setEnabled(false);
                 downloadButton.setEnabled(false);
                 listFiles(ROOT_KEY);
-                myDrive = !myDrive;
             } else {
                 createAlertDialog(getString(R.string.no_connection));
             }
@@ -430,8 +429,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             return;
         }
 
-        String parentId = (String) results.get(PARENT_ID_KEY);
-
+        myDrive = !myDrive;
         if (myDrive) {
             rootButton.setText(getString(R.string.go_shared));
         } else {
@@ -443,7 +441,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         } else {
             backButton.setEnabled(true);
         }
-        this.parentId = parentId;
+        this.parentId = (String) results.get(PARENT_ID_KEY);
 
         if (currentPath.empty()) {
             if (myDrive) {
@@ -622,11 +620,15 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 } catch (UserRecoverableAuthIOException e) {
                     GoogleDriveActivity.this.startActivityForResult(e.getIntent(), AUTHORIZATION_REQUEST_CODE);
                 } catch (IOException e) {
-                    Timber.e(e);
-                    runOnUiThread(() -> createAlertDialog(getString(R.string.google_auth_io_exception_msg)));
+                    if (!isCancelled()) {
+                        Timber.e(e);
+                        runOnUiThread(() -> createAlertDialog(getString(R.string.google_auth_io_exception_msg)));
+                    }
                 }
                 if (rootId == null) {
-                    Timber.e("Unable to fetch drive contents");
+                    if (!isCancelled()) {
+                        Timber.e("Unable to fetch drive contents");
+                    }
                     return null;
                 }
             }
@@ -648,7 +650,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             // SharedWithMe, and root:
             String currentDir = params[0];
 
-            if (!myDrive) {
+            if (myDrive) {
                 if (currentDir.equals(ROOT_KEY) || folderIdStack.empty()) {
                     query = "sharedWithMe=true";
                 }
@@ -661,7 +663,9 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             try {
                 request = driveHelper.buildRequest(query, fields);
             } catch (IOException e) {
-                Timber.e(e);
+                if (!isCancelled()) {
+                    Timber.e(e);
+                }
             }
 
             HashMap<String, Object> results = new HashMap<>();
@@ -680,7 +684,9 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                         nextPage.put(FILE_LIST_KEY, driveFileListPage);
                         publishProgress(nextPage);
                     } catch (IOException e) {
-                        Timber.e(e, "Exception thrown while accessing the file list");
+                        if (!isCancelled()) {
+                            Timber.e(e, "Exception thrown while accessing the file list");
+                        }
                     }
                 } while (request.getPageToken() != null && request.getPageToken().length() > 0);
             }
