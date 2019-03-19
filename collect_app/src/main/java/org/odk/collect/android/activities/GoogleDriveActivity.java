@@ -593,8 +593,25 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             AsyncTask<String, HashMap<String, Object>, HashMap<String, Object>> {
         private TaskListener listener;
 
+        private ProgressDialog progressDialog;
+
         void setTaskListener(TaskListener tl) {
             listener = tl;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(GoogleDriveActivity.this);
+            progressDialog.setMessage(getString(R.string.reading_files));
+            progressDialog.setIndeterminate(true);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setCancelable(false);
+            progressDialog.setButton(getString(R.string.cancel), (dialog, which) -> {
+                cancel(true);
+                rootButton.setEnabled(true);
+            });
+            progressDialog.show();
         }
 
         @Override
@@ -674,6 +691,10 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         @Override
         protected void onPostExecute(HashMap<String, Object> results) {
             super.onPostExecute(results);
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+
             if (results == null) {
                 // was an auth request
                 return;
