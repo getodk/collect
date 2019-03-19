@@ -20,6 +20,7 @@ import android.graphics.drawable.Drawable;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.EditText;
@@ -60,6 +61,7 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
     protected EditText answer;
     private boolean hasExApp = true;
     private final Button launchIntentButton;
+    private EditText launching;
     private final Drawable textBackground;
 
     private ManageForm mf;
@@ -69,7 +71,7 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
 
     private long formId;
 
-    public SmapFormWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
+    public SmapFormWidget(Context context, FormEntryPrompt prompt, String appearance, boolean readOnlyOverride) {
 
         super(context, prompt);
 
@@ -145,13 +147,30 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
         launchIntentButton = getSimpleButton(buttonText);
         launchIntentButton.setEnabled(validForm);
 
+        // set text formatting
+        launching = new EditText(context);
+        launching.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+        launching.setLayoutParams(params);
+        launching.setBackground(null);
+        launching.setTextColor(themeUtils.getPrimaryTextColor());
+        launching.setGravity(Gravity.CENTER);
+        launching.setVisibility(GONE);
+        String launchingText = context.getString(R.string.smap_starting_form).replace("%s", mfd.formName);
+        launching.setText(launchingText);
+
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(launchIntentButton);
         answerLayout.addView(answer);
+        answerLayout.addView(launching);
         addAnswerView(answerLayout);
 
+        if(appearance != null && appearance.contains("auto")) {
+            launchIntentButton.performClick();
+            launchIntentButton.setVisibility(GONE);
+            launching.setVisibility(VISIBLE);
+        }
 
     }
 
@@ -233,6 +252,7 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onButtonClick(int buttonId) {
+
         // 1. Save restore information in collect app
         String instancePath = Collect.getInstance().getFormController().getInstanceFile().getAbsolutePath();
         FormIndex formIndex = Collect.getInstance().getFormController().getFormIndex();

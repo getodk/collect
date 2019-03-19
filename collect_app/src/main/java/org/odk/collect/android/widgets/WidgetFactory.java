@@ -170,7 +170,7 @@ public class WidgetFactory {
                             }
 
                         } else if (fep.getQuestion().getAdditionalAttribute(null, "form_identifier") != null) {	// smap
-                            questionWidget = new SmapFormWidget(context, fep, readOnlyOverride);	// smap
+                            questionWidget = new SmapFormWidget(context, fep, appearance, readOnlyOverride);	// smap
                         } else {
                             questionWidget = new StringWidget(context, fep, readOnlyOverride);
                         }
