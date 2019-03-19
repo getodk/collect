@@ -173,7 +173,6 @@ public class LocationService extends Service implements LocationListener, Locati
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
         boolean enabledTracking = sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
-        boolean enabledGPS = false;
 
         if(isValidLocation(location) && isAccurateLocation(location)) {
             Collect.getInstance().setLocation(location);
@@ -181,14 +180,10 @@ public class LocationService extends Service implements LocationListener, Locati
             // Save the location in the database
             if (enabledTracking) {
                 long newTime = System.currentTimeMillis();
-                if(lastLocation != null) {
-                    Log.i(TAG, "=================== Inserting point: " + (newTime - lastTime) + " ; "
-                            + location.distanceTo(lastLocation));
-                }
                 if(lastLocation == null ||
                         (location.distanceTo(lastLocation) > Constants.GPS_DISTANCE
                                 && (newTime - lastTime)  > Constants.GPS_INTERVAL )) {
-                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("locationChanged"));
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("locationChanged"));  // update map
                     TraceUtilities.insertPoint(location);
                     lastLocation = location;
                     lastTime = newTime;
