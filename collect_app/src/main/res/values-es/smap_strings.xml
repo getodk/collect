@@ -82,4 +82,9 @@
   <string name="smap_restarting_form">Reiniciando formulario\"%s\"</string>
   <string name="smap_form_completed">El formulario \"%s\" ya fué guardado como terminado.</string>
   <string name="smap_show_incomplete">Mostrar formularios incompletos</string>
+  <string name="smap_login">Ingresar</string>
+  <string name="smap_authenticating">Autenticando..</string>
+  <string name="smap_login_success">Inicio de sesión exitoso</string>
+  <string name="smap_login_failed">No se pudo conectar al servidor</string>
+  <string name="smap_login_unauthorized">Error de Inicio de sesión</string>
 </resources>
