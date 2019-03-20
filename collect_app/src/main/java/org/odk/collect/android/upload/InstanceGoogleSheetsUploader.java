@@ -51,7 +51,6 @@ import org.odk.collect.android.utilities.gdrive.SheetsHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -304,10 +303,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         FormDef formDef;
         try {
             formDef = XFormUtils.getFormFromInputStream(new FileInputStream(new File(formFilePath)));
-        } catch (FileNotFoundException e) {
+            FormLoaderTask.importData(instanceFile, new FormEntryController(new FormEntryModel(formDef)));
+        } catch (IOException | RuntimeException e) {
             throw new UploadException(e);
         }
-        FormLoaderTask.importData(instanceFile, new FormEntryController(new FormEntryModel(formDef)));
         return formDef.getMainInstance().getRoot();
     }
 

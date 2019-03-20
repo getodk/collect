@@ -178,7 +178,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             final long start = System.currentTimeMillis();
             usedSavepoint = initializeForm(formDef, fec);
             Timber.i("Form initialized in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
-        } catch (RuntimeException e) {
+        } catch (IOException | RuntimeException e) {
             Timber.e(e);
             if (e.getCause() instanceof XPathTypeMismatchException) {
                 // this is a case of
@@ -296,7 +296,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
     }
 
-    private boolean initializeForm(FormDef formDef, FormEntryController fec) {
+    private boolean initializeForm(FormDef formDef, FormEntryController fec) throws IOException {
         final InstanceInitializationFactory instanceInit = new InstanceInitializationFactory();
         boolean usedSavepoint = false;
 
@@ -320,7 +320,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                     publishProgress(Collect.getInstance().getString(R.string.survey_loading_reading_data_message));
                     importData(instanceXml, fec);
                     formDef.initialize(false, instanceInit);
-                } catch (RuntimeException e) {
+                } catch (IOException | RuntimeException e) {
                     Timber.e(e);
 
                     // Skip a savepoint file that is corrupted or 0-sized
@@ -407,9 +407,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
     }
 
-    public static void importData(File instanceFile, FormEntryController fec) {
+    public static void importData(File instanceFile, FormEntryController fec) throws IOException, RuntimeException {
         // convert files into a byte array
-        byte[] fileBytes = FileUtils.getFileAsBytes(instanceFile);
+        byte[] fileBytes = org.apache.commons.io.FileUtils.readFileToByteArray(instanceFile);
 
         // get the root of the saved and template instances
         TreeElement savedRoot = XFormParser.restoreDataModel(fileBytes, null).getRoot();
