@@ -202,11 +202,11 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             double lon = 0.0;
             double lat = 0.0;
             if (location != null) {
-                Timber.i("saveToDiskTask", "Setting location");
+                Timber.i("Setting location");
                 lon = location.getLongitude();
                 lat = location.getLatitude();
             } else {
-                Timber.i("saveToDiskTask", "Location is null");
+                Timber.i("Location is null");
             }
             values.put(InstanceColumns.ACT_LON, lon);
             values.put(InstanceColumns.ACT_LAT, lat);
