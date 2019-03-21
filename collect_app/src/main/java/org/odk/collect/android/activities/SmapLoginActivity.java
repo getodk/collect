@@ -48,7 +48,7 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setTheme(R.style.DarkAppTheme);     // override theme for login
+        setTheme(R.style.DarkAppTheme);     // override theme for login
         setContentView(R.layout.smap_activity_login);
         ButterKnife.bind(this);
 
