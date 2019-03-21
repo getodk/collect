@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:fitsSystemWindows="true">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -26,9 +27,9 @@
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
 
-        <ImageView android:src="@drawable/ic_logo"
+        <ImageView app:srcCompat="@drawable/ic_logo"
                    android:layout_width="wrap_content"
-                   android:layout_height="72dp"
+                   android:layout_height="wrap_content"
                    android:layout_marginBottom="24dp"
                    android:layout_gravity="center_horizontal" />
 
