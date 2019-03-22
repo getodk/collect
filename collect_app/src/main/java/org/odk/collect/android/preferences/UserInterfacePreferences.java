@@ -53,10 +53,21 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_NAVIGATION;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SPLASH_PATH;
 import static org.odk.collect.android.preferences.GeneralKeys.OSM_BASEMAP_KEY;
 import static org.odk.collect.android.preferences.GeneralKeys.OSM_MAPS_BASEMAP_DEFAULT;
+import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class UserInterfacePreferences extends BasePreferenceFragment {
 
     protected static final int IMAGE_CHOOSER = 0;
+
+    public static UserInterfacePreferences newInstance(boolean adminMode){
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
+
+        UserInterfacePreferences userInterfacePreferences = new UserInterfacePreferences();
+        userInterfacePreferences.setArguments(bundle);
+
+        return userInterfacePreferences;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

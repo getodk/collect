@@ -33,8 +33,19 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_CONSTRAINT_BEH
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_GUIDANCE_HINT;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_IMAGE_SIZE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
+import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class FormManagementPreferences extends BasePreferenceFragment {
+
+    public static FormManagementPreferences newInstance(boolean adminMode){
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
+
+        FormManagementPreferences formManagementPreferences = new FormManagementPreferences();
+        formManagementPreferences.setArguments(bundle);
+
+        return formManagementPreferences;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -25,8 +25,19 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import org.odk.collect.android.R;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_ANALYTICS;
+import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class IdentityPreferences extends BasePreferenceFragment {
+
+    public static IdentityPreferences newInstance(boolean adminMode){
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
+
+        IdentityPreferences identityPreferences = new IdentityPreferences();
+        identityPreferences.setArguments(bundle);
+
+        return identityPreferences;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
