@@ -29,7 +29,7 @@ import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY
 
 public class IdentityPreferences extends BasePreferenceFragment {
 
-    public static IdentityPreferences newInstance(boolean adminMode){
+    public static IdentityPreferences newInstance(boolean adminMode) {
         Bundle bundle = new Bundle();
         bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
 

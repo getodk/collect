@@ -37,7 +37,7 @@ import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY
 
 public class FormManagementPreferences extends BasePreferenceFragment {
 
-    public static FormManagementPreferences newInstance(boolean adminMode){
+    public static FormManagementPreferences newInstance(boolean adminMode) {
         Bundle bundle = new Bundle();
         bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
 

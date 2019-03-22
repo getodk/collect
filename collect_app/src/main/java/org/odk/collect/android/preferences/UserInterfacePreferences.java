@@ -59,7 +59,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
 
     protected static final int IMAGE_CHOOSER = 0;
 
-    public static UserInterfacePreferences newInstance(boolean adminMode){
+    public static UserInterfacePreferences newInstance(boolean adminMode) {
         Bundle bundle = new Bundle();
         bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
 
