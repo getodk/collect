@@ -41,6 +41,7 @@ import org.odk.collect.android.adapters.FormDownloadListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.http.HttpCredentialsInterface;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -123,14 +124,15 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DaggerUtils.getComponent(this).inject(this);
+
         setContentView(R.layout.form_download_list);
-        getComponent().inject(this);
         setTitle(getString(R.string.get_forms));
 
         viewModel = ViewModelProviders.of(this).get(FormDownloadListViewModel.class);
 
         // This activity is accessed directly externally
-        new PermissionUtils(this).requestStoragePermissions(new PermissionListener() {
+        new PermissionUtils().requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
