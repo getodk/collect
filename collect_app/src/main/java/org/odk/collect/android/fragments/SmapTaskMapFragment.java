@@ -281,17 +281,19 @@ public class SmapTaskMapFragment extends Fragment
                 ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED;
 
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
         if (locationEnabled){
             mMap.setMyLocationEnabled(true);
         } else {
-            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            mMap.setMyLocationEnabled(false);
+            //mMap.getUiSettings().setMyLocationButtonEnabled(false);
         }
 
         mHelper = new MapHelper(getActivity(), mMap, 0);    // Default selected layer
         mHelper.setBasemap();
 
-        complete = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_saved));
-        accepted = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_finalized));
+        complete = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_finalized));
+        accepted = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_saved));
         repeat = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_repeat));
         rejected = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_rejected));
         submitted = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_submitted));
