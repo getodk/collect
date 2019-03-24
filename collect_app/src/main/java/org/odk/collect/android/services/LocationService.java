@@ -45,6 +45,8 @@ import org.odk.collect.android.utilities.NotificationUtils;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import timber.log.Timber;
+
 /**
  * Created by neilpenman on 2018-01-11.
  */
@@ -179,6 +181,7 @@ public class LocationService extends Service implements LocationListener, Locati
 
             // Save the location in the database
             if (enabledTracking) {
+                Timber.i("+++++++++++++++++++++++++++++ tracking");
                 long newTime = System.currentTimeMillis();
                 if(lastLocation == null ||
                         (location.distanceTo(lastLocation) > Constants.GPS_DISTANCE

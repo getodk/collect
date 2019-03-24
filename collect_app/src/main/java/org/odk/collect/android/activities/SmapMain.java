@@ -52,7 +52,6 @@ import org.odk.collect.android.fragments.SmapTaskMapFragment;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.NFCListener;
-import org.odk.collect.android.listeners.SmapLoginListener;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.logic.FormDetails;
@@ -60,6 +59,7 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.receivers.NetworkReceiver;
@@ -947,6 +947,14 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 }
             }
         }
+    }
+
+    /*
+     * The user has chosen to exit the application
+     */
+    public void exit() {
+        GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
+        this.finish();
     }
 
 }

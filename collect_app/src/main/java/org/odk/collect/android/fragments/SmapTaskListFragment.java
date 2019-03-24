@@ -88,6 +88,7 @@ public class SmapTaskListFragment extends ListFragment
     private static final int MENU_GETFORMS = Menu.FIRST + 3;
     private static final int MENU_SENDDATA = Menu.FIRST + 4;
     private static final int MENU_MANAGEFILES = Menu.FIRST + 5;
+    private static final int MENU_EXIT = Menu.FIRST + 6;
 
     private static final int PASSWORD_DIALOG = 1;
 
@@ -304,6 +305,10 @@ public class SmapTaskListFragment extends ListFragment
                     .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         }
 
+        menu
+                .add(0, MENU_EXIT, 0, R.string.exit)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+
         boolean adminMenu = PreferenceManager
                 .getDefaultSharedPreferences(getContext())
                 .getBoolean(GeneralKeys.KEY_SMAP_ODK_ADMIN_MENU, false);
@@ -393,6 +398,9 @@ public class SmapTaskListFragment extends ListFragment
                 return true;
             case R.id.menu_sort:
                 bottomSheetDialog.show();
+                return true;
+            case MENU_EXIT:
+                ((SmapMain) getActivity()).exit();
                 return true;
         }
         return super.onOptionsItemSelected(item);

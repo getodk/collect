@@ -93,6 +93,7 @@ public final class GeneralKeys {
     public static final String KEY_SMAP_OVERRIDE_LOCATION = "smap_override_location";  // Override the local settings for user trail
     public static final String KEY_SMAP_OVERRIDE_DELETE = "smap_override_del";  // Override the local settings for delete after send
     public static final String KEY_SMAP_OVERRIDE_IMAGE_SIZE = "smap_override_image_size";  // Override the local settings for the image size
+    public static final String KEY_SMAP_OVERRIDE_NAVIGATION = "smap_override_navigation";  // Override the local settings for the screen navigation
     public static final String KEY_SMAP_REGISTRATION_ID = "registration_id";  // Android notifications id
     public static final String KEY_SMAP_REGISTRATION_SERVER = "registration_server";  // Server name that has been registered
     public static final String KEY_SMAP_REGISTRATION_USER = "registration_user";  // User name that has been registered
@@ -156,6 +157,7 @@ public final class GeneralKeys {
         hashMap.put(KEY_SMAP_OVERRIDE_SYNC, false);
         hashMap.put(KEY_SMAP_OVERRIDE_DELETE, false);
         hashMap.put(KEY_SMAP_OVERRIDE_IMAGE_SIZE, false);
+        hashMap.put(KEY_SMAP_OVERRIDE_NAVIGATION, false);
         hashMap.put(KEY_SMAP_OVERRIDE_LOCATION, false);
         hashMap.put(KEY_SMAP_REGISTRATION_ID, "");
         hashMap.put(KEY_SMAP_REGISTRATION_SERVER, "");

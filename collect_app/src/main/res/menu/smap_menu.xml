@@ -45,4 +45,9 @@ limitations under the License.
         android:title="@string/general_preferences"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/menu_exit"
+        android:title="@string/exit"
+        app:showAsAction="never"/>
+
 </menu>

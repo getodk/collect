@@ -89,6 +89,17 @@ public class BasePreferenceFragment extends PreferenceFragment {
             }
         }
 
+        // smap navigation
+        Preference nav = getPreferenceScreen().findPreference(GeneralKeys.KEY_NAVIGATION);
+        if(nav != null) {
+            boolean override_nav = (Boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_OVERRIDE_NAVIGATION);
+            if (override_nav) {
+                nav.setEnabled(false);
+            } else {
+                nav.setEnabled(true);
+            }
+        }
+
         // smap backward navigation
         Preference back_nav = getPreferenceScreen().findPreference(AdminKeys.KEY_MOVING_BACKWARDS);
         if(back_nav != null) {

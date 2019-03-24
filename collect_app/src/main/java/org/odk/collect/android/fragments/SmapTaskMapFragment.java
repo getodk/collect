@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.fragments;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -25,6 +26,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -231,6 +233,9 @@ public class SmapTaskMapFragment extends Fragment
                 return true;
             case R.id.menu_gettasks:
                 ((SmapMain) getActivity()).processGetTask();
+                return true;
+            case R.id.menu_exit:
+                ((SmapMain) getActivity()).exit();
                 return true;
 
         }
@@ -580,18 +585,8 @@ public class SmapTaskMapFragment extends Fragment
      * Convert an xml drawable to a bitmap
      * From: https://stackoverflow.com/questions/18053156/set-image-from-drawable-as-marker-in-google-map-version-2
      */
+    @TargetApi(19)
     private BitmapDescriptor getMarkerIconFromDrawable(Drawable drawable) {
-        /*
-        Canvas canvas = new Canvas();
-        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-
-        canvas.setBitmap(bitmap);
-        double ratio = (double) drawable.getIntrinsicHeight() / (double) drawable.getIntrinsicWidth();
-        int width =   (int) Math.round(80 / ratio);
-        drawable.setBounds(0, 0, width, 80);
-        drawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
-        */
 
         Bitmap bitmap = null;
 
@@ -617,8 +612,11 @@ public class SmapTaskMapFragment extends Fragment
             if(bitmap.getHeight() > maxHeight) {
                 double ratio = (double) drawable.getIntrinsicHeight() / (double) drawable.getIntrinsicWidth();
                 int width =   (int) Math.round(maxHeight / ratio);
-                bitmap.setHeight((int)maxHeight);
-                bitmap.setWidth(width);
+
+                if(Build.VERSION.SDK_INT > 18 ) {
+                    bitmap.setHeight((int) maxHeight);
+                    bitmap.setWidth(width);
+                }
             }
 
             Canvas canvas = new Canvas(bitmap);

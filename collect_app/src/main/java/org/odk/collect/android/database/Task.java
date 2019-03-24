@@ -9,7 +9,6 @@ public class Task {
 	public String url;
 	public String form_id;
 	public int form_version;
-	public String initial_data;
     public String update_id;
 	public String assignment_mode;
 	public Date scheduled_at;
@@ -17,4 +16,7 @@ public class Task {
 	public boolean repeat;			// Task can be completed multiple times
 	public String address;			// Key value pairs representing an unstructured address
 	public String status;
+
+	// Local attributes - used only on device
+    public String initial_data;
 }

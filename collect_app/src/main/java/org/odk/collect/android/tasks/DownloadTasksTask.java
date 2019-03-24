@@ -454,6 +454,24 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                         AdminSharedPreferences.getInstance().getInstance().save(AdminKeys.KEY_SMAP_OVERRIDE_MOVING_BACKWARDS, false);
                     }
 
+                    /*
+                     * Override the screen navigation setting
+                     */
+                    if(tr.settings.ft_navigation != null) {
+                        if(!tr.settings.ft_navigation.equals("not set")) {
+                            editor.putString(GeneralKeys.KEY_NAVIGATION, tr.settings.ft_navigation);
+                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_NAVIGATION, true);
+                        } else {
+                            // Leave the local settings as they are and enable for local editing
+                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_NAVIGATION, false);
+                        }
+
+                    } else {
+                        // Leave the local settings as they are and enable for local editing
+                        editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_NAVIGATION, false);
+                    }
+
+
 
 
                     editor.apply();
@@ -713,11 +731,6 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                                         ta.task.form_id + "/" + ta.task.update_id;
                             }
                             Timber.i("Instance url: " + ta.task.initial_data);
-                        } else {
-                            // Make sure the initial_data url is sensible (ie null or a URL
-                            if (ta.task.initial_data != null && !ta.task.initial_data.startsWith("http")) {
-                                ta.task.initial_data = null;
-                            }
                         }
 
                         // Add instance data
