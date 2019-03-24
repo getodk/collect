@@ -68,7 +68,7 @@
   <string name="smap_server_changed">Actualizar - Hay Novedades</string>
   <string name="smap_version_changed">La versión del formulario que usted esta abriendo No es la más actualizada. Favor cerrar y volver a abrirla.</string>
   <string name="smap_been_submitted">Este formulario ya fué enviado al servidor y no puede ser editado</string>
-  <string name="smap_location_tracking">Ubicación del dispositivo está siendo registrada. Para desactivar seleccione Cambiar la configuración y luego Otro. Comunicarse con su administrador si no puede. Deberá cerrar  y abrir nuevamente la aplicación.</string>
+  <string name="smap_location_tracking">La ubicación del dispositivo está siendo registrada. </string>
   <string name="smap_reset_locations">Recorrido de GPS registrado</string>
   <string name="smap_reset_locations_result">Recorrido de GPS registrado ::</string>
   <string name="smap_visit_website">Visite el sitio web</string>

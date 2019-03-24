@@ -203,7 +203,7 @@ public class SmapTaskMapFragment extends Fragment
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-        getActivity().getMenuInflater().inflate(R.menu.smap_menu, menu);
+        getActivity().getMenuInflater().inflate(R.menu.smap_menu_map, menu);
         super.onCreateOptionsMenu(menu, inflater);
 
     }
