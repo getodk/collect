@@ -78,7 +78,7 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
                 basePreferenceFragment = IdentityPreferences.newInstance(getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false));
                 break;
         }
-        if (basePreferenceFragment != null){
+        if (basePreferenceFragment != null) {
             getActivity().getFragmentManager()
                     .beginTransaction()
                     .replace(android.R.id.content, basePreferenceFragment)
