@@ -63,35 +63,27 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
+        BasePreferenceFragment basePreferenceFragment = null;
         switch (preference.getKey()) {
             case "protocol":
-                getActivity().getFragmentManager()
-                        .beginTransaction()
-                        .replace(android.R.id.content, ServerPreferences.newInstance(getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false)))
-                        .addToBackStack(null)
-                        .commit();
+                basePreferenceFragment = ServerPreferences.newInstance(getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false));
                 break;
             case "user_interface":
-                getActivity().getFragmentManager()
-                        .beginTransaction()
-                        .replace(android.R.id.content, UserInterfacePreferences.newInstance(getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false)))
-                        .addToBackStack(null)
-                        .commit();
+                basePreferenceFragment = UserInterfacePreferences.newInstance(getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false));
                 break;
             case "form_management":
-                getActivity().getFragmentManager()
-                        .beginTransaction()
-                        .replace(android.R.id.content, FormManagementPreferences.newInstance(getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false)))
-                        .addToBackStack(null)
-                        .commit();
+                basePreferenceFragment = FormManagementPreferences.newInstance(getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false));
                 break;
             case "user_and_device_identity":
-                getActivity().getFragmentManager()
-                        .beginTransaction()
-                        .replace(android.R.id.content, IdentityPreferences.newInstance(getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false)))
-                        .addToBackStack(null)
-                        .commit();
+                basePreferenceFragment = IdentityPreferences.newInstance(getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false));
                 break;
+        }
+        if (basePreferenceFragment != null){
+            getActivity().getFragmentManager()
+                    .beginTransaction()
+                    .replace(android.R.id.content, basePreferenceFragment)
+                    .addToBackStack(null)
+                    .commit();
         }
         return true;
     }
