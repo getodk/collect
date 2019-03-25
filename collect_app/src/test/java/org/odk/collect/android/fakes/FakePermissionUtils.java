@@ -16,12 +16,8 @@ public class FakePermissionUtils extends PermissionUtils {
 
     private boolean isPermissionGranted;
 
-    public FakePermissionUtils(@NonNull Activity activity) {
-        super(activity);
-    }
-
     @Override
-    protected void requestPermissions(@NonNull PermissionListener listener, String... permissions) {
+    protected void requestPermissions(Activity activity, @NonNull PermissionListener listener, String... permissions) {
         if (isPermissionGranted) {
             listener.granted();
         } else {
@@ -30,7 +26,7 @@ public class FakePermissionUtils extends PermissionUtils {
     }
 
     @Override
-    protected void showAdditionalExplanation(int title, int message, int drawable, @NonNull PermissionListener action) {
+    protected void showAdditionalExplanation(Activity activity, int title, int message, int drawable, @NonNull PermissionListener action) {
         action.denied();
     }
 

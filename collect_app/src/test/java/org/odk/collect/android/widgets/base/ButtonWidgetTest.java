@@ -1,6 +1,5 @@
 package org.odk.collect.android.widgets.base;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
-import org.robolectric.shadow.api.Shadow;
 
 import static org.junit.Assert.assertEquals;
 import static org.robolectric.Shadows.shadowOf;
@@ -24,7 +22,7 @@ public abstract class ButtonWidgetTest<W extends ButtonWidget, A extends IAnswer
     private final FakePermissionUtils permissionUtils;
 
     ButtonWidgetTest() {
-        permissionUtils = new FakePermissionUtils(Shadow.newInstanceOf(Activity.class));
+        permissionUtils = new FakePermissionUtils();
     }
 
     protected void stubAllRuntimePermissionsGranted(boolean isGranted) {
