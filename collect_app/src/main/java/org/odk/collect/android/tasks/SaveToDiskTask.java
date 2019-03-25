@@ -275,7 +275,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         writeFile(payloadSms, getSmsInstancePath(instancePath));
 
         // Write last-saved instance
-        writeFile(payload, formController.getLastSavedPath());
+        String lastSavedPath = formController.getLastSavedPath();
+        writeFile(payload, lastSavedPath);
 
         // update the uri. We have exported the reloadable instance, so update status...
         // Since we saved a reloadable instance, it is flagged as re-openable so that if any error
@@ -349,7 +350,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             // if encrypted, delete all plaintext files
             // (anything not named instanceXml or anything not ending in .enc)
             if (isEncrypted) {
-                if (!EncryptionUtils.deletePlaintextFiles(instanceXml)) {
+                if (!EncryptionUtils.deletePlaintextFiles(instanceXml, new File(lastSavedPath))) {
                     Timber.e("Error deleting plaintext files for %s", instanceXml.getAbsolutePath());
                 }
             }
