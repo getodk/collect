@@ -23,7 +23,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 
-import android.support.annotation.Nullable;
 import org.apache.commons.io.IOUtils;
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Document;
@@ -44,6 +43,7 @@ import java.math.BigInteger;
 import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -74,6 +74,9 @@ public class FileUtils {
 
     /** Filename of the last-saved instance data. */
     public static final String LAST_SAVED_FILENAME = "last-saved.xml";
+
+    /** Valid XML stub that can be parsed without error. */
+    private static final String STUB_XML = "<?xml version='1.0' ?><stub />";
 
     static int bufSize = 16 * 1024; // May be set by unit test
 
@@ -401,10 +404,18 @@ public class FileUtils {
         return mediaFolder.getAbsolutePath() + File.separator + LAST_SAVED_FILENAME;
     }
 
-    @Nullable
-    public static String getLastSavedSrcIfExists(File formXml) {
+    /**
+     * Returns the path to the last-saved file for this form,
+     * creating a valid stub if it doesn't yet exist.
+     */
+    public static String getOrCreateLastSavedSrc(File formXml) {
         File lastSavedFile = getLastSavedFile(formXml);
-        return lastSavedFile.exists() ? "jr://file/" + LAST_SAVED_FILENAME : null;
+
+        if (!lastSavedFile.exists()) {
+            write(lastSavedFile, STUB_XML.getBytes(Charset.forName("UTF-8")));
+        }
+
+        return "jr://file/" + LAST_SAVED_FILENAME;
     }
 
     /**
@@ -500,6 +511,9 @@ public class FileUtils {
     }
 
     public static void write(File file, byte[] data) {
+        // Make sure the directory path to this file exists.
+        file.getParentFile().mkdirs();
+
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(data);
             fos.close();

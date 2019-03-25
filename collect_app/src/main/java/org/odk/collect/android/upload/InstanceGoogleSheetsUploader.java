@@ -304,7 +304,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         FormDef formDef;
 
         File formXml = new File(formFilePath);
-        String lastSavedSrc = FileUtils.getLastSavedSrcIfExists(formXml);
+        String lastSavedSrc = FileUtils.getOrCreateLastSavedSrc(formXml);
 
         try {
             formDef = XFormUtils.getFormFromInputStream(new FileInputStream(formXml), lastSavedSrc);

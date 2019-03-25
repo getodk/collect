@@ -233,7 +233,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             Timber.i("Attempting to load from: %s", formXml.getAbsolutePath());
             final long start = System.currentTimeMillis();
             fis = new FileInputStream(formXml);
-            String lastSavedSrc = FileUtils.getLastSavedSrcIfExists(formXml);
+            String lastSavedSrc = FileUtils.getOrCreateLastSavedSrc(formXml);
             FormDef formDefFromXml = XFormUtils.getFormFromInputStream(fis, lastSavedSrc);
             if (formDefFromXml == null) {
                 errorMsg = "Error reading XForm file";
