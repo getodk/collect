@@ -110,12 +110,6 @@ public final class ExternalDataUtil {
 
         Matcher matcher = SEARCH_FUNCTION_REGEX.matcher(appearance);
         if (matcher.find()) {
-            Collect.getInstance().getDefaultTracker()
-                    .send(new HitBuilders.EventBuilder()
-                            .setCategory("ExternalData")
-                            .setAction("search()")
-                            .setLabel(Collect.getCurrentFormIdentifierHash())
-                            .build());
 
             String function = matcher.group(0);
             try {

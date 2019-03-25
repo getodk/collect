@@ -71,12 +71,6 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
 
     @Override
     public Object eval(Object[] args, EvaluationContext ec) {
-        Collect.getInstance().getDefaultTracker()
-                .send(new HitBuilders.EventBuilder()
-                        .setCategory("ExternalData")
-                        .setAction("pulldata()")
-                        .setLabel(Collect.getCurrentFormIdentifierHash())
-                        .build());
 
         if (args.length != 4) {
             Timber.e("4 arguments are needed to evaluate the %s function", HANDLER_NAME);
