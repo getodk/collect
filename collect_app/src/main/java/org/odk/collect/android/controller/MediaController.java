@@ -28,17 +28,17 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.events.MediaEvent;
 import org.odk.collect.android.events.RxEventBus;
-import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 import java.io.IOException;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import timber.log.Timber;
 
-@PerApplication
+@Singleton
 public final class MediaController implements MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener {
 
     public static final int MEDIA_PREPARED = 100;
