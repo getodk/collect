@@ -298,12 +298,6 @@ public class WidgetFactory {
                             String actionName = predicate.toString().contains("func-expr:current") ?
                                     "CurrentPredicate" : "NonCurrentPredicate";
 
-                            Collect.getInstance().getDefaultTracker()
-                                    .send(new HitBuilders.EventBuilder()
-                                    .setCategory("Itemset")
-                                    .setAction(actionName)
-                                    .setLabel(Collect.getCurrentFormIdentifierHash())
-                                    .build());
                         }
                     }
                 }
