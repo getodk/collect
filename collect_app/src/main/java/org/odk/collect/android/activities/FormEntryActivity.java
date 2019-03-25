@@ -37,7 +37,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
-import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.ContextMenu;
@@ -131,6 +130,7 @@ import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.utilities.RegexUtils;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -350,7 +350,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             mediaLoadingFragment = (MediaLoadingFragment) getFragmentManager().findFragmentByTag(TAG_MEDIA_LOADING_FRAGMENT);
         }
 
-        new PermissionUtils(this).requestStoragePermissions(new PermissionListener() {
+        new PermissionUtils().requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
@@ -1216,18 +1216,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 final EditText saveAs = endView.findViewById(R.id.save_name);
 
                 // disallow carriage returns in the name
-                InputFilter returnFilter = new InputFilter() {
-                    public CharSequence filter(CharSequence source, int start,
-                                               int end, Spanned dest, int dstart, int dend) {
-                        String newText = source.toString().substring(start, end);
-                        String invalidCharRegex = "[\\p{Cntrl}]";
-
-                        // Replace invalid characters, only modifying the string if necessary.
-                        return newText.matches(invalidCharRegex)
-                                ? newText.replaceAll(invalidCharRegex, " ")
-                                : null;
-                    }
-                };
+                InputFilter returnFilter = (source, start, end, dest, dstart, dend)
+                        -> RegexUtils.normalizeFormName(source.toString().substring(start, end), true);
                 saveAs.setFilters(new InputFilter[]{returnFilter});
 
                 if (formController.getSubmissionMetadata().instanceName == null) {
@@ -2340,7 +2330,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         final FormController formController = task.getFormController();
         if (formController != null) {
             if (readPhoneStatePermissionRequestNeeded) {
-                new PermissionUtils(this).requestReadPhoneStatePermission(new PermissionListener() {
+                new PermissionUtils().requestReadPhoneStatePermission(this, true, new PermissionListener() {
                     @Override
                     public void granted() {
                         readPhoneStatePermissionRequestNeeded = false;
@@ -2352,7 +2342,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     public void denied() {
                         finish();
                     }
-                }, true);
+                });
             } else {
                 formLoaderTask.setFormLoaderListener(null);
                 FormLoaderTask t = formLoaderTask;
@@ -2492,7 +2482,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private void locationTrackingEnabled(FormController formController, boolean calledJustAfterFormStart) {
         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_TRACKING_ENABLED, null, false);
-        new PermissionUtils(this).requestLocationPermissions(new PermissionListener() {
+        new PermissionUtils().requestLocationPermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 if (!locationPermissionsGranted) {

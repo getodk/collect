@@ -145,7 +145,7 @@ public class MainActivityTest {
         ShadowActivity shadowActivity = shadowOf(mainMenuActivity);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
         ShadowIntent shadowIntent = shadowOf(startedIntent);
-        assertEquals(InstanceUploaderList.class.getName(),
+        assertEquals(InstanceUploaderListActivity.class.getName(),
                 shadowIntent.getIntentClass().getName());
     }
 

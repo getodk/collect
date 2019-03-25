@@ -5,9 +5,7 @@ import android.telephony.SmsManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.DaggerTestComponent;
-import org.odk.collect.android.injection.TestComponent;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.sms.base.BaseSmsTest;
 import org.odk.collect.android.sms.base.SampleData;
 import org.odk.collect.android.tasks.sms.SmsSender;
@@ -18,12 +16,11 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowSmsManager;
 
-import javax.inject.Inject;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.odk.collect.android.support.RobolectricHelpers.getApplicationComponent;
 import static org.robolectric.Shadows.shadowOf;
 
 /**
@@ -35,20 +32,14 @@ import static org.robolectric.Shadows.shadowOf;
 @RunWith(RobolectricTestRunner.class)
 public class SmsSenderJobTest extends BaseSmsTest {
 
-    @Inject
     SmsSubmissionManagerContract submissionManager;
-    @Inject
     SmsManager smsManager;
 
     @Before
     public void setUp() {
-
-        /**
-         * Setting up dagger to utilize test dependencies across the app.
-         */
-        TestComponent testComponent = DaggerTestComponent.builder().application(RuntimeEnvironment.application).build();
-        ((Collect) RuntimeEnvironment.application).setComponent(testComponent);
-        testComponent.inject(this);
+        AppDependencyComponent component = getApplicationComponent();
+        submissionManager = component.smsSubmissionManagerContract();
+        smsManager = component.smsManager();
 
         setupSmsSubmissionManagerData();
         setDefaultGateway();

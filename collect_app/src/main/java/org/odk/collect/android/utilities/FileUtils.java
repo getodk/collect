@@ -90,49 +90,6 @@ public class FileUtils {
         return dir.exists() || dir.mkdirs();
     }
 
-    public static byte[] getFileAsBytes(File file) {
-        try (InputStream is = new FileInputStream(file)) {
-
-            // Get the size of the file
-            long length = file.length();
-            if (length > Integer.MAX_VALUE) {
-                Timber.e("File %s is too large", file.getName());
-                return null;
-            }
-
-            // Create the byte array to hold the data
-            byte[] bytes = new byte[(int) length];
-
-            // Read in the bytes
-            int offset = 0;
-            int read = 0;
-            try {
-                while (offset < bytes.length && read >= 0) {
-                    read = is.read(bytes, offset, bytes.length - offset);
-                    offset += read;
-                }
-            } catch (IOException e) {
-                Timber.e(e, "Cannot read file %s", file.getName());
-                return null;
-            }
-
-            // Ensure all the bytes have been read in
-            if (offset < bytes.length) {
-                try {
-                    throw new IOException("Could not completely read file " + file.getName());
-                } catch (IOException e) {
-                    Timber.e(e);
-                    return null;
-                }
-            }
-
-            return bytes;
-        } catch (IOException e) {
-            Timber.e(e);
-        }
-        return new byte[0];
-    }
-
     public static String getMd5Hash(File file) {
         final InputStream is;
         try {

@@ -4,31 +4,34 @@ import android.app.Application;
 import android.content.Context;
 import android.telephony.SmsManager;
 
+import com.google.android.gms.analytics.Tracker;
+
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.http.HttpClientConnection;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
-import org.odk.collect.android.injection.ViewModelBuilder;
-import org.odk.collect.android.injection.config.architecture.ViewModelFactoryModule;
-import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 
 /**
- * Add Application level providers here, i.e. if you want to
- * inject something into the Collect instance.
+ * Add dependency providers here (annotated with @Provides)
+ * for objects you need to inject
  */
-@Module(includes = {ViewModelFactoryModule.class, ViewModelBuilder.class})
-public class AppModule {
+@Module
+public class AppDependencyModule {
 
     @Provides
-    SmsManager provideSmsManager() {
+    public SmsManager provideSmsManager() {
         return SmsManager.getDefault();
     }
 
@@ -43,34 +46,44 @@ public class AppModule {
     }
 
     @Provides
-    InstancesDao provideInstancesDao() {
+    public InstancesDao provideInstancesDao() {
         return new InstancesDao();
     }
 
     @Provides
-    FormsDao provideFormsDao() {
+    public FormsDao provideFormsDao() {
         return new FormsDao();
     }
 
-    @PerApplication
     @Provides
+    @Singleton
     RxEventBus provideRxEventBus() {
         return new RxEventBus();
     }
 
     @Provides
-    public OpenRosaHttpInterface provideHttpInterface() {
+    OpenRosaHttpInterface provideHttpInterface() {
         return new HttpClientConnection();
     }
 
     @Provides
-    public CollectServerClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
+    CollectServerClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
         return new CollectServerClient(httpInterface, webCredentialsUtils);
     }
 
     @Provides
-    public WebCredentialsUtils provideWebCredentials() {
+    WebCredentialsUtils provideWebCredentials() {
         return new WebCredentialsUtils();
     }
 
+    @Provides
+    @Singleton
+    public Tracker providesTracker(Application application) {
+        return ((Collect) application).getDefaultTracker();
+    }
+
+    @Provides
+    public PermissionUtils providesPermissionUtils() {
+        return new PermissionUtils();
+    }
 }

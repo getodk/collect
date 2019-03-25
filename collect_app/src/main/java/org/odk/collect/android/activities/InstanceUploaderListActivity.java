@@ -38,11 +38,12 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -83,7 +84,7 @@ import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivit
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class InstanceUploaderList extends InstanceListActivity implements
+public class InstanceUploaderListActivity extends InstanceListActivity implements
         OnLongClickListener, DiskSyncListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String SHOW_ALL_MODE = "showAllMode";
     private static final String INSTANCE_UPLOADER_LIST_SORTING_ORDER = "instanceUploaderListSortingOrder";
@@ -122,24 +123,34 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     @Inject
     SmsService smsService;
+
     @Inject
     SmsSubmissionManagerContract smsSubmissionManager;
+
+    @Inject
+    Tracker tracker;
+
+    @Inject
+    PermissionUtils permissionUtils;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Timber.i("onCreate");
+
+        DaggerUtils.getComponent(this).inject(this);
+
         // set title
         setTitle(getString(R.string.send_data));
         setContentView(R.layout.instance_uploader_list);
+
         ButterKnife.bind(this);
-        getComponent().inject(this);
 
         if (savedInstanceState != null) {
             showAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
         }
 
-        new PermissionUtils(this).requestStoragePermissions(new PermissionListener() {
+        permissionUtils.requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 init();
@@ -148,7 +159,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
             @Override
             public void denied() {
                 // The activity has to finish because ODK Collect cannot function without these permissions.
-                finishAllActivities(InstanceUploaderList.this);
+                finishAllActivities(InstanceUploaderListActivity.this);
             }
         });
     }
@@ -210,7 +221,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
         }
     }
 
-    private void init() {
+    void init() {
         setupUploadButtons();
         instancesDao = new InstancesDao();
 
@@ -321,7 +332,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
         if (transport.equals(Transport.Sms) || buttonId == R.id.sms_upload_button) {
             // https://issuetracker.google.com/issues/66979952
             if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
-                new PermissionUtils(this).requestSendSMSAndReadPhoneStatePermissions(new PermissionListener() {
+                permissionUtils.requestSendSMSAndReadPhoneStatePermissions(this, new PermissionListener() {
                     @Override
                     public void granted() {
                         smsService.submitForms(instanceIds);
@@ -332,7 +343,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
                     }
                 });
             } else {
-                new PermissionUtils(this).requestSendSMSPermission(new PermissionListener() {
+                permissionUtils.requestSendSMSPermission(this, new PermissionListener() {
                     @Override
                     public void granted() {
                         smsService.submitForms(instanceIds);
@@ -363,7 +374,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
                 Intent i = new Intent(this, InstanceUploaderActivity.class);
                 i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
                 // Not required but without this permission a Device ID attached to a request will be empty.
-                new PermissionUtils(this).requestReadPhoneStatePermission(new PermissionListener() {
+                permissionUtils.requestReadPhoneStatePermission(this, false, new PermissionListener() {
                     @Override
                     public void granted() {
                         startActivityForResult(i, INSTANCE_UPLOADER);
@@ -373,7 +384,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
                     public void denied() {
                         startActivityForResult(i, INSTANCE_UPLOADER);
                     }
-                }, false);
+                });
             }
         }
     }
@@ -511,8 +522,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
                         case 1: // show all
                             showAllMode = true;
                             updateAdapter();
-                            Collect.getInstance().getDefaultTracker()
-                                    .send(new HitBuilders.EventBuilder()
+                            tracker.send(new HitBuilders.EventBuilder()
                                             .setCategory("FilterSendForms")
                                             .setAction("SentAndUnsent")
                                             .build());

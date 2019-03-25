@@ -1,44 +1,57 @@
 package org.odk.collect.android.injection.config;
 
 import android.app.Application;
+import android.telephony.SmsManager;
 
 import org.odk.collect.android.activities.FormDownloadList;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.activities.InstanceUploaderList;
+import org.odk.collect.android.activities.InstanceUploaderListActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.fragments.DataManagerList;
 import org.odk.collect.android.http.CollectServerClient;
-import org.odk.collect.android.injection.ActivityBuilder;
-import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
-import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSender;
+import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.tasks.sms.SmsService;
+import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.FormDownloader;
 
+import javax.inject.Singleton;
+
 import dagger.BindsInstance;
 import dagger.Component;
-import dagger.android.support.AndroidSupportInjectionModule;
 
 /**
- * Primary module, bootstraps the injection system and
- * injects the main Collect instance here.
- * <p>
- * Shouldn't be modified unless absolutely necessary.
- */
-@PerApplication
+ * Dagger component for the application. Should include
+ * application level Dagger Modules and be built with Application
+ * object.
+ *
+ * Add an `inject(MyClass myClass)` method here for objects you want
+ * to inject into so Dagger knows to wire it up.
+ *
+ * Annotated with @Singleton so modules can include @Singletons that will
+ * be retained at an application level (as this an instance of this components
+ * is owned by the Application object).
+ *
+ * If you need to call a provider directly from the component (in a test
+ * for example) you can add a method with the type you are looking to fetch
+ * (`MyType myType()`) to this interface.
+ *
+ * To read more about Dagger visit: https://google.github.io/dagger/users-guide
+ **/
+
+@Singleton
 @Component(modules = {
-        AndroidSupportInjectionModule.class,
-        AppModule.class,
-        ActivityBuilder.class
+        AppDependencyModule.class
 })
-public interface AppComponent {
+public interface AppDependencyComponent {
 
     @Component.Builder
     interface Builder {
@@ -46,7 +59,9 @@ public interface AppComponent {
         @BindsInstance
         Builder application(Application application);
 
-        AppComponent build();
+        Builder appDependencyModule(AppDependencyModule testDependencyModule);
+
+        AppDependencyComponent build();
     }
 
     void inject(Collect collect);
@@ -58,8 +73,6 @@ public interface AppComponent {
     void inject(SmsSentBroadcastReceiver smsSentBroadcastReceiver);
 
     void inject(SmsNotificationReceiver smsNotificationReceiver);
-
-    void inject(InstanceUploaderList instanceUploaderList);
 
     void inject(InstanceUploaderAdapter instanceUploaderAdapter);
 
@@ -82,4 +95,12 @@ public interface AppComponent {
     void inject(AuthDialogUtility authDialogUtility);
   
     void inject(FormDownloadList formDownloadList);
+
+    void inject(InstanceUploaderListActivity activity);
+
+    SmsManager smsManager();
+
+    SmsSubmissionManagerContract smsSubmissionManagerContract();
+
+    RxEventBus rxEventBus();
 }
