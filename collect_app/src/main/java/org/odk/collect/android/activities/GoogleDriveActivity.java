@@ -240,7 +240,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     }
 
     private void selectAccount() {
-        new PermissionUtils(this).requestGetAccountsPermission(new PermissionListener() {
+        new PermissionUtils().requestGetAccountsPermission(this, new PermissionListener() {
             @Override
             public void granted() {
                 String account = accountsManager.getLastSelectedAccountIfValid();

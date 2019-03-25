@@ -186,7 +186,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     }
 
     private void selectAccount() {
-        new PermissionUtils(this).requestGetAccountsPermission(new PermissionListener() {
+        new PermissionUtils().requestGetAccountsPermission(this, new PermissionListener() {
             @Override
             public void granted() {
                 String account = accountsManager.getLastSelectedAccountIfValid();

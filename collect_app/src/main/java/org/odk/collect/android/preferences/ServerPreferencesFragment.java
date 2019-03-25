@@ -270,7 +270,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     }
 
     private void requestAccountsPermission() {
-        new PermissionUtils(getActivity()).requestGetAccountsPermission(new PermissionListener() {
+        new PermissionUtils().requestGetAccountsPermission(getActivity(), new PermissionListener() {
             @Override
             public void granted() {
                 Intent intent = accountsManager.getAccountChooserIntent();
