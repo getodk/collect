@@ -96,10 +96,18 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
     }
 
     private void setEnabled(View view) {
+        final TextView formTitle = view.findViewById(R.id.form_title);
+        final TextView formSubtitle = view.findViewById(R.id.form_subtitle);
         final TextView disabledCause = view.findViewById(R.id.form_subtitle2);
+        final ImageView imageView = view.findViewById(R.id.image);
 
         view.setEnabled(true);
         disabledCause.setVisibility(View.GONE);
+
+        formTitle.setAlpha(1f);
+        formSubtitle.setAlpha(1f);
+        disabledCause.setAlpha(1f);
+        imageView.setAlpha(1f);
     }
 
     private void setDisabled(View view, String disabledMessage) {
