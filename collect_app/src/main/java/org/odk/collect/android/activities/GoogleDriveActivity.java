@@ -608,6 +608,8 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             progressDialog.setButton(getString(R.string.cancel), (dialog, which) -> {
                 cancel(true);
                 rootButton.setEnabled(true);
+                driveList.clear();
+                updateAdapter();
             });
             progressDialog.show();
         }
