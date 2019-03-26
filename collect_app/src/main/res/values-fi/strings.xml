@@ -506,7 +506,9 @@
   <string name="invalid_email_address">Virheellinen sähköpostiosoite!</string>
   <string name="sort_by">Lajitteluperuste</string>
   <string name="server">Palvelin</string>
+<!--
   <string name="submission_transport_admin_setting">Lähetyksen välitys</string>
+-->
   <string name="select_value">Valitse arvo</string>
   <string name="edit_value">Muokkaa arvoa</string>
   <string name="no_value_selected">Ei valittua arvoa</string>

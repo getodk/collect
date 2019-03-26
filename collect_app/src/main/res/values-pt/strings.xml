@@ -492,7 +492,9 @@ Escolher Imagem</string>
   <string name="invalid_email_address">Endereço de e-mail inválido!</string>
   <string name="sort_by">Organizar por</string>
   <string name="server">Servidor</string>
+<!--
   <string name="submission_transport_admin_setting">Transporte de submissão</string>
+-->
   <string name="select_value">Selecione valor</string>
   <string name="edit_value">Edite valor</string>
   <string name="image_size_large">Grande (3072px)</string>

@@ -502,7 +502,9 @@
   <string name="invalid_email_address">غلط ای میل ایڈریس!</string>
   <string name="sort_by">بہ ترتیب</string>
   <string name="server">سرور </string>
+<!--
   <string name="submission_transport_admin_setting">سبمیشن ٹرانسپورٹ </string>
+-->
   <string name="select_value">سلیکٹ ویلیو </string>
   <string name="edit_value">ایڈٹ ویلیو </string>
   <string name="no_value_selected">کوئی ویلیو منتخب نہیں کی گئی </string>

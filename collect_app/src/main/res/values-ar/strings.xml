@@ -481,7 +481,9 @@
   <string name="invalid_email_address">البريد الالكتروني غير صحيح</string>
   <string name="sort_by">ترتيب حسب</string>
   <string name="server">الخادم</string>
+<!--
   <string name="submission_transport_admin_setting">نقل التقديم</string>
+-->
   <string name="select_value">اختر</string>
   <string name="edit_value">غير</string>
   <string name="no_value_selected">لم يتم اختيار قيمة</string>

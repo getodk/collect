@@ -506,7 +506,9 @@
   <string name="invalid_email_address">Neplatná emailová adresa!</string>
   <string name="sort_by">Seřazeno podle</string>
   <string name="server">Server</string>
+<!--
   <string name="submission_transport_admin_setting">Přenos odeslání</string>
+-->
   <string name="select_value">Vybrat hodnotu</string>
   <string name="edit_value">Upravit hodnotu</string>
   <string name="no_value_selected">Žádná hodnota nebyla vybrána</string>
