@@ -27,6 +27,11 @@ import org.odk.collect.android.external.ExternalDataUtil;
 
 import java.util.List;
 
+/**
+ * ItemsWidget is an abstract class used by widgets containing a list of choices.
+ * Those choices might be read from a form (xml file) or an external csv file and used in questions
+ * like: SelectOne, SelectMultiple, Ranking.
+ */
 public abstract class ItemsWidget extends QuestionWidget {
     List<SelectChoice> items;
 
@@ -54,7 +59,6 @@ public abstract class ItemsWidget extends QuestionWidget {
         return xpathFuncExpr != null && getFormEntryPrompt().getQuestion().getNumChoices() == 1;
     }
 
-    // TODO: This method could be replaced by QuestionDef.setChoices(choices) but it doesn't exist
     private void addExternalChoices(List<SelectChoice> choices) {
         QuestionDef questionDef = getFormEntryPrompt().getQuestion();
         // The first choice in this case is just for providing headers which we need to read external items
