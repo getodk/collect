@@ -504,7 +504,9 @@
   <string name="invalid_email_address">Некоректна електронна адреса!</string>
   <string name="sort_by">Сортувати за</string>
   <string name="server">Сервер</string>
+<!--
   <string name="submission_transport_admin_setting">Транспортування відправлень</string>
+-->
   <string name="select_value">Обрати заначення</string>
   <string name="edit_value">Редагувати значення</string>
   <string name="no_value_selected">Значення не обране</string>

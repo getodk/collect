@@ -502,7 +502,9 @@
   <string name="invalid_email_address">Anwani ya barua pepe ni batili!</string>
   <string name="sort_by">Panga kwa</string>
   <string name="server">Seva</string>
+<!--
   <string name="submission_transport_admin_setting">Usafiri wa uwasilishaji</string>
+-->
   <string name="select_value">Chagua thamani</string>
   <string name="edit_value">Hariri thamani</string>
   <string name="no_value_selected">Hakuna thamani iliyochaguliwa</string>
