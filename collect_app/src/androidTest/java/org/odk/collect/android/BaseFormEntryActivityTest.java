@@ -82,7 +82,7 @@ public abstract class BaseFormEntryActivityTest {
     }
 
     //region Custom TestRule.
-    class FormEntryActivityTestRule extends IntentsTestRule<FormEntryActivity> {
+    static class FormEntryActivityTestRule extends IntentsTestRule<FormEntryActivity> {
 
         FormEntryActivityTestRule() {
             super(FormEntryActivity.class);
