@@ -141,7 +141,13 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         addSessionRootTranslators(formFileName, referenceManager,
                 "images", "image", "audio", "video", "file");
 
-        final FormDef formDef = createFormDefFromCacheOrXml(formPath, formXml);
+        FormDef formDef = null;
+        try {
+            formDef = createFormDefFromCacheOrXml(formPath, formXml);
+        } catch (StackOverflowError e) {
+            Timber.e(e);
+            errorMsg = Collect.getInstance().getString(R.string.too_complex_form);
+        }
 
         if (errorMsg != null || formDef == null) {
             return null;
