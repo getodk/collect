@@ -43,6 +43,7 @@ import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.UrlUtils;
 import org.odk.collect.android.utilities.gdrive.DriveHelper;
@@ -301,8 +302,12 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private TreeElement getInstanceElement(String formFilePath, File instanceFile) throws UploadException {
         FormDef formDef;
+
+        File formXml = new File(formFilePath);
+        String lastSavedSrc = FileUtils.getOrCreateLastSavedSrc(formXml);
+
         try {
-            formDef = XFormUtils.getFormFromInputStream(new FileInputStream(new File(formFilePath)));
+            formDef = XFormUtils.getFormFromInputStream(new FileInputStream(formXml), lastSavedSrc);
             FormLoaderTask.importData(instanceFile, new FormEntryController(new FormEntryModel(formDef)));
         } catch (IOException | RuntimeException e) {
             throw new UploadException(e);

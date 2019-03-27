@@ -122,10 +122,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         final String formPath = path[0];
         final File formXml = new File(formPath);
-
-        // set paths to /sdcard/odk/forms/formfilename-media/
-        final String formFileName = formXml.getName().substring(0, formXml.getName().lastIndexOf("."));
-        final File formMediaDir = new File(formXml.getParent(), formFileName + "-media");
+        final File formMediaDir = FileUtils.getFormMediaDir(formXml);
 
         final ReferenceManager referenceManager = ReferenceManager.instance();
 
@@ -138,7 +135,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             referenceManager.addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
         }
 
-        addSessionRootTranslators(formFileName, referenceManager,
+        addSessionRootTranslators(formMediaDir.getName(), referenceManager,
                 "images", "image", "audio", "video", "file");
 
         FormDef formDef = null;
@@ -219,9 +216,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         return data;
     }
 
-    private void addSessionRootTranslators(String formFileName, ReferenceManager referenceManager, String... hostStrings) {
-        // Set jr://... to point to /sdcard/odk/forms/filename-media/
-        final String translatedPrefix = String.format("jr://file/forms/%s-media/", formFileName);
+    private void addSessionRootTranslators(String formMediaDir, ReferenceManager referenceManager, String... hostStrings) {
+        // Set jr://... to point to /sdcard/odk/forms/formBasename-media/
+        final String translatedPrefix = String.format("jr://file/forms/" + formMediaDir + "/");
         for (String t : hostStrings) {
             referenceManager.addSessionRootTranslator(new RootTranslator(String.format("jr://%s/", t), translatedPrefix));
         }
@@ -242,7 +239,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             Timber.i("Attempting to load from: %s", formXml.getAbsolutePath());
             final long start = System.currentTimeMillis();
             fis = new FileInputStream(formXml);
-            FormDef formDefFromXml = XFormUtils.getFormFromInputStream(fis);
+            String lastSavedSrc = FileUtils.getOrCreateLastSavedSrc(formXml);
+            FormDef formDefFromXml = XFormUtils.getFormFromInputStream(fis, lastSavedSrc);
             if (formDefFromXml == null) {
                 errorMsg = "Error reading XForm file";
             } else {

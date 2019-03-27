@@ -270,9 +270,13 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
         writeFile(payload, instancePath);
 
+        // Write SMS data
         final ByteArrayPayload payloadSms = formController.getFilledInFormSMS();
-        // Write SMS to card
         writeFile(payloadSms, getSmsInstancePath(instancePath));
+
+        // Write last-saved instance
+        String lastSavedPath = formController.getLastSavedPath();
+        writeFile(payload, lastSavedPath);
 
         // update the uri. We have exported the reloadable instance, so update status...
         // Since we saved a reloadable instance, it is flagged as re-openable so that if any error
@@ -346,7 +350,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             // if encrypted, delete all plaintext files
             // (anything not named instanceXml or anything not ending in .enc)
             if (isEncrypted) {
-                if (!EncryptionUtils.deletePlaintextFiles(instanceXml)) {
+                if (!EncryptionUtils.deletePlaintextFiles(instanceXml, new File(lastSavedPath))) {
                     Timber.e("Error deleting plaintext files for %s", instanceXml.getAbsolutePath());
                 }
             }
@@ -395,14 +399,13 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
         // read from data stream
         byte[] data = new byte[len];
-        // try {
         int read = is.read(data, 0, len);
         if (read > 0) {
+            // Make sure the directory path to this file exists.
+            file.getParentFile().mkdirs();
             // write xml file
             RandomAccessFile randomAccessFile = null;
             try {
-                // String filename = path + File.separator +
-                // path.substring(path.lastIndexOf(File.separator) + 1) + ".xml";
                 randomAccessFile = new RandomAccessFile(file, "rws");
                 randomAccessFile.write(data);
             } finally {
