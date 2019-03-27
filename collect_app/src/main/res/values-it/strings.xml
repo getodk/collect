@@ -333,8 +333,6 @@
   <string name="geo_exit_warning">Vuoi scartare le modifiche e ritornare ad ODK?</string>
   <string name="polygon_validator">Devi avere almeno 3 punti per creare un Poligono</string>
   <string name="clear">Cancella</string>
-  <string name="manual_mode">Modalità manuale</string>
-  <string name="automatic_mode">Modalità automatica</string>
   <string name="geopoint_instruction">Premi a lungo per posizionare il segno altrimenti tocca su Aggiungi Posizione.</string>
   <string name="geopoint_no_draggable_instruction">Tocca Aggiungi Posizione.</string>
   <string name="discard">Annulla</string>
@@ -356,7 +354,6 @@
   <string name="install_openmapkit">Per favore installare OpenMapKit!</string>
   <string name="go_back">Torna indietro</string>
   <string name="download_selected">Selezionato il download</string>
-  <string name="record_geopoint">Registrare Coordinate</string>
   <string name="gps_result">Latitudine: %1$s\nLongitudine: %2$s\nAltitudine: %3$sm\nPrecisione: %4$sm</string>
   <string name="parser_exception">Eccezione XPathParser: \"%s\"</string>
   <string name="selected_answer">Selezionato: %s</string>
@@ -445,6 +442,7 @@
   <string name="guidance_no">No</string>
   <string name="server_settings_title">Server</string>
   <string name="server">Server</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="custom_date">%1$s (%2$s)</string>
   <string name="moving_backwards_title">Sfoglia indietro</string>

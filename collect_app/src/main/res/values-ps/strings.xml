@@ -112,6 +112,7 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="guidance_no">نه</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="custom_date">%1$s ( %2$s)</string>
   <string name="multiple_media_folders_detected_notification">له یوې څخه زیات د رسنیو پوښه اوموندل شو، مهرباني وکړئ یو لیرې کړئ او بیا هڅه وکړئ</string>

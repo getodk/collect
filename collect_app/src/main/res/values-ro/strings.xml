@@ -302,6 +302,7 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">Nord%1$s%2$s%3$s</string>
   <string name="guidance_no">Nu</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="search">Căutare</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="yes">Da</string>
