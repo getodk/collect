@@ -344,8 +344,6 @@
   <string name="polygon_validator">Musí mít alespoň 3 body pro vytvoření polygonu</string>
   <string name="polyline_validator">Musí mít alespoň 2 body k vytvoření křivky</string>
   <string name="clear">Vymazat</string>
-  <string name="manual_mode">Ruční režim</string>
-  <string name="automatic_mode">Automatický režim</string>
   <string name="geopoint_instruction">Dlouhým stisknutím označit značku nebo klepnutím na tlačítko přidat značku.</string>
   <string name="geopoint_no_draggable_instruction">Klepnutím na tlačítko přidat značku.</string>
   <string name="discard">Vyřadit</string>
@@ -367,7 +365,6 @@
   <string name="install_openmapkit">Prosím nainstalujte OpenMapKit!</string>
   <string name="go_back">Zpět</string>
   <string name="download_selected">Stáhnout vybrané</string>
-  <string name="record_geopoint">Nahrát GeoPoint</string>
   <string name="gps_result">Zeměpisná šířka:%1$s \n Zeměpisná délka: %2$s \n Výška: %3$s m \n Přesnost %4$sm</string>
   <string name="parser_exception">Výjimka XPathParser: \"%s\"</string>
   <string name="selected_answer">Vybráno: %s</string>
@@ -506,9 +503,7 @@
   <string name="invalid_email_address">Neplatná emailová adresa!</string>
   <string name="sort_by">Seřazeno podle</string>
   <string name="server">Server</string>
-<!--
-  <string name="submission_transport_admin_setting">Přenos odeslání</string>
--->
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Vybrat hodnotu</string>
   <string name="edit_value">Upravit hodnotu</string>
   <string name="no_value_selected">Žádná hodnota nebyla vybrána</string>
@@ -645,8 +640,6 @@
   <string name="location_providers_disabled_dialog_message">Tento formulář chce sledovat vaši polohu, ale poskytovatelé polohy jsou zakázáni. Zvolte prosím nastavení v systému Android.</string>
   <string name="go_to_settings">Jít do nastavení</string>
   <string name="track_location">Sledovat polohu</string>
-  <string name="background_location_disabled">Tento formulář chce sledovat vaši polohu, ale sledování je zakázáno. Aktivujte prosím výše uvedené menu %1$s</string>
-  <string name="background_location_enabled">Tento formulář sleduje vaši polohu. V menu %1$s můžete vypnout sledování.</string>
   <string name="open_file">Otevřít soubor</string>
   <string name="read_details">Přečtěte si podrobnosti</string>
 </resources>

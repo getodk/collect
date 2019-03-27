@@ -216,7 +216,6 @@
   <string name="start">ይጀምሩ</string>
   <string name="enable_gps">GPSን አንቃ</string>
   <string name="clear">አጽዳ</string>
-  <string name="automatic_mode">ራስ-ሰር ሁኔታ</string>
   <string name="discard">አስወግድ</string>
   <string name="geoshape_view_change_location">GeoShapeን ይመልከቱ ወይም ይቀይሩ</string>
   <string name="geotrace_view_change_location">GeoTraceን ይመልከቱ ወይም ይቀይሩ</string>
@@ -228,7 +227,6 @@
   <string name="install_openmapkit">እባክዎ OpenMapKitን ይጫኑ!</string>
   <string name="go_back">ተመለስ</string>
   <string name="download_selected">የተመረጠውን አውርድ</string>
-  <string name="record_geopoint">GeoPointን ይቅዱ</string>
   <string name="selected_answer">ተመርጧል: 1 %s</string>
   <string name="version_number">ሥሪት: 1 %s</string>
   <string name="odk_website">የODKን ድረ ገፅ ይጎብኙ</string>
@@ -269,6 +267,7 @@
   <string name="high_resolution_title">ከፍተኛ ጥራት ቪዲዮ</string>
   <string name="image_size_title">የምስል መጠን</string>
   <string name="sort_by">ቅደምተከተሉ የተስተካከለው</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="search">ፈልግ</string>
   <string name="image_size_large">ትልቅ (3072 ፒክስል)</string>
   <string name="image_size_medium">መካከለኛ (2048 ፒክሰል)</string>
