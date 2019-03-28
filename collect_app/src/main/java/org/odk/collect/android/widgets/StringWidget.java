@@ -17,7 +17,10 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.NonNull;
+
+import android.text.Editable;
 import android.text.Selection;
+import android.text.TextWatcher;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.util.TypedValue;
@@ -104,6 +107,22 @@ public class StringWidget extends QuestionWidget {
         }
 
         addAnswerView(answerText);
+        answerText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                widgetValueChanged();
+            }
+        });
     }
 
     @Override
@@ -161,5 +180,4 @@ public class StringWidget extends QuestionWidget {
         super.cancelLongPress();
         answerText.cancelLongPress();
     }
-
 }

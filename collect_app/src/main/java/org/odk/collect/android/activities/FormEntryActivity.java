@@ -99,6 +99,7 @@ import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.SavePointListener;
+import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.location.client.GoogleLocationClient;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
@@ -107,6 +108,7 @@ import org.odk.collect.android.logic.AuditEvent;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
 import org.odk.collect.android.logic.FormInfo;
+import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -145,10 +147,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -185,7 +189,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         CustomDatePickerDialog.CustomDatePickerDialogListener,
         RankingWidgetDialog.RankingListener,
         SaveFormIndexTask.SaveFormIndexListener, LocationClient.LocationClientListener,
-        LocationListener, FormLoadingDialogFragment.FormLoadingDialogFragmentListener {
+        LocationListener, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
+        WidgetValueChangedListener {
 
     // Defines for FormEntryActivity
     private static final boolean EXIT = true;
@@ -1200,6 +1205,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     FormEntryCaption[] groups = formController
                             .getGroupsForCurrentIndex();
                     odkView = new ODKView(this, prompts, groups, advancingPage);
+                    odkView.setWidgetValueChangedListener(this);
                     Timber.i("Created view for group %s %s",
                             groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]",
                             prompts.length > 0 ? prompts[0].getQuestionText() : "[no question]");
@@ -2900,5 +2906,67 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
+    @Override
+    public void widgetValueChanged(QuestionWidget changedWidget) {
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
+            // TODO: As usual, no idea if/how this is possible.
+            return;
+        }
+
+        if (formController.indexIsInFieldList()) {
+            updateFieldListQuestions(changedWidget.getFormEntryPrompt().getIndex());
+        }
+    }
+
+    /**
+     * Saves the form and updates displayed widgets accordingly:
+     * - removes widgets corresponding to questions that are no longer relevant
+     * - adds widgets corresponding to questions that are newly-relevant
+     * - removes and rebuilds widgets corresponding to questions that have changed in some way. For
+     * example, the question text or hint may have updated due to a value they refer to changing.
+     *
+     * The widget corresponding to the {@param lastChangedIndex} is never changed.
+     */
+    private void updateFieldListQuestions(FormIndex lastChangedIndex) {
+        // Save the user-visible state for all questions in this field-list
+        FormEntryPrompt[] questionsBeforeSave = Collect.getInstance().getFormController().getQuestionPrompts();
+        List<ImmutableDisplayableQuestion> immutableQuestionsBeforeSave = new ArrayList<>();
+        for (FormEntryPrompt questionBeforeSave : questionsBeforeSave) {
+            immutableQuestionsBeforeSave.add(new ImmutableDisplayableQuestion(questionBeforeSave));
+        }
+
+        // Re-evaluate the form with the newly-changed value and store questions in a map by FormIndex
+        // to later quickly match questions that are still relevant with the corresponding question
+        // before saving.
+        saveAnswersForCurrentScreen(false);
+        FormEntryPrompt[] questionsAfterSave = Collect.getInstance().getFormController().getQuestionPrompts();
+
+        Map<FormIndex, FormEntryPrompt> questionsAfterSaveByIndex = new HashMap<>();
+        for (FormEntryPrompt question : questionsAfterSave) {
+            questionsAfterSaveByIndex.put(question.getIndex(), question);
+        }
+
+        List<FormEntryPrompt> questionsThatHaveNotChanged = new ArrayList<>();
+        for (int i = immutableQuestionsBeforeSave.size() - 1; i >= 0; i--) {
+            FormEntryPrompt questionAtSameFormIndex = questionsAfterSaveByIndex.get(immutableQuestionsBeforeSave.get(i).getFormIndex());
+
+            if (immutableQuestionsBeforeSave.get(i).sameAs(questionAtSameFormIndex)) {
+                questionsThatHaveNotChanged.add(questionAtSameFormIndex);
+            } else if (!lastChangedIndex.equals(immutableQuestionsBeforeSave.get(i).getFormIndex())) {
+                // TODO: probably need to explicitly remove any ItemsetWidget or select widget
+                // that uses search() so they are forced to rebuild
+                odkView.removeWidgetAt(i);
+            }
+        }
+
+        for (int i = 0; i < questionsAfterSave.length; i++) {
+            if (!questionsThatHaveNotChanged.contains(questionsAfterSave[i])
+                    && !questionsAfterSave[i].getIndex().equals(lastChangedIndex)) {
+                // TODO: think about readOnlyOverride in the context of intent widgets
+                odkView.addWidgetForQuestion(questionsAfterSave[i], false, i);
+            }
+        }
+    }
 }
 

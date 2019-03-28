@@ -62,6 +62,8 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
             } else {
                 removeItem(selection);
             }
+
+            widget.widgetValueChanged();
         });
 
         for (Selection selectedItem : selectedItems) {

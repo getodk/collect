@@ -61,7 +61,6 @@ public class FieldListUpdateTest {
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-
     @BeforeClass
     public static void copyFormToSdCard() throws IOException {
         String pathname =  FORMS_PATH + FIELD_LIST_TEST_FORM;

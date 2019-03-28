@@ -154,7 +154,6 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
             spinner.setSelection(choiceIndex);
 
         } else if (spinner.getSelectedItemPosition() == choiceIndex) {
-
             clearAnswer();
         }
     }

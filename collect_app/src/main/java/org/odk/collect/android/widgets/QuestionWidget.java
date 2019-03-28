@@ -44,6 +44,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.AudioPlayListener;
+import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
@@ -89,6 +90,8 @@ public abstract class QuestionWidget
     private Bundle state;
     protected ThemeUtils themeUtils;
     private int playColor;
+
+    private WidgetValueChangedListener valueChangedListener;
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
@@ -678,5 +681,15 @@ public abstract class QuestionWidget
 
     public void setPermissionUtils(PermissionUtils permissionUtils) {
         this.permissionUtils = permissionUtils;
+    }
+
+    public void setValueChangedListener(WidgetValueChangedListener valueChangedListener) {
+        this.valueChangedListener = valueChangedListener;
+    }
+
+    public void widgetValueChanged() {
+        if (valueChangedListener != null) {
+            valueChangedListener.widgetValueChanged(this);
+        }
     }
 }
