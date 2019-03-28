@@ -38,8 +38,8 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -84,7 +84,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         super.onCreate(savedInstanceState);
         Timber.i("onCreate: %s", savedInstanceState == null ? "creating" : "re-initializing");
 
-        ((Collect) getApplicationContext()).getComponent().inject(this);
+        DaggerUtils.getComponent(this).inject(this);
 
         // if we start this activity, the following must be true:
         // 1) Google Sheets is selected in preferences

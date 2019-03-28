@@ -66,8 +66,6 @@ public interface AppDependencyComponent {
         AppDependencyComponent build();
     }
 
-    void inject(GoogleDriveActivity googleDriveActivity);
-
     void inject(Collect collect);
 
     void inject(SmsService smsService);
@@ -101,6 +99,8 @@ public interface AppDependencyComponent {
     void inject(FormDownloadList formDownloadList);
 
     void inject(InstanceUploaderListActivity activity);
+
+    void inject(GoogleDriveActivity googleDriveActivity);
 
     void inject(GoogleSheetsUploaderActivity googleSheetsUploaderActivity);
 

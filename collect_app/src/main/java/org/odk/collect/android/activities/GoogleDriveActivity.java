@@ -45,6 +45,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FileArrayAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.TaskListener;
@@ -120,7 +121,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.google_drive_list);
 
-        ((Collect) getApplicationContext()).getComponent().inject(this);
+        DaggerUtils.getComponent(this).inject(this);
 
         setProgressBarVisibility(true);
         initToolbar();
