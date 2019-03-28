@@ -11,6 +11,7 @@ fieldTask/fieldTask-release/
 *.iml
 
 collect_app/src/kontrolid/
+collect_app/src/supply/
 
 # emacs backup files
 *.*~
