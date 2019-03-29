@@ -339,6 +339,8 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
         }
 
         map.setClickListener(this::onClick);
+        // Also allow long press to place point to match prior versions
+        map.setLongPressListener(this::onClick);
         map.setGpsLocationEnabled(true);
         map.setGpsLocationListener(this::onGpsLocation);
         if (restoredMapCenter != null && restoredMapZoom != null) {
