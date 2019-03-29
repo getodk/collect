@@ -10,9 +10,6 @@ fieldTask/fieldTask-release/
 
 *.iml
 
-collect_app/src/kontrolid/
-collect_app/src/supply/
-
 # emacs backup files
 *.*~
 
@@ -22,7 +19,9 @@ collect_app/collect_app.iml
 collect_app/src/kontrolid
 collect_app/kontrolid/
 collect_app/plan/
-collect_app/src/pop/
+collect_app/src/supply/
+collect_app/supply/
+collect_app/src/supply/
 
 # gradle env props
 gradle.properties
