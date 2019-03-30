@@ -42,6 +42,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.http.HttpCredentialsInterface;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.ViewModelProviderFactory;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -86,7 +87,9 @@ import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_ERROR_M
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FormDownloadActivity extends FormListActivity implements FormListDownloaderListener,
-        DownloadFormsTaskListener, AuthDialogUtility.AuthDialogUtilityResultListener, AdapterView.OnItemClickListener {
+        DownloadFormsTaskListener, AuthDialogUtility.AuthDialogUtilityResultListener,
+        AdapterView.OnItemClickListener, FormDownloadNavigator {
+
     private static final String FORM_DOWNLOAD_LIST_SORTING_ORDER = "formDownloadListSortingOrder";
 
     public static final String DISPLAY_ONLY_UPDATED_FORMS = "displayOnlyUpdatedForms";
@@ -123,6 +126,9 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
     @Inject
     PermissionUtils permissionUtils;
 
+    @Inject
+    ViewModelProviderFactory factory;
+
     @SuppressWarnings("unchecked")
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -131,8 +137,6 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
 
         setContentView(R.layout.form_download_list);
         setTitle(getString(R.string.get_forms));
-
-        viewModel = ViewModelProviders.of(this).get(FormDownloadViewModel.class);
 
         // This activity is accessed directly externally
         permissionUtils.requestStoragePermissions(this, new PermissionListener() {
@@ -155,6 +159,9 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
                 finish();
             }
         });
+
+        viewModel = ViewModelProviders.of(this, factory).get(FormDownloadViewModel.class);
+        viewModel.setNavigator(this);
     }
 
     private void init(Bundle savedInstanceState) {

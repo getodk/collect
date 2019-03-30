@@ -17,6 +17,8 @@ import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.android.utilities.rx.AppSchedulerProvider;
+import org.odk.collect.android.utilities.rx.SchedulerProvider;
 
 import javax.inject.Singleton;
 
@@ -85,5 +87,10 @@ public class AppDependencyModule {
     @Provides
     public PermissionUtils providesPermissionUtils() {
         return new PermissionUtils();
+    }
+
+    @Provides
+    SchedulerProvider provideSchedulerProvider() {
+        return new AppSchedulerProvider();
     }
 }

@@ -16,18 +16,19 @@
 
 package org.odk.collect.android.ui.formDownload;
 
-import android.arch.lifecycle.ViewModel;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.ui.base.BaseViewModel;
+import org.odk.collect.android.utilities.rx.SchedulerProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
-public class FormDownloadViewModel extends ViewModel {
+public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> {
+
     private HashMap<String, FormDetails> formNamesAndURLs = new HashMap<>();
 
     private final ArrayList<HashMap<String, String>> formList = new ArrayList<>();
@@ -51,6 +52,10 @@ public class FormDownloadViewModel extends ViewModel {
     private String username;
     private String password;
     private final HashMap<String, Boolean> formResults = new HashMap<>();
+
+    public FormDownloadViewModel(SchedulerProvider schedulerProvider) {
+        super(schedulerProvider);
+    }
 
     public HashMap<String, FormDetails> getFormNamesAndURLs() {
         return formNamesAndURLs;
