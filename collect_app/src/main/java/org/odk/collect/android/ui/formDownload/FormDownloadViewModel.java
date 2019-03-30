@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
-public class FormDownloadListViewModel extends ViewModel {
+public class FormDownloadViewModel extends ViewModel {
     private HashMap<String, FormDetails> formNamesAndURLs = new HashMap<>();
 
     private final ArrayList<HashMap<String, String>> formList = new ArrayList<>();

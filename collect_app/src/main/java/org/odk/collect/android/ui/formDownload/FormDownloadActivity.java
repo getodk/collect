@@ -85,7 +85,7 @@ import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_ERROR_M
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class FormDownloadList extends FormListActivity implements FormListDownloaderListener,
+public class FormDownloadActivity extends FormListActivity implements FormListDownloaderListener,
         DownloadFormsTaskListener, AuthDialogUtility.AuthDialogUtilityResultListener, AdapterView.OnItemClickListener {
     private static final String FORM_DOWNLOAD_LIST_SORTING_ORDER = "formDownloadListSortingOrder";
 
@@ -115,10 +115,13 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     private boolean displayOnlyUpdatedForms;
 
-    private FormDownloadListViewModel viewModel;
+    private FormDownloadViewModel viewModel;
 
     @Inject
     WebCredentialsUtils webCredentialsUtils;
+
+    @Inject
+    PermissionUtils permissionUtils;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -129,17 +132,17 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         setContentView(R.layout.form_download_list);
         setTitle(getString(R.string.get_forms));
 
-        viewModel = ViewModelProviders.of(this).get(FormDownloadListViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(FormDownloadViewModel.class);
 
         // This activity is accessed directly externally
-        new PermissionUtils().requestStoragePermissions(this, new PermissionListener() {
+        permissionUtils.requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
                 try {
                     Collect.createODKDirs();
                 } catch (RuntimeException e) {
-                    DialogUtils.showDialog(DialogUtils.createErrorDialog(FormDownloadList.this, e.getMessage(), EXIT), FormDownloadList.this);
+                    DialogUtils.showDialog(DialogUtils.createErrorDialog(FormDownloadActivity.this, e.getMessage(), EXIT), FormDownloadActivity.this);
                     return;
                 }
 

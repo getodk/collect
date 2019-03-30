@@ -18,7 +18,7 @@ import org.odk.collect.android.tasks.sms.SmsSender;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
-import org.odk.collect.android.ui.formDownload.FormDownloadList;
+import org.odk.collect.android.ui.formDownload.FormDownloadActivity;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.FormDownloader;
@@ -94,7 +94,7 @@ public interface AppDependencyComponent {
 
     void inject(AuthDialogUtility authDialogUtility);
   
-    void inject(FormDownloadList formDownloadList);
+    void inject(FormDownloadActivity formDownloadActivity);
 
     void inject(InstanceUploaderListActivity activity);
 

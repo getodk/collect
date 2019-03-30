@@ -54,7 +54,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.Transport;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.ui.formDownload.FormDownloadList;
+import org.odk.collect.android.ui.formDownload.FormDownloadActivity;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
@@ -198,7 +198,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
                         }
                     } else {
                         i = new Intent(getApplicationContext(),
-                                FormDownloadList.class);
+                                FormDownloadActivity.class);
                     }
                     startActivity(i);
                 }
