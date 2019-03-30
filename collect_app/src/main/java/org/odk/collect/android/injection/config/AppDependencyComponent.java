@@ -3,7 +3,6 @@ package org.odk.collect.android.injection.config;
 import android.app.Application;
 import android.telephony.SmsManager;
 
-import org.odk.collect.android.activities.FormDownloadList;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.InstanceUploaderListActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
@@ -19,6 +18,7 @@ import org.odk.collect.android.tasks.sms.SmsSender;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
+import org.odk.collect.android.ui.formDownload.FormDownloadList;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.FormDownloader;

@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.activities;
+package org.odk.collect.android.ui.formDownload;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -36,7 +36,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.viewmodels.FormDownloadListViewModel;
+import org.odk.collect.android.activities.FormListActivity;
 import org.odk.collect.android.adapters.FormDownloadListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;

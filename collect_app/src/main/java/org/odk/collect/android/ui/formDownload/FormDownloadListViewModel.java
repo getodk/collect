@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.activities.viewmodels;
+package org.odk.collect.android.ui.formDownload;
 
 import android.arch.lifecycle.ViewModel;
 

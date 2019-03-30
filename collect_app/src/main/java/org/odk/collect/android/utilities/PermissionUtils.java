@@ -21,13 +21,13 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.FormChooserList;
-import org.odk.collect.android.activities.FormDownloadList;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.InstanceChooserList;
 import org.odk.collect.android.activities.InstanceUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderListActivity;
 import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.ui.formDownload.FormDownloadList;
 
 import java.util.ArrayList;
 import java.util.List;
