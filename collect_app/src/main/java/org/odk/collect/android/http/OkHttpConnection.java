@@ -375,7 +375,9 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
      */
     @Override
     public @NonNull
-    String getRequest(@NonNull URI uri, @Nullable final String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
+    String getRequest(@NonNull URI uri, @Nullable final String contentType,
+                      @Nullable HttpCredentialsInterface credentials,
+                      HashMap<String, String> headers) throws Exception {
         return null;
     }
 

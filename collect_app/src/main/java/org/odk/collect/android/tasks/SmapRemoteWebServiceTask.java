@@ -66,7 +66,7 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
             URL url = new URL(lookupUrl);
             URI uri = url.toURI();
 
-            item.data = httpInterface.getRequest(uri, null, webCredentialsUtils.getCredentials(uri));
+            item.data = httpInterface.getRequest(uri, null, webCredentialsUtils.getCredentials(uri), null);
 
         } catch (Exception e) {
             item.data = e.getLocalizedMessage();

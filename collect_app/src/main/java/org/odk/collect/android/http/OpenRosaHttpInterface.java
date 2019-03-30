@@ -25,6 +25,7 @@ import org.odk.collect.android.utilities.ResponseMessageParser;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
 
 public interface OpenRosaHttpInterface {
@@ -126,7 +127,9 @@ public interface OpenRosaHttpInterface {
      * @throws Exception a multitude of Exceptions such as IOException can be thrown
      */
     @NonNull
-    String getRequest(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception;
+    String getRequest(@NonNull URI uri, @Nullable String contentType,
+                      @Nullable HttpCredentialsInterface credentials,
+                      HashMap<String, String> headers) throws Exception;
 
     // smap
     @NonNull

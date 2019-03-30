@@ -807,8 +807,8 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
                                                         @NonNull File file,
                                                         @NonNull URI uri,
                                                         @Nullable HttpCredentialsInterface credentials) throws IOException {
-        InputStream is;
-        ByteArrayOutputStream os;
+        InputStream is= null;
+        ByteArrayOutputStream os = null;
 
         addCredentialsForHost(uri, credentials);
         clearCookieStore();
@@ -851,27 +851,46 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
             return response.getStatusLine().getReasonPhrase();
         }
 
-        HttpEntity entity = response.getEntity();
-        is = entity.getContent();
+        String data = null;
+        try {
+            HttpEntity entity = response.getEntity();
+            is = entity.getContent();
 
-        os = new ByteArrayOutputStream();
-        byte[] buf = new byte[4096];
-        int len;
-        while ((len = is.read(buf)) > 0) {
-            os.write(buf, 0, len);
+            os = new ByteArrayOutputStream();
+            byte[] buf = new byte[4096];
+            int len;
+            while ((len = is.read(buf)) > 0) {
+                os.write(buf, 0, len);
+            }
+            os.flush();
+            data = os.toString();
+        } finally {
+
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                }
+            }
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                }
+            }
         }
-        os.flush();
-        String data = os.toString();
 
         return data;
     }
 
     @Override
     public @NonNull
-    String getRequest(@NonNull URI uri, @Nullable final String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
+    String getRequest(@NonNull URI uri, @Nullable final String contentType,
+                      @Nullable HttpCredentialsInterface credentials,
+                      HashMap<String, String> headers) throws Exception {
 
-        InputStream is;
-        ByteArrayOutputStream os;
+        InputStream is = null;
+        ByteArrayOutputStream os = null;
 
         addCredentialsForHost(uri, credentials);
         clearCookieStore();
@@ -888,6 +907,12 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
         req.setURI(uri);
         req.addHeader(ACCEPT_ENCODING_HEADER, GZIP_CONTENT_ENCODING);
 
+        if(headers != null && headers .size() > 0) {
+            for(String key : headers.keySet()) {
+                req.addHeader(key, headers.get(key));
+            }
+        }
+        
         // Make the call
         HttpResponse response = httpclient.execute(req, httpContext);
         int responseCode = response.getStatusLine().getStatusCode();
@@ -901,17 +926,34 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
             return response.getStatusLine().getReasonPhrase();
         }
 
-        HttpEntity entity = response.getEntity();
-        is = entity.getContent();
+        String data = null;
+        try {
+            HttpEntity entity = response.getEntity();
+            is = entity.getContent();
 
-        os = new ByteArrayOutputStream();
-        byte[] buf = new byte[4096];
-        int len;
-        while ((len = is.read(buf)) > 0) {
-            os.write(buf, 0, len);
+            os = new ByteArrayOutputStream();
+            byte[] buf = new byte[4096];
+            int len;
+            while ((len = is.read(buf)) > 0) {
+                os.write(buf, 0, len);
+            }
+            os.flush();
+            data = os.toString();
+        } finally {
+
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                }
+            }
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                }
+            }
         }
-        os.flush();
-        String data = os.toString();
 
         return data;
     }

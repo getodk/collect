@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -303,33 +304,30 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 }
 
                 Uri u = Uri.parse(taskURL);
-                InputStream is = null;
 
+                // Send location with request (if available)  TODO check a paameter to see if this is turned on
+                String lat = null;
+                String lon = null;
+                HashMap<String, String> headers = new HashMap<String, String> ();
                 try {
-                    URI uri = URI.create(taskURL);
-                    is = httpInterface.executeGetRequest(uri, null, webCredentialsUtils.getCredentials(uri)).getInputStream();
-                    // De-serialise
-                    GsonBuilder gb = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer());
-                    gson = gb.create();
-                    Reader isReader = new InputStreamReader(is);
-                    tr = gson.fromJson(isReader, TaskResponse.class);
-                    Timber.i("Message:" + tr.message);
-                } finally {
-                    if (is != null) {
-                        try {
-                            // ensure stream is consumed...
-                            final long count = 1024L;
-                            while (is.skip(count) == count)
-                                ;
-                        } catch (Exception e) {
-                            // no-op
-                        }
-                        try {
-                            is.close();
-                        } catch (Exception e) {
-                        }
+                    Location locn = Collect.getInstance().getLocation();
+                    if (locn != null) {
+                        lat = String.valueOf(locn.getLatitude());
+                        lon = String.valueOf(locn.getLongitude());
+                        headers.put("lat", lat);
+                        headers.put("lon", lon);
                     }
+                } catch (Exception e) {
+
                 }
+
+                URI uri = URI.create(taskURL);
+                String resp = httpInterface.getRequest(uri, null, webCredentialsUtils.getCredentials(uri), headers);
+                GsonBuilder gb = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer());
+                gson = gb.create();
+                tr = gson.fromJson(resp, TaskResponse.class);
+                Timber.i("Message:" + tr.message);
+
 
                 if(isCancelled()) { throw new CancelException("cancelled"); };		// Return if the user cancels
 
