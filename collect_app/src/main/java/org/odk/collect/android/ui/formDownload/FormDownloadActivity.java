@@ -30,7 +30,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.SparseBooleanArray;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -60,7 +59,6 @@ import org.odk.collect.android.utilities.rx.SchedulerProvider;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
@@ -200,39 +198,28 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
 
         downloadButton = findViewById(R.id.add_button);
         downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
-        downloadButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                downloadSelectedFiles();
-            }
-        });
+        downloadButton.setOnClickListener(v -> downloadSelectedFiles());
 
         toggleButton = findViewById(R.id.toggle_button);
         toggleButton.setEnabled(false);
-        toggleButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                downloadButton.setEnabled(toggleChecked(listView));
-                toggleButtonLabel(toggleButton, listView);
-                viewModel.clearSelectedForms();
-                if (listView.getCheckedItemCount() == listView.getCount()) {
-                    for (HashMap<String, String> map : viewModel.getFormList()) {
-                        viewModel.addSelectedForm(map.get(FORMDETAIL_KEY));
-                    }
+        toggleButton.setOnClickListener(v -> {
+            downloadButton.setEnabled(toggleChecked(listView));
+            toggleButtonLabel(toggleButton, listView);
+            viewModel.clearSelectedForms();
+            if (listView.getCheckedItemCount() == listView.getCount()) {
+                for (HashMap<String, String> map : viewModel.getFormList()) {
+                    viewModel.addSelectedForm(map.get(FORMDETAIL_KEY));
                 }
             }
         });
 
         Button refreshButton = findViewById(R.id.refresh_button);
-        refreshButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewModel.setLoadingCanceled(false);
-                viewModel.clearFormList();
-                updateAdapter();
-                clearChoices();
-                downloadFormList();
-            }
+        refreshButton.setOnClickListener(v -> {
+            viewModel.setLoadingCanceled(false);
+            viewModel.clearFormList();
+            updateAdapter();
+            clearChoices();
+            downloadFormList();
         });
 
         if (savedInstanceState != null) {
@@ -412,14 +399,11 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
     }
 
     private void sortList() {
-        Collections.sort(filteredFormList, new Comparator<HashMap<String, String>>() {
-            @Override
-            public int compare(HashMap<String, String> lhs, HashMap<String, String> rhs) {
-                if (getSortingOrder().equals(SORT_BY_NAME_ASC)) {
-                    return lhs.get(FORMNAME).compareToIgnoreCase(rhs.get(FORMNAME));
-                } else {
-                    return rhs.get(FORMNAME).compareToIgnoreCase(lhs.get(FORMNAME));
-                }
+        Collections.sort(filteredFormList, (lhs, rhs) -> {
+            if (getSortingOrder().equals(SORT_BY_NAME_ASC)) {
+                return lhs.get(FORMNAME).compareToIgnoreCase(rhs.get(FORMNAME));
+            } else {
+                return rhs.get(FORMNAME).compareToIgnoreCase(lhs.get(FORMNAME));
             }
         });
     }
@@ -428,7 +412,7 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
      * starts the task to download the selected forms, also shows progress dialog
      */
     private void downloadSelectedFiles() {
-        ArrayList<FormDetails> filesToDownload = new ArrayList<FormDetails>();
+        ArrayList<FormDetails> filesToDownload = new ArrayList<>();
 
         SparseBooleanArray sba = listView.getCheckedItemPositions();
         for (int i = 0; i < listView.getCount(); i++) {
@@ -597,7 +581,7 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
                 FormDetails details = viewModel.getFormNamesAndURLs().get(formDetailsKey);
 
                 if (!displayOnlyUpdatedForms || (details.isNewerFormVersionAvailable() || details.areNewerMediaFilesAvailable())) {
-                    HashMap<String, String> item = new HashMap<String, String>();
+                    HashMap<String, String> item = new HashMap<>();
                     item.put(FORMNAME, details.getFormName());
                     item.put(FORMID_DISPLAY,
                             ((details.getFormVersion() == null) ? "" : (getString(R.string.version) + " "
@@ -667,20 +651,17 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
-        DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE: // ok
-                        // just close the dialog
-                        viewModel.setAlertShowing(false);
-                        // successful download, so quit
-                        // Also quit if in download_mode only(called by another app/activity just to download)
-                        if (shouldExit || viewModel.isDownloadOnlyMode()) {
-                            finish();
-                        }
-                        break;
-                }
+        DialogInterface.OnClickListener quitListener = (dialog, i) -> {
+            switch (i) {
+                case DialogInterface.BUTTON_POSITIVE: // ok
+                    // just close the dialog
+                    viewModel.setAlertShowing(false);
+                    // successful download, so quit
+                    // Also quit if in download_mode only(called by another app/activity just to download)
+                    if (shouldExit || viewModel.isDownloadOnlyMode()) {
+                        finish();
+                    }
+                    break;
             }
         };
         alertDialog.setCancelable(false);
@@ -696,33 +677,30 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
     private void createProgressDialog() {
         progressDialog = new ProgressDialog(this);
         DialogInterface.OnClickListener loadingButtonListener =
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // we use the same progress dialog for both
-                        // so whatever isn't null is running
-                        dialog.dismiss();
-                        if (downloadFormListTask != null) {
-                            downloadFormListTask.setDownloaderListener(null);
-                            downloadFormListTask.cancel(true);
-                            downloadFormListTask = null;
+                (dialog, which) -> {
+                    // we use the same progress dialog for both
+                    // so whatever isn't null is running
+                    dialog.dismiss();
+                    if (downloadFormListTask != null) {
+                        downloadFormListTask.setDownloaderListener(null);
+                        downloadFormListTask.cancel(true);
+                        downloadFormListTask = null;
 
-                            // Only explicitly exit if DownloadFormListTask is running since
-                            // DownloadFormTask has a callback when cancelled and has code to handle
-                            // cancellation when in download mode only
-                            if (viewModel.isDownloadOnlyMode()) {
-                                setReturnResult(false, "User cancelled the operation", viewModel.getFormResults());
-                                finish();
-                            }
+                        // Only explicitly exit if DownloadFormListTask is running since
+                        // DownloadFormTask has a callback when cancelled and has code to handle
+                        // cancellation when in download mode only
+                        if (viewModel.isDownloadOnlyMode()) {
+                            setReturnResult(false, "User cancelled the operation", viewModel.getFormResults());
+                            finish();
                         }
-
-                        if (downloadFormsTask != null) {
-                            createCancelDialog();
-                            downloadFormsTask.cancel(true);
-                        }
-                        viewModel.setLoadingCanceled(true);
-                        viewModel.setProgressDialogShowing(false);
                     }
+
+                    if (downloadFormsTask != null) {
+                        createCancelDialog();
+                        downloadFormsTask.cancel(true);
+                    }
+                    viewModel.setLoadingCanceled(true);
+                    viewModel.setProgressDialogShowing(false);
                 };
         progressDialog.setTitle(getString(R.string.downloading_data));
         progressDialog.setMessage(viewModel.getProgressDialogMsg());
