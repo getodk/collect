@@ -55,6 +55,7 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.android.utilities.rx.SchedulerProvider;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -66,6 +67,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_AUTH_REQUIRED;
@@ -112,6 +114,7 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
     private Button toggleButton;
 
     private final ArrayList<HashMap<String, String>> filteredFormList = new ArrayList<>();
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
@@ -128,6 +131,9 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
 
     @Inject
     ViewModelProviderFactory factory;
+
+    @Inject
+    SchedulerProvider schedulerProvider;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -341,6 +347,14 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
         }
     }
 
+    private void bindViewModel() {
+        // add subscriptions here
+    }
+
+    private void unbindViewModel() {
+        compositeDisposable.clear();
+    }
+
     @Override
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
@@ -474,6 +488,8 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
 
     @Override
     protected void onResume() {
+        bindViewModel();
+
         if (downloadFormListTask != null) {
             downloadFormListTask.setDownloaderListener(this);
         }
@@ -494,6 +510,8 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
 
     @Override
     protected void onPause() {
+        unbindViewModel();
+
         if (alertDialog != null && alertDialog.isShowing()) {
             alertDialog.dismiss();
         }
