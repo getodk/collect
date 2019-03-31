@@ -40,10 +40,8 @@ import org.odk.collect.android.http.HttpCredentialsInterface;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.ViewModelProviderFactory;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
-import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.logic.FormDetails;
-import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
@@ -83,9 +81,9 @@ import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_ERROR_M
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class FormDownloadActivity extends FormListActivity implements FormListDownloaderListener,
-        DownloadFormsTaskListener, AuthDialogUtility.AuthDialogUtilityResultListener,
-        AdapterView.OnItemClickListener, FormDownloadNavigator {
+public class FormDownloadActivity extends FormListActivity implements DownloadFormsTaskListener,
+        AuthDialogUtility.AuthDialogUtilityResultListener, AdapterView.OnItemClickListener,
+        FormDownloadNavigator {
 
     private static final String FORM_DOWNLOAD_LIST_SORTING_ORDER = "formDownloadListSortingOrder";
 
@@ -104,7 +102,6 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
     private ProgressDialog cancelDialog;
     private Button downloadButton;
 
-    private DownloadFormListTask downloadFormListTask;
     private DownloadFormsTask downloadFormsTask;
     private Button toggleButton;
 
@@ -211,20 +208,7 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
 
         filteredFormList.addAll(viewModel.getFormList());
 
-        if (getLastCustomNonConfigurationInstance() instanceof DownloadFormListTask) {
-            downloadFormListTask = (DownloadFormListTask) getLastCustomNonConfigurationInstance();
-            if (downloadFormListTask.getStatus() == AsyncTask.Status.FINISHED) {
-                try {
-                    if (progressDialog != null && progressDialog.isShowing()) {
-                        progressDialog.dismiss();
-                    }
-                    viewModel.setProgressDialogShowing(false);
-                } catch (IllegalArgumentException e) {
-                    Timber.i("Attempting to close a dialog that was not previously opened");
-                }
-                downloadFormsTask = null;
-            }
-        } else if (getLastCustomNonConfigurationInstance() instanceof DownloadFormsTask) {
+        if (getLastCustomNonConfigurationInstance() instanceof DownloadFormsTask) {
             downloadFormsTask = (DownloadFormsTask) getLastCustomNonConfigurationInstance();
             if (downloadFormsTask.getStatus() == AsyncTask.Status.FINISHED) {
                 try {
@@ -430,15 +414,12 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
         if (downloadFormsTask != null) {
             return downloadFormsTask;
         } else {
-            return downloadFormListTask;
+            return null;
         }
     }
 
     @Override
     protected void onDestroy() {
-        if (downloadFormListTask != null) {
-            downloadFormListTask.setDownloaderListener(null);
-        }
         if (downloadFormsTask != null) {
             downloadFormsTask.setDownloaderListener(null);
         }
@@ -449,9 +430,6 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
     protected void onResume() {
         bindViewModel();
 
-        if (downloadFormListTask != null) {
-            downloadFormListTask.setDownloaderListener(this);
-        }
         if (downloadFormsTask != null) {
             downloadFormsTask.setDownloaderListener(this);
         }
@@ -503,9 +481,6 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
      * <formname, formdetails> tuples, or one tuple of DL.ERROR.MSG and the associated message.
      */
     public void formListDownloadingComplete(HashMap<String, FormDetails> result) {
-        downloadFormListTask.setDownloaderListener(null);
-        downloadFormListTask = null;
-
         if (result == null) {
             Timber.e("Formlist Downloading returned null.  That shouldn't happen");
             // Just displayes "error occured" to the user, but this should never happen.
@@ -640,19 +615,8 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
                     // we use the same progress dialog for both
                     // so whatever isn't null is running
                     dialog.dismiss();
-                    if (downloadFormListTask != null) {
-                        downloadFormListTask.setDownloaderListener(null);
-                        downloadFormListTask.cancel(true);
-                        downloadFormListTask = null;
 
-                        // Only explicitly exit if DownloadFormListTask is running since
-                        // DownloadFormTask has a callback when cancelled and has code to handle
-                        // cancellation when in download mode only
-                        if (viewModel.isDownloadOnlyMode()) {
-                            setReturnResult(false, "User cancelled the operation", viewModel.getFormResults());
-                            finish();
-                        }
-                    }
+                    viewModel.cancelFormListDownloadTask();
 
                     if (downloadFormsTask != null) {
                         viewModel.setCancelDialogShowing(true);

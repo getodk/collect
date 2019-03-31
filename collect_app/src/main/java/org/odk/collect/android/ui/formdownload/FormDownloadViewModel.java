@@ -269,6 +269,21 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
         }
     }
 
+    public void cancelFormListDownloadTask() {
+        if (downloadRepository.isLoading() && downloadDisposable != null && !downloadDisposable.isDisposed()) {
+            downloadDisposable.dispose();
+            downloadDisposable = null;
+
+            // Only explicitly exit if DownloadFormListTask is running since
+            // DownloadFormTask has a callback when cancelled and has code to handle
+            // cancellation when in download mode only
+            if (isDownloadOnlyMode) {
+                getNavigator().setReturnResult(false, "User cancelled the operation", formResults);
+                getNavigator().goBack();
+            }
+        }
+    }
+
     public Observable<HashMap<String, FormDetails>> getFormDownloadList() {
         return formDownloadSubject
                 .doOnNext(__ -> setProgressDialogShowing(false));
