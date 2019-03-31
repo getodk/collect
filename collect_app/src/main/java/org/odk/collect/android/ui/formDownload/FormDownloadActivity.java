@@ -311,7 +311,8 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
                 // This is needed because onPrepareDialog() is broken in 1.6.
                 progressDialog.setMessage(viewModel.getProgressDialogMsg());
             }
-            createProgressDialog();
+
+            viewModel.setProgressDialogShowing(true);
 
             if (downloadFormListTask != null
                     && downloadFormListTask.getStatus() != AsyncTask.Status.FINISHED) {
@@ -341,6 +342,12 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
                 .subscribe(model -> createAlertDialog(model.getTitle(), model.getMessage(), model.shouldExit()), Timber::e));
+
+        compositeDisposable.add(viewModel.getProgressDialog()
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
+                .filter(shouldDisplay -> shouldDisplay && (progressDialog == null || !progressDialog.isShowing()))
+                .subscribe(__ -> createProgressDialog(), Timber::e));
     }
 
     private void unbindViewModel() {
@@ -436,7 +443,7 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
         int totalCount = filesToDownload.size();
         if (totalCount > 0) {
             // show dialog box
-            createProgressDialog();
+            viewModel.setProgressDialogShowing(true);
 
             downloadFormsTask = new DownloadFormsTask();
             downloadFormsTask.setDownloaderListener(this);
@@ -484,9 +491,6 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
         }
         if (downloadFormsTask != null) {
             downloadFormsTask.setDownloaderListener(this);
-        }
-        if (viewModel.isProgressDialogShowing() && (progressDialog == null || !progressDialog.isShowing())) {
-            createProgressDialog();
         }
         if (viewModel.isCancelDialogShowing()) {
             createCancelDialog();
@@ -705,7 +709,6 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
         progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
-        viewModel.setProgressDialogShowing(true);
         DialogUtils.showDialog(progressDialog, this);
     }
 

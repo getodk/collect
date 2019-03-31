@@ -39,10 +39,10 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
     private final LinkedHashSet<String> selectedForms = new LinkedHashSet<>();
 
     private final BehaviorSubject<AlertDialogUiModel> alertDialogSubject;
+    private final BehaviorSubject<Boolean> progressDialogSubject;
 
     private String progressDialogMsg;
 
-    private boolean progressDialogShowing;
     private boolean cancelDialogShowing;
     private boolean loadingCanceled;
 
@@ -60,6 +60,7 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
         super(schedulerProvider);
 
         alertDialogSubject = BehaviorSubject.create();
+        progressDialogSubject = BehaviorSubject.create();
     }
 
     public HashMap<String, FormDetails> getFormNamesAndURLs() {
@@ -162,12 +163,8 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
         this.formIdsToDownload = formIdsToDownload;
     }
 
-    public boolean isProgressDialogShowing() {
-        return progressDialogShowing;
-    }
-
     public void setProgressDialogShowing(boolean progressDialogShowing) {
-        this.progressDialogShowing = progressDialogShowing;
+        progressDialogSubject.onNext(progressDialogShowing);
     }
 
     public boolean isCancelDialogShowing() {
@@ -186,9 +183,13 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
         this.loadingCanceled = loadingCanceled;
     }
 
+    public Observable<Boolean> getProgressDialog() {
+        return progressDialogSubject;
+    }
+
     public Observable<AlertDialogUiModel> getAlertDialog() {
         return alertDialogSubject
-                .filter(alertDialogUiModel -> uiModel != null)
+                .filter(__ -> uiModel != null)
                 .doOnSubscribe(disposable -> alertDialogSubject.onNext(uiModel));
     }
 
