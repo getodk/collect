@@ -17,12 +17,9 @@ package org.odk.collect.android.ui.formdownload;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -276,40 +273,7 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
      * Starts the download task and shows the progress dialog.
      */
     private void downloadFormList() {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
-
-        if (ni == null || !ni.isConnected()) {
-            ToastUtils.showShortToast(R.string.no_connection);
-
-            if (viewModel.isDownloadOnlyMode()) {
-                setReturnResult(false, getString(R.string.no_connection), viewModel.getFormResults());
-                finish();
-            }
-        } else {
-            viewModel.clearFormNamesAndURLs();
-            viewModel.setProgressDialogShowing(true);
-
-            if (downloadFormListTask != null
-                    && downloadFormListTask.getStatus() != AsyncTask.Status.FINISHED) {
-                return; // we are already doing the download!!!
-            } else if (downloadFormListTask != null) {
-                downloadFormListTask.setDownloaderListener(null);
-                downloadFormListTask.cancel(true);
-                downloadFormListTask = null;
-            }
-
-            downloadFormListTask = new DownloadFormListTask();
-            downloadFormListTask.setDownloaderListener(this);
-
-            if (viewModel.isDownloadOnlyMode()) {
-                // Pass over the nulls -> They have no effect if even one of them is a null
-                downloadFormListTask.setAlternateCredentials(viewModel.getUrl(), viewModel.getUsername(), viewModel.getPassword());
-            }
-
-            downloadFormListTask.execute();
-        }
+        viewModel.startDownloadingForms();
     }
 
     private void bindViewModel() {
@@ -337,6 +301,11 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
                 .observeOn(schedulerProvider.ui())
                 .filter(shouldDisplay -> shouldDisplay)
                 .subscribe(shouldDisplay -> createCancelDialog(), Timber::e));
+
+        compositeDisposable.add(viewModel.getFormDownloadList()
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
+                .subscribe(this::formListDownloadingComplete, Timber::e));
     }
 
     private void unbindViewModel() {

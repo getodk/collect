@@ -9,11 +9,17 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.odk.collect.android.ui.formdownload.AlertDialogUiModel;
 import org.odk.collect.android.ui.formdownload.FormDownloadNavigator;
+import org.odk.collect.android.ui.formdownload.FormDownloadRepository;
 import org.odk.collect.android.ui.formdownload.FormDownloadViewModel;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.NetworkUtils;
+import org.odk.collect.android.utilities.providers.BaseResourceProvider;
+import org.odk.collect.android.utilities.rx.TestSchedulerProvider;
 import org.robolectric.RobolectricTestRunner;
 
 import io.reactivex.observers.TestObserver;
+
+import static org.mockito.Mockito.mock;
 
 @RunWith(RobolectricTestRunner.class)
 public class FormDownloadViewModelTest {
@@ -27,7 +33,7 @@ public class FormDownloadViewModelTest {
 
     @Before
     public void setUp() {
-        viewModel = new FormDownloadViewModel();
+        viewModel = new FormDownloadViewModel(new TestSchedulerProvider(), mock(NetworkUtils.class), mock(BaseResourceProvider.class), mock(FormDownloadRepository.class));
 
         // prepare the spy!
         viewModel.setNavigator(Mockito.spy(FormDownloadNavigator.class));
