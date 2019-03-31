@@ -18,6 +18,8 @@ import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.NetworkUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.android.utilities.providers.BaseResourceProvider;
+import org.odk.collect.android.utilities.providers.ResourceProvider;
 import org.odk.collect.android.utilities.rx.AppSchedulerProvider;
 import org.odk.collect.android.utilities.rx.SchedulerProvider;
 
@@ -93,6 +95,11 @@ public class AppDependencyModule {
     @Provides
     NetworkUtils providesNetworkUtils(Context context) {
         return new NetworkUtils(context);
+    }
+
+    @Provides
+    BaseResourceProvider providesResourceProvider(Context context) {
+        return new ResourceProvider(context);
     }
 
     @Provides
