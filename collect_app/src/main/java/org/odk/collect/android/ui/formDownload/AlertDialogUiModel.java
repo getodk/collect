@@ -1,12 +1,12 @@
 package org.odk.collect.android.ui.formDownload;
 
-class AlertDialogUiModel {
+public class AlertDialogUiModel {
 
     private String title;
     private String message;
     private boolean shouldExit;
 
-    AlertDialogUiModel(String title, String message, boolean shouldExit) {
+    public AlertDialogUiModel(String title, String message, boolean shouldExit) {
         this.title = title;
         this.message = message;
         this.shouldExit = shouldExit;
