@@ -15,12 +15,14 @@ public class FormDownloadViewModelTest {
     private FormDownloadViewModel viewModel;
 
     private TestObserver<AlertDialogUiModel> alertDialogTestSubscriber;
+    private TestObserver<Boolean> progressDialogTestSubscriber;
 
     @Before
     public void setUp() {
         viewModel = new FormDownloadViewModel(new TestSchedulerProvider());
 
         alertDialogTestSubscriber = new TestObserver<>();
+        progressDialogTestSubscriber = new TestObserver<>();
     }
 
     @After
@@ -29,10 +31,12 @@ public class FormDownloadViewModelTest {
     }
 
     @Test
-    public void doNotDisplayAlertDialogOnInitTest() {
+    public void doNotDisplayDialogsOnInitTest() {
         viewModel.getAlertDialog().subscribe(alertDialogTestSubscriber);
-
         alertDialogTestSubscriber.assertNoValues();
+
+        viewModel.getProgressDialog().subscribe(progressDialogTestSubscriber);
+        progressDialogTestSubscriber.assertNoValues();
     }
 
     @Test
@@ -62,5 +66,23 @@ public class FormDownloadViewModelTest {
         viewModel.getAlertDialog().subscribe(alertDialogTestSubscriber);
 
         alertDialogTestSubscriber.assertNoValues();
+    }
+
+    @Test
+    public void displayProgressDialogTest() {
+        viewModel.getProgressDialog().subscribe(progressDialogTestSubscriber);
+
+        viewModel.setProgressDialogShowing(true);
+        viewModel.setProgressDialogShowing(false);
+        viewModel.setProgressDialogShowing(true);
+
+        progressDialogTestSubscriber.assertValues(true, false, true);
+
+        // re-subscription happens due to activity restoration
+        progressDialogTestSubscriber = new TestObserver<>();
+        viewModel.getProgressDialog().subscribe(progressDialogTestSubscriber);
+
+        // last emiited value is immediately reported back
+        progressDialogTestSubscriber.assertValue(true);
     }
 }
