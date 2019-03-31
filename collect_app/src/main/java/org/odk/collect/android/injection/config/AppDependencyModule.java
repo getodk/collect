@@ -15,6 +15,7 @@ import org.odk.collect.android.http.HttpClientConnection;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
+import org.odk.collect.android.utilities.NetworkUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.utilities.rx.AppSchedulerProvider;
@@ -87,6 +88,11 @@ public class AppDependencyModule {
     @Provides
     public PermissionUtils providesPermissionUtils() {
         return new PermissionUtils();
+    }
+
+    @Provides
+    NetworkUtils providesNetworkUtils(Context context) {
+        return new NetworkUtils(context);
     }
 
     @Provides
