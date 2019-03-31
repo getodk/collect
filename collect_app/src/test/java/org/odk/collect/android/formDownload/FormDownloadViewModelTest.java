@@ -16,6 +16,7 @@ public class FormDownloadViewModelTest {
 
     private TestObserver<AlertDialogUiModel> alertDialogTestSubscriber;
     private TestObserver<Boolean> progressDialogTestSubscriber;
+    private TestObserver<Boolean> cancelDialogTestSubscriber;
 
     @Before
     public void setUp() {
@@ -23,6 +24,7 @@ public class FormDownloadViewModelTest {
 
         alertDialogTestSubscriber = new TestObserver<>();
         progressDialogTestSubscriber = new TestObserver<>();
+        cancelDialogTestSubscriber = new TestObserver<>();
     }
 
     @After
@@ -84,5 +86,23 @@ public class FormDownloadViewModelTest {
 
         // last emiited value is immediately reported back
         progressDialogTestSubscriber.assertValue(true);
+    }
+
+    @Test
+    public void displayCancelDialogTest() {
+        viewModel.getCancelDialog().subscribe(cancelDialogTestSubscriber);
+
+        viewModel.setCancelDialogShowing(true);
+        viewModel.setCancelDialogShowing(false);
+        viewModel.setCancelDialogShowing(true);
+
+        cancelDialogTestSubscriber.assertValues(true, false, true);
+
+        // re-subscription happens due to activity restoration
+        cancelDialogTestSubscriber = new TestObserver<>();
+        viewModel.getCancelDialog().subscribe(cancelDialogTestSubscriber);
+
+        // last emiited value is immediately reported back
+        cancelDialogTestSubscriber.assertValue(true);
     }
 }
