@@ -16,8 +16,11 @@
 
 package org.odk.collect.android.ui.formdownload;
 
+import android.os.Bundle;
+
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.ui.base.BaseViewModel;
+import org.odk.collect.android.utilities.ApplicationConstants;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,6 +61,30 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
         progressDialogSubject = BehaviorSubject.create();
         progressDialogMessageSubject = BehaviorSubject.create();
         cancelDialogSubject = BehaviorSubject.create();
+    }
+
+    public void restoreState(Bundle bundle) {
+        if (bundle != null && bundle.containsKey(ApplicationConstants.BundleKeys.FORM_IDS)) {
+            isDownloadOnlyMode = true;
+            formIdsToDownload = bundle.getStringArray(ApplicationConstants.BundleKeys.FORM_IDS);
+
+            if (formIdsToDownload == null) {
+                getNavigator().setReturnResult(false, "Form Ids is null", null);
+                getNavigator().goBack();
+            }
+
+            if (bundle.containsKey(ApplicationConstants.BundleKeys.URL)) {
+                url = bundle.getString(ApplicationConstants.BundleKeys.URL);
+            }
+
+            if (bundle.containsKey(ApplicationConstants.BundleKeys.USERNAME)) {
+                username = bundle.getString(ApplicationConstants.BundleKeys.USERNAME);
+            }
+
+            if (bundle.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
+                password = bundle.getString(ApplicationConstants.BundleKeys.PASSWORD);
+            }
+        }
     }
 
     public HashMap<String, FormDetails> getFormNamesAndURLs() {

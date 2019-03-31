@@ -174,27 +174,9 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
             if (bundle.containsKey(DISPLAY_ONLY_UPDATED_FORMS)) {
                 displayOnlyUpdatedForms = (boolean) bundle.get(DISPLAY_ONLY_UPDATED_FORMS);
             }
-
-            if (bundle.containsKey(ApplicationConstants.BundleKeys.FORM_IDS)) {
-                viewModel.setDownloadOnlyMode(true);
-                viewModel.setFormIdsToDownload(bundle.getStringArray(ApplicationConstants.BundleKeys.FORM_IDS));
-
-                if (viewModel.getFormIdsToDownload() == null) {
-                    setReturnResult(false, "Form Ids is null", null);
-                    finish();
-                }
-
-                if (bundle.containsKey(ApplicationConstants.BundleKeys.URL)) {
-                    viewModel.setUrl(bundle.getString(ApplicationConstants.BundleKeys.URL));
-
-                    if (bundle.containsKey(ApplicationConstants.BundleKeys.USERNAME)
-                            && bundle.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
-                        viewModel.setUsername(bundle.getString(ApplicationConstants.BundleKeys.USERNAME));
-                        viewModel.setPassword(bundle.getString(ApplicationConstants.BundleKeys.PASSWORD));
-                    }
-                }
-            }
         }
+
+        viewModel.restoreState(bundle);
 
         downloadButton = findViewById(R.id.add_button);
         downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
@@ -829,7 +811,8 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
         finish();
     }
 
-    private void setReturnResult(boolean successful, @Nullable String message, @Nullable HashMap<String, Boolean> resultFormIds) {
+    @Override
+    public void setReturnResult(boolean successful, @Nullable String message, @Nullable HashMap<String, Boolean> resultFormIds) {
         Intent intent = new Intent();
         intent.putExtra(ApplicationConstants.BundleKeys.SUCCESS_KEY, successful);
         if (message != null) {
@@ -840,6 +823,11 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
         }
 
         setResult(RESULT_OK, intent);
+    }
+
+    @Override
+    public void goBack() {
+        finish();
     }
 
     private void cleanUpWebCredentials() {
