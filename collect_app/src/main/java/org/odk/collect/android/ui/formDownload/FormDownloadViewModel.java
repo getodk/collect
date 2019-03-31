@@ -40,11 +40,11 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
 
     private final BehaviorSubject<AlertDialogUiModel> alertDialogSubject;
     private final BehaviorSubject<Boolean> progressDialogSubject;
+    private final BehaviorSubject<Boolean> cancelDialogSubject;
 
     private String progressDialogMsg;
 
     private boolean alertDialogVisible;
-    private boolean cancelDialogShowing;
     private boolean loadingCanceled;
 
     // Variables used when the activity is called from an external app
@@ -62,6 +62,7 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
 
         alertDialogSubject = BehaviorSubject.create();
         progressDialogSubject = BehaviorSubject.create();
+        cancelDialogSubject = BehaviorSubject.create();
     }
 
     public HashMap<String, FormDetails> getFormNamesAndURLs() {
@@ -164,16 +165,12 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
         this.formIdsToDownload = formIdsToDownload;
     }
 
-    public void setProgressDialogShowing(boolean progressDialogShowing) {
-        progressDialogSubject.onNext(progressDialogShowing);
-    }
-
-    public boolean isCancelDialogShowing() {
-        return cancelDialogShowing;
-    }
-
     public void setCancelDialogShowing(boolean cancelDialogShowing) {
-        this.cancelDialogShowing = cancelDialogShowing;
+        cancelDialogSubject.onNext(cancelDialogShowing);
+    }
+
+    public Observable<Boolean> getCancelDialog() {
+        return cancelDialogSubject;
     }
 
     public boolean wasLoadingCanceled() {
@@ -182,6 +179,10 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
 
     public void setLoadingCanceled(boolean loadingCanceled) {
         this.loadingCanceled = loadingCanceled;
+    }
+
+    public void setProgressDialogShowing(boolean progressDialogShowing) {
+        progressDialogSubject.onNext(progressDialogShowing);
     }
 
     public Observable<Boolean> getProgressDialog() {

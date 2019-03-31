@@ -348,6 +348,12 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
                 .observeOn(schedulerProvider.ui())
                 .filter(shouldDisplay -> shouldDisplay && (progressDialog == null || !progressDialog.isShowing()))
                 .subscribe(__ -> createProgressDialog(), Timber::e));
+
+        compositeDisposable.add(viewModel.getCancelDialog()
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
+                .filter(shouldDisplay -> shouldDisplay)
+                .subscribe(shouldDisplay -> createCancelDialog(), Timber::e));
     }
 
     private void unbindViewModel() {
@@ -491,9 +497,6 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
         }
         if (downloadFormsTask != null) {
             downloadFormsTask.setDownloaderListener(this);
-        }
-        if (viewModel.isCancelDialogShowing()) {
-            createCancelDialog();
         }
         super.onResume();
     }
@@ -697,7 +700,7 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
                     }
 
                     if (downloadFormsTask != null) {
-                        createCancelDialog();
+                        viewModel.setCancelDialogShowing(true);
                         downloadFormsTask.cancel(true);
                     }
                     viewModel.setLoadingCanceled(true);
@@ -730,7 +733,6 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
         cancelDialog.setIcon(android.R.drawable.ic_dialog_info);
         cancelDialog.setIndeterminate(true);
         cancelDialog.setCancelable(false);
-        viewModel.setCancelDialogShowing(true);
         DialogUtils.showDialog(cancelDialog, this);
     }
 
