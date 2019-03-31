@@ -15,7 +15,7 @@ public interface BaseResourceProvider {
      * @return String representation of the {@param id}
      */
     @NonNull
-    String getString(@StringRes final int id);
+    String getString(@StringRes int id);
 
     /**
      * Resolves text's id to String and formats it.
@@ -25,5 +25,5 @@ public interface BaseResourceProvider {
      * @return String representation of the {@param resId}
      */
     @NonNull
-    String getString(@StringRes final int resId, final Object... formatArgs);
+    String getString(@StringRes int resId, Object... formatArgs);
 }

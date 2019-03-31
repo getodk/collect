@@ -6,7 +6,7 @@ import android.net.NetworkInfo;
 
 public class NetworkUtils {
 
-    private Context context;
+    private final Context context;
 
     public NetworkUtils(Context context) {
         this.context = context;

@@ -152,8 +152,8 @@ public class FormDownloadViewModelTest {
     public void finishActivityIfFormIdsAreNull() {
         // verify that nothing happens if a null bundle is used
         viewModel.restoreState(null);
-        Mockito.verify(viewModel.getNavigator(), Mockito.times(0)).setReturnResult(false, "Form Ids is null", null);
-        Mockito.verify(viewModel.getNavigator(), Mockito.times(0)).goBack();
+        Mockito.verify(viewModel.getNavigator(), times(0)).setReturnResult(false, "Form Ids is null", null);
+        Mockito.verify(viewModel.getNavigator(), times(0)).goBack();
 
         // use bundle with null form ids for initialization
         Bundle bundle = new Bundle();
@@ -161,8 +161,8 @@ public class FormDownloadViewModelTest {
         viewModel.restoreState(bundle);
 
         // assert that result was set to false and activity was finished
-        Mockito.verify(viewModel.getNavigator(), Mockito.times(1)).setReturnResult(false, "Form Ids is null", null);
-        Mockito.verify(viewModel.getNavigator(), Mockito.times(1)).goBack();
+        Mockito.verify(viewModel.getNavigator(), times(1)).setReturnResult(false, "Form Ids is null", null);
+        Mockito.verify(viewModel.getNavigator(), times(1)).goBack();
     }
 
     @Test
@@ -175,7 +175,7 @@ public class FormDownloadViewModelTest {
 
         viewModel.restoreState(bundle);
 
-        Mockito.verify(viewModel.getNavigator(), Mockito.times(0)).goBack();
+        Mockito.verify(viewModel.getNavigator(), times(0)).goBack();
         Assert.assertEquals("someurl", viewModel.getUrl());
         Assert.assertEquals("username", viewModel.getUsername());
         Assert.assertEquals("password", viewModel.getPassword());
@@ -204,8 +204,8 @@ public class FormDownloadViewModelTest {
         viewModel.startDownloadingForms();
 
         Mockito.verify(mockFormDownloadRepository, times(0)).downloadForms(any(), any(), any());
-        Mockito.verify(viewModel.getNavigator(), Mockito.times(1)).setReturnResult(false, testResourceProvider.getString(R.string.no_connection), new HashMap<>());
-        Mockito.verify(viewModel.getNavigator(), Mockito.times(1)).goBack();
+        Mockito.verify(viewModel.getNavigator(), times(1)).setReturnResult(false, testResourceProvider.getString(R.string.no_connection), new HashMap<>());
+        Mockito.verify(viewModel.getNavigator(), times(1)).goBack();
     }
 
     @Test
@@ -241,7 +241,7 @@ public class FormDownloadViewModelTest {
 
         Assert.assertTrue(disposable == null || disposable.isDisposed());
         Mockito.verify(mockFormDownloadRepository, times(1)).downloadForms(any(), any(), any());
-        Mockito.verify(viewModel.getNavigator(), Mockito.times(1)).setReturnResult(false, "User cancelled the operation", new HashMap<>());
-        Mockito.verify(viewModel.getNavigator(), Mockito.times(1)).goBack();
+        Mockito.verify(viewModel.getNavigator(), times(1)).setReturnResult(false, "User cancelled the operation", new HashMap<>());
+        Mockito.verify(viewModel.getNavigator(), times(1)).goBack();
     }
 }
