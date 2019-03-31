@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.odk.collect.android.R;
+import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.ui.formdownload.AlertDialogUiModel;
 import org.odk.collect.android.ui.formdownload.FormDownloadNavigator;
 import org.odk.collect.android.ui.formdownload.FormDownloadRepository;
@@ -22,6 +23,7 @@ import org.robolectric.RuntimeEnvironment;
 
 import java.util.HashMap;
 
+import io.reactivex.Observable;
 import io.reactivex.observers.TestObserver;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -37,6 +39,7 @@ public class FormDownloadViewModelTest {
     private TestObserver<Boolean> progressDialogTestSubscriber;
     private TestObserver<Boolean> cancelDialogTestSubscriber;
     private TestObserver<String> progressDialogMessageTestSubscriber;
+    private TestObserver<HashMap<String, FormDetails>> formListDownloadTestSubscriber;
 
     private NetworkUtils mockNetworkUtils;
     private FormDownloadRepository mockFormDownloadRepository;
@@ -57,6 +60,7 @@ public class FormDownloadViewModelTest {
         progressDialogTestSubscriber = new TestObserver<>();
         cancelDialogTestSubscriber = new TestObserver<>();
         progressDialogMessageTestSubscriber = new TestObserver<>();
+        formListDownloadTestSubscriber = new TestObserver<>();
     }
 
     @Test
@@ -201,5 +205,21 @@ public class FormDownloadViewModelTest {
         Mockito.verify(mockFormDownloadRepository, times(0)).downloadForms(any(), any(), any());
         Mockito.verify(viewModel.getNavigator(), Mockito.times(1)).setReturnResult(false, testResourceProvider.getString(R.string.no_connection), new HashMap<>());
         Mockito.verify(viewModel.getNavigator(), Mockito.times(1)).goBack();
+    }
+
+    @Test
+    public void cancelFormListDownloadTest() {
+        when(mockFormDownloadRepository.downloadForms(any(), any(), any())).thenReturn(Observable.just(new HashMap<>()));
+        when(mockNetworkUtils.isNetworkAvailable()).thenReturn(true);
+
+        viewModel.getFormDownloadList().subscribe(formListDownloadTestSubscriber);
+
+        viewModel.startDownloadingForms();
+
+        Mockito.verify(mockFormDownloadRepository, times(1)).downloadForms(any(), any(), any());
+
+        viewModel.cancelFormListDownloadTask();
+
+        Assert.assertTrue(viewModel.getDownloadDisposable().isDisposed());
     }
 }

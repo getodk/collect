@@ -239,6 +239,10 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
         alertDialogVisible = false;
     }
 
+    public Disposable getDownloadDisposable() {
+        return downloadDisposable;
+    }
+
     public void startDownloadingForms() {
         if (!networkUtils.isNetworkAvailable()) {
             ToastUtils.showShortToast(R.string.no_connection);
