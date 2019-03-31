@@ -29,7 +29,7 @@ public class FormDownloadViewModelTest {
     }
 
     @Test
-    public void alertDialogTest() {
+    public void doNotDisplayAlertDialogOnInitTest() {
         viewModel.getAlertDialog().subscribe(alertDialogTestSubscriber);
 
         alertDialogTestSubscriber.assertNoValues();
