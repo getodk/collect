@@ -161,10 +161,6 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
         return isDownloadOnlyMode;
     }
 
-    public void setDownloadOnlyMode(boolean downloadOnlyMode) {
-        isDownloadOnlyMode = downloadOnlyMode;
-    }
-
     public HashMap<String, Boolean> getFormResults() {
         return formResults;
     }
@@ -199,10 +195,6 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
 
     public String[] getFormIdsToDownload() {
         return Arrays.copyOf(formIdsToDownload, formIdsToDownload.length);
-    }
-
-    public void setFormIdsToDownload(String[] formIdsToDownload) {
-        this.formIdsToDownload = formIdsToDownload;
     }
 
     public void setCancelDialogShowing(boolean cancelDialogShowing) {
