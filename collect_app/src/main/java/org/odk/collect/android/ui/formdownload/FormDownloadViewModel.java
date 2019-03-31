@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.ui.formDownload;
+package org.odk.collect.android.ui.formdownload;
 
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.ui.base.BaseViewModel;
-import org.odk.collect.android.utilities.rx.SchedulerProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,8 +51,8 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
     private String password;
     private final HashMap<String, Boolean> formResults = new HashMap<>();
 
-    public FormDownloadViewModel(SchedulerProvider schedulerProvider) {
-        super(schedulerProvider);
+    public FormDownloadViewModel() {
+        super();
 
         alertDialogSubject = BehaviorSubject.create();
         progressDialogSubject = BehaviorSubject.create();

@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.ui.formDownload;
+package org.odk.collect.android.ui.formdownload;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;

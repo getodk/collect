@@ -3,11 +3,7 @@ package org.odk.collect.android.utilities.rx;
 import io.reactivex.Scheduler;
 import io.reactivex.schedulers.Schedulers;
 
-
 public class TestSchedulerProvider implements SchedulerProvider {
-
-    public TestSchedulerProvider() {
-    }
 
     @Override
     public Scheduler computation() {

@@ -30,9 +30,9 @@ import org.odk.collect.android.logic.FormDetails;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static org.odk.collect.android.ui.formDownload.FormDownloadActivity.FORMID_DISPLAY;
-import static org.odk.collect.android.ui.formDownload.FormDownloadActivity.FORMNAME;
-import static org.odk.collect.android.ui.formDownload.FormDownloadActivity.FORM_ID_KEY;
+import static org.odk.collect.android.ui.formdownload.FormDownloadActivity.FORMID_DISPLAY;
+import static org.odk.collect.android.ui.formdownload.FormDownloadActivity.FORMNAME;
+import static org.odk.collect.android.ui.formdownload.FormDownloadActivity.FORM_ID_KEY;
 
 public class FormDownloadListAdapter extends ArrayAdapter {
 

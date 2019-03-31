@@ -27,7 +27,7 @@ import org.odk.collect.android.activities.InstanceUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderListActivity;
 import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.ui.formDownload.FormDownloadActivity;
+import org.odk.collect.android.ui.formdownload.FormDownloadActivity;
 
 import java.util.ArrayList;
 import java.util.List;

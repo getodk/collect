@@ -1,11 +1,10 @@
-package org.odk.collect.android.formDownload;
+package org.odk.collect.android.formdownload;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.odk.collect.android.ui.formDownload.AlertDialogUiModel;
-import org.odk.collect.android.ui.formDownload.FormDownloadViewModel;
-import org.odk.collect.android.utilities.rx.TestSchedulerProvider;
+import org.odk.collect.android.ui.formdownload.AlertDialogUiModel;
+import org.odk.collect.android.ui.formdownload.FormDownloadViewModel;
 
 import io.reactivex.observers.TestObserver;
 
@@ -20,7 +19,7 @@ public class FormDownloadViewModelTest {
 
     @Before
     public void setUp() {
-        viewModel = new FormDownloadViewModel(new TestSchedulerProvider());
+        viewModel = new FormDownloadViewModel();
 
         alertDialogTestSubscriber = new TestObserver<>();
         progressDialogTestSubscriber = new TestObserver<>();
