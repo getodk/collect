@@ -43,6 +43,7 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
 
     private String progressDialogMsg;
 
+    private boolean alertDialogVisible;
     private boolean cancelDialogShowing;
     private boolean loadingCanceled;
 
@@ -189,17 +190,17 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
 
     public Observable<AlertDialogUiModel> getAlertDialog() {
         return alertDialogSubject
-                .filter(__ -> uiModel != null)
-                .doOnSubscribe(disposable -> alertDialogSubject.onNext(uiModel));
+                .filter(__ -> alertDialogVisible);
     }
 
     public void setAlertDialog(String title, String message, boolean shouldExit) {
+        alertDialogVisible = true;
         uiModel = new AlertDialogUiModel(title, message, shouldExit);
 
         alertDialogSubject.onNext(uiModel);
     }
 
     public void removeAlertDialog() {
-        uiModel = null;
+        alertDialogVisible = false;
     }
 }
