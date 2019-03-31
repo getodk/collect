@@ -24,6 +24,7 @@ import org.robolectric.RuntimeEnvironment;
 import java.util.HashMap;
 
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.TestObserver;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -210,16 +211,37 @@ public class FormDownloadViewModelTest {
     @Test
     public void cancelFormListDownloadTest() {
         when(mockFormDownloadRepository.downloadForms(any(), any(), any())).thenReturn(Observable.just(new HashMap<>()));
+        when(mockFormDownloadRepository.isLoading()).thenReturn(true);
         when(mockNetworkUtils.isNetworkAvailable()).thenReturn(true);
 
         viewModel.getFormDownloadList().subscribe(formListDownloadTestSubscriber);
 
         viewModel.startDownloadingForms();
-
-        Mockito.verify(mockFormDownloadRepository, times(1)).downloadForms(any(), any(), any());
-
         viewModel.cancelFormListDownloadTask();
 
-        Assert.assertTrue(viewModel.getDownloadDisposable().isDisposed());
+        Disposable disposable = viewModel.getDownloadDisposable();
+
+        Assert.assertTrue(disposable == null || disposable.isDisposed());
+        Mockito.verify(mockFormDownloadRepository, times(1)).downloadForms(any(), any(), any());
+    }
+
+    @Test
+    public void finishActivityIfFormListCanceledInDownloadOnlyModeTest() {
+        when(mockFormDownloadRepository.downloadForms(any(), any(), any())).thenReturn(Observable.just(new HashMap<>()));
+        when(mockFormDownloadRepository.isLoading()).thenReturn(true);
+        when(mockNetworkUtils.isNetworkAvailable()).thenReturn(true);
+
+        viewModel.getFormDownloadList().subscribe(formListDownloadTestSubscriber);
+
+        viewModel.setDownloadOnlyMode(true);
+        viewModel.startDownloadingForms();
+        viewModel.cancelFormListDownloadTask();
+
+        Disposable disposable = viewModel.getDownloadDisposable();
+
+        Assert.assertTrue(disposable == null || disposable.isDisposed());
+        Mockito.verify(mockFormDownloadRepository, times(1)).downloadForms(any(), any(), any());
+        Mockito.verify(viewModel.getNavigator(), Mockito.times(1)).setReturnResult(false, "User cancelled the operation", new HashMap<>());
+        Mockito.verify(viewModel.getNavigator(), Mockito.times(1)).goBack();
     }
 }

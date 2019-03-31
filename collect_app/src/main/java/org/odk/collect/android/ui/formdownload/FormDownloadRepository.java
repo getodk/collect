@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import timber.log.Timber;
 
 @Singleton
 public class FormDownloadRepository {
@@ -24,7 +25,13 @@ public class FormDownloadRepository {
     public Observable<HashMap<String, FormDetails>> downloadForms(String url, String username, String password) {
         return Observable.fromCallable(() -> downloadFormListUtils.downloadFormList(url, username, password, false))
                 .doOnSubscribe(__ -> isLoading = true)
-                .doOnNext(__ -> isLoading = false);
+                .doOnNext(__ -> isLoading = false)
+                .doOnTerminate(() -> isLoading = false)
+                .doOnDispose(() -> isLoading = false)
+                .doOnError(throwable -> {
+                    isLoading = false;
+                    Timber.e(throwable);
+                });
     }
 
     public boolean isLoading() {

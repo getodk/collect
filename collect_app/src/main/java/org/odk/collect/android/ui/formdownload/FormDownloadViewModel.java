@@ -256,9 +256,7 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
             setProgressDialogShowing(true);
 
             // cancel pending tasks
-            if (downloadRepository.isLoading()) {
-                downloadDisposable.dispose();
-            }
+            cancelFormListDownloadTask();
 
             downloadDisposable = downloadRepository.downloadForms(url, username, password)
                     .subscribeOn(getSchedulerProvider().computation())
@@ -270,7 +268,7 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
     }
 
     public void cancelFormListDownloadTask() {
-        if (downloadRepository.isLoading() && downloadDisposable != null && !downloadDisposable.isDisposed()) {
+        if (downloadRepository.isLoading() && downloadDisposable != null) {
             downloadDisposable.dispose();
             downloadDisposable = null;
 
