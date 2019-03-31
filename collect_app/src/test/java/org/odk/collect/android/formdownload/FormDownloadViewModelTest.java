@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.odk.collect.android.R;
 import org.odk.collect.android.ui.formdownload.AlertDialogUiModel;
 import org.odk.collect.android.ui.formdownload.FormDownloadNavigator;
 import org.odk.collect.android.ui.formdownload.FormDownloadRepository;
@@ -17,6 +18,9 @@ import org.odk.collect.android.utilities.providers.BaseResourceProvider;
 import org.odk.collect.android.utilities.providers.ResourceProvider;
 import org.odk.collect.android.utilities.rx.TestSchedulerProvider;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
+
+import java.util.HashMap;
 
 import io.reactivex.observers.TestObserver;
 
@@ -36,15 +40,15 @@ public class FormDownloadViewModelTest {
 
     private NetworkUtils mockNetworkUtils;
     private FormDownloadRepository mockFormDownloadRepository;
-    private BaseResourceProvider mockResourceProvider;
+    private BaseResourceProvider testResourceProvider;
 
     @Before
     public void setUp() {
         mockNetworkUtils = Mockito.mock(NetworkUtils.class);
         mockFormDownloadRepository = Mockito.spy(FormDownloadRepository.class);
-        mockResourceProvider = Mockito.mock(ResourceProvider.class);
+        testResourceProvider = new ResourceProvider(RuntimeEnvironment.application.getApplicationContext());
 
-        viewModel = new FormDownloadViewModel(new TestSchedulerProvider(), mockNetworkUtils, mockResourceProvider, mockFormDownloadRepository);
+        viewModel = new FormDownloadViewModel(new TestSchedulerProvider(), mockNetworkUtils, testResourceProvider, mockFormDownloadRepository);
 
         // prepare the spy!
         viewModel.setNavigator(Mockito.spy(FormDownloadNavigator.class));
@@ -187,6 +191,15 @@ public class FormDownloadViewModelTest {
 
         viewModel.startDownloadingForms();
 
+        // assert that download task isn't triggered
         Mockito.verify(mockFormDownloadRepository, times(0)).downloadForms(any(), any(), any());
+
+        // finish the activity as well if in downloadOnly mode
+        viewModel.setDownloadOnlyMode(true);
+        viewModel.startDownloadingForms();
+
+        Mockito.verify(mockFormDownloadRepository, times(0)).downloadForms(any(), any(), any());
+        Mockito.verify(viewModel.getNavigator(), Mockito.times(1)).setReturnResult(false, testResourceProvider.getString(R.string.no_connection), new HashMap<>());
+        Mockito.verify(viewModel.getNavigator(), Mockito.times(1)).goBack();
     }
 }

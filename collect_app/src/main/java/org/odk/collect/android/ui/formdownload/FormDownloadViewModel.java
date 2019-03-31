@@ -157,6 +157,10 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
         selectedForms.clear();
     }
 
+    public void setDownloadOnlyMode(boolean isDownloadOnlyMode) {
+        this.isDownloadOnlyMode = isDownloadOnlyMode;
+    }
+
     public boolean isDownloadOnlyMode() {
         return isDownloadOnlyMode;
     }
