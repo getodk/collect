@@ -1,13 +1,21 @@
 package org.odk.collect.android.formdownload;
 
+import android.os.Bundle;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.odk.collect.android.ui.formdownload.AlertDialogUiModel;
+import org.odk.collect.android.ui.formdownload.FormDownloadNavigator;
 import org.odk.collect.android.ui.formdownload.FormDownloadViewModel;
+import org.odk.collect.android.utilities.ApplicationConstants;
+import org.robolectric.RobolectricTestRunner;
 
 import io.reactivex.observers.TestObserver;
 
+@RunWith(RobolectricTestRunner.class)
 public class FormDownloadViewModelTest {
 
     private FormDownloadViewModel viewModel;
@@ -20,6 +28,9 @@ public class FormDownloadViewModelTest {
     @Before
     public void setUp() {
         viewModel = new FormDownloadViewModel();
+
+        // prepare the spy!
+        viewModel.setNavigator(Mockito.spy(FormDownloadNavigator.class));
 
         alertDialogTestSubscriber = new TestObserver<>();
         progressDialogTestSubscriber = new TestObserver<>();
@@ -109,5 +120,38 @@ public class FormDownloadViewModelTest {
         viewModel.getProgressDialogMessage().subscribe(progressDialogMessageTestSubscriber);
 
         progressDialogMessageTestSubscriber.assertValue("Progress 1");
+    }
+
+    @Test
+    public void finishActivityIfFormIdsAreNull() {
+        // verify that nothing happens if a null bundle is used
+        viewModel.restoreState(null);
+        Mockito.verify(viewModel.getNavigator(), Mockito.times(0)).setReturnResult(false, "Form Ids is null", null);
+        Mockito.verify(viewModel.getNavigator(), Mockito.times(0)).goBack();
+
+        // use bundle with null form ids for initialization
+        Bundle bundle = new Bundle();
+        bundle.putStringArray(ApplicationConstants.BundleKeys.FORM_IDS, null);
+        viewModel.restoreState(bundle);
+
+        // assert that result was set to false and activity was finished
+        Mockito.verify(viewModel.getNavigator(), Mockito.times(1)).setReturnResult(false, "Form Ids is null", null);
+        Mockito.verify(viewModel.getNavigator(), Mockito.times(1)).goBack();
+    }
+
+    @Test
+    public void loadDataFromBundleTest() {
+        Bundle bundle = new Bundle();
+        bundle.putStringArray(ApplicationConstants.BundleKeys.FORM_IDS, new String[0]);
+        bundle.putString(ApplicationConstants.BundleKeys.URL, "someurl");
+        bundle.putString(ApplicationConstants.BundleKeys.USERNAME, "username");
+        bundle.putString(ApplicationConstants.BundleKeys.PASSWORD, "password");
+
+        viewModel.restoreState(bundle);
+
+        Mockito.verify(viewModel.getNavigator(), Mockito.times(0)).goBack();
+        Assert.assertEquals("someurl", viewModel.getUrl());
+        Assert.assertEquals("username", viewModel.getUsername());
+        Assert.assertEquals("password", viewModel.getPassword());
     }
 }
