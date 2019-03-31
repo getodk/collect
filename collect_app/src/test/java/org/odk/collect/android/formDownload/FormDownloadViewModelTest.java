@@ -44,9 +44,23 @@ public class FormDownloadViewModelTest {
         // now assuming that the activity was recreated. So, the subject was resubscribed.
         viewModel.getAlertDialog().subscribe(alertDialogTestSubscriber);
 
-        alertDialogTestSubscriber.assertValueCount(1);
         AlertDialogUiModel actualModel = (AlertDialogUiModel) alertDialogTestSubscriber.getEvents().get(0).get(0);
 
-        Assert.assertEquals(expectedModel, actualModel);
+        Assert.assertEquals(expectedModel.getTitle(), actualModel.getTitle());
+        Assert.assertEquals(expectedModel.getMessage(), actualModel.getMessage());
+        Assert.assertEquals(expectedModel.shouldExit(), actualModel.shouldExit());
+    }
+
+    @Test
+    public void doNotRestoreLastShownAlertDialogIfRemovedTest() {
+        AlertDialogUiModel expectedModel = new AlertDialogUiModel("Title", "Message", false);
+
+        viewModel.setAlertDialog(expectedModel.getTitle(), expectedModel.getMessage(), expectedModel.shouldExit());
+        viewModel.removeAlertDialog();
+
+        // now assuming that the activity was recreated. So, the subject was resubscribed.
+        viewModel.getAlertDialog().subscribe(alertDialogTestSubscriber);
+
+        alertDialogTestSubscriber.assertNoValues();
     }
 }
