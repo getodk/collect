@@ -1,6 +1,5 @@
 package org.odk.collect.android.formDownload;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,11 +26,6 @@ public class FormDownloadViewModelTest {
         progressDialogTestSubscriber = new TestObserver<>();
         cancelDialogTestSubscriber = new TestObserver<>();
         progressDialogMessageTestSubscriber = new TestObserver<>();
-    }
-
-    @After
-    public void tearDown() {
-        viewModel = null;
     }
 
     @Test
