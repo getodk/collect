@@ -16,8 +16,6 @@
 
 package org.odk.collect.android.ui.formDownload;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.ui.base.BaseViewModel;
 import org.odk.collect.android.utilities.rx.SchedulerProvider;
@@ -40,9 +38,8 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
 
     private final BehaviorSubject<AlertDialogUiModel> alertDialogSubject;
     private final BehaviorSubject<Boolean> progressDialogSubject;
+    private final BehaviorSubject<String> progressDialogMessageSubject;
     private final BehaviorSubject<Boolean> cancelDialogSubject;
-
-    private String progressDialogMsg;
 
     private boolean alertDialogVisible;
     private boolean loadingCanceled;
@@ -55,13 +52,12 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
     private String password;
     private final HashMap<String, Boolean> formResults = new HashMap<>();
 
-    private AlertDialogUiModel uiModel;
-
     public FormDownloadViewModel(SchedulerProvider schedulerProvider) {
         super(schedulerProvider);
 
         alertDialogSubject = BehaviorSubject.create();
         progressDialogSubject = BehaviorSubject.create();
+        progressDialogMessageSubject = BehaviorSubject.create();
         cancelDialogSubject = BehaviorSubject.create();
     }
 
@@ -77,12 +73,12 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
         formNamesAndURLs.clear();
     }
 
-    public String getProgressDialogMsg() {
-        return progressDialogMsg == null ? Collect.getInstance().getString(R.string.please_wait) : progressDialogMsg;
+    public BehaviorSubject<String> getProgressDialogMessage() {
+        return progressDialogMessageSubject;
     }
 
-    public void setProgressDialogMsg(String progressDialogMsg) {
-        this.progressDialogMsg = progressDialogMsg;
+    public void setProgressDialogMessage(String progressDialogMessage) {
+        progressDialogMessageSubject.onNext(progressDialogMessage);
     }
 
     public ArrayList<HashMap<String, String>> getFormList() {
@@ -196,9 +192,7 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
 
     public void setAlertDialog(String title, String message, boolean shouldExit) {
         alertDialogVisible = true;
-        uiModel = new AlertDialogUiModel(title, message, shouldExit);
-
-        alertDialogSubject.onNext(uiModel);
+        alertDialogSubject.onNext(new AlertDialogUiModel(title, message, shouldExit));
     }
 
     public void removeAlertDialog() {

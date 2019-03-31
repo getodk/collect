@@ -307,11 +307,6 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
             }
         } else {
             viewModel.clearFormNamesAndURLs();
-            if (progressDialog != null) {
-                // This is needed because onPrepareDialog() is broken in 1.6.
-                progressDialog.setMessage(viewModel.getProgressDialogMsg());
-            }
-
             viewModel.setProgressDialogShowing(true);
 
             if (downloadFormListTask != null
@@ -348,6 +343,12 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
                 .observeOn(schedulerProvider.ui())
                 .filter(shouldDisplay -> shouldDisplay && (progressDialog == null || !progressDialog.isShowing()))
                 .subscribe(__ -> createProgressDialog(), Timber::e));
+
+        compositeDisposable.add(viewModel.getProgressDialogMessage()
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
+                .filter(message -> progressDialog != null)
+                .subscribe(message -> progressDialog.setMessage(message), Timber::e));
 
         compositeDisposable.add(viewModel.getCancelDialog()
                 .subscribeOn(schedulerProvider.io())
@@ -707,7 +708,7 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
                     viewModel.setProgressDialogShowing(false);
                 };
         progressDialog.setTitle(getString(R.string.downloading_data));
-        progressDialog.setMessage(viewModel.getProgressDialogMsg());
+        progressDialog.setMessage(getString(R.string.please_wait));
         progressDialog.setIcon(android.R.drawable.ic_dialog_info);
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
@@ -738,8 +739,8 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
 
     @Override
     public void progressUpdate(String currentFile, int progress, int total) {
-        viewModel.setProgressDialogMsg(getString(R.string.fetching_file, currentFile, String.valueOf(progress), String.valueOf(total)));
-        progressDialog.setMessage(viewModel.getProgressDialogMsg());
+        String message = getString(R.string.fetching_file, currentFile, String.valueOf(progress), String.valueOf(total));
+        viewModel.setProgressDialogMessage(message);
     }
 
     @Override
