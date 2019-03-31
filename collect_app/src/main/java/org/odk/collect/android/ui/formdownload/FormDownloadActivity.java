@@ -287,8 +287,13 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
         compositeDisposable.add(viewModel.getProgressDialog()
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
-                .filter(shouldDisplay -> shouldDisplay && (progressDialog == null || !progressDialog.isShowing()))
-                .subscribe(__ -> createProgressDialog(), Timber::e));
+                .subscribe(shouldDisplay -> {
+                    if (shouldDisplay && (progressDialog == null || !progressDialog.isShowing())) {
+                        createProgressDialog();
+                    } else if (!shouldDisplay && progressDialog != null && progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
+                }, Timber::e));
 
         compositeDisposable.add(viewModel.getProgressDialogMessage()
                 .subscribeOn(schedulerProvider.io())
@@ -498,8 +503,6 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
      * <formname, formdetails> tuples, or one tuple of DL.ERROR.MSG and the associated message.
      */
     public void formListDownloadingComplete(HashMap<String, FormDetails> result) {
-        progressDialog.dismiss();
-        viewModel.setProgressDialogShowing(false);
         downloadFormListTask.setDownloaderListener(null);
         downloadFormListTask = null;
 

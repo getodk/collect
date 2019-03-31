@@ -270,6 +270,7 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
     }
 
     public Observable<HashMap<String, FormDetails>> getFormDownloadList() {
-        return formDownloadSubject;
+        return formDownloadSubject
+                .doOnNext(__ -> setProgressDialogShowing(false));
     }
 }
