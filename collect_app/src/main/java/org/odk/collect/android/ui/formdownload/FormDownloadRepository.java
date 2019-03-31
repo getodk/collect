@@ -21,7 +21,7 @@ public class FormDownloadRepository {
         downloadFormListUtils = new DownloadFormListUtils();
     }
 
-    Observable<HashMap<String, FormDetails>> downloadForms(String url, String username, String password) {
+    public Observable<HashMap<String, FormDetails>> downloadForms(String url, String username, String password) {
         return Observable.fromCallable(() -> downloadFormListUtils.downloadFormList(url, username, password, false))
                 .doOnSubscribe(__ -> isLoading = true)
                 .doOnNext(__ -> isLoading = false);

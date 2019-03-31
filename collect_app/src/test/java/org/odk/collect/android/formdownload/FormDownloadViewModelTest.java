@@ -14,12 +14,15 @@ import org.odk.collect.android.ui.formdownload.FormDownloadViewModel;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.NetworkUtils;
 import org.odk.collect.android.utilities.providers.BaseResourceProvider;
+import org.odk.collect.android.utilities.providers.ResourceProvider;
 import org.odk.collect.android.utilities.rx.TestSchedulerProvider;
 import org.robolectric.RobolectricTestRunner;
 
 import io.reactivex.observers.TestObserver;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class FormDownloadViewModelTest {
@@ -31,9 +34,17 @@ public class FormDownloadViewModelTest {
     private TestObserver<Boolean> cancelDialogTestSubscriber;
     private TestObserver<String> progressDialogMessageTestSubscriber;
 
+    private NetworkUtils mockNetworkUtils;
+    private FormDownloadRepository mockFormDownloadRepository;
+    private BaseResourceProvider mockResourceProvider;
+
     @Before
     public void setUp() {
-        viewModel = new FormDownloadViewModel(new TestSchedulerProvider(), mock(NetworkUtils.class), mock(BaseResourceProvider.class), mock(FormDownloadRepository.class));
+        mockNetworkUtils = Mockito.mock(NetworkUtils.class);
+        mockFormDownloadRepository = Mockito.spy(FormDownloadRepository.class);
+        mockResourceProvider = Mockito.mock(ResourceProvider.class);
+
+        viewModel = new FormDownloadViewModel(new TestSchedulerProvider(), mockNetworkUtils, mockResourceProvider, mockFormDownloadRepository);
 
         // prepare the spy!
         viewModel.setNavigator(Mockito.spy(FormDownloadNavigator.class));
@@ -159,5 +170,23 @@ public class FormDownloadViewModelTest {
         Assert.assertEquals("someurl", viewModel.getUrl());
         Assert.assertEquals("username", viewModel.getUsername());
         Assert.assertEquals("password", viewModel.getPassword());
+    }
+
+    @Test
+    public void loadFormListDownloadTaskIfNetworkAvailableTest() {
+        when(mockNetworkUtils.isNetworkAvailable()).thenReturn(true);
+
+        viewModel.startDownloadingForms();
+
+        Mockito.verify(mockFormDownloadRepository, times(1)).downloadForms(any(), any(), any());
+    }
+
+    @Test
+    public void displayErrorWhenDownloadingFormListIfNetworkUnavailableTest() {
+        when(mockNetworkUtils.isNetworkAvailable()).thenReturn(false);
+
+        viewModel.startDownloadingForms();
+
+        Mockito.verify(mockFormDownloadRepository, times(0)).downloadForms(any(), any(), any());
     }
 }
