@@ -142,6 +142,9 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
         setContentView(R.layout.form_download_list);
         setTitle(getString(R.string.get_forms));
 
+        viewModel = ViewModelProviders.of(this, factory).get(FormDownloadViewModel.class);
+        viewModel.setNavigator(this);
+
         // This activity is accessed directly externally
         permissionUtils.requestStoragePermissions(this, new PermissionListener() {
             @Override
@@ -163,9 +166,6 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
                 finish();
             }
         });
-
-        viewModel = ViewModelProviders.of(this, factory).get(FormDownloadViewModel.class);
-        viewModel.setNavigator(this);
     }
 
     private void init(Bundle savedInstanceState) {
@@ -336,6 +336,11 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
 
     private void bindViewModel() {
         // add subscriptions here
+
+        compositeDisposable.add(viewModel.getAlertDialog()
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
+                .subscribe(model -> createAlertDialog(model.getTitle(), model.getMessage(), model.shouldExit()), Timber::e));
     }
 
     private void unbindViewModel() {
@@ -480,9 +485,6 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
         if (downloadFormsTask != null) {
             downloadFormsTask.setDownloaderListener(this);
         }
-        if (viewModel.isAlertShowing()) {
-            createAlertDialog(viewModel.getAlertTitle(), viewModel.getAlertDialogMsg(), viewModel.shouldExit());
-        }
         if (viewModel.isProgressDialogShowing() && (progressDialog == null || !progressDialog.isShowing())) {
             createProgressDialog();
         }
@@ -549,8 +551,7 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
                 setReturnResult(false, "Formlist Downloading returned null.  That shouldn't happen", null);
             }
 
-            createAlertDialog(getString(R.string.load_remote_form_error),
-                    getString(R.string.error_occured), EXIT);
+            viewModel.setAlertDialog(getString(R.string.load_remote_form_error), getString(R.string.error_occured), EXIT);
             return;
         }
 
@@ -568,7 +569,7 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
                 setReturnResult(false, getString(R.string.load_remote_form_error), viewModel.getFormResults());
             }
 
-            createAlertDialog(dialogTitle, dialogMessage, DO_NOT_EXIT);
+            viewModel.setAlertDialog(dialogTitle, dialogMessage, DO_NOT_EXIT);
         } else {
             // Everything worked. Clear the list and add the results.
             viewModel.setFormNamesAndURLs(result);
@@ -655,7 +656,7 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
             switch (i) {
                 case DialogInterface.BUTTON_POSITIVE: // ok
                     // just close the dialog
-                    viewModel.setAlertShowing(false);
+                    viewModel.removeAlertDialog();
                     // successful download, so quit
                     // Also quit if in download_mode only(called by another app/activity just to download)
                     if (shouldExit || viewModel.isDownloadOnlyMode()) {
@@ -667,10 +668,6 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
         alertDialog.setCancelable(false);
         alertDialog.setButton(getString(R.string.ok), quitListener);
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
-        viewModel.setAlertDialogMsg(message);
-        viewModel.setAlertTitle(title);
-        viewModel.setAlertShowing(true);
-        viewModel.setShouldExit(shouldExit);
         DialogUtils.showDialog(alertDialog, this);
     }
 
@@ -713,7 +710,7 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
     }
 
     private void createAuthDialog() {
-        viewModel.setAlertShowing(false);
+        viewModel.removeAlertDialog();
 
         AuthDialogUtility authDialogUtility = new AuthDialogUtility();
         if (viewModel.getUrl() != null && viewModel.getUsername() != null && viewModel.getPassword() != null) {
@@ -754,7 +751,7 @@ public class FormDownloadActivity extends FormListActivity implements FormListDo
             viewModel.setProgressDialogShowing(false);
         }
 
-        createAlertDialog(getString(R.string.download_forms_result), getDownloadResultMessage(result), EXIT);
+        viewModel.setAlertDialog(getString(R.string.download_forms_result), getDownloadResultMessage(result), EXIT);
 
         // Set result to true for forms which were downloaded
         if (viewModel.isDownloadOnlyMode()) {

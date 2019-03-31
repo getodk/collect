@@ -27,6 +27,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
+import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
+
 public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> {
 
     private HashMap<String, FormDetails> formNamesAndURLs = new HashMap<>();
@@ -35,14 +38,12 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
 
     private final LinkedHashSet<String> selectedForms = new LinkedHashSet<>();
 
-    private String alertTitle;
+    private final BehaviorSubject<AlertDialogUiModel> alertDialogSubject;
+
     private String progressDialogMsg;
-    private String alertDialogMsg;
 
     private boolean progressDialogShowing;
-    private boolean alertShowing;
     private boolean cancelDialogShowing;
-    private boolean shouldExit;
     private boolean loadingCanceled;
 
     // Variables used when the activity is called from an external app
@@ -53,8 +54,12 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
     private String password;
     private final HashMap<String, Boolean> formResults = new HashMap<>();
 
+    private AlertDialogUiModel uiModel;
+
     public FormDownloadViewModel(SchedulerProvider schedulerProvider) {
         super(schedulerProvider);
+
+        alertDialogSubject = BehaviorSubject.create();
     }
 
     public HashMap<String, FormDetails> getFormNamesAndURLs() {
@@ -69,44 +74,12 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
         formNamesAndURLs.clear();
     }
 
-    public String getAlertTitle() {
-        return alertTitle;
-    }
-
-    public void setAlertTitle(String alertTitle) {
-        this.alertTitle = alertTitle;
-    }
-
     public String getProgressDialogMsg() {
         return progressDialogMsg == null ? Collect.getInstance().getString(R.string.please_wait) : progressDialogMsg;
     }
 
     public void setProgressDialogMsg(String progressDialogMsg) {
         this.progressDialogMsg = progressDialogMsg;
-    }
-
-    public String getAlertDialogMsg() {
-        return alertDialogMsg;
-    }
-
-    public void setAlertDialogMsg(String alertDialogMsg) {
-        this.alertDialogMsg = alertDialogMsg;
-    }
-
-    public boolean isAlertShowing() {
-        return alertShowing;
-    }
-
-    public void setAlertShowing(boolean alertShowing) {
-        this.alertShowing = alertShowing;
-    }
-
-    public boolean shouldExit() {
-        return shouldExit;
-    }
-
-    public void setShouldExit(boolean shouldExit) {
-        this.shouldExit = shouldExit;
     }
 
     public ArrayList<HashMap<String, String>> getFormList() {
@@ -211,5 +184,21 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
 
     public void setLoadingCanceled(boolean loadingCanceled) {
         this.loadingCanceled = loadingCanceled;
+    }
+
+    public Observable<AlertDialogUiModel> getAlertDialog() {
+        return alertDialogSubject
+                .filter(alertDialogUiModel -> uiModel != null)
+                .doOnSubscribe(disposable -> alertDialogSubject.onNext(uiModel));
+    }
+
+    public void setAlertDialog(String title, String message, boolean shouldExit) {
+        uiModel = new AlertDialogUiModel(title, message, shouldExit);
+
+        alertDialogSubject.onNext(uiModel);
+    }
+
+    public void removeAlertDialog() {
+        uiModel = null;
     }
 }
