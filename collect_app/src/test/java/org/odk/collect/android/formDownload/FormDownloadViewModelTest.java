@@ -17,6 +17,7 @@ public class FormDownloadViewModelTest {
     private TestObserver<AlertDialogUiModel> alertDialogTestSubscriber;
     private TestObserver<Boolean> progressDialogTestSubscriber;
     private TestObserver<Boolean> cancelDialogTestSubscriber;
+    private TestObserver<String> progressDialogMessageTestSubscriber;
 
     @Before
     public void setUp() {
@@ -25,6 +26,7 @@ public class FormDownloadViewModelTest {
         alertDialogTestSubscriber = new TestObserver<>();
         progressDialogTestSubscriber = new TestObserver<>();
         cancelDialogTestSubscriber = new TestObserver<>();
+        progressDialogMessageTestSubscriber = new TestObserver<>();
     }
 
     @After
@@ -104,5 +106,15 @@ public class FormDownloadViewModelTest {
 
         // last emiited value is immediately reported back
         cancelDialogTestSubscriber.assertValue(true);
+    }
+
+    @Test
+    public void displayLastShownProgressMessageTest() {
+        viewModel.setProgressDialogMessage("Progress 1");
+
+        // now assuming that the activity was recreated. So, the subject was resubscribed.
+        viewModel.getProgressDialogMessage().subscribe(progressDialogMessageTestSubscriber);
+
+        progressDialogMessageTestSubscriber.assertValue("Progress 1");
     }
 }
