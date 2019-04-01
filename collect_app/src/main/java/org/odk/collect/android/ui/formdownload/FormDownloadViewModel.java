@@ -342,7 +342,7 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
 
                         setCancelDialogShowing(false);
 
-                        if (isDownloadOnlyMode) {
+                        if (isDownloadOnlyMode && getNavigator() != null) {
                             getNavigator().setReturnResult(false, "Download cancelled", null);
                             getNavigator().goBack();
                         }

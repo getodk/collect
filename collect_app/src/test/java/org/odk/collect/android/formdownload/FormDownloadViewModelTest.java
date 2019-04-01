@@ -296,7 +296,9 @@ public class FormDownloadViewModelTest {
         Assert.assertTrue(actualModel.shouldExit());
 
         // assert that result was properly set
-        Mockito.verify(viewModel.getNavigator(), times(1)).setReturnResult(true, null, viewModel.getFormResults());
+        if (viewModel.getNavigator() != null) {
+            Mockito.verify(viewModel.getNavigator(), times(1)).setReturnResult(true, null, viewModel.getFormResults());
+        }
     }
 
     @Test
