@@ -49,15 +49,15 @@ public class FormDownloadViewModelTest {
 
     private NetworkUtils mockNetworkUtils;
     private FormDownloadRepository mockFormDownloadRepository;
-    private WebCredentialsUtils mockWebCredentialsUtils;
     private BaseResourceProvider testResourceProvider;
 
     @Before
     public void setUp() {
         mockNetworkUtils = Mockito.mock(NetworkUtils.class);
         mockFormDownloadRepository = Mockito.spy(FormDownloadRepository.class);
-        mockWebCredentialsUtils = Mockito.mock(WebCredentialsUtils.class);
         testResourceProvider = new ResourceProvider(RuntimeEnvironment.application.getApplicationContext());
+
+        WebCredentialsUtils mockWebCredentialsUtils = Mockito.mock(WebCredentialsUtils.class);
 
         viewModel = new FormDownloadViewModel(new TestSchedulerProvider(), mockNetworkUtils, testResourceProvider, mockFormDownloadRepository, mockWebCredentialsUtils);
 
@@ -297,5 +297,30 @@ public class FormDownloadViewModelTest {
 
         // assert that result was properly set
         Mockito.verify(viewModel.getNavigator(), times(1)).setReturnResult(true, null, viewModel.getFormResults());
+    }
+
+    @Test
+    public void cancelFormDownloadTask() {
+        when(mockFormDownloadRepository.isLoading()).thenReturn(true);
+
+        viewModel.getProgressDialog().subscribe(progressDialogTestSubscriber);
+        viewModel.getCancelDialog().subscribe(cancelDialogTestSubscriber);
+
+        List<FormDetails> formsToDownload = new ArrayList<>();
+        formsToDownload.add(Mockito.mock(FormDetails.class));
+
+        viewModel.startDownloadingForms(formsToDownload);
+        viewModel.cancelFormDownloadTask();
+
+        Disposable disposable = viewModel.getFormDownloadDisposable();
+
+        // assert that cancel dialog was displayed
+        cancelDialogTestSubscriber.assertValues(true);
+
+        // assert that progress dialog was earlier being displayed and then dismissed
+        progressDialogTestSubscriber.assertValues(true, false);
+
+        // assert that download task was disposed
+        Assert.assertTrue(disposable == null || disposable.isDisposed());
     }
 }
