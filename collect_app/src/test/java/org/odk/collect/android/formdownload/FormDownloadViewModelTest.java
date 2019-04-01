@@ -15,6 +15,7 @@ import org.odk.collect.android.ui.formdownload.FormDownloadRepository;
 import org.odk.collect.android.ui.formdownload.FormDownloadViewModel;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.NetworkUtils;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.utilities.providers.BaseResourceProvider;
 import org.odk.collect.android.utilities.providers.ResourceProvider;
 import org.odk.collect.android.utilities.rx.TestSchedulerProvider;
@@ -44,15 +45,17 @@ public class FormDownloadViewModelTest {
 
     private NetworkUtils mockNetworkUtils;
     private FormDownloadRepository mockFormDownloadRepository;
+    private WebCredentialsUtils mockWebCredentialsUtils;
     private BaseResourceProvider testResourceProvider;
 
     @Before
     public void setUp() {
         mockNetworkUtils = Mockito.mock(NetworkUtils.class);
         mockFormDownloadRepository = Mockito.spy(FormDownloadRepository.class);
+        mockWebCredentialsUtils = Mockito.mock(WebCredentialsUtils.class);
         testResourceProvider = new ResourceProvider(RuntimeEnvironment.application.getApplicationContext());
 
-        viewModel = new FormDownloadViewModel(new TestSchedulerProvider(), mockNetworkUtils, testResourceProvider, mockFormDownloadRepository);
+        viewModel = new FormDownloadViewModel(new TestSchedulerProvider(), mockNetworkUtils, testResourceProvider, mockFormDownloadRepository, mockWebCredentialsUtils);
 
         // prepare the spy!
         viewModel.setNavigator(Mockito.spy(FormDownloadNavigator.class));
@@ -185,7 +188,7 @@ public class FormDownloadViewModelTest {
     public void loadFormListDownloadTaskIfNetworkAvailableTest() {
         when(mockNetworkUtils.isNetworkAvailable()).thenReturn(true);
 
-        viewModel.startDownloadingForms();
+        viewModel.startDownloadingFormList();
 
         Mockito.verify(mockFormDownloadRepository, times(1)).downloadFormList(any(), any(), any());
     }
@@ -194,14 +197,14 @@ public class FormDownloadViewModelTest {
     public void displayErrorWhenDownloadingFormListIfNetworkUnavailableTest() {
         when(mockNetworkUtils.isNetworkAvailable()).thenReturn(false);
 
-        viewModel.startDownloadingForms();
+        viewModel.startDownloadingFormList();
 
         // assert that download task isn't triggered
         Mockito.verify(mockFormDownloadRepository, times(0)).downloadFormList(any(), any(), any());
 
         // finish the activity as well if in downloadOnly mode
         viewModel.setDownloadOnlyMode(true);
-        viewModel.startDownloadingForms();
+        viewModel.startDownloadingFormList();
 
         Mockito.verify(mockFormDownloadRepository, times(0)).downloadFormList(any(), any(), any());
         Mockito.verify(viewModel.getNavigator(), times(1)).setReturnResult(false, testResourceProvider.getString(R.string.no_connection), new HashMap<>());
@@ -216,10 +219,10 @@ public class FormDownloadViewModelTest {
 
         viewModel.getFormDownloadList().subscribe(formListDownloadTestSubscriber);
 
-        viewModel.startDownloadingForms();
+        viewModel.startDownloadingFormList();
         viewModel.cancelFormListDownloadTask();
 
-        Disposable disposable = viewModel.getDownloadDisposable();
+        Disposable disposable = viewModel.getFormListDownloadDisposable();
 
         Assert.assertTrue(disposable == null || disposable.isDisposed());
         Mockito.verify(mockFormDownloadRepository, times(1)).downloadFormList(any(), any(), any());
@@ -234,10 +237,10 @@ public class FormDownloadViewModelTest {
         viewModel.getFormDownloadList().subscribe(formListDownloadTestSubscriber);
 
         viewModel.setDownloadOnlyMode(true);
-        viewModel.startDownloadingForms();
+        viewModel.startDownloadingFormList();
         viewModel.cancelFormListDownloadTask();
 
-        Disposable disposable = viewModel.getDownloadDisposable();
+        Disposable disposable = viewModel.getFormListDownloadDisposable();
 
         Assert.assertTrue(disposable == null || disposable.isDisposed());
         Mockito.verify(mockFormDownloadRepository, times(1)).downloadFormList(any(), any(), any());

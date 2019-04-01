@@ -20,8 +20,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -36,22 +34,16 @@ import org.odk.collect.android.activities.FormListActivity;
 import org.odk.collect.android.adapters.FormDownloadListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.http.HttpCredentialsInterface;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.ViewModelProviderFactory;
-import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.logic.FormDetails;
-import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
-import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.utilities.rx.SchedulerProvider;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -81,9 +73,8 @@ import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_ERROR_M
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class FormDownloadActivity extends FormListActivity implements DownloadFormsTaskListener,
-        AuthDialogUtility.AuthDialogUtilityResultListener, AdapterView.OnItemClickListener,
-        FormDownloadNavigator {
+public class FormDownloadActivity extends FormListActivity implements FormDownloadNavigator,
+        AuthDialogUtility.AuthDialogUtilityResultListener, AdapterView.OnItemClickListener {
 
     private static final String FORM_DOWNLOAD_LIST_SORTING_ORDER = "formDownloadListSortingOrder";
 
@@ -102,7 +93,6 @@ public class FormDownloadActivity extends FormListActivity implements DownloadFo
     private ProgressDialog cancelDialog;
     private Button downloadButton;
 
-    private DownloadFormsTask downloadFormsTask;
     private Button toggleButton;
 
     private final ArrayList<HashMap<String, String>> filteredFormList = new ArrayList<>();
@@ -114,9 +104,6 @@ public class FormDownloadActivity extends FormListActivity implements DownloadFo
     private boolean displayOnlyUpdatedForms;
 
     private FormDownloadViewModel viewModel;
-
-    @Inject
-    WebCredentialsUtils webCredentialsUtils;
 
     @Inject
     PermissionUtils permissionUtils;
@@ -208,20 +195,7 @@ public class FormDownloadActivity extends FormListActivity implements DownloadFo
 
         filteredFormList.addAll(viewModel.getFormList());
 
-        if (getLastCustomNonConfigurationInstance() instanceof DownloadFormsTask) {
-            downloadFormsTask = (DownloadFormsTask) getLastCustomNonConfigurationInstance();
-            if (downloadFormsTask.getStatus() == AsyncTask.Status.FINISHED) {
-                try {
-                    if (progressDialog != null && progressDialog.isShowing()) {
-                        progressDialog.dismiss();
-                    }
-                    viewModel.setProgressDialogShowing(false);
-                } catch (IllegalArgumentException e) {
-                    Timber.i("Attempting to close a dialog that was not previously opened");
-                }
-                downloadFormsTask = null;
-            }
-        } else if (viewModel.getFormNamesAndURLs().isEmpty()
+        if (viewModel.getFormNamesAndURLs().isEmpty()
                 && getLastCustomNonConfigurationInstance() == null
                 && !viewModel.wasLoadingCanceled()) {
             // first time, so get the formlist
@@ -257,7 +231,7 @@ public class FormDownloadActivity extends FormListActivity implements DownloadFo
      * Starts the download task and shows the progress dialog.
      */
     private void downloadFormList() {
-        viewModel.startDownloadingForms();
+        viewModel.startDownloadingFormList();
     }
 
     private void bindViewModel() {
@@ -288,8 +262,13 @@ public class FormDownloadActivity extends FormListActivity implements DownloadFo
         compositeDisposable.add(viewModel.getCancelDialog()
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
-                .filter(shouldDisplay -> shouldDisplay)
-                .subscribe(shouldDisplay -> createCancelDialog(), Timber::e));
+                .subscribe(shouldDisplay -> {
+                    if (shouldDisplay && (cancelDialog == null || !cancelDialog.isShowing())) {
+                        createCancelDialog();
+                    } else if (!shouldDisplay && cancelDialog != null && cancelDialog.isShowing()) {
+                        cancelDialog.dismiss();
+                    }
+                }, Timber::e));
 
         compositeDisposable.add(viewModel.getFormDownloadList()
                 .subscribeOn(schedulerProvider.io())
@@ -385,55 +364,14 @@ public class FormDownloadActivity extends FormListActivity implements DownloadFo
         startFormsDownload(filesToDownload);
     }
 
-    @SuppressWarnings("unchecked")
     private void startFormsDownload(@NonNull ArrayList<FormDetails> filesToDownload) {
-        int totalCount = filesToDownload.size();
-        if (totalCount > 0) {
-            // show dialog box
-            viewModel.setProgressDialogShowing(true);
-
-            downloadFormsTask = new DownloadFormsTask();
-            downloadFormsTask.setDownloaderListener(this);
-
-            if (viewModel.getUrl() != null) {
-                if (viewModel.getUsername() != null && viewModel.getPassword() != null) {
-                    webCredentialsUtils.saveCredentials(viewModel.getUrl(), viewModel.getUsername(), viewModel.getPassword());
-                } else {
-                    webCredentialsUtils.clearCredentials(viewModel.getUrl());
-                }
-            }
-
-            downloadFormsTask.execute(filesToDownload);
-        } else {
-            ToastUtils.showShortToast(R.string.noselect_error);
-        }
-    }
-
-    @Override
-    public Object onRetainCustomNonConfigurationInstance() {
-        if (downloadFormsTask != null) {
-            return downloadFormsTask;
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (downloadFormsTask != null) {
-            downloadFormsTask.setDownloaderListener(null);
-        }
-        super.onDestroy();
+        viewModel.startDownloadingForms(filesToDownload);
     }
 
     @Override
     protected void onResume() {
-        bindViewModel();
-
-        if (downloadFormsTask != null) {
-            downloadFormsTask.setDownloaderListener(this);
-        }
         super.onResume();
+        bindViewModel();
     }
 
     @Override
@@ -443,6 +381,7 @@ public class FormDownloadActivity extends FormListActivity implements DownloadFo
         if (alertDialog != null && alertDialog.isShowing()) {
             alertDialog.dismiss();
         }
+
         super.onPause();
     }
 
@@ -617,13 +556,7 @@ public class FormDownloadActivity extends FormListActivity implements DownloadFo
                     dialog.dismiss();
 
                     viewModel.cancelFormListDownloadTask();
-
-                    if (downloadFormsTask != null) {
-                        viewModel.setCancelDialogShowing(true);
-                        downloadFormsTask.cancel(true);
-                    }
-                    viewModel.setLoadingCanceled(true);
-                    viewModel.setProgressDialogShowing(false);
+                    viewModel.cancelFormDownloadTask();
                 };
         progressDialog.setTitle(getString(R.string.downloading_data));
         progressDialog.setMessage(getString(R.string.please_wait));
@@ -655,43 +588,6 @@ public class FormDownloadActivity extends FormListActivity implements DownloadFo
         DialogUtils.showDialog(cancelDialog, this);
     }
 
-    @Override
-    public void progressUpdate(String currentFile, int progress, int total) {
-        String message = getString(R.string.fetching_file, currentFile, String.valueOf(progress), String.valueOf(total));
-        viewModel.setProgressDialogMessage(message);
-    }
-
-    @Override
-    public void formsDownloadingComplete(HashMap<FormDetails, String> result) {
-        if (downloadFormsTask != null) {
-            downloadFormsTask.setDownloaderListener(null);
-        }
-
-        cleanUpWebCredentials();
-
-        if (progressDialog.isShowing()) {
-            // should always be true here
-            progressDialog.dismiss();
-            viewModel.setProgressDialogShowing(false);
-        }
-
-        viewModel.setAlertDialog(getString(R.string.download_forms_result), getDownloadResultMessage(result), EXIT);
-
-        // Set result to true for forms which were downloaded
-        if (viewModel.isDownloadOnlyMode()) {
-            for (FormDetails formDetails: result.keySet()) {
-                String successKey = result.get(formDetails);
-                if (Collect.getInstance().getString(R.string.success).equals(successKey)) {
-                    if (viewModel.getFormResults().containsKey(formDetails.getFormID())) {
-                        viewModel.putFormResult(formDetails.getFormID(), true);
-                    }
-                }
-            }
-
-            setReturnResult(true, null, viewModel.getFormResults());
-        }
-    }
-
     public static String getDownloadResultMessage(HashMap<FormDetails, String> result) {
         Set<FormDetails> keys = result.keySet();
         StringBuilder b = new StringBuilder();
@@ -707,44 +603,16 @@ public class FormDownloadActivity extends FormListActivity implements DownloadFo
     }
 
     @Override
-    public void formsDownloadingCancelled() {
-        if (downloadFormsTask != null) {
-            downloadFormsTask.setDownloaderListener(null);
-            downloadFormsTask = null;
-        }
-
-        cleanUpWebCredentials();
-
-        if (cancelDialog != null && cancelDialog.isShowing()) {
-            cancelDialog.dismiss();
-            viewModel.setCancelDialogShowing(false);
-        }
-
-        if (viewModel.isDownloadOnlyMode()) {
-            setReturnResult(false, "Download cancelled", null);
-            finish();
-        }
-    }
-
-    @Override
     public void updatedCredentials() {
         // If the user updated the custom credentials using the dialog, let us update our
         // variables holding the custom credentials
-        if (viewModel.getUrl() != null) {
-            HttpCredentialsInterface httpCredentials = webCredentialsUtils.getCredentials(URI.create(viewModel.getUrl()));
-
-            if (httpCredentials != null) {
-                viewModel.setUsername(httpCredentials.getUsername());
-                viewModel.setPassword(httpCredentials.getPassword());
-            }
-        }
-
+        viewModel.updateCredentials();
         downloadFormList();
     }
 
     @Override
     public void cancelledUpdatingCredentials() {
-        finish();
+        goBack();
     }
 
     @Override
@@ -764,16 +632,5 @@ public class FormDownloadActivity extends FormListActivity implements DownloadFo
     @Override
     public void goBack() {
         finish();
-    }
-
-    private void cleanUpWebCredentials() {
-        if (viewModel.getUrl() != null) {
-            String host = Uri.parse(viewModel.getUrl())
-                    .getHost();
-
-            if (host != null) {
-                webCredentialsUtils.clearCredentials(viewModel.getUrl());
-            }
-        }
     }
 }

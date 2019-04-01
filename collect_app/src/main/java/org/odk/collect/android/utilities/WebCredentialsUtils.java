@@ -3,11 +3,12 @@ package org.odk.collect.android.utilities;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import org.odk.collect.android.http.HttpCredentials;
 import org.odk.collect.android.http.HttpCredentialsInterface;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -45,7 +46,7 @@ public class WebCredentialsUtils {
      * username and password if the intent extras aren't set?
      */
     public void clearCredentials(@NonNull String url) {
-        if (url.isEmpty()) {
+        if (TextUtils.isEmpty(url)) {
             return;
         }
 

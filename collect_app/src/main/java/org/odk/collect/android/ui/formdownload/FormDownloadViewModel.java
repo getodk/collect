@@ -19,23 +19,29 @@ package org.odk.collect.android.ui.formdownload;
 import android.os.Bundle;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.http.HttpCredentialsInterface;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.ui.base.BaseViewModel;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.NetworkUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.utilities.providers.BaseResourceProvider;
 import org.odk.collect.android.utilities.rx.SchedulerProvider;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.BehaviorSubject;
 import timber.log.Timber;
+
+import static org.odk.collect.android.ui.formdownload.FormDownloadActivity.getDownloadResultMessage;
 
 public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> {
 
@@ -49,7 +55,7 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
     private final BehaviorSubject<Boolean> progressDialogSubject;
     private final BehaviorSubject<String> progressDialogMessageSubject;
     private final BehaviorSubject<Boolean> cancelDialogSubject;
-    private final BehaviorSubject<HashMap<String, FormDetails>> formDownloadSubject;
+    private final BehaviorSubject<HashMap<String, FormDetails>> formListDownloadSubject;
 
     private boolean alertDialogVisible;
     private boolean loadingCanceled;
@@ -65,20 +71,30 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
     private final NetworkUtils networkUtils;
     private final BaseResourceProvider resourceProvider;
     private final FormDownloadRepository downloadRepository;
-    private Disposable downloadDisposable;
+    private final WebCredentialsUtils webCredentialsUtils;
 
-    public FormDownloadViewModel(SchedulerProvider schedulerProvider, NetworkUtils networkUtils, BaseResourceProvider resourceProvider, FormDownloadRepository downloadRepository) {
+    private Disposable formListDownloadDisposable;
+    private Disposable formDownloadDisposable;
+    private Disposable downloadProgressDisposable;
+
+    public FormDownloadViewModel(
+            SchedulerProvider schedulerProvider,
+            NetworkUtils networkUtils,
+            BaseResourceProvider resourceProvider,
+            FormDownloadRepository downloadRepository,
+            WebCredentialsUtils webCredentialsUtils) {
         super(schedulerProvider);
 
         this.networkUtils = networkUtils;
         this.resourceProvider = resourceProvider;
         this.downloadRepository = downloadRepository;
+        this.webCredentialsUtils = webCredentialsUtils;
 
         alertDialogSubject = BehaviorSubject.create();
         progressDialogSubject = BehaviorSubject.create();
         progressDialogMessageSubject = BehaviorSubject.create();
         cancelDialogSubject = BehaviorSubject.create();
-        formDownloadSubject = BehaviorSubject.create();
+        formListDownloadSubject = BehaviorSubject.create();
     }
 
     public void restoreState(Bundle bundle) {
@@ -239,11 +255,11 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
         alertDialogVisible = false;
     }
 
-    public Disposable getDownloadDisposable() {
-        return downloadDisposable;
+    public Disposable getFormListDownloadDisposable() {
+        return formListDownloadDisposable;
     }
 
-    public void startDownloadingForms() {
+    public void startDownloadingFormList() {
         if (!networkUtils.isNetworkAvailable()) {
             ToastUtils.showShortToast(R.string.no_connection);
 
@@ -258,19 +274,23 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
             // cancel pending tasks
             cancelFormListDownloadTask();
 
-            downloadDisposable = downloadRepository.downloadFormList(url, username, password)
+            formListDownloadDisposable = downloadRepository.downloadFormList(url, username, password)
                     .subscribeOn(getSchedulerProvider().computation())
                     .observeOn(getSchedulerProvider().io())
-                    .subscribe(formDownloadSubject::onNext, Timber::e);
+                    .subscribe(formListDownloadSubject::onNext, Timber::e);
 
-            getCompositeDisposable().add(downloadDisposable);
+            getCompositeDisposable().add(formListDownloadDisposable);
         }
     }
 
     public void cancelFormListDownloadTask() {
-        if (downloadRepository.isLoading() && downloadDisposable != null) {
-            downloadDisposable.dispose();
-            downloadDisposable = null;
+        loadingCanceled = true;
+
+        if (downloadRepository.isLoading() && formListDownloadDisposable != null) {
+            formListDownloadDisposable.dispose();
+            formListDownloadDisposable = null;
+
+            setProgressDialogShowing(false);
 
             // Only explicitly exit if DownloadFormListTask is running since
             // DownloadFormTask has a callback when cancelled and has code to handle
@@ -283,7 +303,95 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
     }
 
     public Observable<HashMap<String, FormDetails>> getFormDownloadList() {
-        return formDownloadSubject
+        return formListDownloadSubject
                 .doOnNext(__ -> setProgressDialogShowing(false));
+    }
+
+    public Disposable getFormDownloadDisposable() {
+        return formDownloadDisposable;
+    }
+
+    public void startDownloadingForms(List<FormDetails> filesToDownload) {
+
+        if (url != null) {
+            if (username != null && password != null) {
+                webCredentialsUtils.saveCredentials(url, username, password);
+            } else {
+                webCredentialsUtils.clearCredentials(url);
+            }
+        }
+
+        if (filesToDownload.isEmpty()) {
+            ToastUtils.showShortToast(R.string.noselect_error);
+        } else {
+            setProgressDialogShowing(true);
+
+            formDownloadDisposable = downloadRepository.downloadForms(filesToDownload)
+                    .subscribeOn(getSchedulerProvider().computation())
+                    .observeOn(getSchedulerProvider().io())
+                    .doOnSubscribe(disposable -> {
+                        downloadProgressDisposable = downloadRepository
+                                .getFormDownloadProgress()
+                                .subscribe(this::setProgressDialogMessage, Timber::e);
+
+                        getCompositeDisposable().add(downloadProgressDisposable);
+                    })
+                    .doOnDispose(() -> {
+                        downloadProgressDisposable.dispose();
+                        webCredentialsUtils.clearCredentials(url);
+
+                        setCancelDialogShowing(false);
+
+                        if (isDownloadOnlyMode) {
+                            getNavigator().setReturnResult(false, "Download cancelled", null);
+                            getNavigator().goBack();
+                        }
+                    })
+                    .subscribe(result -> {
+                        webCredentialsUtils.clearCredentials(url);
+
+                        setProgressDialogShowing(false);
+
+                        setAlertDialog(resourceProvider.getString(R.string.download_forms_result), getDownloadResultMessage(result), true);
+
+                        // Set result to true for forms which were downloaded
+                        if (isDownloadOnlyMode()) {
+                            for (FormDetails formDetails : result.keySet()) {
+                                String successKey = result.get(formDetails);
+                                if (resourceProvider.getString(R.string.success).equals(successKey)) {
+                                    if (getFormResults().containsKey(formDetails.getFormID())) {
+                                        putFormResult(formDetails.getFormID(), true);
+                                    }
+                                }
+                            }
+
+                            getNavigator().setReturnResult(true, null, getFormResults());
+                        }
+                    }, Timber::e);
+
+            getCompositeDisposable().add(formDownloadDisposable);
+        }
+    }
+
+    public void cancelFormDownloadTask() {
+        loadingCanceled = true;
+        setCancelDialogShowing(true);
+        setProgressDialogShowing(false);
+
+        if (downloadRepository.isLoading() && formDownloadDisposable != null) {
+            formDownloadDisposable.dispose();
+            formDownloadDisposable = null;
+        }
+    }
+
+    public void updateCredentials() {
+        if (url != null) {
+            HttpCredentialsInterface httpCredentials = webCredentialsUtils.getCredentials(URI.create(url));
+
+            if (httpCredentials != null) {
+                username = httpCredentials.getUsername();
+                password = httpCredentials.getPassword();
+            }
+        }
     }
 }
