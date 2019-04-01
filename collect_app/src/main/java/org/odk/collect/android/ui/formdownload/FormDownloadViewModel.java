@@ -258,7 +258,7 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
             // cancel pending tasks
             cancelFormListDownloadTask();
 
-            downloadDisposable = downloadRepository.downloadForms(url, username, password)
+            downloadDisposable = downloadRepository.downloadFormList(url, username, password)
                     .subscribeOn(getSchedulerProvider().computation())
                     .observeOn(getSchedulerProvider().io())
                     .subscribe(formDownloadSubject::onNext, Timber::e);

@@ -187,7 +187,7 @@ public class FormDownloadViewModelTest {
 
         viewModel.startDownloadingForms();
 
-        Mockito.verify(mockFormDownloadRepository, times(1)).downloadForms(any(), any(), any());
+        Mockito.verify(mockFormDownloadRepository, times(1)).downloadFormList(any(), any(), any());
     }
 
     @Test
@@ -197,20 +197,20 @@ public class FormDownloadViewModelTest {
         viewModel.startDownloadingForms();
 
         // assert that download task isn't triggered
-        Mockito.verify(mockFormDownloadRepository, times(0)).downloadForms(any(), any(), any());
+        Mockito.verify(mockFormDownloadRepository, times(0)).downloadFormList(any(), any(), any());
 
         // finish the activity as well if in downloadOnly mode
         viewModel.setDownloadOnlyMode(true);
         viewModel.startDownloadingForms();
 
-        Mockito.verify(mockFormDownloadRepository, times(0)).downloadForms(any(), any(), any());
+        Mockito.verify(mockFormDownloadRepository, times(0)).downloadFormList(any(), any(), any());
         Mockito.verify(viewModel.getNavigator(), times(1)).setReturnResult(false, testResourceProvider.getString(R.string.no_connection), new HashMap<>());
         Mockito.verify(viewModel.getNavigator(), times(1)).goBack();
     }
 
     @Test
     public void cancelFormListDownloadTest() {
-        when(mockFormDownloadRepository.downloadForms(any(), any(), any())).thenReturn(Observable.just(new HashMap<>()));
+        when(mockFormDownloadRepository.downloadFormList(any(), any(), any())).thenReturn(Observable.just(new HashMap<>()));
         when(mockFormDownloadRepository.isLoading()).thenReturn(true);
         when(mockNetworkUtils.isNetworkAvailable()).thenReturn(true);
 
@@ -222,12 +222,12 @@ public class FormDownloadViewModelTest {
         Disposable disposable = viewModel.getDownloadDisposable();
 
         Assert.assertTrue(disposable == null || disposable.isDisposed());
-        Mockito.verify(mockFormDownloadRepository, times(1)).downloadForms(any(), any(), any());
+        Mockito.verify(mockFormDownloadRepository, times(1)).downloadFormList(any(), any(), any());
     }
 
     @Test
     public void finishActivityIfFormListCanceledInDownloadOnlyModeTest() {
-        when(mockFormDownloadRepository.downloadForms(any(), any(), any())).thenReturn(Observable.just(new HashMap<>()));
+        when(mockFormDownloadRepository.downloadFormList(any(), any(), any())).thenReturn(Observable.just(new HashMap<>()));
         when(mockFormDownloadRepository.isLoading()).thenReturn(true);
         when(mockNetworkUtils.isNetworkAvailable()).thenReturn(true);
 
@@ -240,7 +240,7 @@ public class FormDownloadViewModelTest {
         Disposable disposable = viewModel.getDownloadDisposable();
 
         Assert.assertTrue(disposable == null || disposable.isDisposed());
-        Mockito.verify(mockFormDownloadRepository, times(1)).downloadForms(any(), any(), any());
+        Mockito.verify(mockFormDownloadRepository, times(1)).downloadFormList(any(), any(), any());
         Mockito.verify(viewModel.getNavigator(), times(1)).setReturnResult(false, "User cancelled the operation", new HashMap<>());
         Mockito.verify(viewModel.getNavigator(), times(1)).goBack();
     }
