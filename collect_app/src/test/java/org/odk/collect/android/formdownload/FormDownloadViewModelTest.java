@@ -22,15 +22,19 @@ import org.odk.collect.android.utilities.rx.TestSchedulerProvider;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.TestObserver;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.ui.formdownload.FormDownloadActivity.getDownloadResultMessage;
 
 @RunWith(RobolectricTestRunner.class)
 public class FormDownloadViewModelTest {
@@ -246,5 +250,52 @@ public class FormDownloadViewModelTest {
         Mockito.verify(mockFormDownloadRepository, times(1)).downloadFormList(any(), any(), any());
         Mockito.verify(viewModel.getNavigator(), times(1)).setReturnResult(false, "User cancelled the operation", new HashMap<>());
         Mockito.verify(viewModel.getNavigator(), times(1)).goBack();
+    }
+
+    @Test
+    public void formDownloadTaskTest() {
+        when(mockFormDownloadRepository.getFormDownloadProgress()).thenReturn(new Observable<String>() {
+            @Override
+            protected void subscribeActual(Observer<? super String> observer) {
+                observer.onNext("message 1");
+                observer.onNext("message 2");
+                observer.onNext("message 3");
+            }
+        });
+
+        List<FormDetails> formsToDownload = new ArrayList<>();
+        formsToDownload.add(Mockito.mock(FormDetails.class));
+
+        HashMap<FormDetails, String> result = new HashMap<>();
+        result.put(formsToDownload.get(0), "value");
+
+        when(mockFormDownloadRepository.downloadForms(formsToDownload)).thenReturn(new Observable<HashMap<FormDetails, String>>() {
+            @Override
+            protected void subscribeActual(Observer<? super HashMap<FormDetails, String>> observer) {
+                observer.onNext(result);
+            }
+        });
+
+        viewModel.getProgressDialog().subscribe(progressDialogTestSubscriber);
+        viewModel.getProgressDialogMessage().subscribe(progressDialogMessageTestSubscriber);
+        viewModel.getAlertDialog().subscribe(alertDialogTestSubscriber);
+
+        viewModel.setDownloadOnlyMode(true);
+        viewModel.startDownloadingForms(formsToDownload);
+
+        // assert that the progress dialog was displayed and then dismissed later
+        progressDialogTestSubscriber.assertValues(true, false);
+
+        // assert that the progress dialog showed the following messages in the same order
+        progressDialogMessageTestSubscriber.assertValues("message 1", "message 2", "message 3");
+
+        // assert that success message was displayed
+        AlertDialogUiModel actualModel = (AlertDialogUiModel) alertDialogTestSubscriber.getEvents().get(0).get(0);
+        Assert.assertEquals(testResourceProvider.getString(R.string.download_forms_result), actualModel.getTitle());
+        Assert.assertEquals(getDownloadResultMessage(result), actualModel.getMessage());
+        Assert.assertTrue(actualModel.shouldExit());
+
+        // assert that result was properly set
+        Mockito.verify(viewModel.getNavigator(), times(1)).setReturnResult(true, null, viewModel.getFormResults());
     }
 }
