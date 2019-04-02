@@ -55,7 +55,6 @@ import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_AUTH_REQUIRED;
 import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_ERROR_MSG;
 
 /**
@@ -270,6 +269,11 @@ public class FormDownloadActivity extends FormListActivity implements FormDownlo
                     }
                 }, Timber::e));
 
+        compositeDisposable.add(viewModel.getAuthDialogSubject()
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
+                .subscribe(this::createAuthDialog, Timber::e));
+
         compositeDisposable.add(viewModel.getFormDownloadList()
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
@@ -420,10 +424,7 @@ public class FormDownloadActivity extends FormListActivity implements FormDownlo
      * <formname, formdetails> tuples, or one tuple of DL.ERROR.MSG and the associated message.
      */
     public void formListDownloadingComplete(HashMap<String, FormDetails> result) {
-        if (result.containsKey(DL_AUTH_REQUIRED)) {
-            // need authorization
-            createAuthDialog();
-        } else if (result.containsKey(DL_ERROR_MSG)) {
+        if (result.containsKey(DL_ERROR_MSG)) {
             // Download failed
             String dialogMessage =
                     getString(R.string.list_failed_with_error,
@@ -556,15 +557,13 @@ public class FormDownloadActivity extends FormListActivity implements FormDownlo
         DialogUtils.showDialog(progressDialog, this);
     }
 
-    private void createAuthDialog() {
-        viewModel.removeAlertDialog();
-
+    private void createAuthDialog(AuthorizationModel authorizationModel) {
         AuthDialogUtility authDialogUtility = new AuthDialogUtility();
-        if (viewModel.getUrl() != null && viewModel.getUsername() != null && viewModel.getPassword() != null) {
-            authDialogUtility.setCustomUsername(viewModel.getUsername());
-            authDialogUtility.setCustomPassword(viewModel.getPassword());
+        if (authorizationModel.getUrl() != null && authorizationModel.getUsername() != null && authorizationModel.getPassword() != null) {
+            authDialogUtility.setCustomUsername(authorizationModel.getUsername());
+            authDialogUtility.setCustomPassword(authorizationModel.getPassword());
         }
-        DialogUtils.showDialog(authDialogUtility.createDialog(this, this, viewModel.getUrl()), this);
+        DialogUtils.showDialog(authDialogUtility.createDialog(this, this, authorizationModel.getUrl()), this);
     }
 
     private void createCancelDialog() {

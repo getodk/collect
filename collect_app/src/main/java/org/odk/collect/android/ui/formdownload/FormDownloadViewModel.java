@@ -42,6 +42,7 @@ import io.reactivex.subjects.BehaviorSubject;
 import timber.log.Timber;
 
 import static org.odk.collect.android.ui.formdownload.FormDownloadActivity.getDownloadResultMessage;
+import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_AUTH_REQUIRED;
 
 public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> {
 
@@ -55,6 +56,7 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
     private final BehaviorSubject<Boolean> progressDialogSubject;
     private final BehaviorSubject<String> progressDialogMessageSubject;
     private final BehaviorSubject<Boolean> cancelDialogSubject;
+    private final BehaviorSubject<AuthorizationModel> authDialogSubject;
     private final BehaviorSubject<HashMap<String, FormDetails>> formListDownloadSubject;
 
     private boolean alertDialogVisible;
@@ -95,6 +97,7 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
         progressDialogMessageSubject = BehaviorSubject.create();
         cancelDialogSubject = BehaviorSubject.create();
         formListDownloadSubject = BehaviorSubject.create();
+        authDialogSubject = BehaviorSubject.create();
     }
 
     public void restoreState(Bundle bundle) {
@@ -255,6 +258,11 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
         alertDialogVisible = false;
     }
 
+    public Observable<AuthorizationModel> getAuthDialogSubject() {
+        return authDialogSubject
+                .doOnNext(__ -> removeAlertDialog());
+    }
+
     public Disposable getFormListDownloadDisposable() {
         return formListDownloadDisposable;
     }
@@ -277,7 +285,13 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
             formListDownloadDisposable = downloadRepository.downloadFormList(url, username, password)
                     .subscribeOn(getSchedulerProvider().computation())
                     .observeOn(getSchedulerProvider().io())
-                    .subscribe(formListDownloadSubject::onNext, Timber::e);
+                    .subscribe(result -> {
+                        if (result.containsKey(DL_AUTH_REQUIRED)) {
+                            authDialogSubject.onNext(new AuthorizationModel(url, username, password));
+                        } else {
+                            formListDownloadSubject.onNext(result);
+                        }
+                    }, Timber::e);
 
             getCompositeDisposable().add(formListDownloadDisposable);
         }

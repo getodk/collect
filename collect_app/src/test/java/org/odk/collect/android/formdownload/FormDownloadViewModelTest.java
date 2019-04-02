@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.ui.formdownload.AlertDialogUiModel;
+import org.odk.collect.android.ui.formdownload.AuthorizationModel;
 import org.odk.collect.android.ui.formdownload.FormDownloadNavigator;
 import org.odk.collect.android.ui.formdownload.FormDownloadRepository;
 import org.odk.collect.android.ui.formdownload.FormDownloadViewModel;
@@ -35,6 +36,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.ui.formdownload.FormDownloadActivity.getDownloadResultMessage;
+import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_AUTH_REQUIRED;
 
 @RunWith(RobolectricTestRunner.class)
 public class FormDownloadViewModelTest {
@@ -45,6 +47,7 @@ public class FormDownloadViewModelTest {
     private TestObserver<Boolean> progressDialogTestSubscriber;
     private TestObserver<Boolean> cancelDialogTestSubscriber;
     private TestObserver<String> progressDialogMessageTestSubscriber;
+    private TestObserver<AuthorizationModel> authDialogTestSubscriber;
     private TestObserver<HashMap<String, FormDetails>> formListDownloadTestSubscriber;
 
     private NetworkUtils mockNetworkUtils;
@@ -68,6 +71,7 @@ public class FormDownloadViewModelTest {
         progressDialogTestSubscriber = new TestObserver<>();
         cancelDialogTestSubscriber = new TestObserver<>();
         progressDialogMessageTestSubscriber = new TestObserver<>();
+        authDialogTestSubscriber = new TestObserver<>();
         formListDownloadTestSubscriber = new TestObserver<>();
     }
 
@@ -302,7 +306,7 @@ public class FormDownloadViewModelTest {
     }
 
     @Test
-    public void cancelFormDownloadTask() {
+    public void cancelFormDownloadTaskTest() {
         when(mockFormDownloadRepository.isLoading()).thenReturn(true);
 
         viewModel.getProgressDialog().subscribe(progressDialogTestSubscriber);
@@ -324,5 +328,27 @@ public class FormDownloadViewModelTest {
 
         // assert that download task was disposed
         Assert.assertTrue(disposable == null || disposable.isDisposed());
+    }
+
+    @Test
+    public void showAuthDialogIfUnauthorizedWhenDownloadingFormsTest() {
+        when(mockNetworkUtils.isNetworkAvailable()).thenReturn(true);
+        when(mockFormDownloadRepository.downloadFormList(any(), any(), any())).thenReturn(new Observable<HashMap<String, FormDetails>>() {
+            @Override
+            protected void subscribeActual(Observer<? super HashMap<String, FormDetails>> observer) {
+                HashMap<String, FormDetails> result = new HashMap<>();
+                result.put(DL_AUTH_REQUIRED, new FormDetails("authorization error"));
+
+                observer.onNext(result);
+            }
+        });
+
+        viewModel.getAuthDialogSubject().subscribe(authDialogTestSubscriber);
+        viewModel.getFormDownloadList().subscribe(formListDownloadTestSubscriber);
+
+        viewModel.startDownloadingFormList();
+
+        authDialogTestSubscriber.assertValueCount(1);
+        formListDownloadTestSubscriber.assertNoValues();
     }
 }
