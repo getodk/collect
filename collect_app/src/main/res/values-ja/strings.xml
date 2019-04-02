@@ -674,5 +674,6 @@
   <string name="read_details">詳細を読む</string>
   <string name="google_sheets_encrypted_message">暗号化されたフォームは Google スプレッドに送信できません。</string>
   <string name="number_picker_title">数値選択</string>
+  <string name="too_complex_form">この形式はこの端末には複雑すぎます。 表現を単純化するか、フォーラムで助けを求めてください。</string>
   <string name="reading_files">ファイルを読み込んでいます</string>
 </resources>
