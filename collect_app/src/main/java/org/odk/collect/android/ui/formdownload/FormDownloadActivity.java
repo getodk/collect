@@ -420,17 +420,6 @@ public class FormDownloadActivity extends FormListActivity implements FormDownlo
      * <formname, formdetails> tuples, or one tuple of DL.ERROR.MSG and the associated message.
      */
     public void formListDownloadingComplete(HashMap<String, FormDetails> result) {
-        if (result == null) {
-            Timber.e("Formlist Downloading returned null.  That shouldn't happen");
-            // Just displayes "error occured" to the user, but this should never happen.
-            if (viewModel.isDownloadOnlyMode()) {
-                setReturnResult(false, "Formlist Downloading returned null.  That shouldn't happen", null);
-            }
-
-            viewModel.setAlertDialog(getString(R.string.load_remote_form_error), getString(R.string.error_occured), EXIT);
-            return;
-        }
-
         if (result.containsKey(DL_AUTH_REQUIRED)) {
             // need authorization
             createAuthDialog();

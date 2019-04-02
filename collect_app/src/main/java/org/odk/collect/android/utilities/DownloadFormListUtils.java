@@ -92,7 +92,7 @@ public class DownloadFormListUtils {
 
         // We populate this with available forms from the specified server.
         // <formname, details>
-        HashMap<String, FormDetails> formList = new HashMap<String, FormDetails>();
+        final HashMap<String, FormDetails> formList = new HashMap<String, FormDetails>();
 
         if (url != null) {
             String host = Uri.parse(url).getHost();
