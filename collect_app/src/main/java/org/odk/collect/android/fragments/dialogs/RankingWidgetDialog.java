@@ -20,6 +20,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog.Builder;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,7 +31,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import org.javarosa.core.model.FormIndex;
@@ -106,14 +106,14 @@ public class RankingWidgetDialog extends DialogFragment {
         super.onSaveInstanceState(outState);
     }
 
-    private ScrollView setUpRankingLayout(List<String> values, FormIndex formIndex) {
+    private NestedScrollView setUpRankingLayout(List<String> values, FormIndex formIndex) {
         LinearLayout rankingLayout = new LinearLayout(getContext());
         rankingLayout.setOrientation(LinearLayout.HORIZONTAL);
         rankingLayout.addView(setUpPositionsLayout(values));
         rankingLayout.addView(setUpRecyclerView(values, formIndex));
         rankingLayout.setPadding(10, 0, 10, 0);
 
-        ScrollView scrollView = new ScrollView(getContext());
+        NestedScrollView scrollView = new NestedScrollView(getContext());
         scrollView.addView(rankingLayout);
         return scrollView;
     }
