@@ -338,7 +338,7 @@
   <string name="enable_gps">Activar el GPS</string>
   <string name="geotrace_title">GeoLínea</string>
   <string name="polygon_save">Guardar como polígono</string>
-  <string name="polygon_save_deprecation_warning">(Esta opción será removida en la próxima actualización. Ver bit.ly/odk18277 para alternativas.)</string>
+  <string name="polygon_save_deprecation_warning">(Esta opción será removida en la próxima actualización)</string>
   <string name="polyline_save">Guardar como Polilínea</string>
   <string name="gps_enable_message">GPS esta deshabilitado. ¿Activar?</string>
   <string name="select_offline_layer">Seleccione la capa sin conexión</string>

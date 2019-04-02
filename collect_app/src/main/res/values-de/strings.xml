@@ -678,5 +678,6 @@
   <string name="read_details">Details lesen</string>
   <string name="google_sheets_encrypted_message">Verschlüsselte Formulare können nicht an Google Sheets gesendet werden.</string>
   <string name="number_picker_title">Zahlenwähler</string>
+  <string name="too_complex_form">Dieses Formular ist zu komplex für dieses Gerät. Versuche Ausdrücke zu vereinfachen oder bitte im Forum um Hilfe.</string>
   <string name="reading_files">Lese Dateien</string>
 </resources>
