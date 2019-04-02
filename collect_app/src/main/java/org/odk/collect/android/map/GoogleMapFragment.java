@@ -327,7 +327,10 @@ public class GoogleMapFragment extends SupportMapFragment implements
         if (gpsLocationListener != null) {
             gpsLocationListener.onPoint(lastLocationFix);
         }
-        updateLocationIndicator(toLatLng(lastLocationFix), location.getAccuracy());
+
+        if (getActivity() != null) {
+            updateLocationIndicator(toLatLng(lastLocationFix), location.getAccuracy());
+        }
     }
 
     protected void updateLocationIndicator(LatLng loc, double radius) {
@@ -483,7 +486,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     protected Marker createMarker(GoogleMap map, MapPoint point, boolean draggable) {
-        if (map == null) {  // during Robolectric tests, map will be null
+        if (map == null || getActivity() == null) {  // during Robolectric tests, map will be null
             return null;
         }
         // A Marker's position is a LatLng with just latitude and longitude
