@@ -47,8 +47,6 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.amazonaws.mobile.AWSMobileClient;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.external.handler.SmapRemoteDataItem;
-import org.odk.collect.android.injection.config.AppComponent;
-import org.odk.collect.android.injection.config.DaggerAppComponent;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.jobs.CollectJobCreator;
