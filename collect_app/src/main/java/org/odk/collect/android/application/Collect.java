@@ -46,7 +46,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.amazonaws.mobile.AWSMobileClient;
 import org.odk.collect.android.external.ExternalDataManager;
-import org.odk.collect.android.external.handler.SmapRemoteDataItem;
+import org.odk.collect.android.external.handler.SmapRemoteDataItem; 
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.jobs.CollectJobCreator;
@@ -129,9 +129,6 @@ public class Collect extends Application {
     private HashMap<String, String> remoteCalls = null;                     // smap
     private Stack<FormLaunchDetail> formStack = new Stack<>();              // smap
     private FormRestartDetails mRestartDetails;                             // smap
-
-    @Inject
-    DispatchingAndroidInjector<Activity> androidInjector;
 
     public static Collect getInstance() {
         return singleton;
