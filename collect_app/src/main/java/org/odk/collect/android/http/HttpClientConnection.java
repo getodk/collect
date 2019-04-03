@@ -912,7 +912,7 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
                 req.addHeader(key, headers.get(key));
             }
         }
-        
+
         // Make the call
         HttpResponse response = httpclient.execute(req, httpContext);
         int responseCode = response.getStatusLine().getStatusCode();
