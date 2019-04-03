@@ -9,6 +9,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
 
@@ -22,6 +23,8 @@ import static org.junit.Assert.assertThat;
 
 public abstract class OpenRosaHttpInterfaceTest {
 
+    protected abstract void startHttpsMockWebServer(MockWebServer mockWebServer) throws IOException;
+
     protected abstract OpenRosaHttpInterface buildSubject();
 
     private final MockWebServer mockWebServer = new MockWebServer();
@@ -31,7 +34,7 @@ public abstract class OpenRosaHttpInterfaceTest {
     @Before
     public void setup() throws Exception {
         mockWebServer.start();
-        httpsMockWebServer.start(8443);
+        startHttpsMockWebServer(httpsMockWebServer);
 
         subject = buildSubject();
     }
@@ -90,7 +93,6 @@ public abstract class OpenRosaHttpInterfaceTest {
     }
 
     @Test
-    @Ignore("OkHttpConnection not fooled into https behaviour by port 8443 - scheme needs to be https")
     public void executeGetRequest_withCredentials_whenHttps_retriesWithCredentials() throws Exception  {
         httpsMockWebServer.enqueue(new MockResponse()
                 .setResponseCode(401)

@@ -10,6 +10,8 @@ import com.burgstaller.okhttp.CachingAuthenticatorDecorator;
 import com.burgstaller.okhttp.DispatchingAuthenticator;
 import com.burgstaller.okhttp.basic.BasicAuthenticator;
 import com.burgstaller.okhttp.digest.CachingAuthenticator;
+import com.burgstaller.okhttp.digest.Credentials;
+import com.burgstaller.okhttp.digest.DigestAuthenticator;
 
 import org.apache.commons.io.IOUtils;
 import org.odk.collect.android.BuildConfig;
@@ -32,9 +34,6 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-
-import com.burgstaller.okhttp.digest.Credentials;
-import com.burgstaller.okhttp.digest.DigestAuthenticator;
 
 import okhttp3.Headers;
 import okhttp3.MediaType;
@@ -76,16 +75,21 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
      */
     private static String lastRequestScheme = "";
 
-    MultipartBody multipartBody;
+    private MultipartBody multipartBody;
 
-    public OkHttpConnection() {
+    @Nullable
+    private final OkHttpClient.Builder baseClient;
+
+    public OkHttpConnection(@Nullable OkHttpClient.Builder baseClient) {
+        this.baseClient = baseClient;
+
         if (httpClient == null) {
             initializeHttpClient();
         }
     }
 
     private synchronized void initializeHttpClient() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        OkHttpClient.Builder builder = baseClient != null ? baseClient : new OkHttpClient.Builder();
         httpClient = builder
                 .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                 .writeTimeout(WRITE_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
