@@ -42,7 +42,6 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
-import org.odk.collect.android.utilities.rx.SchedulerProvider;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,7 +51,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_ERROR_MSG;
@@ -95,7 +93,6 @@ public class FormDownloadActivity extends FormListActivity implements FormDownlo
     private Button toggleButton;
 
     private final ArrayList<HashMap<String, String>> filteredFormList = new ArrayList<>();
-    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
@@ -109,9 +106,6 @@ public class FormDownloadActivity extends FormListActivity implements FormDownlo
 
     @Inject
     ViewModelProviderFactory factory;
-
-    @Inject
-    SchedulerProvider schedulerProvider;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -157,6 +151,7 @@ public class FormDownloadActivity extends FormListActivity implements FormDownlo
         }
 
         viewModel.restoreState(bundle);
+        bindViewModel(viewModel);
 
         downloadButton = findViewById(R.id.add_button);
         downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
@@ -233,55 +228,51 @@ public class FormDownloadActivity extends FormListActivity implements FormDownlo
         viewModel.startDownloadingFormList();
     }
 
-    private void bindViewModel() {
-        // add subscriptions here
+    private void bindViewModel(FormDownloadViewModel viewModel) {
 
-        compositeDisposable.add(viewModel.getAlertDialog()
-                .subscribeOn(schedulerProvider.io())
-                .observeOn(schedulerProvider.ui())
-                .subscribe(model -> createAlertDialog(model.getTitle(), model.getMessage(), model.shouldExit()), Timber::e));
+        viewModel.getAlertDialog().observe(this, alertModel -> {
+            if (alertModel != null) {
+                createAlertDialog(alertModel.getTitle(), alertModel.getMessage(), alertModel.shouldExit());
+            }
+        });
 
-        compositeDisposable.add(viewModel.getProgressDialog()
-                .subscribeOn(schedulerProvider.io())
-                .observeOn(schedulerProvider.ui())
-                .subscribe(shouldDisplay -> {
-                    if (shouldDisplay && (progressDialog == null || !progressDialog.isShowing())) {
-                        createProgressDialog();
-                    } else if (!shouldDisplay && progressDialog != null && progressDialog.isShowing()) {
-                        progressDialog.dismiss();
-                    }
-                }, Timber::e));
+        viewModel.getProgressDialog().observe(this, shouldDisplay -> {
+            if (shouldDisplay != null) {
+                if (shouldDisplay && (progressDialog == null || !progressDialog.isShowing())) {
+                    createProgressDialog();
+                } else if (!shouldDisplay && progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+            }
+        });
 
-        compositeDisposable.add(viewModel.getProgressDialogMessage()
-                .subscribeOn(schedulerProvider.io())
-                .observeOn(schedulerProvider.ui())
-                .filter(message -> progressDialog != null)
-                .subscribe(message -> progressDialog.setMessage(message), Timber::e));
+        viewModel.getProgressDialogMessage().observe(this, message -> {
+            if (message != null && progressDialog != null) {
+                progressDialog.setMessage(message);
+            }
+        });
 
-        compositeDisposable.add(viewModel.getCancelDialog()
-                .subscribeOn(schedulerProvider.io())
-                .observeOn(schedulerProvider.ui())
-                .subscribe(shouldDisplay -> {
-                    if (shouldDisplay && (cancelDialog == null || !cancelDialog.isShowing())) {
-                        createCancelDialog();
-                    } else if (!shouldDisplay && cancelDialog != null && cancelDialog.isShowing()) {
-                        cancelDialog.dismiss();
-                    }
-                }, Timber::e));
+        viewModel.getCancelDialog().observe(this, shouldDisplay -> {
+            if (shouldDisplay != null) {
+                if (shouldDisplay && (cancelDialog == null || !cancelDialog.isShowing())) {
+                    createCancelDialog();
+                } else if (!shouldDisplay && cancelDialog != null && cancelDialog.isShowing()) {
+                    cancelDialog.dismiss();
+                }
+            }
+        });
 
-        compositeDisposable.add(viewModel.getAuthDialogSubject()
-                .subscribeOn(schedulerProvider.io())
-                .observeOn(schedulerProvider.ui())
-                .subscribe(this::createAuthDialog, Timber::e));
+        viewModel.getAuthDialog().observe(this, model -> {
+            if (model != null) {
+                createAuthDialog(model.getUrl(), model.getUsername(), model.getPassword());
+            }
+        });
 
-        compositeDisposable.add(viewModel.getFormDownloadList()
-                .subscribeOn(schedulerProvider.io())
-                .observeOn(schedulerProvider.ui())
-                .subscribe(this::formListDownloadingComplete, Timber::e));
-    }
-
-    private void unbindViewModel() {
-        compositeDisposable.clear();
+        viewModel.getFormDownloadList().observe(this, result -> {
+            if (result != null) {
+                formListDownloadingComplete(result);
+            }
+        });
     }
 
     @Override
@@ -373,15 +364,7 @@ public class FormDownloadActivity extends FormListActivity implements FormDownlo
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        bindViewModel();
-    }
-
-    @Override
     protected void onPause() {
-        unbindViewModel();
-
         if (alertDialog != null && alertDialog.isShowing()) {
             alertDialog.dismiss();
         }
@@ -557,13 +540,13 @@ public class FormDownloadActivity extends FormListActivity implements FormDownlo
         DialogUtils.showDialog(progressDialog, this);
     }
 
-    private void createAuthDialog(AuthorizationModel authorizationModel) {
+    private void createAuthDialog(String url, String username, String password) {
         AuthDialogUtility authDialogUtility = new AuthDialogUtility();
-        if (authorizationModel.getUrl() != null && authorizationModel.getUsername() != null && authorizationModel.getPassword() != null) {
-            authDialogUtility.setCustomUsername(authorizationModel.getUsername());
-            authDialogUtility.setCustomPassword(authorizationModel.getPassword());
+        if (url != null && username != null && password != null) {
+            authDialogUtility.setCustomUsername(username);
+            authDialogUtility.setCustomPassword(password);
         }
-        DialogUtils.showDialog(authDialogUtility.createDialog(this, this, authorizationModel.getUrl()), this);
+        DialogUtils.showDialog(authDialogUtility.createDialog(this, this, url), this);
     }
 
     private void createCancelDialog() {

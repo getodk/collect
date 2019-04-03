@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.ui.formdownload;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.os.Bundle;
 
 import org.odk.collect.android.R;
@@ -36,9 +38,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.subjects.BehaviorSubject;
 import timber.log.Timber;
 
 import static org.odk.collect.android.ui.formdownload.FormDownloadActivity.getDownloadResultMessage;
@@ -52,14 +52,13 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
 
     private final LinkedHashSet<String> selectedForms = new LinkedHashSet<>();
 
-    private final BehaviorSubject<AlertDialogUiModel> alertDialogSubject;
-    private final BehaviorSubject<Boolean> progressDialogSubject;
-    private final BehaviorSubject<String> progressDialogMessageSubject;
-    private final BehaviorSubject<Boolean> cancelDialogSubject;
-    private final BehaviorSubject<AuthorizationModel> authDialogSubject;
-    private final BehaviorSubject<HashMap<String, FormDetails>> formListDownloadSubject;
+    private final MutableLiveData<AlertDialogUiModel> alertDialogSubject = new MutableLiveData<>();
+    private final MutableLiveData<AuthorizationModel> authDialogSubject = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> cancelDialogSubject = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> progressDialogSubject = new MutableLiveData<>();
+    private final MutableLiveData<HashMap<String, FormDetails>> formListDownloadSubject = new MutableLiveData<>();
+    private final MutableLiveData<String> progressDialogMessageSubject = new MutableLiveData<>();
 
-    private boolean alertDialogVisible;
     private boolean loadingCanceled;
 
     // Variables used when the activity is called from an external app
@@ -91,13 +90,6 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
         this.resourceProvider = resourceProvider;
         this.downloadRepository = downloadRepository;
         this.webCredentialsUtils = webCredentialsUtils;
-
-        alertDialogSubject = BehaviorSubject.create();
-        progressDialogSubject = BehaviorSubject.create();
-        progressDialogMessageSubject = BehaviorSubject.create();
-        cancelDialogSubject = BehaviorSubject.create();
-        formListDownloadSubject = BehaviorSubject.create();
-        authDialogSubject = BehaviorSubject.create();
     }
 
     public void restoreState(Bundle bundle) {
@@ -136,12 +128,12 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
         formNamesAndURLs.clear();
     }
 
-    public BehaviorSubject<String> getProgressDialogMessage() {
+    public LiveData<String> getProgressDialogMessage() {
         return progressDialogMessageSubject;
     }
 
     public void setProgressDialogMessage(String progressDialogMessage) {
-        progressDialogMessageSubject.onNext(progressDialogMessage);
+        progressDialogMessageSubject.postValue(progressDialogMessage);
     }
 
     public ArrayList<HashMap<String, String>> getFormList() {
@@ -221,10 +213,10 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
     }
 
     public void setCancelDialogShowing(boolean cancelDialogShowing) {
-        cancelDialogSubject.onNext(cancelDialogShowing);
+        cancelDialogSubject.setValue(cancelDialogShowing);
     }
 
-    public Observable<Boolean> getCancelDialog() {
+    public LiveData<Boolean> getCancelDialog() {
         return cancelDialogSubject;
     }
 
@@ -237,30 +229,27 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
     }
 
     public void setProgressDialogShowing(boolean progressDialogShowing) {
-        progressDialogSubject.onNext(progressDialogShowing);
+        progressDialogSubject.setValue(progressDialogShowing);
     }
 
-    public Observable<Boolean> getProgressDialog() {
+    public LiveData<Boolean> getProgressDialog() {
         return progressDialogSubject;
     }
 
-    public Observable<AlertDialogUiModel> getAlertDialog() {
-        return alertDialogSubject
-                .filter(__ -> alertDialogVisible);
+    public LiveData<AlertDialogUiModel> getAlertDialog() {
+        return alertDialogSubject;
     }
 
     public void setAlertDialog(String title, String message, boolean shouldExit) {
-        alertDialogVisible = true;
-        alertDialogSubject.onNext(new AlertDialogUiModel(title, message, shouldExit));
+        alertDialogSubject.setValue(new AlertDialogUiModel(title, message, shouldExit));
     }
 
     public void removeAlertDialog() {
-        alertDialogVisible = false;
+        alertDialogSubject.setValue(null);
     }
 
-    public Observable<AuthorizationModel> getAuthDialogSubject() {
-        return authDialogSubject
-                .doOnNext(__ -> removeAlertDialog());
+    public LiveData<AuthorizationModel> getAuthDialog() {
+        return authDialogSubject;
     }
 
     public Disposable getFormListDownloadDisposable() {
@@ -284,12 +273,17 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
 
             formListDownloadDisposable = downloadRepository.downloadFormList(url, username, password)
                     .subscribeOn(getSchedulerProvider().computation())
-                    .observeOn(getSchedulerProvider().io())
+                    .observeOn(getSchedulerProvider().ui())
+                    .doOnDispose(() -> {
+                        setCancelDialogShowing(false);
+                    })
                     .subscribe(result -> {
                         if (result.containsKey(DL_AUTH_REQUIRED)) {
-                            authDialogSubject.onNext(new AuthorizationModel(url, username, password));
+                            removeAlertDialog();
+                            authDialogSubject.setValue(new AuthorizationModel(url, username, password));
                         } else {
-                            formListDownloadSubject.onNext(result);
+                            setProgressDialogShowing(false);
+                            formListDownloadSubject.setValue(result);
                         }
                     }, Timber::e);
 
@@ -298,12 +292,11 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
     }
 
     public void cancelFormListDownloadTask() {
-        loadingCanceled = true;
-
         if (downloadRepository.isLoading() && formListDownloadDisposable != null) {
             formListDownloadDisposable.dispose();
             formListDownloadDisposable = null;
 
+            loadingCanceled = true;
             setProgressDialogShowing(false);
 
             // Only explicitly exit if DownloadFormListTask is running since
@@ -316,9 +309,8 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
         }
     }
 
-    public Observable<HashMap<String, FormDetails>> getFormDownloadList() {
-        return formListDownloadSubject
-                .doOnNext(__ -> setProgressDialogShowing(false));
+    public LiveData<HashMap<String, FormDetails>> getFormDownloadList() {
+        return formListDownloadSubject;
     }
 
     public Disposable getFormDownloadDisposable() {
@@ -342,7 +334,7 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
 
             formDownloadDisposable = downloadRepository.downloadForms(filesToDownload)
                     .subscribeOn(getSchedulerProvider().computation())
-                    .observeOn(getSchedulerProvider().io())
+                    .observeOn(getSchedulerProvider().ui())
                     .doOnSubscribe(disposable -> {
                         downloadProgressDisposable = downloadRepository
                                 .getFormDownloadProgress()
@@ -388,13 +380,13 @@ public class FormDownloadViewModel extends BaseViewModel<FormDownloadNavigator> 
     }
 
     public void cancelFormDownloadTask() {
-        loadingCanceled = true;
-        setCancelDialogShowing(true);
-        setProgressDialogShowing(false);
-
         if (downloadRepository.isLoading() && formDownloadDisposable != null) {
             formDownloadDisposable.dispose();
             formDownloadDisposable = null;
+
+            loadingCanceled = true;
+            setCancelDialogShowing(true);
+            setProgressDialogShowing(false);
         }
     }
 
