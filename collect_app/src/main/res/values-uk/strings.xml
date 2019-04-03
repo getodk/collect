@@ -329,7 +329,6 @@
   <string name="get_shape">Почати ГеоФігуру</string>
   <string name="get_trace">Почати ГеоМаршрут</string>
   <string name="geoshape_title">ГеоФігура</string>
-  <string name="select_geotrace_mode">Обрати режим ГеоМаршруту</string>
   <string name="start">Почати</string>
   <string name="enable_gps">Увімкнути GPS</string>
   <string name="geotrace_title">ГеоМаршрут</string>
@@ -343,9 +342,6 @@
   <string name="polygon_validator">Для багатокутника необхідно мінімум 3 точки</string>
   <string name="polyline_validator">Для створення лінії необхідні принаймні дві точки</string>
   <string name="clear">Очистити</string>
-  <string name="manual_mode">Ручний режим</string>
-  <string name="automatic_mode">Автоматичний режим</string>
-  <string name="geoshape_instruction">Довге натискання для розміщення позначок.</string>
   <string name="geopoint_instruction">Довго натисніть для розміщення позначки або натисніть кнопку Додати позначку.</string>
   <string name="geopoint_no_draggable_instruction">Натисніть кнопку Додати позначку.</string>
   <string name="discard">Скинути</string>
@@ -367,7 +363,6 @@
   <string name="install_openmapkit">Будь ласка встановіть OpenMapKit!</string>
   <string name="go_back">Повернутись</string>
   <string name="download_selected">Завантажити обране</string>
-  <string name="record_geopoint">Записати ГеоТочку</string>
   <string name="gps_result">Широта: %1$s\nДовгота: %2$s\nВисота: %3$sm\nТочність: %4$sm</string>
   <string name="parser_exception">XPathParser Exception: \"%s\"</string>
   <string name="selected_answer">Обрано: %s</string>
@@ -506,7 +501,7 @@
   <string name="invalid_email_address">Некоректна електронна адреса!</string>
   <string name="sort_by">Сортувати за</string>
   <string name="server">Сервер</string>
-  <string name="submission_transport_admin_setting">Транспортування відправлень</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Обрати заначення</string>
   <string name="edit_value">Редагувати значення</string>
   <string name="no_value_selected">Значення не обране</string>

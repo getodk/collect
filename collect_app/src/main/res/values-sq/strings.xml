@@ -286,7 +286,6 @@
   <string name="get_shape">Nis GeoShape</string>
   <string name="get_trace">Nis GeoTrace</string>
   <string name="geoshape_title">GeoShape</string>
-  <string name="select_geotrace_mode">Përzgjidh mënyrën GeoTrace</string>
   <string name="start">Fillo</string>
   <string name="enable_gps">Aktivizo GPS-in</string>
   <string name="geotrace_title">GeoTrace</string>
@@ -299,9 +298,6 @@
   <string name="geo_exit_warning">Elimino ndryshimet dhe kthehu në ODK?</string>
   <string name="polygon_validator">Duhen së paku 3 pika për të krijuar Poligonin</string>
   <string name="clear">Pastro</string>
-  <string name="manual_mode">Manuale</string>
-  <string name="automatic_mode">Automatike</string>
-  <string name="geoshape_instruction">Shtyp për pak sekonda për të vendosur shenjë.</string>
   <string name="geopoint_instruction">Shtyp për pak sekonda për të vendosur një shenjë ose shtuar buton shenjues</string>
   <string name="discard">Elimino</string>
   <string name="geoshape_view_change_location">Shih ose ndrysho GeoShape</string>
@@ -321,7 +317,6 @@
   <string name="install_openmapkit">Lutemi, instaloni OpenMapKit!</string>
   <string name="go_back">Kthehu prapa</string>
   <string name="download_selected">Shkarko të përzgjedhurat</string>
-  <string name="record_geopoint">Regjistro vendndodhjen gjeografike</string>
   <string name="gps_result">Gjerësi: %1$s\nGjatësi: %2$s\nLartësi: %3$sm\nSaktësi: %4$sm</string>
   <string name="parser_exception">Përjashtim XPathParser \"%s\"</string>
   <string name="selected_answer">Përzgjedhur: %s</string>
@@ -455,6 +450,7 @@
   <string name="not_supported_offline_layer_format">Shtresa offline që përzgjodhët përdor format PBF, i cili nuk është i suportuar.</string>
   <string name="invalid_email_address">Adresa email nuk është e vlefshme</string>
   <string name="sort_by">Rendit sipas</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Përzgjidh vlerën</string>
   <string name="edit_value">Ndrysho vlerën</string>
   <string name="no_value_selected">Nuk keni përzgjedhur vlerën</string>
@@ -514,6 +510,5 @@
   <string name="missing_google_account_dialog_title">Llogaria në Google nuk është përcaktuar</string>
   <string name="go_to_settings">Shko tek parametrat</string>
   <string name="track_location">Gjurmo vendndodhjen</string>
-  <string name="background_location_enabled">Kjo formë gjurmon vendndodhjen tuaj. Mund ta ç\'aktivizoni gjurmimin e vendndodhjes duke shkuar në menunë \u0020\u0020⋮\u0020\u0020 më sipër.</string>
   <string name="open_file">Hap file</string>
 </resources>

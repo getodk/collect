@@ -71,7 +71,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         String s = prompt.getAnswerText();
         if (s != null && !s.equals("")) {
             getBearingButton.setText(getContext().getString(R.string.replace_bearing));
-            if (!isSensorAvailable && answer != null) {
+            if (!isSensorAvailable) {
                 answer.setText(s);
             }
             setBinaryData(s);

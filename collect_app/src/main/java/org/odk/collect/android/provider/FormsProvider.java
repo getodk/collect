@@ -448,17 +448,14 @@ public class FormsProvider extends ContentProvider {
         String md5 = FileUtils.getMd5Hash(form);
         values.put(FormsColumns.MD5_HASH, md5);
 
-        if (!values.containsKey(FormsColumns.JRCACHE_FILE_PATH)) {
-            String cachePath = Collect.CACHE_PATH + File.separator + md5
-                    + ".formdef";
-            values.put(FormsColumns.JRCACHE_FILE_PATH, cachePath);
-        }
-        if (!values.containsKey(FormsColumns.FORM_MEDIA_PATH)) {
-            String pathNoExtension = filePath.substring(0,
-                    filePath.lastIndexOf('.'));
-            String mediaPath = pathNoExtension + "-media";
-            values.put(FormsColumns.FORM_MEDIA_PATH, mediaPath);
-        }
+            if (!values.containsKey(FormsColumns.JRCACHE_FILE_PATH)) {
+                String cachePath = Collect.CACHE_PATH + File.separator + md5
+                        + ".formdef";
+                values.put(FormsColumns.JRCACHE_FILE_PATH, cachePath);
+            }
+            if (!values.containsKey(FormsColumns.FORM_MEDIA_PATH)) {
+                values.put(FormsColumns.FORM_MEDIA_PATH, FileUtils.constructMediaPath(filePath));
+            }
 
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
 

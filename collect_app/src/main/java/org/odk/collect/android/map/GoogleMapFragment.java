@@ -17,7 +17,6 @@ package org.odk.collect.android.map;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Handler;
 import android.provider.Settings;
@@ -32,6 +31,10 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -42,6 +45,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import org.odk.collect.android.R;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
+import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.ArrayList;
@@ -61,6 +65,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
     public static final float POINT_ZOOM = 16;
 
     protected GoogleMap map;
+    protected Marker locationCrosshairs;
+    protected Circle accuracyCircle;
     protected List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
     protected PointListener clickListener;
     protected PointListener longPressListener;
@@ -104,10 +110,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
             map.setOnMapLongClickListener(this);
             map.setOnMarkerDragListener(this);
             map.getUiSettings().setCompassEnabled(true);
-            // Show the blue dot on the map, but hide the Google-provided
-            // "go to my location" button; we have our own button for that.
-            map.setMyLocationEnabled(true);
-            map.getUiSettings().setMyLocationButtonEnabled(false);
+            // Don't show the blue dot on the map; we'll draw crosshairs instead.
+            map.setMyLocationEnabled(false);
             map.setMinZoomPreference(1);
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(INITIAL_CENTER, INITIAL_ZOOM));
             if (listener != null) {
@@ -267,7 +271,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public void clearFeatures() {
         if (map != null) {  // during Robolectric tests, map will be null
-            map.clear();
+            for (MapFeature feature : features.values()) {
+                feature.dispose();
+            }
         }
         features.clear();
     }
@@ -321,6 +327,38 @@ public class GoogleMapFragment extends SupportMapFragment implements
         if (gpsLocationListener != null) {
             gpsLocationListener.onPoint(lastLocationFix);
         }
+
+        if (getActivity() != null) {
+            updateLocationIndicator(toLatLng(lastLocationFix), location.getAccuracy());
+        }
+    }
+
+    protected void updateLocationIndicator(LatLng loc, double radius) {
+        if (map == null) {
+            return;
+        }
+        if (locationCrosshairs == null) {
+            locationCrosshairs = map.addMarker(new MarkerOptions()
+                .position(loc)
+                .icon(getBitmapDescriptor(R.drawable.ic_crosshairs))
+                .anchor(0.5f, 0.5f)  // center the crosshairs on the position
+            );
+        }
+        if (accuracyCircle == null) {
+            int stroke = getResources().getColor(R.color.locationAccuracyCircle);
+            int fill = getResources().getColor(R.color.locationAccuracyFill);
+            accuracyCircle = map.addCircle(new CircleOptions()
+                .center(loc)
+                .radius(radius)
+                .strokeWidth(1)
+                .strokeColor(stroke)
+                .fillColor(fill)
+            );
+        }
+
+        locationCrosshairs.setPosition(loc);
+        accuracyCircle.setCenter(loc);
+        accuracyCircle.setRadius(radius);
     }
 
     @Override public @Nullable MapPoint getGpsLocation() {
@@ -343,7 +381,12 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    @Override public void onMarkerDragStart(Marker marker) { }
+    @Override public void onMarkerDragStart(Marker marker) {
+        // When dragging starts, GoogleMap makes the marker jump up to move it
+        // out from under the user's finger; whenever a marker moves, we have
+        // to update its corresponding feature.
+        updateFeature(findFeature(marker));
+    }
 
     @Override public void onMarkerDrag(Marker marker) {
         // When a marker is manually dragged, the position is no longer
@@ -442,8 +485,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return new LatLng(point.lat, point.lon);
     }
 
-    protected static Marker createMarker(GoogleMap map, MapPoint point, boolean draggable) {
-        if (map == null) {
+    protected Marker createMarker(GoogleMap map, MapPoint point, boolean draggable) {
+        if (map == null || getActivity() == null) {  // during Robolectric tests, map will be null
             return null;
         }
         // A Marker's position is a LatLng with just latitude and longitude
@@ -453,7 +496,14 @@ public class GoogleMapFragment extends SupportMapFragment implements
             .position(toLatLng(point))
             .snippet(point.alt + ";" + point.sd)
             .draggable(draggable)
+            .icon(getBitmapDescriptor(R.drawable.ic_map_point))
+            .anchor(0.5f, 0.5f)  // center the icon on the position
         );
+    }
+
+    protected BitmapDescriptor getBitmapDescriptor(int drawableId) {
+        return BitmapDescriptorFactory.fromBitmap(
+            IconUtils.getBitmap(getActivity(), drawableId));
     }
 
     @VisibleForTesting public boolean isGpsErrorDialogShowing() {
@@ -477,7 +527,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         void dispose();
     }
 
-    protected static class MarkerFeature implements MapFeature {
+    protected class MarkerFeature implements MapFeature {
         Marker marker;
 
         public MarkerFeature(GoogleMap map, MapPoint point, boolean draggable) {
@@ -501,11 +551,12 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     /** A polyline or polygon that can be manipulated by dragging markers at its vertices. */
-    protected static class PolyFeature implements MapFeature {
+    protected class PolyFeature implements MapFeature {
         final GoogleMap map;
         final List<Marker> markers = new ArrayList<>();
         final boolean closedPolygon;
         Polyline polyline;
+        public static final int STROKE_WIDTH = 5;
 
         public PolyFeature(GoogleMap map, Iterable<MapPoint> points, boolean closedPolygon) {
             this.map = map;
@@ -534,11 +585,12 @@ public class GoogleMapFragment extends SupportMapFragment implements
             if (markers.isEmpty()) {
                 clearPolyline();
             } else if (polyline == null) {
-                PolylineOptions options = new PolylineOptions();
-                options.color(Color.RED);
-                options.zIndex(1);
-                options.addAll(latLngs);
-                polyline = map.addPolyline(options);
+                polyline = map.addPolyline(new PolylineOptions()
+                    .color(getResources().getColor(R.color.mapLine))
+                    .zIndex(1)
+                    .width(STROKE_WIDTH)
+                    .addAll(latLngs)
+                );
             } else {
                 polyline.setPoints(latLngs);
             }

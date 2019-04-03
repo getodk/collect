@@ -321,7 +321,6 @@
   <string name="get_shape">ចាប់ផ្តើម GeoShape</string>
   <string name="get_trace">ចាប់ផ្តើម GeoTrace</string>
   <string name="geoshape_title">GeoShape</string>
-  <string name="select_geotrace_mode">ជ្រើសរើសវិធី GeoTrace</string>
   <string name="start">ចាប់ផ្តើម</string>
   <string name="enable_gps">ដំណើរ​ការ​ប្រព័ន្ធ​ចាប់​ទីតាំង</string>
   <string name="geotrace_title">GeoTrace</string>
@@ -334,9 +333,6 @@
   <string name="geo_exit_warning">បោះបង់​ការផ្លាស់​ប្តូរ និងត្រឡប់ទៅកាន់ ODK វិញ?</string>
   <string name="polygon_validator">ត្រូវការចំនុចយ៉ាងតិច 3 ដើម្បី​បង្កើតពហុកោណ</string>
   <string name="clear">លុ​បចេញ</string>
-  <string name="manual_mode">របៀបធ្វើដោយដៃ</string>
-  <string name="automatic_mode">របៀបធ្វើដោយស័្វយប្រវត្តិ</string>
-  <string name="geoshape_instruction">ចុចយូរដើម្បីដាក់ស្លាកកន្លែង</string>
   <string name="geopoint_instruction">ចុចយូរដើម្បីដាក់ស្លាកកន្លែង ឬប៉ះប៊ូតុងបន្ថែមស្លាក</string>
   <string name="geopoint_no_draggable_instruction">ប៉ះដើម្បីបន្ថែមប៊ូតុងសម្គាល់</string>
   <string name="discard">បោះបង់</string>
@@ -358,7 +354,6 @@
   <string name="install_openmapkit">សូមចុចដើម្បីដំឡើង OpenMapKit!</string>
   <string name="go_back">ត្រឡប់ក្រោយ</string>
   <string name="download_selected">ទាញយកនូវជំរើស</string>
-  <string name="record_geopoint">ថត GeoPoint</string>
   <string name="gps_result">រយៈទទឹង: %1$s\nរយៈបណ្ដោយ: %2$s\nរយៈកំពស់: %3$sm\nភាពត្រឹមត្រូវ: %4$sm</string>
   <string name="parser_exception">XPathParser Exception: \"%s\"</string>
   <string name="selected_answer">បានជ្រើសរើស៖ %s</string>
@@ -497,6 +492,7 @@
   <string name="invalid_email_address">អាសយដ្ឋាន​អ៊ីម៉េល​មិនត្រឹមត្រូវ!</string>
   <string name="sort_by">តំរៀបតាម</string>
   <string name="server">ម៉ាស៊ីនម៉េ</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">ជ្រើសរើសតម្លៃ</string>
   <string name="edit_value">កែប្រែ​តម្លៃ</string>
   <string name="no_value_selected">គ្មាន​តម្លៃត្រូវបានរើស</string>

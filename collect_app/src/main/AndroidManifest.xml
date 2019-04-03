@@ -198,7 +198,7 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.GoogleSheetsUploaderActivity"
             android:configChanges="orientation|screenSize" />
         <activity
-            android:name=".activities.InstanceUploaderList"
+            android:name=".activities.InstanceUploaderListActivity"
             android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -219,10 +219,7 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.GeoPointMapActivity"
             android:configChanges="orientation" />
         <activity
-            android:name=".activities.GeoShapeActivity"
-            android:configChanges="orientation" />
-        <activity
-            android:name=".activities.GeoTraceActivity"
+            android:name=".activities.GeoPolyActivity"
             android:configChanges="orientation" />
         <activity android:name=".activities.BearingActivity" />
         <activity
@@ -335,10 +332,6 @@ the specific language governing permissions and limitations under the License.
             android:name="com.google.android.maps"
             android:required="false" />
 
-        <activity
-            android:name=".location.GeoActivity"
-            android:configChanges="orientation"
-            android:exported="true" />
         <activity android:name=".activities.WebViewActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivityNewApi" />

@@ -16,17 +16,10 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 
-import com.google.android.gms.analytics.HitBuilders;
-
 import org.javarosa.core.model.Constants;
-import org.javarosa.core.model.ItemsetBinding;
-import org.javarosa.core.model.QuestionDef;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.javarosa.xpath.expr.XPathExpression;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
 
-import java.util.List;
 import java.util.Locale;
 
 import timber.log.Timber;
@@ -238,7 +231,6 @@ public class WidgetFactory {
                 } else {
                     questionWidget = new SelectOneWidget(context, fep, appearance.contains("quick"), readOnlyOverride);		// smap
                 }
-                logChoiceFilterAnalytics(fep.getQuestion());
                 break;
             case Constants.CONTROL_SELECT_MULTI:
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
@@ -274,7 +266,6 @@ public class WidgetFactory {
                 } else {
                     questionWidget = new SelectMultiWidget(context, fep,  readOnlyOverride);
                 }
-                logChoiceFilterAnalytics(fep.getQuestion());
                 break;
             case Constants.CONTROL_RANK:
                 questionWidget = new RankingWidget(context, fep);
@@ -306,39 +297,5 @@ public class WidgetFactory {
         }
 
         return questionWidget;
-    }
-
-    /**
-     * Log analytics event each time a question with a choice filter is accessed, identifying
-     * choice filters with relative expressions. This was initially introduced to inform messaging
-     * around a long-standing bug in JavaRosa: https://github.com/opendatakit/javarosa/issues/293
-     */
-    private static void logChoiceFilterAnalytics(QuestionDef question) {
-        ItemsetBinding itemsetBinding = question.getDynamicChoices();
-
-        if (itemsetBinding != null && itemsetBinding.nodesetRef != null) {
-            if (itemsetBinding.nodesetRef.hasPredicates()) {
-                for (int level = 0; level < itemsetBinding.nodesetRef.size(); level++) {
-                    List<XPathExpression> predicates = itemsetBinding.nodesetRef.getPredicate(level);
-
-                    if (predicates != null) {
-                        for (XPathExpression predicate : predicates) {
-                            String actionName = predicate.toString().contains("func-expr:current") ?
-                                    "CurrentPredicate" : "NonCurrentPredicate";
-
-                            /* smap
-                            Collect.getInstance().getDefaultTracker()
-                                    .send(new HitBuilders.EventBuilder()
-                                    .setCategory("Itemset")
-                                    .setAction(actionName)
-                                    .setLabel(Collect.getCurrentFormIdentifierHash())
-                                    .build());
-                                    */
-
-                        }
-                    }
-                }
-            }
-        }
     }
 }

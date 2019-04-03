@@ -312,7 +312,6 @@
   <string name="get_shape">जियो सेप शुरू गर्नुहोस्</string>
   <string name="get_trace">जियो ट्रेस शुरू गर्नुहोस्</string>
   <string name="geoshape_title">जियो सेप</string>
-  <string name="select_geotrace_mode">जियो ट्रेस विधि छान्नुहोस्</string>
   <string name="start">शुरू</string>
   <string name="enable_gps">GPS शुरु गर्नुहोस्</string>
   <string name="polygon_save">बहुभुज सुरक्षित गर्नुहोस्। </string>
@@ -325,7 +324,6 @@
   <string name="install_openmapkit">कृपया ओपन म्याप स्ट्रीट इन्सटल गर्नुहोस् !</string>
   <string name="go_back">पछाडि जानुहोस्</string>
   <string name="download_selected">चुनिएका डाउनलोड गर्नुहोस्</string>
-  <string name="record_geopoint">जियो पोइन्ट रेकर्ड गर्नुहोस्</string>
   <string name="odk_forum">ODK मंचमा आवद्ध हुनुहोस्</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">पश्चिम%1$s%2$s%3$s</string>
@@ -391,6 +389,7 @@
   <string name="image_size_title">फोटो साइज</string>
   <string name="form_import_category">फारम ल्याउदा</string>
   <string name="user_and_device_identity_title">प्रयोगकर्ता तथा यन्त्र पहिचान</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="yes">हो</string>
   <string name="no">होइन</string>

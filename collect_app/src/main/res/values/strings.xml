@@ -338,11 +338,12 @@
     <string name="get_trace">Start GeoTrace</string>
 
     <string name="geoshape_title">GeoShape</string>
-    <string name="select_geotrace_mode">"Select GeoTrace Mode"</string>
+    <string name="input_method">Input method</string>
     <string name="start">Start</string>
     <string name="enable_gps">Enable GPS</string>
     <string name="geotrace_title">GeoTrace</string>
     <string name="polygon_save">Save as Polygon</string>
+    <string name="polygon_save_deprecation_warning">(If you use GeoTrace to collect polygons, update your form to use GeoShape before the next update. See https://bit.ly/odk18277.)</string>
     <string name="polyline_save">Save as Polyline</string>
     <string name="gps_enable_message">GPS is disabled in your device. Would you like to enable it?</string>
     <string name="select_offline_layer">Select Offline Layer</string>
@@ -352,8 +353,9 @@
     <string name="polygon_validator">Must have at least 3 points to create Polygon</string>
     <string name="polyline_validator">Must have at least 2 points to create Polyline</string>
     <string name="clear">Clear</string>
-    <string name="manual_mode">Manual recording</string>
-    <string name="automatic_mode">Automatic recording</string>
+    <string name="placement_mode">Placement by tapping</string>
+    <string name="manual_mode">Manual location recording</string>
+    <string name="automatic_mode">Automatic location recording</string>
     <string name="recording_interval">Recording interval:</string>
     <plurals name="number_of_seconds">
         <item quantity="one">%d second</item>
@@ -369,17 +371,17 @@
         <item quantity="one">%d meter</item>
         <item quantity="other">%d meters</item>
     </plurals>
-    <string name="geoshape_instruction">Long press to place marks.</string>
-    <string name="geotrace_location_status_searching">Searching for GPS location, please wait&#8230;</string>
-    <string name="geotrace_location_status_accuracy">GPS location accuracy: %.1f m</string>
-    <string name="geotrace_location_status_acceptable">GPS location accuracy: %.1f m (acceptable)</string>
-    <string name="geotrace_location_status_unacceptable">GPS location accuracy: %.1f m (unacceptable)</string>
-    <string name="geotrace_collection_status_paused">Points recorded: %d</string>
-    <string name="geotrace_collection_status_manual">Points recorded: %d (manual recording)</string>
-    <string name="geotrace_collection_status_auto_seconds">Points recorded: %1$d (recording every %2$d sec)</string>
-    <string name="geotrace_collection_status_auto_minutes">Points recorded: %1$d (recording every %2$d min)</string>
-    <string name="geotrace_collection_status_auto_seconds_accuracy">Points recorded: %1$d (recording every %2$d sec, accuracy %3$d m)</string>
-    <string name="geotrace_collection_status_auto_minutes_accuracy">Points recorded: %1$d (recording every %2$d min, accuracy %3$d m)</string>
+    <string name="location_status_searching">Searching for GPS location, please wait&#8230;</string>
+    <string name="location_status_accuracy">GPS location accuracy: %.1f m</string>
+    <string name="location_status_acceptable">GPS location accuracy: %.1f m (acceptable)</string>
+    <string name="location_status_unacceptable">GPS location accuracy: %.1f m (unacceptable)</string>
+    <string name="collection_status_paused">Points entered: %d</string>
+    <string name="collection_status_placement">Points entered: %d (tap to place points)</string>
+    <string name="collection_status_manual">Points entered: %d (manual recording)</string>
+    <string name="collection_status_auto_seconds">Points entered: %1$d (recording every %2$d sec)</string>
+    <string name="collection_status_auto_minutes">Points entered: %1$d (recording every %2$d min)</string>
+    <string name="collection_status_auto_seconds_accuracy">Points entered: %1$d (recording every %2$d sec, accuracy %3$d m)</string>
+    <string name="collection_status_auto_minutes_accuracy">Points entered: %1$d (recording every %2$d min, accuracy %3$d m)</string>
     <string name="geopoint_instruction">Long press to place mark or tap add marker button.</string>
     <string name="geopoint_no_draggable_instruction">Tap add marker button.</string>
     <string name="discard">Discard</string>
@@ -401,7 +403,7 @@
     <string name="install_openmapkit">Please install OpenMapKit!</string>
     <string name="go_back">Go back</string>
     <string name="download_selected">Download Selected</string>
-    <string name="record_geopoint">Record GeoPoint</string>
+    <string name="record_geopoint">Record a point</string>
     <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nAccuracy: %4$sm</string>
     <string name="parser_exception">XPathParser Exception: \"%s\"</string>
     <string name="selected_answer">Selected: %s</string>
@@ -542,7 +544,9 @@
     <string name="invalid_email_address">Invalid email address!</string>
     <string name="sort_by">Sort by</string>
     <string name="server">Server</string>
+<!--
     <string name="submission_transport_admin_setting">Submission transport</string>
+-->
     <string name="select_value">Select value</string>
     <string name="edit_value">Edit value</string>
     <string name="no_value_selected">No value selected</string>
@@ -679,12 +683,14 @@
     <string name="location_providers_disabled_dialog_message">This form wants to track your location but location providers are disabled. Please enable in Android settings.</string>
     <string name="go_to_settings">Go to settings</string>
     <string name="track_location">Track location</string>
-    <string name="background_location_disabled">This form wants to track your location but tracking is disabled. Please enable in the \u0020\u0020⋮\u0020\u0020 menu above.</string>
-    <string name="background_location_enabled">This form tracks your location. You can disable tracking in the \u0020\u0020⋮\u0020\u0020 menu above.</string>
+    <string name="background_location_disabled">This form wants to track your location but tracking is disabled. Please enable in the %1$s menu above.</string>
+    <string name="background_location_enabled">This form tracks your location. You can disable tracking in the %1$s menu above.</string>
     <string name="open_file">Open file</string>
     <string name="sms_feature_disabled_dialog_title">Sending via SMS Disabled</string>
     <string name="sms_feature_disabled_dialog_message">Sending submissions via SMS has been disabled due to Google Play Store restrictions.\n\nPlease make sure the person who configured this device reads the details below and takes action.</string>
     <string name="read_details">Read details</string>
     <string name="google_sheets_encrypted_message">Encrypted forms can\'t be submitted to Google Sheets.</string>
     <string name="number_picker_title">Number Picker</string>
+    <string name="too_complex_form">This form is too complex for this device. Try simplifying expressions or ask for help on the forum.</string>
+    <string name="reading_files">Reading files</string>
 </resources>

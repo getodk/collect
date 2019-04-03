@@ -299,7 +299,6 @@
   <string name="get_shape">जिओ पॉईंट प्रारंभ करा</string>
   <string name="get_trace">जिओ ट्रेस प्रारंभ करा</string>
   <string name="geoshape_title">जिओ शेप</string>
-  <string name="select_geotrace_mode">जिओ ट्रेस च्या माध्यम निवडा</string>
   <string name="start">प्रारंभ करा</string>
   <string name="enable_gps">जीपीएस सक्षम करा</string>
   <string name="geotrace_title">जिओ ट्रेस</string>
@@ -312,9 +311,6 @@
   <string name="geo_exit_warning">बदल टाकून ओडीके कडे परत जा?</string>
   <string name="polygon_validator">बहुभुज तयार करण्यासाठी किमान 3 गुण असणे आवश्यक आहे</string>
   <string name="clear">साफ करा</string>
-  <string name="manual_mode">मॅन्युअल माध्यम</string>
-  <string name="automatic_mode">स्वयंचलित माध्यम</string>
-  <string name="geoshape_instruction">ठिकाणाच्या ठिकाणी ठेवण्यासाठी जास्त वेळ दाबा</string>
   <string name="geopoint_instruction">चिन्ह ठेवण्यासाठी जास्त वेळ दाबा किंवा जोडा मार्कर बटण टॅप करा</string>
   <string name="geopoint_no_draggable_instruction">जोडा मार्कर बटण टॅप करा</string>
   <string name="discard">टाकून द्या</string>
@@ -336,7 +332,6 @@
   <string name="install_openmapkit">कृपया ओपन मॅप किट स्थापित करा!</string>
   <string name="go_back">परत जा</string>
   <string name="download_selected">निवडलेल्या डाउनलोड करा</string>
-  <string name="record_geopoint">जिओ पॉईंट रेकॉर्ड करा</string>
   <string name="gps_result">अक्षांश: %1$s\nरेखांश: %2$s\nअल्टिट्यूड: %3$sm\nअॅक्चुसीसी: %4$sm</string>
   <string name="parser_exception">एक्स पाथ पार्सर अपवादः  \"%s\"</string>
   <string name="selected_answer">निवडलेले: %s</string>
@@ -454,6 +449,7 @@
   <string name="form_entry">फॉर्म एन्ट्रीमधून लपविण्यासाठी अनचेक करा</string>
   <string name="use_device_language">डिव्हाइस भाषा वापरा</string>
   <string name="not_supported_offline_layer_format">निवडलेली ऑफलाइन स्तर फाइल PBF स्वरूपन वापरते जी समर्थित नाही!</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <!--Sms submission-->
 </resources>

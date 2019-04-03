@@ -27,7 +27,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.GeoShapeActivity;
+import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
@@ -82,8 +82,9 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
             PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
             return;
         }
-        Intent intent = new Intent(getContext(), GeoShapeActivity.class)
-            .putExtra(SHAPE_LOCATION, answerDisplay.getText().toString())
+        Intent intent = new Intent(getContext(), GeoPolyActivity.class)
+            .putExtra(GeoPolyActivity.ANSWER_KEY, answerDisplay.getText().toString())
+            .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOSHAPE)
             .putExtra(GeneralKeys.KEY_MAP_SDK, mapSDK);
         ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOSHAPE_CAPTURE);
     }
@@ -126,7 +127,7 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onButtonClick(int buttonId) {
-        getPermissionUtils().requestLocationPermissions(new PermissionListener() {
+        getPermissionUtils().requestLocationPermissions((Activity) getContext(), new PermissionListener() {
             @Override
             public void granted() {
                 waitForData();

@@ -9,7 +9,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.InstanceUploaderList;
+import org.odk.collect.android.activities.InstanceUploaderListActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.SmsProgress;
@@ -67,7 +67,7 @@ public class SmsNotificationReceiver extends BroadcastReceiver {
 
     private Notification buildNotification() {
 
-        Intent intent = new Intent(context, InstanceUploaderList.class);
+        Intent intent = new Intent(context, InstanceUploaderListActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -88,7 +88,7 @@ public class SmsNotificationReceiver extends BroadcastReceiver {
      * @return Notification
      */
     private Notification buildSummary() {
-        Intent intent = new Intent(context, InstanceUploaderList.class);
+        Intent intent = new Intent(context, InstanceUploaderListActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 

@@ -304,7 +304,6 @@
   <string name="get_shape">जिओशेप शुरू करे </string>
   <string name="get_trace">जीओट्रेस प्रारंभ करें</string>
   <string name="geoshape_title">जिओशेप</string>
-  <string name="select_geotrace_mode">जिओ ट्रेस मोड का चयन करे </string>
   <string name="start">शुरु करे</string>
   <string name="enable_gps">जीपीएस सक्षम करें</string>
   <string name="geotrace_title">जिओ ट्रेस</string>
@@ -317,9 +316,6 @@
   <string name="geo_exit_warning">परिवर्तनों को रद्द करें और वापस ODK पर लौटें?</string>
   <string name="polygon_validator">बहुभुज बनाने के लिए कम से कम 3 पॉइंट होने चाहिए</string>
   <string name="clear">स्पष्ट</string>
-  <string name="manual_mode">मैन्युअल मोड</string>
-  <string name="automatic_mode">स्वचालित मोड</string>
-  <string name="geoshape_instruction">प्लेस मार्क के लिए लंबे समय तक दबाएं</string>
   <string name="geopoint_instruction">प्लेस मार्क के लिए लंबे समय तक दबाएं या मार्कर बटन जोड़ने के लिए टैप करें।</string>
   <string name="geopoint_no_draggable_instruction">मार्कर बटन जोड़ें पर टैप करें</string>
   <string name="discard">छोड़ दें </string>
@@ -341,7 +337,6 @@
   <string name="install_openmapkit">कृपया ओपेन मैप किट  इनस्टॉल करें!</string>
   <string name="go_back">वापस जायें</string>
   <string name="download_selected">डाउनलोड चयनित</string>
-  <string name="record_geopoint">रिकॉर्ड जिओपॉइंट</string>
   <string name="gps_result">अक्षांश: %1$s \n देशांतर: %2$s \n ऊंचाई: %3$sm \n शुद्धता: %4$sm</string>
   <string name="parser_exception">XPathParser अपवाद:\"%s\"</string>
   <string name="selected_answer">चयनित :%s</string>
@@ -465,6 +460,7 @@
   <string name="form_entry">फॉर्म एंट्री से छुपाने के लिए चेक हटायें</string>
   <string name="use_device_language">डिवाइस की भाषा प्रयोग करें </string>
   <string name="not_supported_offline_layer_format">चयनित ऑफलाइन लेयर फाइल PBF फॉर्मेट उपयोग करती है जो कि समर्थित नहीं है! </string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="search">खोज</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="moving_backwards_title">पीछे की ओर बढ़ रहा है</string>

@@ -20,8 +20,6 @@ package org.odk.collect.android.external;
 
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.instance.FormInstance;

@@ -59,7 +59,7 @@ public class SplashScreenActivity extends Activity {
         // this splash screen should be a blank slate
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        new PermissionUtils(this).requestStoragePermissions(new PermissionListener() {
+        new PermissionUtils().requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent

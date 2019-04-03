@@ -287,7 +287,6 @@
   <string name="get_shape">Comença GeoForma</string>
   <string name="get_trace">Comença GeoTraça</string>
   <string name="geoshape_title">GeoForma</string>
-  <string name="select_geotrace_mode">Selecciona Mòdus GeoTraça</string>
   <string name="start">Comença</string>
   <string name="enable_gps">Activa GPS</string>
   <string name="geotrace_title">GeoTraça</string>
@@ -300,9 +299,6 @@
   <string name="geo_exit_warning">Descartar canvis i tornar a ODK?</string>
   <string name="polygon_validator">Per crear un polígon calen mínim 3 punts </string>
   <string name="clear">Neteja</string>
-  <string name="manual_mode">Mòdus Manual</string>
-  <string name="automatic_mode">Mòdus Automàtic</string>
-  <string name="geoshape_instruction">Prem una estona per situar marques.</string>
   <string name="geopoint_instruction">Prem una estona o toca el botó d\'afegir fita.</string>
   <string name="geopoint_no_draggable_instruction">Toca el botó afegir fita</string>
   <string name="discard">Descarta</string>
@@ -324,7 +320,6 @@
   <string name="install_openmapkit">Si us plau, instal·la OpenMapKit!</string>
   <string name="go_back">Enrera</string>
   <string name="download_selected">Descarrega seleccionat</string>
-  <string name="record_geopoint">Grava posicionament gps</string>
   <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nPrecisió: %4$sm</string>
   <string name="parser_exception">Exceptio XPathParser: \"%s\"</string>
   <string name="selected_answer">Seleccionat: %s</string>
@@ -373,6 +368,7 @@
   <string name="form_entry_setting">Característiques d\'omplir formulari</string>
   <string name="user_settings">Configuració d\'usuari</string>
   <string name="main_menu_settings">Menú principal de configuració</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <!--Sms submission-->
 </resources>

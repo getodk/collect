@@ -89,7 +89,7 @@ public class InstanceChooserList extends InstanceListActivity implements
             ((TextView) findViewById(android.R.id.empty)).setText(R.string.no_items_display_sent_forms);
         }
 
-        new PermissionUtils(this).requestStoragePermissions(new PermissionListener() {
+        new PermissionUtils().requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
@@ -124,13 +124,12 @@ public class InstanceChooserList extends InstanceListActivity implements
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (Collect.allowClick(getClass().getName())) {
-            Cursor c = (Cursor) listView.getAdapter().getItem(position);
-            startManagingCursor(c);
-            Uri instanceUri =
-                    ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,
-                            c.getLong(c.getColumnIndex(InstanceColumns._ID)));
-
             if (view.isEnabled()) {
+                Cursor c = (Cursor) listView.getAdapter().getItem(position);
+                Uri instanceUri =
+                        ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,
+                                c.getLong(c.getColumnIndex(InstanceColumns._ID)));
+
                 String action = getIntent().getAction();
                 if (Intent.ACTION_PICK.equals(action)) {
                     // caller is waiting on a picked form

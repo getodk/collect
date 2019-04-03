@@ -17,17 +17,19 @@
 package org.odk.collect.android.utilities;
 
 import android.content.Context;
-import android.support.test.filters.Suppress;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.DatePickerDetails;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import static org.junit.Assert.assertEquals;
 
@@ -41,6 +43,8 @@ public class DateTimeUtilsTest {
     private DatePickerDetails bikramSambatDatePickerDetails;
 
     private Context context;
+    private Locale defaultLocale;
+    private TimeZone defaultTimezone;
 
     @Before
     public void setUp() {
@@ -51,31 +55,39 @@ public class DateTimeUtilsTest {
         bikramSambatDatePickerDetails = new DatePickerDetails(DatePickerDetails.DatePickerType.BIKRAM_SAMBAT, DatePickerDetails.DatePickerMode.SPINNERS);
 
         context = Collect.getInstance();
+        defaultLocale = Locale.getDefault();
+        defaultTimezone = TimeZone.getDefault();
     }
 
     @Test
-    @Suppress
     public void getDateTimeLabelTest() {
-        long dateInMilliseconds = 687967200000L; // 20 Oct 1991 14:00
-
         Locale.setDefault(Locale.ENGLISH);
-        assertEquals("Oct 20, 1991", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), gregorianDatePickerDetails, false, context));
-        assertEquals("Oct 20, 1991, 14:00", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), gregorianDatePickerDetails, true, context));
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
 
-        Locale.setDefault(Locale.ENGLISH);
-        assertEquals("9 Tikimt 1984 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), ethiopianDatePickerDetails, false, context));
-        assertEquals("9 Tikimt 1984, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), ethiopianDatePickerDetails, true, context));
+        // 20 Oct 1991 14:00 GMT
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(1991, 9, 20, 14, 0, 0);
+        Date date = calendar.getTime();
 
-        Locale.setDefault(Locale.ENGLISH);
-        assertEquals("9 Paopi 1708 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), copticDatePickerDetails, false, context));
-        assertEquals("9 Paopi 1708, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), copticDatePickerDetails, true, context));
+        assertEquals("Oct 20, 1991", DateTimeUtils.getDateTimeLabel(date, gregorianDatePickerDetails, false, context));
+        assertEquals("Oct 20, 1991, 14:00", DateTimeUtils.getDateTimeLabel(date, gregorianDatePickerDetails, true, context));
 
-        Locale.setDefault(Locale.ENGLISH);
-        assertEquals("11 Rabī‘ ath-thānī 1412 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), islamicDatePickerDetails, false, context));
-        assertEquals("11 Rabī‘ ath-thānī 1412, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), islamicDatePickerDetails, true, context));
+        assertEquals("9 Tikimt 1984 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(date, ethiopianDatePickerDetails, false, context));
+        assertEquals("9 Tikimt 1984, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(date, ethiopianDatePickerDetails, true, context));
 
-        Locale.setDefault(Locale.ENGLISH);
-        assertEquals("3 कार्तिक 2048 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), bikramSambatDatePickerDetails, false, context));
-        assertEquals("3 कार्तिक 2048, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), bikramSambatDatePickerDetails, true, context));
+        assertEquals("9 Paopi 1708 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(date, copticDatePickerDetails, false, context));
+        assertEquals("9 Paopi 1708, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(date, copticDatePickerDetails, true, context));
+
+        assertEquals("11 Rabi' al-thani 1412 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(date, islamicDatePickerDetails, false, context));
+        assertEquals("11 Rabi' al-thani 1412, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(date, islamicDatePickerDetails, true, context));
+
+        assertEquals("3 कार्तिक 2048 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(date, bikramSambatDatePickerDetails, false, context));
+        assertEquals("3 कार्तिक 2048, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(date, bikramSambatDatePickerDetails, true, context));
+    }
+
+    @After
+    public void resetTimeZone() {
+        Locale.setDefault(defaultLocale);
+        TimeZone.setDefault(defaultTimezone);
     }
 }

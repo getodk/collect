@@ -66,7 +66,7 @@ public class FormChooserList extends FormListActivity implements
 
         setTitle(getString(R.string.enter_data));
 
-        new PermissionUtils(this).requestStoragePermissions(new PermissionListener() {
+        new PermissionUtils().requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent

@@ -323,7 +323,6 @@ Dela ODK Collect med dem.</string>
   <string name="get_shape">Starta GeoShape</string>
   <string name="get_trace">Starta GeoTrace</string>
   <string name="geoshape_title">GeoShape</string>
-  <string name="select_geotrace_mode">Välj GeoTrace-läge</string>
   <string name="start">Starta</string>
   <string name="enable_gps">Aktivera GPS</string>
   <string name="geotrace_title">GeoTrace</string>
@@ -337,9 +336,6 @@ Dela ODK Collect med dem.</string>
   <string name="polygon_validator">Minst tre punkter krävs för att skapa en polygon</string>
   <string name="polyline_validator">Det behövs minst 2 punkter för att skapa en polyline</string>
   <string name="clear">Rensa</string>
-  <string name="manual_mode">Manuellt läge</string>
-  <string name="automatic_mode">Automatiskt läge</string>
-  <string name="geoshape_instruction">Lång tryckning för att placera markör.</string>
   <string name="geopoint_instruction">Lång tryckning för att placera markör eller knacka på knappen \'lägg till markör\'</string>
   <string name="geopoint_no_draggable_instruction">Knacka på knappen \'lägg till markör\'.</string>
   <string name="discard">Ignorera</string>
@@ -361,7 +357,6 @@ Dela ODK Collect med dem.</string>
   <string name="install_openmapkit">Vänligen installera OpenMapKit!</string>
   <string name="go_back">Gå tillbaka</string>
   <string name="download_selected">Nedladdning vald</string>
-  <string name="record_geopoint">Lagra GeoPoint</string>
   <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nNoggrannhet: %4$sm</string>
   <string name="parser_exception">XPathParser undantag: \"%s\"</string>
   <string name="selected_answer">Vald: %s</string>
@@ -500,6 +495,7 @@ Dela ODK Collect med dem.</string>
   <string name="invalid_email_address">Ogiltig e-postadress!</string>
   <string name="sort_by">Sorteringsordning</string>
   <string name="server">Server</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Välj ett värde</string>
   <string name="edit_value">Redigera värde</string>
   <string name="no_value_selected">Inget värde valt</string>

@@ -222,7 +222,7 @@ dependencies {
     implementation "commons-io:commons-io:2.6"
     implementation "net.sf.kxml:kxml2:2.3.0"
     implementation "net.sf.opencsv:opencsv:2.3"
-    implementation("org.opendatakit:opendatakit-javarosa:2.13.0") {
+    implementation("org.opendatakit:opendatakit-javarosa:2.14.0") {
         exclude group: 'joda-time'
         exclude group: 'org.slf4j'
     }
@@ -269,11 +269,14 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 
     // Dagger:
+    implementation "com.google.dagger:dagger:${rootProject.daggerVersion}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}"
+    testAnnotationProcessor "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}" // Needed for injection into Robolectric tests
+
+    // Dagger Android:
     implementation "com.google.dagger:dagger-android:${rootProject.daggerVersion}"
     implementation "com.google.dagger:dagger-android-support:${rootProject.daggerVersion}"
     annotationProcessor "com.google.dagger:dagger-android-processor:${rootProject.daggerVersion}"
-    annotationProcessor "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}"
-    testAnnotationProcessor "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}"
 
     // RxJava 2:
     implementation "io.reactivex.rxjava2:rxandroid:2.0.2"
@@ -313,7 +316,7 @@ dependencies {
     // Testing-only dependencies
     //testImplementation "junit:junit:4.12"
     //testImplementation "org.mockito:mockito-core:2.8.47"
-    //testImplementation "org.robolectric:robolectric:4.0-beta-1"
+    //testImplementation "org.robolectric:robolectric:4.0.1"
     //testImplementation "org.robolectric:shadows-multidex:4.0-beta-1"
 
     // power mock (for mocking final methods which is not handled by mockito)

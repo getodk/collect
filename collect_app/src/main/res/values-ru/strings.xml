@@ -325,7 +325,6 @@
   <string name="get_shape">Начать геофигуру</string>
   <string name="get_trace">Начать геослед</string>
   <string name="geoshape_title">Геофигура</string>
-  <string name="select_geotrace_mode">Выбрать режим геоследа</string>
   <string name="start">Начать</string>
   <string name="enable_gps">Включить GPS</string>
   <string name="geotrace_title">Геослед</string>
@@ -338,9 +337,6 @@
   <string name="polygon_validator">В многоугольнике должно быть как минимум 3 точки</string>
   <string name="polyline_validator">Должно быть как минимум 2 точки, что бы создать ломаную линию</string>
   <string name="clear">Очистить</string>
-  <string name="manual_mode">Ручной режим</string>
-  <string name="automatic_mode">Автоматический режим</string>
-  <string name="geoshape_instruction">Используйте продолжительное нажатие, чтобы расставлять отметки.</string>
   <string name="geopoint_instruction">Используйте продолжительное нажатие, чтобы расставлять отметки или нажмите кнопку \"добавить отметку\".</string>
   <string name="geopoint_no_draggable_instruction">Нажмите кнопку \"добавить отметку\".</string>
   <string name="discard">Отменить</string>
@@ -362,7 +358,6 @@
   <string name="install_openmapkit">Пожалуйста, установите OpenMapKit!</string>
   <string name="go_back">Назад</string>
   <string name="download_selected">Загрузить выбранные</string>
-  <string name="record_geopoint">Записать геоточку</string>
   <string name="gps_result">Широта: %1$s\nДолгота: %2$s\nВысота: %3$sм\nТочность:%4$sм</string>
   <string name="parser_exception">Исключение XPathParser: \"%s\"</string>
   <string name="selected_answer">Выбрано: %s</string>
@@ -497,6 +492,7 @@
   <string name="invalid_email_address">Неверный адрес почты!</string>
   <string name="sort_by">Сортировать по</string>
   <string name="server">Сервер</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Выбрать значение</string>
   <string name="edit_value">Изменить значение</string>
   <string name="no_value_selected">Значение не выбрано</string>

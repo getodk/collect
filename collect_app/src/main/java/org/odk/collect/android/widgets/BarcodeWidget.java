@@ -116,7 +116,7 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onButtonClick(int buttonId) {
-        getPermissionUtils().requestCameraPermission(new PermissionListener() {
+        getPermissionUtils().requestCameraPermission((Activity) getContext(), new PermissionListener() {
             @Override
             public void granted() {
                 waitForData();

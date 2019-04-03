@@ -331,11 +331,12 @@
   <string name="get_shape">GeoShape starten</string>
   <string name="get_trace">GeoTrace starten</string>
   <string name="geoshape_title">GeoShape</string>
-  <string name="select_geotrace_mode">GeoTrace-Modus auswählen</string>
+  <string name="input_method">Eingabemethode</string>
   <string name="start">Start</string>
   <string name="enable_gps">GPS aktivieren</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="polygon_save">Als Polygon speichern</string>
+  <string name="polygon_save_deprecation_warning">(Diese Option wird im nächsten Update entfernt. Schauen Sie unter bit.ly/odk18277 nach Alternativen.)</string>
   <string name="polyline_save">Als Polyline speichern</string>
   <string name="gps_enable_message">GPS ist auf ihrem Gerät deaktiviert. Möchten Sie es aktivieren?</string>
   <string name="select_offline_layer">Offline-Ebene auswählen</string>
@@ -345,9 +346,35 @@
   <string name="polygon_validator">Min. 3 Punkte notwendig um ein Polygon zu erzeugen</string>
   <string name="polyline_validator">Min. 2 Punkte notwendig um eine Polylinie zu erzeugen</string>
   <string name="clear">Löschen</string>
-  <string name="manual_mode">Manueller Modus</string>
-  <string name="automatic_mode">Automatischer Modus</string>
-  <string name="geoshape_instruction">Lange Drücken um eine Markierung zu platzieren.</string>
+  <string name="placement_mode">Platzierung durch Tippen</string>
+  <string name="manual_mode">Manuelle Standorterfassung</string>
+  <string name="automatic_mode">Automatische Standorterfassung</string>
+  <string name="recording_interval">Aufzeichnungsintervall:</string>
+  <plurals name="number_of_seconds">
+    <item quantity="one">%d Sekunde</item>
+    <item quantity="other">%d Sekunden</item>
+  </plurals>
+  <plurals name="number_of_minutes">
+    <item quantity="one">%d Minute</item>
+    <item quantity="other">%d Minuten</item>
+  </plurals>
+  <string name="accuracy_requirement">Genauigkeitsanforderung:</string>
+  <string name="none">Keine</string>
+  <plurals name="number_of_meters">
+    <item quantity="one">%d Meter</item>
+    <item quantity="other">%d Meter</item>
+  </plurals>
+  <string name="location_status_searching">Suche nach GPS-Position, bitte warten…</string>
+  <string name="location_status_accuracy">GPS Ortungsgenauigkeit: %.1f m</string>
+  <string name="location_status_acceptable">GPS Ortungsgenauigkeit: %.1f m (akzeptabel)</string>
+  <string name="location_status_unacceptable">GPS Ortungsgenauigkeit: %.1f m (inakzeptabel)</string>
+  <string name="collection_status_paused">erfasste Punkte: %d</string>
+  <string name="collection_status_placement">erfasste Punkte: %d (tippen zum Platzieren von Punkten)</string>
+  <string name="collection_status_manual">erfasste Punkte: %d (manuelle Standorterfassung)</string>
+  <string name="collection_status_auto_seconds">erfasste Punkte: %1$d (automatische Erfassung alle %2$d s)</string>
+  <string name="collection_status_auto_minutes">erfasste Punkte: %1$d (automatische Erfassung alle %2$d min)</string>
+  <string name="collection_status_auto_seconds_accuracy">erfasste Punkte: %1$d (automatische Erfassung alle%2$d s, Genauigkeit %3$d m)</string>
+  <string name="collection_status_auto_minutes_accuracy">erfasste Punkte: %1$d (automatische Erfassung alle %2$d min, Genauigkeit %3$d m)</string>
   <string name="geopoint_instruction">Lange Drücken um eine Markierung zu platzieren oder Button Markierung hinzufügen antippen.</string>
   <string name="geopoint_no_draggable_instruction">Button Markierung hinzufügen antippen.</string>
   <string name="discard">Verwerfen</string>
@@ -369,7 +396,7 @@
   <string name="install_openmapkit">Bitte OpenMapKit installieren!</string>
   <string name="go_back">Zurück</string>
   <string name="download_selected">Auswahl herunterladen</string>
-  <string name="record_geopoint">Standort erfassen</string>
+  <string name="record_geopoint">Punkt erfassen</string>
   <string name="gps_result">Breite (Lat.): %1$s\nLänge (Long.): %2$s\nHöhe (Alt.): %3$sm\nGenauigkeit: %4$sm</string>
   <string name="parser_exception">XPathParser Exception: \"%s\"</string>
   <string name="selected_answer">Ausgewählt: %s</string>
@@ -508,7 +535,7 @@
   <string name="invalid_email_address">Ungültige E-Mail-Adresse!</string>
   <string name="sort_by">Sortieren nach</string>
   <string name="server">Server</string>
-  <string name="submission_transport_admin_setting">Einsendungsübertragung</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Wert auswählen</string>
   <string name="edit_value">Wert bearbeiten</string>
   <string name="no_value_selected">Kein Wert ausgewählt</string>
@@ -643,10 +670,14 @@
   <string name="location_providers_disabled_dialog_message">Dieses Formular möchte ihren Standort aufzeichnen aber die Standortdienste sind deaktiviert. Bitte den Standortzugriff in den Android-Einstellungen aktivieren.</string>
   <string name="go_to_settings">Zu den Einstellungen wechseln</string>
   <string name="track_location">Standort nachverfolgen</string>
-  <string name="background_location_disabled">Dieses Formular möchte ihren Standort aufzeichnen aber die Standortaufzeichnung ist deaktiviert. Bitte oben im \u0020\u0020⋮\u0020\u0020 Menü aktivieren.</string>
-  <string name="background_location_enabled">Dieses Formular zeichnet Ihren Standort auf. Sie können die Standortaufzeichnung oben im \u0020\u0020⋮\u0020\u0020 Menü deaktivieren.</string>
+  <string name="background_location_disabled">Dieses Formular möchte ihren Standort aufzeichnen aber die Standortaufzeichnung ist deaktiviert. Bitte oben im %1$s Menü aktivieren.</string>
+  <string name="background_location_enabled">Dieses Formular zeichnet Ihren Standort auf. Sie können die Standortaufzeichnung oben im %1$s Menü deaktivieren.</string>
   <string name="open_file">Datei öffnen</string>
+  <string name="sms_feature_disabled_dialog_title">SMS-Versand deaktiviert</string>
+  <string name="sms_feature_disabled_dialog_message">Der Versand von Einsendungen per SMS wurde wegen Google Play-Store-Bestimmungen deaktiviert.\n\nBitte stellen sicher, dass die Person, die dieses Gerät konfiguriert hat, die untenstehenden Details liest und entsprechend handelt. </string>
   <string name="read_details">Details lesen</string>
   <string name="google_sheets_encrypted_message">Verschlüsselte Formulare können nicht an Google Sheets gesendet werden.</string>
   <string name="number_picker_title">Zahlenwähler</string>
+  <string name="too_complex_form">Dieses Formular ist zu komplex für dieses Gerät. Versuche Ausdrücke zu vereinfachen oder bitte im Forum um Hilfe.</string>
+  <string name="reading_files">Lese Dateien</string>
 </resources>

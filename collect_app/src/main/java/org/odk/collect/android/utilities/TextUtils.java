@@ -116,5 +116,11 @@ public class TextUtils {
 
         return Html.fromHtml(markdownToHtml(text));
     }
+
+    public static String ellipsizeBeginning(String text) {
+        return text.length() <= 100
+                ? text
+                : "..." + text.substring(text.length() - 97, text.length());
+    }
 }
 

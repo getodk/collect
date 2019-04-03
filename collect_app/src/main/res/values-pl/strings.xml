@@ -331,7 +331,6 @@
   <string name="get_shape">Zacznij GeoShape</string>
   <string name="get_trace">Zacznij GeoShape</string>
   <string name="geoshape_title">GeoShape</string>
-  <string name="select_geotrace_mode">Wybierz Tryb GeoTrace</string>
   <string name="start">Zacznij</string>
   <string name="enable_gps">Włącz GPS</string>
   <string name="geotrace_title">GeoTrace</string>
@@ -345,9 +344,6 @@
   <string name="polygon_validator">Wymagane są przynajmniej 3 punkty aby utworzyć wielokąt</string>
   <string name="polyline_validator">Wymagane co najmniej 2 punkty, by utworzyć polilinię</string>
   <string name="clear">Wyczyść</string>
-  <string name="manual_mode">Tryb Ręczny</string>
-  <string name="automatic_mode">Tryb Automatyczny</string>
-  <string name="geoshape_instruction">Długo naciśnij aby umieścić znacznik.</string>
   <string name="geopoint_instruction">Długo naciśnij aby umieścić znacznik lub dotknij przycisk Dodaj znacznik.</string>
   <string name="geopoint_no_draggable_instruction">Dotknij przycisk Dodaj znacznik.</string>
   <string name="discard">Usuń</string>
@@ -369,7 +365,6 @@
   <string name="install_openmapkit">Proszę zainstalować OpenMapKit!</string>
   <string name="go_back">Cofnij się</string>
   <string name="download_selected">Pobierz Wybrane</string>
-  <string name="record_geopoint">Zapisz GeoPoint</string>
   <string name="gps_result">Szerokość: %1$s\nDługość: %2$s\nWzniesienie: %3$sm\nDokładność: %4$sm</string>
   <string name="parser_exception">Wyjątek XPathParser: \"%s\"</string>
   <string name="selected_answer">Wybrany: %s</string>
@@ -508,7 +503,7 @@
   <string name="invalid_email_address">Nieprawidłowy adres email!</string>
   <string name="sort_by">Sortuj według</string>
   <string name="server">Serwer</string>
-  <string name="submission_transport_admin_setting">Przesyłanie zgłoszeń</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Wybierz wartość</string>
   <string name="edit_value">Edytuj wartość</string>
   <string name="no_value_selected">Nie wybrano wartości</string>
@@ -639,7 +634,5 @@
   <string name="location_providers_disabled_dialog_message">Ten formularz chce śledzić twoją lokalizację, ale usługi dostawców systemu lokalizacji są wyłączone. Włącz je w ustawieniach Androida.</string>
   <string name="go_to_settings">Przejdź do ustawień</string>
   <string name="track_location">Śledź lokalizację</string>
-  <string name="background_location_disabled">Ten formularz chce śledzić twoją lokalizację, ale opcja śledzenia jest wyłączona. Włącz śledzenie używając \u0020\u0020⋮\u0020\u0020 w menu powyżej.</string>
-  <string name="background_location_enabled">Ten formularz śledzi twoją lokalizację. Możesz wyłączyć funkcję śledzenia korzystając z \u0020\u0020⋮\u0020\u0020 w menu powyżej.</string>
   <string name="open_file">Otwórz plik</string>
 </resources>

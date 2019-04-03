@@ -318,7 +318,6 @@ Escolher Imagem</string>
   <string name="get_shape">Inicia GeoShape</string>
   <string name="get_trace">Inicia GeoTrace</string>
   <string name="geoshape_title">GeoShape</string>
-  <string name="select_geotrace_mode">Selecionar Modo GeoTrace</string>
   <string name="start">Iniciar</string>
   <string name="enable_gps">Habilitar GPS</string>
   <string name="geotrace_title">GeoTrace</string>
@@ -332,9 +331,6 @@ Escolher Imagem</string>
   <string name="polygon_validator">Precisa ter pelo menos 3 pontos para criar Polígono</string>
   <string name="polyline_validator">Precisa ter pelo menos 2 pontos para criar uma Cadeia de Linhas</string>
   <string name="clear">Limpar</string>
-  <string name="manual_mode">Modo manual</string>
-  <string name="automatic_mode">Modo automático</string>
-  <string name="geoshape_instruction">Pressione por mais tempo para colocar marcador.</string>
   <string name="geopoint_instruction">Pressione por mais tempo para colocar marcador ou selecione o botão Adicionar Marcador.</string>
   <string name="geopoint_no_draggable_instruction">Selecione o botão Adicionar Marcador.</string>
   <string name="discard">Descartar</string>
@@ -356,7 +352,6 @@ Escolher Imagem</string>
   <string name="install_openmapkit">Por favor, instala o OpenMapKit!</string>
   <string name="go_back">Voltar</string>
   <string name="download_selected">Baixar selecionados</string>
-  <string name="record_geopoint">Gravar ponto de GPS</string>
   <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nPrecisão:%4$s m</string>
   <string name="parser_exception">Exceção XPathParser: \"%s\"</string>
   <string name="selected_answer">Selecionado: %s</string>
@@ -494,7 +489,7 @@ Escolher Imagem</string>
   <string name="invalid_email_address">Endereço de e-mail inválido!</string>
   <string name="sort_by">Organizar por</string>
   <string name="server">Servidor</string>
-  <string name="submission_transport_admin_setting">Transporte de submissão</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Selecione valor</string>
   <string name="edit_value">Edite valor</string>
   <string name="image_size_large">Grande (3072px)</string>

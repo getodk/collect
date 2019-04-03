@@ -43,6 +43,7 @@ import java.math.BigInteger;
 import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -68,6 +69,16 @@ public class FileUtils {
     public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
     public static final String AUTO_DELETE = "autoDelete";
     public static final String AUTO_SEND = "autoSend";
+
+    /** Suffix for the form media directory. */
+    private static final String MEDIA_SUFFIX = "-media";
+
+    /** Filename of the last-saved instance data. */
+    public static final String LAST_SAVED_FILENAME = "last-saved.xml";
+
+    /** Valid XML stub that can be parsed without error. */
+    private static final String STUB_XML = "<?xml version='1.0' ?><stub />";
+
     static int bufSize = 16 * 1024; // May be set by unit test
 
     private FileUtils() {
@@ -81,49 +92,6 @@ public class FileUtils {
     public static boolean createFolder(String path) {
         File dir = new File(path);
         return dir.exists() || dir.mkdirs();
-    }
-
-    public static byte[] getFileAsBytes(File file) {
-        try (InputStream is = new FileInputStream(file)) {
-
-            // Get the size of the file
-            long length = file.length();
-            if (length > Integer.MAX_VALUE) {
-                Timber.e("File %s is too large", file.getName());
-                return null;
-            }
-
-            // Create the byte array to hold the data
-            byte[] bytes = new byte[(int) length];
-
-            // Read in the bytes
-            int offset = 0;
-            int read = 0;
-            try {
-                while (offset < bytes.length && read >= 0) {
-                    read = is.read(bytes, offset, bytes.length - offset);
-                    offset += read;
-                }
-            } catch (IOException e) {
-                Timber.e(e, "Cannot read file %s", file.getName());
-                return null;
-            }
-
-            // Ensure all the bytes have been read in
-            if (offset < bytes.length) {
-                try {
-                    throw new IOException("Could not completely read file " + file.getName());
-                } catch (IOException e) {
-                    Timber.e(e);
-                    return null;
-                }
-            }
-
-            return bytes;
-        } catch (IOException e) {
-            Timber.e(e);
-        }
-        return new byte[0];
     }
 
     public static String getMd5Hash(File file) {
@@ -403,9 +371,54 @@ public class FileUtils {
         }
     }
 
+    public static String getFormBasename(File formXml) {
+        return getFormBasename(formXml.getName());
+    }
+
+    public static String getFormBasename(String formFilePath) {
+        return formFilePath.substring(0, formFilePath.lastIndexOf('.'));
+    }
+
     public static String constructMediaPath(String formFilePath) {
-        String pathNoExtension = formFilePath.substring(0, formFilePath.lastIndexOf('.'));
-        return pathNoExtension + "-media";
+        return getFormBasename(formFilePath) + MEDIA_SUFFIX;
+    }
+
+    public static File getFormMediaDir(File formXml) {
+        final String formFileName = getFormBasename(formXml);
+        return new File(formXml.getParent(), formFileName + MEDIA_SUFFIX);
+    }
+
+    public static String getFormBasenameFromMediaFolder(File mediaFolder) {
+        /*
+         * TODO (from commit 37e3467): Apparently the form name is neither
+         * in the formController nor the formDef. In fact, it doesn't seem to
+         * be saved into any object in JavaRosa. However, the mediaFolder
+         * has the substring of the file name in it, so we extract the file name
+         * from here. Awkward...
+         */
+        return mediaFolder.getName().split(MEDIA_SUFFIX)[0];
+    }
+
+    public static File getLastSavedFile(File formXml) {
+        return new File(getFormMediaDir(formXml), LAST_SAVED_FILENAME);
+    }
+
+    public static String getLastSavedPath(File mediaFolder) {
+        return mediaFolder.getAbsolutePath() + File.separator + LAST_SAVED_FILENAME;
+    }
+
+    /**
+     * Returns the path to the last-saved file for this form,
+     * creating a valid stub if it doesn't yet exist.
+     */
+    public static String getOrCreateLastSavedSrc(File formXml) {
+        File lastSavedFile = getLastSavedFile(formXml);
+
+        if (!lastSavedFile.exists()) {
+            write(lastSavedFile, STUB_XML.getBytes(Charset.forName("UTF-8")));
+        }
+
+        return "jr://file/" + LAST_SAVED_FILENAME;
     }
 
     /**
@@ -519,6 +532,9 @@ public class FileUtils {
     }
 
     public static void write(File file, byte[] data) {
+        // Make sure the directory path to this file exists.
+        file.getParentFile().mkdirs();
+
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(data);
             fos.close();

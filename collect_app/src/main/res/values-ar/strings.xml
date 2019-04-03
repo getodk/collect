@@ -313,7 +313,6 @@
   <string name="get_shape">تشغيل ٍShape</string>
   <string name="get_trace">تشغيل Trace</string>
   <string name="geoshape_title">عنوان Shape</string>
-  <string name="select_geotrace_mode">اختيار وضع الـ Trace</string>
   <string name="start">أبداء</string>
   <string name="enable_gps">تفعيل ال GPS</string>
   <string name="geotrace_title">Trace</string>
@@ -327,9 +326,6 @@
   <string name="polygon_validator">يجب توفر 3 نقاط GeoPoint لانشاء Polygon</string>
   <string name="polyline_validator">يجب توفر 2 نقاط لانشاء إحداث Polyline</string>
   <string name="clear">الغاء</string>
-  <string name="manual_mode">الوضع اليدوي</string>
-  <string name="automatic_mode">الوضع الآلي</string>
-  <string name="geoshape_instruction">انقر مطولاً لانشاء علامة</string>
   <string name="geopoint_instruction">انقر مطولاً لانشاء علامة او انقر على زر إضافة علامة</string>
   <string name="geopoint_no_draggable_instruction">إضافة علامة</string>
   <string name="discard">تجاهل</string>
@@ -351,7 +347,6 @@
   <string name="install_openmapkit">رجاء قم بتحميل OpenMapKit</string>
   <string name="go_back">السابق</string>
   <string name="download_selected">تحميل المحدد</string>
-  <string name="record_geopoint">تسجيل GeoPoint</string>
   <string name="gps_result">خط العرض: %1$s\n خط الطول : %2$s\nالارتفاع : %3$sm\nالدقة : %4$sm</string>
   <string name="parser_exception">محلل الاخطاء \"%s\</string>
   <string name="selected_answer">المحددة %s</string>
@@ -483,7 +478,7 @@
   <string name="invalid_email_address">البريد الالكتروني غير صحيح</string>
   <string name="sort_by">ترتيب حسب</string>
   <string name="server">الخادم</string>
-  <string name="submission_transport_admin_setting">نقل التقديم</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">اختر</string>
   <string name="edit_value">غير</string>
   <string name="no_value_selected">لم يتم اختيار قيمة</string>

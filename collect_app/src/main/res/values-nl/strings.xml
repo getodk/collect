@@ -287,8 +287,6 @@
   <string name="start">Start</string>
   <string name="polygon_save">Bewaar als Polygoon</string>
   <string name="polyline_save">Bewaar als Lijnstuk</string>
-  <string name="manual_mode">Handmatig</string>
-  <string name="automatic_mode">Automatisch</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="odk_website">Bezoek de ODK website</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
@@ -331,6 +329,7 @@
   <string name="type">Type</string>
   <string name="sort_by">Sorteer op</string>
   <string name="server">Server</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="no">Nee</string>
   <string name="form_update_category">Formulier update</string>

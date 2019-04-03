@@ -291,7 +291,6 @@
   <string name="get_shape">Loo polügoon</string>
   <string name="get_trace">Alusta rada</string>
   <string name="geoshape_title">Polügoon</string>
-  <string name="select_geotrace_mode">Vali raja sisestusviis</string>
   <string name="start">Alusta</string>
   <string name="enable_gps">Luba GPS</string>
   <string name="geotrace_title">Rada</string>
@@ -304,9 +303,6 @@
   <string name="geo_exit_warning">Loobu muudatustest ja ava ODK?</string>
   <string name="polygon_validator">Polügooni loomiseks on vaja vähemalt 3 punkti</string>
   <string name="clear">Eemalda</string>
-  <string name="manual_mode">Käsitsi sisestusviis</string>
-  <string name="automatic_mode">Automaatne sisestusviis</string>
-  <string name="geoshape_instruction">Märke paigutamiseks hoia pikalt soovitud asukohal.</string>
   <string name="geopoint_instruction">Markeri paigutamiseks tuleb teha pikk hoidmine või valida marker nupp.</string>
   <string name="geopoint_no_draggable_instruction">Puuduta lisa marke nuppu.</string>
   <string name="discard">Loobu</string>
@@ -328,7 +324,6 @@
   <string name="install_openmapkit">Palun paigaldage OpenMapKit!</string>
   <string name="go_back">Liikuge tagasi</string>
   <string name="download_selected">Allalaadimine valitud</string>
-  <string name="record_geopoint">Salvesta asukohapunkt</string>
   <string name="gps_result">Laiuskraad: %1$s\nPikkuskraad: %2$s\nKõrgus: %3$sm\nTäpsusaste: %4$sm</string>
   <string name="parser_exception">XPathParser Viga: \"%s\"</string>
   <string name="selected_answer">Valitud: %s</string>
@@ -374,6 +369,7 @@
   <string name="encrypted_form">Krüptitud vorm</string>
   <string name="deleted_form">Kustutatud vorm</string>
   <string name="exit">Välju</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <!--Sms submission-->
 </resources>
