@@ -34,7 +34,6 @@ import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobManagerCreateException;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -519,10 +518,12 @@ public class Collect extends Application {
     }
 
     public void logNullFormControllerEvent(String action) {
+        /* smap
         Collect.getInstance().getDefaultTracker()
                 .send(new HitBuilders.EventBuilder()
                         .setCategory("NullFormControllerEvent")
                         .setAction(action)
                         .build());
+                        */
     }
 }

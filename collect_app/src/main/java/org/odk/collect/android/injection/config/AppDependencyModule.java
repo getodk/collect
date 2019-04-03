@@ -76,11 +76,13 @@ public class AppDependencyModule {
         return new WebCredentialsUtils();
     }
 
+    /* smap
     @Provides
     @Singleton
     public Tracker providesTracker(Application application) {
         return ((Collect) application).getDefaultTracker();
     }
+    */
 
     @Provides
     public PermissionUtils providesPermissionUtils() {

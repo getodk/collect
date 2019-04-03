@@ -79,7 +79,7 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
                 basePreferenceFragment = IdentityPreferences.newInstance(getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false));
                 break;
             case "smap_preferences":
-                fragment = new SmapInterfacePreferences();
+                basePreferenceFragment = new SmapInterfacePreferences();
                 break;
         }
         if (basePreferenceFragment != null) {

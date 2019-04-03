@@ -39,7 +39,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+//import com.google.android.gms.analytics.Tracker;      smap
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
@@ -129,8 +129,8 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     @Inject
     SmsSubmissionManagerContract smsSubmissionManager;
 
-    @Inject
-    Tracker tracker;
+    //@Inject       smap
+    //Tracker tracker;
 
     @Inject
     PermissionUtils permissionUtils;
@@ -387,7 +387,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
                     public void denied() {
                         startActivityForResult(i, INSTANCE_UPLOADER);
                     }
-                }, false);
+                });
             //}
         }
     }

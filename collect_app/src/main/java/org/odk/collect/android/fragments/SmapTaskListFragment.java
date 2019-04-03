@@ -487,7 +487,7 @@ public class SmapTaskListFragment extends ListFragment
 
     // Send data
     private void processSendData() {
-        Intent i = new Intent(getContext(), org.odk.collect.android.activities.InstanceUploaderList.class);
+        Intent i = new Intent(getContext(), org.odk.collect.android.activities.InstanceUploaderActivity.class);
         startActivityForResult(i, INSTANCE_UPLOADER);
     }
 
