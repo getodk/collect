@@ -256,6 +256,7 @@ dependencies {
 
     // Android Architecture Components:
     implementation "android.arch.lifecycle:extensions:1.1.1"
+    testImplementation "android.arch.core:core-testing:1.1.1"
 
     // Dagger:
     implementation "com.google.dagger:dagger:${rootProject.daggerVersion}"

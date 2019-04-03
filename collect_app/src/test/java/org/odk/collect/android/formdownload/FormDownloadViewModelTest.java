@@ -1,16 +1,17 @@
 package org.odk.collect.android.formdownload;
 
+import android.arch.core.executor.testing.InstantTaskExecutorRule;
 import android.os.Bundle;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.ui.formdownload.AlertDialogUiModel;
-import org.odk.collect.android.ui.formdownload.AuthorizationModel;
 import org.odk.collect.android.ui.formdownload.FormDownloadNavigator;
 import org.odk.collect.android.ui.formdownload.FormDownloadRepository;
 import org.odk.collect.android.ui.formdownload.FormDownloadViewModel;
@@ -30,25 +31,22 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.TestObserver;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.ui.formdownload.FormDownloadActivity.getDownloadResultMessage;
 import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_AUTH_REQUIRED;
+import static org.odk.collect.android.utilities.LiveDataTestUtil.getValue;
 
 @RunWith(RobolectricTestRunner.class)
 public class FormDownloadViewModelTest {
 
-    private FormDownloadViewModel viewModel;
+    // Executes each task synchronously using Architecture Components
+    @Rule
+    public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
-    private TestObserver<AlertDialogUiModel> alertDialogTestSubscriber;
-    private TestObserver<Boolean> progressDialogTestSubscriber;
-    private TestObserver<Boolean> cancelDialogTestSubscriber;
-    private TestObserver<String> progressDialogMessageTestSubscriber;
-    private TestObserver<AuthorizationModel> authDialogTestSubscriber;
-    private TestObserver<HashMap<String, FormDetails>> formListDownloadTestSubscriber;
+    private FormDownloadViewModel viewModel;
 
     private NetworkUtils mockNetworkUtils;
     private FormDownloadRepository mockFormDownloadRepository;
@@ -66,34 +64,22 @@ public class FormDownloadViewModelTest {
 
         // prepare the spy!
         viewModel.setNavigator(Mockito.spy(FormDownloadNavigator.class));
-
-        alertDialogTestSubscriber = new TestObserver<>();
-        progressDialogTestSubscriber = new TestObserver<>();
-        cancelDialogTestSubscriber = new TestObserver<>();
-        progressDialogMessageTestSubscriber = new TestObserver<>();
-        authDialogTestSubscriber = new TestObserver<>();
-        formListDownloadTestSubscriber = new TestObserver<>();
     }
 
     @Test
-    public void doNotDisplayDialogsOnInitTest() {
-        viewModel.getAlertDialog().subscribe(alertDialogTestSubscriber);
-        alertDialogTestSubscriber.assertNoValues();
-
-        viewModel.getProgressDialog().subscribe(progressDialogTestSubscriber);
-        progressDialogTestSubscriber.assertNoValues();
+    public void doNotDisplayDialogsOnInitTest() throws InterruptedException {
+        Assert.assertNull(getValue(viewModel.getAlertDialog()));
+        Assert.assertNull(getValue(viewModel.getProgressDialog()));
     }
 
     @Test
-    public void displaySameAlertDialogOnReopenTest() {
+    public void displaySameAlertDialogOnReopenTest() throws InterruptedException {
         AlertDialogUiModel expectedModel = new AlertDialogUiModel("Title", "Message", false);
 
         viewModel.setAlertDialog(expectedModel.getTitle(), expectedModel.getMessage(), expectedModel.shouldExit());
 
         // now assuming that the activity was recreated. So, the subject was resubscribed.
-        viewModel.getAlertDialog().subscribe(alertDialogTestSubscriber);
-
-        AlertDialogUiModel actualModel = (AlertDialogUiModel) alertDialogTestSubscriber.getEvents().get(0).get(0);
+        AlertDialogUiModel actualModel = getValue(viewModel.getAlertDialog());
 
         Assert.assertEquals(expectedModel.getTitle(), actualModel.getTitle());
         Assert.assertEquals(expectedModel.getMessage(), actualModel.getMessage());
@@ -101,62 +87,38 @@ public class FormDownloadViewModelTest {
     }
 
     @Test
-    public void doNotRestoreLastShownAlertDialogIfRemovedTest() {
+    public void doNotRestoreLastShownAlertDialogIfRemovedTest() throws InterruptedException {
         AlertDialogUiModel expectedModel = new AlertDialogUiModel("Title", "Message", false);
 
         viewModel.setAlertDialog(expectedModel.getTitle(), expectedModel.getMessage(), expectedModel.shouldExit());
         viewModel.removeAlertDialog();
 
         // now assuming that the activity was recreated. So, the subject was resubscribed.
-        viewModel.getAlertDialog().subscribe(alertDialogTestSubscriber);
-
-        alertDialogTestSubscriber.assertNoValues();
+        Assert.assertNull(getValue(viewModel.getAlertDialog()));
     }
 
     @Test
-    public void displayProgressDialogTest() {
-        viewModel.getProgressDialog().subscribe(progressDialogTestSubscriber);
-
-        viewModel.setProgressDialogShowing(true);
-        viewModel.setProgressDialogShowing(false);
-        viewModel.setProgressDialogShowing(true);
-
-        progressDialogTestSubscriber.assertValues(true, false, true);
-
-        // re-subscription happens due to activity restoration
-        progressDialogTestSubscriber = new TestObserver<>();
-        viewModel.getProgressDialog().subscribe(progressDialogTestSubscriber);
-
-        // last emiited value is immediately reported back
-        progressDialogTestSubscriber.assertValue(true);
+    public void displayProgressDialogTest() throws InterruptedException {
+        for (boolean value : new boolean[]{true, false, true}) {
+            viewModel.setProgressDialogShowing(value);
+            Assert.assertEquals(value, getValue(viewModel.getProgressDialog()));
+        }
     }
 
     @Test
-    public void displayCancelDialogTest() {
-        viewModel.getCancelDialog().subscribe(cancelDialogTestSubscriber);
-
+    public void displayCancelDialogTest() throws InterruptedException {
         viewModel.setCancelDialogShowing(true);
         viewModel.setCancelDialogShowing(false);
         viewModel.setCancelDialogShowing(true);
 
-        cancelDialogTestSubscriber.assertValues(true, false, true);
-
-        // re-subscription happens due to activity restoration
-        cancelDialogTestSubscriber = new TestObserver<>();
-        viewModel.getCancelDialog().subscribe(cancelDialogTestSubscriber);
-
-        // last emiited value is immediately reported back
-        cancelDialogTestSubscriber.assertValue(true);
+        Assert.assertEquals(getValue(viewModel.getCancelDialog()), true);
     }
 
     @Test
-    public void displayLastShownProgressMessageTest() {
+    public void displayLastShownProgressMessageTest() throws InterruptedException {
         viewModel.setProgressDialogMessage("Progress 1");
 
-        // now assuming that the activity was recreated. So, the subject was resubscribed.
-        viewModel.getProgressDialogMessage().subscribe(progressDialogMessageTestSubscriber);
-
-        progressDialogMessageTestSubscriber.assertValue("Progress 1");
+        Assert.assertEquals("Progress 1", getValue(viewModel.getProgressDialogMessage()));
     }
 
     @Test
@@ -225,8 +187,6 @@ public class FormDownloadViewModelTest {
         when(mockFormDownloadRepository.isLoading()).thenReturn(true);
         when(mockNetworkUtils.isNetworkAvailable()).thenReturn(true);
 
-        viewModel.getFormDownloadList().subscribe(formListDownloadTestSubscriber);
-
         viewModel.startDownloadingFormList();
         viewModel.cancelFormListDownloadTask();
 
@@ -242,8 +202,6 @@ public class FormDownloadViewModelTest {
         when(mockFormDownloadRepository.isLoading()).thenReturn(true);
         when(mockNetworkUtils.isNetworkAvailable()).thenReturn(true);
 
-        viewModel.getFormDownloadList().subscribe(formListDownloadTestSubscriber);
-
         viewModel.setDownloadOnlyMode(true);
         viewModel.startDownloadingFormList();
         viewModel.cancelFormListDownloadTask();
@@ -257,7 +215,7 @@ public class FormDownloadViewModelTest {
     }
 
     @Test
-    public void formDownloadTaskTest() {
+    public void formDownloadTaskTest() throws InterruptedException {
         when(mockFormDownloadRepository.getFormDownloadProgress()).thenReturn(new Observable<String>() {
             @Override
             protected void subscribeActual(Observer<? super String> observer) {
@@ -280,21 +238,17 @@ public class FormDownloadViewModelTest {
             }
         });
 
-        viewModel.getProgressDialog().subscribe(progressDialogTestSubscriber);
-        viewModel.getProgressDialogMessage().subscribe(progressDialogMessageTestSubscriber);
-        viewModel.getAlertDialog().subscribe(alertDialogTestSubscriber);
-
         viewModel.setDownloadOnlyMode(true);
         viewModel.startDownloadingForms(formsToDownload);
 
         // assert that the progress dialog was displayed and then dismissed later
-        progressDialogTestSubscriber.assertValues(true, false);
+        Assert.assertEquals(false, getValue(viewModel.getProgressDialog()));
 
         // assert that the progress dialog showed the following messages in the same order
-        progressDialogMessageTestSubscriber.assertValues("message 1", "message 2", "message 3");
+        Assert.assertEquals("message 3", getValue(viewModel.getProgressDialogMessage()));
 
         // assert that success message was displayed
-        AlertDialogUiModel actualModel = (AlertDialogUiModel) alertDialogTestSubscriber.getEvents().get(0).get(0);
+        AlertDialogUiModel actualModel = getValue(viewModel.getAlertDialog());
         Assert.assertEquals(testResourceProvider.getString(R.string.download_forms_result), actualModel.getTitle());
         Assert.assertEquals(getDownloadResultMessage(result), actualModel.getMessage());
         Assert.assertTrue(actualModel.shouldExit());
@@ -306,11 +260,8 @@ public class FormDownloadViewModelTest {
     }
 
     @Test
-    public void cancelFormDownloadTaskTest() {
+    public void cancelFormDownloadTaskTest() throws InterruptedException {
         when(mockFormDownloadRepository.isLoading()).thenReturn(true);
-
-        viewModel.getProgressDialog().subscribe(progressDialogTestSubscriber);
-        viewModel.getCancelDialog().subscribe(cancelDialogTestSubscriber);
 
         List<FormDetails> formsToDownload = new ArrayList<>();
         formsToDownload.add(Mockito.mock(FormDetails.class));
@@ -321,17 +272,17 @@ public class FormDownloadViewModelTest {
         Disposable disposable = viewModel.getFormDownloadDisposable();
 
         // assert that cancel dialog was displayed
-        cancelDialogTestSubscriber.assertValues(true);
+        Assert.assertEquals(true, getValue(viewModel.getCancelDialog()));
 
         // assert that progress dialog was earlier being displayed and then dismissed
-        progressDialogTestSubscriber.assertValues(true, false);
+        Assert.assertEquals(false, getValue(viewModel.getProgressDialog()));
 
         // assert that download task was disposed
         Assert.assertTrue(disposable == null || disposable.isDisposed());
     }
 
     @Test
-    public void showAuthDialogIfUnauthorizedWhenDownloadingFormsTest() {
+    public void showAuthDialogIfUnauthorizedWhenDownloadingFormsTest() throws InterruptedException {
         when(mockNetworkUtils.isNetworkAvailable()).thenReturn(true);
         when(mockFormDownloadRepository.downloadFormList(any(), any(), any())).thenReturn(new Observable<HashMap<String, FormDetails>>() {
             @Override
@@ -343,12 +294,9 @@ public class FormDownloadViewModelTest {
             }
         });
 
-        viewModel.getAuthDialogSubject().subscribe(authDialogTestSubscriber);
-        viewModel.getFormDownloadList().subscribe(formListDownloadTestSubscriber);
-
         viewModel.startDownloadingFormList();
 
-        authDialogTestSubscriber.assertValueCount(1);
-        formListDownloadTestSubscriber.assertNoValues();
+        Assert.assertNotNull(getValue(viewModel.getAuthDialog()));
+        Assert.assertNull(getValue(viewModel.getFormDownloadList()));
     }
 }
