@@ -72,9 +72,9 @@ import timber.log.Timber;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
- * This class is
- *
- * @author carlhartung
+ * Contains either one {@link QuestionWidget} if the current form element is a question or
+ * multiple {@link QuestionWidget}s if the current form element is a group with the
+ * {@code field-list} appearance.
  */
 @SuppressLint("ViewConstructor")
 public class ODKView extends FrameLayout implements OnLongClickListener {
@@ -85,6 +85,15 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
 
     public static final String FIELD_LIST = "field-list";
 
+    /**
+     * Builds the view for a specified question or field-list of questions.
+     *
+     * @param context the activity creating this view
+     * @param questionPrompts the questions to be included in this view
+     * @param groups the group hierarchy that this question or field list is in
+     * @param advancingPage whether this view is being created after a forward swipe through the
+     *                      form. Used to determine whether to autoplay media.
+     */
     public ODKView(Context context, final FormEntryPrompt[] questionPrompts,
             FormEntryCaption[] groups, boolean advancingPage) {
         super(context);
@@ -104,89 +113,20 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
         layout.setMargins(10, 0, 10, 0);
 
         // display which group you are in as well as the question
-
         addGroupText(groups);
 
         // when the grouped fields are populated by an external app, this will get true.
         boolean readOnlyOverride = false;
 
-        // get the group we are showing -- it will be the last of the groups in the groups list
+        // handle intent groups that are intended to receive multiple values from an external app
         if (groups != null && groups.length > 0) {
+            // get the group we are showing -- it will be the last of the groups in the groups list
             final FormEntryCaption c = groups[groups.length - 1];
             final String intentString = c.getFormElement().getAdditionalAttribute(null, "intent");
             if (intentString != null && intentString.length() != 0) {
-
                 readOnlyOverride = true;
 
-                final String buttonText;
-                final String errorString;
-                String v = c.getSpecialFormQuestionText("buttonText");
-                buttonText = (v != null) ? v : context.getString(R.string.launch_app);
-                v = c.getSpecialFormQuestionText("noAppErrorString");
-                errorString = (v != null) ? v : context.getString(R.string.no_app);
-
-                TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-                params.setMargins(7, 5, 7, 5);
-
-                // set button formatting
-                Button launchIntentButton = new Button(getContext());
-                launchIntentButton.setId(ViewIds.generateViewId());
-                launchIntentButton.setText(buttonText);
-                launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
-                        Collect.getQuestionFontsize() + 2);
-                launchIntentButton.setPadding(20, 20, 20, 20);
-                launchIntentButton.setLayoutParams(params);
-
-                launchIntentButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String intentName = ExternalAppsUtils.extractIntentName(intentString);
-                        Map<String, String> parameters = ExternalAppsUtils.extractParameters(
-                                intentString);
-
-                        Intent i = new Intent(intentName);
-                        try {
-                            ExternalAppsUtils.populateParameters(i, parameters,
-                                    c.getIndex().getReference());
-
-                            for (FormEntryPrompt p : questionPrompts) {
-                                IFormElement formElement = p.getFormElement();
-                                if (formElement instanceof QuestionDef) {
-                                    TreeReference reference =
-                                            (TreeReference) formElement.getBind().getReference();
-                                    IAnswerData answerValue = p.getAnswerValue();
-                                    Object value =
-                                            answerValue == null ? null : answerValue.getValue();
-                                    switch (p.getDataType()) {
-                                        case Constants.DATATYPE_TEXT:
-                                        case Constants.DATATYPE_INTEGER:
-                                        case Constants.DATATYPE_DECIMAL:
-                                            i.putExtra(reference.getNameLast(),
-                                                    (Serializable) value);
-                                            break;
-                                    }
-                                }
-                            }
-
-                            ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_GROUP_CAPTURE);
-                        } catch (ExternalParamsException e) {
-                            Timber.e(e, "ExternalParamsException");
-
-                            ToastUtils.showShortToast(e.getMessage());
-                        } catch (ActivityNotFoundException e) {
-                            Timber.d(e, "ActivityNotFoundExcept");
-
-                            ToastUtils.showShortToast(errorString);
-                        }
-                    }
-                });
-
-                View divider = new View(getContext());
-                divider.setBackgroundResource(new ThemeUtils(getContext()).getDivider());
-                divider.setMinimumHeight(3);
-                view.addView(divider);
-
-                view.addView(launchIntentButton, layout);
+                addIntentLaunchButton(context, questionPrompts, c, intentString);
             }
         }
 
@@ -245,6 +185,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
     }
 
     /**
+     * Addresses 'bitmap size exceeds VM budget' crash.
      * http://code.google.com/p/android/issues/detail?id=8488
      */
     public void recycleDrawables() {
@@ -273,7 +214,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
     }
 
     /**
-     * // * Add a TextView containing the hierarchy of groups to which the question belongs. //
+     * Add a TextView containing the hierarchy of groups to which the question belongs.
      */
     private void addGroupText(FormEntryCaption[] groups) {
         String path = getGroupsPath(groups);
@@ -329,6 +270,84 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
         return TextUtils.join(" > ", segments);
     }
 
+
+    /**
+     * Adds a button to launch an intent if the group displayed by this view is an intent group.
+     * An intent group launches an intent and receives multiple values from the launched app.
+     */
+    private void addIntentLaunchButton(Context context, FormEntryPrompt[] questionPrompts,
+                                       FormEntryCaption c, String intentString) {
+        final String buttonText;
+        final String errorString;
+        String v = c.getSpecialFormQuestionText("buttonText");
+        buttonText = (v != null) ? v : context.getString(R.string.launch_app);
+        v = c.getSpecialFormQuestionText("noAppErrorString");
+        errorString = (v != null) ? v : context.getString(R.string.no_app);
+
+        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+        params.setMargins(7, 5, 7, 5);
+
+        // set button formatting
+        Button launchIntentButton = new Button(getContext());
+        launchIntentButton.setId(ViewIds.generateViewId());
+        launchIntentButton.setText(buttonText);
+        launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
+                Collect.getQuestionFontsize() + 2);
+        launchIntentButton.setPadding(20, 20, 20, 20);
+        launchIntentButton.setLayoutParams(params);
+
+        launchIntentButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String intentName = ExternalAppsUtils.extractIntentName(intentString);
+                Map<String, String> parameters = ExternalAppsUtils.extractParameters(
+                        intentString);
+
+                Intent i = new Intent(intentName);
+                try {
+                    ExternalAppsUtils.populateParameters(i, parameters,
+                            c.getIndex().getReference());
+
+                    for (FormEntryPrompt p : questionPrompts) {
+                        IFormElement formElement = p.getFormElement();
+                        if (formElement instanceof QuestionDef) {
+                            TreeReference reference =
+                                    (TreeReference) formElement.getBind().getReference();
+                            IAnswerData answerValue = p.getAnswerValue();
+                            Object value =
+                                    answerValue == null ? null : answerValue.getValue();
+                            switch (p.getDataType()) {
+                                case Constants.DATATYPE_TEXT:
+                                case Constants.DATATYPE_INTEGER:
+                                case Constants.DATATYPE_DECIMAL:
+                                    i.putExtra(reference.getNameLast(),
+                                            (Serializable) value);
+                                    break;
+                            }
+                        }
+                    }
+
+                    ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_GROUP_CAPTURE);
+                } catch (ExternalParamsException e) {
+                    Timber.e(e, "ExternalParamsException");
+
+                    ToastUtils.showShortToast(e.getMessage());
+                } catch (ActivityNotFoundException e) {
+                    Timber.d(e, "ActivityNotFoundExcept");
+
+                    ToastUtils.showShortToast(errorString);
+                }
+            }
+        });
+
+        View divider = new View(getContext());
+        divider.setBackgroundResource(new ThemeUtils(getContext()).getDivider());
+        divider.setMinimumHeight(3);
+        view.addView(divider);
+
+        view.addView(launchIntentButton, layout);
+    }
+
     public void setFocus(Context context) {
         if (!widgets.isEmpty()) {
             widgets.get(0).setFocus(context);
@@ -363,6 +382,9 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
         }
     }
 
+    /**
+     * Saves answers for the widgets in this view. Called when the widgets are in an intent group.
+     */
     public void setDataForFields(Bundle bundle) throws JavaRosaException {
         if (bundle == null) {
             return;
@@ -481,6 +503,10 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
         }
     }
 
+    /**
+     * Highlights the question at the given {@link FormIndex} in red for 2.5 seconds and scrolls the
+     * view to display that question at the top.
+     */
     public void highlightWidget(FormIndex formIndex) {
         QuestionWidget qw = getQuestionWidget(formIndex);
 
