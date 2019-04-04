@@ -266,7 +266,6 @@ public class FormDownloader {
      * @return a {@link UriResult} object
      */
     private UriResult findExistingOrCreateNewUri(File formFile, Map<String, String> formInfo) {
-        Cursor cursor = null;
         final Uri uri;
         final String formFilePath = formFile.getAbsolutePath();
         String mediaPath = FileUtils.constructMediaPath(formFilePath);
@@ -274,8 +273,7 @@ public class FormDownloader {
 
         FileUtils.checkMediaPath(new File(mediaPath));
 
-        try {
-            cursor = formsDao.getFormsCursorForFormFilePath(formFile.getAbsolutePath());
+        try (Cursor cursor = formsDao.getFormsCursorForFormFilePath(formFile.getAbsolutePath())) {
             isNew = cursor.getCount() <= 0;
 
             if (isNew) {
@@ -285,10 +283,6 @@ public class FormDownloader {
                 uri = Uri.withAppendedPath(FormsProviderAPI.FormsColumns.CONTENT_URI,
                         cursor.getString(cursor.getColumnIndex(FormsProviderAPI.FormsColumns._ID)));
                 mediaPath = cursor.getString(cursor.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH));
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
             }
         }
 
