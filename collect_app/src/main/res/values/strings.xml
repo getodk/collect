@@ -693,4 +693,5 @@
     <string name="number_picker_title">Number Picker</string>
     <string name="too_complex_form">This form is too complex for this device. Try simplifying expressions or ask for help on the forum.</string>
     <string name="reading_files">Reading files</string>
+    <string name="copying_media_files_failed">Copying media files failed</string>
 </resources>
