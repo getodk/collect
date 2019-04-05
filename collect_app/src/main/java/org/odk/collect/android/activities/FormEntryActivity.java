@@ -948,23 +948,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     /**
-     * Refreshes the current view. the controller and the displayed view can get
+     * Rebuilds the current view. the controller and the displayed view can get
      * out of sync due to dialogs and restarts caused by screen orientation
      * changes, so they're resynchronized here.
      */
     public void refreshCurrentView() {
         int event = getFormController().getEvent();
-
-        // When we refresh, repeat dialog state isn't maintained, so step back
-        // to the previous
-        // question.
-        // Also, if we're within a group labeled 'field list', step back to the
-        // beginning of that
-        // group.
-        // That is, skip backwards over repeat prompts, groups that are not
-        // field-lists,
-        // repeat events, and indexes in field-lists that is not the containing
-        // group.
 
         View current = createView(event, false);
         showView(current, AnimationType.FADE);
