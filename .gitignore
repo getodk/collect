@@ -21,7 +21,8 @@ collect_app/kontrolid/
 collect_app/plan/
 collect_app/src/supply/
 collect_app/supply/
-collect_app/src/supply/
+collect_app/seracis/
+collect_app/src/seracis/
 
 # gradle env props
 gradle.properties

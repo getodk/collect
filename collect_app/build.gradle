@@ -53,23 +53,27 @@ android {
     productFlavors {
         standard {
             applicationId "org.smap.smapTask.android"
-            versionName "6.02"
+            versionName "6.10"
         }
         plan {
             applicationId "org.smap.smapTask.android.plan"
-            versionName "6.02-plan"
+            versionName "6.10-plan"
         }
         kontrolid {
             applicationId "org.smap.smapTask.android.kontrolid"
-            versionName "6.02-kontrolid"
+            versionName "6.10-kontrolid"
         }
         pop {
             applicationId "org.smap.smapTask.android.pop"
-            versionName "6.02-pop"
+            versionName "6.10-pop"
         }
         supply {
             applicationId "org.smap.smapTask.android.supply"
-            versionName "6.02-supply"
+            versionName "6.10-supply"
+        }
+        seracis {
+            applicationId "org.smap.smapTask.android.seracis"
+            versionName "6.10-seracis"
         }
     }
 
