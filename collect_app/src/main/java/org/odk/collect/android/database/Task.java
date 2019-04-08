@@ -10,6 +10,7 @@ public class Task {
 	public String form_id;
 	public int form_version;
     public String update_id;
+    public String initial_data_source;   // task || survey || none
 	public String assignment_mode;
 	public Date scheduled_at;
 	public String location_trigger;

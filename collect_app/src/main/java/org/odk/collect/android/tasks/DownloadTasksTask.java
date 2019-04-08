@@ -720,16 +720,23 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
                         // Ensure the instance data is available on the phone
                         // Use update_id in preference to initial_data url
-                        if(ta.task.update_id != null) {
-                            if(tr.version < 1) {
+                        if(tr.version < 1) {
+                            if(ta.task.update_id != null) {
                                 ta.task.initial_data = serverUrl + "/instanceXML/" +
                                         ta.task.form_id + "/0?key=instanceid&keyval=" + ta.task.update_id;
-                            } else {
-                                ta.task.initial_data = serverUrl + "/webForm/instance/" +
-                                        ta.task.form_id + "/" + ta.task.update_id;
                             }
-                            Timber.i("Instance url: " + ta.task.initial_data);
+                        } else {
+                            if(ta.task.initial_data_source != null && ta.task.initial_data_source.equals("task")) {
+                                ta.task.initial_data = serverUrl + "/webForm/instance/" +
+                                        ta.task.form_id + "/task/" + ta.task.id;
+                            } else {
+                                if(ta.task.update_id != null) {
+                                    ta.task.initial_data = serverUrl + "/webForm/instance/" +
+                                            ta.task.form_id + "/" + ta.task.update_id;
+                                }
+                            }
                         }
+                        Timber.i("Instance url: " + ta.task.initial_data);
 
                         // Add instance data
                         ManageForm mf = new ManageForm();
