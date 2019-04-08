@@ -1186,121 +1186,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return createViewForFormBeginning(event, true, formController);
 
             case FormEntryController.EVENT_END_OF_FORM:
-                View endView = View.inflate(this, R.layout.form_entry_end, null);
-                ((TextView) endView.findViewById(R.id.description))
-                        .setText(getString(R.string.save_enter_data_description,
-                                formController.getFormTitle()));
-
-                // checkbox for if finished or ready to send
-                final CheckBox instanceComplete = endView
-                        .findViewById(R.id.mark_finished);
-                instanceComplete.setChecked(InstancesDaoHelper.isInstanceComplete(true));
-
-                if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_MARK_AS_FINALIZED)) {
-                    instanceComplete.setVisibility(View.GONE);
-                }
-
-                // edittext to change the displayed name of the instance
-                final EditText saveAs = endView.findViewById(R.id.save_name);
-
-                // disallow carriage returns in the name
-                InputFilter returnFilter = (source, start, end, dest, dstart, dend)
-                        -> RegexUtils.normalizeFormName(source.toString().substring(start, end), true);
-                saveAs.setFilters(new InputFilter[]{returnFilter});
-
-                if (formController.getSubmissionMetadata().instanceName == null) {
-                    // no meta/instanceName field in the form -- see if we have a
-                    // name for this instance from a previous save attempt...
-                    String uriMimeType = null;
-                    Uri instanceUri = getIntent().getData();
-                    if (instanceUri != null) {
-                        uriMimeType = getContentResolver().getType(instanceUri);
-                    }
-
-                    if (saveName == null && uriMimeType != null
-                            && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
-                        Cursor instance = null;
-                        try {
-                            instance = getContentResolver().query(instanceUri,
-                                    null, null, null, null);
-                            if (instance != null && instance.getCount() == 1) {
-                                instance.moveToFirst();
-                                saveName = instance
-                                        .getString(instance
-                                                .getColumnIndex(InstanceColumns.DISPLAY_NAME));
-                            }
-                        } finally {
-                            if (instance != null) {
-                                instance.close();
-                            }
-                        }
-                    }
-                    if (saveName == null) {
-                        // last resort, default to the form title
-                        saveName = formController.getFormTitle();
-                    }
-                    // present the prompt to allow user to name the form
-                    TextView sa = endView.findViewById(R.id.save_form_as);
-                    sa.setVisibility(View.VISIBLE);
-                    saveAs.setText(saveName);
-                    saveAs.setEnabled(true);
-                    saveAs.setVisibility(View.VISIBLE);
-                    saveAs.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                            saveName = String.valueOf(s);
-                        }
-
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        }
-                    });
-                } else {
-                    // if instanceName is defined in form, this is the name -- no
-                    // revisions
-                    // display only the name, not the prompt, and disable edits
-                    saveName = formController.getSubmissionMetadata().instanceName;
-                    TextView sa = endView.findViewById(R.id.save_form_as);
-                    sa.setVisibility(View.GONE);
-                    saveAs.setText(saveName);
-                    saveAs.setEnabled(false);
-                    saveAs.setVisibility(View.VISIBLE);
-                }
-
-                // override the visibility settings based upon admin preferences
-                if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_AS)) {
-                    saveAs.setVisibility(View.GONE);
-                    TextView sa = endView
-                            .findViewById(R.id.save_form_as);
-                    sa.setVisibility(View.GONE);
-                }
-
-                // Create 'save' button
-                endView.findViewById(R.id.save_exit_button)
-                        .setOnClickListener(new OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                // Form is marked as 'saved' here.
-                                if (saveAs.getText().length() < 1) {
-                                    ToastUtils.showShortToast(R.string.save_as_error);
-                                } else {
-                                    saveDataToDisk(EXIT, instanceComplete
-                                            .isChecked(), saveAs.getText()
-                                            .toString());
-                                }
-                            }
-                        });
-
-                if (showNavigationButtons) {
-                    backButton.setVisibility(allowMovingBackwards ? View.VISIBLE : View.GONE);
-                    nextButton.setVisibility(View.GONE);
-                }
-
-                return endView;
+                return createViewForFormEnd(formController);
             case FormEntryController.EVENT_QUESTION:
             case FormEntryController.EVENT_GROUP:
             case FormEntryController.EVENT_REPEAT:
@@ -1391,6 +1277,129 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         return createView(event, advancingPage);
+    }
+
+    /**
+     * Creates the final screen in a form-filling interaction. Allows the user to set a display
+     * name for the instance and to decide whether the form should be finalized or not. Presents
+     * a button for saving and exiting.
+     */
+    private View createViewForFormEnd(FormController formController) {
+        View endView = View.inflate(this, R.layout.form_entry_end, null);
+        ((TextView) endView.findViewById(R.id.description))
+                .setText(getString(R.string.save_enter_data_description,
+                        formController.getFormTitle()));
+
+        // checkbox for if finished or ready to send
+        final CheckBox instanceComplete = endView
+                .findViewById(R.id.mark_finished);
+        instanceComplete.setChecked(InstancesDaoHelper.isInstanceComplete(true));
+
+        if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_MARK_AS_FINALIZED)) {
+            instanceComplete.setVisibility(View.GONE);
+        }
+
+        // edittext to change the displayed name of the instance
+        final EditText saveAs = endView.findViewById(R.id.save_name);
+
+        // disallow carriage returns in the name
+        InputFilter returnFilter = (source, start, end, dest, dstart, dend)
+                -> RegexUtils.normalizeFormName(source.toString().substring(start, end), true);
+        saveAs.setFilters(new InputFilter[]{returnFilter});
+
+        if (formController.getSubmissionMetadata().instanceName == null) {
+            // no meta/instanceName field in the form -- see if we have a
+            // name for this instance from a previous save attempt...
+            String uriMimeType = null;
+            Uri instanceUri = getIntent().getData();
+            if (instanceUri != null) {
+                uriMimeType = getContentResolver().getType(instanceUri);
+            }
+
+            if (saveName == null && uriMimeType != null
+                    && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
+                Cursor instance = null;
+                try {
+                    instance = getContentResolver().query(instanceUri,
+                            null, null, null, null);
+                    if (instance != null && instance.getCount() == 1) {
+                        instance.moveToFirst();
+                        saveName = instance
+                                .getString(instance
+                                        .getColumnIndex(InstanceColumns.DISPLAY_NAME));
+                    }
+                } finally {
+                    if (instance != null) {
+                        instance.close();
+                    }
+                }
+            }
+            if (saveName == null) {
+                // last resort, default to the form title
+                saveName = formController.getFormTitle();
+            }
+            // present the prompt to allow user to name the form
+            TextView sa = endView.findViewById(R.id.save_form_as);
+            sa.setVisibility(View.VISIBLE);
+            saveAs.setText(saveName);
+            saveAs.setEnabled(true);
+            saveAs.setVisibility(View.VISIBLE);
+            saveAs.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    saveName = String.valueOf(s);
+                }
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+            });
+        } else {
+            // if instanceName is defined in form, this is the name -- no
+            // revisions
+            // display only the name, not the prompt, and disable edits
+            saveName = formController.getSubmissionMetadata().instanceName;
+            TextView sa = endView.findViewById(R.id.save_form_as);
+            sa.setVisibility(View.GONE);
+            saveAs.setText(saveName);
+            saveAs.setEnabled(false);
+            saveAs.setVisibility(View.VISIBLE);
+        }
+
+        // override the visibility settings based upon admin preferences
+        if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_AS)) {
+            saveAs.setVisibility(View.GONE);
+            TextView sa = endView
+                    .findViewById(R.id.save_form_as);
+            sa.setVisibility(View.GONE);
+        }
+
+        // Create 'save' button
+        endView.findViewById(R.id.save_exit_button)
+                .setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Form is marked as 'saved' here.
+                        if (saveAs.getText().length() < 1) {
+                            ToastUtils.showShortToast(R.string.save_as_error);
+                        } else {
+                            saveDataToDisk(EXIT, instanceComplete
+                                    .isChecked(), saveAs.getText()
+                                    .toString());
+                        }
+                    }
+                });
+
+        if (showNavigationButtons) {
+            backButton.setEnabled(allowMovingBackwards);
+            nextButton.setEnabled(false);
+        }
+
+        return endView;
     }
 
     @Override
