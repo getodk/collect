@@ -613,8 +613,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     /**
-     * Create save-points asynchronously in order to not affect swiping performance
-     * on larger forms.
+     * Creates save-points asynchronously in order to not affect swiping performance on larger forms.
+     * If moving backwards through a form is disabled, also saves the index of the form element that
+     * was last shown to the user so that no matter how the app exits and relaunches, the user can't
+     * see previous questions.
      */
     private void nonblockingCreateSavePointData() {
         try {
@@ -1168,7 +1170,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     /**
-     * Creates a view given the View type and an event
+     * Creates and returns a new view based on the event type passed in. The view returned is
+     * of type {@link View} if the event passed in represents the end of the form or of type
+     * {@link ODKView} otherwise.
      *
      * @param advancingPage -- true if this results from advancing through the form
      * @return newly created View
@@ -1183,8 +1187,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
-                return createViewForFormBeginning(event, true, formController);
-
+                return createViewForFormBeginning(formController);
             case FormEntryController.EVENT_END_OF_FORM:
                 return createViewForFormEnd(formController);
             case FormEntryController.EVENT_QUESTION:
@@ -1262,11 +1265,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    private View createViewForFormBeginning(int event, boolean advancingPage,
-                                            FormController formController) {
+    /**
+     * Steps to the next screen and creates a view for it. Always sets {@code advancingPage} to true
+     * to auto-play media.
+     */
+    private View createViewForFormBeginning(FormController formController) {
+        int event = FormEntryController.EVENT_BEGINNING_OF_FORM;
         try {
             event = formController.stepToNextScreenEvent();
-
         } catch (JavaRosaException e) {
             Timber.d(e);
             if (e.getMessage().equals(e.getCause().getMessage())) {
@@ -1276,7 +1282,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        return createView(event, advancingPage);
+        return createView(event, true);
     }
 
     /**
@@ -1485,9 +1491,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     /**
-     * Determines what should be displayed between a question, or the start
-     * screen and displays the appropriate view. Also saves answers to the data
-     * model without checking constraints.
+     * If moving backwards is allowed, displays the view for the previous question or field list.
+     * Steps the global {@link FormController} to the previous question and saves answers to the
+     * data model without checking constraints.
      */
     private void showPreviousView() {
         if (allowMovingBackwards) {
@@ -1495,8 +1501,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             try {
                 FormController formController = getFormController();
                 if (formController != null) {
-                    // The answer is saved on a back swipe, but question constraints are
-                    // ignored.
+                    // The answer is saved on a back swipe, but question constraints are ignored.
                     if (formController.currentPromptIsQuestion()) {
                         saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                     }
@@ -1504,8 +1509,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     if (formController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
                         int event = formController.stepToPreviousScreenEvent();
 
-                        // If we are the begining of the form, lets revert our actions and ignore
-                        // this swipe
+                        // If we are the beginning of the form, there is no previous view to show
                         if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
                             event = formController.stepToNextScreenEvent();
                             beenSwiped = false;
@@ -1545,7 +1549,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * the progress bar.
      */
     public void showView(View next, AnimationType from) {
-
         // disable notifications...
         if (inAnimation != null) {
             inAnimation.setAnimationListener(null);
@@ -2188,6 +2191,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 finish();
                 return;
             } else {
+                // Rebuild the entire view if there is no ongoing form load and there is an active
+                // FormController.
                 refreshCurrentView();
             }
         }
@@ -2317,8 +2322,20 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     /**
-     * loadingComplete() is called by FormLoaderTask once it has finished
-     * loading a form.
+     * Given a {@link FormLoaderTask} which has created a {@link FormController} for either a new or
+     * existing instance, shows that instance to the user. Either launches {@link FormHierarchyActivity}
+     * if an existing instance is being edited or builds the view for the current question(s) if a
+     * new instance is being created.
+     *
+     * May do some or all of these depending on current state:
+     * - Ensures phone state permissions are given if this form needs them
+     * - Cleans up {@link #formLoaderTask}
+     * - Sets the global form controller and database manager for search()/pulldata()
+     * - Restores the last-used language
+     * - Handles activity results that may have come in while the form was loading
+     * - Alerts the user of a recovery from savepoint
+     * - Verifies whether an instance folder exists and creates one if not
+     * - Initializes background location capture (only if the instance being loaded is a new one)
      */
     @Override
     public void loadingComplete(FormLoaderTask task, FormDef formDef) {
@@ -2379,16 +2396,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     return;
                 }
 
-                // it can be a normal flow for a pending activity result to restore from
-                // a savepoint
-                // (the call flow handled by the above if statement). For all other use
-                // cases, the
-                // user should be notified, as it means they wandered off doing other
-                // things then
-                // returned to ODK Collect and chose Edit Saved Form, but that the
-                // savepoint for that
-                // form is newer than the last saved version of their form data.
-
+                // it can be a normal flow for a pending activity result to restore from a savepoint
+                // (the call flow handled by the above if statement). For all other use cases, the
+                // user should be notified, as it means they wandered off doing other things then
+                // returned to ODK Collect and chose Edit Saved Form, but that the savepoint for
+                // that form is newer than the last saved version of their form data.
                 boolean hasUsedSavepoint = task.hasUsedSavepoint();
 
                 if (hasUsedSavepoint) {
@@ -2416,8 +2428,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
                     if (!showFirst) {
-                        // we've just loaded a saved form, so start in the hierarchy view
-
                         if (!allowMovingBackwards) {
                             FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile();
                             if (formIndex != null) {
@@ -2427,6 +2437,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             }
                         }
 
+                        // we've just loaded a saved form, so start in the hierarchy view
                         String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
                             savedFormStart = true;

@@ -871,7 +871,15 @@ public class FormController {
     }
 
     /**
-     * Returns an array of question promps.
+     * Returns an array of question prompts corresponding to the current {@link FormIndex}. These
+     * are the prompts that should be displayed to the user and don't include any non-relevant
+     * questions.
+     *
+     * The array has a single element if there is a question at this {@link FormIndex} or multiple
+     * elements if there is a group.
+     *
+     * @throws RuntimeException if there is a group at this {@link FormIndex} and it contains
+     * elements that are not questions or regular (non-repeat) groups.
      */
     public FormEntryPrompt[] getQuestionPrompts() throws RuntimeException {
         // For questions, there is only one.
