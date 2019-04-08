@@ -33,6 +33,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import timber.log.Timber;
+
 public class InstanceListCursorAdapter extends SimpleCursorAdapter {
     private final Context context;
     private final boolean shouldCheckDisabled;
@@ -79,8 +81,13 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
             String disabledMessage;
 
             if (date != 0) {
-                String deletedTime = context.getString(R.string.deleted_on_date_at_time);
-                disabledMessage = new SimpleDateFormat(deletedTime, Locale.getDefault()).format(new Date(date));
+                try {
+                    String deletedTime = context.getString(R.string.deleted_on_date_at_time);
+                    disabledMessage = new SimpleDateFormat(deletedTime, Locale.getDefault()).format(new Date(date));
+                } catch (IllegalArgumentException e) {
+                    Timber.e(e);
+                    disabledMessage = context.getString(R.string.submission_deleted);
+                }
             } else if (!formExists) {
                 disabledMessage = context.getString(R.string.deleted_form);
             } else {
