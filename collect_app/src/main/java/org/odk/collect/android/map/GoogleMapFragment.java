@@ -59,7 +59,7 @@ import timber.log.Timber;
 public class GoogleMapFragment extends SupportMapFragment implements
     MapFragment, LocationListener, LocationClient.LocationClientListener,
     GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener,
-    GoogleMap.OnMarkerDragListener {
+    GoogleMap.OnMarkerDragListener, GoogleMap.OnMarkerClickListener {
     public static final LatLng INITIAL_CENTER = new LatLng(0, -30);
     public static final float INITIAL_ZOOM = 2;
     public static final float POINT_ZOOM = 16;
@@ -108,6 +108,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             this.map = map;
             map.setOnMapClickListener(this);
             map.setOnMapLongClickListener(this);
+            map.setOnMarkerClickListener(this);
             map.setOnMarkerDragListener(this);
             map.getUiSettings().setCompassEnabled(true);
             // Don't show the blue dot on the map; we'll draw crosshairs instead.
@@ -379,6 +380,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
         if (longPressListener != null) {
             longPressListener.onPoint(fromLatLng(latLng));
         }
+    }
+
+    @Override public boolean onMarkerClick(Marker marker) {
+        onMapClick(marker.getPosition());
+        return true;
     }
 
     @Override public void onMarkerDragStart(Marker marker) {
