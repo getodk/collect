@@ -589,6 +589,8 @@ public class Utilities {
             values.put(InstanceColumns.T_SCHED_START, ta.task.scheduled_at.getTime());
         }
         values.put(InstanceColumns.T_LOCATION_TRIGGER, ta.task.location_trigger);
+        values.put(InstanceColumns.T_SHOW_DIST, ta.task.show_dist);
+        values.put(InstanceColumns.T_HIDE, (ta.task.show_dist > 0) ? 1 : 0);
 
         Collect.getInstance().getContentResolver().update(dbUri, values, selectClause, selectArgs);
 

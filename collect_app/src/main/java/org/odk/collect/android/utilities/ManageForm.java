@@ -345,6 +345,10 @@ public class ManageForm {
     	values.put(InstanceColumns.DISPLAY_NAME, formName);
     	values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
 
+    	// Add task geofence values
+        values.put(InstanceColumns.T_SHOW_DIST, ta.task.show_dist);
+        values.put(InstanceColumns.T_HIDE, (ta.task.show_dist > 0) ? 1 : 0);
+
         values.put(InstanceColumns.ACT_LON, 0.0);
         values.put(InstanceColumns.ACT_LAT, 0.0);
         values.put(InstanceColumns.T_TITLE, ta.task.title);

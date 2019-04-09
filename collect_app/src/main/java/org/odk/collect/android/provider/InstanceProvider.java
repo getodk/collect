@@ -46,7 +46,7 @@ public class InstanceProvider extends ContentProvider {
 
 
     private static final String DATABASE_NAME = "instances.db";
-    private static final int DATABASE_VERSION = 10;		// smap
+    private static final int DATABASE_VERSION = 11;		// smap
     private static final String INSTANCES_TABLE_NAME = "instances";
 
     private static HashMap<String, String> sInstancesProjectionMap;
@@ -101,6 +101,8 @@ public class InstanceProvider extends ContentProvider {
                + InstanceColumns.STATUS + " text not null, "
                + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
                + InstanceColumns.DISPLAY_SUBTEXT + " text not null, "
+               + InstanceColumns.T_SHOW_DIST + " integer default 0, "   // smap
+               + InstanceColumns.T_HIDE + " integer default 0, "        // smap
                + InstanceColumns.DELETED_DATE + " date );" );
         }
 
@@ -108,16 +110,15 @@ public class InstanceProvider extends ContentProvider {
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         	int initialVersion = oldVersion;
-        	if ( oldVersion == 1 ) {
+        	if ( oldVersion < 2 ) {
         		db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
         					InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
         		db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET " +
         					InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true) + "' WHERE " +
         					InstanceColumns.STATUS + " IS NOT NULL AND " +
         					InstanceColumns.STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE + "'");
-        		oldVersion = 2;
         	}
-        	if ( oldVersion == 2 ) {
+        	if ( oldVersion < 3 ) {
         		db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
     					InstanceColumns.JR_VERSION + " text;");
         	}
@@ -166,7 +167,7 @@ public class InstanceProvider extends ContentProvider {
                             InstanceColumns.T_REPEAT + " integer;");
                     db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
                             InstanceColumns.T_UPDATEID + " text;");
-                }catch(Exception e) {
+                } catch(Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
                     Timber.w("Error in upgrading to database version 6");
                     e.printStackTrace();
@@ -176,7 +177,7 @@ public class InstanceProvider extends ContentProvider {
                 try {
                     db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
                             InstanceColumns.T_LOCATION_TRIGGER + " text;");
-                }catch(Exception e) {
+                } catch(Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
                     Timber.w("Error in upgrading to database version 7");
                     e.printStackTrace();
@@ -186,7 +187,7 @@ public class InstanceProvider extends ContentProvider {
                 try {
                     db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
                             InstanceColumns.T_SURVEY_NOTES + " text;");
-                }catch(Exception e) {
+                } catch(Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
                     Timber.w("Error in upgrading to database version 8");
                     e.printStackTrace();
@@ -196,7 +197,7 @@ public class InstanceProvider extends ContentProvider {
                 try {
                     db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
                             InstanceColumns.DELETED_DATE + " date;");
-                }catch(Exception e) {
+                } catch(Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
                     Timber.w("Error in upgrading to database version 9");
                     e.printStackTrace();
@@ -207,7 +208,19 @@ public class InstanceProvider extends ContentProvider {
         	    try {
                     db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
                             InstanceColumns.T_UPDATED + " integer;");
-                }catch(Exception e) {
+                } catch(Exception e) {
+                    // Catch errors, its possible the user upgraded then downgraded
+                    Timber.w("Error in upgrading to database version 10");
+                    e.printStackTrace();
+                }
+            }
+            if (oldVersion < 11) {
+                try {
+                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                            InstanceColumns.T_SHOW_DIST + " integer default 0;");
+                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                            InstanceColumns.T_HIDE + " integer default 0;");
+                } catch(Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
                     Timber.w("Error in upgrading to database version 10");
                     e.printStackTrace();
@@ -597,8 +610,10 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns.T_GEOM, InstanceColumns.T_GEOM);                // smap
         sInstancesProjectionMap.put(InstanceColumns.T_GEOM_TYPE, InstanceColumns.T_GEOM_TYPE);      // smap
         sInstancesProjectionMap.put(InstanceColumns.T_IS_SYNC, InstanceColumns.T_IS_SYNC);          // smap
-        sInstancesProjectionMap.put(InstanceColumns.T_ASS_ID, InstanceColumns.T_ASS_ID);          // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_ASS_ID, InstanceColumns.T_ASS_ID);            // smap
         sInstancesProjectionMap.put(InstanceColumns.T_TASK_STATUS, InstanceColumns.T_TASK_STATUS);  // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_SHOW_DIST, InstanceColumns.T_SHOW_DIST);      // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_HIDE, InstanceColumns.T_HIDE);                // smap
         sInstancesProjectionMap.put(InstanceColumns.UUID, InstanceColumns.UUID);                    // smap
         sInstancesProjectionMap.put(InstanceColumns.DISPLAY_SUBTEXT,
                 InstanceColumns.DISPLAY_SUBTEXT);

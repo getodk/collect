@@ -17,6 +17,7 @@ public class Task {
 	public boolean repeat;			// Task can be completed multiple times
 	public String address;			// Key value pairs representing an unstructured address
 	public String status;
+	public int show_dist;
 
 	// Local attributes - used only on device
     public String initial_data;

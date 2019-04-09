@@ -57,8 +57,6 @@ public final class InstanceProviderAPI {
         public static final String JR_FORM_ID = "jrFormId";
         public static final String SOURCE = "source";			// smap
         public static final String JR_VERSION = "jrVersion";
-        public static final String SHOW_DIST = "show_dist";     // smap
-        public static final String HIDE = "hide";               // smap
         //public static final String FORM_ID = "formId";
 
         // these are generated for you (but you can insert something else if you want)
@@ -91,6 +89,8 @@ public final class InstanceProviderAPI {
         public static final String T_SURVEY_NOTES = "tSurveyNotes";  // Any notes added to the assessment outside of the form itself
         public static final String T_UPDATED = "tUpdated";          // Record the number of times the instance is updated
         public static final String UUID = "uuid";
+        public static final String T_SHOW_DIST = "tShowDist";       // Distance at which task will be shown, 0 for always show
+        public static final String T_HIDE = "tHide";                // Set true if task is to be hidden from view
         // Smap End
 
         //        public static final String DEFAULT_SORT_ORDER = "modified DESC";
