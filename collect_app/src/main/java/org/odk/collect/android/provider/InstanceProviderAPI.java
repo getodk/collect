@@ -57,6 +57,8 @@ public final class InstanceProviderAPI {
         public static final String JR_FORM_ID = "jrFormId";
         public static final String SOURCE = "source";			// smap
         public static final String JR_VERSION = "jrVersion";
+        public static final String SHOW_DIST = "show_dist";     // smap
+        public static final String HIDE = "hide";               // smap
         //public static final String FORM_ID = "formId";
 
         // these are generated for you (but you can insert something else if you want)

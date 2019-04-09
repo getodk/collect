@@ -33,10 +33,12 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColum
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DELETED_DATE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DISPLAY_NAME;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.HIDE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_VERSION;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SHOW_DIST;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.STATUS;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SUBMISSION_URI;
 
@@ -47,7 +49,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "instances.db";
     public static final String INSTANCES_TABLE_NAME = "instances";
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     private final String[] instancesTableColumnsInVersion4 = new String[] {_ID, DISPLAY_NAME, SUBMISSION_URI, CAN_EDIT_WHEN_COMPLETE,
             INSTANCE_FILE_PATH, JR_FORM_ID, JR_VERSION, STATUS, LAST_STATUS_CHANGE_DATE, DISPLAY_SUBTEXT, DELETED_DATE};
@@ -74,6 +76,8 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
                 success &= upgradeToVersion3(db);
             case 3:
                 success &= upgradeToVersion4(db);
+            case 4:
+                success &= upgradeToVersion5(db);
                 break;
             default:
                 Timber.i("Unknown version " + oldVersion);
@@ -153,6 +157,30 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
         return success;
     }
 
+    private boolean upgradeToVersion5(SQLiteDatabase db) {
+        boolean success = true;
+        try {
+            Cursor cursor = db.rawQuery("SELECT * FROM " + INSTANCES_TABLE_NAME + " LIMIT 0", null);
+            int showDistColumnIndex = cursor.getColumnIndex(SHOW_DIST);
+            int hideColumnIndex = cursor.getColumnIndex(HIDE);
+            cursor.close();
+
+            // Only add the column if it doesn't already exist
+            if (showDistColumnIndex == -1) {
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
+                        + SHOW_DIST + " integer;");
+            }
+            if (hideColumnIndex == -1) {
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
+                        + HIDE + " integer default 0;");
+            }
+        } catch (SQLiteException e) {
+            Timber.e(e);
+            success = false;
+        }
+        return success;
+    }
+
     private boolean downgrade(SQLiteDatabase db, String[] instancesTableColumns) {
         boolean success = true;
         String temporaryTable = INSTANCES_TABLE_NAME + "_tmp";
@@ -199,6 +227,8 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
                 + STATUS + " text not null, "
                 + LAST_STATUS_CHANGE_DATE + " date not null, "
                 + DISPLAY_SUBTEXT + " text not null,"
+                + SHOW_DIST + " integer default 0,"
+                + HIDE + " integer default 0,"
                 + DELETED_DATE + " date );");
     }
 }
