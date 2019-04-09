@@ -36,6 +36,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import timber.log.Timber;
+
 public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
 
     private final List<DriveListItem> items;
@@ -61,9 +63,13 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
         void onBind(DriveListItem item) {
             String dateModified = null;
             if (item.getDate() != null) {
-                dateModified = new SimpleDateFormat(getContext().getString(
-                        R.string.modified_on_date_at_time), Locale.getDefault())
-                        .format(new Date(item.getDate().getValue()));
+                try {
+                    dateModified = new SimpleDateFormat(getContext().getString(
+                            R.string.modified_on_date_at_time), Locale.getDefault())
+                            .format(new Date(item.getDate().getValue()));
+                } catch (IllegalArgumentException e) {
+                    Timber.e(e);
+                }
             }
 
             if (item.getType() == DriveListItem.FILE) {
