@@ -266,7 +266,7 @@
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">My Drive</string>
   <string name="go_shared">Deljeno z menoj</string>
-  <string name="modified_on_date_at_time">Spremenjeno \'EEE,MMM dd, yyyy\' ob HH:mm</string>
+  <string name="modified_on_date_at_time">\'Spremenjeno\' EEE, MMM dd, yyyy \'ob\' HH:mm</string>
   <string name="aggregate_preferences">ODK Aggregate nastavitve</string>
   <string name="sms_submission_preferences">Nastavitve za predložitev preko SMS sporočil</string>
   <string name="submission_transport_types_title">Predloži preko</string>
