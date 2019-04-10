@@ -18,7 +18,7 @@ public class PermissionsTest {
 
     @Test
     public void permissionCheck() {
-        AndroidManifest androidManifest = new AndroidManifest(Fs.fileFromPath("build/intermediates/manifests/full/debug/AndroidManifest.xml"), null, null);
+        AndroidManifest androidManifest = new AndroidManifest(Fs.fileFromPath("build/intermediates/merged_manifests/debug/AndroidManifest.xml"), null, null);
         List<String> permissions = androidManifest.getUsedPermissions();
 
         //List of expected permissions to be present in AndroidManifest.xml

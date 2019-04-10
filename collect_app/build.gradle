@@ -174,12 +174,6 @@ configurations.all {
     transitive = true
 }
 
-allprojects {
-    tasks.withType(JavaCompile) {
-        options.compilerArgs << '-Xlint:all'
-    }
-}
-
 dependencies {
     implementation fileTree(dir: 'libs', include: '*.jar')
     implementation "com.android.support:support-v13:${rootProject.supportLibraryVersion}"

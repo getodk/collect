@@ -110,7 +110,7 @@ public class GuidanceHintFormTest {
     }
 
     //region Custom TestRule.
-    private class FormEntryActivityTestRule extends IntentsTestRule<FormEntryActivity> {
+    private static class FormEntryActivityTestRule extends IntentsTestRule<FormEntryActivity> {
 
         FormEntryActivityTestRule() {
             super(FormEntryActivity.class);
