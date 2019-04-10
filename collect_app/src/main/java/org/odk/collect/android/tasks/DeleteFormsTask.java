@@ -76,6 +76,7 @@ public class DeleteFormsTask extends AsyncTask<Long, Void, Integer> {
         }
         Intent intent = new Intent("org.smap.smapTask.refresh");  // smap refresh task list
         LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent); // smap
+        Timber.i("######## send org.smap.smapTask.refresh from deleteFormsTask");  // smap
         super.onPostExecute(result);
     }
 

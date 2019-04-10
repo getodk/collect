@@ -296,6 +296,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
         Intent intent = new Intent("org.smap.smapTask.refresh");                  // smap refresh task list
         LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);  // smap
+        Timber.i("######## send org.smap.smapTask.refresh from instanceUploaderActivity");  // smap
 
         if (!isInstanceStateSaved()) {
             createUploadInstancesResultDialog(message.trim());

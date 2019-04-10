@@ -431,6 +431,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
         Intent intent = new Intent("org.smap.smapTask.refresh");      // Smap
         LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent); // Smap
+        Timber.i("######## send org.smap.smapTask.refresh from saveToDiskTask");  // smap
     }
 
     static void manageFilesAfterSavingEncryptedForm(File instanceXml, File submissionXml) throws IOException {

@@ -32,6 +32,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 public class ResetUtility {
 
     private List<Integer> failedResetActions;
@@ -71,6 +73,7 @@ public class ResetUtility {
                     if (TraceUtilities.deleteSource(0)) {
                         Intent intent = new Intent("org.smap.smapTask.refresh");
                         LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
+                        Timber.i("######## send org.smap.smapTask.refresh from resetUtility");  // smap
                         failedResetActions.remove(failedResetActions.indexOf(ResetAction.SMAP_RESET_LOCATIONS));
                     }
                     break;

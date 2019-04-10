@@ -44,6 +44,8 @@ import org.odk.collect.android.utilities.Utilities;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import timber.log.Timber;
+
 public class TaskAddressActivity extends CollectAbstractActivity implements OnClickListener {
 
 	private class Address {
@@ -201,6 +203,7 @@ public class TaskAddressActivity extends CollectAbstractActivity implements OnCl
                     Utilities.setStatusForTask(taskEntry.id, Utilities.STATUS_T_REJECTED);
                     Intent intent = new Intent("org.smap.smapTask.refresh");      // Notify map and task list of change
                     LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(intent);
+                    Timber.i("######## send org.smap.smapTask.refresh from taskAddressActivity");  // smap
 	    		} else {
 	    			Toast.makeText(getApplicationContext(), getString(R.string.smap_cannot_reject),
 			                Toast.LENGTH_LONG).show();
@@ -219,6 +222,7 @@ public class TaskAddressActivity extends CollectAbstractActivity implements OnCl
                         Utilities.setStatusForTask(taskEntry.id, Utilities.STATUS_T_ACCEPTED);
                         Intent intent = new Intent("org.smap.smapTask.refresh");      // Notify map and task list of change
                         LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(intent);
+                        Timber.i("######## send org.smap.smapTask.refresh from instanceUploaderActivity2");  // smap
                     } else {
                         Toast.makeText(getApplicationContext(), getString(R.string.smap_cannot_reject),
                                 Toast.LENGTH_LONG).show();

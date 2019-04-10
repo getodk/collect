@@ -159,6 +159,7 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
         // Refresh task list
         Intent intent = new Intent("org.smap.smapTask.refresh");
         LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
+        Timber.i("######## send org.smap.smapTask.refresh from networkReceiver");  // smap
     }
 
     @Override
@@ -166,6 +167,7 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
         // Refresh task list
         Intent intent = new Intent("org.smap.smapTask.refresh");
         LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
+        Timber.i("######## send org.smap.smapTask.refresh from networkReceiver2");  // smap
     }
 
     @Override
@@ -173,6 +175,7 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
         // Refresh task list
         Intent intent = new Intent("org.smap.smapTask.refresh");
         LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
+        Timber.i("######## send org.smap.smapTask.refresh from networkReceiver3");  // smap
     }
 
 
@@ -182,6 +185,7 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
         Timber.i("Send intent");
         Intent intent = new Intent("org.smap.smapTask.refresh");
         LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
+        Timber.i("######## send org.smap.smapTask.refresh from networkReceiver4");  // smap
 
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationManager mNotifyMgr =

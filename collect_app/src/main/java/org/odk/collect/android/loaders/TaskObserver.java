@@ -22,7 +22,7 @@ public TaskObserver(TaskLoader loader) {
 
   @Override
   public void onReceive(Context context, Intent intent) {
-	  Timber.i("++++++++received refresh");
+	  Timber.i("++++++++Task observer - received refresh");
 	  mLoader.onContentChanged();
   }
 }

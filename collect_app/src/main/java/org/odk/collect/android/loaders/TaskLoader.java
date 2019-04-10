@@ -35,7 +35,7 @@ import java.util.List;
 /**
  * An implementation of AsyncTaskLoader which loads a {@code List<TaskEntry>}
  * containing all tasks on the device.
- * Forms as well as instances with pre-laoded data are both considered tasks
+ * Forms as well as instances with pre-loaded data are both considered tasks
  */
 public class TaskLoader extends AsyncTaskLoader<List<TaskEntry>> {
 

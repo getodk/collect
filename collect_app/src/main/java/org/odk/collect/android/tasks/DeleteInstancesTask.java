@@ -90,6 +90,7 @@ public class DeleteInstancesTask extends AsyncTask<Long, Integer, Integer> {
         }
         Intent intent = new Intent("org.smap.smapTask.refresh");  // smap refresh task list
         LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent); // smap
+        Timber.i("######## send org.smap.smapTask.refresh from deleteInstancesTask");  // smap
         super.onPostExecute(result);
     }
 

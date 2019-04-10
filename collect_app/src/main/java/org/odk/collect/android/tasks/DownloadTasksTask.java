@@ -208,8 +208,9 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         }
 
         // Refresh task list
-        Intent intent = new Intent("org.smap.smapTask.refresh");
-        LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
+        //Intent intent = new Intent("org.smap.smapTask.refresh");
+        //LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
+        //Timber.i("######## send org.smap.smapTask.refresh from downloadTasksTask");  // smap
 
         return results;
     }
