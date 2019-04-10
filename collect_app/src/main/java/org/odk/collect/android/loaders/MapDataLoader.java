@@ -63,7 +63,7 @@ public class MapDataLoader extends AsyncTaskLoader<MapEntry> {
         data.tasks = new ArrayList<TaskEntry> (10);
         TraceUtilities.getPoints(data.points);
         getForms(data.tasks);
-        Utilities.getTasks(data.tasks, false, "", "", false);
+        Utilities.getTasks(data.tasks, false, sortOrder, filter.toString(), false);
 
 		return data;
 	}
@@ -77,7 +77,7 @@ public class MapDataLoader extends AsyncTaskLoader<MapEntry> {
 	@Override
 	public void deliverResult(MapEntry data) {
 		if (isReset()) {
-			Log.w("taskloader",
+			Log.w("dataloader",
 					"+++ Warning! An async query came in while the Loader was reset! +++");
 
 			if (data != null) {

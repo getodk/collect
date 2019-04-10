@@ -3,7 +3,7 @@ package org.odk.collect.android.loaders;
 import org.javarosa.core.model.FormIndex;
 
 /**
- * This class holds the per-item data in the {@link TaskLoader}.
+ * This class holds the per-item data for items to show on the task list and map
  */
 public class TaskEntry {
     public long id;

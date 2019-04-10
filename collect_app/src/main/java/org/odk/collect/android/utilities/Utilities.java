@@ -390,7 +390,7 @@ public class Utilities {
             selectArgsList.add(Utilities.STATUS_T_CLOSED);
         }
 
-        if (filter.toString().trim().length() > 0) {
+        if (filter.trim().length() > 0) {
             selectClause += " and " + InstanceColumns.T_TITLE + " LIKE ?";
             selectArgsList.add("%" + filter + "%");
         }

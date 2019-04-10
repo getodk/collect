@@ -233,7 +233,7 @@ public class SmapTaskListFragment extends ListFragment
     }
 
     /*
-     * Load data in the taskListFragment but then update all fragments that show the data in this activity
+     * Load data in the taskListFragment, then update all fragments that show the data in this activity
      * Apparently Loader does not work when invoked from an activity only a fragment
      */
     @Override
