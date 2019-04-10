@@ -96,7 +96,7 @@ the specific language governing permissions and limitations under the License.
             android:authorities="org.odk.collect.android.provider.odk.instances"
             android:exported="true" />
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">

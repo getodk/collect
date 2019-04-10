@@ -73,7 +73,7 @@ android {
         targetSdkVersion(26)
         versionCode LEGACY_BUILD_NUMBER_OFFSET + getMasterCommitCount()
         versionName getVersionName()
-        testInstrumentationRunner('android.support.test.runner.AndroidJUnitRunner')
+        testInstrumentationRunner('androidx.test.runner.AndroidJUnitRunner')
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         archivesBaseName = 'collect'
@@ -176,14 +176,14 @@ configurations.all {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: '*.jar')
-    implementation "com.android.support:support-v13:${rootProject.supportLibraryVersion}"
-    implementation "com.android.support:customtabs:${rootProject.supportLibraryVersion}"
-    implementation "com.android.support:design:${rootProject.supportLibraryVersion}"
-    implementation "com.android.support:appcompat-v7:${rootProject.supportLibraryVersion}"
-    implementation "com.android.support:design:${rootProject.supportLibraryVersion}"
-    implementation "com.android.support:cardview-v7:${rootProject.supportLibraryVersion}"
-    implementation "com.android.support:exifinterface:${rootProject.supportLibraryVersion}"
-    implementation "com.android.support:multidex:1.0.3"
+    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
+    implementation 'androidx.browser:browser:1.0.0'
+    implementation 'com.google.android.material:material:1.1.0-alpha05'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
+    implementation 'com.google.android.material:material:1.1.0-alpha05'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.exifinterface:exifinterface:1.1.0-alpha01'
+    implementation "androidx.multidex:multidex:2.0.1"
 
     implementation "com.google.android.gms:play-services-analytics:16.0.1"
     implementation "com.google.android.gms:play-services-auth:16.0.0"
@@ -249,7 +249,7 @@ dependencies {
     odkCollectReleaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${rootProject.leakyCanaryVersion}"
 
     // Android Architecture Components:
-    implementation "android.arch.lifecycle:extensions:1.1.1"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.1.0-alpha04"
 
     // Dagger:
     implementation "com.google.dagger:dagger:${rootProject.daggerVersion}"
@@ -307,12 +307,12 @@ dependencies {
     testImplementation "org.powermock:powermock-api-mockito2:1.7.3"
 
     androidTestImplementation "org.mockito:mockito-android:2.11.0"
-    androidTestImplementation("com.android.support.test:runner:1.0.1") {
+    androidTestImplementation("androidx.test:runner:1.2.0-alpha03") {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
 
-    androidTestImplementation("com.android.support.test.espresso:espresso-intents:3.0.1") {
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.2.0-alpha03") {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }

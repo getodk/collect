@@ -3,8 +3,8 @@ package org.odk.collect.android.tasks;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;

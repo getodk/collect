@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.utilities;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;

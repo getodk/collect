@@ -20,7 +20,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;

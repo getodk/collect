@@ -1,7 +1,7 @@
 package org.odk.collect.android.activities;
 
 import android.content.Intent;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;

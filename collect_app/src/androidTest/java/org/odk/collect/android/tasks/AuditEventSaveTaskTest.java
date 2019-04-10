@@ -17,8 +17,8 @@
 package org.odk.collect.android.tasks;
 
 import android.os.Environment;
-import android.support.test.rule.GrantPermissionRule;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.rule.GrantPermissionRule;
+import androidx.test.runner.AndroidJUnit4;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;

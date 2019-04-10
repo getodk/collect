@@ -20,7 +20,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import android.support.v4.content.CursorLoader;
+import androidx.loader.content.CursorLoader;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dto.Form;

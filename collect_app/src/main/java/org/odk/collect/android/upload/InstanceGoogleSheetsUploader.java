@@ -15,7 +15,7 @@
 package org.odk.collect.android.upload;
 
 import android.database.Cursor;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.sheets.v4.model.Sheet;

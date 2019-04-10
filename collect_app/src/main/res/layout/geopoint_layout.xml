@@ -57,7 +57,7 @@
             <!--android:layout_height="match_parent"-->
             <!--android:layout_weight="1"/>-->
 
-            <android.support.v7.widget.AppCompatImageButton
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/place_marker"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -66,7 +66,7 @@
                 app:srcCompat="@drawable/ic_add_location"
                 android:padding="15dp" />
 
-            <android.support.v7.widget.AppCompatImageButton
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/zoom"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -75,7 +75,7 @@
                 app:srcCompat="@drawable/ic_my_location"
                 android:padding="15dp" />
 
-            <android.support.v7.widget.AppCompatImageButton
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/layer_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -84,7 +84,7 @@
                 app:srcCompat="@drawable/ic_layers"
                 android:padding="15dp" />
 
-            <android.support.v7.widget.AppCompatImageButton
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/clear"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -92,7 +92,7 @@
                 app:srcCompat="@drawable/ic_delete"
                 android:padding="15dp" />
 
-            <android.support.v7.widget.AppCompatImageButton
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/accept_location"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

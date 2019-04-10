@@ -1,6 +1,6 @@
 package org.odk.collect.android.widgets;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.widget.CheckBox;
 
 import org.javarosa.core.model.data.IAnswerData;

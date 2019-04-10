@@ -16,7 +16,7 @@
 
 package org.odk.collect.android.logic;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.javarosa.form.api.FormEntryController;
 

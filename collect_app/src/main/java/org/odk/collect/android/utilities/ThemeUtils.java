@@ -17,10 +17,10 @@ package org.odk.collect.android.utilities;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.AttrRes;
-import android.support.annotation.ColorInt;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.StyleRes;
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.StyleRes;
 import android.util.TypedValue;
 
 import org.odk.collect.android.R;

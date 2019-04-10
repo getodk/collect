@@ -17,7 +17,7 @@
 package org.odk.collect.android.utilities;
 
 import android.content.Context;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.After;
 import org.junit.Before;

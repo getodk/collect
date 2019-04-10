@@ -5,7 +5,7 @@ import android.app.Fragment;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.tasks.MediaLoadingTask;

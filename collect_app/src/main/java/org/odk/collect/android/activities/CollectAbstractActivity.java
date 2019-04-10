@@ -18,9 +18,9 @@ package org.odk.collect.android.activities;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.LocaleHelper;

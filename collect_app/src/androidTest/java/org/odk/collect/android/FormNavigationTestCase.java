@@ -18,7 +18,7 @@ package org.odk.collect.android;
 
 import android.content.res.AssetManager;
 import android.os.Environment;
-import android.support.test.InstrumentationRegistry;
+import androidx.test.InstrumentationRegistry;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.FormDef;

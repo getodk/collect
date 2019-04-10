@@ -19,7 +19,7 @@ package org.odk.collect.android.utilities;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.runner.AndroidJUnit4;
 
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryPrompt;

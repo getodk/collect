@@ -16,7 +16,7 @@ package org.odk.collect.android.preferences;
 
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.tasks.ServerPollingJob;

@@ -2,7 +2,7 @@
 package org.odk.collect.android.tasks;
 
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.odk.collect.android.logic.AuditEvent;
 

@@ -18,7 +18,7 @@ package org.odk.collect.android.utilities;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.annotation.DimenRes;
+import androidx.annotation.DimenRes;
 import android.util.DisplayMetrics;
 
 import org.odk.collect.android.application.Collect;
