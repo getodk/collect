@@ -53,6 +53,7 @@ import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.NFCListener;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
+import org.odk.collect.android.loaders.MapEntry;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.AdminKeys;
@@ -917,6 +918,15 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         /*
          * TODO set geofence triggers
          */
+    }
+
+    /*
+     * Update fragments that use data sourced from the loader that called this method
+     */
+    public void updateData(MapEntry data) {
+        taskManagerList.setData(data);
+        taskManagerMap.setData(data);
+        setLocationTriggers(data.tasks, false);      // NFC and geofence triggers
     }
 
     protected class MainTaskListener extends BroadcastReceiver {

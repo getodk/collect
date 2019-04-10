@@ -53,8 +53,9 @@ import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.adapters.TaskListArrayAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
+import org.odk.collect.android.loaders.MapDataLoader;
+import org.odk.collect.android.loaders.MapEntry;
 import org.odk.collect.android.loaders.TaskEntry;
-import org.odk.collect.android.loaders.TaskLoader;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -76,8 +77,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
  * Responsible for displaying tasks on the main fieldTask screen
  */
 public class SmapTaskListFragment extends ListFragment
-        implements //View.OnClickListener,
-        LoaderManager.LoaderCallbacks<List<TaskEntry>> {
+        implements LoaderManager.LoaderCallbacks<MapEntry> {
 
     // request codes for returning chosen form to main menu.
     private static final int FORM_CHOOSER = 0;
@@ -95,7 +95,7 @@ public class SmapTaskListFragment extends ListFragment
     protected String[] sortingOptions;
     View rootView;
 
-    private TaskLoader mTaskLoader;
+    private MapDataLoader mTaskLoader;
 
     protected LinearLayout searchBoxLayout;
     protected SimpleCursorAdapter listAdapter;
@@ -226,27 +226,36 @@ public class SmapTaskListFragment extends ListFragment
     }
 
     @Override
-    public Loader<List<TaskEntry>> onCreateLoader(int id, Bundle args) {
-        mTaskLoader = new TaskLoader(getContext());
+    public Loader<MapEntry> onCreateLoader(int id, Bundle args) {
+        mTaskLoader = new MapDataLoader(getContext());
         updateAdapter();
         return mTaskLoader;
     }
 
+    /*
+     * Load data in the taskListFragment but then update all fragments that show the data in this activity
+     * Apparently Loader does not work when invoked from an activity only a fragment
+     */
     @Override
-    public void onLoadFinished(Loader<List<TaskEntry>> loader, List<TaskEntry> data) {
-
-        mAdapter.setData(data);
-        ((SmapMain) getActivity()).setLocationTriggers(data, false);      // NFC and geofence triggers
-
+    public void onLoadFinished(Loader<MapEntry> loader, MapEntry data) {
+        ((SmapMain) getActivity()).updateData(data);
     }
 
     @Override
-    public void onLoaderReset(Loader<List<TaskEntry>> loader) {
-        mAdapter.setData(null);
+    public void onLoaderReset(Loader<MapEntry> loader) {
+        ((SmapMain) getActivity()).updateData(null);
     }
 
     protected String getSortingOrderKey() {
         return TASK_MANAGER_LIST_SORTING_ORDER;
+    }
+
+    public void setData(MapEntry data) {
+        if(data != null) {
+            mAdapter.setData(data.tasks);
+        } else {
+            mAdapter.setData(null);
+        }
     }
 
 

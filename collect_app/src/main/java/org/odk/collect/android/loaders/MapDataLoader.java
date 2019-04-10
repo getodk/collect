@@ -19,10 +19,14 @@
  */
 package org.odk.collect.android.loaders;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.utilities.TraceUtilities;
 import org.odk.collect.android.utilities.Utilities;
 
@@ -37,6 +41,9 @@ public class MapDataLoader extends AsyncTaskLoader<MapEntry> {
 	private MapEntry mData = null;
 	private MapDataObserver mMapDataObserver;	// Monitor changes to task data
 
+    private String sortOrder = "BY_NAME_ASC";
+    private CharSequence filter = "";
+
 	public MapDataLoader(Context ctx) {
 		super(ctx);
 	}
@@ -50,10 +57,12 @@ public class MapDataLoader extends AsyncTaskLoader<MapEntry> {
 
         MapEntry data = new MapEntry();
 
+
 		// Create corresponding array of entries and load their labels.
 		data.points = new ArrayList<PointEntry>(100);
         data.tasks = new ArrayList<TaskEntry> (10);
         TraceUtilities.getPoints(data.points);
+        getForms(data.tasks);
         Utilities.getTasks(data.tasks, false, "", "", false);
 
 		return data;
@@ -169,5 +178,80 @@ public class MapDataLoader extends AsyncTaskLoader<MapEntry> {
 	private void releaseResources(MapEntry data) {
 
 	}
+
+    private void getForms(ArrayList<TaskEntry> entries) {
+
+        String [] proj = {FormsProviderAPI.FormsColumns._ID,
+                FormsProviderAPI.FormsColumns.JR_FORM_ID,
+                FormsProviderAPI.FormsColumns.JR_VERSION,
+                FormsProviderAPI.FormsColumns.PROJECT,
+                FormsProviderAPI.FormsColumns.DISPLAY_NAME};
+
+        String selectClause = "(lower(" + FormsProviderAPI.FormsColumns.SOURCE + ")='" + Utilities.getSource() + "' or " +
+                FormsProviderAPI.FormsColumns.SOURCE + " is null)" +
+                " and " + FormsProviderAPI.FormsColumns.TASKS_ONLY + " = 'no'";
+
+        String[] selectArgs = null;
+        if(filter.toString().trim().length() > 0 ) {
+            selectClause += " and " + FormsProviderAPI.FormsColumns.DISPLAY_NAME + " LIKE ?";
+            selectArgs = new String[] {"%" + filter + "%"};
+        }
+
+        final ContentResolver resolver = Collect.getInstance().getContentResolver();
+        Cursor formListCursor = resolver.query(FormsProviderAPI.FormsColumns.CONTENT_URI, proj, selectClause, selectArgs, getSortOrderExpr(sortOrder));
+
+
+        if(formListCursor != null) {
+
+            formListCursor.moveToFirst();
+            while (!formListCursor.isAfterLast()) {
+
+                TaskEntry entry = new TaskEntry();
+
+                entry.type = "form";
+                entry.ident = formListCursor.getString(formListCursor.getColumnIndex(FormsProviderAPI.FormsColumns.JR_FORM_ID));
+                entry.formVersion = formListCursor.getInt(formListCursor.getColumnIndex(FormsProviderAPI.FormsColumns.JR_VERSION));
+                entry.name = formListCursor.getString(formListCursor.getColumnIndex(FormsProviderAPI.FormsColumns.DISPLAY_NAME));
+                entry.project = formListCursor.getString(formListCursor.getColumnIndex(FormsProviderAPI.FormsColumns.PROJECT));
+                entry.id = formListCursor.getLong(formListCursor.getColumnIndex(FormsProviderAPI.FormsColumns._ID));
+
+                entries.add(entry);
+                formListCursor.moveToNext();
+            }
+        }
+        if(formListCursor != null) {
+            formListCursor.close();
+        }
+    }
+
+    /*
+     * Change sort order
+     */
+    public void updateSortOrder(String sortOrder) {
+        this.sortOrder = sortOrder;
+    }
+
+    /*
+     * Change filter
+     */
+    public void updateFilter(CharSequence filter) {
+        this.filter = filter;
+    }
+
+    private String getSortOrderExpr(String sortOrder) {
+
+        String sortOrderExpr = "";
+
+        if(sortOrder.equals("BY_NAME_ASC")) {
+            sortOrderExpr = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " COLLATE NOCASE ASC, " + FormsProviderAPI.FormsColumns.JR_VERSION + " ASC";
+        } else if(sortOrder.equals("BY_NAME_DESC")) {
+            sortOrderExpr = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " COLLATE NOCASE DESC, " + FormsProviderAPI.FormsColumns.JR_VERSION + " DESC";
+        } else if(sortOrder.equals("BY_DATE_ASC")) {
+            sortOrderExpr = FormsProviderAPI.FormsColumns.DATE + " ASC, " + FormsProviderAPI.FormsColumns.DISPLAY_NAME + " COLLATE NOCASE ASC, " + FormsProviderAPI.FormsColumns.JR_VERSION + " ASC";
+        } else if(sortOrder.equals("BY_DATE_DESC")) {
+            sortOrderExpr = FormsProviderAPI.FormsColumns.DATE + " DESC, " + FormsProviderAPI.FormsColumns.DISPLAY_NAME + " COLLATE NOCASE DESC, " + FormsProviderAPI.FormsColumns.JR_VERSION + " DESC";
+        }
+        return sortOrderExpr;
+    }
 
 }

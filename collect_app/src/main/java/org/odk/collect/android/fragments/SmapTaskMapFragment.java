@@ -90,7 +90,7 @@ import timber.log.Timber;
  * Responsible for displaying tasks on the main fieldTask screen
  */
 public class SmapTaskMapFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<MapEntry>, OnMapReadyCallback {
+        implements  OnMapReadyCallback {
 
     private static final int PASSWORD_DIALOG = 1;
     private static final int REQUEST_LOCATION = 100;
@@ -194,13 +194,6 @@ public class SmapTaskMapFragment extends Fragment
     }
 
     @Override
-    public void onLoaderReset(Loader<MapEntry> loader) {
-
-        clearTasks();
-    }
-
-
-    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
         getActivity().getMenuInflater().inflate(R.menu.smap_menu_map, menu);
@@ -286,8 +279,8 @@ public class SmapTaskMapFragment extends Fragment
                 ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED;
 
-        mMap.getUiSettings().setMyLocationButtonEnabled(false);
         if (locationEnabled){
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
             mMap.setMyLocationEnabled(true);
         } else {
             mMap.setMyLocationEnabled(false);
@@ -304,8 +297,6 @@ public class SmapTaskMapFragment extends Fragment
         submitted = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_submitted));
         triggered = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_triggered));
         triggered_repeat = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_triggered));
-
-        getLoaderManager().initLoader(MAP_LOADER_ID, null, this);       // Get the task locations
 
         if (locationEnabled) {
             mo = new MapLocationObserver(getContext(), this);
@@ -418,18 +409,13 @@ public class SmapTaskMapFragment extends Fragment
         });
     }
 
-    @Override
-    public Loader<MapEntry> onCreateLoader(int id, Bundle args) {
-        return new MapDataLoader(getContext());
-    }
-
-    @Override
-    public void onLoadFinished(Loader<MapEntry> loader, MapEntry data) {
-        Timber.i( "######### Load Finished");
-        ((SmapMain) getActivity()).setLocationTriggers(data.tasks, true);
-        showTasks(data.tasks);
-        showPoints(data.points);
-        //zoomToData(false);
+    public void setData(MapEntry data) {
+        if(data != null) {
+            showTasks(data.tasks);
+            showPoints(data.points);
+        } else {
+            clearTasks();
+        }
     }
 
     @Override
@@ -442,14 +428,10 @@ public class SmapTaskMapFragment extends Fragment
         super.onResume();
     }
 
-
-
-
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
-
 
     private void clearTasks() {
 
