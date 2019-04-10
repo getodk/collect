@@ -595,6 +595,9 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         break;
                     }
                     case FormEntryController.EVENT_GROUP: {
+                        if (!formController.isGroupRelevant()) {
+                            break;
+                        }
                         // Nothing but repeat group instances should show up in the picker.
                         if (shouldShowRepeatGroupPicker()) {
                             break;
@@ -631,6 +634,10 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         break;
                     }
                     case FormEntryController.EVENT_REPEAT: {
+                        if (!formController.isGroupRelevant()) {
+                            break;
+                        }
+
                         visibleGroupRef = currentRef;
 
                         FormEntryCaption fc = formController.getCaptionPrompt();

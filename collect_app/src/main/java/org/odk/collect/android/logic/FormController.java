@@ -916,26 +916,41 @@ public class FormController {
      */
     private List<FormIndex> getIndicesForGroup(GroupDef gd) {
         return getIndicesForGroup(gd,
-                formEntryController.getModel().incrementIndex(getFormIndex(), true));
+                formEntryController.getModel().incrementIndex(getFormIndex(), true), false);
     }
 
-    private List<FormIndex> getIndicesForGroup(GroupDef gd, FormIndex currentChildIndex) {
+    private List<FormIndex> getIndicesForGroup(GroupDef gd, FormIndex currentChildIndex, boolean jumpIntoRepeatGroups) {
         List<FormIndex> indices = new ArrayList<>();
         for (int i = 0; i < gd.getChildren().size(); i++) {
             final FormEntryModel formEntryModel = formEntryController.getModel();
-            if (getEvent(currentChildIndex) == FormEntryController.EVENT_GROUP) {
+            if (getEvent(currentChildIndex) == FormEntryController.EVENT_GROUP
+                    || (jumpIntoRepeatGroups && getEvent(currentChildIndex) == FormEntryController.EVENT_REPEAT)) {
                 IFormElement nestedElement = formEntryModel.getForm().getChild(currentChildIndex);
                 if (nestedElement instanceof GroupDef) {
                     indices.addAll(getIndicesForGroup((GroupDef) nestedElement,
-                            formEntryModel.incrementIndex(currentChildIndex, true)));
+                            formEntryModel.incrementIndex(currentChildIndex, true), jumpIntoRepeatGroups));
                     currentChildIndex = formEntryModel.incrementIndex(currentChildIndex, false);
                 }
-            } else {
+            } else if (!jumpIntoRepeatGroups || getEvent(currentChildIndex) != FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
                 indices.add(currentChildIndex);
                 currentChildIndex = formEntryModel.incrementIndex(currentChildIndex, false);
             }
         }
         return indices;
+    }
+
+    /**
+     * @return true if a group contains at least one relevant question, otherwise false
+     */
+    public boolean isGroupRelevant() {
+        GroupDef groupDef = (GroupDef) getCaptionPrompt().getFormElement();
+        FormIndex currentChildIndex = formEntryController.getModel().incrementIndex(getFormIndex(), true);
+        for (FormIndex index : getIndicesForGroup(groupDef, currentChildIndex, true)) {
+            if (formEntryController.getModel().isIndexRelevant(index)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public FormEntryPrompt getQuestionPrompt(FormIndex index) {
