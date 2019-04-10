@@ -1,7 +1,6 @@
 package org.odk.collect.android.utilities.gdrive;
 
 import android.accounts.Account;
-import android.app.Activity;
 import android.content.Intent;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -10,9 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.ServerPreferencesFragment;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -40,30 +38,36 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 @PrepareForTest({GoogleAccountCredential.class, ThemeUtils.class, PermissionUtils.class})
 public class GoogleAccountsManagerTest {
 
+    private static final String EXPECTED_ACCOUNT = "abcd@xyz.com";
+
     @Mock
     private GoogleAccountCredential mockedCredential;
+
     @Mock
     private GeneralSharedPreferences mockPreferences;
+
     @Mock
     private Intent mockIntent;
+
     @Mock
     private ThemeUtils mockThemeUtils;
-    @Mock
-    private ServerPreferencesFragment fragment;
-    @Mock
-    private Activity activity;
-
-    private TestGoogleAccountSelectionListener listener;
-    private GoogleAccountsManager googleAccountsManager;
 
     private String currentAccount;
     private String savedAccount;
-    private static final String EXPECTED_ACCOUNT = "abcd@xyz.com";
+    private GoogleAccountsManager googleAccountsManager;
+
+    @Before
+    public void setup() {
+        googleAccountsManager = spy(new GoogleAccountsManager(mockedCredential, mockPreferences, mockIntent, mockThemeUtils));
+
+        stubCredential();
+        stubPreferences();
+        mockPermissionUtils();
+    }
 
     /**
      * Stubbing
      */
-
     private void stubSavedAccount(String accountName) {
         when(mockPreferences.get(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT)).thenReturn(accountName);
         stubAccount(accountName);
@@ -102,101 +106,49 @@ public class GoogleAccountsManagerTest {
         }).when(mockPreferences).save(anyString(), anyString());
     }
 
-    @Before
-    public void setup() {
-        googleAccountsManager = spy(new GoogleAccountsManager(mockedCredential, mockPreferences, mockIntent, mockThemeUtils, activity, fragment));
-        listener = new TestGoogleAccountSelectionListener();
-        googleAccountsManager.setListener(listener);
-
-        stubCredential();
-        stubPreferences();
-        mockPermissionUtils();
-    }
-
     @Test
     public void isAccountNotSelectedAtStartTest() {
-        assertFalse(googleAccountsManager.isGoogleAccountSelected());
+        assertFalse(googleAccountsManager.isAccountSelected());
     }
 
     @Test
     public void getGoogleAccountNameIfAccountNameIsSavedTest() {
         stubSavedAccount(EXPECTED_ACCOUNT);
-        assertEquals(EXPECTED_ACCOUNT, googleAccountsManager.getSelectedAccount());
+        assertEquals(EXPECTED_ACCOUNT, googleAccountsManager.getLastSelectedAccountIfValid());
     }
 
     @Test
     public void returnNullWhenAccountIsDeleted() {
         //asserting that account exists.
         stubSavedAccount(EXPECTED_ACCOUNT);
-        assertEquals(EXPECTED_ACCOUNT, googleAccountsManager.getSelectedAccount());
+        assertEquals(EXPECTED_ACCOUNT, googleAccountsManager.getLastSelectedAccountIfValid());
 
         //removing the account simulates the deletion of the account via Google account settings.
         removeAccounts();
 
-        assertEquals(googleAccountsManager.getSelectedAccount(), "");
+        assertEquals(googleAccountsManager.getLastSelectedAccountIfValid(), "");
         assertNull(savedAccount);
     }
 
     @Test
     public void returnBlankWhenAccountNameIsNotSaved() {
-        assertEquals("", googleAccountsManager.getSelectedAccount());
+        stubSavedAccount("some_other_email");
+        stubAccount(EXPECTED_ACCOUNT);
+        assertEquals("", googleAccountsManager.getLastSelectedAccountIfValid());
         assertNull(currentAccount);
-    }
-
-    @Test
-    public void displayAccountPickerDialogWhenAutoChooseDisabledTest() {
-        stubSavedAccount(EXPECTED_ACCOUNT);
-        googleAccountsManager.disableAutoChooseAccount();
-        googleAccountsManager.chooseAccountAndRequestPermissionIfNeeded();
-
-        assertNull(listener.getAccountName());
-        assertNull(currentAccount);
-        verify(googleAccountsManager, times(0)).selectAccount(EXPECTED_ACCOUNT);
-        verify(googleAccountsManager, times(1)).showAccountPickerDialog();
-    }
-
-    @Test
-    public void autoSelectAccountInAutoChooseWhenAccountIsAvailableTest() {
-        stubSavedAccount(EXPECTED_ACCOUNT);
-        googleAccountsManager.chooseAccountAndRequestPermissionIfNeeded();
-
-        assertEquals(EXPECTED_ACCOUNT, listener.getAccountName());
-        assertEquals(EXPECTED_ACCOUNT, currentAccount);
-        verify(googleAccountsManager, times(1)).selectAccount(EXPECTED_ACCOUNT);
-        verify(googleAccountsManager, times(0)).showAccountPickerDialog();
-    }
-
-    @Test
-    public void displayAccountPickerDialogInAutoChooseWhenNoAccountIsNotAvailableTest() {
-        googleAccountsManager.chooseAccountAndRequestPermissionIfNeeded();
-
-        assertNull(listener.getAccountName());
-        assertNull(currentAccount);
-        verify(googleAccountsManager, times(0)).selectAccount(EXPECTED_ACCOUNT);
-        verify(googleAccountsManager, times(1)).showAccountPickerDialog();
-    }
-
-    @Test
-    public void accountNameShouldBeSetProperlyIfPermissionsGivenAndAutoSelectEnabledTest() {
-        stubSavedAccount(EXPECTED_ACCOUNT);
-        googleAccountsManager.chooseAccountAndRequestPermissionIfNeeded();
-
-        assertEquals(EXPECTED_ACCOUNT, listener.getAccountName());
-        assertEquals(EXPECTED_ACCOUNT, currentAccount);
     }
 
     @Test
     public void setAccountNameTest() {
-
         assertNull(currentAccount);
-        assertEquals("", googleAccountsManager.getSelectedAccount());
+        assertEquals("", googleAccountsManager.getLastSelectedAccountIfValid());
 
-        googleAccountsManager.setSelectedAccountName(null);
+        googleAccountsManager.selectAccount(null);
         assertNull(currentAccount);
-        assertEquals("", googleAccountsManager.getSelectedAccount());
+        assertEquals("", googleAccountsManager.getLastSelectedAccountIfValid());
         verify(googleAccountsManager, times(0)).selectAccount(anyString());
 
-        googleAccountsManager.setSelectedAccountName(EXPECTED_ACCOUNT);
+        googleAccountsManager.selectAccount(EXPECTED_ACCOUNT);
         assertEquals(EXPECTED_ACCOUNT, currentAccount);
         assertEquals(EXPECTED_ACCOUNT, savedAccount);
         verify(googleAccountsManager, times(1)).selectAccount(EXPECTED_ACCOUNT);

@@ -43,9 +43,11 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -68,13 +70,15 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_SMS_PREFERENCE
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_URL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_TRANSPORT_PREFERENCE;
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
-import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
-
 //import android.preference.ListPreference;
 //import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 
-public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener,
-        GoogleAccountsManager.GoogleAccountSelectionListener, OnBackPressedListener {
+//import static org.odk.collect.android.utilities.DialogUtils.showDialog;
+
+public class ServerPreferencesFragment extends BasePreferenceFragment implements
+        View.OnTouchListener, OnBackPressedListener {
+
+    private static final int REQUEST_ACCOUNT_PICKER = 1000;
     private static final String KNOWN_URL_LIST = "knownUrlList";
     protected EditTextPreference serverUrlPreference;
     protected EditTextPreference usernamePreference;
@@ -85,11 +89,13 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     private ListPopupWindow listPopupWindow;
     private List<String> urlList;
     private Preference selectedGoogleAccountPreference;
-    private GoogleAccountsManager accountsManager;
     private boolean allowClickSelectedGoogleAccountPreference = true;
 
     @Inject
     CollectServerClient collectServerClient;
+
+    @Inject
+    GoogleAccountsManager accountsManager;
 
     /*
     private ListPreference transportPreference;
@@ -249,21 +255,32 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     }
 
     public void initAccountPreferences() {
-        accountsManager = new GoogleAccountsManager(this);
-        accountsManager.setListener(this);
-        accountsManager.disableAutoChooseAccount();
-
-        selectedGoogleAccountPreference.setSummary(accountsManager.getSelectedAccount());
+        selectedGoogleAccountPreference.setSummary(accountsManager.getLastSelectedAccountIfValid());
         selectedGoogleAccountPreference.setOnPreferenceClickListener(preference -> {
             if (allowClickSelectedGoogleAccountPreference) {
                 if (PlayServicesUtil.isGooglePlayServicesAvailable(getActivity())) {
                     allowClickSelectedGoogleAccountPreference = false;
-                    accountsManager.chooseAccountAndRequestPermissionIfNeeded();
+                    requestAccountsPermission();
                 } else {
                     PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getActivity());
                 }
             }
             return true;
+        });
+    }
+
+    private void requestAccountsPermission() {
+        new PermissionUtils().requestGetAccountsPermission(getActivity(), new PermissionListener() {
+            @Override
+            public void granted() {
+                Intent intent = accountsManager.getAccountChooserIntent();
+                startActivityForResult(intent, REQUEST_ACCOUNT_PICKER);
+            }
+
+            @Override
+            public void denied() {
+                allowClickSelectedGoogleAccountPreference = true;
+            }
         });
     }
 
@@ -457,16 +474,12 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
             case REQUEST_ACCOUNT_PICKER:
                 if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
                     String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                    accountsManager.setSelectedAccountName(accountName);
+                    accountsManager.selectAccount(accountName);
+                    selectedGoogleAccountPreference.setSummary(accountName);
                 }
                 allowClickSelectedGoogleAccountPreference = true;
                 break;
         }
-    }
-
-    @Override
-    public void onGoogleAccountSelected(String accountName) {
-        selectedGoogleAccountPreference.setSummary(accountName);
     }
 
     /**
