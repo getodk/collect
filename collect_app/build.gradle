@@ -193,7 +193,7 @@ dependencies {
     implementation "com.google.firebase:firebase-core:16.0.1"
     implementation "com.crashlytics.sdk.android:crashlytics:2.9.2"
 
-    implementation("com.google.guava:guava:26.0-android")
+    implementation("com.google.guava:guava:27.1-android")
 
     implementation("com.google.code.gson:gson:2.6.2") {
         exclude group: 'org.apache.httpcomponents'
@@ -286,8 +286,8 @@ dependencies {
     }
 
     // Makes binding to Views easy:
-    implementation "com.jakewharton:butterknife:8.8.1"
-    annotationProcessor "com.jakewharton:butterknife-compiler:8.8.1"
+    implementation "com.jakewharton:butterknife:10.0.0"
+    annotationProcessor "com.jakewharton:butterknife-compiler:10.0.0"
 
     // Annotations understood by FindBugs
     compileOnly 'com.google.code.findbugs:annotations:3.0.1'
