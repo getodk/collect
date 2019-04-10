@@ -18,8 +18,8 @@ package org.odk.collect.android.dao;
 
 import android.Manifest;
 import android.database.Cursor;
-import android.support.test.rule.GrantPermissionRule;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.rule.GrantPermissionRule;
+import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.After;
 import org.junit.Before;

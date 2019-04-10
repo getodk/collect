@@ -1,8 +1,8 @@
 package org.odk.collect.android.externalintents;
 
-import android.support.test.filters.Suppress;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.filters.Suppress;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.Rule;
 import org.junit.Test;

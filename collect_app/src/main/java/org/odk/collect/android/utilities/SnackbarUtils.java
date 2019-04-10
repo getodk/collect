@@ -14,8 +14,8 @@ limitations under the License.
 
 package org.odk.collect.android.utilities;
 
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
+import androidx.annotation.NonNull;
+import com.google.android.material.snackbar.Snackbar;
 import android.view.View;
 import android.widget.TextView;
 
@@ -48,7 +48,7 @@ public final class SnackbarUtils {
         }
 
         Snackbar snackbar = Snackbar.make(view, message.trim(), duration);
-        TextView textView = snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        TextView textView = snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
         textView.setSingleLine(false);
         snackbar.show();
     }

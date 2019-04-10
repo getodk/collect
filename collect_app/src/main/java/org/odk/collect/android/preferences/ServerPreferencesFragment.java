@@ -24,7 +24,7 @@ import android.content.SharedPreferences;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
-import android.support.v7.content.res.AppCompatResources;
+import androidx.appcompat.content.res.AppCompatResources;
 import android.telephony.PhoneNumberUtils;
 import android.text.InputFilter;
 import android.text.TextUtils;

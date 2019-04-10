@@ -29,8 +29,8 @@ import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Video;
 import android.provider.OpenableColumns;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.apache.commons.io.IOUtils;
 import org.odk.collect.android.application.Collect;

@@ -3,7 +3,7 @@ package org.odk.collect.android.activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;

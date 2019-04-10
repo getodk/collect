@@ -65,7 +65,7 @@ the License.
             android:visibility="gone" />
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:scrollbars="vertical"
         android:layout_width="match_parent"

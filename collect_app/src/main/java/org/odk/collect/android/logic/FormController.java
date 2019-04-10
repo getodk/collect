@@ -14,8 +14,8 @@
 
 package org.odk.collect.android.logic;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.javarosa.core.model.CoreModelModule;
 import org.javarosa.core.model.FormDef;

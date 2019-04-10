@@ -1,7 +1,7 @@
 package org.odk.collect.android.views;
 
 import android.media.MediaPlayer;
-import android.support.v7.widget.AppCompatImageButton;
+import androidx.appcompat.widget.AppCompatImageButton;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;

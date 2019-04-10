@@ -18,7 +18,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
-import android.support.v7.widget.AppCompatImageButton;
+import androidx.appcompat.widget.AppCompatImageButton;
 import android.util.AttributeSet;
 
 import org.javarosa.core.reference.InvalidReferenceException;

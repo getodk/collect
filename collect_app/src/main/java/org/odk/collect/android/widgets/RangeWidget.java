@@ -18,9 +18,9 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
+import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;

@@ -17,8 +17,8 @@ package org.odk.collect.android.upload;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;

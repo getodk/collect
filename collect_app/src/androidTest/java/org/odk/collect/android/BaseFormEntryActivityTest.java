@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Environment;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.rule.GrantPermissionRule;
+import androidx.test.InstrumentationRegistry;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.rule.GrantPermissionRule;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;

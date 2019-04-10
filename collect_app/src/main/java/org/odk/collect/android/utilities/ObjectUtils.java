@@ -1,6 +1,6 @@
 package org.odk.collect.android.utilities;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import timber.log.Timber;
 

@@ -16,7 +16,7 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.Selection;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;

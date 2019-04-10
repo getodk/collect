@@ -3,7 +3,7 @@ package org.odk.collect.android.widgets;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import net.bytebuddy.utility.RandomString;
 

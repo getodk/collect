@@ -1,6 +1,6 @@
 package org.odk.collect.android.widgets.base;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import net.bytebuddy.utility.RandomString;
 

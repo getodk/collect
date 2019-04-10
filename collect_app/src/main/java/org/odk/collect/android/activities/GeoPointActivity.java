@@ -24,7 +24,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.format.DateUtils;
 import android.view.Window;
 

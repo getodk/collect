@@ -1,6 +1,6 @@
 package org.odk.collect.android.jobs;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.evernote.android.job.Job;
 
