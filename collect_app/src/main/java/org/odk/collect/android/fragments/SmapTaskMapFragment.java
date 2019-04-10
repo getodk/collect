@@ -31,10 +31,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -46,7 +42,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,10 +61,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.SmapMain;
-import org.odk.collect.android.adapters.TaskListArrayAdapter;
-import org.odk.collect.android.loaders.MapDataLoader;
 import org.odk.collect.android.loaders.MapEntry;
-import org.odk.collect.android.loaders.MapLocationObserver;
 import org.odk.collect.android.loaders.PointEntry;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.preferences.AdminKeys;
@@ -92,20 +84,14 @@ import timber.log.Timber;
 public class SmapTaskMapFragment extends Fragment
         implements  OnMapReadyCallback {
 
-    private static final int PASSWORD_DIALOG = 1;
     private static final int REQUEST_LOCATION = 100;
 
-    protected String[] sortingOptions;
     View rootView;
-    private ListView drawerList;
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
 
     protected LinearLayout searchBoxLayout;
     protected SimpleCursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
 
-    private MapLocationObserver mo = null;
     private GoogleMap mMap;
     private Polyline mPath;
     private MapHelper mHelper;
@@ -130,11 +116,6 @@ public class SmapTaskMapFragment extends Fragment
     private double tasksSouth;
     private double tasksEast;
     private double tasksWest;
-
-    private static final int TASK_LOADER_ID = 1;
-    private static final int MAP_LOADER_ID = 2;
-
-    private TaskListArrayAdapter mAdapter;
 
     public static SmapTaskMapFragment newInstance() {
         return new SmapTaskMapFragment();
@@ -184,16 +165,6 @@ public class SmapTaskMapFragment extends Fragment
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        if (!isVisibleToUser) {
-            // close the drawer if open
-            if (drawerLayout != null && drawerLayout.isDrawerOpen(Gravity.END)) {
-                drawerLayout.closeDrawer(Gravity.END);
-            }
-        }
-    }
-
-    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
         getActivity().getMenuInflater().inflate(R.menu.smap_menu_map, menu);
@@ -235,12 +206,10 @@ public class SmapTaskMapFragment extends Fragment
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (drawerToggle != null) {
-            drawerToggle.onConfigurationChanged(newConfig);
-        }
     }
 
     @Override
@@ -299,7 +268,6 @@ public class SmapTaskMapFragment extends Fragment
         triggered_repeat = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_triggered));
 
         if (locationEnabled) {
-            mo = new MapLocationObserver(getContext(), this);
             location_button = getActivity().findViewById(R.id.show_location);
             location_button.setOnClickListener(new View.OnClickListener() {
                 @Override
