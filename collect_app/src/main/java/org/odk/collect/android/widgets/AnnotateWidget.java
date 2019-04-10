@@ -36,6 +36,8 @@ import org.odk.collect.android.utilities.FileUtils;
 import java.io.File;
 import java.util.Locale;
 
+import timber.log.Timber;
+
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
@@ -165,13 +167,17 @@ public class AnnotateWidget extends BaseImageWidget {
         // images returned by the camera in 1.6 (and earlier) are ~1/4
         // the size. boo.
 
-        Uri uri = FileProvider.getUriForFile(getContext(),
-                BuildConfig.APPLICATION_ID + ".provider",
-                new File(Collect.TMPFILE_PATH));
-        // if this gets modified, the onActivityResult in
-        // FormEntyActivity will also need to be updated.
-        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
-        FileUtils.grantFilePermissions(intent, uri, getContext());
+        try {
+            Uri uri = FileProvider.getUriForFile(getContext(),
+                    BuildConfig.APPLICATION_ID + ".provider",
+                    new File(Collect.TMPFILE_PATH));
+            // if this gets modified, the onActivityResult in
+            // FormEntyActivity will also need to be updated.
+            intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
+            FileUtils.grantFilePermissions(intent, uri, getContext());
+        } catch (IllegalArgumentException e) {
+            Timber.e(e);
+        }
 
         imageCaptureHandler.captureImage(intent, RequestCodes.IMAGE_CAPTURE, R.string.annotate_image);
     }
