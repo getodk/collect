@@ -417,6 +417,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode,
                                     final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case AUTHORIZATION_REQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
