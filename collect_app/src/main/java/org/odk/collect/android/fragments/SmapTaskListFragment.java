@@ -239,7 +239,7 @@ public class SmapTaskListFragment extends ListFragment
     @Override
     public Loader<MapEntry> onCreateLoader(int id, Bundle args) {
         mTaskLoader = new MapDataLoader(getContext());
-        updateAdapter();
+        updateAdapter(true);
         return mTaskLoader;
     }
 
@@ -359,7 +359,7 @@ public class SmapTaskListFragment extends ListFragment
             @Override
             public boolean onQueryTextSubmit(String query) {
                 filterText = query;
-                updateAdapter();
+                updateAdapter(false);
                 searchView.clearFocus();
                 return false;
             }
@@ -368,7 +368,7 @@ public class SmapTaskListFragment extends ListFragment
             public boolean onQueryTextChange(String newText) {
                 if(!filterText.equals(newText)) {
                     filterText = newText;
-                    updateAdapter();
+                    updateAdapter(false);
                 }
                 return false;
             }
@@ -439,7 +439,7 @@ public class SmapTaskListFragment extends ListFragment
 
     private void performSelectedSearch(int position) {
         saveSelectedSortingOrder(position);
-        updateAdapter();
+        updateAdapter(false);
     }
 
     @Override
@@ -493,10 +493,11 @@ public class SmapTaskListFragment extends ListFragment
         //return inputSearch != null ? inputSearch.getText() : "";
     }
 
-    protected void updateAdapter() {
+    protected void updateAdapter(boolean recalculateGeofences) {
         if(mTaskLoader != null) {
             mTaskLoader.updateSortOrder(getSortingOrder());
             mTaskLoader.updateFilter(getFilterText());
+            mTaskLoader.updateGeofences(recalculateGeofences);
             mTaskLoader.forceLoad();
         }
     }

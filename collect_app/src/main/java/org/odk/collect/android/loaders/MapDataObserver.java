@@ -21,7 +21,8 @@ public MapDataObserver(MapDataLoader loader) {
 
   @Override
   public void onReceive(Context context, Intent intent) {
-	  Log.i("SmapPointObserver: ", "++++++++Map Obsever - received refresh");
+	  Log.i("SmapPointObserver: ", "++++++++Map Observer - received refresh");
+	  mLoader.updateGeofences(true);
 	  mLoader.onContentChanged();
   }
 }

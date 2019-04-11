@@ -18,6 +18,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.location.Location;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -338,7 +339,18 @@ public class Utilities {
 
     }
 
-    public static void getTasks(ArrayList<TaskEntry> tasks, boolean all_non_synchronised, String sortOrder, String filter, boolean serverOnly) {
+    /*
+     * Get current tasks
+     *  set recalculateGeofences to false if the data has not changed and location has not changed (For example the filter has been changed)
+     *  set useGeofenceFilter to true if you want to filter out tasks which show distance is less than the distance of the user to the task
+     */
+    public static void getTasks(
+            ArrayList<TaskEntry> tasks,
+            boolean all_non_synchronised,
+            String sortOrder, String filter,
+            boolean serverOnly,
+            boolean recalculateGeofences,
+            boolean useGeofenceFilter) {
 
         // Get cursor
         String[] proj = {
@@ -400,6 +412,18 @@ public class Utilities {
         Cursor c = Collect.getInstance().getContentResolver().query(InstanceColumns.CONTENT_URI, proj,
                 selectClause, selectArgs, getTaskSortOrderExpr(sortOrder));
 
+        // Set up geofencing
+
+        Location location = null;
+        if(recalculateGeofences) {
+            Timber.i("############ recalculate geofences");
+            location = Collect.getInstance().getLocation();
+        }
+        if(useGeofenceFilter) {
+            Timber.i("############ use geofence filter");
+        }
+
+
         try {
             c.moveToFirst();
             while (!c.isAfterLast()) {
@@ -422,6 +446,7 @@ public class Utilities {
                 entry.schedLat = c.getDouble(c.getColumnIndex(InstanceColumns.SCHED_LAT));
                 entry.actLon = c.getDouble(c.getColumnIndex(InstanceColumns.ACT_LON));
                 entry.actLat = c.getDouble(c.getColumnIndex(InstanceColumns.ACT_LAT));
+                entry.showDist = c.getInt(c.getColumnIndex(InstanceColumns.T_SHOW_DIST));
                 entry.actFinish = c.getLong(c.getColumnIndex(InstanceColumns.T_ACT_FINISH));
                 entry.isSynced = c.getString(c.getColumnIndex(InstanceColumns.T_IS_SYNC));
                 entry.assId = c.getLong(c.getColumnIndex(InstanceColumns.T_ASS_ID));
@@ -429,7 +454,22 @@ public class Utilities {
                 entry.source = c.getString(c.getColumnIndex(InstanceColumns.SOURCE));
                 entry.locationTrigger = c.getString(c.getColumnIndex(InstanceColumns.T_LOCATION_TRIGGER));
 
-                tasks.add(entry);
+                if(useGeofenceFilter) {
+                    if(entry.showDist > 0 && entry.schedLat != 0.0 && entry.schedLon != 0.0) {
+                        Location taskLocation = new Location("");
+                        taskLocation.setLatitude(entry.schedLat);
+                        taskLocation.setLongitude(entry.schedLon);
+
+                        float distance = location.distanceTo(taskLocation);
+                        Timber.i("############ Distance: " + entry.displayName + " : " + distance + " : show dist : " + entry.showDist);
+                        if(distance < entry.showDist) {
+                            tasks.add(entry);
+                        }
+                    }
+                } else {
+                    tasks.add(entry);
+                }
+
                 c.moveToNext();
             }
         } catch (Exception e) {

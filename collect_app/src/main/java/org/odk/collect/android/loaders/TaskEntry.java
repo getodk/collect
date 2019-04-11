@@ -24,6 +24,7 @@ public class TaskEntry {
     public double schedLat = 0.0;
     public double actLon = 0.0;
     public double actLat = 0.0;
+    public int showDist = 0;
     public long actFinish;          // Date time the task was finalised
     public String isSynced;
     public long assId;
