@@ -449,10 +449,10 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         Timber.i("Complete - Send intent");
 
         // Refresh task list
-        Intent intent = new Intent("org.smap.smapTask.refresh");
-        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-        LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
-        Timber.i("######## send org.smap.smapTask.refresh from smapMain2");  // smap
+        //Intent intent = new Intent("org.smap.smapTask.refresh");
+        //intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        //LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
+        //Timber.i("######## send org.smap.smapTask.refresh from smapMain2");  // smap
 
         try {
             dismissDialog(PROGRESS_DIALOG);
