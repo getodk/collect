@@ -117,6 +117,7 @@ public class Utilities {
                 InstanceColumns.SCHED_LAT,
                 InstanceColumns.ACT_LON,
                 InstanceColumns.ACT_LAT,
+                InstanceColumns.T_SHOW_DIST,
                 InstanceColumns.T_ACT_FINISH,
                 InstanceColumns.T_IS_SYNC,
                 InstanceColumns.T_ASS_ID,
@@ -151,12 +152,12 @@ public class Utilities {
             entry.instancePath = c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
             entry.schedLon = c.getDouble(c.getColumnIndex(InstanceColumns.SCHED_LON));
             entry.schedLat = c.getDouble(c.getColumnIndex(InstanceColumns.SCHED_LAT));
+            entry.showDist = c.getInt(c.getColumnIndex(InstanceColumns.T_SHOW_DIST));
             entry.actLon = c.getDouble(c.getColumnIndex(InstanceColumns.ACT_LON));
             entry.actLat = c.getDouble(c.getColumnIndex(InstanceColumns.ACT_LAT));
             entry.actFinish = c.getLong(c.getColumnIndex(InstanceColumns.T_ACT_FINISH));
             entry.isSynced = c.getString(c.getColumnIndex(InstanceColumns.T_IS_SYNC));
             entry.locationTrigger = c.getString(c.getColumnIndex(InstanceColumns.T_LOCATION_TRIGGER));
-            // entry.taskId = c.getLong(c.getColumnIndex(InstanceColumns.T_TASK_ID));
             entry.uuid = c.getString(c.getColumnIndex(InstanceColumns.UUID));
 
         } catch (Exception e) {
@@ -349,7 +350,6 @@ public class Utilities {
             boolean all_non_synchronised,
             String sortOrder, String filter,
             boolean serverOnly,
-            boolean recalculateGeofences,
             boolean useGeofenceFilter) {
 
         // Get cursor
@@ -369,6 +369,7 @@ public class Utilities {
                 InstanceColumns.SCHED_LAT,
                 InstanceColumns.ACT_LON,
                 InstanceColumns.ACT_LAT,
+                InstanceColumns.T_SHOW_DIST,
                 InstanceColumns.T_ACT_FINISH,
                 InstanceColumns.T_IS_SYNC,
                 InstanceColumns.T_ASS_ID,
@@ -415,13 +416,14 @@ public class Utilities {
         // Set up geofencing
 
         Location location = null;
-        if(recalculateGeofences) {
-            Timber.i("############ recalculate geofences");
-            location = Collect.getInstance().getLocation();
-        }
         if(useGeofenceFilter) {
             Timber.i("############ use geofence filter");
+            location = Collect.getInstance().getLocation();
+            if(location == null) {
+                Timber.i("############ location is null");
+            }
         }
+
 
 
         try {
@@ -454,7 +456,7 @@ public class Utilities {
                 entry.source = c.getString(c.getColumnIndex(InstanceColumns.SOURCE));
                 entry.locationTrigger = c.getString(c.getColumnIndex(InstanceColumns.T_LOCATION_TRIGGER));
 
-                if(useGeofenceFilter) {
+                if(useGeofenceFilter && location != null) {
                     if(entry.showDist > 0 && entry.schedLat != 0.0 && entry.schedLon != 0.0) {
                         Location taskLocation = new Location("");
                         taskLocation.setLatitude(entry.schedLat);
@@ -465,6 +467,8 @@ public class Utilities {
                         if(distance < entry.showDist) {
                             tasks.add(entry);
                         }
+                    } else {
+                        tasks.add(entry);
                     }
                 } else {
                     tasks.add(entry);

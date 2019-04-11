@@ -43,7 +43,6 @@ public class MapDataLoader extends AsyncTaskLoader<MapEntry> {
 
     private String sortOrder = "BY_NAME_ASC";
     private CharSequence filter = "";
-    private boolean recalculateGeofences = true;
 
 	public MapDataLoader(Context ctx) {
 		super(ctx);
@@ -64,7 +63,7 @@ public class MapDataLoader extends AsyncTaskLoader<MapEntry> {
         data.tasks = new ArrayList<TaskEntry> (10);
         TraceUtilities.getPoints(data.points);
         getForms(data.tasks);
-        Utilities.getTasks(data.tasks, false, sortOrder, filter.toString(), false, recalculateGeofences, true);
+        Utilities.getTasks(data.tasks, false, sortOrder, filter.toString(), false, true);
 
 		return data;
 	}
@@ -237,13 +236,6 @@ public class MapDataLoader extends AsyncTaskLoader<MapEntry> {
      */
     public void updateFilter(CharSequence filter) {
         this.filter = filter;
-    }
-
-    /*
-     * Change filter
-     */
-    public void updateGeofences(boolean recalculateGeofences) {
-        this.recalculateGeofences = recalculateGeofences;
     }
 
     private String getSortOrderExpr(String sortOrder) {
