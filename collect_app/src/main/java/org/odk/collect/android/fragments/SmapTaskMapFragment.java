@@ -31,6 +31,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -61,6 +62,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.SmapMain;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.loaders.MapEntry;
 import org.odk.collect.android.loaders.PointEntry;
 import org.odk.collect.android.loaders.TaskEntry;
@@ -225,6 +227,7 @@ public class SmapTaskMapFragment extends Fragment
             mapReadyPermissionGranted();
         }
 
+
     }
 
     public void onRequestPermissionsResult(int requestCode,
@@ -375,6 +378,11 @@ public class SmapTaskMapFragment extends Fragment
 
             }
         });
+
+        // Refresh the data
+        Intent intent = new Intent("org.smap.smapTask.refresh");
+        LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
+        Timber.i("######## send org.smap.smapTask.refresh from smapTaskMapFragment");  // smap
     }
 
     public void setData(MapEntry data) {
@@ -412,49 +420,54 @@ public class SmapTaskMapFragment extends Fragment
 
     private void showTasks(List<TaskEntry> data) {
 
-        clearTasks();   // remove existing markers
+        if(mMap != null) {
 
-        // Update markers
-        markers = new ArrayList<Marker>();
-        markerMap = new HashMap<Marker, Integer>();
+            clearTasks();   // remove existing markers
 
-        // Add the tasks to the marker array and to the map
-        int index = 0;
-        for(TaskEntry t : data) {
-            if(t.type.equals("task")) {
-                LatLng ll = getTaskCoords(t);
-                if (ll != null) {
-                    String taskTime = Utilities.getTaskTime(t.taskStatus, t.actFinish, t.taskStart);
-                    String addressText = KeyValueJsonFns.getValues(t.taskAddress);
-                    MarkerOptions markerOptions = new MarkerOptions()
-                            .position(ll)
-                            .title(t.name)
-                            .snippet(taskTime + "\n" + addressText);
+            // Update markers
+            markers = new ArrayList<Marker>();
+            markerMap = new HashMap<Marker, Integer>();
 
-                    markerOptions.icon(getIcon(t.taskStatus, t.repeat, t.locationTrigger != null));
-                    Marker m = mMap.addMarker(markerOptions);
-                    markers.add(m);
-                    markerMap.put(m, index);
+            // Add the tasks to the marker array and to the map
+            int index = 0;
+            for (TaskEntry t : data) {
+                if (t.type.equals("task")) {
+                    LatLng ll = getTaskCoords(t);
+                    if (ll != null) {
+                        String taskTime = Utilities.getTaskTime(t.taskStatus, t.actFinish, t.taskStart);
+                        String addressText = KeyValueJsonFns.getValues(t.taskAddress);
+                        MarkerOptions markerOptions = new MarkerOptions()
+                                .position(ll)
+                                .title(t.name)
+                                .snippet(taskTime + "\n" + addressText);
 
+                        markerOptions.icon(getIcon(t.taskStatus, t.repeat, t.locationTrigger != null));
+                        Marker m = mMap.addMarker(markerOptions);
+                        markers.add(m);
+                        markerMap.put(m, index);
+
+                    }
                 }
+                index++;
             }
-            index++;
         }
 
     }
 
     private void showPoints(List<PointEntry> data) {
 
-        mPoints = new ArrayList<LatLng> ();
-        if(mPath != null) {
-            mPath.remove();
-        }
-        mPath = mMap.addPolyline((new PolylineOptions()));
+        if(mMap != null) {
+            mPoints = new ArrayList<LatLng>();
+            if (mPath != null) {
+                mPath.remove();
+            }
+            mPath = mMap.addPolyline((new PolylineOptions()));
 
-        for(PointEntry p : data) {
-            mPoints.add(new LatLng(p.lat, p.lon));
+            for (PointEntry p : data) {
+                mPoints.add(new LatLng(p.lat, p.lon));
+            }
+            mPath.setPoints(mPoints);
         }
-        mPath.setPoints(mPoints);
     }
 
     public void updatePath(LatLng point) {

@@ -90,18 +90,18 @@ public class SmapTaskListFragment extends ListFragment
     private static final int MENU_MANAGEFILES = Menu.FIRST + 5;
     private static final int MENU_EXIT = Menu.FIRST + 6;
 
-    private static final int PASSWORD_DIALOG = 1;
+    private static final String SEARCH_TEXT = "searchText";
+    private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
 
     protected String[] sortingOptions;
     View rootView;
 
     private MapDataLoader mTaskLoader;
 
-    protected LinearLayout searchBoxLayout;
-    protected SimpleCursorAdapter listAdapter;
-    protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
-    protected EditText inputSearch;
+    private boolean isSearchBoxShown;
     private String filterText;
+    private String savedFilterText;
+    private SearchView searchView;
 
     private Integer selectedSortingOrder;
     private BottomSheetDialog bottomSheetDialog;
@@ -150,6 +150,11 @@ public class SmapTaskListFragment extends ListFragment
                 getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
         };
 
+        if(b != null) {
+            isSearchBoxShown = b.getBoolean(IS_SEARCH_BOX_SHOWN);
+            savedFilterText = b.getString(SEARCH_TEXT);
+        }
+
         // Handle long item clicks
         ListView lv = getListView();
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -164,12 +169,18 @@ public class SmapTaskListFragment extends ListFragment
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle b) {
+        super.onSaveInstanceState(b);
+
+        b.putBoolean(IS_SEARCH_BOX_SHOWN, !searchView.isIconified());
+        b.putString(SEARCH_TEXT, String.valueOf(searchView.getQuery()));
+    }
+
 
     @Override
     public void onViewCreated(View rootView, Bundle savedInstanceState) {
-
         super.onViewCreated(rootView, savedInstanceState);
-
     }
 
 
@@ -279,7 +290,6 @@ public class SmapTaskListFragment extends ListFragment
         }
     }
 
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
@@ -331,9 +341,19 @@ public class SmapTaskListFragment extends ListFragment
 
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
         final MenuItem searchItem = menu.findItem(R.id.menu_filter);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        if(searchView == null) {
+            searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        }
         searchView.setQueryHint(getResources().getString(R.string.search));
         searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        if(filterText == null) {
+            filterText = "";
+        }
+        if (isSearchBoxShown) {
+            searchItem.expandActionView();
+            searchView.setQuery(filterText, false);
+        }
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -346,8 +366,10 @@ public class SmapTaskListFragment extends ListFragment
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                filterText = newText;
-                updateAdapter();
+                if(!filterText.equals(newText)) {
+                    filterText = newText;
+                    updateAdapter();
+                }
                 return false;
             }
         });
