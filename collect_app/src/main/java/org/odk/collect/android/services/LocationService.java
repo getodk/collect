@@ -20,9 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -38,10 +36,12 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.TraceUtilities;
+import org.odk.collect.android.loaders.GeofenceEntry;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.Constants;
 import org.odk.collect.android.utilities.NotificationUtils;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -65,11 +65,10 @@ public class LocationService extends Service {
     Location lastLocation = null;
     LocationManager locationManager;
 
+    public LocationService() {
+    }
     public LocationService(Context applicationContext) {
         super();
-    }
-
-    public LocationService() {
     }
 
     @Override
@@ -97,8 +96,10 @@ public class LocationService extends Service {
 
                 @Override
                 public void run() {
-                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-                    boolean enabled = sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
+                    //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+                    //boolean enabled = sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
+
+                    boolean enabled = true;     // Always turn on location now for geofencing
 
                     Timber.i("=================== Checking location recording: " + enabled + " : " + isRecordingLocation);
                     if (enabled == isRecordingLocation) {
@@ -135,11 +136,13 @@ public class LocationService extends Service {
 
                             /*
                              * Notify the user
-                             */
+                             * Disable this notification is done on task list screen
+                             *
                             NotificationUtils.showNotification(null,
                                     NotificationActivity.NOTIFICATION_ID,
                                     R.string.app_name,
-                                    getString(R.string.smap_location_tracking), false);     // smap add start
+                                    getString(R.string.smap_location_tracking), false);
+                            */
 
                         } else {
                             Timber.i("=================== Location Recording turned off");
@@ -184,10 +187,44 @@ public class LocationService extends Service {
         if(isValidLocation(location) && isAccurateLocation(location)) {
             Collect.getInstance().setLocation(location);
 
-            // Save the location in the database
+            /*
+             * Test for geofence change if the user has moved more than the minimum distance
+             */
+            ArrayList<GeofenceEntry> geofences = Collect.getInstance().getGeofences();
+            if(geofences.size() > 0 && (lastLocation == null || location.distanceTo(lastLocation) > Constants.GPS_DISTANCE)) {
+                boolean refresh = false;
+                boolean notify = false;
+                for(GeofenceEntry gfe : geofences) {
+                    if(gfe.in) {
+                        if(location.distanceTo(gfe.location) > gfe.showDist) {
+                            refresh = true;
+                        }
+                    } else {
+                        if(location.distanceTo(gfe.location) < gfe.showDist) {
+                            refresh = true;
+                            notify = true;
+                            break;      // No need to check more we have a notify and a refresh
+                        }
+                    }
+                }
+                if(refresh) {
+                    Intent intent = new Intent("org.smap.smapTask.refresh");
+                    LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
+                    Timber.i("######## send org.smap.smapTask.refresh from location service");  // smap
+                }
+                if(notify) {
+                    NotificationUtils.showNotification(null,
+                            NotificationActivity.NOTIFICATION_ID,
+                            R.string.app_name,
+                            getString(R.string.smap_geofence_tasks), false);
+                }
+            }
+
+            /*
+             * Save the location in the database - deprecate better to send location immediately to server if we do this
+             */
             if (enabledTracking) {
                 Timber.i("+++++++++++++++++++++++++++++ tracking");
-                //long newTime = System.currentTimeMillis();
                 if(lastLocation == null || location.distanceTo(lastLocation) > Constants.GPS_DISTANCE) {
                     Timber.i("^^^^^^^^^^^^^^^^^^^^^^^^^^ insert point");
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("locationChanged"));  // update map

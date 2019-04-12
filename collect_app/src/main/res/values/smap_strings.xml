@@ -103,4 +103,5 @@
     <string name="smap_login_success">Login succeeded</string>
     <string name="smap_login_failed">Could not connect to server</string>
     <string name="smap_login_unauthorized">Login failed</string>
+    <string name="smap_geofence_tasks">New local tasks</string>
 </resources>

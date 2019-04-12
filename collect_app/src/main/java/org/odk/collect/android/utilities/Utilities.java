@@ -31,6 +31,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.TaskAssignment;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
+import org.odk.collect.android.loaders.GeofenceEntry;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -416,6 +417,7 @@ public class Utilities {
         // Set up geofencing
 
         Location location = null;
+        ArrayList<GeofenceEntry> geofences = new ArrayList<GeofenceEntry> ();
         if(useGeofenceFilter) {
             Timber.i("############ use geofence filter");
             location = Collect.getInstance().getLocation();
@@ -458,15 +460,21 @@ public class Utilities {
 
                 if(useGeofenceFilter && location != null) {
                     if(entry.showDist > 0 && entry.schedLat != 0.0 && entry.schedLon != 0.0) {
+
                         Location taskLocation = new Location("");
                         taskLocation.setLatitude(entry.schedLat);
                         taskLocation.setLongitude(entry.schedLon);
 
                         float distance = location.distanceTo(taskLocation);
                         Timber.i("############ Distance: " + entry.displayName + " : " + distance + " : show dist : " + entry.showDist);
+
+                        GeofenceEntry gfe = new GeofenceEntry(entry.showDist, taskLocation);
                         if(distance < entry.showDist) {
                             tasks.add(entry);
+                            gfe.in = true;
                         }
+
+                        geofences.add(gfe);
                     } else {
                         tasks.add(entry);
                     }
@@ -476,6 +484,9 @@ public class Utilities {
 
                 c.moveToNext();
             }
+
+            Collect.getInstance().setGeofences(geofences);
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

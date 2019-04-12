@@ -49,6 +49,7 @@ import org.odk.collect.android.external.handler.SmapRemoteDataItem;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.jobs.CollectJobCreator;
+import org.odk.collect.android.loaders.GeofenceEntry;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.logic.PropertyManager;
@@ -119,6 +120,7 @@ public class Collect extends Application {
     private AppDependencyComponent applicationComponent;
 
     private Location location = null;                   // smap
+    private ArrayList<GeofenceEntry> geofences = new ArrayList<GeofenceEntry>();    // smap
     private boolean recordLocation = false;             // smap
     private FormInfo formInfo = null;                   // smap
     private boolean tasksDownloading = false;           // smap
@@ -322,6 +324,13 @@ public class Collect extends Application {
     }
     public Location getLocation() {
         return location;
+    }
+
+    public void setGeofences(ArrayList<GeofenceEntry> geofences) {
+        this.geofences = geofences;
+    }
+    public ArrayList<GeofenceEntry> getGeofences() {
+        return geofences;
     }
 
     public void setDownloading(boolean v) {
