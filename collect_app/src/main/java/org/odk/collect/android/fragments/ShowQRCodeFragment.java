@@ -246,15 +246,15 @@ public class ShowQRCodeFragment extends Fragment {
                             if (response != null) {
                                 applySettings(response);
                             } else {
-                                ToastUtils.showLongToast("QR Code not found in the selected image");
+                                ToastUtils.showLongToast(R.string.qr_code_not_found);
                             }
                         }
                     } else {
-                        ToastUtils.showLongToast("QR Code not found in the selected image");
+                        ToastUtils.showLongToast(R.string.qr_code_not_found);
                     }
                 } catch (FormatException | NotFoundException | ChecksumException e) {
                     Timber.i(e);
-                    ToastUtils.showLongToast("QR Code not found in the selected image");
+                    ToastUtils.showLongToast(R.string.qr_code_not_found);
                 } catch (DataFormatException | IOException | OutOfMemoryError e) {
                     Timber.e(e);
                     ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
