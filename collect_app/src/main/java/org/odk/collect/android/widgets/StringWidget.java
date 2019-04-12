@@ -32,6 +32,7 @@ import android.widget.TableLayout;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ViewIds;
 
@@ -179,5 +180,18 @@ public class StringWidget extends QuestionWidget {
     public void cancelLongPress() {
         super.cancelLongPress();
         answerText.cancelLongPress();
+    }
+
+    /**
+     * Registers all subviews except for the EditText to clear on long press. This makes it possible
+     * to long-press to paste or perform other text editing functions.
+     */
+    @Override
+    protected void registerToClearAnswerOnLongPress(FormEntryActivity activity) {
+        for (int i = 0; i < getChildCount(); i++) {
+            if (!(getChildAt(i) instanceof EditText)) {
+                activity.registerForContextMenu(getChildAt(i));
+            }
+        }
     }
 }

@@ -53,7 +53,6 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
@@ -212,10 +211,10 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      */
     private QuestionWidget configureWidgetForQuestion(FormEntryPrompt question, boolean readOnlyOverride) {
         QuestionWidget qw = WidgetFactory.createWidgetFromPrompt(question, getContext(), readOnlyOverride);
-        qw.setLongClickable(true);
         qw.setOnLongClickListener(this);
         qw.setValueChangedListener(this);
         qw.setId(ViewIds.generateViewId());
+
         return qw;
     }
 

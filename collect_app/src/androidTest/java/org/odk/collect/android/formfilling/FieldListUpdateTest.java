@@ -32,6 +32,7 @@ import java.util.UUID;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyAbove;
 import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyBelow;
@@ -41,6 +42,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.core.StringStartsWith.startsWith;
@@ -124,6 +126,25 @@ public class FieldListUpdateTest {
         onView(withText("Target3")).check(isCompletelyAbove(withText("Filler3")));
 
         onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
+        onView(withText("Target3")).check(doesNotExist());
+    }
+
+    @Test
+    public void longPress_ShouldClearAndUpdate() {
+        onView(withId(R.id.menu_goto)).perform(click());
+        onView(withId(R.id.menu_go_up)).perform(click());
+        onView(allOf(withText("Single relevance in middle"), isDisplayed())).perform(click());
+        onView(withText("Source3")).perform(click());
+
+        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
+        onView(withText("Target3")).check(doesNotExist());
+        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText("A"));
+        onView(withText("Target3")).check(matches(isDisplayed()));
+
+        onView(withText("Source3")).perform(longClick());
+        onView(withText(R.string.clear_answer)).perform(click());
+        onView(withText(R.string.discard_answer)).perform(click());
+        onView(withIndex(withClassName(endsWith("EditText")), 0)).check(matches(withText("")));
         onView(withText("Target3")).check(doesNotExist());
     }
 

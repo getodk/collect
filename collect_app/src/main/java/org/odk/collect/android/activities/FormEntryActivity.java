@@ -1223,23 +1223,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     return createView(event, advancingPage);
                 }
 
-                // Makes a "clear answer" menu pop up on long-click
-                for (QuestionWidget qw : odkView.getWidgets()) {
-                    if (!qw.getFormEntryPrompt().isReadOnly()) {
-                        // If it's a StringWidget register all its elements apart from EditText as
-                        // we want to enable paste option after long click on the EditText
-                        if (qw instanceof StringWidget) {
-                            for (int i = 0; i < qw.getChildCount(); i++) {
-                                if (!(qw.getChildAt(i) instanceof EditText)) {
-                                    registerForContextMenu(qw.getChildAt(i));
-                                }
-                            }
-                        } else {
-                            registerForContextMenu(qw);
-                        }
-                    }
-                }
-
                 if (showNavigationButtons) {
                     backButton.setVisibility(!formController.isCurrentQuestionFirstInForm() && allowMovingBackwards ? View.VISIBLE : View.GONE);
                     nextButton.setVisibility(View.VISIBLE);

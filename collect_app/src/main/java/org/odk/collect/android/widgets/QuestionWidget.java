@@ -145,6 +145,10 @@ public abstract class QuestionWidget
 
         addQuestionMediaLayout(getQuestionMediaLayout());
         addHelpTextLayout(getHelpTextLayout());
+
+        if (context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
+            registerToClearAnswerOnLongPress((FormEntryActivity) context);
+        }
     }
 
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
@@ -465,6 +469,15 @@ public abstract class QuestionWidget
 
         params.setMargins(10, 0, 10, 0);
         addView(v, params);
+    }
+
+    /**
+     * Register this widget's child views to pop up a context menu to clear the widget when the
+     * user long presses on it. Widget subclasses may override this if some or all of their
+     * components need to intercept long presses.
+     */
+    protected void registerToClearAnswerOnLongPress(FormEntryActivity activity) {
+        activity.registerForContextMenu(this);
     }
 
     /**
