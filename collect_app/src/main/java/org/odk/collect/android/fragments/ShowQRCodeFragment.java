@@ -236,13 +236,21 @@ public class ShowQRCodeFragment extends Fragment {
             if (resultCode == Activity.RESULT_OK) {
                 try {
                     final Uri imageUri = data.getData();
-                    final InputStream imageStream = getActivity().getContentResolver()
-                            .openInputStream(imageUri);
+                    if (imageUri != null) {
+                        final InputStream imageStream = getActivity().getContentResolver()
+                                .openInputStream(imageUri);
 
-                    final Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
-                    String response = QRCodeUtils.decodeFromBitmap(bitmap);
-                    if (response != null) {
-                        applySettings(response);
+                        final Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+                        if (bitmap != null) {
+                            String response = QRCodeUtils.decodeFromBitmap(bitmap);
+                            if (response != null) {
+                                applySettings(response);
+                            } else {
+                                ToastUtils.showLongToast("QR Code not found in the selected image");
+                            }
+                        }
+                    } else {
+                        ToastUtils.showLongToast("QR Code not found in the selected image");
                     }
                 } catch (FormatException | NotFoundException | ChecksumException e) {
                     Timber.i(e);
