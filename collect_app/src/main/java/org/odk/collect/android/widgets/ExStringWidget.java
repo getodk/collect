@@ -24,6 +24,7 @@ import android.net.Uri;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.EditText;
@@ -109,7 +110,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
 
     private ActivityAvailability activityAvailability;
 
-    public ExStringWidget(Context context, FormEntryPrompt prompt) {
+    public ExStringWidget(Context context, FormEntryPrompt prompt, String appearance) {     // smap add appearance
 
         super(context, prompt);
 
@@ -162,6 +163,11 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
                         .setLabel(Collect.getCurrentFormIdentifierHash())
                         .build());
                         */
+
+        // smap automatically launch external widget if auto is set
+        if(appearance != null && appearance.contains("auto")) {
+            launchIntentButton.performClick();
+        }
 
     }
 
