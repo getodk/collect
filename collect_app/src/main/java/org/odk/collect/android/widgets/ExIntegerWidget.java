@@ -41,8 +41,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  */
 public class ExIntegerWidget extends ExStringWidget {
 
-    public ExIntegerWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+    public ExIntegerWidget(Context context, FormEntryPrompt prompt, String appearance) {    // smap add appearance
+        super(context, prompt, appearance);     // smap add appearance
 
         answer.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
 

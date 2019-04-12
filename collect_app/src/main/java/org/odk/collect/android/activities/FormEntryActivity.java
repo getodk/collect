@@ -2864,7 +2864,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         String navigation = (String) GeneralSharedPreferences.getInstance()
                 .get(GeneralKeys.KEY_NAVIGATION);
 
-        if (navigation.contains(GeneralKeys.NAVIGATION_SWIPE) && doSwipe) {
+        if (e1 != null && e2 != null
+                && navigation.contains(GeneralKeys.NAVIGATION_SWIPE) && doSwipe) {
             // Looks for user swipes. If the user has swiped, move to the
             // appropriate screen.
 

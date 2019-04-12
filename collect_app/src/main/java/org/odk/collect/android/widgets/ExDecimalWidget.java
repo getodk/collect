@@ -43,8 +43,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  */
 public class ExDecimalWidget extends ExStringWidget {
 
-    public ExDecimalWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+    public ExDecimalWidget(Context context, FormEntryPrompt prompt, String appearance) {
+        super(context, prompt, appearance);
 
         answer.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
