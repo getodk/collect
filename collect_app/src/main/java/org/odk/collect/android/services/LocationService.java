@@ -19,25 +19,25 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.media.RingtoneManager;
-import android.net.Uri;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
-import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.TraceUtilities;
-import org.odk.collect.android.location.client.LocationClient;
-import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.Constants;
 import org.odk.collect.android.utilities.NotificationUtils;
@@ -54,17 +54,16 @@ import timber.log.Timber;
 /*
  * Respond to a notification from the server
  */
-public class LocationService extends Service implements LocationListener, LocationClient.LocationClientListener {
+public class LocationService extends Service {
 
-    Handler mHandler = new Handler();       // Background thread to check for enabling / disabling the location listener
-    private LocationClient locationClient;
+    Handler mHandler = new Handler();           // Background thread to check for enabling / disabling the location listener
+    private LocationRequest locationRequest;
+    private FusedLocationProviderClient fusedLocationClient;
+    private LocationCallback locationCallback;
     private boolean isRecordingLocation = false;
     private Timer mTimer;
-    private LocationService mLocationService = null;
-    String TAG = "Location Service";
     Location lastLocation = null;
-    long lastTime = 0;
-
+    LocationManager locationManager;
 
     public LocationService(Context applicationContext) {
         super();
@@ -77,14 +76,14 @@ public class LocationService extends Service implements LocationListener, Locati
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         super.onStartCommand(intent, flags, startId);
-        Log.i(TAG, "======================= Start Location Service");
-
+        Timber.i("======================= Start Location Service");
 
         if (mTimer == null) {
             mTimer = new Timer();
         }
-        mLocationService = this;
-        mTimer.scheduleAtFixedRate(new CheckEnabledTimerTask(), 0, 10000);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mTimer.scheduleAtFixedRate(new CheckEnabledTimerTask(), 0, 60000);  // Peiodically check to see if location tracking is disabled
 
         return START_STICKY;
     }
@@ -101,21 +100,38 @@ public class LocationService extends Service implements LocationListener, Locati
                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
                     boolean enabled = sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
 
+                    Timber.i("=================== Checking location recording: " + enabled + " : " + isRecordingLocation);
                     if (enabled == isRecordingLocation) {
-                        // No change
+                        // No change however TODO may need to restart recording if GPS was turned off previously
                     } else {
 
                         NotificationManager mNotifyMgr =
                                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
                         if (enabled) {
-                            Log.i(TAG, "=================== Location Recording turned on");
-                            if(locationClient != null) {
-                                locationClient.stop();
+                            Timber.i("=================== Location Recording turned on");
+                            if(locationRequest == null) {
+                                locationRequest = LocationRequest.create();
                             }
-                            locationClient = LocationClients.clientForContext(getApplicationContext());
-                            locationClient.setListener(mLocationService);
-                            locationClient.start();
+                            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                            locationRequest.setFastestInterval(Constants.GPS_INTERVAL / 2);
+                            locationRequest.setInterval(Constants.GPS_INTERVAL);
+
+                            locationCallback = new LocationCallback() {
+                                @Override
+                                public void onLocationResult(LocationResult locationResult) {
+                                    super.onLocationResult(locationResult);
+                                    onLocationChanged(locationResult.getLastLocation());
+                                }
+                            };
+
+                            try {
+                                fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+                            } catch (SecurityException e) {
+                                Timber.i("%%%%%%%%%%%%%%%%%%%% location recording not permitted: ");
+                                isRecordingLocation = false;
+                            }
+                            isRecordingLocation = true;
 
                             /*
                              * Notify the user
@@ -126,11 +142,14 @@ public class LocationService extends Service implements LocationListener, Locati
                                     getString(R.string.smap_location_tracking), false);     // smap add start
 
                         } else {
-                            Log.i(TAG, "=================== Location Recording turned off");
-                            locationClient.stop();
+                            Timber.i("=================== Location Recording turned off");
+                            if(fusedLocationClient != null) {
+                                fusedLocationClient.removeLocationUpdates(locationCallback);
+                            }
                             mNotifyMgr.cancel(NotificationActivity.LOCATION_ID);
+                            isRecordingLocation = false;
                         }
-                        isRecordingLocation = enabled;
+
                     }
 
                 }
@@ -143,8 +162,8 @@ public class LocationService extends Service implements LocationListener, Locati
     public void onDestroy() {
         NotificationManager mNotifyMgr =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        if(locationClient != null) {
-            locationClient.stop();
+        if(fusedLocationClient != null) {
+            fusedLocationClient.removeLocationUpdates(locationCallback);
         }
         mNotifyMgr.cancel(NotificationActivity.LOCATION_ID);
         super.onDestroy();
@@ -155,26 +174,12 @@ public class LocationService extends Service implements LocationListener, Locati
         return null;
     }
 
-    @Override
-    public void onClientStart() {
-        locationClient.requestLocationUpdates(this);
-    }
-
-    @Override
-    public void onClientStartFailure() {
-
-    }
-
-    @Override
-    public void onClientStop() {
-
-    }
-
-    @Override
     public void onLocationChanged(Location location) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
         boolean enabledTracking = sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
+
+        Timber.i("%%%%%%%%%%%%%%%%%%%% location changed: ");
 
         if(isValidLocation(location) && isAccurateLocation(location)) {
             Collect.getInstance().setLocation(location);
@@ -182,23 +187,20 @@ public class LocationService extends Service implements LocationListener, Locati
             // Save the location in the database
             if (enabledTracking) {
                 Timber.i("+++++++++++++++++++++++++++++ tracking");
-                long newTime = System.currentTimeMillis();
-                if(lastLocation == null ||
-                        (location.distanceTo(lastLocation) > Constants.GPS_DISTANCE
-                                && (newTime - lastTime)  > Constants.GPS_INTERVAL )) {
+                //long newTime = System.currentTimeMillis();
+                if(lastLocation == null || location.distanceTo(lastLocation) > Constants.GPS_DISTANCE) {
+                    Timber.i("^^^^^^^^^^^^^^^^^^^^^^^^^^ insert point");
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("locationChanged"));  // update map
                     TraceUtilities.insertPoint(location);
                     lastLocation = location;
-                    lastTime = newTime;
                 }
-
             }
         }
     }
 
     /*
- * Check to see if this is a valid location
- */
+     * Check to see if this is a valid location
+     */
     private boolean isValidLocation(Location location) {
         boolean valid = true;
         if(location == null || Math.abs(location.getLatitude()) > 90
@@ -215,13 +217,13 @@ public class LocationService extends Service implements LocationListener, Locati
     }
 
     /*
-  * Check to see if this is a valid location
-  */
+     * Check to see if this is a valid location
+     */
     private boolean isAccurateLocation(Location location) {
 
         boolean accurate = true;
         if (!location.hasAccuracy() || location.getAccuracy() >= Constants.GPS_ACCURACY) {
-            Log.d(TAG, "Ignore location. Poor accuracy.");
+            Timber.i("Ignore location. Poor accuracy.");
             accurate = false;
         }
         return accurate;
