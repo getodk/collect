@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.services;
 
-import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -64,6 +63,7 @@ public class LocationService extends Service {
     private Timer mTimer;
     Location lastLocation = null;
     LocationManager locationManager;
+    boolean enabledTracking = false;
 
     public LocationService() {
     }
@@ -84,91 +84,57 @@ public class LocationService extends Service {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mTimer.scheduleAtFixedRate(new CheckEnabledTimerTask(), 0, 60000);  // Peiodically check to see if location tracking is disabled
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+        enabledTracking = sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
+
+        startLocationUpdates();
+
         return START_STICKY;
     }
 
-    class CheckEnabledTimerTask extends TimerTask {
-
-        @Override
-        public void run() {
-            // run on another thread
-            mHandler.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-                    //boolean enabled = sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
-
-                    boolean enabled = true;     // Always turn on location now for geofencing
-
-                    Timber.i("=================== Checking location recording: " + enabled + " : " + isRecordingLocation);
-                    if (enabled == isRecordingLocation) {
-                        // No change however TODO may need to restart recording if GPS was turned off previously
-                    } else {
-
-                        NotificationManager mNotifyMgr =
-                                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-                        if (enabled) {
-                            Timber.i("=================== Location Recording turned on");
-                            if(locationRequest == null) {
-                                locationRequest = LocationRequest.create();
-                            }
-                            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-                            locationRequest.setFastestInterval(Constants.GPS_INTERVAL / 2);
-                            locationRequest.setInterval(Constants.GPS_INTERVAL);
-
-                            locationCallback = new LocationCallback() {
-                                @Override
-                                public void onLocationResult(LocationResult locationResult) {
-                                    super.onLocationResult(locationResult);
-                                    onLocationChanged(locationResult.getLastLocation());
-                                }
-                            };
-
-                            try {
-                                fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
-                            } catch (SecurityException e) {
-                                Timber.i("%%%%%%%%%%%%%%%%%%%% location recording not permitted: ");
-                                isRecordingLocation = false;
-                            }
-                            isRecordingLocation = true;
-
-                            /*
-                             * Notify the user
-                             * Disable this notification is done on task list screen
-                             *
-                            NotificationUtils.showNotification(null,
-                                    NotificationActivity.NOTIFICATION_ID,
-                                    R.string.app_name,
-                                    getString(R.string.smap_location_tracking), false);
-                            */
-
-                        } else {
-                            Timber.i("=================== Location Recording turned off");
-                            if(fusedLocationClient != null) {
-                                fusedLocationClient.removeLocationUpdates(locationCallback);
-                            }
-                            mNotifyMgr.cancel(NotificationActivity.LOCATION_ID);
-                            isRecordingLocation = false;
-                        }
-
-                    }
-
-                }
-            });
-
+    /*
+     * Start recording locations
+     */
+    private void startLocationUpdates() {
+        Timber.i("=================== Location Recording turned on");
+        if(locationRequest == null) {
+            locationRequest = LocationRequest.create();
         }
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setFastestInterval(Constants.GPS_INTERVAL / 2);
+        locationRequest.setInterval(Constants.GPS_INTERVAL);
+
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+                onLocationChanged(locationResult.getLastLocation());
+            }
+        };
+
+        try {
+            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+            isRecordingLocation = true;
+        } catch (SecurityException e) {
+            Timber.i("%%%%%%%%%%%%%%%%%%%% location recording not permitted: ");
+            isRecordingLocation = false;
+        }
+    }
+
+    /*
+     * Stop recoding locations
+     */
+    private void stopLocationUpdates() {
+        Timber.i("=================== Location Recording turned on");
+        if(fusedLocationClient != null) {
+            fusedLocationClient.removeLocationUpdates(locationCallback);
+        }
+        isRecordingLocation = false;
     }
 
     @Override
     public void onDestroy() {
-        NotificationManager mNotifyMgr =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        if(fusedLocationClient != null) {
-            fusedLocationClient.removeLocationUpdates(locationCallback);
-        }
-        mNotifyMgr.cancel(NotificationActivity.LOCATION_ID);
+        stopLocationUpdates();
         super.onDestroy();
     }
 
@@ -179,13 +145,11 @@ public class LocationService extends Service {
 
     public void onLocationChanged(Location location) {
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-        boolean enabledTracking = sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
-
-        Timber.i("%%%%%%%%%%%%%%%%%%%% location changed: ");
-
         if(isValidLocation(location) && isAccurateLocation(location)) {
+
+            Timber.i("+++++++++++++++++++++++++++++ location received");
             Collect.getInstance().setLocation(location);
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("locationChanged"));  // update map
 
             /*
              * Test for geofence change if the user has moved more than the minimum distance
@@ -224,10 +188,8 @@ public class LocationService extends Service {
              * Save the location in the database - deprecate better to send location immediately to server if we do this
              */
             if (enabledTracking) {
-                Timber.i("+++++++++++++++++++++++++++++ tracking");
                 if(lastLocation == null || location.distanceTo(lastLocation) > Constants.GPS_DISTANCE) {
                     Timber.i("^^^^^^^^^^^^^^^^^^^^^^^^^^ insert point");
-                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("locationChanged"));  // update map
                     TraceUtilities.insertPoint(location);
                     lastLocation = location;
                 }
@@ -265,6 +227,28 @@ public class LocationService extends Service {
         }
         return accurate;
     }
+
+    /*
+     * Run a a periodic query to see if the user settings have changes
+     */
+    class CheckEnabledTimerTask extends TimerTask {
+
+        @Override
+        public void run() {
+            // run on another thread
+            mHandler.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    Timber.i("=================== Periodic check for user settings ");
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+                    enabledTracking = sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
+                }
+            });
+
+        }
+    }
+
 
 
 }
