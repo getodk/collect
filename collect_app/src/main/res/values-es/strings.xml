@@ -333,10 +333,12 @@
   <string name="get_shape">Iniciar GeoArea</string>
   <string name="get_trace">Iniciar GeoLínea</string>
   <string name="geoshape_title">GeoArea</string>
+  <string name="input_method">Método de ingreso</string>
   <string name="start">Iniciar</string>
   <string name="enable_gps">Activar el GPS</string>
   <string name="geotrace_title">GeoLínea</string>
   <string name="polygon_save">Guardar como polígono</string>
+  <string name="polygon_save_deprecation_warning">(Si usa GeoTrace para recolectar polígonos, actualice su formulario para usar GeoShape antes de la próxima actualización. Consulte https://bit.ly/odk18277.)</string>
   <string name="polyline_save">Guardar como Polilínea</string>
   <string name="gps_enable_message">GPS esta deshabilitado. ¿Activar?</string>
   <string name="select_offline_layer">Seleccione la capa sin conexión</string>
@@ -346,8 +348,35 @@
   <string name="polygon_validator">Debe tener al menos 3 puntos para crear un polígono</string>
   <string name="polyline_validator">Deben existir al menos 2 puntos para crear una Polilínea</string>
   <string name="clear">Limpiar</string>
-  <string name="manual_mode">Modo Manual</string>
-  <string name="automatic_mode">Modo Automático </string>
+  <string name="placement_mode">Ubicación con toque</string>
+  <string name="manual_mode">Registro de ubicación manual</string>
+  <string name="automatic_mode">Registro de localización automática</string>
+  <string name="recording_interval">Intervalo de registro:</string>
+  <plurals name="number_of_seconds">
+    <item quantity="one">%d segundo</item>
+    <item quantity="other">%d segundos</item>
+  </plurals>
+  <plurals name="number_of_minutes">
+    <item quantity="one">%d minuto</item>
+    <item quantity="other">%d minutos</item>
+  </plurals>
+  <string name="accuracy_requirement">Requisito de precisión</string>
+  <string name="none">Ninguno</string>
+  <plurals name="number_of_meters">
+    <item quantity="one">%d metro</item>
+    <item quantity="other">%d metros</item>
+  </plurals>
+  <string name="location_status_searching">Buscando ubicación GPS, por favor espere …</string>
+  <string name="location_status_accuracy">Precisión GPS: %.1f m</string>
+  <string name="location_status_acceptable">Precisión GPS: %.1f m (aceptable)</string>
+  <string name="location_status_unacceptable">Precisión GPS: %.1f m (inaceptable)</string>
+  <string name="collection_status_paused">Puntos ingresados: %d</string>
+  <string name="collection_status_placement">Puntos ingresados: %d (toque para ublicar puntos)</string>
+  <string name="collection_status_manual">Puntos ingresados: %d (registro manual)</string>
+  <string name="collection_status_auto_seconds">Puntos ingresados: %1$d (registrando cada %2$d seg)</string>
+  <string name="collection_status_auto_minutes">Puntos ingresados: %1$d (registrando cada %2$d min)</string>
+  <string name="collection_status_auto_seconds_accuracy">Puntos ingresados:: %1$d (registrando cada %2$d seg, precisión %3$d m)</string>
+  <string name="collection_status_auto_minutes_accuracy">Puntos ingresados: %1$d (registrando cada %2$d min, precisión %3$d m)</string>
   <string name="geopoint_instruction">Pulsar prolongadamente para colocar la marca o tocar el botón marcador.</string>
   <string name="geopoint_no_draggable_instruction">Tap botón de agregar marker</string>
   <string name="discard">Descartar</string>
@@ -369,7 +398,7 @@
   <string name="install_openmapkit">Por favor instalar OpenMapKit!</string>
   <string name="go_back">Regresa</string>
   <string name="download_selected">Descarga Seleccionada</string>
-  <string name="record_geopoint">Grabar GeoPoint</string>
+  <string name="record_geopoint">Registrando un punto</string>
   <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nPrecisión: %4$sm</string>
   <string name="parser_exception">Excepción XPathParser: \"%s\"</string>
   <string name="selected_answer">Seleccionado: %s</string>
@@ -508,7 +537,7 @@
   <string name="invalid_email_address">Email inválido</string>
   <string name="sort_by">Ordenar por</string>
   <string name="server">Servidor</string>
-  <string name="submission_transport_admin_setting">Transporte de Envío</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Seleccionar valor</string>
   <string name="edit_value">Editar valor</string>
   <string name="no_value_selected">Ningún valor seleccionado</string>
@@ -643,12 +672,14 @@
   <string name="location_providers_disabled_dialog_message">Este formulario quiere rastrear su ubicación pero los proveedores de ubicación están deshabilitados Por favor, habilite en la configuración de Android.</string>
   <string name="go_to_settings">Ir a ajustes</string>
   <string name="track_location">Rastrear ubicación</string>
-  <string name="background_location_disabled">Este formulario quiere rastrear su ubicación pero el seguimiento está deshabilitado. Por favor habilite en el %1$s menú arriba.</string>
-  <string name="background_location_enabled">Este formulario rastrea tu ubicación. Puede deshabilitar el seguimiento en la %1$s menú arriba.</string>
+  <string name="background_location_disabled">Este formulario requiere registrar su localización, pero el rastreo esta deshabilitado. Favor habilitar en el menú de arriba %1$s .</string>
+  <string name="background_location_enabled">Este formulario registra su localización. Puede deshabilitar el rastreo en el menú de arriba %1$s.</string>
   <string name="open_file">Abrir archivo</string>
   <string name="sms_feature_disabled_dialog_title">Envíos via SMS Deshabilitado</string>
   <string name="sms_feature_disabled_dialog_message">Envio de datos via SMS  se ha deshabilitado por restricciones de Google Play Store .\n\nPor favor asegúrese que la persona que configuró el dispositivo lea los detalles abajo y tome la acción que corresponda.</string>
   <string name="read_details">Leer detalles</string>
   <string name="google_sheets_encrypted_message">Los formularios encriptados no pueden ser enviados a Google Sheets</string>
   <string name="number_picker_title">Selector de números</string>
+  <string name="too_complex_form">Este formulario es muy complejo para este dispositivo. Intente simplificar las expresiones o busque ayuda en el Foro.</string>
+  <string name="reading_files">Leyendo archivos</string>
 </resources>

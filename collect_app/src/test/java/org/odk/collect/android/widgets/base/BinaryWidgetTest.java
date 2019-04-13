@@ -13,7 +13,7 @@ import static org.mockito.Mockito.when;
  * @author James Knight
  */
 public abstract class BinaryWidgetTest<W extends BinaryWidget, A extends IAnswerData>
-        extends QuestionWidgetTest<W, A> {
+        extends ButtonWidgetTest<W, A> {
 
     public abstract Object createBinaryData(A answerData);
 

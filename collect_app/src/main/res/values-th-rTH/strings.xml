@@ -294,8 +294,6 @@
   <string name="geo_exit_warning">ยกเลิกการเปลี่ยนแปลงและกลับไปที่ ODK?</string>
   <string name="polygon_validator">ต้องมีจุดพิกัด 3 จุดขึ้นไปเพื่อสร้าง Polygon</string>
   <string name="clear">ลบ</string>
-  <string name="manual_mode">โหมดตั้งค่าเอง</string>
-  <string name="automatic_mode">โหมดอัตโนมัติ</string>
   <string name="geopoint_instruction">กดแช่ไว้เพื่อวางเครื่องหมายหรือแตะที่ปุ่มเพิ่มเครื่องหมาย</string>
   <string name="geopoint_no_draggable_instruction">แตะที่ปุ่มเพิ่มเครื่องหมาย</string>
   <string name="discard">ยกเลิก</string>
@@ -309,7 +307,6 @@
   <string name="alert">แจ้งเตือน</string>
   <string name="install_openmapkit">กรุณาติดตั้ง OpenMapKit</string>
   <string name="go_back">ย้อนกลับ</string>
-  <string name="record_geopoint">บันทึกจุดพิกัด</string>
   <string name="version_number">เวอร์ชั่น: %s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">ตะวันตก %1$s%2$s%3$s</string>
@@ -361,6 +358,7 @@
   <string name="select_time">เลือกเวลา</string>
   <string name="no_date_selected">ยังไม่ได้เลือกวันที่</string>
   <string name="no_time_selected">ยังไม่ได้เลือกเวลา</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <!--Sms submission-->
 </resources>

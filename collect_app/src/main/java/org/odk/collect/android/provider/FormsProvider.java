@@ -212,10 +212,7 @@ public class FormsProvider extends ContentProvider {
                 values.put(FormsColumns.JRCACHE_FILE_PATH, cachePath);
             }
             if (!values.containsKey(FormsColumns.FORM_MEDIA_PATH)) {
-                String pathNoExtension = filePath.substring(0,
-                        filePath.lastIndexOf('.'));
-                String mediaPath = pathNoExtension + "-media";
-                values.put(FormsColumns.FORM_MEDIA_PATH, mediaPath);
+                values.put(FormsColumns.FORM_MEDIA_PATH, FileUtils.constructMediaPath(filePath));
             }
 
             SQLiteDatabase db = formsDatabaseHelper.getWritableDatabase();

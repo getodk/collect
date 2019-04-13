@@ -344,8 +344,6 @@
   <string name="polygon_validator">Minimal harus memiliki 3 poin untuk membuat Polygon</string>
   <string name="polyline_validator">Dibutuhkan setidaknya 2 buah titik untuk membuat garis</string>
   <string name="clear">Hapus</string>
-  <string name="manual_mode">Mode manual</string>
-  <string name="automatic_mode">Mode otomatis</string>
   <string name="geopoint_instruction">tekan yang lama untuk menandai atau tap tombol tambah marker.</string>
   <string name="geopoint_no_draggable_instruction">Tap tombol tambah marker</string>
   <string name="discard">Buang</string>
@@ -367,7 +365,6 @@
   <string name="install_openmapkit">Silahkan pasang OpenMapKit!</string>
   <string name="go_back">Balik</string>
   <string name="download_selected">Unduh pilihan</string>
-  <string name="record_geopoint">Catat GeoPoint</string>
   <string name="gps_result">Lintang: %1$s\nBujur: %2$s\nKetinggian: %3$sm\nAkurasi: %4$sm</string>
   <string name="parser_exception">XPathParser Kesalahan: \"%s\"</string>
   <string name="selected_answer">Terpilih: %s</string>
@@ -506,7 +503,7 @@
   <string name="invalid_email_address">Alamat email tidak valid</string>
   <string name="sort_by">Urutkan dengan</string>
   <string name="server">Server</string>
-  <string name="submission_transport_admin_setting">Pengiriman</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Pilih nilai</string>
   <string name="edit_value">Sunting nilai</string>
   <string name="no_value_selected">Tidak ada nilai terpilih</string>
@@ -640,7 +637,5 @@
   <string name="location_providers_disabled_dialog_message">Formulir ini ingin merekam pergerakan lokasi anda tapi pengaturan lokasi tidak aktif. Silahkan aktiftan terlebih dahulu.</string>
   <string name="go_to_settings">Pergi ke pengaturan</string>
   <string name="track_location">Rekam pergerakan lokasi</string>
-  <string name="background_location_disabled">Formulir ini ingin merekam pergerakan lokasi anda tapi perekaman lokasi tidak aktif. Silahkan aktifkan di %1$s menu di atas.</string>
-  <string name="background_location_enabled">Formulir ini ingin merekam pergerakan lokasi anda. Anda dapat menonaktifkan perekaman di %1$s menu di atas.</string>
   <string name="open_file">Buka berkas</string>
 </resources>

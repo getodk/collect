@@ -343,7 +343,7 @@
     <string name="enable_gps">Enable GPS</string>
     <string name="geotrace_title">GeoTrace</string>
     <string name="polygon_save">Save as Polygon</string>
-    <string name="polygon_save_deprecation_warning">(This option will be removed in next update. See bit.ly/odk18277 for alternatives.)</string>
+    <string name="polygon_save_deprecation_warning">(If you use GeoTrace to collect polygons, update your form to use GeoShape before the next update. See https://bit.ly/odk18277.)</string>
     <string name="polyline_save">Save as Polyline</string>
     <string name="gps_enable_message">GPS is disabled in your device. Would you like to enable it?</string>
     <string name="select_offline_layer">Select Offline Layer</string>
@@ -544,7 +544,9 @@
     <string name="invalid_email_address">Invalid email address!</string>
     <string name="sort_by">Sort by</string>
     <string name="server">Server</string>
+<!--
     <string name="submission_transport_admin_setting">Submission transport</string>
+-->
     <string name="select_value">Select value</string>
     <string name="edit_value">Edit value</string>
     <string name="no_value_selected">No value selected</string>
@@ -689,5 +691,7 @@
     <string name="read_details">Read details</string>
     <string name="google_sheets_encrypted_message">Encrypted forms can\'t be submitted to Google Sheets.</string>
     <string name="number_picker_title">Number Picker</string>
+    <string name="too_complex_form">This form is too complex for this device. Try simplifying expressions or ask for help on the forum.</string>
     <string name="reading_files">Reading files</string>
+    <string name="copying_media_files_failed">Copying media files failed</string>
 </resources>

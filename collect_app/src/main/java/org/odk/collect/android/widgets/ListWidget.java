@@ -41,9 +41,7 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
-import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.FileUtils;
@@ -52,7 +50,6 @@ import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import timber.log.Timber;
 
@@ -67,14 +64,12 @@ import timber.log.Timber;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 @SuppressLint("ViewConstructor")
-public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnCheckedChangeListener {
+public class ListWidget extends ItemsWidget implements MultiChoiceWidget, OnCheckedChangeListener {
 
     @Nullable
     private AdvanceToNextListener listener;
 
     private final boolean autoAdvance;
-
-    List<SelectChoice> items; // may take a while to compute
 
     ArrayList<RadioButton> buttons;
     View center;
@@ -87,14 +82,6 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
             listener = (AdvanceToNextListener) context;
         }
 
-        // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
-                prompt.getAppearanceHint());
-        if (xpathFuncExpr != null) {
-            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
-        } else {
-            items = prompt.getSelectChoices();
-        }
         buttons = new ArrayList<>();
 
         // Layout holds the horizontal list of buttons

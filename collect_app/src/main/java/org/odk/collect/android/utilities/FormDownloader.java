@@ -180,14 +180,14 @@ public class FormDownloader {
 
         if ((stateListener == null || !stateListener.isTaskCanceled()) && message.isEmpty() && parsedFields != null) {
             if (isSubmissionOk(parsedFields)) {
-                installEverything(tempMediaPath, fileResult, parsedFields);
-                installed = true;
+                installed = installEverything(tempMediaPath, fileResult, parsedFields);
             } else {
                 message += Collect.getInstance().getString(R.string.xform_parse_error,
                         fileResult.file.getName(), "submission url");
             }
         }
         if (!installed) {
+            message += Collect.getInstance().getString(R.string.copying_media_files_failed);
             cleanUp(fileResult, null, tempMediaPath);
         }
         return message;
@@ -198,16 +198,21 @@ public class FormDownloader {
         return submission == null || Validator.isUrlValid(submission);
     }
 
-    private void installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields) {
+    private boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields) {
         UriResult uriResult = null;
         try {
             uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields);
-            Timber.w("Form uri = %s, isNew = %b", uriResult.getUri().toString(), uriResult.isNew());
+            if (uriResult != null) {
+                Timber.w("Form uri = %s, isNew = %b", uriResult.getUri().toString(), uriResult.isNew());
 
-            // move the media files in the media folder
-            if (tempMediaPath != null) {
-                File formMediaPath = new File(uriResult.getMediaPath());
-                FileUtils.moveMediaFiles(tempMediaPath, formMediaPath);
+                // move the media files in the media folder
+                if (tempMediaPath != null) {
+                    File formMediaPath = new File(uriResult.getMediaPath());
+                    FileUtils.moveMediaFiles(tempMediaPath, formMediaPath);
+                }
+                return true;
+            } else {
+                Timber.w("Form uri = null");
             }
         } catch (IOException e) {
             Timber.e(e);
@@ -220,9 +225,8 @@ public class FormDownloader {
                         null, null);
                 Timber.w("Deleted %d rows using uri %s", deletedCount, uri.toString());
             }
-
-            cleanUp(fileResult, null, tempMediaPath);
         }
+        return false;
     }
 
     private void cleanUp(FileResult fileResult, File fileOnCancel, String tempMediaPath) {
@@ -266,7 +270,6 @@ public class FormDownloader {
      * @return a {@link UriResult} object
      */
     private UriResult findExistingOrCreateNewUri(File formFile, Map<String, String> formInfo) {
-        Cursor cursor = null;
         final Uri uri;
         final String formFilePath = formFile.getAbsolutePath();
         String mediaPath = FileUtils.constructMediaPath(formFilePath);
@@ -274,8 +277,11 @@ public class FormDownloader {
 
         FileUtils.checkMediaPath(new File(mediaPath));
 
-        try {
-            cursor = formsDao.getFormsCursorForFormFilePath(formFile.getAbsolutePath());
+        try (Cursor cursor = formsDao.getFormsCursorForFormFilePath(formFile.getAbsolutePath())) {
+            if (cursor == null) {
+                return null;
+            }
+
             isNew = cursor.getCount() <= 0;
 
             if (isNew) {
@@ -285,10 +291,6 @@ public class FormDownloader {
                 uri = Uri.withAppendedPath(FormsProviderAPI.FormsColumns.CONTENT_URI,
                         cursor.getString(cursor.getColumnIndex(FormsProviderAPI.FormsColumns._ID)));
                 mediaPath = cursor.getString(cursor.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH));
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
             }
         }
 

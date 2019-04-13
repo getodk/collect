@@ -340,8 +340,6 @@
   <string name="polygon_validator">قطبون بنانے کے لئے کم از کم 3 پوائنٹس لازمی ہیں</string>
   <string name="polyline_validator">پولی لائن بنانے کے لئے کم سے کم 2 پوائنٹس لازمی ہیں</string>
   <string name="clear">صاف کریں </string>
-  <string name="manual_mode">مینول موڈ</string>
-  <string name="automatic_mode">آٹومیٹک موڈ</string>
   <string name="geopoint_instruction">پلیس مارک کرنے کے لیے طویل دبائیں یا ایڈ مارکر بٹن ٹیپ کریں</string>
   <string name="geopoint_no_draggable_instruction"> مارکر بٹن پر کلک کریں.</string>
   <string name="discard">ختم کر دینا</string>
@@ -363,7 +361,6 @@
   <string name="install_openmapkit">برائے مہربانی اوپن میپ کیٹ  انسٹال کریں!</string>
   <string name="go_back">واپس جاؤ</string>
   <string name="download_selected">منتخب کردہ ڈاؤنلوڈ کریں</string>
-  <string name="record_geopoint">ریکارڈ جیو پوائنٹ</string>
   <string name="gps_result">طول عرض:  %1$s \nطول بلد: %2$s \n اونچائی:  %3$s میٹر\n ایکیوریسی: %4$s میٹر</string>
   <string name="parser_exception"> ایکس پاتھ پارسر ایکسپشن:\"%s\"</string>
   <string name="selected_answer">منتخب شدہ: %s</string>
@@ -502,7 +499,7 @@
   <string name="invalid_email_address">غلط ای میل ایڈریس!</string>
   <string name="sort_by">بہ ترتیب</string>
   <string name="server">سرور </string>
-  <string name="submission_transport_admin_setting">سبمیشن ٹرانسپورٹ </string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">سلیکٹ ویلیو </string>
   <string name="edit_value">ایڈٹ ویلیو </string>
   <string name="no_value_selected">کوئی ویلیو منتخب نہیں کی گئی </string>

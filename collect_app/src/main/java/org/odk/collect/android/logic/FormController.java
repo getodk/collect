@@ -17,8 +17,6 @@ package org.odk.collect.android.logic;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.google.android.gms.analytics.HitBuilders;
-
 import org.javarosa.core.model.CoreModelModule;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
@@ -49,9 +47,9 @@ import org.javarosa.model.xform.XPathReference;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.utilities.AuditEventLogger;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.RegexUtils;
 import org.odk.collect.android.views.ODKView;
 
@@ -169,6 +167,11 @@ public class FormController {
     @Nullable
     public String getAbsoluteInstancePath() {
         return instanceFile != null ? instanceFile.getAbsolutePath() : null;
+    }
+
+    @Nullable
+    public String getLastSavedPath() {
+        return mediaFolder != null ? FileUtils.getLastSavedPath(mediaFolder) : null;
     }
 
     public void setIndexWaitingForData(FormIndex index) {
@@ -913,26 +916,41 @@ public class FormController {
      */
     private List<FormIndex> getIndicesForGroup(GroupDef gd) {
         return getIndicesForGroup(gd,
-                formEntryController.getModel().incrementIndex(getFormIndex(), true));
+                formEntryController.getModel().incrementIndex(getFormIndex(), true), false);
     }
 
-    private List<FormIndex> getIndicesForGroup(GroupDef gd, FormIndex currentChildIndex) {
+    private List<FormIndex> getIndicesForGroup(GroupDef gd, FormIndex currentChildIndex, boolean jumpIntoRepeatGroups) {
         List<FormIndex> indices = new ArrayList<>();
         for (int i = 0; i < gd.getChildren().size(); i++) {
             final FormEntryModel formEntryModel = formEntryController.getModel();
-            if (getEvent(currentChildIndex) == FormEntryController.EVENT_GROUP) {
+            if (getEvent(currentChildIndex) == FormEntryController.EVENT_GROUP
+                    || (jumpIntoRepeatGroups && getEvent(currentChildIndex) == FormEntryController.EVENT_REPEAT)) {
                 IFormElement nestedElement = formEntryModel.getForm().getChild(currentChildIndex);
                 if (nestedElement instanceof GroupDef) {
                     indices.addAll(getIndicesForGroup((GroupDef) nestedElement,
-                            formEntryModel.incrementIndex(currentChildIndex, true)));
+                            formEntryModel.incrementIndex(currentChildIndex, true), jumpIntoRepeatGroups));
                     currentChildIndex = formEntryModel.incrementIndex(currentChildIndex, false);
                 }
-            } else {
+            } else if (!jumpIntoRepeatGroups || getEvent(currentChildIndex) != FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
                 indices.add(currentChildIndex);
                 currentChildIndex = formEntryModel.incrementIndex(currentChildIndex, false);
             }
         }
         return indices;
+    }
+
+    /**
+     * @return true if a group contains at least one relevant question, otherwise false
+     */
+    public boolean isGroupRelevant() {
+        GroupDef groupDef = (GroupDef) getCaptionPrompt().getFormElement();
+        FormIndex currentChildIndex = formEntryController.getModel().incrementIndex(getFormIndex(), true);
+        for (FormIndex index : getIndicesForGroup(groupDef, currentChildIndex, true)) {
+            if (formEntryController.getModel().isIndexRelevant(index)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public FormEntryPrompt getQuestionPrompt(FormIndex index) {
@@ -1220,12 +1238,6 @@ public class FormController {
             // timing element...
             v = e.getChildrenWithName(AUDIT);
             if (v.size() == 1) {
-                Collect.getInstance().getDefaultTracker()
-                        .send(new HitBuilders.EventBuilder()
-                                .setCategory("AuditLogging")
-                                .setAction("Enabled")
-                                .setLabel(Collect.getCurrentFormIdentifierHash())
-                                .build());
 
                 TreeElement auditElement = v.get(0);
 

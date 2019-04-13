@@ -16,7 +16,6 @@
 
 package org.odk.collect.android.preferences;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
@@ -64,31 +63,28 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        Fragment fragment = null;
+        BasePreferenceFragment basePreferenceFragment = null;
         switch (preference.getKey()) {
             case "protocol":
-                fragment = new ServerPreferences();
+                basePreferenceFragment = ServerPreferences.newInstance(getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false));
                 break;
             case "user_interface":
-                fragment = new UserInterfacePreferences();
+                basePreferenceFragment = UserInterfacePreferences.newInstance(getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false));
                 break;
             case "form_management":
-                fragment = new FormManagementPreferences();
+                basePreferenceFragment = FormManagementPreferences.newInstance(getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false));
                 break;
             case "user_and_device_identity":
-                fragment = new IdentityPreferences();
+                basePreferenceFragment = IdentityPreferences.newInstance(getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false));
                 break;
         }
-
-        if (fragment != null) {
-            getActivity()
-                    .getFragmentManager()
+        if (basePreferenceFragment != null) {
+            getActivity().getFragmentManager()
                     .beginTransaction()
-                    .replace(android.R.id.content, fragment)
+                    .replace(android.R.id.content, basePreferenceFragment)
                     .addToBackStack(null)
                     .commit();
         }
-
         return true;
     }
 

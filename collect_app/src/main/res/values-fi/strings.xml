@@ -331,10 +331,12 @@
   <string name="get_shape">Aloita GeoShape</string>
   <string name="get_trace">Aloita GeoTrace</string>
   <string name="geoshape_title">GeoShape</string>
+  <string name="input_method">Syöttötapa</string>
   <string name="start">Aloita</string>
   <string name="enable_gps">Ota GPS käyttöön</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="polygon_save">Tallenna monikulmiona - Polygon</string>
+  <string name="polygon_save_deprecation_warning">(Tämä vaihtoehto tullaan poistamaan seuraavassa päivityksessä. Katso vaihtoehdot: bit.ly/odk18277) </string>
   <string name="polyline_save">Tallenna murtoviivana - Polyline</string>
   <string name="gps_enable_message">GPS on poistettu käytöstä laitteellasi. Haluaisitko ottaa sen käyttöön?</string>
   <string name="select_offline_layer">Valitse Offline-taso</string>
@@ -344,8 +346,35 @@
   <string name="polygon_validator">Monikulmion luomiseen tarvitaan vähintään 3 pistettä</string>
   <string name="polyline_validator">Polyline-kuvion luomiseen tarvitaan vähintään 2 pistettä</string>
   <string name="clear">Tyhjennä</string>
-  <string name="manual_mode">Manuaalinen tila</string>
-  <string name="automatic_mode">Automaattinen tila</string>
+  <string name="placement_mode">Sijoittaminen napsauttamalla</string>
+  <string name="manual_mode">Manuaalinen sijainnin tallennus</string>
+  <string name="automatic_mode">Automaattinen sijainnin tallennus</string>
+  <string name="recording_interval">Tallennusväli:</string>
+  <plurals name="number_of_seconds">
+    <item quantity="one">%d sekunti</item>
+    <item quantity="other">%d sekuntia</item>
+  </plurals>
+  <plurals name="number_of_minutes">
+    <item quantity="one">%d minuutti</item>
+    <item quantity="other">%d minuuttia</item>
+  </plurals>
+  <string name="accuracy_requirement">Tarkkuusvaatimus:</string>
+  <string name="none">Ei mitään</string>
+  <plurals name="number_of_meters">
+    <item quantity="one">%d metri</item>
+    <item quantity="other">%d metriä</item>
+  </plurals>
+  <string name="location_status_searching">Etsitään GPS-sijaintia, ole hyvä ja odota…</string>
+  <string name="location_status_accuracy">GPS-sijaintitarkkuus: %.1f m</string>
+  <string name="location_status_acceptable">GPS-sijaintitarkkuus: %.1f m (hyväksyttävä)</string>
+  <string name="location_status_unacceptable">GPS-sijaintitarkkuus: %.1f m (ei hyväksyttävä)</string>
+  <string name="collection_status_paused">Syötettyjä pisteitä: %d</string>
+  <string name="collection_status_placement">Syötettyjä pisteitä: %d (napsauta sijoittaaksesi pisteitä)</string>
+  <string name="collection_status_manual">Syötettyjä pisteitä: %d (manuaalinen tallennus)</string>
+  <string name="collection_status_auto_seconds">Syötettyjä pisteitä: %1$d (tallennus joka %2$d s)</string>
+  <string name="collection_status_auto_minutes">Tallennettuja pisteitä: %1$d (tallennus joka %2$d min)</string>
+  <string name="collection_status_auto_seconds_accuracy">Tallennettuja pisteitä: %1$d (tallennus joka %2$d s, tarkkuus %3$d m)</string>
+  <string name="collection_status_auto_minutes_accuracy">Tallennettuja pisteitä: %1$d (tallennus joka %2$d min, tarkkuus %3$d m)</string>
   <string name="geopoint_instruction">Paina pitkään asettaaksesi merkin tai näpäytä merkkinäppäintä.</string>
   <string name="geopoint_no_draggable_instruction">Paina lisää merkki -näppäintä.</string>
   <string name="discard">Hylkää</string>
@@ -367,7 +396,7 @@
   <string name="install_openmapkit">Ole hyvä ja asenna OpenMapKit!</string>
   <string name="go_back">Palaa</string>
   <string name="download_selected">Lataaminen valittu</string>
-  <string name="record_geopoint">Tallenna GeoPoint-koordinaatit</string>
+  <string name="record_geopoint">Tallenna piste</string>
   <string name="gps_result">Leveysasteet: %1$s\nPituusasteet: %2$s\nKorkeus: %3$sm\nTarkkuus: %4$sm</string>
   <string name="parser_exception">XPathParser-virhe: \"%s\"</string>
   <string name="selected_answer">Valittu: %s</string>
@@ -506,7 +535,7 @@
   <string name="invalid_email_address">Virheellinen sähköpostiosoite!</string>
   <string name="sort_by">Lajitteluperuste</string>
   <string name="server">Palvelin</string>
-  <string name="submission_transport_admin_setting">Lähetyksen välitys</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Valitse arvo</string>
   <string name="edit_value">Muokkaa arvoa</string>
   <string name="no_value_selected">Ei valittua arvoa</string>
@@ -641,8 +670,14 @@
   <string name="location_providers_disabled_dialog_message">Tämä lomake haluaa seurata sijaintiasi mutta sijaintipalvelut (location providers) eivät ole käytettävissä. Ole hyvä ja aktivoi ne Androidin asetuksissa.</string>
   <string name="go_to_settings">Asetuksiin</string>
   <string name="track_location">Sijainnin jäljittäminen</string>
-  <string name="background_location_disabled">Tämä lomake haluaa jäljittää sijaintiasi, mutta jäljittäminen on kytketty pois päältä. Ole hyvä ja aktivoi se valikossa %1$s yllä.</string>
-  <string name="background_location_enabled">Tämä lomake jäljittää sijaintiasi. Voit kytkeä jäljittämisen pois päältä valikossa %1$s yllä.</string>
+  <string name="background_location_disabled">Tämä lomake haluaa seurata sijaintiasi, mutta seuranta on poissa päältä. Ole hyvä ja laita se päälle valikossa %1$s yllä.</string>
+  <string name="background_location_enabled">Tämä lomake seuraa sijaintiasi. Voit laittaa seurannan pois päältä valikossa %1$s yllä.</string>
   <string name="open_file">Avaa tiedosto</string>
+  <string name="sms_feature_disabled_dialog_title">SMS-lähetys poissa päältä</string>
+  <string name="sms_feature_disabled_dialog_message">SMS-lähetykset poissa päältä Google Play Kaupan rajoitusten takia.\n\nOle hyvä ja varmista, että tämän laitteen asetukset tehnyt henkilö lukee yksityiskohdat alla ja ryhtyy toimenpiteisiin.</string>
   <string name="read_details">Lue yksityiskohdat</string>
+  <string name="google_sheets_encrypted_message">Salattuja lomakkeita ei voi lähettää Google Sheets -palveluun.</string>
+  <string name="number_picker_title">Numerovalitsin</string>
+  <string name="too_complex_form">Tämä lomake on liian monimutkainen tälle laitteelle. Yritä lausekkeiden yksinkertaistamista tai pyydä apua verkon keskusteluryhmästä.</string>
+  <string name="reading_files">Luetaan tiedostoja</string>
 </resources>

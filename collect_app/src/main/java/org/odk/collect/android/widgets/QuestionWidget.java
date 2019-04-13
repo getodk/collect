@@ -661,4 +661,8 @@ public abstract class QuestionWidget extends RelativeLayout implements Widget {
     public PermissionUtils getPermissionUtils() {
         return permissionUtils;
     }
+
+    public void setPermissionUtils(PermissionUtils permissionUtils) {
+        this.permissionUtils = permissionUtils;
+    }
 }

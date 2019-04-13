@@ -47,6 +47,7 @@ public final class AdminKeys {
     private static final String KEY_DEFAULT_TO_FINALIZED        = "default_to_finalized";
     private static final String KEY_HIGH_RESOLUTION             = "high_resolution";
     private static final String KEY_IMAGE_SIZE                  = "image_size";
+    private static final String KEY_GUIDANCE_HINT               = "guidance_hint";
     private static final String KEY_SHOW_SPLASH_SCREEN          = "show_splash_screen";
     private static final String KEY_DELETE_AFTER_SEND           = "delete_after_send";
     private static final String KEY_INSTANCE_FORM_SYNC          = "instance_form_sync";
@@ -85,6 +86,7 @@ public final class AdminKeys {
             ag(KEY_DEFAULT_TO_FINALIZED,       GeneralKeys.KEY_COMPLETED_DEFAULT),
             ag(KEY_HIGH_RESOLUTION,            GeneralKeys.KEY_HIGH_RESOLUTION),
             ag(KEY_IMAGE_SIZE,                 GeneralKeys.KEY_IMAGE_SIZE),
+            ag(KEY_GUIDANCE_HINT,              GeneralKeys.KEY_GUIDANCE_HINT),
             ag(KEY_SHOW_SPLASH_SCREEN,         GeneralKeys.KEY_SHOW_SPLASH),
             ag(KEY_SHOW_SPLASH_SCREEN,         GeneralKeys.KEY_SPLASH_PATH),
             ag(KEY_DELETE_AFTER_SEND,          GeneralKeys.KEY_DELETE_AFTER_SEND),
@@ -139,6 +141,7 @@ public final class AdminKeys {
             KEY_CONSTRAINT_BEHAVIOR,
             KEY_HIGH_RESOLUTION,
             KEY_IMAGE_SIZE,
+            KEY_GUIDANCE_HINT,
             KEY_INSTANCE_FORM_SYNC
     );
 

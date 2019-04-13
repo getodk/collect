@@ -331,10 +331,12 @@
   <string name="get_shape">GeoShape を開始</string>
   <string name="get_trace">GeoTrace を開始</string>
   <string name="geoshape_title">GeoShape</string>
+  <string name="input_method">入力方法</string>
   <string name="start">開始</string>
   <string name="enable_gps">GPS を有効にする</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="polygon_save">ポリゴンとして保存</string>
+  <string name="polygon_save_deprecation_warning">(このオプションは次の更新で削除されます。 代わりに bit.ly/odk18277 を参照してください。)</string>
   <string name="polyline_save">ポリラインとして保存</string>
   <string name="gps_enable_message">お使いのデバイスで GPS は無効になっています。有効にしますか?</string>
   <string name="select_offline_layer">オフライン レイヤーを選択</string>
@@ -344,8 +346,32 @@
   <string name="polygon_validator">ポリゴンを作成するには、少なくとも 3 点指定する必要があります</string>
   <string name="polyline_validator">ポリラインを作成するには、少なくとも2点指定する必要があります</string>
   <string name="clear">クリア</string>
-  <string name="manual_mode">手動モード</string>
-  <string name="automatic_mode">自動モード</string>
+  <string name="placement_mode">タップによる配置</string>
+  <string name="manual_mode">手動位置記録</string>
+  <string name="automatic_mode">自動位置記録</string>
+  <string name="recording_interval">記録間隔:</string>
+  <plurals name="number_of_seconds">
+    <item quantity="other">%d 秒</item>
+  </plurals>
+  <plurals name="number_of_minutes">
+    <item quantity="other">%d 分</item>
+  </plurals>
+  <string name="accuracy_requirement">精度要件:</string>
+  <string name="none">なし</string>
+  <plurals name="number_of_meters">
+    <item quantity="other">%d メートル</item>
+  </plurals>
+  <string name="location_status_searching">GPS の位置を検索しています、しばらくお待ちください…</string>
+  <string name="location_status_accuracy">GPS 位置精度: %.1f m</string>
+  <string name="location_status_acceptable">GPS位置精度: %.1f m (許容)</string>
+  <string name="location_status_unacceptable">GPS位置精度: %.1f m (許容不可)</string>
+  <string name="collection_status_paused">入力された位置: %d</string>
+  <string name="collection_status_placement">入力された位置: %d (タップして位置を配置)</string>
+  <string name="collection_status_manual">入力された位置: %d (手動記録)</string>
+  <string name="collection_status_auto_seconds">入力された位置: %1$d (%2$d 秒ごとに記録)</string>
+  <string name="collection_status_auto_minutes">入力された位置: %1$d (%2$d 分ごとに記録)</string>
+  <string name="collection_status_auto_seconds_accuracy">入力された位置: %1$d (%2$d 秒ごとに記録。精度 %3$d m)</string>
+  <string name="collection_status_auto_minutes_accuracy">入力された位置: %1$d (%2$d 分ごとに記録。精度 %3$d m)</string>
   <string name="geopoint_instruction">長押ししてマークするか、マーカーを追加ボタンをタップしてください。</string>
   <string name="geopoint_no_draggable_instruction">マーカーを追加ボタンをタップします。</string>
   <string name="discard">破棄</string>
@@ -367,7 +393,7 @@
   <string name="install_openmapkit">OpenMapKit をインストールしてください!</string>
   <string name="go_back">戻る</string>
   <string name="download_selected">選択済をダウンロード</string>
-  <string name="record_geopoint">地理位置を記録</string>
+  <string name="record_geopoint">位置を記録</string>
   <string name="gps_result">緯度: %1$s\n経度: %2$s\n高度: %3$sm\n精度: %4$sm</string>
   <string name="parser_exception">XPathParser 例外: \"%s\"</string>
   <string name="selected_answer">選択済: %s</string>
@@ -506,7 +532,7 @@
   <string name="invalid_email_address">メールアドレスが無効です!</string>
   <string name="sort_by">並び順</string>
   <string name="server">サーバー</string>
-  <string name="submission_transport_admin_setting">送信トランスポート</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">値を選択</string>
   <string name="edit_value">値を編集</string>
   <string name="no_value_selected">値が選択されていません</string>
@@ -643,7 +669,11 @@
   <string name="background_location_disabled">このフォームは位置を追跡しようとしますが、追跡が無効になっています。 上の %1$s メニューで有効にしてください。</string>
   <string name="background_location_enabled">このフォームは位置を追跡します。 上の %1$s メニューで追跡を無効にすることができます。</string>
   <string name="open_file">ファイルを開く</string>
+  <string name="sms_feature_disabled_dialog_title">SMS 経由の送信は無効です</string>
+  <string name="sms_feature_disabled_dialog_message">Google Play ストアの制限により、SMS による送信は無効になっています。\n\nこのデバイスを設定する人が、以下の詳細を読んで対処してください。</string>
   <string name="read_details">詳細を読む</string>
   <string name="google_sheets_encrypted_message">暗号化されたフォームは Google スプレッドに送信できません。</string>
   <string name="number_picker_title">数値選択</string>
+  <string name="too_complex_form">この形式はこの端末には複雑すぎます。 表現を単純化するか、フォーラムで助けを求めてください。</string>
+  <string name="reading_files">ファイルを読み込んでいます</string>
 </resources>

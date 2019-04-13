@@ -50,7 +50,7 @@ public final class FormsDaoHelper {
     public static String getFormLanguage(String formPath) {
         String newLanguage = "";
         try (Cursor c = new FormsDao().getFormsCursorForFormFilePath(formPath)) {
-            if (c.getCount() == 1) {
+            if (c != null && c.getCount() == 1) {
                 c.moveToFirst();
                 newLanguage = c.getString(c.getColumnIndex(FormsProviderAPI.FormsColumns.LANGUAGE));
             }

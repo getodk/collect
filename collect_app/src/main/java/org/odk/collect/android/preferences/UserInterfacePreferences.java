@@ -25,18 +25,14 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.common.collect.ObjectArrays;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.MediaUtils;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -53,10 +49,21 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_NAVIGATION;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SPLASH_PATH;
 import static org.odk.collect.android.preferences.GeneralKeys.OSM_BASEMAP_KEY;
 import static org.odk.collect.android.preferences.GeneralKeys.OSM_MAPS_BASEMAP_DEFAULT;
+import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class UserInterfacePreferences extends BasePreferenceFragment {
 
     protected static final int IMAGE_CHOOSER = 0;
+
+    public static UserInterfacePreferences newInstance(boolean adminMode) {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
+
+        UserInterfacePreferences userInterfacePreferences = new UserInterfacePreferences();
+        userInterfacePreferences.setArguments(bundle);
+
+        return userInterfacePreferences;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -253,17 +260,9 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
                 String sourceMediaPath = MediaUtils.getPathFromUri(getActivity(), selectedMedia,
                         MediaStore.Images.Media.DATA);
 
-                String sourceMediaPathHash = FileUtils.getMd5Hash(new ByteArrayInputStream(sourceMediaPath.getBytes()));
-
                 // setting image path
                 setSplashPath(sourceMediaPath);
 
-                Collect.getInstance().getDefaultTracker()
-                        .send(new HitBuilders.EventBuilder()
-                                .setCategory("PreferenceChange")
-                                .setAction("Selected splash image")
-                                .setLabel(sourceMediaPathHash)
-                                .build());
                 break;
         }
     }

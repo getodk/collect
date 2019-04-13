@@ -5,6 +5,8 @@ import android.telephony.SmsManager;
 
 import org.odk.collect.android.activities.FormDownloadList;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.activities.GoogleDriveActivity;
+import org.odk.collect.android.activities.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderListActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.application.Collect;
@@ -29,7 +31,6 @@ import javax.inject.Singleton;
 
 import dagger.BindsInstance;
 import dagger.Component;
-
 
 /**
  * Dagger component for the application. Should include
@@ -100,6 +101,10 @@ public interface AppDependencyComponent {
     void inject(FormDownloadList formDownloadList);
 
     void inject(InstanceUploaderListActivity activity);
+
+    void inject(GoogleDriveActivity googleDriveActivity);
+
+    void inject(GoogleSheetsUploaderActivity googleSheetsUploaderActivity);
 
     void inject(MediaLayout mediaLayout);
 

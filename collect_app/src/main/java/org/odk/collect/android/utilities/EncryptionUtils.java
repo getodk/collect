@@ -17,6 +17,7 @@ package org.odk.collect.android.utilities;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.util.Base64;
 
 import org.apache.commons.io.IOUtils;
@@ -427,16 +428,17 @@ public class EncryptionUtils {
         }
     }
 
-    public static boolean deletePlaintextFiles(File instanceXml) {
+    public static boolean deletePlaintextFiles(File instanceXml, @Nullable File lastSaved) {
         // NOTE: assume the directory containing the instanceXml contains ONLY
         // files related to this one instance.
         File instanceDir = instanceXml.getParentFile();
 
         boolean allSuccessful = true;
-        // encrypt files that do not end with ".enc", and do not start with ".";
+
+        // Delete files that do not end with ".enc", and do not start with ".";
         // ignore directories
-        File[] allFiles = instanceDir.listFiles();
-        for (File f : allFiles) {
+        File[] instanceFiles = instanceDir.listFiles();
+        for (File f : instanceFiles) {
             if (f.equals(instanceXml)) {
                 continue; // don't touch instance file
             }
@@ -449,6 +451,12 @@ public class EncryptionUtils {
                 // short-circuit
             }
         }
+
+        // Delete the last-saved instance, if one exists.
+        if (lastSaved != null && lastSaved.exists()) {
+            allSuccessful &= lastSaved.delete();
+        }
+
         return allSuccessful;
     }
 

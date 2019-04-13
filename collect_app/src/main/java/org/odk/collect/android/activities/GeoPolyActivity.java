@@ -339,6 +339,8 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
         }
 
         map.setClickListener(this::onClick);
+        // Also allow long press to place point to match prior versions
+        map.setLongPressListener(this::onClick);
         map.setGpsLocationEnabled(true);
         map.setGpsLocationListener(this::onGpsLocation);
         if (restoredMapCenter != null && restoredMapZoom != null) {
@@ -525,14 +527,15 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
     }
 
     private void onGpsLocationReady(MapFragment map) {
-        if (getWindow().isActive()) {
+        // Don't zoom to current location if a user is manually entering points
+        if (getWindow().isActive() && (!inputActive || recordingEnabled)) {
             map.zoomToPoint(map.getGpsLocation(), true);
         }
         updateUi();
     }
 
     private void onGpsLocation(MapPoint point) {
-        if (inputActive) {
+        if (inputActive && recordingEnabled) {
             map.setCenter(point, false);
         }
         updateUi();

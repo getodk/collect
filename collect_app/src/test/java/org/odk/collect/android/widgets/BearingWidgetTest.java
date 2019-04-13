@@ -7,7 +7,6 @@ import net.bytebuddy.utility.RandomString;
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
-import org.robolectric.RuntimeEnvironment;
 
 /**
  * @author James Knight
@@ -19,7 +18,7 @@ public class BearingWidgetTest extends BinaryWidgetTest<BearingWidget, StringDat
     @NonNull
     @Override
     public BearingWidget createWidget() {
-        return new BearingWidget(RuntimeEnvironment.application, formEntryPrompt);
+        return new BearingWidget(activity, formEntryPrompt);
     }
 
     @Override

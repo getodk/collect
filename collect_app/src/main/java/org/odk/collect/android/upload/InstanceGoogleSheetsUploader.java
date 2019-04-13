@@ -17,9 +17,6 @@ package org.odk.collect.android.upload;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.sheets.v4.model.Sheet;
 import com.google.api.services.sheets.v4.model.Spreadsheet;
@@ -40,9 +37,10 @@ import org.odk.collect.android.dto.Form;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.UrlUtils;
 import org.odk.collect.android.utilities.gdrive.DriveHelper;
@@ -74,32 +72,14 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private static final String ALTITUDE_TITLE_POSTFIX = "-altitude";
     private static final String ACCURACY_TITLE_POSTFIX = "-accuracy";
 
-    private final GoogleAccountsManager accountsManager;
     private final DriveHelper driveHelper;
     private final SheetsHelper sheetsHelper;
 
     private Spreadsheet spreadsheet;
 
     public InstanceGoogleSheetsUploader(GoogleAccountsManager accountsManager) {
-        this.accountsManager = accountsManager;
         driveHelper = accountsManager.getDriveHelper();
         sheetsHelper = accountsManager.getSheetsHelper();
-    }
-
-    public String getAuthToken() throws IOException, GoogleAuthException {
-        String token;
-        try {
-            token = accountsManager.getCredential().getToken();
-            // Immediately invalidate so we get a different one if we have to try again
-            GoogleAuthUtil.invalidateToken(accountsManager.getContext(), token);
-            return token;
-        } catch (UserRecoverableAuthException e) {
-            if (accountsManager.getActivity() != null) {
-                accountsManager.getActivity().startActivityForResult(e.getIntent(),
-                        GoogleAccountsManager.REQUEST_AUTHORIZATION);
-            }
-            return null;
-        }
     }
 
     /**
@@ -301,8 +281,12 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private TreeElement getInstanceElement(String formFilePath, File instanceFile) throws UploadException {
         FormDef formDef;
+
+        File formXml = new File(formFilePath);
+        String lastSavedSrc = FileUtils.getOrCreateLastSavedSrc(formXml);
+
         try {
-            formDef = XFormUtils.getFormFromInputStream(new FileInputStream(new File(formFilePath)));
+            formDef = XFormUtils.getFormFromInputStream(new FileInputStream(formXml), lastSavedSrc);
             FormLoaderTask.importData(instanceFile, new FormEntryController(new FormEntryModel(formDef)));
         } catch (IOException | RuntimeException e) {
             throw new UploadException(e);

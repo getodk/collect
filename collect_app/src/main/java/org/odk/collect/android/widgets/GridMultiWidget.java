@@ -39,9 +39,7 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
-import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.views.ExpandedHeightGridView;
@@ -63,7 +61,7 @@ import timber.log.Timber;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 @SuppressLint("ViewConstructor")
-public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget {
+public class GridMultiWidget extends ItemsWidget implements MultiChoiceWidget {
 
     private static final int HORIZONTAL_PADDING = 7;
     private static final int VERTICAL_PADDING = 5;
@@ -73,8 +71,6 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
 
     private final int bgOrange = getResources().getColor(R.color.highContrastHighlight);
     private final List<String> uris;
-
-    List<SelectChoice> items;
 
     // The possible select choices
     String[] choices;
@@ -96,15 +92,6 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
     @SuppressWarnings("unchecked")
     public GridMultiWidget(Context context, FormEntryPrompt prompt, int numColumns) {
         super(context, prompt);
-
-        // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
-                prompt.getAppearanceHint());
-        if (xpathFuncExpr != null) {
-            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
-        } else {
-            items = prompt.getSelectChoices();
-        }
 
         selected = new boolean[items.size()];
         choices = new String[items.size()];
