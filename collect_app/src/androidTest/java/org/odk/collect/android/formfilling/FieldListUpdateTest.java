@@ -235,6 +235,28 @@ public class FieldListUpdateTest {
         onView(withText("C1")).check(doesNotExist());
     }
 
+    // TODO: figure out why the third level isn't cleared. Wondering whether there might be an issue
+    // with populateDynamicChoices
+    //    @Test
+    //    public void clearingParentSelect_ShouldUpdateAllDependentLevels() {
+    //        onView(withId(R.id.menu_goto)).perform(click());
+    //        onView(withId(R.id.menu_go_up)).perform(click());
+    //        onView(allOf(withText("Cascading select"), isDisplayed())).perform(click());
+    //        onView(withText(startsWith("Level1"))).perform(click());
+    //
+    //        onView(withText("A")).perform(click());
+    //        onView(withText("A1")).perform(click());
+    //        onView(withText("A1B")).perform(click());
+    //
+    //        onView(withText("A")).perform(longClick());
+    //        onView(withText(R.string.clear_answer)).perform(click());
+    //        onView(withText(R.string.discard_answer)).perform(click());
+    //
+    //        onView(withIndex(withClassName(endsWith("RadioButton")), 0)).check(matches(isNotChecked()));
+    //        onView(withText("A1")).check(doesNotExist());
+    //        onView(withText("A1B")).check(doesNotExist());
+    //    }
+
     private static class FormEntryActivityTestRule extends IntentsTestRule<FormEntryActivity> {
         FormEntryActivityTestRule() {
             super(FormEntryActivity.class);

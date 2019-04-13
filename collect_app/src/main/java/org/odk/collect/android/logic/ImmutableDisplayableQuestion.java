@@ -73,9 +73,10 @@ public class ImmutableDisplayableQuestion {
         answerText = question.getAnswerText();
         isReadOnly = question.isReadOnly();
 
-        if (question.getSelectChoices() != null) {
+        List<SelectChoice> choices = question.getSelectChoices();
+        if (choices != null) {
             selectChoices = new ArrayList<>();
-            selectChoices.addAll(question.getSelectChoices());
+            selectChoices.addAll(choices);
         }
     }
 
@@ -94,6 +95,61 @@ public class ImmutableDisplayableQuestion {
                 && (question.getHelpText() == null ? helpText == null : question.getHelpText().equals(helpText))
                 && (question.getAnswerText() == null ? answerText == null : question.getAnswerText().equals(answerText))
                 && (question.isReadOnly() == isReadOnly)
-                && (question.getSelectChoices() == null ? selectChoices == null : question.getSelectChoices().equals(selectChoices));
+                && selectChoiceListsEqual(question.getSelectChoices(), selectChoices);
+    }
+
+    private static boolean selectChoiceListsEqual(List<SelectChoice> selectChoiceList1, List<SelectChoice> selectChoiceList2) {
+        if (selectChoiceList1 == null) {
+            return selectChoiceList2 == null;
+        }
+
+        if (selectChoiceList1.size() != selectChoiceList2.size()) {
+            return false;
+        }
+
+        for (int i = 0; i < selectChoiceList1.size(); i++) {
+            if (!selectChoicesEqual(selectChoiceList1.get(i), selectChoiceList2.get(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * TODO: move this to {@link SelectChoice} (JavaRosa)
+     */
+    private static boolean selectChoicesEqual(SelectChoice selectChoice1, SelectChoice selectChoice2) {
+        if (selectChoice1 == null) {
+            return selectChoice2 == null;
+        }
+
+        if (selectChoice1.getLabelInnerText() == null) {
+            if (selectChoice2.getLabelInnerText() != null) {
+                return false;
+            }
+        } else if (!selectChoice1.getLabelInnerText().equals(selectChoice2.getLabelInnerText())) {
+            return false;
+        }
+
+        if (selectChoice1.getTextID() == null) {
+            if (selectChoice2.getTextID() != null) {
+                return false;
+            }
+        } else if (!selectChoice1.getTextID().equals(selectChoice2.getTextID())) {
+            return false;
+        }
+
+        if (selectChoice1.getValue() == null) {
+            if (selectChoice2.getValue() != null) {
+                return false;
+            }
+        } else if (!selectChoice1.getValue().equals(selectChoice2.getValue())) {
+            return false;
+        }
+
+        return selectChoice1.getIndex() == selectChoice2.getIndex()
+                && selectChoice1.isLocalizable() == selectChoice2.isLocalizable()
+                && selectChoice1.copyNode == selectChoice2.copyNode;
     }
 }
