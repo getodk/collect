@@ -150,11 +150,6 @@ public class SmapTaskListFragment extends ListFragment
                 getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
         };
 
-        if(b != null) {
-            isSearchBoxShown = b.getBoolean(IS_SEARCH_BOX_SHOWN);
-            savedFilterText = b.getString(SEARCH_TEXT);
-        }
-
         // Handle long item clicks
         ListView lv = getListView();
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -167,14 +162,6 @@ public class SmapTaskListFragment extends ListFragment
         adminPreferences = getActivity().getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle b) {
-        super.onSaveInstanceState(b);
-
-        b.putBoolean(IS_SEARCH_BOX_SHOWN, !searchView.isIconified());
-        b.putString(SEARCH_TEXT, String.valueOf(searchView.getQuery()));
     }
 
 

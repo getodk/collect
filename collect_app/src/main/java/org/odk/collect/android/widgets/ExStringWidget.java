@@ -105,12 +105,12 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
 
     protected EditText answer;
     private boolean hasExApp = true;
-    private final Button launchIntentButton;
+    public final Button launchIntentButton;     // Smap make public
     private final Drawable textBackground;
 
     private ActivityAvailability activityAvailability;
 
-    public ExStringWidget(Context context, FormEntryPrompt prompt, String appearance) {     // smap add appearance
+    public ExStringWidget(Context context, FormEntryPrompt prompt) {
 
         super(context, prompt);
 
@@ -163,11 +163,6 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
                         .setLabel(Collect.getCurrentFormIdentifierHash())
                         .build());
                         */
-
-        // smap automatically launch external widget if auto is set
-        if(appearance != null && appearance.contains("auto")) {
-            launchIntentButton.performClick();
-        }
 
     }
 

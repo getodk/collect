@@ -60,8 +60,8 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
 
     protected EditText answer;
     private boolean hasExApp = true;
-    private final Button launchIntentButton;
-    private EditText launching;
+    public final Button launchIntentButton;
+    public EditText launching;
     private final Drawable textBackground;
 
     private ManageForm mf;
@@ -166,11 +166,13 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
         answerLayout.addView(launching);
         addAnswerView(answerLayout);
 
+        /*
         if(appearance != null && appearance.contains("auto")) {
             launchIntentButton.performClick();
             launchIntentButton.setVisibility(GONE);
             launching.setVisibility(VISIBLE);
         }
+        */
 
     }
 

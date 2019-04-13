@@ -83,7 +83,7 @@ public class WidgetFactory {
                         break;
                     case Constants.DATATYPE_DECIMAL:
                         if (appearance.contains("ex:")) {     // smap change to contains rather than equals
-                            questionWidget = new ExDecimalWidget(context, fep, appearance);     // smap add appearance
+                            questionWidget = new ExDecimalWidget(context, fep);
                         } else if (appearance.contains("bearing")) {    // smap change to contains rather than equals
                             questionWidget = new BearingWidget(context, fep);
                         } else {
@@ -97,7 +97,7 @@ public class WidgetFactory {
                         break;
                     case Constants.DATATYPE_INTEGER:
                         if (appearance.startsWith("ex:")) {
-                            questionWidget = new ExIntegerWidget(context, fep, appearance);     // smap add appperance
+                            questionWidget = new ExIntegerWidget(context, fep);
                         } else {
                             boolean useThousandSeparator = false;
                             if (appearance.contains("thousands-sep")) {
@@ -139,7 +139,7 @@ public class WidgetFactory {
                         } else if (appearance.contains("printer")) {	// smap change to contains rather than equals
                             questionWidget = new ExPrinterWidget(context, fep);
                         } else if (appearance.contains("ex:")) {          // smap change to contains rather than equals
-                            questionWidget = new ExStringWidget(context, fep, appearance);      // smap add appearance
+                            questionWidget = new ExStringWidget(context, fep);
                         } else if (appearance.contains("numbers")) {
                             boolean useThousandsSeparator = false;
                             if (appearance.contains("thousands-sep")) {

@@ -61,7 +61,9 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
+import org.odk.collect.android.widgets.SmapFormWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
@@ -116,11 +118,11 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
         // when the grouped fields are populated by an external app, this will get true.
         boolean readOnlyOverride = false;
 
-        // Smap set read only if this is a completed task
+        // smap set read only if this is a completed task
         if (!canUpdate) {
             readOnlyOverride = true;
         }
-        // Smap
+        // smap end
 
         // get the group we are showing -- it will be the last of the groups in the groups list
         if (groups != null && groups.length > 0) {
@@ -203,7 +205,10 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
         }
 
         boolean first = true;
-        FormEntryPrompt nfcPrompt = null;   // smap
+        FormEntryPrompt nfcPrompt = null;       // smap
+        FormEntryPrompt exPrompt = null;        // smap
+        FormEntryPrompt formPrompt = null;      // smap
+
         int id = 0;
         for (FormEntryPrompt p : questionPrompts) {
             if (!first) {
@@ -226,16 +231,42 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
             view.addView(qw, layout);
 
             // Start smap
+            String appearance = p.getAppearanceHint();
+            if (appearance == null) appearance = "";
+            appearance = appearance.toLowerCase(Locale.ENGLISH);
+
             // Auto get NFC if first question, and not already obtained a code
-            if (first && p.getDataType() == Constants.DATATYPE_BARCODE) {
-                String appearance = p.getAppearanceHint();
-                if (appearance == null) appearance = "";
-                appearance = appearance.toLowerCase(Locale.ENGLISH);
-                if (appearance.contains("read_nfc")) {
-                    // Make sure an NFC code has not alredy been retrieved
-                    String s = p.getAnswerText();
-                    if (s == null) {
-                        nfcPrompt = p;
+            if(first) {
+                if (p.getDataType() == Constants.DATATYPE_BARCODE) {
+                    if (appearance.contains("read_nfc")) {
+                        // Make sure an NFC code has not alredy been retrieved
+                        String s = p.getAnswerText();
+                        if (s == null) {
+                            nfcPrompt = p;
+                        }
+                    }
+                }
+
+                // Other types auto launch only if the auto parameter is set
+                String auto = widgets.get(
+                        0).getFormEntryPrompt().getFormElement().getAdditionalAttribute(null, "auto");
+                String form_identifier = widgets.get(
+                        0).getFormEntryPrompt().getFormElement().getAdditionalAttribute(null, "form_identifier");
+
+                boolean autoLaunch = (auto != null && (auto.equals("yes") || auto.equals("true"))) ? true : false;
+                String s = p.getAnswerText();    // Make sure a value has not alredy been retrieved
+
+                // Auto get External Launch if first question, and not already obtained a value
+                if(nfcPrompt == null && autoLaunch && s == null) {
+                    if (appearance.trim().startsWith("ex:") &&
+                            (p.getDataType() == Constants.DATATYPE_INTEGER ||
+                            p.getDataType() == Constants.DATATYPE_DECIMAL ||
+                            p.getDataType() == Constants.DATATYPE_TEXT)) {
+
+                        exPrompt = p;
+
+                    } else if (form_identifier != null && p.getDataType() == Constants.DATATYPE_TEXT) {
+                        formPrompt = p;
                     }
                 }
             }
@@ -270,6 +301,18 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
                         .setIndexWaitingForData(nfcPrompt.getIndex());
                 ((Activity) getContext()).startActivityForResult(i,
                         RequestCodes.NFC_CAPTURE);
+            } else if (exPrompt != null) {    // Smap - auto external app
+                ExStringWidget exWidget = (ExStringWidget) widgets.get(0);
+                if(exWidget != null) {
+                    exWidget.launchIntentButton.performClick();
+                }
+            } else if (formPrompt != null) {    // Smap - launch form
+                SmapFormWidget formWidget = (SmapFormWidget) widgets.get(0);
+                if(formWidget != null) {
+                    formWidget.launchIntentButton.performClick();
+                    formWidget.launchIntentButton.setVisibility(GONE);
+                    formWidget.launching.setVisibility(VISIBLE);
+                }
             }
         }
     }
