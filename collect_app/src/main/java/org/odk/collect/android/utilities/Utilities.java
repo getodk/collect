@@ -60,6 +60,8 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
+import static java.lang.StrictMath.abs;
+
 public class Utilities {
 
     @Inject
@@ -466,12 +468,17 @@ public class Utilities {
                         taskLocation.setLongitude(entry.schedLon);
 
                         float distance = location.distanceTo(taskLocation);
-                        Timber.i("############ Distance: " + entry.displayName + " : " + distance + " : show dist : " + entry.showDist);
 
+                        /*
+                         * Do a quick check on latitude before the slower check on longitude
+                         */
                         GeofenceEntry gfe = new GeofenceEntry(entry.showDist, taskLocation);
-                        if(distance < entry.showDist) {
-                            tasks.add(entry);
-                            gfe.in = true;
+                        double yDistance = abs(location.getLatitude() - gfe.location.getLatitude()) * 111111.1;     // lattitude difference in meters
+                        if(yDistance < entry.showDist) {            // rough check
+                            if (distance < entry.showDist) {        // detailed check
+                                tasks.add(entry);
+                                gfe.in = true;
+                            }
                         }
 
                         geofences.add(gfe);

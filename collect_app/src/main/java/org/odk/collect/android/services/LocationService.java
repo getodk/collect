@@ -20,11 +20,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -46,6 +48,8 @@ import java.util.TimerTask;
 
 import timber.log.Timber;
 
+import static java.lang.StrictMath.abs;
+
 /**
  * Created by neilpenman on 2018-01-11.
  */
@@ -53,7 +57,7 @@ import timber.log.Timber;
 /*
  * Respond to a notification from the server
  */
-public class LocationService extends Service {
+public class LocationService extends Service implements GoogleApiClient.ConnectionCallbacks {
 
     Handler mHandler = new Handler();           // Background thread to check for enabling / disabling the location listener
     private LocationRequest locationRequest;
@@ -90,6 +94,19 @@ public class LocationService extends Service {
         startLocationUpdates();
 
         return START_STICKY;
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Timber.i("++++++++++Connected to provider");
+        stopLocationUpdates();
+        startLocationUpdates();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Timber.i("+++++++++++ Connection Suspended");
+        stopLocationUpdates();
     }
 
     /*
@@ -159,15 +176,20 @@ public class LocationService extends Service {
                 boolean refresh = false;
                 boolean notify = false;
                 for(GeofenceEntry gfe : geofences) {
-                    if(gfe.in) {
-                        if(location.distanceTo(gfe.location) > gfe.showDist) {
-                            refresh = true;
+                    double yDistance = abs(location.getLatitude() - gfe.location.getLatitude()) * 111111.1;     // lattitude difference in meters
+                    if(gfe.in) {                                                            // Currently inside
+                        if(yDistance > gfe.showDist) {                                      // rough check
+                            if (location.distanceTo(gfe.location) > gfe.showDist) {         // detailed check
+                                refresh = true;
+                            }
                         }
                     } else {
-                        if(location.distanceTo(gfe.location) < gfe.showDist) {
-                            refresh = true;
-                            notify = true;
-                            break;      // No need to check more we have a notify and a refresh
+                        if(yDistance < gfe.showDist) {                                      // Currently outside
+                            if (location.distanceTo(gfe.location) < gfe.showDist) {
+                                refresh = true;
+                                notify = true;
+                                break;      // No need to check more we have a notify and a refresh
+                            }
                         }
                     }
                 }
@@ -182,6 +204,7 @@ public class LocationService extends Service {
                             R.string.app_name,
                             getString(R.string.smap_geofence_tasks), false);
                 }
+
             }
 
             /*
@@ -243,6 +266,10 @@ public class LocationService extends Service {
                     Timber.i("=================== Periodic check for user settings ");
                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
                     enabledTracking = sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
+
+                    // Restart location monitoring - Incase pemission was disabled and then reenabled
+                    stopLocationUpdates();
+                    startLocationUpdates();
                 }
             });
 

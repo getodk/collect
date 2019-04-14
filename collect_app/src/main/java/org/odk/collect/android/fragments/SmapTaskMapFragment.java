@@ -14,7 +14,9 @@
 
 package org.odk.collect.android.fragments;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -63,6 +65,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.loaders.MapEntry;
 import org.odk.collect.android.loaders.PointEntry;
 import org.odk.collect.android.loaders.TaskEntry;
@@ -71,6 +74,7 @@ import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.KeyValueJsonFns;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.Utilities;
 
 import java.util.ArrayList;
@@ -218,46 +222,27 @@ public class SmapTaskMapFragment extends Fragment
     public void onMapReady(GoogleMap googleMap) {
         Timber.i("######## onMapReady");
         mMap = googleMap;
-        if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Check Permissions Now
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-        } else {
-            mapReadyPermissionGranted();
-        }
 
-
-    }
-
-    public void onRequestPermissionsResult(int requestCode,
-                                           String[] permissions,
-                                           int[] grantResults) {
-        if (requestCode == REQUEST_LOCATION) {
-            if(grantResults.length == 1
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // We can now safely use the API we requested access to
+        new PermissionUtils().requestLocationPermissions((Activity) getContext(), new PermissionListener() {
+            @Override
+            public void granted() {
                 mapReadyPermissionGranted();
-            } else {
-                // Permission was denied or request was cancelled
             }
-        }
+
+            @Override
+            public void denied() {
+            }
+        });
+
+
     }
 
+    @SuppressLint("MissingPermission")
     private void mapReadyPermissionGranted() {
 
-        boolean locationEnabled = ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED;
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
-        if (locationEnabled){
-            mMap.getUiSettings().setMyLocationButtonEnabled(true);
-            mMap.setMyLocationEnabled(true);
-        } else {
-            mMap.setMyLocationEnabled(false);
-            //mMap.getUiSettings().setMyLocationButtonEnabled(false);
-        }
+        mMap.setMyLocationEnabled(true);
 
         mHelper = new MapHelper(getActivity(), mMap, 0);    // Default selected layer
         mHelper.setBasemap();
@@ -270,23 +255,21 @@ public class SmapTaskMapFragment extends Fragment
         triggered = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_triggered));
         triggered_repeat = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_triggered));
 
-        if (locationEnabled) {
-            location_button = getActivity().findViewById(R.id.show_location);
-            location_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Location location = mMap.getMyLocation();
 
-                    if (location != null) {
-                        LatLng myLocation = new LatLng(location.getLatitude(),
-                                location.getLongitude());
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 17));
-                    }
+        location_button = getActivity().findViewById(R.id.show_location);
+        location_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Location location = mMap.getMyLocation();
 
+                if (location != null) {
+                    LatLng myLocation = new LatLng(location.getLatitude(),
+                            location.getLongitude());
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 17));
                 }
-            });
-        }
 
+            }
+        });
 
         layers_button = getActivity().findViewById(R.id.layers);
         layers_button.setOnClickListener(new View.OnClickListener() {
