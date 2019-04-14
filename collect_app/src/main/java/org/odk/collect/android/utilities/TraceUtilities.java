@@ -84,8 +84,10 @@ public class TraceUtilities {
 
         Uri dbUri =  TraceColumns.CONTENT_URI;
 
-        String [] selectArgs = {"", ""};
-        selectArgs[0] = Utilities.getSource();
+        String [] selectArgsAll = {""};
+        String [] selectArgsLimit = {"", ""};
+        String [] selectArgs;
+
 
         String selectClauseAll = TraceColumns.SOURCE + " = ?";
         String selectClauseLimit = TraceColumns.SOURCE + " = ? and "
@@ -94,10 +96,13 @@ public class TraceUtilities {
 
         if(lastId > 0) {
             selectClause = selectClauseLimit;
+            selectArgs = selectArgsLimit;
             selectArgs[1] = String.valueOf(lastId);
         } else {
             selectClause = selectClauseAll;
+            selectArgs = selectArgsAll;
         }
+        selectArgs[0] = Utilities.getSource();
 
         boolean status;
         try {

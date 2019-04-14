@@ -663,6 +663,9 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             // Get Points
             updateResponse.userTrail = new ArrayList<>(100);
             lastTraceIdSent = TraceUtilities.getPoints(updateResponse.userTrail);
+        } else {
+            // Delete any points that had been collected
+            TraceUtilities.deleteSource(0);
         }
 
         if(updateResponse.taskAssignments.size() > 0 ||
@@ -841,32 +844,6 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
     	
     	return dfResults;
 	}
-
-	/*
-     * Return true if the passed in instance file is in the odk instance database
-     * Assume that if it has been deleted from the database then it can't be sent although
-     * it is probably still on the sdcard
-     */
-    boolean instanceExists(String instancePath) {
-    	boolean exists = true;
-    	
-    	// Get the provider URI of the instance 
-        String where = InstanceColumns.INSTANCE_FILE_PATH + "=?";
-        String[] whereArgs = {
-            instancePath
-        };
-        
-    	ContentResolver cr = Collect.getInstance().getContentResolver();
-		Cursor cInstanceProvider = cr.query(InstanceColumns.CONTENT_URI, 
-				null, where, whereArgs, null);
-		if(cInstanceProvider.getCount() != 1) {
-			Timber.e("Unique instance not found: count is:" +
-					cInstanceProvider.getCount());
-			exists = false;
-		}
-		cInstanceProvider.close();
-    	return exists;
-    }
 
     /*
      * Remove any shared media files from the current organisation that are not referenced by a form
