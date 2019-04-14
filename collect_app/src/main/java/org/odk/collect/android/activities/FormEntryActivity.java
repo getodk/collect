@@ -270,6 +270,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private TextView backButton;
 
     private ODKView odkView;
+
     private boolean doSwipe = true;
     private String instancePath;
     private String startingXPath;
@@ -2932,7 +2933,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         List<FormEntryPrompt> questionsThatHaveNotChanged = new ArrayList<>();
         for (int i = immutableQuestionsBeforeSave.size() - 1; i >= 0; i--) {
-            FormEntryPrompt questionAtSameFormIndex = questionsAfterSaveByIndex.get(immutableQuestionsBeforeSave.get(i).getFormIndex());
+            // We'd like to use questionsAfterSaveByIndex.get but we can't because FormIndex
+            // doesn't implement hashCode and we're not guaranteed the two FormIndexes will be
+            // the same reference
+            FormEntryPrompt questionAtSameFormIndex = null;
+            for (FormIndex index : questionsAfterSaveByIndex.keySet()) {
+                if (immutableQuestionsBeforeSave.get(i).getFormIndex().equals(index)) {
+                    questionAtSameFormIndex = questionsAfterSaveByIndex.get(index);
+                }
+            }
 
             if (immutableQuestionsBeforeSave.get(i).sameAs(questionAtSameFormIndex)) {
                 questionsThatHaveNotChanged.add(questionAtSameFormIndex);

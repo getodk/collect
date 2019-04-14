@@ -257,6 +257,46 @@ public class FieldListUpdateTest {
     //        onView(withText("A1B")).check(doesNotExist());
     //    }
 
+    @Test
+    public void selectionChangeAtOneCascadeLevelWithMinimalAppearance_ShouldUpdateNextLevels() {
+        onView(withId(R.id.menu_goto)).perform(click());
+        onView(withId(R.id.menu_go_up)).perform(click());
+        onView(allOf(withText("Cascading select minimal"), isDisplayed())).perform(click());
+        onView(withText(startsWith("Level1"))).perform(click());
+
+        // No choices should be shown for levels 2 and 3 when no selection is made for level 1
+        onView(withText("A1")).check(doesNotExist());
+        onView(withText("B1")).check(doesNotExist());
+        onView(withText("C1")).check(doesNotExist());
+        onView(withText("A1A")).check(doesNotExist());
+
+        // Selecting C for level 1 should only reveal options for C at level 2
+        onView(withIndex(withText(R.string.select_one), 0)).perform(click());
+        onView(withText("C")).perform(click());
+        onView(withText("A1")).check(doesNotExist());
+        onView(withText("B1")).check(doesNotExist());
+        onView(withIndex(withText(R.string.select_one), 0)).perform(click());
+        onView(withText("C1")).perform(click());
+        onView(withText("A1A")).check(doesNotExist());
+
+        // Selecting A for level 1 should reveal options for A at level 2
+        onView(withText("C")).perform(click());
+        onView(withText("A")).perform(click());
+        onView(withIndex(withText(R.string.select_one), 0)).perform(click());
+        onView(withText("A1")).check(matches(isDisplayed()));
+        onView(withText("A1A")).check(doesNotExist());
+        onView(withText("B1")).check(doesNotExist());
+        onView(withText("C1")).check(doesNotExist());
+
+        // Selecting A1 for level 2 should reveal options for A1 at level 3
+        onView(withText("A1")).perform(click());
+        onView(withIndex(withText(R.string.select_one), 0)).perform(click());
+        onView(withText("A1A")).check(matches(isDisplayed()));
+        onView(withText("B1A")).check(doesNotExist());
+        onView(withText("B1")).check(doesNotExist());
+        onView(withText("C1")).check(doesNotExist());
+    }
+
     private static class FormEntryActivityTestRule extends IntentsTestRule<FormEntryActivity> {
         FormEntryActivityTestRule() {
             super(FormEntryActivity.class);

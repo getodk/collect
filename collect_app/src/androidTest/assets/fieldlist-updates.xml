@@ -50,6 +50,12 @@
           <text id="static_instance-level3-1">
             <value>A1B</value>
           </text>
+          <text id="static_instance-level3-2">
+            <value>B1A</value>
+          </text>
+          <text id="static_instance-level3-3">
+            <value>B1B</value>
+          </text>
         </translation>
       </itext>
       <instance>
@@ -84,6 +90,11 @@
             <target7/>
             <target7-1/>
           </cascading_select>
+          <cascading_select_minimal>
+            <source8/>
+            <target8/>
+            <target8-1/>
+          </cascading_select_minimal>
           <meta>
             <instanceID/>
           </meta>
@@ -109,53 +120,53 @@
         <root>
           <item>
             <itextId>static_instance-level2-0</itextId>
-            <name>a1</name>
             <level1>a</level1>
+            <name>a1</name>
           </item>
           <item>
             <itextId>static_instance-level2-1</itextId>
-            <name>a2</name>
             <level1>a</level1>
+            <name>a2</name>
           </item>
           <item>
             <itextId>static_instance-level2-2</itextId>
-            <name>a3</name>
             <level1>a</level1>
+            <name>a3</name>
           </item>
           <item>
             <itextId>static_instance-level2-3</itextId>
-            <name>b1</name>
             <level1>b</level1>
+            <name>b1</name>
           </item>
           <item>
             <itextId>static_instance-level2-4</itextId>
-            <name>b2</name>
             <level1>b</level1>
+            <name>b2</name>
           </item>
           <item>
             <itextId>static_instance-level2-5</itextId>
-            <name>b3</name>
             <level1>b</level1>
+            <name>b3</name>
           </item>
           <item>
             <itextId>static_instance-level2-6</itextId>
-            <name>c1</name>
             <level1>c</level1>
+            <name>c1</name>
           </item>
           <item>
             <itextId>static_instance-level2-7</itextId>
-            <name>c2</name>
             <level1>c</level1>
+            <name>c2</name>
           </item>
           <item>
             <itextId>static_instance-level2-8</itextId>
-            <name>c3</name>
             <level1>c</level1>
+            <name>c3</name>
           </item>
           <item>
             <itextId>static_instance-level2-9</itextId>
-            <name>c4</name>
             <level1>c</level1>
+            <name>c4</name>
           </item>
         </root>
       </instance>
@@ -163,13 +174,23 @@
         <root>
           <item>
             <itextId>static_instance-level3-0</itextId>
-            <level2>a1</level2>
             <name>a1a</name>
+            <level2>a1</level2>
           </item>
           <item>
             <itextId>static_instance-level3-1</itextId>
-            <level2>a1</level2>
             <name>a1b</name>
+            <level2>a1</level2>
+          </item>
+          <item>
+            <itextId>static_instance-level3-2</itextId>
+            <name>b1a</name>
+            <level2>b1</level2>
+          </item>
+          <item>
+            <itextId>static_instance-level3-3</itextId>
+            <name>b1b</name>
+            <level2>b1</level2>
           </item>
         </root>
       </instance>
@@ -189,6 +210,9 @@
       <bind nodeset="/fieldlist-updates/cascading_select/source7" type="select1"/>
       <bind nodeset="/fieldlist-updates/cascading_select/target7" type="select1"/>
       <bind nodeset="/fieldlist-updates/cascading_select/target7-1" type="select1"/>
+      <bind nodeset="/fieldlist-updates/cascading_select_minimal/source8" type="select1"/>
+      <bind nodeset="/fieldlist-updates/cascading_select_minimal/target8" type="select1"/>
+      <bind nodeset="/fieldlist-updates/cascading_select_minimal/target8-1" type="select1"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/fieldlist-updates/meta/instanceID" readonly="true()" type="string"/>
     </model>
   </h:head>
@@ -278,6 +302,38 @@
       <select1 ref="/fieldlist-updates/cascading_select/target7-1">
         <label>Level3</label>
         <itemset nodeset="instance('level3')/root/item[level2 =  /fieldlist-updates/cascading_select/target7 ]">
+          <value ref="name"/>
+          <label ref="jr:itext(itextId)"/>
+        </itemset>
+      </select1>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/cascading_select_minimal">
+      <label>Cascading select minimal</label>
+      <select1 appearance="minimal" ref="/fieldlist-updates/cascading_select_minimal/source8">
+        <label>Level1</label>
+        <item>
+          <label>A</label>
+          <value>a</value>
+        </item>
+        <item>
+          <label>B</label>
+          <value>b</value>
+        </item>
+        <item>
+          <label>C</label>
+          <value>c</value>
+        </item>
+      </select1>
+      <select1 appearance="minimal" ref="/fieldlist-updates/cascading_select_minimal/target8">
+        <label>Level2</label>
+        <itemset nodeset="instance('level2')/root/item[level1 =  /fieldlist-updates/cascading_select_minimal/source8 ]">
+          <value ref="name"/>
+          <label ref="jr:itext(itextId)"/>
+        </itemset>
+      </select1>
+      <select1 appearance="minimal" ref="/fieldlist-updates/cascading_select_minimal/target8-1">
+        <label>Level3</label>
+        <itemset nodeset="instance('level3')/root/item[level2 =  /fieldlist-updates/cascading_select_minimal/target8 ]">
           <value ref="name"/>
           <label ref="jr:itext(itextId)"/>
         </itemset>
