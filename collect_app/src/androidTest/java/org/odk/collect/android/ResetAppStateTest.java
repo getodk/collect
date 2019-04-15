@@ -49,7 +49,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class ResetAppStateTestCase {
+public class ResetAppStateTest {
 
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
