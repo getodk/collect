@@ -117,7 +117,6 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        clearFocus();
         int i = spinner.getSelectedItemPosition();
         if (i == -1 || i == items.size()) {
             return null;

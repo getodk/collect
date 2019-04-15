@@ -137,8 +137,6 @@ public class StringWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        clearFocus();
-
         String s = getAnswerText();
         return !s.equals("") ? new StringData(s) : null;
     }

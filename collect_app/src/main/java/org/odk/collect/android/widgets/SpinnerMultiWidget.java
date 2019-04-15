@@ -116,7 +116,6 @@ public class SpinnerMultiWidget extends ItemsWidget implements ButtonWidget, Mul
 
     @Override
     public IAnswerData getAnswer() {
-        clearFocus();
         List<Selection> vc = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
             if (selections[i]) {

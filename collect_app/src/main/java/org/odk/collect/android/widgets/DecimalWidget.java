@@ -122,7 +122,6 @@ public class DecimalWidget extends StringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        clearFocus();
         String s = getAnswerTextField().getText().toString();
         if (useThousandSeparator) {
             s = ThousandsSeparatorTextWatcher.getOriginalString(s);

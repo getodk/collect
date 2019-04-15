@@ -87,7 +87,6 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
 
     @Override
     public IAnswerData getAnswer() {
-        clearFocus();
         return isNullAnswer ? null : new DateData(date.toDate());
     }
 

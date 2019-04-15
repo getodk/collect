@@ -75,8 +75,6 @@ public class DateTimeWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        clearFocus();
-
         if (isNullAnswer()) {
             return null;
         } else {
