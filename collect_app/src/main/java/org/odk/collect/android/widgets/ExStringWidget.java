@@ -107,7 +107,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     private final Button launchIntentButton;
     private final Drawable textBackground;
 
-    private ActivityAvailability activityAvailability = new ActivityAvailability(getContext());
+    private ActivityAvailability activityAvailability;
 
     public ExStringWidget(Context context, FormEntryPrompt prompt) {
 
