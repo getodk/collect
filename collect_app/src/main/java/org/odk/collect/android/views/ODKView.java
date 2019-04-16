@@ -552,8 +552,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     }
 
     /**
-     * Highlights the question at the given {@link FormIndex} in red for 2.5 seconds and scrolls the
-     * view to display that question at the top.
+     * Highlights the question at the given {@link FormIndex} in red for 2.5 seconds, scrolls the
+     * view to display that question at the top and gives it focus.
      */
     public void highlightWidget(FormIndex formIndex) {
         QuestionWidget qw = getQuestionWidget(formIndex);
@@ -562,6 +562,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             // postDelayed is needed because otherwise scrolling may not work as expected in case when
             // answers are validated during form finalization.
             new Handler().postDelayed(() -> {
+                qw.setFocus(getContext());
                 findViewById(R.id.odk_view_container).scrollTo(0, qw.getTop());
 
                 ValueAnimator va = new ValueAnimator();
