@@ -18,7 +18,10 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import timber.log.Timber;
+
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -143,6 +146,7 @@ public abstract class SelectWidget extends ItemsWidget {
     protected RecyclerView setUpRecyclerView() {
         RecyclerView recyclerView = (RecyclerView) LayoutInflater.from(getContext()).inflate(R.layout.recycler_view, null); // keep in an xml file to enable the vertical scrollbar
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), getNumberOfColumns()));
 
         return recyclerView;
     }
@@ -156,5 +160,26 @@ public abstract class SelectWidget extends ItemsWidget {
         } else {
             recyclerView.setNestedScrollingEnabled(false);
         }
+    }
+
+    private int getNumberOfColumns() {
+        String columnsAppearance = "columns";
+
+        int numberOfColumns = 1;
+        String appearance = WidgetFactory.getAppearance(getFormEntryPrompt());
+        if (appearance.contains(columnsAppearance)) {
+            try {
+                appearance =
+                        appearance.substring(appearance.indexOf(columnsAppearance), appearance.length());
+                int idx = appearance.indexOf('-');
+                if (idx != -1) {
+                    numberOfColumns = Integer.parseInt(appearance.substring(idx + 1));
+                }
+            } catch (Exception e) {
+                Timber.e("Exception parsing columns");
+            }
+        }
+
+        return numberOfColumns;
     }
 }

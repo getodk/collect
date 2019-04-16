@@ -22,6 +22,7 @@ import org.odk.collect.android.external.ExternalDataUtil;
 
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
 import timber.log.Timber;
 
 /**
@@ -45,18 +46,7 @@ public class WidgetFactory {
     public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context,
                                                         boolean readOnlyOverride) {
 
-        // Get appearance hint and clean it up so it is lower case and never null.
-        String appearance = fep.getAppearanceHint();
-        if (appearance == null) {
-            appearance = "";
-        }
-        // For now, all appearance tags are in English.
-        appearance = appearance.toLowerCase(Locale.ENGLISH);
-
-        // Strip out the search() appearance/function which is handled in ExternalDataUtil so that
-        // it is not considered when matching other appearances. For example, a file named list.csv
-        // used as a parameter to search() should not be interpreted as a list appearance.
-        appearance = ExternalDataUtil.SEARCH_FUNCTION_REGEX.matcher(appearance).replaceAll("");
+        String appearance = getAppearance(fep);
 
         final QuestionWidget questionWidget;
         switch (fep.getControlType()) {
@@ -271,5 +261,24 @@ public class WidgetFactory {
         }
 
         return questionWidget;
+    }
+
+    // Get appearance hint and clean it up so it is lower case, without the search function and never null.
+    @NonNull
+    static String getAppearance(FormEntryPrompt fep) {
+        String appearance = fep.getAppearanceHint();
+        if (appearance == null) {
+            appearance = "";
+        } else {
+            // For now, all appearance tags are in English.
+            appearance = appearance.toLowerCase(Locale.ENGLISH);
+
+            // Strip out the search() appearance/function which is handled in ExternalDataUtil so that
+            // it is not considered when matching other appearances. For example, a file named list.csv
+            // used as a parameter to search() should not be interpreted as a list appearance.
+            appearance = ExternalDataUtil.SEARCH_FUNCTION_REGEX.matcher(appearance).replaceAll("");
+        }
+
+        return appearance;
     }
 }
