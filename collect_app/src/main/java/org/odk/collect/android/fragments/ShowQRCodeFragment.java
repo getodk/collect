@@ -235,6 +235,7 @@ public class ShowQRCodeFragment extends Fragment {
         if (requestCode == SELECT_PHOTO) {
             if (resultCode == Activity.RESULT_OK) {
                 try {
+                    boolean qrCodeFound = false;
                     final Uri imageUri = data.getData();
                     if (imageUri != null) {
                         final InputStream imageStream = getActivity().getContentResolver()
@@ -244,12 +245,12 @@ public class ShowQRCodeFragment extends Fragment {
                         if (bitmap != null) {
                             String response = QRCodeUtils.decodeFromBitmap(bitmap);
                             if (response != null) {
+                                qrCodeFound = true;
                                 applySettings(response);
-                            } else {
-                                ToastUtils.showLongToast(R.string.qr_code_not_found);
                             }
                         }
-                    } else {
+                    }
+                    if (!qrCodeFound) {
                         ToastUtils.showLongToast(R.string.qr_code_not_found);
                     }
                 } catch (FormatException | NotFoundException | ChecksumException e) {
