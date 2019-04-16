@@ -20,13 +20,16 @@ import timber.log.Timber;
 public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
     private final @NonNull File file;
     private final boolean isLocationEnabled;
+    private final boolean isCollectingAnswersEnabled;
 
-    private static final String CSV_HEADER = "event, node, start, end";
-    private static final String CSV_HEADER_WITH_LOCATION_COORDINATES = CSV_HEADER + ", latitude, longitude, accuracy";
+    private static final String DEFAULT_COLUMNS = "event, node, start, end";
+    private static final String LOCATION_COORDINATES_COLUMNS = ", latitude, longitude, accuracy";
+    private static final String ANSWERS_COLUMN = ", answer";
 
-    public AuditEventSaveTask(@NonNull File file, boolean isLocationEnabled) {
+    public AuditEventSaveTask(@NonNull File file, boolean isLocationEnabled, boolean isCollectingAnswersEnabled) {
         this.file = file;
         this.isLocationEnabled = isLocationEnabled;
+        this.isCollectingAnswersEnabled = isCollectingAnswersEnabled;
     }
 
     @Override
@@ -72,10 +75,10 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
         try {
             br = new BufferedReader(new FileReader(file));
             String header = br.readLine();
-            if (header != null && header.equals(CSV_HEADER)) { // update header
+            if (header != null && header.equals(DEFAULT_COLUMNS)) { // update header
                 File temporaryFile = new File(file.getParentFile().getAbsolutePath() + "/temporaryAudit.csv");
                 tfw = new FileWriter(temporaryFile, true);
-                tfw.write(CSV_HEADER_WITH_LOCATION_COORDINATES + "\n");
+                tfw.write(DEFAULT_COLUMNS + LOCATION_COORDINATES_COLUMNS + "\n");
                 String line;
                 while ((line = br.readLine()) != null) {
                     tfw.write(line + "\n");
@@ -105,8 +108,13 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
     }
 
     private String getHeader() {
-        return isLocationEnabled
-                ? CSV_HEADER_WITH_LOCATION_COORDINATES + "\n"
-                : CSV_HEADER + "\n";
+        String header = DEFAULT_COLUMNS;
+        if (isLocationEnabled) {
+            header += LOCATION_COORDINATES_COLUMNS;
+        }
+        if (isCollectingAnswersEnabled) {
+            header += ANSWERS_COLUMN;
+        }
+        return header + "\n";
     }
 }

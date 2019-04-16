@@ -5,6 +5,8 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 
+import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.instance.TreeReference;
 import org.odk.collect.android.logic.AuditConfig;
 import org.odk.collect.android.logic.AuditEvent;
@@ -13,6 +15,7 @@ import org.odk.collect.android.tasks.AuditEventSaveTask;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.annotations.Nullable;
 import timber.log.Timber;
@@ -87,7 +90,7 @@ public class AuditEventLogger {
              * This can happen if the user is on a question page and the page gets refreshed
              * The exception is hierarchy events since they interrupt an existing interval event
              */
-            if (newAuditEvent.isIntervalAuditEventType()) {
+            if (!auditConfig.isCollectingAnswersEnabled() && newAuditEvent.isIntervalAuditEventType()) {
                 for (AuditEvent aev : auditEvents) {
                     if (aev.isIntervalAuditEventType() && !aev.isEndTimeSet()) {
                         return;
@@ -139,6 +142,10 @@ public class AuditEventLogger {
      * Exit a question
      */
     public void exitView() {
+        exitView(null);
+    }
+
+    public void exitView(Map<FormIndex, IAnswerData> answers) {
         if (isAuditEnabled()) {
             // Calculate the time and add the event to the auditEvents array
             long end = getEventTime();
@@ -146,6 +153,12 @@ public class AuditEventLogger {
                 if (!aev.isEndTimeSet() && aev.isIntervalAuditEventType()) {
                     addLocationCoordinatesToAuditEventIfNeeded(aev);
                     aev.setEnd(end);
+                    if (answers != null && !answers.isEmpty() && aev.getAuditEventType() == AuditEvent.AuditEventType.QUESTION) {
+                        Map.Entry entry = answers.entrySet().iterator().next();
+                        IAnswerData answer = (IAnswerData) entry.getValue();
+                        aev.setAnswer(answer != null ? answer.getValue().toString() : null);
+                        answers.remove(entry.getKey());
+                    }
                 }
             }
 
@@ -157,7 +170,7 @@ public class AuditEventLogger {
         if (saveTask == null || saveTask.getStatus() == AsyncTask.Status.FINISHED) {
             AuditEvent[] auditEventArray = auditEvents.toArray(new AuditEvent[0]);
             if (auditFile != null) {
-                saveTask = new AuditEventSaveTask(auditFile, auditConfig.isLocationEnabled()).execute(auditEventArray);
+                saveTask = new AuditEventSaveTask(auditFile, auditConfig.isLocationEnabled(), true).execute(auditEventArray);
             } else {
                 Timber.e("auditFile null when attempting to write auditEvents.");
             }
@@ -223,5 +236,9 @@ public class AuditEventLogger {
 
     List<Location> getLocations() {
         return locations;
+    }
+
+    public boolean isCollectingAnswersEnabled() {
+        return auditConfig.isCollectingAnswersEnabled();
     }
 }

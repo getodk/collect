@@ -63,7 +63,7 @@ public class AuditEventSaveTaskTest {
     @Test
     public void updateHeaderTest() throws IOException, ExecutionException, InterruptedException {
         // Use a form with enabled audit but without location
-        AuditEventSaveTask auditEventSaveTask = new AuditEventSaveTask(testFile, false);
+        AuditEventSaveTask auditEventSaveTask = new AuditEventSaveTask(testFile, false, false);
         auditEventSaveTask.execute(getSampleAuditEventsWithoutLocations().toArray(new AuditEvent[0])).get();
         String expectedAuditContent = FileUtils.readFileToString(testFile);
         String expectedData = "event, node, start, end\n" +
@@ -81,7 +81,7 @@ public class AuditEventSaveTaskTest {
         assertEquals(expectedData, expectedAuditContent);
 
         // Upgrade a form to use location and edit saved form
-        auditEventSaveTask = new AuditEventSaveTask(testFile, true);
+        auditEventSaveTask = new AuditEventSaveTask(testFile, true, false);
         auditEventSaveTask.execute(getMoreSampleAuditEventsWithLocations().toArray(new AuditEvent[0])).get();
         expectedAuditContent = FileUtils.readFileToString(testFile);
         String expectedData2 = "event, node, start, end, latitude, longitude, accuracy\n" +
@@ -110,7 +110,7 @@ public class AuditEventSaveTaskTest {
 
     @Test
     public void saveAuditWithLocation() throws ExecutionException, InterruptedException, IOException {
-        AuditEventSaveTask auditEventSaveTask = new AuditEventSaveTask(testFile, true);
+        AuditEventSaveTask auditEventSaveTask = new AuditEventSaveTask(testFile, true, false);
         auditEventSaveTask.execute(getSampleAuditEventsWithLocations().toArray(new AuditEvent[0])).get();
         String expectedAuditContent = FileUtils.readFileToString(testFile);
         String expectedData = "event, node, start, end, latitude, longitude, accuracy\n" +

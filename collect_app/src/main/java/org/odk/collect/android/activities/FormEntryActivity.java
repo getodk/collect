@@ -1033,7 +1033,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
 
                 if (formController != null) {
-                    formController.getAuditEventLogger().exitView();
+                    formController.getAuditEventLogger().exitView(getAnswersForCurrentScreen());
                     formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, null, true);
                 }
 
@@ -1104,6 +1104,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (qw.getAnswer() != null || qw instanceof DateTimeWidget) {
             qw.clearAnswer();
         }
+    }
+
+    private HashMap<FormIndex, IAnswerData> getAnswersForCurrentScreen() {
+        return getCurrentViewIfODKView() != null
+                ? getCurrentViewIfODKView().getAnswers()
+                : null;
     }
 
     @Override
@@ -1189,8 +1195,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         setTitle(formController.getFormTitle());
 
-        formController.getAuditEventLogger().logEvent(AuditEvent.getAuditEventTypeFromFecType(event),
-                formController.getFormIndex().getReference(), true);
+        if (!formController.getAuditEventLogger().isCollectingAnswersEnabled()
+                || (event != FormEntryController.EVENT_GROUP && event != FormEntryController.EVENT_QUESTION)) {
+            formController.getAuditEventLogger().logEvent(AuditEvent.getAuditEventTypeFromFecType(event),
+                    formController.getFormIndex().getReference(), true);
+        }
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
@@ -1341,6 +1350,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 // Makes a "clear answer" menu pop up on long-click
                 for (QuestionWidget qw : odkView.getWidgets()) {
+                    if (formController.getAuditEventLogger().isCollectingAnswersEnabled()) {
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.QUESTION,
+                                qw.getFormEntryPrompt().getIndex().getReference(), true);
+                    }
                     if (!qw.getFormEntryPrompt().isReadOnly()) {
                         // If it's a StringWidget register all its elements apart from EditText as
                         // we want to enable paste option after long click on the EditText
@@ -1456,7 +1469,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return;
             }
 
-            formController.getAuditEventLogger().exitView();    // Close events waiting for an end time
+            formController.getAuditEventLogger().exitView(getAnswersForCurrentScreen());    // Close events waiting for an end time
 
             switch (event) {
                 case FormEntryController.EVENT_QUESTION:
@@ -1523,7 +1536,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             // create savepoint
                             nonblockingCreateSavePointData();
                         }
-                        formController.getAuditEventLogger().exitView();    // Close events
+                        formController.getAuditEventLogger().exitView(getAnswersForCurrentScreen());    // Close events
                         View next = createView(event, false);
                         showView(next, AnimationType.LEFT);
                     } else {
@@ -2579,7 +2592,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 break;
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
-                formController.getAuditEventLogger().exitView();
+                formController.getAuditEventLogger().exitView(getAnswersForCurrentScreen());
                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.CONSTRAINT_ERROR, null, true);
                 refreshCurrentView();
 

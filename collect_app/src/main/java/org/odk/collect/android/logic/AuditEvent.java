@@ -65,6 +65,7 @@ public class AuditEvent {
     private String latitude;
     private String longitude;
     private String accuracy;
+    private String answer;
     private long end;
     private boolean endTimeSet;
 
@@ -113,10 +114,18 @@ public class AuditEvent {
                 && accuracy != null && !accuracy.isEmpty();
     }
 
+    private boolean hasAnswer() {
+        return answer != null;
+    }
+
     public void setLocationCoordinates(String latitude, String longitude, String accuracy) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.accuracy = accuracy;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 
     /*
@@ -124,9 +133,18 @@ public class AuditEvent {
      */
     @NonNull
     public String toString() {
-        return hasLocation()
-                ? String.format("%s,%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", latitude, longitude, accuracy)
-                : String.format("%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "");
+        String event;
+        if (hasLocation() && hasAnswer()) {
+            event = String.format("%s,%s,%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", latitude, longitude, accuracy, answer);
+        } else if (hasLocation()) {
+            event = String.format("%s,%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", latitude, longitude, accuracy);
+        } else if (hasAnswer()) {
+            event = String.format("%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", answer);
+        } else {
+            event = String.format("%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "");
+        }
+
+        return event;
     }
 
     // Get event type based on a Form Controller event

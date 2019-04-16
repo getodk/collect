@@ -89,4 +89,8 @@ public class AuditConfig {
     public boolean isLocationEnabled() {
         return locationPriority != null && locationMinInterval != null && locationMaxAge != null;
     }
+
+    public boolean isCollectingAnswersEnabled() {
+        return true;
+    }
 }
