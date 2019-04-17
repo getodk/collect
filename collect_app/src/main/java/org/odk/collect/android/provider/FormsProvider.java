@@ -17,6 +17,7 @@ package org.odk.collect.android.provider;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -188,11 +189,7 @@ public class FormsProvider extends ContentProvider {
             }
 
             if (!values.containsKey(FormsColumns.DISPLAY_SUBTEXT)) {
-                Date today = new Date();
-                String ts = new SimpleDateFormat(getContext().getString(
-                        R.string.added_on_date_at_time), Locale.getDefault())
-                        .format(today);
-                values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
+                values.put(FormsColumns.DISPLAY_SUBTEXT, getDisplaySubtext());
             }
 
             if (!values.containsKey(FormsColumns.DISPLAY_NAME)) {
@@ -442,11 +439,7 @@ public class FormsProvider extends ContentProvider {
 
                     // Make sure that the necessary fields are all set
                     if (values.containsKey(FormsColumns.DATE)) {
-                        Date today = new Date();
-                        String ts = new SimpleDateFormat(getContext().getString(
-                                R.string.added_on_date_at_time), Locale.getDefault())
-                                .format(today);
-                        values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
+                        values.put(FormsColumns.DISPLAY_SUBTEXT, getDisplaySubtext());
                     }
 
                     count = db.update(FORMS_TABLE_NAME, values, where, whereArgs);
@@ -504,11 +497,7 @@ public class FormsProvider extends ContentProvider {
 
                             // Make sure that the necessary fields are all set
                             if (values.containsKey(FormsColumns.DATE)) {
-                                Date today = new Date();
-                                String ts = new SimpleDateFormat(getContext()
-                                        .getString(R.string.added_on_date_at_time),
-                                        Locale.getDefault()).format(today);
-                                values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
+                                values.put(FormsColumns.DISPLAY_SUBTEXT, getDisplaySubtext());
                             }
 
                             count = db.update(
@@ -537,6 +526,20 @@ public class FormsProvider extends ContentProvider {
         }
 
         return count;
+    }
+
+    private String getDisplaySubtext() {
+        String displaySubtext = "";
+        try {
+            Context context = getContext();
+            if (context != null) {
+                displaySubtext = new SimpleDateFormat(context.getString(R.string.added_on_date_at_time),
+                        Locale.getDefault()).format(new Date());
+            }
+        } catch (IllegalArgumentException e) {
+            Timber.e(e);
+        }
+        return displaySubtext;
     }
 
     @NonNull
