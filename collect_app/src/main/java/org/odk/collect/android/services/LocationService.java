@@ -177,14 +177,12 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                 boolean notify = false;
                 for(GeofenceEntry gfe : geofences) {
                     double yDistance = abs(location.getLatitude() - gfe.location.getLatitude()) * 111111.1;     // lattitude difference in meters
-                    if(gfe.in) {                                                            // Currently inside
-                        if(yDistance > gfe.showDist) {                                      // rough check
-                            if (location.distanceTo(gfe.location) > gfe.showDist) {         // detailed check
-                                refresh = true;
-                            }
+                    if(gfe.in) {                                                        // Currently inside
+                        if (location.distanceTo(gfe.location) > gfe.showDist) {         // detailed check only
+                            refresh = true;
                         }
                     } else {
-                        if(yDistance < gfe.showDist) {                                      // Currently outside
+                        if(yDistance < gfe.showDist) {                                      // Currently outside do rough check first
                             if (location.distanceTo(gfe.location) < gfe.showDist) {
                                 refresh = true;
                                 notify = true;
