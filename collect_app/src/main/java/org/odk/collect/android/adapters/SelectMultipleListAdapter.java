@@ -18,14 +18,19 @@ package org.odk.collect.android.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.core.content.ContextCompat;
+
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.helper.Selection;
 import org.odk.collect.android.views.MediaLayout;
 import org.odk.collect.android.widgets.SelectWidget;
+import org.odk.collect.android.R;
 
 import java.util.List;
 
@@ -33,21 +38,39 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
 
     private final List<Selection> selectedItems;
 
-    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectWidget widget) {
-        super(items, widget);
+    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectWidget widget, int numColumns) {
+        super(items, widget, numColumns);
         this.selectedItems = selectedItems;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(new MediaLayout(parent.getContext()));
+        return new ViewHolder(noButtonsMode
+                ? LayoutInflater.from(parent.getContext()).inflate(R.layout.select_item_layout, null)
+                : new MediaLayout(parent.getContext()));
     }
 
     class ViewHolder extends AbstractSelectListAdapter.ViewHolder {
         ViewHolder(View v) {
             super(v);
-            mediaLayout = (MediaLayout) v;
-            widget.initMediaLayoutSetUp(mediaLayout);
+            if (noButtonsMode) {
+                view = (FrameLayout) v;
+            } else {
+                mediaLayout = (MediaLayout) v;
+                widget.initMediaLayoutSetUp(mediaLayout);
+            }
+        }
+
+        void bind(final int index) {
+            super.bind(index);
+            if (noButtonsMode) {
+                for (Selection selectedItem : selectedItems) {
+                    if (filteredItems.get(index).getValue().equals(selectedItem.getValue())) {
+                        view.getChildAt(0).setBackground(ContextCompat.getDrawable(view.getContext(), R.drawable.select_item_border));
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -56,13 +79,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
         AppCompatCheckBox checkBox = new AppCompatCheckBox(widget.getContext());
         adjustButton(checkBox, index);
         checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            Selection selection = filteredItems.get(index).selection();
-            if (isChecked) {
-                addItem(selection);
-            } else {
-                removeItem(selection);
-            }
-
+            onItemClick(filteredItems.get(index).selection(), null);
             widget.widgetValueChanged();
         });
 
@@ -77,13 +94,25 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
         return checkBox;
     }
 
-    public void addItem(Selection item) {
-        for (Selection selectedItem : selectedItems) {
-            if (selectedItem.getValue().equals(item.getValue())) {
-                return;
+    @Override
+    void onItemClick(Selection selection, View view) {
+        if (isItemSelected(selectedItems, selection)) {
+            removeItem(selection);
+            if (view != null) {
+                view.setBackground(null);
+            }
+        } else {
+            addItem(selection);
+            if (view != null) {
+                view.setBackground(ContextCompat.getDrawable(view.getContext(), R.drawable.select_item_border));
             }
         }
-        selectedItems.add(item);
+    }
+
+    public void addItem(Selection item) {
+        if (!isItemSelected(selectedItems, item)) {
+            selectedItems.add(item);
+        }
     }
 
     public void removeItem(Selection item) {

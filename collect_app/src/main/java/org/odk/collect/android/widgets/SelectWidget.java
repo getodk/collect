@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import timber.log.Timber;
 
+import android.content.res.Configuration;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -51,6 +52,7 @@ public abstract class SelectWidget extends ItemsWidget {
 
     protected ArrayList<MediaLayout> playList;
     protected LinearLayout answerLayout;
+    protected int numColumns = 1;
     private int playcounter;
 
     public SelectWidget(Context context, FormEntryPrompt prompt) {
@@ -144,9 +146,11 @@ public abstract class SelectWidget extends ItemsWidget {
     }
 
     protected RecyclerView setUpRecyclerView() {
+        numColumns = getNumberOfColumns();
+
         RecyclerView recyclerView = (RecyclerView) LayoutInflater.from(getContext()).inflate(R.layout.recycler_view, null); // keep in an xml file to enable the vertical scrollbar
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), getNumberOfColumns()));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), numColumns));
 
         return recyclerView;
     }
@@ -163,23 +167,46 @@ public abstract class SelectWidget extends ItemsWidget {
     }
 
     private int getNumberOfColumns() {
-        String columnsAppearance = "columns";
-
-        int numberOfColumns = 1;
+        int numColumns = 1;
         String appearance = WidgetFactory.getAppearance(getFormEntryPrompt());
-        if (appearance.contains(columnsAppearance)) {
-            try {
-                appearance =
-                        appearance.substring(appearance.indexOf(columnsAppearance), appearance.length());
-                int idx = appearance.indexOf('-');
-                if (idx != -1) {
-                    numberOfColumns = Integer.parseInt(appearance.substring(idx + 1));
+        if (appearance.contains("columns-flex") || (appearance.contains("columns") && !appearance.contains("columns-"))) {
+            switch (getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) {
+                case Configuration.SCREENLAYOUT_SIZE_SMALL:
+                    numColumns = 2;
+                    break;
+                case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+                    numColumns = 3;
+                    break;
+                case Configuration.SCREENLAYOUT_SIZE_LARGE:
+                    numColumns = 4;
+                    break;
+                case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+                    numColumns = 5;
+                    break;
+                default:
+                    numColumns = 3;
+            }
+        } else if (appearance.contains("columns-")
+                || appearance.contains("compact-")) { // just for for backward compatibility
+
+            String columnsAppearance = appearance.contains("columns-") ? "columns-" : "compact-";
+
+            if (appearance.contains(columnsAppearance)) {
+                try {
+                    appearance =
+                            appearance.substring(appearance.indexOf(columnsAppearance), appearance.length());
+                    int idx = appearance.indexOf(columnsAppearance);
+                    if (idx != -1) {
+                        String substringFromNumColumns = appearance.substring(idx + columnsAppearance.length());
+                        numColumns = Integer.parseInt(substringFromNumColumns.substring(0, substringFromNumColumns.contains(" ")
+                                ? substringFromNumColumns.indexOf(' ')
+                                : substringFromNumColumns.length()));
+                    }
+                } catch (Exception e) {
+                    Timber.e("Exception parsing columns");
                 }
-            } catch (Exception e) {
-                Timber.e("Exception parsing columns");
             }
         }
-
-        return numberOfColumns;
+        return numColumns;
     }
 }

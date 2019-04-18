@@ -23,7 +23,6 @@ import org.odk.collect.android.external.ExternalDataUtil;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
-import timber.log.Timber;
 
 /**
  * Convenience class that handles creation of widgets.
@@ -167,20 +166,7 @@ public class WidgetFactory {
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
                 // This means normal appearances should be put before search().
-                if (appearance.startsWith("compact") || appearance.startsWith("quickcompact")) {
-                    int numColumns = -1;
-                    try {
-                        String firstWord = appearance.split("\\s+")[0];
-                        int idx = firstWord.indexOf('-');
-                        if (idx != -1) {
-                            numColumns = Integer.parseInt(firstWord.substring(idx + 1));
-                        }
-                    } catch (Exception e) {
-                        // Do nothing, leave numColumns as -1
-                        Timber.e("Exception parsing numColumns");
-                    }
-                    questionWidget = new GridWidget(context, fep, numColumns, appearance.contains("quick"));
-                } else if (appearance.contains("minimal")) {
+                if (appearance.contains("minimal")) {
                     questionWidget = new SpinnerWidget(context, fep, appearance.contains("quick"));
                 } else if (appearance.contains("search") || appearance.contains("autocomplete")) {
                     questionWidget = new SelectOneSearchWidget(context, fep, appearance.contains("quick"));
@@ -200,22 +186,7 @@ public class WidgetFactory {
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
                 // This means normal appearances should be put before search().
-                if (appearance.startsWith("compact")) {
-                    int numColumns = -1;
-                    try {
-                        String firstWord = appearance.split("\\s+")[0];
-                        int idx = firstWord.indexOf('-');
-                        if (idx != -1) {
-                            numColumns =
-                                    Integer.parseInt(firstWord.substring(idx + 1));
-                        }
-                    } catch (Exception e) {
-                        // Do nothing, leave numColumns as -1
-                        Timber.e("Exception parsing numColumns");
-                    }
-
-                    questionWidget = new GridMultiWidget(context, fep, numColumns);
-                } else if (appearance.startsWith("minimal")) {
+                if (appearance.startsWith("minimal")) {
                     questionWidget = new SpinnerMultiWidget(context, fep);
                 } else if (appearance.startsWith("list-nolabel")) {
                     questionWidget = new ListMultiWidget(context, fep, false);
@@ -265,7 +236,7 @@ public class WidgetFactory {
 
     // Get appearance hint and clean it up so it is lower case, without the search function and never null.
     @NonNull
-    static String getAppearance(FormEntryPrompt fep) {
+    public static String getAppearance(FormEntryPrompt fep) {
         String appearance = fep.getAppearanceHint();
         if (appearance == null) {
             appearance = "";
