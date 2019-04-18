@@ -326,6 +326,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 String resp = httpInterface.getRequest(uri, null, webCredentialsUtils.getCredentials(uri), headers);
                 GsonBuilder gb = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer());
                 gson = gb.create();
+
+                if(resp.equals("Unauthorized")) {
+                    throw new Exception(resp);
+                }
                 tr = gson.fromJson(resp, TaskResponse.class);
                 Timber.i("Message:" + tr.message);
 
