@@ -37,6 +37,5 @@ public MapLocationObserver(Context context, SmapTaskMapFragment map) {
       if(sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false)) {
           mMap.updatePath(point);
       }
-      //mMap.setUserLocation(Collect.getInstance().getLocation(), sharedPreferences.getBoolean(PreferencesActivity.KEY_STORE_SMAP_USER_TRAIL, false));
   }
 }

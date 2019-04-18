@@ -67,6 +67,7 @@ import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.loaders.MapEntry;
+import org.odk.collect.android.loaders.MapLocationObserver;
 import org.odk.collect.android.loaders.PointEntry;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.preferences.AdminKeys;
@@ -98,6 +99,7 @@ public class SmapTaskMapFragment extends Fragment
     protected SimpleCursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
 
+    private MapLocationObserver mo = null;
     private GoogleMap mMap;
     private Polyline mPath;
     private MapHelper mHelper;
@@ -256,6 +258,7 @@ public class SmapTaskMapFragment extends Fragment
         triggered_repeat = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_triggered));
 
 
+        mo = new MapLocationObserver(getContext(), this);
         location_button = getActivity().findViewById(R.id.show_location);
         location_button.setOnClickListener(new View.OnClickListener() {
             @Override

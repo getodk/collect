@@ -32,7 +32,7 @@ public class TraceUtilities {
     /*
      * Get the trail of points
      */
-    public static long getPoints(ArrayList<PointEntry> entries) {
+    public static long getPoints(ArrayList<PointEntry> entries, int limit) {
 
         String [] proj = {
                 TraceColumns._ID,
@@ -46,7 +46,7 @@ public class TraceUtilities {
         selectArgs[0] = Utilities.getSource();
         String selectClause = TraceColumns.SOURCE + " = ?";
 
-        String sortOrder = TraceColumns._ID + " ASC LIMIT 10000; ";
+        String sortOrder = TraceColumns._ID + " ASC LIMIT " + limit + ";";
 
         final ContentResolver resolver = Collect.getInstance().getContentResolver();
         Cursor pointListCursor = resolver.query(TraceColumns.CONTENT_URI, proj, selectClause, selectArgs, sortOrder);
