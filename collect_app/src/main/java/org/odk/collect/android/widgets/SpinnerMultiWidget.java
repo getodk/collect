@@ -138,6 +138,8 @@ public class SpinnerMultiWidget extends ItemsWidget implements ButtonWidget, Mul
         for (int i = 0; i < selections.length; i++) {
             selections[i] = false;
         }
+
+        widgetValueChanged();
     }
 
     @Override
@@ -184,6 +186,7 @@ public class SpinnerMultiWidget extends ItemsWidget implements ButtonWidget, Mul
                     public void onClick(DialogInterface dialog, int which,
                                         boolean isChecked) {
                         selections[which] = isChecked;
+                        widgetValueChanged();
                     }
                 });
         AlertDialog alert = alertBuilder.create();

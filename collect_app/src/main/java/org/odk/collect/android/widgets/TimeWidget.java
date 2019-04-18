@@ -75,6 +75,8 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
     public void clearAnswer() {
         nullAnswer = true;
         timeTextView.setText(R.string.no_time_selected);
+
+        widgetValueChanged();
     }
 
     @Override
@@ -173,6 +175,7 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
         this.minuteOfHour = minute;
 
         setTimeLabel();
+        widgetValueChanged();
     }
 
     @Override

@@ -98,6 +98,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
     public void clearAnswer() {
         selectedItems.clear();
         notifyDataSetChanged();
+        widget.widgetValueChanged();
     }
 
     public List<Selection> getSelectedItems() {

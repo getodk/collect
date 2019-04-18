@@ -83,6 +83,8 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
         isNullAnswer = true;
         dateTextView.setText(R.string.no_date_selected);
         setDateToCurrent();
+
+        widgetValueChanged();
     }
 
     @Override

@@ -111,6 +111,8 @@ public class ListMultiWidget extends ItemsWidget implements MultiChoiceWidget {
                                 buttonView.setChecked(true);
                             }
                         }
+
+                        widgetValueChanged();
                     }
                 });
 
@@ -253,6 +255,7 @@ public class ListMultiWidget extends ItemsWidget implements MultiChoiceWidget {
                 c.setChecked(false);
             }
         }
+        widgetValueChanged();
     }
 
     @Override

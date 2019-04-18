@@ -42,6 +42,7 @@ public class TriggerWidget extends QuestionWidget {
     @Override
     public void clearAnswer() {
         triggerButton.setChecked(false);
+        widgetValueChanged();
     }
 
     @Override
@@ -71,6 +72,8 @@ public class TriggerWidget extends QuestionWidget {
         triggerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         triggerButton.setEnabled(!getFormEntryPrompt().isReadOnly());
         triggerButton.setChecked(OK_TEXT.equals(getFormEntryPrompt().getAnswerText()));
+
+        triggerButton.setOnCheckedChangeListener((buttonView, isChecked) -> widgetValueChanged());
 
         addAnswerView(triggerButton);
     }

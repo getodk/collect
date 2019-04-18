@@ -280,7 +280,7 @@ public class GridMultiWidget extends ItemsWidget implements MultiChoiceWidget {
                     }
                     lastClickPosition = position;
                 }
-
+                widgetValueChanged();
             }
         });
 
@@ -343,7 +343,7 @@ public class GridMultiWidget extends ItemsWidget implements MultiChoiceWidget {
             selected[i] = false;
             imageViews[i].setBackgroundColor(0);
         }
-
+        widgetValueChanged();
     }
 
     @Override

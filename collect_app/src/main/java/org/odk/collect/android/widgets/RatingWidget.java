@@ -66,6 +66,7 @@ public class RatingWidget extends QuestionWidget {
                 }
                 answer = position + 1;
 
+                widgetValueChanged();
             });
             gridLayout.addView(imageButton);
         }
@@ -100,5 +101,6 @@ public class RatingWidget extends QuestionWidget {
             ((ImageButton) gridLayout.getChildAt(i)).setImageResource(R.drawable.ic_star_border);
         }
         answer = 0;
+        widgetValueChanged();
     }
 }

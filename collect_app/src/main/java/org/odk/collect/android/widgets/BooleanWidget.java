@@ -37,11 +37,16 @@ public class BooleanWidget extends QuestionWidget {
 
         setupBooleanButton();
         readSavedAnswer();
+
+        booleanButton.setOnClickListener(view -> {
+                widgetValueChanged();
+        });
     }
 
     @Override
     public void clearAnswer() {
         booleanButton.setChecked(false);
+        widgetValueChanged();
     }
 
     @Override

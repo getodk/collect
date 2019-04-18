@@ -288,6 +288,8 @@ public class GridWidget extends ItemsWidget implements MultiChoiceWidget {
                 } else if (audioHandlers[position] != null) {
                     audioHandlers[position].playAudio(getContext());
                 }
+
+                widgetValueChanged();
             }
         });
 
@@ -329,7 +331,7 @@ public class GridWidget extends ItemsWidget implements MultiChoiceWidget {
             selected[i] = false;
             imageViews[i].setBackgroundColor(0);
         }
-
+        widgetValueChanged();
     }
 
     @Override

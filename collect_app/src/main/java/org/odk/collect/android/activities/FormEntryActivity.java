@@ -929,19 +929,18 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     public QuestionWidget getWidgetWaitingForBinaryData() {
-        QuestionWidget questionWidget = null;
         ODKView odkView = (ODKView) currentView;
 
         if (odkView != null) {
             for (QuestionWidget qw : odkView.getWidgets()) {
                 if (qw.isWaitingForData()) {
-                    questionWidget = qw;
+                    return qw;
                 }
             }
         } else {
             Timber.e("currentView returned null.");
         }
-        return questionWidget;
+        return null;
     }
 
     private void saveFileAnswer(Object media) {
@@ -2784,6 +2783,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
                 if (qw instanceof RangeWidget && widgetId == qw.getId()) {
                     ((RangeWidget) qw).setNumberPickerValue(value);
+                    widgetValueChanged(qw);
+                    return;
                 }
             }
         }
@@ -2793,7 +2794,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public void onDateChanged(LocalDateTime date) {
         ODKView odkView = getCurrentViewIfODKView();
         if (odkView != null) {
+            QuestionWidget widgetGettingNewValue = getWidgetWaitingForBinaryData();
             odkView.setBinaryData(date);
+            widgetValueChanged(widgetGettingNewValue);
         }
     }
 
@@ -2801,7 +2804,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public void onRankingChanged(List<String> values) {
         ODKView odkView = getCurrentViewIfODKView();
         if (odkView != null) {
+            QuestionWidget widgetGettingNewValue = getWidgetWaitingForBinaryData();
             odkView.setBinaryData(values);
+            widgetValueChanged(widgetGettingNewValue);
         }
     }
 
@@ -2948,7 +2953,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             } else if (!lastChangedIndex.equals(immutableQuestionsBeforeSave.get(i).getFormIndex())) {
                 // TODO: probably need to explicitly remove any ItemsetWidget or select widget
                 // that uses search() so they are forced to rebuild
-                odkView.removeWidgetAt(i);
+
+                // Some widgets may call widgetValueChanged from a non-main thread but odkView can
+                // only be modified from the main thread
+                final int indexToRemove = i;
+                runOnUiThread(() -> odkView.removeWidgetAt(indexToRemove));
             }
         }
 
@@ -2956,7 +2965,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             if (!questionsThatHaveNotChanged.contains(questionsAfterSave[i])
                     && !questionsAfterSave[i].getIndex().equals(lastChangedIndex)) {
                 // TODO: think about readOnlyOverride in the context of intent widgets
-                odkView.addWidgetForQuestion(questionsAfterSave[i], false, i);
+                final int targetIndex = i;
+                runOnUiThread(() -> odkView.addWidgetForQuestion(questionsAfterSave[targetIndex],
+                        false, targetIndex));
             }
         }
     }
