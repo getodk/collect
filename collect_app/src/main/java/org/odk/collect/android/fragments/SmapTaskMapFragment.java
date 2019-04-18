@@ -24,6 +24,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -449,7 +450,9 @@ public class SmapTaskMapFragment extends Fragment
             }
             mPath = mMap.addPolyline((new PolylineOptions()));
 
-            for (PointEntry p : data) {
+            //Add in reverse order
+            for(int i = data.size() - 1; i >= 0; i--) {
+                PointEntry p = data.get(i);
                 mPoints.add(new LatLng(p.lat, p.lon));
             }
             mPath.setPoints(mPoints);

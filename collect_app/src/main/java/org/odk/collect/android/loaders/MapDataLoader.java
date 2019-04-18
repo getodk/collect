@@ -61,7 +61,7 @@ public class MapDataLoader extends AsyncTaskLoader<MapEntry> {
 		// Create corresponding array of entries and load their labels.
 		data.points = new ArrayList<PointEntry>(100);
         data.tasks = new ArrayList<TaskEntry> (10);
-        TraceUtilities.getPoints(data.points, 500);
+        TraceUtilities.getPoints(data.points, 500, true);
         getForms(data.tasks);
         Utilities.getTasks(data.tasks, false, sortOrder, filter.toString(), false, true);
 

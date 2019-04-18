@@ -662,7 +662,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
             // Get Points
             updateResponse.userTrail = new ArrayList<>(100);
-            lastTraceIdSent = TraceUtilities.getPoints(updateResponse.userTrail, 10000);
+            lastTraceIdSent = TraceUtilities.getPoints(updateResponse.userTrail, 10000, false);
         } else {
             // Delete any points that had been collected
             TraceUtilities.deleteSource(0);
