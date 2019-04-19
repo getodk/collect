@@ -137,7 +137,9 @@ public class FormEntryPromptUtils {
     public static int getNumberOfColumns(FormEntryPrompt formEntryPrompt, Context context) {
         int numColumns = 1;
         String appearance = WidgetFactory.getAppearance(formEntryPrompt);
-        if (appearance.contains("columns-flex") || (appearance.contains("columns") && !appearance.contains("columns-"))) {
+        if (appearance.contains("columns-flex")
+                || (appearance.contains("columns") && !appearance.contains("columns-"))
+                || (appearance.contains("compact") && !appearance.contains("compact-"))) {
             switch (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) {
                 case Configuration.SCREENLAYOUT_SIZE_SMALL:
                     numColumns = 2;
