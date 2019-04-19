@@ -27,6 +27,7 @@ import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.javarosa.core.model.SelectChoice;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
@@ -37,6 +38,7 @@ import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.views.MediaLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class SelectWidget extends ItemsWidget {
 
@@ -125,7 +127,7 @@ public abstract class SelectWidget extends ItemsWidget {
     /**
      * Pull media from the current item and add it to the media layout.
      */
-    public void addMediaFromChoice(MediaLayout mediaLayout, int index, TextView textView) {
+    public void addMediaFromChoice(MediaLayout mediaLayout, int index, TextView textView, List<SelectChoice> items) {
         String audioURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_AUDIO);
 
         String imageURI;

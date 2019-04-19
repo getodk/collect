@@ -135,7 +135,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         View view = new View(context);
         int itemPadding = context.getResources().getDimensionPixelSize(R.dimen.select_item_border);
 
-        SelectChoice selectChoice = items.get(index);
+        SelectChoice selectChoice = filteredItems.get(index);
 
         String imageURI = selectChoice instanceof ExternalSelectChoice
                 ? ((ExternalSelectChoice) selectChoice).getImage()
@@ -213,7 +213,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                 view.removeAllViews();
                 view.addView(setUpNoButtonsView(index));
             } else {
-                widget.addMediaFromChoice(mediaLayout, index, setUpButton(index));
+                widget.addMediaFromChoice(mediaLayout, index, setUpButton(index), filteredItems);
             }
         }
     }
