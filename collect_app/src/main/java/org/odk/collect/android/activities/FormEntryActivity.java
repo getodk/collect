@@ -707,9 +707,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return;
         }
 
+        // If we're coming back from the hierarchy view, the user has either tapped the back
+        // button or another question to jump to so we need to rebuild the view.
+        if (requestCode == RequestCodes.HIERARCHY_ACTIVITY) {
+            refreshCurrentView();
+            return;
+        }
+
         if (resultCode == RESULT_CANCELED) {
-            // request was canceled...
-            if (requestCode != RequestCodes.HIERARCHY_ACTIVITY && getCurrentViewIfODKView() != null) {
+            if (getCurrentViewIfODKView() != null) {
                 getCurrentViewIfODKView().cancelWaitingForBinaryData();
             }
             return;
@@ -717,14 +723,17 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         // intent is needed for all requestCodes except of DRAW_IMAGE, ANNOTATE_IMAGE, SIGNATURE_CAPTURE, IMAGE_CAPTURE and HIERARCHY_ACTIVITY
         if (intent == null && requestCode != RequestCodes.DRAW_IMAGE && requestCode != RequestCodes.ANNOTATE_IMAGE
-                && requestCode != RequestCodes.SIGNATURE_CAPTURE && requestCode != RequestCodes.IMAGE_CAPTURE
-                && requestCode != RequestCodes.HIERARCHY_ACTIVITY) {
+                && requestCode != RequestCodes.SIGNATURE_CAPTURE && requestCode != RequestCodes.IMAGE_CAPTURE) {
             Timber.w("The intent has a null value for requestCode: " + requestCode);
             ToastUtils.showLongToast(getString(R.string.null_intent_value));
             return;
         }
 
-        // For handling results returned by the Zxing Barcode scanning library
+        // Handling results returned by the Zxing Barcode scanning library is done outside the
+        // switch statement because IntentIntegrator.REQUEST_CODE is not final.
+        // TODO: see if we can update the ZXing Android Embedded dependency to 3.6.0.
+        // https://github.com/journeyapps/zxing-android-embedded#adding-aar-dependency-with-gradle
+        // makes it unclear
         IntentResult barcodeScannerResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (barcodeScannerResult != null) {
             if (barcodeScannerResult.getContents() == null) {
@@ -735,20 +744,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (getCurrentViewIfODKView() != null) {
                     getCurrentViewIfODKView().setBinaryData(sb);
                 }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                refreshCurrentView();
                 return;
             }
         }
 
         switch (requestCode) {
-
             case RequestCodes.OSM_CAPTURE:
                 String osmFileName = intent.getStringExtra("OSM_FILE_NAME");
                 if (getCurrentViewIfODKView() != null) {
                     getCurrentViewIfODKView().setBinaryData(osmFileName);
                 }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case RequestCodes.EX_STRING_CAPTURE:
             case RequestCodes.EX_INT_CAPTURE:
@@ -760,7 +765,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     if (getCurrentViewIfODKView() != null) {
                         getCurrentViewIfODKView().setBinaryData(externalValue);
                     }
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
                 break;
             case RequestCodes.EX_GROUP_CAPTURE:
@@ -804,7 +808,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (getCurrentViewIfODKView() != null) {
                     getCurrentViewIfODKView().setBinaryData(nf);
                 }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case RequestCodes.ALIGNED_IMAGE:
                 /*
@@ -828,7 +831,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (getCurrentViewIfODKView() != null) {
                     getCurrentViewIfODKView().setBinaryData(nf);
                 }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case RequestCodes.ARBITRARY_FILE_CHOOSER:
             case RequestCodes.AUDIO_CHOOSER:
@@ -846,7 +848,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         .show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
 
                 mediaLoadingFragment.beginMediaLoadingTask(intent.getData());
-
                 break;
             case RequestCodes.AUDIO_CAPTURE:
                 /*
@@ -896,36 +897,26 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (getCurrentViewIfODKView() != null) {
                     getCurrentViewIfODKView().setBinaryData(sl);
                 }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case RequestCodes.GEOSHAPE_CAPTURE:
                 String gshr = intent.getStringExtra(ANSWER_KEY);
                 if (getCurrentViewIfODKView() != null) {
                     getCurrentViewIfODKView().setBinaryData(gshr);
                 }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case RequestCodes.GEOTRACE_CAPTURE:
                 String traceExtra = intent.getStringExtra(ANSWER_KEY);
                 if (getCurrentViewIfODKView() != null) {
                     getCurrentViewIfODKView().setBinaryData(traceExtra);
                 }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case RequestCodes.BEARING_CAPTURE:
                 String bearing = intent.getStringExtra(BEARING_RESULT);
                 if (getCurrentViewIfODKView() != null) {
                     getCurrentViewIfODKView().setBinaryData(bearing);
                 }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
-            case RequestCodes.HIERARCHY_ACTIVITY:
-                // We may have jumped to a new index in hierarchy activity, so
-                // refresh
-                break;
-
         }
-        refreshCurrentView();
     }
 
     public QuestionWidget getWidgetWaitingForBinaryData() {
@@ -2179,10 +2170,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 startActivity(new Intent(this, MainMenuActivity.class));
                 finish();
                 return;
-            } else {
-                // Rebuild the entire view if there is no ongoing form load and there is an active
-                // FormController.
-                refreshCurrentView();
             }
         }
 
@@ -2432,7 +2419,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             savedFormStart = true;
                             formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, null, true);
                             formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, null, true);
-                            startActivity(new Intent(this, FormHierarchyActivity.class));
+                            startActivityForResult(new Intent(this, FormHierarchyActivity.class), RequestCodes.HIERARCHY_ACTIVITY);
                             return; // so we don't show the intro screen before jumping to the hierarchy
                         } else {
                             if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {

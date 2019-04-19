@@ -90,6 +90,8 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
     public void clearAnswer() {
         answerLayout.setVisibility(GONE);
         deleteFile();
+
+        widgetValueChanged();
     }
 
     @Override
@@ -126,6 +128,8 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
             chosenFileNameTextView.setText(binaryName);
             answerLayout.setVisibility(VISIBLE);
             Timber.i("Setting current answer to %s", newFile.getName());
+
+            widgetValueChanged();
         } else {
             Timber.e("Inserting Arbitrary file FAILED");
         }

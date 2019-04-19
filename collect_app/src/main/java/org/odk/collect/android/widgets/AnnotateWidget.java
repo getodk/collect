@@ -61,7 +61,7 @@ public class AnnotateWidget extends BaseImageWidget {
         imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_ANNOTATE, RequestCodes.ANNOTATE_IMAGE, R.string.annotate_image);
         imageCaptureHandler = new ImageCaptureHandler();
         setUpLayout();
-        setUpBinary();
+        addCurrentImageToLayout();
         addAnswerView(answerLayout);
     }
 
@@ -100,6 +100,8 @@ public class AnnotateWidget extends BaseImageWidget {
 
         // reset buttons
         captureButton.setText(getContext().getString(R.string.capture_image));
+
+        widgetValueChanged();
     }
 
     @Override
@@ -180,5 +182,12 @@ public class AnnotateWidget extends BaseImageWidget {
         }
 
         imageCaptureHandler.captureImage(intent, RequestCodes.IMAGE_CAPTURE, R.string.annotate_image);
+    }
+
+    @Override
+    public void setBinaryData(Object newImageObj) {
+        super.setBinaryData(newImageObj);
+
+        annotateButton.setEnabled(binaryName != null);
     }
 }

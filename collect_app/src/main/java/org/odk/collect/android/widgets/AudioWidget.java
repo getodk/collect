@@ -95,13 +95,8 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
         hideButtonsIfNeeded();
 
-        // retrieve answer from data model and update ui
         binaryName = prompt.getAnswerText();
-        if (binaryName != null) {
-            audioController.setMedia(getAudioFile());
-        } else {
-            audioController.hidePlayer();
-        }
+        updatePlayerMedia();
     }
 
     @Override
@@ -120,6 +115,8 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
         // hide audio player
         audioController.hidePlayer();
+
+        widgetValueChanged();
     }
 
     @Override
@@ -186,6 +183,9 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
             binaryName = newAudio.getName();
             Timber.i("Setting current answer to %s", newAudio.getName());
+
+            widgetValueChanged();
+            updatePlayerMedia();
         } else {
             Timber.e("Inserting Audio file FAILED");
         }
@@ -195,6 +195,15 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         if (getFormEntryPrompt().getAppearanceHint() != null
                 && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains("new")) {
             chooseButton.setVisibility(View.GONE);
+        }
+    }
+
+    private void updatePlayerMedia() {
+        if (binaryName != null) {
+            audioController.setMedia(getAudioFile());
+            audioController.showPlayer();
+        } else {
+            audioController.hidePlayer();
         }
     }
 

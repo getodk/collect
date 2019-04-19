@@ -168,6 +168,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
         stringAnswer = null;
         answerDisplay.setText(null);
         updateButtonLabelsAndVisibility(false);
+        widgetValueChanged();
     }
 
     @Override
@@ -248,6 +249,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
         }
 
         updateButtonLabelsAndVisibility(true);
+        widgetValueChanged();
     }
 
     @Override

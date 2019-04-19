@@ -85,6 +85,8 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
     public void clearAnswer() {
         answer.setText(null);
         getBearingButton.setText(getContext().getString(R.string.get_bearing));
+
+        widgetValueChanged();
     }
 
     @Override
@@ -101,6 +103,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         this.answer.setText((String) answer);
+        widgetValueChanged();
     }
 
     @Override

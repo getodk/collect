@@ -95,8 +95,5 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
         if (odkView != null) {
             odkView.setBinaryData(result);
         }
-
-        formEntryActivity.get().saveAnswersForCurrentScreen(FormEntryActivity.DO_NOT_EVALUATE_CONSTRAINTS);
-        formEntryActivity.get().refreshCurrentView();
     }
 }

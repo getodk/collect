@@ -223,6 +223,10 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
         view.setVisibility(GONE);
     }
 
+    void showPlayer() {
+        view.setVisibility(View.VISIBLE);
+    }
+
     View getPlayerLayout(ViewGroup parent) {
         initControlsLayout(parent);
         return view;

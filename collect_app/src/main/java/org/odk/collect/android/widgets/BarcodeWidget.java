@@ -67,6 +67,8 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
     public void clearAnswer() {
         stringAnswer.setText(null);
         getBarcodeButton.setText(getContext().getString(R.string.get_barcode));
+
+        widgetValueChanged();
     }
 
     @Override
@@ -89,6 +91,8 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
             response = response.replaceAll("\\p{C}", "");
         }
         stringAnswer.setText(response);
+
+        widgetValueChanged();
     }
 
     @Override
