@@ -148,7 +148,9 @@ public abstract class SelectWidget extends ItemsWidget {
         numColumns = FormEntryPromptUtils.getNumberOfColumns(getFormEntryPrompt(), getContext());
 
         RecyclerView recyclerView = (RecyclerView) LayoutInflater.from(getContext()).inflate(R.layout.recycler_view, null); // keep in an xml file to enable the vertical scrollbar
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        if (numColumns == 1) {
+            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        }
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), numColumns));
 
         return recyclerView;
