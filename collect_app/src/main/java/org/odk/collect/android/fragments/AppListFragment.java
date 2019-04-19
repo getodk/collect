@@ -53,7 +53,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 
 abstract class AppListFragment extends ListFragment {
 
-    protected String[] sortingOptions;
+    protected int[] sortingOptions;
     protected SimpleCursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
     protected View rootView;

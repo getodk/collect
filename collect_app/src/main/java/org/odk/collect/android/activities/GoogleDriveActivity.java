@@ -200,8 +200,8 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         listView.setItemsCanFocus(false);
 
-        sortingOptions = new String[]{
-                getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc)
+        sortingOptions = new int[] {
+                R.string.sort_by_name_asc, R.string.sort_by_name_desc
         };
 
         driveHelper = accountsManager.getDriveHelper();

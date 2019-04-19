@@ -62,9 +62,9 @@ public abstract class FileManagerFragment extends AppListFragment implements Loa
         getListView().setItemsCanFocus(false);
         deleteButton.setEnabled(false);
 
-        sortingOptions = new String[]{
-                getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
-                getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
+        sortingOptions = new int[]{
+                R.string.sort_by_name_asc, R.string.sort_by_name_desc,
+                R.string.sort_by_date_asc, R.string.sort_by_date_desc
         };
         getLoaderManager().initLoader(LOADER_ID, null, this);
         super.onViewCreated(view, savedInstanceState);
