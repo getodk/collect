@@ -20,9 +20,7 @@ import android.content.Context;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import timber.log.Timber;
 
-import android.content.res.Configuration;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -35,6 +33,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.external.ExternalSelectChoice;
+import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.views.MediaLayout;
 
 import java.util.ArrayList;
@@ -146,7 +145,7 @@ public abstract class SelectWidget extends ItemsWidget {
     }
 
     protected RecyclerView setUpRecyclerView() {
-        numColumns = getNumberOfColumns();
+        numColumns = FormEntryPromptUtils.getNumberOfColumns(getFormEntryPrompt(), getContext());
 
         RecyclerView recyclerView = (RecyclerView) LayoutInflater.from(getContext()).inflate(R.layout.recycler_view, null); // keep in an xml file to enable the vertical scrollbar
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
@@ -164,49 +163,5 @@ public abstract class SelectWidget extends ItemsWidget {
         } else {
             recyclerView.setNestedScrollingEnabled(false);
         }
-    }
-
-    private int getNumberOfColumns() {
-        int numColumns = 1;
-        String appearance = WidgetFactory.getAppearance(getFormEntryPrompt());
-        if (appearance.contains("columns-flex") || (appearance.contains("columns") && !appearance.contains("columns-"))) {
-            switch (getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) {
-                case Configuration.SCREENLAYOUT_SIZE_SMALL:
-                    numColumns = 2;
-                    break;
-                case Configuration.SCREENLAYOUT_SIZE_NORMAL:
-                    numColumns = 3;
-                    break;
-                case Configuration.SCREENLAYOUT_SIZE_LARGE:
-                    numColumns = 4;
-                    break;
-                case Configuration.SCREENLAYOUT_SIZE_XLARGE:
-                    numColumns = 5;
-                    break;
-                default:
-                    numColumns = 3;
-            }
-        } else if (appearance.contains("columns-")
-                || appearance.contains("compact-")) { // just for for backward compatibility
-
-            String columnsAppearance = appearance.contains("columns-") ? "columns-" : "compact-";
-
-            if (appearance.contains(columnsAppearance)) {
-                try {
-                    appearance =
-                            appearance.substring(appearance.indexOf(columnsAppearance), appearance.length());
-                    int idx = appearance.indexOf(columnsAppearance);
-                    if (idx != -1) {
-                        String substringFromNumColumns = appearance.substring(idx + columnsAppearance.length());
-                        numColumns = Integer.parseInt(substringFromNumColumns.substring(0, substringFromNumColumns.contains(" ")
-                                ? substringFromNumColumns.indexOf(' ')
-                                : substringFromNumColumns.length()));
-                    }
-                } catch (Exception e) {
-                    Timber.e("Exception parsing columns");
-                }
-            }
-        }
-        return numColumns;
     }
 }
