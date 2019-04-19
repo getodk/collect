@@ -62,7 +62,7 @@ abstract class AppListActivity extends CollectAbstractActivity {
 
     protected CursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
-    protected String[] sortingOptions;
+    protected int[] sortingOptions;
     protected Integer selectedSortingOrder;
     protected ListView listView;
     protected LinearLayout llParent;

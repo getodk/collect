@@ -37,9 +37,9 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
     private final int selectedSortingOrder;
     private final RecyclerView recyclerView;
     private final ThemeUtils themeUtils;
-    private final String[] sortList;
+    private final int[] sortList;
 
-    public SortDialogAdapter(Context context, RecyclerView recyclerView, String[] sortList, int selectedSortingOrder, RecyclerViewClickListener recyclerViewClickListener) {
+    public SortDialogAdapter(Context context, RecyclerView recyclerView, int[] sortList, int selectedSortingOrder, RecyclerViewClickListener recyclerViewClickListener) {
         themeUtils = new ThemeUtils(context);
         this.recyclerView = recyclerView;
         this.sortList = sortList;
