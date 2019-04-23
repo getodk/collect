@@ -23,26 +23,20 @@ import static org.junit.Assert.assertThat;
 
 public abstract class OpenRosaHttpInterfaceTest {
 
-    protected abstract void startHttpsMockWebServer(MockWebServer mockWebServer) throws IOException;
-
     protected abstract OpenRosaHttpInterface buildSubject();
 
     private final MockWebServer mockWebServer = new MockWebServer();
-    private final MockWebServer httpsMockWebServer = new MockWebServer();
     private OpenRosaHttpInterface subject;
 
     @Before
     public void setup() throws Exception {
         mockWebServer.start();
-        startHttpsMockWebServer(httpsMockWebServer);
-
         subject = buildSubject();
     }
 
     @After
     public void teardown() throws Exception {
         mockWebServer.shutdown();
-        httpsMockWebServer.shutdown();
     }
 
     @Test
@@ -90,22 +84,6 @@ public abstract class OpenRosaHttpInterfaceTest {
 
         RecordedRequest request = mockWebServer.takeRequest();
         assertThat(request.getHeader("Accept-Encoding"), equalTo("gzip"));
-    }
-
-    @Test
-    public void executeGetRequest_withCredentials_whenHttps_retriesWithCredentials() throws Exception  {
-        httpsMockWebServer.enqueue(new MockResponse()
-                .setResponseCode(401)
-                .addHeader("WWW-Authenticate: Basic realm=\"protected area\"")
-                .setBody("Please authenticate."));
-        httpsMockWebServer.enqueue(new MockResponse());
-
-        subject.executeGetRequest(httpsMockWebServer.url("").uri(), null, new HttpCredentials("user", "pass"));
-
-        assertThat(httpsMockWebServer.getRequestCount(), equalTo(2));
-        httpsMockWebServer.takeRequest();
-        RecordedRequest request = httpsMockWebServer.takeRequest();
-        assertThat(request.getHeader("Authorization"), equalTo("Basic dXNlcjpwYXNz"));
     }
 
     @Test
