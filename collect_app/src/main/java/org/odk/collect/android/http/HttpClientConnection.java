@@ -185,6 +185,8 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
 
         HttpEntity entity = response.getEntity();
 
+        // This will never happen as a 204/304 response will both cause an earlier guard
+        // check on the status code (`statusCode != HttpStatus.SC_OK`) to fire
         if (entity == null) {
             throw new Exception("No entity body returned from: " + uri.toString());
         }
@@ -213,6 +215,9 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
             hash = FileUtils.getMd5Hash(new ByteArrayInputStream(bytes));
         }
 
+        // It looks like this this condition will never be met as Apache Http Client
+        // appears to deal with decompression for us and then removed the Content-Encoding
+        // header from the response
         Header contentEncoding = entity.getContentEncoding();
         if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(GZIP_CONTENT_ENCODING)) {
             downloadStream = new GZIPInputStream(downloadStream);
