@@ -51,7 +51,7 @@ public class NFCActivity extends Activity implements NFCListener {
         Intent intent = getIntent();
 
 
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.smap_read_nfc));
+        //setTitle(getString(R.string.app_name) + " > " + getString(R.string.smap_read_nfc));
 
         /*
          * NFC
