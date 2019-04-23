@@ -4,12 +4,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import java.io.IOException;
-
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
-import okhttp3.tls.internal.TlsUtil;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;

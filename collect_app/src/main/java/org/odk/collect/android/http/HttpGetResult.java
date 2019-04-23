@@ -19,6 +19,7 @@ package org.odk.collect.android.http;
 import androidx.annotation.NonNull;
 import java.io.InputStream;
 import java.util.Map;
+
 import timber.log.Timber;
 
 public class HttpGetResult {

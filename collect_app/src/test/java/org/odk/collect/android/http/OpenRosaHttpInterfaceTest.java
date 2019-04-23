@@ -9,7 +9,6 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
 
