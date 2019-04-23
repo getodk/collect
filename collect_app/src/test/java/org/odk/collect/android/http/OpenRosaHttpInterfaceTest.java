@@ -3,7 +3,6 @@ package org.odk.collect.android.http;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.utilities.FileUtils;
@@ -125,15 +124,6 @@ public abstract class OpenRosaHttpInterfaceTest {
                 .addHeader("Content-Type", "application/json"));
 
         subject.executeGetRequest(mockWebServer.url("").uri(), "text/xml", null);
-    }
-
-    @Test(expected = Exception.class)
-    @Ignore("OkHttp doesn't recognize bogus content types")
-    public void executeGetRequest_withBogusContentType_whenResponseHasDifferentBogusContentType_throwsException() throws Exception {
-        mockWebServer.enqueue(new MockResponse()
-                .addHeader("Content-Type", "bad stuff"));
-
-        subject.executeGetRequest(mockWebServer.url("").uri(), "good stuff", null);
     }
 
     @Test
