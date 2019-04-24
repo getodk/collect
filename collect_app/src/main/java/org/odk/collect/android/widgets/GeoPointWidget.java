@@ -61,7 +61,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
     private static final String GOOGLE_MAP_KEY = "google_maps";
     private final boolean readOnly;
     private final boolean useMapsV2;
-    private final Button getLocationButton;
+    public final Button getLocationButton;
     private final Button viewButton;
     private final String mapSDK;
     private final TextView answerDisplay;

@@ -62,6 +62,7 @@ import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.ExStringWidget;
+import org.odk.collect.android.widgets.GeoPointWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.SmapFormWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
@@ -208,6 +209,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
         FormEntryPrompt nfcPrompt = null;       // smap
         FormEntryPrompt exPrompt = null;        // smap
         FormEntryPrompt formPrompt = null;      // smap
+        FormEntryPrompt geopointPrompt = null;      // smap
 
         int id = 0;
         for (FormEntryPrompt p : questionPrompts) {
@@ -235,8 +237,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
             if (appearance == null) appearance = "";
             appearance = appearance.toLowerCase(Locale.ENGLISH);
 
-            // Auto get NFC if first question, and not already obtained a code
             if(first) {
+                // Auto get NFC if first question, and not already obtained a code
                 if (p.getDataType() == Constants.DATATYPE_BARCODE) {
                     if (appearance.contains("read_nfc")) {
                         // Make sure an NFC code has not alredy been retrieved
@@ -267,6 +269,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
 
                     } else if (form_identifier != null && p.getDataType() == Constants.DATATYPE_TEXT) {
                         formPrompt = p;
+                    } else if (p.getDataType() == Constants.DATATYPE_GEOPOINT) {
+                        geopointPrompt = p;
                     }
                 }
             }
@@ -312,6 +316,11 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
                     formWidget.launchIntentButton.performClick();
                     formWidget.launchIntentButton.setVisibility(GONE);
                     formWidget.launching.setVisibility(VISIBLE);
+                }
+            } else if (geopointPrompt != null) {    // Smap - launch gps collection
+                GeoPointWidget geopointWidget = (GeoPointWidget) widgets.get(0);
+                if(geopointWidget != null) {
+                    geopointWidget.getLocationButton.performClick();
                 }
             }
         }
