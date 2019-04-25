@@ -92,7 +92,35 @@ public class WidgetAppearances {
     public static int getNumberOfColumns(FormEntryPrompt formEntryPrompt, Context context) {
         int numColumns = 1;
         String appearance = WidgetAppearances.getAppearance(formEntryPrompt);
-        if (appearance.contains(WidgetAppearances.COLUMNS) && !appearance.contains(WidgetAppearances.COLUMNS_N)) {
+        if (appearance.startsWith(WidgetAppearances.COMPACT)
+                || appearance.startsWith(WidgetAppearances.QUICKCOMPACT)
+                || appearance.startsWith(WidgetAppearances.COLUMNS_FLEX)) {
+            numColumns = -1;
+            try {
+                String firstWord = appearance.split("\\s+")[0];
+                int idx = firstWord.indexOf('-');
+                if (idx != -1) {
+                    numColumns = Integer.parseInt(firstWord.substring(idx + 1));
+                }
+            } catch (Exception e) {
+                // Do nothing, leave numColumns as -1
+                Timber.e("Exception parsing columns");
+            }
+        } else if (appearance.contains(WidgetAppearances.COLUMNS_N)) {
+            try {
+                appearance =
+                        appearance.substring(appearance.indexOf(WidgetAppearances.COLUMNS_N), appearance.length());
+                int idx = appearance.indexOf(WidgetAppearances.COLUMNS_N);
+                if (idx != -1) {
+                    String substringFromNumColumns = appearance.substring(idx + WidgetAppearances.COLUMNS_N.length());
+                    numColumns = Integer.parseInt(substringFromNumColumns.substring(0, substringFromNumColumns.contains(" ")
+                            ? substringFromNumColumns.indexOf(' ')
+                            : substringFromNumColumns.length()));
+                }
+            } catch (Exception e) {
+                Timber.e("Exception parsing columns");
+            }
+        } else if (appearance.contains(WidgetAppearances.COLUMNS)) {
             switch (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) {
                 case Configuration.SCREENLAYOUT_SIZE_SMALL:
                     numColumns = 2;
@@ -108,20 +136,6 @@ public class WidgetAppearances {
                     break;
                 default:
                     numColumns = 3;
-            }
-        } else if (appearance.contains(WidgetAppearances.COLUMNS_N)) {
-            try {
-                appearance =
-                        appearance.substring(appearance.indexOf(WidgetAppearances.COLUMNS_N), appearance.length());
-                int idx = appearance.indexOf(WidgetAppearances.COLUMNS_N);
-                if (idx != -1) {
-                    String substringFromNumColumns = appearance.substring(idx + WidgetAppearances.COLUMNS_N.length());
-                    numColumns = Integer.parseInt(substringFromNumColumns.substring(0, substringFromNumColumns.contains(" ")
-                            ? substringFromNumColumns.indexOf(' ')
-                            : substringFromNumColumns.length()));
-                }
-            } catch (Exception e) {
-                Timber.e("Exception parsing columns");
             }
         }
         return numColumns;

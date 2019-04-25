@@ -20,8 +20,6 @@ import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.utilities.WidgetAppearances;
 
-import timber.log.Timber;
-
 /**
  * Convenience class that handles creation of widgets.
  *
@@ -167,18 +165,7 @@ public class WidgetFactory {
                 if (appearance.startsWith(WidgetAppearances.COMPACT)
                         || appearance.startsWith(WidgetAppearances.QUICKCOMPACT)
                         || appearance.startsWith(WidgetAppearances.COLUMNS_FLEX)) {
-                    int numColumns = -1;
-                    try {
-                        String firstWord = appearance.split("\\s+")[0];
-                        int idx = firstWord.indexOf('-');
-                        if (idx != -1) {
-                            numColumns = Integer.parseInt(firstWord.substring(idx + 1));
-                        }
-                    } catch (Exception e) {
-                        // Do nothing, leave numColumns as -1
-                        Timber.e("Exception parsing numColumns");
-                    }
-                    questionWidget = new GridWidget(context, fep, numColumns, appearance.contains(WidgetAppearances.QUICK));
+                    questionWidget = new GridWidget(context, fep, WidgetAppearances.getNumberOfColumns(fep, context), appearance.contains(WidgetAppearances.QUICK));
                 } else if (appearance.contains(WidgetAppearances.MINIMAL)) {
                     questionWidget = new SpinnerWidget(context, fep, appearance.contains(WidgetAppearances.QUICK));
                 } else if (appearance.contains(WidgetAppearances.SEARCH) || appearance.contains(WidgetAppearances.AUTOCOMPLETE)) {
@@ -200,20 +187,7 @@ public class WidgetFactory {
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
                 // This means normal appearances should be put before search().
                 if (appearance.startsWith(WidgetAppearances.COMPACT) || appearance.startsWith(WidgetAppearances.COLUMNS_FLEX)) {
-                    int numColumns = -1;
-                    try {
-                        String firstWord = appearance.split("\\s+")[0];
-                        int idx = firstWord.indexOf('-');
-                        if (idx != -1) {
-                            numColumns =
-                                    Integer.parseInt(firstWord.substring(idx + 1));
-                        }
-                    } catch (Exception e) {
-                        // Do nothing, leave numColumns as -1
-                        Timber.e("Exception parsing numColumns");
-                    }
-
-                    questionWidget = new GridMultiWidget(context, fep, numColumns);
+                    questionWidget = new GridMultiWidget(context, fep, WidgetAppearances.getNumberOfColumns(fep, context));
                 } else if (appearance.startsWith(WidgetAppearances.MINIMAL)) {
                     questionWidget = new SpinnerMultiWidget(context, fep);
                 } else if (appearance.startsWith(WidgetAppearances.LIST_NO_LABEL)) {
