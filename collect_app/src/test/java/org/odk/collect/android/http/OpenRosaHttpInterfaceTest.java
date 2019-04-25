@@ -8,12 +8,16 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.util.zip.GZIPOutputStream;
 
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import okio.Buffer;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
@@ -108,6 +112,16 @@ public abstract class OpenRosaHttpInterfaceTest {
     }
 
     @Test
+    public void executeGetRequest_whenResponseIsGzipped_returnsBody() throws Exception {
+        mockWebServer.enqueue(new MockResponse()
+                .addHeader("Content-Encoding", "gzip")
+                .setBody(new Buffer().write(gzip("I AM BODY"))));
+
+        HttpGetResult result = subject.executeGetRequest(mockWebServer.url("").uri(), null, null);
+        assertThat(IOUtils.toString(result.getInputStream(), Charset.defaultCharset()), equalTo("I AM BODY"));
+    }
+
+    @Test
     public void executeGetRequest_whenContentTypeIsXML_returnsBodyWithMD5Hash() throws Exception {
         mockWebServer.enqueue(new MockResponse()
                 .addHeader("Content-Type", "text/xml")
@@ -178,5 +192,17 @@ public abstract class OpenRosaHttpInterfaceTest {
         HttpGetResult result2 = subject.executeGetRequest(mockWebServer.url("").uri(), null, null);
         assertThat(result2.getInputStream(), nullValue());
         assertThat(result2.getStatusCode(), equalTo(304));
+    }
+
+    private static byte[] gzip(String data) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length());
+        GZIPOutputStream gzipStream = new GZIPOutputStream(outputStream);
+        gzipStream.write(data.getBytes());
+        gzipStream.close();
+
+        byte[] compressed = outputStream.toByteArray();
+        outputStream.close();
+
+        return compressed;
     }
 }

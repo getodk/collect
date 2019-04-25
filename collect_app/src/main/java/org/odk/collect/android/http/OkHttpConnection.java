@@ -303,7 +303,6 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     private Request buildGetRequest(@NonNull URI uri) throws MalformedURLException {
         return new Request.Builder()
                 .url(uri.toURL())
-                .addHeader(ACCEPT_ENCODING_HEADER, CONTENT_ENCODING)
                 .addHeader(USER_AGENT_HEADER, getUserAgentString())
                 .addHeader(OPEN_ROSA_VERSION_HEADER, OPEN_ROSA_VERSION)
                 .addHeader(DATE_HEADER, getHeaderDate())
