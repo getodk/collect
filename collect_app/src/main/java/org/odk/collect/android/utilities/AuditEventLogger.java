@@ -19,6 +19,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED;
+import static org.odk.collect.android.logic.AuditEvent.AuditEventType.VALUE_CHANGED;
 import static org.odk.collect.android.logic.FormController.AUDIT_FILE_NAME;
 
 /**
@@ -50,10 +51,11 @@ public class AuditEventLogger {
         }
     }
 
-    /*
-     * Log a new event
-     */
     public void logEvent(AuditEvent.AuditEventType eventType, TreeReference ref, boolean writeImmediatelyToDisk) {
+        logEvent(eventType, ref, writeImmediatelyToDisk, null);
+    }
+
+    public void logEvent(AuditEvent.AuditEventType eventType, TreeReference ref, boolean writeImmediatelyToDisk, String answer) {
         if (isAuditEnabled() && !isDuplicateOfLastAuditEvent(eventType)) {
             Timber.i("AuditEvent recorded: %s", eventType);
             // Calculate the time and add the event to the auditEvents array
@@ -100,6 +102,10 @@ public class AuditEventLogger {
              */
             if (eventType == AuditEvent.AuditEventType.BEGINNING_OF_FORM || eventType == AuditEvent.AuditEventType.REPEAT) {
                 return;
+            }
+
+            if (eventType.equals(VALUE_CHANGED)) {
+                newAuditEvent.setAnswer(answer == null ? "" : answer);
             }
 
             /*
@@ -215,6 +221,10 @@ public class AuditEventLogger {
      */
     boolean isAuditEnabled() {
         return auditConfig != null;
+    }
+
+    public boolean isTrackingChangesEnabled() {
+        return auditConfig.isTrackingChangesEnabled();
     }
 
     ArrayList<AuditEvent> getAuditEvents() {

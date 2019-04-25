@@ -757,6 +757,7 @@ public class FormController {
                 if (getEvent(index) == FormEntryController.EVENT_QUESTION) {
                     int saveStatus;
                     IAnswerData answer = answers.get(index);
+                    logValueChangedEventIfNeeded(index, answer);
                     if (evaluateConstraints) {
                         saveStatus = answerQuestion(index, answer);
                         if (saveStatus != FormEntryController.ANSWER_OK) {
@@ -772,6 +773,18 @@ public class FormController {
             }
         }
         return null;
+    }
+
+    private void logValueChangedEventIfNeeded(FormIndex index, IAnswerData newAnswer) {
+        if (auditEventLogger.isTrackingChangesEnabled()) {
+            IAnswerData oldAnswer = getQuestionPrompt(index).getAnswerValue();
+
+            String oldVal = oldAnswer != null && oldAnswer.getValue() != null ? oldAnswer.getValue().toString() : "";
+            String newVal = newAnswer != null && newAnswer.getValue() != null ? newAnswer.getValue().toString() : "";
+            if (!oldVal.equals(newVal)) {
+                auditEventLogger.logEvent(AuditEvent.AuditEventType.VALUE_CHANGED, null, true, newVal);
+            }
+        }
     }
 
     /**
