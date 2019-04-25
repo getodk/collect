@@ -18,11 +18,8 @@ import android.content.Context;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.utilities.WidgetAppearances;
 
-import java.util.Locale;
-
-import androidx.annotation.NonNull;
 import timber.log.Timber;
 
 /**
@@ -46,7 +43,7 @@ public class WidgetFactory {
     public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context,
                                                         boolean readOnlyOverride) {
 
-        String appearance = getAppearance(fep);
+        String appearance = WidgetAppearances.getAppearance(fep);
 
         final QuestionWidget questionWidget;
         switch (fep.getControlType()) {
@@ -56,13 +53,13 @@ public class WidgetFactory {
                         questionWidget = new DateTimeWidget(context, fep);
                         break;
                     case Constants.DATATYPE_DATE:
-                        if (appearance.contains("ethiopian")) {
+                        if (appearance.contains(WidgetAppearances.ETHIOPIAN)) {
                             questionWidget = new EthiopianDateWidget(context, fep);
-                        } else if (appearance.contains("coptic")) {
+                        } else if (appearance.contains(WidgetAppearances.COPTIC)) {
                             questionWidget = new CopticDateWidget(context, fep);
-                        } else if (appearance.contains("islamic")) {
+                        } else if (appearance.contains(WidgetAppearances.ISLAMIC)) {
                             questionWidget = new IslamicDateWidget(context, fep);
-                        } else if (appearance.contains("bikram-sambat")) {
+                        } else if (appearance.contains(WidgetAppearances.BIKRAM_SAMBAT)) {
                             questionWidget = new BikramSambatDateWidget(context, fep);
                         } else if (appearance.contains("myanmar")) {
                             questionWidget = new MyanmarDateWidget(context, fep);
@@ -74,13 +71,13 @@ public class WidgetFactory {
                         questionWidget = new TimeWidget(context, fep);
                         break;
                     case Constants.DATATYPE_DECIMAL:
-                        if (appearance.startsWith("ex:")) {
+                        if (appearance.startsWith(WidgetAppearances.EX)) {
                             questionWidget = new ExDecimalWidget(context, fep);
-                        } else if (appearance.equals("bearing")) {
+                        } else if (appearance.equals(WidgetAppearances.BEARING)) {
                             questionWidget = new BearingWidget(context, fep);
                         } else {
                             boolean useThousandSeparator = false;
-                            if (appearance.contains("thousands-sep")) {
+                            if (appearance.contains(WidgetAppearances.THOUSANDS_SEP)) {
                                 useThousandSeparator = true;
                             }
                             questionWidget = new DecimalWidget(context, fep, readOnlyOverride,
@@ -88,11 +85,11 @@ public class WidgetFactory {
                         }
                         break;
                     case Constants.DATATYPE_INTEGER:
-                        if (appearance.startsWith("ex:")) {
+                        if (appearance.startsWith(WidgetAppearances.EX)) {
                             questionWidget = new ExIntegerWidget(context, fep);
                         } else {
                             boolean useThousandSeparator = false;
-                            if (appearance.contains("thousands-sep")) {
+                            if (appearance.contains(WidgetAppearances.THOUSANDS_SEP)) {
                                 useThousandSeparator = true;
                             }
                             questionWidget = new IntegerWidget(context, fep, readOnlyOverride,
@@ -114,19 +111,19 @@ public class WidgetFactory {
                     case Constants.DATATYPE_TEXT:
                         String query = fep.getQuestion().getAdditionalAttribute(null, "query");
                         if (query != null) {
-                            questionWidget = new ItemsetWidget(context, fep, appearance.startsWith("quick"));
-                        } else if (appearance.startsWith("printer")) {
+                            questionWidget = new ItemsetWidget(context, fep, appearance.startsWith(WidgetAppearances.QUICK));
+                        } else if (appearance.startsWith(WidgetAppearances.PRINTER)) {
                             questionWidget = new ExPrinterWidget(context, fep);
-                        } else if (appearance.startsWith("ex:")) {
+                        } else if (appearance.startsWith(WidgetAppearances.EX)) {
                             questionWidget = new ExStringWidget(context, fep);
-                        } else if (appearance.contains("numbers")) {
+                        } else if (appearance.contains(WidgetAppearances.NUMBERS)) {
                             boolean useThousandsSeparator = false;
-                            if (appearance.contains("thousands-sep")) {
+                            if (appearance.contains(WidgetAppearances.THOUSANDS_SEP)) {
                                 useThousandsSeparator = true;
                             }
                             questionWidget = new StringNumberWidget(context, fep, readOnlyOverride,
                                     useThousandsSeparator);
-                        } else if (appearance.equals("url")) {
+                        } else if (appearance.equals(WidgetAppearances.URL)) {
                             questionWidget = new UrlWidget(context, fep);
                         } else {
                             questionWidget = new StringWidget(context, fep, readOnlyOverride);
@@ -144,11 +141,11 @@ public class WidgetFactory {
                 questionWidget = new ArbitraryFileWidget(context, fep);
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
-                if (appearance.equals("signature")) {
+                if (appearance.equals(WidgetAppearances.SIGNATURE)) {
                     questionWidget = new SignatureWidget(context, fep);
-                } else if (appearance.contains("annotate")) {
+                } else if (appearance.contains(WidgetAppearances.ANNOTATE)) {
                     questionWidget = new AnnotateWidget(context, fep);
-                } else if (appearance.equals("draw")) {
+                } else if (appearance.equals(WidgetAppearances.DRAW)) {
                     questionWidget = new DrawWidget(context, fep);
                 } else {
                     questionWidget = new ImageWidget(context, fep);
@@ -167,9 +164,9 @@ public class WidgetFactory {
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
                 // This means normal appearances should be put before search().
-                if (appearance.startsWith("compact")
-                        || appearance.startsWith("quickcompact")
-                        || appearance.startsWith("columns-flex")) {
+                if (appearance.startsWith(WidgetAppearances.COMPACT)
+                        || appearance.startsWith(WidgetAppearances.QUICKCOMPACT)
+                        || appearance.startsWith(WidgetAppearances.COLUMNS_FLEX)) {
                     int numColumns = -1;
                     try {
                         String firstWord = appearance.split("\\s+")[0];
@@ -181,28 +178,28 @@ public class WidgetFactory {
                         // Do nothing, leave numColumns as -1
                         Timber.e("Exception parsing numColumns");
                     }
-                    questionWidget = new GridWidget(context, fep, numColumns, appearance.contains("quick"));
-                } else if (appearance.contains("minimal")) {
-                    questionWidget = new SpinnerWidget(context, fep, appearance.contains("quick"));
-                } else if (appearance.contains("search") || appearance.contains("autocomplete")) {
-                    questionWidget = new SelectOneSearchWidget(context, fep, appearance.contains("quick"));
-                } else if (appearance.contains("list-nolabel")) {
-                    questionWidget = new ListWidget(context, fep, false, appearance.contains("quick"));
-                } else if (appearance.contains("list")) {
-                    questionWidget = new ListWidget(context, fep, true, appearance.contains("quick"));
-                } else if (appearance.equals("label")) {
+                    questionWidget = new GridWidget(context, fep, numColumns, appearance.contains(WidgetAppearances.QUICK));
+                } else if (appearance.contains(WidgetAppearances.MINIMAL)) {
+                    questionWidget = new SpinnerWidget(context, fep, appearance.contains(WidgetAppearances.QUICK));
+                } else if (appearance.contains(WidgetAppearances.SEARCH) || appearance.contains(WidgetAppearances.AUTOCOMPLETE)) {
+                    questionWidget = new SelectOneSearchWidget(context, fep, appearance.contains(WidgetAppearances.QUICK));
+                } else if (appearance.contains(WidgetAppearances.LIST_NO_LABEL)) {
+                    questionWidget = new ListWidget(context, fep, false, appearance.contains(WidgetAppearances.QUICK));
+                } else if (appearance.contains(WidgetAppearances.LIST)) {
+                    questionWidget = new ListWidget(context, fep, true, appearance.contains(WidgetAppearances.QUICK));
+                } else if (appearance.equals(WidgetAppearances.LABEL)) {
                     questionWidget = new LabelWidget(context, fep);
-                } else if (appearance.contains("image-map")) {
-                    questionWidget = new SelectOneImageMapWidget(context, fep, appearance.contains("quick"));
+                } else if (appearance.contains(WidgetAppearances.IMAGE_MAP)) {
+                    questionWidget = new SelectOneImageMapWidget(context, fep, appearance.contains(WidgetAppearances.QUICK));
                 } else {
-                    questionWidget = new SelectOneWidget(context, fep, appearance.contains("quick"));
+                    questionWidget = new SelectOneWidget(context, fep, appearance.contains(WidgetAppearances.QUICK));
                 }
                 break;
             case Constants.CONTROL_SELECT_MULTI:
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
                 // This means normal appearances should be put before search().
-                if (appearance.startsWith("compact") || appearance.startsWith("columns-flex")) {
+                if (appearance.startsWith(WidgetAppearances.COMPACT) || appearance.startsWith(WidgetAppearances.COLUMNS_FLEX)) {
                     int numColumns = -1;
                     try {
                         String firstWord = appearance.split("\\s+")[0];
@@ -217,17 +214,17 @@ public class WidgetFactory {
                     }
 
                     questionWidget = new GridMultiWidget(context, fep, numColumns);
-                } else if (appearance.startsWith("minimal")) {
+                } else if (appearance.startsWith(WidgetAppearances.MINIMAL)) {
                     questionWidget = new SpinnerMultiWidget(context, fep);
-                } else if (appearance.startsWith("list-nolabel")) {
+                } else if (appearance.startsWith(WidgetAppearances.LIST_NO_LABEL)) {
                     questionWidget = new ListMultiWidget(context, fep, false);
-                } else if (appearance.startsWith("list")) {
+                } else if (appearance.startsWith(WidgetAppearances.LIST)) {
                     questionWidget = new ListMultiWidget(context, fep, true);
-                } else if (appearance.startsWith("label")) {
+                } else if (appearance.startsWith(WidgetAppearances.LABEL)) {
                     questionWidget = new LabelWidget(context, fep);
-                } else if (appearance.contains("search") || appearance.contains("autocomplete")) {
+                } else if (appearance.contains(WidgetAppearances.SEARCH) || appearance.contains(WidgetAppearances.AUTOCOMPLETE)) {
                     questionWidget = new SelectMultipleAutocompleteWidget(context, fep);
-                } else if (appearance.startsWith("image-map")) {
+                } else if (appearance.startsWith(WidgetAppearances.IMAGE_MAP)) {
                     questionWidget = new SelectMultiImageMapWidget(context, fep);
                 } else {
                     questionWidget = new SelectMultiWidget(context, fep);
@@ -240,8 +237,7 @@ public class WidgetFactory {
                 questionWidget = new TriggerWidget(context, fep);
                 break;
             case Constants.CONTROL_RANGE:
-
-                if (appearance.startsWith("rating")) {
+                if (appearance.startsWith(WidgetAppearances.RATING)) {
                     questionWidget = new RatingWidget(context, fep);
                 } else {
                     switch (fep.getDataType()) {
@@ -263,24 +259,5 @@ public class WidgetFactory {
         }
 
         return questionWidget;
-    }
-
-    // Get appearance hint and clean it up so it is lower case, without the search function and never null.
-    @NonNull
-    public static String getAppearance(FormEntryPrompt fep) {
-        String appearance = fep.getAppearanceHint();
-        if (appearance == null) {
-            appearance = "";
-        } else {
-            // For now, all appearance tags are in English.
-            appearance = appearance.toLowerCase(Locale.ENGLISH);
-
-            // Strip out the search() appearance/function which is handled in ExternalDataUtil so that
-            // it is not considered when matching other appearances. For example, a file named list.csv
-            // used as a parameter to search() should not be interpreted as a list appearance.
-            appearance = ExternalDataUtil.SEARCH_FUNCTION_REGEX.matcher(appearance).replaceAll("");
-        }
-
-        return appearance;
     }
 }

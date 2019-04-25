@@ -32,6 +32,7 @@ import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.WidgetAppearances;
 
 import java.io.File;
 import java.util.Locale;
@@ -143,7 +144,7 @@ public class AnnotateWidget extends BaseImageWidget {
 
     private void hideButtonsIfNeeded() {
         if (getFormEntryPrompt().getAppearanceHint() != null
-                && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains("new")) {
+                && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains(WidgetAppearances.NEW)) {
             chooseButton.setVisibility(View.GONE);
         }
     }

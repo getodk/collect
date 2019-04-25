@@ -24,6 +24,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.utilities.WidgetAppearances;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 /**
@@ -46,13 +47,13 @@ public class DateTimeWidget extends QuestionWidget implements BinaryWidget, Widg
         setGravity(Gravity.START);
 
         String appearance = prompt.getQuestion().getAppearanceAttr();
-        if (appearance != null && appearance.contains("ethiopian")) {
+        if (appearance != null && appearance.contains(WidgetAppearances.ETHIOPIAN)) {
             dateWidget = new EthiopianDateWidget(context, prompt);
-        } else if (appearance != null && appearance.contains("coptic")) {
+        } else if (appearance != null && appearance.contains(WidgetAppearances.COPTIC)) {
             dateWidget = new CopticDateWidget(context, prompt);
-        } else if (appearance != null && appearance.contains("islamic")) {
+        } else if (appearance != null && appearance.contains(WidgetAppearances.ISLAMIC)) {
             dateWidget = new IslamicDateWidget(context, prompt);
-        } else if (appearance != null && appearance.contains("bikram-sambat")) {
+        } else if (appearance != null && appearance.contains(WidgetAppearances.BIKRAM_SAMBAT)) {
             dateWidget = new BikramSambatDateWidget(context, prompt);
         } else if (appearance != null && appearance.contains("myanmar")) {
             dateWidget = new MyanmarDateWidget(context, prompt);

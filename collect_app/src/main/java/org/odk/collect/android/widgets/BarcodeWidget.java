@@ -31,6 +31,7 @@ import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.WidgetAppearances;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 /**
@@ -133,10 +134,10 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
 
     private void setCameraIdIfNeeded(IntentIntegrator intent) {
         String appearance = getFormEntryPrompt().getAppearanceHint();
-        if (appearance != null && appearance.equalsIgnoreCase("front")) {
+        if (appearance != null && appearance.equalsIgnoreCase(WidgetAppearances.FRONT)) {
             if (CameraUtils.isFrontCameraAvailable()) {
                 intent.setCameraId(CameraUtils.getFrontCameraId());
-                intent.addExtra("front", true);
+                intent.addExtra(WidgetAppearances.FRONT, true);
             } else {
                 ToastUtils.showLongToast(R.string.error_front_camera_unavailable);
             }

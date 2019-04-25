@@ -166,28 +166,28 @@ public class DateTimeUtils {
         DatePickerDetails.DatePickerMode datePickerMode = DatePickerDetails.DatePickerMode.CALENDAR;
         if (appearance != null) {
             appearance = appearance.toLowerCase(Locale.US);
-            if (appearance.contains("ethiopian")) {
+            if (appearance.contains(WidgetAppearances.ETHIOPIAN)) {
                 datePickerType = DatePickerDetails.DatePickerType.ETHIOPIAN;
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
-            } else if (appearance.contains("coptic")) {
+            } else if (appearance.contains(WidgetAppearances.COPTIC)) {
                 datePickerType = DatePickerDetails.DatePickerType.COPTIC;
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
-            } else if (appearance.contains("islamic")) {
+            } else if (appearance.contains(WidgetAppearances.ISLAMIC)) {
                 datePickerType = DatePickerDetails.DatePickerType.ISLAMIC;
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
-            } else if (appearance.contains("bikram-sambat")) {
+            } else if (appearance.contains(WidgetAppearances.BIKRAM_SAMBAT)) {
                 datePickerType = DatePickerDetails.DatePickerType.BIKRAM_SAMBAT;
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
             } else if (appearance.contains("myanmar")) {
                 datePickerType = DatePickerDetails.DatePickerType.MYANMAR;
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
-            } else if (appearance.contains("no-calendar")) {
+            } else if (appearance.contains(WidgetAppearances.NO_CALENDAR)) {
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
             }
 
-            if (appearance.contains("month-year")) {
+            if (appearance.contains(WidgetAppearances.MONTH_YEAR)) {
                 datePickerMode = DatePickerDetails.DatePickerMode.MONTH_YEAR;
-            } else if (appearance.contains("year")) {
+            } else if (appearance.contains(WidgetAppearances.YEAR)) {
                 datePickerMode = DatePickerDetails.DatePickerMode.YEAR;
             }
         }

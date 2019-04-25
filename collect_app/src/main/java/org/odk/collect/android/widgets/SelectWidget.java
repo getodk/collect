@@ -34,7 +34,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.external.ExternalSelectChoice;
-import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.utilities.WidgetAppearances;
 import org.odk.collect.android.views.MediaLayout;
 
 import java.util.ArrayList;
@@ -147,7 +147,7 @@ public abstract class SelectWidget extends ItemsWidget {
     }
 
     protected RecyclerView setUpRecyclerView() {
-        numColumns = FormEntryPromptUtils.getNumberOfColumns(getFormEntryPrompt(), getContext());
+        numColumns = WidgetAppearances.getNumberOfColumns(getFormEntryPrompt(), getContext());
 
         RecyclerView recyclerView = (RecyclerView) LayoutInflater.from(getContext()).inflate(R.layout.recycler_view, null); // keep in an xml file to enable the vertical scrollbar
         if (numColumns == 1) {

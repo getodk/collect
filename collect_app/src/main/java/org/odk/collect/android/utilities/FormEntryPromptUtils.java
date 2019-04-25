@@ -17,7 +17,6 @@
 package org.odk.collect.android.utilities;
 
 import android.content.Context;
-import android.content.res.Configuration;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.SelectChoice;
@@ -29,15 +28,12 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.dao.ItemsetDao;
 import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.widgets.WidgetFactory;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Date;
 import java.util.List;
-
-import timber.log.Timber;
 
 import static org.javarosa.core.model.Constants.DATATYPE_TEXT;
 
@@ -79,7 +75,7 @@ public class FormEntryPromptUtils {
                     DateTimeUtils.getDatePickerDetails(appearance), false, context);
         }
 
-        if (data != null && appearance != null && appearance.contains("thousands-sep")) {
+        if (data != null && appearance != null && appearance.contains(WidgetAppearances.THOUSANDS_SEP)) {
             try {
                 final BigDecimal answerAsDecimal = new BigDecimal(fep.getAnswerText());
 
@@ -132,47 +128,5 @@ public class FormEntryPromptUtils {
     public static CharSequence getItemText(FormEntryPrompt formEntryPrompt, SelectChoice selectChoice) {
         String choiceName = formEntryPrompt.getSelectChoiceText(selectChoice);
         return choiceName != null ? TextUtils.textToHtml(choiceName) : "";
-    }
-
-    public static int getNumberOfColumns(FormEntryPrompt formEntryPrompt, Context context) {
-        int numColumns = 1;
-        String appearance = WidgetFactory.getAppearance(formEntryPrompt);
-        if (appearance.contains("columns") && !appearance.contains("columns-")) {
-            switch (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) {
-                case Configuration.SCREENLAYOUT_SIZE_SMALL:
-                    numColumns = 2;
-                    break;
-                case Configuration.SCREENLAYOUT_SIZE_NORMAL:
-                    numColumns = 3;
-                    break;
-                case Configuration.SCREENLAYOUT_SIZE_LARGE:
-                    numColumns = 4;
-                    break;
-                case Configuration.SCREENLAYOUT_SIZE_XLARGE:
-                    numColumns = 5;
-                    break;
-                default:
-                    numColumns = 3;
-            }
-        } else if (appearance.contains("columns-")) {
-            String columnsAppearance = "columns-";
-
-            if (appearance.contains(columnsAppearance)) {
-                try {
-                    appearance =
-                            appearance.substring(appearance.indexOf(columnsAppearance), appearance.length());
-                    int idx = appearance.indexOf(columnsAppearance);
-                    if (idx != -1) {
-                        String substringFromNumColumns = appearance.substring(idx + columnsAppearance.length());
-                        numColumns = Integer.parseInt(substringFromNumColumns.substring(0, substringFromNumColumns.contains(" ")
-                                ? substringFromNumColumns.indexOf(' ')
-                                : substringFromNumColumns.length()));
-                    }
-                } catch (Exception e) {
-                    Timber.e("Exception parsing columns");
-                }
-            }
-        }
-        return numColumns;
     }
 }
