@@ -35,13 +35,7 @@ public class FormEntryPromptUtilsTest {
         when(formEntryPrompt.getAppearanceHint()).thenReturn("columns-2");
         assertEquals(2, FormEntryPromptUtils.getNumberOfColumns(formEntryPrompt, null));
 
-        when(formEntryPrompt.getAppearanceHint()).thenReturn("compact-2");
-        assertEquals(2, FormEntryPromptUtils.getNumberOfColumns(formEntryPrompt, null));
-
         when(formEntryPrompt.getAppearanceHint()).thenReturn("columns-10");
-        assertEquals(10, FormEntryPromptUtils.getNumberOfColumns(formEntryPrompt, null));
-
-        when(formEntryPrompt.getAppearanceHint()).thenReturn("compact-10");
         assertEquals(10, FormEntryPromptUtils.getNumberOfColumns(formEntryPrompt, null));
 
         when(formEntryPrompt.getAppearanceHint()).thenReturn("columns-10 quick");
@@ -67,11 +61,5 @@ public class FormEntryPromptUtilsTest {
 
         when(formEntryPrompt.getAppearanceHint()).thenReturn("quick columns-5");
         assertEquals(5, FormEntryPromptUtils.getNumberOfColumns(formEntryPrompt, null));
-
-        when(formEntryPrompt.getAppearanceHint()).thenReturn("autocomplete compact-5");
-        assertEquals(5, FormEntryPromptUtils.getNumberOfColumns(formEntryPrompt, null));
-
-        when(formEntryPrompt.getAppearanceHint()).thenReturn("autocomplete compact-");
-        assertEquals(1, FormEntryPromptUtils.getNumberOfColumns(formEntryPrompt, null));
     }
 }
