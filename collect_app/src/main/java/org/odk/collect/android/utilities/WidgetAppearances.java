@@ -47,6 +47,7 @@ public class WidgetAppearances {
     public static final String ANNOTATE         = "annotate";
     public static final String DRAW             = "draw";
     public static final String COMPACT          = "compact";
+    public static final String COMPACT_N        = "compact-";
     public static final String QUICKCOMPACT     = "quickcompact";
     public static final String COLUMNS          = "columns";
     public static final String COLUMNS_N        = "columns-";
@@ -92,9 +93,9 @@ public class WidgetAppearances {
     public static int getNumberOfColumns(FormEntryPrompt formEntryPrompt, Context context) {
         int numColumns = 1;
         String appearance = WidgetAppearances.getAppearance(formEntryPrompt);
-        if (appearance.startsWith(WidgetAppearances.COMPACT)
+        if (!appearance.startsWith(WidgetAppearances.COMPACT_N) && (appearance.startsWith(WidgetAppearances.COMPACT)
                 || appearance.startsWith(WidgetAppearances.QUICKCOMPACT)
-                || appearance.startsWith(WidgetAppearances.COLUMNS_FLEX)) {
+                || appearance.startsWith(WidgetAppearances.COLUMNS_FLEX))) {
             numColumns = -1;
             try {
                 String firstWord = appearance.split("\\s+")[0];
@@ -106,16 +107,23 @@ public class WidgetAppearances {
                 // Do nothing, leave numColumns as -1
                 Timber.e("Exception parsing columns");
             }
-        } else if (appearance.contains(WidgetAppearances.COLUMNS_N)) {
+        } else if (appearance.contains(WidgetAppearances.COLUMNS_N) || appearance.contains(WidgetAppearances.COMPACT_N)) {
             try {
-                appearance =
-                        appearance.substring(appearance.indexOf(WidgetAppearances.COLUMNS_N), appearance.length());
-                int idx = appearance.indexOf(WidgetAppearances.COLUMNS_N);
-                if (idx != -1) {
-                    String substringFromNumColumns = appearance.substring(idx + WidgetAppearances.COLUMNS_N.length());
-                    numColumns = Integer.parseInt(substringFromNumColumns.substring(0, substringFromNumColumns.contains(" ")
-                            ? substringFromNumColumns.indexOf(' ')
-                            : substringFromNumColumns.length()));
+                String columnsAppearance = appearance.contains(WidgetAppearances.COLUMNS_N) ? WidgetAppearances.COLUMNS_N : WidgetAppearances.COMPACT_N;
+                if (appearance.contains(columnsAppearance)) {
+                    try {
+                        appearance =
+                                appearance.substring(appearance.indexOf(columnsAppearance), appearance.length());
+                        int idx = appearance.indexOf(columnsAppearance);
+                        if (idx != -1) {
+                            String substringFromNumColumns = appearance.substring(idx + columnsAppearance.length());
+                            numColumns = Integer.parseInt(substringFromNumColumns.substring(0, substringFromNumColumns.contains(" ")
+                                    ? substringFromNumColumns.indexOf(' ')
+                                    : substringFromNumColumns.length()));
+                        }
+                    } catch (Exception e) {
+                        Timber.e("Exception parsing columns");
+                    }
                 }
             } catch (Exception e) {
                 Timber.e("Exception parsing columns");

@@ -162,9 +162,9 @@ public class WidgetFactory {
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
                 // This means normal appearances should be put before search().
-                if (appearance.startsWith(WidgetAppearances.COMPACT)
+                if (!appearance.startsWith(WidgetAppearances.COMPACT_N) && (appearance.startsWith(WidgetAppearances.COMPACT)
                         || appearance.startsWith(WidgetAppearances.QUICKCOMPACT)
-                        || appearance.startsWith(WidgetAppearances.COLUMNS_FLEX)) {
+                        || appearance.startsWith(WidgetAppearances.COLUMNS_FLEX))) {
                     questionWidget = new GridWidget(context, fep, WidgetAppearances.getNumberOfColumns(fep, context), appearance.contains(WidgetAppearances.QUICK));
                 } else if (appearance.contains(WidgetAppearances.MINIMAL)) {
                     questionWidget = new SpinnerWidget(context, fep, appearance.contains(WidgetAppearances.QUICK));
@@ -186,7 +186,9 @@ public class WidgetFactory {
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
                 // This means normal appearances should be put before search().
-                if (appearance.startsWith(WidgetAppearances.COMPACT) || appearance.startsWith(WidgetAppearances.COLUMNS_FLEX)) {
+                if (!appearance.startsWith(WidgetAppearances.COMPACT_N)
+                        && (appearance.startsWith(WidgetAppearances.COMPACT)
+                            || appearance.startsWith(WidgetAppearances.COLUMNS_FLEX))) {
                     questionWidget = new GridMultiWidget(context, fep, WidgetAppearances.getNumberOfColumns(fep, context));
                 } else if (appearance.startsWith(WidgetAppearances.MINIMAL)) {
                     questionWidget = new SpinnerMultiWidget(context, fep);
