@@ -36,7 +36,7 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
-import org.odk.collect.android.utilities.WidgetAppearances;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
@@ -194,7 +194,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
     private void hideButtonsIfNeeded() {
         if (getFormEntryPrompt().getAppearanceHint() != null
-                && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains(WidgetAppearances.NEW)) {
+                && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains(WidgetAppearanceUtils.NEW)) {
             chooseButton.setVisibility(View.GONE);
         }
     }

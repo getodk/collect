@@ -49,7 +49,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.utilities.WidgetAppearances;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
@@ -104,7 +104,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         this.mediaUtil = mediaUtil;
 
         String appearance = getFormEntryPrompt().getAppearanceHint();
-        selfie = appearance != null && (appearance.equalsIgnoreCase(WidgetAppearances.SELFIE) || appearance.equalsIgnoreCase(WidgetAppearances.NEW_FRONT));
+        selfie = appearance != null && (appearance.equalsIgnoreCase(WidgetAppearanceUtils.SELFIE) || appearance.equalsIgnoreCase(WidgetAppearanceUtils.NEW_FRONT));
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_video), R.id.capture_video);
 
@@ -285,7 +285,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
 
     private void hideButtonsIfNeeded() {
         if (selfie || (getFormEntryPrompt().getAppearanceHint() != null
-                && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains(WidgetAppearances.NEW))) {
+                && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains(WidgetAppearanceUtils.NEW))) {
             chooseButton.setVisibility(View.GONE);
         }
     }

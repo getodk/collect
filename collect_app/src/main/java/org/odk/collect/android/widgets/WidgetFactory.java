@@ -18,7 +18,7 @@ import android.content.Context;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.utilities.WidgetAppearances;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 /**
  * Convenience class that handles creation of widgets.
@@ -41,7 +41,7 @@ public class WidgetFactory {
     public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context,
                                                         boolean readOnlyOverride) {
 
-        String appearance = WidgetAppearances.getAppearance(fep);
+        String appearance = WidgetAppearanceUtils.getAppearance(fep);
 
         final QuestionWidget questionWidget;
         switch (fep.getControlType()) {
@@ -51,13 +51,13 @@ public class WidgetFactory {
                         questionWidget = new DateTimeWidget(context, fep);
                         break;
                     case Constants.DATATYPE_DATE:
-                        if (appearance.contains(WidgetAppearances.ETHIOPIAN)) {
+                        if (appearance.contains(WidgetAppearanceUtils.ETHIOPIAN)) {
                             questionWidget = new EthiopianDateWidget(context, fep);
-                        } else if (appearance.contains(WidgetAppearances.COPTIC)) {
+                        } else if (appearance.contains(WidgetAppearanceUtils.COPTIC)) {
                             questionWidget = new CopticDateWidget(context, fep);
-                        } else if (appearance.contains(WidgetAppearances.ISLAMIC)) {
+                        } else if (appearance.contains(WidgetAppearanceUtils.ISLAMIC)) {
                             questionWidget = new IslamicDateWidget(context, fep);
-                        } else if (appearance.contains(WidgetAppearances.BIKRAM_SAMBAT)) {
+                        } else if (appearance.contains(WidgetAppearanceUtils.BIKRAM_SAMBAT)) {
                             questionWidget = new BikramSambatDateWidget(context, fep);
                         } else if (appearance.contains("myanmar")) {
                             questionWidget = new MyanmarDateWidget(context, fep);
@@ -69,13 +69,13 @@ public class WidgetFactory {
                         questionWidget = new TimeWidget(context, fep);
                         break;
                     case Constants.DATATYPE_DECIMAL:
-                        if (appearance.startsWith(WidgetAppearances.EX)) {
+                        if (appearance.startsWith(WidgetAppearanceUtils.EX)) {
                             questionWidget = new ExDecimalWidget(context, fep);
-                        } else if (appearance.equals(WidgetAppearances.BEARING)) {
+                        } else if (appearance.equals(WidgetAppearanceUtils.BEARING)) {
                             questionWidget = new BearingWidget(context, fep);
                         } else {
                             boolean useThousandSeparator = false;
-                            if (appearance.contains(WidgetAppearances.THOUSANDS_SEP)) {
+                            if (appearance.contains(WidgetAppearanceUtils.THOUSANDS_SEP)) {
                                 useThousandSeparator = true;
                             }
                             questionWidget = new DecimalWidget(context, fep, readOnlyOverride,
@@ -83,11 +83,11 @@ public class WidgetFactory {
                         }
                         break;
                     case Constants.DATATYPE_INTEGER:
-                        if (appearance.startsWith(WidgetAppearances.EX)) {
+                        if (appearance.startsWith(WidgetAppearanceUtils.EX)) {
                             questionWidget = new ExIntegerWidget(context, fep);
                         } else {
                             boolean useThousandSeparator = false;
-                            if (appearance.contains(WidgetAppearances.THOUSANDS_SEP)) {
+                            if (appearance.contains(WidgetAppearanceUtils.THOUSANDS_SEP)) {
                                 useThousandSeparator = true;
                             }
                             questionWidget = new IntegerWidget(context, fep, readOnlyOverride,
@@ -109,19 +109,19 @@ public class WidgetFactory {
                     case Constants.DATATYPE_TEXT:
                         String query = fep.getQuestion().getAdditionalAttribute(null, "query");
                         if (query != null) {
-                            questionWidget = new ItemsetWidget(context, fep, appearance.startsWith(WidgetAppearances.QUICK));
-                        } else if (appearance.startsWith(WidgetAppearances.PRINTER)) {
+                            questionWidget = new ItemsetWidget(context, fep, appearance.startsWith(WidgetAppearanceUtils.QUICK));
+                        } else if (appearance.startsWith(WidgetAppearanceUtils.PRINTER)) {
                             questionWidget = new ExPrinterWidget(context, fep);
-                        } else if (appearance.startsWith(WidgetAppearances.EX)) {
+                        } else if (appearance.startsWith(WidgetAppearanceUtils.EX)) {
                             questionWidget = new ExStringWidget(context, fep);
-                        } else if (appearance.contains(WidgetAppearances.NUMBERS)) {
+                        } else if (appearance.contains(WidgetAppearanceUtils.NUMBERS)) {
                             boolean useThousandsSeparator = false;
-                            if (appearance.contains(WidgetAppearances.THOUSANDS_SEP)) {
+                            if (appearance.contains(WidgetAppearanceUtils.THOUSANDS_SEP)) {
                                 useThousandsSeparator = true;
                             }
                             questionWidget = new StringNumberWidget(context, fep, readOnlyOverride,
                                     useThousandsSeparator);
-                        } else if (appearance.equals(WidgetAppearances.URL)) {
+                        } else if (appearance.equals(WidgetAppearanceUtils.URL)) {
                             questionWidget = new UrlWidget(context, fep);
                         } else {
                             questionWidget = new StringWidget(context, fep, readOnlyOverride);
@@ -139,11 +139,11 @@ public class WidgetFactory {
                 questionWidget = new ArbitraryFileWidget(context, fep);
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
-                if (appearance.equals(WidgetAppearances.SIGNATURE)) {
+                if (appearance.equals(WidgetAppearanceUtils.SIGNATURE)) {
                     questionWidget = new SignatureWidget(context, fep);
-                } else if (appearance.contains(WidgetAppearances.ANNOTATE)) {
+                } else if (appearance.contains(WidgetAppearanceUtils.ANNOTATE)) {
                     questionWidget = new AnnotateWidget(context, fep);
-                } else if (appearance.equals(WidgetAppearances.DRAW)) {
+                } else if (appearance.equals(WidgetAppearanceUtils.DRAW)) {
                     questionWidget = new DrawWidget(context, fep);
                 } else {
                     questionWidget = new ImageWidget(context, fep);
@@ -162,45 +162,45 @@ public class WidgetFactory {
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
                 // This means normal appearances should be put before search().
-                if (!appearance.startsWith(WidgetAppearances.COMPACT_N) && (appearance.startsWith(WidgetAppearances.COMPACT)
-                        || appearance.startsWith(WidgetAppearances.QUICKCOMPACT)
-                        || appearance.startsWith(WidgetAppearances.COLUMNS_FLEX))) {
-                    questionWidget = new GridWidget(context, fep, WidgetAppearances.getNumberOfColumns(fep, context), appearance.contains(WidgetAppearances.QUICK));
-                } else if (appearance.contains(WidgetAppearances.MINIMAL)) {
-                    questionWidget = new SpinnerWidget(context, fep, appearance.contains(WidgetAppearances.QUICK));
-                } else if (appearance.contains(WidgetAppearances.SEARCH) || appearance.contains(WidgetAppearances.AUTOCOMPLETE)) {
-                    questionWidget = new SelectOneSearchWidget(context, fep, appearance.contains(WidgetAppearances.QUICK));
-                } else if (appearance.contains(WidgetAppearances.LIST_NO_LABEL)) {
-                    questionWidget = new ListWidget(context, fep, false, appearance.contains(WidgetAppearances.QUICK));
-                } else if (appearance.contains(WidgetAppearances.LIST)) {
-                    questionWidget = new ListWidget(context, fep, true, appearance.contains(WidgetAppearances.QUICK));
-                } else if (appearance.equals(WidgetAppearances.LABEL)) {
+                if (!appearance.startsWith(WidgetAppearanceUtils.COMPACT_N) && (appearance.startsWith(WidgetAppearanceUtils.COMPACT)
+                        || appearance.startsWith(WidgetAppearanceUtils.QUICKCOMPACT)
+                        || appearance.startsWith(WidgetAppearanceUtils.COLUMNS_FLEX))) {
+                    questionWidget = new GridWidget(context, fep, WidgetAppearanceUtils.getNumberOfColumns(fep, context), appearance.contains(WidgetAppearanceUtils.QUICK));
+                } else if (appearance.contains(WidgetAppearanceUtils.MINIMAL)) {
+                    questionWidget = new SpinnerWidget(context, fep, appearance.contains(WidgetAppearanceUtils.QUICK));
+                } else if (appearance.contains(WidgetAppearanceUtils.SEARCH) || appearance.contains(WidgetAppearanceUtils.AUTOCOMPLETE)) {
+                    questionWidget = new SelectOneSearchWidget(context, fep, appearance.contains(WidgetAppearanceUtils.QUICK));
+                } else if (appearance.contains(WidgetAppearanceUtils.LIST_NO_LABEL)) {
+                    questionWidget = new ListWidget(context, fep, false, appearance.contains(WidgetAppearanceUtils.QUICK));
+                } else if (appearance.contains(WidgetAppearanceUtils.LIST)) {
+                    questionWidget = new ListWidget(context, fep, true, appearance.contains(WidgetAppearanceUtils.QUICK));
+                } else if (appearance.equals(WidgetAppearanceUtils.LABEL)) {
                     questionWidget = new LabelWidget(context, fep);
-                } else if (appearance.contains(WidgetAppearances.IMAGE_MAP)) {
-                    questionWidget = new SelectOneImageMapWidget(context, fep, appearance.contains(WidgetAppearances.QUICK));
+                } else if (appearance.contains(WidgetAppearanceUtils.IMAGE_MAP)) {
+                    questionWidget = new SelectOneImageMapWidget(context, fep, appearance.contains(WidgetAppearanceUtils.QUICK));
                 } else {
-                    questionWidget = new SelectOneWidget(context, fep, appearance.contains(WidgetAppearances.QUICK));
+                    questionWidget = new SelectOneWidget(context, fep, appearance.contains(WidgetAppearanceUtils.QUICK));
                 }
                 break;
             case Constants.CONTROL_SELECT_MULTI:
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
                 // This means normal appearances should be put before search().
-                if (!appearance.startsWith(WidgetAppearances.COMPACT_N)
-                        && (appearance.startsWith(WidgetAppearances.COMPACT)
-                            || appearance.startsWith(WidgetAppearances.COLUMNS_FLEX))) {
-                    questionWidget = new GridMultiWidget(context, fep, WidgetAppearances.getNumberOfColumns(fep, context));
-                } else if (appearance.startsWith(WidgetAppearances.MINIMAL)) {
+                if (!appearance.startsWith(WidgetAppearanceUtils.COMPACT_N)
+                        && (appearance.startsWith(WidgetAppearanceUtils.COMPACT)
+                            || appearance.startsWith(WidgetAppearanceUtils.COLUMNS_FLEX))) {
+                    questionWidget = new GridMultiWidget(context, fep, WidgetAppearanceUtils.getNumberOfColumns(fep, context));
+                } else if (appearance.startsWith(WidgetAppearanceUtils.MINIMAL)) {
                     questionWidget = new SpinnerMultiWidget(context, fep);
-                } else if (appearance.startsWith(WidgetAppearances.LIST_NO_LABEL)) {
+                } else if (appearance.startsWith(WidgetAppearanceUtils.LIST_NO_LABEL)) {
                     questionWidget = new ListMultiWidget(context, fep, false);
-                } else if (appearance.startsWith(WidgetAppearances.LIST)) {
+                } else if (appearance.startsWith(WidgetAppearanceUtils.LIST)) {
                     questionWidget = new ListMultiWidget(context, fep, true);
-                } else if (appearance.startsWith(WidgetAppearances.LABEL)) {
+                } else if (appearance.startsWith(WidgetAppearanceUtils.LABEL)) {
                     questionWidget = new LabelWidget(context, fep);
-                } else if (appearance.contains(WidgetAppearances.SEARCH) || appearance.contains(WidgetAppearances.AUTOCOMPLETE)) {
+                } else if (appearance.contains(WidgetAppearanceUtils.SEARCH) || appearance.contains(WidgetAppearanceUtils.AUTOCOMPLETE)) {
                     questionWidget = new SelectMultipleAutocompleteWidget(context, fep);
-                } else if (appearance.startsWith(WidgetAppearances.IMAGE_MAP)) {
+                } else if (appearance.startsWith(WidgetAppearanceUtils.IMAGE_MAP)) {
                     questionWidget = new SelectMultiImageMapWidget(context, fep);
                 } else {
                     questionWidget = new SelectMultiWidget(context, fep);
@@ -213,7 +213,7 @@ public class WidgetFactory {
                 questionWidget = new TriggerWidget(context, fep);
                 break;
             case Constants.CONTROL_RANGE:
-                if (appearance.startsWith(WidgetAppearances.RATING)) {
+                if (appearance.startsWith(WidgetAppearanceUtils.RATING)) {
                     questionWidget = new RatingWidget(context, fep);
                 } else {
                     switch (fep.getDataType()) {

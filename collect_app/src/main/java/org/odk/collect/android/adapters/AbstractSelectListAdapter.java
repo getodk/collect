@@ -44,7 +44,7 @@ import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ImageConverter;
-import org.odk.collect.android.utilities.WidgetAppearances;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.views.MediaLayout;
 import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.SelectWidget;
@@ -73,7 +73,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         this.widget = widget;
         filteredItems = items;
         this.numColumns = numColumns;
-        noButtonsMode = WidgetAppearances.getAppearance(widget.getFormEntryPrompt()).contains(WidgetAppearances.NO_BUTTONS);
+        noButtonsMode = WidgetAppearanceUtils.getAppearance(widget.getFormEntryPrompt()).contains(WidgetAppearanceUtils.NO_BUTTONS);
     }
 
     @Override

@@ -27,8 +27,10 @@ import java.util.Locale;
 import androidx.annotation.NonNull;
 import timber.log.Timber;
 
-public class WidgetAppearances {
-    public static final String NO_APPEARANCE    = "";
+public class WidgetAppearanceUtils {
+    private static final String EXCEPTION_PARSING_COLUMNS = "Exception parsing columns";
+
+    // Date appearances
     public static final String ETHIOPIAN        = "ethiopian";
     public static final String COPTIC           = "coptic";
     public static final String ISLAMIC          = "islamic";
@@ -36,39 +38,48 @@ public class WidgetAppearances {
     public static final String NO_CALENDAR      = "no-calendar";
     public static final String MONTH_YEAR       = "month-year";
     public static final String YEAR             = "year";
-    public static final String BEARING          = "bearing";
-    public static final String EX               = "ex:";
-    public static final String THOUSANDS_SEP    = "thousands-sep";
-    public static final String PRINTER          = "printer";
-    public static final String NUMBERS          = "numbers";
-    public static final String QUICK            = "quick";
-    public static final String URL              = "url";
-    public static final String SIGNATURE        = "signature";
-    public static final String ANNOTATE         = "annotate";
-    public static final String DRAW             = "draw";
+
+    // Select one/multiple appearances
     public static final String COMPACT          = "compact";
     public static final String COMPACT_N        = "compact-";
-    public static final String QUICKCOMPACT     = "quickcompact";
+    public static final String MINIMAL          = "minimal";
     public static final String COLUMNS          = "columns";
     public static final String COLUMNS_N        = "columns-";
     public static final String COLUMNS_FLEX     = "columns-flex";
-    public static final String MINIMAL          = "minimal";
+    public static final String QUICKCOMPACT     = "quickcompact";
     public static final String SEARCH           = "search";
     public static final String AUTOCOMPLETE     = "autocomplete";
     public static final String LIST_NO_LABEL    = "list-nolabel";
     public static final String LIST             = "list";
     public static final String LABEL            = "label";
     public static final String IMAGE_MAP        = "image-map";
-    public static final String RATING           = "rating";
     public static final String NO_BUTTONS       = "no-buttons";
+    public static final String QUICK            = "quick";
+
+    // Media appearances
+    public static final String SIGNATURE        = "signature";
+    public static final String ANNOTATE         = "annotate";
+    public static final String DRAW             = "draw";
     public static final String SELFIE           = "selfie";
     public static final String NEW_FRONT        = "new-front";
     public static final String NEW              = "new";
     public static final String FRONT            = "front";
+
+    // Maps appearances
     public static final String PLACEMENT_MAP    = "placement-map";
     public static final String MAPS             = "maps";
 
-    private WidgetAppearances() {
+    // Other appearances
+    public static final String NO_APPEARANCE    = "";
+    public static final String BEARING          = "bearing";
+    public static final String EX               = "ex:";
+    public static final String THOUSANDS_SEP    = "thousands-sep";
+    public static final String PRINTER          = "printer";
+    public static final String NUMBERS          = "numbers";
+    public static final String URL              = "url";
+    public static final String RATING           = "rating";
+
+    private WidgetAppearanceUtils() {
     }
 
     // Get appearance hint and clean it up so it is lower case, without the search function and never null.
@@ -76,7 +87,7 @@ public class WidgetAppearances {
     public static String getAppearance(FormEntryPrompt fep) {
         String appearance = fep.getAppearanceHint();
         if (appearance == null) {
-            appearance = WidgetAppearances.NO_APPEARANCE;
+            appearance = NO_APPEARANCE;
         } else {
             // For now, all appearance tags are in English.
             appearance = appearance.toLowerCase(Locale.ENGLISH);
@@ -92,10 +103,10 @@ public class WidgetAppearances {
 
     public static int getNumberOfColumns(FormEntryPrompt formEntryPrompt, Context context) {
         int numColumns = 1;
-        String appearance = WidgetAppearances.getAppearance(formEntryPrompt);
-        if (!appearance.startsWith(WidgetAppearances.COMPACT_N) && (appearance.startsWith(WidgetAppearances.COMPACT)
-                || appearance.startsWith(WidgetAppearances.QUICKCOMPACT)
-                || appearance.startsWith(WidgetAppearances.COLUMNS_FLEX))) {
+        String appearance = getAppearance(formEntryPrompt);
+        if (!appearance.startsWith(COMPACT_N) && (appearance.startsWith(COMPACT)
+                || appearance.startsWith(QUICKCOMPACT)
+                || appearance.startsWith(COLUMNS_FLEX))) {
             numColumns = -1;
             try {
                 String firstWord = appearance.split("\\s+")[0];
@@ -105,11 +116,11 @@ public class WidgetAppearances {
                 }
             } catch (Exception e) {
                 // Do nothing, leave numColumns as -1
-                Timber.e("Exception parsing columns");
+                Timber.e(EXCEPTION_PARSING_COLUMNS);
             }
-        } else if (appearance.contains(WidgetAppearances.COLUMNS_N) || appearance.contains(WidgetAppearances.COMPACT_N)) {
+        } else if (appearance.contains(COLUMNS_N) || appearance.contains(COMPACT_N)) {
             try {
-                String columnsAppearance = appearance.contains(WidgetAppearances.COLUMNS_N) ? WidgetAppearances.COLUMNS_N : WidgetAppearances.COMPACT_N;
+                String columnsAppearance = appearance.contains(COLUMNS_N) ? COLUMNS_N : COMPACT_N;
                 if (appearance.contains(columnsAppearance)) {
                     try {
                         appearance =
@@ -122,13 +133,13 @@ public class WidgetAppearances {
                                     : substringFromNumColumns.length()));
                         }
                     } catch (Exception e) {
-                        Timber.e("Exception parsing columns");
+                        Timber.e(EXCEPTION_PARSING_COLUMNS);
                     }
                 }
             } catch (Exception e) {
-                Timber.e("Exception parsing columns");
+                Timber.e(EXCEPTION_PARSING_COLUMNS);
             }
-        } else if (appearance.contains(WidgetAppearances.COLUMNS)) {
+        } else if (appearance.contains(COLUMNS)) {
             switch (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) {
                 case Configuration.SCREENLAYOUT_SIZE_SMALL:
                     numColumns = 2;

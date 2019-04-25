@@ -32,7 +32,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.WidgetAppearances;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import java.io.File;
 import java.util.Locale;
@@ -68,8 +68,8 @@ public class ImageWidget extends BaseImageWidget {
         super.setUpLayout();
 
         String appearance = getFormEntryPrompt().getAppearanceHint();
-        selfie = appearance != null && (appearance.equalsIgnoreCase(WidgetAppearances.SELFIE)
-                || appearance.equalsIgnoreCase(WidgetAppearances.NEW_FRONT));
+        selfie = appearance != null && (appearance.equalsIgnoreCase(WidgetAppearanceUtils.SELFIE)
+                || appearance.equalsIgnoreCase(WidgetAppearanceUtils.NEW_FRONT));
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
 
@@ -140,7 +140,7 @@ public class ImageWidget extends BaseImageWidget {
 
     private void hideButtonsIfNeeded(String appearance) {
         if (selfie || ((appearance != null
-                && appearance.toLowerCase(Locale.ENGLISH).contains(WidgetAppearances.NEW)))) {
+                && appearance.toLowerCase(Locale.ENGLISH).contains(WidgetAppearanceUtils.NEW)))) {
             chooseButton.setVisibility(View.GONE);
         }
     }

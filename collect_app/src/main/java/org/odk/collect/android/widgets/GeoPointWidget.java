@@ -36,7 +36,7 @@ import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
-import org.odk.collect.android.utilities.WidgetAppearances;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.text.DecimalFormat;
@@ -88,10 +88,10 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
 
         // use mapsV2 if it is available and was requested;
         useMapsV2 = useMapsV2(context);
-        if (appearance != null && appearance.toLowerCase(Locale.US).contains(WidgetAppearances.PLACEMENT_MAP) && useMapsV2) {
+        if (appearance != null && appearance.toLowerCase(Locale.US).contains(WidgetAppearanceUtils.PLACEMENT_MAP) && useMapsV2) {
             draggable = true;
             useMaps = true;
-        } else if (appearance != null && appearance.toLowerCase(Locale.US).contains(WidgetAppearances.MAPS) && useMapsV2) {
+        } else if (appearance != null && appearance.toLowerCase(Locale.US).contains(WidgetAppearanceUtils.MAPS) && useMapsV2) {
             draggable = false;
             useMaps = true;
         } else {

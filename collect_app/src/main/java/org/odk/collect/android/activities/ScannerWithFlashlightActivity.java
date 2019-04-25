@@ -26,7 +26,7 @@ import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.WidgetAppearances;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 /**
  * Custom Scannner Activity extending from Activity to display a custom layout form scanner view.
@@ -103,7 +103,7 @@ public class ScannerWithFlashlightActivity extends CollectAbstractActivity imple
 
     private boolean frontCameraUsed() {
         Bundle bundle = getIntent().getExtras();
-        return bundle != null && bundle.getBoolean(WidgetAppearances.FRONT);
+        return bundle != null && bundle.getBoolean(WidgetAppearanceUtils.FRONT);
     }
 
     public void switchFlashlight(View view) {
