@@ -46,6 +46,7 @@ import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.logic.actions.setlocation.CollectSetLocationActionHandler;
 import org.odk.collect.android.utilities.AuditEventLogger;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.RegexUtils;
@@ -126,6 +127,9 @@ public class FormController {
             PrototypeManager.registerPrototypes(JavaRosaCoreModule.classNames);
             PrototypeManager.registerPrototypes(CoreModelModule.classNames);
             new XFormsModule().registerModule();
+
+            PrototypeManager.registerPrototype("org.odk.collect.android.logic.actions.setlocation.CollectSetLocationAction");
+            XFormParser.registerActionHandler(CollectSetLocationActionHandler.ELEMENT_NAME, new CollectSetLocationActionHandler());
 
             isJavaRosaInitialized = true;
         }

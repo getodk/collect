@@ -48,7 +48,7 @@ public class PreferencesActivity extends CollectAbstractActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Collect.getInstance().initProperties();
+        Collect.getInstance().initializeJavaRosa();
     }
 
     // If the onBackPressedListener is set then onBackPressed is delegated to it.
