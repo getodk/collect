@@ -46,10 +46,13 @@ public class AuditConfig {
      */
     private final Long locationMaxAge;
 
-    public AuditConfig(String mode, String locationMinInterval, String locationMaxAge) {
+    private final boolean trackingChangesEnabled;
+
+    public AuditConfig(String mode, String locationMinInterval, String locationMaxAge, boolean trackingChangesEnabled) {
         this.locationPriority = mode != null ? getMode(mode) : null;
         this.locationMinInterval = locationMinInterval != null ? Long.parseLong(locationMinInterval) * 1000 : null;
         this.locationMaxAge = locationMaxAge != null ? Long.parseLong(locationMaxAge) * 1000 : null;
+        this.trackingChangesEnabled = trackingChangesEnabled;
     }
 
     private LocationClient.Priority getMode(@NonNull String mode) {
@@ -88,5 +91,9 @@ public class AuditConfig {
 
     public boolean isLocationEnabled() {
         return locationPriority != null && locationMinInterval != null && locationMaxAge != null;
+    }
+
+    public boolean isTrackingChangesEnabled() {
+        return trackingChangesEnabled;
     }
 }
