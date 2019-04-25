@@ -173,12 +173,6 @@ public abstract class OpenRosaHttpInterfaceTest {
         assertThat(result.getStatusCode(), equalTo(500));
     }
 
-    /**
-     * The original {@link HttpClientConnection} implementation performs a null check on the response
-     * entity (body) and then throws exception if it is null. However, this should never actually happen
-     * as the 204/304 response that would cause a null body will return an empty result object with
-     * the status code before that check happen.
-     */
     @Test
     public void executeGetRequest_whenResponseBodyIsNull_returnsNullBodyAndStatusCode() throws Exception {
         mockWebServer.enqueue(new MockResponse().setResponseCode(204));
