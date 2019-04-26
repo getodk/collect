@@ -104,4 +104,5 @@
     <string name="smap_login_failed">Could not connect to server</string>
     <string name="smap_login_unauthorized">Login failed</string>
     <string name="smap_geofence_tasks">New local tasks</string>
+    <string name="smap_continue_tracking">Exit has been disabled.  To stop tracking of the phone it should be turned off.</string>
 </resources>

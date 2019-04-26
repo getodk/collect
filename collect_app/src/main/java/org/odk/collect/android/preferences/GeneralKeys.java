@@ -89,6 +89,7 @@ public final class GeneralKeys {
     public static final String KEY_SMAP_ODK_STYLE_MENUS = "odk_style_menus";  // Show ODK style menus as well as refresh
     public static final String KEY_SMAP_ODK_INSTANCENAME = "odk_instancename";  // Allow user to change instance name
     public static final String KEY_SMAP_ODK_ADMIN_MENU = "odk_admin_menu";  // Show ODK admin menu
+    public static final String KEY_SMAP_EXIT_TRACK_MENU = "smap_exit_track_menu";  // Show ODK admin menu
     public static final String KEY_SMAP_OVERRIDE_SYNC = "smap_override_sync";  // Override the local settings for synchronisation
     public static final String KEY_SMAP_OVERRIDE_LOCATION = "smap_override_location";  // Override the local settings for user trail
     public static final String KEY_SMAP_OVERRIDE_DELETE = "smap_override_del";  // Override the local settings for delete after send
@@ -153,6 +154,7 @@ public final class GeneralKeys {
         hashMap.put(KEY_SMAP_ODK_STYLE_MENUS, true);
         hashMap.put(KEY_SMAP_ODK_INSTANCENAME, false);
         hashMap.put(KEY_SMAP_ODK_ADMIN_MENU, false);
+        hashMap.put(KEY_SMAP_EXIT_TRACK_MENU, false);
 
         hashMap.put(KEY_SMAP_OVERRIDE_SYNC, false);
         hashMap.put(KEY_SMAP_OVERRIDE_DELETE, false);

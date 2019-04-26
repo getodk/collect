@@ -833,10 +833,12 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 // Start a form
                 te.id = fld.id;
 
-                Toast.makeText(
-                        SmapMain.this,
-                        getString(R.string.smap_starting_form, fld.formName),
-                        Toast.LENGTH_LONG).show();
+                SnackbarUtils.showLongSnackbar(findViewById(R.id.pager),
+                        Collect.getInstance().getString(R.string.smap_starting_form, fld.formName));
+                //Toast.makeText(
+                //        SmapMain.this,
+                //        getString(R.string.smap_starting_form, fld.formName),
+                //        Toast.LENGTH_LONG).show();
 
                 completeForm(te);
             } else if(fld.instancePath != null) {
@@ -850,10 +852,13 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 te.formStatus = formStatus;
                 te.formURI = formURI;
 
-                Toast.makeText(
-                        SmapMain.this,
-                        getString(R.string.smap_restarting_form, fld.formName),
-                        Toast.LENGTH_LONG).show();
+                SnackbarUtils.showLongSnackbar(findViewById(R.id.pager),
+                        Collect.getInstance().getString(R.string.smap_restarting_form, fld.formName));
+
+                //Toast.makeText(
+                //        SmapMain.this,
+                //        getString(R.string.smap_restarting_form, fld.formName),
+                //        Toast.LENGTH_LONG).show();
                 completeTask(te);
             }
         }
@@ -965,8 +970,16 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
      * The user has chosen to exit the application
      */
     public void exit() {
-        GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
-        this.finish();
+        boolean continueTracking = PreferenceManager
+                .getDefaultSharedPreferences(this)
+                .getBoolean(GeneralKeys.KEY_SMAP_EXIT_TRACK_MENU, false);
+        if(!continueTracking) {
+            GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
+            this.finish();
+        } else {
+            SnackbarUtils.showLongSnackbar(findViewById(R.id.pager), Collect.getInstance().getString(R.string.smap_continue_tracking));
+        }
+
     }
 
 }

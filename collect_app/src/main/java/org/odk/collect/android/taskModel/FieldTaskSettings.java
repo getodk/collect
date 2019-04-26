@@ -25,6 +25,7 @@ public class FieldTaskSettings {
     public boolean ft_odk_style_menus;
     public boolean ft_specify_instancename;
     public boolean ft_admin_menu;
+    public boolean ft_exit_track_menu;
     public boolean ft_review_final;
     public String ft_send;
     public boolean ft_send_wifi;
