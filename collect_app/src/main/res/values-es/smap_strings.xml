@@ -88,4 +88,5 @@
   <string name="smap_login_failed">No se pudo conectar al servidor</string>
   <string name="smap_login_unauthorized">Error de Inicio de sesión</string>
   <string name="smap_geofence_tasks">Nuevas tareas locales</string>
+  <string name="smap_continue_tracking">La opción Salir ha sido deshabilitada. </string>
 </resources>
