@@ -1,6 +1,7 @@
 package org.odk.collect.android.map;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Handler;
@@ -31,10 +32,13 @@ import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolDragListener;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
+import com.mapbox.mapboxsdk.style.layers.FillLayer;
+import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.style.layers.RasterLayer;
 import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
 import com.mapbox.mapboxsdk.style.sources.RasterSource;
 import com.mapbox.mapboxsdk.style.sources.TileSet;
+import com.mapbox.mapboxsdk.style.sources.VectorSource;
 import com.mapbox.mapboxsdk.utils.ColorUtils;
 
 import org.odk.collect.android.BuildConfig;
@@ -43,6 +47,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.mapboxsdk.MapFragment;
 import org.odk.collect.android.preferences.GeneralKeys;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -56,8 +62,15 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import timber.log.Timber;
 
 import static android.os.Looper.getMainLooper;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillColor;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillOpacity;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineOpacity;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.rasterOpacity;
 
 public class MapboxMapFragment extends MapFragment implements org.odk.collect.android.map.MapFragment,
     OnMapReadyCallback, MapboxMap.OnMapClickListener, MapboxMap.OnMapLongClickListener,
@@ -103,6 +116,8 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
     protected LineManager lineManager;
     protected boolean isDragging;
 
+    protected TileHttpServer tileServer;
+
     // During Robolectric tests, Google Play Services is unavailable; sadly, the
     // "map" field will be null and many operations will need to be stubbed out.
     @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL", justification = "This flag is exposed for Robolectric tests to set")
@@ -116,12 +131,30 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
             }
             return;
         }
+
+        // Mapbox SDK only knows how to fetch tiles via HTTP.  If we want it to
+        // display tiles from a local file, we have to serve them locally over HTTP.
+        try {
+            tileServer = new TileHttpServer();
+            tileServer.start();
+        } catch (IOException e) {
+            Timber.e(e, "Could not start the TileHttpServer");
+        }
+
         activity.getSupportFragmentManager()
             .beginTransaction().replace(containerId, this).commitNow();
         getMapAsync(map -> {
             this.map = map;  // signature of getMapAsync() ensures map is never null
 
             map.setStyle(getDesiredStyleBuilder(), style -> {
+                for (File file : new File(Collect.OFFLINE_LAYERS).listFiles()) {
+                    String name = file.getName();
+                    if (name.endsWith(".mbtiles")) {
+                        String id = name.substring(0, name.length() - ".mbtiles".length());
+                        addMbtiles(style, id, file);
+                    }
+                }
+
                 map.getUiSettings().setCompassGravity(Gravity.TOP | Gravity.START);
                 map.getUiSettings().setCompassMargins(36, 36, 36, 36);
                 map.getStyle().setTransition(new TransitionOptions(0, 0, false));
@@ -154,6 +187,13 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
         });
     }
 
+    @Override public void onDestroy() {
+        if (tileServer != null) {
+            tileServer.destroy();
+        }
+        super.onDestroy();
+    }
+
     @Override public Fragment getFragment() {
         return this;
     }
@@ -173,6 +213,78 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         String url = STYLE_URLS.get(prefs.getString(GeneralKeys.KEY_MAP_BASEMAP, null));
         return new Style.Builder().fromUrl(url == null ? DEFAULT_STYLE_URL : url);
+    }
+
+    @SuppressWarnings("TimberExceptionLogging")
+    private void addMbtiles(Style style, String id, File file) {
+        MbtilesFile mbtiles;
+        try {
+            mbtiles = new MbtilesFile(file);
+        } catch (MbtilesFile.UnsupportedFormatException e) {
+            Timber.w(e.getMessage());
+            return;
+        }
+
+        TileSet tileSet = createTileSet(mbtiles, tileServer.getUrlTemplate(id));
+        tileServer.addSource(id, mbtiles);
+
+        if (mbtiles.getType() == MbtilesFile.Type.VECTOR) {
+            style.addSource(new VectorSource(id, tileSet));
+            List<MbtilesFile.VectorLayer> layers = mbtiles.getVectorLayers();
+            for (MbtilesFile.VectorLayer layer : layers) {
+                // Pick a colour that's a function of the filename and layer name.
+                int hue = (((id + "." + layer.name).hashCode()) & 0x7fffffff) % 360;
+                style.addLayer(new FillLayer(id + "/" + layer.name + ".fill", id).withProperties(
+                    fillColor(Color.HSVToColor(new float[] {hue, 0.3f, 1})),
+                    fillOpacity(0.1f)
+                ).withSourceLayer(layer.name));
+                style.addLayer(new LineLayer(id + "/" + layer.name + ".line", id).withProperties(
+                    lineColor(Color.HSVToColor(new float[] {hue, 0.7f, 1})),
+                    lineWidth(1f),
+                    lineOpacity(0.7f)
+                ).withSourceLayer(layer.name));
+            }
+        }
+        if (mbtiles.getType() == MbtilesFile.Type.RASTER) {
+            style.addSource(new RasterSource(id, tileSet));
+            style.addLayer(new RasterLayer(id + ".raster", id).withProperties(
+                rasterOpacity(0.5f)
+            ));
+        }
+        Timber.i("Added %s as a %s layer at /%s", file, mbtiles.getType(), id);
+    }
+
+    private TileSet createTileSet(MbtilesFile mbtiles, String urlTemplate) {
+        TileSet tileSet = new TileSet("2.2.0", urlTemplate);
+
+        // Configure the TileSet using the metadata in the .mbtiles file.
+        tileSet.setName(mbtiles.getMetadata("name"));
+        try {
+            tileSet.setMinZoom(Integer.parseInt(mbtiles.getMetadata("minzoom")));
+            tileSet.setMaxZoom(Integer.parseInt(mbtiles.getMetadata("maxzoom")));
+        } catch (NumberFormatException e) { /* ignore */ }
+
+        String[] parts = mbtiles.getMetadata("center").split(",");
+        if (parts.length == 3) {  // latitude, longitude, zoom
+            try {
+                tileSet.setCenter(
+                    Float.parseFloat(parts[0]), Float.parseFloat(parts[1]),
+                    (float) Integer.parseInt(parts[2])
+                );
+            } catch (NumberFormatException e) { /* ignore */ }
+        }
+
+        parts = mbtiles.getMetadata("bounds").split(",");
+        if (parts.length == 4) {  // left, bottom, right, top
+            try {
+                tileSet.setBounds(
+                    Float.parseFloat(parts[0]), Float.parseFloat(parts[1]),
+                    Float.parseFloat(parts[2]), Float.parseFloat(parts[3])
+                );
+            } catch (NumberFormatException e) { /* ignore */ }
+        }
+
+        return tileSet;
     }
 
     private SymbolManager createSymbolManager() {
