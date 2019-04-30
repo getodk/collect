@@ -87,14 +87,7 @@ the specific language governing permissions and limitations under the License.
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true">
-        <provider
-            android:name=".provider.FormsProvider"
-            android:authorities="org.odk.collect.android.provider.odk.forms"
-            android:exported="true" />
-        <provider
-            android:name=".provider.InstanceProvider"
-            android:authorities="org.odk.collect.android.provider.odk.instances"
-            android:exported="true" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -114,20 +107,6 @@ the specific language governing permissions and limitations under the License.
             android:stateNotNeeded="true"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".activities.FormEntryActivity"
-            android:configChanges="orientation"
-            android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.EDIT" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="vnd.android.cursor.item/vnd.odk.form" />
-                <data android:mimeType="vnd.android.cursor.item/vnd.odk.instance" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".activities.NotificationActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
@@ -140,34 +119,6 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.GoogleDriveActivity"
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".activities.InstanceChooserList">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.EDIT" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".activities.FormChooserList">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.EDIT" />
-                <action android:name="android.intent.action.PICK" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".activities.FormDownloadList">
-            <intent-filter>
-                <action android:name="org.odk.collect.android.FORM_DOWNLOAD" />
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".activities.FileManagerTabs"
             android:configChanges="orientation|screenSize" />
@@ -176,26 +127,8 @@ the specific language governing permissions and limitations under the License.
             android:configChanges="orientation|screenSize" />
         <activity
             android:name=".activities.InstanceUploaderListActivity"
-            android:configChanges="orientation|screenSize">
-        </activity>
-        <activity-alias
-            android:name=".activities.InstanceUploaderList"
-            android:targetActivity=".activities.InstanceUploaderListActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.EDIT" />
+            android:configChanges="orientation|screenSize" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity-alias>
-        <activity
-            android:name=".activities.InstanceUploaderActivity">
-            <intent-filter>
-                <action android:name="org.odk.collect.android.INSTANCE_UPLOAD" />
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
-            </intent-filter>
-        </activity>
         <activity android:name=".activities.AboutActivity" />
         <activity android:name=".preferences.PreferencesActivity" />
         <activity android:name=".preferences.AdminPreferencesActivity" />
@@ -209,29 +142,11 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.GeoPolyActivity"
             android:configChanges="orientation" />
         <activity android:name=".activities.BearingActivity" />
-        <activity
-            android:name=".activities.SplashScreenActivity"
-            android:theme="@android:style/Theme.Dialog">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <!-- Enable Shortcuts for Command Actions -->
-        <activity
-            android:name=".activities.AndroidShortcuts"
-            android:label="ODK Form"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.CREATE_SHORTCUT" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
         <activity android:name=".activities.CaptureSelfieActivity" />
         <activity android:name=".activities.CaptureSelfieActivityNewApi" />
+        <activity android:name=".activities.WebViewActivity" />
+        <activity android:name=".activities.CaptureSelfieVideoActivity" />
+        <activity android:name=".activities.CaptureSelfieVideoActivityNewApi" />
 
         <!--
         Register AnalyticsReceiver and AnalyticsService to support background
@@ -267,8 +182,112 @@ the specific language governing permissions and limitations under the License.
             android:name="com.google.android.maps"
             android:required="false" />
 
-        <activity android:name=".activities.WebViewActivity" />
-        <activity android:name=".activities.CaptureSelfieVideoActivity" />
-        <activity android:name=".activities.CaptureSelfieVideoActivityNewApi" />
+        <!--
+             ******************External API, DO NOT CHANGE BEFORE DISCUSSING***********************
+             * The providers and activities below are available for external applications to      *
+             * integrate with and are actively in use. If one of these needs to change for some   *
+             * reason, it needs to be placed on a deprecation path so users can adapt before the  *
+             * change. If an activity needs to be renamed internally, use an activity-alias. If   *
+             * the external API needs to be expanded, introduce carefully-named actions.          *
+             **************************************************************************************
+         -->
+
+        <provider
+            android:name=".provider.FormsProvider"
+            android:authorities="org.odk.collect.android.provider.odk.forms"
+            android:exported="true" />
+        <provider
+            android:name=".provider.InstanceProvider"
+            android:authorities="org.odk.collect.android.provider.odk.instances"
+            android:exported="true" />
+
+        <activity
+            android:name=".activities.FormEntryActivity"
+            android:configChanges="orientation"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/vnd.odk.form" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.odk.instance" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".activities.InstanceChooserList">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".activities.FormChooserList">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+                <action android:name="android.intent.action.PICK" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".activities.FormDownloadList">
+            <intent-filter>
+                <action android:name="org.odk.collect.android.FORM_DOWNLOAD" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
+            </intent-filter>
+        </activity>
+
+        <activity-alias
+            android:name=".activities.InstanceUploaderList"
+            android:targetActivity=".activities.InstanceUploaderListActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity
+            android:name=".activities.InstanceUploaderActivity">
+            <intent-filter>
+                <action android:name="org.odk.collect.android.INSTANCE_UPLOAD" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.SplashScreenActivity"
+            android:theme="@android:style/Theme.Dialog">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Enable Shortcuts for Command Actions -->
+        <activity
+            android:name=".activities.AndroidShortcuts"
+            android:label="ODK Form"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>
