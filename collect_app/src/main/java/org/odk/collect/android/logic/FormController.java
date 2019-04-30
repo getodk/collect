@@ -708,8 +708,11 @@ public class FormController {
      * Returns true if the index is either a repeatable group or a visible group.
      */
     public boolean isDisplayableGroup(FormIndex index) {
-        return getEvent(index) == FormEntryController.EVENT_REPEAT ||
-                (getEvent(index) == FormEntryController.EVENT_GROUP && isPresentationGroup(index) && isLogicalGroup(index));
+        int event = getEvent(index);
+        return event == FormEntryController.EVENT_REPEAT
+                || event == FormEntryController.EVENT_PROMPT_NEW_REPEAT
+                || (event == FormEntryController.EVENT_GROUP
+                && isPresentationGroup(index) && isLogicalGroup(index));
     }
 
     /**
