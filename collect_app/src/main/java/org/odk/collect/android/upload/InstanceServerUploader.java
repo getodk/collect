@@ -26,7 +26,6 @@ import org.odk.collect.android.http.HttpHeadResult;
 import org.odk.collect.android.http.HttpPostResult;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
@@ -68,16 +67,12 @@ public class InstanceServerUploader extends InstanceUploader {
     public String uploadOneSubmission(Instance instance, String urlString) throws UploadException {
         Uri submissionUri = Uri.parse(urlString);
 
-        // Used to determine if attachments should be sent for Aggregate < 0.9x servers
-        boolean openRosaServer = false;
-
         long contentLength = 10000000L;
 
         // We already issued a head request and got a response, so we know it was an
         // OpenRosa-compliant server. We also know the proper URL to send the submission to and
         // the proper scheme.
         if (uriRemap.containsKey(submissionUri)) {
-            openRosaServer = true;
             submissionUri = uriRemap.get(submissionUri);
             Timber.i("Using Uri remap for submission %s. Now: %s", instance.getDatabaseId(),
                     submissionUri.toString());
@@ -128,7 +123,6 @@ public class InstanceServerUploader extends InstanceUploader {
                         Uri newURI = Uri.parse(URLDecoder.decode(responseHeaders.get("Location"), "utf-8"));
                         // Allow redirects within same host. This could be redirecting to HTTPS.
                         if (submissionUri.getHost().equalsIgnoreCase(newURI.getHost())) {
-                            openRosaServer = true;
                             // Re-add params if server didn't respond with params
                             if (newURI.getQuery() == null) {
                                 newURI = newURI.buildUpon()
@@ -179,7 +173,7 @@ public class InstanceServerUploader extends InstanceUploader {
             throw new UploadException(FAIL + "instance XML file does not exist!");
         }
 
-        List<File> files = getFilesInParentDirectory(instanceFile, submissionFile, openRosaServer);
+        List<File> files = getFilesInParentDirectory(instanceFile, submissionFile);
 
         // TODO: when can this happen? It used to cause the whole submission attempt to fail. Should it?
         if (files == null) {
@@ -233,7 +227,7 @@ public class InstanceServerUploader extends InstanceUploader {
         return null;
     }
 
-    private List<File> getFilesInParentDirectory(File instanceFile, File submissionFile, boolean openRosaServer) {
+    private List<File> getFilesInParentDirectory(File instanceFile, File submissionFile) {
         List<File> files = new ArrayList<>();
 
         // find all files in parent directory
@@ -253,23 +247,7 @@ public class InstanceServerUploader extends InstanceUploader {
                 continue; // the xml file has already been added
             }
 
-            String extension = FileUtils.getFileExtension(fileName);
-
-            if (openRosaServer) {
-                files.add(f);
-            } else if (extension.equals("jpg")) { // legacy 0.9x
-                files.add(f);
-            } else if (extension.equals("3gpp")) { // legacy 0.9x
-                files.add(f);
-            } else if (extension.equals("3gp")) { // legacy 0.9x
-                files.add(f);
-            } else if (extension.equals("mp4")) { // legacy 0.9x
-                files.add(f);
-            } else if (extension.equals("osm")) { // legacy 0.9x
-                files.add(f);
-            } else {
-                Timber.w("unrecognized file type %s", f.getName());
-            }
+            files.add(f);
         }
 
         return files;
