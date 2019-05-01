@@ -17,16 +17,44 @@
 package org.odk.collect.android.test;
 
 import android.view.View;
+import android.widget.SeekBar;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
+import androidx.test.espresso.matcher.BoundedMatcher;
+
 /**
- * Grab bag of Hamcrest matchers useful for testing.
+ * Grab bag of Hamcrest matchers.
  */
 public class CustomMatchers {
-    // https://stackoverflow.com/a/39756832
+    private CustomMatchers() {
+
+    }
+
+    /**
+     * Matches a SeekBar with progress {@code expectedProgress}.
+     */
+    public static Matcher<View> withProgress(final int expectedProgress) {
+        return new BoundedMatcher<View, SeekBar>(SeekBar.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("expected: ");
+                description.appendText(String.valueOf(expectedProgress));
+            }
+
+            @Override
+            public boolean matchesSafely(SeekBar seekBar) {
+                return seekBar.getProgress() == expectedProgress;
+            }
+        };
+    }
+
+    /**
+     * Matches the view at the given index. Useful when several views have the same properties.
+     * https://stackoverflow.com/a/39756832
+     */
     public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
         return new TypeSafeMatcher<View>() {
             int currentIndex;

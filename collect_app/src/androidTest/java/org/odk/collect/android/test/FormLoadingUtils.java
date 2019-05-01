@@ -22,6 +22,7 @@ import android.os.Environment;
 
 import org.apache.commons.io.IOUtils;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.tasks.FormLoaderTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,17 +38,34 @@ import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING
 
 public class FormLoadingUtils {
     private static final String FORMS_PATH = Environment.getExternalStorageDirectory().getPath() + "/odk/forms/";
+    public static final String ALL_WIDGETS_FORM = "all-widgets.xml";
 
-    public static void copyFormToSdCard(String formFilename) throws IOException {
+    private FormLoadingUtils() {
+        
+    }
+
+    /**
+     * Copies a form with the given file name from the given assets folder to the SD Card where it
+     * will be loaded by {@link FormLoaderTask}.
+     */
+    public static void copyFormToSdCard(String formFilename, String formAssetPath) throws IOException {
         String pathname = FORMS_PATH + formFilename;
 
         AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
-        InputStream inputStream = assetManager.open(formFilename);
+        InputStream inputStream = assetManager.open(formAssetPath + formFilename);
 
         File outFile = new File(pathname);
         OutputStream outputStream = new FileOutputStream(outFile);
 
         IOUtils.copy(inputStream, outputStream);
+    }
+
+    /**
+     * Copies a form with the given file name from the assets root to the SD Card where it
+     * will be loaded by {@link FormLoaderTask}.
+     */
+    public static void copyFormToSdCard(String formFilename) throws IOException {
+        copyFormToSdCard(formFilename, "");
     }
 
     public static IntentsTestRule<FormEntryActivity> getFormActivityTestRuleFor(String formFilename) {
@@ -58,6 +76,12 @@ public class FormLoadingUtils {
                 intent.putExtra(EXTRA_TESTING_PATH, FORMS_PATH + formFilename);
 
                 return intent;
+            }
+
+            @Override
+            protected void afterActivityLaunched() {
+                this.getActivity().setShouldOverrideAnimations(true);
+                super.afterActivityLaunched();
             }
         };
     }
