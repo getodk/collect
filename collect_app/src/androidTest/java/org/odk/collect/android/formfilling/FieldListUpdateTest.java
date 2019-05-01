@@ -1,3 +1,19 @@
+/*
+ * Copyright 2019 Nafundi
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.odk.collect.android.formfilling;
 
 import android.Manifest;
@@ -16,12 +32,17 @@ import org.apache.commons.io.IOUtils;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.test.FormLoadingUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,41 +60,30 @@ import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyBe
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
+import static org.odk.collect.android.test.CustomMatchers.withIndex;
 
-@RunWith(AndroidJUnit4.class)
-/**
- * TODO: consolidate boilerplate with {@link org.odk.collect.android.AllWidgetsFormTest}? Challenge
- * is that much of it is static and needs to have the form path.
- */
 public class FieldListUpdateTest {
-    private static final String FORMS_PATH = Environment.getExternalStorageDirectory().getPath() + "/odk/forms/";
     private static final String FIELD_LIST_TEST_FORM = "fieldlist-updates.xml";
 
     @Rule
-    public FormEntryActivityTestRule activityTestRule = new FormEntryActivityTestRule();
+    public IntentsTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(FIELD_LIST_TEST_FORM);
 
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
     @BeforeClass
     public static void copyFormToSdCard() throws IOException {
-        String pathname =  FORMS_PATH + FIELD_LIST_TEST_FORM;
-
-        AssetManager assetManager = InstrumentationRegistry.getContext().getAssets();
-        InputStream inputStream = assetManager.open(FIELD_LIST_TEST_FORM);
-
-        File outFile = new File(pathname);
-        OutputStream outputStream = new FileOutputStream(outFile);
-
-        IOUtils.copy(inputStream, outputStream);
+        FormLoadingUtils.copyFormToSdCard(FIELD_LIST_TEST_FORM);
     }
 
     @Test
@@ -295,38 +305,5 @@ public class FieldListUpdateTest {
         onView(withText("B1A")).check(doesNotExist());
         onView(withText("B1")).check(doesNotExist());
         onView(withText("C1")).check(doesNotExist());
-    }
-
-    private static class FormEntryActivityTestRule extends IntentsTestRule<FormEntryActivity> {
-        FormEntryActivityTestRule() {
-            super(FormEntryActivity.class);
-        }
-
-        @Override
-        protected Intent getActivityIntent() {
-            Intent intent = new Intent(ApplicationProvider.getApplicationContext(), FormEntryActivity.class);
-            intent.putExtra(EXTRA_TESTING_PATH, FORMS_PATH + FIELD_LIST_TEST_FORM);
-
-            return intent;
-        }
-    }
-
-    // https://stackoverflow.com/a/39756832
-    public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
-        return new TypeSafeMatcher<View>() {
-            int currentIndex;
-
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("with index: ");
-                description.appendValue(index);
-                matcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                return matcher.matches(view) && currentIndex++ == index;
-            }
-        };
     }
 }
