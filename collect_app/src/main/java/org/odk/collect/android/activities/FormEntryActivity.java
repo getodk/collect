@@ -1215,8 +1215,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
 
                 if (showNavigationButtons) {
-                    backButton.setVisibility(!formController.isCurrentQuestionFirstInForm() && allowMovingBackwards ? View.VISIBLE : View.GONE);
-                    nextButton.setVisibility(View.VISIBLE);
+                    updateNavigationButtonVisibility();
                 }
                 return odkView;
 
@@ -1381,8 +1380,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 });
 
         if (showNavigationButtons) {
-            backButton.setEnabled(allowMovingBackwards);
-            nextButton.setEnabled(false);
+            updateNavigationButtonVisibility();
         }
 
         return endView;
@@ -2067,6 +2065,24 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
+    /**
+     * Shows the next or back button, neither or both. Both buttons are displayed unless:
+     * - we are at the first question in the form so the back button is hidden
+     * - we are at the end screen so the next button is hidden
+     * - settings prevent backwards navigation of the form so the back button is hidden
+     *
+     * The visibility of the container for these buttons is determined once {@link #onResume()}.
+     */
+    private void updateNavigationButtonVisibility() {
+        FormController formController = getFormController();
+        if (formController == null) {
+            return;
+        }
+
+        backButton.setVisibility(!formController.isCurrentQuestionFirstInForm() && allowMovingBackwards ? View.VISIBLE : View.GONE);
+        nextButton.setVisibility(formController.getEvent() != FormEntryController.EVENT_END_OF_FORM ? View.VISIBLE : View.GONE);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -2132,8 +2148,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         String navigation = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_NAVIGATION);
         showNavigationButtons = navigation.contains(GeneralKeys.NAVIGATION_BUTTONS);
+
         findViewById(R.id.buttonholder).setVisibility(showNavigationButtons ? View.VISIBLE : View.GONE);
         findViewById(R.id.shadow_up).setVisibility(showNavigationButtons ? View.VISIBLE : View.GONE);
+
+        if (showNavigationButtons) {
+            updateNavigationButtonVisibility();
+        }
 
         if (errorMessage != null) {
             if (alertDialog != null && !alertDialog.isShowing()) {
