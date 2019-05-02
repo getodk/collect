@@ -177,13 +177,17 @@ the specific language governing permissions and limitations under the License.
         <activity
             android:name=".activities.InstanceUploaderListActivity"
             android:configChanges="orientation|screenSize">
+        </activity>
+        <activity-alias
+            android:name=".activities.InstanceUploaderList"
+            android:targetActivity=".activities.InstanceUploaderListActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>
+        </activity-alias>
         <activity
             android:name=".activities.InstanceUploaderActivity">
             <intent-filter>
