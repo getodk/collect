@@ -14,7 +14,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
-public class OkHttpConnectionTest extends OpenRosaHttpInterfaceTest {
+public class OkHttpConnectionExecuteGetRequestTest extends OpenRosaHttpInterfaceExecuteGetRequestTest {
 
     @Override
     protected OpenRosaHttpInterface buildSubject() {
@@ -24,7 +24,7 @@ public class OkHttpConnectionTest extends OpenRosaHttpInterfaceTest {
     }
 
     @Test
-    public void executeGetRequest_withCredentials_whenHttps_retriesWithCredentials() throws Exception  {
+    public void withCredentials_whenHttps_retriesWithCredentials() throws Exception  {
         MockWebServer httpsMockWebServer = new MockWebServer();
         httpsMockWebServer.useHttps(TlsUtil.localhost().sslSocketFactory(), false);
         httpsMockWebServer.start();

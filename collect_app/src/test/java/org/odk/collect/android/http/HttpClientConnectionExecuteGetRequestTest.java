@@ -12,7 +12,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
-public class HttpClientConnectionTest extends OpenRosaHttpInterfaceTest {
+public class HttpClientConnectionExecuteGetRequestTest extends OpenRosaHttpInterfaceExecuteGetRequestTest {
 
     @Override
     protected OpenRosaHttpInterface buildSubject() {
@@ -20,7 +20,7 @@ public class HttpClientConnectionTest extends OpenRosaHttpInterfaceTest {
     }
 
     @Test
-    public void executeGetRequest_withCredentials_whenHttpsPort_retriesWithCredentials() throws Exception  {
+    public void withCredentials_whenHttpsPort_retriesWithCredentials() throws Exception  {
         MockWebServer httpsPortMockWebServer = new MockWebServer();
         httpsPortMockWebServer.start(8443);
 
