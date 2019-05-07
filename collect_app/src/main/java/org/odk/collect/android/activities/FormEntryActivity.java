@@ -2913,6 +2913,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         if (formController.indexIsInFieldList()) {
             updateFieldListQuestions(changedWidget.getFormEntryPrompt().getIndex());
+
+            odkView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    if (!odkView.isDisplayed(changedWidget)) {
+                        odkView.scrollTo(changedWidget);
+                    }
+                    odkView.removeOnLayoutChangeListener(this);
+                }
+            });
         }
     }
 

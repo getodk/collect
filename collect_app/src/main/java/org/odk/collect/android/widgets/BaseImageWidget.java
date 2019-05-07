@@ -123,8 +123,8 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             binaryName = newImage.getName();
             Timber.i("Setting current answer to %s", newImage.getName());
 
-            widgetValueChanged();
             addCurrentImageToLayout();
+            widgetValueChanged();
         } else {
             Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }

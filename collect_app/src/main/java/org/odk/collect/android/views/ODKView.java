@@ -21,10 +21,12 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -403,6 +405,21 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     }
 
     /**
+     * Returns true if any part of the question widget is currently on the screen or false otherwise.
+     */
+    public boolean isDisplayed(QuestionWidget qw) {
+        Rect scrollBounds = new Rect();
+        findViewById(R.id.odk_view_container).getHitRect(scrollBounds);
+        return qw.getLocalVisibleRect(scrollBounds);
+    }
+
+    public void scrollTo(@Nullable QuestionWidget qw) {
+        if (qw != null && widgets.contains(qw)) {
+            findViewById(R.id.odk_view_container).scrollTo(0, qw.getTop());
+        }
+    }
+
+    /**
      * Called when another activity returns information to answer this question.
      */
     public void setBinaryData(Object answer) {
@@ -563,7 +580,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             // answers are validated during form finalization.
             new Handler().postDelayed(() -> {
                 qw.setFocus(getContext());
-                findViewById(R.id.odk_view_container).scrollTo(0, qw.getTop());
+                scrollTo(qw);
 
                 ValueAnimator va = new ValueAnimator();
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {

@@ -17,6 +17,12 @@
 package org.odk.collect.android.formfilling;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.Instrumentation;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.rule.GrantPermissionRule;
 
@@ -25,8 +31,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.test.FormLoadingUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -38,11 +47,16 @@ import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyAb
 import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyBelow;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intending;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.isInternal;
+import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
+import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.core.StringStartsWith.startsWith;
@@ -281,5 +295,45 @@ public class FieldListUpdateTest {
         onView(withText("B1A")).check(doesNotExist());
         onView(withText("B1")).check(doesNotExist());
         onView(withText("C1")).check(doesNotExist());
+    }
+
+    @Test
+    public void questionsAppearingBeforeCurrentTextQuestion_ShouldNotChangeFocus() {
+        onView(withId(R.id.menu_goto)).perform(click());
+        onView(withId(R.id.menu_go_up)).perform(click());
+        onView(allOf(withText("Push off screen"), isDisplayed())).perform(click());
+        onView(withText(startsWith("Source9"))).perform(click());
+
+        onView(withText("Target9-15")).check(doesNotExist());
+        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText("A"));
+
+        onView(withText("Target9-15")).check(matches(isDisplayed()));
+
+        onView(withIndex(withClassName(endsWith("EditText")), 15)).check(matches(isCompletelyDisplayed()));
+        onView(withIndex(withClassName(endsWith("EditText")), 15)).check(matches(hasFocus()));
+    }
+
+    @Test
+    public void questionsAppearingBeforeCurrentBinaryQuestion_ShouldNotChangeFocus() throws IOException {
+        onView(withId(R.id.menu_goto)).perform(click());
+        onView(withId(R.id.menu_go_up)).perform(click());
+        onView(allOf(withText("Push off screen binary"), isDisplayed())).perform(click());
+        onView(withText(startsWith("Source10"))).perform(click());
+
+        onView(withText("Target10-15")).check(doesNotExist());
+
+        // FormEntryActivity expects an image at a fixed path so copy the app logo there
+        Bitmap icon = BitmapFactory.decodeResource(ApplicationProvider.getApplicationContext().getResources(), R.drawable.notes);
+        File tmpJpg = new File(Collect.TMPFILE_PATH);
+        tmpJpg.createNewFile();
+        FileOutputStream fos = new FileOutputStream(tmpJpg);
+        icon.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+
+        intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
+
+        onView(withId(R.id.capture_image)).perform(click());
+
+        onView(withText("Target10-15")).check(matches(isDisplayed()));
+        onView(withId(R.id.capture_image)).check(matches(isCompletelyDisplayed()));
     }
 }
