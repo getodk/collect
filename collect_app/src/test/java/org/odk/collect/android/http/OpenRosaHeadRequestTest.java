@@ -11,9 +11,13 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.isEmptyString;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 public abstract class OpenRosaHeadRequestTest {
 
@@ -106,5 +110,16 @@ public abstract class OpenRosaHeadRequestTest {
         subject.executeHeadRequest(mockWebServer.url("").uri(), new HttpCredentials("user", "pass"));
 
         assertThat(mockWebServer.getRequestCount(), equalTo(1));
+    }
+
+    @Test
+    public void whenAnExceptionIsThrown_throwsExceptionWithMessage() {
+        try {
+            subject.executeHeadRequest(new URI("http://localhost:8443"), null);
+            fail();
+        } catch (Exception e) {
+            assertThat(e, isA(Exception.class));
+            assertThat(e.getMessage(), not(isEmptyString()));
+        }
     }
 }
