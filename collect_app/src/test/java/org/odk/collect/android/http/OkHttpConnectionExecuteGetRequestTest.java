@@ -1,8 +1,11 @@
 package org.odk.collect.android.http;
 
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+
+import java.io.IOException;
 
 import okhttp3.OkHttpClient;
 import okhttp3.mockwebserver.MockResponse;
@@ -16,6 +19,8 @@ import static org.junit.Assert.assertThat;
 @RunWith(RobolectricTestRunner.class)
 public class OkHttpConnectionExecuteGetRequestTest extends OpenRosaHttpInterfaceExecuteGetRequestTest {
 
+    private MockWebServer httpsMockWebServer;
+
     @Override
     protected OpenRosaHttpInterface buildSubject() {
         return new OkHttpConnection(new OkHttpClient.Builder()
@@ -23,9 +28,16 @@ public class OkHttpConnectionExecuteGetRequestTest extends OpenRosaHttpInterface
         );
     }
 
+    @After
+    public void shutdownMockWebserver() throws IOException {
+        if (httpsMockWebServer != null) {
+            httpsMockWebServer.shutdown();
+        }
+    }
+
     @Test
     public void withCredentials_whenHttps_retriesWithCredentials() throws Exception  {
-        MockWebServer httpsMockWebServer = new MockWebServer();
+        httpsMockWebServer = new MockWebServer();
         httpsMockWebServer.useHttps(TlsUtil.localhost().sslSocketFactory(), false);
         httpsMockWebServer.start();
 

@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
-public class HttpClientConnectionExecuteGetRequestTest extends OpenRosaHttpInterfaceExecuteGetRequestTest {
+public class HttpClientConnectionExecuteHeadRequestTest extends OpenRosaHttpInterfaceExecuteHeadRequestTest {
 
     private MockWebServer httpsPortMockWebServer;
 
@@ -38,11 +38,10 @@ public class HttpClientConnectionExecuteGetRequestTest extends OpenRosaHttpInter
 
         httpsPortMockWebServer.enqueue(new MockResponse()
                 .setResponseCode(401)
-                .addHeader("WWW-Authenticate: Basic realm=\"protected area\"")
-                .setBody("Please authenticate."));
+                .addHeader("WWW-Authenticate: Basic realm=\"protected area\""));
         httpsPortMockWebServer.enqueue(new MockResponse());
 
-        buildSubject().executeGetRequest(httpsPortMockWebServer.url("").uri(), null, new HttpCredentials("user", "pass"));
+        buildSubject().executeHeadRequest(httpsPortMockWebServer.url("").uri(), new HttpCredentials("user", "pass"));
 
         assertThat(httpsPortMockWebServer.getRequestCount(), equalTo(2));
         httpsPortMockWebServer.takeRequest();
