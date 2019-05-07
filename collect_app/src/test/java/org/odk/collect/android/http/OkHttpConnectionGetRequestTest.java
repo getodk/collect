@@ -39,7 +39,7 @@ public class OkHttpConnectionGetRequestTest extends OpenRosaGetRequestTest {
     public void withCredentials_whenHttps_retriesWithCredentials() throws Exception  {
         httpsMockWebServer = new MockWebServer();
         httpsMockWebServer.useHttps(TlsUtil.localhost().sslSocketFactory(), false);
-        httpsMockWebServer.start();
+        httpsMockWebServer.start(8443);
 
         httpsMockWebServer.enqueue(new MockResponse()
                 .setResponseCode(401)

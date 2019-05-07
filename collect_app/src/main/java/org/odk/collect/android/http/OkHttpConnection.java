@@ -184,8 +184,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     }
 
     @NonNull
-    @Override
-    public HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
+    private HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
         setCredentialsIfNeeded(credentials, uri.getScheme());
         HttpPostResult postResult;
         Request request = buildPostRequest(uri, multipartBody);

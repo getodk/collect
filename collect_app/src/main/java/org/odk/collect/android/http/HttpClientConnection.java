@@ -419,17 +419,6 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
         return postResult;
     }
 
-    /**
-     * HttpPostResult - This is just stubbed out for now, implemented when we move to OkHttpConnection
-     * @param uri of which to post
-     * @param credentials to use on this post request
-     * @return null
-     * @throws Exception not used
-     */
-    public HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        return new HttpPostResult("", 0, "");
-    }
-
     private void addCredentialsForHost(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) {
         if (credentials != null) {
             addCredentials(credentials.getUsername(), credentials.getPassword(), uri.getHost());
