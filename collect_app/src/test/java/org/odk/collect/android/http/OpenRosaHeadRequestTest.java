@@ -14,7 +14,7 @@ import okhttp3.mockwebserver.RecordedRequest;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-public abstract class OpenRosaHttpInterfaceExecuteHeadRequestTest {
+public abstract class OpenRosaHeadRequestTest {
 
     protected abstract OpenRosaHttpInterface buildSubject();
 

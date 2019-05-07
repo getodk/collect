@@ -17,7 +17,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
-public class OkHttpConnectionExecuteGetRequestTest extends OpenRosaHttpInterfaceExecuteGetRequestTest {
+public class OkHttpConnectionGetRequestTest extends OpenRosaGetRequestTest {
 
     private MockWebServer httpsMockWebServer;
 

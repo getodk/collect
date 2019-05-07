@@ -23,7 +23,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-public abstract class OpenRosaHttpInterfaceExecuteGetRequestTest {
+public abstract class OpenRosaGetRequestTest {
 
     protected abstract OpenRosaHttpInterface buildSubject();
 
