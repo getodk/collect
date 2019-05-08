@@ -32,6 +32,9 @@ import org.junit.Test;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.test.FormLoadingUtils;
 
 import java.io.File;
@@ -335,5 +338,19 @@ public class FieldListUpdateTest {
 
         onView(withText("Target10-15")).check(matches(isDisplayed()));
         onView(withId(R.id.capture_image)).check(matches(isCompletelyDisplayed()));
+    }
+
+    @Test
+    public void changeInValueUsedInGuidanceHint_ShouldChangeGuidanceHintText() {
+        GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_GUIDANCE_HINT, GuidanceHint.Yes.toString());
+        onView(withId(R.id.menu_goto)).perform(click());
+        onView(withId(R.id.menu_go_up)).perform(click());
+        onView(allOf(withText("Guidance hint"), isDisplayed())).perform(click());
+        onView(withText(startsWith("Source11"))).perform(click());
+
+        onView(withText("10")).check(doesNotExist());
+        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText("5"));
+        onView(withText("10")).check(matches(isDisplayed()));
+        onView(withText("10")).check(isCompletelyBelow(withText("Target11")));
     }
 }

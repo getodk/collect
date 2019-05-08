@@ -5,6 +5,9 @@
     <model>
       <itext>
         <translation default="true()" lang="default">
+          <text id="/fieldlist-updates/guidance/target11:hint">
+            <value form="guidance"><output value=" /fieldlist-updates/guidance/calculate11 "/></value>
+          </text>
           <text id="static_instance-level1-0">
             <value>A</value>
           </text>
@@ -135,6 +138,11 @@
             </relevance_group2>
             <source10/>
           </push_off_screen_binary>
+          <guidance>
+            <source11/>
+            <calculate11/>
+            <target11/>
+          </guidance>
           <meta>
             <instanceID/>
           </meta>
@@ -160,53 +168,53 @@
         <root>
           <item>
             <itextId>static_instance-level2-0</itextId>
-            <name>a1</name>
             <level1>a</level1>
+            <name>a1</name>
           </item>
           <item>
             <itextId>static_instance-level2-1</itextId>
-            <name>a2</name>
             <level1>a</level1>
+            <name>a2</name>
           </item>
           <item>
             <itextId>static_instance-level2-2</itextId>
-            <name>a3</name>
             <level1>a</level1>
+            <name>a3</name>
           </item>
           <item>
             <itextId>static_instance-level2-3</itextId>
-            <name>b1</name>
             <level1>b</level1>
+            <name>b1</name>
           </item>
           <item>
             <itextId>static_instance-level2-4</itextId>
-            <name>b2</name>
             <level1>b</level1>
+            <name>b2</name>
           </item>
           <item>
             <itextId>static_instance-level2-5</itextId>
-            <name>b3</name>
             <level1>b</level1>
+            <name>b3</name>
           </item>
           <item>
             <itextId>static_instance-level2-6</itextId>
-            <name>c1</name>
             <level1>c</level1>
+            <name>c1</name>
           </item>
           <item>
             <itextId>static_instance-level2-7</itextId>
-            <name>c2</name>
             <level1>c</level1>
+            <name>c2</name>
           </item>
           <item>
             <itextId>static_instance-level2-8</itextId>
-            <name>c3</name>
             <level1>c</level1>
+            <name>c3</name>
           </item>
           <item>
             <itextId>static_instance-level2-9</itextId>
-            <name>c4</name>
             <level1>c</level1>
+            <name>c4</name>
           </item>
         </root>
       </instance>
@@ -287,6 +295,9 @@
       <bind nodeset="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-14" type="string"/>
       <bind nodeset="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-15" type="string"/>
       <bind nodeset="/fieldlist-updates/push_off_screen_binary/source10" type="binary"/>
+      <bind nodeset="/fieldlist-updates/guidance/source11" type="int"/>
+      <bind calculate=" /fieldlist-updates/guidance/source11  * 2" nodeset="/fieldlist-updates/guidance/calculate11" type="string"/>
+      <bind nodeset="/fieldlist-updates/guidance/target11" type="string"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/fieldlist-updates/meta/instanceID" readonly="true()" type="string"/>
     </model>
   </h:head>
@@ -518,6 +529,16 @@
       <upload mediatype="image/*" ref="/fieldlist-updates/push_off_screen_binary/source10">
         <label>Source10</label>
       </upload>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/guidance">
+      <label>Guidance hint</label>
+      <input ref="/fieldlist-updates/guidance/source11">
+        <label>Source11</label>
+      </input>
+      <input ref="/fieldlist-updates/guidance/target11">
+        <label>Target11</label>
+        <hint ref="jr:itext('/fieldlist-updates/guidance/target11:hint')"/>
+      </input>
     </group>
   </h:body>
 </h:html>

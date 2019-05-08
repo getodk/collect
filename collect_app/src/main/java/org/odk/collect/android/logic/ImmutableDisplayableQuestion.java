@@ -49,6 +49,11 @@ public class ImmutableDisplayableQuestion {
     private final String helpText;
 
     /**
+     * The guidance hint text of the question.
+     */
+    private final String guidanceText;
+
+    /**
      * The answer text of the question.
      */
     private final String answerText;
@@ -70,6 +75,7 @@ public class ImmutableDisplayableQuestion {
         index = question.getIndex();
         questionText = question.getQuestionText();
         helpText = question.getHelpText();
+        guidanceText = question.getSpecialFormQuestionText(question.getQuestion().getHelpTextID(), "guidance");
         answerText = question.getAnswerText();
         isReadOnly = question.isReadOnly();
 
@@ -93,6 +99,7 @@ public class ImmutableDisplayableQuestion {
                 && question.getIndex().equals(index)
                 && (question.getQuestionText() == null ? questionText == null : question.getQuestionText().equals(questionText))
                 && (question.getHelpText() == null ? helpText == null : question.getHelpText().equals(helpText))
+                && (getGuidanceHintText(question) == null ? guidanceText == null : getGuidanceHintText(question).equals(guidanceText))
                 && (question.getAnswerText() == null ? answerText == null : question.getAnswerText().equals(answerText))
                 && (question.isReadOnly() == isReadOnly)
                 && selectChoiceListsEqual(question.getSelectChoices(), selectChoices);
@@ -117,7 +124,19 @@ public class ImmutableDisplayableQuestion {
     }
 
     /**
-     * TODO: move this to {@link SelectChoice} (JavaRosa)
+     * TODO: move to JavaRosa
+     */
+    private static String getGuidanceHintText(FormEntryPrompt question) {
+        return question.getSpecialFormQuestionText(question.getQuestion().getHelpTextID(), "guidance");
+    }
+
+    /**
+     * Returns true if the two SelectChoice objects currently represent the same choice in the same
+     * position.
+     *
+     * Note: this is here rather than as a .equals for SelectChoice in JavaRosa because SelectChoice
+     * is mutable and keeps track of both the choice and its current position. Clients may want to
+     * define equality differently for different usages.
      */
     private static boolean selectChoicesEqual(SelectChoice selectChoice1, SelectChoice selectChoice2) {
         if (selectChoice1 == null) {
