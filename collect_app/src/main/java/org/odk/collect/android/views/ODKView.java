@@ -59,6 +59,7 @@ import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.QuestionWidget;
+import org.odk.collect.android.widgets.StringWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
@@ -463,7 +464,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                         (TreeReference) prompt.getFormElement().getBind().getReference();
 
                 if (treeReference.getNameLast().equals(key)) {
-
                     switch (prompt.getDataType()) {
                         case Constants.DATATYPE_TEXT:
                             formController.saveAnswer(prompt.getIndex(),
@@ -483,6 +483,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                                             treeReference.toString(false)));
                     }
 
+                    ((StringWidget) questionWidget).setDisplayValueFromModel();
                     break;
                 }
             }

@@ -2982,7 +2982,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         for (int i = 0; i < questionsAfterSave.length; i++) {
             if (!questionsThatHaveNotChanged.contains(questionsAfterSave[i])
                     && !questionsAfterSave[i].getIndex().equals(lastChangedIndex)) {
-                // TODO: think about readOnlyOverride in the context of intent widgets
+                // The values of widgets in intent groups are set by the view so widgetValueChanged
+                // is never called. This means readOnlyOverride can always be set to false.
                 final int targetIndex = i;
                 runOnUiThread(() -> odkView.addWidgetForQuestion(questionsAfterSave[targetIndex],
                         false, targetIndex));

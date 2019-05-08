@@ -94,11 +94,7 @@ public class StringWidget extends QuestionWidget {
         answerText.setHorizontallyScrolling(false);
         answerText.setSingleLine(false);
 
-        String s = prompt.getAnswerText();
-        if (s != null) {
-            answerText.setText(s);
-            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
-        }
+        setDisplayValueFromModel();
 
         if (readOnly) {
             answerText.setBackground(null);
@@ -190,6 +186,15 @@ public class StringWidget extends QuestionWidget {
             if (!(getChildAt(i) instanceof EditText)) {
                 activity.registerForContextMenu(getChildAt(i));
             }
+        }
+    }
+
+    public void setDisplayValueFromModel() {
+        String currentAnswer = getFormEntryPrompt().getAnswerText();
+
+        if (currentAnswer != null) {
+            answerText.setText(currentAnswer);
+            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
         }
     }
 }
