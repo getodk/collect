@@ -35,30 +35,6 @@ public class DatePickerDetails implements Serializable {
         this.datePickerMode = datePickerMode;
     }
 
-    public boolean isGregorianType() {
-        return datePickerType.equals(DatePickerType.GREGORIAN);
-    }
-
-    public boolean isEthiopianType() {
-        return datePickerType.equals(DatePickerType.ETHIOPIAN);
-    }
-
-    public boolean isCopticType() {
-        return datePickerType.equals(DatePickerType.COPTIC);
-    }
-
-    public boolean isIslamicType() {
-        return datePickerType.equals(DatePickerType.ISLAMIC);
-    }
-
-    public boolean isBikramSambatType() {
-        return datePickerType.equals(DatePickerType.BIKRAM_SAMBAT);
-    }
-
-    public boolean isMyanmarType() {
-        return datePickerType.equals(DatePickerType.MYANMAR);
-    }
-
     public boolean isCalendarMode() {
         return datePickerMode.equals(DatePickerMode.CALENDAR);
     }
@@ -73,6 +49,10 @@ public class DatePickerDetails implements Serializable {
 
     public boolean isYearMode() {
         return datePickerMode.equals(DatePickerMode.YEAR);
+    }
+
+    public DatePickerType getDatePickerType() {
+        return datePickerType;
     }
 
     @Override
