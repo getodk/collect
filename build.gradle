@@ -6,7 +6,7 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.2'
+        classpath 'com.android.tools.build:gradle:3.4.0'
         classpath 'com.google.gms:google-services:4.0.1'
         classpath 'org.ow2.asm:asm:6.0' // https://github.com/jacoco/jacoco/issues/639#issuecomment-355424756
         classpath 'org.jacoco:org.jacoco.core:0.8.0'
@@ -15,7 +15,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.github.spotbugs' version '1.6.2'
+    id 'com.github.spotbugs' version '1.6.4'
 }
 
 allprojects {
