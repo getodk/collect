@@ -27,11 +27,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.DateWidget;
 import org.odk.collect.android.widgets.TimeWidget;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import java.util.TimeZone;
 
@@ -106,7 +107,7 @@ public class DaylightSavingTest {
         when(datePickerDialog.getDatePicker().getMonth()).thenReturn(month);
         when(datePickerDialog.getDatePicker().getDayOfMonth()).thenReturn(day);
 
-        DateWidget dateWidget = new DateWidget(RuntimeEnvironment.application, formEntryPromptStub);
+        DateWidget dateWidget = new DateWidget(Robolectric.buildActivity(FormEntryActivity.class).create().get(), formEntryPromptStub);
         dateWidget.setDatePickerDialog(datePickerDialog);
         return dateWidget;
     }
@@ -128,7 +129,7 @@ public class DaylightSavingTest {
         when(timeWidget.getHour()).thenReturn(hour);
         when(timeWidget.getMinute()).thenReturn(minute);
 
-        DateTimeWidget dateTimeWidget = new DateTimeWidget(RuntimeEnvironment.application, formEntryPromptStub);
+        DateTimeWidget dateTimeWidget = new DateTimeWidget(Robolectric.buildActivity(FormEntryActivity.class).create().get(), formEntryPromptStub);
         dateTimeWidget.setDateWidget(dateWidget);
         dateTimeWidget.setTimeWidget(timeWidget);
 

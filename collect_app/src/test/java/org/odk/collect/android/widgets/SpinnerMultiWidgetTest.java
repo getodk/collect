@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.SelectChoice;
 import org.odk.collect.android.widgets.base.GeneralSelectMultiWidgetTest;
-import org.robolectric.RuntimeEnvironment;
 
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class SpinnerMultiWidgetTest extends GeneralSelectMultiWidgetTest<Spinner
     @NonNull
     @Override
     public SpinnerMultiWidget createWidget() {
-        return new SpinnerMultiWidget(RuntimeEnvironment.application, formEntryPrompt);
+        return new SpinnerMultiWidget(activity, formEntryPrompt);
     }
 
     @Override

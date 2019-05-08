@@ -6,7 +6,6 @@ import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.widgets.base.GeneralStringWidgetTest;
-import org.robolectric.RuntimeEnvironment;
 
 import java.util.Random;
 
@@ -21,7 +20,7 @@ public class StringNumberWidgetTest
     public StringNumberWidget createWidget() {
         Random random = new Random();
         boolean useThousandSeparator = random.nextBoolean();
-        return new StringNumberWidget(RuntimeEnvironment.application, formEntryPrompt, false, useThousandSeparator);
+        return new StringNumberWidget(activity, formEntryPrompt, false, useThousandSeparator);
     }
 
     @NonNull
