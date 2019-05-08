@@ -302,7 +302,7 @@ dependencies {
 
     // Testing-only dependencies
     testImplementation "junit:junit:4.12"
-    testImplementation "org.mockito:mockito-core:2.8.47"
+    testImplementation "org.mockito:mockito-core:2.22.0"
     testImplementation "org.robolectric:robolectric:4.0.1"
     testImplementation "org.robolectric:shadows-multidex:4.0-beta-1"
 
@@ -310,7 +310,7 @@ dependencies {
     testImplementation "org.powermock:powermock-module-junit4:1.6.4"
     testImplementation "org.powermock:powermock-api-mockito2:1.7.3"
 
-    androidTestImplementation "org.mockito:mockito-android:2.11.0"
+    androidTestImplementation "org.mockito:mockito-android:2.22.0"
     androidTestImplementation("androidx.test:runner:1.2.0-alpha03") {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
