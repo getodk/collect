@@ -143,6 +143,10 @@
             <calculate11/>
             <target11/>
           </guidance>
+          <date-time>
+            <source12/>
+            <target12/>
+          </date-time>
           <meta>
             <instanceID/>
           </meta>
@@ -298,6 +302,8 @@
       <bind nodeset="/fieldlist-updates/guidance/source11" type="int"/>
       <bind calculate=" /fieldlist-updates/guidance/source11  * 2" nodeset="/fieldlist-updates/guidance/calculate11" type="string"/>
       <bind nodeset="/fieldlist-updates/guidance/target11" type="string"/>
+      <bind nodeset="/fieldlist-updates/date-time/source12" type="dateTime"/>
+      <bind nodeset="/fieldlist-updates/date-time/target12" relevant=" /fieldlist-updates/date-time/source12  != ''" type="string"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/fieldlist-updates/meta/instanceID" readonly="true()" type="string"/>
     </model>
   </h:head>
@@ -538,6 +544,15 @@
       <input ref="/fieldlist-updates/guidance/target11">
         <label>Target11</label>
         <hint ref="jr:itext('/fieldlist-updates/guidance/target11:hint')"/>
+      </input>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/date-time">
+      <label>Date time</label>
+      <input ref="/fieldlist-updates/date-time/source12">
+        <label>Source12</label>
+      </input>
+      <input ref="/fieldlist-updates/date-time/target12">
+        <label>Target12</label>
       </input>
     </group>
   </h:body>

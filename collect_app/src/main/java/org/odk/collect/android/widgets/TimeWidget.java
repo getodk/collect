@@ -73,10 +73,13 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
 
     @Override
     public void clearAnswer() {
+        clearAnswerWithoutValueChangeEvent();
+        widgetValueChanged();
+    }
+
+    void clearAnswerWithoutValueChangeEvent() {
         nullAnswer = true;
         timeTextView.setText(R.string.no_time_selected);
-
-        widgetValueChanged();
     }
 
     @Override

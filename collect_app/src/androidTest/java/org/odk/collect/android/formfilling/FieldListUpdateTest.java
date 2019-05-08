@@ -353,4 +353,19 @@ public class FieldListUpdateTest {
         onView(withText("10")).check(matches(isDisplayed()));
         onView(withText("10")).check(isCompletelyBelow(withText("Target11")));
     }
+
+    @Test
+    public void selectingADateForDateTime_ShouldChangeRelevanceOfRelatedField() {
+        onView(withId(R.id.menu_goto)).perform(click());
+        onView(withId(R.id.menu_go_up)).perform(click());
+        onView(allOf(withText("Date time"), isDisplayed())).perform(click());
+        onView(withText(startsWith("Source12"))).perform(click());
+
+        onView(withText("Target12")).check(doesNotExist());
+
+        onView(withText(R.string.select_date)).perform(click());
+        onView(withText(R.string.ok)).perform(click());
+
+        onView(withText("Target12")).check(matches(isDisplayed()));
+    }
 }
