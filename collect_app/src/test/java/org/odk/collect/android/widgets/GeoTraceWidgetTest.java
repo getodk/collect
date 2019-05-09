@@ -15,7 +15,6 @@ import org.robolectric.annotation.Config;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
 
 /**
@@ -124,6 +123,6 @@ public class GeoTraceWidgetTest extends BinaryWidgetTest<GeoTraceWidget, StringD
     public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
         stubAllRuntimePermissionsGranted(false);
 
-        assertNull(getIntentLaunchedByClick(R.id.simple_button));
+        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.simple_button));
     }
 }

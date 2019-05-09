@@ -12,8 +12,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
 
-import static org.junit.Assert.assertNull;
-
 /**
  * @author James Knight
  */
@@ -62,6 +60,6 @@ public class BarcodeWidgetTest extends BinaryWidgetTest<BarcodeWidget, StringDat
     public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
         stubAllRuntimePermissionsGranted(false);
 
-        assertNull(getIntentLaunchedByClick(R.id.simple_button));
+        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.simple_button));
     }
 }

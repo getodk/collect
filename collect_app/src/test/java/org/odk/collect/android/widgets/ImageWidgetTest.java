@@ -15,7 +15,6 @@ import org.odk.collect.android.widgets.base.FileWidgetTest;
 
 import java.io.File;
 
-import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
 
 /**
@@ -75,6 +74,6 @@ public class ImageWidgetTest extends FileWidgetTest<ImageWidget> {
     public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
         stubAllRuntimePermissionsGranted(false);
 
-        assertNull(getIntentLaunchedByClick(R.id.capture_image));
+        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.capture_image));
     }
 }
