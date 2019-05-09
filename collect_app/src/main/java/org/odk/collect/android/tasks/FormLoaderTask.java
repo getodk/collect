@@ -121,6 +121,12 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         errorMsg = null;
 
         final String formPath = path[0];
+        if (formPath == null) {
+            Timber.e("formPath is null");
+            errorMsg = "formPath is null, please post on the forum with a description of what you were doing when this happened.";
+            return null;
+        }
+
         final File formXml = new File(formPath);
         final File formMediaDir = FileUtils.getFormMediaDir(formXml);
 
