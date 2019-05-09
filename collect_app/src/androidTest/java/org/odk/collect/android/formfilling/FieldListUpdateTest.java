@@ -84,10 +84,7 @@ public class FieldListUpdateTest {
 
     @Test
     public void relevanceChangeAtEnd_ShouldToggleLastWidgetVisibility() {
-        onView(withId(R.id.menu_goto)).perform(click());
-        onView(withId(R.id.menu_go_up)).perform(click());
-        // TODO: what is with those hidden views with the same text?
-        onView(allOf(withText("Single relevance at end"), isDisplayed())).perform(click());
+        jumpToGroupWithText("Single relevance at end");
         onView(withText("Source1")).perform(click());
 
         onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
@@ -102,9 +99,7 @@ public class FieldListUpdateTest {
 
     @Test
     public void relevanceChangeAtBeginning_ShouldToggleFirstWidgetVisibility() {
-        onView(withId(R.id.menu_goto)).perform(click());
-        onView(withId(R.id.menu_go_up)).perform(click());
-        onView(allOf(withText("Single relevance at beginning"), isDisplayed())).perform(click());
+        jumpToGroupWithText("Single relevance at beginning");
         onView(withText("Source2")).perform(click());
 
         onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
@@ -119,9 +114,7 @@ public class FieldListUpdateTest {
 
     @Test
     public void relevanceChangeInMiddle_ShouldToggleMiddleWidgetVisibility() {
-        onView(withId(R.id.menu_goto)).perform(click());
-        onView(withId(R.id.menu_go_up)).perform(click());
-        onView(allOf(withText("Single relevance in middle"), isDisplayed())).perform(click());
+        jumpToGroupWithText("Single relevance in middle");
         onView(withText("Source3")).perform(click());
 
         onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
@@ -137,9 +130,7 @@ public class FieldListUpdateTest {
 
     @Test
     public void longPress_ShouldClearAndUpdate() {
-        onView(withId(R.id.menu_goto)).perform(click());
-        onView(withId(R.id.menu_go_up)).perform(click());
-        onView(allOf(withText("Single relevance in middle"), isDisplayed())).perform(click());
+        jumpToGroupWithText("Single relevance in middle");
         onView(withText("Source3")).perform(click());
 
         onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
@@ -156,9 +147,7 @@ public class FieldListUpdateTest {
 
     @Test
     public void changeInValueUsedInLabel_ShouldChangeLabelText() {
-        onView(withId(R.id.menu_goto)).perform(click());
-        onView(withId(R.id.menu_go_up)).perform(click());
-        onView(allOf(withText("Label change"), isDisplayed())).perform(click());
+        jumpToGroupWithText("Label change");
         onView(withText(startsWith("Hello"))).perform(click());
 
         String name = UUID.randomUUID().toString();
@@ -173,9 +162,7 @@ public class FieldListUpdateTest {
 
     @Test
     public void changeInValueUsedInHint_ShouldChangeHintText() {
-        onView(withId(R.id.menu_goto)).perform(click());
-        onView(withId(R.id.menu_go_up)).perform(click());
-        onView(allOf(withText("Hint change"), isDisplayed())).perform(click());
+        jumpToGroupWithText("Hint change");
         onView(withText(startsWith("What is your"))).perform(click());
 
         String name = UUID.randomUUID().toString();
@@ -209,9 +196,7 @@ public class FieldListUpdateTest {
 
     @Test
     public void selectionChangeAtFirstCascadeLevel_ShouldUpdateNextLevels() {
-        onView(withId(R.id.menu_goto)).perform(click());
-        onView(withId(R.id.menu_go_up)).perform(click());
-        onView(allOf(withText("Cascading select"), isDisplayed())).perform(click());
+        jumpToGroupWithText("Cascading select");
         onView(withText(startsWith("Level1"))).perform(click());
 
         // No choices should be shown for levels 2 and 3 when no selection is made for level 1
@@ -265,9 +250,7 @@ public class FieldListUpdateTest {
 
     @Test
     public void selectionChangeAtOneCascadeLevelWithMinimalAppearance_ShouldUpdateNextLevels() {
-        onView(withId(R.id.menu_goto)).perform(click());
-        onView(withId(R.id.menu_go_up)).perform(click());
-        onView(allOf(withText("Cascading select minimal"), isDisplayed())).perform(click());
+        jumpToGroupWithText("Cascading select minimal");
         onView(withText(startsWith("Level1"))).perform(click());
 
         // No choices should be shown for levels 2 and 3 when no selection is made for level 1
@@ -305,9 +288,7 @@ public class FieldListUpdateTest {
 
     @Test
     public void questionsAppearingBeforeCurrentTextQuestion_ShouldNotChangeFocus() {
-        onView(withId(R.id.menu_goto)).perform(click());
-        onView(withId(R.id.menu_go_up)).perform(click());
-        onView(allOf(withText("Push off screen"), isDisplayed())).perform(click());
+        jumpToGroupWithText("Push off screen");
         onView(withText(startsWith("Source9"))).perform(click());
 
         onView(withText("Target9-15")).check(doesNotExist());
@@ -321,9 +302,7 @@ public class FieldListUpdateTest {
 
     @Test
     public void questionsAppearingBeforeCurrentBinaryQuestion_ShouldNotChangeFocus() throws IOException {
-        onView(withId(R.id.menu_goto)).perform(click());
-        onView(withId(R.id.menu_go_up)).perform(click());
-        onView(allOf(withText("Push off screen binary"), isDisplayed())).perform(click());
+        jumpToGroupWithText("Push off screen binary");
         onView(withText(startsWith("Source10"))).perform(click());
 
         onView(withText("Target10-15")).check(doesNotExist());
@@ -346,9 +325,7 @@ public class FieldListUpdateTest {
     @Test
     public void changeInValueUsedInGuidanceHint_ShouldChangeGuidanceHintText() {
         GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_GUIDANCE_HINT, GuidanceHint.Yes.toString());
-        onView(withId(R.id.menu_goto)).perform(click());
-        onView(withId(R.id.menu_go_up)).perform(click());
-        onView(allOf(withText("Guidance hint"), isDisplayed())).perform(click());
+        jumpToGroupWithText("Guidance hint");
         onView(withText(startsWith("Source11"))).perform(click());
 
         onView(withText("10")).check(doesNotExist());
@@ -359,9 +336,7 @@ public class FieldListUpdateTest {
 
     @Test
     public void selectingADateForDateTime_ShouldChangeRelevanceOfRelatedField() {
-        onView(withId(R.id.menu_goto)).perform(click());
-        onView(withId(R.id.menu_go_up)).perform(click());
-        onView(allOf(withText("Date time"), isDisplayed())).perform(click());
+        jumpToGroupWithText("Date time");
         onView(withText(startsWith("Source12"))).perform(click());
 
         onView(withText("Target12")).check(doesNotExist());
@@ -374,11 +349,7 @@ public class FieldListUpdateTest {
 
     @Test
     public void selectingARating_ShouldChangeRelevanceOfRelatedField() {
-        onView(withId(R.id.menu_goto)).perform(click());
-        onView(withId(R.id.menu_go_up)).perform(click());
-        onView(withId(R.id.list)).perform(repeatedlyUntil(swipeUp(),
-                hasDescendant(withText("Rating")), MAX_HIERARCHY_SWIPE_ATTEMPTS));
-        onView(withText("Rating")).perform(click());
+        jumpToGroupWithText("Rating");
         onView(withText(startsWith("Source13"))).perform(click());
 
         for (int i = 0; i < 10; i++) {
@@ -390,5 +361,15 @@ public class FieldListUpdateTest {
             onView(withText(R.string.clear_answer)).perform(click());
             onView(withText(R.string.discard_answer)).perform(click());
         }
+    }
+
+    // Scroll down until the desired group name is visible. This is needed to make the tests work
+    // on devices with screens of different heights.
+    private void jumpToGroupWithText(String text) {
+        onView(withId(R.id.menu_goto)).perform(click());
+        onView(withId(R.id.menu_go_up)).perform(click());
+        onView(withId(R.id.list)).perform(repeatedlyUntil(swipeUp(),
+                hasDescendant(withText(text)), MAX_HIERARCHY_SWIPE_ATTEMPTS));
+        onView(allOf(isDisplayed(), withText(text))).perform(click());
     }
 }
