@@ -147,6 +147,10 @@
             <source12/>
             <target12/>
           </date-time>
+          <rating>
+            <source13/>
+            <target13/>
+          </rating>
           <meta>
             <instanceID/>
           </meta>
@@ -172,53 +176,53 @@
         <root>
           <item>
             <itextId>static_instance-level2-0</itextId>
-            <level1>a</level1>
             <name>a1</name>
+            <level1>a</level1>
           </item>
           <item>
             <itextId>static_instance-level2-1</itextId>
-            <level1>a</level1>
             <name>a2</name>
+            <level1>a</level1>
           </item>
           <item>
             <itextId>static_instance-level2-2</itextId>
-            <level1>a</level1>
             <name>a3</name>
+            <level1>a</level1>
           </item>
           <item>
             <itextId>static_instance-level2-3</itextId>
-            <level1>b</level1>
             <name>b1</name>
+            <level1>b</level1>
           </item>
           <item>
             <itextId>static_instance-level2-4</itextId>
-            <level1>b</level1>
             <name>b2</name>
+            <level1>b</level1>
           </item>
           <item>
             <itextId>static_instance-level2-5</itextId>
-            <level1>b</level1>
             <name>b3</name>
+            <level1>b</level1>
           </item>
           <item>
             <itextId>static_instance-level2-6</itextId>
-            <level1>c</level1>
             <name>c1</name>
+            <level1>c</level1>
           </item>
           <item>
             <itextId>static_instance-level2-7</itextId>
-            <level1>c</level1>
             <name>c2</name>
+            <level1>c</level1>
           </item>
           <item>
             <itextId>static_instance-level2-8</itextId>
-            <level1>c</level1>
             <name>c3</name>
+            <level1>c</level1>
           </item>
           <item>
             <itextId>static_instance-level2-9</itextId>
-            <level1>c</level1>
             <name>c4</name>
+            <level1>c</level1>
           </item>
         </root>
       </instance>
@@ -226,23 +230,23 @@
         <root>
           <item>
             <itextId>static_instance-level3-0</itextId>
-            <level2>a1</level2>
             <name>a1a</name>
+            <level2>a1</level2>
           </item>
           <item>
             <itextId>static_instance-level3-1</itextId>
-            <level2>a1</level2>
             <name>a1b</name>
+            <level2>a1</level2>
           </item>
           <item>
             <itextId>static_instance-level3-2</itextId>
-            <level2>b1</level2>
             <name>b1a</name>
+            <level2>b1</level2>
           </item>
           <item>
             <itextId>static_instance-level3-3</itextId>
-            <level2>b1</level2>
             <name>b1b</name>
+            <level2>b1</level2>
           </item>
         </root>
       </instance>
@@ -304,6 +308,8 @@
       <bind nodeset="/fieldlist-updates/guidance/target11" type="string"/>
       <bind nodeset="/fieldlist-updates/date-time/source12" type="dateTime"/>
       <bind nodeset="/fieldlist-updates/date-time/target12" relevant=" /fieldlist-updates/date-time/source12  != ''" type="string"/>
+      <bind nodeset="/fieldlist-updates/rating/source13" type="int"/>
+      <bind nodeset="/fieldlist-updates/rating/target13" relevant=" /fieldlist-updates/rating/source13  != ''" type="string"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/fieldlist-updates/meta/instanceID" readonly="true()" type="string"/>
     </model>
   </h:head>
@@ -553,6 +559,15 @@
       </input>
       <input ref="/fieldlist-updates/date-time/target12">
         <label>Target12</label>
+      </input>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/rating">
+      <label>Rating</label>
+      <range appearance="rating" end="10" ref="/fieldlist-updates/rating/source13" start="1" step="1">
+        <label>Source13</label>
+      </range>
+      <input ref="/fieldlist-updates/rating/target13">
+        <label>Target13</label>
       </input>
     </group>
   </h:body>

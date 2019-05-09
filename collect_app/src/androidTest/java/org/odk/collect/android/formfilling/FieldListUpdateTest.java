@@ -22,10 +22,6 @@ import android.app.Instrumentation;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.rule.GrantPermissionRule;
-
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -42,23 +38,29 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.rule.GrantPermissionRule;
+
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
+import static androidx.test.espresso.action.ViewActions.repeatedlyUntil;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyAbove;
 import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyBelow;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.isInternal;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
 import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.endsWith;
@@ -67,6 +69,7 @@ import static org.odk.collect.android.test.CustomMatchers.withIndex;
 
 public class FieldListUpdateTest {
     private static final String FIELD_LIST_TEST_FORM = "fieldlist-updates.xml";
+    private static final int MAX_HIERARCHY_SWIPE_ATTEMPTS = 10;
 
     @Rule
     public IntentsTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(FIELD_LIST_TEST_FORM);
@@ -367,5 +370,25 @@ public class FieldListUpdateTest {
         onView(withText(R.string.ok)).perform(click());
 
         onView(withText("Target12")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void selectingARating_ShouldChangeRelevanceOfRelatedField() {
+        onView(withId(R.id.menu_goto)).perform(click());
+        onView(withId(R.id.menu_go_up)).perform(click());
+        onView(withId(R.id.list)).perform(repeatedlyUntil(swipeUp(),
+                hasDescendant(withText("Rating")), MAX_HIERARCHY_SWIPE_ATTEMPTS));
+        onView(withText("Rating")).perform(click());
+        onView(withText(startsWith("Source13"))).perform(click());
+
+        for (int i = 0; i < 10; i++) {
+            onView(withText("Target13")).check(doesNotExist());
+            onView(allOf(withClassName(endsWith("ImageButton")), withId(i))).perform(click());
+            onView(withText("Target13")).check(matches(isDisplayed()));
+
+            onView(withText("Source13")).perform(longClick());
+            onView(withText(R.string.clear_answer)).perform(click());
+            onView(withText(R.string.discard_answer)).perform(click());
+        }
     }
 }
