@@ -37,7 +37,7 @@ public class SignatureWidget extends BaseImageWidget {
         super(context, prompt);
         imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_SIGNATURE, RequestCodes.SIGNATURE_CAPTURE, R.string.signature_capture);
         setUpLayout();
-        setUpBinary();
+        addCurrentImageToLayout();
         addAnswerView(answerLayout);
     }
 

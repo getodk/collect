@@ -75,6 +75,8 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
         if (adapter != null) {
             adapter.clearAnswer();
         }
+
+        widgetValueChanged();
     }
 
     @Override
@@ -130,6 +132,8 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
         if (autoAdvance && listener != null) {
             listener.advance();
         }
+
+        widgetValueChanged();
     }
 
     public boolean isAutoAdvance() {

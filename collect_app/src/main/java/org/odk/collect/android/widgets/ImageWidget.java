@@ -58,7 +58,7 @@ public class ImageWidget extends BaseImageWidget {
         imageClickHandler = new ViewImageClickHandler();
         imageCaptureHandler = new ImageCaptureHandler();
         setUpLayout();
-        setUpBinary();
+        addCurrentImageToLayout();
         addAnswerView(answerLayout);
     }
 

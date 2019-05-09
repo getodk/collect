@@ -171,6 +171,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public void clearAnswer() {
         answer.setText(null);
+        widgetValueChanged();
     }
 
     @Override
@@ -186,6 +187,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     public void setBinaryData(Object answer) {
         StringData stringData = ExternalAppsUtils.asStringData(answer);
         this.answer.setText(stringData == null ? null : stringData.getValue().toString());
+        widgetValueChanged();
     }
 
     @Override

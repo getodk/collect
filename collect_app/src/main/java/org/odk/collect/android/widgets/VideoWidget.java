@@ -113,11 +113,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
 
         // retrieve answer from data model and update ui
         binaryName = prompt.getAnswerText();
-        if (binaryName != null) {
-            playButton.setEnabled(true);
-        } else {
-            playButton.setEnabled(false);
-        }
+        playButton.setEnabled(binaryName != null);
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
@@ -201,6 +197,8 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
 
         // reset buttons
         playButton.setEnabled(false);
+
+        widgetValueChanged();
     }
 
     @Override
@@ -279,6 +277,9 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
                 Timber.i("Deleting original capture of file: %s count: %d", binaryName, delCount);
             }
         }
+
+        widgetValueChanged();
+        playButton.setEnabled(binaryName != null);
     }
 
     private void hideButtonsIfNeeded() {

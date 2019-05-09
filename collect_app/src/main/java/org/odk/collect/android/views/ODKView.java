@@ -21,10 +21,12 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -51,11 +53,13 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
+import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.QuestionWidget;
+import org.odk.collect.android.widgets.StringWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
@@ -72,12 +76,12 @@ import timber.log.Timber;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
- * This class is
- *
- * @author carlhartung
+ * Contains either one {@link QuestionWidget} if the current form element is a question or
+ * multiple {@link QuestionWidget}s if the current form element is a group with the
+ * {@code field-list} appearance.
  */
 @SuppressLint("ViewConstructor")
-public class ODKView extends FrameLayout implements OnLongClickListener {
+public class ODKView extends FrameLayout implements OnLongClickListener, WidgetValueChangedListener {
 
     private final LinearLayout view;
     private final LinearLayout.LayoutParams layout;
@@ -85,6 +89,17 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
 
     public static final String FIELD_LIST = "field-list";
 
+    private WidgetValueChangedListener widgetValueChangedListener;
+
+    /**
+     * Builds the view for a specified question or field-list of questions.
+     *
+     * @param context the activity creating this view
+     * @param questionPrompts the questions to be included in this view
+     * @param groups the group hierarchy that this question or field list is in
+     * @param advancingPage whether this view is being created after a forward swipe through the
+     *                      form. Used to determine whether to autoplay media.
+     */
     public ODKView(Context context, final FormEntryPrompt[] questionPrompts,
             FormEntryCaption[] groups, boolean advancingPage) {
         super(context);
@@ -104,112 +119,25 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
         layout.setMargins(10, 0, 10, 0);
 
         // display which group you are in as well as the question
-
         addGroupText(groups);
 
         // when the grouped fields are populated by an external app, this will get true.
         boolean readOnlyOverride = false;
 
-        // get the group we are showing -- it will be the last of the groups in the groups list
+        // handle intent groups that are intended to receive multiple values from an external app
         if (groups != null && groups.length > 0) {
+            // get the group we are showing -- it will be the last of the groups in the groups list
             final FormEntryCaption c = groups[groups.length - 1];
             final String intentString = c.getFormElement().getAdditionalAttribute(null, "intent");
             if (intentString != null && intentString.length() != 0) {
-
                 readOnlyOverride = true;
 
-                final String buttonText;
-                final String errorString;
-                String v = c.getSpecialFormQuestionText("buttonText");
-                buttonText = (v != null) ? v : context.getString(R.string.launch_app);
-                v = c.getSpecialFormQuestionText("noAppErrorString");
-                errorString = (v != null) ? v : context.getString(R.string.no_app);
-
-                TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-                params.setMargins(7, 5, 7, 5);
-
-                // set button formatting
-                Button launchIntentButton = new Button(getContext());
-                launchIntentButton.setId(ViewIds.generateViewId());
-                launchIntentButton.setText(buttonText);
-                launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
-                        Collect.getQuestionFontsize() + 2);
-                launchIntentButton.setPadding(20, 20, 20, 20);
-                launchIntentButton.setLayoutParams(params);
-
-                launchIntentButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String intentName = ExternalAppsUtils.extractIntentName(intentString);
-                        Map<String, String> parameters = ExternalAppsUtils.extractParameters(
-                                intentString);
-
-                        Intent i = new Intent(intentName);
-                        try {
-                            ExternalAppsUtils.populateParameters(i, parameters,
-                                    c.getIndex().getReference());
-
-                            for (FormEntryPrompt p : questionPrompts) {
-                                IFormElement formElement = p.getFormElement();
-                                if (formElement instanceof QuestionDef) {
-                                    TreeReference reference =
-                                            (TreeReference) formElement.getBind().getReference();
-                                    IAnswerData answerValue = p.getAnswerValue();
-                                    Object value =
-                                            answerValue == null ? null : answerValue.getValue();
-                                    switch (p.getDataType()) {
-                                        case Constants.DATATYPE_TEXT:
-                                        case Constants.DATATYPE_INTEGER:
-                                        case Constants.DATATYPE_DECIMAL:
-                                            i.putExtra(reference.getNameLast(),
-                                                    (Serializable) value);
-                                            break;
-                                    }
-                                }
-                            }
-
-                            ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_GROUP_CAPTURE);
-                        } catch (ExternalParamsException e) {
-                            Timber.e(e, "ExternalParamsException");
-
-                            ToastUtils.showShortToast(e.getMessage());
-                        } catch (ActivityNotFoundException e) {
-                            Timber.d(e, "ActivityNotFoundExcept");
-
-                            ToastUtils.showShortToast(errorString);
-                        }
-                    }
-                });
-
-                View divider = new View(getContext());
-                divider.setBackgroundResource(new ThemeUtils(getContext()).getDivider());
-                divider.setMinimumHeight(3);
-                view.addView(divider);
-
-                view.addView(launchIntentButton, layout);
+                addIntentLaunchButton(context, questionPrompts, c, intentString);
             }
         }
 
-        boolean first = true;
-        for (FormEntryPrompt p : questionPrompts) {
-            if (!first) {
-                View divider = new View(getContext());
-                divider.setBackgroundResource(new ThemeUtils(getContext()).getDivider());
-                divider.setMinimumHeight(3);
-                view.addView(divider);
-            } else {
-                first = false;
-            }
-
-            // if question or answer type is not supported, use text widget
-            QuestionWidget qw =
-                    WidgetFactory.createWidgetFromPrompt(p, getContext(), readOnlyOverride);
-            qw.setLongClickable(true);
-            qw.setOnLongClickListener(this);
-            qw.setId(ViewIds.generateViewId());
-
-            widgets.add(qw);
-            view.addView(qw, layout);
+        for (FormEntryPrompt question : questionPrompts) {
+            addWidgetForQuestion(question, readOnlyOverride);
         }
 
         ((NestedScrollView) findViewById(R.id.odk_view_container)).addView(view);
@@ -235,6 +163,72 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
         }
     }
 
+    /**
+     * Creates a {@link QuestionWidget} for the given {@link FormEntryPrompt}, sets its listeners,
+     * and adds it to the end of the view. If this widget is not the first one, add a divider above
+     * it.
+     */
+    private void addWidgetForQuestion(FormEntryPrompt question, boolean readOnlyOverride) {
+        QuestionWidget qw = configureWidgetForQuestion(question, readOnlyOverride);
+
+        widgets.add(qw);
+
+        if (widgets.size() > 1) {
+            view.addView(getDividerView());
+        }
+        view.addView(qw, layout);
+    }
+
+    /**
+     * Creates a {@link QuestionWidget} for the given {@link FormEntryPrompt}, sets its listeners,
+     * and adds it to the view at the specified {@code index}. If this widget is not the first one,
+     * add a divider above it. If the specified {@code index} is beyond the end of the widget list,
+     * add it to the end.
+     */
+    public void addWidgetForQuestion(FormEntryPrompt question, boolean readOnlyOverride, int index) {
+        if (index > widgets.size() - 1) {
+            addWidgetForQuestion(question, readOnlyOverride);
+            return;
+        }
+
+        QuestionWidget qw = configureWidgetForQuestion(question, readOnlyOverride);
+
+        widgets.add(index, qw);
+
+        int indexAccountingForDividers = index * 2;
+        // There may be a first TextView to display the group path. See addGroupText(FormEntryCaption[])
+        if (view.getChildCount() > 0 && view.getChildAt(0) instanceof TextView) {
+            indexAccountingForDividers += 1;
+        }
+
+        if (index > 0) {
+            view.addView(getDividerView(), indexAccountingForDividers - 1);
+        }
+        view.addView(qw, indexAccountingForDividers, layout);
+    }
+
+    /**
+     * Creates and configures a {@link QuestionWidget} for the given {@link FormEntryPrompt}.
+     *
+     * Note: if the given question is of an unsupported type, a text widget will be created.
+     */
+    private QuestionWidget configureWidgetForQuestion(FormEntryPrompt question, boolean readOnlyOverride) {
+        QuestionWidget qw = WidgetFactory.createWidgetFromPrompt(question, getContext(), readOnlyOverride);
+        qw.setOnLongClickListener(this);
+        qw.setValueChangedListener(this);
+        qw.setId(ViewIds.generateViewId());
+
+        return qw;
+    }
+
+    private View getDividerView() {
+        View divider = new View(getContext());
+        divider.setBackgroundResource(new ThemeUtils(getContext()).getDivider());
+        divider.setMinimumHeight(3);
+
+        return divider;
+    }
+
     public Bundle getState() {
         Bundle state = new Bundle();
         for (QuestionWidget qw : getWidgets()) {
@@ -245,6 +239,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
     }
 
     /**
+     * Addresses 'bitmap size exceeds VM budget' crash.
      * http://code.google.com/p/android/issues/detail?id=8488
      */
     public void recycleDrawables() {
@@ -273,7 +268,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
     }
 
     /**
-     * // * Add a TextView containing the hierarchy of groups to which the question belongs. //
+     * Add a TextView containing the hierarchy of groups to which the question belongs.
      */
     private void addGroupText(FormEntryCaption[] groups) {
         String path = getGroupsPath(groups);
@@ -329,9 +324,99 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
         return TextUtils.join(" > ", segments);
     }
 
+
+    /**
+     * Adds a button to launch an intent if the group displayed by this view is an intent group.
+     * An intent group launches an intent and receives multiple values from the launched app.
+     */
+    private void addIntentLaunchButton(Context context, FormEntryPrompt[] questionPrompts,
+                                       FormEntryCaption c, String intentString) {
+        final String buttonText;
+        final String errorString;
+        String v = c.getSpecialFormQuestionText("buttonText");
+        buttonText = (v != null) ? v : context.getString(R.string.launch_app);
+        v = c.getSpecialFormQuestionText("noAppErrorString");
+        errorString = (v != null) ? v : context.getString(R.string.no_app);
+
+        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+        params.setMargins(7, 5, 7, 5);
+
+        // set button formatting
+        Button launchIntentButton = new Button(getContext());
+        launchIntentButton.setId(ViewIds.generateViewId());
+        launchIntentButton.setText(buttonText);
+        launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
+                Collect.getQuestionFontsize() + 2);
+        launchIntentButton.setPadding(20, 20, 20, 20);
+        launchIntentButton.setLayoutParams(params);
+
+        launchIntentButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String intentName = ExternalAppsUtils.extractIntentName(intentString);
+                Map<String, String> parameters = ExternalAppsUtils.extractParameters(
+                        intentString);
+
+                Intent i = new Intent(intentName);
+                try {
+                    ExternalAppsUtils.populateParameters(i, parameters,
+                            c.getIndex().getReference());
+
+                    for (FormEntryPrompt p : questionPrompts) {
+                        IFormElement formElement = p.getFormElement();
+                        if (formElement instanceof QuestionDef) {
+                            TreeReference reference =
+                                    (TreeReference) formElement.getBind().getReference();
+                            IAnswerData answerValue = p.getAnswerValue();
+                            Object value =
+                                    answerValue == null ? null : answerValue.getValue();
+                            switch (p.getDataType()) {
+                                case Constants.DATATYPE_TEXT:
+                                case Constants.DATATYPE_INTEGER:
+                                case Constants.DATATYPE_DECIMAL:
+                                    i.putExtra(reference.getNameLast(),
+                                            (Serializable) value);
+                                    break;
+                            }
+                        }
+                    }
+
+                    ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_GROUP_CAPTURE);
+                } catch (ExternalParamsException e) {
+                    Timber.e(e, "ExternalParamsException");
+
+                    ToastUtils.showShortToast(e.getMessage());
+                } catch (ActivityNotFoundException e) {
+                    Timber.d(e, "ActivityNotFoundExcept");
+
+                    ToastUtils.showShortToast(errorString);
+                }
+            }
+        });
+
+        view.addView(getDividerView());
+
+        view.addView(launchIntentButton, layout);
+    }
+
     public void setFocus(Context context) {
         if (!widgets.isEmpty()) {
             widgets.get(0).setFocus(context);
+        }
+    }
+
+    /**
+     * Returns true if any part of the question widget is currently on the screen or false otherwise.
+     */
+    public boolean isDisplayed(QuestionWidget qw) {
+        Rect scrollBounds = new Rect();
+        findViewById(R.id.odk_view_container).getHitRect(scrollBounds);
+        return qw.getLocalVisibleRect(scrollBounds);
+    }
+
+    public void scrollTo(@Nullable QuestionWidget qw) {
+        if (qw != null && widgets.contains(qw)) {
+            findViewById(R.id.odk_view_container).scrollTo(0, qw.getTop());
         }
     }
 
@@ -363,6 +448,9 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
         }
     }
 
+    /**
+     * Saves answers for the widgets in this view. Called when the widgets are in an intent group.
+     */
     public void setDataForFields(Bundle bundle) throws JavaRosaException {
         if (bundle == null) {
             return;
@@ -376,7 +464,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
                         (TreeReference) prompt.getFormElement().getBind().getReference();
 
                 if (treeReference.getNameLast().equals(key)) {
-
                     switch (prompt.getDataType()) {
                         case Constants.DATATYPE_TEXT:
                             formController.saveAnswer(prompt.getIndex(),
@@ -396,6 +483,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
                                             treeReference.toString(false)));
                     }
 
+                    ((StringWidget) questionWidget).setDisplayValueFromModel();
                     break;
                 }
             }
@@ -481,6 +569,10 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
         }
     }
 
+    /**
+     * Highlights the question at the given {@link FormIndex} in red for 2.5 seconds, scrolls the
+     * view to display that question at the top and gives it focus.
+     */
     public void highlightWidget(FormIndex formIndex) {
         QuestionWidget qw = getQuestionWidget(formIndex);
 
@@ -488,7 +580,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
             // postDelayed is needed because otherwise scrolling may not work as expected in case when
             // answers are validated during form finalization.
             new Handler().postDelayed(() -> {
-                findViewById(R.id.odk_view_container).scrollTo(0, qw.getTop());
+                qw.setFocus(getContext());
+                scrollTo(qw);
 
                 ValueAnimator va = new ValueAnimator();
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
@@ -519,5 +612,33 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
             }
         }
         return null;
+    }
+
+    /**
+     * Removes the widget and corresponding divider at a particular index.
+     */
+    public void removeWidgetAt(int index) {
+        int indexAccountingForDividers = index * 2;
+
+        // There may be a first TextView to display the group path. See addGroupText(FormEntryCaption[])
+        if (view.getChildCount() > 0 && view.getChildAt(0) instanceof TextView) {
+            indexAccountingForDividers += 1;
+        }
+        view.removeViewAt(indexAccountingForDividers);
+
+        if (index > 0) {
+            view.removeViewAt(indexAccountingForDividers - 1);
+        }
+
+        widgets.get(index).release();
+        widgets.remove(index);
+    }
+
+    public void setWidgetValueChangedListener(WidgetValueChangedListener listener) {
+        widgetValueChangedListener = listener;
+    }
+
+    public void widgetValueChanged(QuestionWidget changedWidget) {
+        widgetValueChangedListener.widgetValueChanged(changedWidget);
     }
 }

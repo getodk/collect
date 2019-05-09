@@ -102,6 +102,7 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         answerDisplay.setText(answer.toString());
+        widgetValueChanged();
     }
 
     @Override
@@ -116,6 +117,7 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
     public void clearAnswer() {
         answerDisplay.setText(null);
         updateButtonLabelsAndVisibility(false);
+        widgetValueChanged();
     }
 
     @Override

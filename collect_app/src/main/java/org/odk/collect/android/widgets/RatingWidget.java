@@ -22,14 +22,14 @@ import android.widget.GridLayout;
 import android.widget.ImageButton;
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
+import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 
 public class RatingWidget extends QuestionWidget {
 
     private final GridLayout gridLayout;
-    private int answer;
+    private Integer answer;
 
     public RatingWidget(Context context, FormEntryPrompt prompt) {
 
@@ -66,6 +66,7 @@ public class RatingWidget extends QuestionWidget {
                 }
                 answer = position + 1;
 
+                widgetValueChanged();
             });
             gridLayout.addView(imageButton);
         }
@@ -90,15 +91,18 @@ public class RatingWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String s = String.valueOf(answer);
-        return new StringData(s);
+        return answer != null ? new IntegerData(answer) : null;
     }
 
     @Override
     public void clearAnswer() {
-        for (int i = 0; i < answer; i++) {
-            ((ImageButton) gridLayout.getChildAt(i)).setImageResource(R.drawable.ic_star_border);
+        if (answer != null) {
+            for (int i = 0; i < answer; i++) {
+                ((ImageButton) gridLayout.getChildAt(i)).setImageResource(R.drawable.ic_star_border);
+            }
         }
-        answer = 0;
+
+        answer = null;
+        widgetValueChanged();
     }
 }

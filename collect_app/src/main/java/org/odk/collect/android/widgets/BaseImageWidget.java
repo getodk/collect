@@ -78,6 +78,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         }
 
         errorTextView.setVisibility(View.GONE);
+        widgetValueChanged();
     }
 
     @Override
@@ -121,6 +122,9 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
             binaryName = newImage.getName();
             Timber.i("Setting current answer to %s", newImage.getName());
+
+            addCurrentImageToLayout();
+            widgetValueChanged();
         } else {
             Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
@@ -141,7 +145,9 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         }
     }
 
-    protected void setUpBinary() {
+    protected void addCurrentImageToLayout() {
+        answerLayout.removeView(imageView);
+
         if (binaryName != null) {
             DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
             int screenWidth = metrics.widthPixels;
@@ -168,7 +174,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
                 }
             });
 
-        answerLayout.addView(imageView);
+            answerLayout.addView(imageView);
         }
     }
 

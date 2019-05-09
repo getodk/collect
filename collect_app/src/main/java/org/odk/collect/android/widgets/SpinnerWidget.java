@@ -102,6 +102,8 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
                 if (position != items.size() && autoAdvance && listener != null) {
                     listener.advance();
                 }
+
+                widgetValueChanged();
             }
 
             @Override
@@ -115,7 +117,6 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        clearFocus();
         int i = spinner.getSelectedItemPosition();
         if (i == -1 || i == items.size()) {
             return null;
@@ -130,6 +131,8 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
         // It seems that spinners cannot return a null answer. This resets the answer
         // to its original value, but it is not null.
         spinner.setSelection(items.size());
+
+        widgetValueChanged();
     }
 
     @Override
@@ -154,7 +157,6 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
             spinner.setSelection(choiceIndex);
 
         } else if (spinner.getSelectedItemPosition() == choiceIndex) {
-
             clearAnswer();
         }
     }

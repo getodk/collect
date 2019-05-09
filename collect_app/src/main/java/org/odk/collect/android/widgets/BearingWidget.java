@@ -21,7 +21,9 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
 import android.util.TypedValue;
 import android.widget.Button;
@@ -83,6 +85,8 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
     public void clearAnswer() {
         answer.setText(null);
         getBearingButton.setText(getContext().getString(R.string.get_bearing));
+
+        widgetValueChanged();
     }
 
     @Override
@@ -99,6 +103,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         this.answer.setText((String) answer);
+        widgetValueChanged();
     }
 
     @Override
@@ -145,6 +150,23 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
         manualData.setLayoutParams(params);
+
+        manualData.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                widgetValueChanged();
+            }
+        });
 
         return manualData;
     }

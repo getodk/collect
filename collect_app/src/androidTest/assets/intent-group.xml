@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>intent-group</h:title>
+    <model>
+      <itext>
+        <translation lang="English (en)">
+          <text id="/intent-group/mygroup:label">
+            <value>Fields to populate</value>
+            <value form="noAppErrorString">This is noAppErrorString</value>
+            <value form="buttonText">This is buttonText</value>
+          </text>
+          <text id="/intent-group/mygroup/sometext:label">
+            <value>Some text</value>
+          </text>
+          <text id="/intent-group/mygroup/someinteger:label">
+            <value>Some integer</value>
+          </text>
+        </translation>
+      </itext>
+      <instance>
+        <intent-group id="intent-group">
+          <mygroup>
+            <sometext/>
+            <someinteger/>
+          </mygroup>
+          <meta>
+            <instanceID/>
+          </meta>
+        </intent-group>
+      </instance>
+      <bind nodeset="/intent-group/mygroup/sometext" type="string"/>
+      <bind nodeset="/intent-group/mygroup/someinteger" type="int"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/intent-group/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <group appearance="field-list" intent="org.mycompany.myapp(sometext='Some text', uuid=/intent-group/meta/instanceID)"  ref="/intent-group/mygroup">
+      <label ref="jr:itext('/intent-group/mygroup:label')"/>
+      <input ref="/intent-group/mygroup/sometext">
+        <label ref="jr:itext('/intent-group/mygroup/sometext:label')"/>
+      </input>
+      <input ref="/intent-group/mygroup/someinteger">
+        <label ref="jr:itext('/intent-group/mygroup/someinteger:label')"/>
+      </input>
+    </group>
+  </h:body>
+</h:html>

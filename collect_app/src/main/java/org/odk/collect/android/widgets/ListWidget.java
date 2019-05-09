@@ -238,6 +238,7 @@ public class ListWidget extends ItemsWidget implements MultiChoiceWidget, OnChec
         for (RadioButton button : this.buttons) {
             if (button.isChecked()) {
                 button.setChecked(false);
+                widgetValueChanged();
                 return;
             }
         }
@@ -280,6 +281,8 @@ public class ListWidget extends ItemsWidget implements MultiChoiceWidget, OnChec
         if (autoAdvance && listener != null) {
             listener.advance();
         }
+
+        widgetValueChanged();
     }
 
     @Override

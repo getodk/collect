@@ -62,6 +62,8 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
             } else {
                 removeItem(selection);
             }
+
+            widget.widgetValueChanged();
         });
 
         for (Selection selectedItem : selectedItems) {
@@ -96,6 +98,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
     public void clearAnswer() {
         selectedItems.clear();
         notifyDataSetChanged();
+        widget.widgetValueChanged();
     }
 
     public List<Selection> getSelectedItems() {

@@ -39,7 +39,7 @@ public class DrawWidget extends BaseImageWidget {
         super(context, prompt);
         imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_DRAW, RequestCodes.DRAW_IMAGE, R.string.draw_image);
         setUpLayout();
-        setUpBinary();
+        addCurrentImageToLayout();
         addAnswerView(answerLayout);
     }
 

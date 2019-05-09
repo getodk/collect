@@ -80,6 +80,11 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
 
     @Override
     public void clearAnswer() {
+        clearAnswerWithoutValueChangeEvent();
+        widgetValueChanged();
+    }
+
+    void clearAnswerWithoutValueChangeEvent() {
         isNullAnswer = true;
         dateTextView.setText(R.string.no_date_selected);
         setDateToCurrent();
@@ -87,7 +92,6 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
 
     @Override
     public IAnswerData getAnswer() {
-        clearFocus();
         return isNullAnswer ? null : new DateData(date.toDate());
     }
 

@@ -85,6 +85,7 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
     @Override
     public void clearAnswer() {
         setUpNullValue();
+        widgetValueChanged();
     }
 
     @Override
@@ -338,6 +339,7 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
         }
 
         setUpActualValueLabel();
+        widgetValueChanged();
     }
 
     public int getElementCount() {
