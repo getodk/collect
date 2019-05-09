@@ -29,12 +29,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -156,6 +150,12 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.work.Constraints;
 import androidx.work.ExistingWorkPolicy;
 import androidx.work.NetworkType;
@@ -171,8 +171,8 @@ import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
+import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating
@@ -2956,22 +2956,23 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         List<FormEntryPrompt> questionsThatHaveNotChanged = new ArrayList<>();
         for (int i = immutableQuestionsBeforeSave.size() - 1; i >= 0; i--) {
+            ImmutableDisplayableQuestion questionBeforeSave = immutableQuestionsBeforeSave.get(i);
             // We'd like to use questionsAfterSaveByIndex.get but we can't because FormIndex
             // doesn't implement hashCode and we're not guaranteed the two FormIndexes will be
             // the same reference
             FormEntryPrompt questionAtSameFormIndex = null;
             for (FormIndex index : questionsAfterSaveByIndex.keySet()) {
-                if (immutableQuestionsBeforeSave.get(i).getFormIndex().equals(index)) {
+                if (questionBeforeSave.getFormIndex().equals(index)) {
                     questionAtSameFormIndex = questionsAfterSaveByIndex.get(index);
                 }
             }
 
-            if (immutableQuestionsBeforeSave.get(i).sameAs(questionAtSameFormIndex)) {
+            // Always rebuild questions that use database-driven external data features since they
+            // bypass SelectChoices stored in ImmutableDisplayableQuestion
+            if (questionBeforeSave.sameAs(questionAtSameFormIndex)
+                    && !getFormController().usesDatabaseExternalDataFeature(questionBeforeSave.getFormIndex())) {
                 questionsThatHaveNotChanged.add(questionAtSameFormIndex);
-            } else if (!lastChangedIndex.equals(immutableQuestionsBeforeSave.get(i).getFormIndex())) {
-                // TODO: probably need to explicitly remove any ItemsetWidget or select widget
-                // that uses search() so they are forced to rebuild
-
+            } else if (!lastChangedIndex.equals(questionBeforeSave.getFormIndex())) {
                 // Some widgets may call widgetValueChanged from a non-main thread but odkView can
                 // only be modified from the main thread
                 final int indexToRemove = i;

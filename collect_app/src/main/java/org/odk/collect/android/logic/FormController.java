@@ -14,9 +14,6 @@
 
 package org.odk.collect.android.logic;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import org.javarosa.core.model.CoreModelModule;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
@@ -48,6 +45,7 @@ import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.utilities.AuditEventLogger;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.RegexUtils;
@@ -59,6 +57,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.XML_OPENDATAKIT_NAMESPACE;
@@ -394,6 +394,20 @@ public class FormController {
 
         IFormElement element = formEntryController.getModel().getForm().getChild(index);
         return element.getAppearanceAttr();
+    }
+
+    /**
+     * Returns true if the question at the given FormIndex uses the search() appearance/function
+     * of "fast itemset" feature.
+     *
+     * Precondition: there is a question at the given FormIndex.
+     */
+    public boolean usesDatabaseExternalDataFeature(@NonNull FormIndex index) {
+        String queryAttribute = getFormDef().getChild(index).getAdditionalAttribute(null, "query");
+        String appearanceAttribute = getAppearanceAttr(index);
+
+        return appearanceAttribute != null && ExternalDataUtil.SEARCH_FUNCTION_REGEX.matcher(appearanceAttribute).find()
+                || queryAttribute != null && queryAttribute.length() > 0;
     }
 
     /**
