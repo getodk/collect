@@ -201,7 +201,6 @@
   <string name="found_in_settings">不选中以从设置中隐藏</string>
   <string name="save_preferences">保存设置到磁盘</string>
   <string name="form_forward">下一个</string>
-  <string name="form_backward">上一个</string>
   <string name="navigation">导航</string>
   <string name="swipe_navigation">使用水平滑动</string>
   <string name="buttons_navigation">使用前进/后退按钮</string>

@@ -193,6 +193,7 @@
   <string name="sending_failed_on_date_at_time">\'Envio fallado:\' EEE, dd MMM, yyyy \'a las\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time">\'Borrado el\' EEE dd \'de\' MMM \'de\' yyyy \'a las\' HH:mm</string>
+  <string name="submission_deleted">Envío borrado</string>
   <string name="version">Version:</string>
   <string name="parent_form_not_present">No se pudo editar este formulario guardado por que el formulario en blanco que le corresponde no esta o fue borrado.\n\nID de Formulario: %1$s</string>
   <string name="launch_app">Iniciar</string>
@@ -220,7 +221,7 @@
   <string name="found_in_settings">Desmarque para ocultar de la Configuración General</string>
   <string name="save_preferences">Guardar configuración en disco</string>
   <string name="form_forward">Sig.</string>
-  <string name="form_backward">Ant.</string>
+  <string name="form_backward">Retroceder</string>
   <string name="navigation">Navegación</string>
   <string name="swipe_navigation">Use deslizamiento horizontal</string>
   <string name="buttons_navigation">Use los botones adelante/atrás</string>
@@ -338,7 +339,7 @@
   <string name="enable_gps">Activar el GPS</string>
   <string name="geotrace_title">GeoLínea</string>
   <string name="polygon_save">Guardar como polígono</string>
-  <string name="polygon_save_deprecation_warning">(Si usa GeoTrace para recolectar polígonos, actualice su formulario para usar GeoShape antes de la próxima actualización. Consulte https://bit.ly/odk18277.)</string>
+  <string name="polygon_save_deprecation_warning">(Si está usando GeoLínea para trazar polígonos, actualice su formulario y use GeoArea antes de la próxima versión.)</string>
   <string name="polyline_save">Guardar como Polilínea</string>
   <string name="gps_enable_message">GPS esta deshabilitado. ¿Activar?</string>
   <string name="select_offline_layer">Seleccione la capa sin conexión</string>
@@ -349,7 +350,7 @@
   <string name="polyline_validator">Deben existir al menos 2 puntos para crear una Polilínea</string>
   <string name="clear">Limpiar</string>
   <string name="placement_mode">Ubicación con toque</string>
-  <string name="manual_mode">Registro de ubicación manual</string>
+  <string name="manual_mode">Registro de localización manual</string>
   <string name="automatic_mode">Registro de localización automática</string>
   <string name="recording_interval">Intervalo de registro:</string>
   <plurals name="number_of_seconds">
@@ -651,7 +652,7 @@
   <string name="sms_encrypted_message">Formularios encriptados no pueden ser enviados vía SMS</string>
   <string name="sms_last_submission_on_date_at_time">\'Ultimo intento de envío a\' EEE, MMM dd, yyyy \' \' HH:mm</string>
   <plurals name="sms_sending">
-    <item quantity="one">Submitting form as a single message.</item>
+    <item quantity="one" tools:ignore="ImpliedQuantity">Submitting form as a single message.</item>
     <item quantity="other">Enviando formulario, enviando mensaje %1$d de %2$d</item>
   </plurals>
   <string name="sms_sent_on_date_at_time">\'Enviado como SMS en\' EEE, MMM dd, yyyy \' \' HH:mm</string>
@@ -682,4 +683,6 @@
   <string name="number_picker_title">Selector de números</string>
   <string name="too_complex_form">Este formulario es muy complejo para este dispositivo. Intente simplificar las expresiones o busque ayuda en el Foro.</string>
   <string name="reading_files">Leyendo archivos</string>
+  <string name="copying_media_files_failed">La copia de los archivos de medios falló</string>
+  <string name="qr_code_not_found">Código QR no encontrado en la imagen seleccionada</string>
 </resources>

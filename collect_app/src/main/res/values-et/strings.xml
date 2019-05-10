@@ -198,7 +198,6 @@
   <string name="found_in_settings">Üldseadetest eemaldamiseks puhasta väli </string>
   <string name="save_preferences">Salvesta seaded mäluseadmele</string>
   <string name="form_forward">Järgmine</string>
-  <string name="form_backward">Eelmine</string>
   <string name="navigation">Rakenduses liikumine</string>
   <string name="swipe_navigation">Liikumiseks kasuta libistamist (swipe) käeliigutust</string>
   <string name="buttons_navigation">Liikumiseks kasuta edasi-tagasi nuppe</string>

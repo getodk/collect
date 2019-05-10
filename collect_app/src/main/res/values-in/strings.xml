@@ -219,7 +219,6 @@
   <string name="found_in_settings">Hapus centang untuk menyembunyikan dari Pengaturan Umum</string>
   <string name="save_preferences">Simpan Pengaturan ke Disk</string>
   <string name="form_forward">Lanjut</string>
-  <string name="form_backward">Sebelumnya</string>
   <string name="navigation">Navigasi</string>
   <string name="swipe_navigation">Gunakan sapuan mendatar</string>
   <string name="buttons_navigation">Gunakan tombol maju/mundur</string>

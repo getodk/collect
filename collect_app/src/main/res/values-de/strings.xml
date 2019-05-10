@@ -192,6 +192,7 @@
   <string name="sending_failed_on_date_at_time">\'Senden gescheitert am\' EEE, dd.MM.yyyy \'um\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time">\'Gelöscht am\' EEE, dd.MM.yyyy \'um\' HH:mm</string>
+  <string name="submission_deleted">Einsendung gelöscht</string>
   <string name="version">Version:</string>
   <string name="parent_form_not_present">Das gespeicherte Formular kann nicht bearbeitet werden, weil das zugehörige leere Formular nicht vorhanden ist oder gelöscht wurde.\n\nForm ID: %1$s</string>
   <string name="launch_app">Starten</string>
@@ -336,7 +337,7 @@
   <string name="enable_gps">GPS aktivieren</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="polygon_save">Als Polygon speichern</string>
-  <string name="polygon_save_deprecation_warning">(Diese Option wird im nächsten Update entfernt. Schauen Sie unter bit.ly/odk18277 nach Alternativen.)</string>
+  <string name="polygon_save_deprecation_warning">(Falls Sie GeoTrace benutzen um Polygone zu erfassen, aktualisieren Sie Ihr Formular vor dem nächsten Update so, dass es stattdessen GeoShape verwendet. Siehe https://bit.ly/odk18277.)</string>
   <string name="polyline_save">Als Polyline speichern</string>
   <string name="gps_enable_message">GPS ist auf ihrem Gerät deaktiviert. Möchten Sie es aktivieren?</string>
   <string name="select_offline_layer">Offline-Ebene auswählen</string>
@@ -649,7 +650,7 @@
   <string name="sms_encrypted_message">Verschlüsselte Formulare können nicht per SMS eingesendet werden.</string>
   <string name="sms_last_submission_on_date_at_time">\'Letzter Einsendeversuch am\' EEE, MMM dd, yyyy \'um\' HH:mm</string>
   <plurals name="sms_sending">
-    <item quantity="one">Formulareinsendung als einzelne Nachricht.</item>
+    <item quantity="one" tools:ignore="ImpliedQuantity">Formulareinsendung als einzelne Nachricht.</item>
     <item quantity="other">Formulareinsendung, sende Nachricht %1$d von %2$d</item>
   </plurals>
   <string name="sms_sent_on_date_at_time">\'Als SMS versendet am\' EEE, MMM dd, yyyy \'um\' HH:mm</string>
@@ -680,4 +681,6 @@
   <string name="number_picker_title">Zahlenwähler</string>
   <string name="too_complex_form">Dieses Formular ist zu komplex für dieses Gerät. Versuche Ausdrücke zu vereinfachen oder bitte im Forum um Hilfe.</string>
   <string name="reading_files">Lese Dateien</string>
+  <string name="copying_media_files_failed">Kopieren von Mediendateien fehlgeschlagen</string>
+  <string name="qr_code_not_found">Kein QR-Code im ausgewählten Bild gefunden</string>
 </resources>

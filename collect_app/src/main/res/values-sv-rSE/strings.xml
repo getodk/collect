@@ -216,7 +216,6 @@
   <string name="found_in_settings">Avmarkera för att dölja under allmänna inställningar</string>
   <string name="save_preferences">Spara inställningar till disk</string>
   <string name="form_forward">Nästa</string>
-  <string name="form_backward">Föregående</string>
   <string name="navigation">Navigering</string>
   <string name="swipe_navigation">Använd horisontella svepningar</string>
   <string name="buttons_navigation">Använd framåt/bakåt knappar</string>

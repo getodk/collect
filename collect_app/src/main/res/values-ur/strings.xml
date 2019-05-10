@@ -216,7 +216,6 @@
   <string name="found_in_settings">نشانی ہٹاکر جنرل سیٹنگز سے ہٹا دیں۔</string>
   <string name="save_preferences">سیٹنگزڈسک میں محفوظ کریں۔</string>
   <string name="form_forward">اگلا</string>
-  <string name="form_backward">پچھلا</string>
   <string name="navigation">نیوی گیشن</string>
   <string name="swipe_navigation">افقی سوائپ استعمال کریں</string>
   <string name="buttons_navigation">آگے / پیچھے جانے والے بٹن استعمال کریں۔</string>
@@ -613,7 +612,7 @@
   <string name="sms_encrypted_message">انکرپٹڈ فارم ایس ایم ایس کے طور پرجمع نہیں کیا جا سکتا.</string>
   <string name="sms_last_submission_on_date_at_time">EEE, MMM dd, yyyy\' پر\' HH:mm \' کوآخری دفعہ جمع کرانےکی کوشش کی گئی  \'</string>
   <plurals name="sms_sending">
-    <item quantity="one">فارم کو سنگل میسج کے طور پر جمع کیا جا رہا ہے</item>
+    <item quantity="one" tools:ignore="ImpliedQuantity">فارم کو سنگل میسج کے طور پر جمع کیا جا رہا ہے</item>
     <item quantity="other">فارم جمع ہو رہا ہے، میسج %1$d آف %2$d بھیجا جا رہا ہے</item>
   </plurals>
   <string name="sms_sent_on_date_at_time">EEE, MMM dd, yyyy\' کو\' HH:mm \'پر ایس ایم ایس کے طور پر بھیجا گیا ہے\'</string>

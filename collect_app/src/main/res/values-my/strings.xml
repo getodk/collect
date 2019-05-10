@@ -193,7 +193,6 @@
   <string name="found_in_settings">Uncheck to hide from General Settings</string>
   <string name="save_preferences">Save Settings to Disk</string>
   <string name="form_forward">Next</string>
-  <string name="form_backward">Prev</string>
   <string name="navigation">Navigation</string>
   <string name="swipe_navigation">Use horizontal swipes</string>
   <string name="buttons_navigation">Use forward/backward buttons</string>

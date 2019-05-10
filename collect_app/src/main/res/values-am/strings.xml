@@ -173,7 +173,6 @@
   <string name="found_in_settings">ከጠቅላላ ቅንብሮች ለመደበቅ አትምረጥ</string>
   <string name="save_preferences">ቅንብሮችን ዲስክ ላይ አስቀምጥ</string>
   <string name="form_forward">ቀጣይ</string>
-  <string name="form_backward">ቅድመ</string>
   <string name="navigation">ዳሰሳ</string>
   <string name="swipe_navigation">አግድም ማጠፊያዎችን ይጠቀሙ</string>
   <string name="buttons_navigation">ወደፊት/ወደኋላ አዝራሮችን ይጠቀሙ</string>

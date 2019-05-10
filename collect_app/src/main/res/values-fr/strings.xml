@@ -143,9 +143,9 @@
   <string name="keep_changes">Sauvegarder les Modifications</string>
   <string name="change_formlist_url">Chemin de la liste de formulaires (ajouté à l\'URL du serveur)</string>
   <string name="change_protocol">Protocole</string>
-  <string name="change_submission_url">Chemin d\'enregistrement (ajouté à l\'URL du serveur)</string>
+  <string name="change_submission_url">Chemin de soumission (ajouté à l\'URL du serveur)</string>
   <string name="formlist_url">Chemin de la liste de formulaires</string>
-  <string name="submission_url">Chemin d\'enregistrement</string>
+  <string name="submission_url">Chemin de soumission</string>
   <string name="font_size">Taille de la Police</string>
   <string name="change_font_size">Taille de la Police</string>
   <string name="access_error">Erreur lors de l\'accès à %s: </string>
@@ -192,6 +192,7 @@
   <string name="sending_failed_on_date_at_time">\'L\'\'envoi a échoué le\' EEE, dd MMM, yyyy \'à\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time">\'Supprimé le\' EEE dd MMM yyyy \'à\' HH:mm</string>
+  <string name="submission_deleted">Soumission supprimée</string>
   <string name="version">Version:</string>
   <string name="parent_form_not_present">Il n\'est pas possible de modifier ce formulaire car le formulaire vierge correspondant n\'existe pas ou a été supprimé.\n\nID du formulaire: %1$s</string>
   <string name="launch_app">Démarrer</string>
@@ -219,7 +220,7 @@
   <string name="found_in_settings">Désélectionner pour cacher dans les Paramètres</string>
   <string name="save_preferences">Enregistrer les paramètres sur le disque</string>
   <string name="form_forward">Suiv.</string>
-  <string name="form_backward">Préc.</string>
+  <string name="form_backward">Retour</string>
   <string name="navigation">Navigation</string>
   <string name="swipe_navigation">Utiliser le glissement du doigt à l\'horizontal</string>
   <string name="buttons_navigation">Utiliser les boutons avancer/reculer</string>
@@ -331,10 +332,12 @@
   <string name="get_shape">Démarrer la FormeGéo</string>
   <string name="get_trace">Démarrer le TracéGéo</string>
   <string name="geoshape_title">FormeGéo</string>
+  <string name="input_method">Méthode de saisie</string>
   <string name="start">Démarrer</string>
   <string name="enable_gps">Activer le GPS</string>
   <string name="geotrace_title">TracéGéo</string>
   <string name="polygon_save">Enregistrer comme Polygone</string>
+  <string name="polygon_save_deprecation_warning">(Si vous utilisez GeoTrace pour collecter des polygones, mettez à jour votre formulaire pour qu\'il utilise GeoShape avant la prochaine mise à jour. Voir https://bit.ly/odk18277.)</string>
   <string name="polyline_save">Enregistrer comme Polyligne</string>
   <string name="gps_enable_message">Le GPS est désactivé. Voulez vous l\'activer ?</string>
   <string name="select_offline_layer">Sélectionner le fond de carte hors ligne </string>
@@ -344,6 +347,35 @@
   <string name="polygon_validator">3 points minimum sont nécessaires pour créer un Polygone</string>
   <string name="polyline_validator">Il faut au moins 2 points pour créer une ligne</string>
   <string name="clear">Effacer</string>
+  <string name="placement_mode">Placement en tapotant</string>
+  <string name="manual_mode">Enregistrement manuel de la localisation</string>
+  <string name="automatic_mode">Enregistrement automatique de la localisation</string>
+  <string name="recording_interval">Intervalle d\'enregistrement:</string>
+  <plurals name="number_of_seconds">
+    <item quantity="one">%d seconde</item>
+    <item quantity="other">%d secondes</item>
+  </plurals>
+  <plurals name="number_of_minutes">
+    <item quantity="one">%d minute</item>
+    <item quantity="other">%d minutes</item>
+  </plurals>
+  <string name="accuracy_requirement">Exigence de précision:</string>
+  <string name="none">Aucun</string>
+  <plurals name="number_of_meters">
+    <item quantity="one">%d mètre</item>
+    <item quantity="other">%d mètres</item>
+  </plurals>
+  <string name="location_status_searching">Recherche de la localisation GPS, veuillez patienter…</string>
+  <string name="location_status_accuracy">Précision de localisation GPS: %.1f m</string>
+  <string name="location_status_acceptable">Précision de localisation GPS: %.1f m (acceptable)</string>
+  <string name="location_status_unacceptable">Précision de localisation GPS: %.1f m (inacceptable)</string>
+  <string name="collection_status_paused">Points entrés: %d</string>
+  <string name="collection_status_placement">Points entrés: %d (appuyez pour placer des points)</string>
+  <string name="collection_status_manual">Points entrés: %d (enregistrement manuel)</string>
+  <string name="collection_status_auto_seconds">Points entrés: %1$d (enregistrement chaque %2$d sec)</string>
+  <string name="collection_status_auto_minutes">Points entrés: %1$d (enregistrement chaque %2$d min)</string>
+  <string name="collection_status_auto_seconds_accuracy">Points entrés: %1$d (enregistrement chaque %2$d sec, précision%3$d m)</string>
+  <string name="collection_status_auto_minutes_accuracy">Points entrés: %1$d (enregistrement chaque %2$d min, précision%3$d m)</string>
   <string name="geopoint_instruction">Appuyez longuement sur la carte pour placer un marqueur ou appuyez sur le bouton \"ajouter un marqueur\".</string>
   <string name="geopoint_no_draggable_instruction">Appuyez sur le bouton \"ajouter un marqueur\".</string>
   <string name="discard">Annuler</string>
@@ -365,6 +397,7 @@
   <string name="install_openmapkit">Veuillez installer OpenMapKit.</string>
   <string name="go_back">Retour</string>
   <string name="download_selected">Télécharger la sélection</string>
+  <string name="record_geopoint">Enregistrer un point</string>
   <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nPrécision: %4$sm</string>
   <string name="parser_exception">Exception XPathParser: \\"%s\\"</string>
   <string name="selected_answer">Sélectionné: %s</string>
@@ -638,6 +671,15 @@
   <string name="location_providers_disabled_dialog_message">Ce formulaire souhaite suivre votre localisation, mais les fournisseurs d\'emplacements sont désactivés. Merci de vérifier les paramétres Android</string>
   <string name="go_to_settings">Aller aux paramètres</string>
   <string name="track_location">Localisation du trajet</string>
+  <string name="background_location_disabled">Ce formulaire veut suivre votre position mais le suivi est désactivé. S\'il vous plaît activer dans le %1$s menu ci-dessus.</string>
+  <string name="background_location_enabled">Ce formulaire suit votre position. Vous pouvez désactiver le suivi dans le %1$s menu ci-dessus.</string>
   <string name="open_file">Ouvrir fichier</string>
+  <string name="sms_feature_disabled_dialog_title">Envoi par SMS désactivé</string>
+  <string name="sms_feature_disabled_dialog_message">L\'envoi de soumissions par SMS a été désactivé en raison de restrictions imposées par Google Play Store.\n\nVeuillez vous assurer que la personne qui a configuré ce périphérique lit les détails ci-dessous et prend les mesures qui s\'imposent.</string>
   <string name="read_details">Lire les details</string>
+  <string name="google_sheets_encrypted_message">Les formulaires cryptés ne peuvent pas être envoyés à Google Sheets.</string>
+  <string name="number_picker_title">Sélecteur de numéro</string>
+  <string name="too_complex_form">Ce formulaire est trop complexe pour cet appareil. Essayez de simplifier les expressions ou demandez de l\'aide sur le forum.</string>
+  <string name="reading_files">lecture des fichiers</string>
+  <string name="copying_media_files_failed">Echec de la copie des fichiers media</string>
 </resources>

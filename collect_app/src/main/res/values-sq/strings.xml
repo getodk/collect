@@ -207,7 +207,6 @@
   <string name="found_in_settings">Hiq përzgjedhjen për ta fshehur nga Parametrat e Përgjithshëm</string>
   <string name="save_preferences">Ruaj parametrat në disk</string>
   <string name="form_forward">Tjetra</string>
-  <string name="form_backward">Paraprake</string>
   <string name="navigation">Navigim</string>
   <string name="swipe_navigation">Përdor prekjen horizontale në ekran</string>
   <string name="buttons_navigation">Përdor butonat përpara/prapa</string>

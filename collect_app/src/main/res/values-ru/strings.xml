@@ -215,7 +215,6 @@
   <string name="found_in_settings">Снимите галочку, чтобы скрыть пункт в настройках</string>
   <string name="save_preferences">Сохранить настройки</string>
   <string name="form_forward">Далее</string>
-  <string name="form_backward">Назад</string>
   <string name="navigation">Навигация</string>
   <string name="swipe_navigation">Горизонтальные свайпы</string>
   <string name="buttons_navigation">Кнопки вперёд/назад</string>
