@@ -37,8 +37,8 @@ public class GridMultiWidget extends BaseGridWidget {
     public GridMultiWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt, false);
 
-        buildView(prompt);
-        fillInAnswer(prompt);
+        setUpView(prompt);
+        fillInAnswer();
         initializeGridView();
         SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
     }
@@ -64,8 +64,8 @@ public class GridMultiWidget extends BaseGridWidget {
         widgetValueChanged();
     }
 
-    private void fillInAnswer(FormEntryPrompt prompt) {
-        IAnswerData answer = prompt.getAnswerValue();
+    private void fillInAnswer() {
+        IAnswerData answer = getFormEntryPrompt().getAnswerValue();
         List<Selection> ve;
         if ((answer == null) || (answer.getValue() == null)) {
             ve = new ArrayList<>();

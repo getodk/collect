@@ -18,7 +18,6 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -37,6 +36,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.views.AudioButton;
 import org.odk.collect.android.views.ExpandedHeightGridView;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
@@ -58,111 +58,60 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
     static final int SPACING = 2;
     static final int IMAGE_PADDING = 8;
 
-    // The possible select choices
-    String[] choices;
-
-    // The Gridview that will hold the icons
-    ExpandedHeightGridView gridview;
-
-    // Defines which icon is selected
-    boolean[] selected;
-
-    // The image views for each of the icons
-    View[] imageViews;
-    AudioButton.AudioHandler[] audioHandlers;
-
-    int resizeWidth;
+    int maxColumnWidth;
 
     boolean quickAdvance;
+    boolean[] selected;
+
+    String[] choices;
+    View[] imageViews;
+    ExpandedHeightGridView gridView;
+    AudioButton.AudioHandler[] audioHandlers;
 
     public BaseGridWidget(Context context, FormEntryPrompt prompt, boolean quickAdvance) {
         super(context, prompt);
-        this.quickAdvance = quickAdvance;
-    }
 
-    void buildView(FormEntryPrompt prompt) {
+        this.quickAdvance = quickAdvance;
         selected = new boolean[items.size()];
         choices = new String[items.size()];
-        gridview = new ExpandedHeightGridView(getContext());
         imageViews = new View[items.size()];
         audioHandlers = new AudioButton.AudioHandler[items.size()];
+    }
 
-        // The max width of an icon in a given column. Used to line
-        // up the columns and automatically fit the columns in when
-        // they are chosen automatically
-        int maxColumnWidth = -1;
+    void setUpView(FormEntryPrompt prompt) {
         int maxCellHeight = -1;
-        for (int i = 0; i < items.size(); i++) {
-            imageViews[i] = new ImageView(getContext());
-        }
+        int screenWidth = ScreenUtils.getScreenWidth();
+        int screenHeight = ScreenUtils.getScreenHeight();
 
-        DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
-        int screenWidth = metrics.widthPixels;
-        int screenHeight = metrics.heightPixels;
-
-        if (prompt.isReadOnly()) {
-            gridview.setEnabled(false);
-        }
-
-        // Build view
         for (int i = 0; i < items.size(); i++) {
             SelectChoice sc = items.get(i);
-
             int curHeight = -1;
 
-            // Create an audioHandler iff there is an audio prompt associated with this selection.
-            String audioURI =
-                    prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_AUDIO);
-            if (audioURI != null) {
-                audioHandlers[i] = new AudioButton.AudioHandler(audioURI, getPlayer());
-            } else {
-                audioHandlers[i] = null;
-            }
+            // Create an audioHandler if there is an audio prompt associated with this selection.
+            String audioURI = prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_AUDIO);
 
-            // Read the image sizes and set maxColumnWidth. This allows us to make sure all of our
-            // columns are going to fit
-            String imageURI;
-            if (items.get(i) instanceof ExternalSelectChoice) {
-                imageURI = ((ExternalSelectChoice) sc).getImage();
-            } else {
-                imageURI = prompt.getSpecialFormSelectChoiceText(sc,
-                        FormEntryCaption.TEXT_FORM_IMAGE);
-            }
+            audioHandlers[i] = audioURI != null ? new AudioButton.AudioHandler(audioURI, getPlayer()) : null;
 
+            String imageURI = getImageUri(i, sc);
             String errorMsg = null;
+
             if (imageURI != null) {
                 choices[i] = imageURI;
 
-                String imageFilename;
                 try {
-                    imageFilename = ReferenceManager.instance().DeriveReference(imageURI).getLocalURI();
-                    final File imageFile = new File(imageFilename);
+                    final File imageFile = new File(ReferenceManager.instance().DeriveReference(imageURI).getLocalURI());
                     if (imageFile.exists()) {
                         Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
                         if (b != null) {
-
                             if (b.getWidth() > maxColumnWidth) {
                                 maxColumnWidth = b.getWidth();
                             }
-
-                            ImageView imageView = (ImageView) imageViews[i];
-
-                            imageView.setPadding(IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING,
-                                    IMAGE_PADDING);
-                            imageView.setImageBitmap(b);
-                            imageView.setLayoutParams(
-                                    new ListView.LayoutParams(ListView.LayoutParams.WRAP_CONTENT,
-                                            ListView.LayoutParams.WRAP_CONTENT));
-                            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-
-                            imageView.measure(0, 0);
-                            curHeight = imageView.getMeasuredHeight();
+                            imageViews[i] = setUpImageView(b);
+                            curHeight = imageViews[i].getMeasuredHeight();
                         } else {
-                            // Loading the image failed, so it's likely a bad file.
                             errorMsg = getContext().getString(R.string.file_invalid, imageFile);
                         }
                     } else {
-                        // We should have an image, but the file doesn't exist.
                         errorMsg = getContext().getString(R.string.file_missing, imageFile);
                     }
                 } catch (InvalidReferenceException e) {
@@ -174,27 +123,12 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
 
             if (errorMsg != null) {
                 choices[i] = prompt.getSelectChoiceText(sc);
-
-                TextView missingImage = new TextView(getContext());
-                missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-                missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
-                missingImage.setPadding(IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING);
-
-                if (choices[i] != null && choices[i].length() != 0) {
-                    missingImage.setText(choices[i]);
-                } else {
-                    // errorMsg is only set when an error has occurred
-                    Timber.e(errorMsg);
-                    missingImage.setText(errorMsg);
-                }
-
-                missingImage.measure(0, 0);
+                TextView missingImage = setUpLabelView(i, errorMsg);
                 int width = missingImage.getMeasuredWidth();
                 if (width > maxColumnWidth) {
                     maxColumnWidth = width;
                 }
                 curHeight = missingImage.getMeasuredHeight();
-
                 imageViews[i] = missingImage;
             }
 
@@ -209,30 +143,64 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
             imageViews[i].setMinimumHeight(maxCellHeight);
         }
 
-        // Read the screen dimensions and fit the grid view to them. It is important that the grid
-        // knows how far out it can stretch.
-
-        resizeWidth = maxColumnWidth;
-        gridview.setNumColumns(GridView.AUTO_FIT);
-
-        gridview.setColumnWidth(resizeWidth);
-
-        gridview.setPadding(HORIZONTAL_PADDING, VERTICAL_PADDING, HORIZONTAL_PADDING,
-                VERTICAL_PADDING);
-        gridview.setHorizontalSpacing(SPACING);
-        gridview.setVerticalSpacing(SPACING);
-        gridview.setGravity(Gravity.CENTER);
-        gridview.setScrollContainer(false);
-        gridview.setStretchMode(GridView.NO_STRETCH);
-
-        gridview.setOnItemClickListener((parent, v, position, id) -> onElementClick(position));
+        setUpGridView();
     }
 
     void initializeGridView() {
         // Use the custom image adapter and initialize the grid view
         ImageAdapter ia = new ImageAdapter(choices);
-        gridview.setAdapter(ia);
-        addAnswerView(gridview);
+        gridView.setAdapter(ia);
+        addAnswerView(gridView);
+    }
+
+    private String getImageUri(int i, SelectChoice sc) {
+        return items.get(i) instanceof ExternalSelectChoice
+                ? ((ExternalSelectChoice) sc).getImage()
+                : getFormEntryPrompt().getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_IMAGE);
+    }
+
+    private ImageView setUpImageView(Bitmap b) {
+        ImageView imageView = new ImageView(getContext());
+        imageView.setPadding(IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING);
+        imageView.setImageBitmap(b);
+        imageView.setLayoutParams(
+                new ListView.LayoutParams(ListView.LayoutParams.WRAP_CONTENT,
+                        ListView.LayoutParams.WRAP_CONTENT));
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        imageView.measure(0, 0);
+
+        return imageView;
+    }
+
+    private TextView setUpLabelView(int i, String errorMsg) {
+        TextView missingImage = new TextView(getContext());
+        missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+        missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
+        missingImage.setPadding(IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING);
+
+        if (choices[i] != null && choices[i].length() != 0) {
+            missingImage.setText(choices[i]);
+        } else {
+            Timber.e(errorMsg);
+            missingImage.setText(errorMsg);
+        }
+        missingImage.measure(0, 0);
+
+        return missingImage;
+    }
+
+    private void setUpGridView() {
+        gridView = new ExpandedHeightGridView(getContext());
+        gridView.setNumColumns(GridView.AUTO_FIT);
+        gridView.setColumnWidth(maxColumnWidth);
+        gridView.setPadding(HORIZONTAL_PADDING, VERTICAL_PADDING, HORIZONTAL_PADDING, VERTICAL_PADDING);
+        gridView.setHorizontalSpacing(SPACING);
+        gridView.setVerticalSpacing(SPACING);
+        gridView.setGravity(Gravity.CENTER);
+        gridView.setScrollContainer(false);
+        gridView.setStretchMode(GridView.NO_STRETCH);
+        gridView.setOnItemClickListener((parent, v, position, id) -> onElementClick(position));
+        gridView.setEnabled(!getFormEntryPrompt().isReadOnly());
     }
 
     abstract void onElementClick(int position);
@@ -248,13 +216,13 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        gridview.setOnLongClickListener(l);
+        gridView.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        gridview.cancelLongPress();
+        gridView.cancelLongPress();
     }
 
     @Override
@@ -262,8 +230,6 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         return selected.length;
     }
 
-    // Custom image adapter. Most of the code is copied from
-    // media layout for using a picture.
     class ImageAdapter extends BaseAdapter {
         private final String[] choices;
 
@@ -285,11 +251,7 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
 
         // create a new ImageView for each item referenced by the Adapter
         public View getView(int position, View convertView, ViewGroup parent) {
-            if (position < imageViews.length) {
-                return imageViews[position];
-            } else {
-                return convertView;
-            }
+            return position < imageViews.length ? imageViews[position] : convertView;
         }
     }
 }

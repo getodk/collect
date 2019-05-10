@@ -38,8 +38,8 @@ public class GridWidget extends BaseGridWidget {
             listener = (AdvanceToNextListener) context;
         }
 
-        buildView(prompt);
-        fillInAnswer(prompt);
+        setUpView(prompt);
+        fillInAnswer();
         initializeGridView();
     }
 
@@ -67,10 +67,10 @@ public class GridWidget extends BaseGridWidget {
         widgetValueChanged();
     }
 
-    private void fillInAnswer(FormEntryPrompt prompt) {
+    private void fillInAnswer() {
         String s = null;
-        if (prompt.getAnswerValue() != null) {
-            s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
+        if (getFormEntryPrompt().getAnswerValue() != null) {
+            s = ((Selection) getFormEntryPrompt().getAnswerValue().getValue()).getValue();
         }
 
         for (int i = 0; i < items.size(); ++i) {
