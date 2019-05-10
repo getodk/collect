@@ -14,7 +14,6 @@ import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
 import org.robolectric.annotation.Config;
 
-import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
 
 /**
@@ -106,7 +105,7 @@ public class GeoPointWidgetTest extends BinaryWidgetTest<GeoPointWidget, GeoPoin
     public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
         stubAllRuntimePermissionsGranted(false);
 
-        assertNull(getIntentLaunchedByClick(R.id.get_point));
-        assertNull(getIntentLaunchedByClick(R.id.get_location));
+        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.get_point));
+        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.get_location));
     }
 }

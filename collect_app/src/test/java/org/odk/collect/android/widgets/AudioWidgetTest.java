@@ -20,7 +20,6 @@ import org.odk.collect.android.widgets.base.FileWidgetTest;
 
 import java.io.File;
 
-import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -101,6 +100,6 @@ public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
     public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
         stubAllRuntimePermissionsGranted(false);
 
-        assertNull(getIntentLaunchedByClick(R.id.capture_audio));
+        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.capture_audio));
     }
 }

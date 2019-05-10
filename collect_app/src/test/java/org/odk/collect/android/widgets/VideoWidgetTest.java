@@ -18,7 +18,6 @@ import org.odk.collect.android.widgets.base.FileWidgetTest;
 
 import java.io.File;
 
-import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
 
 /**
@@ -118,6 +117,6 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
     public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
         stubAllRuntimePermissionsGranted(false);
 
-        assertNull(getIntentLaunchedByClick(R.id.capture_video));
+        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.capture_video));
     }
 }

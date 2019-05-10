@@ -7,7 +7,6 @@ import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.junit.Test;
 import org.odk.collect.android.widgets.base.GeneralSelectMultiWidgetTest;
-import org.robolectric.RuntimeEnvironment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,7 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
     @NonNull
     @Override
     public GridMultiWidget createWidget() {
-        return new GridMultiWidget(RuntimeEnvironment.application, formEntryPrompt, 1);
+        return new GridMultiWidget(activity, formEntryPrompt, 1);
     }
 
     @Test

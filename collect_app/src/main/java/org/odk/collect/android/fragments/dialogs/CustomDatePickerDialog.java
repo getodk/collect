@@ -139,16 +139,14 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
         monthPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                updateDays();
-                updateGregorianDateLabel();
+                monthUpdated();
             }
         });
         yearPicker = getDialog().findViewById(R.id.year_picker);
         yearPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                updateDays();
-                updateGregorianDateLabel();
+                yearUpdated();
             }
         });
 
@@ -189,7 +187,11 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     }
 
     protected void setUpDayPicker(int dayOfMonth, int daysInMonth) {
-        dayPicker.setMinValue(1);
+        setUpDayPicker(1, dayOfMonth, daysInMonth);
+    }
+
+    protected void setUpDayPicker(int minDay, int dayOfMonth, int daysInMonth) {
+        dayPicker.setMinValue(minDay);
         dayPicker.setMaxValue(daysInMonth);
         if (datePickerDetails.isSpinnerMode()) {
             dayPicker.setValue(dayOfMonth);
@@ -197,6 +199,9 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     }
 
     protected void setUpMonthPicker(int monthOfYear, String[] monthsArray) {
+        // In Myanmar calendar we don't have specified amount of months, it's dynamic so clear
+        // values first to avoid ArrayIndexOutOfBoundsException
+        monthPicker.setDisplayedValues(null);
         monthPicker.setMaxValue(monthsArray.length - 1);
         monthPicker.setDisplayedValues(monthsArray);
         if (!datePickerDetails.isYearMode()) {
@@ -210,6 +215,16 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
         yearPicker.setValue(year);
     }
 
+    protected void monthUpdated() {
+        updateDays();
+        updateGregorianDateLabel();
+    }
+
+    protected void yearUpdated() {
+        updateDays();
+        updateGregorianDateLabel();
+    }
+
     public int getDay() {
         return dayPicker.getValue();
     }
@@ -218,12 +233,23 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
         return monthPicker.getDisplayedValues()[monthPicker.getValue()];
     }
 
+    public int getMonthId() {
+        return monthPicker.getValue();
+    }
+
     public int getYear() {
         return yearPicker.getValue();
     }
 
     public LocalDateTime getDate() {
         return date;
+    }
+
+    public LocalDateTime getDateWithSkippedDaylightSavingGapIfExists() {
+        return DateTimeUtils
+                .skipDaylightSavingGapIfExists(getDate())
+                .toDateTime()
+                .toLocalDateTime();
     }
 
     protected abstract void updateDays();

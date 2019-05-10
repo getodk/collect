@@ -22,20 +22,14 @@ import bikramsambat.BikramSambatDate;
 import bikramsambat.BsCalendar;
 import bikramsambat.BsException;
 import bikramsambat.BsGregorianDate;
+import mmcalendar.MyanmarDate;
+import mmcalendar.MyanmarDateConverter;
 import timber.log.Timber;
 
 public class DateTimeUtils {
 
     private DateTimeUtils() {
 
-    }
-
-    public static String getDateTimeLabel(Date date, DatePickerDetails datePickerDetails, boolean containsTime, Context context) {
-        if (datePickerDetails.isGregorianType()) {
-            return getGregorianDateTimeLabel(date, datePickerDetails, containsTime, null);
-        } else {
-            return getCustomDateTimeLabel(date, datePickerDetails, containsTime, context);
-        }
     }
 
     private static String getGregorianDateTimeLabel(Date date, DatePickerDetails datePickerDetails, boolean containsTime, Locale locale) {
@@ -50,57 +44,94 @@ public class DateTimeUtils {
         return dateFormatter.format(date);
     }
 
-    private static String getCustomDateTimeLabel(Date date, DatePickerDetails datePickerDetails, boolean containsTime, Context context) {
+    public static String getDateTimeLabel(Date date, DatePickerDetails datePickerDetails, boolean containsTime, Context context) {
         String gregorianDateText = getGregorianDateTimeLabel(date, datePickerDetails, containsTime, Locale.getDefault());
 
         DateTime customDate;
         String[] monthArray;
-        if (datePickerDetails.isEthiopianType()) {
-            customDate = new DateTime(date).withChronology(EthiopicChronology.getInstance());
-            monthArray = context.getResources().getStringArray(R.array.ethiopian_months);
-        } else if (datePickerDetails.isCopticType()) {
-            customDate = new DateTime(date).withChronology(CopticChronology.getInstance());
-            monthArray = context.getResources().getStringArray(R.array.coptic_months);
-        } else if (datePickerDetails.isIslamicType()) {
-            customDate = new DateTime(date).withChronology(IslamicChronology.getInstance());
-            monthArray = context.getResources().getStringArray(R.array.islamic_months);
-        } else {
-            customDate = new DateTime(date);
-            monthArray = BsCalendar.MONTH_NAMES.toArray(new String[BsCalendar.MONTH_NAMES.size()]);
+
+        switch (datePickerDetails.getDatePickerType()) {
+            case GREGORIAN:
+                return gregorianDateText;
+            case ETHIOPIAN:
+                customDate = new DateTime(date).withChronology(EthiopicChronology.getInstance());
+                monthArray = context.getResources().getStringArray(R.array.ethiopian_months);
+                break;
+            case COPTIC:
+                customDate = new DateTime(date).withChronology(CopticChronology.getInstance());
+                monthArray = context.getResources().getStringArray(R.array.coptic_months);
+                break;
+            case ISLAMIC:
+                customDate = new DateTime(date).withChronology(IslamicChronology.getInstance());
+                monthArray = context.getResources().getStringArray(R.array.islamic_months);
+                break;
+            case BIKRAM_SAMBAT:
+                customDate = new DateTime(date);
+                monthArray = BsCalendar.MONTH_NAMES.toArray(new String[BsCalendar.MONTH_NAMES.size()]);
+                break;
+            case MYANMAR:
+                customDate = new DateTime(date);
+                MyanmarDate myanmarDate = MyanmarDateConverter.convert(customDate.getYear(),
+                        customDate.getMonthOfYear(), customDate.getDayOfMonth(), customDate.getHourOfDay(),
+                        customDate.getMinuteOfHour(), customDate.getSecondOfMinute());
+                monthArray = MyanmarDateUtils.getMyanmarMonthsArray(myanmarDate.getYearInt());
+                break;
+            default:
+                Timber.w("Not supported date type.");
+                return null;
         }
+
         String customDateText = "";
 
         SimpleDateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        if (datePickerDetails.isBikramSambatType()) {
-            BikramSambatDate bikramSambatDate;
-            try {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
-                bikramSambatDate = BsCalendar.getInstance().toBik(new BsGregorianDate(
-                                        calendar.get(Calendar.YEAR),
-                                        calendar.get(Calendar.MONTH) + 1,
-                                        calendar.get(Calendar.DAY_OF_MONTH)));
-                String day = datePickerDetails.isSpinnerMode() ? bikramSambatDate.day + " " : "";
-                String month = datePickerDetails.isSpinnerMode() || datePickerDetails.isMonthYearMode() ? monthArray[bikramSambatDate.month - 1] + " " : "";
+        switch (datePickerDetails.getDatePickerType()) {
+            case BIKRAM_SAMBAT:
+                BikramSambatDate bikramSambatDate;
+                try {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date);
+                    bikramSambatDate = BsCalendar.getInstance().toBik(new BsGregorianDate(
+                            calendar.get(Calendar.YEAR),
+                            calendar.get(Calendar.MONTH) + 1,
+                            calendar.get(Calendar.DAY_OF_MONTH)));
+                    String day = datePickerDetails.isSpinnerMode() ? bikramSambatDate.day + " " : "";
+                    String month = datePickerDetails.isSpinnerMode() || datePickerDetails.isMonthYearMode() ? monthArray[bikramSambatDate.month - 1] + " " : "";
+
+                    if (containsTime) {
+                        customDateText = day + month + bikramSambatDate.year + ", " + df.format(customDate.toDate());
+                    } else {
+                        customDateText = day + month + bikramSambatDate.year;
+                    }
+                } catch (BsException e) {
+                    Timber.e(e);
+                }
+                break;
+            case MYANMAR: {
+                MyanmarDate myanmarDate = MyanmarDateConverter.convert(customDate.getYear(),
+                        customDate.getMonthOfYear(), customDate.getDayOfMonth(), customDate.getHourOfDay(),
+                        customDate.getMinuteOfHour(), customDate.getSecondOfMinute());
+
+                String day = datePickerDetails.isSpinnerMode() ? myanmarDate.getMonthDay() + " " : "";
+                String month = datePickerDetails.isSpinnerMode() || datePickerDetails.isMonthYearMode() ? monthArray[MyanmarDateUtils.getMonthId(myanmarDate)] + " " : "";
 
                 if (containsTime) {
-                    customDateText = day + month + bikramSambatDate.year + ", " + df.format(customDate.toDate());
+                    customDateText = day + month + myanmarDate.getYearInt() + ", " + df.format(customDate.toDate());
                 } else {
-                    customDateText = day + month + bikramSambatDate.year;
+                    customDateText = day + month + myanmarDate.getYearInt();
                 }
-            } catch (BsException e) {
-                Timber.e(e);
+                break;
             }
-        } else {
-            String day = datePickerDetails.isSpinnerMode() ? customDate.getDayOfMonth() + " " : "";
-            String month = datePickerDetails.isSpinnerMode() || datePickerDetails.isMonthYearMode() ? monthArray[customDate.getMonthOfYear() - 1] + " " : "";
+            default:
+                String day = datePickerDetails.isSpinnerMode() ? customDate.getDayOfMonth() + " " : "";
+                String month = datePickerDetails.isSpinnerMode() || datePickerDetails.isMonthYearMode() ? monthArray[customDate.getMonthOfYear() - 1] + " " : "";
 
-            if (containsTime) {
-                customDateText = day + month + customDate.getYear() + ", " + df.format(customDate.toDate());
-            } else {
-                customDateText = day + month + customDate.getYear();
-            }
+                if (containsTime) {
+                    customDateText = day + month + customDate.getYear() + ", " + df.format(customDate.toDate());
+                } else {
+                    customDateText = day + month + customDate.getYear();
+                }
         }
+
         return String.format(context.getString(R.string.custom_date), customDateText, gregorianDateText);
     }
 
@@ -146,6 +177,9 @@ public class DateTimeUtils {
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
             } else if (appearance.contains("bikram-sambat")) {
                 datePickerType = DatePickerDetails.DatePickerType.BIKRAM_SAMBAT;
+                datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
+            } else if (appearance.contains("myanmar")) {
+                datePickerType = DatePickerDetails.DatePickerType.MYANMAR;
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
             } else if (appearance.contains("no-calendar")) {
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
