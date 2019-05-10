@@ -196,7 +196,6 @@
   <string name="found_in_settings">ปล่อยว่างเพื่อซ่อนจากเมนูตั้งค่าทั่วไป</string>
   <string name="save_preferences">บันทึกการตั้งค่า</string>
   <string name="form_forward">ต่อไป</string>
-  <string name="form_backward">ย้อนกลับ</string>
   <string name="navigation">ค้นหา</string>
   <string name="swipe_navigation">ใช้การเลื่อนหน้าจอไปด้านข้าง</string>
   <string name="buttons_navigation">ใช่ปุ่มเลื่อนไปข้างหน้า/ย้อนกลับ</string>

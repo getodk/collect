@@ -220,7 +220,6 @@
   <string name="found_in_settings">Deseleziona per nascondere da Impostazioni Generali</string>
   <string name="save_preferences">Salvataggio Impostazioni su Disco</string>
   <string name="form_forward">Prossimo</string>
-  <string name="form_backward">Precedente</string>
   <string name="navigation">Navigazione</string>
   <string name="swipe_navigation">Scorri il dito orizzontalmente</string>
   <string name="buttons_navigation">Usa pulsanti avanti/indietro</string>
@@ -337,7 +336,6 @@
   <string name="enable_gps">Abilita GPS</string>
   <string name="geotrace_title">Geo-tracciatura</string>
   <string name="polygon_save">Salva come Poligono</string>
-  <string name="polygon_save_deprecation_warning">(Questa opzione sarà rimossa al prossimo aggiornamento. Guarda bit.ly/odk18277 per alternative.)</string>
   <string name="polyline_save">Salva come Polilinea</string>
   <string name="gps_enable_message">Il GPS è disabilitato nel tuo dispositivo. Vuoi abilitarlo?</string>
   <string name="select_offline_layer">Seleziona Layer Offline</string>

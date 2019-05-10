@@ -192,6 +192,7 @@
   <string name="sending_failed_on_date_at_time">\'Lähettäminen epäonnistunut\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time">\'Poistettu\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
+  <string name="submission_deleted">Lähetys poistettu</string>
   <string name="version">Versio:</string>
   <string name="parent_form_not_present">Ei voitu muokata tallennettua lomaketta, koska vastaava tyhjää lomaketta ei ole tai se on poistettu.\n\nLomakkeen tunniste: %1$s</string>
   <string name="launch_app">Käynnistä</string>
@@ -219,7 +220,7 @@
   <string name="found_in_settings">Poista rasti piilottaaksesi yleisasetuksista</string>
   <string name="save_preferences">Tallenna asetukset</string>
   <string name="form_forward">Seuraava</string>
-  <string name="form_backward">Edellinen</string>
+  <string name="form_backward">Takaisin</string>
   <string name="navigation">Navigointi</string>
   <string name="swipe_navigation">Käytä vaakapyyhkäisyjä</string>
   <string name="buttons_navigation">Käytä painikkeita eteenpäin/taaksepäin</string>
@@ -336,7 +337,7 @@
   <string name="enable_gps">Ota GPS käyttöön</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="polygon_save">Tallenna monikulmiona - Polygon</string>
-  <string name="polygon_save_deprecation_warning">(Tämä vaihtoehto tullaan poistamaan seuraavassa päivityksessä. Katso vaihtoehdot: bit.ly/odk18277) </string>
+  <string name="polygon_save_deprecation_warning">(Jos käytät GeoTrace-polygonikeräystä, päivitä lomakettasi käyttämään GeoShape-toimintoa ennen seuraavaa päivitystä. Katso https://bit.ly/odk18277.)</string>
   <string name="polyline_save">Tallenna murtoviivana - Polyline</string>
   <string name="gps_enable_message">GPS on poistettu käytöstä laitteellasi. Haluaisitko ottaa sen käyttöön?</string>
   <string name="select_offline_layer">Valitse Offline-taso</string>
@@ -649,7 +650,7 @@
   <string name="sms_encrypted_message">Salattuja kyselyitä ei pystytä lähettämään SMS:llä.</string>
   <string name="sms_last_submission_on_date_at_time">\'Viimeisin lähetysyritys\' EEE dd MMM yyyy \'kello\' HH:mm</string>
   <plurals name="sms_sending">
-    <item quantity="one">Lähetetään lomaketta yhtenä viestinä.</item>
+    <item quantity="one" tools:ignore="ImpliedQuantity">Lähetetään lomaketta yhtenä viestinä.</item>
     <item quantity="other">Lähetetään lomaketta, lähetetään viestiä %1$d / %2$d</item>
   </plurals>
   <string name="sms_sent_on_date_at_time">\'Lähetetty SMS-viestinä\' EEE dd MMM yyyy \'kello\' HH:mm</string>
@@ -680,4 +681,6 @@
   <string name="number_picker_title">Numerovalitsin</string>
   <string name="too_complex_form">Tämä lomake on liian monimutkainen tälle laitteelle. Yritä lausekkeiden yksinkertaistamista tai pyydä apua verkon keskusteluryhmästä.</string>
   <string name="reading_files">Luetaan tiedostoja</string>
+  <string name="copying_media_files_failed">Mediatiedostojen kopiointi epäonnistui</string>
+  <string name="qr_code_not_found">Valitusta kuvasta ei löytynyt QR-koodia</string>
 </resources>

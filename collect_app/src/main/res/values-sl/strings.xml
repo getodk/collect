@@ -214,7 +214,6 @@
   <string name="found_in_settings">Ne izberi da ne prikaže v Splošne nastavitve</string>
   <string name="save_preferences">Shrani nastavitve</string>
   <string name="form_forward">Naprej</string>
-  <string name="form_backward">Nazaj</string>
   <string name="navigation">Navigacija</string>
   <string name="swipe_navigation">Uporabi horizontalne potege</string>
   <string name="buttons_navigation">Uporabi naprej/nazaj tipke</string>
@@ -266,7 +265,7 @@
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">My Drive</string>
   <string name="go_shared">Deljeno z menoj</string>
-  <string name="modified_on_date_at_time">\'Spremenjeno\' EEE, MMM dd, yyyy \'ob\' HH:mm</string>
+  <string name="modified_on_date_at_time">\'Spremenjeno\' EEE, MMM dd,  yyyy \'ob\' HH:mm</string>
   <string name="aggregate_preferences">ODK Aggregate nastavitve</string>
   <string name="sms_submission_preferences">Nastavitve za predložitev preko SMS sporočil</string>
   <string name="submission_transport_types_title">Predloži preko</string>

@@ -8,6 +8,7 @@
   <string name="view_video">Переглянути Відео</string>
   <string name="choose_audio">Обрати Аудіо</string>
   <string name="add_another">Додати групу</string>
+  <string name="add_another_menu">Додати</string>
   <string name="add_another_repeat">Додати ще \"%s\" групу?</string>
   <string name="add_repeat">Додати нову \"%s\" групу?</string>
   <string name="add_repeat_no">Не додавати</string>
@@ -105,6 +106,7 @@
   <string name="quit_application">Вийти з %s</string>
   <string name="quit_entry">Зберегти анкету та вийти</string>
   <string name="refresh">Оновити</string>
+  <string name="group_label">Група</string>
   <string name="repeatable_group_label">Повторюєма Група</string>
   <string name="replace_barcode">Змінити штрих-код</string>
   <string name="required_answer_error">Вибачте, але ця відповідь обов`язкова!</string>
@@ -190,6 +192,7 @@
   <string name="sending_failed_on_date_at_time">\'Помилка надсилання\' EEE, dd MMM, yyyy \'в\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time">\'Видалена\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <string name="submission_deleted">Надсилання видалене</string>
   <string name="version">Версія:</string>
   <string name="parent_form_not_present">Неможливо відредагувати збережену анкету бо відповідна незаповнена анкета відсутня або була видалена.\n\nID анкети: %1$s</string>
   <string name="launch_app">Запустити</string>
@@ -217,7 +220,7 @@
   <string name="found_in_settings">Зніміть позначку щоб прибрати з Загальні Налаштування</string>
   <string name="save_preferences">Зберегти налаштування на диск</string>
   <string name="form_forward">Далі</string>
-  <string name="form_backward">Назад</string>
+  <string name="form_backward">Повернутись</string>
   <string name="navigation">Навігація</string>
   <string name="swipe_navigation">Використовувати горизонтальну прокрутку</string>
   <string name="buttons_navigation">Використовувати кнопки вперед/назад</string>
@@ -329,10 +332,12 @@
   <string name="get_shape">Почати ГеоФігуру</string>
   <string name="get_trace">Почати ГеоМаршрут</string>
   <string name="geoshape_title">ГеоФігура</string>
+  <string name="input_method">Метод введення</string>
   <string name="start">Почати</string>
   <string name="enable_gps">Увімкнути GPS</string>
   <string name="geotrace_title">ГеоМаршрут</string>
   <string name="polygon_save">Зберегти як багатокутник</string>
+  <string name="polygon_save_deprecation_warning">(Якщо ви використовуєте GeoTrace для збору полігонів, оновіть вашу анкету для використання GeoShape перед наступним оновленням. Дивіться https://bit.ly/odk18277.)</string>
   <string name="polyline_save">Зберегти як ламану лінію</string>
   <string name="gps_enable_message">GPS на Вашому пристрої вимкнено. Бажаєте увімкнути?</string>
   <string name="select_offline_layer">Обрати офлайн шар</string>
@@ -342,6 +347,41 @@
   <string name="polygon_validator">Для багатокутника необхідно мінімум 3 точки</string>
   <string name="polyline_validator">Для створення лінії необхідні принаймні дві точки</string>
   <string name="clear">Очистити</string>
+  <string name="placement_mode">Розмішення тиком</string>
+  <string name="manual_mode">Ручний запис розташування</string>
+  <string name="automatic_mode">Автоматичний запис розташування</string>
+  <string name="recording_interval">Інтервал запису</string>
+  <plurals name="number_of_seconds">
+    <item quantity="one">%d секунда</item>
+    <item quantity="few">%d секунди</item>
+    <item quantity="many">%d секунд</item>
+    <item quantity="other">%d секунд</item>
+  </plurals>
+  <plurals name="number_of_minutes">
+    <item quantity="one">%d хвилина</item>
+    <item quantity="few">%d хвилини</item>
+    <item quantity="many">%d хвилин</item>
+    <item quantity="other">%d хвилин</item>
+  </plurals>
+  <string name="accuracy_requirement">Вимога до точності</string>
+  <string name="none">Немає</string>
+  <plurals name="number_of_meters">
+    <item quantity="one">%d метр</item>
+    <item quantity="few">%d метри</item>
+    <item quantity="many">%d метрів</item>
+    <item quantity="other">%d метрів</item>
+  </plurals>
+  <string name="location_status_searching">Пошук розташування GPS, будь ласка, зачекайте…</string>
+  <string name="location_status_accuracy">Точність GPS розташування: %.1f м</string>
+  <string name="location_status_acceptable">Точність GPS розташування: %.1f м (прийнятна)</string>
+  <string name="location_status_unacceptable">Точність GPS розташування: %.1f м (неприйнятна)</string>
+  <string name="collection_status_paused">Введених точок: %d</string>
+  <string name="collection_status_placement">Введених точок: %d (ткніть для розміщення точок)</string>
+  <string name="collection_status_manual">Введених точок: %d (ручний запис)</string>
+  <string name="collection_status_auto_seconds">Введених точок: %1$d (запис кожні %2$d сек)</string>
+  <string name="collection_status_auto_minutes">Введених точок: %1$d (запис кожні %2$d хв)</string>
+  <string name="collection_status_auto_seconds_accuracy">Введених точок: %1$d (запис кожні %2$d сек, точність %3$d м)</string>
+  <string name="collection_status_auto_minutes_accuracy">Введених точок: %1$d (запис кожні %2$d хв, точність %3$d м)</string>
   <string name="geopoint_instruction">Довго натисніть для розміщення позначки або натисніть кнопку Додати позначку.</string>
   <string name="geopoint_no_draggable_instruction">Натисніть кнопку Додати позначку.</string>
   <string name="discard">Скинути</string>
@@ -363,6 +403,7 @@
   <string name="install_openmapkit">Будь ласка встановіть OpenMapKit!</string>
   <string name="go_back">Повернутись</string>
   <string name="download_selected">Завантажити обране</string>
+  <string name="record_geopoint">Записати точку</string>
   <string name="gps_result">Широта: %1$s\nДовгота: %2$s\nВисота: %3$sm\nТочність: %4$sm</string>
   <string name="parser_exception">XPathParser Exception: \"%s\"</string>
   <string name="selected_answer">Обрано: %s</string>
@@ -634,6 +675,12 @@
   <string name="sms_invalid_phone_number_description">Вкажіть номер телефону для надсиланнячерез повідомлення або замініть тип відправки.</string>
   <string name="notification_channel_name">Загальні сповіщення</string>
   <string name="corrupt_imported_preferences_error">Ці налаштування пошкоджені. Через адміністративні налаштування стиньте налаштування програми або імпортуйте непошкоджені.</string>
+  <string name="google_play_services_not_available">Ця анкета хоче відслідковувати ваше розташування але Сервіси Google Play не доступні.</string>
+  <string name="location_providers_disabled_dialog_message">Ця анкета хоче відслідковувати ваше розташування але розташування вимкнене. Будь ласка, увімкніть його в налаштуваннях Android.</string>
+  <string name="go_to_settings">Перейти в налаштування</string>
+  <string name="track_location">Відслідковувати розташування</string>
+  <string name="background_location_disabled">Ця анкета хоче відслідковувати ваше розташування але відслідковування вимкнене. Будь ласка, увімкніть його в %1$s меню.</string>
+  <string name="background_location_enabled">Ця анкета відслідковує ваше розташування. Ви можете вимкнути відслідковування в %1$s меню.</string>
   <string name="open_file">Відкрити файл</string>
   <string name="read_details">Прочитайте докладну інформацію</string>
 </resources>

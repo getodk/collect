@@ -219,7 +219,6 @@
   <string name="found_in_settings">Odznacz aby ukryć w Ogólnych Ustawieniach</string>
   <string name="save_preferences">Zapisz Ustawienia na Dysk</string>
   <string name="form_forward">Następny</string>
-  <string name="form_backward">Poprzedni</string>
   <string name="navigation">Nawigacja</string>
   <string name="swipe_navigation">Użyj horyzontalnych przeciągnięć</string>
   <string name="buttons_navigation">Użyj przycisków następny/poprzedni</string>

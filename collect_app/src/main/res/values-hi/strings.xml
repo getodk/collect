@@ -208,7 +208,6 @@
   <string name="found_in_settings">सामान्य सेटिंग्स से छुपाने के लिए अनचेक करें</string>
   <string name="save_preferences">सेटिंग्स डिस्क पर संरक्षित करे</string>
   <string name="form_forward">आगामी</string>
-  <string name="form_backward">पिछला</string>
   <string name="navigation">पथ प्रदर्शन</string>
   <string name="swipe_navigation">क्षैतिज स्वाइप प्रयोग करें</string>
   <string name="buttons_navigation">आगे / पीछे बटन का प्रयोग करें</string>

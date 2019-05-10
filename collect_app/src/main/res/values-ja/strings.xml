@@ -192,6 +192,7 @@
   <string name="sending_failed_on_date_at_time">yyyy/MM/dd HH:mm \'に送信失敗しました\'</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time">yyyy/MM/dd HH:mm \'に削除しました\'</string>
+  <string name="submission_deleted">送信を削除しました</string>
   <string name="version">バージョン:</string>
   <string name="parent_form_not_present">対応する空のフォームが存在しないか、削除されたため、この保存済のフォームを編集できません。\n\nフォーム ID: %1$s</string>
   <string name="launch_app">起動</string>
@@ -219,7 +220,7 @@
   <string name="found_in_settings">チェックを外すと全般設定から非表示にします</string>
   <string name="save_preferences">設定をディスクに保存する</string>
   <string name="form_forward">次へ</string>
-  <string name="form_backward">前へ</string>
+  <string name="form_backward">戻る</string>
   <string name="navigation">ナビゲーション</string>
   <string name="swipe_navigation">水平方向のスワイプを使用</string>
   <string name="buttons_navigation">次へ/前へボタンを使用</string>
@@ -336,7 +337,7 @@
   <string name="enable_gps">GPS を有効にする</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="polygon_save">ポリゴンとして保存</string>
-  <string name="polygon_save_deprecation_warning">(このオプションは次の更新で削除されます。 代わりに bit.ly/odk18277 を参照してください。)</string>
+  <string name="polygon_save_deprecation_warning">(ポリゴンを収集するためにGeoTraceを使用する場合は、次の更新の前にGeoShapeを使用するようにフォームを更新してください。https://bit.ly/odk18277 を参照してください。)</string>
   <string name="polyline_save">ポリラインとして保存</string>
   <string name="gps_enable_message">お使いのデバイスで GPS は無効になっています。有効にしますか?</string>
   <string name="select_offline_layer">オフライン レイヤーを選択</string>
@@ -676,4 +677,6 @@
   <string name="number_picker_title">数値選択</string>
   <string name="too_complex_form">この形式はこの端末には複雑すぎます。 表現を単純化するか、フォーラムで助けを求めてください。</string>
   <string name="reading_files">ファイルを読み込んでいます</string>
+  <string name="copying_media_files_failed">メディアファイルのコピーに失敗しました</string>
+  <string name="qr_code_not_found">選択した画像に QR コードが見つかりませんでした</string>
 </resources>

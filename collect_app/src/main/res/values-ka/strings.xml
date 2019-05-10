@@ -193,7 +193,6 @@
   <string name="found_in_settings">გამორთეთ ძირითადი პარამეტრებიდან დასამალად</string>
   <string name="save_preferences">პარამეტრების დისკზე შენახვა</string>
   <string name="form_forward">შემდეგი</string>
-  <string name="form_backward">წინა</string>
   <string name="navigation">ნავიგაცია</string>
   <string name="swipe_navigation">ჰორიზონტალური გასრიალების გამოყენება</string>
   <string name="buttons_navigation">წინა-უკანა ღილაკების გამოყენება</string>

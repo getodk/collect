@@ -48,6 +48,7 @@
   <string name="discard_answer">जवाफ हटाउनुहोस् </string>
   <string name="discard_group">ग्रुप हटाउनुहोस्</string>
   <string name="download">छानिएका/nपाउनुहोस्</string>
+  <string name="download_forms_result">परिणामहरू डाउनलोड गर्नुहोस्।</string>
   <string name="downloading_data">सर्भरसँग कनेक्ट हुँदैछ</string>
   <string name="do_not_change">फिर्ता जानुहोस्</string>
   <string name="do_not_exit">फिर्ता जानुहोस्</string>
@@ -116,6 +117,8 @@
   <string name="send_data">भरिसकेको फारम पठाउन</string>
   <string name="send_data_button">भरिसकेको फारम पठाउन (%s)</string>
   <string name="send_selected_data">छानिएका पठाउनुहोस् </string>
+  <string name="send_selected_data_internet">पठाउनुहोस् (Internet)</string>
+  <string name="send_selected_data_sms">पठाउनुहोस् (SMS)</string>
   <string name="view_sent_forms">भरिसकेको फारम हेर्न</string>
   <string name="view_sent_forms_button">भरिसकेको फारम हेर्न (%s)</string>
   <string name="server_auth_credentials">सर्भरको प्रयोगकर्ता नाम वा पासवर्ड गलत छ %s</string>
@@ -155,6 +158,7 @@
   <string name="no_forms_uploaded">माफ गर्नुहोस्, कुनै फारम पनि अपलोड गरिएन |</string>
   <string name="upload_results">अपलोडको परिणामहरु </string>
   <string name="xform_parse_error">X फारमको शब्द-सम्मतीमा गल्ति भयो | %1$s मा %2$s तत्व छुटेको छ |</string>
+  <string name="choose_file">फाइलहरू छान्नुहोस्</string>
   <string name="choose_sound">आवाज छान्नुहोस् </string>
   <string name="choose_video">भिडियो छान्नुहोस् </string>
   <string name="choose_image">तस्विर छान्नुहोस् </string>
@@ -212,7 +216,7 @@
   <string name="found_in_settings">जेनेरल सेटिंगमा नदेखाउनको लागि ठीक चिन्ह हटाउनुहोस् </string>
   <string name="save_preferences">सेटिङ्सलाई डिस्कमा सेभ गर्नुहोस्</string>
   <string name="form_forward">अघि</string>
-  <string name="form_backward">पछि</string>
+  <string name="form_backward">पछाडि</string>
   <string name="navigation">संचालन</string>
   <string name="swipe_navigation">स्वाइप को प्रयोग गर्नुहोस् </string>
   <string name="buttons_navigation">अगाडि / पछाडी बटनहरुको प्रयोग गर्नुहोस् |</string>
@@ -223,6 +227,7 @@
   <string name="constraint_behavior_on_swipe">तेर्सो स्वाइप गरे पछी मान्य छ कि छैन हेर्नुहोला </string>
   <string name="constraint_behavior_on_finalize">अन्तिम रुप नदिए सम्म मान्यता दिन स्थगित गर्नुहोस् </string>
   <string name="view_change_location">स्थान हेर्नुहोस् वा परिवर्तन गर्नुहोस् </string>
+  <string name="change_location">स्थान परिवर्तन गर्नुहोस्</string>
   <string name="open_url">URL खोल्नुहोस्</string>
   <string name="get_bearing">दिशानिर्देश रेकर्ड गर्नुहोस् </string>
   <string name="replace_bearing">दिशानिर्देश बदल्नुहोस् </string>
@@ -238,6 +243,7 @@
   <string name="ext_search_return_error">खोज ह्याण्डलरले \'%s\' खालको वस्तु फिर्ता पठायो |</string>
   <string name="ext_import_generic_error">%1$s वाट तथ्यांक आयात गर्न सकिएन | कारण: %2$s</string>
   <string name="ext_import_progress_message">\'%1$s\' वाट तथ्यांक पूर्व-लोड गरिदैछ, कृपया पर्खिनुहोला…%2$s</string>
+  <string name="ext_import_cancelled_message">डेटा पढ्ने रद्द गरियो!</string>
   <string name="ext_import_finalizing_message">पूर्व-लोड गरिएका तथ्यांकहरुलाई अन्तिम रुप दिइदैछ…</string>
   <string name="ext_import_completed_message">तथ्यांक पढेर सकियो !</string>
   <string name="ext_not_initialized_error">ExternalDataManager लाई चालू गरिएको छैन |</string>
@@ -264,6 +270,8 @@
   <string name="go_shared">म संग साझा गरिएको </string>
   <string name="modified_on_date_at_time">EEE, MMM dd, yyyy \'को\' HH:mm \'मा परिवर्तन गरिएको\'</string>
   <string name="aggregate_preferences">ODK एग्रीगेट सेटिङ्स</string>
+  <string name="sms_submission_preferences">SMS सेटिङहरू</string>
+  <string name="submission_transport_types_title">फारमहरू कसरी पठाउने?</string>
   <string name="other_preferences">अन्य प्लेटफर्म सेटिङ्स</string>
   <string name="google_preferences">गुगल सिट्स सेटिङ्स</string>
   <string name="google_sheets_url_hint">फारमहरु पठाउनको लागि URL सेट गर्नुपर्दछ । अन्यथा यही URL प्रयोग हुनेछ ।</string>
