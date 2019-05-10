@@ -62,15 +62,6 @@ public class FormEntryPromptUtilsTest {
         when(formEntryPrompt.getAppearanceHint()).thenReturn("quick columns-5");
         assertEquals(5, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, null));
 
-        when(formEntryPrompt.getAppearanceHint()).thenReturn("columns-flex");
-        assertEquals(-1, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, null));
-
-        when(formEntryPrompt.getAppearanceHint()).thenReturn("compact");
-        assertEquals(-1, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, null));
-
-        when(formEntryPrompt.getAppearanceHint()).thenReturn("quickcompact");
-        assertEquals(-1, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, null));
-
         when(formEntryPrompt.getAppearanceHint()).thenReturn("compact-5");
         assertEquals(5, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, null));
     }

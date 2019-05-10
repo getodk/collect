@@ -104,21 +104,7 @@ public class WidgetAppearanceUtils {
     public static int getNumberOfColumns(FormEntryPrompt formEntryPrompt, Context context) {
         int numColumns = 1;
         String appearance = getAppearance(formEntryPrompt);
-        if (!appearance.startsWith(COMPACT_N) && (appearance.startsWith(COMPACT)
-                || appearance.startsWith(QUICKCOMPACT)
-                || appearance.startsWith(COLUMNS_FLEX))) {
-            numColumns = -1;
-            try {
-                String firstWord = appearance.split("\\s+")[0];
-                int idx = firstWord.indexOf('-');
-                if (idx != -1) {
-                    numColumns = Integer.parseInt(firstWord.substring(idx + 1));
-                }
-            } catch (Exception e) {
-                // Do nothing, leave numColumns as -1
-                Timber.e(EXCEPTION_PARSING_COLUMNS);
-            }
-        } else if (appearance.contains(COLUMNS_N) || appearance.contains(COMPACT_N)) {
+        if (appearance.contains(COLUMNS_N) || appearance.contains(COMPACT_N)) {
             try {
                 String columnsAppearance = appearance.contains(COLUMNS_N) ? COLUMNS_N : COMPACT_N;
                 if (appearance.contains(columnsAppearance)) {

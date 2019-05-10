@@ -165,7 +165,7 @@ public class WidgetFactory {
                 if (!appearance.startsWith(WidgetAppearanceUtils.COMPACT_N) && (appearance.startsWith(WidgetAppearanceUtils.COMPACT)
                         || appearance.startsWith(WidgetAppearanceUtils.QUICKCOMPACT)
                         || appearance.startsWith(WidgetAppearanceUtils.COLUMNS_FLEX))) {
-                    questionWidget = new GridWidget(context, fep, WidgetAppearanceUtils.getNumberOfColumns(fep, context), appearance.contains(WidgetAppearanceUtils.QUICK));
+                    questionWidget = new GridWidget(context, fep, appearance.contains(WidgetAppearanceUtils.QUICK));
                 } else if (appearance.contains(WidgetAppearanceUtils.MINIMAL)) {
                     questionWidget = new SpinnerWidget(context, fep, appearance.contains(WidgetAppearanceUtils.QUICK));
                 } else if (appearance.contains(WidgetAppearanceUtils.SEARCH) || appearance.contains(WidgetAppearanceUtils.AUTOCOMPLETE)) {
@@ -189,7 +189,7 @@ public class WidgetFactory {
                 if (!appearance.startsWith(WidgetAppearanceUtils.COMPACT_N)
                         && (appearance.startsWith(WidgetAppearanceUtils.COMPACT)
                             || appearance.startsWith(WidgetAppearanceUtils.COLUMNS_FLEX))) {
-                    questionWidget = new GridMultiWidget(context, fep, WidgetAppearanceUtils.getNumberOfColumns(fep, context));
+                    questionWidget = new GridMultiWidget(context, fep);
                 } else if (appearance.startsWith(WidgetAppearanceUtils.MINIMAL)) {
                     questionWidget = new SpinnerMultiWidget(context, fep);
                 } else if (appearance.startsWith(WidgetAppearanceUtils.LIST_NO_LABEL)) {

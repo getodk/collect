@@ -69,7 +69,6 @@ public class GridWidget extends ItemsWidget implements MultiChoiceWidget {
     private static final int VERTICAL_PADDING = 5;
     private static final int SPACING = 2;
     private static final int IMAGE_PADDING = 8;
-    private static final int SCROLL_WIDTH = 16;
 
     // The possible select choices
     String[] choices;
@@ -89,8 +88,7 @@ public class GridWidget extends ItemsWidget implements MultiChoiceWidget {
 
     int resizeWidth;
 
-    public GridWidget(Context context, FormEntryPrompt prompt, int numColumns,
-                      final boolean quickAdvance) {
+    public GridWidget(Context context, FormEntryPrompt prompt, final boolean quickAdvance) {
         super(context, prompt);
 
         if (context instanceof AdvanceToNextListener) {
@@ -115,11 +113,6 @@ public class GridWidget extends ItemsWidget implements MultiChoiceWidget {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         int screenWidth = metrics.widthPixels;
         int screenHeight = metrics.heightPixels;
-
-        if (numColumns > 0) {
-            resizeWidth = (screenWidth - 2 * HORIZONTAL_PADDING - SCROLL_WIDTH
-                    - (IMAGE_PADDING + SPACING) * (numColumns + 1)) / numColumns;
-        }
 
         if (prompt.isReadOnly()) {
             gridview.setEnabled(false);
@@ -169,11 +162,6 @@ public class GridWidget extends ItemsWidget implements MultiChoiceWidget {
 
                             ImageView imageView = (ImageView) imageViews[i];
 
-                            if (numColumns > 0) {
-                                int resizeHeight = (b.getHeight() * resizeWidth) / b.getWidth();
-                                b = Bitmap.createScaledBitmap(b, resizeWidth, resizeHeight, false);
-                            }
-
                             imageView.setPadding(IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING,
                                     IMAGE_PADDING);
                             imageView.setImageBitmap(b);
@@ -215,21 +203,13 @@ public class GridWidget extends ItemsWidget implements MultiChoiceWidget {
                     missingImage.setText(errorMsg);
                 }
 
-                if (numColumns > 0) {
-                    maxColumnWidth = resizeWidth;
-                    // force max width to find needed height...
-                    missingImage.setMaxWidth(resizeWidth);
-                    missingImage.measure(
-                            MeasureSpec.makeMeasureSpec(resizeWidth, MeasureSpec.EXACTLY), 0);
-                    curHeight = missingImage.getMeasuredHeight();
-                } else {
-                    missingImage.measure(0, 0);
-                    int width = missingImage.getMeasuredWidth();
-                    if (width > maxColumnWidth) {
-                        maxColumnWidth = width;
-                    }
-                    curHeight = missingImage.getMeasuredHeight();
+                missingImage.measure(0, 0);
+                int width = missingImage.getMeasuredWidth();
+                if (width > maxColumnWidth) {
+                    maxColumnWidth = width;
                 }
+                curHeight = missingImage.getMeasuredHeight();
+
                 imageViews[i] = missingImage;
             }
 
@@ -247,13 +227,8 @@ public class GridWidget extends ItemsWidget implements MultiChoiceWidget {
         // Read the screen dimensions and fit the grid view to them. It is important that the grid
         // knows how far out it can stretch.
 
-        if (numColumns > 0) {
-            // gridview.setNumColumns(numColumns);
-            gridview.setNumColumns(GridView.AUTO_FIT);
-        } else {
-            resizeWidth = maxColumnWidth;
-            gridview.setNumColumns(GridView.AUTO_FIT);
-        }
+        resizeWidth = maxColumnWidth;
+        gridview.setNumColumns(GridView.AUTO_FIT);
 
         gridview.setColumnWidth(resizeWidth);
 

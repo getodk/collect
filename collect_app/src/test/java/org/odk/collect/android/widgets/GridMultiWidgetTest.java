@@ -23,7 +23,7 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
     @NonNull
     @Override
     public GridMultiWidget createWidget() {
-        return new GridMultiWidget(activity, formEntryPrompt, 1);
+        return new GridMultiWidget(activity, formEntryPrompt);
     }
 
     @Test
