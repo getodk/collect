@@ -26,9 +26,9 @@ public class ApplicationConstants {
     public static final int SQLITE_MAX_VARIABLE_NUMBER = 999;
 
     static final String[] TRANSLATIONS_AVAILABLE = {"af", "am", "ar",
-            "bn", "ca", "cs", "de", "en", "es", "et", "fa", "fi", "fr", "ha",
-            "hi", "hu", "in", "it", "ja", "ka", "km", "ln", "lo_LA", "lt",
-            "mg", "ml", "mr", "my", "nb", "ne_NP", "nl", "no", "pl", "ps",
+            "bn", "ca", "cs", "de", "en", "es", "et", "fa", "fi", "fr",
+            "ha", "hi", "hu", "in", "it", "ja", "ka", "km", "ln", "lo_LA", "lt",
+            "mg", "ml", "mr", "ms", "my", "nb", "ne_NP", "nl", "no", "pl", "ps",
             "pt", "ro", "ru", "si", "sl", "so", "sq", "sr", "sv_SE", "sw",
             "sw_KE", "ta", "th_TH", "ti", "tl", "tr", "uk", "ur", "ur_PK",
             "uz", "vi", "zh", "zu"};
