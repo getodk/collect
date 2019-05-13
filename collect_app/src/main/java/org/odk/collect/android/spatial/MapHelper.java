@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabaseCorruptException;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
 
@@ -46,6 +47,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
+
+import timber.log.Timber;
 
 public class MapHelper {
     private static final String OFFLINE_LAYER_TAG = " (custom, offline)";
@@ -299,14 +302,18 @@ public class MapHelper {
     private boolean isFileFormatSupported(File file) {
         boolean result = true;
         SQLiteDatabase db = SQLiteDatabase.openDatabase(file.getAbsolutePath(), null, SQLiteDatabase.OPEN_READONLY);
-        Cursor cursor = db.rawQuery("SELECT * FROM metadata where name =?", new String[]{"format"});
-        if (cursor != null && cursor.getCount() == 1) {
-            try {
-                cursor.moveToFirst();
-                result = !"pbf".equals(cursor.getString(cursor.getColumnIndex("value")));
-            } finally {
-                cursor.close();
+        try {
+            Cursor cursor = db.rawQuery("SELECT * FROM metadata where name =?", new String[]{"format"});
+            if (cursor != null && cursor.getCount() == 1) {
+                try {
+                    cursor.moveToFirst();
+                    result = !"pbf".equals(cursor.getString(cursor.getColumnIndex("value")));
+                } finally {
+                    cursor.close();
+                }
             }
+        } catch (SQLiteDatabaseCorruptException e) {
+            Timber.w(e);
         }
         return result;
     }
