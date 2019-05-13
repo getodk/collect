@@ -1,6 +1,7 @@
 package org.odk.collect.android.location.activities;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +37,7 @@ public class GeoPointMapActivityTest extends BaseGeoActivityTest {
         controller = Robolectric.buildActivity(GeoPointMapActivity.class);
     }
 
+    @Ignore
     @Test public void shouldReturnPointFromSecondLocationFix() {
         GeoPointMapActivity activity = controller.create().start().resume().visible().get();
 

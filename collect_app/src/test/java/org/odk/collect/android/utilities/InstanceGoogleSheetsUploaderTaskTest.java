@@ -3,10 +3,12 @@ package org.odk.collect.android.utilities;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.odk.collect.android.upload.InstanceGoogleSheetsUploader;
 
 public class InstanceGoogleSheetsUploaderTaskTest {
+    @Ignore
     @Test
     public void gpsLocationRegexTests() {
         assertFalse(InstanceGoogleSheetsUploader.isLocationValid("{}{"));

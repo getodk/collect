@@ -583,11 +583,13 @@ public abstract class QuestionWidget
     // Smap added function
     protected boolean nochoose(FormEntryPrompt prompt) {
         boolean nochoose = false;
-        String appearance = prompt.getQuestion().getAppearanceAttr();
+        if(prompt != null && prompt.getQuestion() != null) {
+            String appearance = prompt.getQuestion().getAppearanceAttr();
 
-        if (appearance != null && (appearance.toLowerCase().contains("nochoose")
-                || appearance.toLowerCase().contains("new"))) {
-            nochoose = true;
+            if (appearance != null && (appearance.toLowerCase().contains("nochoose")
+                    || appearance.toLowerCase().contains("new"))) {
+                nochoose = true;
+            }
         }
         return nochoose;
     }

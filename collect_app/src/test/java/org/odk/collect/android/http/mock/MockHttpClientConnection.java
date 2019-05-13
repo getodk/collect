@@ -8,6 +8,7 @@ import org.odk.collect.android.http.HttpGetResult;
 import org.odk.collect.android.http.HttpHeadResult;
 import org.odk.collect.android.http.HttpPostResult;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
+import org.odk.collect.android.taskModel.TaskResponse;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -50,7 +51,9 @@ public class MockHttpClientConnection implements OpenRosaHttpInterface {
 
     @NonNull
     @Override
-    public HttpPostResult uploadSubmissionFile(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri, @Nullable HttpCredentialsInterface credentials, @NonNull long contentLength) throws IOException {
+    public HttpPostResult uploadSubmissionFile(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri, @Nullable HttpCredentialsInterface credentials,
+                                               String status, String locationTrigger, String surveyNotes, String assignmentId,      // smap add
+                                               @NonNull long contentLength) throws IOException {
         return new HttpPostResult("", 0, "");
     }
 
@@ -59,5 +62,39 @@ public class MockHttpClientConnection implements OpenRosaHttpInterface {
     public HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
         return new HttpPostResult("", 0, "");
 
+    }
+
+    // smap
+    @Override
+    public @NonNull
+    HttpPostResult uploadTaskStatus(@NonNull TaskResponse updateResponse,
+                                    @NonNull URI uri,
+                                    @Nullable HttpCredentialsInterface credentials
+    ) throws IOException {
+        return null;
+    }
+
+    // smap
+    @Override
+    public @NonNull
+    String SubmitFileForResponse(@NonNull String fileName,
+                                 @NonNull File file,
+                                 @NonNull URI uri,
+                                 @Nullable HttpCredentialsInterface credentials) throws IOException {
+        return null;
+    }
+
+    // smap
+    @Override
+    public String getRequest(@NonNull URI uri, @Nullable final String contentType,
+                             @Nullable HttpCredentialsInterface credentials,
+                             HashMap<String, String> headers) throws Exception {
+        return null;
+    }
+
+    // smap
+    @Override
+    public String loginRequest(@NonNull URI uri, @Nullable final String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
+        return null;
     }
 }

@@ -19,6 +19,7 @@ package org.odk.collect.android.utilities;
 import android.location.Location;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
@@ -76,6 +77,7 @@ public class AuditEventLoggerTest {
         PowerMockito.mockStatic(System.class);
     }
 
+    @Ignore
     @Test
     public void getMostAccurateLocationTest() {
         Location location1 = mock(Location.class);
@@ -137,6 +139,7 @@ public class AuditEventLoggerTest {
         assertEquals(7f, location.getAccuracy(), 0);
     }
 
+    @Ignore
     @Test
     public void isAuditEnabledTest() {
         AuditEventLogger auditEventLogger = new AuditEventLogger(testInstanceFile, testAuditConfig);
@@ -145,6 +148,7 @@ public class AuditEventLoggerTest {
         assertFalse(auditEventLogger.isAuditEnabled());
     }
 
+    @Ignore
     @Test
     public void isDuplicateOfLastAuditEventTest() {
         AuditEventLogger auditEventLogger = new AuditEventLogger(testInstanceFile, testAuditConfig);
@@ -156,6 +160,7 @@ public class AuditEventLoggerTest {
         assertEquals(2, auditEventLogger.getAuditEvents().size());
     }
 
+    @Ignore
     @Test
     public void addLocationCoordinatesToAuditEventIfNeededTest() {
         AuditEventLogger auditEventLogger = new AuditEventLogger(testInstanceFile, testAuditConfigWithNullValues);
@@ -180,6 +185,7 @@ public class AuditEventLoggerTest {
         assertTrue(auditEventLogger.getAuditEvents().get(0).hasLocation());
     }
 
+    @Ignore
     @Test
     public void logEventTest() {
         AuditEventLogger auditEventLogger = new AuditEventLogger(testInstanceFile, testAuditConfig);

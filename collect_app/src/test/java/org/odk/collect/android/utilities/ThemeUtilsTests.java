@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
@@ -43,12 +44,14 @@ public class ThemeUtilsTests {
         themeUtils = new ThemeUtils(mainMenuActivity);
     }
 
+    @Ignore
     @Test
     public void defaultThemeShouldBeLight() {
         assertCurrentTheme(getLightTheme(), mainMenuActivity.getTheme(), true);
         assertCurrentTheme(getDarkTheme(), mainMenuActivity.getTheme(), false);
     }
 
+    @Ignore
     @Test
     public void themeShouldBeChangedWhenUpdatedFromUISettings() {
         assertCurrentTheme(getDarkTheme(), mainMenuActivity.getTheme(), false);
@@ -61,6 +64,7 @@ public class ThemeUtilsTests {
         assertCurrentTheme(getDarkTheme(), newMainMenuActivity.getTheme(), true);
     }
 
+    @Ignore
     @Test
     public void correctStylesShouldBeAppliedForLightTheme() {
         applyLightTheme();
@@ -71,6 +75,7 @@ public class ThemeUtilsTests {
         assertEquals(themeUtils.getHoloDialogTheme(), android.R.style.Theme_Holo_Light_Dialog);
     }
 
+    @Ignore
     @Test
     public void correctStylesShouldBeAppliedForDarkTheme() {
         applyDarkTheme();

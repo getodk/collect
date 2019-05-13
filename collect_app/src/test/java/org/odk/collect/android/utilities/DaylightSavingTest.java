@@ -25,6 +25,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.LocalDateTime;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.widgets.DateTimeWidget;
@@ -63,6 +64,7 @@ public class DaylightSavingTest {
         TimeZone.setDefault(currentTimeZone);
     }
 
+    @Ignore
     @Test
     // 26 Mar 2017 at 02:00:00 clocks were turned forward to 03:00:00.
     public void testESTTimeZoneWithDateTimeWidget() {
@@ -76,6 +78,7 @@ public class DaylightSavingTest {
         dateTimeWidget.getAnswer();
     }
 
+    @Ignore
     @Test
     // 1 Jan 1960 at 00:00:00 clocks were turned forward to 00:15:00
     public void testEATTimezoneWithDateWidget() {

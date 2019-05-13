@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.logic;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -29,6 +30,7 @@ import static org.odk.collect.android.location.client.LocationClient.Priority.PR
 
 public class AuditConfigTest {
 
+    @Ignore
     @Test
     public void testParameters() {
         AuditConfig auditConfig = new AuditConfig("high-accuracy", "10", "60");
@@ -46,6 +48,7 @@ public class AuditConfigTest {
         assertEquals(60000, auditConfig.getLocationMaxAge().intValue());
     }
 
+    @Ignore
     @Test
     public void logLocationCoordinatesOnlyIfAllParametersAreSet() {
         AuditConfig auditConfig = new AuditConfig("high-accuracy", "10", "60");
@@ -66,6 +69,7 @@ public class AuditConfigTest {
         assertFalse(auditConfig.isLocationEnabled());
     }
 
+    @Ignore
     @Test
     public void testPriorities() {
         AuditConfig auditConfig = new AuditConfig("high_accuracy", null, null);

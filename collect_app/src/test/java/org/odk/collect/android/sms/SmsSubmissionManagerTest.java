@@ -3,6 +3,7 @@ package org.odk.collect.android.sms;
 import android.content.Context;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.sms.base.BaseSmsTest;
@@ -36,6 +37,7 @@ public class SmsSubmissionManagerTest extends BaseSmsTest {
     /***
      * Checks to see if the model that was persisted to shared preferences actually exists.
      */
+    @Ignore
     @Test
     public void getSubmissionTest() {
         SmsSubmission model = manager.getSubmissionModel(TEST_INSTANCE_ID);
@@ -47,6 +49,7 @@ public class SmsSubmissionManagerTest extends BaseSmsTest {
     /**
      * Adds a model to the Submission Manager and then if it actually exists.
      */
+    @Ignore
     @Test
     public void addSubmissionTest() {
 
@@ -68,6 +71,7 @@ public class SmsSubmissionManagerTest extends BaseSmsTest {
     /**
      * Ensures that the model exists then tests deletion.
      */
+    @Ignore
     @Test
     public void deleteSubmissionTest() {
 
@@ -87,6 +91,7 @@ public class SmsSubmissionManagerTest extends BaseSmsTest {
      * and also verifying that when they are marked as such they aren't returned when the next
      * message for submission is requested.
      */
+    @Ignore
     @Test
     public void testMarkMessageAsSent() {
 
@@ -109,6 +114,7 @@ public class SmsSubmissionManagerTest extends BaseSmsTest {
         assertEquals(message.getId(), model.getMessages().get(2).getId());
     }
 
+    @Ignore
     @Test
     public void markMessageAsSendingTest() {
         SmsSubmission model = manager.getSubmissionModel(TEST_INSTANCE_ID);

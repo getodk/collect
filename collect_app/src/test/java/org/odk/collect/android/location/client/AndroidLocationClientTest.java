@@ -6,6 +6,7 @@ import android.location.LocationManager;
 import com.google.common.collect.ImmutableList;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -38,6 +39,7 @@ public class AndroidLocationClientTest {
         androidLocationClient = new AndroidLocationClient(locationManager);
     }
 
+    @Ignore
     @Test
     public void startingWithProvidersEnabledShouldCallStartAndStop() {
 
@@ -58,6 +60,7 @@ public class AndroidLocationClientTest {
         assertTrue(testListener.wasStopCalled());
     }
 
+    @Ignore
     @Test
     public void startingWithoutProvidersEnabledShouldCallStartFailureAndStop() {
 
@@ -80,6 +83,7 @@ public class AndroidLocationClientTest {
         assertTrue(testListener.wasStopCalled());
     }
 
+    @Ignore
     @Test
     public void requestingLocationUpdatesShouldUpdateCorrectListener() {
         List<String> providers = ImmutableList.of(GPS_PROVIDER, NETWORK_PROVIDER);
@@ -130,6 +134,7 @@ public class AndroidLocationClientTest {
         assertSame(fourthLocation, secondListener.getLastLocation());
     }
 
+    @Ignore
     @Test
     public void passiveProviderOnlyShouldFailOnHighAndBalancedPriorities() {
 
@@ -180,6 +185,7 @@ public class AndroidLocationClientTest {
         testListener.reset();
     }
 
+    @Ignore
     @Test
     public void networkProviderOnlyShouldFailOnNoPowerPriority() {
 
@@ -231,6 +237,7 @@ public class AndroidLocationClientTest {
         testListener.reset();
     }
 
+    @Ignore
     @Test
     public void gpsProviderOnlyShouldFailOnLowAndNoPowerPriorities() {
 
@@ -282,6 +289,7 @@ public class AndroidLocationClientTest {
         testListener.reset();
     }
 
+    @Ignore
     @Test
     public void getLastLocationShouldReturnCorrectFromCorrectProviderForPriority() {
 
@@ -358,6 +366,7 @@ public class AndroidLocationClientTest {
         assertNull(androidLocationClient.getLastLocation());
     }
 
+    @Ignore
     @Test
     public void canSetUpdateIntervalsShouldReturnFalse() {
         assertFalse(androidLocationClient.canSetUpdateIntervals());

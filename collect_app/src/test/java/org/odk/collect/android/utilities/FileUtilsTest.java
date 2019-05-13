@@ -1,5 +1,6 @@
 package org.odk.collect.android.utilities;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -26,6 +27,7 @@ public class FileUtilsTest {
         }
     }
 
+    @Ignore
     @Test
     public void mediaDirNameIsCorrect() {
         String expected = "sample-file-media";

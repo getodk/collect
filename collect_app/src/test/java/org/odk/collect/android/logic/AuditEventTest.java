@@ -17,6 +17,7 @@
 package org.odk.collect.android.logic;
 
 import org.javarosa.form.api.FormEntryController;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -52,6 +53,7 @@ public class AuditEventTest {
     private static final long START_TIME = 1545392727685L;
     private static final long END_TIME = 1545392728527L;
 
+    @Ignore
     @Test
     public void testToString() {
         AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, "/data/text1");
@@ -91,6 +93,7 @@ public class AuditEventTest {
         assertEquals("question,null,1545392727685,1545392728527", auditEvent.toString());
     }
 
+    @Ignore
     @Test
     public void testEventTypes() {
         AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, "");
@@ -214,6 +217,7 @@ public class AuditEventTest {
         assertEquals("Unknown AuditEvent Type,,1545392727685,", auditEvent.toString());
     }
 
+    @Ignore
     @Test
     public void getAuditEventTypeFromFecTypeTest() {
         assertEquals(BEGINNING_OF_FORM, AuditEvent.getAuditEventTypeFromFecType(FormEntryController.EVENT_BEGINNING_OF_FORM));

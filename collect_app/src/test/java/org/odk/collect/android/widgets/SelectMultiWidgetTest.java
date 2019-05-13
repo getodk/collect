@@ -13,6 +13,6 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
     @NonNull
     @Override
     public SelectMultiWidget createWidget() {
-        return new SelectMultiWidget(RuntimeEnvironment.application, formEntryPrompt);
+        return new SelectMultiWidget(RuntimeEnvironment.application, formEntryPrompt, false);       // smap add readonly override
     }
 }

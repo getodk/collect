@@ -3,6 +3,7 @@ package org.odk.collect.android.sms;
 import android.telephony.SmsManager;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
@@ -45,6 +46,7 @@ public class SmsSenderJobTest extends BaseSmsTest {
         setDefaultGateway();
     }
 
+    @Ignore
     @Test
     public void smsSenderJobTest() {
 
@@ -66,6 +68,7 @@ public class SmsSenderJobTest extends BaseSmsTest {
         assertTrue(next.isSending());
     }
 
+    @Ignore
     @Test
     public void sendUnsentMessageTest() {
 

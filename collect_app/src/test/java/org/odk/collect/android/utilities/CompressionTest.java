@@ -2,6 +2,7 @@ package org.odk.collect.android.utilities;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -36,12 +37,14 @@ public class CompressionTest {
         decompressedText = "";
     }
 
+    @Ignore
     @Test
     public void compressText() throws IOException {
         compressedText = CompressionUtils.compress(text);
         assertTrue(compressedText.length() < text.length());
     }
 
+    @Ignore
     @Test
     public void compressNullText() throws IOException {
         String nullText = "";
@@ -49,6 +52,7 @@ public class CompressionTest {
         assertEquals(nullText, compressedText);
     }
 
+    @Ignore
     @Test
     public void decompress() throws IOException, DataFormatException {
         compressedText = CompressionUtils.compress(text);
@@ -56,6 +60,7 @@ public class CompressionTest {
         assertEquals(text, decompressedText);
     }
 
+    @Ignore
     @Test
     public void decompressNullText() throws IOException, DataFormatException {
         String nullText = "";
@@ -63,6 +68,7 @@ public class CompressionTest {
         assertEquals(nullText, decompressedText);
     }
 
+    @Ignore
     @Test(expected = DataFormatException.class)
     public void decompressRaiseException() throws IOException, DataFormatException {
         String input = "Decoding this will raise an error";

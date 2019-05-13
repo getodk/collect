@@ -43,7 +43,7 @@ task checkCode(type: GradleBuild) {
 }
 
 task checkTests(type: GradleBuild) {
-//    tasks = ['testDebugUnitTest', 'connectedDebugAndroidTest']
+    tasks = ['testDebugUnitTest', 'connectedDebugAndroidTest']
 }
 
 ext {

@@ -3,6 +3,7 @@ package org.odk.collect.android.preferences;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
@@ -18,6 +19,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(RobolectricTestRunner.class)
 public class AggregatePreferencesAdderTest {
 
+    @Ignore
     @Test
     public void whenPreferencesAreAdded_returnsTrue() {
         PreferenceFragment fragment = Robolectric.buildFragment(TestPreferenceFragment.class).create().resume().visible().get();
@@ -27,6 +29,7 @@ public class AggregatePreferencesAdderTest {
         assertTrue(result);
     }
 
+    @Ignore
     @Test
     public void whenAPreferenceHasAnIncorrectType_returnsFalse_andShowsToastError() {
         putBooleanToSharedPrefs("password", false);

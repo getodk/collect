@@ -92,7 +92,7 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
     @Override
     public ItemsetWidget createWidget() {
         return new ItemsetWidget(RuntimeEnvironment.application, formEntryPrompt,
-                false, parseTool, adapter, fileUtil);
+                false, parseTool, adapter, fileUtil, false);    // smap add eadonlyoverride
     }
 
     @NonNull

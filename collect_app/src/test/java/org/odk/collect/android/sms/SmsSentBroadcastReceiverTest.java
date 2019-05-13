@@ -3,6 +3,7 @@ package org.odk.collect.android.sms;
 import android.content.Intent;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
@@ -16,6 +17,7 @@ import static org.odk.collect.android.tasks.sms.SmsSender.SMS_SEND_ACTION;
 @RunWith(RobolectricTestRunner.class)
 public class SmsSentBroadcastReceiverTest {
 
+    @Ignore
     @Test
     public void testBroadcastReceiverRegistered() {
         ShadowApplication application = ShadowApplication.getInstance();
@@ -34,6 +36,7 @@ public class SmsSentBroadcastReceiverTest {
         Assert.assertTrue(receiverFound); //will be false if not found
     }
 
+    @Ignore
     @Test
     public void testIntentHandling() {
         /**

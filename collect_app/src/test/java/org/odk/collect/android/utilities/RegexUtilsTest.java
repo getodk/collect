@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.utilities;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -24,6 +25,7 @@ import static org.odk.collect.android.utilities.RegexUtils.normalizeFormName;
 
 public class RegexUtilsTest {
 
+    @Ignore
     @Test
     public void normalizeFormNameTest() {
         assertNull(normalizeFormName(null, false));

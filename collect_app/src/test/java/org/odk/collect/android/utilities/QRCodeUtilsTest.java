@@ -8,6 +8,7 @@ import com.google.zxing.NotFoundException;
 import com.google.zxing.WriterException;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
@@ -45,6 +46,7 @@ public class QRCodeUtilsTest {
         md5File.delete();
     }
 
+    @Ignore
     @Test
     public void generateAndDecodeQRCode() throws IOException, WriterException, DataFormatException, ChecksumException, NotFoundException, FormatException {
         String data = "Some random text";
@@ -52,6 +54,7 @@ public class QRCodeUtilsTest {
         assertQRContains(generatedQRBitMap, data);
     }
 
+    @Ignore
     @Test
     public void generateQRCodeIfNoCacheExists() throws DataFormatException, FormatException, ChecksumException, NotFoundException, IOException, NoSuchAlgorithmException {
         // verify that QRCode and md5 cache files don't exist
@@ -71,6 +74,7 @@ public class QRCodeUtilsTest {
         verifyCachedMd5Data(expectedData);
     }
 
+    @Ignore
     @Test
     public void readQRCodeFromDiskIfCacheExists() throws NoSuchAlgorithmException, IOException, WriterException {
         String expectedData = "{\"general\":{},\"admin\":{}}";

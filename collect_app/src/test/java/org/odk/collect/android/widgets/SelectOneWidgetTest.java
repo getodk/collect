@@ -14,6 +14,6 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<AbstractSele
     @NonNull
     @Override
     public SelectOneWidget createWidget() {
-        return new SelectOneWidget(RuntimeEnvironment.application, formEntryPrompt, false);
+        return new SelectOneWidget(RuntimeEnvironment.application, formEntryPrompt, false, false);  // smap add readonlyoverride
     }
 }

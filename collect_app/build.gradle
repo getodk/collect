@@ -315,25 +315,25 @@ dependencies {
     androidTestImplementation "tools.fastlane:screengrab:1.1.0"
 
     // Testing-only dependencies
-    //testImplementation "junit:junit:4.12"
-    //testImplementation "org.mockito:mockito-core:2.8.47"
-    //testImplementation "org.robolectric:robolectric:4.0.1"
-    //testImplementation "org.robolectric:shadows-multidex:4.0-beta-1"
+    testImplementation "junit:junit:4.12"
+    testImplementation "org.mockito:mockito-core:2.8.47"
+    testImplementation "org.robolectric:robolectric:4.0.1"
+    testImplementation "org.robolectric:shadows-multidex:4.0-beta-1"
 
     // power mock (for mocking final methods which is not handled by mockito)
-    //testImplementation "org.powermock:powermock-module-junit4:1.6.4"
-    //testImplementation "org.powermock:powermock-api-mockito2:1.7.3"
+    testImplementation "org.powermock:powermock-module-junit4:1.6.4"
+    testImplementation "org.powermock:powermock-api-mockito2:1.7.3"
 
-    //androidTestImplementation "org.mockito:mockito-android:2.11.0"
-    //androidTestImplementation("com.android.support.test:runner:1.0.1") {
-    //    exclude group: 'com.android.support', module: 'support-annotations'
-    //    exclude group: 'com.google.code.findbugs', module: 'jsr305'
-    //}
+    androidTestImplementation "org.mockito:mockito-android:2.11.0"
+    androidTestImplementation("com.android.support.test:runner:1.0.1") {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs', module: 'jsr305'
+    }
 
-    //androidTestImplementation("com.android.support.test.espresso:espresso-intents:3.0.1") {
-    //    exclude group: 'com.android.support', module: 'support-annotations'
-    //    exclude group: 'com.google.code.findbugs', module: 'jsr305'
-    //}
+    androidTestImplementation("com.android.support.test.espresso:espresso-intents:3.0.1") {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs', module: 'jsr305'
+    }
 
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:${rootProject.okhttp3Version}"
 

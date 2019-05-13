@@ -4,6 +4,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.odk.collect.android.activities.MainActivityTest;
 import org.odk.collect.android.utilities.CompressionTest;
+import org.odk.collect.android.utilities.PermissionsTest;
+import org.odk.collect.android.utilities.TextUtilsTest;
 
 /**
  * Suite for running all unit tests from one place

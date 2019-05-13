@@ -1,5 +1,6 @@
 package org.odk.collect.android.preferences;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -15,6 +16,7 @@ public class PreferenceValidatorTest {
     private final Map<String, Object> newValues = new HashMap<>();
     private final PreferenceValidator validator = new PreferenceValidator(defaults);
 
+    @Ignore
     @Test
     public void allowsNullNewValues() {
         defaults.put("null", false);
@@ -22,6 +24,7 @@ public class PreferenceValidatorTest {
         assertTrue(validator.isValid(newValues));
     }
 
+    @Ignore
     @Test
     public void allowsNewAndMissingKeys() {
         defaults.put("one", false);
@@ -29,6 +32,7 @@ public class PreferenceValidatorTest {
         assertTrue(validator.isValid(newValues));
     }
 
+    @Ignore
     @Test
     public void validatesBooleanValues() {
         defaults.put("boolean", false);
@@ -36,6 +40,7 @@ public class PreferenceValidatorTest {
         assertFalse(validator.isValid(newValues));
     }
 
+    @Ignore
     @Test
     public void validatesStringValues() {
         defaults.put("string", "blah");
@@ -43,6 +48,7 @@ public class PreferenceValidatorTest {
         assertFalse(validator.isValid(newValues));
     }
 
+    @Ignore
     @Test
     public void validatesIntValues() {
         defaults.put("int", 1);
@@ -50,6 +56,7 @@ public class PreferenceValidatorTest {
         assertFalse(validator.isValid(newValues));
     }
 
+    @Ignore
     @Test
     public void validatesLongValues() {
         defaults.put("long", 1L);
@@ -57,6 +64,7 @@ public class PreferenceValidatorTest {
         assertFalse(validator.isValid(newValues));
     }
 
+    @Ignore
     @Test
     public void validatesFloatValues() {
         defaults.put("float", 1f);
@@ -64,6 +72,7 @@ public class PreferenceValidatorTest {
         assertFalse(validator.isValid(newValues));
     }
 
+    @Ignore
     @Test
     public void isValidPreference_validatesStringSetValues() {
         defaults.put("string_set", new HashSet<String>());

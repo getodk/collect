@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.dependencies;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import bikramsambat.BikramSambatDate;
@@ -28,6 +29,7 @@ import static org.junit.Assert.assertEquals;
 // Results confirmed with https://www.ashesh.com.np/nepali-date-converter.php
 public class BikramSambatTest {
 
+    @Ignore
     @Test
     public void convertingGregorianToBikramSambatTest() throws BsException {
         BikramSambatDate bikramSambatDate = BsCalendar.getInstance().toBik(1914, 1, 3);
@@ -86,6 +88,7 @@ public class BikramSambatTest {
         assertEquals(1, bikramSambatDate.day);
     }
 
+    @Ignore
     @Test
     public void convertingBikramSambatToGregorian() throws BsException {
         BsGregorianDate bsGregorianDate = BsCalendar.getInstance().toGreg(new BikramSambatDate(1972, 1, 1));

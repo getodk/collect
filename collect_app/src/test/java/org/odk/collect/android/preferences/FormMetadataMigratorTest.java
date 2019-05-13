@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
@@ -62,6 +63,7 @@ public class FormMetadataMigratorTest {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
     }
 
+    @Ignore
     @Test
     public void shouldMigrateDataCorrectly() {
         setPreferencesToPreMigrationValues();

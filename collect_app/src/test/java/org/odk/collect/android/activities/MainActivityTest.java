@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
@@ -38,6 +39,7 @@ public class MainActivityTest {
     /**
      * {@link Test} to assert {@link MainMenuActivity} for not null.
      */
+    @Ignore
     @Test
     public void nullActivityTest() throws Exception {
         assertNotNull(mainMenuActivity);
@@ -46,6 +48,7 @@ public class MainActivityTest {
     /**
      * {@link Test} to assert title of {@link MainMenuActivity} for not null.
      */
+    @Ignore
     @Test
     public void titleTest() throws Exception {
         Toolbar toolbar = mainMenuActivity.findViewById(R.id.toolbar);
@@ -55,6 +58,7 @@ public class MainActivityTest {
     /**
      * {@link Test} to assert Options Menu's functioning.
      */
+    @Ignore
     @Test
     public void optionsMenuTest() throws Exception {
         Menu menu = shadowOf(mainMenuActivity).getOptionsMenu();
@@ -95,6 +99,7 @@ public class MainActivityTest {
     /**
      * {@link Test} to assert dataButton's functioning.
      */
+    @Ignore
     @Test
     public void dataButtonTest() throws Exception {
         Button dataButton = mainMenuActivity.findViewById(R.id.enter_data);
@@ -114,6 +119,7 @@ public class MainActivityTest {
     /**
      * {@link Test} to assert reviewDataButton's functioning.
      */
+    @Ignore
     @Test
     public void reviewDataButtonTest() throws Exception {
         Button reviewDataButton = mainMenuActivity.findViewById(R.id.review_data);
@@ -133,6 +139,7 @@ public class MainActivityTest {
     /**
      * {@link Test} to assert sendDataButton's functioning.
      */
+    @Ignore
     @Test
     public void sendDataButtonTest() throws Exception {
         Button sendDataButton = mainMenuActivity.findViewById(R.id.send_data);
@@ -152,6 +159,7 @@ public class MainActivityTest {
     /**
      * {@link Test} to assert viewSentFormButton's functioning.
      */
+    @Ignore
     @Test
     public void viewSentFormButtonTest() throws Exception {
         Button viewSentFormButton = mainMenuActivity.findViewById(R.id.view_sent_forms);
@@ -171,6 +179,7 @@ public class MainActivityTest {
     /**
      * {@link Test} to assert getFormButton's functioning.
      */
+    @Ignore
     @Test
     public void getFormButtonTest() throws Exception {
         Button getFormButton = mainMenuActivity.findViewById(R.id.get_forms);
@@ -182,6 +191,7 @@ public class MainActivityTest {
     /**
      * {@link Test} to assert manageFilesButton's functioning.
      */
+    @Ignore
     @Test
     public void manageFilesButtonTest() throws Exception {
         Button manageFilesButton = mainMenuActivity.findViewById(R.id.manage_forms);
