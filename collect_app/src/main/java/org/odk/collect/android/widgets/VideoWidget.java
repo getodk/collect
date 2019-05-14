@@ -84,7 +84,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     @NonNull
     private FileUtil fileUtil;
 
-    private Button captureButton;
+    public Button captureButton;    // smap make public
     private Button playButton;
     private Button chooseButton;
     private String binaryName;

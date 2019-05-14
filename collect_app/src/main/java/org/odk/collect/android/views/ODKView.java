@@ -61,11 +61,14 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.AudioWidget;
 import org.odk.collect.android.widgets.BarcodeWidget;
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.GeoPointWidget;
+import org.odk.collect.android.widgets.ImageWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.SmapFormWidget;
+import org.odk.collect.android.widgets.VideoWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
@@ -212,9 +215,22 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
         FormEntryPrompt exPrompt = null;        // smap
         FormEntryPrompt formPrompt = null;      // smap
         FormEntryPrompt geopointPrompt = null;      // smap
+        FormEntryPrompt imagePrompt = null;      // smap
+        FormEntryPrompt videoPrompt = null;      // smap
+        FormEntryPrompt audioPrompt = null;      // smap
 
         int id = 0;
         for (FormEntryPrompt p : questionPrompts) {
+
+            nfcPrompt = null;           // smap
+            barcodePrompt = null;       // smap
+            exPrompt = null;            // smap
+            formPrompt = null;          // smap
+            geopointPrompt = null;      // smap
+            imagePrompt = null;         // smap
+            videoPrompt = null;         // smap
+            audioPrompt = null;         // smap
+
             if (!first) {
                 View divider = new View(getContext());
                 divider.setBackgroundResource(new ThemeUtils(getContext()).getDivider());
@@ -257,6 +273,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
                         0).getFormEntryPrompt().getFormElement().getAdditionalAttribute(null, "form_identifier");
 
                 boolean autoLaunch = (auto != null && (auto.equals("yes") || auto.equals("true"))) ? true : false;
+                boolean isNew = (appearance.contains("new")) ? true : false;
                 String s = p.getAnswerText();    // Make sure a value has not alredy been retrieved
 
                 // Auto get External Launch if first question, and not already obtained a value
@@ -274,6 +291,12 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
                         geopointPrompt = p;
                     } else if (p.getDataType() == Constants.DATATYPE_BARCODE) {
                         barcodePrompt = p;
+                    } else if (isNew && p.getControlType() == Constants.CONTROL_VIDEO_CAPTURE) {
+                        videoPrompt = p;
+                    } else if (isNew && p.getControlType() == Constants.CONTROL_AUDIO_CAPTURE) {
+                        audioPrompt = p;
+                    } else if (isNew && p.getControlType() == Constants.CONTROL_IMAGE_CHOOSE) {
+                        imagePrompt = p;
                     }
                 }
             }
@@ -329,6 +352,21 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
                 GeoPointWidget geopointWidget = (GeoPointWidget) widgets.get(0);
                 if(geopointWidget != null) {
                     geopointWidget.getLocationButton.performClick();
+                }
+            } else if (imagePrompt != null) {    // Smap - launch image collection
+                ImageWidget imageWidget = (ImageWidget) widgets.get(0);
+                if(imageWidget != null) {
+                    imageWidget.captureButton.performClick();
+                }
+            } else if (videoPrompt != null) {    // Smap - launch video collection
+                VideoWidget videoWidget = (VideoWidget) widgets.get(0);
+                if(videoWidget != null) {
+                    videoWidget.captureButton.performClick();
+                }
+            } else if (audioPrompt != null) {    // Smap - launch audio collection
+                AudioWidget audioWidget = (AudioWidget) widgets.get(0);
+                if(audioWidget != null) {
+                    audioWidget.captureButton.performClick();
                 }
             }
         }

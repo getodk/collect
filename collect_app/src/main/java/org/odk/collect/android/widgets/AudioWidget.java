@@ -63,7 +63,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     private MediaUtil mediaUtil;
 
     private AudioController audioController;
-    private Button captureButton;
+    public Button captureButton;    // smap make public
     private Button chooseButton;
 
     private String binaryName;

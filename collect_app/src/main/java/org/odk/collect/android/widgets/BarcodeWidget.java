@@ -49,7 +49,7 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
-    private final Button getBarcodeButton;
+    public final Button getBarcodeButton;       // smap make public
     private final TextView stringAnswer;
 
     public BarcodeWidget(Context context, FormEntryPrompt prompt) {
