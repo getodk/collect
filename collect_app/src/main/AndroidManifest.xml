@@ -107,6 +107,10 @@ the specific language governing permissions and limitations under the License.
             android:stateNotNeeded="true"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
+            android:name=".activities.FormEntryActivity"
+            android:configChanges="orientation"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".activities.NotificationActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
@@ -119,6 +123,9 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.GoogleDriveActivity"
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".activities.InstanceChooserList" />
+        <activity android:name=".activities.FormChooserList" />
+        <activity android:name=".activities.FormDownloadList" />
         <activity
             android:name=".activities.FileManagerTabs"
             android:configChanges="orientation|screenSize" />
@@ -128,7 +135,7 @@ the specific language governing permissions and limitations under the License.
         <activity
             android:name=".activities.InstanceUploaderListActivity"
             android:configChanges="orientation|screenSize" />
-
+        <activity android:name=".activities.InstanceUploaderActivity" />
         <activity android:name=".activities.AboutActivity" />
         <activity android:name=".preferences.PreferencesActivity" />
         <activity android:name=".preferences.AdminPreferencesActivity" />
@@ -142,6 +149,9 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.GeoPolyActivity"
             android:configChanges="orientation" />
         <activity android:name=".activities.BearingActivity" />
+        <activity
+            android:name=".activities.SplashScreenActivity"
+            android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".activities.CaptureSelfieActivity" />
         <activity android:name=".activities.CaptureSelfieActivityNewApi" />
         <activity android:name=".activities.WebViewActivity" />
@@ -201,10 +211,9 @@ the specific language governing permissions and limitations under the License.
             android:authorities="org.odk.collect.android.provider.odk.instances"
             android:exported="true" />
 
-        <activity
+        <activity-alias
             android:name=".activities.FormEntryActivity"
-            android:configChanges="orientation"
-            android:windowSoftInputMode="adjustResize">
+            android:targetActivity=".activities.FormEntryActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
@@ -214,9 +223,11 @@ the specific language governing permissions and limitations under the License.
                 <data android:mimeType="vnd.android.cursor.item/vnd.odk.form" />
                 <data android:mimeType="vnd.android.cursor.item/vnd.odk.instance" />
             </intent-filter>
-        </activity>
+        </activity-alias>
 
-        <activity android:name=".activities.InstanceChooserList">
+        <activity-alias
+            android:name=".activities.InstanceChooserList"
+            android:targetActivity=".activities.InstanceChooserList">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
@@ -225,9 +236,11 @@ the specific language governing permissions and limitations under the License.
 
                 <data android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
             </intent-filter>
-        </activity>
+        </activity-alias>
 
-        <activity android:name=".activities.FormChooserList">
+        <activity-alias
+            android:name=".activities.FormChooserList"
+            android:targetActivity=".activities.FormChooserList">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
@@ -237,15 +250,17 @@ the specific language governing permissions and limitations under the License.
 
                 <data android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
             </intent-filter>
-        </activity>
+        </activity-alias>
 
-        <activity android:name=".activities.FormDownloadList">
+        <activity-alias
+            android:name=".activities.FormDownloadList"
+            android:targetActivity=".activities.FormDownloadList">
             <intent-filter>
                 <action android:name="org.odk.collect.android.FORM_DOWNLOAD" />
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
             </intent-filter>
-        </activity>
+        </activity-alias>
 
         <activity-alias
             android:name=".activities.InstanceUploaderList"
@@ -258,25 +273,26 @@ the specific language governing permissions and limitations under the License.
             </intent-filter>
         </activity-alias>
 
-        <activity
-            android:name=".activities.InstanceUploaderActivity">
+        <activity-alias
+            android:name=".activities.InstanceUploaderActivity"
+            android:targetActivity=".activities.InstanceUploaderActivity">
             <intent-filter>
                 <action android:name="org.odk.collect.android.INSTANCE_UPLOAD" />
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
             </intent-filter>
-        </activity>
+        </activity-alias>
 
-        <activity
+        <activity-alias
             android:name=".activities.SplashScreenActivity"
-            android:theme="@android:style/Theme.Dialog">
+            android:targetActivity=".activities.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity-alias>
 
         <!-- Enable Shortcuts for Command Actions -->
         <activity
