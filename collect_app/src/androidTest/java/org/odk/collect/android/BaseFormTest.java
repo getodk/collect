@@ -1,9 +1,7 @@
 package org.odk.collect.android;
 
 import android.Manifest;
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.TextView;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
