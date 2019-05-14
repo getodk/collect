@@ -61,6 +61,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.BarcodeWidget;
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.GeoPointWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
@@ -207,6 +208,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
 
         boolean first = true;
         FormEntryPrompt nfcPrompt = null;       // smap
+        FormEntryPrompt barcodePrompt = null;       // smap
         FormEntryPrompt exPrompt = null;        // smap
         FormEntryPrompt formPrompt = null;      // smap
         FormEntryPrompt geopointPrompt = null;      // smap
@@ -240,10 +242,9 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
             if(first) {
                 // Auto get NFC if first question, and not already obtained a code
                 if (p.getDataType() == Constants.DATATYPE_BARCODE) {
-                    if (appearance.contains("read_nfc")) {
-                        // Make sure an NFC code has not alredy been retrieved
-                        String s = p.getAnswerText();
-                        if (s == null) {
+                    String s = p.getAnswerText();    // Make sure an NFC / barcode code has not alredy been retrieved
+                    if (s == null) {
+                        if (appearance.contains("read_nfc")) {
                             nfcPrompt = p;
                         }
                     }
@@ -271,6 +272,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
                         formPrompt = p;
                     } else if (p.getDataType() == Constants.DATATYPE_GEOPOINT) {
                         geopointPrompt = p;
+                    } else if (p.getDataType() == Constants.DATATYPE_BARCODE) {
+                        barcodePrompt = p;
                     }
                 }
             }
@@ -305,6 +308,11 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
                         .setIndexWaitingForData(nfcPrompt.getIndex());
                 ((Activity) getContext()).startActivityForResult(i,
                         RequestCodes.NFC_CAPTURE);
+            } else if (barcodePrompt != null) {    // Smap - auto get barcode
+                BarcodeWidget bcWidget = (BarcodeWidget) widgets.get(0);
+                if(bcWidget != null) {
+                    bcWidget.getBarcodeButton.performClick();
+                }
             } else if (exPrompt != null) {    // Smap - auto external app
                 ExStringWidget exWidget = (ExStringWidget) widgets.get(0);
                 if(exWidget != null) {
