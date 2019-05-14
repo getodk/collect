@@ -46,6 +46,7 @@ import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.ObjectUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
@@ -165,7 +166,12 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
 
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
         i.putExtra("value", getFormEntryPrompt().getAnswerText());
-        ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_STRING_CAPTURE);
+        try {
+            ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_STRING_CAPTURE);
+        } catch (SecurityException e) {
+            Timber.i(e);
+            ToastUtils.showLongToast(R.string.not_granted_permission);
+        }
     }
 
     @Override
