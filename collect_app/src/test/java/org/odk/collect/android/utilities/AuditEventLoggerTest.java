@@ -66,9 +66,9 @@ public class AuditEventLoggerTest {
 
     private final File testInstanceFile = new File("/storage/emulated/0/odk/instances/testForm/testForm.xml");
     // All values are set so location coordinates should be collected
-    private final AuditConfig testAuditConfig = new AuditConfig("high-priority", "10", "60");
+    private final AuditConfig testAuditConfig = new AuditConfig("high-priority", "10", "60", false);
     // At least one value is not set so location coordinates shouldn't be collected
-    private final AuditConfig testAuditConfigWithNullValues = new AuditConfig("high-priority", "10", null);
+    private final AuditConfig testAuditConfigWithNullValues = new AuditConfig("high-priority", "10", null, false);
 
     @Before
     public void setup() {

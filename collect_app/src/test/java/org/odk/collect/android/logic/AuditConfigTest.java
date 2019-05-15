@@ -31,15 +31,17 @@ public class AuditConfigTest {
 
     @Test
     public void testParameters() {
-        AuditConfig auditConfig = new AuditConfig("high-accuracy", "10", "60");
+        AuditConfig auditConfig = new AuditConfig("high-accuracy", "10", "60", true);
 
+        assertTrue(auditConfig.isTrackingChangesEnabled());
         assertTrue(auditConfig.isLocationEnabled());
         assertEquals(PRIORITY_HIGH_ACCURACY, auditConfig.getLocationPriority());
         assertEquals(10000, auditConfig.getLocationMinInterval().intValue());
         assertEquals(60000, auditConfig.getLocationMaxAge().intValue());
 
-        auditConfig = new AuditConfig("high-accuracy", "0", "60");
+        auditConfig = new AuditConfig("high-accuracy", "0", "60", false);
 
+        assertFalse(auditConfig.isTrackingChangesEnabled());
         assertTrue(auditConfig.isLocationEnabled());
         assertEquals(PRIORITY_HIGH_ACCURACY, auditConfig.getLocationPriority());
         assertEquals(1000, auditConfig.getLocationMinInterval().intValue());
@@ -48,53 +50,53 @@ public class AuditConfigTest {
 
     @Test
     public void logLocationCoordinatesOnlyIfAllParametersAreSet() {
-        AuditConfig auditConfig = new AuditConfig("high-accuracy", "10", "60");
+        AuditConfig auditConfig = new AuditConfig("high-accuracy", "10", "60", false);
         assertTrue(auditConfig.isLocationEnabled());
-        auditConfig = new AuditConfig(null, "10", "60");
+        auditConfig = new AuditConfig(null, "10", "60", false);
         assertFalse(auditConfig.isLocationEnabled());
-        auditConfig = new AuditConfig(null, null, "60");
+        auditConfig = new AuditConfig(null, null, "60", false);
         assertFalse(auditConfig.isLocationEnabled());
-        auditConfig = new AuditConfig(null, null, null);
+        auditConfig = new AuditConfig(null, null, null, false);
         assertFalse(auditConfig.isLocationEnabled());
-        auditConfig = new AuditConfig("balanced", null, null);
+        auditConfig = new AuditConfig("balanced", null, null, false);
         assertFalse(auditConfig.isLocationEnabled());
-        auditConfig = new AuditConfig("balanced", "10", null);
+        auditConfig = new AuditConfig("balanced", "10", null, false);
         assertFalse(auditConfig.isLocationEnabled());
-        auditConfig = new AuditConfig("balanced", null, "60");
+        auditConfig = new AuditConfig("balanced", null, "60", false);
         assertFalse(auditConfig.isLocationEnabled());
-        auditConfig = new AuditConfig(null, null, "60");
+        auditConfig = new AuditConfig(null, null, "60", false);
         assertFalse(auditConfig.isLocationEnabled());
     }
 
     @Test
     public void testPriorities() {
-        AuditConfig auditConfig = new AuditConfig("high_accuracy", null, null);
+        AuditConfig auditConfig = new AuditConfig("high_accuracy", null, null, false);
         assertEquals(PRIORITY_HIGH_ACCURACY, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("high-accuracy", null, null);
+        auditConfig = new AuditConfig("high-accuracy", null, null, false);
         assertEquals(PRIORITY_HIGH_ACCURACY, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("HIGH_ACCURACY", null, null);
+        auditConfig = new AuditConfig("HIGH_ACCURACY", null, null, false);
         assertEquals(PRIORITY_HIGH_ACCURACY, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("balanced", null, null);
+        auditConfig = new AuditConfig("balanced", null, null, false);
         assertEquals(PRIORITY_BALANCED_POWER_ACCURACY, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("BALANCED", null, null);
+        auditConfig = new AuditConfig("BALANCED", null, null, false);
         assertEquals(PRIORITY_BALANCED_POWER_ACCURACY, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("low_power", null, null);
+        auditConfig = new AuditConfig("low_power", null, null, false);
         assertEquals(PRIORITY_LOW_POWER, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("low-power", null, null);
+        auditConfig = new AuditConfig("low-power", null, null, false);
         assertEquals(PRIORITY_LOW_POWER, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("low_POWER", null, null);
+        auditConfig = new AuditConfig("low_POWER", null, null, false);
         assertEquals(PRIORITY_LOW_POWER, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("no_power", null, null);
+        auditConfig = new AuditConfig("no_power", null, null, false);
         assertEquals(PRIORITY_NO_POWER, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("no-power", null, null);
+        auditConfig = new AuditConfig("no-power", null, null, false);
         assertEquals(PRIORITY_NO_POWER, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("NO_power", null, null);
+        auditConfig = new AuditConfig("NO_power", null, null, false);
         assertEquals(PRIORITY_NO_POWER, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("qwerty", null, null);
+        auditConfig = new AuditConfig("qwerty", null, null, false);
         assertEquals(PRIORITY_HIGH_ACCURACY, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("", null, null);
+        auditConfig = new AuditConfig("", null, null, false);
         assertEquals(PRIORITY_HIGH_ACCURACY, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig(null, null, null);
+        auditConfig = new AuditConfig(null, null, null, false);
         assertNull(auditConfig.getLocationPriority());
     }
 }
