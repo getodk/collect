@@ -178,7 +178,7 @@ public class DateTimeUtils {
             } else if (appearance.contains(WidgetAppearanceUtils.BIKRAM_SAMBAT)) {
                 datePickerType = DatePickerDetails.DatePickerType.BIKRAM_SAMBAT;
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
-            } else if (appearance.contains("myanmar")) {
+            } else if (appearance.contains(WidgetAppearanceUtils.MYANMAR)) {
                 datePickerType = DatePickerDetails.DatePickerType.MYANMAR;
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
             } else if (appearance.contains(WidgetAppearanceUtils.NO_CALENDAR)) {

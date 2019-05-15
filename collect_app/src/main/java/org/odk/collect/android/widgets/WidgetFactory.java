@@ -59,7 +59,7 @@ public class WidgetFactory {
                             questionWidget = new IslamicDateWidget(context, fep);
                         } else if (appearance.contains(WidgetAppearanceUtils.BIKRAM_SAMBAT)) {
                             questionWidget = new BikramSambatDateWidget(context, fep);
-                        } else if (appearance.contains("myanmar")) {
+                        } else if (appearance.contains(WidgetAppearanceUtils.MYANMAR)) {
                             questionWidget = new MyanmarDateWidget(context, fep);
                         } else {
                             questionWidget = new DateWidget(context, fep);
@@ -74,24 +74,16 @@ public class WidgetFactory {
                         } else if (appearance.equals(WidgetAppearanceUtils.BEARING)) {
                             questionWidget = new BearingWidget(context, fep);
                         } else {
-                            boolean useThousandSeparator = false;
-                            if (appearance.contains(WidgetAppearanceUtils.THOUSANDS_SEP)) {
-                                useThousandSeparator = true;
-                            }
-                            questionWidget = new DecimalWidget(context, fep, readOnlyOverride,
-                                    useThousandSeparator);
+                             questionWidget = new DecimalWidget(context, fep, readOnlyOverride,
+                                    appearance.contains(WidgetAppearanceUtils.THOUSANDS_SEP));
                         }
                         break;
                     case Constants.DATATYPE_INTEGER:
                         if (appearance.startsWith(WidgetAppearanceUtils.EX)) {
                             questionWidget = new ExIntegerWidget(context, fep);
                         } else {
-                            boolean useThousandSeparator = false;
-                            if (appearance.contains(WidgetAppearanceUtils.THOUSANDS_SEP)) {
-                                useThousandSeparator = true;
-                            }
                             questionWidget = new IntegerWidget(context, fep, readOnlyOverride,
-                                    useThousandSeparator);
+                                    appearance.contains(WidgetAppearanceUtils.THOUSANDS_SEP));
                         }
                         break;
                     case Constants.DATATYPE_GEOPOINT:
@@ -115,12 +107,8 @@ public class WidgetFactory {
                         } else if (appearance.startsWith(WidgetAppearanceUtils.EX)) {
                             questionWidget = new ExStringWidget(context, fep);
                         } else if (appearance.contains(WidgetAppearanceUtils.NUMBERS)) {
-                            boolean useThousandsSeparator = false;
-                            if (appearance.contains(WidgetAppearanceUtils.THOUSANDS_SEP)) {
-                                useThousandsSeparator = true;
-                            }
                             questionWidget = new StringNumberWidget(context, fep, readOnlyOverride,
-                                    useThousandsSeparator);
+                                    appearance.contains(WidgetAppearanceUtils.THOUSANDS_SEP));
                         } else if (appearance.equals(WidgetAppearanceUtils.URL)) {
                             questionWidget = new UrlWidget(context, fep);
                         } else {

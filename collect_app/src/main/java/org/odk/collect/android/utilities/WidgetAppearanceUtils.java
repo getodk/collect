@@ -35,6 +35,7 @@ public class WidgetAppearanceUtils {
     public static final String COPTIC           = "coptic";
     public static final String ISLAMIC          = "islamic";
     public static final String BIKRAM_SAMBAT    = "bikram-sambat";
+    public static final String MYANMAR          = "myanmar";
     public static final String NO_CALENDAR      = "no-calendar";
     public static final String MONTH_YEAR       = "month-year";
     public static final String YEAR             = "year";

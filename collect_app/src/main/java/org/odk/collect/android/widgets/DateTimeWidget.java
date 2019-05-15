@@ -55,7 +55,7 @@ public class DateTimeWidget extends QuestionWidget implements BinaryWidget, Widg
             dateWidget = new IslamicDateWidget(context, prompt);
         } else if (appearance != null && appearance.contains(WidgetAppearanceUtils.BIKRAM_SAMBAT)) {
             dateWidget = new BikramSambatDateWidget(context, prompt);
-        } else if (appearance != null && appearance.contains("myanmar")) {
+        } else if (appearance != null && appearance.contains(WidgetAppearanceUtils.MYANMAR)) {
             dateWidget = new MyanmarDateWidget(context, prompt);
         } else {
             dateWidget = new DateWidget(context, prompt);
