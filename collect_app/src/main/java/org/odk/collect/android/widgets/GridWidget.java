@@ -16,9 +16,7 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.annotation.Nullable;
 
-import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
@@ -28,78 +26,57 @@ import org.odk.collect.android.listeners.AdvanceToNextListener;
 @SuppressLint("ViewConstructor")
 public class GridWidget extends BaseGridWidget {
 
-    @Nullable
-    private AdvanceToNextListener listener;
+    private final AdvanceToNextListener listener;
 
     public GridWidget(Context context, FormEntryPrompt prompt, final boolean quickAdvance) {
         super(context, prompt, quickAdvance);
-
-        if (context instanceof AdvanceToNextListener) {
-            listener = (AdvanceToNextListener) context;
-        }
-
-        setUpView(prompt);
-        fillInAnswer();
-        initializeGridView();
+        listener = context instanceof AdvanceToNextListener ? (AdvanceToNextListener) context : null;
     }
 
-    void onElementClick(int position) {
-        // Imitate the behavior of a radio button. Clear all buttons
-        // and then check the one clicked by the user. Update the
-        // background color accordingly
-        for (int i = 0; i < selected.length; i++) {
-            // if we have an audio handler, be sure audio is stopped.
-            if (selected[i] && (audioHandlers[i] != null)) {
+    @Override
+    protected void fillInAnswer() {
+        String answer = getFormEntryPrompt().getAnswerValue() != null
+                ? ((Selection) getFormEntryPrompt().getAnswerValue().getValue()).getValue()
+                : null;
+
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getValue().equals(answer)) {
+                selectItem(i);
+            }
+        }
+    }
+
+    @Override
+    protected void onItemClick(int index) {
+        if (selectedItems.contains(index)) {
+            if (audioHandlers[selectedItems.get(0)] != null) {
                 stopAudio();
             }
-            selected[i] = false;
-            imageViews[i].setBackgroundColor(0);
+        } else {
+            if (selectedItems.isEmpty()) {
+                selectItem(index);
+            } else {
+                unselectItem(selectedItems.get(0));
+                selectItem(index);
+            }
         }
-        selected[position] = true;
-        imageViews[position].setBackgroundColor(bgOrange);
 
         if (quickAdvance && listener != null) {
             listener.advance();
-        } else if (audioHandlers[position] != null) {
-            audioHandlers[position].playAudio(getContext());
+        } else if (noButtonsMode && audioHandlers[index] != null) {
+            audioHandlers[index].playAudio(getContext());
         }
-
         widgetValueChanged();
-    }
-
-    private void fillInAnswer() {
-        String s = null;
-        if (getFormEntryPrompt().getAnswerValue() != null) {
-            s = ((Selection) getFormEntryPrompt().getAnswerValue().getValue()).getValue();
-        }
-
-        for (int i = 0; i < items.size(); ++i) {
-            String match = items.get(i).getValue();
-
-            selected[i] = match.equals(s);
-            if (selected[i]) {
-                imageViews[i].setBackgroundColor(bgOrange);
-            }
-        }
     }
 
     @Override
     public IAnswerData getAnswer() {
-        for (int i = 0; i < choices.length; ++i) {
-            if (selected[i]) {
-                SelectChoice sc = items.get(i);
-                return new SelectOneData(new Selection(sc));
-            }
-        }
-        return null;
+        return selectedItems.isEmpty()
+                ? null
+                : new SelectOneData(new Selection(items.get(selectedItems.get(0))));
     }
 
     @Override
     public void setChoiceSelected(int choiceIndex, boolean isSelected) {
-        for (int i = 0; i < selected.length; i++) {
-            selected[i] = false;
-        }
-
-        selected[choiceIndex] = isSelected;
     }
 }

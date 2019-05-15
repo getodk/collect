@@ -23,25 +23,33 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.javarosa.core.model.SelectChoice;
+import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.AppCompatRadioButton;
+
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.views.AudioButton;
 import org.odk.collect.android.views.ExpandedHeightGridView;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -53,192 +61,204 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
 
     final int bgOrange = getResources().getColor(R.color.highContrastHighlight);
 
-    static final int HORIZONTAL_PADDING = 7;
-    static final int VERTICAL_PADDING = 5;
-    static final int SPACING = 2;
-    static final int IMAGE_PADDING = 8;
+    private static final int PADDING = 7;
+    private static final int SPACING = 2;
 
-    int maxColumnWidth;
+    private int maxColumnWidth;
+    private int maxCellHeight;
 
+    boolean noButtonsMode;
     boolean quickAdvance;
-    boolean[] selected;
 
-    String[] choices;
-    View[] imageViews;
-    ExpandedHeightGridView gridView;
+    List<Integer> selectedItems = new ArrayList<>();
+    View[] itemViews;
     AudioButton.AudioHandler[] audioHandlers;
 
     public BaseGridWidget(Context context, FormEntryPrompt prompt, boolean quickAdvance) {
         super(context, prompt);
 
         this.quickAdvance = quickAdvance;
-        selected = new boolean[items.size()];
-        choices = new String[items.size()];
-        imageViews = new View[items.size()];
+        noButtonsMode = getFormEntryPrompt().getAppearanceHint().contains(WidgetAppearanceUtils.COMPACT)
+                || getFormEntryPrompt().getAppearanceHint().contains(WidgetAppearanceUtils.NO_BUTTONS);
+        itemViews = new View[items.size()];
         audioHandlers = new AudioButton.AudioHandler[items.size()];
-    }
 
-    void setUpView(FormEntryPrompt prompt) {
-        int maxCellHeight = -1;
-        int screenWidth = ScreenUtils.getScreenWidth();
-        int screenHeight = ScreenUtils.getScreenHeight();
-
-        for (int i = 0; i < items.size(); i++) {
-            SelectChoice sc = items.get(i);
-            int curHeight = -1;
-
-            // Create an audioHandler if there is an audio prompt associated with this selection.
-            String audioURI = prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_AUDIO);
-
-            audioHandlers[i] = audioURI != null ? new AudioButton.AudioHandler(audioURI, getPlayer()) : null;
-
-            String imageURI = getImageUri(i, sc);
-            String errorMsg = null;
-
-            if (imageURI != null) {
-                choices[i] = imageURI;
-
-                try {
-                    final File imageFile = new File(ReferenceManager.instance().DeriveReference(imageURI).getLocalURI());
-                    if (imageFile.exists()) {
-                        Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
-                        if (b != null) {
-                            if (b.getWidth() > maxColumnWidth) {
-                                maxColumnWidth = b.getWidth();
-                            }
-                            imageViews[i] = setUpImageView(b);
-                            curHeight = imageViews[i].getMeasuredHeight();
-                        } else {
-                            errorMsg = getContext().getString(R.string.file_invalid, imageFile);
-                        }
-                    } else {
-                        errorMsg = getContext().getString(R.string.file_missing, imageFile);
-                    }
-                } catch (InvalidReferenceException e) {
-                    Timber.e("Image invalid reference due to %s ", e.getMessage());
-                }
-            } else {
-                errorMsg = "";
-            }
-
-            if (errorMsg != null) {
-                choices[i] = prompt.getSelectChoiceText(sc);
-                TextView missingImage = setUpLabelView(i, errorMsg);
-                int width = missingImage.getMeasuredWidth();
-                if (width > maxColumnWidth) {
-                    maxColumnWidth = width;
-                }
-                curHeight = missingImage.getMeasuredHeight();
-                imageViews[i] = missingImage;
-            }
-
-            // if we get a taller image/text, force all cells to be that height
-            // could also set cell heights on a per-row basis if user feedback requests it.
-            if (curHeight > maxCellHeight) {
-                maxCellHeight = curHeight;
-                for (int j = 0; j < i; j++) {
-                    imageViews[j].setMinimumHeight(maxCellHeight);
-                }
-            }
-            imageViews[i].setMinimumHeight(maxCellHeight);
-        }
-
+        setUpItems();
         setUpGridView();
+        fillInAnswer();
     }
 
-    void initializeGridView() {
-        // Use the custom image adapter and initialize the grid view
-        ImageAdapter ia = new ImageAdapter(choices);
-        gridView.setAdapter(ia);
-        addAnswerView(gridView);
-    }
-
-    private String getImageUri(int i, SelectChoice sc) {
-        return items.get(i) instanceof ExternalSelectChoice
-                ? ((ExternalSelectChoice) sc).getImage()
-                : getFormEntryPrompt().getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_IMAGE);
-    }
-
-    private ImageView setUpImageView(Bitmap b) {
-        ImageView imageView = new ImageView(getContext());
-        imageView.setPadding(IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING);
-        imageView.setImageBitmap(b);
-        imageView.setLayoutParams(
-                new ListView.LayoutParams(ListView.LayoutParams.WRAP_CONTENT,
-                        ListView.LayoutParams.WRAP_CONTENT));
-        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        imageView.measure(0, 0);
-
-        return imageView;
-    }
-
-    private TextView setUpLabelView(int i, String errorMsg) {
-        TextView missingImage = new TextView(getContext());
-        missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
-        missingImage.setPadding(IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING);
-
-        if (choices[i] != null && choices[i].length() != 0) {
-            missingImage.setText(choices[i]);
-        } else {
-            Timber.e(errorMsg);
-            missingImage.setText(errorMsg);
+    private void setUpItems() {
+        for (int i = 0; i < items.size(); i++) {
+            setUpAudioHandler(i);
+            itemViews[i] = measureItem(noButtonsMode ? setUpNoButtonsItem(i) : setUpButtonsItem(i), i);
+            int index = i;
+            itemViews[i].setOnClickListener(v -> onItemClick(index));
         }
-        missingImage.measure(0, 0);
+    }
 
-        return missingImage;
+    private View measureItem(View item, int index) {
+        item.measure(0, 0);
+        if (!(item instanceof ImageView)) {
+            if (item.getMeasuredWidth() > maxColumnWidth) {
+                maxColumnWidth = item.getMeasuredWidth();
+            }
+        }
+        if (item.getMeasuredHeight() > maxCellHeight) {
+            maxCellHeight = item.getMeasuredHeight();
+            for (int j = 0; j < index; j++) {
+                itemViews[j].setMinimumHeight(maxCellHeight);
+            }
+        }
+        item.setMinimumHeight(maxCellHeight);
+        return item;
+    }
+
+    private void setUpAudioHandler(int index) {
+        // Create an audioHandler if there is an audio prompt associated with this selection.
+        String audioURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_AUDIO);
+        audioHandlers[index] = audioURI != null ? new AudioButton.AudioHandler(audioURI, getPlayer()) : null;
+    }
+
+    private View setUpNoButtonsItem(int index) {
+        View item = null;
+        String imageURI = getImageUri(index);
+        String errorMsg = null;
+        if (imageURI != null) {
+            try {
+                final File imageFile = new File(ReferenceManager.instance().DeriveReference(imageURI).getLocalURI());
+                if (imageFile.exists()) {
+                    Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, ScreenUtils.getScreenHeight(), ScreenUtils.getScreenWidth());
+                    if (b != null) {
+                        maxColumnWidth = b.getWidth() > maxColumnWidth ? b.getWidth() : maxColumnWidth;
+                        item = setUpImageItem(b);
+                    } else {
+                        errorMsg = getContext().getString(R.string.file_invalid, imageFile);
+                    }
+                } else {
+                    errorMsg = getContext().getString(R.string.file_missing, imageFile);
+                }
+            } catch (InvalidReferenceException e) {
+                Timber.e("Image invalid reference due to %s ", e.getMessage());
+            }
+        } else {
+            errorMsg = "";
+        }
+
+        return errorMsg == null ? item : setUpLabelItem(errorMsg, index);
+    }
+
+    private TextView setUpButtonsItem(int index) {
+        TextView item = this instanceof GridWidget
+                ? new AppCompatRadioButton(getContext())
+                : new AppCompatCheckBox(getContext());
+
+        item.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize());
+        item.setText(FormEntryPromptUtils.getItemText(getFormEntryPrompt(), items.get(index)));
+        item.setTag(items.indexOf(items.get(index)));
+        item.setEnabled(!getFormEntryPrompt().isReadOnly());
+        item.setGravity(isRTL() ? Gravity.END : Gravity.START);
+        return item;
+    }
+
+    private String getImageUri(int index) {
+        return items.get(index) instanceof ExternalSelectChoice
+                ? ((ExternalSelectChoice) items.get(index)).getImage()
+                : getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_IMAGE);
+    }
+
+    private ImageView setUpImageItem(Bitmap image) {
+        ImageView item = new ImageView(getContext());
+        item.setPadding(PADDING, PADDING, PADDING, PADDING);
+        item.setImageBitmap(image);
+        item.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.WRAP_CONTENT, ListView.LayoutParams.WRAP_CONTENT));
+        item.setScaleType(ImageView.ScaleType.FIT_XY);
+        return item;
+    }
+
+    private TextView setUpLabelItem(String errorMsg, int index) {
+        CharSequence choice = FormEntryPromptUtils.getItemText(getFormEntryPrompt(), items.get(index));
+        TextView item = new TextView(getContext());
+        item.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+        item.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
+        item.setPadding(PADDING, PADDING, PADDING, PADDING);
+        item.setText(choice != null && choice.length() > 0 ? choice : errorMsg);
+        return item;
     }
 
     private void setUpGridView() {
-        gridView = new ExpandedHeightGridView(getContext());
+        ExpandedHeightGridView gridView = new ExpandedHeightGridView(getContext());
         gridView.setNumColumns(GridView.AUTO_FIT);
         gridView.setColumnWidth(maxColumnWidth);
-        gridView.setPadding(HORIZONTAL_PADDING, VERTICAL_PADDING, HORIZONTAL_PADDING, VERTICAL_PADDING);
+        gridView.setPadding(PADDING, PADDING, PADDING, PADDING);
         gridView.setHorizontalSpacing(SPACING);
         gridView.setVerticalSpacing(SPACING);
         gridView.setGravity(Gravity.CENTER);
         gridView.setScrollContainer(false);
         gridView.setStretchMode(GridView.NO_STRETCH);
-        gridView.setOnItemClickListener((parent, v, position, id) -> onElementClick(position));
         gridView.setEnabled(!getFormEntryPrompt().isReadOnly());
+        gridView.setAdapter(new ImageAdapter());
+        addAnswerView(gridView);
     }
 
-    abstract void onElementClick(int position);
+    void selectItem(int index) {
+        selectedItems.add(index);
+        if (noButtonsMode) {
+            itemViews[index].setBackgroundColor(bgOrange);
+        } else {
+            ((CompoundButton) itemViews[index]).setChecked(true);
+        }
+    }
+
+    void unselectItem(int index) {
+        selectedItems.remove(Integer.valueOf(index));
+        if (noButtonsMode) {
+            itemViews[index].setBackgroundColor(0);
+        } else {
+            ((CompoundButton) itemViews[index]).setChecked(false);
+        }
+    }
+
+    protected abstract void fillInAnswer();
+
+    protected abstract void onItemClick(int position);
 
     @Override
     public void clearAnswer() {
-        for (int i = 0; i < items.size(); ++i) {
-            selected[i] = false;
-            imageViews[i].setBackgroundColor(0);
+        for (int selectedItem : selectedItems) {
+            if (noButtonsMode) {
+                itemViews[selectedItem].setBackgroundColor(0);
+            } else {
+                ((CompoundButton) itemViews[selectedItem]).setChecked(false);
+            }
         }
+        selectedItems.clear();
         widgetValueChanged();
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        gridView.setOnLongClickListener(l);
+        for (View item : itemViews) {
+            item.setOnLongClickListener(l);
+        }
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        gridView.cancelLongPress();
+        for (View item : itemViews) {
+            item.cancelLongPress();
+        }
     }
 
     @Override
     public int getChoiceCount() {
-        return selected.length;
+        return selectedItems.size();
     }
 
     class ImageAdapter extends BaseAdapter {
-        private final String[] choices;
-
-        ImageAdapter(String[] choices) {
-            this.choices = choices;
-        }
-
         public int getCount() {
-            return choices.length;
+            return itemViews.length;
         }
 
         public Object getItem(int position) {
@@ -249,9 +269,8 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
             return 0;
         }
 
-        // create a new ImageView for each item referenced by the Adapter
         public View getView(int position, View convertView, ViewGroup parent) {
-            return position < imageViews.length ? imageViews[position] : convertView;
+            return position < itemViews.length ? itemViews[position] : convertView;
         }
     }
 }

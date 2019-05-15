@@ -30,86 +30,66 @@ import java.util.List;
 @SuppressLint("ViewConstructor")
 public class GridMultiWidget extends BaseGridWidget {
 
-    // need to remember the last click position for audio treatment
-    int lastClickPosition;
+    int lastClickPosition; // need to remember the last click position for audio treatment
 
-    @SuppressWarnings("unchecked")
     public GridMultiWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt, false);
-
-        setUpView(prompt);
-        fillInAnswer();
-        initializeGridView();
         SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
     }
 
-    void onElementClick(int position) {
-        if (selected[position]) {
-            selected[position] = false;
-            imageViews[position].setBackgroundColor(0);
-            if (audioHandlers[position] != null) {
-                stopAudio();
+    @Override
+    protected void fillInAnswer() {
+        List<Selection> answerList = getFormEntryPrompt().getAnswerValue() == null || getFormEntryPrompt().getAnswerValue().getValue() == null
+                ? new ArrayList<>()
+                : (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
+
+        for (int i = 0; i < items.size(); i++) {
+            for (Selection answer : answerList) {
+                if (items.get(i).getValue().equals(answer.getValue())) {
+                    selectItem(i);
+                    break;
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onItemClick(int index) {
+        if (selectedItems.contains(index)) {
+            selectedItems.remove(Integer.valueOf(index));
+            if (noButtonsMode) {
+                itemViews[index].setBackgroundColor(0);
+                if (audioHandlers[index] != null) {
+                    stopAudio();
+                }
             }
         } else {
-            selected[position] = true;
-            if (audioHandlers[lastClickPosition] != null) {
-                stopAudio();
+            selectedItems.add(index);
+            if (noButtonsMode) {
+                if (audioHandlers[lastClickPosition] != null) {
+                    stopAudio();
+                }
+                itemViews[index].setBackgroundColor(bgOrange);
+                if (audioHandlers[index] != null) {
+                    audioHandlers[index].playAudio(getContext());
+                }
+                lastClickPosition = index;
             }
-            imageViews[position].setBackgroundColor(bgOrange);
-            if (audioHandlers[position] != null) {
-                audioHandlers[position].playAudio(getContext());
-            }
-            lastClickPosition = position;
         }
         widgetValueChanged();
     }
 
-    private void fillInAnswer() {
-        IAnswerData answer = getFormEntryPrompt().getAnswerValue();
-        List<Selection> ve;
-        if ((answer == null) || (answer.getValue() == null)) {
-            ve = new ArrayList<>();
-        } else {
-            ve = (List<Selection>) answer.getValue();
-        }
-
-        for (int i = 0; i < choices.length; ++i) {
-            String value = items.get(i).getValue();
-            boolean found = false;
-            for (Selection s : ve) {
-                if (value.equals(s.getValue())) {
-                    found = true;
-                    break;
-                }
-            }
-
-            selected[i] = found;
-            if (selected[i]) {
-                imageViews[i].setBackgroundColor(bgOrange);
-            }
-        }
-    }
-
     @Override
     public IAnswerData getAnswer() {
-        List<Selection> vc = new ArrayList<>();
-        for (int i = 0; i < items.size(); i++) {
-            if (selected[i]) {
-                SelectChoice sc = items.get(i);
-                vc.add(new Selection(sc));
-            }
+        List<Selection> answers = new ArrayList<>();
+        for (int selectedItem : selectedItems) {
+            SelectChoice sc = items.get(selectedItem);
+            answers.add(new Selection(sc));
         }
-
-        if (vc.isEmpty()) {
-            return null;
-
-        } else {
-            return new SelectMultiData(vc);
-        }
+        return answers.isEmpty() ? null : new SelectMultiData(answers);
     }
 
     @Override
     public void setChoiceSelected(int choiceIndex, boolean isSelected) {
-        selected[choiceIndex] = isSelected;
     }
 }
