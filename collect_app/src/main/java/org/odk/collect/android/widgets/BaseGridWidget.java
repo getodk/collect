@@ -78,8 +78,8 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         super(context, prompt);
 
         this.quickAdvance = quickAdvance;
-        noButtonsMode = getFormEntryPrompt().getAppearanceHint().contains(WidgetAppearanceUtils.COMPACT)
-                || getFormEntryPrompt().getAppearanceHint().contains(WidgetAppearanceUtils.NO_BUTTONS);
+        noButtonsMode = WidgetAppearanceUtils.getAppearance(prompt).contains(WidgetAppearanceUtils.COMPACT)
+                || WidgetAppearanceUtils.getAppearance(prompt).contains(WidgetAppearanceUtils.NO_BUTTONS);
         itemViews = new View[items.size()];
         audioHandlers = new AudioButton.AudioHandler[items.size()];
 

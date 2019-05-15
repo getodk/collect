@@ -7,14 +7,18 @@ import com.google.common.collect.ImmutableList;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
+import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.OverridingMethodsMustInvokeSuper;
+
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 /**
  * @author James Knight
@@ -22,6 +26,13 @@ import static org.junit.Assert.assertTrue;
 
 public abstract class GeneralSelectMultiWidgetTest<W extends MultiChoiceWidget>
         extends SelectWidgetTest<W, SelectMultiData> {
+
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("");
+    }
+
 
     @NonNull
     @Override
