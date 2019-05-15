@@ -14,8 +14,6 @@ import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.OverridingMethodsMustInvokeSuper;
-
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
@@ -32,7 +30,6 @@ public abstract class GeneralSelectMultiWidgetTest<W extends MultiChoiceWidget>
         super.setUp();
         when(formEntryPrompt.getAppearanceHint()).thenReturn("");
     }
-
 
     @NonNull
     @Override

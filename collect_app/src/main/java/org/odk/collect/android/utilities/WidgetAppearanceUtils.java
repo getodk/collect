@@ -145,4 +145,12 @@ public class WidgetAppearanceUtils {
         }
         return numColumns;
     }
+
+    public static boolean isNoButtonsAppearance(FormEntryPrompt prompt) {
+        return getAppearance(prompt).contains(NO_BUTTONS);
+    }
+
+    public static boolean isCompactAppearance(FormEntryPrompt prompt) {
+        return getAppearance(prompt).contains(COMPACT);
+    }
 }
