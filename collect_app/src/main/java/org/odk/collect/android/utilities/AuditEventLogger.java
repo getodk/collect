@@ -157,7 +157,7 @@ public class AuditEventLogger {
         if (saveTask == null || saveTask.getStatus() == AsyncTask.Status.FINISHED) {
             AuditEvent[] auditEventArray = auditEvents.toArray(new AuditEvent[0]);
             if (auditFile != null) {
-                saveTask = new AuditEventSaveTask(auditFile, auditConfig.isLocationEnabled()).execute(auditEventArray);
+                saveTask = new AuditEventSaveTask(auditFile, auditConfig.isLocationEnabled(), auditConfig.isTrackingChangesEnabled()).execute(auditEventArray);
             } else {
                 Timber.e("auditFile null when attempting to write auditEvents.");
             }
