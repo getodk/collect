@@ -108,20 +108,18 @@ public class WidgetAppearanceUtils {
         if (appearance.contains(COLUMNS_N) || appearance.contains(COMPACT_N)) {
             try {
                 String columnsAppearance = appearance.contains(COLUMNS_N) ? COLUMNS_N : COMPACT_N;
-                if (appearance.contains(columnsAppearance)) {
-                    try {
-                        appearance =
-                                appearance.substring(appearance.indexOf(columnsAppearance), appearance.length());
-                        int idx = appearance.indexOf(columnsAppearance);
-                        if (idx != -1) {
-                            String substringFromNumColumns = appearance.substring(idx + columnsAppearance.length());
-                            numColumns = Integer.parseInt(substringFromNumColumns.substring(0, substringFromNumColumns.contains(" ")
-                                    ? substringFromNumColumns.indexOf(' ')
-                                    : substringFromNumColumns.length()));
-                        }
-                    } catch (Exception e) {
-                        Timber.e(EXCEPTION_PARSING_COLUMNS);
+                try {
+                    appearance =
+                            appearance.substring(appearance.indexOf(columnsAppearance));
+                    int idx = appearance.indexOf(columnsAppearance);
+                    if (idx != -1) {
+                        String substringFromNumColumns = appearance.substring(idx + columnsAppearance.length());
+                        numColumns = Integer.parseInt(substringFromNumColumns.substring(0, substringFromNumColumns.contains(" ")
+                                ? substringFromNumColumns.indexOf(' ')
+                                : substringFromNumColumns.length()));
                     }
+                } catch (Exception e) {
+                    Timber.e(EXCEPTION_PARSING_COLUMNS);
                 }
             } catch (Exception e) {
                 Timber.e(EXCEPTION_PARSING_COLUMNS);
