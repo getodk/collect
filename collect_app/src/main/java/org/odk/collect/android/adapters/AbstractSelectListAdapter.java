@@ -73,7 +73,8 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         this.widget = widget;
         filteredItems = items;
         this.numColumns = numColumns;
-        noButtonsMode = WidgetAppearanceUtils.getAppearance(widget.getFormEntryPrompt()).contains(WidgetAppearanceUtils.NO_BUTTONS);
+        noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(widget.getFormEntryPrompt())
+                || WidgetAppearanceUtils.isNoButtonsAppearance(widget.getFormEntryPrompt());
     }
 
     @Override
