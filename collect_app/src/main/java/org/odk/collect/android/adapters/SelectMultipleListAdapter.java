@@ -78,7 +78,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
     CheckBox setUpButton(final int index) {
         AppCompatCheckBox checkBox = new AppCompatCheckBox(widget.getContext());
         adjustButton(checkBox, index);
-        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        checkBox.setOnClickListener(v -> {
             onItemClick(filteredItems.get(index).selection(), null);
             widget.widgetValueChanged();
         });
