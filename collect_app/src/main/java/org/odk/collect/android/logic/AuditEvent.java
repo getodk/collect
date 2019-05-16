@@ -18,6 +18,7 @@ package org.odk.collect.android.logic;
 
 import androidx.annotation.NonNull;
 
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryController;
 
 public class AuditEvent {
@@ -65,24 +66,28 @@ public class AuditEvent {
     private String latitude;
     private String longitude;
     private String accuracy;
-    private String oldValue = "";
-    private String newValue = "";
+    @NonNull private String oldValue;
+    @NonNull private String newValue = "";
     private long end;
     private boolean endTimeSet;
     private boolean isTrackingChangesEnabled;
+    private FormIndex formIndex;
 
     /*
      * Create a new event
      */
     public AuditEvent(long start, AuditEventType auditEventType, String node) {
-        this(start, auditEventType, node, false);
+        this(start, auditEventType, node, false, null, null);
     }
 
-    public AuditEvent(long start, AuditEventType auditEventType, String node, boolean isTrackingChangesEnabled) {
+    public AuditEvent(long start, AuditEventType auditEventType, String node,
+                      boolean isTrackingChangesEnabled, FormIndex formIndex, String oldValue) {
         this.start = start;
         this.auditEventType = auditEventType;
         this.node = node;
         this.isTrackingChangesEnabled = isTrackingChangesEnabled;
+        this.formIndex = formIndex;
+        this.oldValue = oldValue == null ? "" : oldValue;
     }
 
     /*
@@ -115,6 +120,14 @@ public class AuditEvent {
         return auditEventType;
     }
 
+    public FormIndex getFormIndex() {
+        return formIndex;
+    }
+
+    public boolean newAnswerAppeared() {
+        return !oldValue.equals(newValue);
+    }
+
     public boolean hasLocation() {
         return latitude != null && !latitude.isEmpty()
                 && longitude != null && !longitude.isEmpty()
@@ -127,12 +140,8 @@ public class AuditEvent {
         this.accuracy = accuracy;
     }
 
-    public void setOldValue(String oldValue) {
-        this.oldValue = oldValue;
-    }
-
     public void setNewValue(String newValue) {
-        this.newValue = newValue;
+        this.newValue = newValue != null ? newValue : "";
     }
 
     /*
@@ -140,6 +149,12 @@ public class AuditEvent {
      */
     @NonNull
     public String toString() {
+        // Clear values if they are equal
+        if (oldValue.equals(newValue)) {
+            oldValue = "";
+            newValue = "";
+        }
+
         String event;
         if (hasLocation() && isTrackingChangesEnabled) {
             event = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", latitude, longitude, accuracy, oldValue, newValue);
@@ -160,9 +175,6 @@ public class AuditEvent {
         switch (fcEvent) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
                 auditEventType = AuditEventType.BEGINNING_OF_FORM;
-                break;
-            case FormEntryController.EVENT_QUESTION:
-                auditEventType = AuditEventType.QUESTION;
                 break;
             case FormEntryController.EVENT_GROUP:
                 auditEventType = AuditEventType.GROUP;

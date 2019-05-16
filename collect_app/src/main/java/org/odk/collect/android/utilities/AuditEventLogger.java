@@ -5,9 +5,12 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 
-import org.javarosa.core.model.instance.TreeReference;
+import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.data.IAnswerData;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.AuditConfig;
 import org.odk.collect.android.logic.AuditEvent;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.tasks.AuditEventSaveTask;
 
 import java.io.File;
@@ -51,20 +54,21 @@ public class AuditEventLogger {
     }
 
     public void logEvent(AuditEvent.AuditEventType eventType, boolean writeImmediatelyToDisk) {
-        logEvent(eventType, null, writeImmediatelyToDisk);
+        logEvent(eventType, null, writeImmediatelyToDisk, null);
     }
 
     /*
      * Log a new event
      */
-    public void logEvent(AuditEvent.AuditEventType eventType, TreeReference ref, boolean writeImmediatelyToDisk) {
+    public void logEvent(AuditEvent.AuditEventType eventType, FormIndex formIndex,
+                         boolean writeImmediatelyToDisk, String questionAnswer) {
         if (isAuditEnabled() && !isDuplicateOfLastAuditEvent(eventType)) {
             Timber.i("AuditEvent recorded: %s", eventType);
             // Calculate the time and add the event to the auditEvents array
             long start = getEventTime();
 
             // Set the node value from the question reference
-            String node = ref == null ? "" : ref.toString();
+            String node = formIndex == null || formIndex.getReference() == null ? "" : formIndex.getReference().toString();
             if (eventType == AuditEvent.AuditEventType.QUESTION || eventType == AuditEvent.AuditEventType.GROUP) {
                 int idx = node.lastIndexOf('[');
                 if (idx > 0) {
@@ -72,7 +76,8 @@ public class AuditEventLogger {
                 }
             }
 
-            AuditEvent newAuditEvent = new AuditEvent(start, eventType, node, auditConfig.isTrackingChangesEnabled());
+            AuditEvent newAuditEvent = new AuditEvent(start, eventType, node,
+                    auditConfig.isTrackingChangesEnabled(), formIndex, questionAnswer);
             addLocationCoordinatesToAuditEventIfNeeded(newAuditEvent);
 
             /*
@@ -132,6 +137,14 @@ public class AuditEventLogger {
         }
     }
 
+    private void addNewValueToAuditEventIfNeeded(AuditEvent aev) {
+        FormController formController = Collect.getInstance().getFormController();
+        if (aev.getAuditEventType().equals(AuditEvent.AuditEventType.QUESTION) && formController != null) {
+            IAnswerData answerData = formController.getQuestionPrompt(aev.getFormIndex()).getAnswerValue();
+            aev.setNewValue(answerData != null ? answerData.getDisplayText() : null);
+        }
+    }
+
     // If location provider are enabled/disabled it sometimes fires the BroadcastReceiver multiple
     // times what tries to add duplicated logs
     boolean isDuplicateOfLastAuditEvent(AuditEvent.AuditEventType eventType) {
@@ -149,6 +162,7 @@ public class AuditEventLogger {
             for (AuditEvent aev : auditEvents) {
                 if (!aev.isEndTimeSet() && aev.isIntervalAuditEventType()) {
                     addLocationCoordinatesToAuditEventIfNeeded(aev);
+                    addNewValueToAuditEventIfNeeded(aev);
                     aev.setEnd(end);
                 }
             }

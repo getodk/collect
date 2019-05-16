@@ -4,7 +4,9 @@ package org.odk.collect.android.tasks;
 import android.os.AsyncTask;
 import androidx.annotation.NonNull;
 
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.AuditEvent;
+import org.odk.collect.android.logic.FormController;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -46,8 +48,10 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
             }
             if (params.length > 0) {
                 for (AuditEvent aev : params) {
-                    fw.write(aev.toString() + "\n");
-                    Timber.i("Log audit event: %s", aev.toString());
+                    if (shouldEventBeLogged(aev)) {
+                        fw.write(aev.toString() + "\n");
+                        Timber.i("Log audit event: %s", aev.toString());
+                    }
                 }
             }
         } catch (IOException e) {
@@ -64,6 +68,19 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
             }
         }
         return null;
+    }
+
+    /*
+     Question which is in field-list group should be logged only if tracking changes option is
+     enabled and its answer has changed
+      */
+    private boolean shouldEventBeLogged(AuditEvent aev) {
+        FormController formController = Collect.getInstance().getFormController();
+        if (aev.getAuditEventType().equals(AuditEvent.AuditEventType.QUESTION) && formController != null) {
+            return !formController.indexIsInFieldList(aev.getFormIndex())
+                    || (aev.newAnswerAppeared() && isTrackingChangesEnabled);
+        }
+        return true;
     }
 
     private boolean updateHeaderIfNeeded() {

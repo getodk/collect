@@ -1178,8 +1178,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         setTitle(formController.getFormTitle());
 
-        formController.getAuditEventLogger().logEvent(AuditEvent.getAuditEventTypeFromFecType(event),
-                formController.getFormIndex().getReference(), true);
+        if (event != FormEntryController.EVENT_QUESTION) {
+            formController.getAuditEventLogger().logEvent(AuditEvent.getAuditEventTypeFromFecType(event),
+                    formController.getFormIndex(), true, null);
+        }
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
@@ -1195,7 +1197,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     FormEntryPrompt[] prompts = formController.getQuestionPrompts();
                     FormEntryCaption[] groups = formController
                             .getGroupsForCurrentIndex();
-                    odkView = new ODKView(this, prompts, groups, advancingPage);
+
+                    odkView = new ODKView(this, prompts, groups, advancingPage, formController.getAuditEventLogger());
                     odkView.setWidgetValueChangedListener(this);
                     Timber.i("Created view for group %s %s",
                             groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]",

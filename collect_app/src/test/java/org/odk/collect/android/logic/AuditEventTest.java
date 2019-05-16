@@ -80,7 +80,7 @@ public class AuditEventTest {
 
     @Test
     public void testToStringWithTrackingChanges() {
-        AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, "/data/text1", true);
+        AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, "/data/text1", true, null, "First answer");
         assertNotNull(auditEvent);
         assertTrue(auditEvent.isIntervalAuditEventType());
         assertEquals("question,/data/text1,1545392727685,,,", auditEvent.toString());
@@ -88,14 +88,13 @@ public class AuditEventTest {
         auditEvent.setEnd(END_TIME);
         assertTrue(auditEvent.isEndTimeSet());
         assertFalse(auditEvent.hasLocation());
-        auditEvent.setOldValue("First answer");
         auditEvent.setNewValue("Second answer");
         assertEquals("question,/data/text1,1545392727685,1545392728527,First answer,Second answer", auditEvent.toString());
     }
 
     @Test
     public void testToStringWithLocationCoordinatesAndTrackingChanges() {
-        AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, "/data/text1", true);
+        AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, "/data/text1", true, null, "First answer");
         assertNotNull(auditEvent);
         auditEvent.setLocationCoordinates("54.35202520000001", "18.64663840000003", "10");
         assertTrue(auditEvent.isIntervalAuditEventType());
@@ -103,7 +102,6 @@ public class AuditEventTest {
         auditEvent.setEnd(END_TIME);
         assertTrue(auditEvent.isEndTimeSet());
         assertTrue(auditEvent.hasLocation());
-        auditEvent.setOldValue("First answer");
         auditEvent.setNewValue("Second answer");
         assertEquals("question,/data/text1,1545392727685,1545392728527,54.35202520000001,18.64663840000003,10,First answer,Second answer", auditEvent.toString());
     }
@@ -247,7 +245,6 @@ public class AuditEventTest {
     @Test
     public void getAuditEventTypeFromFecTypeTest() {
         assertEquals(BEGINNING_OF_FORM, AuditEvent.getAuditEventTypeFromFecType(FormEntryController.EVENT_BEGINNING_OF_FORM));
-        assertEquals(QUESTION, AuditEvent.getAuditEventTypeFromFecType(FormEntryController.EVENT_QUESTION));
         assertEquals(GROUP, AuditEvent.getAuditEventTypeFromFecType(FormEntryController.EVENT_GROUP));
         assertEquals(REPEAT, AuditEvent.getAuditEventTypeFromFecType(FormEntryController.EVENT_REPEAT));
         assertEquals(PROMPT_NEW_REPEAT, AuditEvent.getAuditEventTypeFromFecType(FormEntryController.EVENT_PROMPT_NEW_REPEAT));
