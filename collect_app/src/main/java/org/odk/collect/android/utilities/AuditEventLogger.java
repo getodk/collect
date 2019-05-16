@@ -50,6 +50,10 @@ public class AuditEventLogger {
         }
     }
 
+    public void logEvent(AuditEvent.AuditEventType eventType, boolean writeImmediatelyToDisk) {
+        logEvent(eventType, null, writeImmediatelyToDisk);
+    }
+
     /*
      * Log a new event
      */
