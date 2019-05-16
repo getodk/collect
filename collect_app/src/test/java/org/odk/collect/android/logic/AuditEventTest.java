@@ -79,6 +79,36 @@ public class AuditEventTest {
     }
 
     @Test
+    public void testToStringWithTrackingChanges() {
+        AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, "/data/text1", true);
+        assertNotNull(auditEvent);
+        assertTrue(auditEvent.isIntervalAuditEventType());
+        assertEquals("question,/data/text1,1545392727685,,,", auditEvent.toString());
+        assertFalse(auditEvent.isEndTimeSet());
+        auditEvent.setEnd(END_TIME);
+        assertTrue(auditEvent.isEndTimeSet());
+        assertFalse(auditEvent.hasLocation());
+        auditEvent.setOldValue("First answer");
+        auditEvent.setNewValue("Second answer");
+        assertEquals("question,/data/text1,1545392727685,1545392728527,First answer,Second answer", auditEvent.toString());
+    }
+
+    @Test
+    public void testToStringWithLocationCoordinatesAndTrackingChanges() {
+        AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, "/data/text1", true);
+        assertNotNull(auditEvent);
+        auditEvent.setLocationCoordinates("54.35202520000001", "18.64663840000003", "10");
+        assertTrue(auditEvent.isIntervalAuditEventType());
+        assertFalse(auditEvent.isEndTimeSet());
+        auditEvent.setEnd(END_TIME);
+        assertTrue(auditEvent.isEndTimeSet());
+        assertTrue(auditEvent.hasLocation());
+        auditEvent.setOldValue("First answer");
+        auditEvent.setNewValue("Second answer");
+        assertEquals("question,/data/text1,1545392727685,1545392728527,54.35202520000001,18.64663840000003,10,First answer,Second answer", auditEvent.toString());
+    }
+
+    @Test
     public void testToStringNullValues() {
         AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, null);
         assertNotNull(auditEvent);

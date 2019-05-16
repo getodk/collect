@@ -68,7 +68,7 @@ public class AuditEventLogger {
                 }
             }
 
-            AuditEvent newAuditEvent = new AuditEvent(start, eventType, node);
+            AuditEvent newAuditEvent = new AuditEvent(start, eventType, node, auditConfig.isTrackingChangesEnabled());
             addLocationCoordinatesToAuditEventIfNeeded(newAuditEvent);
 
             /*

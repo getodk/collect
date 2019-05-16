@@ -65,16 +65,24 @@ public class AuditEvent {
     private String latitude;
     private String longitude;
     private String accuracy;
+    private String oldValue = "";
+    private String newValue = "";
     private long end;
     private boolean endTimeSet;
+    private boolean isTrackingChangesEnabled;
 
     /*
      * Create a new event
      */
     public AuditEvent(long start, AuditEventType auditEventType, String node) {
+        this(start, auditEventType, node, false);
+    }
+
+    public AuditEvent(long start, AuditEventType auditEventType, String node, boolean isTrackingChangesEnabled) {
         this.start = start;
         this.auditEventType = auditEventType;
         this.node = node;
+        this.isTrackingChangesEnabled = isTrackingChangesEnabled;
     }
 
     /*
@@ -119,14 +127,31 @@ public class AuditEvent {
         this.accuracy = accuracy;
     }
 
+    public void setOldValue(String oldValue) {
+        this.oldValue = oldValue;
+    }
+
+    public void setNewValue(String newValue) {
+        this.newValue = newValue;
+    }
+
     /*
      * convert the event into a record to write to the CSV file
      */
     @NonNull
     public String toString() {
-        return hasLocation()
-                ? String.format("%s,%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", latitude, longitude, accuracy)
-                : String.format("%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "");
+        String event;
+        if (hasLocation() && isTrackingChangesEnabled) {
+            event = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", latitude, longitude, accuracy, oldValue, newValue);
+        } else if (hasLocation()) {
+            event = String.format("%s,%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", latitude, longitude, accuracy);
+        } else if (isTrackingChangesEnabled) {
+            event = String.format("%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", oldValue, newValue);
+        } else {
+            event = String.format("%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "");
+        }
+
+        return event;
     }
 
     // Get event type based on a Form Controller event
