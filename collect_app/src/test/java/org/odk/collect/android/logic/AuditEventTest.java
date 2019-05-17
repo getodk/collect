@@ -83,7 +83,6 @@ public class AuditEventTest {
         AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, "/data/text1", true, null, "First answer");
         assertNotNull(auditEvent);
         assertTrue(auditEvent.isIntervalAuditEventType());
-        assertEquals("question,/data/text1,1545392727685,,,", auditEvent.toString());
         assertFalse(auditEvent.isEndTimeSet());
         auditEvent.setEnd(END_TIME);
         assertTrue(auditEvent.isEndTimeSet());
@@ -116,7 +115,7 @@ public class AuditEventTest {
         auditEvent.setEnd(END_TIME);
         assertTrue(auditEvent.isEndTimeSet());
         assertFalse(auditEvent.hasLocation());
-        assertEquals("question,null,1545392727685,1545392728527", auditEvent.toString());
+        assertEquals("question,,1545392727685,1545392728527", auditEvent.toString());
     }
 
     @Test
