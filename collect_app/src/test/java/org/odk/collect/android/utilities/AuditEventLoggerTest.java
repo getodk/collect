@@ -149,10 +149,10 @@ public class AuditEventLoggerTest {
     public void isDuplicateOfLastAuditEventTest() {
         AuditEventLogger auditEventLogger = new AuditEventLogger(testInstanceFile, testAuditConfig);
         auditEventLogger.logEvent(LOCATION_PROVIDERS_ENABLED, false);
-        assertTrue(auditEventLogger.isDuplicateOfLastAuditEvent(LOCATION_PROVIDERS_ENABLED));
+        assertTrue(auditEventLogger.isDuplicateOfLastLocationEvent(LOCATION_PROVIDERS_ENABLED));
         auditEventLogger.logEvent(LOCATION_PROVIDERS_DISABLED, false);
-        assertTrue(auditEventLogger.isDuplicateOfLastAuditEvent(LOCATION_PROVIDERS_DISABLED));
-        assertFalse(auditEventLogger.isDuplicateOfLastAuditEvent(LOCATION_PROVIDERS_ENABLED));
+        assertTrue(auditEventLogger.isDuplicateOfLastLocationEvent(LOCATION_PROVIDERS_DISABLED));
+        assertFalse(auditEventLogger.isDuplicateOfLastLocationEvent(LOCATION_PROVIDERS_ENABLED));
         assertEquals(2, auditEventLogger.getAuditEvents().size());
     }
 

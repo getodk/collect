@@ -62,7 +62,7 @@ public class AuditEventLogger {
      */
     public void logEvent(AuditEvent.AuditEventType eventType, FormIndex formIndex,
                          boolean writeImmediatelyToDisk, String questionAnswer) {
-        if (isAuditEnabled() && !isDuplicateOfLastAuditEvent(eventType)) {
+        if (isAuditEnabled() && !isDuplicateOfLastLocationEvent(eventType)) {
             Timber.i("AuditEvent recorded: %s", eventType);
             // Calculate the time and add the event to the auditEvents array
             long start = getEventTime();
@@ -78,6 +78,11 @@ public class AuditEventLogger {
 
             AuditEvent newAuditEvent = new AuditEvent(start, eventType, node,
                     auditConfig.isTrackingChangesEnabled(), formIndex, questionAnswer);
+
+            if (isDuplicatedIntervalEvent(newAuditEvent)) {
+                return;
+            }
+
             addLocationCoordinatesToAuditEventIfNeeded(newAuditEvent);
 
             /*
@@ -87,19 +92,6 @@ public class AuditEventLogger {
                 for (AuditEvent aev : auditEvents) {
                     if (!aev.isEndTimeSet() && aev.isIntervalAuditEventType()) {
                         aev.setEnd(start);
-                    }
-                }
-            }
-
-            /*
-             * Ignore the event if we are already in an interval view event or have jumped
-             * This can happen if the user is on a question page and the page gets refreshed
-             * The exception is hierarchy events since they interrupt an existing interval event
-             */
-            if (newAuditEvent.isIntervalAuditEventType()) {
-                for (AuditEvent aev : auditEvents) {
-                    if (aev.isIntervalAuditEventType() && !aev.isEndTimeSet()) {
-                        return;
                     }
                 }
             }
@@ -147,9 +139,27 @@ public class AuditEventLogger {
 
     // If location provider are enabled/disabled it sometimes fires the BroadcastReceiver multiple
     // times what tries to add duplicated logs
-    boolean isDuplicateOfLastAuditEvent(AuditEvent.AuditEventType eventType) {
+    boolean isDuplicateOfLastLocationEvent(AuditEvent.AuditEventType eventType) {
         return (eventType.equals(LOCATION_PROVIDERS_ENABLED) || eventType.equals(LOCATION_PROVIDERS_DISABLED))
                 && !auditEvents.isEmpty() && eventType.equals(auditEvents.get(auditEvents.size() - 1).getAuditEventType());
+    }
+
+    /*
+     * Ignore the event if we are already in an interval view event or have jumped
+     * This can happen if the user is on a question page and the page gets refreshed
+     * The exception is hierarchy events since they interrupt an existing interval event
+     */
+    boolean isDuplicatedIntervalEvent(AuditEvent newAuditEvent) {
+        if (newAuditEvent.isIntervalAuditEventType()) {
+            for (AuditEvent aev : auditEvents) {
+                if (aev.isIntervalAuditEventType()
+                        && newAuditEvent.getAuditEventType().equals(aev.getAuditEventType())
+                        && newAuditEvent.getNode().equals(aev.getNode())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /*

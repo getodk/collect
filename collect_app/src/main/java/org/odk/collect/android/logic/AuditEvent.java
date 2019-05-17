@@ -62,7 +62,7 @@ public class AuditEvent {
 
     private final long start;
     private AuditEventType auditEventType;
-    private final String node;
+    @NonNull private final String node;
     private String latitude;
     private String longitude;
     private String accuracy;
@@ -84,7 +84,7 @@ public class AuditEvent {
                       boolean isTrackingChangesEnabled, FormIndex formIndex, String oldValue) {
         this.start = start;
         this.auditEventType = auditEventType;
-        this.node = node;
+        this.node = node == null ? "" : node;
         this.isTrackingChangesEnabled = isTrackingChangesEnabled;
         this.formIndex = formIndex;
         this.oldValue = oldValue == null ? "" : oldValue;
@@ -118,6 +118,10 @@ public class AuditEvent {
 
     public AuditEventType getAuditEventType() {
         return auditEventType;
+    }
+
+    public String getNode() {
+        return node;
     }
 
     public FormIndex getFormIndex() {
