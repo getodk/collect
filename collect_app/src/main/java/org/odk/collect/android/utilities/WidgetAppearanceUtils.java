@@ -31,61 +31,61 @@ public class WidgetAppearanceUtils {
     private static final String EXCEPTION_PARSING_COLUMNS = "Exception parsing columns";
 
     // Date appearances
-    public static final String ETHIOPIAN        = "ethiopian";
-    public static final String COPTIC           = "coptic";
-    public static final String ISLAMIC          = "islamic";
-    public static final String BIKRAM_SAMBAT    = "bikram-sambat";
-    public static final String MYANMAR          = "myanmar";
-    public static final String NO_CALENDAR      = "no-calendar";
-    public static final String MONTH_YEAR       = "month-year";
-    public static final String YEAR             = "year";
+    public static final String ETHIOPIAN                = "ethiopian";
+    public static final String COPTIC                   = "coptic";
+    public static final String ISLAMIC                  = "islamic";
+    public static final String BIKRAM_SAMBAT            = "bikram-sambat";
+    public static final String MYANMAR                  = "myanmar";
+    public static final String NO_CALENDAR              = "no-calendar";
+    public static final String MONTH_YEAR               = "month-year";
+    public static final String YEAR                     = "year";
 
     // Select one/multiple appearances
-    public static final String COMPACT          = "compact";
-    public static final String COMPACT_N        = "compact-";
-    public static final String MINIMAL          = "minimal";
-    public static final String COLUMNS          = "columns";
-    public static final String COLUMNS_N        = "columns-";
-    public static final String COLUMNS_FLEX     = "columns-flex";
-    public static final String QUICKCOMPACT     = "quickcompact";
-    public static final String SEARCH           = "search";
-    public static final String AUTOCOMPLETE     = "autocomplete";
-    public static final String LIST_NO_LABEL    = "list-nolabel";
-    public static final String LIST             = "list";
-    public static final String LABEL            = "label";
-    public static final String IMAGE_MAP        = "image-map";
-    public static final String NO_BUTTONS       = "no-buttons";
-    public static final String QUICK            = "quick";
+    @Deprecated public static final String COMPACT      = "compact";
+    @Deprecated public static final String COMPACT_N    = "compact-";
+    public static final String MINIMAL                  = "minimal";
+    public static final String COLUMNS                  = "columns";
+    public static final String COLUMNS_N                = "columns-";
+    public static final String COLUMNS_FLEX             = "columns-flex";
+    @Deprecated public static final String QUICKCOMPACT = "quickcompact";
+    @Deprecated public static final String SEARCH       = "search";
+    public static final String AUTOCOMPLETE             = "autocomplete";
+    public static final String LIST_NO_LABEL            = "list-nolabel";
+    public static final String LIST                     = "list";
+    public static final String LABEL                    = "label";
+    public static final String IMAGE_MAP                = "image-map";
+    public static final String NO_BUTTONS               = "no-buttons";
+    public static final String QUICK                    = "quick";
 
     // Media appearances
-    public static final String SIGNATURE        = "signature";
-    public static final String ANNOTATE         = "annotate";
-    public static final String DRAW             = "draw";
-    public static final String SELFIE           = "selfie";
-    public static final String NEW_FRONT        = "new-front";
-    public static final String NEW              = "new";
-    public static final String FRONT            = "front";
+    public static final String SIGNATURE                = "signature";
+    public static final String ANNOTATE                 = "annotate";
+    public static final String DRAW                     = "draw";
+    @Deprecated public static final String SELFIE       = "selfie";
+    public static final String NEW_FRONT                = "new-front";
+    public static final String NEW                      = "new";
+    public static final String FRONT                    = "front";
 
     // Maps appearances
-    public static final String PLACEMENT_MAP    = "placement-map";
-    public static final String MAPS             = "maps";
+    public static final String PLACEMENT_MAP            = "placement-map";
+    public static final String MAPS                     = "maps";
 
     // Other appearances
-    public static final String NO_APPEARANCE    = "";
-    public static final String BEARING          = "bearing";
-    public static final String EX               = "ex:";
-    public static final String THOUSANDS_SEP    = "thousands-sep";
-    public static final String PRINTER          = "printer";
-    public static final String NUMBERS          = "numbers";
-    public static final String URL              = "url";
-    public static final String RATING           = "rating";
+    public static final String NO_APPEARANCE            = "";
+    public static final String BEARING                  = "bearing";
+    public static final String EX                       = "ex:";
+    public static final String THOUSANDS_SEP            = "thousands-sep";
+    public static final String PRINTER                  = "printer";
+    public static final String NUMBERS                  = "numbers";
+    public static final String URL                      = "url";
+    public static final String RATING                   = "rating";
 
     private WidgetAppearanceUtils() {
     }
 
     // Get appearance hint and clean it up so it is lower case, without the search function and never null.
     @NonNull
-    public static String getAppearance(FormEntryPrompt fep) {
+    public static String getSanitizedAppearanceHint(FormEntryPrompt fep) {
         String appearance = fep.getAppearanceHint();
         if (appearance == null) {
             appearance = NO_APPEARANCE;
@@ -102,9 +102,14 @@ public class WidgetAppearanceUtils {
         return appearance;
     }
 
+    /*
+    Gets the number of columns that choices should be displayed in. In the case of the columns-n
+    appearance (compact-n for backwards compatibility), that number is determined from the n in the
+    appearance string. For columns (without any number), this is determined by the device screen size.
+     */
     public static int getNumberOfColumns(FormEntryPrompt formEntryPrompt, Context context) {
         int numColumns = 1;
-        String appearance = getAppearance(formEntryPrompt);
+        String appearance = getSanitizedAppearanceHint(formEntryPrompt);
         if (appearance.contains(COLUMNS_N) || appearance.contains(COMPACT_N)) {
             try {
                 String columnsAppearance = appearance.contains(COLUMNS_N) ? COLUMNS_N : COMPACT_N;
@@ -146,10 +151,10 @@ public class WidgetAppearanceUtils {
     }
 
     public static boolean isNoButtonsAppearance(FormEntryPrompt prompt) {
-        return getAppearance(prompt).contains(NO_BUTTONS);
+        return getSanitizedAppearanceHint(prompt).contains(NO_BUTTONS);
     }
 
     public static boolean isCompactAppearance(FormEntryPrompt prompt) {
-        return getAppearance(prompt).contains(COMPACT);
+        return getSanitizedAppearanceHint(prompt).contains(COMPACT);
     }
 }

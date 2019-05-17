@@ -41,7 +41,7 @@ public class WidgetFactory {
     public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context,
                                                         boolean readOnlyOverride) {
 
-        String appearance = WidgetAppearanceUtils.getAppearance(fep);
+        String appearance = WidgetAppearanceUtils.getSanitizedAppearanceHint(fep);
 
         final QuestionWidget questionWidget;
         switch (fep.getControlType()) {
