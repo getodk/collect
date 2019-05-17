@@ -32,7 +32,6 @@
         android:key="splashPath"
         android:layout="?android:attr/preferenceLayoutChild"
         android:title="@string/splash_path" />
-
     <PreferenceCategory
         android:key="@string/map_preferences"
         android:title="@string/map_preferences">
