@@ -60,7 +60,7 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
     }
 
     private void createLayout() {
-        adapter = new SelectMultipleListAdapter(items, ve, this);
+        adapter = new SelectMultipleListAdapter(items, ve, this, numColumns);
 
         if (items != null) {
             // check if any values have spaces

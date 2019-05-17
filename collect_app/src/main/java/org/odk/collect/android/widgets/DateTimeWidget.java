@@ -24,6 +24,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 /**
@@ -46,15 +47,15 @@ public class DateTimeWidget extends QuestionWidget implements BinaryWidget, Widg
         setGravity(Gravity.START);
 
         String appearance = prompt.getQuestion().getAppearanceAttr();
-        if (appearance != null && appearance.contains("ethiopian")) {
+        if (appearance != null && appearance.contains(WidgetAppearanceUtils.ETHIOPIAN)) {
             dateWidget = new EthiopianDateWidget(context, prompt);
-        } else if (appearance != null && appearance.contains("coptic")) {
+        } else if (appearance != null && appearance.contains(WidgetAppearanceUtils.COPTIC)) {
             dateWidget = new CopticDateWidget(context, prompt);
-        } else if (appearance != null && appearance.contains("islamic")) {
+        } else if (appearance != null && appearance.contains(WidgetAppearanceUtils.ISLAMIC)) {
             dateWidget = new IslamicDateWidget(context, prompt);
-        } else if (appearance != null && appearance.contains("bikram-sambat")) {
+        } else if (appearance != null && appearance.contains(WidgetAppearanceUtils.BIKRAM_SAMBAT)) {
             dateWidget = new BikramSambatDateWidget(context, prompt);
-        } else if (appearance != null && appearance.contains("myanmar")) {
+        } else if (appearance != null && appearance.contains(WidgetAppearanceUtils.MYANMAR)) {
             dateWidget = new MyanmarDateWidget(context, prompt);
         } else {
             dateWidget = new DateWidget(context, prompt);

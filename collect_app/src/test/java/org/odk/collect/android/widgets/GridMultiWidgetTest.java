@@ -23,7 +23,7 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
     @NonNull
     @Override
     public GridMultiWidget createWidget() {
-        return new GridMultiWidget(activity, formEntryPrompt, 1);
+        return new GridMultiWidget(activity, formEntryPrompt);
     }
 
     @Test
@@ -36,9 +36,11 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
 
         boolean atLeastOneSelected = false;
 
-        for (int i = 0; i < widget.selected.length; i++) {
+        for (int i = 0; i < widget.selectedItems.size(); i++) {
             boolean shouldBeSelected = random.nextBoolean();
-            widget.selected[i] = shouldBeSelected;
+            if (shouldBeSelected) {
+                widget.selectedItems.add(i);
+            }
 
             atLeastOneSelected = atLeastOneSelected || shouldBeSelected;
 
@@ -51,9 +53,9 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
         // Make sure at least one item is selected, so we're not just retesting the
         // null answer case:
         if (!atLeastOneSelected) {
-            int randomIndex = Math.abs(random.nextInt()) % widget.selected.length;
+            int randomIndex = Math.abs(random.nextInt()) % widget.items.size();
 
-            widget.selected[randomIndex] = true;
+            widget.selectedItems.add(randomIndex);
             SelectChoice selectChoice = selectChoices.get(randomIndex);
             selectedValues.add(selectChoice.getValue());
         }

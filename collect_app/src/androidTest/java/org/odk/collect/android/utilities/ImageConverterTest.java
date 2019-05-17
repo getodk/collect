@@ -339,6 +339,33 @@ public class ImageConverterTest {
         assertEquals(1500, image.getHeight());
     }
 
+    @Test
+    public void scaleImageToNewWidthTest() {
+        saveTestBitmap(2000, 1000, null);
+        Bitmap image = FileUtils.getBitmap(TEST_IMAGE_PATH, new BitmapFactory.Options());
+        image = ImageConverter.scaleImageToNewWidth(image, 500);
+        assertEquals(500, image.getWidth());
+        assertEquals(250, image.getHeight());
+
+        saveTestBitmap(1000, 2000, null);
+        image = FileUtils.getBitmap(TEST_IMAGE_PATH, new BitmapFactory.Options());
+        image = ImageConverter.scaleImageToNewWidth(image, 500);
+        assertEquals(500, image.getWidth());
+        assertEquals(1000, image.getHeight());
+
+        saveTestBitmap(500, 400, null);
+        image = FileUtils.getBitmap(TEST_IMAGE_PATH, new BitmapFactory.Options());
+        image = ImageConverter.scaleImageToNewWidth(image, 1000);
+        assertEquals(1000, image.getWidth());
+        assertEquals(800, image.getHeight());
+
+        saveTestBitmap(400, 500, null);
+        image = FileUtils.getBitmap(TEST_IMAGE_PATH, new BitmapFactory.Options());
+        image = ImageConverter.scaleImageToNewWidth(image, 1000);
+        assertEquals(1000, image.getWidth());
+        assertEquals(1250, image.getHeight());
+    }
+
     private void saveTestBitmap(int width, int height, Integer orientation) {
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
         FileUtils.saveBitmapToFile(bitmap, TEST_IMAGE_PATH);

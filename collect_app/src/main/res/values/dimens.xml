@@ -46,4 +46,6 @@
 
     <!-- corner radius -->
     <dimen name="corner_radius">2dp</dimen>
+
+    <dimen name="select_item_border">4dp</dimen>
 </resources>

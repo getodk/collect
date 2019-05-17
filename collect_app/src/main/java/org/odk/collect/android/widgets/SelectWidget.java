@@ -18,22 +18,27 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.javarosa.core.model.SelectChoice;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.external.ExternalSelectChoice;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.views.MediaLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class SelectWidget extends ItemsWidget {
 
@@ -48,6 +53,7 @@ public abstract class SelectWidget extends ItemsWidget {
 
     protected ArrayList<MediaLayout> playList;
     protected LinearLayout answerLayout;
+    protected int numColumns = 1;
     private int playcounter;
 
     public SelectWidget(Context context, FormEntryPrompt prompt) {
@@ -121,7 +127,7 @@ public abstract class SelectWidget extends ItemsWidget {
     /**
      * Pull media from the current item and add it to the media layout.
      */
-    public void addMediaFromChoice(MediaLayout mediaLayout, int index, TextView textView) {
+    public void addMediaFromChoice(MediaLayout mediaLayout, int index, TextView textView, List<SelectChoice> items) {
         String audioURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_AUDIO);
 
         String imageURI;
@@ -141,8 +147,13 @@ public abstract class SelectWidget extends ItemsWidget {
     }
 
     protected RecyclerView setUpRecyclerView() {
+        numColumns = WidgetAppearanceUtils.getNumberOfColumns(getFormEntryPrompt(), getContext());
+
         RecyclerView recyclerView = (RecyclerView) LayoutInflater.from(getContext()).inflate(R.layout.recycler_view, null); // keep in an xml file to enable the vertical scrollbar
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        if (numColumns == 1) {
+            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        }
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), numColumns));
 
         return recyclerView;
     }

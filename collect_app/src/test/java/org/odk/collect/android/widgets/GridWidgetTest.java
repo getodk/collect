@@ -12,6 +12,6 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
     @NonNull
     @Override
     public GridWidget createWidget() {
-        return new GridWidget(activity, formEntryPrompt, 1, false);
+        return new GridWidget(activity, formEntryPrompt, false);
     }
 }
