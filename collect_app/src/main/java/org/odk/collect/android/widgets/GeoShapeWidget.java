@@ -44,17 +44,12 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
 
     public static final String SHAPE_LOCATION = "gp";
-    public SharedPreferences sharedPreferences;
-    public String mapSDK;
     private final Button createShapeButton;
     private final TextView answerDisplay;
 
     public GeoShapeWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
         // assemble the widget...
-
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        mapSDK = sharedPreferences.getString(GeneralKeys.KEY_MAP_SDK, GeneralKeys.DEFAULT_BASEMAP_KEY);
 
         answerDisplay = getCenteredAnswerTextView();
 
@@ -77,6 +72,9 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
     }
 
     private void startGeoShapeActivity() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String mapSDK = prefs.getString(GeneralKeys.KEY_MAP_SDK, GeneralKeys.DEFAULT_BASEMAP_KEY);
+
         if (mapSDK.equals(GeneralKeys.GOOGLE_MAPS_BASEMAP_KEY) && !PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
             PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
             return;

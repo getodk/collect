@@ -63,7 +63,6 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
     private final boolean useMapsV2;
     private final Button getLocationButton;
     private final Button viewButton;
-    private final String mapSDK;
     private final TextView answerDisplay;
     private boolean useMaps;
     private double accuracyThreshold;
@@ -96,9 +95,6 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
         } else {
             useMaps = false;
         }
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        mapSDK = sharedPreferences.getString(GeneralKeys.KEY_MAP_SDK, GeneralKeys.DEFAULT_BASEMAP_KEY);
 
         readOnly = prompt.isReadOnly();
 
@@ -291,6 +287,8 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
 
     private void startGeoPoint() {
         Activity activity = (Activity) getContext();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        String mapSDK = prefs.getString(GeneralKeys.KEY_MAP_SDK, GeneralKeys.DEFAULT_BASEMAP_KEY);
         if (mapSDK.equals(GeneralKeys.GOOGLE_MAPS_BASEMAP_KEY) &&
             !PlayServicesUtil.isGooglePlayServicesAvailable(activity)) {
             PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(activity);
