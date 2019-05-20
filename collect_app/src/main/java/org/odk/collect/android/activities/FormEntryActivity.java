@@ -1195,10 +1195,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // should only be a group here if the event_group is a field-list
                 try {
                     FormEntryPrompt[] prompts = formController.getQuestionPrompts();
+                    for (FormEntryPrompt question : prompts) {
+                        String answer = question.getAnswerValue() != null ? question.getAnswerValue().getDisplayText() : null;
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.QUESTION, question.getIndex(), true, answer);
+                    }
                     FormEntryCaption[] groups = formController
                             .getGroupsForCurrentIndex();
 
-                    odkView = new ODKView(this, prompts, groups, advancingPage, formController.getAuditEventLogger());
+                    odkView = new ODKView(this, prompts, groups, advancingPage);
                     odkView.setWidgetValueChangedListener(this);
                     Timber.i("Created view for group %s %s",
                             groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]",

@@ -54,9 +54,7 @@ import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.logic.AuditEvent;
 import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.utilities.AuditEventLogger;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
@@ -103,7 +101,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      *                      form. Used to determine whether to autoplay media.
      */
     public ODKView(Context context, final FormEntryPrompt[] questionPrompts,
-                   FormEntryCaption[] groups, boolean advancingPage, AuditEventLogger auditEventLogger) {
+                   FormEntryCaption[] groups, boolean advancingPage) {
         super(context);
 
         inflate(getContext(), R.layout.nested_scroll_view, this); // keep in an xml file to enable the vertical scrollbar
@@ -139,9 +137,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         }
 
         for (FormEntryPrompt question : questionPrompts) {
-            String answer = question.getAnswerValue() != null ? question.getAnswerValue().getDisplayText() : null;
-            auditEventLogger.logEvent(AuditEvent.AuditEventType.QUESTION, question.getIndex(), true, answer);
-
             addWidgetForQuestion(question, readOnlyOverride);
         }
 

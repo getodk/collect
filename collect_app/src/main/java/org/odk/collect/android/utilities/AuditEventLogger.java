@@ -83,7 +83,9 @@ public class AuditEventLogger {
                 return;
             }
 
-            addLocationCoordinatesToAuditEventIfNeeded(newAuditEvent);
+            if (auditConfig.isLocationEnabled()) {
+                addLocationCoordinatesToAuditEvent(newAuditEvent);
+            }
 
             /*
              * Close any existing interval events if the view is being exited
@@ -117,24 +119,19 @@ public class AuditEventLogger {
         }
     }
 
-    private void addLocationCoordinatesToAuditEventIfNeeded(AuditEvent auditEvent) {
-        if (auditConfig.isLocationEnabled()) {
-            Location location = getMostAccurateLocation();
-            String latitude = location != null ? Double.toString(location.getLatitude()) : "";
-            String longitude = location != null ? Double.toString(location.getLongitude()) : "";
-            String accuracy = location != null ? Double.toString(location.getAccuracy()) : "";
-            if (!auditEvent.hasLocation()) {
-                auditEvent.setLocationCoordinates(latitude, longitude, accuracy);
-            }
+    private void addLocationCoordinatesToAuditEvent(AuditEvent auditEvent) {
+        Location location = getMostAccurateLocation();
+        String latitude = location != null ? Double.toString(location.getLatitude()) : "";
+        String longitude = location != null ? Double.toString(location.getLongitude()) : "";
+        String accuracy = location != null ? Double.toString(location.getAccuracy()) : "";
+        if (!auditEvent.hasLocation()) {
+            auditEvent.setLocationCoordinates(latitude, longitude, accuracy);
         }
     }
 
-    private void addNewValueToAuditEventIfNeeded(AuditEvent aev) {
-        FormController formController = Collect.getInstance().getFormController();
-        if (aev.getAuditEventType().equals(AuditEvent.AuditEventType.QUESTION) && formController != null) {
-            IAnswerData answerData = formController.getQuestionPrompt(aev.getFormIndex()).getAnswerValue();
-            aev.setNewValue(answerData != null ? answerData.getDisplayText() : null);
-        }
+    private void addNewValueToQuestionAuditEvent(AuditEvent aev, FormController formController) {
+        IAnswerData answerData = formController.getQuestionPrompt(aev.getFormIndex()).getAnswerValue();
+        aev.setNewValue(answerData != null ? answerData.getDisplayText() : null);
     }
 
     // If location provider are enabled/disabled it sometimes fires the BroadcastReceiver multiple
@@ -149,7 +146,7 @@ public class AuditEventLogger {
      * This can happen if the user is on a question page and the page gets refreshed
      * The exception is hierarchy events since they interrupt an existing interval event
      */
-    boolean isDuplicatedIntervalEvent(AuditEvent newAuditEvent) {
+    private boolean isDuplicatedIntervalEvent(AuditEvent newAuditEvent) {
         if (newAuditEvent.isIntervalAuditEventType()) {
             for (AuditEvent aev : auditEvents) {
                 if (aev.isIntervalAuditEventType()
@@ -169,16 +166,40 @@ public class AuditEventLogger {
         if (isAuditEnabled()) {
             // Calculate the time and add the event to the auditEvents array
             long end = getEventTime();
+            ArrayList<AuditEvent> filteredAuditEvents = new ArrayList<>();
             for (AuditEvent aev : auditEvents) {
                 if (!aev.isEndTimeSet() && aev.isIntervalAuditEventType()) {
-                    addLocationCoordinatesToAuditEventIfNeeded(aev);
-                    addNewValueToAuditEventIfNeeded(aev);
+                    if (auditConfig.isLocationEnabled()) {
+                        addLocationCoordinatesToAuditEvent(aev);
+                    }
+                    FormController formController = Collect.getInstance().getFormController();
+                    if (aev.getAuditEventType().equals(AuditEvent.AuditEventType.QUESTION) && formController != null) {
+                        addNewValueToQuestionAuditEvent(aev, formController);
+                    }
                     aev.setEnd(end);
+                    if (shouldEventBeLogged(aev)) {
+                        filteredAuditEvents.add(aev);
+                    }
                 }
             }
 
+            auditEvents.clear();
+            auditEvents.addAll(filteredAuditEvents);
             writeEvents();
         }
+    }
+
+    /*
+    Question which is in field-list group should be logged only if tracking changes option is
+    enabled and its answer has changed
+    */
+    private boolean shouldEventBeLogged(AuditEvent aev) {
+        FormController formController = Collect.getInstance().getFormController();
+        if (aev.getAuditEventType().equals(AuditEvent.AuditEventType.QUESTION) && formController != null) {
+            return !formController.indexIsInFieldList(aev.getFormIndex())
+                    || (aev.newAnswerAppeared() && auditConfig.isTrackingChangesEnabled());
+        }
+        return true;
     }
 
     private void writeEvents() {
