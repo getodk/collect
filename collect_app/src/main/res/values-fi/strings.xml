@@ -336,13 +336,9 @@
   <string name="start">Aloita</string>
   <string name="enable_gps">Ota GPS käyttöön</string>
   <string name="geotrace_title">GeoTrace</string>
-  <string name="polygon_save">Tallenna monikulmiona - Polygon</string>
-  <string name="polygon_save_deprecation_warning">(Jos käytät GeoTrace-polygonikeräystä, päivitä lomakettasi käyttämään GeoShape-toimintoa ennen seuraavaa päivitystä. Katso https://bit.ly/odk18277.)</string>
-  <string name="polyline_save">Tallenna murtoviivana - Polyline</string>
-  <string name="gps_enable_message">GPS on poistettu käytöstä laitteellasi. Haluaisitko ottaa sen käyttöön?</string>
+    <string name="gps_enable_message">GPS on poistettu käytöstä laitteellasi. Haluaisitko ottaa sen käyttöön?</string>
   <string name="select_offline_layer">Valitse Offline-taso</string>
-  <string name="polygon_or_polyline">Tallenna GeoTrace nimellä</string>
-  <string name="geo_clear_warning">Ominaisuus on jo luotu. Haluatko tyhjentää ominaisuuden?</string>
+    <string name="geo_clear_warning">Ominaisuus on jo luotu. Haluatko tyhjentää ominaisuuden?</string>
   <string name="geo_exit_warning">Hylätäänkö muutokset ja palataan ODK:hon?</string>
   <string name="polygon_validator">Monikulmion luomiseen tarvitaan vähintään 3 pistettä</string>
   <string name="polyline_validator">Polyline-kuvion luomiseen tarvitaan vähintään 2 pistettä</string>

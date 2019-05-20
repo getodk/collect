@@ -14,11 +14,9 @@
 
 package org.odk.collect.android.activities;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.VisibleForTesting;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -28,6 +26,8 @@ import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.annotation.VisibleForTesting;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.map.GoogleMapFragment;
@@ -84,8 +84,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
 
     private AlertDialog settingsDialog;
     private View settingsView;
-    private AlertDialog polygonOrPolylineDialog;
-    private View polygonOrPolylineView;
 
     private static final int[] INTERVAL_OPTIONS = {
         1, 5, 10, 20, 30, 60, 300, 600, 1200, 1800
@@ -198,9 +196,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
 
     @Override public void destroy() { }
 
-    // This is just for the polygonOrPolylineDialog deprecation warning,
-    // which will go away in the next release.
-    @SuppressLint("SetTextI18n")
     public void initMap(MapFragment newMapFragment) {
         if (newMapFragment == null) {  // could not create the map
             finish();
@@ -280,11 +275,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
         saveButton.setOnClickListener(v -> {
             if (!map.getPolyPoints(featureId).isEmpty()) {
                 if (outputMode == OutputMode.GEOTRACE) {
-                    // This release shows a deprecation warning for the "Save
-                    // as Polygon" button.  After the deprecation period,
-                    // we plan to remove the dialog entirely; outputMode
-                    // determines whether a polyline or a polygon will be saved.
-                    polygonOrPolylineDialog.show();
+                    saveAsPolyline();
                 } else {
                     saveAsPolygon();
                 }
@@ -304,17 +295,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
 
         recordButton = findViewById(R.id.record_button);
         recordButton.setOnClickListener(v -> recordPoint());
-
-        // The polygonOrPolylineDialog will go away in the next release.
-        polygonOrPolylineView = getLayoutInflater().inflate(R.layout.polygon_polyline_dialog, null);
-
-        Button polygonSave = polygonOrPolylineView.findViewById(R.id.polygon_save);
-        polygonSave.setOnClickListener(v -> saveAsPolygon());
-        polygonSave.setText(polygonSave.getText() + "\n\n" +
-            getString(R.string.polygon_save_deprecation_warning));
-
-        Button polylineSave = polygonOrPolylineView.findViewById(R.id.polyline_save);
-        polylineSave.setOnClickListener(v -> saveAsPolyline());
 
         buildDialogs();
 
@@ -354,7 +334,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
     }
 
     private void saveAsPolyline() {
-        polygonOrPolylineDialog.dismiss();
         if (map.getPolyPoints(featureId).size() > 1) {
             finishWithResult();
         } else {
@@ -363,7 +342,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
     }
 
     private void saveAsPolygon() {
-        polygonOrPolylineDialog.dismiss();
         if (map.getPolyPoints(featureId).size() > 2) {
             // Close the polygon.
             List<MapPoint> points = map.getPolyPoints(featureId);
@@ -484,16 +462,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
                 settingsDialog.dismiss();
             })
             .setNegativeButton(R.string.cancel, (dialog, id) -> {
-                dialog.cancel();
-                settingsDialog.dismiss();
-            })
-            .create();
-
-        polygonOrPolylineDialog = new AlertDialog.Builder(this)
-            .setTitle(getString(R.string.polygon_or_polyline))
-            .setView(polygonOrPolylineView)
-            .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel())
-            .setOnCancelListener(dialog -> {
                 dialog.cancel();
                 settingsDialog.dismiss();
             })

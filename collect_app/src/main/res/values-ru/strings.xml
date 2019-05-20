@@ -327,12 +327,9 @@
   <string name="start">Начать</string>
   <string name="enable_gps">Включить GPS</string>
   <string name="geotrace_title">Геослед</string>
-  <string name="polygon_save">Сохранить как многоугольник</string>
-  <string name="polyline_save">Сохранить как ломаную линию</string>
-  <string name="gps_enable_message">На вашем устройстве отключен GPS. Хотите включить его?</string>
+    <string name="gps_enable_message">На вашем устройстве отключен GPS. Хотите включить его?</string>
   <string name="select_offline_layer">Выберите оффлайн-слой</string>
-  <string name="polygon_or_polyline">Сохранить геослед как</string>
-  <string name="geo_exit_warning">Отказаться от изменений и вернуться к ODK?</string>
+    <string name="geo_exit_warning">Отказаться от изменений и вернуться к ODK?</string>
   <string name="polygon_validator">В многоугольнике должно быть как минимум 3 точки</string>
   <string name="polyline_validator">Должно быть как минимум 2 точки, что бы создать ломаную линию</string>
   <string name="clear">Очистить</string>

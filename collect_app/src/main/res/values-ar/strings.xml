@@ -336,12 +336,8 @@
   <string name="start">أبداء</string>
   <string name="enable_gps">تفعيل ال GPS</string>
   <string name="geotrace_title">Trace</string>
-  <string name="polygon_save">حفظ الـ Polygon</string>
-  <string name="polygon_save_deprecation_warning">(إذا كنت تستخدم GeoTrace لجمع المضلعات ، فقم بتحديث الاستمارة الخاصة بك لاستخدام GeoShape قبل التحديث التالي. راجع https://bit.ly/odk18277.)</string>
-  <string name="polyline_save">حفظ الـ Polyline</string>
   <string name="gps_enable_message">خاصية الـ GPS غير مفعلة في جهازك هل تريد تفعيلها ؟</string>
   <string name="select_offline_layer">طبقة غير متصلة</string>
-  <string name="polygon_or_polyline">حفظ GeoTrace كـ</string>
   <string name="geo_clear_warning">الميزة تم انشائها مسبقاً</string>
   <string name="geo_exit_warning">تجاهل التعديلات والعودة الى ODK؟</string>
   <string name="polygon_validator">يجب توفر 3 نقاط GeoPoint لانشاء Polygon</string>

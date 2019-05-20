@@ -284,9 +284,7 @@
   <string name="streets">Straten</string>
   <string name="terrain">Terrein</string>
   <string name="start">Start</string>
-  <string name="polygon_save">Bewaar als Polygoon</string>
-  <string name="polyline_save">Bewaar als Lijnstuk</string>
-  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+    <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="odk_website">Bezoek de ODK website</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->

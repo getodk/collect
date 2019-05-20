@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- vector selector needed for APIs lower than 5.0 when vector drawables
-is used without srcCompat ex.: drawableLeft etc.-->
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/polyline"/>
-</layer-list>

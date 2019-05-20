@@ -329,12 +329,9 @@
   <string name="start">Anza</string>
   <string name="enable_gps">Wezesha GPS</string>
   <string name="geotrace_title">Fatilisha mstari kijografia</string>
-  <string name="polygon_save">Hifadhi kama  poligoni \"Polygon\"</string>
-  <string name="polyline_save">Hifadhi kama Mistari \"Polyline\"</string>
-  <string name="gps_enable_message">GPS kwenye kifaa chako imezimwa. Je ungependa kuiwasha?</string>
+    <string name="gps_enable_message">GPS kwenye kifaa chako imezimwa. Je ungependa kuiwasha?</string>
   <string name="select_offline_layer">Chagua tabaka la nje ya mtandao</string>
-  <string name="polygon_or_polyline">Hifadhi Geotrace kama</string>
-  <string name="geo_clear_warning">Umbo lishatengenezwa. Ungependa kufuta Umbo?</string>
+    <string name="geo_clear_warning">Umbo lishatengenezwa. Ungependa kufuta Umbo?</string>
   <string name="geo_exit_warning">Sitisha mabadiliko na rudi kwenye ODK?</string>
   <string name="polygon_validator">Lazima uwe na angalau  nukta 3 ili kutengeneza poligoni</string>
   <string name="polyline_validator">Ni lazima uwe angalau na pointi 2 kutengeneza Mistari </string>

@@ -338,13 +338,9 @@
   <string name="start">Iniciar</string>
   <string name="enable_gps">Activar el GPS</string>
   <string name="geotrace_title">GeoLínea</string>
-  <string name="polygon_save">Guardar como polígono</string>
-  <string name="polygon_save_deprecation_warning">(Si está usando GeoLínea para trazar polígonos, actualice su formulario y use GeoArea antes de la próxima versión.)</string>
-  <string name="polyline_save">Guardar como Polilínea</string>
-  <string name="gps_enable_message">GPS esta deshabilitado. ¿Activar?</string>
+    <string name="gps_enable_message">GPS esta deshabilitado. ¿Activar?</string>
   <string name="select_offline_layer">Seleccione la capa sin conexión</string>
-  <string name="polygon_or_polyline">Guardar GeoLínea como</string>
-  <string name="geo_clear_warning">Función ya creada. ¿Desea borrar la función?</string>
+    <string name="geo_clear_warning">Función ya creada. ¿Desea borrar la función?</string>
   <string name="geo_exit_warning">¿Ignorar los cambios y regresar?</string>
   <string name="polygon_validator">Debe tener al menos 3 puntos para crear un polígono</string>
   <string name="polyline_validator">Deben existir al menos 2 puntos para crear una Polilínea</string>

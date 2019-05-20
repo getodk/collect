@@ -336,13 +336,9 @@
   <string name="start">Start</string>
   <string name="enable_gps">GPS aktivieren</string>
   <string name="geotrace_title">GeoTrace</string>
-  <string name="polygon_save">Als Polygon speichern</string>
-  <string name="polygon_save_deprecation_warning">(Falls Sie GeoTrace benutzen um Polygone zu erfassen, aktualisieren Sie Ihr Formular vor dem nächsten Update so, dass es stattdessen GeoShape verwendet. Siehe https://bit.ly/odk18277.)</string>
-  <string name="polyline_save">Als Polyline speichern</string>
-  <string name="gps_enable_message">GPS ist auf ihrem Gerät deaktiviert. Möchten Sie es aktivieren?</string>
+    <string name="gps_enable_message">GPS ist auf ihrem Gerät deaktiviert. Möchten Sie es aktivieren?</string>
   <string name="select_offline_layer">Offline-Ebene auswählen</string>
-  <string name="polygon_or_polyline">GeoTrace speichern als</string>
-  <string name="geo_clear_warning">Merkmal bereits erzeugt. Möchten Sie das Merkmal löschen?</string>
+    <string name="geo_clear_warning">Merkmal bereits erzeugt. Möchten Sie das Merkmal löschen?</string>
   <string name="geo_exit_warning">Änderungen verwerfen und zu ODK zurückkehren?</string>
   <string name="polygon_validator">Min. 3 Punkte notwendig um ein Polygon zu erzeugen</string>
   <string name="polyline_validator">Min. 2 Punkte notwendig um eine Polylinie zu erzeugen</string>
