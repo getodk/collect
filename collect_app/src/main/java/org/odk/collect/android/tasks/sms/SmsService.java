@@ -324,20 +324,15 @@ public class SmsService {
         contentValues.put(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT, getDisplaySubtext(RESULT_OK, date, progress, context));
         contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
 
-        Collect.getInstance()
-                .getDefaultTracker()
-                .send(new HitBuilders.EventBuilder()
-                        .setCategory("Submission")
-                        .setAction("SMS")
-                        .build());
-
         try (Cursor cursor = instancesDao.getInstancesCursorForId(instanceId)) {
             cursor.moveToPosition(-1);
 
             boolean isFormAutoDeleteOptionEnabled = (boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_DELETE_AFTER_SEND);
-            String formId;
+            String formId = null;
+            String formVersion = null;
             while (cursor.moveToNext()) {
                 formId = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
+                formVersion = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_VERSION));
                 if (InstanceServerUploader.formShouldBeAutoDeleted(formId, isFormAutoDeleteOptionEnabled)) {
 
                     List<String> instancesToDelete = new ArrayList<>();
@@ -348,6 +343,14 @@ public class SmsService {
                     instancesDao.updateInstance(contentValues, where, whereArgs);
                 }
             }
+
+            Collect.getInstance()
+                    .getDefaultTracker()
+                    .send(new HitBuilders.EventBuilder()
+                            .setCategory("Submission")
+                            .setAction("SMS")
+                            .setLabel(Collect.getFormIdentifierHash(formId, formVersion))
+                            .build());
         }
     }
 

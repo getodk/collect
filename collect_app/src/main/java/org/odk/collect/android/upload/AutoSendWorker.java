@@ -164,6 +164,7 @@ public class AutoSendWorker extends Worker {
                                 .setCategory("Submission")
                                 .setAction(protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets)) ?
                                         "HTTP-Sheets auto" : "HTTP auto")
+                                .setLabel(Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()))
                                 .build());
             } catch (UploadException e) {
                 Timber.d(e);

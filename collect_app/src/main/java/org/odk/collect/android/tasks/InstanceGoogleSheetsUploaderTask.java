@@ -83,6 +83,7 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
                             .send(new HitBuilders.EventBuilder()
                                     .setCategory("Submission")
                                     .setAction("HTTP-Sheets")
+                                    .setLabel(Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()))
                                     .build());
                 } catch (UploadException e) {
                     Timber.d(e);
