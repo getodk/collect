@@ -336,13 +336,9 @@
   <string name="start">Démarrer</string>
   <string name="enable_gps">Activer le GPS</string>
   <string name="geotrace_title">TracéGéo</string>
-  <string name="polygon_save">Enregistrer comme Polygone</string>
-  <string name="polygon_save_deprecation_warning">(Si vous utilisez GeoTrace pour collecter des polygones, mettez à jour votre formulaire pour qu\'il utilise GeoShape avant la prochaine mise à jour. Voir https://bit.ly/odk18277.)</string>
-  <string name="polyline_save">Enregistrer comme Polyligne</string>
-  <string name="gps_enable_message">Le GPS est désactivé. Voulez vous l\'activer ?</string>
+    <string name="gps_enable_message">Le GPS est désactivé. Voulez vous l\'activer ?</string>
   <string name="select_offline_layer">Sélectionner le fond de carte hors ligne </string>
-  <string name="polygon_or_polyline">Enregistrer le TracéGéo sous</string>
-  <string name="geo_clear_warning">Objet déjà créé. Souhaitez-vous l\'effacer ?</string>
+    <string name="geo_clear_warning">Objet déjà créé. Souhaitez-vous l\'effacer ?</string>
   <string name="geo_exit_warning">Annuler les changements et revenir à ODK</string>
   <string name="polygon_validator">3 points minimum sont nécessaires pour créer un Polygone</string>
   <string name="polyline_validator">Il faut au moins 2 points pour créer une ligne</string>

@@ -336,12 +336,8 @@
   <string name="start">Začít</string>
   <string name="enable_gps">Zapnout GPS</string>
   <string name="geotrace_title">GeoTrace</string>
-  <string name="polygon_save">Uložit jako polygon</string>
-  <string name="polygon_save_deprecation_warning">(Pokud používáte GeoTrace ke sbírání polygonů, aktualizujte svůj formulář, abyste před další aktualizací použili GeoShape. Viz https://bit.ly/odk18277.)</string>
-  <string name="polyline_save">Uložit jako Polyline</string>
   <string name="gps_enable_message">GPS je v přístroji zakázáno. Chcete jej povolit?</string>
   <string name="select_offline_layer">Vybrat Offline Layer</string>
-  <string name="polygon_or_polyline">Uložit GeoTrace jako</string>
   <string name="geo_clear_warning">Funkce již vytvořena. Chcete tuto funkci vymazat?</string>
   <string name="geo_exit_warning">Zrušit změny a vrátit se do ODK?</string>
   <string name="polygon_validator">Musí mít alespoň 3 body pro vytvoření polygonu</string>

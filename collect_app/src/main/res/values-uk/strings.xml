@@ -336,13 +336,9 @@
   <string name="start">Почати</string>
   <string name="enable_gps">Увімкнути GPS</string>
   <string name="geotrace_title">ГеоМаршрут</string>
-  <string name="polygon_save">Зберегти як багатокутник</string>
-  <string name="polygon_save_deprecation_warning">(Якщо ви використовуєте GeoTrace для збору полігонів, оновіть вашу анкету для використання GeoShape перед наступним оновленням. Дивіться https://bit.ly/odk18277.)</string>
-  <string name="polyline_save">Зберегти як ламану лінію</string>
-  <string name="gps_enable_message">GPS на Вашому пристрої вимкнено. Бажаєте увімкнути?</string>
+    <string name="gps_enable_message">GPS на Вашому пристрої вимкнено. Бажаєте увімкнути?</string>
   <string name="select_offline_layer">Обрати офлайн шар</string>
-  <string name="polygon_or_polyline">Зберегти ГеоМаршрут як</string>
-  <string name="geo_clear_warning">Ознака вже створена. Бажаєте очистити ознаку?</string>
+    <string name="geo_clear_warning">Ознака вже створена. Бажаєте очистити ознаку?</string>
   <string name="geo_exit_warning">Скасувати зміни і повернутись до ODK?</string>
   <string name="polygon_validator">Для багатокутника необхідно мінімум 3 точки</string>
   <string name="polyline_validator">Для створення лінії необхідні принаймні дві точки</string>

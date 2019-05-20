@@ -293,12 +293,9 @@
   <string name="start">Alusta</string>
   <string name="enable_gps">Luba GPS</string>
   <string name="geotrace_title">Rada</string>
-  <string name="polygon_save">Salvesta polügoonina</string>
-  <string name="polyline_save">Salvesta polyline-ina</string>
-  <string name="gps_enable_message">Teie seadmel on GPS keelatud. Kas te soovite lubada?</string>
+    <string name="gps_enable_message">Teie seadmel on GPS keelatud. Kas te soovite lubada?</string>
   <string name="select_offline_layer">Vali offline kiht</string>
-  <string name="polygon_or_polyline">Salvesta rada kui</string>
-  <string name="geo_clear_warning">Kujutis on juba loodud. Kas soovite kujutise eemaldada?</string>
+    <string name="geo_clear_warning">Kujutis on juba loodud. Kas soovite kujutise eemaldada?</string>
   <string name="geo_exit_warning">Loobu muudatustest ja ava ODK?</string>
   <string name="polygon_validator">Polügooni loomiseks on vaja vähemalt 3 punkti</string>
   <string name="clear">Eemalda</string>

@@ -333,12 +333,9 @@
   <string name="start">Zacznij</string>
   <string name="enable_gps">Włącz GPS</string>
   <string name="geotrace_title">GeoTrace</string>
-  <string name="polygon_save">Zapisz jako wielokąt</string>
-  <string name="polyline_save">Zapis jako łamana</string>
-  <string name="gps_enable_message">GPS jest jest wyłączony na twoim urządzeniu. Czy chciałbyś go włączyć?</string>
+    <string name="gps_enable_message">GPS jest jest wyłączony na twoim urządzeniu. Czy chciałbyś go włączyć?</string>
   <string name="select_offline_layer">Wybierz Warstwę Offline</string>
-  <string name="polygon_or_polyline">Zapisz GeoTrace Jako</string>
-  <string name="geo_clear_warning">Właściwość już stworzona. Chcesz usunąć właściwość?</string>
+    <string name="geo_clear_warning">Właściwość już stworzona. Chcesz usunąć właściwość?</string>
   <string name="geo_exit_warning">Usunąć zmiany i wrócić do ODK?</string>
   <string name="polygon_validator">Wymagane są przynajmniej 3 punkty aby utworzyć wielokąt</string>
   <string name="polyline_validator">Wymagane co najmniej 2 punkty, by utworzyć polilinię</string>
