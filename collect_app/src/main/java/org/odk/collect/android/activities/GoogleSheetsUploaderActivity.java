@@ -31,6 +31,7 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
@@ -137,35 +138,13 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
                     GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
             if (googleUsername == null || googleUsername.equals("")) {
                 showDialog(GOOGLE_USER_DIALOG);
-            } else if (isCollectAuthorized()) {
-                showDialog(PROGRESS_DIALOG);
-
-                instanceGoogleSheetsUploaderTask.setUploaderListener(this);
-                instanceGoogleSheetsUploaderTask.execute(instancesToSend);
+            } else {
+                new AuthorizationChecker().execute();
             }
         } else {
             // it's not null, so we have a task running
             // progress dialog is handled by the system
         }
-    }
-
-    /**
-     * @return true if Collect is authorized to access selected account via APIs otherwise false
-     */
-    private boolean isCollectAuthorized() {
-        try {
-            if (accountsManager.getToken() != null) {
-                return true;
-            }
-        } catch (UserRecoverableAuthException e) {
-            // Collect is not yet authorized to access current account, so request for authorization
-            startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
-        } catch (IOException | GoogleAuthException e) {
-            // authorization failed
-            createAlertDialog(getString(R.string.google_auth_io_exception_msg));
-        }
-
-        return false;
     }
 
     /*
@@ -388,16 +367,13 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(getString(R.string.upload_results));
         alertDialog.setMessage(message);
-        DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON1: // ok
-                        // always exit this activity since it has no interface
-                        alertShowing = false;
-                        finish();
-                        break;
-                }
+        DialogInterface.OnClickListener quitListener = (dialog, i) -> {
+            switch (i) {
+                case DialogInterface.BUTTON1: // ok
+                    // always exit this activity since it has no interface
+                    alertShowing = false;
+                    finish();
+                    break;
             }
         };
         alertDialog.setCancelable(false);
@@ -410,5 +386,39 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
         // in interface, but not needed
+    }
+
+    private void authorized() {
+        showDialog(PROGRESS_DIALOG);
+
+        instanceGoogleSheetsUploaderTask.setUploaderListener(this);
+        instanceGoogleSheetsUploaderTask.execute(instancesToSend);
+    }
+
+    private class AuthorizationChecker extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                // Must be run from a background thread, not the main UI thread.
+                if (accountsManager.getToken() != null) {
+                    return true;
+                }
+            } catch (UserRecoverableAuthException e) {
+                // Collect is not yet authorized to access current account, so request for authorization
+                runOnUiThread(() -> startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION));
+            } catch (IOException | GoogleAuthException e) {
+                // authorization failed
+                runOnUiThread(() -> createAlertDialog(getString(R.string.google_auth_io_exception_msg)));
+            }
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                authorized();
+            }
+        }
     }
 }
