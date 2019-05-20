@@ -59,7 +59,6 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
     public static final String DRAGGABLE_ONLY = "draggable";
 
     public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
-    private static final String GOOGLE_MAP_KEY = "google_maps";
     private final boolean readOnly;
     private final boolean useMapsV2;
     private final Button getLocationButton;
@@ -99,7 +98,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
         }
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        mapSDK = sharedPreferences.getString(GeneralKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
+        mapSDK = sharedPreferences.getString(GeneralKeys.KEY_MAP_SDK, GeneralKeys.DEFAULT_BASEMAP_KEY);
 
         readOnly = prompt.isReadOnly();
 
@@ -292,7 +291,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
 
     private void startGeoPoint() {
         Activity activity = (Activity) getContext();
-        if (mapSDK.equals(GOOGLE_MAP_KEY) &&
+        if (mapSDK.equals(GeneralKeys.GOOGLE_MAPS_BASEMAP_KEY) &&
             !PlayServicesUtil.isGooglePlayServicesAvailable(activity)) {
             PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(activity);
             return;

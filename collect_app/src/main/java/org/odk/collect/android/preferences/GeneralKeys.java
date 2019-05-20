@@ -74,12 +74,27 @@ public final class GeneralKeys {
     public static final String NAVIGATION_SWIPE             = "swipe";
     public static final String CONSTRAINT_BEHAVIOR_ON_SWIPE = "on_swipe";
     public static final String NAVIGATION_BUTTONS           = "buttons";
-    private static final String GOOGLE_MAPS                 = "google_maps";
     private static final String AUTOSEND_OFF                = "off";
     private static final String GUIDANCE_HINT_OFF           = "no";
-    static final String GOOGLE_MAPS_BASEMAP_DEFAULT         = "streets";
-    static final String OSM_BASEMAP_KEY                     = "osmdroid";
-    static final String OSM_MAPS_BASEMAP_DEFAULT            = "openmap_streets";
+
+    // These values match those in map_sdk_selector_entry_values.
+    public static final String GOOGLE_MAPS_BASEMAP_KEY      = "google_maps";
+    public static final String OSM_BASEMAP_KEY              = "osmdroid";
+    public static final String MAPBOX_BASEMAP_KEY           = "mapbox_maps";
+    public static final String DEFAULT_BASEMAP_KEY = GOOGLE_MAPS_BASEMAP_KEY;
+
+    public static final String GOOGLE_MAPS_BASEMAP_DEFAULT  = "streets";
+
+    public static final String OSM_MAPS_BASEMAP_DEFAULT     = "openmap_streets";
+
+    // These values match those in map_mapbox_basemap_selector_entry_values.
+    public static final String MAPBOX_MAP_STREETS           = "mapbox_streets";
+    public static final String MAPBOX_MAP_LIGHT             = "mapbox_light";
+    public static final String MAPBOX_MAP_DARK              = "mapbox_dark";
+    public static final String MAPBOX_MAP_SATELLITE         = "mapbox_satellite";
+    public static final String MAPBOX_MAP_SATELLITE_STREETS = "mapbox_satellite_streets";
+    public static final String MAPBOX_MAP_OUTDOORS          = "mapbox_outdoors";
+    public static final String MAPBOX_BASEMAP_DEFAULT       = "mapbox_streets";
 
     private static HashMap<String, Object> getHashMap() {
         HashMap<String, Object> hashMap = new HashMap<>();
@@ -123,7 +138,7 @@ public final class GeneralKeys {
         hashMap.put(KEY_NAVIGATION,                 NAVIGATION_SWIPE);
         hashMap.put(KEY_SHOW_SPLASH,                false);
         hashMap.put(KEY_SPLASH_PATH,                Collect.getInstance().getString(R.string.default_splash_path));
-        hashMap.put(KEY_MAP_SDK,                    GOOGLE_MAPS);
+        hashMap.put(KEY_MAP_SDK,                    GOOGLE_MAPS_BASEMAP_KEY);
         hashMap.put(KEY_MAP_BASEMAP,                GOOGLE_MAPS_BASEMAP_DEFAULT);
         return hashMap;
     }

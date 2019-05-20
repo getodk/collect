@@ -17,7 +17,6 @@ package org.odk.collect.android.activities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.VisibleForTesting;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
@@ -27,8 +26,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.map.GoogleMapFragment;
 import org.odk.collect.android.map.MapFragment;
 import org.odk.collect.android.map.MapPoint;
+import org.odk.collect.android.map.MapboxMapFragment;
 import org.odk.collect.android.map.OsmMapFragment;
-import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.GeoPointUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -37,6 +36,7 @@ import org.osmdroid.tileprovider.IRegisterReceiver;
 
 import java.text.DecimalFormat;
 
+import androidx.annotation.VisibleForTesting;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
@@ -47,7 +47,7 @@ import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermi
  * at the current location (obtained from GPS or other location sensors).
  */
 public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegisterReceiver {
-    public static final String PREF_VALUE_GOOGLE_MAPS = "google_maps";
+
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
     public static final String POINT_KEY = "point";
@@ -128,12 +128,6 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
         zoomButton = findViewById(R.id.zoom);
 
         createMapFragment().addTo(this, R.id.map_container, this::initMap);
-    }
-
-    public MapFragment createMapFragment() {
-        String mapSdk = getIntent().getStringExtra(GeneralKeys.KEY_MAP_SDK);
-        return (mapSdk == null || mapSdk.equals(PREF_VALUE_GOOGLE_MAPS)) ?
-            new GoogleMapFragment() : new OsmMapFragment();
     }
 
     @Override protected void onStart() {
@@ -231,10 +225,10 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
 
         if (map instanceof GoogleMapFragment) {
             helper = new MapHelper(this, ((GoogleMapFragment) map).getGoogleMap(), selectedLayer);
+        } else if (map instanceof MapboxMapFragment) {
+            helper = new MapHelper(this);
         } else if (map instanceof OsmMapFragment) {
             helper = new MapHelper(this, ((OsmMapFragment) map).getMapView(), this, selectedLayer);
-        } else {
-            throw new AssertionError("newMapFragment has unknown type");
         }
         helper.setBasemap();
 
