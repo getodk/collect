@@ -63,6 +63,7 @@ def secrets = new Properties()
 if (secretsFile.exists()) {
     secrets.load(new FileInputStream(secretsFile))
 }
+def googleMapsApiKey = secrets.getProperty('GOOGLE_MAPS_API_KEY', '')
 
 android {
     compileSdkVersion(28)
@@ -99,6 +100,7 @@ android {
             minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             resValue("bool", "FIREBASE_CRASHLYTICS_ENABLED", "false")
+            resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
         }
         // Release build for the official ODK Collect app
         odkCollectRelease {
@@ -108,11 +110,13 @@ android {
             minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             resValue("bool", "FIREBASE_CRASHLYTICS_ENABLED", "true")
+            resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
         }
         debug {
             debuggable(true)
             testCoverageEnabled(true)
             resValue("bool", "FIREBASE_CRASHLYTICS_ENABLED", "false")
+            resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
         }
     }
 
