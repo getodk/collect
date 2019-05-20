@@ -76,18 +76,18 @@ public class AuditEvent {
     /*
      * Create a new event
      */
-    public AuditEvent(long start, AuditEventType auditEventType, String node) {
-        this(start, auditEventType, node, false, null, null);
+    public AuditEvent(long start, AuditEventType auditEventType) {
+        this(start, auditEventType, false, null, null);
     }
 
-    public AuditEvent(long start, AuditEventType auditEventType, String node,
-                      boolean isTrackingChangesEnabled, FormIndex formIndex, String oldValue) {
+    public AuditEvent(long start, AuditEventType auditEventType, boolean isTrackingChangesEnabled,
+                      FormIndex formIndex, String oldValue) {
         this.start = start;
         this.auditEventType = auditEventType;
-        this.node = node == null ? "" : node;
         this.isTrackingChangesEnabled = isTrackingChangesEnabled;
         this.formIndex = formIndex;
         this.oldValue = oldValue == null ? "" : oldValue;
+        this.node = formIndex == null || formIndex.getReference() == null ? "" : formIndex.getReference().toString();
     }
 
     /*

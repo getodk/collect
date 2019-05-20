@@ -67,16 +67,7 @@ public class AuditEventLogger {
             // Calculate the time and add the event to the auditEvents array
             long start = getEventTime();
 
-            // Set the node value from the question reference
-            String node = formIndex == null || formIndex.getReference() == null ? "" : formIndex.getReference().toString();
-            if (eventType == AuditEvent.AuditEventType.QUESTION || eventType == AuditEvent.AuditEventType.GROUP) {
-                int idx = node.lastIndexOf('[');
-                if (idx > 0) {
-                    node = node.substring(0, idx);
-                }
-            }
-
-            AuditEvent newAuditEvent = new AuditEvent(start, eventType, node,
+            AuditEvent newAuditEvent = new AuditEvent(start, eventType,
                     auditConfig.isTrackingChangesEnabled(), formIndex, questionAnswer);
 
             if (isDuplicatedIntervalEvent(newAuditEvent)) {
