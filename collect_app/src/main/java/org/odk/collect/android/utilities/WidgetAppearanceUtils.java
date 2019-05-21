@@ -122,6 +122,10 @@ public class WidgetAppearanceUtils {
                         numColumns = Integer.parseInt(substringFromNumColumns.substring(0, substringFromNumColumns.contains(" ")
                                 ? substringFromNumColumns.indexOf(' ')
                                 : substringFromNumColumns.length()));
+
+                        if (numColumns < 1) {
+                            numColumns = 1;
+                        }
                     }
                 } catch (Exception e) {
                     Timber.e(EXCEPTION_PARSING_COLUMNS);
