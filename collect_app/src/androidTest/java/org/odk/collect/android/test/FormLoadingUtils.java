@@ -18,10 +18,10 @@ package org.odk.collect.android.test;
 
 import android.content.Intent;
 import android.content.res.AssetManager;
-import android.os.Environment;
 
 import org.apache.commons.io.IOUtils;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.tasks.FormLoaderTask;
 
 import java.io.File;
@@ -30,14 +30,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
 
 public class FormLoadingUtils {
-    private static final String FORMS_PATH = Environment.getExternalStorageDirectory().getPath() + "/odk/forms/";
     public static final String ALL_WIDGETS_FORM = "all-widgets.xml";
 
     private FormLoadingUtils() {
@@ -49,7 +48,7 @@ public class FormLoadingUtils {
      * will be loaded by {@link FormLoaderTask}.
      */
     public static void copyFormToSdCard(String formFilename, String formAssetPath) throws IOException {
-        String pathname = FORMS_PATH + formFilename;
+        String pathname = Collect.FORMS_PATH + formFilename;
 
         AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
         InputStream inputStream = assetManager.open(formAssetPath + formFilename);
@@ -73,7 +72,7 @@ public class FormLoadingUtils {
             @Override
             protected Intent getActivityIntent() {
                 Intent intent = new Intent(ApplicationProvider.getApplicationContext(), FormEntryActivity.class);
-                intent.putExtra(EXTRA_TESTING_PATH, FORMS_PATH + formFilename);
+                intent.putExtra(EXTRA_TESTING_PATH, Collect.FORMS_PATH + formFilename);
 
                 return intent;
             }
