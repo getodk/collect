@@ -81,12 +81,19 @@ When you first run Collect, it is set to download forms from [https://opendataki
 
 ## Using APIs for local development
 
-To run functionality that makes API calls from your debug-signed builds, you may need to get an API key or otherwise authorize your app. The API keys included in the source code are the ones used for releases and they only work with release builds signed with the release keys.
+Certain functions in ODK Collect depend on cloud services that require API keys or authorization steps to work.  Here are the steps you need to take in order to use these functions in your development builds.
 
-**Google Drive and Sheets APIs** - Follow the instructions in the "Generate the signing certificate fingerprint and register your application" section from [here](https://developers.google.com/drive/android/auth). Enable the Google Drive API [here](https://console.developers.google.com/apis/api/drive.googleapis.com). Enable the Google Sheets API [here](https://console.developers.google.com/apis/api/sheets.googleapis.com).
+**Google Drive and Sheets APIs**: When the "Google Drive, Google Sheets" option is selected in the "Server" settings, ODK Collect uses these APIs to store submitted form data in Google Sheets and submitted media in Google Drive.  To enable these APIs:
+  - Follow [these instructions to generate a signing certificate fingerprint and register the application with the Google API Console](https://developers.google.com/drive/android/auth#generate_the_signing_certificate_fingerprint_and_register_your_application).
+  - [Enable the Google Drive API](https://console.developers.google.com/apis/api/drive.googleapis.com).
+  - [Enable the Google Sheets API](https://console.developers.google.com/apis/api/sheets.googleapis.com).
 
-**Google Maps API** - Getting a Google Maps API key now requires providing a credit card number. As of October 2018, there is some free API usage provided and the card will not be charged without explicit user approval. You should carefully read the terms before providing a credit card number. Once you have created a billing account, follow the instructions [here](https://developers.google.com/maps/documentation/android-api/signup) and paste your key in the `AndroidManifest` as the value for `com.google.android.geo.API_KEY`. Please be sure not to commit your personal API key to a branch that you will submit a pull request for.
-
+**Google Maps API**: When the "Google Maps SDK" option is selected in the "User interface" settings, ODK Collect uses the Google Maps API for displaying maps in the geospatial widgets (GeoPoint, GeoTrace, and GeoShape).  To enable this API:
+  - [Get a Google Maps API key](https://developers.google.com/maps/documentation/android-api/signup).  Note that this requires a credit card number, though the card will not be charged immediately; some free API usage is permitted.  You should carefully read the terms before providing a credit card number.
+  - Edit or create `collect_app/secrets.properties` and set the `GOOGLE_MAPS_API_KEY` property to your API key.  You should end up with a line that looks like this:
+    ```
+    GOOGLE_MAPS_API_KEY=AIbzvW8e0ub...
+    ```
 
 ## Debugging JavaRosa
 
