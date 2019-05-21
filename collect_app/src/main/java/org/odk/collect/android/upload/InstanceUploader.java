@@ -112,7 +112,7 @@ public abstract class InstanceUploader {
     public static boolean formShouldBeAutoDeleted(String jrFormId, boolean isAutoDeleteAppSettingEnabled) {
         String autoDelete = null;
         try (Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId)) {
-            if (cursor.moveToFirst()) {
+            if (cursor != null && cursor.moveToFirst()) {
                 int autoDeleteColumnIndex = cursor.getColumnIndex(AUTO_DELETE);
                 autoDelete = cursor.getString(autoDeleteColumnIndex);
             }
