@@ -46,7 +46,7 @@ public class WidgetAppearanceUtils {
     public static final String MINIMAL                  = "minimal";
     public static final String COLUMNS                  = "columns";
     public static final String COLUMNS_N                = "columns-";
-    public static final String COLUMNS_FLEX             = "columns-flex";
+    public static final String COLUMNS_PACK             = "columns-pack";
     @Deprecated public static final String QUICKCOMPACT = "quickcompact";
     @Deprecated public static final String SEARCH       = "search";
     public static final String AUTOCOMPLETE             = "autocomplete";

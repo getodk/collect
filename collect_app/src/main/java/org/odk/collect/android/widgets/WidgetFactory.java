@@ -152,7 +152,7 @@ public class WidgetFactory {
                 // This means normal appearances should be put before search().
                 if (!appearance.startsWith(WidgetAppearanceUtils.COMPACT_N) && (appearance.startsWith(WidgetAppearanceUtils.COMPACT)
                         || appearance.startsWith(WidgetAppearanceUtils.QUICKCOMPACT)
-                        || appearance.startsWith(WidgetAppearanceUtils.COLUMNS_FLEX))) {
+                        || appearance.startsWith(WidgetAppearanceUtils.COLUMNS_PACK))) {
                     questionWidget = new GridWidget(context, fep, appearance.contains(WidgetAppearanceUtils.QUICK));
                 } else if (appearance.contains(WidgetAppearanceUtils.MINIMAL)) {
                     questionWidget = new SpinnerWidget(context, fep, appearance.contains(WidgetAppearanceUtils.QUICK));
@@ -176,7 +176,7 @@ public class WidgetFactory {
                 // This means normal appearances should be put before search().
                 if (!appearance.startsWith(WidgetAppearanceUtils.COMPACT_N)
                         && (appearance.startsWith(WidgetAppearanceUtils.COMPACT)
-                            || appearance.startsWith(WidgetAppearanceUtils.COLUMNS_FLEX))) {
+                            || appearance.startsWith(WidgetAppearanceUtils.COLUMNS_PACK))) {
                     questionWidget = new GridMultiWidget(context, fep);
                 } else if (appearance.startsWith(WidgetAppearanceUtils.MINIMAL)) {
                     questionWidget = new SpinnerMultiWidget(context, fep);
