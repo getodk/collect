@@ -62,7 +62,6 @@ public class AuditEvent {
 
     private final long start;
     private AuditEventType auditEventType;
-    @NonNull private final String node;
     private String latitude;
     private String longitude;
     private String accuracy;
@@ -87,7 +86,6 @@ public class AuditEvent {
         this.isTrackingChangesEnabled = isTrackingChangesEnabled;
         this.formIndex = formIndex;
         this.oldValue = oldValue == null ? "" : oldValue;
-        this.node = formIndex == null || formIndex.getReference() == null ? "" : formIndex.getReference().toString();
     }
 
     /*
@@ -120,15 +118,11 @@ public class AuditEvent {
         return auditEventType;
     }
 
-    public String getNode() {
-        return node;
-    }
-
     public FormIndex getFormIndex() {
         return formIndex;
     }
 
-    public boolean newAnswerAppeared() {
+    public boolean hasNewAnswer() {
         return !oldValue.equals(newValue);
     }
 
@@ -144,8 +138,14 @@ public class AuditEvent {
         this.accuracy = accuracy;
     }
 
-    public void setNewValue(String newValue) {
+    public void recordValueChange(String newValue) {
         this.newValue = newValue != null ? newValue : "";
+
+        // Clear values if they are equal
+        if (this.oldValue.equals(this.newValue)) {
+            this.oldValue = "";
+            this.newValue = "";
+        }
     }
 
     /*
@@ -153,10 +153,12 @@ public class AuditEvent {
      */
     @NonNull
     public String toString() {
-        // Clear values if they are equal
-        if (oldValue.equals(newValue)) {
-            oldValue = "";
-            newValue = "";
+        String node = formIndex == null || formIndex.getReference() == null ? "" : formIndex.getReference().toString();
+        if (auditEventType == AuditEvent.AuditEventType.QUESTION || auditEventType == AuditEvent.AuditEventType.GROUP) {
+            int idx = node.lastIndexOf('[');
+            if (idx > 0) {
+                node = node.substring(0, idx);
+            }
         }
 
         String event;

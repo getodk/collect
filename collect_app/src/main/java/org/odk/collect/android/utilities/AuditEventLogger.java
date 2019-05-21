@@ -122,7 +122,7 @@ public class AuditEventLogger {
 
     private void addNewValueToQuestionAuditEvent(AuditEvent aev, FormController formController) {
         IAnswerData answerData = formController.getQuestionPrompt(aev.getFormIndex()).getAnswerValue();
-        aev.setNewValue(answerData != null ? answerData.getDisplayText() : null);
+        aev.recordValueChange(answerData != null ? answerData.getDisplayText() : null);
     }
 
     // If location provider are enabled/disabled it sometimes fires the BroadcastReceiver multiple
@@ -142,7 +142,7 @@ public class AuditEventLogger {
             for (AuditEvent aev : auditEvents) {
                 if (aev.isIntervalAuditEventType()
                         && newAuditEvent.getAuditEventType().equals(aev.getAuditEventType())
-                        && newAuditEvent.getNode().equals(aev.getNode())) {
+                        && newAuditEvent.getFormIndex().equals(aev.getFormIndex())) {
                     return true;
                 }
             }
@@ -188,7 +188,7 @@ public class AuditEventLogger {
         FormController formController = Collect.getInstance().getFormController();
         if (aev.getAuditEventType().equals(AuditEvent.AuditEventType.QUESTION) && formController != null) {
             return !formController.indexIsInFieldList(aev.getFormIndex())
-                    || (aev.newAnswerAppeared() && auditConfig.isTrackingChangesEnabled());
+                    || (aev.hasNewAnswer() && auditConfig.isTrackingChangesEnabled());
         }
         return true;
     }

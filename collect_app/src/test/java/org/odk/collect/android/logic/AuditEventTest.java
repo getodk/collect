@@ -91,7 +91,7 @@ public class AuditEventTest {
         auditEvent.setEnd(END_TIME);
         assertTrue(auditEvent.isEndTimeSet());
         assertFalse(auditEvent.hasLocation());
-        auditEvent.setNewValue("Second answer");
+        auditEvent.recordValueChange("Second answer");
         assertEquals("question,/data/text1,1545392727685,1545392728527,First answer,Second answer", auditEvent.toString());
     }
 
@@ -105,7 +105,7 @@ public class AuditEventTest {
         auditEvent.setEnd(END_TIME);
         assertTrue(auditEvent.isEndTimeSet());
         assertTrue(auditEvent.hasLocation());
-        auditEvent.setNewValue("Second answer");
+        auditEvent.recordValueChange("Second answer");
         assertEquals("question,/data/text1,1545392727685,1545392728527,54.35202520000001,18.64663840000003,10,First answer,Second answer", auditEvent.toString());
     }
 
