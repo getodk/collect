@@ -21,6 +21,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.util.TypedValue;
@@ -309,6 +311,23 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
             answer.setFocusable(true);
             answer.setFocusableInTouchMode(true);
             answer.setEnabled(true);
+
+            answer.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    widgetValueChanged();
+                }
+            });
         }
         launchIntentButton.setEnabled(false);
         launchIntentButton.setFocusable(false);

@@ -151,6 +151,10 @@
             <source13/>
             <target13/>
           </rating>
+          <external_app>
+            <source14/>
+            <target14/>
+          </external_app>
           <meta>
             <instanceID/>
           </meta>
@@ -176,53 +180,53 @@
         <root>
           <item>
             <itextId>static_instance-level2-0</itextId>
-            <name>a1</name>
             <level1>a</level1>
+            <name>a1</name>
           </item>
           <item>
             <itextId>static_instance-level2-1</itextId>
-            <name>a2</name>
             <level1>a</level1>
+            <name>a2</name>
           </item>
           <item>
             <itextId>static_instance-level2-2</itextId>
-            <name>a3</name>
             <level1>a</level1>
+            <name>a3</name>
           </item>
           <item>
             <itextId>static_instance-level2-3</itextId>
-            <name>b1</name>
             <level1>b</level1>
+            <name>b1</name>
           </item>
           <item>
             <itextId>static_instance-level2-4</itextId>
-            <name>b2</name>
             <level1>b</level1>
+            <name>b2</name>
           </item>
           <item>
             <itextId>static_instance-level2-5</itextId>
-            <name>b3</name>
             <level1>b</level1>
+            <name>b3</name>
           </item>
           <item>
             <itextId>static_instance-level2-6</itextId>
-            <name>c1</name>
             <level1>c</level1>
+            <name>c1</name>
           </item>
           <item>
             <itextId>static_instance-level2-7</itextId>
-            <name>c2</name>
             <level1>c</level1>
+            <name>c2</name>
           </item>
           <item>
             <itextId>static_instance-level2-8</itextId>
-            <name>c3</name>
             <level1>c</level1>
+            <name>c3</name>
           </item>
           <item>
             <itextId>static_instance-level2-9</itextId>
-            <name>c4</name>
             <level1>c</level1>
+            <name>c4</name>
           </item>
         </root>
       </instance>
@@ -310,6 +314,8 @@
       <bind nodeset="/fieldlist-updates/date-time/target12" relevant=" /fieldlist-updates/date-time/source12  != ''" type="string"/>
       <bind nodeset="/fieldlist-updates/rating/source13" type="int"/>
       <bind nodeset="/fieldlist-updates/rating/target13" relevant=" /fieldlist-updates/rating/source13  != ''" type="string"/>
+      <bind nodeset="/fieldlist-updates/external_app/source14" type="int"/>
+      <bind nodeset="/fieldlist-updates/external_app/target14" relevant=" /fieldlist-updates/external_app/source14  != ''" type="string"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/fieldlist-updates/meta/instanceID" readonly="true()" type="string"/>
     </model>
   </h:head>
@@ -568,6 +574,15 @@
       </range>
       <input ref="/fieldlist-updates/rating/target13">
         <label>Target13</label>
+      </input>
+    </group>
+    <group ref="/fieldlist-updates/external_app">
+      <label>External app</label>
+      <input appearance="ex:org.fake.app(fake=&quot;fake&quot;)" ref="/fieldlist-updates/external_app/source14">
+        <label>Source14</label>
+      </input>
+      <input ref="/fieldlist-updates/external_app/target14">
+        <label>Target14</label>
       </input>
     </group>
   </h:body>

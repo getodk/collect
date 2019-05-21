@@ -22,6 +22,10 @@ import android.app.Instrumentation;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.rule.GrantPermissionRule;
+
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,10 +42,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 
-import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
-import androidx.test.rule.GrantPermissionRule;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -366,6 +367,17 @@ public class FieldListUpdateTest {
             onView(withText(R.string.clear_answer)).perform(click());
             onView(withText(R.string.discard_answer)).perform(click());
         }
+    }
+
+    @Test
+    public void manuallySelectingAValueForMissingExternalApp_ShouldTriggerUpdate() {
+        jumpToGroupWithText("External app");
+        onView(withText(startsWith("Source14"))).perform(click());
+
+        onView(withText(startsWith("Launch"))).perform(click());
+        onView(withClassName(endsWith("EditText"))).perform(replaceText(UUID.randomUUID().toString()));
+
+        onView(withText("Target14")).check(matches(isDisplayed()));
     }
 
     // Scroll down until the desired group name is visible. This is needed to make the tests work
