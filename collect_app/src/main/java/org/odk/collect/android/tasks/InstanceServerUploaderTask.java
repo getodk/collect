@@ -81,6 +81,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
                         .send(new HitBuilders.EventBuilder()
                                 .setCategory("Submission")
                                 .setAction("HTTP")
+                                .setLabel(Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()))
                                 .build());
             } catch (UploadAuthRequestedException e) {
                 outcome.authRequestingServer = e.getAuthRequestingServer();

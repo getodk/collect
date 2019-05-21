@@ -112,6 +112,23 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
+    public String getFormTitleForFormIdAndFormVersion(String formId, String formVersion) {
+        String formTitle = "";
+
+        Cursor cursor = getFormsCursor(formId, formVersion);
+        if (cursor != null) {
+            try {
+                if (cursor.moveToFirst()) {
+                    formTitle = cursor.getString(cursor.getColumnIndex(FormsProviderAPI.FormsColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+
+        return formTitle;
+    }
+
     public boolean isFormEncrypted(String formId, String formVersion) {
         boolean encrypted = false;
 
