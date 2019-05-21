@@ -182,13 +182,12 @@ public class FormsDao {
         try {
             for (String hash : hashes) {
                 c = getFormsCursorForMd5Hash(hash);
-                if (c.getCount() > 0) {
-                    c.moveToFirst();
+                if (c != null && c.moveToFirst()) {
                     String id = c.getString(c.getColumnIndex(FormsProviderAPI.FormsColumns._ID));
                     idsToDelete.add(id);
+                    c.close();
+                    c = null;
                 }
-                c.close();
-                c = null;
             }
         } finally {
             if (c != null) {
