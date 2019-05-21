@@ -538,11 +538,11 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
             }
 
             @Override public void onAnnotationDragFinished(Symbol draggedSymbol) {
-                isDragging = false;
                 onAnnotationDrag(draggedSymbol);
                 if (draggedSymbol.getId() == symbol.getId() && dragEndListener != null) {
                     dragEndListener.onFeature(featureId);
                 }
+                isDragging = false;
             }
         }
     }
