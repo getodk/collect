@@ -18,6 +18,7 @@ package org.odk.collect.android.logic;
 
 import androidx.annotation.NonNull;
 
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryController;
 
 public class AuditEvent {
@@ -61,20 +62,30 @@ public class AuditEvent {
 
     private final long start;
     private AuditEventType auditEventType;
-    private final String node;
     private String latitude;
     private String longitude;
     private String accuracy;
+    @NonNull private String oldValue;
+    @NonNull private String newValue = "";
     private long end;
     private boolean endTimeSet;
+    private boolean isTrackingChangesEnabled;
+    private FormIndex formIndex;
 
     /*
      * Create a new event
      */
-    public AuditEvent(long start, AuditEventType auditEventType, String node) {
+    public AuditEvent(long start, AuditEventType auditEventType) {
+        this(start, auditEventType, false, null, null);
+    }
+
+    public AuditEvent(long start, AuditEventType auditEventType, boolean isTrackingChangesEnabled,
+                      FormIndex formIndex, String oldValue) {
         this.start = start;
         this.auditEventType = auditEventType;
-        this.node = node;
+        this.isTrackingChangesEnabled = isTrackingChangesEnabled;
+        this.formIndex = formIndex;
+        this.oldValue = oldValue == null ? "" : oldValue;
     }
 
     /*
@@ -107,6 +118,14 @@ public class AuditEvent {
         return auditEventType;
     }
 
+    public FormIndex getFormIndex() {
+        return formIndex;
+    }
+
+    public boolean hasNewAnswer() {
+        return !oldValue.equals(newValue);
+    }
+
     public boolean hasLocation() {
         return latitude != null && !latitude.isEmpty()
                 && longitude != null && !longitude.isEmpty()
@@ -119,14 +138,45 @@ public class AuditEvent {
         this.accuracy = accuracy;
     }
 
+    public void recordValueChange(String newValue) {
+        this.newValue = newValue != null ? newValue : "";
+
+        // Clear values if they are equal
+        if (this.oldValue.equals(this.newValue)) {
+            this.oldValue = "";
+            this.newValue = "";
+        }
+
+        // some answers might contain commas so wrap all of them in quotes just in case
+        this.oldValue = "\"" + this.oldValue + "\"";
+        this.newValue = "\"" + this.newValue + "\"";
+    }
+
     /*
      * convert the event into a record to write to the CSV file
      */
     @NonNull
     public String toString() {
-        return hasLocation()
-                ? String.format("%s,%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", latitude, longitude, accuracy)
-                : String.format("%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "");
+        String node = formIndex == null || formIndex.getReference() == null ? "" : formIndex.getReference().toString();
+        if (auditEventType == AuditEvent.AuditEventType.QUESTION || auditEventType == AuditEvent.AuditEventType.GROUP) {
+            int idx = node.lastIndexOf('[');
+            if (idx > 0) {
+                node = node.substring(0, idx);
+            }
+        }
+
+        String event;
+        if (hasLocation() && isTrackingChangesEnabled) {
+            event = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", latitude, longitude, accuracy, oldValue, newValue);
+        } else if (hasLocation()) {
+            event = String.format("%s,%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", latitude, longitude, accuracy);
+        } else if (isTrackingChangesEnabled) {
+            event = String.format("%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", oldValue, newValue);
+        } else {
+            event = String.format("%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "");
+        }
+
+        return event;
     }
 
     // Get event type based on a Form Controller event
@@ -135,9 +185,6 @@ public class AuditEvent {
         switch (fcEvent) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
                 auditEventType = AuditEventType.BEGINNING_OF_FORM;
-                break;
-            case FormEntryController.EVENT_QUESTION:
-                auditEventType = AuditEventType.QUESTION;
                 break;
             case FormEntryController.EVENT_GROUP:
                 auditEventType = AuditEventType.GROUP;

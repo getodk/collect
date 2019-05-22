@@ -5,9 +5,12 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 
-import org.javarosa.core.model.instance.TreeReference;
+import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.data.IAnswerData;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.AuditConfig;
 import org.odk.collect.android.logic.AuditEvent;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.tasks.AuditEventSaveTask;
 
 import java.io.File;
@@ -50,26 +53,30 @@ public class AuditEventLogger {
         }
     }
 
+    public void logEvent(AuditEvent.AuditEventType eventType, boolean writeImmediatelyToDisk) {
+        logEvent(eventType, null, writeImmediatelyToDisk, null);
+    }
+
     /*
      * Log a new event
      */
-    public void logEvent(AuditEvent.AuditEventType eventType, TreeReference ref, boolean writeImmediatelyToDisk) {
-        if (isAuditEnabled() && !isDuplicateOfLastAuditEvent(eventType)) {
+    public void logEvent(AuditEvent.AuditEventType eventType, FormIndex formIndex,
+                         boolean writeImmediatelyToDisk, String questionAnswer) {
+        if (isAuditEnabled() && !isDuplicateOfLastLocationEvent(eventType)) {
             Timber.i("AuditEvent recorded: %s", eventType);
             // Calculate the time and add the event to the auditEvents array
             long start = getEventTime();
 
-            // Set the node value from the question reference
-            String node = ref == null ? "" : ref.toString();
-            if (eventType == AuditEvent.AuditEventType.QUESTION || eventType == AuditEvent.AuditEventType.GROUP) {
-                int idx = node.lastIndexOf('[');
-                if (idx > 0) {
-                    node = node.substring(0, idx);
-                }
+            AuditEvent newAuditEvent = new AuditEvent(start, eventType,
+                    auditConfig.isTrackingChangesEnabled(), formIndex, questionAnswer);
+
+            if (isDuplicatedIntervalEvent(newAuditEvent)) {
+                return;
             }
 
-            AuditEvent newAuditEvent = new AuditEvent(start, eventType, node);
-            addLocationCoordinatesToAuditEventIfNeeded(newAuditEvent);
+            if (auditConfig.isLocationEnabled()) {
+                addLocationCoordinatesToAuditEvent(newAuditEvent);
+            }
 
             /*
              * Close any existing interval events if the view is being exited
@@ -78,19 +85,6 @@ public class AuditEventLogger {
                 for (AuditEvent aev : auditEvents) {
                     if (!aev.isEndTimeSet() && aev.isIntervalAuditEventType()) {
                         aev.setEnd(start);
-                    }
-                }
-            }
-
-            /*
-             * Ignore the event if we are already in an interval view event or have jumped
-             * This can happen if the user is on a question page and the page gets refreshed
-             * The exception is hierarchy events since they interrupt an existing interval event
-             */
-            if (newAuditEvent.isIntervalAuditEventType()) {
-                for (AuditEvent aev : auditEvents) {
-                    if (aev.isIntervalAuditEventType() && !aev.isEndTimeSet()) {
-                        return;
                     }
                 }
             }
@@ -116,23 +110,44 @@ public class AuditEventLogger {
         }
     }
 
-    private void addLocationCoordinatesToAuditEventIfNeeded(AuditEvent auditEvent) {
-        if (auditConfig.isLocationEnabled()) {
-            Location location = getMostAccurateLocation();
-            String latitude = location != null ? Double.toString(location.getLatitude()) : "";
-            String longitude = location != null ? Double.toString(location.getLongitude()) : "";
-            String accuracy = location != null ? Double.toString(location.getAccuracy()) : "";
-            if (!auditEvent.hasLocation()) {
-                auditEvent.setLocationCoordinates(latitude, longitude, accuracy);
-            }
+    private void addLocationCoordinatesToAuditEvent(AuditEvent auditEvent) {
+        Location location = getMostAccurateLocation();
+        String latitude = location != null ? Double.toString(location.getLatitude()) : "";
+        String longitude = location != null ? Double.toString(location.getLongitude()) : "";
+        String accuracy = location != null ? Double.toString(location.getAccuracy()) : "";
+        if (!auditEvent.hasLocation()) {
+            auditEvent.setLocationCoordinates(latitude, longitude, accuracy);
         }
+    }
+
+    private void addNewValueToQuestionAuditEvent(AuditEvent aev, FormController formController) {
+        IAnswerData answerData = formController.getQuestionPrompt(aev.getFormIndex()).getAnswerValue();
+        aev.recordValueChange(answerData != null ? answerData.getDisplayText() : null);
     }
 
     // If location provider are enabled/disabled it sometimes fires the BroadcastReceiver multiple
     // times what tries to add duplicated logs
-    boolean isDuplicateOfLastAuditEvent(AuditEvent.AuditEventType eventType) {
+    boolean isDuplicateOfLastLocationEvent(AuditEvent.AuditEventType eventType) {
         return (eventType.equals(LOCATION_PROVIDERS_ENABLED) || eventType.equals(LOCATION_PROVIDERS_DISABLED))
                 && !auditEvents.isEmpty() && eventType.equals(auditEvents.get(auditEvents.size() - 1).getAuditEventType());
+    }
+
+    /*
+     * Ignore the event if we are already in an interval view event or have jumped
+     * This can happen if the user is on a question page and the page gets refreshed
+     * The exception is hierarchy events since they interrupt an existing interval event
+     */
+    private boolean isDuplicatedIntervalEvent(AuditEvent newAuditEvent) {
+        if (newAuditEvent.isIntervalAuditEventType()) {
+            for (AuditEvent aev : auditEvents) {
+                if (aev.isIntervalAuditEventType()
+                        && newAuditEvent.getAuditEventType().equals(aev.getAuditEventType())
+                        && newAuditEvent.getFormIndex().equals(aev.getFormIndex())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /*
@@ -142,22 +157,47 @@ public class AuditEventLogger {
         if (isAuditEnabled()) {
             // Calculate the time and add the event to the auditEvents array
             long end = getEventTime();
+            ArrayList<AuditEvent> filteredAuditEvents = new ArrayList<>();
             for (AuditEvent aev : auditEvents) {
                 if (!aev.isEndTimeSet() && aev.isIntervalAuditEventType()) {
-                    addLocationCoordinatesToAuditEventIfNeeded(aev);
+                    if (auditConfig.isLocationEnabled()) {
+                        addLocationCoordinatesToAuditEvent(aev);
+                    }
+                    FormController formController = Collect.getInstance().getFormController();
+                    if (aev.getAuditEventType().equals(AuditEvent.AuditEventType.QUESTION) && formController != null) {
+                        addNewValueToQuestionAuditEvent(aev, formController);
+                    }
                     aev.setEnd(end);
+                    if (shouldEventBeLogged(aev)) {
+                        filteredAuditEvents.add(aev);
+                    }
                 }
             }
 
+            auditEvents.clear();
+            auditEvents.addAll(filteredAuditEvents);
             writeEvents();
         }
+    }
+
+    /*
+    Question which is in field-list group should be logged only if tracking changes option is
+    enabled and its answer has changed
+    */
+    private boolean shouldEventBeLogged(AuditEvent aev) {
+        FormController formController = Collect.getInstance().getFormController();
+        if (aev.getAuditEventType().equals(AuditEvent.AuditEventType.QUESTION) && formController != null) {
+            return !formController.indexIsInFieldList(aev.getFormIndex())
+                    || (aev.hasNewAnswer() && auditConfig.isTrackingChangesEnabled());
+        }
+        return true;
     }
 
     private void writeEvents() {
         if (saveTask == null || saveTask.getStatus() == AsyncTask.Status.FINISHED) {
             AuditEvent[] auditEventArray = auditEvents.toArray(new AuditEvent[0]);
             if (auditFile != null) {
-                saveTask = new AuditEventSaveTask(auditFile, auditConfig.isLocationEnabled()).execute(auditEventArray);
+                saveTask = new AuditEventSaveTask(auditFile, auditConfig.isLocationEnabled(), auditConfig.isTrackingChangesEnabled()).execute(auditEventArray);
             } else {
                 Timber.e("auditFile null when attempting to write auditEvents.");
             }
