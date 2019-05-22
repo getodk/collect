@@ -137,7 +137,9 @@ public class AuditEventSaveTaskTest {
                 "form exit,,1548108909730,,54.4112062,18.5896652,30.716999053955078\n" +
                 "form finalize,,1548108909731,,54.4112062,18.5896652,30.716999053955078\n" +
                 "form resume,,1548108900606,,54.4112062,18.5896652,30.716999053955078,,\n" +
-                "question,,1548108900700,,54.4112062,18.5896652,30.716999053955078,\"Old value\",\"New value\"\n" +
+                "question,,1548108900700,,54.4112062,18.5896652,30.716999053955078,Old value,New value\n" +
+                "question,,1548108903100,,54.4112062,18.5896652,30.716999053955078,\"Old value, with comma\",New value\n" +
+                "question,,1548108904200,,54.4112062,18.5896652,30.716999053955078,Old value,\"New value, with comma\"\n" +
                 "form save,,1548108909730,,54.4112062,18.5896652,30.716999053955078,,\n" +
                 "form exit,,1548108909730,,54.4112062,18.5896652,30.716999053955078,,\n" +
                 "form finalize,,1548108909731,,54.4112062,18.5896652,30.716999053955078,,\n";
@@ -177,7 +179,7 @@ public class AuditEventSaveTaskTest {
                 "location tracking enabled,,548108908250,,,\n" +
                 "location permissions granted,,548108908255,,,\n" +
                 "location providers enabled,,548108908259,,,\n" +
-                "question,/data/q1,1548106927323,1548106930112,54.4112062,18.5896652,30.716999053955078,\"Old value\",\"New Value\"\n" +
+                "question,/data/q1,1548106927323,1548106930112,54.4112062,18.5896652,30.716999053955078,Old value,New Value\n" +
                 "add repeat,/data/g1[1],1548106930118,1548106931611,54.4112062,18.5896652,30.716999053955078,,\n" +
                 "end screen,,1548106949448,1548106953601,54.4112062,18.5896652,30.716999053955078,,\n" +
                 "form save,,1548106953600,,54.4112062,18.5896652,30.716999053955078,,\n" +
@@ -255,6 +257,14 @@ public class AuditEventSaveTaskTest {
         event = new AuditEvent(1548108900700L, QUESTION, true, null, "Old value");
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.recordValueChange("New value");
+        auditEvents.add(event);
+        event = new AuditEvent(1548108903100L, QUESTION, true, null, "Old value, with comma");
+        event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
+        event.recordValueChange("New value");
+        auditEvents.add(event);
+        event = new AuditEvent(1548108904200L, QUESTION, true, null, "Old value");
+        event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
+        event.recordValueChange("New value, with comma");
         auditEvents.add(event);
         event = new AuditEvent(1548108909730L, FORM_SAVE, true, null, null);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
