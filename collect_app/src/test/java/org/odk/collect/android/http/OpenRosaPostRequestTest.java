@@ -12,9 +12,13 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.isEmptyString;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 public abstract class OpenRosaPostRequestTest {
 
@@ -75,5 +79,17 @@ public abstract class OpenRosaPostRequestTest {
         mockWebServer.takeRequest();
         RecordedRequest request = mockWebServer.takeRequest();
         assertThat(request.getHeader("Cookie"), isEmptyOrNullString());
+    }
+
+    @Test
+    public void whenRequestFails_throwsExceptionWithMessage() {
+        try {
+            URI uri = new URI("http://localhost:8443");
+            subject.uploadSubmissionFile(new ArrayList<>(), File.createTempFile("blah", "blah"), uri, null, 0);
+            fail();
+        } catch (Exception e) {
+            assertThat(e, isA(Exception.class));
+            assertThat(e.getMessage(), not(isEmptyString()));
+        }
     }
 }

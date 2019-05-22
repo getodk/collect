@@ -113,7 +113,7 @@ public abstract class OpenRosaHeadRequestTest {
     }
 
     @Test
-    public void whenAnExceptionIsThrown_throwsExceptionWithMessage() {
+    public void whenRequestFails_throwsExceptionWithMessage() {
         try {
             subject.executeHeadRequest(new URI("http://localhost:8443"), null);
             fail();
