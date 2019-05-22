@@ -576,7 +576,7 @@
         <label>Target13</label>
       </input>
     </group>
-    <group ref="/fieldlist-updates/external_app">
+    <group appearance="field-list" ref="/fieldlist-updates/external_app">
       <label>External app</label>
       <input appearance="ex:org.fake.app(fake=&quot;fake&quot;)" ref="/fieldlist-updates/external_app/source14">
         <label>Source14</label>

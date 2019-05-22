@@ -40,6 +40,7 @@ import org.odk.collect.android.test.FormLoadingUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Random;
 import java.util.UUID;
 
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -375,7 +376,7 @@ public class FieldListUpdateTest {
         onView(withText(startsWith("Source14"))).perform(click());
 
         onView(withText(startsWith("Launch"))).perform(click());
-        onView(withClassName(endsWith("EditText"))).perform(replaceText(UUID.randomUUID().toString()));
+        onView(withClassName(endsWith("EditText"))).perform(replaceText(String.valueOf(new Random().nextInt())));
 
         onView(withText("Target14")).check(matches(isDisplayed()));
     }
