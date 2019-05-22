@@ -146,6 +146,10 @@ public class AuditEvent {
             this.oldValue = "";
             this.newValue = "";
         }
+
+        // some answers might contain commas so wrap all of them in quotes just in case
+        this.oldValue = "\"" + this.oldValue + "\"";
+        this.newValue = "\"" + this.newValue + "\"";
     }
 
     /*
