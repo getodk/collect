@@ -147,9 +147,14 @@ public class AuditEvent {
             this.newValue = "";
         }
 
-        // some answers might contain commas so wrap all of them in quotes just in case
-        this.oldValue = "\"" + this.oldValue + "\"";
-        this.newValue = "\"" + this.newValue + "\"";
+        // Wrap values that have commas in quotes
+        if (this.oldValue.contains(",")) {
+            this.oldValue = "\"" + this.oldValue + "\"";
+        }
+
+        if (this.newValue.contains(",")) {
+            this.newValue = "\"" + this.newValue + "\"";
+        }
     }
 
     /*
