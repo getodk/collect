@@ -64,5 +64,17 @@ public class WidgetAppearanceUtilsTest {
 
         when(formEntryPrompt.getAppearanceHint()).thenReturn("compact-5");
         assertEquals(5, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, null));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("compact-9");
+        assertEquals(9, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, null));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("columns-9");
+        assertEquals(9, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, null));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("columns--1");
+        assertEquals(1, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, null));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("columns--10");
+        assertEquals(1, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, null));
     }
 }
