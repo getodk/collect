@@ -62,12 +62,16 @@ public class AuditEventLogger {
      */
     public void logEvent(AuditEvent.AuditEventType eventType, FormIndex formIndex,
                          boolean writeImmediatelyToDisk, String questionAnswer) {
+
+        // Ignore beginning of form and repeat events
+        if (eventType == AuditEvent.AuditEventType.BEGINNING_OF_FORM || eventType == AuditEvent.AuditEventType.REPEAT) {
+            return;
+        }
+
         if (isAuditEnabled() && !isDuplicateOfLastLocationEvent(eventType)) {
             Timber.i("AuditEvent recorded: %s", eventType);
-            // Calculate the time and add the event to the auditEvents array
-            long start = getEventTime();
 
-            AuditEvent newAuditEvent = new AuditEvent(start, eventType,
+            AuditEvent newAuditEvent = new AuditEvent(getEventTime(), eventType,
                     auditConfig.isTrackingChangesEnabled(), formIndex, questionAnswer);
 
             if (isDuplicatedIntervalEvent(newAuditEvent)) {
@@ -85,16 +89,6 @@ public class AuditEventLogger {
                 manageSavedEvents();
             }
 
-            /*
-             * Ignore beginning of form events and repeat events
-             */
-            if (eventType == AuditEvent.AuditEventType.BEGINNING_OF_FORM || eventType == AuditEvent.AuditEventType.REPEAT) {
-                return;
-            }
-
-            /*
-             * Having got to this point we are going to keep the event
-             */
             auditEvents.add(newAuditEvent);
 
             /*
@@ -156,12 +150,13 @@ public class AuditEventLogger {
         }
     }
 
+    // Filter all events and set final parameters of interval events
     private void manageSavedEvents() {
         // Calculate the time and add the event to the auditEvents array
         long end = getEventTime();
         ArrayList<AuditEvent> filteredAuditEvents = new ArrayList<>();
         for (AuditEvent aev : auditEvents) {
-            if (!aev.isEndTimeSet() && aev.isIntervalAuditEventType()) {
+            if (aev.isIntervalAuditEventType()) {
                 setIntervalEventFinalParameters(aev, end);
             }
             if (shouldEventBeLogged(aev)) {
@@ -186,7 +181,9 @@ public class AuditEventLogger {
         }
 
         // Set end time
-        aev.setEnd(end);
+        if (!aev.isEndTimeSet()) {
+            aev.setEnd(end);
+        }
     }
 
     /*
