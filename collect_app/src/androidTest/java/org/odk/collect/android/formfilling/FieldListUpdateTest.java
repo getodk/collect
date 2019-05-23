@@ -24,6 +24,7 @@ import android.graphics.BitmapFactory;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.BeforeClass;
@@ -42,8 +43,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Random;
 import java.util.UUID;
-
-import androidx.test.espresso.matcher.ViewMatchers;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -387,7 +386,7 @@ public class FieldListUpdateTest {
         onView(withId(R.id.menu_goto)).perform(click());
         onView(withId(R.id.menu_go_up)).perform(click());
         onView(withId(R.id.list)).perform(repeatedlyUntil(swipeUp(),
-                hasDescendant(withText(text)), MAX_HIERARCHY_SWIPE_ATTEMPTS));
+                hasDescendant(allOf(isDisplayed(), withText(text))), MAX_HIERARCHY_SWIPE_ATTEMPTS));
         onView(allOf(isDisplayed(), withText(text))).perform(click());
     }
 }
