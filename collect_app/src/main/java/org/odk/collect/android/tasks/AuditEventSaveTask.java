@@ -21,6 +21,7 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
     private final @NonNull File file;
     private final boolean isLocationEnabled;
     private final boolean isTrackingChangesEnabled;
+    private final String expectedHeader;
 
     private static final String DEFAULT_COLUMNS = "event, node, start, end";
     private static final String LOCATION_COORDINATES_COLUMNS = ", latitude, longitude, accuracy";
@@ -30,25 +31,24 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
         this.file = file;
         this.isLocationEnabled = isLocationEnabled;
         this.isTrackingChangesEnabled = isTrackingChangesEnabled;
+        expectedHeader = getHeader();
     }
 
     @Override
     protected Void doInBackground(AuditEvent... params) {
         FileWriter fw = null;
         try {
-            boolean newFile = !file.exists();
+            boolean editedFile = file.exists();
             fw = new FileWriter(file, true);
-            if (newFile) {
-                fw.write(getHeader() + "\n");
-            } else if (updateHeaderIfNeeded()) {
-                fw.close();
-                fw = new FileWriter(file.getAbsolutePath(), true);
-            }
-            if (params.length > 0) {
-                for (AuditEvent aev : params) {
-                    fw.write(aev.toString() + "\n");
-                    Timber.i("Log audit event: %s", aev.toString());
+            if (shouldHeaderBeAdded()) {
+                if (editedFile) {
+                    fw.write("\n");
                 }
+                fw.write(expectedHeader + "\n");
+            }
+            for (AuditEvent aev : params) {
+                fw.write(aev.toString() + "\n");
+                Timber.i("Log audit event: %s", aev.toString());
             }
         } catch (IOException e) {
             Timber.e(e);
@@ -66,32 +66,23 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
         return null;
     }
 
-    private boolean updateHeaderIfNeeded() {
-        boolean headerUpdated = false;
-        FileWriter tfw = null;
+    private boolean shouldHeaderBeAdded() {
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(file));
-            if (shouldHeaderBeUpdated(br.readLine())) { // update header
-                File temporaryFile = new File(file.getParentFile().getAbsolutePath() + "/temporaryAudit.csv");
-                tfw = new FileWriter(temporaryFile, true);
-                tfw.write(getHeader() + "\n");
-                String line;
-                while ((line = br.readLine()) != null) {
-                    tfw.write(line + "\n");
+            String currentHeader = null;
+            String line;
+            while ((line = br.readLine()) != null)   {
+                if (line.startsWith(DEFAULT_COLUMNS)) {
+                    currentHeader = line;
                 }
-                temporaryFile.renameTo(file);
-                headerUpdated = true;
             }
+
+            return !expectedHeader.equals(currentHeader);
         } catch (IOException e) {
             Timber.e(e);
         } finally {
             try {
-                if (tfw != null) {
-                    tfw.close();
-                } else {
-                    Timber.e("Attempt to close null FileWriter for AuditEventLogger.");
-                }
                 if (br != null) {
                     br.close();
                 } else {
@@ -101,13 +92,7 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
                 Timber.e(e);
             }
         }
-        return headerUpdated;
-    }
-
-    private boolean shouldHeaderBeUpdated(String header) {
-        return header == null
-                || (isLocationEnabled && !header.contains(LOCATION_COORDINATES_COLUMNS))
-                || (isTrackingChangesEnabled && !header.contains(ANSWER_VALUES_COLUMNS));
+        return false;
     }
 
     private String getHeader() {
