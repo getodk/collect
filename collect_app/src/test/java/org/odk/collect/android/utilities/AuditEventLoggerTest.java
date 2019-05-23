@@ -40,7 +40,6 @@ import static org.odk.collect.android.logic.AuditEvent.AuditEventType.CONSTRAINT
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.DELETE_REPEAT;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.END_OF_FORM;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FINALIZE_ERROR;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FORM_EXIT;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FORM_FINALIZE;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FORM_RESUME;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FORM_SAVE;
@@ -194,7 +193,6 @@ public class AuditEventLoggerTest {
         auditEventLogger.logEvent(REPEAT, false); //shouldn't be logged
         auditEventLogger.logEvent(END_OF_FORM, false);
         auditEventLogger.logEvent(FORM_START, false);
-        auditEventLogger.logEvent(FORM_EXIT, false);
         auditEventLogger.logEvent(FORM_RESUME, false);
         auditEventLogger.logEvent(FORM_SAVE, false);
         auditEventLogger.logEvent(FORM_FINALIZE, false);
@@ -213,6 +211,6 @@ public class AuditEventLoggerTest {
         auditEventLogger.logEvent(LOCATION_PROVIDERS_DISABLED, false);
         auditEventLogger.logEvent(UNKNOWN_EVENT_TYPE, false);
 
-        assertEquals(22, auditEventLogger.getAuditEvents().size());
+        assertEquals(21, auditEventLogger.getAuditEvents().size());
     }
 }
