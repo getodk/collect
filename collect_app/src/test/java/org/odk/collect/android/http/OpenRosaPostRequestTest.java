@@ -2,6 +2,7 @@ package org.odk.collect.android.http;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -91,5 +92,48 @@ public abstract class OpenRosaPostRequestTest {
             assertThat(e, isA(Exception.class));
             assertThat(e.getMessage(), not(isEmptyString()));
         }
+    }
+
+    @Test
+    @Ignore
+    public void sendsSubmissionFileAsFirstPartOfBody() {
+
+    }
+
+    @Test
+    @Ignore
+    public void sendsAttachmentsAsPartsOfBody() {
+
+    }
+
+    @Test
+    @Ignore
+    public void whenRequestIsLargerThan10mb_sendsTwoRequests() {
+
+    }
+
+    @Test
+    @Ignore
+    public void whenRequestIsLargerThan10mb_andFirstRequestIs500_returnsErrorResult() {
+
+    }
+
+
+    @Test
+    @Ignore
+    public void whenRequestIsLargerThan10mb_andSecondRequestIs500_returnsErrorResult() {
+
+    }
+
+    @Test
+    @Ignore
+    public void whenRequestIsLargerThan10mb_andFirstRequestFails_throwsExceptionWithMessage() {
+
+    }
+
+    @Test
+    @Ignore
+    public void whenRequestIsLargerThan10mb_andSecondRequestFails_throwsExceptionWithMessage() {
+
     }
 }
