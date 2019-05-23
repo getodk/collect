@@ -33,8 +33,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.map.GoogleMapFragment;
 import org.odk.collect.android.map.MapFragment;
 import org.odk.collect.android.map.MapPoint;
+import org.odk.collect.android.map.MapboxMapFragment;
 import org.odk.collect.android.map.OsmMapFragment;
-import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.osmdroid.tileprovider.IRegisterReceiver;
@@ -47,10 +47,12 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.VisibleForTesting;
+
 import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
 
 public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterReceiver {
-    public static final String PREF_VALUE_GOOGLE_MAPS = "google_maps";
+
     public static final String ANSWER_KEY = "answer";
     public static final String OUTPUT_MODE_KEY = "output_mode";
     public static final String MAP_CENTER_KEY = "map_center";
@@ -138,12 +140,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
         createMapFragment().addTo(this, R.id.map_container, this::initMap);
     }
 
-    public MapFragment createMapFragment() {
-        String mapSdk = getIntent().getStringExtra(GeneralKeys.KEY_MAP_SDK);
-        return (mapSdk == null || mapSdk.equals(PREF_VALUE_GOOGLE_MAPS)) ?
-            new GoogleMapFragment() : new OsmMapFragment();
-    }
-
     @Override protected void onStart() {
         super.onStart();
         // initMap() is called asynchronously, so map might not be initialized yet.
@@ -213,6 +209,8 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
         map = newMapFragment;
         if (map instanceof GoogleMapFragment) {
             helper = new MapHelper(this, ((GoogleMapFragment) map).getGoogleMap(), selectedLayer);
+        } else if (map instanceof MapboxMapFragment) {
+            helper = new MapHelper(this);
         } else if (map instanceof OsmMapFragment) {
             helper = new MapHelper(this, ((OsmMapFragment) map).getMapView(), this, selectedLayer);
         }
