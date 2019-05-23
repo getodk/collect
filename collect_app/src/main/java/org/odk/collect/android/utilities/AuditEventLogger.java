@@ -82,11 +82,7 @@ public class AuditEventLogger {
              * Close any existing interval events if the view is being exited
              */
             if (eventType == AuditEvent.AuditEventType.FORM_EXIT) {
-                for (AuditEvent aev : auditEvents) {
-                    if (!aev.isEndTimeSet() && aev.isIntervalAuditEventType()) {
-                        aev.setEnd(start);
-                    }
-                }
+                manageSavedEvents();
             }
 
             /*
@@ -155,29 +151,42 @@ public class AuditEventLogger {
      */
     public void exitView() {
         if (isAuditEnabled()) {
-            // Calculate the time and add the event to the auditEvents array
-            long end = getEventTime();
-            ArrayList<AuditEvent> filteredAuditEvents = new ArrayList<>();
-            for (AuditEvent aev : auditEvents) {
-                if (!aev.isEndTimeSet() && aev.isIntervalAuditEventType()) {
-                    if (auditConfig.isLocationEnabled()) {
-                        addLocationCoordinatesToAuditEvent(aev);
-                    }
-                    FormController formController = Collect.getInstance().getFormController();
-                    if (aev.getAuditEventType().equals(AuditEvent.AuditEventType.QUESTION) && formController != null) {
-                        addNewValueToQuestionAuditEvent(aev, formController);
-                    }
-                    aev.setEnd(end);
-                    if (shouldEventBeLogged(aev)) {
-                        filteredAuditEvents.add(aev);
-                    }
-                }
-            }
-
-            auditEvents.clear();
-            auditEvents.addAll(filteredAuditEvents);
+            manageSavedEvents();
             writeEvents();
         }
+    }
+
+    private void manageSavedEvents() {
+        // Calculate the time and add the event to the auditEvents array
+        long end = getEventTime();
+        ArrayList<AuditEvent> filteredAuditEvents = new ArrayList<>();
+        for (AuditEvent aev : auditEvents) {
+            if (!aev.isEndTimeSet() && aev.isIntervalAuditEventType()) {
+                setIntervalEventFinalParameters(aev, end);
+            }
+            if (shouldEventBeLogged(aev)) {
+                filteredAuditEvents.add(aev);
+            }
+        }
+
+        auditEvents.clear();
+        auditEvents.addAll(filteredAuditEvents);
+    }
+
+    private void setIntervalEventFinalParameters(AuditEvent aev, long end) {
+        // Set location parameters
+        if (auditConfig.isLocationEnabled()) {
+            addLocationCoordinatesToAuditEvent(aev);
+        }
+
+        // Set answers
+        FormController formController = Collect.getInstance().getFormController();
+        if (aev.getAuditEventType().equals(AuditEvent.AuditEventType.QUESTION) && formController != null) {
+            addNewValueToQuestionAuditEvent(aev, formController);
+        }
+
+        // Set end time
+        aev.setEnd(end);
     }
 
     /*
