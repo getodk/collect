@@ -97,43 +97,43 @@ public abstract class OpenRosaPostRequestTest {
     @Test
     @Ignore
     public void sendsSubmissionFileAsFirstPartOfBody() {
-
+        fail();
     }
 
     @Test
     @Ignore
     public void sendsAttachmentsAsPartsOfBody() {
-
+        fail();
     }
 
     @Test
     @Ignore
     public void whenRequestIsLargerThan10mb_sendsTwoRequests() {
-
+        fail();
     }
 
     @Test
     @Ignore
     public void whenRequestIsLargerThan10mb_andFirstRequestIs500_returnsErrorResult() {
-
+        fail();
     }
 
 
     @Test
     @Ignore
     public void whenRequestIsLargerThan10mb_andSecondRequestIs500_returnsErrorResult() {
-
+        fail();
     }
 
     @Test
     @Ignore
     public void whenRequestIsLargerThan10mb_andFirstRequestFails_throwsExceptionWithMessage() {
-
+        fail();
     }
 
     @Test
     @Ignore
     public void whenRequestIsLargerThan10mb_andSecondRequestFails_throwsExceptionWithMessage() {
-
+        fail();
     }
 }
