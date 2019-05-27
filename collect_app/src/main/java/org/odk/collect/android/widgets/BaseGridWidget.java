@@ -90,9 +90,11 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
     private void setUpItems() {
         for (int i = 0; i < items.size(); i++) {
             setUpAudioHandler(i);
-            itemViews[i] = measureItem(noButtonsMode ? setUpNoButtonsItem(i) : setUpButtonsItem(i), i);
+            View view = measureItem(noButtonsMode ? setUpNoButtonsItem(i) : setUpButtonsItem(i), i);
             int index = i;
-            itemViews[i].setOnClickListener(v -> onItemClick(index));
+            view.setOnClickListener(v -> onItemClick(index));
+            view.setEnabled(!getFormEntryPrompt().isReadOnly());
+            itemViews[i] = view;
         }
     }
 
@@ -155,7 +157,6 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         item.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize());
         item.setText(FormEntryPromptUtils.getItemText(getFormEntryPrompt(), items.get(index)));
         item.setTag(items.indexOf(items.get(index)));
-        item.setEnabled(!getFormEntryPrompt().isReadOnly());
         item.setGravity(isRTL() ? Gravity.END : Gravity.START);
         return item;
     }
@@ -195,7 +196,6 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         gridView.setGravity(Gravity.CENTER);
         gridView.setScrollContainer(false);
         gridView.setStretchMode(GridView.NO_STRETCH);
-        gridView.setEnabled(!getFormEntryPrompt().isReadOnly());
         gridView.setAdapter(new ImageAdapter());
         addAnswerView(gridView);
     }
