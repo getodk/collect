@@ -5,7 +5,9 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.net.URI;
 import java.util.ArrayList;
 
@@ -13,6 +15,7 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isA;
@@ -95,9 +98,20 @@ public abstract class OpenRosaPostRequestTest {
     }
 
     @Test
-    @Ignore
-    public void sendsSubmissionFileAsFirstPartOfBody() {
-        fail();
+    public void sendsSubmissionFileAsFirstPartOfBody() throws Exception {
+        mockWebServer.enqueue(new MockResponse());
+
+        URI uri = mockWebServer.url("/blah").uri();
+        String fileContent = "<node>content</node>";
+        File tempFile = createTempFile(fileContent);
+        subject.uploadSubmissionFile(new ArrayList<>(), tempFile, uri, null, 0);
+
+        RecordedRequest request = mockWebServer.takeRequest();
+        String[] bodyParts = request.getBody().readUtf8().split("\r\n");
+        assertThat(bodyParts[1], containsString("name=\"xml_submission_file\""));
+        assertThat(bodyParts[1], containsString("filename=\"" + tempFile.getName() + "\""));
+        assertThat(bodyParts[2], containsString("Content-Type: text/xml"));
+        assertThat(bodyParts[5], equalTo("<node>content</node>"));
     }
 
     @Test
@@ -108,32 +122,41 @@ public abstract class OpenRosaPostRequestTest {
 
     @Test
     @Ignore
-    public void whenRequestIsLargerThan10mb_sendsTwoRequests() {
+    public void whenRequestIsLargerThanMaxContentLength_sendsTwoRequests() {
         fail();
     }
 
     @Test
     @Ignore
-    public void whenRequestIsLargerThan10mb_andFirstRequestIs500_returnsErrorResult() {
-        fail();
-    }
-
-
-    @Test
-    @Ignore
-    public void whenRequestIsLargerThan10mb_andSecondRequestIs500_returnsErrorResult() {
+    public void whenRequestIsLargerThanMaxContentLength_andFirstRequestIs500_returnsErrorResult() {
         fail();
     }
 
     @Test
     @Ignore
-    public void whenRequestIsLargerThan10mb_andFirstRequestFails_throwsExceptionWithMessage() {
+    public void whenRequestIsLargerThanMaxContentLength_andSecondRequestIs500_returnsErrorResult() {
         fail();
     }
 
     @Test
     @Ignore
-    public void whenRequestIsLargerThan10mb_andSecondRequestFails_throwsExceptionWithMessage() {
+    public void whenRequestIsLargerThanMaxContentLength_andFirstRequestFails_throwsExceptionWithMessage() {
         fail();
+    }
+
+    @Test
+    @Ignore
+    public void whenRequestIsLargerThanMaxContentLength_andSecondRequestFails_throwsExceptionWithMessage() {
+        fail();
+    }
+
+    private File createTempFile(String content) throws Exception {
+        File temp = File.createTempFile("tempfile", ".tmp");
+
+        BufferedWriter bw = new BufferedWriter(new FileWriter(temp));
+        bw.write(content);
+        bw.close();
+
+        return temp;
     }
 }
