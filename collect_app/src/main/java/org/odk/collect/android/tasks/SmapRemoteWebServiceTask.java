@@ -7,10 +7,12 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.handler.SmapRemoteDataItem;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.listeners.SmapRemoteListener;
+import org.odk.collect.android.utilities.FormDownloader;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.opendatakit.httpclientandroidlib.HttpResponse;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
@@ -43,6 +45,8 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
         String lookupUrl = params[0];
         String timeoutValue = params[1];
         String choices = params[2];
+        String imagePath = params[3];
+        String imageName = params[4];
 
         int timeout = 0;
         try {
@@ -57,7 +61,7 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
         if(timeout == 0) {
             item.perSubmission = true;
         }
-        if(params[2] != null && params[2].equals("true")) {
+        if(choices != null && choices.equals("true")) {
             item.choices = true;
         }
 
@@ -66,7 +70,16 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
             URL url = new URL(lookupUrl);
             URI uri = url.toURI();
 
-            item.data = httpInterface.getRequest(uri, null, webCredentialsUtils.getCredentials(uri), null);
+            if(imagePath != null) {
+                FormDownloader fd = new FormDownloader();
+                File f = new File(imagePath);
+                if(!f.exists()) {
+                    fd.downloadFile(f, lookupUrl);
+                }
+                item.data = imageName;
+            } else {
+                item.data = httpInterface.getRequest(uri, null, webCredentialsUtils.getCredentials(uri), null);
+            }
 
         } catch (Exception e) {
             item.data = e.getLocalizedMessage();

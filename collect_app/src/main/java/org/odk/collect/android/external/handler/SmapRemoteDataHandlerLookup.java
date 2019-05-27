@@ -114,7 +114,7 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
                 app.startRemoteCall(url);
                 SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
                 task.setSmapRemoteListener(app.getFormEntryActivity());
-                task.execute(url, timeoutValue, "false");
+                task.execute(url, timeoutValue, "false", null, null);
                 return "";
             } else {
                 return ExternalDataUtil.nullSafe(record.get(queriedColumn));

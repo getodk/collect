@@ -208,7 +208,7 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
                 app.startRemoteCall(urlString);
                 SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
                 task.setSmapRemoteListener(app.getFormEntryActivity());
-                task.execute(urlString, timeoutValue, "true");
+                task.execute(urlString, timeoutValue, "true", null, null);
                 //return new ArrayList<SelectChoice>();
             }
         } catch (Exception e) {
