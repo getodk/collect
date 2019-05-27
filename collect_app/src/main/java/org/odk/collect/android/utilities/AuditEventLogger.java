@@ -105,9 +105,7 @@ public class AuditEventLogger {
         String latitude = location != null ? Double.toString(location.getLatitude()) : "";
         String longitude = location != null ? Double.toString(location.getLongitude()) : "";
         String accuracy = location != null ? Double.toString(location.getAccuracy()) : "";
-        if (!auditEvent.isLocationAlreadySet()) {
-            auditEvent.setLocationCoordinates(latitude, longitude, accuracy);
-        }
+        auditEvent.setLocationCoordinates(latitude, longitude, accuracy);
     }
 
     private void addNewValueToQuestionAuditEvent(AuditEvent aev, FormController formController) {
@@ -169,8 +167,10 @@ public class AuditEventLogger {
     }
 
     private void setIntervalEventFinalParameters(AuditEvent aev, long end) {
-        // Set location parameters
-        if (auditConfig.isLocationEnabled()) {
+        // Set location parameters.
+        // We try to add them here again (first attempt takes place when an event is being created),
+        // because coordinates might be not available at that time, so now we have another (last) chance.
+        if (auditConfig.isLocationEnabled() && !aev.isLocationAlreadySet()) {
             addLocationCoordinatesToAuditEvent(aev);
         }
 
