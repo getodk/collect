@@ -111,15 +111,16 @@ public class AuditEventTest {
 
     @Test
     public void testToStringNullValues() {
-        AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION);
+        AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, true, getMockedFormIndex(), "Old value");
         assertNotNull(auditEvent);
-        auditEvent.setLocationCoordinates(null, null, null);
+        auditEvent.setLocationCoordinates("", "", "");
         assertTrue(auditEvent.isIntervalAuditEventType());
         assertFalse(auditEvent.isEndTimeSet());
         auditEvent.setEnd(END_TIME);
         assertTrue(auditEvent.isEndTimeSet());
         assertFalse(auditEvent.hasLocation());
-        assertEquals("question,,1545392727685,1545392728527", auditEvent.toString());
+        auditEvent.recordValueChange("New value");
+        assertEquals("question,/data/text1,1545392727685,1545392728527,,,,Old value,New value", auditEvent.toString());
     }
 
     @Test
