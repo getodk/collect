@@ -71,7 +71,7 @@ public class AuditEventLogger {
         if (isAuditEnabled() && !isDuplicateOfLastLocationEvent(eventType)) {
             Timber.i("AuditEvent recorded: %s", eventType);
 
-            AuditEvent newAuditEvent = new AuditEvent(getEventTime(), eventType,
+            AuditEvent newAuditEvent = new AuditEvent(getEventTime(), eventType, auditConfig.isLocationEnabled(),
                     auditConfig.isTrackingChangesEnabled(), formIndex, questionAnswer);
 
             if (isDuplicatedIntervalEvent(newAuditEvent)) {

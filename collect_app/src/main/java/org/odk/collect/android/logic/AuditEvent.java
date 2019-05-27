@@ -69,6 +69,7 @@ public class AuditEvent {
     @NonNull private String newValue = "";
     private long end;
     private boolean endTimeSet;
+    private boolean isTrackingLocationsEnabled;
     private boolean isTrackingChangesEnabled;
     private FormIndex formIndex;
 
@@ -76,13 +77,14 @@ public class AuditEvent {
      * Create a new event
      */
     public AuditEvent(long start, AuditEventType auditEventType) {
-        this(start, auditEventType, false, null, null);
+        this(start, auditEventType, false, false, null, null);
     }
 
-    public AuditEvent(long start, AuditEventType auditEventType, boolean isTrackingChangesEnabled,
-                      FormIndex formIndex, String oldValue) {
+    public AuditEvent(long start, AuditEventType auditEventType, boolean isTrackingLocationsEnabled,
+                      boolean isTrackingChangesEnabled, FormIndex formIndex, String oldValue) {
         this.start = start;
         this.auditEventType = auditEventType;
+        this.isTrackingLocationsEnabled = isTrackingLocationsEnabled;
         this.isTrackingChangesEnabled = isTrackingChangesEnabled;
         this.formIndex = formIndex;
         this.oldValue = oldValue == null ? "" : oldValue;
@@ -171,9 +173,9 @@ public class AuditEvent {
         }
 
         String event;
-        if (hasLocation() && isTrackingChangesEnabled) {
+        if (isTrackingLocationsEnabled && isTrackingChangesEnabled) {
             event = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", latitude, longitude, accuracy, oldValue, newValue);
-        } else if (hasLocation()) {
+        } else if (isTrackingLocationsEnabled) {
             event = String.format("%s,%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", latitude, longitude, accuracy);
         } else if (isTrackingChangesEnabled) {
             event = String.format("%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", oldValue, newValue);
