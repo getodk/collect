@@ -80,6 +80,10 @@ public class AuditEvent {
         this(start, auditEventType, false, false, null, null);
     }
 
+    public AuditEvent(long start, AuditEventType auditEventType,  boolean isTrackingLocationsEnabled, boolean isTrackingChangesEnabled) {
+        this(start, auditEventType, isTrackingLocationsEnabled, isTrackingChangesEnabled, null, null);
+    }
+
     public AuditEvent(long start, AuditEventType auditEventType, boolean isTrackingLocationsEnabled,
                       boolean isTrackingChangesEnabled, FormIndex formIndex, String oldValue) {
         this.start = start;
