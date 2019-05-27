@@ -102,9 +102,9 @@ public class AuditEventSaveTaskTest {
                 "form finalize,,1548106953601,\n" +
                 "form resume,,1548108900606,,54.4112062,18.5896652,30.716999053955078\n" +
                 "jump,,1548108906276,1548108908206,54.4112062,18.5896652,30.716999053955078\n" +
-                "location tracking enabled,,548108908250,\n" +
-                "location permissions granted,,548108908255,\n" +
-                "location providers enabled,,548108908259,\n" +
+                "location tracking enabled,,548108908250,,,,\n" +
+                "location permissions granted,,548108908255,,,,\n" +
+                "location providers enabled,,548108908259,,,,\n" +
                 "end screen,,1548108908285,1548108909730,54.4112062,18.5896652,30.716999053955078\n" +
                 "form save,,1548108909730,,54.4112062,18.5896652,30.716999053955078\n" +
                 "form exit,,1548108909730,,54.4112062,18.5896652,30.716999053955078\n" +
@@ -129,9 +129,9 @@ public class AuditEventSaveTaskTest {
                 "form finalize,,1548106953601,\n" +
                 "form resume,,1548108900606,,54.4112062,18.5896652,30.716999053955078\n" +
                 "jump,,1548108906276,1548108908206,54.4112062,18.5896652,30.716999053955078\n" +
-                "location tracking enabled,,548108908250,\n" +
-                "location permissions granted,,548108908255,\n" +
-                "location providers enabled,,548108908259,\n" +
+                "location tracking enabled,,548108908250,,,,\n" +
+                "location permissions granted,,548108908255,,,,\n" +
+                "location providers enabled,,548108908259,,,,\n" +
                 "end screen,,1548108908285,1548108909730,54.4112062,18.5896652,30.716999053955078\n" +
                 "form save,,1548108909730,,54.4112062,18.5896652,30.716999053955078\n" +
                 "form exit,,1548108909730,,54.4112062,18.5896652,30.716999053955078\n" +
@@ -152,10 +152,10 @@ public class AuditEventSaveTaskTest {
         auditEventSaveTask.execute(getSampleAuditEventsWithLocations().toArray(new AuditEvent[0])).get();
         String expectedAuditContent = FileUtils.readFileToString(testFile);
         String expectedData = "event, node, start, end, latitude, longitude, accuracy\n" +
-                "form start,,1548106927319,\n" +
-                "location tracking enabled,,548108908250,\n" +
-                "location permissions granted,,548108908255,\n" +
-                "location providers enabled,,548108908259,\n" +
+                "form start,,1548106927319,,,,\n" +
+                "location tracking enabled,,548108908250,,,,\n" +
+                "location permissions granted,,548108908255,,,,\n" +
+                "location providers enabled,,548108908259,,,,\n" +
                 "question,/data/q1,1548106927323,1548106930112,54.4112062,18.5896652,30.716999053955078\n" +
                 "add repeat,/data/g1[1],1548106930118,1548106931611,54.4112062,18.5896652,30.716999053955078\n" +
                 "question,/data/g1[1]/q2,1548106931612,1548106937122,54.4112062,18.5896652,30.716999053955078\n" +
@@ -175,10 +175,10 @@ public class AuditEventSaveTaskTest {
         auditEventSaveTask.execute(getSampleAuditEventsWithLocationsAndTrackingChanges().toArray(new AuditEvent[0])).get();
         String expectedAuditContent = FileUtils.readFileToString(testFile);
         String expectedData = "event, node, start, end, latitude, longitude, accuracy, old-value, new-value\n" +
-                "form start,,1548106927319,,,\n" +
-                "location tracking enabled,,548108908250,,,\n" +
-                "location permissions granted,,548108908255,,,\n" +
-                "location providers enabled,,548108908259,,,\n" +
+                "form start,,1548106927319,,,,,,\n" +
+                "location tracking enabled,,548108908250,,,,,,\n" +
+                "location permissions granted,,548108908255,,,,,,\n" +
+                "location providers enabled,,548108908259,,,,,,\n" +
                 "question,/data/q1,1548106927323,1548106930112,54.4112062,18.5896652,30.716999053955078,Old value,New Value\n" +
                 "add repeat,/data/g1[1],1548106930118,1548106931611,54.4112062,18.5896652,30.716999053955078,,\n" +
                 "end screen,,1548106949448,1548106953601,54.4112062,18.5896652,30.716999053955078,,\n" +
@@ -192,22 +192,22 @@ public class AuditEventSaveTaskTest {
         AuditEvent event;
         ArrayList<AuditEvent> auditEvents = new ArrayList<>();
         auditEvents.add(new AuditEvent(1548106927319L, FORM_START));
-        event = new AuditEvent(1548106927323L, QUESTION, false, getMockedFormIndex("/data/q1"), "");
+        event = new AuditEvent(1548106927323L, QUESTION, false, false, getMockedFormIndex("/data/q1"), "");
         event.setEnd(1548106930112L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106930118L, PROMPT_NEW_REPEAT, false, getMockedFormIndex("/data/g1[1]"), "");
+        event = new AuditEvent(1548106930118L, PROMPT_NEW_REPEAT, false, false, getMockedFormIndex("/data/g1[1]"), "");
         event.setEnd(1548106931611L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106931612L, QUESTION, false, getMockedFormIndex("/data/g1[1]/q2[1]"), "");
+        event = new AuditEvent(1548106931612L, QUESTION, false, false, getMockedFormIndex("/data/g1[1]/q2[1]"), "");
         event.setEnd(1548106937122L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106937123L, PROMPT_NEW_REPEAT, false, getMockedFormIndex("/data/g1[2]"), "");
+        event = new AuditEvent(1548106937123L, PROMPT_NEW_REPEAT, false, false, getMockedFormIndex("/data/g1[2]"), "");
         event.setEnd(1548106938276L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106938277L, QUESTION, false, getMockedFormIndex("/data/g1[2]/q2[1]"), "");
+        event = new AuditEvent(1548106938277L, QUESTION, false, false, getMockedFormIndex("/data/g1[2]/q2[1]"), "");
         event.setEnd(1548106948127L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106948128L, PROMPT_NEW_REPEAT, false, getMockedFormIndex("/data/g1[3]"), "");
+        event = new AuditEvent(1548106948128L, PROMPT_NEW_REPEAT, false, false, getMockedFormIndex("/data/g1[3]"), "");
         event.setEnd(1548106949446L);
         auditEvents.add(event);
         event = new AuditEvent(1548106949448L, END_OF_FORM);
@@ -222,27 +222,33 @@ public class AuditEventSaveTaskTest {
     private ArrayList<AuditEvent> getMoreSampleAuditEventsWithLocations() {
         AuditEvent event;
         ArrayList<AuditEvent> auditEvents = new ArrayList<>();
-        event = new AuditEvent(1548108900606L, FORM_RESUME);
+        event = new AuditEvent(1548108900606L, FORM_RESUME, true, false);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         auditEvents.add(event);
-        event = new AuditEvent(1548108906276L, HIERARCHY);
+        event = new AuditEvent(1548108906276L, HIERARCHY, true, false);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.setEnd(1548108908206L);
         auditEvents.add(event);
-        auditEvents.add(new AuditEvent(548108908250L, LOCATION_TRACKING_ENABLED));
-        auditEvents.add(new AuditEvent(548108908255L, LOCATION_PERMISSIONS_GRANTED));
-        auditEvents.add(new AuditEvent(548108908259L, LOCATION_PROVIDERS_ENABLED));
-        event = new AuditEvent(1548108908285L, END_OF_FORM);
+        event = new AuditEvent(548108908250L, LOCATION_TRACKING_ENABLED, true, false);
+        event.setLocationCoordinates("", "", "");
+        auditEvents.add(event);
+        event = new AuditEvent(548108908255L, LOCATION_PERMISSIONS_GRANTED, true, false);
+        event.setLocationCoordinates("", "", "");
+        auditEvents.add(event);
+        event = new AuditEvent(548108908259L, LOCATION_PROVIDERS_ENABLED, true, false);
+        event.setLocationCoordinates("", "", "");
+        auditEvents.add(event);
+        event = new AuditEvent(1548108908285L, END_OF_FORM, true, false);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.setEnd(1548108909730L);
         auditEvents.add(event);
-        event = new AuditEvent(1548108909730L, FORM_SAVE);
+        event = new AuditEvent(1548108909730L, FORM_SAVE, true, false);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         auditEvents.add(event);
-        event = new AuditEvent(1548108909730L, FORM_EXIT);
+        event = new AuditEvent(1548108909730L, FORM_EXIT, true, false);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         auditEvents.add(event);
-        event = new AuditEvent(1548108909731L, FORM_FINALIZE);
+        event = new AuditEvent(1548108909731L, FORM_FINALIZE, true, false);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         auditEvents.add(event);
         return auditEvents;
@@ -251,28 +257,28 @@ public class AuditEventSaveTaskTest {
     private ArrayList<AuditEvent> getMoreSampleAuditEventsWithLocationsAndTrackingChanges() {
         AuditEvent event;
         ArrayList<AuditEvent> auditEvents = new ArrayList<>();
-        event = new AuditEvent(1548108900606L, FORM_RESUME, true, null, null);
+        event = new AuditEvent(1548108900606L, FORM_RESUME, true, true);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         auditEvents.add(event);
-        event = new AuditEvent(1548108900700L, QUESTION, true, null, "Old value");
-        event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
-        event.recordValueChange("New value");
-        auditEvents.add(event);
-        event = new AuditEvent(1548108903100L, QUESTION, true, null, "Old value, with comma");
+        event = new AuditEvent(1548108900700L, QUESTION, true, true, null, "Old value");
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.recordValueChange("New value");
         auditEvents.add(event);
-        event = new AuditEvent(1548108904200L, QUESTION, true, null, "Old value");
+        event = new AuditEvent(1548108903100L, QUESTION, true, true, null, "Old value, with comma");
+        event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
+        event.recordValueChange("New value");
+        auditEvents.add(event);
+        event = new AuditEvent(1548108904200L, QUESTION, true, true, null, "Old value");
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.recordValueChange("New value, with comma");
         auditEvents.add(event);
-        event = new AuditEvent(1548108909730L, FORM_SAVE, true, null, null);
+        event = new AuditEvent(1548108909730L, FORM_SAVE, true, true);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         auditEvents.add(event);
-        event = new AuditEvent(1548108909730L, FORM_EXIT, true, null, null);
+        event = new AuditEvent(1548108909730L, FORM_EXIT, true, true);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         auditEvents.add(event);
-        event = new AuditEvent(1548108909731L, FORM_FINALIZE, true, null, null);
+        event = new AuditEvent(1548108909731L, FORM_FINALIZE, true, true);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         auditEvents.add(event);
         return auditEvents;
@@ -280,46 +286,54 @@ public class AuditEventSaveTaskTest {
 
     private ArrayList<AuditEvent> getSampleAuditEventsWithLocations() {
         ArrayList<AuditEvent> auditEvents = new ArrayList<>();
-        auditEvents.add(new AuditEvent(1548106927319L, FORM_START));
-        auditEvents.add(new AuditEvent(548108908250L, LOCATION_TRACKING_ENABLED));
-        auditEvents.add(new AuditEvent(548108908255L, LOCATION_PERMISSIONS_GRANTED));
-        auditEvents.add(new AuditEvent(548108908259L, LOCATION_PROVIDERS_ENABLED));
         AuditEvent event;
-        event = new AuditEvent(1548106927323L, QUESTION, false, getMockedFormIndex("/data/q1"), "");
+        event = new AuditEvent(1548106927319L, FORM_START, true, false);
+        event.setLocationCoordinates("", "", "");
+        auditEvents.add(event);
+        event = new AuditEvent(548108908250L, LOCATION_TRACKING_ENABLED, true, false);
+        event.setLocationCoordinates("", "", "");
+        auditEvents.add(event);
+        event = new AuditEvent(548108908255L, LOCATION_PERMISSIONS_GRANTED, true, false);
+        event.setLocationCoordinates("", "", "");
+        auditEvents.add(event);
+        event = new AuditEvent(548108908259L, LOCATION_PROVIDERS_ENABLED, true, false);
+        event.setLocationCoordinates("", "", "");
+        auditEvents.add(event);
+        event = new AuditEvent(1548106927323L, QUESTION, true,  false, getMockedFormIndex("/data/q1"), "");
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.setEnd(1548106930112L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106930118L, PROMPT_NEW_REPEAT, false, getMockedFormIndex("/data/g1[1]"), "");
+        event = new AuditEvent(1548106930118L, PROMPT_NEW_REPEAT, true, false, getMockedFormIndex("/data/g1[1]"), "");
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.setEnd(1548106931611L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106931612L, QUESTION, false, getMockedFormIndex("/data/g1[1]/q2[1]"), "");
+        event = new AuditEvent(1548106931612L, QUESTION, true, false, getMockedFormIndex("/data/g1[1]/q2[1]"), "");
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.setEnd(1548106937122L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106937123L, PROMPT_NEW_REPEAT, false, getMockedFormIndex("/data/g1[2]"), "");
+        event = new AuditEvent(1548106937123L, PROMPT_NEW_REPEAT, true, false, getMockedFormIndex("/data/g1[2]"), "");
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.setEnd(1548106938276L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106938277L, QUESTION, false, getMockedFormIndex("/data/g1[2]/q2[1]"), "");
+        event = new AuditEvent(1548106938277L, QUESTION, true, false, getMockedFormIndex("/data/g1[2]/q2[1]"), "");
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.setEnd(1548106948127L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106948128L, PROMPT_NEW_REPEAT, false, getMockedFormIndex("/data/g1[3]"), "");
+        event = new AuditEvent(1548106948128L, PROMPT_NEW_REPEAT, true, false, getMockedFormIndex("/data/g1[3]"), "");
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.setEnd(1548106949446L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106949448L, END_OF_FORM);
+        event = new AuditEvent(1548106949448L, END_OF_FORM, true, false);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.setEnd(1548106953601L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106953600L, FORM_SAVE);
+        event = new AuditEvent(1548106953600L, FORM_SAVE, true, false);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         auditEvents.add(event);
-        event = new AuditEvent(1548106953601L, FORM_EXIT);
+        event = new AuditEvent(1548106953601L, FORM_EXIT, true, false);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         auditEvents.add(event);
-        event = new AuditEvent(1548106953601L, FORM_FINALIZE);
+        event = new AuditEvent(1548106953601L, FORM_FINALIZE, true, false);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         auditEvents.add(event);
         return auditEvents;
@@ -327,31 +341,39 @@ public class AuditEventSaveTaskTest {
 
     private ArrayList<AuditEvent> getSampleAuditEventsWithLocationsAndTrackingChanges() {
         ArrayList<AuditEvent> auditEvents = new ArrayList<>();
-        auditEvents.add(new AuditEvent(1548106927319L, FORM_START, true, null, null));
-        auditEvents.add(new AuditEvent(548108908250L, LOCATION_TRACKING_ENABLED, true, null, null));
-        auditEvents.add(new AuditEvent(548108908255L, LOCATION_PERMISSIONS_GRANTED, true, null, null));
-        auditEvents.add(new AuditEvent(548108908259L, LOCATION_PROVIDERS_ENABLED, true, null, null));
         AuditEvent event;
-        event = new AuditEvent(1548106927323L, QUESTION, true, getMockedFormIndex("/data/q1"), "Old value");
+        event = new AuditEvent(1548106927319L, FORM_START, true, true);
+        event.setLocationCoordinates("", "", "");
+        auditEvents.add(event);
+        event = new AuditEvent(548108908250L, LOCATION_TRACKING_ENABLED, true, true);
+        event.setLocationCoordinates("", "", "");
+        auditEvents.add(event);
+        event = new AuditEvent(548108908255L, LOCATION_PERMISSIONS_GRANTED, true, true);
+        event.setLocationCoordinates("", "", "");
+        auditEvents.add(event);
+        event = new AuditEvent(548108908259L, LOCATION_PROVIDERS_ENABLED, true, true);
+        event.setLocationCoordinates("", "", "");
+        auditEvents.add(event);
+        event = new AuditEvent(1548106927323L, QUESTION, true, true, getMockedFormIndex("/data/q1"), "Old value");
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.recordValueChange("New Value");
         event.setEnd(1548106930112L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106930118L, PROMPT_NEW_REPEAT, true, getMockedFormIndex("/data/g1[1]"), null);
+        event = new AuditEvent(1548106930118L, PROMPT_NEW_REPEAT, true, true, getMockedFormIndex("/data/g1[1]"), null);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.setEnd(1548106931611L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106949448L, END_OF_FORM, true, null, null);
+        event = new AuditEvent(1548106949448L, END_OF_FORM, true, true, null, null);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.setEnd(1548106953601L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106953600L, FORM_SAVE, true, null, null);
+        event = new AuditEvent(1548106953600L, FORM_SAVE, true, true, null, null);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         auditEvents.add(event);
-        event = new AuditEvent(1548106953601L, FORM_EXIT, true, null, null);
+        event = new AuditEvent(1548106953601L, FORM_EXIT, true, true, null, null);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         auditEvents.add(event);
-        event = new AuditEvent(1548106953601L, FORM_FINALIZE, true, null, null);
+        event = new AuditEvent(1548106953601L, FORM_FINALIZE, true, true, null, null);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         auditEvents.add(event);
         return auditEvents;
