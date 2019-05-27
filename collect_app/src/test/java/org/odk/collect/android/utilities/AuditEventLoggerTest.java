@@ -160,7 +160,7 @@ public class AuditEventLoggerTest {
         AuditEventLogger auditEventLogger = new AuditEventLogger(testInstanceFile, testAuditConfigWithNullValues);
 
         auditEventLogger.logEvent(END_OF_FORM, false);
-        assertFalse(auditEventLogger.getAuditEvents().get(0).hasLocation());
+        assertFalse(auditEventLogger.getAuditEvents().get(0).isLocationAlreadySet());
 
         auditEventLogger = new AuditEventLogger(testInstanceFile, testAuditConfig);
 
@@ -176,7 +176,7 @@ public class AuditEventLoggerTest {
 
         auditEventLogger.logEvent(END_OF_FORM, false);
 
-        assertTrue(auditEventLogger.getAuditEvents().get(0).hasLocation());
+        assertTrue(auditEventLogger.getAuditEvents().get(0).isLocationAlreadySet());
     }
 
     @Test
