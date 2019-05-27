@@ -17,6 +17,7 @@ import okhttp3.mockwebserver.RecordedRequest;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
@@ -83,6 +84,31 @@ public abstract class OpenRosaPostRequestTest {
         mockWebServer.takeRequest();
         RecordedRequest request = mockWebServer.takeRequest();
         assertThat(request.getHeader("Cookie"), isEmptyOrNullString());
+    }
+
+    @Test
+    public void returnsPostBody() throws Exception {
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(200)
+                .setBody("blah"));
+
+        URI uri = mockWebServer.url("/blah").uri();
+        HttpPostResult response = subject.uploadSubmissionFile(new ArrayList<>(), File.createTempFile("blah", "blah"), uri, null, 0);
+
+        assertThat(response.getResponseCode(), equalTo(200));
+    }
+
+    @Test
+    public void whenThereIsAServerError_returnsPostBody() throws Exception {
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(500)
+                .setBody("blah"));
+
+        URI uri = mockWebServer.url("/blah").uri();
+        HttpPostResult response = subject.uploadSubmissionFile(new ArrayList<>(), File.createTempFile("blah", "blah"), uri, null, 0);
+
+        assertThat(response, notNullValue());
+        assertThat(response.getResponseCode(), equalTo(500));
     }
 
     @Test
