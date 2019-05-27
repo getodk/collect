@@ -128,7 +128,7 @@ public class AuditEvent {
         return !oldValue.equals(newValue);
     }
 
-    public boolean hasLocation() {
+    public boolean isLocationAlreadySet() {
         return latitude != null && !latitude.isEmpty()
                 && longitude != null && !longitude.isEmpty()
                 && accuracy != null && !accuracy.isEmpty();

@@ -105,7 +105,7 @@ public class AuditEventLogger {
         String latitude = location != null ? Double.toString(location.getLatitude()) : "";
         String longitude = location != null ? Double.toString(location.getLongitude()) : "";
         String accuracy = location != null ? Double.toString(location.getAccuracy()) : "";
-        if (!auditEvent.hasLocation()) {
+        if (!auditEvent.isLocationAlreadySet()) {
             auditEvent.setLocationCoordinates(latitude, longitude, accuracy);
         }
     }
