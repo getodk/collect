@@ -126,7 +126,6 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize());
         button.setText(FormEntryPromptUtils.getItemText(widget.getFormEntryPrompt(), filteredItems.get(index)));
         button.setTag(items.indexOf(filteredItems.get(index)));
-        button.setEnabled(!widget.getFormEntryPrompt().isReadOnly());
         button.setGravity(isRTL() ? Gravity.END : Gravity.START);
         button.setOnLongClickListener((ODKView) widget.getParent().getParent().getParent());
     }
@@ -186,6 +185,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         }
 
         view.setOnClickListener(v -> onItemClick(selectChoice.selection(), v));
+        view.setEnabled(!widget.getFormEntryPrompt().isReadOnly());
         return view;
     }
 
@@ -214,6 +214,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                 view.addView(setUpNoButtonsView(index));
             } else {
                 widget.addMediaFromChoice(mediaLayout, index, setUpButton(index), filteredItems);
+                mediaLayout.setEnabled(!widget.getFormEntryPrompt().isReadOnly());
             }
         }
     }

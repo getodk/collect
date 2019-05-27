@@ -261,6 +261,12 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         }
     }
 
+    @Override
+    public void setEnabled(boolean enabled) {
+        viewText.setEnabled(enabled);
+        imageView.setEnabled(enabled);
+    }
+
     private void openImage() {
         if (bigImageURI != null) {
             try {
