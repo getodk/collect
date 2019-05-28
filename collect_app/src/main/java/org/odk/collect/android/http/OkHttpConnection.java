@@ -1,9 +1,9 @@
 package org.odk.collect.android.http;
 
+import android.text.format.DateFormat;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.text.format.DateFormat;
-import android.webkit.MimeTypeMap;
 
 import com.burgstaller.okhttp.AuthenticationCacheInterceptor;
 import com.burgstaller.okhttp.CachingAuthenticatorDecorator;
@@ -18,7 +18,6 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
-import org.opendatakit.httpclientandroidlib.entity.ContentType;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -81,8 +80,12 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     @Nullable
     private final OkHttpClient.Builder baseClient;
 
-    public OkHttpConnection(@Nullable OkHttpClient.Builder baseClient) {
+    @NonNull
+    private final FileToContentTypeMapper fileToContentTypeMapper;
+
+    public OkHttpConnection(@Nullable OkHttpClient.Builder baseClient, @NonNull  FileToContentTypeMapper fileToContentTypeMapper) {
         this.baseClient = baseClient;
+        this.fileToContentTypeMapper = fileToContentTypeMapper;
 
         if (httpClient == null) {
             initializeHttpClient();
@@ -212,9 +215,6 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         while (fileIndex < fileList.size() || first) {
             lastFileIndex = fileIndex;
             first = false;
-
-            MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-
             long byteCount = 0L;
 
             RequestBody requestBody = RequestBody.create(MediaType.parse(HTTP_CONTENT_TYPE_TEXT_XML), submissionFile);
@@ -229,17 +229,13 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
             for (; fileIndex < fileList.size(); fileIndex++) {
                 File file = fileList.get(fileIndex);
 
-                String mime = mimeTypeMap.getMimeTypeFromExtension(FileUtils.getFileExtension(file.getName()));
-                if (mime == null) {
-                    ContentType contentType = ContentTypeMapping.of(file.getName());
-                    mime = contentType != null ? contentType.toString() : ContentType.APPLICATION_OCTET_STREAM.toString();
-                }
+                String contentType = fileToContentTypeMapper.map(file.getName());
 
-                RequestBody fileRequestBody = RequestBody.create(MediaType.parse(mime), file);
+                RequestBody fileRequestBody = RequestBody.create(MediaType.parse(contentType), file);
                 multipartBuilder.addPart(MultipartBody.Part.createFormData(file.getName(), file.getName(), fileRequestBody));
 
                 byteCount += file.length();
-                Timber.i("added file of type '%s' %s", mime, file.getName());
+                Timber.i("added file of type '%s' %s", contentType, file.getName());
 
                 // we've added at least one attachment to the request...
                 if (fileIndex + 1 < fileList.size()) {

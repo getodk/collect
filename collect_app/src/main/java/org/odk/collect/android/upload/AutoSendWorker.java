@@ -35,6 +35,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dto.Form;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
+import org.odk.collect.android.http.CollectThenSystemContentTypeMapper;
 import org.odk.collect.android.http.HttpClientConnection;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -134,7 +135,7 @@ public class AutoSendWorker extends Worker {
                 return Result.FAILURE;
             }
         } else {
-            uploader = new InstanceServerUploader(new HttpClientConnection(),
+            uploader = new InstanceServerUploader(new HttpClientConnection(new CollectThenSystemContentTypeMapper()),
                     new WebCredentialsUtils(), new HashMap<>());
             deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
                     .getSingularProperty(PropertyManager.withUri(PropertyManager.PROPMGR_DEVICE_ID));

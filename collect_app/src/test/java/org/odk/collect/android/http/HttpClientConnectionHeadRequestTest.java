@@ -8,7 +8,7 @@ public class HttpClientConnectionHeadRequestTest extends OpenRosaHeadRequestTest
 
     @Override
     protected OpenRosaHttpInterface buildSubject() {
-        return new HttpClientConnection();
+        return new HttpClientConnection(new CollectThenSystemContentTypeMapper());
     }
 
     @Override

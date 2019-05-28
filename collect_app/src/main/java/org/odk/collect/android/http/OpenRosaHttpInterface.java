@@ -66,4 +66,9 @@ public interface OpenRosaHttpInterface {
                                         @Nullable HttpCredentialsInterface credentials,
                                         @NonNull long contentLength) throws Exception;
 
+    interface FileToContentTypeMapper {
+
+        @NonNull
+        String map(String fileName);
+    }
 }

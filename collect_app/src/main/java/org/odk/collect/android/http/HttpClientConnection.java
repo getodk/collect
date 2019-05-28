@@ -19,7 +19,6 @@ package org.odk.collect.android.http;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.text.format.DateFormat;
-import android.webkit.MimeTypeMap;
 
 import org.apache.commons.io.IOUtils;
 import org.odk.collect.android.BuildConfig;
@@ -97,12 +96,14 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
     private static final int CONNECTION_TIMEOUT = 30000;
     private static final int UPLOAD_CONNECTION_TIMEOUT = 60000; // it can take up to 27 seconds to spin up an Aggregate
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
+    private final FileToContentTypeMapper fileToContentTypeMapper;
 
     // Retain authentication and cookies between requests. Gets mutated on each call to
     // HttpClient.execute).
     private HttpContext httpContext;
 
-    public HttpClientConnection() {
+    public HttpClientConnection(FileToContentTypeMapper fileToContentTypeMapper) {
+        this.fileToContentTypeMapper = fileToContentTypeMapper;
         httpContext = new BasicHttpContext();
 
         httpContext.setAttribute(HttpClientContext.COOKIE_STORE, new BasicCookieStore());
@@ -283,9 +284,6 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
         while (fileIndex < fileList.size() || first) {
             lastFileIndex = fileIndex;
             first = false;
-
-            MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-
             long byteCount = 0L;
 
             // mime post
@@ -300,18 +298,7 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
             for (; fileIndex < fileList.size(); fileIndex++) {
                 File file = fileList.get(fileIndex);
 
-                // we will be processing every one of these, so
-                // we only need to deal with the content type determination...
-                ContentType contentType = ContentTypeMapping.of(file.getName());
-                if (contentType == null) {
-                    String mime = mimeTypeMap.getMimeTypeFromExtension(FileUtils.getFileExtension(file.getName()));
-                    if (mime != null) {
-                        contentType = ContentType.create(mime);
-                    } else {
-                        Timber.w("No specific MIME type found for file: %s", file.getName());
-                        contentType = ContentType.APPLICATION_OCTET_STREAM;
-                    }
-                }
+                ContentType contentType = ContentType.create(fileToContentTypeMapper.map(file.getName()));
                 fb = new FileBody(file, contentType);
                 builder.addPart(file.getName(), fb);
                 byteCount += file.length();

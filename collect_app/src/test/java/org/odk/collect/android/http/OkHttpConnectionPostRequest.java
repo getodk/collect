@@ -12,7 +12,8 @@ public class OkHttpConnectionPostRequest extends OpenRosaPostRequestTest {
     @Override
     protected OpenRosaHttpInterface buildSubject() {
         return new OkHttpConnection(new OkHttpClient.Builder()
-                .sslSocketFactory(TlsUtil.localhost().sslSocketFactory(), TlsUtil.localhost().trustManager())
+                .sslSocketFactory(TlsUtil.localhost().sslSocketFactory(), TlsUtil.localhost().trustManager()),
+                new CollectThenSystemContentTypeMapper()
         );
     }
 
