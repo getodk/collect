@@ -58,6 +58,7 @@ public class RatingWidget extends QuestionWidget {
             imageButton.setId(total);
             imageButton.setPadding(0, 0, 0, 0);
             imageButton.setBackground(null);
+            imageButton.setEnabled(!getFormEntryPrompt().isReadOnly());
             imageButton.setOnClickListener(view -> {
                 int position = view.getId();
                 for (int i = 0; i < numberOfStarsToShow; i++) {
