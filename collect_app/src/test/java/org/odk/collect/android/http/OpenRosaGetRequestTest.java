@@ -28,6 +28,7 @@ import static org.junit.Assert.assertThat;
 public abstract class OpenRosaGetRequestTest {
 
     protected abstract OpenRosaHttpInterface buildSubject();
+
     protected abstract Boolean useRealHttps();
 
     private final MockWebServer mockWebServer = new MockWebServer();

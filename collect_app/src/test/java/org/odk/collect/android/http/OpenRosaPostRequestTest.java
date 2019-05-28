@@ -36,6 +36,7 @@ import static org.junit.Assert.fail;
 public abstract class OpenRosaPostRequestTest {
 
     protected abstract OpenRosaHttpInterface buildSubject(OpenRosaHttpInterface.FileToContentTypeMapper mapper);
+
     protected abstract Boolean useRealHttps();
 
     private final MockWebServer mockWebServer = new MockWebServer();
