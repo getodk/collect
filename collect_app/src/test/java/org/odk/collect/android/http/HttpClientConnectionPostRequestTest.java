@@ -7,8 +7,8 @@ import org.robolectric.RobolectricTestRunner;
 public class HttpClientConnectionPostRequestTest extends OpenRosaPostRequestTest {
 
     @Override
-    protected OpenRosaHttpInterface buildSubject() {
-        return new HttpClientConnection(new CollectThenSystemContentTypeMapper());
+    protected OpenRosaHttpInterface buildSubject(OpenRosaHttpInterface.FileToContentTypeMapper mapper) {
+        return new HttpClientConnection(mapper);
     }
 
     @Override

@@ -10,10 +10,10 @@ import okhttp3.tls.internal.TlsUtil;
 public class OkHttpConnectionPostRequest extends OpenRosaPostRequestTest {
 
     @Override
-    protected OpenRosaHttpInterface buildSubject() {
+    protected OpenRosaHttpInterface buildSubject(OpenRosaHttpInterface.FileToContentTypeMapper mapper) {
         return new OkHttpConnection(new OkHttpClient.Builder()
                 .sslSocketFactory(TlsUtil.localhost().sslSocketFactory(), TlsUtil.localhost().trustManager()),
-                new CollectThenSystemContentTypeMapper()
+                mapper
         );
     }
 

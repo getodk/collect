@@ -1,5 +1,7 @@
 package org.odk.collect.android.http;
 
+import androidx.annotation.NonNull;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -33,7 +35,7 @@ import static org.junit.Assert.fail;
 
 public abstract class OpenRosaPostRequestTest {
 
-    protected abstract OpenRosaHttpInterface buildSubject();
+    protected abstract OpenRosaHttpInterface buildSubject(OpenRosaHttpInterface.FileToContentTypeMapper mapper);
     protected abstract Boolean useRealHttps();
 
     private final MockWebServer mockWebServer = new MockWebServer();
@@ -43,7 +45,7 @@ public abstract class OpenRosaPostRequestTest {
     @Before
     public void setup() throws Exception {
         mockWebServer.start();
-        subject = buildSubject();
+        subject = buildSubject(new XmlOrBlahContentTypeMapper());
     }
 
     @After
@@ -184,21 +186,29 @@ public abstract class OpenRosaPostRequestTest {
         String[] secondPartLines = splitMultiPart(request).get(1);
         assertThat(secondPartLines[1], containsString("name=\"" + attachment.getName() + "\""));
         assertThat(secondPartLines[1], containsString("filename=\"" + attachment.getName() + "\""));
-        assertThat(secondPartLines[2], containsString("Content-Type: application/octet-stream"));
         assertThat(secondPartLines[5], equalTo("blah blah blah"));
     }
 
     @Test
-    public void whenAttachmentHasRecognizedExtension_sendsWithContentType() throws Exception {
+    public void sendsAttachmentsAsPartsOfBody_withContentType() throws Exception {
+        mockWebServer.enqueue(new MockResponse());
         mockWebServer.enqueue(new MockResponse());
 
         URI uri = mockWebServer.url("/blah").uri();
-        File attachment = createTempFile("<node>blah blah blah</node>", ".xml");
-        subject.uploadSubmissionFile(singletonList(attachment), createTempFile("<node>content</node>"), uri, null, 0);
+        File xmlAttachment = createTempFile("<node>blah blah blah</node>", ".xml");
+        File plainAttachment = createTempFile("blah", ".blah");
+
+        subject.uploadSubmissionFile(singletonList(xmlAttachment), createTempFile("<node>content</node>"), uri, null, 0);
 
         RecordedRequest request = mockWebServer.takeRequest();
-        String[] secondPartLines = splitMultiPart(request).get(1);
-        assertThat(secondPartLines[2], containsString("Content-Type: text/xml"));
+        List<String[]> parts = splitMultiPart(request);
+        assertThat(parts.get(1)[2], containsString("Content-Type: text/xml"));
+
+        subject.uploadSubmissionFile(singletonList(plainAttachment), createTempFile("<node>content</node>"), uri, null, 0);
+
+        request = mockWebServer.takeRequest();
+        parts = splitMultiPart(request);
+        assertThat(parts.get(1)[2], containsString("Content-Type: text/blah"));
     }
 
     @Test
@@ -261,5 +271,18 @@ public abstract class OpenRosaPostRequestTest {
         String[] split = body.split(boundary);
         String[] stringParts = Arrays.copyOfRange(split, 1, split.length - 1);
         return Arrays.stream(stringParts).map(part -> part.split("\r\n")).collect(Collectors.toList());
+    }
+
+    private class XmlOrBlahContentTypeMapper implements OpenRosaHttpInterface.FileToContentTypeMapper {
+
+        @NonNull
+        @Override
+        public String map(String fileName) {
+            if (fileName.endsWith(".xml")) {
+                return "text/xml";
+            } else {
+                return "text/blah";
+            }
+        }
     }
 }

@@ -16,9 +16,10 @@
 
 package org.odk.collect.android.http;
 
+import android.text.format.DateFormat;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.text.format.DateFormat;
 
 import org.apache.commons.io.IOUtils;
 import org.odk.collect.android.BuildConfig;

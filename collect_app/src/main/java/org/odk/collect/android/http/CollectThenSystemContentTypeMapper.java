@@ -4,8 +4,6 @@ import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
 
-import org.odk.collect.android.http.ContentTypeMapping;
-import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.utilities.FileUtils;
 import org.opendatakit.httpclientandroidlib.entity.ContentType;
 
