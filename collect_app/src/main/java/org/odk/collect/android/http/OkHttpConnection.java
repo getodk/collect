@@ -18,6 +18,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
+import org.opendatakit.httpclientandroidlib.entity.ContentType;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -229,10 +230,13 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                 File file = fileList.get(fileIndex);
 
                 String mime = mimeTypeMap.getMimeTypeFromExtension(FileUtils.getFileExtension(file.getName()));
+                if (mime == null) {
+                    ContentType contentType = ContentTypeMapping.of(file.getName());
+                    mime = contentType != null ? contentType.toString() : ContentType.APPLICATION_OCTET_STREAM.toString();
+                }
 
                 RequestBody fileRequestBody = RequestBody.create(MediaType.parse(mime), file);
-
-                multipartBuilder.addPart(MultipartBody.Part.create(fileRequestBody));
+                multipartBuilder.addPart(MultipartBody.Part.createFormData(file.getName(), file.getName(), fileRequestBody));
 
                 byteCount += file.length();
                 Timber.i("added file of type '%s' %s", mime, file.getName());
