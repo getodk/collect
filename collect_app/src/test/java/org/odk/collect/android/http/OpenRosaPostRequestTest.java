@@ -22,7 +22,7 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import okhttp3.tls.internal.TlsUtil;
 
-import static java.util.Collections.singletonList;
+import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -61,7 +61,7 @@ public abstract class OpenRosaPostRequestTest {
 
     @Test
     public void makesAPostRequestToUri() throws Exception {
-        mockWebServer.enqueue(new MockResponse());
+        mockWebServer.enqueue(new MockResponse().setResponseCode(201));
 
         URI uri = mockWebServer.url("/blah").uri();
         subject.uploadSubmissionFile(new ArrayList<>(), File.createTempFile("blah", "blah"), uri, null, 0);
@@ -74,7 +74,7 @@ public abstract class OpenRosaPostRequestTest {
     }
 
     @Test
-    public void withCredentials_whenHttp_doesNotRetryWithCredentials() throws Exception  {
+    public void withCredentials_whenHttp_doesNotRetryWithCredentials() throws Exception {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(401)
                 .addHeader("WWW-Authenticate: Basic realm=\"protected area\"")
@@ -108,7 +108,7 @@ public abstract class OpenRosaPostRequestTest {
 
     @Test
     public void whenLastRequestSetCookies_nextRequestDoesNotSendThem() throws Exception {
-        mockWebServer.enqueue(new MockResponse()
+        mockWebServer.enqueue(new MockResponse().setResponseCode(201)
                 .addHeader("Set-Cookie", "blah=blah"));
         mockWebServer.enqueue(new MockResponse());
 
@@ -160,7 +160,7 @@ public abstract class OpenRosaPostRequestTest {
 
     @Test
     public void sendsSubmissionFileAsFirstPartOfBody() throws Exception {
-        mockWebServer.enqueue(new MockResponse());
+        mockWebServer.enqueue(new MockResponse().setResponseCode(201));
 
         URI uri = mockWebServer.url("/blah").uri();
         String submissionContent = "<node>content</node>";
@@ -177,68 +177,98 @@ public abstract class OpenRosaPostRequestTest {
 
     @Test
     public void sendsAttachmentsAsPartsOfBody() throws Exception {
-        mockWebServer.enqueue(new MockResponse());
+        mockWebServer.enqueue(new MockResponse().setResponseCode(201));
 
         URI uri = mockWebServer.url("/blah").uri();
-        File attachment = createTempFile("blah blah blah");
-        subject.uploadSubmissionFile(singletonList(attachment), createTempFile("<node>content</node>"), uri, null, 0);
+        File attachment1 = createTempFile("blah blah blah");
+        File attachment2 = createTempFile("blah2 blah2 blah2");
+        subject.uploadSubmissionFile(asList(attachment1, attachment2), createTempFile("<node>content</node>"), uri, null, 1024);
 
         RecordedRequest request = mockWebServer.takeRequest();
-        String[] secondPartLines = splitMultiPart(request).get(1);
-        assertThat(secondPartLines[1], containsString("name=\"" + attachment.getName() + "\""));
-        assertThat(secondPartLines[1], containsString("filename=\"" + attachment.getName() + "\""));
+        List<String[]> parts = splitMultiPart(request);
+
+        String[] secondPartLines = parts.get(1);
+        assertThat(secondPartLines[1], containsString("name=\"" + attachment1.getName() + "\""));
+        assertThat(secondPartLines[1], containsString("filename=\"" + attachment1.getName() + "\""));
         assertThat(secondPartLines[5], equalTo("blah blah blah"));
+
+        String[] thirdPartLines = parts.get(2);
+        assertThat(thirdPartLines[1], containsString("name=\"" + attachment2.getName() + "\""));
+        assertThat(thirdPartLines[1], containsString("filename=\"" + attachment2.getName() + "\""));
+        assertThat(thirdPartLines[5], equalTo("blah2 blah2 blah2"));
     }
 
     @Test
     public void sendsAttachmentsAsPartsOfBody_withContentType() throws Exception {
-        mockWebServer.enqueue(new MockResponse());
-        mockWebServer.enqueue(new MockResponse());
+        mockWebServer.enqueue(new MockResponse().setResponseCode(201));
 
         URI uri = mockWebServer.url("/blah").uri();
         File xmlAttachment = createTempFile("<node>blah blah blah</node>", ".xml");
         File plainAttachment = createTempFile("blah", ".blah");
 
-        subject.uploadSubmissionFile(singletonList(xmlAttachment), createTempFile("<node>content</node>"), uri, null, 0);
+        subject.uploadSubmissionFile(asList(xmlAttachment, plainAttachment), createTempFile("<node>content</node>"), uri, null, 1024);
 
         RecordedRequest request = mockWebServer.takeRequest();
         List<String[]> parts = splitMultiPart(request);
         assertThat(parts.get(1)[2], containsString("Content-Type: text/xml"));
+        assertThat(parts.get(2)[2], containsString("Content-Type: text/blah"));
+    }
 
-        subject.uploadSubmissionFile(singletonList(plainAttachment), createTempFile("<node>content</node>"), uri, null, 0);
+    @Test
+    public void whenMoreThanOneAttachment_andRequestIsLargerThanMaxContentLength_sendsTwoRequests() throws Exception {
+        mockWebServer.enqueue(new MockResponse().setResponseCode(201));
+        mockWebServer.enqueue(new MockResponse().setResponseCode(201));
+
+        URI uri = mockWebServer.url("/blah").uri();
+        File attachment1 = createTempFile("blah blah blah");
+        File attachment2 = createTempFile("blah2 blah2 blah2");
+        subject.uploadSubmissionFile(asList(attachment1, attachment2), createTempFile("<node>content</node>"), uri, null, 0);
+
+        RecordedRequest request = mockWebServer.takeRequest();
+        List<String[]> parts = splitMultiPart(request);
+
+        assertThat(parts.size(), equalTo(3));
+
+        String[] secondPartLines = parts.get(1);
+        assertThat(secondPartLines[1], containsString("name=\"" + attachment1.getName() + "\""));
+        assertThat(secondPartLines[1], containsString("filename=\"" + attachment1.getName() + "\""));
+        assertThat(secondPartLines[5], equalTo("blah blah blah"));
+
+        String[] thirdPartLines = parts.get(2);
+        assertThat(thirdPartLines[1], containsString("name=\"*isIncomplete*\""));
 
         request = mockWebServer.takeRequest();
         parts = splitMultiPart(request);
-        assertThat(parts.get(1)[2], containsString("Content-Type: text/blah"));
+
+        assertThat(parts.size(), equalTo(2));
+
+        secondPartLines = parts.get(1);
+        assertThat(secondPartLines[1], containsString("name=\"" + attachment2.getName() + "\""));
+        assertThat(secondPartLines[1], containsString("filename=\"" + attachment2.getName() + "\""));
+        assertThat(secondPartLines[5], equalTo("blah2 blah2 blah2"));
     }
 
     @Test
     @Ignore
-    public void whenRequestIsLargerThanMaxContentLength_sendsTwoRequests() {
+    public void whenMoreThanOneAttachment_andRequestIsLargerThanMaxContentLength__andFirstRequestIs500_returnsErrorResult() {
         fail();
     }
 
     @Test
     @Ignore
-    public void whenRequestIsLargerThanMaxContentLength_andFirstRequestIs500_returnsErrorResult() {
+    public void whenMoreThanOneAttachment_andRequestIsLargerThanMaxContentLength_andSecondRequestIs500_returnsErrorResult() {
         fail();
     }
 
     @Test
     @Ignore
-    public void whenRequestIsLargerThanMaxContentLength_andSecondRequestIs500_returnsErrorResult() {
+    public void whenMoreThanOneAttachment_andRequestIsLargerThanMaxContentLength__andFirstRequestFails_throwsExceptionWithMessage() {
         fail();
     }
 
     @Test
     @Ignore
-    public void whenRequestIsLargerThanMaxContentLength_andFirstRequestFails_throwsExceptionWithMessage() {
-        fail();
-    }
-
-    @Test
-    @Ignore
-    public void whenRequestIsLargerThanMaxContentLength_andSecondRequestFails_throwsExceptionWithMessage() {
+    public void whenMoreThanOneAttachment_andRequestIsLargerThanMaxContentLength__andSecondRequestFails_throwsExceptionWithMessage() {
         fail();
     }
 
