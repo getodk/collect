@@ -1,7 +1,5 @@
 package org.odk.collect.android.http;
 
-import com.google.common.collect.Collections2;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -10,18 +8,18 @@ import org.junit.Test;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import okhttp3.tls.internal.TlsUtil;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
@@ -36,8 +34,10 @@ import static org.junit.Assert.fail;
 public abstract class OpenRosaPostRequestTest {
 
     protected abstract OpenRosaHttpInterface buildSubject();
+    protected abstract Boolean useRealHttps();
 
     private final MockWebServer mockWebServer = new MockWebServer();
+    private MockWebServer httpsMockWebServer;
     private OpenRosaHttpInterface subject;
 
     @Before
@@ -49,6 +49,11 @@ public abstract class OpenRosaPostRequestTest {
     @After
     public void teardown() throws Exception {
         mockWebServer.shutdown();
+
+        if (httpsMockWebServer != null) {
+            httpsMockWebServer.shutdown();
+            httpsMockWebServer = null;
+        }
     }
 
     @Test
@@ -77,6 +82,25 @@ public abstract class OpenRosaPostRequestTest {
         subject.uploadSubmissionFile(new ArrayList<>(), File.createTempFile("blah", "blah"), uri, new HttpCredentials("user", "pass"), 0);
 
         assertThat(mockWebServer.getRequestCount(), equalTo(1));
+    }
+
+    @Test
+    public void withCredentials_whenHttps_retriesWithCredentials() throws Exception {
+        startHttpsMockWebServer();
+
+        httpsMockWebServer.enqueue(new MockResponse()
+                .setResponseCode(401)
+                .addHeader("WWW-Authenticate: Basic realm=\"protected area\"")
+                .setBody("Please authenticate."));
+        httpsMockWebServer.enqueue(new MockResponse());
+
+        URI uri = httpsMockWebServer.url("").uri();
+        subject.uploadSubmissionFile(new ArrayList<>(), File.createTempFile("blah", "blah"), uri, new HttpCredentials("user", "pass"), 0);
+
+        assertThat(httpsMockWebServer.getRequestCount(), equalTo(2));
+        httpsMockWebServer.takeRequest();
+        RecordedRequest request = httpsMockWebServer.takeRequest();
+        assertThat(request.getHeader("Authorization"), equalTo("Basic dXNlcjpwYXNz"));
     }
 
     @Test
@@ -205,6 +229,16 @@ public abstract class OpenRosaPostRequestTest {
     @Ignore
     public void whenRequestIsLargerThanMaxContentLength_andSecondRequestFails_throwsExceptionWithMessage() {
         fail();
+    }
+
+    private void startHttpsMockWebServer() throws IOException {
+        httpsMockWebServer = new MockWebServer();
+
+        if (useRealHttps()) {
+            httpsMockWebServer.useHttps(TlsUtil.localhost().sslSocketFactory(), false);
+        }
+
+        httpsMockWebServer.start(8443);
     }
 
     private File createTempFile(String content) throws Exception {

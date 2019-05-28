@@ -5,11 +5,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.BuildConfig;
 
+import java.io.IOException;
 import java.net.URI;
 
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import okhttp3.tls.internal.TlsUtil;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.equalTo;
@@ -22,8 +24,10 @@ import static org.junit.Assert.fail;
 public abstract class OpenRosaHeadRequestTest {
 
     protected abstract OpenRosaHttpInterface buildSubject();
+    protected abstract Boolean useRealHttps();
 
     private final MockWebServer mockWebServer = new MockWebServer();
+    private MockWebServer httpsMockWebServer;
     private OpenRosaHttpInterface subject;
 
     @Before
@@ -35,6 +39,11 @@ public abstract class OpenRosaHeadRequestTest {
     @After
     public void teardown() throws Exception {
         mockWebServer.shutdown();
+
+        if (httpsMockWebServer != null) {
+            httpsMockWebServer.shutdown();
+            httpsMockWebServer = null;
+        }
     }
 
     @Test
@@ -113,6 +122,23 @@ public abstract class OpenRosaHeadRequestTest {
     }
 
     @Test
+    public void withCredentials_whenHttps_retriesWithCredentials() throws Exception  {
+        startHttpsMockWebServer();
+
+        httpsMockWebServer.enqueue(new MockResponse()
+                .setResponseCode(401)
+                .addHeader("WWW-Authenticate: Basic realm=\"protected area\""));
+        httpsMockWebServer.enqueue(new MockResponse());
+
+        buildSubject().executeHeadRequest(httpsMockWebServer.url("").uri(), new HttpCredentials("user", "pass"));
+
+        assertThat(httpsMockWebServer.getRequestCount(), equalTo(2));
+        httpsMockWebServer.takeRequest();
+        RecordedRequest request = httpsMockWebServer.takeRequest();
+        assertThat(request.getHeader("Authorization"), equalTo("Basic dXNlcjpwYXNz"));
+    }
+
+    @Test
     public void whenRequestFails_throwsExceptionWithMessage() {
         try {
             subject.executeHeadRequest(new URI("http://localhost:8443"), null);
@@ -121,5 +147,15 @@ public abstract class OpenRosaHeadRequestTest {
             assertThat(e, isA(Exception.class));
             assertThat(e.getMessage(), not(isEmptyString()));
         }
+    }
+
+    private void startHttpsMockWebServer() throws IOException {
+        httpsMockWebServer = new MockWebServer();
+
+        if (useRealHttps()) {
+            httpsMockWebServer.useHttps(TlsUtil.localhost().sslSocketFactory(), false);
+        }
+
+        httpsMockWebServer.start(8443);
     }
 }
