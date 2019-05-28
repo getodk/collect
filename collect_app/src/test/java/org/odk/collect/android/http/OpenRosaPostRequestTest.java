@@ -1,5 +1,7 @@
 package org.odk.collect.android.http;
 
+import com.google.common.collect.Collections2;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -10,11 +12,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -128,22 +136,45 @@ public abstract class OpenRosaPostRequestTest {
         mockWebServer.enqueue(new MockResponse());
 
         URI uri = mockWebServer.url("/blah").uri();
-        String fileContent = "<node>content</node>";
-        File tempFile = createTempFile(fileContent);
+        String submissionContent = "<node>content</node>";
+        File tempFile = createTempFile(submissionContent);
         subject.uploadSubmissionFile(new ArrayList<>(), tempFile, uri, null, 0);
 
         RecordedRequest request = mockWebServer.takeRequest();
-        String[] bodyParts = request.getBody().readUtf8().split("\r\n");
-        assertThat(bodyParts[1], containsString("name=\"xml_submission_file\""));
-        assertThat(bodyParts[1], containsString("filename=\"" + tempFile.getName() + "\""));
-        assertThat(bodyParts[2], containsString("Content-Type: text/xml"));
-        assertThat(bodyParts[5], equalTo("<node>content</node>"));
+        String[] firstPartLines = splitMultiPart(request).get(0);
+        assertThat(firstPartLines[1], containsString("name=\"xml_submission_file\""));
+        assertThat(firstPartLines[1], containsString("filename=\"" + tempFile.getName() + "\""));
+        assertThat(firstPartLines[2], containsString("Content-Type: text/xml"));
+        assertThat(firstPartLines[5], equalTo("<node>content</node>"));
     }
 
     @Test
-    @Ignore
-    public void sendsAttachmentsAsPartsOfBody() {
-        fail();
+    public void sendsAttachmentsAsPartsOfBody() throws Exception {
+        mockWebServer.enqueue(new MockResponse());
+
+        URI uri = mockWebServer.url("/blah").uri();
+        File attachment = createTempFile("blah blah blah");
+        subject.uploadSubmissionFile(singletonList(attachment), createTempFile("<node>content</node>"), uri, null, 0);
+
+        RecordedRequest request = mockWebServer.takeRequest();
+        String[] secondPartLines = splitMultiPart(request).get(1);
+        assertThat(secondPartLines[1], containsString("name=\"" + attachment.getName() + "\""));
+        assertThat(secondPartLines[1], containsString("filename=\"" + attachment.getName() + "\""));
+        assertThat(secondPartLines[2], containsString("Content-Type: application/octet-stream"));
+        assertThat(secondPartLines[5], equalTo("blah blah blah"));
+    }
+
+    @Test
+    public void whenAttachmentHasRecognizedExtension_sendsWithContentType() throws Exception {
+        mockWebServer.enqueue(new MockResponse());
+
+        URI uri = mockWebServer.url("/blah").uri();
+        File attachment = createTempFile("<node>blah blah blah</node>", ".xml");
+        subject.uploadSubmissionFile(singletonList(attachment), createTempFile("<node>content</node>"), uri, null, 0);
+
+        RecordedRequest request = mockWebServer.takeRequest();
+        String[] secondPartLines = splitMultiPart(request).get(1);
+        assertThat(secondPartLines[2], containsString("Content-Type: text/xml"));
     }
 
     @Test
@@ -177,12 +208,24 @@ public abstract class OpenRosaPostRequestTest {
     }
 
     private File createTempFile(String content) throws Exception {
-        File temp = File.createTempFile("tempfile", ".tmp");
+        return createTempFile(content, ".tmp");
+    }
+
+    private File createTempFile(String content, String extension) throws Exception {
+        File temp = File.createTempFile("tempfile", extension);
 
         BufferedWriter bw = new BufferedWriter(new FileWriter(temp));
         bw.write(content);
         bw.close();
 
         return temp;
+    }
+
+    private List<String[]> splitMultiPart(RecordedRequest request) {
+        String body = request.getBody().readUtf8();
+        String boundary = body.split("\r\n")[0];
+        String[] split = body.split(boundary);
+        String[] stringParts = Arrays.copyOfRange(split, 1, split.length - 1);
+        return Arrays.stream(stringParts).map(part -> part.split("\r\n")).collect(Collectors.toList());
     }
 }
