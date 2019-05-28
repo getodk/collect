@@ -148,6 +148,10 @@ android {
         pickFirst 'META-INF/services/com.fasterxml.jackson.core.ObjectCodec'
         pickFirst 'META-INF/services/javax.ws.rs.ext.MessageBodyReader'
         pickFirst 'META-INF/services/javax.ws.rs.ext.MessageBodyWriter'
+
+        exclude 'lib/arm64-v8a/libmapbox-gl.so'
+        exclude 'lib/x86/libmapbox-gl.so'
+        exclude 'lib/x86_64/libmapbox-gl.so'
     }
 
     compileOptions {
@@ -183,7 +187,7 @@ configurations.all {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: '*.jar')
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
     implementation 'androidx.browser:browser:1.0.0'
     implementation 'com.google.android.material:material:1.1.0-alpha05'
