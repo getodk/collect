@@ -101,7 +101,7 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
 
     // Retain authentication and cookies between requests. Gets mutated on each call to
     // HttpClient.execute).
-    private HttpContext httpContext;
+    private final HttpContext httpContext;
 
     public HttpClientConnection(FileToContentTypeMapper fileToContentTypeMapper) {
         this.fileToContentTypeMapper = fileToContentTypeMapper;
