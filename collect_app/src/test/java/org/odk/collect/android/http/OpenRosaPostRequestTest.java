@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.BufferedWriter;
@@ -249,27 +248,32 @@ public abstract class OpenRosaPostRequestTest {
     }
 
     @Test
-    @Ignore
-    public void whenMoreThanOneAttachment_andRequestIsLargerThanMaxContentLength__andFirstRequestIs500_returnsErrorResult() {
-        fail();
+    public void whenMoreThanOneAttachment_andRequestIsLargerThanMaxContentLength__andFirstRequestIs500_returnsErrorResult() throws Exception {
+        mockWebServer.enqueue(new MockResponse().setResponseCode(500));
+
+        URI uri = mockWebServer.url("/blah").uri();
+        File attachment1 = createTempFile("blah blah blah");
+        File attachment2 = createTempFile("blah2 blah2 blah2");
+        HttpPostResult response = subject.uploadSubmissionFile(asList(attachment1, attachment2), createTempFile("<node>content</node>"), uri, null, 0);
+
+        assertThat(mockWebServer.getRequestCount(), equalTo(1));
+        assertThat(response, notNullValue());
+        assertThat(response.getResponseCode(), equalTo(500));
     }
 
     @Test
-    @Ignore
-    public void whenMoreThanOneAttachment_andRequestIsLargerThanMaxContentLength_andSecondRequestIs500_returnsErrorResult() {
-        fail();
-    }
+    public void whenMoreThanOneAttachment_andRequestIsLargerThanMaxContentLength_andSecondRequestIs500_returnsErrorResult() throws Exception {
+        mockWebServer.enqueue(new MockResponse().setResponseCode(201));
+        mockWebServer.enqueue(new MockResponse().setResponseCode(500));
 
-    @Test
-    @Ignore
-    public void whenMoreThanOneAttachment_andRequestIsLargerThanMaxContentLength__andFirstRequestFails_throwsExceptionWithMessage() {
-        fail();
-    }
+        URI uri = mockWebServer.url("/blah").uri();
+        File attachment1 = createTempFile("blah blah blah");
+        File attachment2 = createTempFile("blah2 blah2 blah2");
+        HttpPostResult response = subject.uploadSubmissionFile(asList(attachment1, attachment2), createTempFile("<node>content</node>"), uri, null, 0);
 
-    @Test
-    @Ignore
-    public void whenMoreThanOneAttachment_andRequestIsLargerThanMaxContentLength__andSecondRequestFails_throwsExceptionWithMessage() {
-        fail();
+        assertThat(mockWebServer.getRequestCount(), equalTo(2));
+        assertThat(response, notNullValue());
+        assertThat(response.getResponseCode(), equalTo(500));
     }
 
     private void startHttpsMockWebServer() throws IOException {
