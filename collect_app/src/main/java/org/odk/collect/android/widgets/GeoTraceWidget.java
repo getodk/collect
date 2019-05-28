@@ -97,7 +97,9 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void setBinaryData(Object answer) {
-        answerDisplay.setText(answer.toString());
+        String answerText = answer.toString();
+        answerDisplay.setText(answerText);
+        updateButtonLabelsAndVisibility(!answerText.isEmpty());
         widgetValueChanged();
     }
 

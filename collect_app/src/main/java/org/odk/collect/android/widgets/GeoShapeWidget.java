@@ -97,9 +97,9 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void setBinaryData(Object answer) {
-        String s = answer.toString();
-        answerDisplay.setText(s);
-
+        String answerText = answer.toString();
+        answerDisplay.setText(answerText);
+        updateButtonLabelsAndVisibility(!answerText.isEmpty());
         widgetValueChanged();
     }
 
@@ -116,7 +116,6 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
     public void clearAnswer() {
         answerDisplay.setText(null);
         updateButtonLabelsAndVisibility(false);
-
         widgetValueChanged();
     }
 
