@@ -25,6 +25,7 @@ import org.odk.collect.android.dto.Form;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.upload.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.upload.UploadException;
+import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.util.List;
@@ -32,6 +33,7 @@ import java.util.List;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.InstanceUploaderUtils.DEFAULT_SUCCESSFUL_TEXT;
+import static org.odk.collect.android.utilities.InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE;
 
 public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
     private final GoogleAccountsManager accountsManager;
@@ -74,17 +76,21 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
             } else {
                 try {
                     String destinationUrl = uploader.getUrlToSubmitTo(instance, null, null);
-                    uploader.uploadOneSubmission(instance, destinationUrl);
+                    if (InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile(destinationUrl)) {
+                        uploader.uploadOneSubmission(instance, destinationUrl);
 
-                    outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), DEFAULT_SUCCESSFUL_TEXT);
+                        outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), DEFAULT_SUCCESSFUL_TEXT);
 
-                    Collect.getInstance()
-                            .getDefaultTracker()
-                            .send(new HitBuilders.EventBuilder()
-                                    .setCategory("Submission")
-                                    .setAction("HTTP-Sheets")
-                                    .setLabel(Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()))
-                                    .build());
+                        Collect.getInstance()
+                                .getDefaultTracker()
+                                .send(new HitBuilders.EventBuilder()
+                                        .setCategory("Submission")
+                                        .setAction("HTTP-Sheets")
+                                        .setLabel(Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()))
+                                        .build());
+                    } else {
+                        outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE);
+                    }
                 } catch (UploadException e) {
                     Timber.d(e);
                     outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
