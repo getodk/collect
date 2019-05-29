@@ -12,7 +12,6 @@ import com.mapbox.android.core.location.LocationEngineCallback;
 import com.mapbox.android.core.location.LocationEngineProvider;
 import com.mapbox.android.core.location.LocationEngineRequest;
 import com.mapbox.android.core.location.LocationEngineResult;
-import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -110,11 +109,12 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
     @VisibleForTesting public static boolean testMode;
 
     @Override public void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener) {
-        // To use the Mapbox base maps, we have to initialize the Mapbox SDK with
-        // an access token. Configure this token in collect_app/secrets.properties.
-        // If no token is defined, we use the OSM base map; see getDesiredStyleBuilder().
-        if (!testMode) {
-            Mapbox.getInstance(Collect.getInstance(), BuildConfig.MAPBOX_ACCESS_TOKEN);
+        if (MapboxUtils.initMapbox() == null) {
+            MapboxUtils.warnMapboxUnsupported(Collect.getInstance());
+            if (listener != null) {
+                listener.onReady(null);
+            }
+            return;
         }
         activity.getSupportFragmentManager()
             .beginTransaction().replace(containerId, this).commitNow();
