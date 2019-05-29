@@ -22,9 +22,9 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
     private final boolean isLocationEnabled;
     private final boolean isTrackingChangesEnabled;
 
-    private static final String DEFAULT_COLUMNS = "event, node, start, end";
-    private static final String LOCATION_COORDINATES_COLUMNS = ", latitude, longitude, accuracy";
-    private static final String ANSWER_VALUES_COLUMNS = ", old-value, new-value";
+    private static final String DEFAULT_COLUMNS = "event,node,start,end";
+    private static final String LOCATION_COORDINATES_COLUMNS = ",latitude,longitude,accuracy";
+    private static final String ANSWER_VALUES_COLUMNS = ",old-value,new-value";
 
     public AuditEventSaveTask(@NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled) {
         this.file = file;
