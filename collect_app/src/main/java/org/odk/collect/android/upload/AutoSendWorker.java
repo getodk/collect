@@ -61,6 +61,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION;
+import static org.odk.collect.android.utilities.InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE;
 
 public class AutoSendWorker extends Worker {
     private static final int AUTO_SEND_RESULT_NOTIFICATION_ID = 1328974928;
@@ -144,6 +145,12 @@ public class AutoSendWorker extends Worker {
         for (Instance instance : toUpload) {
             try {
                 String destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, null);
+                if (protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets))
+                        && !InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile(destinationUrl)) {
+                    anyFailure = true;
+                    resultMessagesByInstanceId.put(instance.getDatabaseId().toString(), SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE);
+                    continue;
+                }
                 String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
                 resultMessagesByInstanceId.put(instance.getDatabaseId().toString(),
                         customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
