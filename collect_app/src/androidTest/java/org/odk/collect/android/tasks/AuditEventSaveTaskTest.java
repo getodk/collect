@@ -139,6 +139,7 @@ public class AuditEventSaveTaskTest {
                 "form resume,,1548108900606,,54.4112062,18.5896652,30.716999053955078,,\n" +
                 "question,,1548108900700,,54.4112062,18.5896652,30.716999053955078,Old value,New value\n" +
                 "question,,1548108903100,,54.4112062,18.5896652,30.716999053955078,\"Old value, with comma\",New value\n" +
+                "question,,1548108903101,,54.4112062,18.5896652,30.716999053955078,\"Old value \n with linebreak\",\"New value \n with linebreak and \"\"quotes\"\"\"\n" +
                 "question,,1548108904200,,54.4112062,18.5896652,30.716999053955078,Old value,\"New value, with comma\"\n" +
                 "form save,,1548108909730,,54.4112062,18.5896652,30.716999053955078,,\n" +
                 "form exit,,1548108909730,,54.4112062,18.5896652,30.716999053955078,,\n" +
@@ -267,6 +268,10 @@ public class AuditEventSaveTaskTest {
         event = new AuditEvent(1548108903100L, QUESTION, true, true, null, "Old value, with comma");
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.recordValueChange("New value");
+        auditEvents.add(event);
+        event = new AuditEvent(1548108903101L, QUESTION, true, true, null, "Old value \n with linebreak");
+        event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
+        event.recordValueChange("New value \n with linebreak and \"quotes\"");
         auditEvents.add(event);
         event = new AuditEvent(1548108904200L, QUESTION, true, true, null, "Old value");
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");

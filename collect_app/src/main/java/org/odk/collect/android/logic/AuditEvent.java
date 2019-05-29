@@ -151,15 +151,15 @@ public class AuditEvent {
         if (this.oldValue.equals(this.newValue)) {
             this.oldValue = "";
             this.newValue = "";
+            return;
         }
 
-        // Wrap values that have commas in quotes
-        if (this.oldValue.contains(",")) {
-            this.oldValue = "\"" + this.oldValue + "\"";
+        if (oldValue.contains(",") || oldValue.contains("\n")) {
+            oldValue = getEscapedValueForCsv(oldValue);
         }
 
-        if (this.newValue.contains(",")) {
-            this.newValue = "\"" + this.newValue + "\"";
+        if (this.newValue.contains(",") || this.newValue.contains("\n")) {
+            this.newValue = getEscapedValueForCsv(this.newValue);
         }
     }
 
@@ -213,5 +213,16 @@ public class AuditEvent {
                 auditEventType = AuditEventType.UNKNOWN_EVENT_TYPE;
         }
         return auditEventType;
+    }
+
+    /**
+     * Escapes quotes and then wraps in quotes for output to CSV.
+     */
+    private String getEscapedValueForCsv(String value) {
+        if (value.contains("\"")) {
+            value = value.replaceAll("\"", "\"\"");
+        }
+
+        return "\"" + value + "\"";
     }
 }
