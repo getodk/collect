@@ -70,7 +70,7 @@ public class AuditEventSaveTaskTest {
         AuditEventSaveTask auditEventSaveTask = new AuditEventSaveTask(testFile, false, false);
         auditEventSaveTask.execute(getSampleAuditEventsWithoutLocations().toArray(new AuditEvent[0])).get();
         String expectedAuditContent = FileUtils.readFileToString(testFile);
-        String expectedData = "event, node, start, end\n" +
+        String expectedData = "event,node,start,end\n" +
                 "form start,,1548106927319,\n" +
                 "question,/data/q1,1548106927323,1548106930112\n" +
                 "add repeat,/data/g1[1],1548106930118,1548106931611\n" +
@@ -88,7 +88,7 @@ public class AuditEventSaveTaskTest {
         auditEventSaveTask = new AuditEventSaveTask(testFile, true, false);
         auditEventSaveTask.execute(getMoreSampleAuditEventsWithLocations().toArray(new AuditEvent[0])).get();
         expectedAuditContent = FileUtils.readFileToString(testFile);
-        String expectedData2 = "event, node, start, end, latitude, longitude, accuracy\n" +
+        String expectedData2 = "event,node,start,end,latitude,longitude,accuracy\n" +
                 "form start,,1548106927319,\n" +
                 "question,/data/q1,1548106927323,1548106930112\n" +
                 "add repeat,/data/g1[1],1548106930118,1548106931611\n" +
@@ -115,7 +115,7 @@ public class AuditEventSaveTaskTest {
         auditEventSaveTask = new AuditEventSaveTask(testFile, true, true);
         auditEventSaveTask.execute(getMoreSampleAuditEventsWithLocationsAndTrackingChanges().toArray(new AuditEvent[0])).get();
         expectedAuditContent = FileUtils.readFileToString(testFile);
-        String expectedData3 = "event, node, start, end, latitude, longitude, accuracy, old-value, new-value\n" +
+        String expectedData3 = "event,node,start,end,latitude,longitude,accuracy,old-value,new-value\n" +
                 "form start,,1548106927319,\n" +
                 "question,/data/q1,1548106927323,1548106930112\n" +
                 "add repeat,/data/g1[1],1548106930118,1548106931611\n" +
@@ -151,7 +151,7 @@ public class AuditEventSaveTaskTest {
         AuditEventSaveTask auditEventSaveTask = new AuditEventSaveTask(testFile, true, false);
         auditEventSaveTask.execute(getSampleAuditEventsWithLocations().toArray(new AuditEvent[0])).get();
         String expectedAuditContent = FileUtils.readFileToString(testFile);
-        String expectedData = "event, node, start, end, latitude, longitude, accuracy\n" +
+        String expectedData = "event,node,start,end,latitude,longitude,accuracy\n" +
                 "form start,,1548106927319,,,,\n" +
                 "location tracking enabled,,548108908250,,,,\n" +
                 "location permissions granted,,548108908255,,,,\n" +
@@ -174,7 +174,7 @@ public class AuditEventSaveTaskTest {
         AuditEventSaveTask auditEventSaveTask = new AuditEventSaveTask(testFile, true, true);
         auditEventSaveTask.execute(getSampleAuditEventsWithLocationsAndTrackingChanges().toArray(new AuditEvent[0])).get();
         String expectedAuditContent = FileUtils.readFileToString(testFile);
-        String expectedData = "event, node, start, end, latitude, longitude, accuracy, old-value, new-value\n" +
+        String expectedData = "event,node,start,end,latitude,longitude,accuracy,old-value,new-value\n" +
                 "form start,,1548106927319,,,,,,\n" +
                 "location tracking enabled,,548108908250,,,,,,\n" +
                 "location permissions granted,,548108908255,,,,,,\n" +
