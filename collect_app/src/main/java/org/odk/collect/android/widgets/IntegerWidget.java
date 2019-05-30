@@ -61,12 +61,6 @@ public class IntegerWidget extends StringWidget {
         }
         answerText.setFilters(fa);
 
-        if (prompt.isReadOnly()) {
-            setBackground(null);
-            setFocusable(false);
-            setClickable(false);
-        }
-
         Integer i = getIntegerAnswerValue();
 
         if (i != null) {

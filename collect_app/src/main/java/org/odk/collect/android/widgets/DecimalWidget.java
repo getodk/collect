@@ -76,13 +76,6 @@ public class DecimalWidget extends StringWidget {
 
             Selection.setSelection(answerText.getText(), answerText.getText().length());
         }
-
-        // disable if read only
-        if (prompt.isReadOnly()) {
-            setBackground(null);
-            setFocusable(false);
-            setClickable(false);
-        }
     }
 
     private Double getDoubleAnswerValue() {

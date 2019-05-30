@@ -54,12 +54,6 @@ public class StringNumberWidget extends StringWidget {
             }
         });
 
-        if (prompt.isReadOnly()) {
-            setBackground(null);
-            setFocusable(false);
-            setClickable(false);
-        }
-
         String s = null;
         if (prompt.getAnswerValue() != null) {
             s = (String) prompt.getAnswerValue().getValue();
