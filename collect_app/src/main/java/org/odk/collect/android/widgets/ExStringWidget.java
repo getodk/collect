@@ -105,7 +105,6 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
     // If an extra with this key is specified, it will be parsed as a URI and used as intent data
     private static final String URI_KEY = "uri_data";
 
-    protected EditText answer;
     private boolean hasExApp = true;
     private final Button launchIntentButton;
     private final Drawable textBackground;
@@ -120,29 +119,29 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
         params.setMargins(7, 5, 7, 5);
 
         // set text formatting
-        answer = new EditText(context);
-        answer.setId(ViewIds.generateViewId());
-        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        answer.setLayoutParams(params);
-        textBackground = answer.getBackground();
-        answer.setBackground(null);
-        answer.setTextColor(themeUtils.getPrimaryTextColor());
+        answerText = new EditText(context);
+        answerText.setId(ViewIds.generateViewId());
+        answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+        answerText.setLayoutParams(params);
+        textBackground = answerText.getBackground();
+        answerText.setBackground(null);
+        answerText.setTextColor(themeUtils.getPrimaryTextColor());
 
         // capitalize nothing
-        answer.setKeyListener(new TextKeyListener(Capitalize.NONE, false));
+        answerText.setKeyListener(new TextKeyListener(Capitalize.NONE, false));
 
         // needed to make long read only text scroll
-        answer.setHorizontallyScrolling(false);
-        answer.setSingleLine(false);
+        answerText.setHorizontallyScrolling(false);
+        answerText.setSingleLine(false);
 
         String s = prompt.getAnswerText();
         if (s != null) {
-            answer.setText(s);
+            answerText.setText(s);
         }
 
         if (getFormEntryPrompt().isReadOnly() || hasExApp) {
-            answer.setFocusable(false);
-            answer.setEnabled(false);
+            answerText.setFocusable(false);
+            answerText.setEnabled(false);
         }
 
         String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
@@ -154,7 +153,7 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(launchIntentButton);
-        answerLayout.addView(answer);
+        answerLayout.addView(answerText);
         addAnswerView(answerLayout);
 
         Collect.getInstance().getDefaultTracker()
@@ -178,13 +177,13 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
 
     @Override
     public void clearAnswer() {
-        answer.setText(null);
+        answerText.setText(null);
         widgetValueChanged();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        String s = answer.getText().toString();
+        String s = answerText.getText().toString();
         return !s.isEmpty() ? new StringData(s) : null;
     }
 
@@ -194,19 +193,19 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         StringData stringData = ExternalAppsUtils.asStringData(answer);
-        this.answer.setText(stringData == null ? null : stringData.getValue().toString());
+        this.answerText.setText(stringData == null ? null : stringData.getValue().toString());
         widgetValueChanged();
     }
 
     @Override
     public void setFocus(Context context) {
         if (hasExApp) {
-            SoftKeyboardUtils.hideSoftKeyboard(answer);
+            SoftKeyboardUtils.hideSoftKeyboard(answerText);
             // focus on launch button
             launchIntentButton.requestFocus();
         } else {
             if (!getFormEntryPrompt().isReadOnly()) {
-                SoftKeyboardUtils.showSoftKeyboard(answer);
+                SoftKeyboardUtils.showSoftKeyboard(answerText);
             /*
              * If you do a multi-question screen after a "add another group" dialog, this won't
              * automatically pop up. It's an Android issue.
@@ -218,7 +217,7 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
              * is focused before the dialog pops up, everything works fine. great.
              */
             } else {
-                SoftKeyboardUtils.hideSoftKeyboard(answer);
+                SoftKeyboardUtils.hideSoftKeyboard(answerText);
             }
         }
     }
@@ -230,14 +229,14 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        answer.setOnLongClickListener(l);
+        answerText.setOnLongClickListener(l);
         launchIntentButton.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        answer.cancelLongPress();
+        answerText.cancelLongPress();
         launchIntentButton.cancelLongPress();
     }
 
@@ -301,18 +300,18 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
     }
 
     private void focusAnswer() {
-        SoftKeyboardUtils.showSoftKeyboard(answer);
+        SoftKeyboardUtils.showSoftKeyboard(answerText);
     }
 
     private void onException(String toastText) {
         hasExApp = false;
         if (!getFormEntryPrompt().isReadOnly()) {
-            answer.setBackground(textBackground);
-            answer.setFocusable(true);
-            answer.setFocusableInTouchMode(true);
-            answer.setEnabled(true);
+            answerText.setBackground(textBackground);
+            answerText.setFocusable(true);
+            answerText.setFocusableInTouchMode(true);
+            answerText.setEnabled(true);
 
-            answer.addTextChangedListener(new TextWatcher() {
+            answerText.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 

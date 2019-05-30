@@ -17,10 +17,13 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.widget.EditText;
 
 import org.javarosa.form.api.FormEntryPrompt;
 
 public abstract class BaseStringWidget extends QuestionWidget {
+    protected EditText answerText;
+
     public BaseStringWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
     }

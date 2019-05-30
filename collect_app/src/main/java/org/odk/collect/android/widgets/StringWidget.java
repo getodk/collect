@@ -48,7 +48,6 @@ import timber.log.Timber;
 public class StringWidget extends BaseStringWidget {
     private static final String ROWS = "rows";
     boolean readOnly;
-    private final EditText answerText;
 
     protected StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
         super(context, prompt);

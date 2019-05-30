@@ -48,20 +48,20 @@ public class ExIntegerWidget extends ExStringWidget {
     public ExIntegerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        answer.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
+        answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
 
         // only allows numbers and no periods
-        answer.setKeyListener(new DigitsKeyListener(true, false));
+        answerText.setKeyListener(new DigitsKeyListener(true, false));
 
         // ints can only hold 2,147,483,648. we allow 999,999,999
         InputFilter[] fa = new InputFilter[1];
         fa[0] = new InputFilter.LengthFilter(9);
-        answer.setFilters(fa);
+        answerText.setFilters(fa);
 
         Integer i = getIntegerAnswerValue();
 
         if (i != null) {
-            answer.setText(String.format(Locale.US, "%d", i));
+            answerText.setText(String.format(Locale.US, "%d", i));
         }
     }
 
@@ -94,7 +94,7 @@ public class ExIntegerWidget extends ExStringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String s = answer.getText().toString();
+        String s = answerText.getText().toString();
         if (s.equals("")) {
             return null;
         } else {
@@ -112,7 +112,7 @@ public class ExIntegerWidget extends ExStringWidget {
     @Override
     public void setBinaryData(Object answer) {
         IntegerData integerData = ExternalAppsUtils.asIntegerData(answer);
-        this.answer.setText(integerData == null ? null : integerData.getValue().toString());
+        this.answerText.setText(integerData == null ? null : integerData.getValue().toString());
 
         widgetValueChanged();
     }
