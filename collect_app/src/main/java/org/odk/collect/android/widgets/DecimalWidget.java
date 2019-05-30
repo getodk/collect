@@ -44,8 +44,6 @@ public class DecimalWidget extends StringWidget {
         super(context, prompt, readOnlyOverride);
 
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-
-        // only numbers are allowed
         answerText.setKeyListener(new DigitsKeyListener(true, true));
 
         this.useThousandSeparator = useThousandSeparator;
@@ -71,9 +69,7 @@ public class DecimalWidget extends StringWidget {
             nf.setMaximumIntegerDigits(15);
             nf.setGroupingUsed(false);
 
-            String formattedValue = nf.format(d);
-            answerText.setText(formattedValue);
-
+            answerText.setText(nf.format(d));
             Selection.setSelection(answerText.getText(), answerText.getText().length());
         }
     }
@@ -84,11 +80,7 @@ public class DecimalWidget extends StringWidget {
         if (dataHolder != null) {
             Object dataValue = dataHolder.getValue();
             if (dataValue != null) {
-                if (dataValue instanceof Integer) {
-                    d = (double) (Integer) dataValue;
-                } else {
-                    d = (Double) dataValue;
-                }
+                d = dataValue instanceof Integer ? (double) (Integer) dataValue : (Double) dataValue;
             }
         }
         return d;
@@ -97,10 +89,9 @@ public class DecimalWidget extends StringWidget {
     @NonNull
     @Override
     public String getAnswerText() {
-        if (useThousandSeparator) {
-            return ThousandsSeparatorTextWatcher.getOriginalString(super.getAnswerText());
-        }
-        return super.getAnswerText();
+        return useThousandSeparator
+                ? ThousandsSeparatorTextWatcher.getOriginalString(super.getAnswerText())
+                : super.getAnswerText();
     }
 
     @Override
@@ -112,7 +103,6 @@ public class DecimalWidget extends StringWidget {
 
         if (s.isEmpty()) {
             return null;
-
         } else {
             try {
                 return new DecimalData(Double.parseDouble(s));

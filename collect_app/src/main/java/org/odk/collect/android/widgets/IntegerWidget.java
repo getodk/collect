@@ -43,14 +43,12 @@ public class IntegerWidget extends StringWidget {
         super(context, prompt, readOnlyOverride);
 
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
+        answerText.setKeyListener(new DigitsKeyListener(true, false));
 
         this.useThousandSeparator = useThousandSeparator;
         if (useThousandSeparator) {
             answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
         }
-
-        // only allows numbers and no periods
-        answerText.setKeyListener(new DigitsKeyListener(true, false));
 
         // ints can only hold 2,147,483,648. we allow 999,999,999
         InputFilter[] fa = new InputFilter[1];
@@ -62,7 +60,6 @@ public class IntegerWidget extends StringWidget {
         answerText.setFilters(fa);
 
         Integer i = getIntegerAnswerValue();
-
         if (i != null) {
             answerText.setText(String.format(Locale.US, "%d", i));
             Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
@@ -75,11 +72,7 @@ public class IntegerWidget extends StringWidget {
         if (dataHolder != null) {
             Object dataValue = dataHolder.getValue();
             if (dataValue != null) {
-                if (dataValue instanceof Double) {
-                    d = ((Double) dataValue).intValue();
-                } else {
-                    d = (Integer) dataValue;
-                }
+                d = dataValue instanceof Double ? ((Double) dataValue).intValue() : (Integer) dataValue;
             }
         }
         return d;
@@ -88,10 +81,9 @@ public class IntegerWidget extends StringWidget {
     @NonNull
     @Override
     public String getAnswerText() {
-        if (useThousandSeparator) {
-            return ThousandsSeparatorTextWatcher.getOriginalString(super.getAnswerText());
-        }
-        return super.getAnswerText();
+        return useThousandSeparator
+                ? ThousandsSeparatorTextWatcher.getOriginalString(super.getAnswerText())
+                : super.getAnswerText();
     }
 
     @Override
@@ -103,7 +95,6 @@ public class IntegerWidget extends StringWidget {
 
         if (s.isEmpty()) {
             return null;
-
         } else {
             try {
                 return new IntegerData(Integer.parseInt(s));

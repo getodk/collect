@@ -26,6 +26,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -49,8 +50,6 @@ public class ExIntegerWidget extends ExStringWidget {
         super(context, prompt);
 
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
-
-        // only allows numbers and no periods
         answerText.setKeyListener(new DigitsKeyListener(true, false));
 
         // ints can only hold 2,147,483,648. we allow 999,999,999
@@ -59,7 +58,6 @@ public class ExIntegerWidget extends ExStringWidget {
         answerText.setFilters(fa);
 
         Integer i = getIntegerAnswerValue();
-
         if (i != null) {
             answerText.setText(String.format(Locale.US, "%d", i));
         }
@@ -71,11 +69,7 @@ public class ExIntegerWidget extends ExStringWidget {
         if (dataHolder != null) {
             Object dataValue = dataHolder.getValue();
             if (dataValue != null) {
-                if (dataValue instanceof Double) {
-                    d = ((Double) dataValue).intValue();
-                } else {
-                    d = (Integer) dataValue;
-                }
+                d = dataValue instanceof Double ? ((Double) dataValue).intValue() : (Integer) dataValue;
             }
         }
         return d;
@@ -95,7 +89,7 @@ public class ExIntegerWidget extends ExStringWidget {
     @Override
     public IAnswerData getAnswer() {
         String s = answerText.getText().toString();
-        if (s.equals("")) {
+        if (s.isEmpty()) {
             return null;
         } else {
             try {
@@ -112,8 +106,7 @@ public class ExIntegerWidget extends ExStringWidget {
     @Override
     public void setBinaryData(Object answer) {
         IntegerData integerData = ExternalAppsUtils.asIntegerData(answer);
-        this.answerText.setText(integerData == null ? null : integerData.getValue().toString());
-
+        answerText.setText(integerData == null ? null : integerData.getValue().toString());
         widgetValueChanged();
     }
 }

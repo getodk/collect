@@ -27,6 +27,7 @@ import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -51,8 +52,6 @@ public class ExDecimalWidget extends ExStringWidget {
         super(context, prompt);
 
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-
-        // only allows numbers and no periods
         answerText.setKeyListener(new DigitsKeyListener(true, true));
 
         // only 15 characters allowed
@@ -82,11 +81,7 @@ public class ExDecimalWidget extends ExStringWidget {
         if (dataHolder != null) {
             Object dataValue = dataHolder.getValue();
             if (dataValue != null) {
-                if (dataValue instanceof Integer) {
-                    d = (double) (Integer) dataValue;
-                } else {
-                    d = (Double) dataValue;
-                }
+                d = dataValue instanceof Integer ? (double) (Integer) dataValue : (Double) dataValue;
             }
         }
         return d;
@@ -123,8 +118,7 @@ public class ExDecimalWidget extends ExStringWidget {
     @Override
     public void setBinaryData(Object answer) {
         DecimalData decimalData = ExternalAppsUtils.asDecimalData(answer);
-        this.answerText.setText(decimalData == null ? null : decimalData.getValue().toString());
-
+        answerText.setText(decimalData == null ? null : decimalData.getValue().toString());
         widgetValueChanged();
     }
 }

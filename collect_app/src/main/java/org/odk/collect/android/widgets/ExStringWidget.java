@@ -161,7 +161,7 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         StringData stringData = ExternalAppsUtils.asStringData(answer);
-        this.answerText.setText(stringData == null ? null : stringData.getValue().toString());
+        answerText.setText(stringData == null ? null : stringData.getValue().toString());
         widgetValueChanged();
     }
 
@@ -213,7 +213,7 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
             return;
         }
 
-        this.activityAvailability = activityUtilProvider.provide();
+        activityAvailability = activityUtilProvider.provide();
     }
 
     @Override
@@ -243,8 +243,7 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
 
         if (activityAvailability.isActivityAvailable(i)) {
             try {
-                ExternalAppsUtils.populateParameters(i, exParams,
-                        getFormEntryPrompt().getIndex().getReference());
+                ExternalAppsUtils.populateParameters(i, exParams, getFormEntryPrompt().getIndex().getReference());
 
                 waitForData();
                 // ACTION_SENDTO used for sending text messages or emails doesn't require any results
@@ -278,9 +277,7 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
         launchIntentButton.setFocusable(false);
         cancelWaitingForData();
 
-        Toast.makeText(getContext(),
-                toastText, Toast.LENGTH_SHORT)
-                .show();
+        Toast.makeText(getContext(), toastText, Toast.LENGTH_SHORT).show();
         Timber.d(toastText);
         focusAnswer();
     }

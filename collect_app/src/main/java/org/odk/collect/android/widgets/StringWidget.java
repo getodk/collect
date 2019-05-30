@@ -43,28 +43,7 @@ public class StringWidget extends BaseStringWidget {
 
         readOnly = prompt.isReadOnly() || readOnlyOverride;
 
-        /*
-         * If a 'rows' attribute is on the input tag, set the minimum number of lines
-         * to display in the field to that value.
-         *
-         * I.e.,
-         * <input ref="foo" rows="5">
-         *   ...
-         * </input>
-         *
-         * will set the height of the EditText box to 5 rows high.
-         */
-        String height = prompt.getQuestion().getAdditionalAttribute(null, ROWS);
-        if (height != null && height.length() != 0) {
-            try {
-                int rows = Integer.parseInt(height);
-                answerText.setMinLines(rows);
-                answerText.setGravity(
-                        Gravity.TOP); // to write test starting at the top of the edit area
-            } catch (Exception e) {
-                Timber.e("Unable to process the rows setting for the answerText field: %s", e.toString());
-            }
-        }
+        handleRowsNumber();
 
         // capitalize the first letter of the sentence
         answerText.setKeyListener(new TextKeyListener(Capitalize.SENTENCES, false));
@@ -77,10 +56,6 @@ public class StringWidget extends BaseStringWidget {
         }
 
         addAnswerView(answerText);
-    }
-
-    public EditText getAnswerTextField() {
-        return answerText;
     }
 
     @Override
@@ -110,5 +85,33 @@ public class StringWidget extends BaseStringWidget {
     public void cancelLongPress() {
         super.cancelLongPress();
         answerText.cancelLongPress();
+    }
+
+    private void handleRowsNumber() {
+        /*
+         * If a 'rows' attribute is on the input tag, set the minimum number of lines
+         * to display in the field to that value.
+         *
+         * I.e.,
+         * <input ref="foo" rows="5">
+         *   ...
+         * </input>
+         *
+         * will set the height of the EditText box to 5 rows high.
+         */
+        String height = getFormEntryPrompt().getQuestion().getAdditionalAttribute(null, ROWS);
+        if (height != null && height.length() != 0) {
+            try {
+                answerText.setMinLines(Integer.parseInt(height));
+                answerText.setGravity(Gravity.TOP); // to write test starting at the top of the edit area
+            } catch (Exception e) {
+                Timber.e("Unable to process the rows setting for the answerText field: %s", e.toString());
+            }
+        }
+    }
+
+    // Just for tests
+    public EditText getAnswerTextField() {
+        return answerText;
     }
 }

@@ -20,6 +20,8 @@ import android.text.InputType;
 import android.text.Selection;
 import android.text.method.DigitsKeyListener;
 
+import androidx.annotation.NonNull;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -39,13 +41,8 @@ public class StringNumberWidget extends StringWidget {
         super(context, prompt, readOnlyOverride);
 
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
-
-        this.useThousandSeparator = useThousandSeparator;
-        if (useThousandSeparator) {
-            answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
-        }
-
         answerText.setKeyListener(new DigitsKeyListener() {
+            @NonNull
             @Override
             protected char[] getAcceptedChars() {
                 return new char[]{
@@ -54,11 +51,12 @@ public class StringNumberWidget extends StringWidget {
             }
         });
 
-        String s = null;
-        if (prompt.getAnswerValue() != null) {
-            s = (String) prompt.getAnswerValue().getValue();
+        this.useThousandSeparator = useThousandSeparator;
+        if (useThousandSeparator) {
+            answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
         }
 
+        String s = prompt.getAnswerValue() != null ? (String) prompt.getAnswerValue().getValue() : null;
         if (s != null) {
             answerText.setText(s);
             Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
