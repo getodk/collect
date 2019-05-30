@@ -18,7 +18,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.NonNull;
 
-import android.text.Selection;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.view.Gravity;
@@ -28,7 +27,6 @@ import android.widget.EditText;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 
 import timber.log.Timber;
@@ -74,8 +72,6 @@ public class StringWidget extends BaseStringWidget {
 
         // capitalize the first letter of the sentence
         answerText.setKeyListener(new TextKeyListener(Capitalize.SENTENCES, false));
-
-        setDisplayValueFromModel();
 
         if (readOnly) {
             answerText.setBackground(null);
@@ -139,27 +135,5 @@ public class StringWidget extends BaseStringWidget {
     public void cancelLongPress() {
         super.cancelLongPress();
         answerText.cancelLongPress();
-    }
-
-    /**
-     * Registers all subviews except for the EditText to clear on long press. This makes it possible
-     * to long-press to paste or perform other text editing functions.
-     */
-    @Override
-    protected void registerToClearAnswerOnLongPress(FormEntryActivity activity) {
-        for (int i = 0; i < getChildCount(); i++) {
-            if (!(getChildAt(i) instanceof EditText)) {
-                activity.registerForContextMenu(getChildAt(i));
-            }
-        }
-    }
-
-    public void setDisplayValueFromModel() {
-        String currentAnswer = getFormEntryPrompt().getAnswerText();
-
-        if (currentAnswer != null) {
-            answerText.setText(currentAnswer);
-            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
-        }
     }
 }

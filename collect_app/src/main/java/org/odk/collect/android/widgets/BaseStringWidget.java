@@ -18,12 +18,14 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.text.Editable;
+import android.text.Selection;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.widget.EditText;
 import android.widget.TableLayout;
 
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.utilities.ViewIds;
 
 public abstract class BaseStringWidget extends QuestionWidget {
@@ -59,5 +61,29 @@ public abstract class BaseStringWidget extends QuestionWidget {
                 widgetValueChanged();
             }
         });
+
+        setDisplayValueFromModel();
+    }
+
+    /**
+     * Registers all subviews except for the EditText to clear on long press. This makes it possible
+     * to long-press to paste or perform other text editing functions.
+     */
+    @Override
+    protected void registerToClearAnswerOnLongPress(FormEntryActivity activity) {
+        for (int i = 0; i < getChildCount(); i++) {
+            if (!(getChildAt(i) instanceof EditText)) {
+                activity.registerForContextMenu(getChildAt(i));
+            }
+        }
+    }
+
+    public void setDisplayValueFromModel() {
+        String currentAnswer = getFormEntryPrompt().getAnswerText();
+
+        if (currentAnswer != null) {
+            answerText.setText(currentAnswer);
+            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
+        }
     }
 }

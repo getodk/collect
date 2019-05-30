@@ -55,8 +55,8 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.BaseStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
-import org.odk.collect.android.widgets.StringWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
@@ -483,7 +483,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                                             treeReference.toString(false)));
                     }
 
-                    ((StringWidget) questionWidget).setDisplayValueFromModel();
+                    ((BaseStringWidget) questionWidget).setDisplayValueFromModel();
                     break;
                 }
             }
