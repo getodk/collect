@@ -45,7 +45,7 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class StringWidget extends QuestionWidget {
+public class StringWidget extends BaseStringWidget {
     private static final String ROWS = "rows";
     boolean readOnly;
     private final EditText answerText;

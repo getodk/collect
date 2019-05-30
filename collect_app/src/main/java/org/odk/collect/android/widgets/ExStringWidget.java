@@ -101,7 +101,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * @author mitchellsundt@gmail.com
  */
 @SuppressLint("ViewConstructor")
-public class ExStringWidget extends QuestionWidget implements BinaryWidget {
+public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
     // If an extra with this key is specified, it will be parsed as a URI and used as intent data
     private static final String URI_KEY = "uri_data";
 
