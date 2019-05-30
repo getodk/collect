@@ -21,9 +21,14 @@ import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.widget.EditText;
 import android.widget.TableLayout;
 
+import androidx.annotation.NonNull;
+
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.utilities.ViewIds;
@@ -63,6 +68,27 @@ public abstract class BaseStringWidget extends QuestionWidget {
         });
 
         setDisplayValueFromModel();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return !event.isAltPressed() && super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void clearAnswer() {
+        answerText.setText(null);
+    }
+
+    @Override
+    public IAnswerData getAnswer() {
+        String s = getAnswerText();
+        return !s.equals("") ? new StringData(s) : null;
+    }
+
+    @NonNull
+    public String getAnswerText() {
+        return answerText.getText().toString();
     }
 
     /**

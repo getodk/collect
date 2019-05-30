@@ -23,14 +23,12 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
-import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 
-import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.parser.XPathSyntaxException;
@@ -157,18 +155,6 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
         }
     }
 
-    @Override
-    public void clearAnswer() {
-        answerText.setText(null);
-        widgetValueChanged();
-    }
-
-    @Override
-    public IAnswerData getAnswer() {
-        String s = answerText.getText().toString();
-        return !s.isEmpty() ? new StringData(s) : null;
-    }
-
     /**
      * Allows answer to be set externally in {@link FormEntryActivity}.
      */
@@ -202,11 +188,6 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
                 SoftKeyboardUtils.hideSoftKeyboard(answerText);
             }
         }
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return !event.isAltPressed() && super.onKeyDown(keyCode, event);
     }
 
     @Override

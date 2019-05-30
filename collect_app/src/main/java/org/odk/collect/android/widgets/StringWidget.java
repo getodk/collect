@@ -16,16 +16,12 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.annotation.NonNull;
 
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.widget.EditText;
 
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 
@@ -83,24 +79,8 @@ public class StringWidget extends BaseStringWidget {
         addAnswerView(answerText);
     }
 
-    @Override
-    public void clearAnswer() {
-        answerText.setText(null);
-    }
-
     public EditText getAnswerTextField() {
         return answerText;
-    }
-
-    @Override
-    public IAnswerData getAnswer() {
-        String s = getAnswerText();
-        return !s.equals("") ? new StringData(s) : null;
-    }
-
-    @NonNull
-    public String getAnswerText() {
-        return answerText.getText().toString();
     }
 
     @Override
@@ -119,11 +99,6 @@ public class StringWidget extends BaseStringWidget {
         } else {
             SoftKeyboardUtils.hideSoftKeyboard(answerText);
         }
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return !event.isAltPressed() && super.onKeyDown(keyCode, event);
     }
 
     @Override
