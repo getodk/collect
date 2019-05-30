@@ -81,8 +81,9 @@ public class ExternalAppsUtils {
                 : exString.substring(leftParIndex + 1);
 
         Map<String, String> parameters = new LinkedHashMap<>();
-        String[] paramsPairs = paramsStr.trim().split(",");
+        String[] paramsPairs = paramsStr.trim().split("(?<!\\\\),");
         for (String paramsPair : paramsPairs) {
+            paramsPair = paramsPair.replaceAll("\\\\,", ",");
             String[] keyValue = paramsPair.trim().split("=");
             if (keyValue.length == 2) {
                 parameters.put(keyValue[0].trim(), keyValue[1].trim());
