@@ -11,8 +11,12 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
 public class MapboxUtils {
-    private static boolean initAttempted = false;
-    private static Mapbox mapbox = null;
+    private static boolean initAttempted;
+    private static Mapbox mapbox;
+
+    private MapboxUtils() {
+
+    }
 
     /** Attempts to initialize Mapbox; returns the singleton Mapbox if successful. */
     public static Mapbox initMapbox() {
