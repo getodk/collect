@@ -45,12 +45,7 @@ public class DecimalWidget extends StringWidget {
     public DecimalWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
         super(context, prompt, readOnlyOverride);
 
-        answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-
-        // needed to make long readonly text scroll
-        answerText.setHorizontallyScrolling(false);
-        answerText.setSingleLine(false);
 
         // only numbers are allowed
         answerText.setKeyListener(new DigitsKeyListener(true, true));

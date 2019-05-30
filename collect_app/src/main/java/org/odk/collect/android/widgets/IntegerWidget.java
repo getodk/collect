@@ -44,12 +44,7 @@ public class IntegerWidget extends StringWidget {
     public IntegerWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
         super(context, prompt, readOnlyOverride);
 
-        answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
-
-        // needed to make long readonly text scroll
-        answerText.setHorizontallyScrolling(false);
-        answerText.setSingleLine(false);
 
         this.useThousandSeparator = useThousandSeparator;
         if (useThousandSeparator) {

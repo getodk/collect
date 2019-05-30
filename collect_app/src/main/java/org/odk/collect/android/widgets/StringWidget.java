@@ -52,13 +52,7 @@ public class StringWidget extends BaseStringWidget {
     protected StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
         super(context, prompt);
 
-        answerText = new EditText(context);
-        answerText.setId(ViewIds.generateViewId());
         readOnly = prompt.isReadOnly() || readOnlyOverride;
-
-        answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 
         /*
          * If a 'rows' attribute is on the input tag, set the minimum number of lines
@@ -83,15 +77,8 @@ public class StringWidget extends BaseStringWidget {
             }
         }
 
-        params.setMargins(7, 5, 7, 5);
-        answerText.setLayoutParams(params);
-
         // capitalize the first letter of the sentence
         answerText.setKeyListener(new TextKeyListener(Capitalize.SENTENCES, false));
-
-        // needed to make long read only text scroll
-        answerText.setHorizontallyScrolling(false);
-        answerText.setSingleLine(false);
 
         setDisplayValueFromModel();
 
@@ -103,22 +90,6 @@ public class StringWidget extends BaseStringWidget {
         }
 
         addAnswerView(answerText);
-        answerText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                widgetValueChanged();
-            }
-        });
     }
 
     @Override

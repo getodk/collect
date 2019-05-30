@@ -115,24 +115,12 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
 
         super(context, prompt);
 
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
-
-        // set text formatting
-        answerText = new EditText(context);
-        answerText.setId(ViewIds.generateViewId());
-        answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        answerText.setLayoutParams(params);
         textBackground = answerText.getBackground();
         answerText.setBackground(null);
         answerText.setTextColor(themeUtils.getPrimaryTextColor());
 
         // capitalize nothing
         answerText.setKeyListener(new TextKeyListener(Capitalize.NONE, false));
-
-        // needed to make long read only text scroll
-        answerText.setHorizontallyScrolling(false);
-        answerText.setSingleLine(false);
 
         String s = prompt.getAnswerText();
         if (s != null) {
@@ -310,23 +298,6 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
             answerText.setFocusable(true);
             answerText.setFocusableInTouchMode(true);
             answerText.setEnabled(true);
-
-            answerText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    widgetValueChanged();
-                }
-            });
         }
         launchIntentButton.setEnabled(false);
         launchIntentButton.setFocusable(false);
