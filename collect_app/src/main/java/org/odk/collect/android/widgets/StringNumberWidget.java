@@ -19,8 +19,6 @@ import android.content.Context;
 import android.text.InputType;
 import android.text.Selection;
 import android.text.method.DigitsKeyListener;
-import android.util.TypedValue;
-import android.widget.EditText;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
