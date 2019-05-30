@@ -51,47 +51,6 @@ import timber.log.Timber;
 import static android.content.Intent.ACTION_SENDTO;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
-/**
- * <p>Launch an external app to supply a string value. If the app
- * does not launch, enable the text area for regular data entry.</p>
- * <p>
- * <p>The default button text is "Launch"
- * <p>
- * <p>You may override the button text and the error text that is
- * displayed when the app is missing by using jr:itext() values.
- * <p>
- * <p>To use this widget, define an appearance on the &lt;input/&gt;
- * tag that begins "ex:" and then contains the intent action to lauch.
- * <p>
- * <p>e.g.,
- * <p>
- * <pre>
- * &lt;input appearance="ex:change.uw.android.TEXTANSWER" ref="/form/passPhrase" &gt;
- * </pre>
- * <p>or, to customize the button text and error strings with itext:
- * <pre>
- *      ...
- *      &lt;bind nodeset="/form/passPhrase" type="string" /&gt;
- *      ...
- *      &lt;itext&gt;
- *        &lt;translation lang="English"&gt;
- *          &lt;text id="textAnswer"&gt;
- *            &lt;value form="short"&gt;Text question&lt;/value&gt;
- *            &lt;value form="long"&gt;Enter your pass phrase&lt;/value&gt;
- *            &lt;value form="buttonText"&gt;Get Pass Phrase&lt;/value&gt;
- *            &lt;value form="noAppErrorString"&gt;Pass Phrase Tool is not installed!
- *             Please proceed to manually enter pass phrase.&lt;/value&gt;
- *          &lt;/text&gt;
- *        &lt;/translation&gt;
- *      &lt;/itext&gt;
- *    ...
- *    &lt;input appearance="ex:change.uw.android.TEXTANSWER" ref="/form/passPhrase"&gt;
- *      &lt;label ref="jr:itext('textAnswer')"/&gt;
- *    &lt;/input&gt;
- * </pre>
- *
- * @author mitchellsundt@gmail.com
- */
 @SuppressLint("ViewConstructor")
 public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
     // If an extra with this key is specified, it will be parsed as a URI and used as intent data
