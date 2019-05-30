@@ -45,9 +45,6 @@ public class DecimalWidget extends StringWidget {
     public DecimalWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
         super(context, prompt, readOnlyOverride);
 
-        // formatting
-        EditText answerText = getAnswerTextField();
-
         answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
@@ -122,7 +119,7 @@ public class DecimalWidget extends StringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String s = getAnswerTextField().getText().toString();
+        String s = answerText.getText().toString();
         if (useThousandSeparator) {
             s = ThousandsSeparatorTextWatcher.getOriginalString(s);
         }

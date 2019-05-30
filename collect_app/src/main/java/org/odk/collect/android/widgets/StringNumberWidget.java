@@ -40,21 +40,19 @@ public class StringNumberWidget extends StringWidget {
     public StringNumberWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
         super(context, prompt, readOnlyOverride);
 
-        EditText answerTextField = getAnswerTextField();
-
-        answerTextField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        answerTextField.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
+        answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+        answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
 
         // needed to make long readonly text scroll
-        answerTextField.setHorizontallyScrolling(false);
-        answerTextField.setSingleLine(false);
+        answerText.setHorizontallyScrolling(false);
+        answerText.setSingleLine(false);
 
         this.useThousandSeparator = useThousandSeparator;
         if (useThousandSeparator) {
-            answerTextField.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerTextField));
+            answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
         }
 
-        answerTextField.setKeyListener(new DigitsKeyListener() {
+        answerText.setKeyListener(new DigitsKeyListener() {
             @Override
             protected char[] getAcceptedChars() {
                 return new char[]{
@@ -75,8 +73,8 @@ public class StringNumberWidget extends StringWidget {
         }
 
         if (s != null) {
-            answerTextField.setText(s);
-            Selection.setSelection(answerTextField.getText(), answerTextField.getText().toString().length());
+            answerText.setText(s);
+            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
         }
     }
 

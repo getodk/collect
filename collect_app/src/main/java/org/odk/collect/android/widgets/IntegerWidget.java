@@ -44,7 +44,6 @@ public class IntegerWidget extends StringWidget {
     public IntegerWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
         super(context, prompt, readOnlyOverride);
 
-        EditText answerText = getAnswerTextField();
         answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
 
@@ -110,7 +109,7 @@ public class IntegerWidget extends StringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String s = getAnswerTextField().getText().toString();
+        String s = answerText.getText().toString();
         if (useThousandSeparator) {
             s = ThousandsSeparatorTextWatcher.getOriginalString(s);
         }
