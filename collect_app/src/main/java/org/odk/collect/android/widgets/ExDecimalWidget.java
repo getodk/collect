@@ -49,7 +49,7 @@ public class ExDecimalWidget extends ExStringWidget {
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         answerText.setKeyListener(new DigitsKeyListener(true, true));
 
-        setUpDecimalInputFilter(false);
+        setUpDecimalInputFilter();
     }
 
     @Override

@@ -64,7 +64,7 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
 
     public ExStringWidget(Context context, FormEntryPrompt prompt) {
 
-        super(context, prompt);
+        super(context, prompt, false);
 
         textBackground = answerText.getBackground();
         answerText.setBackground(null);

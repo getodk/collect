@@ -39,7 +39,11 @@ public class StringWidget extends BaseStringWidget {
     boolean readOnly;
 
     protected StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
-        super(context, prompt);
+        this(context, prompt, readOnlyOverride, false);
+    }
+
+    protected StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
+        super(context, prompt, useThousandSeparator);
 
         readOnly = prompt.isReadOnly() || readOnlyOverride;
 

@@ -34,12 +34,8 @@ import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
 @SuppressLint("ViewConstructor")
 public class StringNumberWidget extends StringWidget {
 
-    boolean useThousandSeparator;
-
     public StringNumberWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
-        super(context, prompt, readOnlyOverride);
-
-        this.useThousandSeparator = useThousandSeparator;
+        super(context, prompt, readOnlyOverride, useThousandSeparator);
 
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
         answerText.setKeyListener(new DigitsKeyListener() {
@@ -51,9 +47,6 @@ public class StringNumberWidget extends StringWidget {
                 };
             }
         });
-        if (useThousandSeparator) {
-            answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
-        }
     }
 
     @Override

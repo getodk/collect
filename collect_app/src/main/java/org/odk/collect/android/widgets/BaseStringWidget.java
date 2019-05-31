@@ -32,6 +32,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
 import org.odk.collect.android.utilities.ViewIds;
 
 import java.text.NumberFormat;
@@ -39,10 +40,13 @@ import java.util.Locale;
 
 public abstract class BaseStringWidget extends QuestionWidget {
     protected EditText answerText;
+    protected boolean useThousandSeparator;
 
-    public BaseStringWidget(Context context, FormEntryPrompt prompt) {
+    public BaseStringWidget(Context context, FormEntryPrompt prompt, boolean useThousandSeparator) {
         super(context, prompt);
+        this.useThousandSeparator = useThousandSeparator;
 
+        setUpAnswerText();
         setUpAnswerText();
         setDisplayValueFromModel();
     }
@@ -120,9 +124,12 @@ public abstract class BaseStringWidget extends QuestionWidget {
                 widgetValueChanged();
             }
         });
+        if (useThousandSeparator) {
+            answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
+        }
     }
 
-    protected void setUpIntegerInputFilter(boolean useThousandSeparator) {
+    protected void setUpIntegerInputFilter() {
         // ints can only hold 2,147,483,648. we allow 999,999,999
         InputFilter[] fa = new InputFilter[1];
         fa[0] = new InputFilter.LengthFilter(9);
@@ -133,7 +140,7 @@ public abstract class BaseStringWidget extends QuestionWidget {
         answerText.setFilters(fa);
     }
 
-    protected void setUpDecimalInputFilter(boolean useThousandSeparator) {
+    protected void setUpDecimalInputFilter() {
         // only 15 characters allowed
         InputFilter[] fa = new InputFilter[1];
         fa[0] = new InputFilter.LengthFilter(15);

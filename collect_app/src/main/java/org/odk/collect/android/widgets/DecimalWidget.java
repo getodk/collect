@@ -33,20 +33,12 @@ import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
 @SuppressLint("ViewConstructor")
 public class DecimalWidget extends StringWidget {
 
-    boolean useThousandSeparator;
-
     public DecimalWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
-        super(context, prompt, readOnlyOverride);
-
-        this.useThousandSeparator = useThousandSeparator;
+        super(context, prompt, readOnlyOverride, useThousandSeparator);
 
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         answerText.setKeyListener(new DigitsKeyListener(true, true));
-        if (useThousandSeparator) {
-            answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
-        }
-
-        setUpDecimalInputFilter(useThousandSeparator);
+        setUpDecimalInputFilter();
     }
 
     @NonNull

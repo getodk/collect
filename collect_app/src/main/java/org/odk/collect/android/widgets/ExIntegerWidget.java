@@ -48,8 +48,7 @@ public class ExIntegerWidget extends ExStringWidget {
 
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
         answerText.setKeyListener(new DigitsKeyListener(true, false));
-
-        setUpIntegerInputFilter(false);
+        setUpIntegerInputFilter();
     }
 
     @Override
