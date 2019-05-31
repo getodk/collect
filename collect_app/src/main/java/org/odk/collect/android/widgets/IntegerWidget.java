@@ -41,10 +41,10 @@ public class IntegerWidget extends StringWidget {
     public IntegerWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
         super(context, prompt, readOnlyOverride);
 
+        this.useThousandSeparator = useThousandSeparator;
+
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
         answerText.setKeyListener(new DigitsKeyListener(true, false));
-
-        this.useThousandSeparator = useThousandSeparator;
         if (useThousandSeparator) {
             answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
         }

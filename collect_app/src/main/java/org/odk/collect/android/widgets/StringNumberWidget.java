@@ -40,6 +40,8 @@ public class StringNumberWidget extends StringWidget {
     public StringNumberWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
         super(context, prompt, readOnlyOverride);
 
+        this.useThousandSeparator = useThousandSeparator;
+
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
         answerText.setKeyListener(new DigitsKeyListener() {
             @NonNull
@@ -50,8 +52,6 @@ public class StringNumberWidget extends StringWidget {
                 };
             }
         });
-
-        this.useThousandSeparator = useThousandSeparator;
         if (useThousandSeparator) {
             answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
         }

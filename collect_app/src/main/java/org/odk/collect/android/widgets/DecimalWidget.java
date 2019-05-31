@@ -42,10 +42,10 @@ public class DecimalWidget extends StringWidget {
     public DecimalWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
         super(context, prompt, readOnlyOverride);
 
+        this.useThousandSeparator = useThousandSeparator;
+
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         answerText.setKeyListener(new DigitsKeyListener(true, true));
-
-        this.useThousandSeparator = useThousandSeparator;
         if (useThousandSeparator) {
             answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
         }
