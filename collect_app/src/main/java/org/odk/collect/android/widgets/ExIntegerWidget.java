@@ -18,7 +18,6 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.text.InputFilter;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
 
@@ -52,14 +51,7 @@ public class ExIntegerWidget extends ExStringWidget {
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
         answerText.setKeyListener(new DigitsKeyListener(true, false));
 
-        setUpInputFilter();
-    }
-
-    private void setUpInputFilter() {
-        // ints can only hold 2,147,483,648. we allow 999,999,999
-        InputFilter[] fa = new InputFilter[1];
-        fa[0] = new InputFilter.LengthFilter(9);
-        answerText.setFilters(fa);
+        setUpIntegerInputFilter(false);
     }
 
     private Integer getIntegerAnswerValue() {

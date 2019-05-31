@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.NonNull;
-import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Selection;
 import android.text.method.DigitsKeyListener;
@@ -51,17 +50,7 @@ public class DecimalWidget extends StringWidget {
             answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
         }
 
-        setUpInputFilter();
-    }
-
-    private void setUpInputFilter() {
-        // only 15 characters allowed
-        InputFilter[] fa = new InputFilter[1];
-        fa[0] = new InputFilter.LengthFilter(15);
-        if (useThousandSeparator) {
-            fa[0] = new InputFilter.LengthFilter(19);
-        }
-        answerText.setFilters(fa);
+        setUpDecimalInputFilter(useThousandSeparator);
     }
 
     private Double getDoubleAnswerValue() {

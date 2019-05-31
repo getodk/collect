@@ -18,7 +18,6 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Selection;
 import android.text.method.DigitsKeyListener;
@@ -54,14 +53,7 @@ public class ExDecimalWidget extends ExStringWidget {
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         answerText.setKeyListener(new DigitsKeyListener(true, true));
 
-        setUpInputFilter();
-    }
-
-    private void setUpInputFilter() {
-        // only 15 characters allowed
-        InputFilter[] fa = new InputFilter[1];
-        fa[0] = new InputFilter.LengthFilter(15);
-        answerText.setFilters(fa);
+        setUpDecimalInputFilter(false);
     }
 
     private Double getDoubleAnswerValue() {

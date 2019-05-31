@@ -18,6 +18,7 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -107,5 +108,26 @@ public abstract class BaseStringWidget extends QuestionWidget {
                 widgetValueChanged();
             }
         });
+    }
+
+    protected void setUpIntegerInputFilter(boolean useThousandSeparator) {
+        // ints can only hold 2,147,483,648. we allow 999,999,999
+        InputFilter[] fa = new InputFilter[1];
+        fa[0] = new InputFilter.LengthFilter(9);
+        if (useThousandSeparator) {
+            //11 since for a nine digit number , their will be 2 separators.
+            fa[0] = new InputFilter.LengthFilter(11);
+        }
+        answerText.setFilters(fa);
+    }
+
+    protected void setUpDecimalInputFilter(boolean useThousandSeparator) {
+        // only 15 characters allowed
+        InputFilter[] fa = new InputFilter[1];
+        fa[0] = new InputFilter.LengthFilter(15);
+        if (useThousandSeparator) {
+            fa[0] = new InputFilter.LengthFilter(19);
+        }
+        answerText.setFilters(fa);
     }
 }
