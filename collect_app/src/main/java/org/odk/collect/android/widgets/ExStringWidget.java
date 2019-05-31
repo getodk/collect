@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.text.Selection;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.widget.Button;
@@ -73,11 +74,6 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
         // capitalize nothing
         answerText.setKeyListener(new TextKeyListener(Capitalize.NONE, false));
 
-        String s = prompt.getAnswerText();
-        if (s != null) {
-            answerText.setText(s);
-        }
-
         if (getFormEntryPrompt().isReadOnly() || hasExApp) {
             answerText.setFocusable(false);
             answerText.setEnabled(false);
@@ -102,6 +98,14 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
                         .setLabel(Collect.getCurrentFormIdentifierHash())
                         .build());
 
+    }
+
+    @Override
+    public void setDisplayValueFromModel() {
+        String s = getFormEntryPrompt().getAnswerText();
+        if (s != null) {
+            answerText.setText(s);
+        }
     }
 
     protected void fireActivity(Intent i) throws ActivityNotFoundException {

@@ -27,6 +27,8 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
 
+import java.util.Locale;
+
 /**
  * Widget that restricts values to integers.
  *
@@ -55,8 +57,11 @@ public class StringNumberWidget extends StringWidget {
         if (useThousandSeparator) {
             answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
         }
+    }
 
-        String s = prompt.getAnswerValue() != null ? (String) prompt.getAnswerValue().getValue() : null;
+    @Override
+    public void setDisplayValueFromModel() {
+        String s = getFormEntryPrompt().getAnswerValue() != null ? (String) getFormEntryPrompt().getAnswerValue().getValue() : null;
         if (s != null) {
             answerText.setText(s);
             Selection.setSelection(answerText.getText(), answerText.getText().toString().length());

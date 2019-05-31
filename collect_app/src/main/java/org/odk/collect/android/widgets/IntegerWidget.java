@@ -58,12 +58,6 @@ public class IntegerWidget extends StringWidget {
             fa[0] = new InputFilter.LengthFilter(11);
         }
         answerText.setFilters(fa);
-
-        Integer i = getIntegerAnswerValue();
-        if (i != null) {
-            answerText.setText(String.format(Locale.US, "%d", i));
-            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
-        }
     }
 
     private Integer getIntegerAnswerValue() {
@@ -76,6 +70,15 @@ public class IntegerWidget extends StringWidget {
             }
         }
         return d;
+    }
+
+    @Override
+    public void setDisplayValueFromModel() {
+        Integer i = getIntegerAnswerValue();
+        if (i != null) {
+            answerText.setText(String.format(Locale.US, "%d", i));
+            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
+        }
     }
 
     @NonNull

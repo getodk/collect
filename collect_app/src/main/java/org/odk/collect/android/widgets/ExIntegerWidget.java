@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Selection;
 import android.text.method.DigitsKeyListener;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -56,11 +57,6 @@ public class ExIntegerWidget extends ExStringWidget {
         InputFilter[] fa = new InputFilter[1];
         fa[0] = new InputFilter.LengthFilter(9);
         answerText.setFilters(fa);
-
-        Integer i = getIntegerAnswerValue();
-        if (i != null) {
-            answerText.setText(String.format(Locale.US, "%d", i));
-        }
     }
 
     private Integer getIntegerAnswerValue() {
@@ -73,6 +69,14 @@ public class ExIntegerWidget extends ExStringWidget {
             }
         }
         return d;
+    }
+
+    @Override
+    public void setDisplayValueFromModel() {
+        Integer i = getIntegerAnswerValue();
+        if (i != null) {
+            answerText.setText(String.format(Locale.US, "%d", i));
+        }
     }
 
     @Override

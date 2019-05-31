@@ -18,7 +18,6 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.text.Editable;
-import android.text.Selection;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -77,14 +76,7 @@ public abstract class BaseStringWidget extends QuestionWidget {
         }
     }
 
-    public void setDisplayValueFromModel() {
-        String currentAnswer = getFormEntryPrompt().getAnswerText();
-
-        if (currentAnswer != null) {
-            answerText.setText(currentAnswer);
-            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
-        }
-    }
+    public abstract void setDisplayValueFromModel();
 
     private void setUpAnswerText() {
         answerText = new EditText(getContext());
