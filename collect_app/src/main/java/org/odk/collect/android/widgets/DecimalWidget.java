@@ -53,18 +53,6 @@ public class DecimalWidget extends StringWidget {
         setUpDecimalInputFilter(useThousandSeparator);
     }
 
-    private Double getDoubleAnswerValue() {
-        IAnswerData dataHolder = getFormEntryPrompt().getAnswerValue();
-        Double d = null;
-        if (dataHolder != null) {
-            Object dataValue = dataHolder.getValue();
-            if (dataValue != null) {
-                d = dataValue instanceof Integer ? (double) (Integer) dataValue : (Double) dataValue;
-            }
-        }
-        return d;
-    }
-
     @Override
     public void setDisplayValueFromModel() {
         Double d = getDoubleAnswerValue();

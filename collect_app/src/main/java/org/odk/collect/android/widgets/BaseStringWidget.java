@@ -130,4 +130,28 @@ public abstract class BaseStringWidget extends QuestionWidget {
         }
         answerText.setFilters(fa);
     }
+
+    protected Integer getIntegerAnswerValue() {
+        IAnswerData dataHolder = getFormEntryPrompt().getAnswerValue();
+        Integer d = null;
+        if (dataHolder != null) {
+            Object dataValue = dataHolder.getValue();
+            if (dataValue != null) {
+                d = dataValue instanceof Double ? ((Double) dataValue).intValue() : (Integer) dataValue;
+            }
+        }
+        return d;
+    }
+
+    protected Double getDoubleAnswerValue() {
+        IAnswerData dataHolder = getFormEntryPrompt().getAnswerValue();
+        Double d = null;
+        if (dataHolder != null) {
+            Object dataValue = dataHolder.getValue();
+            if (dataValue != null) {
+                d = dataValue instanceof Integer ? (double) (Integer) dataValue : (Double) dataValue;
+            }
+        }
+        return d;
+    }
 }

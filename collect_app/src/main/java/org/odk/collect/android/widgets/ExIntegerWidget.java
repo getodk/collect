@@ -54,18 +54,6 @@ public class ExIntegerWidget extends ExStringWidget {
         setUpIntegerInputFilter(false);
     }
 
-    private Integer getIntegerAnswerValue() {
-        IAnswerData dataHolder = getFormEntryPrompt().getAnswerValue();
-        Integer d = null;
-        if (dataHolder != null) {
-            Object dataValue = dataHolder.getValue();
-            if (dataValue != null) {
-                d = dataValue instanceof Double ? ((Double) dataValue).intValue() : (Integer) dataValue;
-            }
-        }
-        return d;
-    }
-
     @Override
     public void setDisplayValueFromModel() {
         Integer i = getIntegerAnswerValue();
