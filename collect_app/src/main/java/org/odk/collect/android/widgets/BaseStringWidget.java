@@ -49,7 +49,6 @@ public abstract class BaseStringWidget extends QuestionWidget {
         this.useThousandSeparator = useThousandSeparator;
 
         setUpAnswerText();
-        setUpAnswerText();
         setDisplayValueFromModel();
     }
 
