@@ -16,10 +16,6 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.text.InputType;
-import android.text.method.DigitsKeyListener;
-
-import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -36,17 +32,6 @@ public class StringNumberWidget extends StringWidget {
 
     public StringNumberWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
         super(context, prompt, readOnlyOverride, useThousandSeparator);
-
-        answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
-        answerText.setKeyListener(new DigitsKeyListener() {
-            @NonNull
-            @Override
-            protected char[] getAcceptedChars() {
-                return new char[]{
-                        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-', '+', ' ', ','
-                };
-            }
-        });
     }
 
     @Override

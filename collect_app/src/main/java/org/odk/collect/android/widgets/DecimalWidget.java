@@ -17,8 +17,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.NonNull;
-import android.text.InputType;
-import android.text.method.DigitsKeyListener;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
@@ -33,10 +31,6 @@ public class DecimalWidget extends StringWidget {
 
     public DecimalWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
         super(context, prompt, readOnlyOverride, useThousandSeparator);
-
-        answerText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        answerText.setKeyListener(new DigitsKeyListener(true, true));
-        setUpDecimalInputFilter();
     }
 
     @NonNull

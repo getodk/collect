@@ -18,8 +18,6 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.text.InputType;
-import android.text.method.DigitsKeyListener;
 
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -44,10 +42,6 @@ public class ExIntegerWidget extends ExStringWidget {
 
     public ExIntegerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-
-        answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
-        answerText.setKeyListener(new DigitsKeyListener(true, false));
-        setUpIntegerInputFilter();
     }
 
     @Override

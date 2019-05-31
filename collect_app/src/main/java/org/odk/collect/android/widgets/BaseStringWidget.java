@@ -19,8 +19,10 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.Selection;
 import android.text.TextWatcher;
+import android.text.method.DigitsKeyListener;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.widget.EditText;
@@ -103,6 +105,7 @@ public abstract class BaseStringWidget extends QuestionWidget {
 
     private void setUpAnswerText() {
         answerText = new EditText(getContext());
+        adjustEditTextBasedOnWidgetType();
         answerText.setId(ViewIds.generateViewId());
         answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
 
@@ -245,10 +248,32 @@ public abstract class BaseStringWidget extends QuestionWidget {
 
     private void setDisplayStringValueFromModel() {
         String currentAnswer = getFormEntryPrompt().getAnswerText();
-
         if (currentAnswer != null) {
             answerText.setText(currentAnswer);
             Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
+        }
+    }
+
+    private void adjustEditTextBasedOnWidgetType() {
+        if (this instanceof IntegerWidget || this instanceof ExIntegerWidget) {
+            answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
+            answerText.setKeyListener(new DigitsKeyListener(true, false));
+            setUpIntegerInputFilter();
+        } else if (this instanceof DecimalWidget || this instanceof ExDecimalWidget) {
+            answerText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            answerText.setKeyListener(new DigitsKeyListener(true, true));
+            setUpDecimalInputFilter();
+        } else if (this instanceof StringNumberWidget) {
+            answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
+            answerText.setKeyListener(new DigitsKeyListener() {
+                @NonNull
+                @Override
+                protected char[] getAcceptedChars() {
+                    return new char[]{
+                            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-', '+', ' ', ','
+                    };
+                }
+            });
         }
     }
 }
