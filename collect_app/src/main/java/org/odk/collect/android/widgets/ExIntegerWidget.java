@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
 
-import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
@@ -59,20 +58,6 @@ public class ExIntegerWidget extends ExStringWidget {
         } catch (SecurityException e) {
             Timber.i(e);
             ToastUtils.showLongToast(R.string.not_granted_permission);
-        }
-    }
-
-    @Override
-    public IAnswerData getAnswer() {
-        String s = answerText.getText().toString();
-        if (s.isEmpty()) {
-            return null;
-        } else {
-            try {
-                return new IntegerData(Integer.parseInt(s));
-            } catch (Exception numberFormatException) {
-                return null;
-            }
         }
     }
 

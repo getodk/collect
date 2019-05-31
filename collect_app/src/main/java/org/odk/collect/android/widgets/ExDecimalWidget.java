@@ -22,7 +22,6 @@ import android.text.InputType;
 import android.text.method.DigitsKeyListener;
 
 import org.javarosa.core.model.data.DecimalData;
-import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
@@ -48,7 +47,6 @@ public class ExDecimalWidget extends ExStringWidget {
 
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         answerText.setKeyListener(new DigitsKeyListener(true, true));
-
         setUpDecimalInputFilter();
     }
 
@@ -60,20 +58,6 @@ public class ExDecimalWidget extends ExStringWidget {
         } catch (SecurityException e) {
             Timber.i(e);
             ToastUtils.showLongToast(R.string.not_granted_permission);
-        }
-    }
-
-    @Override
-    public IAnswerData getAnswer() {
-        String s = answerText.getText().toString();
-        if (s.equals("")) {
-            return null;
-        } else {
-            try {
-                return new DecimalData(Double.valueOf(s));
-            } catch (Exception numberFormatException) {
-                return null;
-            }
         }
     }
 

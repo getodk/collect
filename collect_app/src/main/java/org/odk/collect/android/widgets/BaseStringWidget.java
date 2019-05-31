@@ -28,7 +28,9 @@ import android.widget.TableLayout;
 
 import androidx.annotation.NonNull;
 
+import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormEntryActivity;
@@ -63,8 +65,13 @@ public abstract class BaseStringWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String s = getAnswerText();
-        return !s.equals("") ? new StringData(s) : null;
+        if (this instanceof IntegerWidget || this instanceof ExIntegerWidget) {
+            return getIntegerValue();
+        } else if (this instanceof DecimalWidget || this instanceof ExDecimalWidget) {
+            return getDecimalValue();
+        } else {
+            return getStringValue();
+        }
     }
 
     @NonNull
@@ -148,6 +155,45 @@ public abstract class BaseStringWidget extends QuestionWidget {
             fa[0] = new InputFilter.LengthFilter(19);
         }
         answerText.setFilters(fa);
+    }
+
+    protected IAnswerData getIntegerValue() {
+        String s = answerText.getText().toString();
+        if (useThousandSeparator) {
+            s = ThousandsSeparatorTextWatcher.getOriginalString(s);
+        }
+
+        if (s.isEmpty()) {
+            return null;
+        } else {
+            try {
+                return new IntegerData(Integer.parseInt(s));
+            } catch (Exception numberFormatException) {
+                return null;
+            }
+        }
+    }
+
+    protected IAnswerData getDecimalValue() {
+        String s = answerText.getText().toString();
+        if (useThousandSeparator) {
+            s = ThousandsSeparatorTextWatcher.getOriginalString(s);
+        }
+
+        if (s.isEmpty()) {
+            return null;
+        } else {
+            try {
+                return new DecimalData(Double.parseDouble(s));
+            } catch (Exception numberFormatException) {
+                return null;
+            }
+        }
+    }
+
+    protected IAnswerData getStringValue() {
+        String s = getAnswerText();
+        return !s.equals("") ? new StringData(s) : null;
     }
 
     protected Integer getIntegerAnswerValue() {

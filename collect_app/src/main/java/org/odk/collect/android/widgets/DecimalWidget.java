@@ -20,8 +20,6 @@ import androidx.annotation.NonNull;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
 
-import org.javarosa.core.model.data.DecimalData;
-import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
 
@@ -48,23 +46,4 @@ public class DecimalWidget extends StringWidget {
                 ? ThousandsSeparatorTextWatcher.getOriginalString(super.getAnswerText())
                 : super.getAnswerText();
     }
-
-    @Override
-    public IAnswerData getAnswer() {
-        String s = answerText.getText().toString();
-        if (useThousandSeparator) {
-            s = ThousandsSeparatorTextWatcher.getOriginalString(s);
-        }
-
-        if (s.isEmpty()) {
-            return null;
-        } else {
-            try {
-                return new DecimalData(Double.parseDouble(s));
-            } catch (Exception numberFormatException) {
-                return null;
-            }
-        }
-    }
-
 }
