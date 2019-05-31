@@ -8,6 +8,7 @@
   <string name="view_video">Просмотреть видео</string>
   <string name="choose_audio">Выбрать аудиозапись</string>
   <string name="add_another">Добавить группу</string>
+  <string name="add_another_menu">Добавить другое</string>
   <string name="add_another_repeat">Добавить другую группу \"%s\"?</string>
   <string name="add_repeat">Добавить новую группу \"%s\"?</string>
   <string name="add_repeat_no">Не добавлять</string>
@@ -113,11 +114,11 @@
   <string name="saving_form">Выполняется сохранение …</string>
   <string name="sending_items">Выгрузка %1$s опроса из %2$s</string>
   <string name="send_data">Выгрузить финализированные опросы</string>
-  <string name="send_data_button">Выгрузить ответы (%s)</string>
+  <string name="send_data_button">Выгрузить опросы (%s)</string>
   <string name="send_selected_data">Выгрузить выбранные</string>
   <string name="send_selected_data_internet">Выгрузить (Интернет)</string>
   <string name="send_selected_data_sms">Выгрузить (SMS)</string>
-  <string name="view_sent_forms">Просмотреть выгруженные опросы</string>
+  <string name="view_sent_forms">Опросы в архиве</string>
   <string name="view_sent_forms_button">Архив (%s)</string>
   <string name="server_auth_credentials">Неправильное имя пользователя или пароль для сервера: %s</string>
   <string name="server_requires_auth">Необходима аутентификация</string>
@@ -327,9 +328,9 @@
   <string name="start">Начать</string>
   <string name="enable_gps">Включить GPS</string>
   <string name="geotrace_title">Геослед</string>
-    <string name="gps_enable_message">На вашем устройстве отключен GPS. Хотите включить его?</string>
+  <string name="gps_enable_message">На вашем устройстве отключен GPS. Хотите включить его?</string>
   <string name="select_offline_layer">Выберите оффлайн-слой</string>
-    <string name="geo_exit_warning">Отказаться от изменений и вернуться к ODK?</string>
+  <string name="geo_exit_warning">Отказаться от изменений и вернуться к ODK?</string>
   <string name="polygon_validator">В многоугольнике должно быть как минимум 3 точки</string>
   <string name="polyline_validator">Должно быть как минимум 2 точки, что бы создать ломаную линию</string>
   <string name="clear">Очистить</string>

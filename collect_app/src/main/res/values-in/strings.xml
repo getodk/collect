@@ -333,9 +333,9 @@
   <string name="start">Mulai</string>
   <string name="enable_gps">Hidupkan GPS</string>
   <string name="geotrace_title">Lacak GeoTrace </string>
-    <string name="gps_enable_message">GPS perangkatmu tidak aktif, apakah ingin menghidupkan?</string>
+  <string name="gps_enable_message">GPS perangkatmu tidak aktif, apakah ingin menghidupkan?</string>
   <string name="select_offline_layer">Pilih layer offline</string>
-    <string name="geo_clear_warning">Fitur sudah dibuat. Apakah anda ingin menghapus fitur ini?</string>
+  <string name="geo_clear_warning">Fitur sudah dibuat. Apakah anda ingin menghapus fitur ini?</string>
   <string name="geo_exit_warning">Abaikan perubahan dan kembali ke ODK?</string>
   <string name="polygon_validator">Minimal harus memiliki 3 poin untuk membuat Polygon</string>
   <string name="polyline_validator">Dibutuhkan setidaknya 2 buah titik untuk membuat garis</string>

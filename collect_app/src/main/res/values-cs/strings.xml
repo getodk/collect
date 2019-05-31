@@ -652,7 +652,7 @@
   <string name="sms_encrypted_message">Šifrované dotazníky nelze odeslat jako SMS.</string>
   <string name="sms_last_submission_on_date_at_time">\"Poslední pokus o podání\" EEE, MMM dd, yyyy\"na\" HH:mm</string>
   <plurals name="sms_sending">
-    <item quantity="one" tools:ignore="ImpliedQuantity">Odeslání dotazníku jako jediné zprávy.</item>
+    <item quantity="one">Odeslání dotazníku jako jediné zprávy.</item>
     <item quantity="few">Odeslání dotazníku, odeslání zprávy %1$d z %2$d</item>
     <item quantity="many">Odeslání dotazníku, odeslání zpráv %1$d z %2$d</item>
     <item quantity="other">Odeslání dotazníku, odeslání zprávy %1$d z %2$d</item>

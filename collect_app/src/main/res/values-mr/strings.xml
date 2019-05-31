@@ -301,9 +301,9 @@
   <string name="start">प्रारंभ करा</string>
   <string name="enable_gps">जीपीएस सक्षम करा</string>
   <string name="geotrace_title">जिओ ट्रेस</string>
-    <string name="gps_enable_message">आपल्या डिव्हाइसमध्ये जीपीएस अक्षम केले आहे आपण ते सक्षम करू इच्छिता?</string>
+  <string name="gps_enable_message">आपल्या डिव्हाइसमध्ये जीपीएस अक्षम केले आहे आपण ते सक्षम करू इच्छिता?</string>
   <string name="select_offline_layer">ऑफलाइन स्तर निवडा</string>
-    <string name="geo_clear_warning">वैशिष्ट्य आधीच तयार केले आपण वैशिष्ट्य साफ करू इच्छिता?</string>
+  <string name="geo_clear_warning">वैशिष्ट्य आधीच तयार केले आपण वैशिष्ट्य साफ करू इच्छिता?</string>
   <string name="geo_exit_warning">बदल टाकून ओडीके कडे परत जा?</string>
   <string name="polygon_validator">बहुभुज तयार करण्यासाठी किमान 3 गुण असणे आवश्यक आहे</string>
   <string name="clear">साफ करा</string>

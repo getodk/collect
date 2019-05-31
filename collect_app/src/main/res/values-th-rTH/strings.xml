@@ -285,9 +285,9 @@
   <string name="start">เริ่มต้น</string>
   <string name="enable_gps">เปิด GPS</string>
   <string name="geotrace_title">GeoTrace</string>
-    <string name="gps_enable_message">GPS ถูกปิดไว้ ต้องการเปิดใช้งานหรือไม่?</string>
+  <string name="gps_enable_message">GPS ถูกปิดไว้ ต้องการเปิดใช้งานหรือไม่?</string>
   <string name="select_offline_layer">เลือกเลเยอร์ที่บันทึกไว้</string>
-    <string name="geo_exit_warning">ยกเลิกการเปลี่ยนแปลงและกลับไปที่ ODK?</string>
+  <string name="geo_exit_warning">ยกเลิกการเปลี่ยนแปลงและกลับไปที่ ODK?</string>
   <string name="polygon_validator">ต้องมีจุดพิกัด 3 จุดขึ้นไปเพื่อสร้าง Polygon</string>
   <string name="clear">ลบ</string>
   <string name="geopoint_instruction">กดแช่ไว้เพื่อวางเครื่องหมายหรือแตะที่ปุ่มเพิ่มเครื่องหมาย</string>

@@ -320,9 +320,9 @@ Escolher Imagem</string>
   <string name="start">Iniciar</string>
   <string name="enable_gps">Habilitar GPS</string>
   <string name="geotrace_title">GeoTrace</string>
-    <string name="gps_enable_message">O GPS está desabilitado em seu aparelho. Gostaria de habilitá-lo?</string>
+  <string name="gps_enable_message">O GPS está desabilitado em seu aparelho. Gostaria de habilitá-lo?</string>
   <string name="select_offline_layer">Selecionar Layer Desligado</string>
-    <string name="geo_clear_warning">A feature já foi criada. Gostaria de limpar a feature?</string>
+  <string name="geo_clear_warning">A feature já foi criada. Gostaria de limpar a feature?</string>
   <string name="geo_exit_warning">Descartar mudanças e retornar ao ODK?</string>
   <string name="polygon_validator">Precisa ter pelo menos 3 pontos para criar Polígono</string>
   <string name="polyline_validator">Precisa ter pelo menos 2 pontos para criar uma Cadeia de Linhas</string>
