@@ -306,9 +306,9 @@
   <string name="start">शुरु करे</string>
   <string name="enable_gps">जीपीएस सक्षम करें</string>
   <string name="geotrace_title">जिओ ट्रेस</string>
-    <string name="gps_enable_message">आपके डिवाइस में जीपीएस सक्षम नही है. क्या आप इसे सक्षम करना चाहेंगे?</string>
+  <string name="gps_enable_message">आपके डिवाइस में जीपीएस सक्षम नही है. क्या आप इसे सक्षम करना चाहेंगे?</string>
   <string name="select_offline_layer">ऑफ़लाइन लेयर चुनें</string>
-    <string name="geo_clear_warning">फीचर पहले से ही बना है. क्या आप फीचर को क्लियर करना चाहेंगे?</string>
+  <string name="geo_clear_warning">फीचर पहले से ही बना है. क्या आप फीचर को क्लियर करना चाहेंगे?</string>
   <string name="geo_exit_warning">परिवर्तनों को रद्द करें और वापस ODK पर लौटें?</string>
   <string name="polygon_validator">बहुभुज बनाने के लिए कम से कम 3 पॉइंट होने चाहिए</string>
   <string name="clear">स्पष्ट</string>

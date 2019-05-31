@@ -335,9 +335,9 @@
   <string name="start">Inizia</string>
   <string name="enable_gps">Abilita GPS</string>
   <string name="geotrace_title">Geo-tracciatura</string>
-    <string name="gps_enable_message">Il GPS è disabilitato nel tuo dispositivo. Vuoi abilitarlo?</string>
+  <string name="gps_enable_message">Il GPS è disabilitato nel tuo dispositivo. Vuoi abilitarlo?</string>
   <string name="select_offline_layer">Seleziona Layer Offline</string>
-    <string name="geo_clear_warning">Caratteristica già creata. Vuoi cancellarla?</string>
+  <string name="geo_clear_warning">Caratteristica già creata. Vuoi cancellarla?</string>
   <string name="geo_exit_warning">Vuoi scartare le modifiche e ritornare ad ODK?</string>
   <string name="polygon_validator">Devi avere almeno 3 punti per creare un Poligono</string>
   <string name="polyline_validator">Devi avere almeno 2 punti per creare una Polilinea</string>

@@ -93,8 +93,8 @@
   <string name="no_connection">Povezivanje na mrežu trenutno nije dostupno</string>
   <string name="no_items_display">Ništa nije dostupno za prikaz.</string>
   <string name="no_items_display_forms">Povezivanje na mrežu trenutno nije dostupno. Pokušaj preuzeti i popuniti prazan formular.</string>
-  <string name="no_items_display_sent_forms">NIšta nije dostupno za prikaz. Pokušaj poslati završeni formular prije uvida.</string>
-  <string name="no_items_display_instances">NIšta nije dostupno za prikaz. Pokušaj završiti sačuvane formulare prije slanja.</string>
+  <string name="no_items_display_sent_forms">Ništa nije dostupno za prikaz. Pokušaj poslati završeni formular prije uvida.</string>
+  <string name="no_items_display_instances">Ništa nije dostupno za prikaz. Pokušaj završiti sačuvane formulare prije slanja.</string>
   <string name="ok">Ok.</string>
   <string name="parse_error">Nisam u stanju da analiziram formular!</string>
   <string name="parse_legacy_formlist_failed">Na serveru se ne nalazi dostupan formular kompatibilan sa Aggregate 0.9x verzijom: %s</string>
@@ -196,7 +196,7 @@
   <string name="version">Verzija:</string>
   <string name="parent_form_not_present">Ne mogu da uredim ili sačuvam formular jer prazna forma nije dostupna ili je obrisana.\n\nForm ID: %1$s</string>
   <string name="launch_app">Pokreni</string>
-  <string name="no_app">Tražena aplikacije nedostaje. Molim ručno unesite podatke.</string>
+  <string name="no_app">Tražena aplikacija nedostaje. Molim ručno unesite podatke.</string>
   <string name="select_one">Odaberi jedan odgovor</string>
   <string name="savepoint_used">Nesačuvane izmjene su preuzete sa memorijske tačke!</string>
   <string name="save_and_close">Sačuvaj i izađi</string>
@@ -213,7 +213,7 @@
   <string name="admin_password_changed">Administratorska lozinka je uspješno promijenjena</string>
   <string name="admin_password_disabled">Administratorska lozinka je onemogućena</string>
   <string name="admin_password_incorrect">Netačna lozinka</string>
-  <string name="enter_admin_password">Ukucaj administratorsku lozinka</string>
+  <string name="enter_admin_password">Ukucaj administratorsku lozinku</string>
   <string name="change_admin_password">Promijeni administratorsku lozinku</string>
   <string name="autosend">Automatski otpremi</string>
   <string name="found_in_main">Uklonite oznaku da biste isključili iz glavnog menija</string>
@@ -312,6 +312,7 @@
   <string name="map_sdk_behavior">Mapiranje SDK</string>
   <string name="google_maps_sdk">Google Maps SDK</string>
   <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
+  <string name="mapbox_maps_sdk">Mapbox Maps SDK</string>
   <string name="show_map_sdk">Prikaži opcije Mape SDP</string>
   <string name="openmap_streets">OSM ulice</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
@@ -326,6 +327,12 @@
   <string name="satellite">Satelit</string>
   <string name="map_basemap_selector_title">Osnovne mape</string>
   <string name="show_map_basemap">Prikaži opcije za osnovne mane</string>
+  <string name="mapbox_streets">Mapbox Streets</string>
+  <string name="mapbox_light">Mapbox Light</string>
+  <string name="mapbox_dark">Mapbox Dark</string>
+  <string name="mapbox_satellite">Mapbox Satellite</string>
+  <string name="mapbox_satellite_streets">Mapbox Satellite Streets</string>
+  <string name="mapbox_outdoors">Mapbox Outdoors</string>
   <string name="save_point">Sačuvaj GeoPoint</string>
   <string name="get_point">Započni GeoPoint</string>
   <string name="geopoint_view_read_only">Vidi GeoPoint</string>
@@ -336,9 +343,9 @@
   <string name="start">Početak</string>
   <string name="enable_gps">Omogući GPS</string>
   <string name="geotrace_title">GeoTrace</string>
-    <string name="gps_enable_message">GPS je onemogućen na Vašem uređaju. Da li biste željeli da ga uključite?</string>
+  <string name="gps_enable_message">GPS je onemogućen na Vašem uređaju. Da li biste željeli da ga uključite?</string>
   <string name="select_offline_layer">Odaberi oflajn podlogu</string>
-    <string name="geo_clear_warning">Karakteristika je već kreirana. Da li biste željeli da obrišete karakteristiku?</string>
+  <string name="geo_clear_warning">Karakteristika je već kreirana. Da li biste željeli da obrišete karakteristiku?</string>
   <string name="geo_exit_warning">Odbaci izmjene i vrati se na ODK?</string>
   <string name="polygon_validator">Moram imati makar 3 tačke kako bih kreirao Polygon</string>
   <string name="polyline_validator">Moraju postojati najmanje 2 tačke kako bi se kreirao Polyline</string>
@@ -502,7 +509,7 @@
   <string name="error_front_camera_unavailable">Prednja kamera nije dostupna na ovom uređaju</string>
   <string name="camera_error">Ovaj uređaj ne podržava Camera2 API.</string>
   <string name="invalid_range_widget">Ovaj widget ima nepravilne parametre!</string>
-  <string name="form_entry_setting">Podešavanje ispinjavanja formulara</string>
+  <string name="form_entry_setting">Podešavanje ispunjavanja formulara</string>
   <string name="form_entry_settings_summary">Dodirni za  upravljanje stavkama formulara</string>
   <string name="user_settings">Korisnička podešavanja</string>
   <string name="user_setting_summary">Dodirni za upravljanje opštim podešavanjima stavki</string>
@@ -547,7 +554,7 @@
   <string name="image_size_medium">Srednje (2048px)</string>
   <string name="image_size_small">Malo (1024px)</string>
   <string name="image_size_very_small">Veoma malo (640px)</string>
-  <string name="image_size_original">Orignalna veličina iz kamere (fabrička podešavanja)</string>
+  <string name="image_size_original">Originalna veličina iz kamere (fabrička podešavanja)</string>
   <string name="image_size_dialog_title">Maksimalan broj piksela na osnovu dugačke ivice slike</string>
   <string name="bearing_lack_of_sensors">Pravac ne može biti određen: uređaju nedostaje mjerač brzine, magnetnog polja ili oboje.</string>
   <string name="ethiopian_month_1">Januar</string>
@@ -648,8 +655,8 @@
   <string name="sms_no_message">Ovaj formular nema pitanja sa SMS tagovima.</string>
   <string name="sms_encrypted_message">Enkriptovani formulari ne mogu biti poslati kao SMS.</string>
   <string name="sms_last_submission_on_date_at_time">\'Poslednji pokušaj otpremanja\' EEE, MMM dd, yyyy \'u\' HH:mm </string>
-  <plurals name="sms_sending">
-    <item quantity="one" tools:ignore="ImpliedQuantity">Otpremam formular kao jedinstvenu poruku.</item>
+  <plurals name="sms_sending" tools:ignore="ImpliedQuantity">
+    <item quantity="one">Otpremam formular kao jedinstvenu poruku.</item>
     <item quantity="few">Otpreman formular, šaljem poruku %1$d od %2$d</item>
     <item quantity="other">Otpreman formular, šaljem poruku %1$d od %2$d</item>
   </plurals>
@@ -683,4 +690,5 @@
   <string name="reading_files">Učitavanje fajlova</string>
   <string name="copying_media_files_failed">Kopiranje medija fajlova nije uspjelo</string>
   <string name="qr_code_not_found">QR kod nije pronađen na odabranoj slici</string>
+  <string name="not_granted_permission">Aktivnost koju pokušavate da pokrenete zahtijeva dozvolu koja nije odobrena.</string>
 </resources>

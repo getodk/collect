@@ -283,7 +283,7 @@
   <string name="start">Start</string>
   <string name="enable_gps">Activați GPS</string>
   <string name="geotrace_title">GeoTrace</string>
-    <string name="gps_enable_message">GPS-ul este dezactivat în dispozitivul dumneavoastră. Doriți să-l activați?</string>
+  <string name="gps_enable_message">GPS-ul este dezactivat în dispozitivul dumneavoastră. Doriți să-l activați?</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="alert">Alertă</string>
   <string name="install_openmapkit">Vă rugăm instalați OpenMapKit!</string>

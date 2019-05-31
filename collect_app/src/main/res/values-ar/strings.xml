@@ -662,7 +662,7 @@
   <string name="sms_last_submission_on_date_at_time">\'آخر محاولة إرسال في\' EEE, MMM dd, yyyy HH:mm</string>
   <plurals name="sms_sending">
     <item quantity="zero">تقديم الاستمارة ، إرسال رسالة %1$d من %2$d</item>
-    <item quantity="one" tools:ignore="ImpliedQuantity">تقديم النموذج كرسالة واحدة.</item>
+    <item quantity="one">تقديم النموذج كرسالة واحدة.</item>
     <item quantity="two">تقديم الاستمارة ، إرسال رسالة %1$d من %2$d</item>
     <item quantity="few">تقديم الاستمارة ، إرسال رسالة %1$d من %2$d</item>
     <item quantity="many">تقديم الاستمارة ، إرسال رسالة %1$d من %2$d</item>
