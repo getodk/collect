@@ -21,8 +21,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.text.method.TextKeyListener;
-import android.text.method.TextKeyListener.Capitalize;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -69,9 +67,6 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
         textBackground = answerText.getBackground();
         answerText.setBackground(null);
         answerText.setTextColor(themeUtils.getPrimaryTextColor());
-
-        // capitalize nothing
-        answerText.setKeyListener(new TextKeyListener(Capitalize.NONE, false));
 
         if (getFormEntryPrompt().isReadOnly() || hasExApp) {
             answerText.setFocusable(false);
@@ -214,10 +209,6 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
         }
     }
 
-    private void focusAnswer() {
-        SoftKeyboardUtils.showSoftKeyboard(answerText);
-    }
-
     private void onException(String toastText) {
         hasExApp = false;
         if (!getFormEntryPrompt().isReadOnly()) {
@@ -232,6 +223,6 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
 
         Toast.makeText(getContext(), toastText, Toast.LENGTH_SHORT).show();
         Timber.d(toastText);
-        focusAnswer();
+        SoftKeyboardUtils.showSoftKeyboard(answerText);
     }
 }

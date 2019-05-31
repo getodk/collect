@@ -23,6 +23,7 @@ import android.text.InputType;
 import android.text.Selection;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
+import android.text.method.TextKeyListener;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.widget.EditText;
@@ -44,7 +45,7 @@ import java.util.Locale;
 
 public abstract class BaseStringWidget extends QuestionWidget {
     protected EditText answerText;
-    protected boolean useThousandSeparator;
+    protected boolean useThousandSeparator; // just for number widgets
 
     public BaseStringWidget(Context context, FormEntryPrompt prompt, boolean useThousandSeparator) {
         super(context, prompt);
@@ -101,6 +102,7 @@ public abstract class BaseStringWidget extends QuestionWidget {
         } else {
             setDisplayStringValueFromModel();
         }
+        Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
     }
 
     private void setUpAnswerText() {
@@ -234,7 +236,6 @@ public abstract class BaseStringWidget extends QuestionWidget {
             nf.setGroupingUsed(false);
 
             answerText.setText(nf.format(d));
-            Selection.setSelection(answerText.getText(), answerText.getText().length());
         }
     }
 
@@ -242,7 +243,6 @@ public abstract class BaseStringWidget extends QuestionWidget {
         Integer i = getIntegerAnswerValue();
         if (i != null) {
             answerText.setText(String.format(Locale.US, "%d", i));
-            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
         }
     }
 
@@ -250,7 +250,6 @@ public abstract class BaseStringWidget extends QuestionWidget {
         String currentAnswer = getFormEntryPrompt().getAnswerText();
         if (currentAnswer != null) {
             answerText.setText(currentAnswer);
-            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
         }
     }
 
@@ -274,6 +273,8 @@ public abstract class BaseStringWidget extends QuestionWidget {
                     };
                 }
             });
+        } else {
+            answerText.setKeyListener(new TextKeyListener(TextKeyListener.Capitalize.SENTENCES, false));
         }
     }
 }

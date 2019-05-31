@@ -17,8 +17,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import android.text.method.TextKeyListener;
-import android.text.method.TextKeyListener.Capitalize;
 import android.view.Gravity;
 import android.widget.EditText;
 
@@ -48,17 +46,7 @@ public class StringWidget extends BaseStringWidget {
         readOnly = prompt.isReadOnly() || readOnlyOverride;
 
         handleRowsNumber();
-
-        // capitalize the first letter of the sentence
-        answerText.setKeyListener(new TextKeyListener(Capitalize.SENTENCES, false));
-
-        if (readOnly) {
-            answerText.setBackground(null);
-            answerText.setEnabled(false);
-            answerText.setTextColor(themeUtils.getPrimaryTextColor());
-            answerText.setFocusable(false);
-        }
-
+        handleReadOnlyMode();
         addAnswerView(answerText);
     }
 
@@ -111,6 +99,15 @@ public class StringWidget extends BaseStringWidget {
             } catch (Exception e) {
                 Timber.e("Unable to process the rows setting for the answerText field: %s", e.toString());
             }
+        }
+    }
+
+    private void handleReadOnlyMode() {
+        if (readOnly) {
+            answerText.setBackground(null);
+            answerText.setEnabled(false);
+            answerText.setTextColor(themeUtils.getPrimaryTextColor());
+            answerText.setFocusable(false);
         }
     }
 
