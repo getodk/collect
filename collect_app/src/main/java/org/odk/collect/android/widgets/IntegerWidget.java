@@ -18,15 +18,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import android.text.InputType;
-import android.text.Selection;
 import android.text.method.DigitsKeyListener;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
-
-import java.util.Locale;
 
 /**
  * Widget that restricts values to integers.
@@ -54,11 +51,7 @@ public class IntegerWidget extends StringWidget {
 
     @Override
     public void setDisplayValueFromModel() {
-        Integer i = getIntegerAnswerValue();
-        if (i != null) {
-            answerText.setText(String.format(Locale.US, "%d", i));
-            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
-        }
+        setDisplayIntegerValueFromModel();
     }
 
     @NonNull

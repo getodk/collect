@@ -18,16 +18,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import android.text.InputType;
-import android.text.Selection;
 import android.text.method.DigitsKeyListener;
 
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
-
-import java.text.NumberFormat;
-import java.util.Locale;
 
 /**
  * A widget that restricts values to floating point numbers.
@@ -55,19 +51,7 @@ public class DecimalWidget extends StringWidget {
 
     @Override
     public void setDisplayValueFromModel() {
-        Double d = getDoubleAnswerValue();
-
-        if (d != null) {
-            // truncate to 15 digits max in US locale
-            // use US locale because DigitsKeyListener can't be localized before API 26
-            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
-            nf.setMaximumFractionDigits(15);
-            nf.setMaximumIntegerDigits(15);
-            nf.setGroupingUsed(false);
-
-            answerText.setText(nf.format(d));
-            Selection.setSelection(answerText.getText(), answerText.getText().length());
-        }
+        setDisplayDecimalValueFromModel();
     }
 
     @NonNull

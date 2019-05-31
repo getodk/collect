@@ -19,7 +19,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.text.InputType;
-import android.text.Selection;
 import android.text.method.DigitsKeyListener;
 
 import org.javarosa.core.model.data.DecimalData;
@@ -29,9 +28,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-
-import java.text.NumberFormat;
-import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -58,20 +54,7 @@ public class ExDecimalWidget extends ExStringWidget {
 
     @Override
     public void setDisplayValueFromModel() {
-        Double d = getDoubleAnswerValue();
-
-        if (d != null) {
-            // truncate to 15 digits max in US locale
-            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
-            nf.setMaximumFractionDigits(15);
-            nf.setMaximumIntegerDigits(15);
-            nf.setGroupingUsed(false);
-
-            String formattedValue = nf.format(d);
-            answerText.setText(formattedValue);
-
-            Selection.setSelection(answerText.getText(), answerText.getText().length());
-        }
+        setDisplayDecimalValueFromModel();
     }
 
     @Override

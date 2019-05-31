@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import android.text.Selection;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.view.Gravity;
@@ -61,12 +60,7 @@ public class StringWidget extends BaseStringWidget {
 
     @Override
     public void setDisplayValueFromModel() {
-        String currentAnswer = getFormEntryPrompt().getAnswerText();
-
-        if (currentAnswer != null) {
-            answerText.setText(currentAnswer);
-            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
-        }
+        setDisplayStringValueFromModel();
     }
 
     @Override

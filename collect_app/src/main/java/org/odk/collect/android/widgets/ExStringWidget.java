@@ -101,10 +101,7 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
 
     @Override
     public void setDisplayValueFromModel() {
-        String s = getFormEntryPrompt().getAnswerText();
-        if (s != null) {
-            answerText.setText(s);
-        }
+        setDisplayStringValueFromModel();
     }
 
     protected void fireActivity(Intent i) throws ActivityNotFoundException {

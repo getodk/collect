@@ -29,8 +29,6 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import java.util.Locale;
-
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
@@ -56,10 +54,7 @@ public class ExIntegerWidget extends ExStringWidget {
 
     @Override
     public void setDisplayValueFromModel() {
-        Integer i = getIntegerAnswerValue();
-        if (i != null) {
-            answerText.setText(String.format(Locale.US, "%d", i));
-        }
+        setDisplayIntegerValueFromModel();
     }
 
     @Override

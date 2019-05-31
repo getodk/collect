@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.InputType;
-import android.text.Selection;
 import android.text.method.DigitsKeyListener;
 
 import androidx.annotation.NonNull;
@@ -59,11 +58,7 @@ public class StringNumberWidget extends StringWidget {
 
     @Override
     public void setDisplayValueFromModel() {
-        String s = getFormEntryPrompt().getAnswerValue() != null ? (String) getFormEntryPrompt().getAnswerValue().getValue() : null;
-        if (s != null) {
-            answerText.setText(s);
-            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
-        }
+        setDisplayStringValueFromModel();
     }
 
     @Override

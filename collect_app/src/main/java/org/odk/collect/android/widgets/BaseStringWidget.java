@@ -19,6 +19,7 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.Selection;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -32,6 +33,9 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.utilities.ViewIds;
+
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public abstract class BaseStringWidget extends QuestionWidget {
     protected EditText answerText;
@@ -153,5 +157,38 @@ public abstract class BaseStringWidget extends QuestionWidget {
             }
         }
         return d;
+    }
+
+    protected void setDisplayDecimalValueFromModel() {
+        Double d = getDoubleAnswerValue();
+
+        if (d != null) {
+            // truncate to 15 digits max in US locale
+            // use US locale because DigitsKeyListener can't be localized before API 26
+            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+            nf.setMaximumFractionDigits(15);
+            nf.setMaximumIntegerDigits(15);
+            nf.setGroupingUsed(false);
+
+            answerText.setText(nf.format(d));
+            Selection.setSelection(answerText.getText(), answerText.getText().length());
+        }
+    }
+
+    protected void setDisplayIntegerValueFromModel() {
+        Integer i = getIntegerAnswerValue();
+        if (i != null) {
+            answerText.setText(String.format(Locale.US, "%d", i));
+            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
+        }
+    }
+
+    protected void setDisplayStringValueFromModel() {
+        String currentAnswer = getFormEntryPrompt().getAnswerText();
+
+        if (currentAnswer != null) {
+            answerText.setText(currentAnswer);
+            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
+        }
     }
 }
