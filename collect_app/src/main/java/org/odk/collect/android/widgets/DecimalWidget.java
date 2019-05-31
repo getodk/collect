@@ -51,6 +51,10 @@ public class DecimalWidget extends StringWidget {
             answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
         }
 
+        setUpInputFilter();
+    }
+
+    private void setUpInputFilter() {
         // only 15 characters allowed
         InputFilter[] fa = new InputFilter[1];
         fa[0] = new InputFilter.LengthFilter(15);

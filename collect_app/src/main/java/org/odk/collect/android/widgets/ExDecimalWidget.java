@@ -54,6 +54,10 @@ public class ExDecimalWidget extends ExStringWidget {
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         answerText.setKeyListener(new DigitsKeyListener(true, true));
 
+        setUpInputFilter();
+    }
+
+    private void setUpInputFilter() {
         // only 15 characters allowed
         InputFilter[] fa = new InputFilter[1];
         fa[0] = new InputFilter.LengthFilter(15);

@@ -50,6 +50,10 @@ public class IntegerWidget extends StringWidget {
             answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
         }
 
+        setUpInputFilter();
+    }
+
+    private void setUpInputFilter() {
         // ints can only hold 2,147,483,648. we allow 999,999,999
         InputFilter[] fa = new InputFilter[1];
         fa[0] = new InputFilter.LengthFilter(9);

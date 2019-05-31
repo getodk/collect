@@ -27,8 +27,6 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
 
-import java.util.Locale;
-
 /**
  * Widget that restricts values to integers.
  *
