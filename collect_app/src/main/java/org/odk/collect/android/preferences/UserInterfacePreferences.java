@@ -28,6 +28,7 @@ import com.google.common.collect.ObjectArrays;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.map.MapboxUtils;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -224,6 +225,11 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
                 onlineLayerEntries1 = getResources().getStringArray(R.array.map_osm_basemap_selector_entries);
                 mapBasemap.setValue(OSM_MAPS_BASEMAP_DEFAULT);
             } else if (value.equals(MAPBOX_BASEMAP_KEY)) {
+                if (MapboxUtils.initMapbox() == null) {
+                    // This settings code will be rewritten very soon (planned for r1.23),
+                    // so let's just warn for now instead of trying to disable the option.
+                    MapboxUtils.warnMapboxUnsupported(getActivity());
+                }
                 onlineLayerEntryValues1 = getResources().getStringArray(R.array.map_mapbox_basemap_selector_entry_values);
                 onlineLayerEntries1 = getResources().getStringArray(R.array.map_mapbox_basemap_selector_entries);
                 mapBasemap.setValue(MAPBOX_BASEMAP_DEFAULT);
