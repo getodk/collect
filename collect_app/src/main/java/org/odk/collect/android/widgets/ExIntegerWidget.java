@@ -68,6 +68,5 @@ public class ExIntegerWidget extends ExStringWidget {
     public void setBinaryData(Object answer) {
         IntegerData integerData = ExternalAppsUtils.asIntegerData(answer);
         answerText.setText(integerData == null ? null : integerData.getValue().toString());
-        widgetValueChanged();
     }
 }

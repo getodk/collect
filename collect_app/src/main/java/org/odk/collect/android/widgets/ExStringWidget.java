@@ -116,7 +116,6 @@ public class ExStringWidget extends BaseStringWidget implements BinaryWidget {
     public void setBinaryData(Object answer) {
         StringData stringData = ExternalAppsUtils.asStringData(answer);
         answerText.setText(stringData == null ? null : stringData.getValue().toString());
-        widgetValueChanged();
     }
 
     @Override
