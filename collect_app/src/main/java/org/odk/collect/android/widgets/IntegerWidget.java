@@ -49,11 +49,6 @@ public class IntegerWidget extends StringWidget {
         setUpIntegerInputFilter(useThousandSeparator);
     }
 
-    @Override
-    public void setDisplayValueFromModel() {
-        setDisplayIntegerValueFromModel();
-    }
-
     @NonNull
     @Override
     public String getAnswerText() {

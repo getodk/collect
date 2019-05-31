@@ -57,11 +57,6 @@ public class StringNumberWidget extends StringWidget {
     }
 
     @Override
-    public void setDisplayValueFromModel() {
-        setDisplayStringValueFromModel();
-    }
-
-    @Override
     public IAnswerData getAnswer() {
         String s = getAnswerText();
 

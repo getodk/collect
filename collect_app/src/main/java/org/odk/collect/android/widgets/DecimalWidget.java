@@ -49,11 +49,6 @@ public class DecimalWidget extends StringWidget {
         setUpDecimalInputFilter(useThousandSeparator);
     }
 
-    @Override
-    public void setDisplayValueFromModel() {
-        setDisplayDecimalValueFromModel();
-    }
-
     @NonNull
     @Override
     public String getAnswerText() {

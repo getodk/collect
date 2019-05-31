@@ -81,7 +81,15 @@ public abstract class BaseStringWidget extends QuestionWidget {
         }
     }
 
-    public abstract void setDisplayValueFromModel();
+    public void setDisplayValueFromModel() {
+        if (this instanceof IntegerWidget || this instanceof ExIntegerWidget) {
+            setDisplayIntegerValueFromModel();
+        } else if (this instanceof DecimalWidget || this instanceof ExDecimalWidget) {
+            setDisplayDecimalValueFromModel();
+        } else {
+            setDisplayStringValueFromModel();
+        }
+    }
 
     private void setUpAnswerText() {
         answerText = new EditText(getContext());
@@ -159,7 +167,7 @@ public abstract class BaseStringWidget extends QuestionWidget {
         return d;
     }
 
-    protected void setDisplayDecimalValueFromModel() {
+    private void setDisplayDecimalValueFromModel() {
         Double d = getDoubleAnswerValue();
 
         if (d != null) {
@@ -175,7 +183,7 @@ public abstract class BaseStringWidget extends QuestionWidget {
         }
     }
 
-    protected void setDisplayIntegerValueFromModel() {
+    private void setDisplayIntegerValueFromModel() {
         Integer i = getIntegerAnswerValue();
         if (i != null) {
             answerText.setText(String.format(Locale.US, "%d", i));
@@ -183,7 +191,7 @@ public abstract class BaseStringWidget extends QuestionWidget {
         }
     }
 
-    protected void setDisplayStringValueFromModel() {
+    private void setDisplayStringValueFromModel() {
         String currentAnswer = getFormEntryPrompt().getAnswerText();
 
         if (currentAnswer != null) {

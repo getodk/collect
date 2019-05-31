@@ -59,11 +59,6 @@ public class StringWidget extends BaseStringWidget {
     }
 
     @Override
-    public void setDisplayValueFromModel() {
-        setDisplayStringValueFromModel();
-    }
-
-    @Override
     public void setFocus(Context context) {
         if (!readOnly) {
             SoftKeyboardUtils.showSoftKeyboard(answerText);

@@ -53,11 +53,6 @@ public class ExDecimalWidget extends ExStringWidget {
     }
 
     @Override
-    public void setDisplayValueFromModel() {
-        setDisplayDecimalValueFromModel();
-    }
-
-    @Override
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
         i.putExtra("value", getDoubleAnswerValue());
         try {

@@ -53,11 +53,6 @@ public class ExIntegerWidget extends ExStringWidget {
     }
 
     @Override
-    public void setDisplayValueFromModel() {
-        setDisplayIntegerValueFromModel();
-    }
-
-    @Override
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
         i.putExtra("value", getIntegerAnswerValue());
         try {
