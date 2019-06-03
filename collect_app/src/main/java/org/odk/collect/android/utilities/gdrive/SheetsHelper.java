@@ -212,14 +212,14 @@ public class SheetsHelper {
                     .append(spreadsheetId, sheetName, row)
                     .setIncludeValuesInResponse(true)
                     .setInsertDataOption("INSERT_ROWS")
-                    .setValueInputOption("USER_ENTERED").execute();
+                    .setValueInputOption("RAW").execute();
         }
 
         public void updateRow(String spreadsheetId, String sheetName, ValueRange row) throws IOException {
             sheets.spreadsheets().values()
                     .update(spreadsheetId, sheetName, row)
                     .setIncludeValuesInResponse(true)
-                    .setValueInputOption("USER_ENTERED").execute();
+                    .setValueInputOption("RAW").execute();
         }
 
         ValueRange getSpreadsheet(String spreadsheetId, String sheetName) throws IOException {
