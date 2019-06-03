@@ -76,6 +76,17 @@ public class ExternalAppUtilsTest {
 
         assertEquals("/send-sms-or-email-in-form/message", result.get("sms_body"));
         assertEquals("/send-sms-or-email-in-form/send_to", result.get("uri_data"));
+
+        // Real sample from a user: https://forum.opendatakit.org/t/external-app-with-intent-parameters/20125/5?u=grzesiek2010
+        result = ExternalAppsUtils.extractParameters("ex:ch.novelt.odkcompanion.OPEN(current_value=/afp_report/group_mini_cif/cn, match='^[0-9]{4}W[0-9]{2}-[0-9]{1\\,5}$', filter='^AFP:([0-9]{4}W[0-9]{2}-[0-9]{1\\,5})')");
+        assertEquals(3, result.size());
+        assertTrue(result.keySet().contains("current_value"));
+        assertTrue(result.keySet().contains("match"));
+        assertTrue(result.keySet().contains("filter"));
+
+        assertEquals("/afp_report/group_mini_cif/cn", result.get("current_value"));
+        assertEquals("'^[0-9]{4}W[0-9]{2}-[0-9]{1,5}$'", result.get("match"));
+        assertEquals("'^AFP:([0-9]{4}W[0-9]{2}-[0-9]{1,5})'", result.get("filter"));
     }
 
     @Test
