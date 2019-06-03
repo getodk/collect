@@ -146,7 +146,6 @@
   <string name="enter_admin_password">Yönetici Şifresi Giriniz</string>
   <string name="save_preferences">Değişiklikleri Diske Kaydet</string>
   <string name="form_forward">İleri</string>
-  <string name="form_backward">Geri</string>
   <string name="navigation">navigasyon</string>
   <string name="buttons_navigation">ileri/geri butonlarini kullan </string>
   <string name="view_change_location">Lokasyonu Göster yada Değiştir</string>

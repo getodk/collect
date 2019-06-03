@@ -207,7 +207,6 @@
   <string name="found_in_settings">Hiq përzgjedhjen për ta fshehur nga Parametrat e Përgjithshëm</string>
   <string name="save_preferences">Ruaj parametrat në disk</string>
   <string name="form_forward">Tjetra</string>
-  <string name="form_backward">Paraprake</string>
   <string name="navigation">Navigim</string>
   <string name="swipe_navigation">Përdor prekjen horizontale në ekran</string>
   <string name="buttons_navigation">Përdor butonat përpara/prapa</string>
@@ -289,11 +288,8 @@
   <string name="start">Fillo</string>
   <string name="enable_gps">Aktivizo GPS-in</string>
   <string name="geotrace_title">GeoTrace</string>
-  <string name="polygon_save">Ruaj si Poligon</string>
-  <string name="polyline_save">Ruaj si Polyline</string>
   <string name="gps_enable_message">GPS-i në telefonin tuaj është i ç\'aktivizuar. A do të donit ta aktivizonit?</string>
   <string name="select_offline_layer">Përzgjidh shtresë offline</string>
-  <string name="polygon_or_polyline">Ruaj GeoTrace si</string>
   <string name="geo_clear_warning">Tipari është krijuar tanimë. A doni ta pastroni këtë tipar?</string>
   <string name="geo_exit_warning">Elimino ndryshimet dhe kthehu në ODK?</string>
   <string name="polygon_validator">Duhen së paku 3 pika për të krijuar Poligonin</string>

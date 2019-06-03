@@ -1,7 +1,7 @@
 package org.odk.collect.android.widgets;
 
 import android.database.Cursor;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -23,7 +23,6 @@ import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.XPathParseTool;
 import org.odk.collect.android.widgets.base.QuestionWidgetTest;
-import org.robolectric.RuntimeEnvironment;
 
 import java.io.File;
 import java.util.HashMap;
@@ -91,8 +90,8 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
     @NonNull
     @Override
     public ItemsetWidget createWidget() {
-        return new ItemsetWidget(RuntimeEnvironment.application, formEntryPrompt,
-                false, parseTool, adapter, fileUtil, false);    // smap add eadonlyoverride
+        return new ItemsetWidget(activity, formEntryPrompt,
+                false, parseTool, adapter, fileUtil, false);    // smap add readonlyoverride
     }
 
     @NonNull

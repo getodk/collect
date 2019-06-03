@@ -1,16 +1,19 @@
 package org.odk.collect.android.widgets.base;
 
-import android.support.annotation.NonNull;
+import android.app.Activity;
+import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.widgets.ItemsetWidgetTest;
 import org.odk.collect.android.widgets.interfaces.Widget;
+import org.robolectric.Robolectric;
 
 import java.util.Random;
 
@@ -24,7 +27,9 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
         extends WidgetTest {
 
     protected Random random = new Random();
+    protected Activity activity = Robolectric.buildActivity(FormEntryActivity.class).create().get();
     private W widget;
+    private W actualWidget;
 
     @Mock
     public FormIndex formIndex;
@@ -42,9 +47,28 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
         return getNextAnswer();
     }
 
+    /**
+     * @return Real {@link Widget} object if present otherwise creates one
+     * <p>
+     * This should be used for mutating the {@link org.odk.collect.android.widgets.QuestionWidget}
+     */
+    public W getActualWidget() {
+        if (actualWidget == null) {
+            actualWidget = createWidget();
+        }
+
+        return actualWidget;
+    }
+
+    /**
+     * @return {@link org.mockito.Spy} of the {@link #actualWidget}
+     * <p>
+     * This should be unless we want to mutate {@link org.odk.collect.android.widgets.QuestionWidget}
+     * This is because a spy is not the real object and changing it won't have any effect on the real object
+     */
     public W getWidget() {
         if (widget == null) {
-            widget = spy(createWidget());
+            widget = spy(getActualWidget());
         }
 
         return widget;

@@ -22,7 +22,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;

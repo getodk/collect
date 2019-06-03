@@ -41,6 +41,7 @@ import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 /**
@@ -77,6 +78,8 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
     public void clearAnswer() {
         stringAnswer.setText(null);
         getBarcodeButton.setText(getContext().getString(R.string.get_barcode));
+
+        widgetValueChanged();
     }
 
     @Override
@@ -99,6 +102,8 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
             response = response.replaceAll("\\p{C}", " ");      // smap replace with a space
         }
         stringAnswer.setText(response);
+
+        widgetValueChanged();
     }
 
     @Override
@@ -139,10 +144,10 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
 
     private void setCameraIdIfNeeded(IntentIntegrator intent) {
         String appearance = getFormEntryPrompt().getAppearanceHint();
-        if (appearance != null && appearance.equalsIgnoreCase("front")) {
+        if (appearance != null && appearance.equalsIgnoreCase(WidgetAppearanceUtils.FRONT)) {
             if (CameraUtils.isFrontCameraAvailable()) {
                 intent.setCameraId(CameraUtils.getFrontCameraId());
-                intent.addExtra("front", true);
+                intent.addExtra(WidgetAppearanceUtils.FRONT, true);
             } else {
                 ToastUtils.showLongToast(R.string.error_front_camera_unavailable);
             }

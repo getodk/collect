@@ -1,7 +1,7 @@
 package org.odk.collect.android.views;
 
 import android.media.MediaPlayer;
-import android.support.v7.widget.AppCompatImageButton;
+import androidx.appcompat.widget.AppCompatImageButton;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,8 +13,10 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.logic.FileReference;
 import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
 
 import java.util.Arrays;
@@ -74,7 +76,7 @@ public class MediaLayoutTest {
         referenceManager = mock(ReferenceManager.class);
         textView = new TextView(RuntimeEnvironment.application);
 
-        mediaLayout = new MediaLayout(RuntimeEnvironment.application);
+        mediaLayout = new MediaLayout(Robolectric.buildActivity(FormEntryActivity.class).create().get());
 
         audioButton = mediaLayout.audioButton;
         videoButton = mediaLayout.videoButton;

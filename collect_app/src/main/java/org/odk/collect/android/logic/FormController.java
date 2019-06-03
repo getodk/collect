@@ -14,9 +14,6 @@
 
 package org.odk.collect.android.logic;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import org.javarosa.core.model.CoreModelModule;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
@@ -48,6 +45,7 @@ import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.utilities.AuditEventLogger;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.RegexUtils;
@@ -59,6 +57,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.XML_OPENDATAKIT_NAMESPACE;
@@ -400,6 +400,20 @@ public class FormController {
     }
 
     /**
+     * Returns true if the question at the given FormIndex uses the search() appearance/function
+     * of "fast itemset" feature.
+     *
+     * Precondition: there is a question at the given FormIndex.
+     */
+    public boolean usesDatabaseExternalDataFeature(@NonNull FormIndex index) {
+        String queryAttribute = getFormDef().getChild(index).getAdditionalAttribute(null, "query");
+        String appearanceAttribute = getAppearanceAttr(index);
+
+        return appearanceAttribute != null && ExternalDataUtil.SEARCH_FUNCTION_REGEX.matcher(appearanceAttribute).find()
+                || queryAttribute != null && queryAttribute.length() > 0;
+    }
+
+    /**
      * Tests if the FormIndex 'index' is located inside a group that is marked as a "field-list"
      *
      * @return true if index is in a "field-list". False otherwise.
@@ -711,8 +725,11 @@ public class FormController {
      * Returns true if the index is either a repeatable group or a visible group.
      */
     public boolean isDisplayableGroup(FormIndex index) {
-        return getEvent(index) == FormEntryController.EVENT_REPEAT ||
-                (getEvent(index) == FormEntryController.EVENT_GROUP && isPresentationGroup(index) && isLogicalGroup(index));
+        int event = getEvent(index);
+        return event == FormEntryController.EVENT_REPEAT
+                || event == FormEntryController.EVENT_PROMPT_NEW_REPEAT
+                || (event == FormEntryController.EVENT_GROUP
+                && isPresentationGroup(index) && isLogicalGroup(index));
     }
 
     /**
@@ -871,7 +888,15 @@ public class FormController {
     }
 
     /**
-     * Returns an array of question promps.
+     * Returns an array of question prompts corresponding to the current {@link FormIndex}. These
+     * are the prompts that should be displayed to the user and don't include any non-relevant
+     * questions.
+     *
+     * The array has a single element if there is a question at this {@link FormIndex} or multiple
+     * elements if there is a group.
+     *
+     * @throws RuntimeException if there is a group at this {@link FormIndex} and it contains
+     * elements that are not questions or regular (non-repeat) groups.
      */
     public FormEntryPrompt[] getQuestionPrompts() throws RuntimeException {
         // For questions, there is only one.
@@ -919,26 +944,41 @@ public class FormController {
      */
     private List<FormIndex> getIndicesForGroup(GroupDef gd) {
         return getIndicesForGroup(gd,
-                formEntryController.getModel().incrementIndex(getFormIndex(), true));
+                formEntryController.getModel().incrementIndex(getFormIndex(), true), false);
     }
 
-    private List<FormIndex> getIndicesForGroup(GroupDef gd, FormIndex currentChildIndex) {
+    private List<FormIndex> getIndicesForGroup(GroupDef gd, FormIndex currentChildIndex, boolean jumpIntoRepeatGroups) {
         List<FormIndex> indices = new ArrayList<>();
         for (int i = 0; i < gd.getChildren().size(); i++) {
             final FormEntryModel formEntryModel = formEntryController.getModel();
-            if (getEvent(currentChildIndex) == FormEntryController.EVENT_GROUP) {
+            if (getEvent(currentChildIndex) == FormEntryController.EVENT_GROUP
+                    || (jumpIntoRepeatGroups && getEvent(currentChildIndex) == FormEntryController.EVENT_REPEAT)) {
                 IFormElement nestedElement = formEntryModel.getForm().getChild(currentChildIndex);
                 if (nestedElement instanceof GroupDef) {
                     indices.addAll(getIndicesForGroup((GroupDef) nestedElement,
-                            formEntryModel.incrementIndex(currentChildIndex, true)));
+                            formEntryModel.incrementIndex(currentChildIndex, true), jumpIntoRepeatGroups));
                     currentChildIndex = formEntryModel.incrementIndex(currentChildIndex, false);
                 }
-            } else {
+            } else if (!jumpIntoRepeatGroups || getEvent(currentChildIndex) != FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
                 indices.add(currentChildIndex);
                 currentChildIndex = formEntryModel.incrementIndex(currentChildIndex, false);
             }
         }
         return indices;
+    }
+
+    /**
+     * @return true if a group contains at least one relevant question, otherwise false
+     */
+    public boolean isGroupRelevant() {
+        GroupDef groupDef = (GroupDef) getCaptionPrompt().getFormElement();
+        FormIndex currentChildIndex = formEntryController.getModel().incrementIndex(getFormIndex(), true);
+        for (FormIndex index : getIndicesForGroup(groupDef, currentChildIndex, true)) {
+            if (formEntryController.getModel().isIndexRelevant(index)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public FormEntryPrompt getQuestionPrompt(FormIndex index) {
@@ -1240,8 +1280,9 @@ public class FormController {
                 String locationPriority = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-priority");
                 String locationMinInterval = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-min-interval");
                 String locationMaxAge = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-max-age");
+                boolean isTrackingChangesEnabled = Boolean.parseBoolean(auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "track-changes"));
 
-                auditConfig = new AuditConfig(locationPriority, locationMinInterval, locationMaxAge);
+                auditConfig = new AuditConfig(locationPriority, locationMinInterval, locationMaxAge, isTrackingChangesEnabled);
 
                 IAnswerData answerData = new StringData();
                 answerData.setValue(AUDIT_FILE_NAME);

@@ -197,6 +197,7 @@
     <string name="sent_on_date_at_time">\'Sent on\' EEE, MMM dd, yyyy \'at\' HH:mm</string> <!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
     <string name="sending_failed_on_date_at_time">\'Sending failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string> <!-- http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
     <string name="deleted_on_date_at_time">\'Deleted on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+    <string name="submission_deleted">Submission deleted</string>
     <string name="version">Version:</string>
     <string name="parent_form_not_present">Unable to edit this saved form because the corresponding blank form is not present or was deleted.\n\nForm ID: %1$s</string>
     <string name="launch_app">Launch</string>
@@ -224,7 +225,7 @@
     <string name="found_in_settings">Uncheck to hide from General Settings</string>
     <string name="save_preferences">Save Settings to Disk</string>
     <string name="form_forward">Next</string>
-    <string name="form_backward">Prev</string>
+    <string name="form_backward">Back</string>
     <string name="navigation">Navigation</string>
     <string name="swipe_navigation">Use horizontal swipes</string>
     <string name="buttons_navigation">Use forward/backward buttons</string>
@@ -316,6 +317,7 @@
     <string name="map_sdk_behavior">Mapping SDK</string>
     <string name="google_maps_sdk">Google Maps SDK</string>
     <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
+    <string name="mapbox_maps_sdk">Mapbox Maps SDK</string>
     <string name="show_map_sdk">Show Map SDK Options</string>
     <string name="openmap_streets">OSM Streets</string>
     <string name="openmap_usgs_topo">USGS National Map Topo</string>
@@ -331,6 +333,13 @@
     <string name="map_basemap_selector_title">Basemaps</string>
     <string name="show_map_basemap">Show Basemap Options</string>
 
+    <string name="mapbox_streets">Mapbox Streets</string>
+    <string name="mapbox_light">Mapbox Light</string>
+    <string name="mapbox_dark">Mapbox Dark</string>
+    <string name="mapbox_satellite">Mapbox Satellite</string>
+    <string name="mapbox_satellite_streets">Mapbox Satellite Streets</string>
+    <string name="mapbox_outdoors">Mapbox Outdoors</string>
+
     <string name="save_point">Save GeoPoint</string>
     <string name="get_point">Start GeoPoint</string>
     <string name="geopoint_view_read_only">View GeoPoint</string>
@@ -342,12 +351,8 @@
     <string name="start">Start</string>
     <string name="enable_gps">Enable GPS</string>
     <string name="geotrace_title">GeoTrace</string>
-    <string name="polygon_save">Save as Polygon</string>
-    <string name="polygon_save_deprecation_warning">(If you use GeoTrace to collect polygons, update your form to use GeoShape before the next update. See https://bit.ly/odk18277.)</string>
-    <string name="polyline_save">Save as Polyline</string>
     <string name="gps_enable_message">GPS is disabled in your device. Would you like to enable it?</string>
     <string name="select_offline_layer">Select Offline Layer</string>
-    <string name="polygon_or_polyline">"Save GeoTrace As"</string>
     <string name="geo_clear_warning">Feature already created. Would you like to clear the feature?</string>
     <string name="geo_exit_warning">Discard changes and return to ODK?</string>
     <string name="polygon_validator">Must have at least 3 points to create Polygon</string>
@@ -693,4 +698,8 @@
     <string name="number_picker_title">Number Picker</string>
     <string name="too_complex_form">This form is too complex for this device. Try simplifying expressions or ask for help on the forum.</string>
     <string name="reading_files">Reading files</string>
+    <string name="copying_media_files_failed">Copying media files failed</string>
+    <string name="qr_code_not_found">QR Code not found in the selected image</string>
+    <string name="not_granted_permission">The activity you are trying to start requires a permission which is not granted.</string>
+    <string name="mapbox_unsupported_warning">Mapbox is not supported on this device (%s).  Please choose another mapping SDK in General Settings &gt; User interface.</string>
 </resources>

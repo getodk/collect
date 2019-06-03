@@ -23,7 +23,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.analytics.HitBuilders;
 
@@ -114,12 +114,12 @@ public class AutoSendWorker extends Worker {
         if (protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets))) {
             if (PermissionUtils.isGetAccountsPermissionGranted(getApplicationContext())) {
                 GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
-                String googleUsername = accountsManager.getSelectedAccount();
+                String googleUsername = accountsManager.getLastSelectedAccountIfValid();
                 if (googleUsername.isEmpty()) {
                     showUploadStatusNotification(true, Collect.getInstance().getString(R.string.google_set_account));
                     return Result.FAILURE;
                 }
-                accountsManager.getCredential().setSelectedAccountName(googleUsername);
+                accountsManager.selectAccount(googleUsername);
                 uploader = new InstanceGoogleSheetsUploader(accountsManager);
 
                 try {

@@ -16,7 +16,7 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v7.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.AppCompatCheckBox;
 import android.util.TypedValue;
 import android.widget.CheckBox;
 
@@ -42,6 +42,7 @@ public class TriggerWidget extends QuestionWidget {
     @Override
     public void clearAnswer() {
         triggerButton.setChecked(false);
+        widgetValueChanged();
     }
 
     @Override
@@ -71,6 +72,8 @@ public class TriggerWidget extends QuestionWidget {
         triggerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         triggerButton.setEnabled(!getFormEntryPrompt().isReadOnly());
         triggerButton.setChecked(OK_TEXT.equals(getFormEntryPrompt().getAnswerText()));
+
+        triggerButton.setOnCheckedChangeListener((buttonView, isChecked) -> widgetValueChanged());
 
         addAnswerView(triggerButton);
     }

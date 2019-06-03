@@ -1,9 +1,11 @@
+import com.github.spotbugs.SpotBugsTask
+
 buildscript {
     repositories {
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath 'gradle.plugin.com.github.spotbugs:spotbugs-gradle-plugin:1.6.2'
+        classpath 'gradle.plugin.com.github.spotbugs:spotbugs-gradle-plugin:1.6.4'
     }
 }
 
@@ -16,7 +18,7 @@ apply plugin: 'checkstyle'
 
 checkstyle.toolVersion = '7.6.1'
 
-task checkstyle(type: Checkstyle) {
+tasks.register("checkstyle", Checkstyle) {
     configFile file("$configDir/checkstyle.xml")
 
     ignoreFailures false // Fail early
@@ -32,44 +34,41 @@ task checkstyle(type: Checkstyle) {
 
 apply plugin: 'com.github.spotbugs'
 
-spotbugs.toolVersion = '3.1.3'
+spotbugs.toolVersion = '3.1.7'
 
-android.applicationVariants.all { variant ->
-    task("spotbugs${variant.name.capitalize()}", type: com.github.spotbugs.SpotBugsTask, dependsOn: variant.javaCompiler) {
+tasks.register("spotbugs", SpotBugsTask) {
+    ignoreFailures false // Fail early
+    effort = 'max'       // Search better
 
-        ignoreFailures false // Fail early
-        effort = 'max'       // Search better
+    reportLevel = 'low' // Possible reportLevels: 'high', 'medium', 'low'
 
-        reportLevel = 'low' // Possible reportLevels: 'high', 'medium', 'low'
+    excludeFilter = new File("$configDir/findbugs-filter.xml")
+    classes = fileTree("build/intermediates/javac/")
 
-        excludeFilter = new File("$configDir/findbugs-filter.xml")
-        classes = fileTree("build/intermediates/classes/${variant.flavorName}/${variant.buildType.name}/")
+    source = 'src'
 
-        source = variant.javaCompiler.source
+    classpath = files()
+    pluginClasspath = project.configurations.spotbugsPlugins
+    spotbugsClasspath = buildscript.configurations.classpath
 
-        classpath = variant.javaCompiler.classpath.asFileTree
-        pluginClasspath = project.configurations.spotbugsPlugins
-        spotbugsClasspath = buildscript.configurations.classpath
+    /**
+     * Tweak worker process max heap size
+     * 128m = OutOfMemory
+     * 256m=~31s
+     * 384m=~31s
+     * 768m=~31s
+     * */
+    setMaxHeapSize('256m')
 
-        /**
-         * Tweak worker process max heap size
-         * 128m = OutOfMemory
-         * 256m=~31s
-         * 384m=~31s
-         * 768m=~31s
-         * */
-        setMaxHeapSize('256m')
-
-        reports {
-            html {
-                enabled = true
-                setDestination new File("$reportsDir/spotbugs/spotbugs.html")
-                stylesheet resources.text.fromFile("$configDir/xsl/plain.xsl")
-            }
-            xml {
-                enabled = false
-                setDestination new File("$reportsDir/spotbugs/spotbugs.xml")
-            }
+    reports {
+        html {
+            enabled = true
+            setDestination new File("$reportsDir/spotbugs/spotbugs.html")
+            stylesheet resources.text.fromFile("$configDir/xsl/plain.xsl")
+        }
+        xml {
+            enabled = false
+            setDestination new File("$reportsDir/spotbugs/spotbugs.xml")
         }
     }
 }
@@ -82,7 +81,7 @@ pmd {
     toolVersion = '6.4.0'
 }
 
-task pmd(type: Pmd) {
+tasks.register("pmd", Pmd) {
     ignoreFailures = false // Fail early
     ruleSetFiles = files("$configDir/pmd-ruleset.xml")
     ruleSets = []

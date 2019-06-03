@@ -192,6 +192,7 @@
   <string name="sending_failed_on_date_at_time">yyyy/MM/dd HH:mm \'に送信失敗しました\'</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time">yyyy/MM/dd HH:mm \'に削除しました\'</string>
+  <string name="submission_deleted">送信を削除しました</string>
   <string name="version">バージョン:</string>
   <string name="parent_form_not_present">対応する空のフォームが存在しないか、削除されたため、この保存済のフォームを編集できません。\n\nフォーム ID: %1$s</string>
   <string name="launch_app">起動</string>
@@ -219,7 +220,7 @@
   <string name="found_in_settings">チェックを外すと全般設定から非表示にします</string>
   <string name="save_preferences">設定をディスクに保存する</string>
   <string name="form_forward">次へ</string>
-  <string name="form_backward">前へ</string>
+  <string name="form_backward">戻る</string>
   <string name="navigation">ナビゲーション</string>
   <string name="swipe_navigation">水平方向のスワイプを使用</string>
   <string name="buttons_navigation">次へ/前へボタンを使用</string>
@@ -311,6 +312,7 @@
   <string name="map_sdk_behavior">マッピング SDK</string>
   <string name="google_maps_sdk">Google マップ SDK</string>
   <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
+  <string name="mapbox_maps_sdk">Mapbox マップ SDK</string>
   <string name="show_map_sdk">マップ SDK オプションを表示</string>
   <string name="openmap_streets">OSM 道路</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
@@ -325,6 +327,12 @@
   <string name="satellite">衛星</string>
   <string name="map_basemap_selector_title">基本地図</string>
   <string name="show_map_basemap">基本地図オプションを表示</string>
+  <string name="mapbox_streets">Mapbox 道路</string>
+  <string name="mapbox_light">Mapbox ライト</string>
+  <string name="mapbox_dark">Mapbox ダーク</string>
+  <string name="mapbox_satellite">Mapbox 衛星</string>
+  <string name="mapbox_satellite_streets">Mapbox 衛星道路</string>
+  <string name="mapbox_outdoors">Mapbox アウトドア</string>
   <string name="save_point">地理位置を保存</string>
   <string name="get_point">地理位置を開始</string>
   <string name="geopoint_view_read_only">地理位置を表示</string>
@@ -335,12 +343,8 @@
   <string name="start">開始</string>
   <string name="enable_gps">GPS を有効にする</string>
   <string name="geotrace_title">GeoTrace</string>
-  <string name="polygon_save">ポリゴンとして保存</string>
-  <string name="polygon_save_deprecation_warning">(このオプションは次の更新で削除されます。 代わりに bit.ly/odk18277 を参照してください。)</string>
-  <string name="polyline_save">ポリラインとして保存</string>
   <string name="gps_enable_message">お使いのデバイスで GPS は無効になっています。有効にしますか?</string>
   <string name="select_offline_layer">オフライン レイヤーを選択</string>
-  <string name="polygon_or_polyline">名前を付けて GeoTrace を保存</string>
   <string name="geo_clear_warning">機能は既に作成済です。機能をクリアしますか?</string>
   <string name="geo_exit_warning">変更を破棄して ODK の戻りますか?</string>
   <string name="polygon_validator">ポリゴンを作成するには、少なくとも 3 点指定する必要があります</string>
@@ -676,4 +680,7 @@
   <string name="number_picker_title">数値選択</string>
   <string name="too_complex_form">この形式はこの端末には複雑すぎます。 表現を単純化するか、フォーラムで助けを求めてください。</string>
   <string name="reading_files">ファイルを読み込んでいます</string>
+  <string name="copying_media_files_failed">メディアファイルのコピーに失敗しました</string>
+  <string name="qr_code_not_found">選択した画像に QR コードが見つかりませんでした</string>
+  <string name="not_granted_permission">開始しようとしているアクティビティは、必要なアクセス許可が付与されていません。</string>
 </resources>

@@ -1,7 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="activity_not_found">Hindi mapangasiwaan: %s</string>
+  <string name="view_image">Ipakita ang Imahe</string>
+  <string name="choose_audio">Pumili ng audio</string>
   <string name="add_another">Mag-dagdag ng Pangkat</string>
+  <string name="add_another_menu">Magdagdag pa</string>
   <string name="add_another_repeat">I-dagdag ang \"%s\" sa pangkat?</string>
   <string name="add_repeat">Magdagdag ng bagong \"%s\" sa pangkat?</string>
   <string name="add_repeat_no">Huwag Mag-dagdag</string>
@@ -181,13 +184,13 @@
   <string name="found_in_settings">Uncheck to hide from General Settings</string>
   <string name="save_preferences">Save Settings to Disk</string>
   <string name="form_forward">Next</string>
-  <string name="form_backward">Prev</string>
   <string name="navigation">Navigation</string>
   <string name="swipe_navigation">Use horizontal swipes</string>
   <string name="buttons_navigation">Use forward/backward buttons</string>
   <string name="swipe_buttons_navigation">Use swipes and buttons</string>
   <string name="launch_printer">Initiate Printing</string>
   <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
+  <string name="change_location">Palitan ang Lokasyon</string>
   <string name="change_server_url">URL ng Server</string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->

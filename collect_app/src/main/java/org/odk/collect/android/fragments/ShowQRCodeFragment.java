@@ -21,9 +21,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.content.FileProvider;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
+import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -236,18 +236,27 @@ public class ShowQRCodeFragment extends Fragment {
         if (requestCode == SELECT_PHOTO) {
             if (resultCode == Activity.RESULT_OK) {
                 try {
+                    boolean qrCodeFound = false;
                     final Uri imageUri = data.getData();
-                    final InputStream imageStream = getActivity().getContentResolver()
-                            .openInputStream(imageUri);
+                    if (imageUri != null) {
+                        final InputStream imageStream = getActivity().getContentResolver()
+                                .openInputStream(imageUri);
 
-                    final Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
-                    String response = QRCodeUtils.decodeFromBitmap(bitmap);
-                    if (response != null) {
-                        applySettings(response);
+                        final Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+                        if (bitmap != null) {
+                            String response = QRCodeUtils.decodeFromBitmap(bitmap);
+                            if (response != null) {
+                                qrCodeFound = true;
+                                applySettings(response);
+                            }
+                        }
+                    }
+                    if (!qrCodeFound) {
+                        ToastUtils.showLongToast(R.string.qr_code_not_found);
                     }
                 } catch (FormatException | NotFoundException | ChecksumException e) {
                     Timber.i(e);
-                    ToastUtils.showLongToast("QR Code not found in the selected image");
+                    ToastUtils.showLongToast(R.string.qr_code_not_found);
                 } catch (DataFormatException | IOException | OutOfMemoryError e) {
                     Timber.e(e);
                     ToastUtils.showShortToast(getString(R.string.invalid_qrcode));

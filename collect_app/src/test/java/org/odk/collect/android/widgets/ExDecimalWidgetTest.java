@@ -1,10 +1,9 @@
 package org.odk.collect.android.widgets;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.data.DecimalData;
 import org.odk.collect.android.widgets.base.GeneralExStringWidgetTest;
-import org.robolectric.RuntimeEnvironment;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -20,7 +19,7 @@ public class ExDecimalWidgetTest extends GeneralExStringWidgetTest<ExDecimalWidg
     @NonNull
     @Override
     public ExDecimalWidget createWidget() {
-        return new ExDecimalWidget(RuntimeEnvironment.application, formEntryPrompt);
+        return new ExDecimalWidget(activity, formEntryPrompt);
     }
 
     @NonNull

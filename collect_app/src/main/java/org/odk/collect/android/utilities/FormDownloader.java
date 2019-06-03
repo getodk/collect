@@ -195,15 +195,15 @@ public class FormDownloader {
 
         if ((stateListener == null || !stateListener.isTaskCanceled()) && parsedFields != null) {   // smap remove check on empty message
             if (isSubmissionOk(parsedFields)) {
-                installEverything(tempMediaPath, fileResult, parsedFields, fd, orgTempMediaPath, orgMediaPath);     // Added organisation paths
-                installed = true;
+                installed = installEverything(tempMediaPath, fileResult, parsedFields, fd, orgTempMediaPath, orgMediaPath);   // Added organisation paths
             } else {
                 message += Collect.getInstance().getString(R.string.xform_parse_error,
                         fileResult.file.getName(), "submission url");
             }
         }
         if (!installed) {
-            cleanUp(fileResult, null, tempMediaPath, orgTempMediaPath);     // smap
+            message += Collect.getInstance().getString(R.string.copying_media_files_failed);
+            cleanUp(fileResult, null, tempMediaPath, orgTempMediaPath);    // smap
         }
         return message;
     }
@@ -213,7 +213,7 @@ public class FormDownloader {
         return submission == null || Validator.isUrlValid(submission);
     }
 
-    private void installEverything(String tempMediaPath, FileResult fileResult, Map<String,
+    private boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String,
             String> parsedFields, FormDetails fd, String orgTempMediaPath, String orgMediaPath)   // smap added organisational paths
             throws TaskCancelledException {     // smap add fd
         UriResult uriResult = null;
@@ -244,6 +244,7 @@ public class FormDownloader {
                 File formMediaPath = new File(uriResult.getMediaPath());
                 FileUtils.moveMediaFiles(orgTempMediaPath, formMediaPath);      // smap Move org files first and overwrite with form level
                 FileUtils.moveMediaFiles(tempMediaPath, formMediaPath);
+                return true;
             }
         } catch (IOException e) {
             Timber.e(e);
@@ -259,6 +260,7 @@ public class FormDownloader {
 
             cleanUp(fileResult, null, tempMediaPath, orgTempMediaPath);     // smap add organisation
         }
+        return false;
     }
 
     private void cleanUp(FileResult fileResult, File fileOnCancel, String tempMediaPath, String orgTempMediaPath) {     // smap add org
@@ -306,9 +308,7 @@ public class FormDownloader {
      * @param formInfo certain fields extracted from the parsed XML form, such as title and form ID
      * @return a {@link UriResult} object
      */
-    private UriResult findExistingOrCreateNewUri(File formFile, Map<String, String> formInfo, String source, boolean tasks_only)   // smap add source as a parameter
-            throws TaskCancelledException {
-        Cursor cursor = null;
+    private UriResult findExistingOrCreateNewUri(File formFile, Map<String, String> formInfo, String source, boolean tasks_only) {   // smap add source as a parameter
         final Uri uri;
         final String formFilePath = formFile.getAbsolutePath();
         String mediaPath = FileUtils.constructMediaPath(formFilePath);
@@ -316,8 +316,11 @@ public class FormDownloader {
 
         FileUtils.checkMediaPath(new File(mediaPath));
 
-        try {
-            cursor = formsDao.getFormsCursorForFormFilePath(formFile.getAbsolutePath());
+        try (Cursor cursor = formsDao.getFormsCursorForFormFilePath(formFile.getAbsolutePath())) {
+            if (cursor == null) {
+                return null;
+            }
+
             isNew = cursor.getCount() <= 0;
 
             if (isNew) {
@@ -327,10 +330,6 @@ public class FormDownloader {
                 uri = Uri.withAppendedPath(FormsProviderAPI.FormsColumns.CONTENT_URI,
                         cursor.getString(cursor.getColumnIndex(FormsProviderAPI.FormsColumns._ID)));
                 mediaPath = cursor.getString(cursor.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH));
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
             }
         }
 

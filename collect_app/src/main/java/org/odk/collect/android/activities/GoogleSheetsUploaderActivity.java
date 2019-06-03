@@ -31,31 +31,41 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.UserRecoverableAuthException;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploaderTask;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.showSettingsDialog;
 
-import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_AUTHORIZATION;
+public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener {
 
-public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener,
-        GoogleAccountsManager.GoogleAccountSelectionListener {
+    private static final int REQUEST_AUTHORIZATION = 1001;
     private static final int PROGRESS_DIALOG = 1;
     private static final int GOOGLE_USER_DIALOG = 3;
     private static final String ALERT_MSG = "alertmsg";
@@ -67,12 +77,15 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     private Long[] instancesToSend;
     private InstanceGoogleSheetsUploaderTask instanceGoogleSheetsUploaderTask;
 
-    private GoogleAccountsManager accountsManager;
+    @Inject
+    GoogleAccountsManager accountsManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Timber.i("onCreate: %s", savedInstanceState == null ? "creating" : "re-initializing");
+
+        DaggerUtils.getComponent(this).inject(this);
 
         // if we start this activity, the following must be true:
         // 1) Google Sheets is selected in preferences
@@ -111,9 +124,6 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
             Timber.i("onCreate: Beginning upload of %d instances!", instancesToSend.length);
         }
 
-        accountsManager = new GoogleAccountsManager(this);
-        accountsManager.setListener(this);
-
         getResultsFromApi();
     }
 
@@ -128,13 +138,9 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
                     GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
             if (googleUsername == null || googleUsername.equals("")) {
                 showDialog(GOOGLE_USER_DIALOG);
-                return;
+            } else {
+                new AuthorizationChecker().execute();
             }
-
-            showDialog(PROGRESS_DIALOG);
-
-            instanceGoogleSheetsUploaderTask.setUploaderListener(this);
-            instanceGoogleSheetsUploaderTask.execute(instancesToSend);
         } else {
             // it's not null, so we have a task running
             // progress dialog is handled by the system
@@ -149,13 +155,35 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
      * appropriate.
      */
     private void getResultsFromApi() {
-        if (!accountsManager.isGoogleAccountSelected()) {
-            accountsManager.chooseAccountAndRequestPermissionIfNeeded();
+        if (!accountsManager.isAccountSelected()) {
+            selectAccount();
         } else if (!isDeviceOnline()) {
             ToastUtils.showShortToast("No network connection available.");
         } else {
             runTask();
         }
+    }
+
+    private void selectAccount() {
+        new PermissionUtils().requestGetAccountsPermission(this, new PermissionListener() {
+            @Override
+            public void granted() {
+                String account = accountsManager.getLastSelectedAccountIfValid();
+                if (!account.isEmpty()) {
+                    accountsManager.selectAccount(account);
+
+                    // re-attempt to list google drive files
+                    getResultsFromApi();
+                } else {
+                    showSettingsDialog(GoogleSheetsUploaderActivity.this);
+                }
+            }
+
+            @Override
+            public void denied() {
+                finish();
+            }
+        });
     }
 
     /**
@@ -264,12 +292,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         String message;
 
         if (keys.isEmpty()) {
-            if (instanceGoogleSheetsUploaderTask.isAuthFailed()) {
-                message = getString(R.string.google_auth_io_exception_msg);
-                instanceGoogleSheetsUploaderTask.setAuthFailedToFalse();
-            } else {
-                message = getString(R.string.no_forms_uploaded);
-            }
+            message = getString(R.string.no_forms_uploaded);
         } else {
             Iterator<String> it = keys.iterator();
 
@@ -288,12 +311,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
                 if (results != null && results.getCount() > 0) {
                     message = InstanceUploaderUtils.getUploadResultMessage(results, result);
                 } else {
-                    if (instanceGoogleSheetsUploaderTask.isAuthFailed()) {
-                        message = getString(R.string.google_auth_io_exception_msg);
-                        instanceGoogleSheetsUploaderTask.setAuthFailedToFalse();
-                    } else {
-                        message = getString(R.string.no_forms_uploaded);
-                    }
+                    message = getString(R.string.no_forms_uploaded);
                 }
             }
         }
@@ -349,16 +367,13 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(getString(R.string.upload_results));
         alertDialog.setMessage(message);
-        DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON1: // ok
-                        // always exit this activity since it has no interface
-                        alertShowing = false;
-                        finish();
-                        break;
-                }
+        DialogInterface.OnClickListener quitListener = (dialog, i) -> {
+            switch (i) {
+                case DialogInterface.BUTTON1: // ok
+                    // always exit this activity since it has no interface
+                    alertShowing = false;
+                    finish();
+                    break;
             }
         };
         alertDialog.setCancelable(false);
@@ -373,8 +388,37 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         // in interface, but not needed
     }
 
-    @Override
-    public void onGoogleAccountSelected(String accountName) {
-        getResultsFromApi();
+    private void authorized() {
+        showDialog(PROGRESS_DIALOG);
+
+        instanceGoogleSheetsUploaderTask.setUploaderListener(this);
+        instanceGoogleSheetsUploaderTask.execute(instancesToSend);
+    }
+
+    private class AuthorizationChecker extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                // Must be run from a background thread, not the main UI thread.
+                if (accountsManager.getToken() != null) {
+                    return true;
+                }
+            } catch (UserRecoverableAuthException e) {
+                // Collect is not yet authorized to access current account, so request for authorization
+                runOnUiThread(() -> startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION));
+            } catch (IOException | GoogleAuthException e) {
+                // authorization failed
+                runOnUiThread(() -> createAlertDialog(getString(R.string.google_auth_io_exception_msg)));
+            }
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                authorized();
+            }
+        }
     }
 }

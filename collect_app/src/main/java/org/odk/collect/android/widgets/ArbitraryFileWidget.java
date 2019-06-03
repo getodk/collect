@@ -20,8 +20,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.content.FileProvider;
+import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import android.view.Gravity;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -90,6 +90,8 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
     public void clearAnswer() {
         answerLayout.setVisibility(GONE);
         deleteFile();
+
+        widgetValueChanged();
     }
 
     @Override
@@ -126,6 +128,8 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
             chosenFileNameTextView.setText(binaryName);
             answerLayout.setVisibility(VISIBLE);
             Timber.i("Setting current answer to %s", newFile.getName());
+
+            widgetValueChanged();
         } else {
             Timber.e("Inserting Arbitrary file FAILED");
         }

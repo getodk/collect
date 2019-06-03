@@ -125,9 +125,10 @@ public class ResetUtility {
         File file = new File(path);
         if (file.exists()) {
             File[] files = file.listFiles();
-
-            for (File f : files) {
-                result = deleteRecursive(f);
+            if (files != null) {
+                for (File f : files) {
+                    result = deleteRecursive(f);
+                }
             }
         }
         return result;

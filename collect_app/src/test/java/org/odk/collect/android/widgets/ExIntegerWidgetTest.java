@@ -1,10 +1,9 @@
 package org.odk.collect.android.widgets;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.data.IntegerData;
 import org.odk.collect.android.widgets.base.GeneralExStringWidgetTest;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.mockito.Mockito.when;
 
@@ -17,7 +16,7 @@ public class ExIntegerWidgetTest extends GeneralExStringWidgetTest<ExIntegerWidg
     @NonNull
     @Override
     public ExIntegerWidget createWidget() {
-        return new ExIntegerWidget(RuntimeEnvironment.application, formEntryPrompt);
+        return new ExIntegerWidget(activity, formEntryPrompt);
     }
 
     @NonNull

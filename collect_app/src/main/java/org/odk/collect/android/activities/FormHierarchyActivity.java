@@ -17,11 +17,11 @@ package org.odk.collect.android.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -595,6 +595,9 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         break;
                     }
                     case FormEntryController.EVENT_GROUP: {
+                        if (!formController.isGroupRelevant()) {
+                            break;
+                        }
                         // Nothing but repeat group instances should show up in the picker.
                         if (shouldShowRepeatGroupPicker()) {
                             break;
@@ -631,6 +634,10 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         break;
                     }
                     case FormEntryController.EVENT_REPEAT: {
+                        if (!formController.isGroupRelevant()) {
+                            break;
+                        }
+
                         visibleGroupRef = currentRef;
 
                         FormEntryCaption fc = formController.getCaptionPrompt();

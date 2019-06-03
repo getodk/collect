@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabaseCorruptException;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
 
@@ -46,6 +47,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
+
+import timber.log.Timber;
 
 public class MapHelper {
     private static final String OFFLINE_LAYER_TAG = " (custom, offline)";
@@ -73,12 +76,22 @@ public class MapHelper {
 
     private TilesOverlay osmTileOverlay;
     private TileOverlay googleTileOverlay;
+
     private IRegisterReceiver iregisterReceiver;
 
     private final GoogleMap googleMap;
     private final MapView osmMap;
     private final org.odk.collect.android.spatial.TileSourceFactory tileFactory;
     private final Context context;
+
+    public MapHelper(Context context) {
+        this.context = context;
+        googleMap = null;
+        osmMap = null;
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        offilineOverlays = getOfflineLayerList();
+        tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(context);
+    }
 
     public MapHelper(Context context, GoogleMap googleMap, Integer selectedLayer) {
         this.context = context;
@@ -177,6 +190,10 @@ public class MapHelper {
                 osmMap.setTileSource(tileSource);
             }
         }
+        // setBasemap doesn't do anything in Mapbox mode; MapboxMapFragment will
+        // set the basemap according to the preferences.  This inconsistency
+        // between Mapbox and the other (Google, OSM) modes will be cleaned up
+        // when we reorganize the preferences for maps.
     }
 
     private boolean useOfflineBasemapIfAvailable(String basemap) {
@@ -218,6 +235,11 @@ public class MapHelper {
     }
 
     public void showLayersDialog() {
+        if (googleMap == null && osmMap == null) {
+            // The layers dialog doesn't work with the Mapbox SDK yet.  This
+            // will be fixed when we add offline tile support for Mapbox.
+            return;
+        }
         AlertDialog.Builder layerDialod = new AlertDialog.Builder(context);
         layerDialod.setTitle(context.getString(R.string.select_offline_layer));
         layerDialod.setSingleChoiceItems(offilineOverlays,
@@ -236,8 +258,8 @@ public class MapHelper {
                         googleTileOverlay.remove();
                     }
 
-                } else {
-                    //OSM
+                }
+                if (osmMap != null) {
                     if (osmTileOverlay != null) {
                         osmMap.getOverlays().remove(osmTileOverlay);
                         osmMap.invalidate();
@@ -268,7 +290,8 @@ public class MapHelper {
                             } catch (Exception e) {
                                 break;
                             }
-                        } else {
+                        }
+                        if (osmMap != null) {
                             if (osmTileOverlay != null) {
                                 osmMap.getOverlays().remove(osmTileOverlay);
                                 osmMap.invalidate();
@@ -299,14 +322,18 @@ public class MapHelper {
     private boolean isFileFormatSupported(File file) {
         boolean result = true;
         SQLiteDatabase db = SQLiteDatabase.openDatabase(file.getAbsolutePath(), null, SQLiteDatabase.OPEN_READONLY);
-        Cursor cursor = db.rawQuery("SELECT * FROM metadata where name =?", new String[]{"format"});
-        if (cursor != null && cursor.getCount() == 1) {
-            try {
-                cursor.moveToFirst();
-                result = !"pbf".equals(cursor.getString(cursor.getColumnIndex("value")));
-            } finally {
-                cursor.close();
+        try {
+            Cursor cursor = db.rawQuery("SELECT * FROM metadata where name =?", new String[]{"format"});
+            if (cursor != null && cursor.getCount() == 1) {
+                try {
+                    cursor.moveToFirst();
+                    result = !"pbf".equals(cursor.getString(cursor.getColumnIndex("value")));
+                } finally {
+                    cursor.close();
+                }
             }
+        } catch (SQLiteDatabaseCorruptException e) {
+            Timber.w(e);
         }
         return result;
     }

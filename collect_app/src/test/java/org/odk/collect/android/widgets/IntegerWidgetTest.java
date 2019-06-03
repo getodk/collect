@@ -1,10 +1,9 @@
 package org.odk.collect.android.widgets;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.data.IntegerData;
 import org.odk.collect.android.widgets.base.GeneralStringWidgetTest;
-import org.robolectric.RuntimeEnvironment;
 
 import java.util.Random;
 
@@ -18,7 +17,7 @@ public class IntegerWidgetTest extends GeneralStringWidgetTest<IntegerWidget, In
     public IntegerWidget createWidget() {
         Random random = new Random();
         boolean useThousandSeparator = random.nextBoolean();
-        return new IntegerWidget(RuntimeEnvironment.application, formEntryPrompt, false, useThousandSeparator);
+        return new IntegerWidget(activity, formEntryPrompt, false, useThousandSeparator);
     }
 
     @NonNull

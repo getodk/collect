@@ -19,7 +19,7 @@ package org.odk.collect.android.preferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 
 import org.odk.collect.android.R;

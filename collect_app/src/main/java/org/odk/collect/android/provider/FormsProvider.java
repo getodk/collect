@@ -17,13 +17,14 @@ package org.odk.collect.android.provider;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.TextUtils;
 
 import org.odk.collect.android.R;
@@ -429,13 +430,9 @@ public class FormsProvider extends ContentProvider {
             values.put(FormsColumns.DATE, now);
         }
 
-        if (!values.containsKey(FormsColumns.DISPLAY_SUBTEXT)) {
-            Date today = new Date();
-            String ts = new SimpleDateFormat(getContext().getString(
-                    R.string.added_on_date_at_time), Locale.getDefault())
-                    .format(today);
-            values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
-        }
+            if (!values.containsKey(FormsColumns.DISPLAY_SUBTEXT)) {
+                values.put(FormsColumns.DISPLAY_SUBTEXT, getDisplaySubtext());
+            }
 
         if (!values.containsKey(FormsColumns.DISPLAY_NAME)) {
             values.put(FormsColumns.DISPLAY_NAME, form.getName());
@@ -676,12 +673,8 @@ public class FormsProvider extends ContentProvider {
 
                 // Make sure that the necessary fields are all set
                     if (values.containsKey(FormsColumns.DATE)) {
-                    Date today = new Date();
-                    String ts = new SimpleDateFormat(getContext().getString(
-                            R.string.added_on_date_at_time), Locale.getDefault())
-                            .format(today);
-                    values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
-                }
+                        values.put(FormsColumns.DISPLAY_SUBTEXT, getDisplaySubtext());
+                    }
 
                 count = db.update(FORMS_TABLE_NAME, values, where, whereArgs);
                 break;
@@ -738,12 +731,8 @@ public class FormsProvider extends ContentProvider {
 
                         // Make sure that the necessary fields are all set
                             if (values.containsKey(FormsColumns.DATE)) {
-                            Date today = new Date();
-                            String ts = new SimpleDateFormat(getContext()
-                                    .getString(R.string.added_on_date_at_time),
-                                    Locale.getDefault()).format(today);
-                            values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
-                        }
+                                values.put(FormsColumns.DISPLAY_SUBTEXT, getDisplaySubtext());
+                            }
 
                         count = db.update(
                                 FORMS_TABLE_NAME,
@@ -769,6 +758,20 @@ public class FormsProvider extends ContentProvider {
         getContext().getContentResolver().notifyChange(uri, null);
         getContext().getContentResolver().notifyChange(FormsProviderAPI.FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
         return count;
+    }
+
+    private String getDisplaySubtext() {
+        String displaySubtext = "";
+        try {
+            Context context = getContext();
+            if (context != null) {
+                displaySubtext = new SimpleDateFormat(context.getString(R.string.added_on_date_at_time),
+                        Locale.getDefault()).format(new Date());
+            }
+        } catch (IllegalArgumentException e) {
+            Timber.e(e);
+        }
+        return displaySubtext;
     }
 
     @NonNull

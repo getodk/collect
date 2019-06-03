@@ -17,8 +17,8 @@ package org.odk.collect.android.upload;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
@@ -113,7 +113,7 @@ public abstract class InstanceUploader {
     public static boolean formShouldBeAutoDeleted(String jrFormId, boolean isAutoDeleteAppSettingEnabled) {
         String autoDelete = null;
         try (Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId)) {
-            if (cursor.moveToFirst()) {
+            if (cursor != null && cursor.moveToFirst()) {
                 int autoDeleteColumnIndex = cursor.getColumnIndex(AUTO_DELETE);
                 autoDelete = cursor.getString(autoDeleteColumnIndex);
             }

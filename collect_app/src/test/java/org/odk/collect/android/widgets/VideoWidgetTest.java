@@ -1,18 +1,20 @@
 package org.odk.collect.android.widgets;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mock;
+import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
-import org.robolectric.RuntimeEnvironment;
 
 import java.io.File;
 
@@ -40,7 +42,7 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
     @NonNull
     @Override
     public VideoWidget createWidget() {
-        return new VideoWidget(RuntimeEnvironment.application, formEntryPrompt, fileUtil, mediaUtil);
+        return new VideoWidget(activity, formEntryPrompt, fileUtil, mediaUtil);
     }
 
     @NonNull
@@ -82,7 +84,7 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
         when(formEntryPrompt.isReadOnly()).thenReturn(false);
 
         when(mediaUtil.getPathFromUri(
-                RuntimeEnvironment.application,
+                activity,
                 uri,
                 MediaStore.Video.Media.DATA)
 
@@ -93,5 +95,28 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
                 .thenReturn(file);
 
         when(file.getName()).thenReturn(destinationName);
+    }
+
+    @Test
+    public void buttonsShouldLaunchCorrectIntents() {
+        stubAllRuntimePermissionsGranted(true);
+
+        Intent intent = getIntentLaunchedByClick(R.id.capture_video);
+        assertActionEquals(MediaStore.ACTION_VIDEO_CAPTURE, intent);
+
+        intent = getIntentLaunchedByClick(R.id.choose_video);
+        assertActionEquals(Intent.ACTION_GET_CONTENT, intent);
+        assertTypeEquals("video/*", intent);
+
+        intent = getIntentLaunchedByClick(R.id.play_video);
+        assertActionEquals(Intent.ACTION_VIEW, intent);
+        assertTypeEquals("video/*", intent);
+    }
+
+    @Test
+    public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
+        stubAllRuntimePermissionsGranted(false);
+
+        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.capture_video));
     }
 }

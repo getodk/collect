@@ -19,7 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 import android.view.View;
 import android.widget.Button;
 
@@ -32,9 +32,12 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import java.io.File;
 import java.util.Locale;
+
+import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
@@ -56,7 +59,7 @@ public class ImageWidget extends BaseImageWidget {
         imageClickHandler = new ViewImageClickHandler();
         imageCaptureHandler = new ImageCaptureHandler();
         setUpLayout();
-        setUpBinary();
+        addCurrentImageToLayout();
         addAnswerView(answerLayout);
     }
 
@@ -65,8 +68,8 @@ public class ImageWidget extends BaseImageWidget {
         super.setUpLayout();
 
         String appearance = getFormEntryPrompt().getAppearanceHint();
-        selfie = appearance != null && (appearance.equalsIgnoreCase("selfie")
-                || appearance.equalsIgnoreCase("new-front"));
+        selfie = appearance != null && (appearance.equalsIgnoreCase(WidgetAppearanceUtils.SELFIE)
+                || appearance.equalsIgnoreCase(WidgetAppearanceUtils.NEW_FRONT));
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
 
@@ -163,13 +166,17 @@ public class ImageWidget extends BaseImageWidget {
             // images returned by the camera in 1.6 (and earlier) are ~1/4
             // the size. boo.
 
-            Uri uri = FileProvider.getUriForFile(getContext(),
-                    BuildConfig.APPLICATION_ID + ".provider",
-                    new File(Collect.TMPFILE_PATH));
-            // if this gets modified, the onActivityResult in
-            // FormEntyActivity will also need to be updated.
-            intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
-            FileUtils.grantFilePermissions(intent, uri, getContext());
+            try {
+                Uri uri = FileProvider.getUriForFile(getContext(),
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        new File(Collect.TMPFILE_PATH));
+                // if this gets modified, the onActivityResult in
+                // FormEntyActivity will also need to be updated.
+                intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
+                FileUtils.grantFilePermissions(intent, uri, getContext());
+            } catch (IllegalArgumentException e) {
+                Timber.e(e);
+            }
         }
 
         imageCaptureHandler.captureImage(intent, RequestCodes.IMAGE_CAPTURE, R.string.capture_image);

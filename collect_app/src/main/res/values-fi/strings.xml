@@ -192,6 +192,7 @@
   <string name="sending_failed_on_date_at_time">\'Lähettäminen epäonnistunut\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time">\'Poistettu\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
+  <string name="submission_deleted">Lähetys poistettu</string>
   <string name="version">Versio:</string>
   <string name="parent_form_not_present">Ei voitu muokata tallennettua lomaketta, koska vastaava tyhjää lomaketta ei ole tai se on poistettu.\n\nLomakkeen tunniste: %1$s</string>
   <string name="launch_app">Käynnistä</string>
@@ -219,7 +220,7 @@
   <string name="found_in_settings">Poista rasti piilottaaksesi yleisasetuksista</string>
   <string name="save_preferences">Tallenna asetukset</string>
   <string name="form_forward">Seuraava</string>
-  <string name="form_backward">Edellinen</string>
+  <string name="form_backward">Takaisin</string>
   <string name="navigation">Navigointi</string>
   <string name="swipe_navigation">Käytä vaakapyyhkäisyjä</string>
   <string name="buttons_navigation">Käytä painikkeita eteenpäin/taaksepäin</string>
@@ -283,7 +284,7 @@
   <string name="no_google_account">Ei valittua Google-tiliä!</string>
   <string name="google_set_account">Palvelimesi on Google Sheets, valitse vastaava Google-tili yleisasetuksissa ennen jatkamista</string>
   <string name="media_upload_error">Palvelimelle ei voida siirtää tiedostoa, jota ei ole olemassa: %1$s</string>
-  <string name="odk_permissions_fail">Automaattisella ODK-lähetyksellä lupavirhe, varmista että olet antanut sovellukselle kaikki tarvittavat luvat</string>
+  <string name="odk_permissions_fail">Automaattisella ODK-lähetyksellä käyttölupavirhe, varmista että olet antanut sovellukselle kaikki tarvittavat käyttöluvat</string>
   <string name="odk_auto_note">ODK automaattisen lähetyksen tulokset</string>
   <string name="odk_auto_download_notification_title">ODK automaattisen lataamisen tulokset</string>
   <string name="notification_error">Virhe näyttäessä ilmoitustekstiä</string>
@@ -311,6 +312,7 @@
   <string name="map_sdk_behavior">Mapping SDK</string>
   <string name="google_maps_sdk">Google Maps SDK</string>
   <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
+  <string name="mapbox_maps_sdk">Mapbox Maps SDK</string>
   <string name="show_map_sdk">Näytä Map SDK:n valikko</string>
   <string name="openmap_streets">OSM Streets</string>
   <string name="openmap_usgs_topo">USGS National Map topografinen</string>
@@ -325,6 +327,12 @@
   <string name="satellite">Satelliitti</string>
   <string name="map_basemap_selector_title">Basemaps</string>
   <string name="show_map_basemap">Näytä peruskarttavalikko</string>
+  <string name="mapbox_streets">Mapbox Streets</string>
+  <string name="mapbox_light">Mapbox Light</string>
+  <string name="mapbox_dark">Mapbox Dark</string>
+  <string name="mapbox_satellite">Mapbox Satellite</string>
+  <string name="mapbox_satellite_streets">Mapbox Satellite Streets</string>
+  <string name="mapbox_outdoors">Mapbox Outdoors</string>
   <string name="save_point">Tallenna GeoPoint</string>
   <string name="get_point">Käynnistä GeoPoint</string>
   <string name="geopoint_view_read_only">Tarkastele GeoPoint</string>
@@ -335,12 +343,8 @@
   <string name="start">Aloita</string>
   <string name="enable_gps">Ota GPS käyttöön</string>
   <string name="geotrace_title">GeoTrace</string>
-  <string name="polygon_save">Tallenna monikulmiona - Polygon</string>
-  <string name="polygon_save_deprecation_warning">(Tämä vaihtoehto tullaan poistamaan seuraavassa päivityksessä. Katso vaihtoehdot: bit.ly/odk18277) </string>
-  <string name="polyline_save">Tallenna murtoviivana - Polyline</string>
   <string name="gps_enable_message">GPS on poistettu käytöstä laitteellasi. Haluaisitko ottaa sen käyttöön?</string>
   <string name="select_offline_layer">Valitse Offline-taso</string>
-  <string name="polygon_or_polyline">Tallenna GeoTrace nimellä</string>
   <string name="geo_clear_warning">Ominaisuus on jo luotu. Haluatko tyhjentää ominaisuuden?</string>
   <string name="geo_exit_warning">Hylätäänkö muutokset ja palataan ODK:hon?</string>
   <string name="polygon_validator">Monikulmion luomiseen tarvitaan vähintään 3 pistettä</string>
@@ -605,17 +609,17 @@
   <string name="no_columns_to_upload">Palvelimelle siirrettävässä lomakkeessa ei ollut sarakkeita.</string>
   <string name="storage_runtime_permission_denied_title">Talletusluvat</string>
   <string name="storage_runtime_permission_denied_desc">Ilman näitä lupia Collect ei pysty lukemaan lomakemäärittelyitä tai tallentamaan vastauksia. Avaa sovellus uudestaan kun olet valmis antamaan luvat.</string>
-  <string name="location_runtime_permissions_denied_title">Sijaintitietoluvat</string>
-  <string name="location_runtime_permissions_denied_desc">Ilman näitä lupia Collect ei pysty tallentamaan sijaintiasi. Ole hyvä ja yritä uudestaan kun olet valmis myöntämään ne.</string>
-  <string name="camera_runtime_permission_denied_title">Kameralupa</string>
-  <string name="camera_runtime_permission_denied_desc">Ilman tätä lupaa Collect ei pysty käyttämään kameraa. Ole hyvä ja yritä uudestaa kun olet valmis myöntämään sen.</string>
-  <string name="record_audio_runtime_permission_denied_title">Äänen tallentamisen lupa</string>
-  <string name="record_audio_runtime_permission_denied_desc">Ilman tätä lupaa Collect ei pysty käyttämään mikrofonia. Ole hyvä ja yritä uudestaa kun olet valmis myöntämään sen.</string>
-  <string name="get_accounts_runtime_permission_denied_title">Hae tililuvat</string>
-  <string name="get_accounts_runtime_permission_denied_desc">Ilman tätä lupaa Collect ei voi saada yhteyttää tileihin. Ole hyvä ja yritä uudestaan kun olet valmis myöntämään sen.</string>
+  <string name="location_runtime_permissions_denied_title">Sijaintitiedon käyttöluvat</string>
+  <string name="location_runtime_permissions_denied_desc">Ilman näitä käyttölupia Collect ei pysty tallentamaan sijaintiasi. Ole hyvä ja yritä uudestaan kun olet valmis myöntämään ne.</string>
+  <string name="camera_runtime_permission_denied_title">Kameran käyttölupa</string>
+  <string name="camera_runtime_permission_denied_desc">Ilman tätä käyttölupaa Collect ei pysty käyttämään kameraa. Ole hyvä ja yritä uudestaa kun olet valmis myöntämään sen.</string>
+  <string name="record_audio_runtime_permission_denied_title">Äänen tallentamisen käyttölupa</string>
+  <string name="record_audio_runtime_permission_denied_desc">Ilman tätä käyttölupaa Collect ei pysty käyttämään mikrofonia. Ole hyvä ja yritä uudestaa kun olet valmis myöntämään sen.</string>
+  <string name="get_accounts_runtime_permission_denied_title">Hae tilin käyttöluvat</string>
+  <string name="get_accounts_runtime_permission_denied_desc">Ilman tätä käyttölupaa Collect ei voi saada yhteyttää tileihin. Ole hyvä ja yritä uudestaan kun olet valmis myöntämään sen.</string>
   <string name="send_sms_runtime_permission_denied_title">SMS-lähetyslupa</string>
   <string name="send_sms_runtime_permission_denied_desc">Ilman tätä lupaa Collect ei pysty lähettämään SMS-viestejä. Ole hyvä ja yritä uudestaa kun olet valmis myöntämään sen.</string>
-  <string name="read_phone_state_runtime_permission_denied_title">Puhelimen tilan lukemisen lupa</string>
+  <string name="read_phone_state_runtime_permission_denied_title">Puhelimen tilan lukemisen käyttölupa</string>
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect ei soita puheluita, mutta se tarvitsee tiedot joistakin laitteesi tiedoista, kuten puhelinnumero ja laitteen ID.</string>
   <string name="form_update_category">Lomakepäivitys</string>
   <string name="periodic_form_updates_check_title">Ajastettu lomakepäivitysten tarkistus</string>
@@ -680,4 +684,7 @@
   <string name="number_picker_title">Numerovalitsin</string>
   <string name="too_complex_form">Tämä lomake on liian monimutkainen tälle laitteelle. Yritä lausekkeiden yksinkertaistamista tai pyydä apua verkon keskusteluryhmästä.</string>
   <string name="reading_files">Luetaan tiedostoja</string>
+  <string name="copying_media_files_failed">Mediatiedostojen kopiointi epäonnistui</string>
+  <string name="qr_code_not_found">Valitusta kuvasta ei löytynyt QR-koodia</string>
+  <string name="not_granted_permission">Toiminto, jota yrität käynnistää, vaatii käyttöluvan jota ei ole myönnetty.</string>
 </resources>

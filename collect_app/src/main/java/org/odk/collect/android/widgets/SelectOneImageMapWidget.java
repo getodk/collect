@@ -17,7 +17,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.webkit.WebView;
 
 import org.javarosa.core.model.data.IAnswerData;

@@ -18,8 +18,8 @@ package org.odk.collect.android.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +35,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import timber.log.Timber;
 
 public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
 
@@ -61,9 +63,13 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
         void onBind(DriveListItem item) {
             String dateModified = null;
             if (item.getDate() != null) {
-                dateModified = new SimpleDateFormat(getContext().getString(
-                        R.string.modified_on_date_at_time), Locale.getDefault())
-                        .format(new Date(item.getDate().getValue()));
+                try {
+                    dateModified = new SimpleDateFormat(getContext().getString(
+                            R.string.modified_on_date_at_time), Locale.getDefault())
+                            .format(new Date(item.getDate().getValue()));
+                } catch (IllegalArgumentException e) {
+                    Timber.e(e);
+                }
             }
 
             if (item.getType() == DriveListItem.FILE) {

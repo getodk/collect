@@ -44,18 +44,12 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
 
     public static final String SHAPE_LOCATION = "gp";
-    public static final String GOOGLE_MAP_KEY = "google_maps";
-    public SharedPreferences sharedPreferences;
-    public String mapSDK;
     private final Button createShapeButton;
     private final TextView answerDisplay;
 
     public GeoShapeWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
         // assemble the widget...
-
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        mapSDK = sharedPreferences.getString(GeneralKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
 
         answerDisplay = getCenteredAnswerTextView();
 
@@ -78,7 +72,10 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
     }
 
     private void startGeoShapeActivity() {
-        if (mapSDK.equals(GOOGLE_MAP_KEY) && !PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String mapSDK = prefs.getString(GeneralKeys.KEY_MAP_SDK, GeneralKeys.DEFAULT_BASEMAP_KEY);
+
+        if (mapSDK.equals(GeneralKeys.GOOGLE_MAPS_BASEMAP_KEY) && !PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
             PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
             return;
         }
@@ -100,8 +97,10 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void setBinaryData(Object answer) {
-        String s = answer.toString();
-        answerDisplay.setText(s);
+        String answerText = answer.toString();
+        answerDisplay.setText(answerText);
+        updateButtonLabelsAndVisibility(!answerText.isEmpty());
+        widgetValueChanged();
     }
 
     @Override
@@ -117,6 +116,7 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
     public void clearAnswer() {
         answerDisplay.setText(null);
         updateButtonLabelsAndVisibility(false);
+        widgetValueChanged();
     }
 
     @Override

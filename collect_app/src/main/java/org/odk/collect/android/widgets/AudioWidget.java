@@ -22,7 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore.Audio;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -36,6 +36,7 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
@@ -95,13 +96,8 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
         hideButtonsIfNeeded();
 
-        // retrieve answer from data model and update ui
         binaryName = prompt.getAnswerText();
-        if (binaryName != null) {
-            audioController.setMedia(getAudioFile());
-        } else {
-            audioController.hidePlayer();
-        }
+        updatePlayerMedia();
     }
 
     @Override
@@ -120,6 +116,8 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
         // hide audio player
         audioController.hidePlayer();
+
+        widgetValueChanged();
     }
 
     @Override
@@ -186,6 +184,9 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
             binaryName = newAudio.getName();
             Timber.i("Setting current answer to %s", newAudio.getName());
+
+            widgetValueChanged();
+            updatePlayerMedia();
         } else {
             Timber.e("Inserting Audio file FAILED");
         }
@@ -197,6 +198,15 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
             chooseButton.setVisibility(View.GONE);
         } else if(nochoose(getFormEntryPrompt())) {
             chooseButton.setVisibility(View.GONE);
+        }
+    }
+
+    private void updatePlayerMedia() {
+        if (binaryName != null) {
+            audioController.setMedia(getAudioFile());
+            audioController.showPlayer();
+        } else {
+            audioController.hidePlayer();
         }
     }
 

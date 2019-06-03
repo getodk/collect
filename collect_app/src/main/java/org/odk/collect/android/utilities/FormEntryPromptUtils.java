@@ -75,7 +75,7 @@ public class FormEntryPromptUtils {
                     DateTimeUtils.getDatePickerDetails(appearance), false, context);
         }
 
-        if (data != null && appearance != null && appearance.contains("thousands-sep")) {
+        if (data != null && appearance != null && appearance.contains(WidgetAppearanceUtils.THOUSANDS_SEP)) {
             try {
                 final BigDecimal answerAsDecimal = new BigDecimal(fep.getAnswerText());
 

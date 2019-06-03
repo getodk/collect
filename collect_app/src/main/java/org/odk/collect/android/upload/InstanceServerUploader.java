@@ -17,7 +17,7 @@ package org.odk.collect.android.upload;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -66,10 +66,6 @@ public class InstanceServerUploader extends InstanceUploader {
     @Override
     public String uploadOneSubmission(Instance instance, String urlString) throws UploadException {
         Uri submissionUri = Uri.parse(urlString);
-
-        // Used to determine if attachments should be sent for Aggregate < 0.9x servers
-        boolean openRosaServer = false;
-        openRosaServer = true;  // smap always assume open rosa sever even though smap does not return the submissionUri after a head request
 
         long contentLength = 10000000L;
 

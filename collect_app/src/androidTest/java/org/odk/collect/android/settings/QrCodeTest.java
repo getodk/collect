@@ -17,7 +17,7 @@
 package org.odk.collect.android.settings;
 
 import android.graphics.Bitmap;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.runner.AndroidJUnit4;
 
 import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;

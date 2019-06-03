@@ -16,11 +16,11 @@ package org.odk.collect.android.fragments;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,9 +62,9 @@ public abstract class FileManagerFragment extends AppListFragment implements Loa
         getListView().setItemsCanFocus(false);
         deleteButton.setEnabled(false);
 
-        sortingOptions = new String[]{
-                getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
-                getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
+        sortingOptions = new int[]{
+                R.string.sort_by_name_asc, R.string.sort_by_name_desc,
+                R.string.sort_by_date_asc, R.string.sort_by_date_desc
         };
         getLoaderManager().initLoader(LOADER_ID, null, this);
         super.onViewCreated(view, savedInstanceState);

@@ -29,9 +29,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
-import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
@@ -51,9 +49,7 @@ import java.util.List;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 @SuppressLint("ViewConstructor")
-public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, MultiChoiceWidget {
-
-    List<SelectChoice> items;
+public class SpinnerMultiWidget extends ItemsWidget implements ButtonWidget, MultiChoiceWidget {
 
     // The possible select answers
     CharSequence[] answerItems;
@@ -73,15 +69,6 @@ public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, 
     @SuppressWarnings("unchecked")
     public SpinnerMultiWidget(final Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-
-        // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
-                prompt.getAppearanceHint());
-        if (xpathFuncExpr != null) {
-            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
-        } else {
-            items = prompt.getSelectChoices();
-        }
 
         selections = new boolean[items.size()];
         answerItems = new CharSequence[items.size()];
@@ -129,7 +116,6 @@ public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, 
 
     @Override
     public IAnswerData getAnswer() {
-        clearFocus();
         List<Selection> vc = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
             if (selections[i]) {
@@ -152,6 +138,8 @@ public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, 
         for (int i = 0; i < selections.length; i++) {
             selections[i] = false;
         }
+
+        widgetValueChanged();
     }
 
     @Override
@@ -198,6 +186,7 @@ public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, 
                     public void onClick(DialogInterface dialog, int which,
                                         boolean isChecked) {
                         selections[which] = isChecked;
+                        widgetValueChanged();
                     }
                 });
         AlertDialog alert = alertBuilder.create();

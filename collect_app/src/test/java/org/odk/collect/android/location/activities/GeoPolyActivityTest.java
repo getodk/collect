@@ -22,30 +22,23 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.activities.GeoPolyActivity;
-import org.odk.collect.android.location.client.FakeLocationClient;
-import org.odk.collect.android.location.client.LocationClients;
-import org.odk.collect.android.map.GoogleMapFragment;
 import org.odk.collect.android.map.MapPoint;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
 public class GeoPolyActivityTest extends BaseGeoActivityTest {
     @Rule public MockitoRule rule = MockitoJUnit.rule();
     private ActivityController<GeoPolyActivity> controller;
-    private FakeLocationClient fakeLocationClient;
 
     @Before public void setUp() throws Exception {
         super.setUp();
-        fakeLocationClient = new FakeLocationClient();
-        LocationClients.setTestClient(fakeLocationClient);
-        GoogleMapFragment.testMode = true;
-        controller = Robolectric.buildActivity(GeoPolyActivity.class);
+        controller = Robolectric.buildActivity(GeoPolyActivity.class, intent);
     }
 
     @Ignore

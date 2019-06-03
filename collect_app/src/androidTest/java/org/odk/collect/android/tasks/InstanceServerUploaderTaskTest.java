@@ -1,7 +1,7 @@
 package org.odk.collect.android.tasks;
 
 import android.net.Uri;
-import android.support.test.rule.GrantPermissionRule;
+import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.After;
 import org.junit.Before;

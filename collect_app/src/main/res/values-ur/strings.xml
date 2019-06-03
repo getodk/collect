@@ -216,7 +216,6 @@
   <string name="found_in_settings">نشانی ہٹاکر جنرل سیٹنگز سے ہٹا دیں۔</string>
   <string name="save_preferences">سیٹنگزڈسک میں محفوظ کریں۔</string>
   <string name="form_forward">اگلا</string>
-  <string name="form_backward">پچھلا</string>
   <string name="navigation">نیوی گیشن</string>
   <string name="swipe_navigation">افقی سوائپ استعمال کریں</string>
   <string name="buttons_navigation">آگے / پیچھے جانے والے بٹن استعمال کریں۔</string>
@@ -330,11 +329,8 @@
   <string name="start">شروع </string>
   <string name="enable_gps">جی پی ایس کو فعال  کریں</string>
   <string name="geotrace_title">جیو ٹریس </string>
-  <string name="polygon_save">قطبون کے طور پر محفوظ کریں</string>
-  <string name="polyline_save">پولی لائن کے طور پر محفوظ کریں</string>
   <string name="gps_enable_message">آپ کے آلے میں جی پی ایس غیر فعال ہے. کیا آپ اسے فعال کرنا چاہتے ہیں؟ </string>
   <string name="select_offline_layer">آف لائن لیئر منتخب کریں</string>
-  <string name="polygon_or_polyline">جیو ٹریس کے طور پر محفوظ کریں</string>
   <string name="geo_clear_warning">فیچر پہلے سے ہی بنائی گئی ہے. کیا آپ کو فیچرکو ختم کرنا چاہیں گے؟</string>
   <string name="geo_exit_warning">تبدیلیوں کو ختم کریں اور او ڈی کے  کے پاس واپس جائیں؟</string>
   <string name="polygon_validator">قطبون بنانے کے لئے کم از کم 3 پوائنٹس لازمی ہیں</string>

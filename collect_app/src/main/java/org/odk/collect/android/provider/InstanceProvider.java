@@ -23,7 +23,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.TextUtils;
 
 import org.odk.collect.android.R;
@@ -401,10 +401,12 @@ public class InstanceProvider extends ContentProvider {
 
                 // delete all the files in the directory
                 File[] files = directory.listFiles();
-                for (File f : files) {
-                    // should make this recursive if we get worried about
-                    // the media directory containing directories
-                    f.delete();
+                if (files != null) {
+                    for (File f : files) {
+                        // should make this recursive if we get worried about
+                        // the media directory containing directories
+                        f.delete();
+                    }
                 }
             }
             directory.delete();

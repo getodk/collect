@@ -29,8 +29,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -45,11 +45,14 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FileArrayAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.TaskListener;
 import org.odk.collect.android.logic.DriveListItem;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.gdrive.DriveHelper;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
@@ -62,11 +65,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.showSettingsDialog;
+
 public class GoogleDriveActivity extends FormListActivity implements View.OnClickListener,
-        TaskListener, GoogleDriveFormDownloadListener, GoogleAccountsManager.GoogleAccountSelectionListener,
-        AdapterView.OnItemClickListener {
+        TaskListener, GoogleDriveFormDownloadListener, AdapterView.OnItemClickListener {
 
     private static final String DRIVE_DOWNLOAD_LIST_SORTING_ORDER = "driveDownloadListSortingOrder";
     public static final int AUTHORIZATION_REQUEST_CODE = 4322;
@@ -99,7 +105,9 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     private List<DriveListItem> filteredList;
     private List<DriveListItem> driveList;
     private DriveHelper driveHelper;
-    private GoogleAccountsManager accountsManager;
+
+    @Inject
+    GoogleAccountsManager accountsManager;
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -112,6 +120,8 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.google_drive_list);
+
+        DaggerUtils.getComponent(this).inject(this);
 
         setProgressBarVisibility(true);
         initToolbar();
@@ -190,12 +200,10 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         listView.setItemsCanFocus(false);
 
-        sortingOptions = new String[]{
-                getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc)
+        sortingOptions = new int[] {
+                R.string.sort_by_name_asc, R.string.sort_by_name_desc
         };
 
-        accountsManager = new GoogleAccountsManager(this);
-        accountsManager.setListener(this);
         driveHelper = accountsManager.getDriveHelper();
         getResultsFromApi();
     }
@@ -212,8 +220,8 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
      * https://developers.google.com/drive/v3/web/quickstart/android
      */
     private void getResultsFromApi() {
-        if (!accountsManager.isGoogleAccountSelected()) {
-            accountsManager.chooseAccountAndRequestPermissionIfNeeded();
+        if (!accountsManager.isAccountSelected()) {
+            selectAccount();
         } else {
             if (isDeviceOnline()) {
                 toDownload.clear();
@@ -230,6 +238,28 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             currentPath.clear();
             currentPath.add(rootButton.getText().toString());
         }
+    }
+
+    private void selectAccount() {
+        new PermissionUtils().requestGetAccountsPermission(this, new PermissionListener() {
+            @Override
+            public void granted() {
+                String account = accountsManager.getLastSelectedAccountIfValid();
+                if (!account.isEmpty()) {
+                    accountsManager.selectAccount(account);
+
+                    // re-attempt to list google drive files
+                    getResultsFromApi();
+                } else {
+                    showSettingsDialog(GoogleDriveActivity.this);
+                }
+            }
+
+            @Override
+            public void denied() {
+                finish();
+            }
+        });
     }
 
     /**
@@ -387,6 +417,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode,
                                     final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case AUTHORIZATION_REQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
@@ -551,11 +582,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 getFiles();
                 break;
         }
-    }
-
-    @Override
-    public void onGoogleAccountSelected(String accountName) {
-        getResultsFromApi();
     }
 
     @Override

@@ -1,13 +1,12 @@
 package org.odk.collect.android.widgets;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.junit.Test;
 import org.odk.collect.android.widgets.base.GeneralSelectMultiWidgetTest;
-import org.robolectric.RuntimeEnvironment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,7 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
     @NonNull
     @Override
     public GridMultiWidget createWidget() {
-        return new GridMultiWidget(RuntimeEnvironment.application, formEntryPrompt, 1);
+        return new GridMultiWidget(activity, formEntryPrompt);
     }
 
     @Test
@@ -37,9 +36,11 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
 
         boolean atLeastOneSelected = false;
 
-        for (int i = 0; i < widget.selected.length; i++) {
+        for (int i = 0; i < widget.selectedItems.size(); i++) {
             boolean shouldBeSelected = random.nextBoolean();
-            widget.selected[i] = shouldBeSelected;
+            if (shouldBeSelected) {
+                widget.selectedItems.add(i);
+            }
 
             atLeastOneSelected = atLeastOneSelected || shouldBeSelected;
 
@@ -52,9 +53,9 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
         // Make sure at least one item is selected, so we're not just retesting the
         // null answer case:
         if (!atLeastOneSelected) {
-            int randomIndex = Math.abs(random.nextInt()) % widget.selected.length;
+            int randomIndex = Math.abs(random.nextInt()) % widget.items.size();
 
-            widget.selected[randomIndex] = true;
+            widget.selectedItems.add(randomIndex);
             SelectChoice selectChoice = selectChoices.get(randomIndex);
             selectedValues.add(selectChoice.getValue());
         }

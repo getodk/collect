@@ -3,11 +3,10 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.View;
@@ -81,7 +80,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         osmFileName = prompt.getAnswerText();
 
         // Setup Launch OpenMapKit Button
-        launchOpenMapKitButton = getSimpleButton(ViewIds.generateViewId());
+        launchOpenMapKitButton = getSimpleButton(R.id.simple_button);
 
         // Button Styling
         if (osmFileName != null) {
@@ -155,22 +154,14 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
             //send encode tag data structure to intent
             writeOsmRequiredTagsToExtras(launchIntent);
 
-            //verify the package resolves before starting activity
-            Context ctx = getContext();
-            PackageManager packageManager = ctx.getPackageManager();
-            List<ResolveInfo> activities = packageManager.queryIntentActivities(launchIntent, 0);
-            boolean isIntentSafe = !activities.isEmpty();
-
-            //launch activity if it is safe
-            if (isIntentSafe) {
-                // notify that the form is waiting for data
+            try {
                 waitForData();
-
-                // launch
-                ((Activity) ctx).startActivityForResult(launchIntent, RequestCodes.OSM_CAPTURE);
-            } else {
+                ((Activity) getContext()).startActivityForResult(launchIntent, RequestCodes.OSM_CAPTURE);
+            } catch (ActivityNotFoundException e) {
+                cancelWaitingForData();
                 errorTextView.setVisibility(View.VISIBLE);
             }
+
         } catch (Exception ex) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle(R.string.alert);
@@ -194,6 +185,8 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         osmFileNameTextView.setText(osmFileName);
         osmFileNameHeaderTextView.setVisibility(View.VISIBLE);
         osmFileNameTextView.setVisibility(View.VISIBLE);
+
+        widgetValueChanged();
     }
 
     @Override
@@ -208,6 +201,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public void clearAnswer() {
         osmFileNameTextView.setText(null);
+        widgetValueChanged();
     }
 
     @Override

@@ -2,7 +2,7 @@ package org.odk.collect.android.preferences;
 
 import android.content.Context;
 import android.preference.CheckBoxPreference;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.CheckBox;

@@ -16,7 +16,7 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
@@ -61,9 +61,7 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
     }
 
     private void createLayout(boolean readOnlyOverride) {    // smap add readOnlyOverride
-        readItems();
-
-        adapter = new SelectMultipleListAdapter(items, ve, this, readOnlyOverride);  // smap add readOnlyOverride
+        adapter = new SelectMultipleListAdapter(items, ve, this, numColumns, readOnlyOverride);  // smap add readOnlyOverride
 
         if (items != null) {
             // check if any values have spaces

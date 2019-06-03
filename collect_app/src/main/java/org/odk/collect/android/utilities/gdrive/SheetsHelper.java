@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.utilities.gdrive;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;

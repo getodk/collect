@@ -26,8 +26,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Video;
-import android.support.annotation.NonNull;
-import android.support.v4.content.FileProvider;
+import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -49,6 +49,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
@@ -103,7 +104,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         this.mediaUtil = mediaUtil;
 
         String appearance = getFormEntryPrompt().getAppearanceHint();
-        selfie = appearance != null && (appearance.equalsIgnoreCase("selfie") || appearance.equalsIgnoreCase("new-front"));
+        selfie = appearance != null && (appearance.equalsIgnoreCase(WidgetAppearanceUtils.SELFIE) || appearance.equalsIgnoreCase(WidgetAppearanceUtils.NEW_FRONT));
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_video), R.id.capture_video);
 
@@ -113,11 +114,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
 
         // retrieve answer from data model and update ui
         binaryName = prompt.getAnswerText();
-        if (binaryName != null) {
-            playButton.setEnabled(true);
-        } else {
-            playButton.setEnabled(false);
-        }
+        playButton.setEnabled(binaryName != null);
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
@@ -201,6 +198,8 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
 
         // reset buttons
         playButton.setEnabled(false);
+
+        widgetValueChanged();
     }
 
     @Override
@@ -279,6 +278,9 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
                 Timber.i("Deleting original capture of file: %s count: %d", binaryName, delCount);
             }
         }
+
+        widgetValueChanged();
+        playButton.setEnabled(binaryName != null);
     }
 
     private void hideButtonsIfNeeded() {
@@ -423,13 +425,17 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     }
 
     private void playVideoFile() {
-        Intent intent = new Intent("android.intent.action.VIEW");
+        Intent intent = new Intent(Intent.ACTION_VIEW);
         File file = new File(getInstanceFolder() + File.separator + binaryName);
 
-        Uri uri =
-                FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", file);
+        Uri uri = null;
+        try {
+            uri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", file);
+            FileUtils.grantFileReadPermissions(intent, uri, getContext());
+        } catch (IllegalArgumentException e) {
+            Timber.e(e);
+        }
 
-        FileUtils.grantFileReadPermissions(intent, uri, getContext());
         intent.setDataAndType(uri, "video/*");
         try {
             getContext().startActivity(intent);

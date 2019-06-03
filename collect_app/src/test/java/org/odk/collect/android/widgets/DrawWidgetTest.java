@@ -1,16 +1,19 @@
 package org.odk.collect.android.widgets;
 
-import android.support.annotation.NonNull;
+import android.content.Intent;
+import androidx.annotation.NonNull;
 
 import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.odk.collect.android.R;
+import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import java.io.File;
 
@@ -30,7 +33,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
     @NonNull
     @Override
     public DrawWidget createWidget() {
-        return new DrawWidget(RuntimeEnvironment.application, formEntryPrompt);
+        return new DrawWidget(activity, formEntryPrompt);
     }
 
     @NonNull
@@ -55,5 +58,14 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
 
         when(file.exists()).thenReturn(true);
         when(file.getName()).thenReturn(fileName);
+    }
+
+    @Test
+    public void buttonsShouldLaunchCorrectIntents() {
+        stubAllRuntimePermissionsGranted(true);
+
+        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
+        assertComponentEquals(activity, DrawActivity.class, intent);
+        assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_DRAW, intent);
     }
 }

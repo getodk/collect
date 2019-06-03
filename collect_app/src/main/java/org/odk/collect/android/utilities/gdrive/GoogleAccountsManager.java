@@ -17,12 +17,13 @@ package org.odk.collect.android.utilities.gdrive;
 import android.accounts.Account;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
@@ -32,33 +33,23 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.GoogleDriveActivity;
-import org.odk.collect.android.activities.GoogleSheetsUploaderActivity;
-import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.ServerPreferencesFragment;
-import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.ThemeUtils;
 
+import java.io.IOException;
 import java.util.Collections;
+
+import javax.inject.Inject;
 
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
 public class GoogleAccountsManager {
-    public static final int REQUEST_ACCOUNT_PICKER = 1000;
-    public static final int REQUEST_AUTHORIZATION = 1001;
 
-    @Nullable
-    private Fragment fragment;
-    @Nullable
-    private Activity activity;
     @Nullable
     private HttpTransport transport;
     @Nullable
     private JsonFactory jsonFactory;
-    @Nullable
-    private GoogleAccountSelectionListener listener;
 
     private Intent intentChooseAccount;
     private Context context;
@@ -67,19 +58,8 @@ public class GoogleAccountsManager {
     private GoogleAccountCredential credential;
     private GeneralSharedPreferences preferences;
     private ThemeUtils themeUtils;
-    private boolean autoChooseAccount = true;
 
-    public GoogleAccountsManager(@NonNull Activity activity) {
-        this.activity = activity;
-        initCredential(activity);
-    }
-
-    public GoogleAccountsManager(@NonNull Fragment fragment) {
-        this.fragment = fragment;
-        activity = fragment.getActivity();
-        initCredential(activity);
-    }
-
+    @Inject
     public GoogleAccountsManager(@NonNull Context context) {
         initCredential(context);
     }
@@ -90,16 +70,12 @@ public class GoogleAccountsManager {
     public GoogleAccountsManager(@NonNull GoogleAccountCredential credential,
                                  @NonNull GeneralSharedPreferences preferences,
                                  @NonNull Intent intentChooseAccount,
-                                 @NonNull ThemeUtils themeUtils,
-                                 @NonNull Activity activity,
-                                 @NonNull Fragment fragment
+                                 @NonNull ThemeUtils themeUtils
     ) {
         this.credential = credential;
         this.preferences = preferences;
         this.intentChooseAccount = intentChooseAccount;
         this.themeUtils = themeUtils;
-        this.fragment = fragment;
-        this.activity = activity;
     }
 
     private void initCredential(@NonNull Context context) {
@@ -117,46 +93,32 @@ public class GoogleAccountsManager {
         themeUtils = new ThemeUtils(context);
     }
 
-    public void setSelectedAccountName(String accountName) {
-        if (accountName != null) {
-            preferences.save(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
-            selectAccount(accountName);
-        }
-    }
-
-    public void chooseAccountAndRequestPermissionIfNeeded() {
-        if (activity != null) {
-            new PermissionUtils().requestGetAccountsPermission(activity, new PermissionListener() {
-                @Override
-                public void granted() {
-                    chooseAccount();
-                }
-
-                @Override
-                public void denied() {
-                    if (activity instanceof GoogleSheetsUploaderActivity || activity instanceof GoogleDriveActivity) {
+    public static void showSettingsDialog(Activity activity) {
+        AlertDialog alertDialog = new AlertDialog.Builder(activity)
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setTitle(R.string.missing_google_account_dialog_title)
+                .setMessage(R.string.missing_google_account_dialog_desc)
+                .setOnCancelListener(dialog -> {
+                    dialog.dismiss();
+                    if (activity != null) {
                         activity.finish();
                     }
-                }
-            });
-        }
+                })
+                .setPositiveButton(activity.getString(R.string.ok), (dialog, which) -> {
+                    dialog.dismiss();
+                    activity.finish();
+                })
+                .create();
+
+        showDialog(alertDialog, activity);
     }
 
-    private void chooseAccount() {
-        String accountName = getSelectedAccount();
-        if (autoChooseAccount && !accountName.isEmpty()) {
-            selectAccount(accountName);
-        } else {
-            if (fragment != null && fragment instanceof ServerPreferencesFragment) {
-                showAccountPickerDialog();
-            } else {
-                showSettingsDialog();
-            }
-        }
+    public boolean isAccountSelected() {
+        return credential.getSelectedAccountName() != null;
     }
 
     @NonNull
-    public String getSelectedAccount() {
+    public String getLastSelectedAccountIfValid() {
         Account[] googleAccounts = credential.getAllAccounts();
         String account = (String) preferences.get(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
 
@@ -173,48 +135,15 @@ public class GoogleAccountsManager {
         return "";
     }
 
-    private void showSettingsDialog() {
-        AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
-                .setIcon(android.R.drawable.ic_dialog_info)
-                .setTitle(R.string.missing_google_account_dialog_title)
-                .setMessage(R.string.missing_google_account_dialog_desc)
-                .setOnCancelListener(dialog -> {
-                    dialog.dismiss();
-                    if (activity != null) {
-                        activity.finish();
-                    }
-                })
-                .setPositiveButton(context.getString(R.string.ok), (dialog, which) -> {
-                    dialog.dismiss();
-                    if (activity != null) {
-                        activity.finish();
-                    }
-                })
-                .create();
-
-        showDialog(alertDialog, getActivity());
-    }
-
-    public void showAccountPickerDialog() {
-        Account selectedAccount = getAccountPickerCurrentAccount();
-        intentChooseAccount.putExtra("selectedAccount", selectedAccount);
-        intentChooseAccount.putExtra("overrideTheme", themeUtils.getAccountPickerTheme());
-        intentChooseAccount.putExtra("overrideCustomTheme", 0);
-
-        if (fragment != null) {
-            fragment.startActivityForResult(intentChooseAccount, REQUEST_ACCOUNT_PICKER);
-        }
-    }
-
     public void selectAccount(String accountName) {
-        credential.setSelectedAccountName(accountName);
-        if (listener != null) {
-            listener.onGoogleAccountSelected(accountName);
+        if (accountName != null) {
+            preferences.save(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
+            credential.setSelectedAccountName(accountName);
         }
     }
 
     private Account getAccountPickerCurrentAccount() {
-        String selectedAccountName = getSelectedAccount();
+        String selectedAccountName = getLastSelectedAccountIfValid();
         if (selectedAccountName.isEmpty()) {
             Account[] googleAccounts = credential.getAllAccounts();
             if (googleAccounts != null && googleAccounts.length > 0) {
@@ -224,10 +153,6 @@ public class GoogleAccountsManager {
             }
         }
         return new Account(selectedAccountName, "com.google");
-    }
-
-    public boolean isGoogleAccountSelected() {
-        return credential.getSelectedAccountName() != null;
     }
 
     public DriveHelper getDriveHelper() {
@@ -244,29 +169,19 @@ public class GoogleAccountsManager {
         return sheetsHelper;
     }
 
-    @Nullable
-    public Activity getActivity() {
-        return activity;
+    public String getToken() throws IOException, GoogleAuthException {
+        String token = credential.getToken();
+
+        // Immediately invalidate so we get a different one if we have to try again
+        GoogleAuthUtil.invalidateToken(context, token);
+        return token;
     }
 
-    @NonNull
-    public Context getContext() {
-        return context;
-    }
-
-    public GoogleAccountCredential getCredential() {
-        return credential;
-    }
-
-    public void disableAutoChooseAccount() {
-        autoChooseAccount = false;
-    }
-
-    public void setListener(@Nullable GoogleAccountSelectionListener listener) {
-        this.listener = listener;
-    }
-
-    public interface GoogleAccountSelectionListener {
-        void onGoogleAccountSelected(String accountName);
+    public Intent getAccountChooserIntent() {
+        Account selectedAccount = getAccountPickerCurrentAccount();
+        intentChooseAccount.putExtra("selectedAccount", selectedAccount);
+        intentChooseAccount.putExtra("overrideTheme", themeUtils.getAccountPickerTheme());
+        intentChooseAccount.putExtra("overrideCustomTheme", 0);
+        return intentChooseAccount;
     }
 }

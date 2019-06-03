@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets;
 
-import android.support.annotation.NonNull;
+import android.content.Intent;
+import androidx.annotation.NonNull;
 
 import com.google.common.collect.ImmutableList;
 
@@ -11,10 +12,11 @@ import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.osm.OSMTag;
 import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mock;
+import org.odk.collect.android.R;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
-import org.robolectric.RuntimeEnvironment;
 
 import java.io.File;
 
@@ -38,7 +40,7 @@ public class OSMWidgetTest extends BinaryWidgetTest<OSMWidget, StringData> {
     @NonNull
     @Override
     public OSMWidget createWidget() {
-        return new OSMWidget(RuntimeEnvironment.application, formEntryPrompt);
+        return new OSMWidget(activity, formEntryPrompt);
     }
 
     @NonNull
@@ -77,5 +79,13 @@ public class OSMWidgetTest extends BinaryWidgetTest<OSMWidget, StringData> {
         when(questionDef.getOsmTags()).thenReturn(ImmutableList.<OSMTag>of());
 
         fileName = RandomString.make();
+    }
+
+    @Test
+    public void buttonsShouldLaunchCorrectIntents() {
+        stubAllRuntimePermissionsGranted(true);
+
+        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
+        assertActionEquals(Intent.ACTION_SEND, intent);
     }
 }

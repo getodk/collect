@@ -17,7 +17,7 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.v7.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.AppCompatCheckBox;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -31,7 +31,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
@@ -39,9 +38,7 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
-import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ViewIds;
@@ -65,9 +62,7 @@ import timber.log.Timber;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 @SuppressLint("ViewConstructor")
-public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget {
-
-    private List<SelectChoice> items; // may take a while to compute...
+public class ListMultiWidget extends ItemsWidget implements MultiChoiceWidget {
 
     private final ArrayList<CheckBox> checkBoxes;
     private View center;
@@ -76,14 +71,6 @@ public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget
     public ListMultiWidget(Context context, FormEntryPrompt prompt, boolean displayLabel) {
         super(context, prompt);
 
-        // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
-                prompt.getAppearanceHint());
-        if (xpathFuncExpr != null) {
-            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
-        } else {
-            items = prompt.getSelectChoices();
-        }
         checkBoxes = new ArrayList<>();
 
         // Layout holds the horizontal list of buttons
@@ -124,6 +111,8 @@ public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget
                                 buttonView.setChecked(true);
                             }
                         }
+
+                        widgetValueChanged();
                     }
                 });
 
@@ -266,6 +255,7 @@ public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget
                 c.setChecked(false);
             }
         }
+        widgetValueChanged();
     }
 
     @Override

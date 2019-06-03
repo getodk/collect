@@ -193,7 +193,6 @@
   <string name="found_in_settings">Deselectați pentru a ascunde din Setări generale</string>
   <string name="save_preferences">Salvați setările pe disk</string>
   <string name="form_forward">Următor</string>
-  <string name="form_backward">Anterior</string>
   <string name="navigation">Navigare</string>
   <string name="swipe_navigation">Utilizați gesturi orizontale</string>
   <string name="buttons_navigation">Utilizați butoanele înainte/înapoi</string>
@@ -284,8 +283,6 @@
   <string name="start">Start</string>
   <string name="enable_gps">Activați GPS</string>
   <string name="geotrace_title">GeoTrace</string>
-  <string name="polygon_save">Salvare ca poligon</string>
-  <string name="polyline_save">Salvare ca Polyline</string>
   <string name="gps_enable_message">GPS-ul este dezactivat în dispozitivul dumneavoastră. Doriți să-l activați?</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="alert">Alertă</string>

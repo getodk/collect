@@ -199,7 +199,6 @@
   <string name="found_in_settings">Desmarcar per amagar en Configuració General</string>
   <string name="save_preferences">Salve Configuració a disc</string>
   <string name="form_forward">Següent</string>
-  <string name="form_backward">Previ</string>
   <string name="navigation">Navegació</string>
   <string name="swipe_navigation">Usar desplaçament horizontal</string>
   <string name="buttons_navigation">Usar botons avança/enrere</string>
@@ -290,11 +289,8 @@
   <string name="start">Comença</string>
   <string name="enable_gps">Activa GPS</string>
   <string name="geotrace_title">GeoTraça</string>
-  <string name="polygon_save">Desa com Poligon</string>
-  <string name="polyline_save">Desa com polilínea</string>
   <string name="gps_enable_message">El GPS esta desactivat al teu dispositiu. Vols activar-lo?</string>
   <string name="select_offline_layer">Selecciona capa autònoma</string>
-  <string name="polygon_or_polyline">Desa GeoTraça com</string>
   <string name="geo_clear_warning">Característica ja creada. Vols netejar-la?</string>
   <string name="geo_exit_warning">Descartar canvis i tornar a ODK?</string>
   <string name="polygon_validator">Per crear un polígon calen mínim 3 punts </string>

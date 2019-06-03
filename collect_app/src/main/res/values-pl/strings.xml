@@ -192,6 +192,7 @@
   <string name="sending_failed_on_date_at_time">\'Wysyłanie nie powiodło się\' EEE, MMM dd, yyyy \'o\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time">\'Skasowany \' EEE, MMM dd, yyyy \'o\' HH:mm</string>
+  <string name="submission_deleted">Usunięto zapis</string>
   <string name="version">Wersja:</string>
   <string name="parent_form_not_present">Nie mogę edytować tego zapisanego formularza ponieważ powiązany czysty formularz jest niedostępny lub został skasowany.\n\nID Formularza: %1$s</string>
   <string name="launch_app">Uruchom</string>
@@ -219,7 +220,7 @@
   <string name="found_in_settings">Odznacz aby ukryć w Ogólnych Ustawieniach</string>
   <string name="save_preferences">Zapisz Ustawienia na Dysk</string>
   <string name="form_forward">Następny</string>
-  <string name="form_backward">Poprzedni</string>
+  <string name="form_backward">Powrót</string>
   <string name="navigation">Nawigacja</string>
   <string name="swipe_navigation">Użyj horyzontalnych przeciągnięć</string>
   <string name="buttons_navigation">Użyj przycisków następny/poprzedni</string>
@@ -311,6 +312,7 @@
   <string name="map_sdk_behavior">SDK Mapowania</string>
   <string name="google_maps_sdk">Google Maps SDK</string>
   <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
+  <string name="mapbox_maps_sdk">Mapbox Maps SDK</string>
   <string name="show_map_sdk">Pokaż Opcje Map SDK</string>
   <string name="openmap_streets">Ulice OSM</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
@@ -325,25 +327,64 @@
   <string name="satellite">Satelita</string>
   <string name="map_basemap_selector_title">Mapy bazowe</string>
   <string name="show_map_basemap">Pokaż opcje mapy bazowej</string>
+  <string name="mapbox_streets">Mapbox Streets</string>
+  <string name="mapbox_light">Mapbox Light - tryb jasny</string>
+  <string name="mapbox_dark">Mapbox Dark - tryb ciemny</string>
+  <string name="mapbox_satellite">Mapbox Satellite</string>
+  <string name="mapbox_satellite_streets">Mapbox Satellite Streets</string>
+  <string name="mapbox_outdoors">Mapbox Outdoors</string>
   <string name="save_point">Zapisz GeoPoint</string>
   <string name="get_point">Zacznij GeoPoint</string>
   <string name="geopoint_view_read_only">Pokaż GeoPoint</string>
   <string name="get_shape">Zacznij GeoShape</string>
   <string name="get_trace">Zacznij GeoShape</string>
   <string name="geoshape_title">GeoShape</string>
+  <string name="input_method">Metoda wprowadzania</string>
   <string name="start">Zacznij</string>
   <string name="enable_gps">Włącz GPS</string>
   <string name="geotrace_title">GeoTrace</string>
-  <string name="polygon_save">Zapisz jako wielokąt</string>
-  <string name="polyline_save">Zapis jako łamana</string>
   <string name="gps_enable_message">GPS jest jest wyłączony na twoim urządzeniu. Czy chciałbyś go włączyć?</string>
   <string name="select_offline_layer">Wybierz Warstwę Offline</string>
-  <string name="polygon_or_polyline">Zapisz GeoTrace Jako</string>
   <string name="geo_clear_warning">Właściwość już stworzona. Chcesz usunąć właściwość?</string>
   <string name="geo_exit_warning">Usunąć zmiany i wrócić do ODK?</string>
   <string name="polygon_validator">Wymagane są przynajmniej 3 punkty aby utworzyć wielokąt</string>
   <string name="polyline_validator">Wymagane co najmniej 2 punkty, by utworzyć polilinię</string>
   <string name="clear">Wyczyść</string>
+  <string name="placement_mode">Wybór lokalizacji przez dotknięcie</string>
+  <string name="manual_mode">Manualny zapis lokalizacji</string>
+  <string name="automatic_mode">Automatyczny zapis lokalizacji</string>
+  <string name="recording_interval">Interwały zapisu:</string>
+  <plurals name="number_of_seconds">
+    <item quantity="one">%d sekunda</item>
+    <item quantity="few">%d sekund</item>
+    <item quantity="many">%d sekund</item>
+    <item quantity="other">%d sekundy</item>
+  </plurals>
+  <plurals name="number_of_minutes">
+    <item quantity="one">%d minuta</item>
+    <item quantity="few">%d minut</item>
+    <item quantity="many">%d minut</item>
+    <item quantity="other">%d minuty</item>
+  </plurals>
+  <string name="accuracy_requirement">Wymagana dokładność:</string>
+  <string name="none">Żaden</string>
+  <plurals name="number_of_meters">
+    <item quantity="one">%d metr</item>
+    <item quantity="few">%d metrów</item>
+    <item quantity="many">%d metrów</item>
+    <item quantity="other">%d metry</item>
+  </plurals>
+  <string name="location_status_searching">Wyszukiwanie lokalizacji GPS, proszę czekać…</string>
+  <string name="location_status_accuracy">Dokładność lokalizacji GPS: %.1f m</string>
+  <string name="location_status_acceptable">Dokładność lokalizacji GPS: %.1f m (dopuszczalna)</string>
+  <string name="location_status_unacceptable">Dokładność lokalizacji GPS: %.1f m (niedopuszczalna)</string>
+  <string name="collection_status_paused">Wprowadzone punkty: %d</string>
+  <string name="collection_status_placement">Wprowadzone punkty: %d (dotknij, by dodać)</string>
+  <string name="collection_status_manual">Wprowadzone punkty: %d (wprowadzanie manualne)</string>
+  <string name="collection_status_auto_seconds">Wprowadzone punkty: %1$d (zapis co %2$d sek)</string>
+  <string name="collection_status_auto_minutes">Wprowadzone punkty: %1$d (zapis co %2$d min)</string>
+  <string name="collection_status_auto_seconds_accuracy">Wprowadzone punkty: %1$d (zapis co %2$d sek, dokładność%3$d m)</string>
+  <string name="collection_status_auto_minutes_accuracy">Wprowadzone punkty: %1$d (zapis co %2$d min, dokładność%3$d m)</string>
   <string name="geopoint_instruction">Długo naciśnij aby umieścić znacznik lub dotknij przycisk Dodaj znacznik.</string>
   <string name="geopoint_no_draggable_instruction">Dotknij przycisk Dodaj znacznik.</string>
   <string name="discard">Usuń</string>
@@ -365,6 +406,7 @@
   <string name="install_openmapkit">Proszę zainstalować OpenMapKit!</string>
   <string name="go_back">Cofnij się</string>
   <string name="download_selected">Pobierz Wybrane</string>
+  <string name="record_geopoint">Zapisz punkt</string>
   <string name="gps_result">Szerokość: %1$s\nDługość: %2$s\nWzniesienie: %3$sm\nDokładność: %4$sm</string>
   <string name="parser_exception">Wyjątek XPathParser: \"%s\"</string>
   <string name="selected_answer">Wybrany: %s</string>
@@ -616,6 +658,12 @@
   <string name="sms_no_message">Ten formularz nie zawiera żadnych pytań z otagowaniem SMS.</string>
   <string name="sms_encrypted_message">Zaszyfrowane formularze nie mogą być przesłane przez SMS.</string>
   <string name="sms_last_submission_on_date_at_time">\'Ostatnia próba przesłania miała miejsce\' EEE, MMM dd, yyyy \'o\' HH:mm</string>
+  <plurals name="sms_sending">
+    <item quantity="one">Przesyłanie formularza jako pojedynczej wiadomości.</item>
+    <item quantity="few">Przesyłanie formularza, wysyłanie wiadomości %1$d z %2$d</item>
+    <item quantity="many">Przesyłanie formularza, wysyłanie wiadomości %1$d z %2$d</item>
+    <item quantity="other">Przesyłanie formularza, wysyłanie wiadomości %1$d z %2$d</item>
+  </plurals>
   <string name="sms_sent_on_date_at_time">\'Wysłano jako SMS\' EEE, MMM dd, yyyy \'o\' HH:mm</string>
   <string name="sms_submission_queued">W kolejce do przesłania.</string>
   <string name="sms_submissions_notif_title">Przesyłanie SMSów</string>
@@ -634,5 +682,17 @@
   <string name="location_providers_disabled_dialog_message">Ten formularz chce śledzić twoją lokalizację, ale usługi dostawców systemu lokalizacji są wyłączone. Włącz je w ustawieniach Androida.</string>
   <string name="go_to_settings">Przejdź do ustawień</string>
   <string name="track_location">Śledź lokalizację</string>
+  <string name="background_location_disabled">Ten formularz chce śledzić twoją lokalizację, jednak funkcja śledzenia jest wyłączona. Włącz ją wybierając %1$s w menu powyżej.</string>
+  <string name="background_location_enabled">Ten formularz śledzi twoją lokalizację. Możesz wyłączyć funkcję śledzenia poprzez %1$s w menu powyżej.</string>
   <string name="open_file">Otwórz plik</string>
+  <string name="sms_feature_disabled_dialog_title">Wysyłanie przez wiadomość SMS Wyłączone.</string>
+  <string name="sms_feature_disabled_dialog_message">Wysyłanie przez SMS zostało wyłączone ze względu na ograniczenia Google Play Store.\n\nUpewnij się, że osoba konfigurująca to urządzenie przeczyta poniższe szczegóły i podejmie stosowne kroki.</string>
+  <string name="read_details">Przeczytaj szczegóły</string>
+  <string name="google_sheets_encrypted_message">Zaszyfrowane formularze nie mogą być przesłane do Google Sheets.</string>
+  <string name="number_picker_title">Wybór Wartości</string>
+  <string name="too_complex_form">Formularz jest zbyt skomplikowany dla tego urządzenia. Spróbuj uprościć wyrażenia, lub poproś o pomoc na forum.</string>
+  <string name="reading_files">Odczyt plików</string>
+  <string name="copying_media_files_failed">Kopiowanie plików mediów nie powiodło się</string>
+  <string name="qr_code_not_found">Na wybranym zdjęciu nie odnaleziono kodu QR</string>
+  <string name="not_granted_permission">Aktywność, którą próbujesz wykonać, wymaga autoryzacji, której nie posiadasz.</string>
 </resources>

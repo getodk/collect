@@ -27,6 +27,9 @@ import android.location.Location;       // smap
 import android.support.annotation.Nullable;
 import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatDelegate;
+import androidx.annotation.Nullable;
+import androidx.multidex.MultiDex;
+import androidx.appcompat.app.AppCompatDelegate;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
@@ -44,6 +47,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.amazonaws.mobile.AWSMobileClient;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.external.handler.SmapRemoteDataItem; 
 import org.odk.collect.android.injection.config.AppDependencyComponent;
@@ -522,8 +526,19 @@ public class Collect extends Application {
             }
         }
 
-        return FileUtils.getMd5Hash(
-                new ByteArrayInputStream(formIdentifier.getBytes()));
+        return FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
+    }
+
+
+    /**
+     * Gets a unique, privacy-preserving identifier for a form based on its id and version.
+     * @param formId id of a form
+     * @param formVersion version of a form
+     * @return md5 hash of the form title, a space, the form ID
+     */
+    public static String getFormIdentifierHash(String formId, String formVersion) {
+        String formIdentifier = new FormsDao().getFormTitleForFormIdAndFormVersion(formId, formVersion) + " " + formId;
+        return FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
     }
 
     public void logNullFormControllerEvent(String action) {

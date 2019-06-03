@@ -24,9 +24,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
@@ -78,6 +78,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         }
 
         errorTextView.setVisibility(View.GONE);
+        widgetValueChanged();
     }
 
     @Override
@@ -121,6 +122,9 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
             binaryName = newImage.getName();
             Timber.i("Setting current answer to %s", newImage.getName());
+
+            addCurrentImageToLayout();
+            widgetValueChanged();
         } else {
             Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
@@ -141,7 +145,9 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         }
     }
 
-    protected void setUpBinary() {
+    protected void addCurrentImageToLayout() {
+        answerLayout.removeView(imageView);
+
         if (binaryName != null) {
             DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
             int screenWidth = metrics.widthPixels;
@@ -168,7 +174,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
                 }
             });
 
-        answerLayout.addView(imageView);
+            answerLayout.addView(imageView);
         }
     }
 

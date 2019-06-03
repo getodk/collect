@@ -1,7 +1,7 @@
 package org.odk.collect.android;
 
-import android.support.test.filters.Suppress;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.filters.Suppress;
+import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

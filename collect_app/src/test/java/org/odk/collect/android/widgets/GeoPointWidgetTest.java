@@ -1,13 +1,18 @@
 package org.odk.collect.android.widgets;
 
-import android.support.annotation.NonNull;
+import android.content.Intent;
+import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.GeoPointData;
 import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mock;
+import org.odk.collect.android.R;
+import org.odk.collect.android.ShadowPlayServicesUtil;
+import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
-import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
 
 import static org.mockito.Mockito.when;
 
@@ -15,6 +20,7 @@ import static org.mockito.Mockito.when;
  * @author James Knight
  */
 
+@Config(shadows = {ShadowPlayServicesUtil.class})
 public class GeoPointWidgetTest extends BinaryWidgetTest<GeoPointWidget, GeoPointData> {
 
     @Mock
@@ -31,7 +37,7 @@ public class GeoPointWidgetTest extends BinaryWidgetTest<GeoPointWidget, GeoPoin
     @NonNull
     @Override
     public GeoPointWidget createWidget() {
-        return new GeoPointWidget(RuntimeEnvironment.application, formEntryPrompt);
+        return new GeoPointWidget(activity, formEntryPrompt);
     }
 
     @Override
@@ -82,5 +88,24 @@ public class GeoPointWidgetTest extends BinaryWidgetTest<GeoPointWidget, GeoPoin
         }
 
         return b.toString();
+    }
+
+    @Test
+    public void buttonsShouldLaunchCorrectIntents() {
+        stubAllRuntimePermissionsGranted(true);
+
+        Intent intent = getIntentLaunchedByClick(R.id.get_point);
+        assertComponentEquals(activity, GeoPointActivity.class, intent);
+
+        intent = getIntentLaunchedByClick(R.id.get_location);
+        assertComponentEquals(activity, GeoPointActivity.class, intent);
+    }
+
+    @Test
+    public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
+        stubAllRuntimePermissionsGranted(false);
+
+        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.get_point));
+        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.get_location));
     }
 }

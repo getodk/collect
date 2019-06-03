@@ -22,8 +22,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.support.v4.content.FileProvider;
-import android.support.v7.widget.AppCompatImageButton;
+import androidx.core.content.FileProvider;
+import androidx.appcompat.widget.AppCompatImageButton;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -259,6 +259,12 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
                 openImage();
                 break;
         }
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        viewText.setEnabled(enabled);
+        imageView.setEnabled(enabled);
     }
 
     private void openImage() {

@@ -16,7 +16,7 @@
 
 package org.odk.collect.android.activities.viewmodels;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;

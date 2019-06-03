@@ -2,8 +2,8 @@ package org.odk.collect.android.preferences;
 
 import android.content.Context;
 import android.preference.PreferenceCategory;
-import android.support.annotation.ColorInt;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.ColorInt;
+import androidx.core.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;

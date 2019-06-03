@@ -23,7 +23,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.widget.ListView;
 
 import org.odk.collect.android.R;
@@ -95,13 +95,13 @@ public final class DialogUtils {
         if (repeatcount != -1) {
             name += " (" + (repeatcount + 1) + ")";
         }
-        android.support.v7.app.AlertDialog alertDialog = new android.support.v7.app.AlertDialog.Builder(context).create();
+        androidx.appcompat.app.AlertDialog alertDialog = new androidx.appcompat.app.AlertDialog.Builder(context).create();
         alertDialog.setTitle(context.getString(R.string.delete_repeat_ask));
         alertDialog.setMessage(context.getString(R.string.delete_repeat_confirm, name));
         DialogInterface.OnClickListener quitListener = (dialog, i) -> {
             switch (i) {
                 case BUTTON_POSITIVE: // yes
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.DELETE_REPEAT, null, true);
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.DELETE_REPEAT, true);
                     formController.deleteRepeat();
 
                     if (onDeleted != null) {

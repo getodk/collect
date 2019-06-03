@@ -67,6 +67,8 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
                 .withSecondOfMinute(0)
                 .withMillisOfSecond(0);
         setDateLabel();
+
+        widgetValueChanged();
     }
 
     private int getTheme() {

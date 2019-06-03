@@ -190,7 +190,6 @@
   <string name="found_in_settings">ຍົກເລີກການ​ເລືອກ​ ເພື່ອເຊື່ອງຈາກການຕັ້ງຄ່າທົ່ວໄປ</string>
   <string name="save_preferences">ບັນທຶກການຕັ້ງຄ່າ</string>
   <string name="form_forward">ເລື່ອນຕໍ່ໄປ</string>
-  <string name="form_backward">ເລື່ອນກັບຄືນໜ້າຜ່ານມາ</string>
   <string name="navigation">ຄົ້ນຫາ</string>
   <string name="swipe_navigation">ໃຊ້ການເລື່ອນໜ້າຈໍໄປທາງຂ້າງ</string>
   <string name="buttons_navigation">ກົດປູ່ມເລື່ອນໄປທາງໜ້າ/ກັບຫຼັງ</string>

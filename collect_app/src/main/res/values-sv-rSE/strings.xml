@@ -216,7 +216,6 @@
   <string name="found_in_settings">Avmarkera för att dölja under allmänna inställningar</string>
   <string name="save_preferences">Spara inställningar till disk</string>
   <string name="form_forward">Nästa</string>
-  <string name="form_backward">Föregående</string>
   <string name="navigation">Navigering</string>
   <string name="swipe_navigation">Använd horisontella svepningar</string>
   <string name="buttons_navigation">Använd framåt/bakåt knappar</string>
@@ -326,11 +325,8 @@ Dela ODK Collect med dem.</string>
   <string name="start">Starta</string>
   <string name="enable_gps">Aktivera GPS</string>
   <string name="geotrace_title">GeoTrace</string>
-  <string name="polygon_save">Spara som polygon</string>
-  <string name="polyline_save">Spara som polyline</string>
   <string name="gps_enable_message">GPS är inaktiverat på din enhet. Vill du aktivera den?</string>
   <string name="select_offline_layer">Välj offline-lager</string>
-  <string name="polygon_or_polyline">Spara GeoTrace som</string>
   <string name="geo_clear_warning">Objekt redan skapat. Vill du rensa objektet?</string>
   <string name="geo_exit_warning">Ignorera ändringar och återgå till ODK?</string>
   <string name="polygon_validator">Minst tre punkter krävs för att skapa en polygon</string>

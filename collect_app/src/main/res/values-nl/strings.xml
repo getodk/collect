@@ -216,7 +216,6 @@
   <string name="found_in_settings">Uitvinken om te verbergen in algemene instellingen</string>
   <string name="save_preferences">Bewaar instellingen op schijf</string>
   <string name="form_forward">Verder</string>
-  <string name="form_backward">Terug</string>
   <string name="navigation">Navigatie</string>
   <string name="swipe_navigation">Horizontaal vegen</string>
   <string name="buttons_navigation">Navigatie knoppen</string>
@@ -285,8 +284,6 @@
   <string name="streets">Straten</string>
   <string name="terrain">Terrein</string>
   <string name="start">Start</string>
-  <string name="polygon_save">Bewaar als Polygoon</string>
-  <string name="polyline_save">Bewaar als Lijnstuk</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="odk_website">Bezoek de ODK website</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->

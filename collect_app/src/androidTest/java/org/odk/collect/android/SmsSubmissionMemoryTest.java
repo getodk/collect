@@ -1,16 +1,19 @@
 package org.odk.collect.android;
 
 import android.app.Activity;
-import android.support.test.runner.AndroidJUnit4;
+
+import androidx.test.rule.ActivityTestRule;
 import android.text.format.Formatter;
 
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.models.Message;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
+import org.odk.collect.android.test.FormLoadingUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.security.SecureRandom;
@@ -22,13 +25,15 @@ import timber.log.Timber;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
+import static org.odk.collect.android.test.FormLoadingUtils.ALL_WIDGETS_FORM;
 
 /**
  * Generates submissions and then checks to see if the device runs out of memory
  * when they are being persisted to SharedPreferences
  */
-@RunWith(AndroidJUnit4.class)
-public class SmsSubmissionMemoryTest extends BaseFormEntryActivityTest {
+public class SmsSubmissionMemoryTest {
+    @Rule
+    public ActivityTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(ALL_WIDGETS_FORM);
 
     private static final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     private static final SecureRandom RANDOM = new SecureRandom();
@@ -37,7 +42,7 @@ public class SmsSubmissionMemoryTest extends BaseFormEntryActivityTest {
     private static final int SUBMISSION_POOL_SIZE = 1000;
     private static final double STATUS_REPORT_PERCENT = .15 * SUBMISSION_POOL_SIZE;
 
-    @Ignore("This test isn't part of the suite so it should be run manually.")
+    @Ignore("SMS is currently disabled and this takes a while to run")
     @Test
     public void testMemoryConsumption() {
         SmsSubmissionManager manager = new SmsSubmissionManager(activityTestRule.getActivity());
@@ -79,12 +84,12 @@ public class SmsSubmissionMemoryTest extends BaseFormEntryActivityTest {
         return Formatter.formatShortFileSize(activityTestRule.getActivity(), memorySize);
     }
 
-    public boolean isMemoryLow() {
+    boolean isMemoryLow() {
         // Get app memory info
         long available = Runtime.getRuntime().maxMemory();
         long used = Runtime.getRuntime().totalMemory();
 
-        // Check for & and handle low memory state
+        // Check for and handle low memory state
         float percentAvailable = 100f * (1f - ((float) used / available));
         return percentAvailable <= LOW_MEMORY_THRESHOLD_PERCENT;
     }
@@ -99,7 +104,7 @@ public class SmsSubmissionMemoryTest extends BaseFormEntryActivityTest {
         return model;
     }
 
-    public List<SmsSubmission> generateModels(int amount) {
+    List<SmsSubmission> generateModels(int amount) {
         List<SmsSubmission> models = new ArrayList<>();
 
         for (int x = 0; x <= amount; x++) {
@@ -109,7 +114,7 @@ public class SmsSubmissionMemoryTest extends BaseFormEntryActivityTest {
         return models;
     }
 
-    public static List<Message> generateSampleMessages() {
+    static List<Message> generateSampleMessages() {
         Message first = new Message();
         first.setResultCode(Activity.RESULT_OK);
         first.setPartNumber(1);

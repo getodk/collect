@@ -5,9 +5,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
 
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.DexterBuilder;
@@ -265,7 +265,7 @@ public class PermissionUtils {
         }, Manifest.permission.SEND_SMS, Manifest.permission.READ_PHONE_STATE);
     }
 
-    private void requestPermissions(Activity activity, @NonNull PermissionListener listener, String... permissions) {
+    protected void requestPermissions(Activity activity, @NonNull PermissionListener listener, String... permissions) {
         DexterBuilder builder = null;
 
         if (permissions.length == 1) {
@@ -320,7 +320,7 @@ public class PermissionUtils {
                 });
     }
 
-    private void showAdditionalExplanation(Activity activity, int title, int message, int drawable, @NonNull PermissionListener action) {
+    protected void showAdditionalExplanation(Activity activity, int title, int message, int drawable, @NonNull PermissionListener action) {
         AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.PermissionAlertDialogTheme)
                 .setTitle(title)
                 .setMessage(message)

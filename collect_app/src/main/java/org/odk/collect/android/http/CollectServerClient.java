@@ -1,7 +1,7 @@
 package org.odk.collect.android.http;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;

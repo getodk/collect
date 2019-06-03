@@ -1,14 +1,17 @@
 package org.odk.collect.android.widgets;
 
-import android.support.annotation.NonNull;
+import android.content.Intent;
+import android.provider.MediaStore;
+import androidx.annotation.NonNull;
 
 import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mock;
+import org.odk.collect.android.R;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
-import org.robolectric.RuntimeEnvironment;
 
 import java.io.File;
 
@@ -27,7 +30,7 @@ public class ImageWidgetTest extends FileWidgetTest<ImageWidget> {
     @NonNull
     @Override
     public ImageWidget createWidget() {
-        return new ImageWidget(RuntimeEnvironment.application, formEntryPrompt);
+        return new ImageWidget(activity, formEntryPrompt);
     }
 
     @NonNull
@@ -53,5 +56,24 @@ public class ImageWidgetTest extends FileWidgetTest<ImageWidget> {
 
         when(file.exists()).thenReturn(true);
         when(file.getName()).thenReturn(fileName);
+    }
+
+    @Test
+    public void buttonsShouldLaunchCorrectIntents() {
+        stubAllRuntimePermissionsGranted(true);
+
+        Intent intent = getIntentLaunchedByClick(R.id.capture_image);
+        assertActionEquals(MediaStore.ACTION_IMAGE_CAPTURE, intent);
+
+        intent = getIntentLaunchedByClick(R.id.choose_image);
+        assertActionEquals(Intent.ACTION_GET_CONTENT, intent);
+        assertTypeEquals("image/*", intent);
+    }
+
+    @Test
+    public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
+        stubAllRuntimePermissionsGranted(false);
+
+        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.capture_image));
     }
 }

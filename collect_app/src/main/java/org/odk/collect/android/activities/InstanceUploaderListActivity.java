@@ -15,7 +15,7 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.LiveData;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -26,9 +26,9 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
+import androidx.annotation.NonNull;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -258,9 +258,9 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
 
-        sortingOptions = new String[]{
-                getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
-                getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
+        sortingOptions = new int[] {
+                R.string.sort_by_name_asc, R.string.sort_by_name_desc,
+                R.string.sort_by_date_asc, R.string.sort_by_date_desc
         };
 
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);

@@ -16,8 +16,11 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
+
+import android.text.Editable;
 import android.text.Selection;
+import android.text.TextWatcher;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.util.TypedValue;
@@ -29,6 +32,7 @@ import android.widget.TableLayout;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ViewIds;
 
@@ -90,11 +94,7 @@ public class StringWidget extends QuestionWidget {
         answerText.setHorizontallyScrolling(false);
         answerText.setSingleLine(false);
 
-        String s = prompt.getAnswerText();
-        if (s != null) {
-            answerText.setText(s);
-            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
-        }
+        setDisplayValueFromModel();
 
         if (readOnly) {
             answerText.setBackground(null);
@@ -104,6 +104,22 @@ public class StringWidget extends QuestionWidget {
         }
 
         addAnswerView(answerText);
+        answerText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                widgetValueChanged();
+            }
+        });
     }
 
     @Override
@@ -117,8 +133,6 @@ public class StringWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        clearFocus();
-
         String s = getAnswerText();
         return !s.equals("") ? new StringData(s) : null;
     }
@@ -162,4 +176,25 @@ public class StringWidget extends QuestionWidget {
         answerText.cancelLongPress();
     }
 
+    /**
+     * Registers all subviews except for the EditText to clear on long press. This makes it possible
+     * to long-press to paste or perform other text editing functions.
+     */
+    @Override
+    protected void registerToClearAnswerOnLongPress(FormEntryActivity activity) {
+        for (int i = 0; i < getChildCount(); i++) {
+            if (!(getChildAt(i) instanceof EditText)) {
+                activity.registerForContextMenu(getChildAt(i));
+            }
+        }
+    }
+
+    public void setDisplayValueFromModel() {
+        String currentAnswer = getFormEntryPrompt().getAnswerText();
+
+        if (currentAnswer != null) {
+            answerText.setText(currentAnswer);
+            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
+        }
+    }
 }

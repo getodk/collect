@@ -1,7 +1,7 @@
 package org.odk.collect.android.location.client;
 
 import android.location.Location;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 class TestLocationListener implements com.google.android.gms.location.LocationListener {
 

@@ -24,12 +24,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +52,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import timber.log.Timber;
 
 public class OsmMapFragment extends Fragment implements MapFragment,
@@ -242,7 +242,7 @@ public class OsmMapFragment extends Fragment implements MapFragment,
     }
 
     @Override public void removeFeature(int featureId) {
-        MapFeature feature = features.get(featureId);
+        MapFeature feature = features.remove(featureId);
         if (feature != null) {
             feature.dispose();
         }
