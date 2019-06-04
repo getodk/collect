@@ -26,9 +26,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.util.SparseBooleanArray;
@@ -68,6 +65,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_AUTH_REQUIRED;

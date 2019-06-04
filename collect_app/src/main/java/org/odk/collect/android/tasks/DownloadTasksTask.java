@@ -15,7 +15,6 @@
 package org.odk.collect.android.tasks;
 
 import android.app.PendingIntent;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,7 +23,6 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.net.URI;
@@ -54,7 +52,6 @@ import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
-import org.odk.collect.android.loaders.PointEntry;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.taskModel.FormLocator;
 import org.odk.collect.android.taskModel.TaskCompletionInfo;
@@ -63,7 +60,6 @@ import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.ManageForm.ManageFormDetails;
 import org.odk.collect.android.utilities.ManageFormResponse;
 import org.odk.collect.android.utilities.NotificationUtils;
-import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.TraceUtilities;
 import org.odk.collect.android.utilities.Utilities;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -83,6 +79,7 @@ import java.util.TimeZone;
 
 import javax.inject.Inject;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import timber.log.Timber;
 
 

@@ -41,13 +41,13 @@ import org.odk.collect.android.utilities.MediaManager;
 
 import android.content.Intent;
 import android.location.Location;
-import android.support.v4.content.LocalBroadcastManager;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.FileUtil.getSmsInstancePath;

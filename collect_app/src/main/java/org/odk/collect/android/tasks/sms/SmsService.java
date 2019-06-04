@@ -344,13 +344,6 @@ public class SmsService {
                 }
             }
 
-            Collect.getInstance()
-                    .getDefaultTracker()
-                    .send(new HitBuilders.EventBuilder()
-                            .setCategory("Submission")
-                            .setAction("SMS")
-                            .setLabel(Collect.getFormIdentifierHash(formId, formVersion))
-                            .build());
         }
     }
 

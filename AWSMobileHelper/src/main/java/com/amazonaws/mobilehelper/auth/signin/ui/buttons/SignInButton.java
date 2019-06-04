@@ -20,7 +20,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
-import android.support.annotation.Nullable;
 import android.text.TextPaint;
 import android.text.method.TransformationMethod;
 import android.util.AttributeSet;
@@ -32,6 +31,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.amazonaws.mobilehelper.R;
+
+import androidx.annotation.Nullable;
 
 import static com.amazonaws.mobilehelper.auth.signin.ui.DisplayUtils.dp;
 import static com.amazonaws.mobilehelper.auth.signin.ui.DisplayUtils.getRoundedRectangleBackground;

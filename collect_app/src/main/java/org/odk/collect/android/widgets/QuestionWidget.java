@@ -604,7 +604,7 @@ public abstract class QuestionWidget
             String appearance = prompt.getQuestion().getAppearanceAttr();
 
             if (appearance != null && (appearance.toLowerCase().contains("nochoose")
-                    || appearance.toLowerCase(Locale.ENGLISH).contains(WidgetAppearanceUtils.NEW)) {
+                    || appearance.toLowerCase(Locale.ENGLISH).contains(WidgetAppearanceUtils.NEW))) {
                 nochoose = true;
             }
         }

@@ -22,7 +22,6 @@ package org.odk.collect.android.loaders;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
-import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
 import org.odk.collect.android.application.Collect;
@@ -31,6 +30,8 @@ import org.odk.collect.android.utilities.TraceUtilities;
 import org.odk.collect.android.utilities.Utilities;
 
 import java.util.ArrayList;
+
+import androidx.loader.content.AsyncTaskLoader;
 
 /**
  * An implementation of AsyncTaskLoader which loads a {@code List<MapEntry>}

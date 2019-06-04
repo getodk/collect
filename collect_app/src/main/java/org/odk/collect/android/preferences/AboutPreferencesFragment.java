@@ -8,7 +8,6 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.support.annotation.Nullable;
 import android.view.View;
 
 import org.odk.collect.android.R;
@@ -17,6 +16,7 @@ import org.odk.collect.android.utilities.CustomTabHelper;
 
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import timber.log.Timber;
 
 

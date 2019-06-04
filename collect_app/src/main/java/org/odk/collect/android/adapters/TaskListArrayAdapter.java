@@ -21,7 +21,6 @@ package org.odk.collect.android.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +36,8 @@ import org.odk.collect.android.utilities.KeyValueJsonFns;
 import org.odk.collect.android.utilities.Utilities;
 
 import java.util.List;
+
+import androidx.core.content.ContextCompat;
 
 public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
     

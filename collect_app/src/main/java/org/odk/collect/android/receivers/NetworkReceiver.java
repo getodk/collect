@@ -11,7 +11,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
-import android.support.v4.content.LocalBroadcastManager;
 
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 
@@ -33,6 +32,7 @@ import org.odk.collect.android.utilities.Utilities;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import timber.log.Timber;
 
 import static android.content.Context.NOTIFICATION_SERVICE;

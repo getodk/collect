@@ -7,13 +7,14 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.preference.PreferenceManager;
-import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.SmapTaskMapFragment;
 import org.odk.collect.android.preferences.GeneralKeys;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 
 public class MapLocationObserver extends BroadcastReceiver {

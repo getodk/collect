@@ -22,7 +22,6 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 
 import org.javarosa.core.services.IPropertyManager;
@@ -38,6 +37,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import androidx.core.app.ActivityCompat;
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_EMAIL;

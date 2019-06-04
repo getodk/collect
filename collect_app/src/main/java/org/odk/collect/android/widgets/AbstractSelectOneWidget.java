@@ -90,7 +90,7 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
                     : new SelectOneData(new Selection(selectChoice));
     }
 
-    protected void createLayout() {
+    protected void createLayout(boolean readOnlyOverride) {     // smap add readOnlyOverride
         adapter = new SelectOneListAdapter(items, selectedValue, this, numColumns, readOnlyOverride);	// smap add readOnlyOverride
 
         if (items != null) {

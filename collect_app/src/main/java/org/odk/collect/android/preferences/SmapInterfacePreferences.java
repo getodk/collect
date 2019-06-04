@@ -23,11 +23,9 @@ import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
 import android.view.View;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -35,6 +33,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import androidx.annotation.Nullable;
 import timber.log.Timber;
 
 import static android.app.Activity.RESULT_CANCELED;
