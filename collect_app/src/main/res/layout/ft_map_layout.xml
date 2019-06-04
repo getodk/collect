@@ -35,7 +35,7 @@
             android:paddingTop="0dip"
             android:paddingBottom="60dip">
 
-            <android.support.v7.widget.AppCompatImageButton
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/show_location"
                 app:srcCompat="@drawable/ic_my_location"
                 android:padding="15dp"
@@ -44,7 +44,7 @@
                 android:layout_height="fill_parent"
                 />
 
-            <android.support.v7.widget.AppCompatImageButton
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/layers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

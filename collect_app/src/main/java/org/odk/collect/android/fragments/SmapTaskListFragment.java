@@ -95,7 +95,8 @@ public class SmapTaskListFragment extends ListFragment
     private static final String SEARCH_TEXT = "searchText";
     private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
 
-    protected String[] sortingOptions;
+    protected int[] sortingOptions;
+
     View rootView;
 
     private MapDataLoader mTaskLoader;
@@ -146,11 +147,6 @@ public class SmapTaskListFragment extends ListFragment
         mAdapter = new TaskListArrayAdapter(getActivity());
         setListAdapter(mAdapter);
         getLoaderManager().initLoader(TASK_LOADER_ID, null, this);
-
-        sortingOptions = new String[]{
-                getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
-                getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
-        };
 
         // Handle long item clicks
         ListView lv = getListView();

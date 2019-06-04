@@ -32,6 +32,6 @@ dependencies {
 
     implementation 'com.amazonaws:aws-android-sdk-core:2.4.2'
     implementation 'com.amazonaws:aws-android-sdk-cognito:2.4.2'
-    implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation 'com.android.support:appcompat-v7:28.0.2'
     //testCompile 'junit:junit:4.12'
 }
