@@ -244,8 +244,8 @@ public class FormDownloader {
                 File formMediaPath = new File(uriResult.getMediaPath());
                 FileUtils.moveMediaFiles(orgTempMediaPath, formMediaPath);      // smap Move org files first and overwrite with form level
                 FileUtils.moveMediaFiles(tempMediaPath, formMediaPath);
-                return true;
             }
+            return true;
         } catch (IOException e) {
             Timber.e(e);
 
