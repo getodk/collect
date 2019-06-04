@@ -50,6 +50,9 @@ public class DateTimeUtilsTest {
     private DatePickerDetails myanmar;
     private DatePickerDetails myanmarMonthYear;
     private DatePickerDetails myanmarYear;
+    private DatePickerDetails persian;
+    private DatePickerDetails persianMonthYear;
+    private DatePickerDetails persianYear;
 
     @Before
     public void setUp() {
@@ -72,6 +75,9 @@ public class DateTimeUtilsTest {
         myanmar = new DatePickerDetails(DatePickerDetails.DatePickerType.MYANMAR, DatePickerDetails.DatePickerMode.SPINNERS);
         myanmarMonthYear = new DatePickerDetails(DatePickerDetails.DatePickerType.MYANMAR, DatePickerDetails.DatePickerMode.MONTH_YEAR);
         myanmarYear = new DatePickerDetails(DatePickerDetails.DatePickerType.MYANMAR, DatePickerDetails.DatePickerMode.YEAR);
+        persian = new DatePickerDetails(DatePickerDetails.DatePickerType.PERSIAN, DatePickerDetails.DatePickerMode.SPINNERS);
+        persianMonthYear = new DatePickerDetails(DatePickerDetails.DatePickerType.PERSIAN, DatePickerDetails.DatePickerMode.MONTH_YEAR);
+        persianYear = new DatePickerDetails(DatePickerDetails.DatePickerType.PERSIAN, DatePickerDetails.DatePickerMode.YEAR);
     }
 
     @Test
@@ -159,5 +165,16 @@ public class DateTimeUtilsTest {
         assertEquals(myanmarYear, DateTimeUtils.getDatePickerDetails(appearance));
         appearance = "year myanmar";
         assertEquals(myanmarYear, DateTimeUtils.getDatePickerDetails(appearance));
+
+        appearance = "persian";
+        assertEquals(persian, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "Persian month-year";
+        assertEquals(persianMonthYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "month-year persian";
+        assertEquals(persianMonthYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "Persian year";
+        assertEquals(persianYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "year persian";
+        assertEquals(persianYear, DateTimeUtils.getDatePickerDetails(appearance));
     }
 }
