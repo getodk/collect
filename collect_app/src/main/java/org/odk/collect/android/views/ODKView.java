@@ -155,106 +155,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             }
         }
 
-<<<<<<< HEAD
-        boolean first = true;
-        FormEntryPrompt nfcPrompt = null;       // smap
-        FormEntryPrompt barcodePrompt = null;       // smap
-        FormEntryPrompt exPrompt = null;        // smap
-        FormEntryPrompt formPrompt = null;      // smap
-        FormEntryPrompt geopointPrompt = null;      // smap
-        FormEntryPrompt imagePrompt = null;      // smap
-        FormEntryPrompt videoPrompt = null;      // smap
-        FormEntryPrompt audioPrompt = null;      // smap
-
-        int id = 0;
-        for (FormEntryPrompt p : questionPrompts) {
-
-            nfcPrompt = null;           // smap
-            barcodePrompt = null;       // smap
-            exPrompt = null;            // smap
-            formPrompt = null;          // smap
-            geopointPrompt = null;      // smap
-            imagePrompt = null;         // smap
-            videoPrompt = null;         // smap
-            audioPrompt = null;         // smap
-
-            if (!first) {
-                View divider = new View(getContext());
-                divider.setBackgroundResource(new ThemeUtils(getContext()).getDivider());
-                divider.setMinimumHeight(3);
-                view.addView(divider);
-            } // else {     smap - move to end
-            //  first = false;
-            //}
-
-            // if question or answer type is not supported, use text widget
-            QuestionWidget qw =
-                    WidgetFactory.createWidgetFromPrompt(p, getContext(), readOnlyOverride);
-            qw.setLongClickable(true);
-            qw.setOnLongClickListener(this);
-            qw.setId(ViewIds.generateViewId());
-
-            widgets.add(qw);
-            view.addView(qw, layout);
-
-            // Start smap
-            String appearance = p.getAppearanceHint();
-            if (appearance == null) appearance = "";
-            appearance = appearance.toLowerCase(Locale.ENGLISH);
-
-            if(first) {
-                // Auto get NFC if first question, and not already obtained a code
-                if (p.getDataType() == Constants.DATATYPE_BARCODE) {
-                    String s = p.getAnswerText();    // Make sure an NFC / barcode code has not alredy been retrieved
-                    if (s == null) {
-                        if (appearance.contains("read_nfc")) {
-                            nfcPrompt = p;
-                        }
-                    }
-                }
-
-                // Other types auto launch only if the auto parameter is set
-                String auto = widgets.get(
-                        0).getFormEntryPrompt().getFormElement().getAdditionalAttribute(null, "auto");
-                String form_identifier = widgets.get(
-                        0).getFormEntryPrompt().getFormElement().getAdditionalAttribute(null, "form_identifier");
-
-                boolean autoLaunch = (auto != null && (auto.equals("yes") || auto.equals("true"))) ? true : false;
-                boolean isNew = (appearance.contains("new")) ? true : false;
-                String s = p.getAnswerText();    // Make sure a value has not alredy been retrieved
-
-                // Auto get External Launch if first question, and not already obtained a value
-                if(nfcPrompt == null && autoLaunch && s == null) {
-                    if (appearance.trim().startsWith("ex:") &&
-                            (p.getDataType() == Constants.DATATYPE_INTEGER ||
-                            p.getDataType() == Constants.DATATYPE_DECIMAL ||
-                            p.getDataType() == Constants.DATATYPE_TEXT)) {
-
-                        exPrompt = p;
-
-                    } else if (form_identifier != null && p.getDataType() == Constants.DATATYPE_TEXT) {
-                        formPrompt = p;
-                    } else if (p.getDataType() == Constants.DATATYPE_GEOPOINT) {
-                        geopointPrompt = p;
-                    } else if (p.getDataType() == Constants.DATATYPE_BARCODE) {
-                        barcodePrompt = p;
-                    } else if (isNew && p.getControlType() == Constants.CONTROL_VIDEO_CAPTURE) {
-                        videoPrompt = p;
-                    } else if (isNew && p.getControlType() == Constants.CONTROL_AUDIO_CAPTURE) {
-                        audioPrompt = p;
-                    } else if (isNew && p.getControlType() == Constants.CONTROL_IMAGE_CHOOSE) {
-                        imagePrompt = p;
-                    }
-                }
-            }
-            // End Smap
-
-            first = false;   // smap - relocated flag for false
-
-=======
         for (FormEntryPrompt question : questionPrompts) {
             addWidgetForQuestion(question, readOnlyOverride);
->>>>>>> merge_master
         }
 
         ((NestedScrollView) findViewById(R.id.odk_view_container)).addView(view);
@@ -329,6 +231,16 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      * it.
      */
     private void addWidgetForQuestion(FormEntryPrompt question, boolean readOnlyOverride) {
+
+        FormEntryPrompt nfcPrompt = null;           // smap
+        FormEntryPrompt barcodePrompt = null;       // smap
+        FormEntryPrompt exPrompt = null;            // smap
+        FormEntryPrompt formPrompt = null;          // smap
+        FormEntryPrompt geopointPrompt = null;      // smap
+        FormEntryPrompt imagePrompt = null;         // smap
+        FormEntryPrompt videoPrompt = null;         // smap
+        FormEntryPrompt audioPrompt = null;         // smap
+
         QuestionWidget qw = configureWidgetForQuestion(question, readOnlyOverride);
 
         widgets.add(qw);
@@ -337,6 +249,58 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             view.addView(getDividerView());
         }
         view.addView(qw, layout);
+
+            // Start smap
+            String appearance = question.getAppearanceHint();
+            if (appearance == null) appearance = "";
+            appearance = appearance.toLowerCase(Locale.ENGLISH);
+
+            if(widgets.size() == 1) {
+                // Auto get NFC if first question, and not already obtained a code
+                if (question.getDataType() == Constants.DATATYPE_BARCODE) {
+                    String s = question.getAnswerText();    // Make sure an NFC / barcode code has not alredy been retrieved
+                    if (s == null) {
+                        if (appearance.contains("read_nfc")) {
+                            nfcPrompt = question;
+                        }
+                    }
+                }
+
+                // Other types auto launch only if the auto parameter is set
+                String auto = widgets.get(
+                        0).getFormEntryPrompt().getFormElement().getAdditionalAttribute(null, "auto");
+                String form_identifier = widgets.get(
+                        0).getFormEntryPrompt().getFormElement().getAdditionalAttribute(null, "form_identifier");
+
+                boolean autoLaunch = (auto != null && (auto.equals("yes") || auto.equals("true"))) ? true : false;
+                boolean isNew = (appearance.contains("new")) ? true : false;
+                String s = question.getAnswerText();    // Make sure a value has not alredy been retrieved
+
+                // Auto get External Launch if first question, and not already obtained a value
+                if(nfcPrompt == null && autoLaunch && s == null) {
+                    if (appearance.trim().startsWith("ex:") &&
+                            (question.getDataType() == Constants.DATATYPE_INTEGER ||
+                                    question.getDataType() == Constants.DATATYPE_DECIMAL ||
+                                    question.getDataType() == Constants.DATATYPE_TEXT)) {
+
+                        exPrompt = question;
+
+                    } else if (form_identifier != null && p.getDataType() == Constants.DATATYPE_TEXT) {
+                        formPrompt = question;
+                    } else if (question.getDataType() == Constants.DATATYPE_GEOPOINT) {
+                        geopointPrompt = question;
+                    } else if (question.getDataType() == Constants.DATATYPE_BARCODE) {
+                        barcodePrompt = question;
+                    } else if (isNew && question.getControlType() == Constants.CONTROL_VIDEO_CAPTURE) {
+                        videoPrompt = question;
+                    } else if (isNew && question.getControlType() == Constants.CONTROL_AUDIO_CAPTURE) {
+                        audioPrompt = question;
+                    } else if (isNew && question.getControlType() == Constants.CONTROL_IMAGE_CHOOSE) {
+                        imagePrompt = question;
+                    }
+                }
+            }
+            // End Smap
     }
 
     /**
