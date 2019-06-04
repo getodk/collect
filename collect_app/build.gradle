@@ -233,6 +233,7 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:${rootProject.okhttp3Version}"
     implementation 'com.burgstaller:okhttp-digest:1.18'
 
+    implementation 'com.github.mohamadian:PersianJodaTime:1.2'
     implementation 'com.github.chanmratekoko:myanmar-calendar:1.0.6.RC3'
     implementation 'bikramsambat:bikram-sambat:1.1.0'
     implementation "com.evernote:android-job:1.2.5"
