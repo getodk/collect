@@ -104,6 +104,15 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
     private WidgetValueChangedListener widgetValueChangedListener;
 
+    private FormEntryPrompt nfcPrompt = null;           // smap
+    private FormEntryPrompt barcodePrompt = null;       // smap
+    private FormEntryPrompt exPrompt = null;            // smap
+    private FormEntryPrompt formPrompt = null;          // smap
+    private FormEntryPrompt geopointPrompt = null;      // smap
+    private FormEntryPrompt imagePrompt = null;         // smap
+    private FormEntryPrompt videoPrompt = null;         // smap
+    private FormEntryPrompt audioPrompt = null;         // smap
+
     /**
      * Builds the view for a specified question or field-list of questions.
      *
@@ -232,14 +241,14 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      */
     private void addWidgetForQuestion(FormEntryPrompt question, boolean readOnlyOverride) {
 
-        FormEntryPrompt nfcPrompt = null;           // smap
-        FormEntryPrompt barcodePrompt = null;       // smap
-        FormEntryPrompt exPrompt = null;            // smap
-        FormEntryPrompt formPrompt = null;          // smap
-        FormEntryPrompt geopointPrompt = null;      // smap
-        FormEntryPrompt imagePrompt = null;         // smap
-        FormEntryPrompt videoPrompt = null;         // smap
-        FormEntryPrompt audioPrompt = null;         // smap
+        nfcPrompt = null;           // smap - Set these to null for this widget.  Used later for auto launch
+        barcodePrompt = null;       // smap
+        exPrompt = null;            // smap
+        formPrompt = null;          // smap
+        geopointPrompt = null;      // smap
+        imagePrompt = null;         // smap
+        videoPrompt = null;         // smap
+        audioPrompt = null;         // smap
 
         QuestionWidget qw = configureWidgetForQuestion(question, readOnlyOverride);
 
@@ -285,7 +294,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
                         exPrompt = question;
 
-                    } else if (form_identifier != null && p.getDataType() == Constants.DATATYPE_TEXT) {
+                    } else if (form_identifier != null && question.getDataType() == Constants.DATATYPE_TEXT) {
                         formPrompt = question;
                     } else if (question.getDataType() == Constants.DATATYPE_GEOPOINT) {
                         geopointPrompt = question;
