@@ -18,11 +18,9 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 
-import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
-import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.external.ExternalDataUtil;
 
 import java.util.List;
@@ -43,28 +41,10 @@ public abstract class ItemsWidget extends QuestionWidget {
     protected void readItems() {
         // SurveyCTO-added support for dynamic select content (from .csv files)
         XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(getFormEntryPrompt().getAppearanceHint());
-        if (readExternalChoices(xpathFuncExpr)) {
-            try {
-                items = ExternalDataUtil.populateExternalChoices(getFormEntryPrompt(), xpathFuncExpr);
-                addExternalChoices(items);
-            } catch (ExternalDataException e) {
-                items = getFormEntryPrompt().getSelectChoices();
-            }
+        if (xpathFuncExpr != null) {
+            items = ExternalDataUtil.populateExternalChoices(getFormEntryPrompt(), xpathFuncExpr);
         } else {
             items = getFormEntryPrompt().getSelectChoices();
-        }
-    }
-
-    private boolean readExternalChoices(XPathFuncExpr xpathFuncExpr) {
-        return xpathFuncExpr != null && getFormEntryPrompt().getQuestion().getNumChoices() == 1;
-    }
-
-    private void addExternalChoices(List<SelectChoice> choices) {
-        QuestionDef questionDef = getFormEntryPrompt().getQuestion();
-        // The first choice in this case is just for providing headers which we need to read external items
-        questionDef.removeSelectChoice(questionDef.getChoice(0));
-        for (SelectChoice choice : choices) {
-            questionDef.addSelectChoice(choice);
         }
     }
 }

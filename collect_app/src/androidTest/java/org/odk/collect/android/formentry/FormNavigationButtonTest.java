@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.formfilling;
+package org.odk.collect.android.formentry;
 
 import android.Manifest;
 
