@@ -1618,6 +1618,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                 .setAction("saveIncomplete")
                                 .setLabel(Collect.getCurrentFormIdentifierHash())
                                 .build());
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("action", "saveIncomplete");
+                        bundle.putString("label", Collect.getCurrentFormIdentifierHash());
+                        Collect.getInstance().logEvent("WidgetAttribute", bundle);
+
                         saveDataToDisk(false, false, null, false);
                         autoSaved = true;
                     }

@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.TextKeyListener;
@@ -164,6 +165,10 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
                         .setLabel(Collect.getCurrentFormIdentifierHash())
                         .build());
 
+        Bundle bundle = new Bundle();
+        bundle.putString("action", "ExternalApp");
+        bundle.putString("label", Collect.getCurrentFormIdentifierHash());
+        Collect.getInstance().logEvent("WidgetType", bundle);
     }
 
     protected void fireActivity(Intent i) throws ActivityNotFoundException {

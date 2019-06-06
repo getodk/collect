@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.telephony.SmsManager;
 
 import com.evernote.android.job.Job;
@@ -351,6 +352,11 @@ public class SmsService {
                             .setAction("SMS")
                             .setLabel(Collect.getFormIdentifierHash(formId, formVersion))
                             .build());
+
+            Bundle bundle = new Bundle();
+            bundle.putString("action", "SMS");
+            bundle.putString("label", Collect.getFormIdentifierHash(formId, formVersion));
+            Collect.getInstance().logEvent("Submission", bundle);
         }
     }
 

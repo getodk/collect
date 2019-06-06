@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
@@ -453,6 +454,11 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                         .setAction(scheme + " " + host)
                         .setLabel(urlHash)
                         .build());
+
+        Bundle bundle = new Bundle();
+        bundle.putString("action", scheme + " " + host);
+        bundle.putString("label", urlHash);
+        Collect.getInstance().logEvent("SetServer", bundle);
     }
 
     private void maskPasswordSummary(String password) {

@@ -94,6 +94,11 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                                     .setLabel((String) newValue)
                                     .build());
 
+                    Bundle bundle = new Bundle();
+                    bundle.putString("action", "Periodic form updates check");
+                    bundle.putString("label", (String) newValue);
+                    Collect.getInstance().logEvent("PreferenceChange", bundle);
+
                     if (newValue.equals(getString(R.string.never_value))) {
                         Preference automaticUpdatePreference = findPreference(KEY_AUTOMATIC_UPDATE);
                         if (automaticUpdatePreference != null) {
@@ -128,6 +133,11 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                                     .setAction("Automatic form updates")
                                     .setLabel(newValue + " " + formUpdateCheckPeriod)
                                     .build());
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("action", "Automatic form updates");
+                    bundle.putString("label", newValue + " " + formUpdateCheckPeriod);
+                    Collect.getInstance().logEvent("PreferenceChange", bundle);
 
                     return true;
                 });

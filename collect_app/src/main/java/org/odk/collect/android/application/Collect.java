@@ -20,6 +20,7 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -34,6 +35,7 @@ import com.evernote.android.job.JobManagerCreateException;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -105,6 +107,7 @@ public class Collect extends Application {
     private FormController formController;
     private ExternalDataManager externalDataManager;
     private Tracker tracker;
+    private FirebaseAnalytics firebaseAnalytics;
     private AppDependencyComponent applicationComponent;
 
     public static Collect getInstance() {
@@ -220,6 +223,7 @@ public class Collect extends Application {
     public void onCreate() {
         super.onCreate();
         singleton = this;
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         setupDagger();
 
@@ -297,6 +301,10 @@ public class Collect extends Application {
             tracker = analytics.newTracker(R.xml.global_tracker);
         }
         return tracker;
+    }
+
+    public void logEvent(String event, Bundle bundle) {
+        firebaseAnalytics.logEvent(event, bundle);
     }
 
     private static class CrashReportingTree extends Timber.Tree {
@@ -391,5 +399,9 @@ public class Collect extends Application {
                         .setCategory("NullFormControllerEvent")
                         .setAction(action)
                         .build());
+
+        Bundle bundle = new Bundle();
+        bundle.putString("action", action);
+        Collect.getInstance().logEvent("NullFormControllerEvent", bundle);
     }
 }

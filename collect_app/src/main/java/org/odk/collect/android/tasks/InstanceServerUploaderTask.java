@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.tasks;
 
+import android.os.Bundle;
+
 import com.google.android.gms.analytics.HitBuilders;
 
 import org.odk.collect.android.R;
@@ -83,6 +85,11 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
                                 .setAction("HTTP")
                                 .setLabel(Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()))
                                 .build());
+
+                Bundle bundle = new Bundle();
+                bundle.putString("action", "HTTP");
+                bundle.putString("label", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
+                Collect.getInstance().logEvent("Submission", bundle);
             } catch (UploadAuthRequestedException e) {
                 outcome.authRequestingServer = e.getAuthRequestingServer();
                 // Don't add the instance that caused an auth request to the map because we want to

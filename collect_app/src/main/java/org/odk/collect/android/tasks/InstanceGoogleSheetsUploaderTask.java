@@ -15,6 +15,7 @@
 package org.odk.collect.android.tasks;
 
 import android.database.Cursor;
+import android.os.Bundle;
 
 import com.google.android.gms.analytics.HitBuilders;
 
@@ -85,6 +86,11 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
                                     .setAction("HTTP-Sheets")
                                     .setLabel(Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()))
                                     .build());
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("action", "HTTP-Sheets");
+                    bundle.putString("label", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
+                    Collect.getInstance().logEvent("Submission", bundle);
                 } catch (UploadException e) {
                     Timber.d(e);
                     outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),

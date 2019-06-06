@@ -22,6 +22,7 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import androidx.annotation.NonNull;
 
@@ -166,6 +167,12 @@ public class AutoSendWorker extends Worker {
                                         "HTTP-Sheets auto" : "HTTP auto")
                                 .setLabel(Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()))
                                 .build());
+
+                Bundle bundle = new Bundle();
+                bundle.putString("action", protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets)) ?
+                        "HTTP-Sheets auto" : "HTTP auto");
+                bundle.putString("label", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
+                Collect.getInstance().logEvent("Submission", bundle);
             } catch (UploadException e) {
                 Timber.d(e);
                 anyFailure = true;
