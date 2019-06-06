@@ -26,6 +26,7 @@ import org.odk.collect.android.dto.Form;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.upload.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.upload.UploadException;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.util.List;
@@ -88,8 +89,8 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
                                     .build());
 
                     Bundle bundle = new Bundle();
-                    bundle.putString("action", "HTTP-Sheets");
-                    bundle.putString("label", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
+                    bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, "HTTP-Sheets");
+                    bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
                     Collect.getInstance().logEvent("Submission", bundle);
                 } catch (UploadException e) {
                     Timber.d(e);

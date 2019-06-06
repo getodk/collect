@@ -47,6 +47,7 @@ import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
@@ -456,8 +457,8 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                         .build());
 
         Bundle bundle = new Bundle();
-        bundle.putString("action", scheme + " " + host);
-        bundle.putString("label", urlHash);
+        bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, scheme + " " + host);
+        bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, urlHash);
         Collect.getInstance().logEvent("SetServer", bundle);
     }
 

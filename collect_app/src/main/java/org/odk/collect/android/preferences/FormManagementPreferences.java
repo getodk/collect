@@ -25,6 +25,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.tasks.ServerPollingJob;
+import org.odk.collect.android.utilities.ApplicationConstants;
 
 import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
@@ -95,8 +96,8 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                                     .build());
 
                     Bundle bundle = new Bundle();
-                    bundle.putString("action", "Periodic form updates check");
-                    bundle.putString("label", (String) newValue);
+                    bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, "Periodic form updates check");
+                    bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, (String) newValue);
                     Collect.getInstance().logEvent("PreferenceChange", bundle);
 
                     if (newValue.equals(getString(R.string.never_value))) {
@@ -135,8 +136,8 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                                     .build());
 
                     Bundle bundle = new Bundle();
-                    bundle.putString("action", "Automatic form updates");
-                    bundle.putString("label", newValue + " " + formUpdateCheckPeriod);
+                    bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, "Automatic form updates");
+                    bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, newValue + " " + formUpdateCheckPeriod);
                     Collect.getInstance().logEvent("PreferenceChange", bundle);
 
                     return true;

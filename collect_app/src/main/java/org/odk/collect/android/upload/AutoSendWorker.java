@@ -41,6 +41,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
@@ -169,9 +170,9 @@ public class AutoSendWorker extends Worker {
                                 .build());
 
                 Bundle bundle = new Bundle();
-                bundle.putString("action", protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets)) ?
+                bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets)) ?
                         "HTTP-Sheets auto" : "HTTP auto");
-                bundle.putString("label", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
+                bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
                 Collect.getInstance().logEvent("Submission", bundle);
             } catch (UploadException e) {
                 Timber.d(e);

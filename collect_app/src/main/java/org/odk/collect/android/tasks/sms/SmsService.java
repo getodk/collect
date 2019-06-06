@@ -29,6 +29,7 @@ import org.odk.collect.android.tasks.sms.models.Message;
 import org.odk.collect.android.tasks.sms.models.SmsProgress;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.upload.InstanceServerUploader;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ArrayUtils;
 
 import java.io.File;
@@ -354,8 +355,8 @@ public class SmsService {
                             .build());
 
             Bundle bundle = new Bundle();
-            bundle.putString("action", "SMS");
-            bundle.putString("label", Collect.getFormIdentifierHash(formId, formVersion));
+            bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, "SMS");
+            bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, Collect.getFormIdentifierHash(formId, formVersion));
             Collect.getInstance().logEvent("Submission", bundle);
         }
     }

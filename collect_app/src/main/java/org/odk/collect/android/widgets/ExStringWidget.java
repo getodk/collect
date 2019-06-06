@@ -46,6 +46,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.utilities.ActivityAvailability;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.ObjectUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
@@ -166,8 +167,8 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
                         .build());
 
         Bundle bundle = new Bundle();
-        bundle.putString("action", "ExternalApp");
-        bundle.putString("label", Collect.getCurrentFormIdentifierHash());
+        bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, "ExternalApp");
+        bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, Collect.getCurrentFormIdentifierHash());
         Collect.getInstance().logEvent("WidgetType", bundle);
     }
 

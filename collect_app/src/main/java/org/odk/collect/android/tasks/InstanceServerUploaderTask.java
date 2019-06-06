@@ -26,6 +26,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.upload.UploadAuthRequestedException;
 import org.odk.collect.android.upload.UploadException;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.util.HashMap;
@@ -87,8 +88,8 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
                                 .build());
 
                 Bundle bundle = new Bundle();
-                bundle.putString("action", "HTTP");
-                bundle.putString("label", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
+                bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, "HTTP");
+                bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
                 Collect.getInstance().logEvent("Submission", bundle);
             } catch (UploadAuthRequestedException e) {
                 outcome.authRequestingServer = e.getAuthRequestingServer();
