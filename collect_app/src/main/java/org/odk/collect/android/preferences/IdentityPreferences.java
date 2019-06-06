@@ -16,7 +16,6 @@ package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-import android.preference.Preference;
 import androidx.annotation.Nullable;
 import android.view.View;
 
@@ -74,15 +73,12 @@ public class IdentityPreferences extends BasePreferenceFragment {
         final CheckBoxPreference analyticsPreference = (CheckBoxPreference) findPreference(KEY_ANALYTICS);
 
         if (analyticsPreference != null) {
-            analyticsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getActivity().getApplicationContext());
-                    googleAnalytics.setAppOptOut(!analyticsPreference.isChecked());
+            analyticsPreference.setOnPreferenceClickListener(preference -> {
+                GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getActivity().getApplicationContext());
+                googleAnalytics.setAppOptOut(!analyticsPreference.isChecked());
 
-                    Collect.getInstance().setAnalyticsCollectionEnabled(analyticsPreference.isChecked());
-                    return true;
-                }
+                Collect.getInstance().setAnalyticsCollectionEnabled(analyticsPreference.isChecked());
+                return true;
             });
         }
     }
