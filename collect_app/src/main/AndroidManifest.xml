@@ -187,10 +187,10 @@ the specific language governing permissions and limitations under the License.
 
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"
-            android:value="@bool/FIREBASE_CRASHLYTICS_ENABLED" />
+            android:value="@bool/FIREBASE_ENABLED" />
 
         <meta-data android:name="firebase_analytics_collection_enabled"
-            android:value="@bool/FIREBASE_ANALYTICS_ENABLED" />
+            android:value="@bool/FIREBASE_ENABLED" />
 
         <uses-library
             android:name="com.google.android.maps"
