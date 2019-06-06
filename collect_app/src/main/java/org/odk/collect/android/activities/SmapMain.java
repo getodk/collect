@@ -835,7 +835,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 // Start a form
                 te.id = fld.id;
 
-                SnackbarUtils.showLongSnackbar(findViewById(R.id.pager),
+                SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent),
                         Collect.getInstance().getString(R.string.smap_starting_form, fld.formName));
                 //Toast.makeText(
                 //        SmapMain.this,
@@ -933,7 +933,9 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     public void updateData(MapEntry data) {
         taskManagerList.setData(data);
         taskManagerMap.setData(data);
-        setLocationTriggers(data.tasks, false);      // NFC and geofence triggers
+        if(data != null) {
+            setLocationTriggers(data.tasks, false);      // NFC and geofence triggers
+        }
     }
 
     protected class MainTaskListener extends BroadcastReceiver {

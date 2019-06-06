@@ -272,7 +272,7 @@ public class Collect extends Application {
 
         initProperties();
 
-        if (BuildConfig.BUILD_TYPE.equals("release")) {     // smap change from odkCollectRelease
+        if (BuildConfig.BUILD_TYPE.equals("odkCollectRelease")) {
             Timber.plant(new CrashReportingTree());
         } else {
             Timber.plant(new Timber.DebugTree());

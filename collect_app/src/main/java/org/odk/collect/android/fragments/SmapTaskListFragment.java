@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.fragments;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -27,10 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -51,13 +47,8 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.tasks.DeleteInstancesTask;
-import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
-
-import java.util.LinkedHashSet;
-import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -164,8 +155,14 @@ public class SmapTaskListFragment extends ListFragment
 
 
     @Override
-    public void onViewCreated(View rootView, Bundle savedInstanceState) {
-        super.onViewCreated(rootView, savedInstanceState);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+
+        sortingOptions = new int[]{
+                R.string.sort_by_name_asc, R.string.sort_by_name_desc,
+                R.string.sort_by_date_asc, R.string.sort_by_date_desc
+        };
+
+        super.onViewCreated(view, savedInstanceState);
     }
 
 
@@ -187,14 +184,14 @@ public class SmapTaskListFragment extends ListFragment
         // Notify the user if tracking is turned on
         if(PreferenceManager
                 .getDefaultSharedPreferences(getContext()).getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false)) {
-            SnackbarUtils.showLongSnackbar(getActivity().findViewById(R.id.drawer_layout), getString(R.string.smap_location_tracking));
+            SnackbarUtils.showLongSnackbar(getActivity().findViewById(R.id.llParent), getString(R.string.smap_location_tracking));
         }
     }
 
     private void setupBottomSheet() {
         bottomSheetDialog = new BottomSheetDialog(getActivity(), new ThemeUtils(getContext()).getBottomDialogTheme());
         View sheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet, null);
-        final RecyclerView recyclerView = (RecyclerView) sheetView.findViewById(R.id.recyclerView);
+        final RecyclerView recyclerView = sheetView.findViewById(R.id.recyclerView);
 
         final SortDialogAdapter adapter = new SortDialogAdapter(getActivity(), recyclerView, sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {
             @Override
@@ -247,10 +244,12 @@ public class SmapTaskListFragment extends ListFragment
     }
 
     public void setData(MapEntry data) {
-        if(data != null) {
-            mAdapter.setData(data.tasks);
-        } else {
-            mAdapter.setData(null);
+        if(mAdapter != null) {
+            if (data != null) {
+                mAdapter.setData(data.tasks);
+            } else {
+                mAdapter.setData(null);
+            }
         }
     }
 
@@ -326,9 +325,7 @@ public class SmapTaskListFragment extends ListFragment
 
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
         final MenuItem searchItem = menu.findItem(R.id.menu_filter);
-        if(searchView == null) {
-            searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        }
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setQueryHint(getResources().getString(R.string.search));
         searchView.setMaxWidth(Integer.MAX_VALUE);
 

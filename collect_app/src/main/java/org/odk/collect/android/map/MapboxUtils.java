@@ -10,6 +10,8 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
+import timber.log.Timber;
+
 public class MapboxUtils {
     private static boolean initAttempted;
     private static Mapbox mapbox;
@@ -28,9 +30,10 @@ public class MapboxUtils {
         // an access token. Configure this token in collect_app/secrets.properties.
         try {
             mapbox = Mapbox.getInstance(Collect.getInstance(), BuildConfig.MAPBOX_ACCESS_TOKEN);
-        } catch (ExceptionInInitializerError e) {
+        } catch (Exception e) { // smap changed to Exception
             // Initialization failed (usually because the Mapbox native library for
             // the current architecture could not be found or loaded).
+            Timber.e(e);    // smap
             mapbox = null;
         }
 

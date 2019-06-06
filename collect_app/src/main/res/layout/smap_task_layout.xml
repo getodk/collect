@@ -14,41 +14,27 @@ License for the specific language governing permissions and limitations under
 the License.
 
 -->
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/drawer_layout"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llParent"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <!--<include layout="@layout/search_box_layout" />-->
-
-        <ListView
-            android:id="@id/android:list"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:clipToPadding="false"
-            android:scrollbarStyle="outsideOverlay"
-            android:divider="?dividerCompat"/>
-
-        <TextView
-            android:id="@android:id/empty"
-            style="@style/emptyViewStyle"
-            android:text="@string/no_items_display" />
-
-    </LinearLayout>
-
-    <!-- Side navigation drawer UI -->
     <ListView
-        android:id="@+id/sortingMenu"
-        android:layout_width="250dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:background="#DDDDDD" />
-</androidx.drawerlayout.widget.DrawerLayout>
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:clipToPadding="false"
+        android:scrollbarStyle="outsideOverlay"
+        android:divider="?dividerCompat"/>
+
+    <TextView
+        android:id="@android:id/empty"
+        style="@style/emptyViewStyle"
+        android:text="@string/no_items_display" />
+
+</LinearLayout>
