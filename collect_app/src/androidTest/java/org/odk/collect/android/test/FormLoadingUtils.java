@@ -50,10 +50,14 @@ public class FormLoadingUtils {
      * folder to the SD Card where it will be loaded by {@link FormLoaderTask}.
      */
     public static void copyFormToSdCard(String formFilename, String formAssetPath, List<String> mediaFilenames) throws IOException {
+        if (!formAssetPath.isEmpty() && !formAssetPath.endsWith(File.separator)) {
+            formAssetPath = formAssetPath + File.separator;
+        }
+
         String pathname = Collect.FORMS_PATH + formFilename;
 
         AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
-        InputStream inputStream = assetManager.open(formAssetPath + File.separator + formFilename);
+        InputStream inputStream = assetManager.open(formAssetPath + formFilename);
 
         File outFile = new File(pathname);
         OutputStream outputStream = new FileOutputStream(outFile);
@@ -64,7 +68,7 @@ public class FormLoadingUtils {
             String mediaPathName = Collect.FORMS_PATH + formFilename.replace(".xml", "") + FileUtils.MEDIA_SUFFIX + "/";
 
             for (String mediaFilename: mediaFilenames) {
-                InputStream mediaInputStream = assetManager.open(formAssetPath + File.separator + mediaFilename);
+                InputStream mediaInputStream = assetManager.open(formAssetPath + mediaFilename);
                 File mediaOutFile = new File(mediaPathName + mediaFilename);
                 OutputStream mediaOutputStream = new FileOutputStream(mediaOutFile);
 
