@@ -117,7 +117,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     public IntentFilter[] mNfcFilters;
     public NdefReaderTask mReadNFC;
     public ArrayList<NfcTrigger> nfcTriggersList;   // nfcTriggers (geofence should have separate list)
-    public ArrayList<NfcTrigger> nfcTriggersMap;    // nfcTriggers (geofence should have separate list)
 
     private String mProgressMsg;
     public DownloadTasksTask mDownloadTasks;
@@ -127,7 +126,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
     boolean listenerRegistered = false;
     private static List<TaskEntry> mTasks = null;
-    private static List<TaskEntry> mMapTasks = null;
 
     private Intent mLocationServiceIntent = null;
     private LocationService mLocationService = null;
@@ -233,7 +231,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             listener = new MainTaskListener(this);
             IntentFilter filter = new IntentFilter();
             filter.addAction("startTask");
-            filter.addAction("startMapTask");
             registerReceiver(listener, filter);
 
             networkReceiver = new NetworkReceiver();
@@ -538,6 +535,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
     @Override
     protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
         handleNFCIntent(intent);
     }
 
@@ -568,29 +566,14 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     public void readComplete(String result) {
 
         boolean foundTask = false;
-        ArrayList<NfcTrigger> triggers = null;
-        //String tab = tabHost.getCurrentTabTag();      // smap TODO determine which tab is showing
-        String tab = "taskList";                        // smap TODO
 
-        boolean isMapTab = tab.equals("taskMap");
-        if (isMapTab) {
-            triggers = nfcTriggersMap;
-        } else {
-            triggers = nfcTriggersList;
-        }
-
-
-        if (triggers != null) {
-            for (NfcTrigger trigger : triggers) {
+        if (nfcTriggersList != null) {
+            for (NfcTrigger trigger : nfcTriggersList) {
                 if (trigger.uid.equals(result)) {
                     foundTask = true;
 
                     Intent i = new Intent();
-                    if (isMapTab) {
-                        i.setAction("startMapTask");
-                    } else {
-                        i.setAction("startTask");
-                    }
+                    i.setAction("startTask");
                     i.putExtra("position", trigger.position);
                     sendBroadcast(i);
 
@@ -613,6 +596,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
         if(requestCode == COMPLETE_FORM && intent != null) {
             String instanceId = intent.getStringExtra("instanceid");
             String formStatus = intent.getStringExtra("status");
@@ -888,27 +872,18 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     /*
      * Get the tasks shown on the map
      */
-    public List<TaskEntry> getMapTasks() {
-        return mMapTasks;
+    public List<TaskEntry> getTasks() {
+        return mTasks;
     }
 
     /*
      * Manage location triggers
      */
-    public void setLocationTriggers(List<TaskEntry> data, boolean map) {
+    public void setLocationTriggers(List<TaskEntry> data) {
 
-        // Need to maintain two lists of tasks as the position in the task list is different for maps than for the list view
-        ArrayList<NfcTrigger> triggers = null;
+        mTasks = data;
+        nfcTriggersList = new ArrayList<NfcTrigger>();
 
-        if (map) {
-            mMapTasks = data;
-            nfcTriggersMap = new ArrayList<NfcTrigger>();
-            triggers = nfcTriggersMap;
-        } else {
-            mTasks = data;
-            nfcTriggersList = new ArrayList<NfcTrigger>();
-            triggers = nfcTriggersList;
-        }
         /*
          * Set NFC triggers
          */
@@ -917,14 +892,11 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         for (TaskEntry t : data) {
             if (t.type.equals("task") && t.locationTrigger != null && t.locationTrigger.trim().length() > 0
                     && t.taskStatus.equals(Utilities.STATUS_T_ACCEPTED)) {
-                triggers.add(new NfcTrigger(t.id, t.locationTrigger, position));
+                nfcTriggersList.add(new NfcTrigger(t.id, t.locationTrigger, position));
             }
             position++;
         }
 
-        /*
-         * TODO set geofence triggers
-         */
     }
 
     /*
@@ -934,7 +906,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         taskManagerList.setData(data);
         taskManagerMap.setData(data);
         if(data != null) {
-            setLocationTriggers(data.tasks, false);      // NFC and geofence triggers
+            setLocationTriggers(data.tasks);      // NFC and geofence triggers
         }
     }
 
@@ -957,13 +929,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 if (position >= 0) {
                     TaskEntry entry = (TaskEntry) mTasks.get(position);
 
-                    mActivity.completeTask(entry);
-                }
-            } else if (intent.getAction().equals("startMapTask")) {
-
-                int position = intent.getIntExtra("position", -1);
-                if (position >= 0) {
-                    TaskEntry entry = (TaskEntry) mMapTasks.get(position);
                     mActivity.completeTask(entry);
                 }
             }

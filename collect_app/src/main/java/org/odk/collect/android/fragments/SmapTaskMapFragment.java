@@ -346,8 +346,8 @@ public class SmapTaskMapFragment extends Fragment
                     if(iPos != null) {
 
                         int position = iPos;
-                        List<TaskEntry> mapTasks = ((SmapMain) getActivity()).getMapTasks();
-                        TaskEntry entry = mapTasks.get(position);
+                        List<TaskEntry> tasks = ((SmapMain) getActivity()).getTasks();
+                        TaskEntry entry = tasks.get(position);
 
                         if(entry.locationTrigger != null) {
                             Toast.makeText(
