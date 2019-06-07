@@ -71,7 +71,7 @@ public class FileUtils {
     public static final String AUTO_SEND = "autoSend";
 
     /** Suffix for the form media directory. */
-    private static final String MEDIA_SUFFIX = "-media";
+    public static final String MEDIA_SUFFIX = "-media";
 
     /** Filename of the last-saved instance data. */
     public static final String LAST_SAVED_FILENAME = "last-saved.xml";

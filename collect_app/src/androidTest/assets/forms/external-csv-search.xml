@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>external-csv-search</h:title>
+    <model>
+      <instance>
+        <external-csv-search id="external-csv-search">
+          <multi_produce/>
+          <produce_search/>
+          <produce/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </external-csv-search>
+      </instance>
+      <bind nodeset="/external-csv-search/multi_produce" type="select"/>
+      <bind nodeset="/external-csv-search/produce_search" type="string"/>
+      <bind nodeset="/external-csv-search/produce" type="select1"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/external-csv-search/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <select appearance="search('external-csv-search-produce')" ref="/external-csv-search/multi_produce">
+      <label>Multiple produce</label>
+      <item>
+        <label>label</label>
+        <value>name</value>
+      </item>
+    </select>
+    <input ref="/external-csv-search/produce_search">
+      <label>Produce search</label>
+    </input>
+    <select1 appearance="search('external-csv-search-produce', 'contains', 'name',  /external-csv-search/produce_search )" ref="/external-csv-search/produce">
+      <label>Produce</label>
+      <item>
+        <label>label</label>
+        <value>name</value>
+      </item>
+    </select1>
+  </h:body>
+</h:html>
