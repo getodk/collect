@@ -97,7 +97,7 @@ public class PropertyManager implements IPropertyManager {
             TelephonyManager telMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             IdAndPrefix idp = findDeviceId(context, telMgr);
             putProperty(PROPMGR_DEVICE_ID,     idp.prefix,          idp.id);
-            putProperty(PROPMGR_PHONE_NUMBER,  SCHEME_TEL,          telMgr.getLine1Number());
+           // putProperty(PROPMGR_PHONE_NUMBER,  SCHEME_TEL,          telMgr.getLine1Number());         // smap do we need this, we don't seem to have asked for permission
             putProperty(PROPMGR_SUBSCRIBER_ID, SCHEME_IMSI,         telMgr.getSubscriberId());
             putProperty(PROPMGR_SIM_SERIAL,    SCHEME_SIMSERIAL,    telMgr.getSimSerialNumber());
         } catch (SecurityException e) {
