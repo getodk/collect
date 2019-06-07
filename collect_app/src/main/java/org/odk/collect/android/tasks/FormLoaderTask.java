@@ -45,6 +45,7 @@ import org.odk.collect.android.external.handler.ExternalDataHandlerPull;
 import org.odk.collect.android.external.handler.SmapRemoteDataHandlerGetMedia;
 import org.odk.collect.android.external.handler.SmapRemoteDataHandlerLookup;
 import org.odk.collect.android.external.handler.SmapRemoteDataHandlerLookupImagelabels;
+import org.odk.collect.android.external.handler.SmapRemoteDataHandlerSearch;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.FormController;
@@ -179,6 +180,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         SmapRemoteDataHandlerGetMedia remoteDataHandlerGetMedia = new SmapRemoteDataHandlerGetMedia();
         formDef.getEvaluationContext().addFunctionHandler(remoteDataHandlerGetMedia);
+
         // smap end
 
         try {
