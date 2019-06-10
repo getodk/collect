@@ -314,7 +314,6 @@
     <!-- Geo string added in feature-geofeatures branch-->
 
     <string name="maps">Maps</string>
-    <string name="map_preferences">Mapping</string>
     <string name="map_sdk_selector_title">Mapping SDK</string>
     <string name="map_sdk_behavior">Mapping SDK</string>
     <string name="google_maps_sdk">Google Maps SDK</string>
