@@ -39,21 +39,23 @@ public abstract class ItemsWidget extends QuestionWidget {
     public ItemsWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
         readItems();
-        handleItemsWithNullValues();
+        handleItems();
     }
 
     protected void readItems() {
         // SurveyCTO-added support for dynamic select content (from .csv files)
         XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(getFormEntryPrompt().getAppearanceHint());
-        if (xpathFuncExpr != null) {
-            items = ExternalDataUtil.populateExternalChoices(getFormEntryPrompt(), xpathFuncExpr);
-        } else {
-            items = getFormEntryPrompt().getSelectChoices();
-        }
+        items = xpathFuncExpr != null
+                ? ExternalDataUtil.populateExternalChoices(getFormEntryPrompt(), xpathFuncExpr)
+                : getFormEntryPrompt().getSelectChoices();
     }
 
     // Remove items with null values if exist and display a message about the fact
-    private void handleItemsWithNullValues() {
+    private void handleItems() {
+        if (items == null) {
+            return;
+        }
+
         boolean itemsWithNullValuesExisted = false;
         List<SelectChoice> itemsWithoutNullValues = new ArrayList<>(items);
         for (SelectChoice item : itemsWithoutNullValues) {
