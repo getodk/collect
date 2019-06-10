@@ -21,8 +21,11 @@ import android.content.Context;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
+import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.utilities.ToastUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,6 +39,7 @@ public abstract class ItemsWidget extends QuestionWidget {
     public ItemsWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
         readItems();
+        handleItemsWithNullValues();
     }
 
     protected void readItems() {
@@ -45,6 +49,21 @@ public abstract class ItemsWidget extends QuestionWidget {
             items = ExternalDataUtil.populateExternalChoices(getFormEntryPrompt(), xpathFuncExpr);
         } else {
             items = getFormEntryPrompt().getSelectChoices();
+        }
+    }
+
+    // Remove items with null values if exist and display a message about the fact
+    private void handleItemsWithNullValues() {
+        boolean itemsWithNullValuesExisted = false;
+        List<SelectChoice> itemsWithoutNullValues = new ArrayList<>(items);
+        for (SelectChoice item : itemsWithoutNullValues) {
+            if (item.getValue() == null) {
+                items.remove(item);
+                itemsWithNullValuesExisted = true;
+            }
+        }
+        if (itemsWithNullValuesExisted) {
+            ToastUtils.showLongToast(R.string.item_set_with_null_values);
         }
     }
 }

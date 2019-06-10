@@ -702,4 +702,5 @@
     <string name="qr_code_not_found">QR Code not found in the selected image</string>
     <string name="not_granted_permission">The activity you are trying to start requires a permission which is not granted.</string>
     <string name="mapbox_unsupported_warning">Mapbox is not supported on this device (%s).  Please choose another mapping SDK in General Settings &gt; User interface.</string>
+    <string name="item_set_with_null_values">Your item set contained elements with null values which were removed.</string>
 </resources>
