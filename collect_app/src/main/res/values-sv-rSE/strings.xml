@@ -297,7 +297,6 @@ Dela ODK Collect med dem.</string>
   <string name="leave_a_review">Lämna ett omdöme på Play Store</string>
   <string name="leave_a_review_msg">Din (förhoppningsvis positiva) recension ökar synligheten av Appen i Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Kartor</string>
   <string name="map_sdk_selector_title">SDK för kartor</string>
   <string name="map_sdk_behavior">SDK för kartor</string>
   <string name="google_maps_sdk">Google Maps SDK</string>

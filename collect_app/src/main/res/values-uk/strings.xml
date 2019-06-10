@@ -307,7 +307,6 @@
   <string name="leave_a_review">Залишити відгук в Play Store</string>
   <string name="leave_a_review_msg">Ваш (сподіваємось позитивний) відгук покращить помітність програми в Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Мапування</string>
   <string name="map_sdk_selector_title">SDK для мапування</string>
   <string name="map_sdk_behavior">SDK для мапування</string>
   <string name="google_maps_sdk">Google Карти SDK</string>

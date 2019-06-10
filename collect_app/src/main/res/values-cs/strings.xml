@@ -307,7 +307,6 @@
   <string name="leave_a_review">Nechte recenzi v Play Store</string>
   <string name="leave_a_review_msg">Vaše recenze (snad pozitivní) zvyšuje viditelnost aplikace v Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Mapování</string>
   <string name="map_sdk_selector_title">SDK Mapování</string>
   <string name="map_sdk_behavior">SDK Mapování</string>
   <string name="google_maps_sdk">SDK Google Maps</string>

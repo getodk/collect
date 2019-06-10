@@ -280,7 +280,6 @@
   <string name="google_play_services_error_occured">गूगल मानचित्र तक पहुंचने में असमर्थ क्या गूगल प्ले सर्विस इनस्टॉल है?</string>
   <string name="about_preferences">बारे में </string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">मानचित्रण</string>
   <string name="map_sdk_selector_title">मानचित्रण SDK</string>
   <string name="map_sdk_behavior">मानचित्रण SDK</string>
   <string name="google_maps_sdk">गूगल मैप SDK</string>

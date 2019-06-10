@@ -307,7 +307,6 @@
   <string name="leave_a_review">Laissez un avis sur Play Store</string>
   <string name="leave_a_review_msg">Votre avis (ce qu\'on espère est positif) augmente la visibilité de l\'application dans le Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Cartographie</string>
   <string name="map_sdk_selector_title">Moteur cartographique - SDK</string>
   <string name="map_sdk_behavior">Moteur cartographique - SDK</string>
   <string name="google_maps_sdk">Google Maps SDK</string>
