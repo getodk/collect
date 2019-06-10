@@ -145,7 +145,6 @@ public abstract class OpenRosaHeadRequestTest {
             subject.executeHeadRequest(new URI("http://localhost:8443"), null);
             fail();
         } catch (Exception e) {
-            assertThat(e, isA(Exception.class));
             assertThat(e.getMessage(), not(isEmptyString()));
         }
     }
