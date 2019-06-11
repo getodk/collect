@@ -24,14 +24,15 @@ import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.test.FormLoadingUtils;
 import org.odk.collect.android.utilities.ActivityAvailability;
 
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -89,16 +90,15 @@ public class AllWidgetsFormTest {
     public MockitoRule rule = MockitoJUnit.rule();
 
     @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    public RuleChain copyFormChain = RuleChain
+            .outerRule(GrantPermissionRule.grant(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            )
+            .around(new CopyFormRule(ALL_WIDGETS_FORM));
 
     @Mock
     private ActivityAvailability activityAvailability;
-
-    //region Test prep.
-    @BeforeClass
-    public static void copyFormToSdCard() throws IOException {
-        FormLoadingUtils.copyFormToSdCard(ALL_WIDGETS_FORM);
-    }
 
     @BeforeClass
     public static void beforeAll() {
@@ -860,7 +860,6 @@ public class AllWidgetsFormTest {
     }
 
     public void testImageSelectOne() {
-
         Screengrab.screenshot("image-select1");
 
         onView(withText("Image select one widget")).perform(swipeLeft());
