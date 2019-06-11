@@ -45,11 +45,6 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
         InstanceGoogleSheetsUploader uploader = new InstanceGoogleSheetsUploader(accountsManager);
         final Outcome outcome = new Outcome();
 
-        // TODO: check this behavior against master -- is there an error message shown?
-        if (!uploader.submissionsFolderExistsAndIsUnique()) {
-            return outcome;
-        }
-
         List<Instance> instancesToUpload = uploader.getInstancesFromIds(instanceIdsToUpload);
 
         for (int i = 0; i < instancesToUpload.size(); i++) {
