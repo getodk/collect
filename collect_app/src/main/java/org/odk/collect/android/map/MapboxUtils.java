@@ -28,7 +28,7 @@ public class MapboxUtils {
         // an access token. Configure this token in collect_app/secrets.properties.
         try {
             mapbox = Mapbox.getInstance(Collect.getInstance(), BuildConfig.MAPBOX_ACCESS_TOKEN);
-        } catch (ExceptionInInitializerError | UnsatisfiedLinkError e) {
+        } catch (Exception e) {
             // Initialization failed (usually because the Mapbox native library for
             // the current architecture could not be found or loaded).
             mapbox = null;
