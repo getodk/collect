@@ -49,6 +49,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.core.AllOf.allOf;
+import static org.odk.collect.android.support.CollectHelpers.waitForFormController;
 import static org.odk.collect.android.test.FormLoadingUtils.ALL_WIDGETS_FORM;
 
 /**
@@ -166,12 +167,12 @@ public class FormNavigationButtonTest {
     }
 
     @Test
-    public void noButtons_ShouldShowOnLastScreen_IfNavigatingBackwardsIsDisabled() {
+    public void noButtons_ShouldShowOnLastScreen_IfNavigatingBackwardsIsDisabled() throws Exception {
         GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_NAVIGATION, GeneralKeys.NAVIGATION_BUTTONS);
         AdminSharedPreferences.getInstance().save(AdminKeys.KEY_MOVING_BACKWARDS, false);
 
         // the jump button doesn't exist so set the form controller to the end and recreate activity
-        Collect.getInstance().getFormController().jumpToIndex(FormIndex.createEndOfFormIndex());
+        waitForFormController().jumpToIndex(FormIndex.createEndOfFormIndex());
         activityTestRule.getActivity().runOnUiThread(() -> activityTestRule.getActivity().recreate());
 
         onView(withId(R.id.form_forward_button)).check(matches(not(isDisplayed())));
