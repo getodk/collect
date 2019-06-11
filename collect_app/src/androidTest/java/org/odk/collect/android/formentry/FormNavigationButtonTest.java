@@ -18,25 +18,23 @@ package org.odk.collect.android.formentry;
 
 import android.Manifest;
 
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.rule.GrantPermissionRule;
+
 import org.javarosa.core.model.FormIndex;
 import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.test.FormLoadingUtils;
-
-import java.io.IOException;
-
-import androidx.test.rule.ActivityTestRule;
-import androidx.test.rule.GrantPermissionRule;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -69,12 +67,12 @@ public class FormNavigationButtonTest {
     public ActivityTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(ALL_WIDGETS_FORM);
 
     @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-    @BeforeClass
-    public static void copyFormToSdCard() throws IOException {
-        FormLoadingUtils.copyFormToSdCard(ALL_WIDGETS_FORM);
-    }
+    public RuleChain copyFormChain = RuleChain
+            .outerRule(GrantPermissionRule.grant(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            )
+            .around(new CopyFormRule(ALL_WIDGETS_FORM));
 
     @Before
     public void resetAllPreferences() {
