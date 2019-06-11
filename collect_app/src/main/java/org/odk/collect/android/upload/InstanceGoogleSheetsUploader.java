@@ -242,7 +242,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         String folderId;
         try {
-            folderId = driveHelper.createOrGetIDOfFolderWithName(instance.getJrFormId());
+            folderId = driveHelper.createOrGetIDOfSubmissionsFolder();
         } catch (IOException | MultipleFoldersFoundException e) {
             Timber.e(e);
             throw new UploadException(e);
