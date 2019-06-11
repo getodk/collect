@@ -18,25 +18,23 @@ package org.odk.collect.android.formentry;
 
 import android.Manifest;
 
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.rule.GrantPermissionRule;
+
 import org.javarosa.core.model.FormIndex;
 import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.test.FormLoadingUtils;
-
-import java.io.IOException;
-
-import androidx.test.rule.ActivityTestRule;
-import androidx.test.rule.GrantPermissionRule;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -49,6 +47,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.core.AllOf.allOf;
+import static org.odk.collect.android.support.CollectHelpers.waitForFormController;
 import static org.odk.collect.android.test.FormLoadingUtils.ALL_WIDGETS_FORM;
 
 /**
@@ -68,12 +67,12 @@ public class FormNavigationButtonTest {
     public ActivityTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(ALL_WIDGETS_FORM);
 
     @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-    @BeforeClass
-    public static void copyFormToSdCard() throws IOException {
-        FormLoadingUtils.copyFormToSdCard(ALL_WIDGETS_FORM);
-    }
+    public RuleChain copyFormChain = RuleChain
+            .outerRule(GrantPermissionRule.grant(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            )
+            .around(new CopyFormRule(ALL_WIDGETS_FORM));
 
     @Before
     public void resetAllPreferences() {
@@ -166,12 +165,12 @@ public class FormNavigationButtonTest {
     }
 
     @Test
-    public void noButtons_ShouldShowOnLastScreen_IfNavigatingBackwardsIsDisabled() {
+    public void noButtons_ShouldShowOnLastScreen_IfNavigatingBackwardsIsDisabled() throws Exception {
         GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_NAVIGATION, GeneralKeys.NAVIGATION_BUTTONS);
         AdminSharedPreferences.getInstance().save(AdminKeys.KEY_MOVING_BACKWARDS, false);
 
         // the jump button doesn't exist so set the form controller to the end and recreate activity
-        Collect.getInstance().getFormController().jumpToIndex(FormIndex.createEndOfFormIndex());
+        waitForFormController().jumpToIndex(FormIndex.createEndOfFormIndex());
         activityTestRule.getActivity().runOnUiThread(() -> activityTestRule.getActivity().recreate());
 
         onView(withId(R.id.form_forward_button)).check(matches(not(isDisplayed())));
