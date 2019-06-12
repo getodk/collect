@@ -259,7 +259,6 @@
 </string>
   <string name="about_preferences">เกี่ยวกับ</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">ทำแผนที่</string>
   <string name="map_sdk_selector_title">Mapping SDK</string>
   <string name="map_sdk_behavior">Mapping SDK</string>
   <string name="google_maps_sdk">Google Maps SDK</string>

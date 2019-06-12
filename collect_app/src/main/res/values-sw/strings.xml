@@ -301,7 +301,6 @@
   <string name="leave_a_review">Acha tathmini katika Play Store</string>
   <string name="leave_a_review_msg">Tathmini yako (tunatumaini itakuwa chanya) inaongeza nafasi ya programu hii kuonekana Pay Store</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Kuchora ramani</string>
   <string name="map_sdk_selector_title">Ramani SDK</string>
   <string name="map_sdk_behavior">Ramani SDK</string>
   <string name="google_maps_sdk">Ramani za Google SDK</string>

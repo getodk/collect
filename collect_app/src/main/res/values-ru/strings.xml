@@ -301,7 +301,6 @@
   <string name="leave_a_review">Оставить отзыв в Play Store</string>
   <string name="leave_a_review_msg">Ваш отзыв (надеемся, положительный) делает приложение более заметным в Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">КАРТЫ</string>
   <string name="map_sdk_selector_title">Источник карт</string>
   <string name="map_sdk_behavior">Источник карт</string>
   <string name="google_maps_sdk">Google</string>

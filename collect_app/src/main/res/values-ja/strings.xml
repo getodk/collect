@@ -307,7 +307,6 @@
   <string name="leave_a_review">Play ストアにレビューを残す</string>
   <string name="leave_a_review_msg">あなたの (肯定的な) レビューが Play ストアでアプリの認知度を向上させてくれます</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">マッピング</string>
   <string name="map_sdk_selector_title">マッピング SDK</string>
   <string name="map_sdk_behavior">マッピング SDK</string>
   <string name="google_maps_sdk">Google マップ SDK</string>

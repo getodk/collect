@@ -307,7 +307,6 @@
   <string name="leave_a_review">Kirjoita Play Store -arvio</string>
   <string name="leave_a_review_msg">Sinun (toivottavasti myönteinen) arviosi lisää sovelluksen näkyvyyttä Play Store -kaupassa.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Kartoitus</string>
   <string name="map_sdk_selector_title">Mapping SDK</string>
   <string name="map_sdk_behavior">Mapping SDK</string>
   <string name="google_maps_sdk">Google Maps SDK</string>

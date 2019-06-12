@@ -150,7 +150,10 @@ public final class AdminKeys {
             KEY_APP_LANGUAGE,
             KEY_CHANGE_FONT_SIZE,
             KEY_NAVIGATION,
-            KEY_SHOW_SPLASH_SCREEN,
+            KEY_SHOW_SPLASH_SCREEN
+    );
+
+    static Collection<String> mapsKeys = Arrays.asList(
             KEY_SHOW_MAP_BASEMAP,
             KEY_SHOW_MAP_SDK
     );

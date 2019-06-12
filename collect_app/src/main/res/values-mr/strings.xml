@@ -275,7 +275,6 @@
   <string name="google_play_services_error_occured">गूगल नकाशे मध्ये प्रवेश करण्यात अक्षम. गूगल प्ले सेवा स्थापित केली आहे का?</string>
   <string name="about_preferences">विषयी</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">मॅपिंग</string>
   <string name="map_sdk_selector_title">मॅपिंग एसडीके</string>
   <string name="map_sdk_behavior">मॅपिंग एसडीके</string>
   <string name="google_maps_sdk">गूगल नकाशे एसडीके</string>

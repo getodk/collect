@@ -295,7 +295,6 @@
   <string name="leave_a_review">ទុកមតិនៅក្នុងហាង Play</string>
   <string name="leave_a_review_msg">ការ​ផ្តល់​មតិ​ (សង្ឃឹមថាជាវិជ្ជមាន) របស់​អ្នក​បង្កើន​ភាព​មើល​ឃើញ​នៃ​កម្មវិធី​នៅ​ក្នុង Play Store ។</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">ដៅផែនទី</string>
   <string name="map_sdk_selector_title">ផែនទី SDK</string>
   <string name="map_sdk_behavior">ផែនទី SDK</string>
   <string name="google_maps_sdk">ផែនទី Google SDK</string>
