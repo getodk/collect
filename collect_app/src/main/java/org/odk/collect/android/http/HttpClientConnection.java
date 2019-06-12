@@ -16,10 +16,10 @@
 
 package org.odk.collect.android.http;
 
+import android.text.format.DateFormat;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.text.format.DateFormat;
-import android.webkit.MimeTypeMap;
 
 import org.apache.commons.io.IOUtils;
 import org.odk.collect.android.BuildConfig;
@@ -97,54 +97,18 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
     private static final int CONNECTION_TIMEOUT = 30000;
     private static final int UPLOAD_CONNECTION_TIMEOUT = 60000; // it can take up to 27 seconds to spin up an Aggregate
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
+    private final FileToContentTypeMapper fileToContentTypeMapper;
 
     // Retain authentication and cookies between requests. Gets mutated on each call to
     // HttpClient.execute).
-    private HttpContext httpContext;
+    private final HttpContext httpContext;
 
-    public HttpClientConnection() {
+    public HttpClientConnection(FileToContentTypeMapper fileToContentTypeMapper) {
+        this.fileToContentTypeMapper = fileToContentTypeMapper;
         httpContext = new BasicHttpContext();
 
         httpContext.setAttribute(HttpClientContext.COOKIE_STORE, new BasicCookieStore());
         httpContext.setAttribute(HttpClientContext.CREDS_PROVIDER, new AgingCredentialsProvider(7 * 60 * 1000));
-    }
-
-    private enum ContentTypeMapping {
-        XML("xml",  ContentType.TEXT_XML),
-        _3GPP("3gpp", ContentType.create("audio/3gpp")),
-        _3GP("3gp",  ContentType.create("video/3gpp")),
-        AVI("avi",  ContentType.create("video/avi")),
-        AMR("amr",  ContentType.create("audio/amr")),
-        CSV("csv",  ContentType.create("text/csv")),
-        JPG("jpg",  ContentType.create("image/jpeg")),
-        MP3("mp3",  ContentType.create("audio/mp3")),
-        MP4("mp4",  ContentType.create("video/mp4")),
-        OGA("oga",  ContentType.create("audio/ogg")),
-        OGG("ogg",  ContentType.create("audio/ogg")),
-        OGV("ogv",  ContentType.create("video/ogg")),
-        WAV("wav",  ContentType.create("audio/wav")),
-        WEBM("webm", ContentType.create("video/webm")),
-        XLS("xls",  ContentType.create("application/vnd.ms-excel"));
-
-        private String extension;
-        private ContentType contentType;
-
-        ContentTypeMapping(String extension, ContentType contentType) {
-            this.extension = extension;
-            this.contentType = contentType;
-        }
-
-        public static ContentType of(String fileName) {
-            String extension = FileUtils.getFileExtension(fileName);
-
-            for (ContentTypeMapping m : values()) {
-                if (m.extension.equals(extension)) {
-                    return m.contentType;
-                }
-            }
-
-            return null;
-        }
     }
 
     @Override
@@ -185,6 +149,8 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
 
         HttpEntity entity = response.getEntity();
 
+        // This will never happen as a 204/304 response will both cause an earlier guard
+        // check on the status code (`statusCode != HttpStatus.SC_OK`) to fire
         if (entity == null) {
             throw new Exception("No entity body returned from: " + uri.toString());
         }
@@ -213,6 +179,9 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
             hash = FileUtils.getMd5Hash(new ByteArrayInputStream(bytes));
         }
 
+        // It looks like this this condition will never be met as Apache Http Client
+        // appears to deal with decompression for us and then removed the Content-Encoding
+        // header from the response
         Header contentEncoding = entity.getContentEncoding();
         if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(GZIP_CONTENT_ENCODING)) {
             downloadStream = new GZIPInputStream(downloadStream);
@@ -316,9 +285,6 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
         while (fileIndex < fileList.size() || first) {
             lastFileIndex = fileIndex;
             first = false;
-
-            MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-
             long byteCount = 0L;
 
             // mime post
@@ -333,18 +299,7 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
             for (; fileIndex < fileList.size(); fileIndex++) {
                 File file = fileList.get(fileIndex);
 
-                // we will be processing every one of these, so
-                // we only need to deal with the content type determination...
-                ContentType contentType = ContentTypeMapping.of(file.getName());
-                if (contentType == null) {
-                    String mime = mimeTypeMap.getMimeTypeFromExtension(FileUtils.getFileExtension(file.getName()));
-                    if (mime != null) {
-                        contentType = ContentType.create(mime);
-                    } else {
-                        Timber.w("No specific MIME type found for file: %s", file.getName());
-                        contentType = ContentType.APPLICATION_OCTET_STREAM;
-                    }
-                }
+                ContentType contentType = ContentType.create(fileToContentTypeMapper.map(file.getName()));
                 fb = new FileBody(file, contentType);
                 builder.addPart(file.getName(), fb);
                 byteCount += file.length();
@@ -412,17 +367,6 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
         }
 
         return postResult;
-    }
-
-    /**
-     * HttpPostResult - This is just stubbed out for now, implemented when we move to OkHttpConnection
-     * @param uri of which to post
-     * @param credentials to use on this post request
-     * @return null
-     * @throws Exception not used
-     */
-    public HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        return new HttpPostResult("", 0, "");
     }
 
     private void addCredentialsForHost(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) {
