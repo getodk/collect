@@ -39,10 +39,11 @@ import java.util.List;
 import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
 
 public class FormLoadingUtils {
+
     public static final String ALL_WIDGETS_FORM = "all-widgets.xml";
 
     private FormLoadingUtils() {
-        
+
     }
 
     /**
@@ -50,30 +51,16 @@ public class FormLoadingUtils {
      * folder to the SD Card where it will be loaded by {@link FormLoaderTask}.
      */
     public static void copyFormToSdCard(String formFilename, String formAssetPath, List<String> mediaFilenames) throws IOException {
+        Collect.createODKDirs();
+
         if (!formAssetPath.isEmpty() && !formAssetPath.endsWith(File.separator)) {
             formAssetPath = formAssetPath + File.separator;
         }
 
-        String pathname = Collect.FORMS_PATH + formFilename;
-
-        AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
-        InputStream inputStream = assetManager.open(formAssetPath + formFilename);
-
-        File outFile = new File(pathname);
-        OutputStream outputStream = new FileOutputStream(outFile);
-
-        IOUtils.copy(inputStream, outputStream);
+        copyForm(formFilename, formAssetPath);
 
         if (mediaFilenames != null) {
-            String mediaPathName = Collect.FORMS_PATH + formFilename.replace(".xml", "") + FileUtils.MEDIA_SUFFIX + "/";
-
-            for (String mediaFilename: mediaFilenames) {
-                InputStream mediaInputStream = assetManager.open(formAssetPath + mediaFilename);
-                File mediaOutFile = new File(mediaPathName + mediaFilename);
-                OutputStream mediaOutputStream = new FileOutputStream(mediaOutFile);
-
-                IOUtils.copy(mediaInputStream, mediaOutputStream);
-            }
+            copyFormMediaFiles(formFilename, formAssetPath, mediaFilenames);
         }
     }
 
@@ -109,5 +96,32 @@ public class FormLoadingUtils {
                 super.afterActivityLaunched();
             }
         };
+    }
+
+    private static void copyForm(String formFilename, String formAssetPath) throws IOException {
+        String pathname = Collect.FORMS_PATH + formFilename;
+
+        AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
+        InputStream inputStream = assetManager.open(formAssetPath + formFilename);
+
+        File outFile = new File(pathname);
+        OutputStream outputStream = new FileOutputStream(outFile);
+
+        IOUtils.copy(inputStream, outputStream);
+    }
+
+    private static void copyFormMediaFiles(String formFilename, String formAssetPath, List<String> mediaFilenames) throws IOException {
+        String mediaPathName = Collect.FORMS_PATH + formFilename.replace(".xml", "") + FileUtils.MEDIA_SUFFIX + "/";
+        FileUtils.checkMediaPath(new File(mediaPathName));
+
+        AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
+
+        for (String mediaFilename : mediaFilenames) {
+            InputStream mediaInputStream = assetManager.open(formAssetPath + mediaFilename);
+            File mediaOutFile = new File(mediaPathName + mediaFilename);
+            OutputStream mediaOutputStream = new FileOutputStream(mediaOutFile);
+
+            IOUtils.copy(mediaInputStream, mediaOutputStream);
+        }
     }
 }
