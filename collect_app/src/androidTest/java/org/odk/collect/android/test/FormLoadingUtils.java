@@ -27,6 +27,7 @@ import org.apache.commons.io.IOUtils;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
@@ -42,7 +43,7 @@ public class FormLoadingUtils {
     public static final String ALL_WIDGETS_FORM = "all-widgets.xml";
 
     private FormLoadingUtils() {
-        
+
     }
 
     /**
@@ -56,6 +57,14 @@ public class FormLoadingUtils {
             formAssetPath = formAssetPath + File.separator;
         }
 
+        copyForm(formFilename, formAssetPath);
+
+        if (mediaFilenames != null) {
+            copyFormMediaFiles(formFilename, formAssetPath, mediaFilenames);
+        }
+    }
+
+    private static void copyForm(String formFilename, String formAssetPath) throws IOException {
         String pathname = Collect.FORMS_PATH + formFilename;
 
         AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
@@ -65,17 +74,20 @@ public class FormLoadingUtils {
         OutputStream outputStream = new FileOutputStream(outFile);
 
         IOUtils.copy(inputStream, outputStream);
+    }
 
-        if (mediaFilenames != null) {
-            String mediaPathName = Collect.FORMS_PATH + formFilename.replace(".xml", "") + FileUtils.MEDIA_SUFFIX + "/";
+    private static void copyFormMediaFiles(String formFilename, String formAssetPath, List<String> mediaFilenames) throws IOException {
+        String mediaPathName = Collect.FORMS_PATH + formFilename.replace(".xml", "") + FileUtils.MEDIA_SUFFIX + "/";
+        FileUtils.checkMediaPath(new File(mediaPathName));
 
-            for (String mediaFilename: mediaFilenames) {
-                InputStream mediaInputStream = assetManager.open(formAssetPath + mediaFilename);
-                File mediaOutFile = new File(mediaPathName + mediaFilename);
-                OutputStream mediaOutputStream = new FileOutputStream(mediaOutFile);
+        AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
 
-                IOUtils.copy(mediaInputStream, mediaOutputStream);
-            }
+        for (String mediaFilename : mediaFilenames) {
+            InputStream mediaInputStream = assetManager.open(formAssetPath + mediaFilename);
+            File mediaOutFile = new File(mediaPathName + mediaFilename);
+            OutputStream mediaOutputStream = new FileOutputStream(mediaOutFile);
+
+            IOUtils.copy(mediaInputStream, mediaOutputStream);
         }
     }
 
