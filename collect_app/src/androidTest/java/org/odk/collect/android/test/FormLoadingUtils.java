@@ -50,6 +50,8 @@ public class FormLoadingUtils {
      * folder to the SD Card where it will be loaded by {@link FormLoaderTask}.
      */
     public static void copyFormToSdCard(String formFilename, String formAssetPath, List<String> mediaFilenames) throws IOException {
+        Collect.createODKDirs();
+
         if (!formAssetPath.isEmpty() && !formAssetPath.endsWith(File.separator)) {
             formAssetPath = formAssetPath + File.separator;
         }
