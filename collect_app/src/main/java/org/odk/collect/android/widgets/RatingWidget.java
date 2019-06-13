@@ -63,7 +63,10 @@ public class RatingWidget extends QuestionWidget {
         gridLayout.setColumnCount(columns);
         gridLayout.setRowCount(rows);
 
-        for (int column = 0, starId = 0; starId < numberOfStars; column++, starId++) {
+        for (int column = 0,
+             starId = 0;
+             starId < numberOfStars;
+             column++, starId++) {
             column = column == columns ? 0 : column;
 
             ImageButton imageButton = createImageButton(context, numberOfStars, starId);
