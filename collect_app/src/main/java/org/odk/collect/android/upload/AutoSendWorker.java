@@ -34,7 +34,6 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dto.Form;
 import org.odk.collect.android.dto.Instance;
-import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.http.CollectThenSystemContentTypeMapper;
 import org.odk.collect.android.http.HttpClientConnection;
 import org.odk.collect.android.logic.PropertyManager;
@@ -47,7 +46,6 @@ import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -123,14 +121,6 @@ public class AutoSendWorker extends Worker {
                 }
                 accountsManager.selectAccount(googleUsername);
                 uploader = new InstanceGoogleSheetsUploader(accountsManager);
-
-                try {
-                    accountsManager.getDriveHelper().createOrGetIDOfSubmissionsFolder();
-                } catch (IOException | MultipleFoldersFoundException e) {
-                    Timber.d(e, "Exception getting or creating root folder for submissions");
-                    showUploadStatusNotification(true, "Exception getting or creating root folder for submissions");
-                    return Result.FAILURE;
-                }
             } else {
                 showUploadStatusNotification(true, Collect.getInstance().getString(R.string.odk_permissions_fail));
                 return Result.FAILURE;
