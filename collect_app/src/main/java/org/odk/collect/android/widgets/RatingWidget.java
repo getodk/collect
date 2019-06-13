@@ -20,6 +20,7 @@ import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
+
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
@@ -28,59 +29,66 @@ import org.odk.collect.android.R;
 
 public class RatingWidget extends QuestionWidget {
 
+    public static final int ASSUMED_TOTAL_MARGIN_AROUND_WIDGET = 40;
+
     private final GridLayout gridLayout;
     private Integer answer;
 
     public RatingWidget(Context context, FormEntryPrompt prompt) {
-
         super(context, prompt);
 
-        Drawable d = getResources().getDrawable(R.drawable.ic_star);
-        int widthOfStar = d.getIntrinsicWidth();
-        DisplayMetrics dm = new DisplayMetrics();
-        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
-        int maxStarsPerRow = (dm.widthPixels - 20) / widthOfStar;
+        RangeQuestion rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
+        int numberOfStars = rangeQuestion.getRangeEnd().intValue();
+        int columns = calculateColumns();
+        int rows = (int) Math.ceil((double) numberOfStars / columns);
 
         gridLayout = new GridLayout(context);
         gridLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        RangeQuestion rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
-        gridLayout.setColumnCount(maxStarsPerRow);
-        int numberOfStarsToShow = rangeQuestion.getRangeEnd().intValue();
-        int rows = (int) Math.ceil((double) numberOfStarsToShow / maxStarsPerRow);
-        gridLayout.setRowCount(rows);
 
-        for (int column = 0,
-            total = 0; total < numberOfStarsToShow; total++, column++) {
+        renderGrid(context, numberOfStars, columns, rows);
 
-            column = column == maxStarsPerRow ? 0 : column;
-            ImageButton imageButton = new ImageButton(context);
-            imageButton.setImageResource(R.drawable.ic_star_border);
-            imageButton.setId(total);
-            imageButton.setPadding(0, 0, 0, 0);
-            imageButton.setBackground(null);
-            imageButton.setEnabled(!getFormEntryPrompt().isReadOnly());
-            imageButton.setOnClickListener(view -> {
-                int position = view.getId();
-                for (int i = 0; i < numberOfStarsToShow; i++) {
-                    ImageButton button = (ImageButton) gridLayout.getChildAt(i);
-                    button.setImageResource(i <= position ? R.drawable.ic_star : R.drawable.ic_star_border);
-                }
-                answer = position + 1;
-
-                widgetValueChanged();
-            });
-            gridLayout.addView(imageButton);
+        String answerText = prompt.getAnswerText();
+        if (answerText != null) {
+            answer = Integer.parseInt(answerText);
+            for (int i = 0; i < answer; i++) {
+                ImageButton button = (ImageButton) gridLayout.getChildAt(i);
+                button.setImageResource(R.drawable.ic_star);
+            }
         }
 
-        String s = prompt.getAnswerText();
-            if (s != null) {
-                answer = Integer.parseInt(s);
-                for (int i = 0; i < answer; i++) {
-                    ImageButton button = (ImageButton) gridLayout.getChildAt(i);
-                    button.setImageResource(R.drawable.ic_star);
-                }
-            }
         addAnswerView(gridLayout);
+    }
+
+    private void renderGrid(Context context, int numberOfStars, int columns, int rows) {
+        gridLayout.setColumnCount(columns);
+        gridLayout.setRowCount(rows);
+
+        for (int column = 0, starId = 0; starId < numberOfStars; column++, starId++) {
+            column = column == columns ? 0 : column;
+
+            ImageButton imageButton = createImageButton(context, numberOfStars, starId);
+            gridLayout.addView(imageButton);
+        }
+    }
+
+    private ImageButton createImageButton(Context context, int numberOfStars, int total) {
+        ImageButton imageButton = new ImageButton(context);
+        imageButton.setImageResource(R.drawable.ic_star_border);
+        imageButton.setId(total);
+        imageButton.setPadding(0, 0, 0, 0);
+        imageButton.setBackground(null);
+        imageButton.setEnabled(!getFormEntryPrompt().isReadOnly());
+        imageButton.setOnClickListener(view -> {
+            int position = view.getId();
+            for (int i = 0; i < numberOfStars; i++) {
+                ImageButton button = (ImageButton) gridLayout.getChildAt(i);
+                button.setImageResource(i <= position ? R.drawable.ic_star : R.drawable.ic_star_border);
+            }
+            answer = position + 1;
+
+            widgetValueChanged();
+        });
+        return imageButton;
     }
 
     @Override
@@ -105,5 +113,18 @@ public class RatingWidget extends QuestionWidget {
 
         answer = null;
         widgetValueChanged();
+    }
+
+    private int calculateColumns() {
+        Drawable starDrawable = getResources().getDrawable(R.drawable.ic_star);
+        DisplayMetrics dm = getScreenDimensions((Activity) getContext());
+        int widthOfStar = starDrawable.getIntrinsicWidth();
+        return (dm.widthPixels - ASSUMED_TOTAL_MARGIN_AROUND_WIDGET) / widthOfStar;
+    }
+
+    private DisplayMetrics getScreenDimensions(Activity activity) {
+        DisplayMetrics dm = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        return dm;
     }
 }
