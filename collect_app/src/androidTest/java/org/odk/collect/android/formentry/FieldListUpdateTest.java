@@ -346,7 +346,7 @@ public class FieldListUpdateTest {
         onView(withText("Target12")).check(doesNotExist());
 
         onView(withText(R.string.select_date)).perform(click());
-        onView(withText(R.string.ok)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click());
 
         onView(withText("Target12")).check(matches(isDisplayed()));
     }
