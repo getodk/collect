@@ -71,11 +71,7 @@ public class MapsPreferences extends BasePreferenceFragment {
         final ListPreference mapSdk = (ListPreference) findPreference(KEY_MAP_SDK);
         final ListPreference mapBasemap = (ListPreference) findPreference(KEY_MAP_BASEMAP);
 
-        if (mapSdk == null || mapBasemap == null
-                || mapSdk.getEntryValues() == null || mapSdk.getEntries() == null
-                || mapSdk.getEntryValues().length == 0 || mapSdk.getEntries().length == 0
-                || mapBasemap.getEntryValues() == null || mapBasemap.getEntries() == null
-                || mapBasemap.getEntryValues().length == 0 || mapBasemap.getEntries().length == 0) {
+        if (failedLoadingMapPrefs(mapSdk, mapBasemap)) {
             return;
         }
 
@@ -143,5 +139,13 @@ public class MapsPreferences extends BasePreferenceFragment {
             preference.setSummary(((ListPreference) preference).getEntries()[index]);
             return true;
         });
+    }
+
+    private boolean failedLoadingMapPrefs(ListPreference mapSdk, ListPreference mapBasemap) {
+        return mapSdk == null || mapBasemap == null
+                || mapSdk.getEntryValues() == null || mapSdk.getEntries() == null
+                || mapSdk.getEntryValues().length == 0 || mapSdk.getEntries().length == 0
+                || mapBasemap.getEntryValues() == null || mapBasemap.getEntries() == null
+                || mapBasemap.getEntryValues().length == 0 || mapBasemap.getEntries().length == 0;
     }
 }
