@@ -4,8 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.http.CollectThenSystemContentTypeMapper;
-import org.odk.collect.android.http.HttpClientConnection;
+import org.odk.collect.android.http.OkHttpConnection;
 import org.odk.collect.android.test.MockedServerTest;
+
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.RecordedRequest;
 
@@ -22,7 +23,7 @@ public class CollectServerClientTest extends MockedServerTest {
     public void setUp() throws Exception {
         // server hangs without a response queued:
         server.enqueue(new MockResponse());
-        collectServerClient = new CollectServerClient(new HttpClientConnection(new CollectThenSystemContentTypeMapper()), new WebCredentialsUtils());
+        collectServerClient = new CollectServerClient(new OkHttpConnection(null, new CollectThenSystemContentTypeMapper()), new WebCredentialsUtils());
     }
 
         @Test
