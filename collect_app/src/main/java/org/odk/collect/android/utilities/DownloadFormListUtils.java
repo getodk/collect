@@ -42,7 +42,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import okhttp3.HttpUrl;
 import timber.log.Timber;
 
 public class DownloadFormListUtils {
@@ -77,14 +76,14 @@ public class DownloadFormListUtils {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
                 Collect.getInstance().getBaseContext());
 
-        // Remove trailing '/'
-        while (url != null && url.endsWith("/")) {
-            url = url.substring(0, url.length() - 1);
-        }
-
         String downloadListUrl = url != null ? url :
                 settings.getString(GeneralKeys.KEY_SERVER_URL,
                         Collect.getInstance().getString(R.string.default_server_url));
+
+        if (downloadListUrl.endsWith("/")) {
+            downloadListUrl = downloadListUrl.substring(0, downloadListUrl.length() - 1);
+        }
+
         // NOTE: /formlist must not be translated! It is the well-known path on the server.
         String formListUrl = Collect.getInstance().getApplicationContext().getString(
                 R.string.default_odk_formlist);
@@ -93,11 +92,7 @@ public class DownloadFormListUtils {
         String downloadPath = (url != null) ?
                 formListUrl : settings.getString(GeneralKeys.KEY_FORMLIST_URL, formListUrl);
 
-        downloadListUrl = HttpUrl.get(downloadListUrl)
-                .newBuilder()
-                .addPathSegments(downloadPath)
-                .build()
-                .toString();
+        downloadListUrl += downloadPath;
 
         // We populate this with available forms from the specified server.
         // <formname, details>

@@ -12,7 +12,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.http.CollectThenSystemContentTypeMapper;
-import org.odk.collect.android.http.HttpClientConnection;
+import org.odk.collect.android.http.OkHttpConnection;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
@@ -64,7 +64,7 @@ public class AppDependencyModule {
 
     @Provides
     OpenRosaHttpInterface provideHttpInterface() {
-        return new HttpClientConnection(new CollectThenSystemContentTypeMapper());
+        return new OkHttpConnection(null, new CollectThenSystemContentTypeMapper());
     }
 
     @Provides
