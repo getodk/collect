@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+
 import androidx.annotation.Nullable;
 
 import org.javarosa.xform.parse.XFormParser;
@@ -41,6 +42,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import okhttp3.HttpUrl;
 import timber.log.Timber;
 
 public class DownloadFormListUtils {
@@ -59,7 +61,8 @@ public class DownloadFormListUtils {
         return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST);
     }
 
-    @Inject CollectServerClient collectServerClient;
+    @Inject
+    CollectServerClient collectServerClient;
 
     public DownloadFormListUtils() {
         Collect.getInstance().getComponent().inject(this);
@@ -72,7 +75,7 @@ public class DownloadFormListUtils {
     public HashMap<String, FormDetails> downloadFormList(@Nullable String url, @Nullable String username,
                                                          @Nullable String password, boolean alwaysCheckMediaFiles) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
-                        Collect.getInstance().getBaseContext());
+                Collect.getInstance().getBaseContext());
 
         // Remove trailing '/'
         while (url != null && url.endsWith("/")) {
@@ -87,8 +90,14 @@ public class DownloadFormListUtils {
                 R.string.default_odk_formlist);
 
         // When a url is supplied, we will use the default formList url
-        String downloadPath = (url != null) ? formListUrl : settings.getString(GeneralKeys.KEY_FORMLIST_URL, formListUrl);
-        downloadListUrl += downloadPath;
+        String downloadPath = (url != null) ?
+                formListUrl : settings.getString(GeneralKeys.KEY_FORMLIST_URL, formListUrl);
+
+        downloadListUrl = HttpUrl.get(downloadListUrl)
+                .newBuilder()
+                .addPathSegments(downloadPath)
+                .build()
+                .toString();
 
         // We populate this with available forms from the specified server.
         // <formname, details>
