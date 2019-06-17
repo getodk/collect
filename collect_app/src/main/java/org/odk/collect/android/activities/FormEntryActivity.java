@@ -1622,7 +1622,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         Bundle bundle = new Bundle();
                         bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, "saveIncomplete");
                         bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, Collect.getCurrentFormIdentifierHash());
-                        Collect.getInstance().logEvent("WidgetAttribute", bundle);
+                        Collect.getInstance().logRemoteAnalytics("WidgetAttribute", bundle);
 
                         saveDataToDisk(false, false, null, false);
                         autoSaved = true;

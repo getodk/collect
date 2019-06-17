@@ -98,7 +98,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                     Bundle bundle = new Bundle();
                     bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, "Periodic form updates check");
                     bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, (String) newValue);
-                    Collect.getInstance().logEvent("PreferenceChange", bundle);
+                    Collect.getInstance().logRemoteAnalytics("PreferenceChange", bundle);
 
                     if (newValue.equals(getString(R.string.never_value))) {
                         Preference automaticUpdatePreference = findPreference(KEY_AUTOMATIC_UPDATE);
@@ -138,7 +138,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                     Bundle bundle = new Bundle();
                     bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, "Automatic form updates");
                     bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, newValue + " " + formUpdateCheckPeriod);
-                    Collect.getInstance().logEvent("PreferenceChange", bundle);
+                    Collect.getInstance().logRemoteAnalytics("PreferenceChange", bundle);
 
                     return true;
                 });

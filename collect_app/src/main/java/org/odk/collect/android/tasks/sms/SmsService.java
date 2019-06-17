@@ -357,7 +357,7 @@ public class SmsService {
             Bundle bundle = new Bundle();
             bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, "SMS");
             bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, Collect.getFormIdentifierHash(formId, formVersion));
-            Collect.getInstance().logEvent("Submission", bundle);
+            Collect.getInstance().logRemoteAnalytics("Submission", bundle);
         }
     }
 

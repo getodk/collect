@@ -91,7 +91,7 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
                     Bundle bundle = new Bundle();
                     bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, "HTTP-Sheets");
                     bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
-                    Collect.getInstance().logEvent("Submission", bundle);
+                    Collect.getInstance().logRemoteAnalytics("Submission", bundle);
                 } catch (UploadException e) {
                     Timber.d(e);
                     outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),

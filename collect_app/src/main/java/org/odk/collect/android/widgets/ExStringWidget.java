@@ -169,7 +169,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         Bundle bundle = new Bundle();
         bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, "ExternalApp");
         bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, Collect.getCurrentFormIdentifierHash());
-        Collect.getInstance().logEvent("WidgetType", bundle);
+        Collect.getInstance().logRemoteAnalytics("WidgetType", bundle);
     }
 
     protected void fireActivity(Intent i) throws ActivityNotFoundException {

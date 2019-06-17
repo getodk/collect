@@ -459,7 +459,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         Bundle bundle = new Bundle();
         bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, scheme + " " + host);
         bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, urlHash);
-        Collect.getInstance().logEvent("SetServer", bundle);
+        Collect.getInstance().logRemoteAnalytics("SetServer", bundle);
     }
 
     private void maskPasswordSummary(String password) {

@@ -90,7 +90,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
                 Bundle bundle = new Bundle();
                 bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, "HTTP");
                 bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
-                Collect.getInstance().logEvent("Submission", bundle);
+                Collect.getInstance().logRemoteAnalytics("Submission", bundle);
             } catch (UploadAuthRequestedException e) {
                 outcome.authRequestingServer = e.getAuthRequestingServer();
                 // Don't add the instance that caused an auth request to the map because we want to

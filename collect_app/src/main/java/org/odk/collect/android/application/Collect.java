@@ -304,7 +304,7 @@ public class Collect extends Application {
         return tracker;
     }
 
-    public void logEvent(String event, Bundle bundle) {
+    public void logRemoteAnalytics(String event, Bundle bundle) {
         firebaseAnalytics.logEvent(event, bundle);
     }
 
@@ -407,6 +407,6 @@ public class Collect extends Application {
 
         Bundle bundle = new Bundle();
         bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, action);
-        Collect.getInstance().logEvent("NullFormControllerEvent", bundle);
+        Collect.getInstance().logRemoteAnalytics("NullFormControllerEvent", bundle);
     }
 }

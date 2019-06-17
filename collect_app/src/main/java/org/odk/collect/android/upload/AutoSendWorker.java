@@ -173,7 +173,7 @@ public class AutoSendWorker extends Worker {
                 bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets)) ?
                         "HTTP-Sheets auto" : "HTTP auto");
                 bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
-                Collect.getInstance().logEvent("Submission", bundle);
+                Collect.getInstance().logRemoteAnalytics("Submission", bundle);
             } catch (UploadException e) {
                 Timber.d(e);
                 anyFailure = true;
