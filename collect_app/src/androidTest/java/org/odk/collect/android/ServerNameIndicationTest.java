@@ -6,11 +6,8 @@ import androidx.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.http.CollectServerClient;
-import org.odk.collect.android.http.CollectThenSystemContentTypeMapper;
 import org.odk.collect.android.http.HttpGetResult;
-import org.odk.collect.android.http.OkHttpConnection;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
-import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.BufferedReader;
@@ -23,7 +20,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
-import static org.odk.collect.android.support.CollectHelpers.*;
+import static org.odk.collect.android.support.CollectHelpers.getAppDependencyComponent;
 
 /**
  * An on-device test for TLS server name indication support.
