@@ -51,8 +51,6 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     private static final int CONNECTION_TIMEOUT = 30000;
     private static final int WRITE_CONNECTION_TIMEOUT = 60000; // it can take up to 27 seconds to spin up an Aggregate
     private static final int READ_CONNECTION_TIMEOUT = 60000; // it can take up to 27 seconds to spin up an Aggregate
-    private static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
-    private static final String CONTENT_ENCODING = "gzip";
     private static final String OPEN_ROSA_VERSION_HEADER = "X-OpenRosa-Version";
     private static final String OPEN_ROSA_VERSION = "1.0";
     private static final String DATE_HEADER = "Date";
@@ -316,7 +314,6 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     private Request buildHeadRequest(@NonNull URI uri) throws MalformedURLException {
         return new Request.Builder()
                 .url(uri.toURL())
-                .addHeader(ACCEPT_ENCODING_HEADER, CONTENT_ENCODING)
                 .addHeader(USER_AGENT_HEADER, getUserAgentString())
                 .addHeader(OPEN_ROSA_VERSION_HEADER, OPEN_ROSA_VERSION)
                 .addHeader(DATE_HEADER, getHeaderDate())
@@ -327,7 +324,6 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     private Request buildPostRequest(@NonNull URI uri, RequestBody body) throws MalformedURLException {
         return new Request.Builder()
                 .url(uri.toURL())
-                .addHeader(ACCEPT_ENCODING_HEADER, CONTENT_ENCODING)
                 .addHeader(USER_AGENT_HEADER, getUserAgentString())
                 .addHeader(OPEN_ROSA_VERSION_HEADER, OPEN_ROSA_VERSION)
                 .addHeader(DATE_HEADER, getHeaderDate())

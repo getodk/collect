@@ -2,24 +2,29 @@ package org.odk.collect.android.http;
 
 import androidx.annotation.NonNull;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.zip.GZIPOutputStream;
 
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import okhttp3.tls.internal.TlsUtil;
+import okio.Buffer;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -130,6 +135,19 @@ public abstract class OpenRosaPostRequestTest {
         HttpPostResult response = subject.uploadSubmissionFile(new ArrayList<>(), File.createTempFile("blah", "blah"), uri, null, 0);
 
         assertThat(response.getResponseCode(), equalTo(200));
+        assertThat(response.getHttpResponse(), equalTo("I AM BODY"));
+    }
+
+    @Test
+    public void whenResponseIsGzipped_returnsBody() throws Exception {
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(200)
+                .addHeader("Content-Encoding", "gzip")
+                .setBody(new Buffer().write(gzip("I AM BODY"))));
+
+        URI uri = mockWebServer.url("/blah").uri();
+        HttpPostResult response = subject.uploadSubmissionFile(new ArrayList<>(), File.createTempFile("blah", "blah"), uri, null, 0);
+
         assertThat(response.getHttpResponse(), equalTo("I AM BODY"));
     }
 
@@ -316,6 +334,18 @@ public abstract class OpenRosaPostRequestTest {
         String[] split = body.split(boundary);
         String[] stringParts = Arrays.copyOfRange(split, 1, split.length - 1);
         return Arrays.stream(stringParts).map(part -> part.split("\r\n")).collect(Collectors.toList());
+    }
+
+    private static byte[] gzip(String data) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length());
+        GZIPOutputStream gzipStream = new GZIPOutputStream(outputStream);
+        gzipStream.write(data.getBytes());
+        gzipStream.close();
+
+        byte[] compressed = outputStream.toByteArray();
+        outputStream.close();
+
+        return compressed;
     }
 
     private class XmlOrBlahContentTypeMapper implements OpenRosaHttpInterface.FileToContentTypeMapper {
