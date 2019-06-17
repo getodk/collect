@@ -121,15 +121,25 @@ public abstract class OpenRosaPostRequestTest {
     }
 
     @Test
-    public void returnsPostBody() throws Exception {
+    public void returnsPostResult() throws Exception {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(200)
-                .setBody("blah"));
+                .setBody("I AM BODY"));
 
         URI uri = mockWebServer.url("/blah").uri();
         HttpPostResult response = subject.uploadSubmissionFile(new ArrayList<>(), File.createTempFile("blah", "blah"), uri, null, 0);
 
         assertThat(response.getResponseCode(), equalTo(200));
+        assertThat(response.getHttpResponse(), equalTo("I AM BODY"));
+    }
+
+    @Test(expected = Exception.class)
+    public void whenResponseIs204_throwsException() throws Exception {
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(204));
+
+        URI uri = mockWebServer.url("/blah").uri();
+        subject.uploadSubmissionFile(new ArrayList<>(), File.createTempFile("blah", "blah"), uri, null, 0);
     }
 
     @Test

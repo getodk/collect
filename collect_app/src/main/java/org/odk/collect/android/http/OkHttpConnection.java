@@ -194,8 +194,12 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         Request request = buildPostRequest(uri, multipartBody);
         Response response = httpClient.newCall(request).execute();
 
+        if (response.code() == 204) {
+            throw new Exception();
+        }
+
         postResult = new HttpPostResult(
-                response.toString(),
+                response.body().string(),
                 response.code(),
                 response.message());
 
