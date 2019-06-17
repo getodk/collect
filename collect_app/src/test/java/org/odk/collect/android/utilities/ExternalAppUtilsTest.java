@@ -49,7 +49,7 @@ public class ExternalAppUtilsTest {
         assertCounterAppParameters(result);
 
         // Commas in values
-        result = ExternalAppsUtils.extractParameters("org.companyX.appX(parameter1='value1', parameter2='value2a\\, value2b'");
+        result = ExternalAppsUtils.extractParameters("org.companyX.appX(parameter1='value1', parameter2='value2a, value2b'");
         assertEquals(2, result.size());
         assertTrue(result.keySet().contains("parameter1"));
         assertTrue(result.keySet().contains("parameter2"));
@@ -58,7 +58,7 @@ public class ExternalAppUtilsTest {
         assertEquals("'value2a, value2b'", result.get("parameter2"));
 
         // Regex with commas
-        result = ExternalAppsUtils.extractParameters("org.companyX.appX(regex1='/^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2\\,6})$/', regex2='/^[a-z0-9_-]{6\\,18}$/', regex3='/^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2\\,6})([\\/\\w \\.-]*)*\\/?$/'");
+        result = ExternalAppsUtils.extractParameters("org.companyX.appX(regex1='/^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$/', regex2='/^[a-z0-9_-]{6,18}$/', regex3='/^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$/'");
         assertEquals(3, result.size());
         assertTrue(result.keySet().contains("regex1"));
         assertTrue(result.keySet().contains("regex2"));
@@ -78,7 +78,7 @@ public class ExternalAppUtilsTest {
         assertEquals("/send-sms-or-email-in-form/send_to", result.get("uri_data"));
 
         // Real sample from a user: https://forum.opendatakit.org/t/external-app-with-intent-parameters/20125/5?u=grzesiek2010
-        result = ExternalAppsUtils.extractParameters("ex:ch.novelt.odkcompanion.OPEN(current_value=/afp_report/group_mini_cif/cn, match='^[0-9]{4}W[0-9]{2}-[0-9]{1\\,5}$', filter='^AFP:([0-9]{4}W[0-9]{2}-[0-9]{1\\,5})')");
+        result = ExternalAppsUtils.extractParameters("ex:ch.novelt.odkcompanion.OPEN(current_value=/afp_report/group_mini_cif/cn, match='^[0-9]{4}W[0-9]{2}-[0-9]{1,5}$', filter='^AFP:([0-9]{4}W[0-9]{2}-[0-9]{1,5})')");
         assertEquals(3, result.size());
         assertTrue(result.keySet().contains("current_value"));
         assertTrue(result.keySet().contains("match"));
