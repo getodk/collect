@@ -312,7 +312,8 @@
     <string name="leave_a_review">Leave a Play Store review</string>
     <string name="leave_a_review_msg">Your (hopefully positive) review increases the visibility of the App in the Play Store.</string>
     <!-- Geo string added in feature-geofeatures branch-->
-    <string name="map_preferences">Mapping</string>
+
+    <string name="maps">Maps</string>
     <string name="map_sdk_selector_title">Mapping SDK</string>
     <string name="map_sdk_behavior">Mapping SDK</string>
     <string name="google_maps_sdk">Google Maps SDK</string>
@@ -605,9 +606,20 @@
     <string name="islamic_month_8">Sha\'ban</string>
     <string name="islamic_month_9">Ramadan</string>
     <string name="islamic_month_10">Shawwal</string>
-
     <string name="islamic_month_11">Dhu al-Qidah</string>
     <string name="islamic_month_12">Dhu al-Hijjah</string>
+    <string name="persian_month_1">Farvardin</string>
+    <string name="persian_month_2">Ordibehesht</string>
+    <string name="persian_month_3">Khordad</string>
+    <string name="persian_month_4">Tir</string>
+    <string name="persian_month_5">Mordad</string>
+    <string name="persian_month_6">Shahrivar</string>
+    <string name="persian_month_7">Mehr</string>
+    <string name="persian_month_8">Aban</string>
+    <string name="persian_month_9">Azar</string>
+    <string name="persian_month_10">Dey</string>
+    <string name="persian_month_11">Bahman</string>
+    <string name="persian_month_12">Esfand</string>
     <string name="moving_backwards_title">Moving backwards</string>
     <string name="moving_backwards_disabled_title">Moving backwards disabled</string>
     <string name="moving_backwards_disabled_message">Configure the device to prevent users from bypassing this setting?\n\nThe changes are:\n\u2022 Disable Edit Saved Form\n\u2022 Disable Save Form\n\u2022 Disable Go To Prompt\n\u2022 Set Constraint processing to Validate upon forward swipe</string>

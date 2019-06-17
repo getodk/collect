@@ -295,7 +295,6 @@
   <string name="tell_your_friends_msg">के तपाईँका सहकर्मीहरू अझै कागजमा डाटा संकलन गर्दै हुनुहुन्छ? तिनीहरुसँग ODK Collect शेयर गर्नुहोस् ।</string>
   <string name="leave_a_review">हामीलाई  प्ले स्टोर आफ्नो मा समीक्षा छोड्नुहोस् ।</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">नक्शाकंन</string>
   <string name="map_sdk_selector_title">SDK नक्शाकंन गर्न</string>
   <string name="map_sdk_behavior">SDK नक्शाकंन गर्न</string>
   <string name="google_maps_sdk">गुगल म्याप्स् SDK</string>

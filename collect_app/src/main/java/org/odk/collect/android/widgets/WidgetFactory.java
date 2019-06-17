@@ -61,6 +61,8 @@ public class WidgetFactory {
                             questionWidget = new BikramSambatDateWidget(context, fep);
                         } else if (appearance.contains(WidgetAppearanceUtils.MYANMAR)) {
                             questionWidget = new MyanmarDateWidget(context, fep);
+                        } else if (appearance.contains(WidgetAppearanceUtils.PERSIAN)) {
+                            questionWidget = new PersianDateWidget(context, fep);
                         } else {
                             questionWidget = new DateWidget(context, fep);
                         }

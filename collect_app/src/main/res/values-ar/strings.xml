@@ -307,7 +307,6 @@
   <string name="leave_a_review">اترك تعليق في Play Store</string>
   <string name="leave_a_review_msg">رأيك (نأمل إيجابيا) يزيد من رؤية التطبيق في Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">رسم الخريطة</string>
   <string name="map_sdk_selector_title">خدمة الخريطة</string>
   <string name="map_sdk_behavior">الخريطة</string>
   <string name="google_maps_sdk">خريطة جوجل</string>

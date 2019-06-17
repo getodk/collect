@@ -301,7 +301,6 @@
   <string name="leave_a_review">پلے اسٹور پر رائے دیجیے</string>
   <string name="leave_a_review_msg">آپ ( امید ہے مثبت) کی رائے سے پلے اسٹورمیں اپپ کی نمائش میں اضافہ ہوتا ہے </string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">میپنگ</string>
   <string name="map_sdk_selector_title"> ایس ڈی کے میپنگ</string>
   <string name="map_sdk_behavior"> ایس ڈی کے میپنگ</string>
   <string name="google_maps_sdk">گوگل میپس ایس ڈی کے </string>

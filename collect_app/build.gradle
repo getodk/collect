@@ -233,6 +233,7 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:${rootProject.okhttp3Version}"
     implementation 'com.burgstaller:okhttp-digest:1.18'
 
+    implementation 'com.github.mohamadian:PersianJodaTime:1.2'
     implementation 'com.github.chanmratekoko:myanmar-calendar:1.0.6.RC3'
     implementation 'bikramsambat:bikram-sambat:1.1.0'
     implementation "com.evernote:android-job:1.2.5"
@@ -329,6 +330,8 @@ dependencies {
     testImplementation "org.mockito:mockito-core:2.22.0"
     testImplementation "org.robolectric:robolectric:4.0.1"
     testImplementation "org.robolectric:shadows-multidex:4.0-beta-1"
+    testImplementation "com.squareup.okhttp3:mockwebserver:${rootProject.okhttp3Version}"
+    testImplementation "com.squareup.okhttp3:okhttp-tls:${rootProject.okhttp3Version}"
 
     // power mock (for mocking final methods which is not handled by mockito)
     testImplementation "org.powermock:powermock-module-junit4:2.0.2"
@@ -340,6 +343,7 @@ dependencies {
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
 
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
     androidTestImplementation("androidx.test.espresso:espresso-intents:3.2.0-alpha03") {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.google.code.findbugs', module: 'jsr305'

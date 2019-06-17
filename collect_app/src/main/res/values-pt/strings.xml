@@ -295,7 +295,6 @@ Escolher Imagem</string>
   <string name="leave_a_review">Deixe um opinião sua na Play Store</string>
   <string name="leave_a_review_msg">A sua opinião (possivelmente positiva) aumenta a visibilidade da App na Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Cartografia</string>
   <string name="map_sdk_selector_title">Cartografia SDK</string>
   <string name="map_sdk_behavior">Cartografia SDK</string>
   <string name="google_maps_sdk">Google Maps SDK</string>

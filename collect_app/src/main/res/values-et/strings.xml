@@ -267,7 +267,6 @@
   <string name="google_play_services_error_occured">Puudub ligipääs Google Maps-ile. Veenduge, et Google Play teenused on paigaldatud.</string>
   <string name="about_preferences">Teave</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Kaardistus</string>
   <string name="map_sdk_selector_title">Kaardistus SDK</string>
   <string name="map_sdk_behavior">Kaardistus SDK</string>
   <string name="google_maps_sdk">Google Maps SDK</string>

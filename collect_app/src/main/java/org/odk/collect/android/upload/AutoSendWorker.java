@@ -32,7 +32,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dto.Form;
 import org.odk.collect.android.dto.Instance;
-import org.odk.collect.android.exception.MultipleFoldersFoundException;
+import org.odk.collect.android.http.CollectThenSystemContentTypeMapper;
 import org.odk.collect.android.http.HttpClientConnection;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -44,7 +44,6 @@ import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -58,6 +57,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION;
+import static org.odk.collect.android.utilities.InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE;
 
 public class AutoSendWorker extends Worker {
     private static final int AUTO_SEND_RESULT_NOTIFICATION_ID = 1328974928;
@@ -119,20 +119,12 @@ public class AutoSendWorker extends Worker {
                 }
                 accountsManager.selectAccount(googleUsername);
                 uploader = new InstanceGoogleSheetsUploader(accountsManager);
-
-                try {
-                    accountsManager.getDriveHelper().createOrGetIDOfSubmissionsFolder();
-                } catch (IOException | MultipleFoldersFoundException e) {
-                    Timber.d(e, "Exception getting or creating root folder for submissions");
-                    showUploadStatusNotification(true, "Exception getting or creating root folder for submissions");
-                    return Result.FAILURE;
-                }
             } else {
                 showUploadStatusNotification(true, Collect.getInstance().getString(R.string.odk_permissions_fail));
                 return Result.FAILURE;
             }
         } else {
-            uploader = new InstanceServerUploader(new HttpClientConnection(),
+            uploader = new InstanceServerUploader(new HttpClientConnection(new CollectThenSystemContentTypeMapper()),
                     new WebCredentialsUtils(), new HashMap<>());
             deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
                     .getSingularProperty(PropertyManager.withUri(PropertyManager.PROPMGR_DEVICE_ID));
@@ -141,6 +133,12 @@ public class AutoSendWorker extends Worker {
         for (Instance instance : toUpload) {
             try {
                 String destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, null);
+                if (protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets))
+                        && !InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile(destinationUrl)) {
+                    anyFailure = true;
+                    resultMessagesByInstanceId.put(instance.getDatabaseId().toString(), SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE);
+                    continue;
+                }
                 String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
                 resultMessagesByInstanceId.put(instance.getDatabaseId().toString(),
                         customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));

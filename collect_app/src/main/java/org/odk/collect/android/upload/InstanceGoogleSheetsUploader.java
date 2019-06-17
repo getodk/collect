@@ -82,20 +82,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         sheetsHelper = accountsManager.getSheetsHelper();
     }
 
-    /**
-     * Returns whether the submissions folder previously existed or was successfully created. False
-     * if multiple folders match or there was another exception.
-     */
-    public boolean submissionsFolderExistsAndIsUnique() {
-        try {
-            driveHelper.createOrGetIDOfSubmissionsFolder();
-            return true;
-        } catch (IOException | MultipleFoldersFoundException e) {
-            Timber.d(e, "Exception getting or creating root folder for submissions");
-            return false;
-        }
-    }
-
     @Override
     public String uploadOneSubmission(Instance instance, String spreadsheetUrl) throws UploadException {
         if (new FormsDao().isFormEncrypted(instance.getJrFormId(), instance.getJrVersion())) {
@@ -256,7 +242,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         String folderId;
         try {
-            folderId = driveHelper.createOrGetIDOfFolderWithName(instance.getJrFormId());
+            folderId = driveHelper.createOrGetIDOfSubmissionsFolder();
         } catch (IOException | MultipleFoldersFoundException e) {
             Timber.e(e);
             throw new UploadException(e);

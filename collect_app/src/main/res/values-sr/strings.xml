@@ -307,7 +307,6 @@
   <string name="leave_a_review">Napiši Play Store recenziju</string>
   <string name="leave_a_review_msg">Vaša (nadamo se pozitivna) recenzija povećava vidljivost aplikacije u Play Storu.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Mapiranje</string>
   <string name="map_sdk_selector_title">Mapiranje SDK</string>
   <string name="map_sdk_behavior">Mapiranje SDK</string>
   <string name="google_maps_sdk">Google Maps SDK</string>

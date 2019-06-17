@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:dialogTitle="@string/map_sdk_selector_title"
+        android:entries="@array/map_sdk_selector_entries"
+        android:entryValues="@array/map_sdk_selector_entry_values"
+        android:key="map_sdk_behavior"
+        android:title="@string/map_sdk_behavior" />
+    <ListPreference
+        android:dialogTitle="@string/map_basemap_selector_title"
+        android:entries="@array/map_mapbox_basemap_selector_entries"
+        android:entryValues="@array/map_mapbox_basemap_selector_entry_values"
+        android:key="map_basemap_behavior"
+        android:title="@string/map_basemap_behavior_title" />
+</PreferenceScreen>

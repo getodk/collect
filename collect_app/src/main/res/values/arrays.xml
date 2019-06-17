@@ -212,6 +212,20 @@ the specific language governing permissions and limitations under the License. -
         <item>@string/islamic_month_11</item>
         <item>@string/islamic_month_12</item>
     </string-array>
+    <string-array name="persian_months">
+        <item>@string/persian_month_1</item>
+        <item>@string/persian_month_2</item>
+        <item>@string/persian_month_3</item>
+        <item>@string/persian_month_4</item>
+        <item>@string/persian_month_5</item>
+        <item>@string/persian_month_6</item>
+        <item>@string/persian_month_7</item>
+        <item>@string/persian_month_8</item>
+        <item>@string/persian_month_9</item>
+        <item>@string/persian_month_10</item>
+        <item>@string/persian_month_11</item>
+        <item>@string/persian_month_12</item>
+    </string-array>
     <string-array name="periodic_form_updates_check_entry_values">
         <item>@string/never_value</item>
         <item>@string/every_fifteen_minutes_value</item>

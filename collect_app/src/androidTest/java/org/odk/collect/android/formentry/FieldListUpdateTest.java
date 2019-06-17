@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.formfilling;
+package org.odk.collect.android.formentry;
 
 import android.Manifest;
 import android.app.Activity;
@@ -23,20 +23,21 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.GrantPermissionRule;
 
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
+import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.test.FormLoadingUtils;
 
 import java.io.File;
@@ -48,9 +49,7 @@ import java.util.UUID;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
-import static androidx.test.espresso.action.ViewActions.repeatedlyUntil;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyAbove;
 import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyBelow;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
@@ -73,21 +72,18 @@ import static org.odk.collect.android.test.CustomMatchers.withIndex;
 
 public class FieldListUpdateTest {
     private static final String FIELD_LIST_TEST_FORM = "fieldlist-updates.xml";
-    private static final int MAX_HIERARCHY_SWIPE_ATTEMPTS = 10;
 
     @Rule
     public IntentsTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(FIELD_LIST_TEST_FORM);
 
     @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.CAMERA);
-
-    @BeforeClass
-    public static void copyFormToSdCard() throws IOException {
-        FormLoadingUtils.copyFormToSdCard(FIELD_LIST_TEST_FORM);
-    }
+    public RuleChain copyFormChain = RuleChain
+            .outerRule(GrantPermissionRule.grant(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA)
+            )
+            .around(new CopyFormRule(FIELD_LIST_TEST_FORM));
 
     @Test
     public void relevanceChangeAtEnd_ShouldToggleLastWidgetVisibility() {
@@ -182,24 +178,25 @@ public class FieldListUpdateTest {
         onView(withText("Please don't use your calculator, !")).check(matches(isDisplayed()));
     }
 
-    /** TODO: calculation doesn't seem to be updated whether or not there's a fieldlist.
-    @Test
-    public void changeInValueUsedInOtherField_ShouldChangeValue() {
-        onView(withId(R.id.menu_goto)).perform(click());
-        onView(withId(R.id.menu_go_up)).perform(click());
-        onView(allOf(withText("Value change"), isDisplayed())).perform(click());
-        onView(withText(startsWith("What is your"))).perform(click());
-
-        String name = UUID.randomUUID().toString();
-
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
-        onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("0")));
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(name));
-        onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText(name.length())));
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
-        onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("0")));
-    }
-    **/
+    /**
+     * TODO: calculation doesn't seem to be updated whether or not there's a fieldlist.
+     *
+     * @Test public void changeInValueUsedInOtherField_ShouldChangeValue() {
+     * onView(withId(R.id.menu_goto)).perform(click());
+     * onView(withId(R.id.menu_go_up)).perform(click());
+     * onView(allOf(withText("Value change"), isDisplayed())).perform(click());
+     * onView(withText(startsWith("What is your"))).perform(click());
+     * <p>
+     * String name = UUID.randomUUID().toString();
+     * <p>
+     * onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
+     * onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("0")));
+     * onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(name));
+     * onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText(name.length())));
+     * onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
+     * onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("0")));
+     * }
+     **/
 
     @Test
     public void selectionChangeAtFirstCascadeLevel_ShouldUpdateNextLevels() {
@@ -255,7 +252,6 @@ public class FieldListUpdateTest {
     //        onView(withText("A1B")).check(doesNotExist());
     //    }
 
-    @Ignore("Fails on Firebase Test Lab Nexus 5, Virtual, API Level 21 for unknown reasons")
     @Test
     public void selectionChangeAtOneCascadeLevelWithMinimalAppearance_ShouldUpdateNextLevels() {
         jumpToGroupWithText("Cascading select minimal");
@@ -350,13 +346,13 @@ public class FieldListUpdateTest {
         onView(withText("Target12")).check(doesNotExist());
 
         onView(withText(R.string.select_date)).perform(click());
-        onView(withText(R.string.ok)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click());
 
         onView(withText("Target12")).check(matches(isDisplayed()));
     }
 
     @Test
-    public void selectingARating_ShouldChangeRelevanceOfRelatedField() {
+    public void selectingARating_ShouldChangeRelevanceOfRelatedField() throws Exception {
         jumpToGroupWithText("Rating");
         onView(withText(startsWith("Source13"))).perform(click());
 
@@ -387,8 +383,8 @@ public class FieldListUpdateTest {
     private void jumpToGroupWithText(String text) {
         onView(withId(R.id.menu_goto)).perform(click());
         onView(withId(R.id.menu_go_up)).perform(click());
-        onView(withId(R.id.list)).perform(repeatedlyUntil(swipeUp(),
-                hasDescendant(allOf(isDisplayed(), withText(text))), MAX_HIERARCHY_SWIPE_ATTEMPTS));
+        onView(withId(R.id.list)).perform(RecyclerViewActions.scrollTo(hasDescendant(withText(text))));
+
         onView(allOf(isDisplayed(), withText(text))).perform(click());
     }
 }
