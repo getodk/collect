@@ -9,6 +9,8 @@ import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.http.CollectThenSystemContentTypeMapper;
 import org.odk.collect.android.http.HttpGetResult;
 import org.odk.collect.android.http.OkHttpConnection;
+import org.odk.collect.android.http.OpenRosaHttpInterface;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.BufferedReader;
@@ -21,6 +23,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
+import static org.odk.collect.android.support.CollectHelpers.*;
 
 /**
  * An on-device test for TLS server name indication support.
@@ -36,7 +39,9 @@ public class ServerNameIndicationTest {
 
     @Test
     public void testThatHttpClientSupportsSNI() throws Exception {
-        CollectServerClient serverClient = new CollectServerClient(new OkHttpConnection(null, new CollectThenSystemContentTypeMapper()), new WebCredentialsUtils());
+        OpenRosaHttpInterface openRosaHttpInterface = getAppDependencyComponent().openRosaHttpInterface();
+        CollectServerClient serverClient = new CollectServerClient(openRosaHttpInterface, new WebCredentialsUtils());
+
         HttpGetResult inputStreamResult = serverClient.getHttpInputStream(SNI_URI, null);
         assertHttpSuccess(inputStreamResult.getStatusCode());
         assertPageContent(inputStreamResult.getInputStream());
