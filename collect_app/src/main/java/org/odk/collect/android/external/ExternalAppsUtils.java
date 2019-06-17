@@ -41,8 +41,10 @@ import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -81,15 +83,34 @@ public class ExternalAppsUtils {
                 : exString.substring(leftParIndex + 1);
 
         Map<String, String> parameters = new LinkedHashMap<>();
-        String[] paramsPairs = paramsStr.trim().split("(?<!\\\\),");
+        List<String> paramsPairs = getParamPairs(paramsStr.trim());
         for (String paramsPair : paramsPairs) {
-            paramsPair = paramsPair.replaceAll("\\\\,", ",");
             String[] keyValue = paramsPair.trim().split("=");
             if (keyValue.length == 2) {
                 parameters.put(keyValue[0].trim(), keyValue[1].trim());
             }
         }
         return parameters;
+    }
+
+    private static List<String> getParamPairs(String paramsStr) {
+        List<String> paramPairs = new ArrayList<>();
+        int startPos = 0;
+        boolean inQuotes = false;
+        for (int current = 0; current < paramsStr.length(); current++) {
+            if (paramsStr.charAt(current) == '\'') {
+                inQuotes = !inQuotes;
+            }
+
+            if (current == paramsStr.length() - 1) {
+                paramPairs.add(paramsStr.substring(startPos));
+            } else if (paramsStr.charAt(current) == ',' && !inQuotes) {
+                paramPairs.add(paramsStr.substring(startPos, current));
+                startPos = current + 1;
+            }
+        }
+
+        return paramPairs;
     }
 
     public static void populateParameters(Intent intent, Map<String, String> exParams,
