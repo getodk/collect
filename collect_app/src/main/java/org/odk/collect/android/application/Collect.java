@@ -56,7 +56,6 @@ import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.NotificationUtils;
@@ -316,8 +315,8 @@ public class Collect extends Application {
 
         // Firebase Analytics
         Bundle bundle = new Bundle();
-        bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, action);
-        bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, label);
+        bundle.putString("action", action);
+        bundle.putString("label", label);
         firebaseAnalytics.logEvent(event, bundle);
     }
 
