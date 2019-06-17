@@ -14,10 +14,6 @@
 
 package org.odk.collect.android.tasks;
 
-import android.os.Bundle;
-
-import com.google.android.gms.analytics.HitBuilders;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dto.Instance;
@@ -26,7 +22,6 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.upload.UploadAuthRequestedException;
 import org.odk.collect.android.upload.UploadException;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.util.HashMap;
@@ -79,18 +74,8 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
                 String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
                 outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
                         customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
-                Collect.getInstance()
-                        .getDefaultTracker()
-                        .send(new HitBuilders.EventBuilder()
-                                .setCategory("Submission")
-                                .setAction("HTTP")
-                                .setLabel(Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()))
-                                .build());
 
-                Bundle bundle = new Bundle();
-                bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, "HTTP");
-                bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
-                Collect.getInstance().logRemoteAnalytics("Submission", bundle);
+                Collect.getInstance().logRemoteAnalytics("Submission", "HTTP", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
             } catch (UploadAuthRequestedException e) {
                 outcome.authRequestingServer = e.getAuthRequestingServer();
                 // Don't add the instance that caused an auth request to the map because we want to

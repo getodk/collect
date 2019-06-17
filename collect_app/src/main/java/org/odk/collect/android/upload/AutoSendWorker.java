@@ -22,11 +22,8 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
 import androidx.annotation.NonNull;
-
-import com.google.android.gms.analytics.HitBuilders;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
@@ -41,7 +38,6 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
@@ -160,20 +156,10 @@ public class AutoSendWorker extends Worker {
                     Collect.getInstance().getContentResolver().delete(deleteForm, null, null);
                 }
 
-                Collect.getInstance()
-                        .getDefaultTracker()
-                        .send(new HitBuilders.EventBuilder()
-                                .setCategory("Submission")
-                                .setAction(protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets)) ?
-                                        "HTTP-Sheets auto" : "HTTP auto")
-                                .setLabel(Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()))
-                                .build());
-
-                Bundle bundle = new Bundle();
-                bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets)) ?
-                        "HTTP-Sheets auto" : "HTTP auto");
-                bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
-                Collect.getInstance().logRemoteAnalytics("Submission", bundle);
+                String action = protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets)) ?
+                        "HTTP-Sheets auto" : "HTTP auto";
+                String label = Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion());
+                Collect.getInstance().logRemoteAnalytics("Submission", action, label);
             } catch (UploadException e) {
                 Timber.d(e);
                 anyFailure = true;

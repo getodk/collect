@@ -15,9 +15,6 @@
 package org.odk.collect.android.tasks;
 
 import android.database.Cursor;
-import android.os.Bundle;
-
-import com.google.android.gms.analytics.HitBuilders;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -26,7 +23,6 @@ import org.odk.collect.android.dto.Form;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.upload.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.upload.UploadException;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.util.List;
@@ -80,18 +76,7 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
 
                     outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), DEFAULT_SUCCESSFUL_TEXT);
 
-                    Collect.getInstance()
-                            .getDefaultTracker()
-                            .send(new HitBuilders.EventBuilder()
-                                    .setCategory("Submission")
-                                    .setAction("HTTP-Sheets")
-                                    .setLabel(Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()))
-                                    .build());
-
-                    Bundle bundle = new Bundle();
-                    bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, "HTTP-Sheets");
-                    bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
-                    Collect.getInstance().logRemoteAnalytics("Submission", bundle);
+                    Collect.getInstance().logRemoteAnalytics("Submission", "HTTP-Sheets", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
                 } catch (UploadException e) {
                     Timber.d(e);
                     outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),

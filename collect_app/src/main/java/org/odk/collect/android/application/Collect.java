@@ -304,7 +304,20 @@ public class Collect extends Application {
         return tracker;
     }
 
-    public void logRemoteAnalytics(String event, Bundle bundle) {
+    public void logRemoteAnalytics(String event, String action, String label) {
+        // Google Analytics
+        Collect.getInstance()
+                .getDefaultTracker()
+                .send(new HitBuilders.EventBuilder()
+                        .setCategory(event)
+                        .setAction(action)
+                        .setLabel(label)
+                        .build());
+
+        // Firebase Analytics
+        Bundle bundle = new Bundle();
+        bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, action);
+        bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, label);
         firebaseAnalytics.logEvent(event, bundle);
     }
 
@@ -399,14 +412,6 @@ public class Collect extends Application {
     }
 
     public void logNullFormControllerEvent(String action) {
-        Collect.getInstance().getDefaultTracker()
-                .send(new HitBuilders.EventBuilder()
-                        .setCategory("NullFormControllerEvent")
-                        .setAction(action)
-                        .build());
-
-        Bundle bundle = new Bundle();
-        bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, action);
-        Collect.getInstance().logRemoteAnalytics("NullFormControllerEvent", bundle);
+        logRemoteAnalytics("NullFormControllerEvent", action, null);
     }
 }

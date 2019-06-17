@@ -20,12 +20,9 @@ import android.preference.Preference;
 import androidx.annotation.Nullable;
 import android.view.View;
 
-import com.google.android.gms.analytics.HitBuilders;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.tasks.ServerPollingJob;
-import org.odk.collect.android.utilities.ApplicationConstants;
 
 import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
@@ -88,17 +85,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
                     ServerPollingJob.schedulePeriodicJob((String) newValue);
 
-                    Collect.getInstance().getDefaultTracker()
-                            .send(new HitBuilders.EventBuilder()
-                                    .setCategory("PreferenceChange")
-                                    .setAction("Periodic form updates check")
-                                    .setLabel((String) newValue)
-                                    .build());
-
-                    Bundle bundle = new Bundle();
-                    bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, "Periodic form updates check");
-                    bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, (String) newValue);
-                    Collect.getInstance().logRemoteAnalytics("PreferenceChange", bundle);
+                    Collect.getInstance().logRemoteAnalytics("PreferenceChange", "Periodic form updates check", (String) newValue);
 
                     if (newValue.equals(getString(R.string.never_value))) {
                         Preference automaticUpdatePreference = findPreference(KEY_AUTOMATIC_UPDATE);
@@ -128,17 +115,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 pref.setEnabled(!formUpdateCheckPeriod.equals(getString(R.string.never_value)));
 
                 pref.setOnPreferenceChangeListener((preference, newValue) -> {
-                    Collect.getInstance().getDefaultTracker()
-                            .send(new HitBuilders.EventBuilder()
-                                    .setCategory("PreferenceChange")
-                                    .setAction("Automatic form updates")
-                                    .setLabel(newValue + " " + formUpdateCheckPeriod)
-                                    .build());
-
-                    Bundle bundle = new Bundle();
-                    bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, "Automatic form updates");
-                    bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, newValue + " " + formUpdateCheckPeriod);
-                    Collect.getInstance().logRemoteAnalytics("PreferenceChange", bundle);
+                    Collect.getInstance().logRemoteAnalytics("PreferenceChange", "Automatic form updates", newValue + " " + formUpdateCheckPeriod);
 
                     return true;
                 });

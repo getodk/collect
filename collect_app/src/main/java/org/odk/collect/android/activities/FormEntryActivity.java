@@ -55,7 +55,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.location.LocationListener;
 import com.google.common.collect.ImmutableList;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -1612,17 +1611,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 List<TreeElement> attrs = p.getBindAttributes();
                 for (int i = 0; i < attrs.size(); i++) {
                     if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
-                        Collect.getInstance().getDefaultTracker()
-                            .send(new HitBuilders.EventBuilder()
-                                .setCategory("WidgetAttribute")
-                                .setAction("saveIncomplete")
-                                .setLabel(Collect.getCurrentFormIdentifierHash())
-                                .build());
-
-                        Bundle bundle = new Bundle();
-                        bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, "saveIncomplete");
-                        bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, Collect.getCurrentFormIdentifierHash());
-                        Collect.getInstance().logRemoteAnalytics("WidgetAttribute", bundle);
+                        Collect.getInstance().logRemoteAnalytics("WidgetAttribute", "saveIncomplete", Collect.getCurrentFormIdentifierHash());
 
                         saveDataToDisk(false, false, null, false);
                         autoSaved = true;

@@ -21,7 +21,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
@@ -35,7 +34,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListPopupWindow;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -47,7 +45,6 @@ import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
@@ -449,17 +446,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         String urlHash = FileUtils.getMd5Hash(
                 new ByteArrayInputStream(url.getBytes()));
 
-        Collect.getInstance().getDefaultTracker()
-                .send(new HitBuilders.EventBuilder()
-                        .setCategory("SetServer")
-                        .setAction(scheme + " " + host)
-                        .setLabel(urlHash)
-                        .build());
-
-        Bundle bundle = new Bundle();
-        bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, scheme + " " + host);
-        bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, urlHash);
-        Collect.getInstance().logRemoteAnalytics("SetServer", bundle);
+        Collect.getInstance().logRemoteAnalytics("SetServer", scheme + " " + host, urlHash);
     }
 
     private void maskPasswordSummary(String password) {

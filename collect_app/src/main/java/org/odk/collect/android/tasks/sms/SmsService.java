@@ -4,14 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Bundle;
 import android.telephony.SmsManager;
 
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
-import com.google.android.gms.analytics.HitBuilders;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -29,7 +27,6 @@ import org.odk.collect.android.tasks.sms.models.Message;
 import org.odk.collect.android.tasks.sms.models.SmsProgress;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.upload.InstanceServerUploader;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ArrayUtils;
 
 import java.io.File;
@@ -346,18 +343,7 @@ public class SmsService {
                 }
             }
 
-            Collect.getInstance()
-                    .getDefaultTracker()
-                    .send(new HitBuilders.EventBuilder()
-                            .setCategory("Submission")
-                            .setAction("SMS")
-                            .setLabel(Collect.getFormIdentifierHash(formId, formVersion))
-                            .build());
-
-            Bundle bundle = new Bundle();
-            bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.ACTION, "SMS");
-            bundle.putString(ApplicationConstants.FirebaseAnalyticsParams.LABEL, Collect.getFormIdentifierHash(formId, formVersion));
-            Collect.getInstance().logRemoteAnalytics("Submission", bundle);
+            Collect.getInstance().logRemoteAnalytics("Submission", "SMS", Collect.getFormIdentifierHash(formId, formVersion));
         }
     }
 
