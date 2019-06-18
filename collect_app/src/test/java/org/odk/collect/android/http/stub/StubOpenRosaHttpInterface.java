@@ -1,4 +1,4 @@
-package org.odk.collect.android.http.mock;
+package org.odk.collect.android.http.stub;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MockHttpClientConnection implements OpenRosaHttpInterface {
+public class StubOpenRosaHttpInterface implements OpenRosaHttpInterface {
 
     @Override
     @NonNull

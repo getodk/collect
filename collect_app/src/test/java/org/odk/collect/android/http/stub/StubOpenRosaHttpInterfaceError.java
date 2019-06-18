@@ -1,4 +1,4 @@
-package org.odk.collect.android.http.mock;
+package org.odk.collect.android.http.stub;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,7 +8,7 @@ import org.odk.collect.android.http.HttpGetResult;
 
 import java.net.URI;
 
-public class MockHttpClientConnectionError extends MockHttpClientConnection {
+public class StubOpenRosaHttpInterfaceError extends StubOpenRosaHttpInterface {
 
     @Override
     @NonNull
