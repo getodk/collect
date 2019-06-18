@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.test;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.AssetManager;
 
@@ -26,6 +27,8 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import org.apache.commons.io.IOUtils;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.FileUtils;
 
@@ -35,6 +38,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Map;
 
 import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
 
@@ -80,6 +84,21 @@ public class FormLoadingUtils {
         copyFormToSdCard(formFilename, "", null);
     }
 
+    private static void saveFormToDatabase(File outFile) {
+        Map<String, String> formInfo = FileUtils.parseXML(outFile);
+        final ContentValues v = new ContentValues();
+        v.put(FormsProviderAPI.FormsColumns.FORM_FILE_PATH,          outFile.getAbsolutePath());
+        v.put(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH,         FileUtils.constructMediaPath(outFile.getAbsolutePath()));
+        v.put(FormsProviderAPI.FormsColumns.DISPLAY_NAME,            formInfo.get(FileUtils.TITLE));
+        v.put(FormsProviderAPI.FormsColumns.JR_VERSION,              formInfo.get(FileUtils.VERSION));
+        v.put(FormsProviderAPI.FormsColumns.JR_FORM_ID,              formInfo.get(FileUtils.FORMID));
+        v.put(FormsProviderAPI.FormsColumns.SUBMISSION_URI,          formInfo.get(FileUtils.SUBMISSIONURI));
+        v.put(FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY,   formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
+        v.put(FormsProviderAPI.FormsColumns.AUTO_DELETE,             formInfo.get(FileUtils.AUTO_DELETE));
+        v.put(FormsProviderAPI.FormsColumns.AUTO_SEND,               formInfo.get(FileUtils.AUTO_SEND));
+        new FormsDao().saveForm(v);
+    }
+
     public static IntentsTestRule<FormEntryActivity> getFormActivityTestRuleFor(String formFilename) {
         return new IntentsTestRule<FormEntryActivity>(FormEntryActivity.class) {
             @Override
@@ -108,6 +127,8 @@ public class FormLoadingUtils {
         OutputStream outputStream = new FileOutputStream(outFile);
 
         IOUtils.copy(inputStream, outputStream);
+
+        saveFormToDatabase(outFile);
     }
 
     private static void copyFormMediaFiles(String formFilename, String formAssetPath, List<String> mediaFilenames) throws IOException {
