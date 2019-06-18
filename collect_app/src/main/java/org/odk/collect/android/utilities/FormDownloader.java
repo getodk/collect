@@ -234,7 +234,10 @@ public class FormDownloader {
             Timber.w("The user cancelled (or an exception happened) the download of a form at the "
                     + "very beginning.");
         } else {
-            formsDao.deleteFormsFromMd5Hash(FileUtils.getMd5Hash(fileResult.file));
+            String md5Hash = FileUtils.getMd5Hash(fileResult.file);
+            if (md5Hash != null) {
+                formsDao.deleteFormsFromMd5Hash(md5Hash);
+            }
             FileUtils.deleteAndReport(fileResult.getFile());
         }
 
