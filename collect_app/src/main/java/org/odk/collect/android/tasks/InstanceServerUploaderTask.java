@@ -14,8 +14,6 @@
 
 package org.odk.collect.android.tasks;
 
-import com.google.android.gms.analytics.HitBuilders;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dto.Instance;
@@ -76,13 +74,8 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
                 String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
                 outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
                         customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
-                Collect.getInstance()
-                        .getDefaultTracker()
-                        .send(new HitBuilders.EventBuilder()
-                                .setCategory("Submission")
-                                .setAction("HTTP")
-                                .setLabel(Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()))
-                                .build());
+
+                Collect.getInstance().logRemoteAnalytics("Submission", "HTTP", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
             } catch (UploadAuthRequestedException e) {
                 outcome.authRequestingServer = e.getAuthRequestingServer();
                 // Don't add the instance that caused an auth request to the map because we want to

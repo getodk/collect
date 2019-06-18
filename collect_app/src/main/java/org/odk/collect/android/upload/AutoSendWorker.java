@@ -25,8 +25,6 @@ import android.net.Uri;
 import android.os.Environment;
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.analytics.HitBuilders;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
@@ -156,14 +154,10 @@ public class AutoSendWorker extends Worker {
                     Collect.getInstance().getContentResolver().delete(deleteForm, null, null);
                 }
 
-                Collect.getInstance()
-                        .getDefaultTracker()
-                        .send(new HitBuilders.EventBuilder()
-                                .setCategory("Submission")
-                                .setAction(protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets)) ?
-                                        "HTTP-Sheets auto" : "HTTP auto")
-                                .setLabel(Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()))
-                                .build());
+                String action = protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets)) ?
+                        "HTTP-Sheets auto" : "HTTP auto";
+                String label = Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion());
+                Collect.getInstance().logRemoteAnalytics("Submission", action, label);
             } catch (UploadException e) {
                 Timber.d(e);
                 anyFailure = true;

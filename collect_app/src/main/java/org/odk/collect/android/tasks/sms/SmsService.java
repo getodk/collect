@@ -10,7 +10,6 @@ import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
-import com.google.android.gms.analytics.HitBuilders;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -344,13 +343,7 @@ public class SmsService {
                 }
             }
 
-            Collect.getInstance()
-                    .getDefaultTracker()
-                    .send(new HitBuilders.EventBuilder()
-                            .setCategory("Submission")
-                            .setAction("SMS")
-                            .setLabel(Collect.getFormIdentifierHash(formId, formVersion))
-                            .build());
+            Collect.getInstance().logRemoteAnalytics("Submission", "SMS", Collect.getFormIdentifierHash(formId, formVersion));
         }
     }
 

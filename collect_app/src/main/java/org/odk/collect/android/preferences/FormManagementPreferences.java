@@ -20,8 +20,6 @@ import android.preference.Preference;
 import androidx.annotation.Nullable;
 import android.view.View;
 
-import com.google.android.gms.analytics.HitBuilders;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.tasks.ServerPollingJob;
@@ -87,12 +85,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
                     ServerPollingJob.schedulePeriodicJob((String) newValue);
 
-                    Collect.getInstance().getDefaultTracker()
-                            .send(new HitBuilders.EventBuilder()
-                                    .setCategory("PreferenceChange")
-                                    .setAction("Periodic form updates check")
-                                    .setLabel((String) newValue)
-                                    .build());
+                    Collect.getInstance().logRemoteAnalytics("PreferenceChange", "Periodic form updates check", (String) newValue);
 
                     if (newValue.equals(getString(R.string.never_value))) {
                         Preference automaticUpdatePreference = findPreference(KEY_AUTOMATIC_UPDATE);
@@ -122,12 +115,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 pref.setEnabled(!formUpdateCheckPeriod.equals(getString(R.string.never_value)));
 
                 pref.setOnPreferenceChangeListener((preference, newValue) -> {
-                    Collect.getInstance().getDefaultTracker()
-                            .send(new HitBuilders.EventBuilder()
-                                    .setCategory("PreferenceChange")
-                                    .setAction("Automatic form updates")
-                                    .setLabel(newValue + " " + formUpdateCheckPeriod)
-                                    .build());
+                    Collect.getInstance().logRemoteAnalytics("PreferenceChange", "Automatic form updates", newValue + " " + formUpdateCheckPeriod);
 
                     return true;
                 });

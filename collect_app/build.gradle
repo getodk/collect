@@ -100,7 +100,7 @@ android {
             }
             minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-            resValue("bool", "FIREBASE_CRASHLYTICS_ENABLED", "false")
+            resValue("bool", "FIREBASE_ENABLED", "false")
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
         }
@@ -111,14 +111,14 @@ android {
             }
             minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-            resValue("bool", "FIREBASE_CRASHLYTICS_ENABLED", "true")
+            resValue("bool", "FIREBASE_ENABLED", "true")
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
         }
         debug {
             debuggable(true)
             testCoverageEnabled(true)
-            resValue("bool", "FIREBASE_CRASHLYTICS_ENABLED", "false")
+            resValue("bool", "FIREBASE_ENABLED", "false")
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
         }

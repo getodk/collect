@@ -16,8 +16,6 @@ package org.odk.collect.android.tasks;
 
 import android.database.Cursor;
 
-import com.google.android.gms.analytics.HitBuilders;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
@@ -73,16 +71,9 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
                     String destinationUrl = uploader.getUrlToSubmitTo(instance, null, null);
                     if (InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile(destinationUrl)) {
                         uploader.uploadOneSubmission(instance, destinationUrl);
-
                         outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), DEFAULT_SUCCESSFUL_TEXT);
 
-                        Collect.getInstance()
-                                .getDefaultTracker()
-                                .send(new HitBuilders.EventBuilder()
-                                        .setCategory("Submission")
-                                        .setAction("HTTP-Sheets")
-                                        .setLabel(Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()))
-                                        .build());
+                        Collect.getInstance().logRemoteAnalytics("Submission", "HTTP-Sheets", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
                     } else {
                         outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE);
                     }
