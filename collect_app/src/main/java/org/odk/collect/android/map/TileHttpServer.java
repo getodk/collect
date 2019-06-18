@@ -48,6 +48,10 @@ public class TileHttpServer {
         return null;
     }
 
+    /**
+     * Constructs a URL template for fetching tiles from this server for a given
+     * tileset, with placeholders {z} for zoom level and {x} and {y} for coordinates.
+     */
     public String getUrlTemplate(String key) {
         return String.format(
             Locale.US, "http://localhost:%d/%s/{z}/{x}/{y}", socket.getLocalPort(), key);

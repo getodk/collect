@@ -18,6 +18,12 @@ import java.util.Locale;
 import androidx.annotation.NonNull;
 import timber.log.Timber;
 
+/**
+ * This class provides access to the metadata and tiles in a .mbtiles file.
+ * An .mbtiles file is a SQLite database file containing specific tables and
+ * columns, including tiles that may contain raster images or vector geometry.
+ * See https://github.com/mapbox/mbtiles-spec for the detailed specification.
+ */
 public class MbtilesFile implements Closeable, TileHttpServer.TileSource {
     public enum Type { RASTER, VECTOR }
 
@@ -31,6 +37,9 @@ public class MbtilesFile implements Closeable, TileHttpServer.TileSource {
     public MbtilesFile(File file) throws SQLiteException, UnsupportedFormatException {
         this.file = file;
         db = SQLiteDatabase.openOrCreateDatabase(file, null);
+
+        // The "format" code indicates whether the binary tiles are raster image
+        // files (JPEG, PNG) or protobuf-encoded vector geometry (PBF, MVT).
         format = getMetadata("format").toLowerCase(Locale.US);
         if (format.equals("pbf") || format.equals("mvt")) {
             contentType = "application/protobuf";
@@ -56,6 +65,7 @@ public class MbtilesFile implements Closeable, TileHttpServer.TileSource {
         db.close();
     }
 
+    /** Queries the "metadata" table, which has just "name" and "value" columns. */
     public @NonNull String getMetadata(String key) {
         try (Cursor results = db.query("metadata", new String[] {"value"},
             "name = ?", new String[] {key}, null, null, null, null)) {
@@ -63,6 +73,7 @@ public class MbtilesFile implements Closeable, TileHttpServer.TileSource {
         }
     }
 
+    /** Puts together the HTTP response for a given tile. */
     public TileHttpServer.Response getTile(int zoom, int x, int y) {
         // TMS coordinates are used in .mbtiles files, so Y needs to be flipped.
         byte[] data = getTileBlob(zoom, x, (1 << zoom) - 1 - y);
@@ -70,10 +81,14 @@ public class MbtilesFile implements Closeable, TileHttpServer.TileSource {
             new TileHttpServer.Response(data, contentType, contentEncoding);
     }
 
+    /** Fetches a tile out of the .mbtiles SQLite database. */
     // PMD complains about returning null for an array return type, but we
     // really do want to return null when there is no tile available.
     @SuppressWarnings("PMD.ReturnEmptyArrayRatherThanNull")
     public byte[] getTileBlob(int zoom, int column, int row) {
+        // We have to use String.format because the templating mechanism in
+        // SQLiteDatabase.query is written for a strange alternate universe
+        // in which numbers don't exist -- it only supports strings!
         String selection = String.format(
             Locale.US,
             "zoom_level = %d and tile_column = %d and tile_row = %d",
