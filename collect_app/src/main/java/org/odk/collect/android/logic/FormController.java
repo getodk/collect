@@ -14,6 +14,9 @@
 
 package org.odk.collect.android.logic;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import org.javarosa.core.model.CoreModelModule;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
@@ -58,8 +61,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.XML_OPENDATAKIT_NAMESPACE;
@@ -1284,6 +1285,23 @@ public class FormController {
         }
 
         return new InstanceMetadata(instanceId, instanceName, auditConfig);
+    }
+
+    /**
+     * Returns true if the current form definition audits user location in the background.
+     */
+    public boolean currentFormAuditsLocation() {
+        AuditConfig auditConfig = getSubmissionMetadata().auditConfig;
+
+        return auditConfig != null && auditConfig.isLocationEnabled();
+    }
+
+    /**
+     * Returns true if the current form definition collects user location in the background either
+     * because of the audit configuration or because it contains odk:setlocation actions.
+     */
+    public boolean currentFormCollectsBackgroundLocation() {
+        return currentFormAuditsLocation() || getFormDef().hasSetLocationAction();
     }
 
     /**

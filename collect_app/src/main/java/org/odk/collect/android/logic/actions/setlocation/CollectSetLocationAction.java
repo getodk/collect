@@ -69,8 +69,8 @@ public class CollectSetLocationAction extends SetLocationAction implements Locat
         // over again.
         highestAccuracyReading = null;
 
-        // Only track location if the Collect preference allows it. If it's not allowed, leave
-        // the target field blank.
+        // Only start acquiring location if the Collect preference allows it. If it's not allowed,
+        // leave the target field blank.
         if (GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true)) {
             new Handler(Looper.getMainLooper()).post(() -> {
                 if (locationClient == null) {

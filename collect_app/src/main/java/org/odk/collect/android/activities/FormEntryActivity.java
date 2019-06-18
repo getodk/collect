@@ -609,13 +609,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         googleLocationClient.start();
     }
 
-    private boolean shouldLocationCoordinatesBeCollected(FormController formController) {
-        return formController != null
-                && formController.getSubmissionMetadata().auditConfig != null
-                && formController.getSubmissionMetadata().auditConfig.isLocationEnabled();
-    }
-
-    private boolean isBackgroundLocationEnabled() {
+    private boolean isBackgroundLocationPreferenceEnabled() {
         return GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true);
     }
 
@@ -994,10 +988,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         menu.findItem(R.id.menu_preferences).setVisible(useability)
                 .setEnabled(useability);
 
-        if (shouldLocationCoordinatesBeCollected(getFormController()) && LocationClients.areGooglePlayServicesAvailable(this)) {
+        if (getFormController() != null && getFormController().currentFormCollectsBackgroundLocation()
+                && LocationClients.areGooglePlayServicesAvailable(this)) {
             MenuItem backgroundLocation = menu.findItem(R.id.track_location);
             backgroundLocation.setVisible(true);
-            backgroundLocation.setChecked(isBackgroundLocationEnabled());
+            backgroundLocation.setChecked(isBackgroundLocationPreferenceEnabled());
         }
 
         return true;
@@ -1033,7 +1028,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 startActivity(pref);
                 return true;
             case R.id.track_location:
-                boolean previousValue = isBackgroundLocationEnabled();
+                boolean previousValue = isBackgroundLocationPreferenceEnabled();
                 if (formController != null) {
                     if (previousValue) {
                         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_TRACKING_DISABLED, false);
@@ -2106,7 +2101,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         } else if (shouldLocationCoordinatesBeCollected(formController)
                 && LocationClients.areGooglePlayServicesAvailable(this)) {
             registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
-            if (isBackgroundLocationEnabled()) {
+            if (isBackgroundLocationPreferenceEnabled()) {
                 if (PermissionUtils.areLocationPermissionsGranted(this)) {
                     if (!locationPermissionsGranted) {
                         locationPermissionsGranted = true;
@@ -2477,11 +2472,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
+    /**
+     *
+     */
     private void initBackgroundLocationIfNeeded(FormController formController) {
-        if (shouldLocationCoordinatesBeCollected(formController)) {
+        if (formController != null && formController.currentFormAuditsLocation()) {
             if (LocationClients.areGooglePlayServicesAvailable(this)) {
                 registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
-                if (isBackgroundLocationEnabled()) {
+                if (isBackgroundLocationPreferenceEnabled()) {
                     locationTrackingEnabled(formController, true);
                 } else {
                     if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
