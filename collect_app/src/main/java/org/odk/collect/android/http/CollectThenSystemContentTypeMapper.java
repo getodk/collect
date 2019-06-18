@@ -5,7 +5,6 @@ import android.webkit.MimeTypeMap;
 import androidx.annotation.NonNull;
 
 import org.odk.collect.android.utilities.FileUtils;
-import org.opendatakit.httpclientandroidlib.entity.ContentType;
 
 public class CollectThenSystemContentTypeMapper implements OpenRosaHttpInterface.FileToContentTypeMapper {
 
@@ -18,49 +17,47 @@ public class CollectThenSystemContentTypeMapper implements OpenRosaHttpInterface
     @NonNull
     @Override
     public String map(String fileName) {
-        ContentType contentType = ContentTypeMapping.of(fileName);
+        String extension = FileUtils.getFileExtension(fileName);
 
-        if (contentType == null) {
-            String mime = androidTypeMap.getMimeTypeFromExtension(FileUtils.getFileExtension(fileName));
-            if (mime != null) {
-                contentType = ContentType.create(mime);
-            } else {
-                contentType = ContentType.APPLICATION_OCTET_STREAM;
-            }
+        String collectContentType = CollectContentTypeMappings.of(extension);
+        String androidContentType = androidTypeMap.getMimeTypeFromExtension(extension);
+
+        if (collectContentType != null) {
+            return collectContentType;
+        } else if (androidContentType != null) {
+            return androidContentType;
+        } else {
+            return "application/octet-stream";
         }
-
-        return contentType.getMimeType();
     }
 
-    private enum ContentTypeMapping {
-        XML("xml",  ContentType.TEXT_XML),
-        _3GPP("3gpp", ContentType.create("audio/3gpp")),
-        _3GP("3gp",  ContentType.create("video/3gpp")),
-        AVI("avi",  ContentType.create("video/avi")),
-        AMR("amr",  ContentType.create("audio/amr")),
-        CSV("csv",  ContentType.create("text/csv")),
-        JPG("jpg",  ContentType.create("image/jpeg")),
-        MP3("mp3",  ContentType.create("audio/mp3")),
-        MP4("mp4",  ContentType.create("video/mp4")),
-        OGA("oga",  ContentType.create("audio/ogg")),
-        OGG("ogg",  ContentType.create("audio/ogg")),
-        OGV("ogv",  ContentType.create("video/ogg")),
-        WAV("wav",  ContentType.create("audio/wav")),
-        WEBM("webm", ContentType.create("video/webm")),
-        XLS("xls",  ContentType.create("application/vnd.ms-excel"));
+    private enum CollectContentTypeMappings {
+        XML("xml",  "text/xml"),
+        _3GPP("3gpp", "audio/3gpp"),
+        _3GP("3gp",  "video/3gpp"),
+        AVI("avi",  "video/avi"),
+        AMR("amr",  "audio/amr"),
+        CSV("csv",  "text/csv"),
+        JPG("jpg",  "image/jpeg"),
+        MP3("mp3",  "audio/mp3"),
+        MP4("mp4",  "video/mp4"),
+        OGA("oga",  "audio/ogg"),
+        OGG("ogg",  "audio/ogg"),
+        OGV("ogv",  "video/ogg"),
+        WAV("wav",  "audio/wav"),
+        WEBM("webm", "video/webm"),
+        XLS("xls",  "application/vnd.ms-excel");
 
         private String extension;
-        private ContentType contentType;
+        private String contentType;
 
-        ContentTypeMapping(String extension, ContentType contentType) {
+        CollectContentTypeMappings(String extension, String contentType) {
             this.extension = extension;
             this.contentType = contentType;
         }
 
-        public static ContentType of(String fileName) {
-            String extension = FileUtils.getFileExtension(fileName);
-
-            for (ContentTypeMapping m : ContentTypeMapping.values()) {
+        public static String of(String extension) {
+            for (CollectContentTypeMappings m : CollectContentTypeMappings.values()) {
                 if (m.extension.equals(extension)) {
                     return m.contentType;
                 }
