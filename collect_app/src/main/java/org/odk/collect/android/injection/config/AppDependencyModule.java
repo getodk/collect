@@ -3,6 +3,7 @@ package org.odk.collect.android.injection.config;
 import android.app.Application;
 import android.content.Context;
 import android.telephony.SmsManager;
+import android.webkit.MimeTypeMap;
 
 import com.google.android.gms.analytics.Tracker;
 
@@ -63,8 +64,13 @@ public class AppDependencyModule {
     }
 
     @Provides
-    OpenRosaHttpInterface provideHttpInterface() {
-        return new OkHttpConnection(null, new CollectThenSystemContentTypeMapper());
+    MimeTypeMap provideMimeTypeMap() {
+        return MimeTypeMap.getSingleton();
+    }
+
+    @Provides
+    OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap) {
+        return new OkHttpConnection(null, new CollectThenSystemContentTypeMapper(mimeTypeMap));
     }
 
     @Provides

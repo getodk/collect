@@ -1,5 +1,7 @@
 package org.odk.collect.android.http;
 
+import android.webkit.MimeTypeMap;
+
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
@@ -13,7 +15,7 @@ public class OkHttpConnectionHeadRequestTest extends OpenRosaHeadRequestTest {
     protected OpenRosaHttpInterface buildSubject() {
         return new OkHttpConnection(new OkHttpClient.Builder()
                 .sslSocketFactory(TlsUtil.localhost().sslSocketFactory(), TlsUtil.localhost().trustManager()),
-                new CollectThenSystemContentTypeMapper()
+                new CollectThenSystemContentTypeMapper(MimeTypeMap.getSingleton())
         );
     }
 

@@ -23,6 +23,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
+import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
@@ -127,7 +128,7 @@ public class AutoSendWorker extends Worker {
                 return Result.FAILURE;
             }
         } else {
-            uploader = new InstanceServerUploader(new OkHttpConnection(null, new CollectThenSystemContentTypeMapper()),
+            uploader = new InstanceServerUploader(new OkHttpConnection(null, new CollectThenSystemContentTypeMapper(MimeTypeMap.getSingleton())),
                     new WebCredentialsUtils(), new HashMap<>());
             deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
                     .getSingularProperty(PropertyManager.withUri(PropertyManager.PROPMGR_DEVICE_ID));
