@@ -1,5 +1,7 @@
 package org.odk.collect.android.utilities;
 
+import android.webkit.MimeTypeMap;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.http.CollectServerClient;
@@ -23,7 +25,7 @@ public class CollectServerClientTest extends MockedServerTest {
     public void setUp() throws Exception {
         // server hangs without a response queued:
         server.enqueue(new MockResponse());
-        collectServerClient = new CollectServerClient(new OkHttpConnection(null, new CollectThenSystemContentTypeMapper()), new WebCredentialsUtils());
+        collectServerClient = new CollectServerClient(new OkHttpConnection(null, new CollectThenSystemContentTypeMapper(MimeTypeMap.getSingleton())), new WebCredentialsUtils());
     }
 
         @Test
