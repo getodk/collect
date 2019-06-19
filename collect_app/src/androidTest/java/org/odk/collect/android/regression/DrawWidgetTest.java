@@ -2,36 +2,47 @@ package org.odk.collect.android.regression;
 
 import androidx.test.runner.AndroidJUnit4;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.espressoutils.FormEntry;
+import org.odk.collect.android.espressoutils.MainMenu;
+import org.odk.collect.android.test.FormLoadingUtils;
+
+import java.io.IOException;
 
 import static androidx.test.espresso.Espresso.pressBack;
 
 
 // Issue number NODK-209
 @RunWith(AndroidJUnit4.class)
-public class DrawWidgetTest extends BaseFormTest {
+public class DrawWidgetTest extends BaseRegressionTest {
+
+    @BeforeClass
+    public static void copyFormToSdCard() throws IOException {
+        FormLoadingUtils.copyFormToSdCard("All_widgets.xml", "regression/");
+    }
 
     @Test
     public void saveIgnoreDialog_ShouldUseBothOptions() {
 
         //TestCase1
-        EspressoTestUtilities.startBlankForm("All widgets");
-        EspressoTestUtilities.clickGoToIconInForm();
-        EspressoTestUtilities.clickOnText("Image widgets");
-        EspressoTestUtilities.clickOnText("Draw widget");
-        EspressoTestUtilities.clickOnId(R.id.simple_button);
+        MainMenu.startBlankForm("All widgets");
+        FormEntry.clickGoToIconInForm();
+        FormEntry.clickOnText("Image widgets");
+        FormEntry.clickOnText("Draw widget");
+        FormEntry.clickOnId(R.id.simple_button);
         pressBack();
-        EspressoTestUtilities.checkIsTextDisplayed("Exit Sketch Image");
-        EspressoTestUtilities.checkIsStringDisplayed(R.string.keep_changes);
-        EspressoTestUtilities.clickOnString(R.string.do_not_save);
-        EspressoTestUtilities.clickOnId(R.id.simple_button);
+        FormEntry.checkIsTextDisplayed("Exit Sketch Image");
+        FormEntry.checkIsStringDisplayed(R.string.keep_changes);
+        FormEntry.clickOnString(R.string.do_not_save);
+        FormEntry.clickOnId(R.id.simple_button);
         pressBack();
-        EspressoTestUtilities.clickOnString(R.string.keep_changes);
-        EspressoTestUtilities.clickGoToIconInForm();
-        EspressoTestUtilities.clickJumpEndButton();
-        EspressoTestUtilities.clickSaveAndExit();
+        FormEntry.clickOnString(R.string.keep_changes);
+        FormEntry.clickGoToIconInForm();
+        FormEntry.clickJumpEndButton();
+        FormEntry.clickSaveAndExit();
 
     }
 
@@ -39,19 +50,19 @@ public class DrawWidgetTest extends BaseFormTest {
     public void setColor_ShouldSeeColorPicker() {
 
         //TestCase2
-        EspressoTestUtilities.startBlankForm("All widgets");
-        EspressoTestUtilities.clickGoToIconInForm();
-        EspressoTestUtilities.clickOnText("Image widgets");
-        EspressoTestUtilities.clickOnText("Draw widget");
-        EspressoTestUtilities.clickOnId(R.id.simple_button);
-        EspressoTestUtilities.clickOnId(R.id.fab_actions);
-        EspressoTestUtilities.clickOnId(R.id.fab_set_color);
-        EspressoTestUtilities.clickOnString(R.string.ok);
+        MainMenu.startBlankForm("All widgets");
+        FormEntry.clickGoToIconInForm();
+        FormEntry.clickOnText("Image widgets");
+        FormEntry.clickOnText("Draw widget");
+        FormEntry.clickOnId(R.id.simple_button);
+        FormEntry.clickOnId(R.id.fab_actions);
+        FormEntry.clickOnId(R.id.fab_set_color);
+        FormEntry.clickOnString(R.string.ok);
         pressBack();
-        EspressoTestUtilities.clickOnString(R.string.keep_changes);
-        EspressoTestUtilities.clickGoToIconInForm();
-        EspressoTestUtilities.clickJumpEndButton();
-        EspressoTestUtilities.clickSaveAndExit();
+        FormEntry.clickOnString(R.string.keep_changes);
+        FormEntry.clickGoToIconInForm();
+        FormEntry.clickJumpEndButton();
+        FormEntry.clickSaveAndExit();
 
     }
 
@@ -59,25 +70,25 @@ public class DrawWidgetTest extends BaseFormTest {
     public void multiClickOnPlus_ShouldDisplayIcons() {
 
         //TestCase3
-        EspressoTestUtilities.startBlankForm("All widgets");
-        EspressoTestUtilities.clickGoToIconInForm();
-        EspressoTestUtilities.clickOnText("Image widgets");
-        EspressoTestUtilities.clickOnText("Draw widget");
-        EspressoTestUtilities.clickOnId(R.id.simple_button);
-        EspressoTestUtilities.clickOnId(R.id.fab_actions);
-        EspressoTestUtilities.checkIsStringDisplayed(R.string.set_color);
-        EspressoTestUtilities.checkIsIdDisplayed(R.id.fab_clear);
-        EspressoTestUtilities.clickOnId(R.id.fab_actions);
-        EspressoTestUtilities.checkIsStringDisplayed(R.string.set_color);
-        EspressoTestUtilities.checkIsIdDisplayed(R.id.fab_save_and_close);
-        EspressoTestUtilities.clickOnId(R.id.fab_actions);
-        EspressoTestUtilities.checkIsStringDisplayed(R.string.set_color);
-        EspressoTestUtilities.checkIsStringDisplayed(R.string.set_color);
+        MainMenu.startBlankForm("All widgets");
+        FormEntry.clickGoToIconInForm();
+        FormEntry.clickOnText("Image widgets");
+        FormEntry.clickOnText("Draw widget");
+        FormEntry.clickOnId(R.id.simple_button);
+        FormEntry.clickOnId(R.id.fab_actions);
+        FormEntry.checkIsStringDisplayed(R.string.set_color);
+        FormEntry.checkIsIdDisplayed(R.id.fab_clear);
+        FormEntry.clickOnId(R.id.fab_actions);
+        FormEntry.checkIsStringDisplayed(R.string.set_color);
+        FormEntry.checkIsIdDisplayed(R.id.fab_save_and_close);
+        FormEntry.clickOnId(R.id.fab_actions);
+        FormEntry.checkIsStringDisplayed(R.string.set_color);
+        FormEntry.checkIsStringDisplayed(R.string.set_color);
         pressBack();
-        EspressoTestUtilities.clickOnString(R.string.keep_changes);
-        EspressoTestUtilities.clickGoToIconInForm();
-        EspressoTestUtilities.clickJumpEndButton();
-        EspressoTestUtilities.clickSaveAndExit();
+        FormEntry.clickOnString(R.string.keep_changes);
+        FormEntry.clickGoToIconInForm();
+        FormEntry.clickJumpEndButton();
+        FormEntry.clickSaveAndExit();
 
     }
 }
