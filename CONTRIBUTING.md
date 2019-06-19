@@ -171,7 +171,7 @@ To swap out depdendencies in a Robolectric test you can override the module the 
 @Before
 public void setup() {
     MyDependency mocked = mock(MyDependency.class);
-    RobolectricHelpers.overrideAppDependencyModule(new AppDepedencyModule() {
+    RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
       @Override
       public MyDependency providesMyDependency() {
         return mocked;
