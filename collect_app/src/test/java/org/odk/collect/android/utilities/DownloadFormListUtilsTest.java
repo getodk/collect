@@ -9,7 +9,6 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
 
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -31,7 +30,6 @@ public class DownloadFormListUtilsTest {
             }
         });
     }
-
 
     @Test
     public void removesTrailingSlashesFromUrl() {
