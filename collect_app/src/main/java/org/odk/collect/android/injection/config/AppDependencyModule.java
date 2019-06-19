@@ -3,6 +3,7 @@ package org.odk.collect.android.injection.config;
 import android.app.Application;
 import android.content.Context;
 import android.telephony.SmsManager;
+import android.webkit.MimeTypeMap;
 
 import com.google.android.gms.analytics.Tracker;
 
@@ -12,7 +13,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.http.CollectThenSystemContentTypeMapper;
-import org.odk.collect.android.http.HttpClientConnection;
+import org.odk.collect.android.http.OkHttpConnection;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
@@ -63,12 +64,17 @@ public class AppDependencyModule {
     }
 
     @Provides
-    OpenRosaHttpInterface provideHttpInterface() {
-        return new HttpClientConnection(new CollectThenSystemContentTypeMapper());
+    MimeTypeMap provideMimeTypeMap() {
+        return MimeTypeMap.getSingleton();
     }
 
     @Provides
-    CollectServerClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
+    OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap) {
+        return new OkHttpConnection(null, new CollectThenSystemContentTypeMapper(mimeTypeMap));
+    }
+
+    @Provides
+    public CollectServerClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
         return new CollectServerClient(httpInterface, webCredentialsUtils);
     }
 

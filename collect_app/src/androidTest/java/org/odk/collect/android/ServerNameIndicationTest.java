@@ -6,9 +6,8 @@ import androidx.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.http.CollectServerClient;
-import org.odk.collect.android.http.CollectThenSystemContentTypeMapper;
-import org.odk.collect.android.http.HttpClientConnection;
 import org.odk.collect.android.http.HttpGetResult;
+import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.BufferedReader;
@@ -21,6 +20,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
+import static org.odk.collect.android.support.CollectHelpers.getAppDependencyComponent;
 
 /**
  * An on-device test for TLS server name indication support.
@@ -29,14 +29,16 @@ import static junit.framework.Assert.fail;
  */
 @Suppress
 @RunWith(AndroidJUnit4.class)
-public class SNITest {
+public class ServerNameIndicationTest {
 
     private static final String SNI_URI = "https://sni.velox.ch/";
     private static final String SUCCESS_SENTINEL = "sent the following TLS server name indication extension";
 
     @Test
     public void testThatHttpClientSupportsSNI() throws Exception {
-        CollectServerClient serverClient = new CollectServerClient(new HttpClientConnection(new CollectThenSystemContentTypeMapper()), new WebCredentialsUtils());
+        OpenRosaHttpInterface openRosaHttpInterface = getAppDependencyComponent().openRosaHttpInterface();
+        CollectServerClient serverClient = new CollectServerClient(openRosaHttpInterface, new WebCredentialsUtils());
+
         HttpGetResult inputStreamResult = serverClient.getHttpInputStream(SNI_URI, null);
         assertHttpSuccess(inputStreamResult.getStatusCode());
         assertPageContent(inputStreamResult.getInputStream());

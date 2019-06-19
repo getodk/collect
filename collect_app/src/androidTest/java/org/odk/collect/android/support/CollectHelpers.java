@@ -1,6 +1,11 @@
 package org.odk.collect.android.support;
 
+import android.content.Context;
+
+import androidx.test.platform.app.InstrumentationRegistry;
+
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.logic.FormController;
 
 public final class CollectHelpers {
@@ -15,5 +20,11 @@ public final class CollectHelpers {
         }
 
         return Collect.getInstance().getFormController();
+    }
+
+    public static AppDependencyComponent getAppDependencyComponent() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        Collect application = (Collect) context;
+        return application.getComponent();
     }
 }
