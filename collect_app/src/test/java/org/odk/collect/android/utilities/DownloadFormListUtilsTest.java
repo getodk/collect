@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class DownloadFormListUtilsTest {
 
-    private CollectServerClient client = mock(CollectServerClient.class);
+    private final CollectServerClient client = mock(CollectServerClient.class);
 
     @Before
     public void setup() {
