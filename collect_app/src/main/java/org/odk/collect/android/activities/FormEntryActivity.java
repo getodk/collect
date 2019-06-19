@@ -294,6 +294,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private boolean showNavigationButtons;
+
+    /** null unless the form definition configures background location tracking **/
+    @Nullable
     private GoogleLocationClient googleLocationClient;
 
     private Bundle state;
@@ -1036,7 +1039,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             googleLocationClient.stop();
                         }
                     } else {
-                        locationTrackingEnabled(formController, false);
+                        enableBackgroundLocationTracking(formController, false);
                     }
                 }
                 GeneralSharedPreferences.getInstance().save(KEY_BACKGROUND_LOCATION, !previousValue);
@@ -2095,19 +2098,31 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     protected void onStart() {
         super.onStart();
         FormController formController = getFormController();
+
         if (savedFormStart) {
+            // If the user got here by editing an existing saved instance, s/he first saw the
+            // hierarchy so background location tracking has not been enabled yet.
             savedFormStart = false;
-            initBackgroundLocationIfNeeded(formController);
-        } else if (shouldLocationCoordinatesBeCollected(formController)
+            if (formController != null && formController.currentFormCollectsBackgroundLocation()
+                    && backgroundLocationPreconditionsSatisfied(formController)) {
+                enableBackgroundLocationTracking(formController, true);
+            }
+        } else if (formController != null && formController.currentFormCollectsBackgroundLocation()
                 && LocationClients.areGooglePlayServicesAvailable(this)) {
-            registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+            if (formController.currentFormAuditsLocation()) {
+                registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+            }
             if (isBackgroundLocationPreferenceEnabled()) {
                 if (PermissionUtils.areLocationPermissionsGranted(this)) {
                     if (!locationPermissionsGranted) {
                         locationPermissionsGranted = true;
                         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED, false);
                     }
-                    setUpLocationClient(formController.getSubmissionMetadata().auditConfig);
+
+                    // Setlocation actions manage their own location clients
+                    if (formController.currentFormAuditsLocation()) {
+                        setUpLocationClient(formController.getSubmissionMetadata().auditConfig);
+                    }
                 } else if (locationPermissionsGranted) {
                     locationPermissionsGranted = false;
                     formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_NOT_GRANTED, false);
@@ -2461,7 +2476,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                 }
 
-                initBackgroundLocationIfNeeded(formController);
+                if (formController.currentFormCollectsBackgroundLocation() && backgroundLocationPreconditionsSatisfied(formController)) {
+                    enableBackgroundLocationTracking(formController, true);
+                }
 
                 refreshCurrentView();
             }
@@ -2473,30 +2490,48 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     /**
+     * Returns true if Google Play Services are available and the background location tracking
+     * preference is enabled. Otherwise, returns false, displays a snackbar to the user and logs
+     * audit events.
      *
+     * Additionally, if Google Play Services are available and the form audits location, registers
+     * to receive notifications on provider change.
      */
-    private void initBackgroundLocationIfNeeded(FormController formController) {
-        if (formController != null && formController.currentFormAuditsLocation()) {
-            if (LocationClients.areGooglePlayServicesAvailable(this)) {
+    private boolean backgroundLocationPreconditionsSatisfied(FormController formController) {
+        if (LocationClients.areGooglePlayServicesAvailable(this)) {
+            if (formController.currentFormAuditsLocation()) {
                 registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
-                if (isBackgroundLocationPreferenceEnabled()) {
-                    locationTrackingEnabled(formController, true);
-                } else {
-                    if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                        SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_disabled), "").replace("  ", " "));
-                    } else {
-                        SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_disabled), "⋮"));
-                    }
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_TRACKING_DISABLED, false);
-                }
-            } else {
-                SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.google_play_services_not_available));
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, false);
             }
+
+            if (isBackgroundLocationPreferenceEnabled()) {
+                return true;
+            } else {
+                if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                    SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_disabled), "").replace("  ", " "));
+                } else {
+                    SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_disabled), "⋮"));
+                }
+
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_TRACKING_DISABLED, false);
+                return false;
+            }
+        } else {
+            SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.google_play_services_not_available));
+            formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, false);
+
+            return false;
         }
     }
 
-    private void locationTrackingEnabled(FormController formController, boolean calledJustAfterFormStart) {
+    /**
+     * Logs that location tracking is enabled, requests location permissions and in the case of
+     * audit background location tracking, initialize the location client.
+     *
+     * @param formController Gives access to the current form instance and underlying form definition.
+     * @param showBackgroundLocationNotice If true, alerts the user that their location is being
+     *                                     tracked in the background.
+     */
+    private void enableBackgroundLocationTracking(FormController formController, boolean showBackgroundLocationNotice) {
         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_TRACKING_ENABLED, false);
         new PermissionUtils().requestLocationPermissions(this, new PermissionListener() {
             @Override
@@ -2505,9 +2540,19 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED, false);
                     locationPermissionsGranted = true;
                 }
-                setUpLocationClient(formController.getSubmissionMetadata().auditConfig);
-                if (googleLocationClient.isLocationAvailable()) {
-                    if (calledJustAfterFormStart) {
+
+                AuditConfig formAuditConfig = formController.getSubmissionMetadata().auditConfig;
+                // Setlocation actions manage their own location clients
+                if (formAuditConfig != null && formAuditConfig.isLocationEnabled()) {
+                    setUpLocationClient(formAuditConfig);
+                }
+
+                // If the form does not configure background location audits, then it contains
+                // setlocation actions. In that case, show the location tracking notice even if
+                // no providers are currently enabled since each action has its own location client.
+                if (formAuditConfig == null || !formAuditConfig.isLocationEnabled()
+                        || googleLocationClient.isLocationAvailable()) {
+                    if (showBackgroundLocationNotice) {
                         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED, false);
                         if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
                             SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_enabled), "").replace("  ", " "));
