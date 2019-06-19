@@ -5,15 +5,16 @@ import androidx.test.runner.AndroidJUnit4;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.regression.BaseFormTest;
-import org.odk.collect.android.regression.EspressoTestUtilities;
+import org.odk.collect.android.espressoutils.FormEntry;
+import org.odk.collect.android.espressoutils.MainMenu;
+import org.odk.collect.android.regression.BaseRegressionTest;
 import org.odk.collect.android.test.FormLoadingUtils;
 
 import java.io.IOException;
 
 // Issue number NODK-207
 @RunWith(AndroidJUnit4.class)
-public class CascadingSelectWithNumberInHeaderTest extends BaseFormTest {
+public class CascadingSelectWithNumberInHeaderTest extends BaseRegressionTest {
 
     @BeforeClass
     public static void copyFormToSdCard() throws IOException {
@@ -22,19 +23,19 @@ public class CascadingSelectWithNumberInHeaderTest extends BaseFormTest {
 
     @Test
     public void fillForm_ShouldFillFormWithNumberInCsvHeader() {
-        EspressoTestUtilities.startBlankForm("numberInCSV");
-        EspressoTestUtilities.swipeToNextQuestion();
-        EspressoTestUtilities.clickOnText("Venda de animais");
-        EspressoTestUtilities.checkIsTextDisplayed("1a");
-        EspressoTestUtilities.swipeToNextQuestion();
-        EspressoTestUtilities.clickOnText("Vendas agrícolas");
-        EspressoTestUtilities.checkIsTextDisplayed("2a");
-        EspressoTestUtilities.swipeToNextQuestion();
-        EspressoTestUtilities.clickOnText("Pensão");
-        EspressoTestUtilities.checkIsTextDisplayed("3a");
-        EspressoTestUtilities.swipeToNextQuestion();
-        EspressoTestUtilities.swipeToNextQuestion();
-        EspressoTestUtilities.clickSaveAndExit();
+        MainMenu.startBlankForm("numberInCSV");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickOnText("Venda de animais");
+        FormEntry.checkIsTextDisplayed("1a");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickOnText("Vendas agrícolas");
+        FormEntry.checkIsTextDisplayed("2a");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickOnText("Pensão");
+        FormEntry.checkIsTextDisplayed("3a");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickSaveAndExit();
 
     }
 }
