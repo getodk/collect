@@ -17,8 +17,6 @@
 package org.odk.collect.android.logic.actions.setlocation;
 
 import android.location.Location;
-import android.os.Handler;
-import android.os.Looper;
 
 import com.google.android.gms.location.LocationListener;
 
@@ -26,7 +24,8 @@ import org.javarosa.core.model.actions.setlocation.SetLocationAction;
 import org.javarosa.core.model.instance.TreeReference;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.GoogleLocationClient;
-import org.odk.collect.android.location.client.LocationClient;
+import org.odk.collect.android.location.client.MaxAccuracyWithinTimeoutLocationClient;
+import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.GeoUtils;
 
@@ -35,23 +34,25 @@ import timber.log.Timber;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 
 /**
- * An Android-specific implementation of {@link SetLocationAction}. When the action is triggered,
- * the first location available is saved and the highest-accuracy reading within
- * {@link #SECONDS_TO_CONSIDER_UPDATES} seconds will replace it. If no location is available within
- * {@link #SECONDS_TO_CONSIDER_UPDATES} seconds, no location is written.
+ * An Android-specific implementation of {@link SetLocationAction}.
+ *
+ * When the action is triggered, the first location available is saved and the highest-accuracy
+ * reading within {@link #SECONDS_TO_CONSIDER_UPDATES} seconds will replace it. If no location is
+ * available within {@link #SECONDS_TO_CONSIDER_UPDATES} seconds, no location is written.
  *
  * It is possible for the same action to be triggered multiple times within
- * {@link #SECONDS_TO_CONSIDER_UPDATES} seconds (if the action is triggered by a value changed
- * event, for example). In that case, the highest accuracy reading resets for subsequent triggers of
- * the action.
+ * {@link #SECONDS_TO_CONSIDER_UPDATES} seconds if the action is triggered by a value changed
+ * event, for example. In that case, the highest accuracy reading resets each time the action is
+ * triggered.
+ *
+ * In a repeat, the target node for subsequent times the action is triggered could be different than
+ * the target node the first time it was triggered. In that case, only the current target node is
+ * updated.
  */
-public class CollectSetLocationAction extends SetLocationAction implements LocationListener, LocationClient.LocationClientListener {
+public class CollectSetLocationAction extends SetLocationAction implements LocationListener {
     private static final int SECONDS_TO_CONSIDER_UPDATES = 20;
 
-    private LocationClient locationClient;
-    private Location highestAccuracyReading;
-
-    private Handler timerHandler;
+    private MaxAccuracyWithinTimeoutLocationClient maxAccuracyLocationClient;
 
     public CollectSetLocationAction() {
         // For serialization
@@ -64,43 +65,19 @@ public class CollectSetLocationAction extends SetLocationAction implements Locat
 
     @Override
     public void requestLocationUpdates() {
-        // The action has been triggered again so make sure to consider the first reading. This is
-        // especially important in the case of repeats when the action may be triggered over and
-        // over again.
-        highestAccuracyReading = null;
+        // Do initialization on first location request so the client doesn't need to be serialized
+        if (maxAccuracyLocationClient == null) {
+            maxAccuracyLocationClient = new MaxAccuracyWithinTimeoutLocationClient(new GoogleLocationClient(Collect.getInstance().getApplicationContext()), this);
+        }
 
-        // Only start acquiring location if the Collect preference allows it. If it's not allowed,
-        // leave the target field blank.
-        if (GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true)) {
-            new Handler(Looper.getMainLooper()).post(() -> {
-                if (locationClient == null) {
-                    locationClient = new GoogleLocationClient(Collect.getInstance().getApplicationContext());
-                    locationClient.setPriority(LocationClient.Priority.PRIORITY_BALANCED_POWER_ACCURACY);
-                    locationClient.setListener(this);
-                    locationClient.start();
-                }
-            });
-
-            if (timerHandler == null) {
-                timerHandler = new Handler(Looper.getMainLooper());
-            }
-
-            // If this action is triggered more than once, only the most recently-triggered instance
-            // actually sets its target. For example, in a repeat, if a second repeat is added
-            // within SECONDS_TO_CONSIDER_UPDATES of the first repeat, the first repeat will stop
-            // being updated at that moment but the window of time during which the client is active
-            // is extended for the second repeat.
-            timerHandler.removeCallbacksAndMessages(null);
-            timerHandler.postDelayed(() -> {
-                if (locationClient != null) {
-                    locationClient.stop();
-                    Timber.i("Setlocation action for " + getContextualizedTargetReference() + ": stopping location updates");
-                }
-            }, SECONDS_TO_CONSIDER_UPDATES * 1000);
+        // Only start acquiring location if the Collect preference allows it and Google Play
+        // Services are available. If it's not allowed, leave the target field blank.
+        if (GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true)
+            && LocationClients.areGooglePlayServicesAvailable(Collect.getInstance().getApplicationContext())) {
+            maxAccuracyLocationClient.requestLocationUpdates(SECONDS_TO_CONSIDER_UPDATES);
         }
     }
 
-    //region LocationListener
     /**
      * When the location updates, if location updates are allowed, no location has been received yet
      * or the new location has a higher accuracy than previous locations, save the location in the
@@ -114,44 +91,10 @@ public class CollectSetLocationAction extends SetLocationAction implements Locat
         if (GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true)) {
             Timber.i("Setlocation action for " + getContextualizedTargetReference() + ": location update");
 
-            if (highestAccuracyReading == null || !location.hasAccuracy()
-                    || location.hasAccuracy() && highestAccuracyReading.hasAccuracy() && location.getAccuracy() > highestAccuracyReading.getAccuracy()) {
-                highestAccuracyReading = location;
-
-                String formattedLocation = GeoUtils.formatLocationResultString(location);
-
-                saveLocationValue(formattedLocation);
-            }
+            String formattedLocation = GeoUtils.formatLocationResultString(location);
+            saveLocationValue(formattedLocation);
         } else {
             saveLocationValue("");
         }
-    }
-    //endregion
-
-    //region LocationClientListener
-
-    /**
-     * Request location updates as soon as possible.
-     */
-    @Override
-    public void onClientStart() {
-        Timber.i("Setlocation action for " + getTargetReference() + ": starting location updates");
-        try {
-            locationClient.requestLocationUpdates(this);
-        } catch (SecurityException e) {
-            // Device-level location permissions have not been granted. The user will be prompted to
-            // provide permissions. It will be too late for this triggered action but will work for
-            // future ones.
-        }
-    }
-
-    @Override
-    public void onClientStartFailure() {
-
-    }
-
-    @Override
-    public void onClientStop() {
-
     }
 }

@@ -8,8 +8,6 @@
     <!-- Allows changing locales -->
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" tools:ignore="ProtectedPermissions" />
 
-    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
-
     <application
         android:name=".application.TestCollect"
         tools:replace="android:name" />

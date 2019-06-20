@@ -17,6 +17,7 @@ import static android.app.Activity.RESULT_OK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.odk.collect.android.activities.FormEntryActivity.LOCATION_RESULT;
+import static org.odk.collect.android.location.LocationTestUtils.createLocation;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
