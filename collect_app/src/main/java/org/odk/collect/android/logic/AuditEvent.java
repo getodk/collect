@@ -40,23 +40,42 @@ public class AuditEvent {
         FINALIZE_ERROR("finalize error"),                                           // Error in finalize
         CONSTRAINT_ERROR("constraint error"),                                       // Constraint or missing answer error on save
         DELETE_REPEAT("delete repeat"),                                             // Delete a repeat group
-        GOOGLE_PLAY_SERVICES_NOT_AVAILABLE("google play services not available"),   // Google Play Services are not available
-        LOCATION_PERMISSIONS_GRANTED("location permissions granted"),               // Location permissions are granted
-        LOCATION_PERMISSIONS_NOT_GRANTED("location permissions not granted"),       // Location permissions are not granted
-        LOCATION_TRACKING_ENABLED("location tracking enabled"),                     // Location tracking option is enabled
-        LOCATION_TRACKING_DISABLED("location tracking disabled"),                   // Location tracking option is disabled
-        LOCATION_PROVIDERS_ENABLED("location providers enabled"),                   // Location providers are enabled
-        LOCATION_PROVIDERS_DISABLED("location providers disabled"),                 // Location providers are disabled
-        UNKNOWN_EVENT_TYPE("Unknown AuditEvent Type");                              // Unknown event type
+
+        // Google Play Services are not available
+        GOOGLE_PLAY_SERVICES_NOT_AVAILABLE("google play services not available", true),
+        // Location permissions are granted
+        LOCATION_PERMISSIONS_GRANTED("location permissions granted", true),
+        // Location permissions are not granted
+        LOCATION_PERMISSIONS_NOT_GRANTED("location permissions not granted", true),
+        // Location tracking option is enabled
+        LOCATION_TRACKING_ENABLED("location tracking enabled", true),
+        // Location tracking option is disabled
+        LOCATION_TRACKING_DISABLED("location tracking disabled", true),
+        // Location providers are enabled
+        LOCATION_PROVIDERS_ENABLED("location providers enabled", true),
+        // Location providers are disabled
+        LOCATION_PROVIDERS_DISABLED("location providers disabled", true),
+        // Unknown event type
+        UNKNOWN_EVENT_TYPE("Unknown AuditEvent Type");
 
         private final String value;
+        private final boolean isLocationRelated;
+
+        AuditEventType(String value, boolean isLocationRelated) {
+            this.value = value;
+            this.isLocationRelated = isLocationRelated;
+        }
 
         AuditEventType(String value) {
-            this.value = value;
+            this(value, false);
         }
 
         public String getValue() {
             return value;
+        }
+
+        public boolean isLocationRelated() {
+            return isLocationRelated;
         }
     }
 
