@@ -17,6 +17,7 @@ import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
+import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSender;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
@@ -93,7 +94,7 @@ public interface AppDependencyComponent {
 
     void inject(FormDownloader formDownloader);
 
-    void inject(DownloadFormListUtils downloadFormListUtils);
+    void inject(ServerPollingJob serverPollingJob);
 
     void inject(AuthDialogUtility authDialogUtility);
 
@@ -112,4 +113,6 @@ public interface AppDependencyComponent {
     RxEventBus rxEventBus();
 
     OpenRosaHttpInterface openRosaHttpInterface();
+
+    DownloadFormListUtils downloadFormListUtils();
 }
