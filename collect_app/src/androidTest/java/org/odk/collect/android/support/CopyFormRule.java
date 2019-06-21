@@ -17,6 +17,10 @@ public class CopyFormRule implements TestRule {
         this(fileName, null, null);
     }
 
+    public CopyFormRule(String fileName, String formAssetPath) {
+        this(fileName, formAssetPath, null);
+    }
+
     public CopyFormRule(String fileName, String formAssetPath, List<String> mediaFilenames) {
         this.fileName = fileName;
         this.formAssetPath = formAssetPath;
@@ -45,11 +49,7 @@ public class CopyFormRule implements TestRule {
 
         @Override
         public void evaluate() throws Throwable {
-            if (formAssetPath != null && mediaFilenames != null) {
-                FormLoadingUtils.copyFormToSdCard(fileName, formAssetPath, mediaFilenames);
-            } else {
-                FormLoadingUtils.copyFormToSdCard(fileName);
-            }
+            FormLoadingUtils.copyFormToSdCard(fileName, formAssetPath, mediaFilenames);
 
             base.evaluate();
         }
