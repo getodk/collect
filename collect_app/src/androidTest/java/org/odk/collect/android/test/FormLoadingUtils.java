@@ -57,7 +57,9 @@ public class FormLoadingUtils {
     public static void copyFormToSdCard(String formFilename, String formAssetPath, List<String> mediaFilenames) throws IOException {
         Collect.createODKDirs();
 
-        if (!formAssetPath.isEmpty() && !formAssetPath.endsWith(File.separator)) {
+        if (formAssetPath == null) {
+            formAssetPath = "";
+        } else if (!formAssetPath.isEmpty() && !formAssetPath.endsWith(File.separator)) {
             formAssetPath = formAssetPath + File.separator;
         }
 
@@ -81,7 +83,7 @@ public class FormLoadingUtils {
      * will be loaded by {@link FormLoaderTask}.
      */
     public static void copyFormToSdCard(String formFilename) throws IOException {
-        copyFormToSdCard(formFilename, "", null);
+        copyFormToSdCard(formFilename, null, null);
     }
 
     private static void saveFormToDatabase(File outFile) {
@@ -104,7 +106,7 @@ public class FormLoadingUtils {
             @Override
             protected Intent getActivityIntent() {
                 Intent intent = new Intent(ApplicationProvider.getApplicationContext(), FormEntryActivity.class);
-                intent.putExtra(EXTRA_TESTING_PATH, Collect.FORMS_PATH + formFilename);
+                intent.putExtra(EXTRA_TESTING_PATH, Collect.FORMS_PATH + "/" + formFilename);
 
                 return intent;
             }
@@ -118,7 +120,7 @@ public class FormLoadingUtils {
     }
 
     private static void copyForm(String formFilename, String formAssetPath) throws IOException {
-        String pathname = Collect.FORMS_PATH + formFilename;
+        String pathname = Collect.FORMS_PATH + "/" + formFilename;
 
         AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
         InputStream inputStream = assetManager.open(formAssetPath + formFilename);
@@ -132,7 +134,7 @@ public class FormLoadingUtils {
     }
 
     private static void copyFormMediaFiles(String formFilename, String formAssetPath, List<String> mediaFilenames) throws IOException {
-        String mediaPathName = Collect.FORMS_PATH + formFilename.replace(".xml", "") + FileUtils.MEDIA_SUFFIX + "/";
+        String mediaPathName = Collect.FORMS_PATH + "/" + formFilename.replace(".xml", "") + FileUtils.MEDIA_SUFFIX + "/";
         FileUtils.checkMediaPath(new File(mediaPathName));
 
         AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
