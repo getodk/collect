@@ -119,6 +119,14 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         } catch (UploadException e) {
             saveFailedStatusToDatabase(instance);
             throw e;
+        } catch (GoogleJsonResponseException e) {
+            saveFailedStatusToDatabase(instance);
+
+            String message = e.getMessage();
+            if (e.getDetails() != null && e.getDetails().getCode() == 403) {
+                message = Collect.getInstance().getString(R.string.google_sheets_access_denied);
+            }
+            throw new UploadException(message);
         }
 
         saveSuccessStatusToDatabase(instance);
@@ -516,17 +524,13 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return false;
     }
 
-    private void setUpSpreadsheet(String urlString) throws UploadException {
+    private void setUpSpreadsheet(String urlString) throws UploadException, GoogleJsonResponseException {
         if (spreadsheet == null || spreadsheet.getSpreadsheetUrl() == null || !urlString.equals(spreadsheet.getSpreadsheetUrl())) {
             try {
                 spreadsheet = sheetsHelper.getSpreadsheet(UrlUtils.getSpreadsheetID(urlString));
                 spreadsheet.setSpreadsheetUrl(urlString);
             } catch (GoogleJsonResponseException e) {
-                String message = e.getMessage();
-                if (e.getDetails() != null && e.getDetails().getCode() == 403) {
-                    message = Collect.getInstance().getString(R.string.google_sheets_access_denied);
-                }
-                throw new UploadException(message);
+                throw e;
             } catch (IOException | BadUrlException e) {
                 Timber.i(e);
                 throw new UploadException(e);
