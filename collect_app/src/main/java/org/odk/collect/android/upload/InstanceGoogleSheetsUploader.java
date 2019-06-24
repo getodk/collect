@@ -121,19 +121,27 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             throw e;
         } catch (GoogleJsonResponseException e) {
             saveFailedStatusToDatabase(instance);
-
-            String message = e.getMessage();
-            if (e.getDetails() != null && e.getDetails().getCode() == 403) {
-                message = Collect.getInstance().getString(R.string.google_sheets_access_denied);
-            } else if (e.getDetails() != null && e.getDetails().getCode() == 429) {
-                message = FAIL + "Too many requests per 100 seconds";
-            }
-            throw new UploadException(message);
+            throw new UploadException(getErrorMessageFromGoogleJsonResponseException(e));
         }
 
         saveSuccessStatusToDatabase(instance);
         // Google Sheets can't provide a custom success message
         return null;
+    }
+
+    private String getErrorMessageFromGoogleJsonResponseException(GoogleJsonResponseException e) {
+        String message = e.getMessage();
+        if (e.getDetails() != null) {
+            switch (e.getDetails().getCode()) {
+                case 403 :
+                    message = Collect.getInstance().getString(R.string.google_sheets_access_denied);
+                    break;
+                case 429 :
+                    message = FAIL + "Too many requests per 100 seconds";
+                    break;
+            }
+        }
+        return message;
     }
 
     @Override
