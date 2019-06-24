@@ -540,6 +540,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 spreadsheet = sheetsHelper.getSpreadsheet(UrlUtils.getSpreadsheetID(urlString));
                 spreadsheet.setSpreadsheetUrl(urlString);
             } catch (GoogleJsonResponseException e) {
+                Timber.i(e);
                 throw e;
             } catch (IOException | BadUrlException e) {
                 Timber.i(e);
