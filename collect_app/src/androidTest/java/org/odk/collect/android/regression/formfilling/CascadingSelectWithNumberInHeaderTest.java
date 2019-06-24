@@ -11,6 +11,7 @@ import org.odk.collect.android.regression.BaseRegressionTest;
 import org.odk.collect.android.test.FormLoadingUtils;
 
 import java.io.IOException;
+import java.util.Collections;
 
 // Issue number NODK-207
 @RunWith(AndroidJUnit4.class)
@@ -18,7 +19,7 @@ public class CascadingSelectWithNumberInHeaderTest extends BaseRegressionTest {
 
     @BeforeClass
     public static void copyFormToSdCard() throws IOException {
-        FormLoadingUtils.copyFormToSdCard("numberInCSV.xml", "regression/");
+        FormLoadingUtils.copyFormToSdCard("numberInCSV.xml", "regression/", Collections.singletonList("itemSets.csv"));
     }
 
     @Test
