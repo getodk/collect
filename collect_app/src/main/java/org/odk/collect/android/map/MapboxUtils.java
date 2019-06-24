@@ -30,7 +30,7 @@ public class MapboxUtils {
         // an access token. Configure this token in collect_app/secrets.properties.
         try {
             mapbox = Mapbox.getInstance(Collect.getInstance(), BuildConfig.MAPBOX_ACCESS_TOKEN);
-        } catch (Exception e) { // smap changed to Exception
+        } catch (Exception | Error e) {
             // Initialization failed (usually because the Mapbox native library for
             // the current architecture could not be found or loaded).
             Timber.e(e);    // smap
