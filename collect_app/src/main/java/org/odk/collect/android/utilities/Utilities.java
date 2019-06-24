@@ -654,6 +654,37 @@ public class Utilities {
         values.put(InstanceColumns.T_SHOW_DIST, ta.task.show_dist);
         values.put(InstanceColumns.T_HIDE, (ta.task.show_dist > 0) ? 1 : 0);
 
+        values.put(InstanceColumns.T_TITLE, ta.task.title);
+        values.put(InstanceColumns.T_ADDRESS, ta.task.address);
+        values.put(InstanceColumns.T_LOCATION_TRIGGER, ta.task.location_trigger);
+
+        // Add task geofence values
+        values.put(InstanceColumns.T_SHOW_DIST, ta.task.show_dist);
+        values.put(InstanceColumns.T_HIDE, (ta.task.show_dist > 0) ? 1 : 0);
+
+        // Update target location
+        if (ta.location != null && ta.location.geometry != null && ta.location.geometry.coordinates != null && ta.location.geometry.coordinates.length >= 1) {
+            // Set the location of the task to the first coordinate pair
+            String firstCoord = ta.location.geometry.coordinates[0];
+            String [] fc = firstCoord.split(" ");
+            if(fc.length > 1) {
+                values.put(InstanceColumns.SCHED_LON, fc[0]);
+                values.put(InstanceColumns.SCHED_LAT, fc[1]);
+            }
+            StringBuilder builder = new StringBuilder();
+            for(String coord : ta.location.geometry.coordinates) {
+                builder.append(coord);
+                builder.append(",");
+            }
+            values.put(InstanceColumns.T_GEOM, builder.toString());
+            values.put(InstanceColumns.T_GEOM_TYPE, ta.location.geometry.type);
+        }
+
+        // update scheduled_a
+        if(ta.task.scheduled_at != null) {
+            values.put(InstanceColumns.T_SCHED_START, ta.task.scheduled_at.getTime());
+        }
+
         Collect.getInstance().getContentResolver().update(dbUri, values, selectClause, selectArgs);
 
     }

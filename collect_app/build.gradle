@@ -31,7 +31,7 @@ android {
         applicationId "org.smap.smapTask.android"
         minSdkVersion(16)
         targetSdkVersion(26)
-        versionCode(6020)
+        versionCode(6021)
         versionName getVersionName()
         testInstrumentationRunner('androidx.test.runner.AndroidJUnitRunner')
         multiDexEnabled true
@@ -55,27 +55,27 @@ android {
     productFlavors {
         standard {
             applicationId "org.smap.smapTask.android"
-            versionName "6.20.0"
+            versionName "6.21"
         }
         plan {
             applicationId "org.smap.smapTask.android.plan"
-            versionName "6.20.0-plan"
+            versionName "6.21-plan"
         }
         kontrolid {
             applicationId "org.smap.smapTask.android.kontrolid"
-            versionName "6.20.0-kontrolid"
+            versionName "6.21-kontrolid"
         }
         pop {
             applicationId "org.smap.smapTask.android.pop"
-            versionName "6.20.0-pop"
+            versionName "6.21-pop"
         }
         supply {
             applicationId "org.smap.smapTask.android.supply"
-            versionName "6.20.0-supply"
+            versionName "6.21-supply"
         }
         seracis {
             applicationId "org.smap.smapTask.android.seracis"
-            versionName "6.20.0-seracis"
+            versionName "6.21-seracis"
         }
     }
 
@@ -97,7 +97,7 @@ android {
             }
             minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-            resValue("bool", "FIREBASE_CRASHLYTICS_ENABLED", "false")
+            resValue("bool", "FIREBASE_CRASHLYTICS_ENABLED", "true")
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
         }

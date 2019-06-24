@@ -278,7 +278,6 @@ public class ManageForm {
 	 */
     public ManageFormResponse insertInstance(TaskAssignment ta, long assignmentId, String source, String serverUrl, int version) {
 
-        String formId = ta.task.form_id;
         int formVersion = ta.task.form_version;
         String initialDataURL = ta.task.initial_data;
 
@@ -287,7 +286,7 @@ public class ManageForm {
         
         ManageFormResponse mfResponse = new ManageFormResponse();
         
-    	ManageFormDetails fd = getFormDetails(formId, formVersionString, source);    // Get the form details
+    	ManageFormDetails fd = getFormDetails(ta.task.form_id, formVersionString, source);    // Get the form details
 		
     	if(fd.exists) {
          
@@ -297,7 +296,7 @@ public class ManageForm {
 	        	 File f = new File(instancePath);
                  try {
                      Utilities smapUtilities = new Utilities();
-                     smapUtilities.downloadInstanceFile(f, initialDataURL, serverUrl, formId, version);
+                     smapUtilities.downloadInstanceFile(f, initialDataURL, serverUrl, ta.task.form_id, version);
                  } catch (Exception e) {
                      e.printStackTrace();
                      mfResponse.isError = true;
@@ -314,12 +313,12 @@ public class ManageForm {
 			    
 	         // Write the new instance entry into the instance content provider
 	         try {
-	        	 mfResponse.mUri = writeInstanceDatabase(formId, formVersionString, fd.formName, fd.submissionUri,
+	        	 mfResponse.mUri = writeInstanceDatabase(ta.task.form_id, formVersionString, fd.formName, fd.submissionUri,
                          instancePath, ta, fd.formPath);
 	         } catch (Throwable e) {
 	        	 e.printStackTrace();
 	       		 mfResponse.isError = true;
-	    		 mfResponse.statusMsg = "Unable to insert instance " + formId + " into instance database.";
+	    		 mfResponse.statusMsg = "Unable to insert instance " + ta.task.form_id + " into instance database.";
 	        	 return mfResponse;
 	         }
     	} else {
