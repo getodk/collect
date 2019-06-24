@@ -125,6 +125,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             String message = e.getMessage();
             if (e.getDetails() != null && e.getDetails().getCode() == 403) {
                 message = Collect.getInstance().getString(R.string.google_sheets_access_denied);
+            } else if (e.getDetails() != null && e.getDetails().getCode() == 429) {
+                message = FAIL + "Too many requests per 100 seconds";
             }
             throw new UploadException(message);
         }
