@@ -73,8 +73,6 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
 
     private DatePickerDetails datePickerDetails;
 
-    private DatePickerDialog datePickerDialog;
-
     public DateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
     }

@@ -51,21 +51,7 @@ public class WidgetFactory {
                         questionWidget = new DateTimeWidget(context, fep);
                         break;
                     case Constants.DATATYPE_DATE:
-                        if (appearance.contains(WidgetAppearanceUtils.ETHIOPIAN)) {
-                            questionWidget = new EthiopianDateWidget(context, fep);
-                        } else if (appearance.contains(WidgetAppearanceUtils.COPTIC)) {
-                            questionWidget = new CopticDateWidget(context, fep);
-                        } else if (appearance.contains(WidgetAppearanceUtils.ISLAMIC)) {
-                            questionWidget = new IslamicDateWidget(context, fep);
-                        } else if (appearance.contains(WidgetAppearanceUtils.BIKRAM_SAMBAT)) {
-                            questionWidget = new BikramSambatDateWidget(context, fep);
-                        } else if (appearance.contains(WidgetAppearanceUtils.MYANMAR)) {
-                            questionWidget = new MyanmarDateWidget(context, fep);
-                        } else if (appearance.contains(WidgetAppearanceUtils.PERSIAN)) {
-                            questionWidget = new PersianDateWidget(context, fep);
-                        } else {
-                            questionWidget = new DateWidget(context, fep);
-                        }
+                        questionWidget = new DateWidget(context, fep);
                         break;
                     case Constants.DATATYPE_TIME:
                         questionWidget = new TimeWidget(context, fep);
