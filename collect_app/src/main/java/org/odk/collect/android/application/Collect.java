@@ -21,6 +21,7 @@ import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Build;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -36,6 +37,9 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.security.ProviderInstaller;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -225,6 +229,7 @@ public class Collect extends Application {
         singleton = this;
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
+        installTls12();
         setupDagger();
 
         NotificationUtils.createNotificationChannel(singleton);
@@ -269,6 +274,16 @@ public class Collect extends Application {
                 .build();
 
         applicationComponent.inject(this);
+    }
+
+    private void installTls12() {
+        if (Build.VERSION.SDK_INT <= 20) {
+            try {
+                ProviderInstaller.installIfNeeded(getApplicationContext());
+            } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
+                Timber.i(e);
+            }
+        }
     }
 
     protected RefWatcher setupLeakCanary() {
