@@ -41,9 +41,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.security.ProviderInstaller;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -67,12 +64,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import javax.net.ssl.SSLContext;
 
 import timber.log.Timber;
 
@@ -122,18 +115,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
         initToolbar();
-
-        // Enable TLS v1.2 for Android 4.2.2
-        try {
-            ProviderInstaller.installIfNeeded(getApplicationContext());
-            SSLContext sslContext;
-            sslContext = SSLContext.getInstance("TLSv1.2");
-            sslContext.init(null, null, null);
-            sslContext.createSSLEngine();
-        } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException
-                | NoSuchAlgorithmException | KeyManagementException e) {
-            Timber.i("Failed enabling TLS v1.2");
-        }
 
         disableSmsIfNeeded();
 
