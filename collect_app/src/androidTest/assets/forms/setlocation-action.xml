@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+        xmlns:h="http://www.w3.org/1999/xhtml"
+        xmlns:odk="http://www.opendatakit.org/xforms">
+    <h:head>
+        <h:title>setlocation-action-instance-load</h:title>
+        <model>
+            <instance>
+                <data id="setlocation-action-instance-load">
+                    <location/>
+                </data>
+            </instance>
+            <bind nodeset="/data/location" type="string" />
+            <odk:setlocation ref="/data/location" event="odk-instance-first-load" />
+        </model>
+    </h:head>
+    <h:body />
+</h:html>
