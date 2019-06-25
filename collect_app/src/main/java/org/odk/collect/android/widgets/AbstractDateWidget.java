@@ -26,11 +26,21 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.fragments.dialogs.BikramSambatDatePickerDialog;
+import org.odk.collect.android.fragments.dialogs.CopticDatePickerDialog;
+import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
+import org.odk.collect.android.fragments.dialogs.EthiopianDatePickerDialog;
+import org.odk.collect.android.fragments.dialogs.IslamicDatePickerDialog;
+import org.odk.collect.android.fragments.dialogs.MyanmarDatePickerDialog;
+import org.odk.collect.android.fragments.dialogs.PersianDatePickerDialog;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.util.Date;
+
+import static org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog.DATE_PICKER_DIALOG;
 
 /**
  * @author Grzegorz Orczykowski (gorczykowski@soldevelo.com)
@@ -146,5 +156,30 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
         dateTextView.setText(DateTimeUtils.getDateTimeLabel((Date) getAnswer().getValue(), datePickerDetails, false, getContext()));
     }
 
-    protected abstract void showDatePickerDialog();
+    protected void showDatePickerDialog() {
+        CustomDatePickerDialog dialog = null;
+        switch (datePickerDetails.getDatePickerType()) {
+            case ETHIOPIAN:
+                dialog = EthiopianDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
+                break;
+            case COPTIC:
+                dialog = CopticDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
+                break;
+            case ISLAMIC:
+                dialog = IslamicDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
+                break;
+            case BIKRAM_SAMBAT:
+                dialog = BikramSambatDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
+                break;
+            case MYANMAR:
+                dialog = MyanmarDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
+                break;
+            case PERSIAN:
+                dialog = PersianDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
+                break;
+        }
+        if (dialog != null) {
+            dialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
+        }
+    }
 }
