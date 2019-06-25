@@ -80,7 +80,7 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
 
     protected void createWidget() {
         datePickerDetails = DateTimeUtils.getDatePickerDetails(getFormEntryPrompt().getQuestion().getAppearanceAttr());
-        createDateButton();
+        dateButton = getSimpleButton(getContext().getString(R.string.select_date));
         dateTextView = getAnswerTextView();
         addViews();
         if (getFormEntryPrompt().getAnswerValue() == null) {
@@ -145,10 +145,6 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
 
     public boolean isNullAnswer() {
         return isNullAnswer;
-    }
-
-    private void createDateButton() {
-        dateButton = getSimpleButton(getContext().getString(R.string.select_date));
     }
 
     private void addViews() {
