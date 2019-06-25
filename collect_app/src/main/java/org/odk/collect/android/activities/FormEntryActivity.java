@@ -2099,6 +2099,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         super.onStart();
         FormController formController = getFormController();
 
+        // Register to receive location provider change updates and write them to the audit log
+        if (formController != null && formController.currentFormAuditsLocation()
+                && LocationClients.areGooglePlayServicesAvailable(this)) {
+            registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+        }
+
         if (savedFormStart) {
             // If the user got here by editing an existing saved instance, s/he first saw the
             // hierarchy so background location tracking has not been enabled yet.
@@ -2109,9 +2115,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         } else if (formController != null && formController.currentFormCollectsBackgroundLocation()
                 && LocationClients.areGooglePlayServicesAvailable(this)) {
-            if (formController.currentFormAuditsLocation()) {
-                registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
-            }
             if (isBackgroundLocationPreferenceEnabled()) {
                 if (PermissionUtils.areLocationPermissionsGranted(this)) {
                     if (!locationPermissionsGranted) {
@@ -2136,6 +2139,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (googleLocationClient != null) {
             googleLocationClient.stop();
         }
+
+        try {
+            unregisterReceiver(locationProvidersReceiver);
+        } catch (IllegalArgumentException e) {
+            // This is the common case -- the form didn't have location audits enabled so the
+            // receiver was not registered.
+        }
+
         super.onStop();
     }
 
@@ -2292,11 +2303,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         releaseOdkView();
         compositeDisposable.dispose();
 
-        try {
-            unregisterReceiver(locationProvidersReceiver);
-        } catch (IllegalArgumentException e) {
-            Timber.i(e);
-        }
         super.onDestroy();
 
     }
@@ -2493,16 +2499,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * Returns true if Google Play Services are available and the background location tracking
      * preference is enabled. Otherwise, returns false, displays a snackbar to the user and logs
      * audit events.
-     *
-     * Additionally, if Google Play Services are available and the form audits location, registers
-     * to receive notifications on provider change.
      */
     private boolean backgroundLocationPreconditionsSatisfied(FormController formController) {
         if (LocationClients.areGooglePlayServicesAvailable(this)) {
-            if (formController.currentFormAuditsLocation()) {
-                registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
-            }
-
             if (isBackgroundLocationPreferenceEnabled()) {
                 return true;
             } else {
