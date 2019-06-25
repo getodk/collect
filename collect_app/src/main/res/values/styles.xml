@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MainMenuBigButton">
+        <item name="android:padding">20dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">21sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+</resources>
