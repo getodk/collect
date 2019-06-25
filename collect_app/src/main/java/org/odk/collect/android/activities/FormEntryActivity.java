@@ -2113,23 +2113,25 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     && backgroundLocationPreconditionsSatisfied(formController)) {
                 enableBackgroundLocationTracking(formController, true);
             }
-        } else if (formController != null && formController.currentFormCollectsBackgroundLocation()
-                && LocationClients.areGooglePlayServicesAvailable(this)) {
-            if (isBackgroundLocationPreferenceEnabled()) {
-                if (PermissionUtils.areLocationPermissionsGranted(this)) {
-                    if (!locationPermissionsGranted) {
-                        locationPermissionsGranted = true;
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED, false);
-                    }
+        } else if (formController != null && formController.currentFormAuditsLocation()
+                && LocationClients.areGooglePlayServicesAvailable(this)
+                && isBackgroundLocationPreferenceEnabled()) {
+            // If location auditing is enabled and the orientation has changed or the user went to
+            // another activity, rebuild the location client. If the user went to Android
+            // preferences and changed Collect's location permissions, write that to the audit log.
+            if (PermissionUtils.areLocationPermissionsGranted(this)) {
+                // TODO: this is redundant if onCreate was just called. If onStop was called, the
+                // location client was stopped but not destroyed. Can we just call start()? Is
+                // there a case where a full rebuild is necessary?
+                setUpLocationClient(formController.getSubmissionMetadata().auditConfig);
 
-                    // Setlocation actions manage their own location clients
-                    if (formController.currentFormAuditsLocation()) {
-                        setUpLocationClient(formController.getSubmissionMetadata().auditConfig);
-                    }
-                } else if (locationPermissionsGranted) {
-                    locationPermissionsGranted = false;
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_NOT_GRANTED, false);
+                if (!locationPermissionsGranted) {
+                    locationPermissionsGranted = true;
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED, false);
                 }
+            } else if (locationPermissionsGranted) {
+                locationPermissionsGranted = false;
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_NOT_GRANTED, false);
             }
         }
     }
