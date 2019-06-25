@@ -67,7 +67,7 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
     private Button dateButton;
     private TextView dateTextView;
 
-    private boolean isNullAnswer;
+    boolean isNullAnswer;
 
     private LocalDateTime date;
 
@@ -239,11 +239,6 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
         return Build.MANUFACTURER.equalsIgnoreCase("samsung")
                 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
                 && Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1;
-    }
-
-    // Exposed for testing purposes to avoid reflection.
-    public void setDatePickerDialog(DatePickerDialog datePickerDialog) {
-        this.datePickerDialog = datePickerDialog;
     }
 
     private class FixedDatePickerDialog extends DatePickerDialog {
