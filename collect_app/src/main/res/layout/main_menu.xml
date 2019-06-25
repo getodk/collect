@@ -7,25 +7,24 @@
   OR CONDITIONS OF ANY KIND, either express or implied. See the License for
   the specific language governing permissions and limitations under the License.
 -->
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="0dp"
     android:layout_marginLeft="0dp"
-    android:layout_marginRight="0dp"
     android:layout_marginTop="0dp"
+    android:layout_marginRight="0dp"
+    android:layout_marginBottom="0dp"
     android:orientation="vertical"
     android:padding="0dp">
 
     <!-- Toolbar -->
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar" />
 
     <include
         layout="@layout/toolbar_action_bar_shadow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"/>
+        android:layout_below="@id/toolbar" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,25 +34,22 @@
 
         <TextView
             android:id="@+id/main_menu_header"
+            style="@style/TextAppearance.Collect.Headline6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingBottom="1dp"
             android:paddingTop="6dp"
-            android:text="@string/app_name"
-            android:textColor="?primaryTextColor"
-            android:textSize="21sp"
-            android:textStyle="bold"/>
+            android:paddingBottom="1dp"
+            android:text="@string/app_name" />
 
         <TextView
+            style="@style/TextAppearance.Collect.Subtitle1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingBottom="10dp"
             android:paddingTop="1dp"
-            android:text="@string/main_menu_details"
-            android:textColor="?primaryTextColor"
-            android:textSize="17sp"/>
+            android:paddingBottom="10dp"
+            android:text="@string/main_menu_details" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -64,14 +60,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingStart="10dp">
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp">
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="10dp"/>
+                    android:layout_height="10dp" />
 
                 <Button
                     android:id="@+id/enter_data"
@@ -80,11 +76,11 @@
                     android:padding="20dp"
                     android:textAllCaps="false"
                     android:textSize="21sp"
-                    android:textStyle="normal"/>
+                    android:textStyle="normal" />
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="5dp"/>
+                    android:layout_height="5dp" />
 
                 <Button
                     android:id="@+id/review_data"
@@ -93,12 +89,12 @@
                     android:padding="20dp"
                     android:textAllCaps="false"
                     android:textSize="21sp"
-                    android:textStyle="normal"/>
+                    android:textStyle="normal" />
 
                 <View
                     android:id="@+id/review_spacer"
                     android:layout_width="match_parent"
-                    android:layout_height="5dp"/>
+                    android:layout_height="5dp" />
 
                 <Button
                     android:id="@+id/send_data"
@@ -107,11 +103,11 @@
                     android:padding="20dp"
                     android:textAllCaps="false"
                     android:textSize="21sp"
-                    android:textStyle="normal"/>
+                    android:textStyle="normal" />
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="5dp"/>
+                    android:layout_height="5dp" />
 
                 <Button
                     android:id="@+id/view_sent_forms"
@@ -121,11 +117,11 @@
                     android:text="@string/view_sent_forms"
                     android:textAllCaps="false"
                     android:textSize="21sp"
-                    android:textStyle="normal"/>
+                    android:textStyle="normal" />
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"/>
+                    android:layout_height="20dp" />
 
                 <Button
                     android:id="@+id/get_forms"
@@ -134,12 +130,12 @@
                     android:padding="20dp"
                     android:textAllCaps="false"
                     android:textSize="21sp"
-                    android:textStyle="normal"/>
+                    android:textStyle="normal" />
 
                 <View
                     android:id="@+id/get_forms_spacer"
                     android:layout_width="match_parent"
-                    android:layout_height="5dp"/>
+                    android:layout_height="5dp" />
 
                 <Button
                     android:id="@+id/manage_forms"
@@ -148,7 +144,7 @@
                     android:padding="20dp"
                     android:textAllCaps="false"
                     android:textSize="21sp"
-                    android:textStyle="normal"/>
+                    android:textStyle="normal" />
             </LinearLayout>
 
         </ScrollView>
