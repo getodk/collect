@@ -23,7 +23,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
-import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -61,13 +60,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.work.Constraints;
 import androidx.work.ExistingWorkPolicy;
 import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
-import com.google.android.gms.location.LocationListener;
 import com.google.common.collect.ImmutableList;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -93,6 +92,8 @@ import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationManager;
+import org.odk.collect.android.formentry.backgroundlocation.FormEntryViewModel;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.FormLoadingDialogFragment;
@@ -106,10 +107,7 @@ import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.location.client.GoogleLocationClient;
-import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
-import org.odk.collect.android.logic.AuditConfig;
 import org.odk.collect.android.logic.AuditEvent;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
@@ -189,8 +187,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         DependencyProvider<ActivityAvailability>,
         CustomDatePickerDialog.CustomDatePickerDialogListener,
         RankingWidgetDialog.RankingListener,
-        SaveFormIndexTask.SaveFormIndexListener, LocationClient.LocationClientListener,
-        LocationListener, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
+        SaveFormIndexTask.SaveFormIndexListener, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
         WidgetValueChangedListener {
 
     // Defines for FormEntryActivity
@@ -295,10 +292,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private boolean showNavigationButtons;
 
-    /** null unless the form definition configures background location tracking **/
-    @Nullable
-    private GoogleLocationClient googleLocationClient;
-
     private Bundle state;
 
     @NonNull
@@ -311,12 +304,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
+    FormEntryViewModel viewModel;
+
     /**
      * Called when the activity is first created.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        viewModel = ViewModelProviders.of(this).get(FormEntryViewModel.class);
 
         setContentView(R.layout.form_entry);
 
@@ -602,18 +599,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(getString(R.string.loading_form));
-    }
-
-    private void setUpLocationClient(AuditConfig auditConfig) {
-        googleLocationClient = new GoogleLocationClient(this);
-        googleLocationClient.setListener(this);
-        googleLocationClient.setPriority(auditConfig.getLocationPriority());
-        googleLocationClient.setUpdateIntervals(auditConfig.getLocationMinInterval(), auditConfig.getLocationMinInterval());
-        googleLocationClient.start();
-    }
-
-    private boolean isBackgroundLocationPreferenceEnabled() {
-        return GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true);
     }
 
     /**
@@ -995,7 +980,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 && LocationClients.areGooglePlayServicesAvailable(this)) {
             MenuItem backgroundLocation = menu.findItem(R.id.track_location);
             backgroundLocation.setVisible(true);
-            backgroundLocation.setChecked(isBackgroundLocationPreferenceEnabled());
+            backgroundLocation.setChecked(GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));
         }
 
         return true;
@@ -1031,18 +1016,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 startActivity(pref);
                 return true;
             case R.id.track_location:
-                boolean previousValue = isBackgroundLocationPreferenceEnabled();
-                if (formController != null) {
-                    if (previousValue) {
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_TRACKING_DISABLED, false);
-                        if (googleLocationClient != null) {
-                            googleLocationClient.stop();
-                        }
-                    } else {
-                        enableBackgroundLocationTracking(formController, false);
-                    }
-                }
-                GeneralSharedPreferences.getInstance().save(KEY_BACKGROUND_LOCATION, !previousValue);
+                GeneralSharedPreferences.getInstance().save(KEY_BACKGROUND_LOCATION, !GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));
+
+                viewModel.backgroundLocationPreferenceToggled();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -2105,42 +2081,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
         }
 
-        if (savedFormStart) {
-            // If the user got here by editing an existing saved instance, s/he first saw the
-            // hierarchy so background location tracking has not been enabled yet.
-            savedFormStart = false;
-            if (formController != null && formController.currentFormCollectsBackgroundLocation()
-                    && backgroundLocationPreconditionsSatisfied(formController)) {
-                enableBackgroundLocationTracking(formController, true);
-            }
-        } else if (formController != null && formController.currentFormAuditsLocation()
-                && LocationClients.areGooglePlayServicesAvailable(this)
-                && isBackgroundLocationPreferenceEnabled()) {
-            // If location auditing is enabled and the orientation has changed or the user went to
-            // another activity, rebuild the location client. If the user went to Android
-            // preferences and changed Collect's location permissions, write that to the audit log.
-            if (PermissionUtils.areLocationPermissionsGranted(this)) {
-                // TODO: this is redundant if onCreate was just called. If onStop was called, the
-                // location client was stopped but not destroyed. Can we just call start()? Is
-                // there a case where a full rebuild is necessary?
-                setUpLocationClient(formController.getSubmissionMetadata().auditConfig);
-
-                if (!locationPermissionsGranted) {
-                    locationPermissionsGranted = true;
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED, false);
-                }
-            } else if (locationPermissionsGranted) {
-                locationPermissionsGranted = false;
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_NOT_GRANTED, false);
-            }
-        }
+        activityDisplayed();
     }
 
     @Override
     protected void onStop() {
-        if (googleLocationClient != null) {
-            googleLocationClient.stop();
-        }
+        viewModel.activityHidden();
 
         try {
             unregisterReceiver(locationProvidersReceiver);
@@ -2394,6 +2340,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 Collect.getInstance().setFormController(formController);
                 supportInvalidateOptionsMenu();
 
+                viewModel.formFinishedLoading();
+
                 Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
 
                 // Set the language if one has already been set in the past
@@ -2484,94 +2432,17 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                 }
 
-                if (formController.currentFormCollectsBackgroundLocation() && backgroundLocationPreconditionsSatisfied(formController)) {
-                    enableBackgroundLocationTracking(formController, true);
-                }
-
                 refreshCurrentView();
+
+                // onStart ran before the form was loaded. Let the viewModel know that the activity
+                // is now displayed and configured.
+                activityDisplayed();
             }
         } else {
             Timber.e("FormController is null");
             ToastUtils.showLongToast(R.string.loading_form_failed);
             finish();
         }
-    }
-
-    /**
-     * Returns true if Google Play Services are available and the background location tracking
-     * preference is enabled. Otherwise, returns false, displays a snackbar to the user and logs
-     * audit events.
-     */
-    private boolean backgroundLocationPreconditionsSatisfied(FormController formController) {
-        if (LocationClients.areGooglePlayServicesAvailable(this)) {
-            if (isBackgroundLocationPreferenceEnabled()) {
-                return true;
-            } else {
-                if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                    SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_disabled), "").replace("  ", " "));
-                } else {
-                    SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_disabled), "⋮"));
-                }
-
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_TRACKING_DISABLED, false);
-                return false;
-            }
-        } else {
-            SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.google_play_services_not_available));
-            formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, false);
-
-            return false;
-        }
-    }
-
-    /**
-     * Logs that location tracking is enabled, requests location permissions and in the case of
-     * audit background location tracking, initialize the location client.
-     *
-     * @param formController Gives access to the current form instance and underlying form definition.
-     * @param showBackgroundLocationNotice If true, alerts the user that their location is being
-     *                                     tracked in the background.
-     */
-    private void enableBackgroundLocationTracking(FormController formController, boolean showBackgroundLocationNotice) {
-        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_TRACKING_ENABLED, false);
-        new PermissionUtils().requestLocationPermissions(this, new PermissionListener() {
-            @Override
-            public void granted() {
-                if (!locationPermissionsGranted) {
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED, false);
-                    locationPermissionsGranted = true;
-                }
-
-                AuditConfig formAuditConfig = formController.getSubmissionMetadata().auditConfig;
-                // Setlocation actions manage their own location clients
-                if (formAuditConfig != null && formAuditConfig.isLocationEnabled()) {
-                    setUpLocationClient(formAuditConfig);
-                }
-
-                // If the form does not configure background location audits, then it contains
-                // setlocation actions. In that case, show the location tracking notice even if
-                // no providers are currently enabled since each action has its own location client.
-                if (formAuditConfig == null || !formAuditConfig.isLocationEnabled()
-                        || googleLocationClient.isLocationAvailable()) {
-                    if (showBackgroundLocationNotice) {
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED, false);
-                        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                            SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_enabled), "").replace("  ", " "));
-                        } else {
-                            SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), String.format(getString(R.string.background_location_enabled), "⋮"));
-                        }
-                    }
-                } else {
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED, false);
-                    new LocationProvidersDisabledDialog().show(getSupportFragmentManager(), LocationProvidersDisabledDialog.LOCATION_PROVIDERS_DISABLED_DIALOG_TAG);
-                }
-            }
-
-            @Override
-            public void denied() {
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_NOT_GRANTED, false);
-            }
-        });
     }
 
     /**
@@ -2876,27 +2747,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     @Override
-    public void onClientStart() {
-        googleLocationClient.requestLocationUpdates(this);
-    }
-
-    @Override
-    public void onClientStartFailure() {
-    }
-
-    @Override
-    public void onClientStop() {
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        FormController formController = getFormController();
-        if (formController != null) {
-            formController.getAuditEventLogger().addLocation(location);
-        }
-    }
-
-    @Override
     public void onCancelFormLoading() {
         if (formLoaderTask != null) {
             formLoaderTask.setFormLoaderListener(null);
@@ -2948,16 +2798,59 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction() != null
                     && intent.getAction().matches(LocationManager.PROVIDERS_CHANGED_ACTION)) {
-                FormController formController = getFormController();
-                if (formController != null && googleLocationClient != null) {
-                    if (googleLocationClient.isLocationAvailable()) {
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED, false);
-                    } else {
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED, false);
-                    }
-                }
+                viewModel.locationProvidersChanged();
             }
         }
+    }
+
+    private void activityDisplayed() {
+        displayUIFor(viewModel.activityDisplayed());
+
+        if (viewModel.isBackgroundLocationPermissionsCheckNeeded()) {
+            new PermissionUtils().requestLocationPermissions(this, new PermissionListener() {
+                @Override
+                public void granted() {
+                    displayUIFor(viewModel.locationPermissionsGranted());
+                }
+
+                @Override
+                public void denied() {
+                    viewModel.locationPermissionsDenied();
+                }
+            });
+        }
+    }
+
+    /**
+     * Displays UI representing the given background location message, if there is one.
+     */
+    private void displayUIFor(@Nullable BackgroundLocationManager.BackgroundLocationMessage backgroundLocationMessage) {
+        if (backgroundLocationMessage == null) {
+            return;
+        }
+
+        if (backgroundLocationMessage == BackgroundLocationManager.BackgroundLocationMessage.PROVIDERS_DISABLED) {
+            new LocationProvidersDisabledDialog().show(getSupportFragmentManager(), LocationProvidersDisabledDialog.LOCATION_PROVIDERS_DISABLED_DIALOG_TAG);
+            return;
+        }
+
+        String snackBarText;
+
+        // Older Android versions don't have the "⋮" character. Only insert it into the text if the
+        // Android version supports it. If the Android version doesn't support it, there will be a
+        // double space where the placeholder is in the text resource. Collapse those spaces.
+        // See https://github.com/opendatakit/collect/pull/2864
+        if (backgroundLocationMessage.isMenuCharacterNeeded()) {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                snackBarText = String.format(getString(backgroundLocationMessage.getMessageTextResourceId()), "⋮");
+            } else {
+                snackBarText = String.format(getString(backgroundLocationMessage.getMessageTextResourceId()), "").replace("  ", " ");
+            }
+        } else {
+            snackBarText = getString(backgroundLocationMessage.getMessageTextResourceId());
+        }
+
+        SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), snackBarText);
     }
 
     @Override
