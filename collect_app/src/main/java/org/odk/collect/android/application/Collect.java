@@ -16,6 +16,7 @@ package org.odk.collect.android.application;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
@@ -36,9 +37,8 @@ import com.evernote.android.job.JobManagerCreateException;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -278,11 +278,18 @@ public class Collect extends Application {
 
     private void installTls12() {
         if (Build.VERSION.SDK_INT <= 20) {
-            try {
-                ProviderInstaller.installIfNeeded(getApplicationContext());
-            } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
-                Timber.i(e);
-            }
+            ProviderInstaller.installIfNeededAsync(getApplicationContext(), new ProviderInstaller.ProviderInstallListener() {
+                @Override
+                public void onProviderInstalled() {
+                }
+
+                @Override
+                public void onProviderInstallFailed(int i, Intent intent) {
+                    GoogleApiAvailability
+                            .getInstance()
+                            .showErrorNotification(getApplicationContext(), i);
+                }
+            });
         }
     }
 
