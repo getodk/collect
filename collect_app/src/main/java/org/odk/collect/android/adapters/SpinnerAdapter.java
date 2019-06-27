@@ -15,8 +15,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 public class SpinnerAdapter extends ArrayAdapter<String> {
-    Context context;
-    String[] items = new String[]{};
+    private Context context;
+    private String[] items;
     private int selectedPosition;
     private ThemeUtils themeUtils;
 
@@ -37,19 +37,16 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
             convertView = inflater.inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
         }
 
-        TextView tv = convertView.findViewById(android.R.id.text1);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize());
-        tv.setPadding(20, 10, 10, 10);
-
         if (themeUtils.isDarkTheme()) {
             convertView.setBackgroundColor(context.getResources().getColor(R.color.darkPopupDialogColor));
         }
 
-        if (position == items.length - 1) {
-            tv.setText(parent.getContext().getString(R.string.clear_answer));
-        } else {
-            tv.setText(items[position]);
-        }
+        TextView tv = convertView.findViewById(android.R.id.text1);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize());
+        tv.setPadding(20, 10, 10, 10);
+        tv.setText(position == items.length - 1
+                ? parent.getContext().getString(R.string.clear_answer)
+                : items[position]);
 
         if (position == (items.length - 1) && selectedPosition == position) {
             tv.setEnabled(false);
