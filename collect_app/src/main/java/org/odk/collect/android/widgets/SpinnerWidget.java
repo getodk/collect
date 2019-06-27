@@ -21,7 +21,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
@@ -41,8 +40,7 @@ import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
  */
 @SuppressLint("ViewConstructor")
 public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
-    ScrolledToTopSpinner spinner;
-    String[] choices;
+    private ScrolledToTopSpinner spinner;
 
     // used to ascertain whether the user selected an item on spinner (not programmatically)
     private boolean userActionOnSpinner = true;
@@ -60,47 +58,17 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
         View view = inflate(context, R.layout.spinner_layout, null);
 
         spinner = view.findViewById(R.id.spinner);
-        choices = new String[items.size() + 1];
-        for (int i = 0; i < items.size(); i++) {
-            choices[i] = prompt.getSelectChoiceText(items.get(i));
-        }
-        choices[items.size()] = getContext().getString(R.string.select_one);
-
-        // The spinner requires a custom adapter. It is defined below
-        SpinnerAdapter adapter =
-                new SpinnerAdapter(getContext(), choices, spinner.getSelectedItemPosition());
-
-        spinner.setAdapter(adapter);
+        spinner.setAdapter(new SpinnerAdapter(getContext(), getChoices(prompt), spinner.getSelectedItemPosition()));
         spinner.setPrompt(prompt.getQuestionText());
         spinner.setEnabled(!prompt.isReadOnly());
         spinner.setFocusable(!prompt.isReadOnly());
-
-        // Fill in previous answer
-        String s = null;
-        if (prompt.getAnswerValue() != null) {
-            s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
-        }
-
-        programmaticallySetSelection(items.size());
-        if (s != null) {
-            for (int i = 0; i < items.size(); ++i) {
-                String match = items.get(i).getValue();
-                if (match.equals(s)) {
-                    programmaticallySetSelection(i);
-                }
-            }
-        }
-
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (userActionOnSpinner) {
                     if (position != items.size() && autoAdvance && listener != null) {
                         listener.advance();
                     }
-
                     widgetValueChanged();
                 }
 
@@ -109,28 +77,24 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
 
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
-
             }
         });
 
+        fillInPreviousAnswer(prompt);
         addAnswerView(view);
     }
 
     @Override
     public IAnswerData getAnswer() {
-        int i = spinner.getSelectedItemPosition();
-        if (i == -1 || i == items.size()) {
-            return null;
-        } else {
-            SelectChoice sc = items.get(i);
-            return new SelectOneData(new Selection(sc));
-        }
+        int selectedItemPosition = spinner.getSelectedItemPosition();
+        return selectedItemPosition < 0 || selectedItemPosition >= items.size()
+                ? null
+                : new SelectOneData(new Selection(items.get(selectedItemPosition)));
     }
 
     @Override
     public void clearAnswer() {
-        // It seems that spinners cannot return a null answer. This resets the answer
-        // to its original value, but it is not null.
+        // It seems that spinners cannot return a null answer. This resets the answer to its original value, but it is not null.
         programmaticallySetSelection(items.size());
         widgetValueChanged();
     }
@@ -155,7 +119,6 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
     public void setChoiceSelected(int choiceIndex, boolean isSelected) {
         if (isSelected) {
             spinner.setSelection(choiceIndex);
-
         } else if (spinner.getSelectedItemPosition() == choiceIndex) {
             clearAnswer();
         }
@@ -164,5 +127,31 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
     private void programmaticallySetSelection(int position) {
         userActionOnSpinner = false;
         spinner.setSelection(position);
+    }
+
+    private void fillInPreviousAnswer(FormEntryPrompt prompt) {
+        String s = null;
+        if (prompt.getAnswerValue() != null) {
+            s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
+        }
+
+        programmaticallySetSelection(items.size());
+        if (s != null) {
+            for (int i = 0; i < items.size(); ++i) {
+                String match = items.get(i).getValue();
+                if (match.equals(s)) {
+                    programmaticallySetSelection(i);
+                }
+            }
+        }
+    }
+
+    private String[] getChoices(FormEntryPrompt prompt) {
+        String[] choices = new String[items.size() + 1];
+        for (int i = 0; i < items.size(); i++) {
+            choices[i] = prompt.getSelectChoiceText(items.get(i));
+        }
+        choices[items.size()] = getContext().getString(R.string.select_one);
+        return choices;
     }
 }
