@@ -1,6 +1,7 @@
 package org.odk.collect.android.adapters;
 
 import android.content.Context;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,23 +11,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 public class SpinnerAdapter extends ArrayAdapter<String> {
     Context context;
     String[] items = new String[]{};
-    int textUnit;
-    float textSize;
     private int selectedPosition;
     private ThemeUtils themeUtils;
 
-    public SpinnerAdapter(final Context context, final int textViewResourceId,
-                          final String[] objects, int textUnit, float textSize, int selectedPosition) {
-        super(context, textViewResourceId, objects);
+    public SpinnerAdapter(final Context context, final String[] objects, int selectedPosition) {
+        super(context, android.R.layout.simple_spinner_item, objects);
         this.items = objects;
         this.context = context;
-        this.textUnit = textUnit;
-        this.textSize = textSize;
         this.selectedPosition = selectedPosition;
         themeUtils = new ThemeUtils(context);
     }
@@ -41,7 +38,7 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
         }
 
         TextView tv = convertView.findViewById(android.R.id.text1);
-        tv.setTextSize(textUnit, textSize);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize());
         tv.setPadding(20, 10, 10, 10);
 
         if (themeUtils.isDarkTheme()) {
@@ -77,7 +74,7 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
         }
 
         TextView tv = convertView.findViewById(android.R.id.text1);
-        tv.setTextSize(textUnit, textSize);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize());
         tv.setPadding(10, 10, 10, 10);
         tv.setText(items[position]);
 

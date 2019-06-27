@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.Nullable;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -69,8 +68,7 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
 
         // The spinner requires a custom adapter. It is defined below
         SpinnerAdapter adapter =
-                new SpinnerAdapter(getContext(), android.R.layout.simple_spinner_item, choices,
-                        TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize(), spinner.getSelectedItemPosition());
+                new SpinnerAdapter(getContext(), choices, spinner.getSelectedItemPosition());
 
         spinner.setAdapter(adapter);
         spinner.setPrompt(prompt.getQuestionText());
