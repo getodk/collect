@@ -17,14 +17,13 @@ import org.odk.collect.android.utilities.ThemeUtils;
 public class SpinnerAdapter extends ArrayAdapter<String> {
     private final Context context;
     private final String[] items;
-    private final int selectedPosition;
     private final ThemeUtils themeUtils;
+    private int selectedPosition;
 
-    public SpinnerAdapter(final Context context, final String[] objects, int selectedPosition) {
+    public SpinnerAdapter(final Context context, final String[] objects) {
         super(context, android.R.layout.simple_spinner_item, objects);
         this.items = objects;
         this.context = context;
-        this.selectedPosition = selectedPosition;
         themeUtils = new ThemeUtils(context);
     }
 
@@ -76,5 +75,9 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
         tv.setText(items[position]);
 
         return convertView;
+    }
+
+    public void updateSelectedItemPosition(int selectedPosition) {
+        this.selectedPosition = selectedPosition;
     }
 }

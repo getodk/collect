@@ -58,7 +58,7 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
         View view = inflate(context, R.layout.spinner_layout, null);
 
         spinner = view.findViewById(R.id.spinner);
-        spinner.setAdapter(new SpinnerAdapter(getContext(), getChoices(prompt), spinner.getSelectedItemPosition()));
+        spinner.setAdapter(new SpinnerAdapter(getContext(), getChoices(prompt)));
         spinner.setPrompt(prompt.getQuestionText());
         spinner.setEnabled(!prompt.isReadOnly());
         spinner.setFocusable(!prompt.isReadOnly());
@@ -71,7 +71,7 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
                     }
                     widgetValueChanged();
                 }
-
+                ((SpinnerAdapter) spinner.getAdapter()).updateSelectedItemPosition(spinner.getSelectedItemPosition());
                 userActionOnSpinner = true;
             }
 
@@ -130,16 +130,16 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
     }
 
     private void fillInPreviousAnswer(FormEntryPrompt prompt) {
-        String s = null;
+        String selectedItemValue = null;
         if (prompt.getAnswerValue() != null) {
-            s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
+            selectedItemValue = ((Selection) prompt.getAnswerValue().getValue()).getValue();
         }
 
         programmaticallySetSelection(items.size());
-        if (s != null) {
+        if (selectedItemValue != null) {
             for (int i = 0; i < items.size(); ++i) {
                 String match = items.get(i).getValue();
-                if (match.equals(s)) {
+                if (match.equals(selectedItemValue)) {
                     programmaticallySetSelection(i);
                 }
             }
