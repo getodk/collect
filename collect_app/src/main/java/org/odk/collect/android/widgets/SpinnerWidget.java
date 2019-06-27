@@ -16,16 +16,11 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
@@ -33,6 +28,7 @@ import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.SpinnerAdapter;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.views.ScrolledToTopSpinner;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
@@ -74,7 +70,7 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
         // The spinner requires a custom adapter. It is defined below
         SpinnerAdapter adapter =
                 new SpinnerAdapter(getContext(), android.R.layout.simple_spinner_item, choices,
-                        TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize());
+                        TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize(), spinner.getSelectedItemPosition());
 
         spinner.setAdapter(adapter);
         spinner.setPrompt(prompt.getQuestionText());
@@ -164,76 +160,6 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
 
         } else if (spinner.getSelectedItemPosition() == choiceIndex) {
             clearAnswer();
-        }
-    }
-
-    // Defines how to display the select answers
-    private class SpinnerAdapter extends ArrayAdapter<String> {
-        Context context;
-        String[] items = new String[]{};
-        int textUnit;
-        float textSize;
-
-        SpinnerAdapter(final Context context, final int textViewResourceId,
-                       final String[] objects, int textUnit, float textSize) {
-            super(context, textViewResourceId, objects);
-            this.items = objects;
-            this.context = context;
-            this.textUnit = textUnit;
-            this.textSize = textSize;
-        }
-
-        @Override
-        // Defines the text view parameters for the drop down list entries
-        public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
-
-            if (convertView == null) {
-                LayoutInflater inflater = LayoutInflater.from(context);
-                convertView = inflater.inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
-            }
-
-            TextView tv = convertView.findViewById(android.R.id.text1);
-            tv.setTextSize(textUnit, textSize);
-            tv.setPadding(20, 10, 10, 10);
-
-            if (themeUtils.isDarkTheme()) {
-                convertView.setBackgroundColor(getResources().getColor(R.color.darkPopupDialogColor));
-            }
-
-            if (position == items.length - 1) {
-                tv.setText(parent.getContext().getString(R.string.clear_answer));
-            } else {
-                tv.setText(items[position]);
-            }
-
-            if (position == (items.length - 1) && spinner.getSelectedItemPosition() == position) {
-                tv.setEnabled(false);
-            } else {
-                tv.setTextColor(spinner.getSelectedItemPosition() == position ? themeUtils.getAccentColor() : themeUtils.getPrimaryTextColor());
-            }
-
-            return convertView;
-        }
-
-        @Override
-        public int getCount() {
-            return items.length;
-        }
-
-        @NonNull
-        @Override
-        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-            if (convertView == null) {
-                LayoutInflater inflater = LayoutInflater.from(context);
-                convertView = inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
-            }
-
-            TextView tv = convertView.findViewById(android.R.id.text1);
-            tv.setTextSize(textUnit, textSize);
-            tv.setPadding(10, 10, 10, 10);
-            tv.setText(items[position]);
-
-            return convertView;
         }
     }
 
