@@ -15,10 +15,10 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 public class SpinnerAdapter extends ArrayAdapter<String> {
-    private Context context;
-    private String[] items;
-    private int selectedPosition;
-    private ThemeUtils themeUtils;
+    private final Context context;
+    private final String[] items;
+    private final int selectedPosition;
+    private final ThemeUtils themeUtils;
 
     public SpinnerAdapter(final Context context, final String[] objects, int selectedPosition) {
         super(context, android.R.layout.simple_spinner_item, objects);
