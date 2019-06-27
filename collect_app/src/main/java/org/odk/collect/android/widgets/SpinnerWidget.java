@@ -49,6 +49,9 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
     ScrolledToTopSpinner spinner;
     String[] choices;
 
+    // used to ascertain whether the user selected an item on spinner (not programmatically)
+    private boolean userActionOnSpinner = true;
+
     @Nullable
     private AdvanceToNextListener listener;
 
@@ -84,12 +87,12 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
             s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
         }
 
-        spinner.setSelection(items.size());
+        programmaticallySetSelection(items.size());
         if (s != null) {
             for (int i = 0; i < items.size(); ++i) {
                 String match = items.get(i).getValue();
                 if (match.equals(s)) {
-                    spinner.setSelection(i);
+                    programmaticallySetSelection(i);
                 }
             }
         }
@@ -99,11 +102,15 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-                if (position != items.size() && autoAdvance && listener != null) {
-                    listener.advance();
+                if (userActionOnSpinner) {
+                    if (position != items.size() && autoAdvance && listener != null) {
+                        listener.advance();
+                    }
+
+                    widgetValueChanged();
                 }
 
-                widgetValueChanged();
+                userActionOnSpinner = true;
             }
 
             @Override
@@ -130,8 +137,7 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
     public void clearAnswer() {
         // It seems that spinners cannot return a null answer. This resets the answer
         // to its original value, but it is not null.
-        spinner.setSelection(items.size());
-
+        programmaticallySetSelection(items.size());
         widgetValueChanged();
     }
 
@@ -229,5 +235,10 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
 
             return convertView;
         }
+    }
+
+    private void programmaticallySetSelection(int position) {
+        userActionOnSpinner = false;
+        spinner.setSelection(position);
     }
 }
