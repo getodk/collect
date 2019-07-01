@@ -29,7 +29,7 @@
 
         <TextView
             android:id="@+id/main_menu_header"
-            style="@style/TextAppearance.Collect.Headline6"
+            style="?attr/textAppearanceHeadline6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -37,7 +37,7 @@
             android:textAlignment="center" />
 
         <TextView
-            style="@style/TextAppearance.Collect.Subtitle1"
+            style="?attr/textAppearanceSubtitle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
