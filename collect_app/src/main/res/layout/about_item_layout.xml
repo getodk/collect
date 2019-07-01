@@ -36,17 +36,17 @@ limitations under the License.
 
         <TextView
             android:id="@+id/title"
-            style="?attr/textAppearanceSubtitle1"
+            style="@style/TextAppearance.Collect.Subtitle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="@string/odk_website" />
 
         <TextView
             android:id="@+id/summary"
-            style="?attr/textAppearanceBody2"
+            style="@style/TextAppearance.Collect.Body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_small"
             tools:text="@string/odk_website_summary" />
 
     </LinearLayout>
