@@ -212,6 +212,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 sheetsHelper.insertRow(spreadsheet.getSpreadsheetId(), sheetTitle,
                         new ValueRange().setValues(Collections.singletonList(prepareListOfValues(sheetCells.get(0), columnTitles, answers))));
             }
+        } catch (GoogleJsonResponseException e) {
+            throw new UploadException(getErrorMessageFromGoogleJsonResponseException(e));
         } catch (IOException e) {
             throw new UploadException(e);
         }
