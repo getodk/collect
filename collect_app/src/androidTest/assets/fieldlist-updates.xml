@@ -321,7 +321,7 @@
       <bind nodeset="/fieldlist-updates/external_app/source14" type="int"/>
       <bind nodeset="/fieldlist-updates/external_app/target14" relevant=" /fieldlist-updates/external_app/source14  != ''" type="string"/>
       <bind nodeset="/fieldlist-updates/search_in_field_list_group/source15" type="select1"/>
-      <bind nodeset="/fieldlist-updates/search_in_field_list_group/target15" relevant=" /fieldlist-updates/search_in_field_list_group/source15  != ''" type="select1"/>
+      <bind nodeset="/fieldlist-updates/search_in_field_list_group/target15" relevant=" /fieldlist-updates/search_in_field_list_group/source15  != ''" type="string"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/fieldlist-updates/meta/instanceID" readonly="true()" type="string"/>
     </model>
   </h:head>
@@ -600,13 +600,9 @@
           <value>name_key</value>
         </item>
       </select1>
-      <select1 appearance="minimal search('fruits')" ref="/fieldlist-updates/search_in_field_list_group/target15">
+      <input ref="/fieldlist-updates/search_in_field_list_group/target15">
         <label>Target15</label>
-        <item>
-          <label>name</label>
-          <value>name_key</value>
-        </item>
-      </select1>
+      </input>
     </group>
   </h:body>
 </h:html>

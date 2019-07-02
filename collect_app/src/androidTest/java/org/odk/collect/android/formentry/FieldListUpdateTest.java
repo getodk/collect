@@ -384,7 +384,7 @@ public class FieldListUpdateTest {
         jumpToGroupWithText("Search in field-list");
         onView(withText(startsWith("Source15"))).perform(click());
         Thread.sleep(1000);
-        onView(withId(R.id.spinner)).check(matches(isDisplayed())).perform(click());
+        onView(withText("Select One Answer")).check(matches(isDisplayed())).perform(click());
         onView(withText("Mango")).check(matches(isDisplayed()));
         onView(withText("Oranges")).check(matches(isDisplayed()));
         onView(withText("Strawberries")).check(matches(isDisplayed())).perform(click());
