@@ -920,7 +920,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     public QuestionWidget getWidgetWaitingForBinaryData() {
-        ODKView odkView = (ODKView) currentView;
+        ODKView odkView = getCurrentViewIfODKView();
 
         if (odkView != null) {
             for (QuestionWidget qw : odkView.getWidgets()) {
