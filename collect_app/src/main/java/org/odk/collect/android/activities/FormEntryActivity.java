@@ -920,7 +920,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     public QuestionWidget getWidgetWaitingForBinaryData() {
-        ODKView odkView = (ODKView) currentView;
+        ODKView odkView = getCurrentViewIfODKView();
 
         if (odkView != null) {
             for (QuestionWidget qw : odkView.getWidgets()) {
@@ -1117,22 +1117,25 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
              * clicked on.
              */
             boolean shouldClearDialogBeShown;
-            for (QuestionWidget qw : getCurrentViewIfODKView().getWidgets()) {
-                shouldClearDialogBeShown = false;
-                if (qw instanceof StringWidget) {
-                    for (int i = 0; i < qw.getChildCount(); i++) {
-                        if (item.getItemId() == qw.getChildAt(i).getId()) {
-                            shouldClearDialogBeShown = true;
-                            break;
+            ODKView odkView = getCurrentViewIfODKView();
+            if (odkView != null) {
+                for (QuestionWidget qw : odkView.getWidgets()) {
+                    shouldClearDialogBeShown = false;
+                    if (qw instanceof StringWidget) {
+                        for (int i = 0; i < qw.getChildCount(); i++) {
+                            if (item.getItemId() == qw.getChildAt(i).getId()) {
+                                shouldClearDialogBeShown = true;
+                                break;
+                            }
                         }
+                    } else if (item.getItemId() == qw.getId()) {
+                        shouldClearDialogBeShown = true;
                     }
-                } else if (item.getItemId() == qw.getId()) {
-                    shouldClearDialogBeShown = true;
-                }
 
-                if (shouldClearDialogBeShown) {
-                    createClearDialog(qw);
-                    break;
+                    if (shouldClearDialogBeShown) {
+                        createClearDialog(qw);
+                        break;
+                    }
                 }
             }
         }
