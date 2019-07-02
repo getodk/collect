@@ -2414,7 +2414,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         try {
             unregisterReceiver(locationProvidersReceiver);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {     // smap changed to check for Exception
             Timber.i(e);
         }
         super.onDestroy();

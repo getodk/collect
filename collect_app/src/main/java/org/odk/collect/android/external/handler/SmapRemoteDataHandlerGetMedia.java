@@ -72,8 +72,8 @@ public class SmapRemoteDataHandlerGetMedia implements IFunctionHandler {
     @Override
     public Object eval(Object[] args, EvaluationContext ec) {
 
-        if (args.length != 1) {
-            Timber.e("1 arguments is needed to evaluate the %s function", HANDLER_NAME);
+        if (args.length < 1) {
+            Timber.e("At least 1 arguments is needed to evaluate the %s function", HANDLER_NAME);
             return "";
         }
 
