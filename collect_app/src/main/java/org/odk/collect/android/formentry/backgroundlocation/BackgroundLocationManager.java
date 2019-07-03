@@ -38,7 +38,7 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
     @NonNull
     private BackgroundLocationHelper helper;
 
-    BackgroundLocationManager(LocationClient locationClient, BackgroundLocationHelper helper) {
+    public BackgroundLocationManager(LocationClient locationClient, BackgroundLocationHelper helper) {
         currentState = BackgroundLocationState.NO_BACKGROUND_LOCATION_NEEDED;
         this.locationClient = locationClient;
 
@@ -47,7 +47,7 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
         this.locationListener = this;
     }
 
-    void formFinishedLoading() {
+    public void formFinishedLoading() {
         switch (currentState) {
             case NO_BACKGROUND_LOCATION_NEEDED:
                 if (helper.currentFormCollectsBackgroundLocation()) {
@@ -56,7 +56,7 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
         }
     }
 
-    BackgroundLocationMessage activityDisplayed() {
+    public BackgroundLocationMessage activityDisplayed() {
         switch (currentState) {
             case PENDING_PRECONDITION_CHECKS:
                 // Separate out user message so that any failed precondition is written to the audit
@@ -107,7 +107,7 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
         return null;
     }
 
-    void activityHidden() {
+    public void activityHidden() {
         switch (currentState) {
             case RECEIVING_LOCATIONS:
             case STOPPED:
@@ -115,11 +115,11 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
         }
     }
 
-    boolean isPendingPermissionCheck() {
+    public boolean isPendingPermissionCheck() {
         return currentState == BackgroundLocationState.PENDING_PERMISSION_CHECK;
     }
 
-    BackgroundLocationMessage locationPermissionGranted() {
+    public BackgroundLocationMessage locationPermissionGranted() {
         switch (currentState) {
             case PENDING_PERMISSION_CHECK:
                 if (!helper.currentFormAuditsLocation()) {
@@ -153,7 +153,7 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
         }
     }
 
-    void locationPermissionDenied() {
+    public void locationPermissionDenied() {
         switch (currentState) {
             case PENDING_PERMISSION_CHECK:
                 if (!helper.currentFormAuditsLocation()) {
@@ -166,7 +166,7 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
         }
     }
 
-    void backgroundLocationPreferenceToggled() {
+    public void backgroundLocationPreferenceToggled() {
         switch (currentState) {
             case RECEIVING_LOCATIONS:
                 if (!helper.isBackgroundLocationPreferenceEnabled()) {
@@ -184,7 +184,7 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
         }
     }
 
-    void locationProvidersChanged() {
+    public void locationProvidersChanged() {
         switch (currentState) {
             case RECEIVING_LOCATIONS:
             case STOPPED:

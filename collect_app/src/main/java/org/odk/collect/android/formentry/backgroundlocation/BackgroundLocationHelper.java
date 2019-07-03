@@ -23,7 +23,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOC
  * because the form controller isn't set until
  * {@link org.odk.collect.android.activities.FormEntryActivity}'s onCreate.
  */
-class BackgroundLocationHelper {
+public class BackgroundLocationHelper {
     boolean isAndroidLocationPermissionGranted() {
         return PermissionUtils.areLocationPermissionsGranted(Collect.getInstance().getApplicationContext());
     }

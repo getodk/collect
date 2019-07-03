@@ -93,7 +93,7 @@ import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationManager;
-import org.odk.collect.android.formentry.backgroundlocation.FormEntryViewModel;
+import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.FormLoadingDialogFragment;
