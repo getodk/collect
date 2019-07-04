@@ -25,17 +25,17 @@ public class AuditEvent {
 
     public enum AuditEventType {
         // Beginning of the form
-        BEGINNING_OF_FORM("beginning of form", false, false),
+        BEGINNING_OF_FORM("beginning of form", false, false, false),
         // Create a question
-        QUESTION("question"),
+        QUESTION("question", true),
         // Create a group
-        GROUP("group questions"),
+        GROUP("group questions", true),
         // Prompt to add a new repeat
-        PROMPT_NEW_REPEAT("add repeat"),
+        PROMPT_NEW_REPEAT("add repeat", true),
         // Repeat group
-        REPEAT("repeat", false, false),
+        REPEAT("repeat", false, false, false),
         // Show the "end of form" view
-        END_OF_FORM("end screen"),
+        END_OF_FORM("end screen", true),
         // Start filling in the form
         FORM_START("form start"),
         // Exit the form
@@ -47,7 +47,7 @@ public class AuditEvent {
         // Finalize the form
         FORM_FINALIZE("form finalize"),
         // Jump to a question
-        HIERARCHY("jump"),
+        HIERARCHY("jump", true),
         // Error in save
         SAVE_ERROR("save error"),
         // Error in finalize
@@ -58,35 +58,41 @@ public class AuditEvent {
         DELETE_REPEAT("delete repeat"),
 
         // Google Play Services are not available
-        GOOGLE_PLAY_SERVICES_NOT_AVAILABLE("google play services not available", true, true),
+        GOOGLE_PLAY_SERVICES_NOT_AVAILABLE("google play services not available", true, false, true),
         // Location permissions are granted
-        LOCATION_PERMISSIONS_GRANTED("location permissions granted", true, true),
+        LOCATION_PERMISSIONS_GRANTED("location permissions granted", true, false, true),
         // Location permissions are not granted
-        LOCATION_PERMISSIONS_NOT_GRANTED("location permissions not granted", true, true),
+        LOCATION_PERMISSIONS_NOT_GRANTED("location permissions not granted", true, false, true),
         // Location tracking option is enabled
-        LOCATION_TRACKING_ENABLED("location tracking enabled", true, true),
+        LOCATION_TRACKING_ENABLED("location tracking enabled", true, false, true),
         // Location tracking option is disabled
-        LOCATION_TRACKING_DISABLED("location tracking disabled", true, true),
+        LOCATION_TRACKING_DISABLED("location tracking disabled", true, false, true),
         // Location providers are enabled
-        LOCATION_PROVIDERS_ENABLED("location providers enabled", true, true),
+        LOCATION_PROVIDERS_ENABLED("location providers enabled", true, false, true),
         // Location providers are disabled
-        LOCATION_PROVIDERS_DISABLED("location providers disabled", true, true),
+        LOCATION_PROVIDERS_DISABLED("location providers disabled", true, false, true),
         // Unknown event type
         UNKNOWN_EVENT_TYPE("Unknown AuditEvent Type");
 
         private final String value;
         private final boolean isLogged;
+        private final boolean isInterval;
         private final boolean isLocationRelated;
 
-        AuditEventType(String value, boolean isLogged, boolean isLocationRelated) {
+        AuditEventType(String value, boolean isLogged, boolean isInterval, boolean isLocationRelated) {
             this.value = value;
 
             this.isLogged = isLogged;
+            this.isInterval = isInterval;
             this.isLocationRelated = isLocationRelated;
         }
 
+        AuditEventType(String value, boolean isInterval) {
+            this(value, true, isInterval, false);
+        }
+
         AuditEventType(String value) {
-            this(value, true, false);
+            this(value, true, false, false);
         }
 
         public String getValue() {
@@ -95,6 +101,13 @@ public class AuditEvent {
 
         public boolean isLogged() {
             return isLogged;
+        }
+
+        /**
+         * @return true if events of this type have both a start and an end time, false otherwise.
+         */
+        public boolean isInterval() {
+            return isInterval;
         }
 
         public boolean isLocationRelated() {
@@ -136,18 +149,11 @@ public class AuditEvent {
         this.oldValue = oldValue == null ? "" : oldValue;
     }
 
-    /*
-     * Return true if this is a view type event
-     *  Hierarchy Jump
-     *  Question
-     *  Prompt for repeat
+    /**
+     * @return true if this event's type is an interval event type.
      */
     public boolean isIntervalAuditEventType() {
-        return auditEventType == AuditEventType.HIERARCHY
-                || auditEventType == AuditEventType.QUESTION
-                || auditEventType == AuditEventType.GROUP
-                || auditEventType == AuditEventType.END_OF_FORM
-                || auditEventType == AuditEventType.PROMPT_NEW_REPEAT;
+        return auditEventType.isInterval();
     }
 
     /*
