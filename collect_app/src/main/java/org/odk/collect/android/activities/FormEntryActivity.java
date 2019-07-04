@@ -256,7 +256,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     // used to limit forward/backward swipes to one per question
     private boolean beenSwiped;
-    private boolean locationPermissionsGranted;
 
     private final Object saveDialogLock = new Object();
 
@@ -301,6 +300,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     RxEventBus eventBus;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
+
+    /**
+     * True if the Android location permission was granted last time it was checked. Allows for
+     * detection of location permissions changes while the activity is in the background.
+     */
+    private boolean locationPermissionsPreviouslyGranted;
 
     FormEntryViewModel viewModel;
 
@@ -418,7 +423,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 readPhoneStatePermissionRequestNeeded = savedInstanceState.getBoolean(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED);
             }
             if (savedInstanceState.containsKey(KEY_LOCATION_PERMISSIONS_GRANTED)) {
-                locationPermissionsGranted = savedInstanceState.getBoolean(KEY_LOCATION_PERMISSIONS_GRANTED);
+                locationPermissionsPreviouslyGranted = savedInstanceState.getBoolean(KEY_LOCATION_PERMISSIONS_GRANTED);
             }
         }
     }
@@ -656,7 +661,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         outState.putString(KEY_SAVE_NAME, saveName);
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
         outState.putBoolean(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED, readPhoneStatePermissionRequestNeeded);
-        outState.putBoolean(KEY_LOCATION_PERMISSIONS_GRANTED, locationPermissionsGranted);
+        outState.putBoolean(KEY_LOCATION_PERMISSIONS_GRANTED, locationPermissionsPreviouslyGranted);
 
         if (currentView instanceof ODKView) {
             outState.putAll(((ODKView) currentView).getState());
@@ -2074,6 +2079,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
         }
 
+        // User may have changed location permissions in Android settings
+        if (PermissionUtils.areLocationPermissionsGranted(this) != locationPermissionsPreviouslyGranted) {
+            viewModel.locationPermissionChanged();
+            locationPermissionsPreviouslyGranted = !locationPermissionsPreviouslyGranted;
+        }
         activityDisplayed();
     }
 

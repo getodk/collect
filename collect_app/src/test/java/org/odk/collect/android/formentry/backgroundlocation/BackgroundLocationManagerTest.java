@@ -104,6 +104,51 @@ public class BackgroundLocationManagerTest {
     }
 
     @Test
+    public void locationPermissionGranted_ShouldBeLogged_WhenFormAuditsLocation() {
+        when(locationHelper.currentFormCollectsBackgroundLocation()).thenReturn(true);
+        when(locationHelper.currentFormAuditsLocation()).thenReturn(true);
+
+        when(locationHelper.arePlayServicesAvailable()).thenReturn(true);
+        when(locationHelper.isBackgroundLocationPreferenceEnabled()).thenReturn(true);
+
+        backgroundLocationManager.formFinishedLoading();
+        backgroundLocationManager.activityDisplayed();
+
+        assertThat(backgroundLocationManager.isPendingPermissionCheck(), is(true));
+
+        backgroundLocationManager.locationPermissionGranted();
+
+        verify(locationHelper).logAuditEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED);
+    }
+
+    /**
+     * Simulates orientation change.
+     */
+    @Test
+    public void androidPermissionEvent_ShouldNotBeLogged_WhenActivityDisplayedMultipleTimes() {
+        when(locationHelper.currentFormCollectsBackgroundLocation()).thenReturn(true);
+        when(locationHelper.currentFormAuditsLocation()).thenReturn(true);
+
+        when(locationHelper.arePlayServicesAvailable()).thenReturn(true);
+        when(locationHelper.isBackgroundLocationPreferenceEnabled()).thenReturn(true);
+        when(locationHelper.isAndroidLocationPermissionGranted()).thenReturn(true);
+        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo",  "2", "3", true));
+
+        backgroundLocationManager.formFinishedLoading();
+        backgroundLocationManager.activityDisplayed();
+        backgroundLocationManager.locationPermissionGranted();
+
+        // Activity displayed again without a permission change (e.g. orientation has changed)
+        backgroundLocationManager.activityHidden();
+        backgroundLocationManager.activityDisplayed();
+        verify(locationHelper, times(1)).logAuditEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED);
+
+        Location location2 = LocationTestUtils.createLocation("GPS", 7, 2, 3, 4);
+        fakeLocationClient.receiveFix(location2);
+        verify(locationHelper).provideLocationToAuditLogger(location2);
+    }
+
+    @Test
     public void playServicesWarning_ShouldBeReturnedAndLogged_WhenFormRequestsBackgroundLocation_AndPlayServicesNotAvailable() {
         when(locationHelper.currentFormCollectsBackgroundLocation()).thenReturn(true);
 
@@ -227,16 +272,23 @@ public class BackgroundLocationManagerTest {
         backgroundLocationManager.activityDisplayed();
         backgroundLocationManager.locationPermissionGranted();
 
+        Location location = LocationTestUtils.createLocation("GPS", 1, 2, 3, 4);
+        fakeLocationClient.receiveFix(location);
+        verify(locationHelper).provideLocationToAuditLogger(location);
+
         // User revokes permission in Android settings
         backgroundLocationManager.activityHidden();
         when(locationHelper.isAndroidLocationPermissionGranted()).thenReturn(false);
+        backgroundLocationManager.locationPermissionChanged();
+
+        verify(locationHelper).logAuditEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_NOT_GRANTED);
+
         // No snackbar is shown on activity re-entry
         assertThat(backgroundLocationManager.activityDisplayed(), is(nullValue()));
 
-        Location location = LocationTestUtils.createLocation("GPS", 1, 2, 3, 4);
         fakeLocationClient.receiveFix(location);
 
-        verify(locationHelper, never()).provideLocationToAuditLogger(location);
+        verify(locationHelper, times(1)).provideLocationToAuditLogger(location);
     }
 
     @Test

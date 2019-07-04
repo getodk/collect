@@ -99,23 +99,9 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
 
                 return userMessage;
 
-            case RECEIVING_LOCATIONS:
-                if (!helper.isAndroidLocationPermissionGranted()) {
-                    // The user revoked the Android-level location permissions and returned to Collect
-                    helper.logAuditEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_NOT_GRANTED);
-                    stopLocationRequests();
-                } else {
-                    startLocationRequests();
-                }
-                break;
-
             case STOPPED:
-                if (helper.isAndroidLocationPermissionGranted()) {
-                    // The user granted the Android-level location permissions and returned to Collect
-                    helper.logAuditEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED);
-                }
-
-                // Android permissions or another precondition could have changed so try again
+                // All preconditions could be met either because we were collecting location, hid
+                // the activity and showed it again or because a precondition became met.
                 startLocationRequests();
                 break;
         }
@@ -195,6 +181,18 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
                 if (helper.isBackgroundLocationPreferenceEnabled()) {
                     helper.logAuditEvent(AuditEvent.AuditEventType.LOCATION_TRACKING_ENABLED);
                     startLocationRequests();
+                }
+                break;
+        }
+    }
+
+    public void locationPermissionChanged() {
+        switch (currentState) {
+            case STOPPED:
+                if (helper.isAndroidLocationPermissionGranted()) {
+                    helper.logAuditEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED);
+                } else {
+                    helper.logAuditEvent(AuditEvent.AuditEventType.LOCATION_PERMISSIONS_NOT_GRANTED);
                 }
                 break;
         }

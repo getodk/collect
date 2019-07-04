@@ -50,6 +50,10 @@ public class FormEntryViewModel extends ViewModel {
         locationManager.locationPermissionDenied();
     }
 
+    public void locationPermissionChanged() {
+        locationManager.locationPermissionChanged();
+    }
+
     public void locationProvidersChanged() {
         locationManager.locationProvidersChanged();
     }
