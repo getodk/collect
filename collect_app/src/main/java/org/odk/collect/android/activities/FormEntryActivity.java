@@ -60,6 +60,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.work.Constraints;
 import androidx.work.ExistingWorkPolicy;
@@ -92,8 +94,9 @@ import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
-import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationManager;
 import org.odk.collect.android.formentry.FormEntryViewModel;
+import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationHelper;
+import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationManager;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.FormLoadingDialogFragment;
@@ -107,6 +110,7 @@ import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.location.client.GoogleLocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.logic.AuditEvent;
 import org.odk.collect.android.logic.FormController;
@@ -316,7 +320,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        viewModel = ViewModelProviders.of(this).get(FormEntryViewModel.class);
+        viewModel = ViewModelProviders.of(this, new FormEntryViewModelFactory()).get(FormEntryViewModel.class);
 
         setContentView(R.layout.form_entry);
 
@@ -2943,6 +2947,23 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 runOnUiThread(() -> odkView.addWidgetForQuestion(questionsAfterSave[targetIndex],
                         false, targetIndex));
             }
+        }
+    }
+
+    /**
+     * Build {@link FormEntryViewModel} and its dependencies.
+     */
+    private class FormEntryViewModelFactory implements ViewModelProvider.Factory {
+        @Override
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.equals(FormEntryViewModel.class)) {
+                GoogleLocationClient googleLocationClient = new GoogleLocationClient(Collect.getInstance().getApplicationContext());
+
+                BackgroundLocationManager locationManager =
+                        new BackgroundLocationManager(googleLocationClient, new BackgroundLocationHelper());
+                return (T) new FormEntryViewModel(locationManager);
+            }
+            return null;
         }
     }
 }

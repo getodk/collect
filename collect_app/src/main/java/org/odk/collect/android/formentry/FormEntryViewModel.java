@@ -4,10 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationHelper;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationManager;
-import org.odk.collect.android.location.client.GoogleLocationClient;
 
 /**
  * Ensures that background location tracking continues throughout the activity lifecycle. Builds
@@ -21,9 +18,8 @@ public class FormEntryViewModel extends ViewModel {
     @NonNull
     private final BackgroundLocationManager locationManager;
 
-    public FormEntryViewModel() {
-        locationManager = new BackgroundLocationManager(new GoogleLocationClient(Collect.getInstance().getApplicationContext()),
-                new BackgroundLocationHelper());
+    public FormEntryViewModel(BackgroundLocationManager locationManager) {
+        this.locationManager = locationManager;
     }
 
     public void formFinishedLoading() {
