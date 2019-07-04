@@ -12,11 +12,9 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.espressoutils.FormEntry;
 import org.odk.collect.android.espressoutils.MainMenu;
-import org.odk.collect.android.espressoutils.Settings;
 import org.odk.collect.android.support.CopyFormRule;
 
 import static androidx.test.espresso.Espresso.pressBack;
-
 
 // Issue number NODK-209
 @RunWith(AndroidJUnit4.class)
@@ -49,8 +47,6 @@ public class DrawWidgetTest extends BaseRegressionTest {
         FormEntry.clickGoToIconInForm();
         FormEntry.clickJumpEndButton();
         FormEntry.clickSaveAndExit();
-        Settings.resetAllSettings();
-
     }
 
     @Test
@@ -70,8 +66,6 @@ public class DrawWidgetTest extends BaseRegressionTest {
         FormEntry.clickGoToIconInForm();
         FormEntry.clickJumpEndButton();
         FormEntry.clickSaveAndExit();
-        Settings.resetAllSettings();
-
     }
 
     @Test
@@ -97,7 +91,5 @@ public class DrawWidgetTest extends BaseRegressionTest {
         FormEntry.clickGoToIconInForm();
         FormEntry.clickJumpEndButton();
         FormEntry.clickSaveAndExit();
-        Settings.resetAllSettings();
-
     }
 }

@@ -17,7 +17,6 @@ import org.odk.collect.android.support.CopyFormRule;
 
 import static androidx.test.espresso.Espresso.pressBack;
 
-
 // Issue number NODK-238
 @RunWith(AndroidJUnit4.class)
 public class UserAndDeviceIdentityTest extends BaseRegressionTest {
@@ -52,8 +51,6 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
         pressBack();
         pressBack();
         pressBack();
-        Settings.resetAllSettings();
-
     }
 
     @Test
@@ -63,8 +60,6 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
         MainMenu.startBlankForm("Test");
         FormEntry.checkIsDisplayedInTextClassAndSwipe("");
         FormEntry.clickSaveAndExit();
-        Settings.resetAllSettings();
-
     }
 
     @Test
@@ -84,7 +79,6 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
         MainMenu.startBlankForm("Test");
         FormEntry.checkIsDisplayedInTextClassAndSwipe("AAA");
         FormEntry.clickSaveAndExit();
-        Settings.resetAllSettings();
     }
 
     @Test
@@ -114,7 +108,6 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
         MainMenu.startBlankForm("Test");
         FormEntry.checkIsDisplayedInTextClassAndSwipe("BBB");
         FormEntry.clickSaveAndExit();
-        Settings.resetAllSettings();
     }
 
     @Test
@@ -144,7 +137,5 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
         MainMenu.startBlankForm("Test");
         FormEntry.checkIsDisplayedInTextClassAndSwipe("CCC");
         FormEntry.clickSaveAndExit();
-        Settings.resetAllSettings();
-
     }
 }
