@@ -11,7 +11,6 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.espressoutils.FormEntry;
 import org.odk.collect.android.espressoutils.MainMenu;
-import org.odk.collect.android.espressoutils.Settings;
 import org.odk.collect.android.regression.BaseRegressionTest;
 import org.odk.collect.android.support.CopyFormRule;
 
@@ -45,7 +44,5 @@ public class CascadingSelectWithNumberInHeaderTest extends BaseRegressionTest {
         FormEntry.swipeToNextQuestion();
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
-        Settings.resetAllSettings();
-
     }
 }

@@ -11,7 +11,6 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.espressoutils.FormEntry;
 import org.odk.collect.android.espressoutils.MainMenu;
-import org.odk.collect.android.espressoutils.Settings;
 import org.odk.collect.android.support.CopyFormRule;
 
 import static androidx.test.espresso.Espresso.pressBack;
@@ -38,8 +37,6 @@ public class RequiredQuestionTest extends BaseRegressionTest {
         pressBack();
         pressBack();
         FormEntry.ignoreChanges();
-        Settings.resetAllSettings();
-
     }
 
     @Test
@@ -52,7 +49,5 @@ public class RequiredQuestionTest extends BaseRegressionTest {
         pressBack();
         pressBack();
         FormEntry.ignoreChanges();
-        Settings.resetAllSettings();
-
     }
 }

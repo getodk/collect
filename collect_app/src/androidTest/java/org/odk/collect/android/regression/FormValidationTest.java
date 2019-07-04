@@ -11,11 +11,9 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.espressoutils.FormEntry;
 import org.odk.collect.android.espressoutils.MainMenu;
-import org.odk.collect.android.espressoutils.Settings;
 import org.odk.collect.android.support.CopyFormRule;
 
 import static androidx.test.espresso.Espresso.pressBack;
-
 
 // Issue number NODK-251
 @RunWith(AndroidJUnit4.class)
@@ -43,8 +41,6 @@ public class FormValidationTest extends BaseRegressionTest {
         FormEntry.clickGoToIconInForm();
         FormEntry.clickJumpEndButton();
         FormEntry.clickSaveAndExit();
-        Settings.resetAllSettings();
-
     }
 
     @Test
@@ -59,7 +55,5 @@ public class FormValidationTest extends BaseRegressionTest {
         pressBack();
         pressBack();
         FormEntry.ignoreChanges();
-        Settings.resetAllSettings();
-
     }
 }
