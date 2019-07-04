@@ -2424,11 +2424,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                 }
 
-                refreshCurrentView();
-
                 // onStart ran before the form was loaded. Let the viewModel know that the activity
-                // is now displayed and configured.
+                // is about to be displayed and configured. Do this before the refresh actually
+                // happens because if audit logging is enabled, the refresh logs a question event
+                // and we want that to show up after initialization events.
                 activityDisplayed();
+
+                refreshCurrentView();
             }
         } else {
             Timber.e("FormController is null");
