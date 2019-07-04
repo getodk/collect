@@ -62,10 +62,7 @@ public class AuditEventLogger {
      */
     public void logEvent(AuditEvent.AuditEventType eventType, FormIndex formIndex,
                          boolean writeImmediatelyToDisk, String questionAnswer) {
-        if (!isAuditEnabled()
-                || eventType.isLocationRelated() && !auditConfig.isLocationEnabled()
-                || !eventType.isLogged()
-                || isDuplicateOfLastLocationEvent(eventType)) {
+        if (!isAuditEnabled() || shouldBeIgnored(eventType)) {
             return;
         }
 
@@ -183,6 +180,16 @@ public class AuditEventLogger {
         if (!aev.isEndTimeSet()) {
             aev.setEnd(end);
         }
+    }
+
+    /**
+     * @return true if an event of this type should be ignored given the current audit configuration
+     * and previous events, false otherwise.
+     */
+    private boolean shouldBeIgnored(AuditEvent.AuditEventType eventType) {
+        return !eventType.isLogged()
+                || eventType.isLocationRelated() && !auditConfig.isLocationEnabled()
+                || isDuplicateOfLastLocationEvent(eventType);
     }
 
     /*
