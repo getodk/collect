@@ -58,6 +58,22 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
 
     public BackgroundLocationMessage activityDisplayed() {
         switch (currentState) {
+            case NO_BACKGROUND_LOCATION_NEEDED:
+                // After system-initiated process death, state is reset. The form did not get
+                // reloaded and user messaging has already been displayed so go straight to
+                // requesting location.
+                if (helper.isCurrentFormSet() && helper.currentFormAuditsLocation()) {
+                    startLocationRequests();
+
+                    if (currentState != BackgroundLocationState.RECEIVING_LOCATIONS) {
+                        // The form requests background location and some precondition failed. Change
+                        // the state to STOPPED so that if preconditions change, location tracking
+                        // will resume.
+                        currentState = BackgroundLocationState.STOPPED;
+                    }
+                }
+                break;
+
             case PENDING_PRECONDITION_CHECKS:
                 // Separate out user message so that any failed precondition is written to the audit
                 // log. If Play Services are unavailable AND the location preference is disabled,

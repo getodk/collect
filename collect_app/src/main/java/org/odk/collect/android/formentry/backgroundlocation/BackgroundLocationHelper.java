@@ -9,8 +9,6 @@ import org.odk.collect.android.logic.AuditEvent;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.PermissionUtils;
 
-import timber.log.Timber;
-
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 
 /**
@@ -34,6 +32,13 @@ public class BackgroundLocationHelper {
 
     boolean arePlayServicesAvailable() {
         return LocationClients.areGooglePlayServicesAvailable(Collect.getInstance().getApplicationContext());
+    }
+
+    /**
+     * @return true if the global form controller has been initialized.
+     */
+    boolean isCurrentFormSet() {
+        return Collect.getInstance().getFormController() != null;
     }
 
     /**
@@ -70,7 +75,6 @@ public class BackgroundLocationHelper {
      * Precondition: the global form controller has been initialized.
      */
     void logAuditEvent(AuditEvent.AuditEventType eventType) {
-        Timber.i("$$$$$$$ Logging %s", eventType);
         Collect.getInstance().getFormController().getAuditEventLogger().logEvent(eventType, false);
     }
 

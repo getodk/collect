@@ -358,4 +358,36 @@ public class BackgroundLocationManagerTest {
 
         verify(locationHelper, never()).logAuditEvent(Mockito.any());
     }
+
+    /**
+     * Simulates the case where the system kills the activity. The form doesn't need to be loaded
+     * again because FormController is an Application-scoped singleton so if the form audits location,
+     * we should go straight to requesting location without showing anything to the user.
+     **/
+    @Test
+    public void locationRequests_ShouldResume_WhenActivityIsDisplayed_AndFormThatAuditsLocationWasAlreadyLoaded() {
+        when(locationHelper.isCurrentFormSet()).thenReturn(true);
+        when(locationHelper.currentFormAuditsLocation()).thenReturn(true);
+
+        when(locationHelper.arePlayServicesAvailable()).thenReturn(true);
+        when(locationHelper.isBackgroundLocationPreferenceEnabled()).thenReturn(true);
+        when(locationHelper.isAndroidLocationPermissionGranted()).thenReturn(true);
+        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo", "2", "3", true));
+
+        backgroundLocationManager.activityDisplayed();
+
+        Location location = LocationTestUtils.createLocation("GPS", 1, 2, 3, 4);
+        fakeLocationClient.receiveFix(location);
+        verify(locationHelper).provideLocationToAuditLogger(location);
+    }
+
+    @Test
+    public void locationRequests_ShouldNotResume_WhenActivityIsDisplayed_AndFormThatDoesNotAuditLocationWasAlreadyLoaded() {
+        when(locationHelper.isCurrentFormSet()).thenReturn(true);
+        backgroundLocationManager.activityDisplayed();
+
+        Location location = LocationTestUtils.createLocation("GPS", 1, 2, 3, 4);
+        fakeLocationClient.receiveFix(location);
+        verify(locationHelper, never()).provideLocationToAuditLogger(location);
+    }
 }
