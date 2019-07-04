@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <h:html
-    xmlns:jr="http://openrosa.org/javarosa"
     xmlns:h="http://www.w3.org/1999/xhtml">
     <h:head>
         <h:title>numberInCSV</h:title>
         <model>
             <instance>
                 <data id="a0e1C00000DA61ZQAT">
-                    <start />
-                    <end />
-                    <today />
-                    <deviceid />
-                    <simid />
-                    <phonenumber />
                     <new_section>
                         <number>
                             <number_static />
@@ -24,12 +17,6 @@
                     <closemessage />
                 </data>
             </instance>
-            <bind nodeset="/data/start" type="dateTime" jr:preload="timestamp" jr:preloadParams="start" />
-            <bind nodeset="/data/end" type="dateTime" jr:preload="timestamp" jr:preloadParams="end" />
-            <bind nodeset="/data/today" type="date" jr:preload="date" jr:preloadParams="today" />
-            <bind nodeset="/data/deviceid" type="string" jr:preload="property" jr:preloadParams="devicesid" />
-            <bind nodeset="/data/simid" type="string" jr:preload="property" jr:preloadParams="simserial" />
-            <bind nodeset="/data/phonenumber" type="string" jr:preload="property" jr:preloadParams="phonenumber" />
             <bind nodeset="/data/new_section" />
             <bind nodeset="/data/new_section/number" />
             <bind nodeset="/data/new_section/number/number_static" readonly="true()" />
