@@ -88,4 +88,8 @@ public final class FormEntry {
     public static void swipeToNextQuestion() {
         onView(withId(R.id.questionholder)).perform(swipeLeft());
     }
+
+    public static void ignoreChanges() {
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.do_not_save))).perform(click());
+    }
 }

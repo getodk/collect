@@ -61,6 +61,20 @@ public final class Settings {
         onView(withText(getInstrumentation().getTargetContext().getString(R.string.ok))).perform(click());
     }
 
+    public static void resetAllSettings() {
+        MainMenu.clickOnMenu();
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.admin_preferences))).perform(click());
+        onData(PreferenceMatchers.withKey("reset_settings")).perform(click());
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.reset_settings))).perform(click());
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.reset_saved_forms))).perform(click());
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.reset_blank_forms))).perform(click());
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.reset_layers))).perform(click());
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.reset_cache))).perform(click());
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.reset_osm_tiles))).perform(click());
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.reset_settings_button_reset))).perform(click());
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.ok))).perform(click());
+    }
+
     public static void putText(String text) {
         onView(withClassName(endsWith("EditText"))).perform(replaceText(text));
     }

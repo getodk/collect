@@ -1,29 +1,37 @@
 package org.odk.collect.android.regression.formfilling;
 
+import android.Manifest;
+
+import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
-import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.espressoutils.FormEntry;
 import org.odk.collect.android.espressoutils.MainMenu;
+import org.odk.collect.android.espressoutils.Settings;
 import org.odk.collect.android.regression.BaseRegressionTest;
-import org.odk.collect.android.test.FormLoadingUtils;
+import org.odk.collect.android.support.CopyFormRule;
 
-import java.io.IOException;
 import java.util.Collections;
 
 // Issue number NODK-207
 @RunWith(AndroidJUnit4.class)
 public class CascadingSelectWithNumberInHeaderTest extends BaseRegressionTest {
 
-    @BeforeClass
-    public static void copyFormToSdCard() throws IOException {
-        FormLoadingUtils.copyFormToSdCard("numberInCSV.xml", "regression/", Collections.singletonList("itemSets.csv"));
-    }
+    @Rule
+    public RuleChain copyFormChain = RuleChain
+            .outerRule(GrantPermissionRule.grant(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            )
+            .around(new CopyFormRule("numberInCSV.xml", "regression", Collections.singletonList("itemSets.csv")));
 
     @Test
     public void fillForm_ShouldFillFormWithNumberInCsvHeader() {
+
         MainMenu.startBlankForm("numberInCSV");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickOnText("Venda de animais");
@@ -37,6 +45,7 @@ public class CascadingSelectWithNumberInHeaderTest extends BaseRegressionTest {
         FormEntry.swipeToNextQuestion();
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
+        Settings.resetAllSettings();
 
     }
 }

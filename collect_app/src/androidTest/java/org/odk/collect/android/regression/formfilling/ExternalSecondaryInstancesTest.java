@@ -1,26 +1,34 @@
 package org.odk.collect.android.regression.formfilling;
 
+import android.Manifest;
+
+import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
-import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.espressoutils.FormEntry;
 import org.odk.collect.android.espressoutils.MainMenu;
+import org.odk.collect.android.espressoutils.Settings;
 import org.odk.collect.android.regression.BaseRegressionTest;
-import org.odk.collect.android.test.FormLoadingUtils;
+import org.odk.collect.android.support.CopyFormRule;
 
-import java.io.IOException;
+import java.util.Collections;
 
 // Issue number NODK-377
 @RunWith(AndroidJUnit4.class)
 public class ExternalSecondaryInstancesTest extends BaseRegressionTest {
 
-    @BeforeClass
-    public static void copyFormToSdCard() throws IOException {
-        FormLoadingUtils.copyFormToSdCard("external_select_10.xml", "regression/");
-        FormLoadingUtils.copyFormToSdCard("internal_select_10.xml", "regression/");
-    }
+    @Rule
+    public RuleChain copyFormChain = RuleChain
+            .outerRule(GrantPermissionRule.grant(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            )
+            .around(new CopyFormRule("internal_select_10.xml", "regression"))
+            .around(new CopyFormRule("external_select_10.xml", "regression", Collections.singletonList("external_data_10.xml")));
 
     @Test
     public void external_ShouldFillTheForm() {
@@ -32,6 +40,7 @@ public class ExternalSecondaryInstancesTest extends BaseRegressionTest {
         FormEntry.clickOnText("ba");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
+        Settings.resetAllSettings();
 
     }
 
@@ -45,6 +54,7 @@ public class ExternalSecondaryInstancesTest extends BaseRegressionTest {
         FormEntry.clickOnText("ca");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
+        Settings.resetAllSettings();
 
     }
 }
