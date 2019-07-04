@@ -64,7 +64,7 @@ public class AuditEventLogger {
                          boolean writeImmediatelyToDisk, String questionAnswer) {
         if (!isAuditEnabled()
                 || eventType.isLocationRelated() && !auditConfig.isLocationEnabled()
-                || eventType == AuditEvent.AuditEventType.BEGINNING_OF_FORM || eventType == AuditEvent.AuditEventType.REPEAT
+                || !eventType.isLogged()
                 || isDuplicateOfLastLocationEvent(eventType)) {
             return;
         }

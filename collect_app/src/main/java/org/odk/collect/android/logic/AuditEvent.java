@@ -24,54 +24,77 @@ import org.javarosa.form.api.FormEntryController;
 public class AuditEvent {
 
     public enum AuditEventType {
-        BEGINNING_OF_FORM("beginning of form"),                                     // Beginning of the form
-        QUESTION("question"),                                                       // Create a question
-        GROUP("group questions"),                                                   // Create a group
-        PROMPT_NEW_REPEAT("add repeat"),                                            // Prompt do add a new group
-        REPEAT("repeat"),                                                           // Repeat group
-        END_OF_FORM("end screen"),                                                  // Show the "end of form" view
-        FORM_START("form start"),                                                   // Start filling in the form
-        FORM_EXIT("form exit"),                                                     // Exit the form
-        FORM_RESUME("form resume"),                                                 // Resume filling in the form after previously exiting
-        FORM_SAVE("form save"),                                                     // Save the form
-        FORM_FINALIZE("form finalize"),                                             // Finalize the form
-        HIERARCHY("jump"),                                                          // Jump to a question
-        SAVE_ERROR("save error"),                                                   // Error in save
-        FINALIZE_ERROR("finalize error"),                                           // Error in finalize
-        CONSTRAINT_ERROR("constraint error"),                                       // Constraint or missing answer error on save
-        DELETE_REPEAT("delete repeat"),                                             // Delete a repeat group
+        // Beginning of the form
+        BEGINNING_OF_FORM("beginning of form", false, false),
+        // Create a question
+        QUESTION("question"),
+        // Create a group
+        GROUP("group questions"),
+        // Prompt to add a new repeat
+        PROMPT_NEW_REPEAT("add repeat"),
+        // Repeat group
+        REPEAT("repeat", false, false),
+        // Show the "end of form" view
+        END_OF_FORM("end screen"),
+        // Start filling in the form
+        FORM_START("form start"),
+        // Exit the form
+        FORM_EXIT("form exit"),
+        // Resume filling in the form after previously exiting
+        FORM_RESUME("form resume"),
+        // Save the form
+        FORM_SAVE("form save"),
+        // Finalize the form
+        FORM_FINALIZE("form finalize"),
+        // Jump to a question
+        HIERARCHY("jump"),
+        // Error in save
+        SAVE_ERROR("save error"),
+        // Error in finalize
+        FINALIZE_ERROR("finalize error"),
+        // Constraint or missing answer error on save
+        CONSTRAINT_ERROR("constraint error"),
+        // Delete a repeat group
+        DELETE_REPEAT("delete repeat"),
 
         // Google Play Services are not available
-        GOOGLE_PLAY_SERVICES_NOT_AVAILABLE("google play services not available", true),
+        GOOGLE_PLAY_SERVICES_NOT_AVAILABLE("google play services not available", true, true),
         // Location permissions are granted
-        LOCATION_PERMISSIONS_GRANTED("location permissions granted", true),
+        LOCATION_PERMISSIONS_GRANTED("location permissions granted", true, true),
         // Location permissions are not granted
-        LOCATION_PERMISSIONS_NOT_GRANTED("location permissions not granted", true),
+        LOCATION_PERMISSIONS_NOT_GRANTED("location permissions not granted", true, true),
         // Location tracking option is enabled
-        LOCATION_TRACKING_ENABLED("location tracking enabled", true),
+        LOCATION_TRACKING_ENABLED("location tracking enabled", true, true),
         // Location tracking option is disabled
-        LOCATION_TRACKING_DISABLED("location tracking disabled", true),
+        LOCATION_TRACKING_DISABLED("location tracking disabled", true, true),
         // Location providers are enabled
-        LOCATION_PROVIDERS_ENABLED("location providers enabled", true),
+        LOCATION_PROVIDERS_ENABLED("location providers enabled", true, true),
         // Location providers are disabled
-        LOCATION_PROVIDERS_DISABLED("location providers disabled", true),
+        LOCATION_PROVIDERS_DISABLED("location providers disabled", true, true),
         // Unknown event type
         UNKNOWN_EVENT_TYPE("Unknown AuditEvent Type");
 
         private final String value;
+        private final boolean isLogged;
         private final boolean isLocationRelated;
 
-        AuditEventType(String value, boolean isLocationRelated) {
+        AuditEventType(String value, boolean isLogged, boolean isLocationRelated) {
             this.value = value;
+
+            this.isLogged = isLogged;
             this.isLocationRelated = isLocationRelated;
         }
 
         AuditEventType(String value) {
-            this(value, false);
+            this(value, true, false);
         }
 
         public String getValue() {
             return value;
+        }
+
+        public boolean isLogged() {
+            return isLogged;
         }
 
         public boolean isLocationRelated() {
