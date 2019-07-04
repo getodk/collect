@@ -1,24 +1,33 @@
 package org.odk.collect.android.regression;
 
+import android.Manifest;
+
+import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
-import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.espressoutils.FormEntry;
 import org.odk.collect.android.espressoutils.MainMenu;
-import org.odk.collect.android.test.FormLoadingUtils;
+import org.odk.collect.android.espressoutils.Settings;
+import org.odk.collect.android.support.CopyFormRule;
 
-import java.io.IOException;
+import static androidx.test.espresso.Espresso.pressBack;
+
 
 // Issue number NODK-251
 @RunWith(AndroidJUnit4.class)
 public class FormValidationTest extends BaseRegressionTest {
 
-    @BeforeClass
-    public static void copyFormToSdCard() throws IOException {
-        FormLoadingUtils.copyFormToSdCard("OnePageFormShort.xml", "regression/");
-    }
+    @Rule
+    public RuleChain copyFormChain = RuleChain
+            .outerRule(GrantPermissionRule.grant(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            )
+            .around(new CopyFormRule("OnePageFormShort.xml", "regression/"));
 
     @Test
     public void invalidAnswer_ShouldDisplayAllQuestionsOnOnePage() {
@@ -34,6 +43,7 @@ public class FormValidationTest extends BaseRegressionTest {
         FormEntry.clickGoToIconInForm();
         FormEntry.clickJumpEndButton();
         FormEntry.clickSaveAndExit();
+        Settings.resetAllSettings();
 
     }
 
@@ -45,6 +55,11 @@ public class FormValidationTest extends BaseRegressionTest {
         FormEntry.clickGoToIconInForm();
         FormEntry.checkIsTextDisplayed("YY MM");
         FormEntry.checkIsTextDisplayed("YY");
+        pressBack();
+        pressBack();
+        pressBack();
+        FormEntry.ignoreChanges();
+        Settings.resetAllSettings();
 
     }
 }

@@ -1,16 +1,19 @@
 package org.odk.collect.android.regression;
 
+import android.Manifest;
+
+import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
-import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.espressoutils.FormEntry;
 import org.odk.collect.android.espressoutils.MainMenu;
-import org.odk.collect.android.test.FormLoadingUtils;
-
-import java.io.IOException;
+import org.odk.collect.android.espressoutils.Settings;
+import org.odk.collect.android.support.CopyFormRule;
 
 import static androidx.test.espresso.Espresso.pressBack;
 
@@ -19,10 +22,13 @@ import static androidx.test.espresso.Espresso.pressBack;
 @RunWith(AndroidJUnit4.class)
 public class SignatureWidgetTest extends BaseRegressionTest {
 
-    @BeforeClass
-    public static void copyFormToSdCard() throws IOException {
-        FormLoadingUtils.copyFormToSdCard("All_widgets.xml", "regression/");
-    }
+    @Rule
+    public RuleChain copyFormChain = RuleChain
+            .outerRule(GrantPermissionRule.grant(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            )
+            .around(new CopyFormRule("All_widgets.xml", "regression/"));
 
     @Test
     public void saveIgnoreDialog_ShouldUseBothOptions() {
@@ -43,7 +49,7 @@ public class SignatureWidgetTest extends BaseRegressionTest {
         FormEntry.clickGoToIconInForm();
         FormEntry.clickJumpEndButton();
         FormEntry.clickSaveAndExit();
-
+        Settings.resetAllSettings();
     }
 
     @Test
@@ -66,6 +72,7 @@ public class SignatureWidgetTest extends BaseRegressionTest {
         FormEntry.clickGoToIconInForm();
         FormEntry.clickJumpEndButton();
         FormEntry.clickSaveAndExit();
+        Settings.resetAllSettings();
 
     }
 }
