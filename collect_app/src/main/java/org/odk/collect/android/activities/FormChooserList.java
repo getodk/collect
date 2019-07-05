@@ -171,7 +171,7 @@ public class FormChooserList extends FormListActivity implements
 
     private void setupAdapter() {
         String[] data = new String[]{
-                FormsColumns.DISPLAY_NAME, FormsColumns.JR_VERSION, "MAX(" + FormsColumns.DATE + ")"
+                FormsColumns.DISPLAY_NAME, FormsColumns.JR_VERSION, FormsColumns.MAX_DATE
         };
         int[] view = new int[]{
                 R.id.form_title, R.id.form_subtitle, R.id.form_subtitle2

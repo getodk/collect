@@ -46,7 +46,7 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
         originalBinder = getViewBinder();
         setViewBinder((view, cursor, columnIndex) -> {
             String columnName = cursor.getColumnName(columnIndex);
-            if (columnName.equals(FormsProviderAPI.FormsColumns.DATE) || columnName.equals("MAX(" + FormsProviderAPI.FormsColumns.DATE + ")")) {
+            if (columnName.equals(FormsProviderAPI.FormsColumns.DATE) || columnName.equals(FormsProviderAPI.FormsColumns.MAX_DATE)) {
                 String subtext = getDisplaySubtext(context, new Date(cursor.getLong(columnIndex)));
                 if (!subtext.isEmpty()) {
                     TextView v = (TextView) view;
