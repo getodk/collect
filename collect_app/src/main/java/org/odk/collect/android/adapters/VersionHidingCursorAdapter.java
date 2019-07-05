@@ -50,9 +50,11 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
             String columnName = cursor.getColumnName(columnIndex);
             if (columnName.equals(FormsProviderAPI.FormsColumns.DATE) || columnName.equals("MAX(" + FormsProviderAPI.FormsColumns.DATE + ")")) {
                 String subtext = getDisplaySubtext(context, new Date(cursor.getLong(columnIndex)));
-                TextView v = (TextView) view;
-                ((TextView) view).setText(subtext);
-                v.setVisibility(View.VISIBLE);
+                if (!subtext.isEmpty()) {
+                    TextView v = (TextView) view;
+                    ((TextView) view).setText(subtext);
+                    v.setVisibility(View.VISIBLE);
+                }
             } else if (columnName.equals(VersionHidingCursorAdapter.this.versionColumnName)) {
                 String version = cursor.getString(columnIndex);
                 TextView v = (TextView) view;
