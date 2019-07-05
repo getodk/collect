@@ -21,6 +21,10 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.provider.FormsProvider;
+import org.odk.collect.android.provider.FormsProviderAPI;
+
+import java.util.Date;
 
 /**
  * Implementation of cursor adapter that displays the version of a form if a form has a version.
@@ -45,10 +49,12 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
             public boolean setViewValue(View view, Cursor cursor,
                     int columnIndex) {
                 String columnName = cursor.getColumnName(columnIndex);
-                if (!columnName.equals(VersionHidingCursorAdapter.this.versionColumnName)) {
-                    view.setVisibility(View.VISIBLE);
-                    return originalBinder != null && originalBinder.setViewValue(view, cursor, columnIndex);
-                } else {
+                if (columnName.equals(FormsProviderAPI.FormsColumns.DATE) || columnName.equals("MAX(" + FormsProviderAPI.FormsColumns.DATE + ")")) {
+                    String subtext = FormsProvider.getDisplaySubtext(context, new Date(cursor.getLong(columnIndex)));
+                    TextView v = (TextView) view;
+                    ((TextView) view).setText(subtext);
+                    v.setVisibility(View.VISIBLE);
+                } else if (columnName.equals(VersionHidingCursorAdapter.this.versionColumnName)) {
                     String version = cursor.getString(columnIndex);
                     TextView v = (TextView) view;
                     v.setText("");
@@ -66,6 +72,9 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
                             v.setVisibility(View.VISIBLE);
                         }
                     }
+                } else {
+                    view.setVisibility(View.VISIBLE);
+                    return originalBinder != null && originalBinder.setViewValue(view, cursor, columnIndex);
                 }
                 return true;
             }
