@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
