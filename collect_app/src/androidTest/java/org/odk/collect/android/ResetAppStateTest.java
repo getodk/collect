@@ -166,7 +166,6 @@ public class ResetAppStateTest {
         values.put(FormsProviderAPI.FormsColumns.DATE, "1487077903756");
         values.put(FormsProviderAPI.FormsColumns.DISPLAY_NAME, "displayName");
         values.put(FormsProviderAPI.FormsColumns.FORM_FILE_PATH, Collect.FORMS_PATH + "/testFile1.xml");
-        values.put(FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT, "Added on Tue, Feb 14, 2017 at 14:21");
         Collect.getInstance().getContentResolver()
                 .insert(FormsProviderAPI.FormsColumns.CONTENT_URI, values);
 

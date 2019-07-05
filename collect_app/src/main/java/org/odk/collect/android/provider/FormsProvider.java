@@ -188,10 +188,6 @@ public class FormsProvider extends ContentProvider {
                 values.put(FormsColumns.DATE, now);
             }
 
-            if (!values.containsKey(FormsColumns.DISPLAY_SUBTEXT)) {
-                values.put(FormsColumns.DISPLAY_SUBTEXT, getDisplaySubtext());
-            }
-
             if (!values.containsKey(FormsColumns.DISPLAY_NAME)) {
                 values.put(FormsColumns.DISPLAY_NAME, form.getName());
             }
@@ -437,11 +433,6 @@ public class FormsProvider extends ContentProvider {
                         }
                     }
 
-                    // Make sure that the necessary fields are all set
-                    if (values.containsKey(FormsColumns.DATE)) {
-                        values.put(FormsColumns.DISPLAY_SUBTEXT, getDisplaySubtext());
-                    }
-
                     count = db.update(FORMS_TABLE_NAME, values, where, whereArgs);
                     break;
 
@@ -495,11 +486,6 @@ public class FormsProvider extends ContentProvider {
                                                 + ".formdef");
                             }
 
-                            // Make sure that the necessary fields are all set
-                            if (values.containsKey(FormsColumns.DATE)) {
-                                values.put(FormsColumns.DISPLAY_SUBTEXT, getDisplaySubtext());
-                            }
-
                             count = db.update(
                                     FORMS_TABLE_NAME,
                                     values,
@@ -526,20 +512,6 @@ public class FormsProvider extends ContentProvider {
         }
 
         return count;
-    }
-
-    private String getDisplaySubtext() {
-        String displaySubtext = "";
-        try {
-            Context context = getContext();
-            if (context != null) {
-                displaySubtext = new SimpleDateFormat(context.getString(R.string.added_on_date_at_time),
-                        Locale.getDefault()).format(new Date());
-            }
-        } catch (IllegalArgumentException e) {
-            Timber.e(e);
-        }
-        return displaySubtext;
     }
 
     public static String getDisplaySubtext(Context context, Date date) {
@@ -580,7 +552,6 @@ public class FormsProvider extends ContentProvider {
         sFormsProjectionMap = new HashMap<>();
         sFormsProjectionMap.put(FormsColumns._ID, FormsColumns._ID);
         sFormsProjectionMap.put(FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_NAME);
-        sFormsProjectionMap.put(FormsColumns.DISPLAY_SUBTEXT, FormsColumns.DISPLAY_SUBTEXT);
         sFormsProjectionMap.put(FormsColumns.DESCRIPTION, FormsColumns.DESCRIPTION);
         sFormsProjectionMap.put(FormsColumns.JR_FORM_ID, FormsColumns.JR_FORM_ID);
         sFormsProjectionMap.put(FormsColumns.JR_VERSION, FormsColumns.JR_VERSION);
