@@ -37,13 +37,11 @@ import timber.log.Timber;
 public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
 
     private final Context ctxt;
-    private final String versionColumnName;
     private final ViewBinder originalBinder;
 
     public VersionHidingCursorAdapter(String versionColumnName, Context context, int layout,
             Cursor c, String[] from, int[] to) {
         super(context, layout, c, from, to);
-        this.versionColumnName = versionColumnName;
         ctxt = context;
         originalBinder = getViewBinder();
         setViewBinder((view, cursor, columnIndex) -> {
@@ -55,7 +53,7 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
                     ((TextView) view).setText(subtext);
                     v.setVisibility(View.VISIBLE);
                 }
-            } else if (columnName.equals(VersionHidingCursorAdapter.this.versionColumnName)) {
+            } else if (columnName.equals(versionColumnName)) {
                 String version = cursor.getString(columnIndex);
                 TextView v = (TextView) view;
                 v.setText("");
