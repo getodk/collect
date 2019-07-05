@@ -21,10 +21,13 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.FormsProviderAPI;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+
+import timber.log.Timber;
 
 /**
  * Implementation of cursor adapter that displays the version of a form if a form has a version.
@@ -50,7 +53,7 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
                     int columnIndex) {
                 String columnName = cursor.getColumnName(columnIndex);
                 if (columnName.equals(FormsProviderAPI.FormsColumns.DATE) || columnName.equals("MAX(" + FormsProviderAPI.FormsColumns.DATE + ")")) {
-                    String subtext = FormsProvider.getDisplaySubtext(context, new Date(cursor.getLong(columnIndex)));
+                    String subtext = getDisplaySubtext(context, new Date(cursor.getLong(columnIndex)));
                     TextView v = (TextView) view;
                     ((TextView) view).setText(subtext);
                     v.setVisibility(View.VISIBLE);
@@ -79,6 +82,19 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
                 return true;
             }
         });
+    }
+
+    private String getDisplaySubtext(Context context, Date date) {
+        String displaySubtext = "";
+        try {
+            if (context != null) {
+                displaySubtext = new SimpleDateFormat(context.getString(R.string.added_on_date_at_time),
+                        Locale.getDefault()).format(date);
+            }
+        } catch (IllegalArgumentException e) {
+            Timber.e(e);
+        }
+        return displaySubtext;
     }
 
 }

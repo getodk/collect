@@ -17,7 +17,6 @@ package org.odk.collect.android.provider;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -27,7 +26,6 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import android.text.TextUtils;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.database.helpers.FormsDatabaseHelper;
@@ -36,10 +34,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import timber.log.Timber;
@@ -512,19 +507,6 @@ public class FormsProvider extends ContentProvider {
         }
 
         return count;
-    }
-
-    public static String getDisplaySubtext(Context context, Date date) {
-        String displaySubtext = "";
-        try {
-            if (context != null) {
-                displaySubtext = new SimpleDateFormat(context.getString(R.string.added_on_date_at_time),
-                        Locale.getDefault()).format(date);
-            }
-        } catch (IllegalArgumentException e) {
-            Timber.e(e);
-        }
-        return displaySubtext;
     }
 
     @NonNull
