@@ -46,41 +46,36 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
         this.versionColumnName = versionColumnName;
         ctxt = context;
         originalBinder = getViewBinder();
-        setViewBinder(new ViewBinder() {
-
-            @Override
-            public boolean setViewValue(View view, Cursor cursor,
-                    int columnIndex) {
-                String columnName = cursor.getColumnName(columnIndex);
-                if (columnName.equals(FormsProviderAPI.FormsColumns.DATE) || columnName.equals("MAX(" + FormsProviderAPI.FormsColumns.DATE + ")")) {
-                    String subtext = getDisplaySubtext(context, new Date(cursor.getLong(columnIndex)));
-                    TextView v = (TextView) view;
-                    ((TextView) view).setText(subtext);
+        setViewBinder((view, cursor, columnIndex) -> {
+            String columnName = cursor.getColumnName(columnIndex);
+            if (columnName.equals(FormsProviderAPI.FormsColumns.DATE) || columnName.equals("MAX(" + FormsProviderAPI.FormsColumns.DATE + ")")) {
+                String subtext = getDisplaySubtext(context, new Date(cursor.getLong(columnIndex)));
+                TextView v = (TextView) view;
+                ((TextView) view).setText(subtext);
+                v.setVisibility(View.VISIBLE);
+            } else if (columnName.equals(VersionHidingCursorAdapter.this.versionColumnName)) {
+                String version = cursor.getString(columnIndex);
+                TextView v = (TextView) view;
+                v.setText("");
+                v.setVisibility(View.GONE);
+                if (version != null) {
+                    v.append(String.format(ctxt.getString(R.string.version_number), version));
+                    v.append(" ");
                     v.setVisibility(View.VISIBLE);
-                } else if (columnName.equals(VersionHidingCursorAdapter.this.versionColumnName)) {
-                    String version = cursor.getString(columnIndex);
-                    TextView v = (TextView) view;
-                    v.setText("");
-                    v.setVisibility(View.GONE);
-                    if (version != null) {
-                        v.append(String.format(ctxt.getString(R.string.version_number), version));
-                        v.append(" ");
+                }
+                if (from.length > 3) {
+                    int idColumnIndex = cursor.getColumnIndex(from[3]);
+                    String id = cursor.getString(idColumnIndex);
+                    if (id != null) {
+                        v.append(String.format(ctxt.getString(R.string.id_number), id));
                         v.setVisibility(View.VISIBLE);
                     }
-                    if (from.length > 3) {
-                        int idColumnIndex = cursor.getColumnIndex(from[3]);
-                        String id = cursor.getString(idColumnIndex);
-                        if (id != null) {
-                            v.append(String.format(ctxt.getString(R.string.id_number), id));
-                            v.setVisibility(View.VISIBLE);
-                        }
-                    }
-                } else {
-                    view.setVisibility(View.VISIBLE);
-                    return originalBinder != null && originalBinder.setViewValue(view, cursor, columnIndex);
                 }
-                return true;
+            } else {
+                view.setVisibility(View.VISIBLE);
+                return originalBinder != null && originalBinder.setViewValue(view, cursor, columnIndex);
             }
+            return true;
         });
     }
 
