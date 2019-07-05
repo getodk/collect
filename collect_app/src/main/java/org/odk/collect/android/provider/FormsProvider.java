@@ -111,7 +111,7 @@ public class FormsProvider extends ContentProvider {
                 // Only include the latest form that was downloaded with each form_id
                 case NEWEST_FORMS_BY_FORM_ID:
                     Map<String, String> filteredProjectionMap = new HashMap<>(sFormsProjectionMap);
-                    filteredProjectionMap.put(FormsColumns.DATE, "MAX(" + FormsColumns.DATE + ")");
+                    filteredProjectionMap.put(FormsColumns.DATE, FormsColumns.MAX_DATE);
 
                     qb.setProjectionMap(filteredProjectionMap);
                     groupBy = FormsColumns.JR_FORM_ID;
