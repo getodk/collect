@@ -51,7 +51,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "forms.db";
     public static final String FORMS_TABLE_NAME = "forms";
 
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     // These exist in database versions 2 and 3, but not in 4...
     private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
@@ -63,7 +63,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        createFormsTable(db, FORMS_TABLE_NAME);
+        createFormsTableV7(db);
     }
 
     @SuppressWarnings({"checkstyle:FallThrough"})
@@ -82,6 +82,8 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                 success &= upgradeToVersion5(db);
             case 5:
                 success &= upgradeToVersion6(db);
+            case 6:
+                success &= upgradeToVersion7(db);
                 break;
             default:
                 Timber.i("Unknown version %s", oldVersion);
@@ -103,7 +105,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                     .dropIfExists(FORMS_TABLE_NAME)
                     .end();
 
-            createFormsTable(db, FORMS_TABLE_NAME);
+            createFormsTableV7(db);
         } catch (SQLiteException e) {
             Timber.e(e);
             success = false;
@@ -134,7 +136,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
             // adding BASE64_RSA_PUBLIC_KEY and changing type and name of
             // integer MODEL_VERSION to text VERSION
             db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
-            createFormsTable(db, TEMP_FORMS_TABLE_NAME);
+            createFormsTableV4(db, TEMP_FORMS_TABLE_NAME);
             db.execSQL("INSERT INTO "
                     + TEMP_FORMS_TABLE_NAME
                     + " ("
@@ -201,7 +203,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
 
             // risky failures here...
             db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
-            createFormsTable(db, FORMS_TABLE_NAME);
+            createFormsTableV4(db, FORMS_TABLE_NAME);
             db.execSQL("INSERT INTO "
                     + FORMS_TABLE_NAME
                     + " ("
@@ -295,11 +297,68 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         return success;
     }
 
-    private void createFormsTable(SQLiteDatabase db, String tableName) {
+    private boolean upgradeToVersion7(SQLiteDatabase db) {
+        boolean success = true;
+        String temporaryTable = FORMS_TABLE_NAME + "_tmp";
+        String[] formsTableColumnsInV7 = new String[] {_ID, DISPLAY_NAME, DESCRIPTION,
+                JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
+                SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
+                LAST_DETECTED_FORM_VERSION_HASH};
+
+        try {
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .renameTable(FORMS_TABLE_NAME)
+                    .to(temporaryTable)
+                    .end();
+
+            createFormsTableV7(db);
+
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .insertInto(FORMS_TABLE_NAME)
+                    .columnsForInsert(formsTableColumnsInV7)
+                    .select()
+                    .columnsForSelect(formsTableColumnsInV7)
+                    .from(temporaryTable)
+                    .end();
+
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .dropIfExists(temporaryTable)
+                    .end();
+        } catch (SQLiteException e) {
+            Timber.i(e);
+            success = false;
+        }
+        return success;
+    }
+
+    private void createFormsTableV4(SQLiteDatabase db, String tableName) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + tableName + " ("
                 + _ID + " integer primary key, "
                 + DISPLAY_NAME + " text not null, "
                 + DISPLAY_SUBTEXT + " text not null, "
+                + DESCRIPTION + " text, "
+                + JR_FORM_ID + " text not null, "
+                + JR_VERSION + " text, "
+                + MD5_HASH + " text not null, "
+                + DATE + " integer not null, " // milliseconds
+                + FORM_MEDIA_PATH + " text not null, "
+                + FORM_FILE_PATH + " text not null, "
+                + LANGUAGE + " text, "
+                + SUBMISSION_URI + " text, "
+                + BASE64_RSA_PUBLIC_KEY + " text, "
+                + JRCACHE_FILE_PATH + " text not null, "
+                + AUTO_SEND + " text, "
+                + AUTO_DELETE + " text, "
+                + LAST_DETECTED_FORM_VERSION_HASH + " text);");
+    }
+
+    private void createFormsTableV7(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
+                + _ID + " integer primary key, "
+                + DISPLAY_NAME + " text not null, "
                 + DESCRIPTION + " text, "
                 + JR_FORM_ID + " text not null, "
                 + JR_VERSION + " text, "
