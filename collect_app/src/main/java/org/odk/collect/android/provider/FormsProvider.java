@@ -542,6 +542,19 @@ public class FormsProvider extends ContentProvider {
         return displaySubtext;
     }
 
+    public static String getDisplaySubtext(Context context, Date date) {
+        String displaySubtext = "";
+        try {
+            if (context != null) {
+                displaySubtext = new SimpleDateFormat(context.getString(R.string.added_on_date_at_time),
+                        Locale.getDefault()).format(date);
+            }
+        } catch (IllegalArgumentException e) {
+            Timber.e(e);
+        }
+        return displaySubtext;
+    }
+
     @NonNull
     private String[] prepareWhereArgs(String[] whereArgs, String formId) {
         String[] newWhereArgs;
