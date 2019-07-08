@@ -34,7 +34,6 @@ import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
-import org.osmdroid.tileprovider.IRegisterReceiver;
 
 import java.text.DecimalFormat;
 
@@ -48,7 +47,7 @@ import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermi
  * by touching a point on the map or by tapping a button to place the marker
  * at the current location (obtained from GPS or other location sensors).
  */
-public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegisterReceiver {
+public class GeoPointMapActivity extends BaseGeoMapActivity {
 
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
@@ -107,6 +106,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        registerReceiver(null, null);
 
         if (!areLocationPermissionsGranted(this)) {
             finish();
@@ -189,8 +189,6 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
         state.putInt(LOCATION_INFO_VISIBILITY_KEY, locationInfo.getVisibility());
     }
 
-    @Override public void destroy() { }
-
     public void returnLocation() {
         String result = null;
 
@@ -232,7 +230,8 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
         } else if (map instanceof MapboxMapFragment) {
             helper = new MapHelper(this);
         } else if (map instanceof OsmMapFragment) {
-            helper = new MapHelper(this, ((OsmMapFragment) map).getMapView(), this, selectedLayer);
+            OsmMapFragment osmMap = (OsmMapFragment) map;
+            helper = new MapHelper(this, osmMap.getMapView(), osmMap, selectedLayer);
         }
         helper.setBasemap();
 

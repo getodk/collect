@@ -37,7 +37,6 @@ import org.odk.collect.android.map.MapboxMapFragment;
 import org.odk.collect.android.map.OsmMapFragment;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.osmdroid.tileprovider.IRegisterReceiver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +50,7 @@ import androidx.annotation.VisibleForTesting;
 
 import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
 
-public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterReceiver {
+public class GeoPolyActivity extends BaseGeoMapActivity {
 
     public static final String ANSWER_KEY = "answer";
     public static final String OUTPUT_MODE_KEY = "output_mode";
@@ -193,8 +192,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
         super.onDestroy();
     }
 
-    @Override public void destroy() { }
-
     public void initMap(MapFragment newMapFragment) {
         if (newMapFragment == null) {  // could not create the map
             finish();
@@ -215,7 +212,8 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
         } else if (map instanceof MapboxMapFragment) {
             helper = new MapHelper(this);
         } else if (map instanceof OsmMapFragment) {
-            helper = new MapHelper(this, ((OsmMapFragment) map).getMapView(), this, selectedLayer);
+            OsmMapFragment osmMap = (OsmMapFragment) map;
+            helper = new MapHelper(this, osmMap.getMapView(), osmMap, selectedLayer);
         }
         helper.setBasemap();
 

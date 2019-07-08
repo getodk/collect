@@ -15,8 +15,10 @@
 package org.odk.collect.android.map;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.location.Location;
@@ -39,6 +41,7 @@ import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
+import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
@@ -63,7 +66,8 @@ import androidx.fragment.app.FragmentActivity;
 import timber.log.Timber;
 
 public class OsmMapFragment extends Fragment implements MapFragment,
-    MapEventsReceiver, LocationListener, LocationClient.LocationClientListener {
+    MapEventsReceiver, IRegisterReceiver,
+    LocationListener, LocationClient.LocationClientListener {
     public static final GeoPoint INITIAL_CENTER = new GeoPoint(0.0, -30.0);
     public static final int INITIAL_ZOOM = 2;
     public static final int POINT_ZOOM = 16;
@@ -88,6 +92,20 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         this.tiles = tiles;
         this.referenceLayer = referenceLayer;
     }
+
+    @Override public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
+        Context context = getActivity();
+        return context != null ? context.registerReceiver(receiver, filter) : null;
+    }
+
+    @Override public void unregisterReceiver(BroadcastReceiver receiver) {
+        Context context = getActivity();
+        if (context != null) {
+            context.unregisterReceiver(receiver);
+        }
+    }
+
+    @Override public void destroy() { }
 
     @Override public Fragment getFragment() {
         return this;
