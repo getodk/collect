@@ -8,11 +8,13 @@ import org.odk.collect.android.R;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.CoreMatchers.is;
@@ -61,10 +63,6 @@ public final class Settings {
         onView(withText(getInstrumentation().getTargetContext().getString(R.string.ok))).perform(click());
     }
 
-    public static void putText(String text) {
-        onView(withClassName(endsWith("EditText"))).perform(replaceText(text));
-    }
-
     public static void clickOnString(int value) {
         onView(withText(getInstrumentation().getTargetContext().getString(value))).perform(click());
     }
@@ -75,5 +73,19 @@ public final class Settings {
 
     public static void checkIsTextDisplayed(String text) {
         onView(withText(text)).check(matches(isDisplayed()));
+    }
+
+    public static final class Dialog {
+
+        private Dialog() {
+        }
+
+        public static void putText(String text) {
+            onView(withClassName(endsWith("EditText"))).perform(replaceText(text), closeSoftKeyboard());
+        }
+
+        public static void clickOK() {
+            onView(withId(android.R.id.button1)).perform(click());
+        }
     }
 }
