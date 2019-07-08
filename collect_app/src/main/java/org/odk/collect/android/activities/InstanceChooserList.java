@@ -196,10 +196,10 @@ public class InstanceChooserList extends InstanceListActivity implements
 
     private void setupAdapter() {
         String[] data = new String[]{
-                InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT, InstanceColumns.DELETED_DATE
+                InstanceColumns.DISPLAY_NAME, InstanceColumns.DELETED_DATE
         };
         int[] view = new int[]{
-                R.id.form_title, R.id.form_subtitle, R.id.form_subtitle2
+                R.id.form_title, R.id.form_subtitle2
         };
 
         boolean shouldCheckDisabled = !editMode;
