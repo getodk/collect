@@ -78,7 +78,7 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
             }
         }
 
-        Long date = getCursor().getLong(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE));
+        long date = getCursor().getLong(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE));
 
         if (date != 0 || !formExists || isFormEncrypted) {
             String disabledMessage;
