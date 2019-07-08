@@ -27,6 +27,7 @@ import android.widget.TextView;
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import java.text.SimpleDateFormat;
@@ -51,6 +52,8 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
 
         ImageView imageView = view.findViewById(R.id.image);
         setImageFromStatus(imageView);
+
+        setUpSubtext(view);
 
         // Some form lists never contain disabled items; if so, we're done.
         if (!shouldCheckDisabled) {
@@ -132,6 +135,15 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
         formSubtitle.setAlpha(0.38f);
         disabledCause.setAlpha(0.38f);
         imageView.setAlpha(0.38f);
+    }
+
+    private void setUpSubtext(View view) {
+        long lastStatusChangeDate = getCursor().getLong(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE));
+        String status = getCursor().getString(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.STATUS));
+        String subtext = InstanceProvider.getDisplaySubtext(context, status, new Date(lastStatusChangeDate));
+
+        final TextView formSubtitle = view.findViewById(R.id.form_subtitle);
+        formSubtitle.setText(subtext);
     }
 
     private void setImageFromStatus(ImageView imageView) {
