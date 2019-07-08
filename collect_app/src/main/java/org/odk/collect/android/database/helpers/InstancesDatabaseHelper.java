@@ -32,7 +32,6 @@ import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DELETED_DATE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DISPLAY_NAME;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_VERSION;
@@ -47,10 +46,10 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "instances.db";
     public static final String INSTANCES_TABLE_NAME = "instances";
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
-    private final String[] instancesTableColumnsInVersion4 = new String[] {_ID, DISPLAY_NAME, SUBMISSION_URI, CAN_EDIT_WHEN_COMPLETE,
-            INSTANCE_FILE_PATH, JR_FORM_ID, JR_VERSION, STATUS, LAST_STATUS_CHANGE_DATE, DISPLAY_SUBTEXT, DELETED_DATE};
+    private final String[] instancesTableColumnsInVersion5 = new String[] {_ID, DISPLAY_NAME, SUBMISSION_URI, CAN_EDIT_WHEN_COMPLETE,
+            INSTANCE_FILE_PATH, JR_FORM_ID, JR_VERSION, STATUS, LAST_STATUS_CHANGE_DATE, DELETED_DATE};
 
     public InstancesDatabaseHelper() {
         super(new DatabaseContext(Collect.METADATA_PATH), DATABASE_NAME, null, DATABASE_VERSION);
@@ -58,7 +57,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        createInstancesTable(db);
+        createInstancesTableV5(db);
     }
 
     @SuppressWarnings({"checkstyle:FallThrough"})
@@ -74,6 +73,8 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
                 success &= upgradeToVersion3(db);
             case 3:
                 success &= upgradeToVersion4(db);
+            case 4:
+                success &= upgradeToVersion5(db);
                 break;
             default:
                 Timber.i("Unknown version " + oldVersion);
@@ -91,7 +92,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
         boolean success = true;
         switch (newVersion) {
             case 4:
-                success = downgrade(db, instancesTableColumnsInVersion4);
+                success = downgrade(db, instancesTableColumnsInVersion5);
                 break;
 
             default:
@@ -153,6 +154,38 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
         return success;
     }
 
+    private boolean upgradeToVersion5(SQLiteDatabase db) {
+        boolean success = true;
+        String temporaryTable = INSTANCES_TABLE_NAME + "_tmp";
+        try {
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .renameTable(INSTANCES_TABLE_NAME)
+                    .to(temporaryTable)
+                    .end();
+
+            createInstancesTableV5(db);
+
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .insertInto(INSTANCES_TABLE_NAME)
+                    .columnsForInsert(instancesTableColumnsInVersion5)
+                    .select()
+                    .columnsForSelect(instancesTableColumnsInVersion5)
+                    .from(temporaryTable)
+                    .end();
+
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .dropIfExists(temporaryTable)
+                    .end();
+        } catch (SQLiteException e) {
+            Timber.e(e);
+            success = false;
+        }
+        return success;
+    }
+
     private boolean downgrade(SQLiteDatabase db, String[] instancesTableColumns) {
         boolean success = true;
         String temporaryTable = INSTANCES_TABLE_NAME + "_tmp";
@@ -164,7 +197,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
                     .to(temporaryTable)
                     .end();
 
-            createInstancesTable(db);
+            createInstancesTableV5(db);
 
             // Try to avoid renaming columns in the future since restoring data after downgrade might not work
             CustomSQLiteQueryBuilder
@@ -187,7 +220,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
         return success;
     }
 
-    private void createInstancesTable(SQLiteDatabase db) {
+    private void createInstancesTableV5(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + INSTANCES_TABLE_NAME + " ("
                 + _ID + " integer primary key, "
                 + DISPLAY_NAME + " text not null, "
@@ -198,7 +231,6 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
                 + JR_VERSION + " text, "
                 + STATUS + " text not null, "
                 + LAST_STATUS_CHANGE_DATE + " date not null, "
-                + DISPLAY_SUBTEXT + " text not null,"
                 + DELETED_DATE + " date );");
     }
 }
