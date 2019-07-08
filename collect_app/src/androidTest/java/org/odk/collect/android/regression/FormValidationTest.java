@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.espressoutils.FormEntry;
 import org.odk.collect.android.espressoutils.MainMenu;
 import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.ResetStateRule;
 
 import static androidx.test.espresso.Espresso.pressBack;
 
@@ -25,6 +26,7 @@ public class FormValidationTest extends BaseRegressionTest {
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
+            .around(new ResetStateRule())
             .around(new CopyFormRule("OnePageFormShort.xml", "regression/"));
 
     @Test

@@ -30,6 +30,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.test.FormLoadingUtils;
 import org.odk.collect.android.utilities.ActivityAvailability;
 
@@ -95,6 +96,7 @@ public class AllWidgetsFormTest {
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
+            .around(new ResetStateRule())
             .around(new CopyFormRule(ALL_WIDGETS_FORM));
 
     @Mock
