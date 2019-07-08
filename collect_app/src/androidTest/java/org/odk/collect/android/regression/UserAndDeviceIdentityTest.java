@@ -14,6 +14,7 @@ import org.odk.collect.android.espressoutils.FormEntry;
 import org.odk.collect.android.espressoutils.MainMenu;
 import org.odk.collect.android.espressoutils.Settings;
 import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.ResetStateRule;
 
 import static androidx.test.espresso.Espresso.pressBack;
 
@@ -28,6 +29,7 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.READ_PHONE_STATE)
             )
+            .around(new ResetStateRule())
             .around(new CopyFormRule("Test.xml", "regression/"));
 
     @Test
