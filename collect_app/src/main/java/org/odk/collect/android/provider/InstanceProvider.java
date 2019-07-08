@@ -353,6 +353,11 @@ public class InstanceProvider extends ContentProvider {
                 values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
             }
 
+            // Don't update last status change date if an instance is being deleted
+            if (values.containsKey(InstanceColumns.DELETED_DATE)) {
+                values.remove(InstanceColumns.LAST_STATUS_CHANGE_DATE);
+            }
+
             String status;
             switch (URI_MATCHER.match(uri)) {
                 case INSTANCES:
