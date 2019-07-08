@@ -90,13 +90,33 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         boolean success = true;
-        switch (newVersion) {
-            case 4:
-                success = downgrade(db, instancesTableColumnsInVersion5);
-                break;
+        String temporaryTable = INSTANCES_TABLE_NAME + "_tmp";
 
-            default:
-                Timber.i("Unknown version " + newVersion);
+        try {
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .renameTable(INSTANCES_TABLE_NAME)
+                    .to(temporaryTable)
+                    .end();
+
+            createInstancesTableV5(db);
+
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .insertInto(INSTANCES_TABLE_NAME)
+                    .columnsForInsert(instancesTableColumnsInVersion5)
+                    .select()
+                    .columnsForSelect(instancesTableColumnsInVersion5)
+                    .from(temporaryTable)
+                    .end();
+
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .dropIfExists(temporaryTable)
+                    .end();
+        } catch (SQLiteException e) {
+            Timber.i(e);
+            success = false;
         }
 
         if (success) {
@@ -181,40 +201,6 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
                     .end();
         } catch (SQLiteException e) {
             Timber.e(e);
-            success = false;
-        }
-        return success;
-    }
-
-    private boolean downgrade(SQLiteDatabase db, String[] instancesTableColumns) {
-        boolean success = true;
-        String temporaryTable = INSTANCES_TABLE_NAME + "_tmp";
-
-        try {
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .renameTable(INSTANCES_TABLE_NAME)
-                    .to(temporaryTable)
-                    .end();
-
-            createInstancesTableV5(db);
-
-            // Try to avoid renaming columns in the future since restoring data after downgrade might not work
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .insertInto(INSTANCES_TABLE_NAME)
-                    .columnsForInsert(instancesTableColumns)
-                    .select()
-                    .columnsForSelect(instancesTableColumns)
-                    .from(temporaryTable)
-                    .end();
-
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .dropIfExists(temporaryTable)
-                    .end();
-        } catch (SQLiteException e) {
-            Timber.i(e);
             success = false;
         }
         return success;
