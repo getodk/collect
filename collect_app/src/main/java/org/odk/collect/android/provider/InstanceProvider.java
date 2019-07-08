@@ -159,12 +159,6 @@ public class InstanceProvider extends ContentProvider {
                 values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
             }
 
-            if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
-                Date today = new Date();
-                String text = getDisplaySubtext(InstanceProviderAPI.STATUS_INCOMPLETE, today);
-                values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
-            }
-
             if (!values.containsKey(InstanceColumns.STATUS)) {
                 values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
             }
@@ -178,10 +172,6 @@ public class InstanceProvider extends ContentProvider {
         }
 
         throw new SQLException("Failed to insert row into " + uri);
-    }
-
-    private String getDisplaySubtext(String state, Date date) {
-        return getDisplaySubtext(getContext(), state, date);
     }
 
     public static String getDisplaySubtext(Context context, String state, Date date) {
@@ -358,34 +348,13 @@ public class InstanceProvider extends ContentProvider {
                 values.remove(InstanceColumns.LAST_STATUS_CHANGE_DATE);
             }
 
-            String status;
             switch (URI_MATCHER.match(uri)) {
                 case INSTANCES:
-                    if (values.containsKey(InstanceColumns.STATUS)) {
-                        status = values.getAsString(InstanceColumns.STATUS);
-
-                        if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
-                            Date today = new Date();
-                            String text = getDisplaySubtext(status, today);
-                            values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
-                        }
-                    }
-
                     count = db.update(INSTANCES_TABLE_NAME, values, where, whereArgs);
                     break;
 
                 case INSTANCE_ID:
                     String instanceId = uri.getPathSegments().get(1);
-
-                    if (values.containsKey(InstanceColumns.STATUS)) {
-                        status = values.getAsString(InstanceColumns.STATUS);
-
-                        if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
-                            Date today = new Date();
-                            String text = getDisplaySubtext(status, today);
-                            values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
-                        }
-                    }
 
                     String[] newWhereArgs;
                     if (whereArgs == null || whereArgs.length == 0) {
@@ -433,8 +402,6 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns.STATUS, InstanceColumns.STATUS);
         sInstancesProjectionMap.put(InstanceColumns.LAST_STATUS_CHANGE_DATE,
                 InstanceColumns.LAST_STATUS_CHANGE_DATE);
-        sInstancesProjectionMap.put(InstanceColumns.DISPLAY_SUBTEXT,
-                InstanceColumns.DISPLAY_SUBTEXT);
         sInstancesProjectionMap.put(InstanceColumns.DELETED_DATE, InstanceColumns.DELETED_DATE);
     }
 }
