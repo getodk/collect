@@ -19,6 +19,7 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.test.FormLoadingUtils;
 
 import tools.fastlane.screengrab.Screengrab;
@@ -50,6 +51,7 @@ public class GuidanceHintFormTest {
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             ))
+            .around(new ResetStateRule())
             .around(new CopyFormRule(GUIDANCE_SAMPLE_FORM));
 
     @Before

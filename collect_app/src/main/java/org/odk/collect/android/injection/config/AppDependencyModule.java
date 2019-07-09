@@ -17,6 +17,7 @@ import org.odk.collect.android.http.OkHttpConnection;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
+import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
@@ -81,6 +82,20 @@ public class AppDependencyModule {
     @Provides
     WebCredentialsUtils provideWebCredentials() {
         return new WebCredentialsUtils();
+    }
+
+    @Provides
+    DownloadFormListUtils provideDownloadFormListUtils(
+            Application application,
+            CollectServerClient collectServerClient,
+            WebCredentialsUtils webCredentialsUtils,
+            FormsDao formsDao) {
+        return new DownloadFormListUtils(
+                application,
+                collectServerClient,
+                webCredentialsUtils,
+                formsDao
+        );
     }
 
     @Provides

@@ -38,6 +38,7 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.test.FormLoadingUtils;
 
 import java.io.File;
@@ -84,6 +85,7 @@ public class FieldListUpdateTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.CAMERA)
             )
+            .around(new ResetStateRule())
             .around(new CopyFormRule(FIELD_LIST_TEST_FORM, "", Collections.singletonList("fruits.csv")));
 
     @Test

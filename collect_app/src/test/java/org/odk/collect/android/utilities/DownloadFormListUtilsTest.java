@@ -3,11 +3,10 @@ package org.odk.collect.android.utilities;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.http.CollectServerClient;
-import org.odk.collect.android.http.OpenRosaHttpInterface;
-import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -22,20 +21,18 @@ public class DownloadFormListUtilsTest {
     @Before
     public void setup() {
         when(client.getXmlDocument(any())).thenReturn(new DocumentFetchResult("blah", 200));
-
-        RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
-            @Override
-            public CollectServerClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
-                return client;
-            }
-        });
     }
 
     @Test
     public void removesTrailingSlashesFromUrl() {
-        DownloadFormListUtils downloadFormListUtils = new DownloadFormListUtils();
-        downloadFormListUtils.downloadFormList("http://blah.com///", "user", "password", false);
+        DownloadFormListUtils downloadFormListUtils = new DownloadFormListUtils(
+                RuntimeEnvironment.application,
+                client,
+                new WebCredentialsUtils(),
+                new FormsDao()
+        );
 
+        downloadFormListUtils.downloadFormList("http://blah.com///", "user", "password", false);
         verify(client).getXmlDocument("http://blah.com/formList");
     }
 }

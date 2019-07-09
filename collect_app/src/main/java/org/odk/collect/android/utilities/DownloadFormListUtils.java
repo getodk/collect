@@ -27,7 +27,6 @@ import androidx.annotation.Nullable;
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.logic.FormDetails;
@@ -41,8 +40,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import timber.log.Timber;
 
 public class DownloadFormListUtils {
@@ -54,17 +51,20 @@ public class DownloadFormListUtils {
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST =
             "http://openrosa.org/xforms/xformsList";
 
-    @Inject
-    WebCredentialsUtils webCredentialsUtils;
+    private final WebCredentialsUtils webCredentialsUtils;
+    private final CollectServerClient collectServerClient;
+    private final Application application;
+    private final FormsDao formsDao;
 
-    @Inject
-    CollectServerClient collectServerClient;
-
-    @Inject
-    Application application;
-
-    public DownloadFormListUtils() {
-        Collect.getInstance().getComponent().inject(this);
+    public DownloadFormListUtils(
+            Application application,
+            CollectServerClient collectServerClient,
+            WebCredentialsUtils webCredentialsUtils,
+            FormsDao formsDao) {
+        this.application = application;
+        this.collectServerClient = collectServerClient;
+        this.webCredentialsUtils = webCredentialsUtils;
+        this.formsDao = formsDao;
     }
 
     public HashMap<String, FormDetails> downloadFormList(boolean alwaysCheckMediaFiles) {
@@ -329,8 +329,8 @@ public class DownloadFormListUtils {
         }
     }
 
-    private static boolean isThisFormAlreadyDownloaded(String formId) {
-        Cursor cursor = new FormsDao().getFormsCursorForFormId(formId);
+    private boolean isThisFormAlreadyDownloaded(String formId) {
+        Cursor cursor = formsDao.getFormsCursorForFormId(formId);
         return cursor == null || cursor.getCount() > 0;
     }
 
@@ -433,17 +433,17 @@ public class DownloadFormListUtils {
         return new ManifestFile(result.getHash(), files);
     }
 
-    private static boolean isNewerFormVersionAvailable(String md5Hash) {
+    private boolean isNewerFormVersionAvailable(String md5Hash) {
         if (md5Hash == null) {
             return false;
         }
-        try (Cursor cursor = new FormsDao().getFormsCursorForMd5Hash(md5Hash)) {
+        try (Cursor cursor = formsDao.getFormsCursorForMd5Hash(md5Hash)) {
             return cursor != null && cursor.getCount() == 0;
         }
     }
 
-    private static boolean areNewerMediaFilesAvailable(String formId, String formVersion, List<MediaFile> newMediaFiles) {
-        String mediaDirPath = new FormsDao().getFormMediaPath(formId, formVersion);
+    private boolean areNewerMediaFilesAvailable(String formId, String formVersion, List<MediaFile> newMediaFiles) {
+        String mediaDirPath = formsDao.getFormMediaPath(formId, formVersion);
         if (mediaDirPath != null) {
             File[] localMediaFiles = new File(mediaDirPath).listFiles();
             if (localMediaFiles != null) {

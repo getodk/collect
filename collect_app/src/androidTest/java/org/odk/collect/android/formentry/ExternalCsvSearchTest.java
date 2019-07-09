@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.test.FormLoadingUtils;
 
 import java.util.Collections;
@@ -37,6 +38,7 @@ public class ExternalCsvSearchTest {
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
+            .around(new ResetStateRule())
             .around(new CopyFormRule(EXTERNAL_CSV_SEARCH_FORM, "forms",
                     Collections.singletonList("external-csv-search-produce.csv")));
 
