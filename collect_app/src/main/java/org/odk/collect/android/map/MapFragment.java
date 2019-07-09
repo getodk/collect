@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.map;
 
+import java.io.File;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -52,6 +53,9 @@ public interface MapFragment {
      * map is ready, or with null if there is a problem initializing the map.
      */
     void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener);
+
+    /** Sets a file to be shown as a reference layer, or turns off the layer. */
+    void setReferenceLayerFile(@Nullable File file);
 
     /** Gets the point currently shown at the center of the map view. */
     @NonNull MapPoint getCenter();

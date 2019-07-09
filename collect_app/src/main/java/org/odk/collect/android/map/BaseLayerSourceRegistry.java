@@ -12,6 +12,7 @@ import org.odk.collect.android.spatial.TileSourceFactory;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASE_LAYER_SOURCE;
 
 /** A static class that defines the set of available base layer sources. */
+/** A static class that configures a MapFragment according to the user's preferences. */
 public class BaseLayerSourceRegistry {
     private BaseLayerSourceRegistry() { }  // prevent instantiation
 
@@ -79,7 +80,17 @@ public class BaseLayerSourceRegistry {
     /** Asks the currently selected BaseLayerSource to make us a MapFragment. */
     public static MapFragment createMapFragment(Context context) {
         Option option = getCurrent(context);
-        return option == null ? null : option.provider.createMapFragment(context);
+        if (option == null) {
+            return null;
+        }
+        MapFragment map = option.source.createMapFragment(context);
+        if (map == null) {
+            option.source.showUnavailableMessage(context);
+            return null;
+        }
+        String referencePath = PrefUtils.getSharedPrefs(context).getString(KEY_REFERENCE_LAYER, null);
+        map.setReferenceLayerFile(referencePath == null ? null : new File(referencePath));
+        return map;
     }
 
     /** Gets a list of the IDs of the options, in order. */

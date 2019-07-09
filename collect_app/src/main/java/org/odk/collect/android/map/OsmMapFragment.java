@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.location.Location;
 import android.location.LocationManager;
@@ -35,6 +36,7 @@ import com.google.android.gms.location.LocationListener;
 import org.odk.collect.android.R;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
+import org.odk.collect.android.spatial.OsmMBTileProvider;
 import org.odk.collect.android.utilities.IconUtils;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.events.MapEventsReceiver;
@@ -49,6 +51,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
+import org.osmdroid.views.overlay.TilesOverlay;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.io.File;
@@ -86,11 +89,11 @@ public class OsmMapFragment extends Fragment implements MapFragment,
     protected boolean gpsLocationEnabled;
     protected IGeoPoint lastMapCenter;
     protected final ITileSource tiles;
-    protected File referenceLayer;
+    protected File referenceLayerFile;
+    protected TilesOverlay referenceOverlay;
 
-    public OsmMapFragment(ITileSource tiles, File referenceLayer) {
+    public OsmMapFragment(ITileSource tiles) {
         this.tiles = tiles;
-        this.referenceLayer = referenceLayer;
     }
 
     @Override public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
@@ -140,6 +143,7 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         map.getController().setZoom(INITIAL_ZOOM);
         map.setTilesScaledToDpi(true);
         map.getOverlays().add(new MapEventsOverlay(this));
+        loadReferenceOverlay();
         addMapLayoutChangeListener(map);
         myLocationOverlay = new MyLocationNewOverlay(map);
         myLocationOverlay.setDrawAccuracyEnabled(true);
@@ -153,6 +157,27 @@ public class OsmMapFragment extends Fragment implements MapFragment,
             new Handler().postDelayed(() -> readyListener.onReady(this), 100);
         }
         return view;
+    }
+
+    @Override public void setReferenceLayerFile(@Nullable File file) {
+        referenceLayerFile = file;
+        if (map != null) {
+            loadReferenceOverlay();
+        }
+    }
+
+    /** Updates the map to reflect the value of referenceLayerFile. */
+    protected void loadReferenceOverlay() {
+        if (referenceOverlay != null) {
+            map.getOverlays().remove(referenceOverlay);
+        }
+        if (referenceLayerFile != null) {
+            OsmMBTileProvider mbprovider = new OsmMBTileProvider(this, referenceLayerFile);
+            referenceOverlay = new TilesOverlay(mbprovider, getContext());
+            referenceOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
+            map.getOverlays().add(0, referenceOverlay);
+        }
+        map.invalidate();
     }
 
     @Override public boolean singleTapConfirmedHelper(GeoPoint geoPoint) {

@@ -48,9 +48,10 @@ public class GoogleBaseLayerSource implements BaseLayerSource {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         int mapType = Integer.valueOf(prefs.getString(
             KEY_GOOGLE_MAP_STYLE, Integer.toString(GoogleMap.MAP_TYPE_NORMAL)));
+        MapFragment map = new GoogleMapFragment(mapType);
         String referencePath = prefs.getString(KEY_REFERENCE_LAYER, null);
-        File referenceLayer = referencePath == null ? null : new File(referencePath);
-        return new GoogleMapFragment(mapType, referenceLayer);
+        map.setReferenceLayer(referencePath == null ? null : new File(referencePath));
+        return map;
     }
 
     @Override public boolean supportsLayer(File file) {

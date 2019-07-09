@@ -62,9 +62,11 @@ public class MapboxBaseLayerSource implements BaseLayerSource {
         }
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String styleUrl = prefs.getString(KEY_MAPBOX_MAP_STYLE, Style.MAPBOX_STREETS);
+        MapFragment map = new MapboxMapFragment(styleUrl);
         String referencePath = prefs.getString(KEY_REFERENCE_LAYER, null);
-        File referenceLayer = referencePath == null ? null : new File(referencePath);
-        return new MapboxMapFragment(styleUrl, referenceLayer);
+        map.setReferenceLayer(referencePath == null ? null : new File(referencePath));
+        return map;
+
     }
 
     @Override public boolean supportsLayer(File file) {

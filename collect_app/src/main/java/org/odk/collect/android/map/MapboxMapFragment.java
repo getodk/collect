@@ -31,10 +31,12 @@ import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 import com.mapbox.mapboxsdk.style.layers.FillLayer;
+import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.style.layers.RasterLayer;
 import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
 import com.mapbox.mapboxsdk.style.sources.RasterSource;
+import com.mapbox.mapboxsdk.style.sources.Source;
 import com.mapbox.mapboxsdk.style.sources.TileSet;
 import com.mapbox.mapboxsdk.style.sources.VectorSource;
 import com.mapbox.mapboxsdk.utils.ColorUtils;
@@ -79,7 +81,7 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
     public static final float POINT_ZOOM = 16;
     public static final String POINT_ICON_ID = "point-icon-id";
     public static final long LOCATION_INTERVAL_MILLIS = 1000;
-    public static final long LOCATION_MAX_WAIT_MILLIS = 5 * LOCATION_INTERVAL_MILLIS;
+    public static final long LOCATION_MAX_WAIT_MILLIS = 5*LOCATION_INTERVAL_MILLIS;
 
     protected MapboxMap map;
     protected List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
@@ -98,7 +100,9 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
     protected LineManager lineManager;
     protected boolean isDragging;
     protected final String styleUrl;
-    protected final File referenceLayer;
+    protected File referenceLayerFile;
+    protected List<Layer> overlayLayers = new ArrayList<>();
+    protected List<Source> overlaySources = new ArrayList<>();
 
     protected TileHttpServer tileServer;
 
@@ -107,12 +111,12 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
     @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL", justification = "This flag is exposed for Robolectric tests to set")
     @VisibleForTesting public static boolean testMode;
 
-    public MapboxMapFragment(String styleUrl, File referenceLayer) {
+    public MapboxMapFragment(String styleUrl) {
         this.styleUrl = styleUrl;
-        this.referenceLayer = referenceLayer;
     }
 
-    @Override public void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener) {
+    @Override
+    public void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener) {
         if (MapboxUtils.initMapbox() == null) {
             MapboxUtils.warnMapboxUnsupported(Collect.getInstance());
             if (listener != null) {
@@ -136,10 +140,6 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
             this.map = map;  // signature of getMapAsync() ensures map is never null
 
             map.setStyle(getDesiredStyleBuilder(), style -> {
-                if (referenceLayer != null) {
-                    addMbtiles(style, referenceLayer.getName(), referenceLayer);
-                }
-
                 map.getUiSettings().setCompassGravity(Gravity.TOP | Gravity.START);
                 map.getUiSettings().setCompassMargins(36, 36, 36, 36);
                 map.getStyle().setTransition(new TransitionOptions(0, 0, false));
@@ -156,6 +156,7 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
                 lineManager = createLineManager();
                 symbolManager = createSymbolManager();
 
+                loadReferenceOverlay();
                 enableLocationComponent();
 
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(INITIAL_CENTER, INITIAL_ZOOM));
@@ -198,8 +199,23 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
         return new Style.Builder().fromUrl(styleUrl);
     }
 
+    @Override public void setReferenceLayerFile(File file) {
+        referenceLayerFile = file;
+        if (map != null) {
+            loadReferenceOverlay();
+        }
+    }
+
+    /** Updates the map to reflect the value of referenceLayerFile. */
+    private void loadReferenceOverlay() {
+        clearOverlays();
+        if (referenceLayerFile != null) {
+            addMbtiles(referenceLayerFile.getName(), referenceLayerFile);
+        }
+    }
+
     @SuppressWarnings("TimberExceptionLogging")
-    private void addMbtiles(Style style, String id, File file) {
+    private void addMbtiles(String id, File file) {
         MbtilesFile mbtiles;
         try {
             mbtiles = new MbtilesFile(file);
@@ -212,16 +228,16 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
         tileServer.addSource(id, mbtiles);
 
         if (mbtiles.getLayerType() == LayerType.VECTOR) {
-            style.addSource(new VectorSource(id, tileSet));
+            addOverlaySource(new VectorSource(id, tileSet));
             List<MbtilesFile.VectorLayer> layers = mbtiles.getVectorLayers();
             for (MbtilesFile.VectorLayer layer : layers) {
                 // Pick a colour that's a function of the filename and layer name.
                 int hue = (((id + "." + layer.name).hashCode()) & 0x7fffffff) % 360;
-                style.addLayer(new FillLayer(id + "/" + layer.name + ".fill", id).withProperties(
+                addOverlayLayer(new FillLayer(id + "/" + layer.name + ".fill", id).withProperties(
                     fillColor(Color.HSVToColor(new float[] {hue, 0.3f, 1})),
                     fillOpacity(0.1f)
                 ).withSourceLayer(layer.name));
-                style.addLayer(new LineLayer(id + "/" + layer.name + ".line", id).withProperties(
+                addOverlayLayer(new LineLayer(id + "/" + layer.name + ".line", id).withProperties(
                     lineColor(Color.HSVToColor(new float[] {hue, 0.7f, 1})),
                     lineWidth(1f),
                     lineOpacity(0.7f)
@@ -229,8 +245,8 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
             }
         }
         if (mbtiles.getLayerType() == LayerType.RASTER) {
-            style.addSource(new RasterSource(id, tileSet));
-            style.addLayer(new RasterLayer(id + ".raster", id).withProperties(
+            addOverlaySource(new RasterSource(id, tileSet));
+            addOverlayLayer(new RasterLayer(id + ".raster", id).withProperties(
                 rasterOpacity(0.5f)
             ));
         }
@@ -272,6 +288,28 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
         }
 
         return tileSet;
+    }
+
+    private void clearOverlays() {
+        Style style = map.getStyle();
+        for (Layer layer : overlayLayers) {
+            style.removeLayer(layer);
+        }
+        overlayLayers.clear();
+        for (Source source : overlaySources) {
+            style.removeSource(source);
+        }
+        overlaySources.clear();
+    }
+
+    private void addOverlayLayer(Layer layer) {
+        map.getStyle().addLayer(layer);
+        overlayLayers.add(layer);
+    }
+
+    private void addOverlaySource(Source source) {
+        map.getStyle().addSource(source);
+        overlaySources.add(source);
     }
 
     private SymbolManager createSymbolManager() {

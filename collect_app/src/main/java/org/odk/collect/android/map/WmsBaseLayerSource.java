@@ -54,18 +54,19 @@ public class WmsBaseLayerSource implements BaseLayerSource {
 
     @Override public MapFragment createMapFragment(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String referencePath = prefs.getString(KEY_REFERENCE_LAYER, null);
-        File referenceLayer = referencePath == null ? null : new File(referencePath);
-
+        OnlineTileSourceBase source = options[0].source;
         if (options.length > 1) {
             String value = prefs.getString(prefKey, null);
             for (int i = 0; i < options.length; i++) {
                 if (options[i].id.equals(value)) {
-                    return new OsmMapFragment(options[i].source, referenceLayer);
+                    source = options[i].source;
                 }
             }
         }
-        return new OsmMapFragment(options[0].source, referenceLayer);
+        MapFragment map = new OsmMapFragment(options[0].source);
+        String referencePath = prefs.getString(KEY_REFERENCE_LAYER, null);
+        map.setReferenceLayer(referencePath == null ? null : new File(referencePath));
+        return map;
     }
 
     @Override public boolean supportsLayer(File path) {
