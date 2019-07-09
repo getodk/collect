@@ -39,7 +39,7 @@ public class RequiredQuestionTest extends BaseRegressionTest {
         FormEntry.checkIsTextDisplayed("* Foo");
         closeSoftKeyboard();
         pressBack();
-        FormEntry.checkIgnoreChangesDisplayed();
+        FormEntry.clickIgnoreChanges();
     }
 
     @Test
@@ -51,6 +51,6 @@ public class RequiredQuestionTest extends BaseRegressionTest {
         FormEntry.checkIsToastWithMessageDisplayes("Custom required message", main);
         closeSoftKeyboard();
         pressBack();
-        FormEntry.checkIgnoreChangesDisplayed();
+        FormEntry.clickIgnoreChanges();
     }
 }

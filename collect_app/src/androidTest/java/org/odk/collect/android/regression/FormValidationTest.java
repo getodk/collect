@@ -57,6 +57,6 @@ public class FormValidationTest extends BaseRegressionTest {
         pressBack();
         closeSoftKeyboard();
         pressBack();
-        FormEntry.checkIgnoreChangesDisplayed();
+        FormEntry.clickIgnoreChanges();
     }
 }
