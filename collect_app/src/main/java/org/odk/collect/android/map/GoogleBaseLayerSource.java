@@ -16,7 +16,6 @@ import java.io.File;
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_GOOGLE_MAP_STYLE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 
 public class GoogleBaseLayerSource implements BaseLayerSource {
     @Override public void onSelected() { }
@@ -48,10 +47,7 @@ public class GoogleBaseLayerSource implements BaseLayerSource {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         int mapType = Integer.valueOf(prefs.getString(
             KEY_GOOGLE_MAP_STYLE, Integer.toString(GoogleMap.MAP_TYPE_NORMAL)));
-        MapFragment map = new GoogleMapFragment(mapType);
-        String referencePath = prefs.getString(KEY_REFERENCE_LAYER, null);
-        map.setReferenceLayer(referencePath == null ? null : new File(referencePath));
-        return map;
+        return new GoogleMapFragment(mapType);
     }
 
     @Override public boolean supportsLayer(File file) {

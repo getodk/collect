@@ -10,8 +10,6 @@ import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 
 import java.io.File;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
-
 public class WmsBaseLayerSource implements BaseLayerSource {
     private final String prefKey;
     private final int prefTitleId;
@@ -63,10 +61,7 @@ public class WmsBaseLayerSource implements BaseLayerSource {
                 }
             }
         }
-        MapFragment map = new OsmMapFragment(options[0].source);
-        String referencePath = prefs.getString(KEY_REFERENCE_LAYER, null);
-        map.setReferenceLayer(referencePath == null ? null : new File(referencePath));
-        return map;
+        return new OsmMapFragment(source);
     }
 
     @Override public boolean supportsLayer(File path) {

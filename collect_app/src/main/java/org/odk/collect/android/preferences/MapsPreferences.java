@@ -23,7 +23,7 @@ import android.view.View;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.map.BaseLayerSource;
-import org.odk.collect.android.map.BaseLayerSourceRegistry;
+import org.odk.collect.android.map.MapConfigurator;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -79,9 +79,9 @@ public class MapsPreferences extends BasePreferenceFragment {
      * onBaseLayerSourceChanged will do that part).
      */
     private void initBaseLayerSourcePref() {
-        mBaseLayerSourcePref = PrefUtils.createListPref(
+        baseLayerSourcePref = PrefUtils.createListPref(
             mContext, KEY_BASE_LAYER_SOURCE, R.string.base_layer_source,
-            BaseLayerSourceRegistry.getLabelIds(), BaseLayerSourceRegistry.getIds()
+            MapConfigurator.getLabelIds(), MapConfigurator.getIds()
         );
         onBaseLayerSourceChanged(null);
         mBaseLayerSourcePref.setOnPreferenceChangeListener((pref, value) -> {
@@ -92,20 +92,20 @@ public class MapsPreferences extends BasePreferenceFragment {
 
     /** Updates the rest of the preference UI when the Base Layer Source is changed. */
     private void onBaseLayerSourceChanged(String id) {
-        BaseLayerSourceRegistry.Option option = id == null ?
-            BaseLayerSourceRegistry.getCurrent(mContext) :
-            BaseLayerSourceRegistry.get(id);
-        option.provider.onSelected();
+        MapConfigurator.Option option = id == null ?
+            MapConfigurator.getCurrent(mContext) :
+            MapConfigurator.get(id);
+        option.source.onSelected();
 
         PreferenceCategory baseCategory = getCategory(CATEGORY_BASE_LAYER);
         baseCategory.removeAll();
-        baseCategory.addPreference(mBaseLayerSourcePref);
-        option.provider.addPrefs(baseCategory);
+        baseCategory.addPreference(baseLayerSourcePref);
+        option.source.addPrefs(baseCategory);
 
         PreferenceCategory referenceCategory = getCategory(CATEGORY_REFERENCE_LAYER);
         referenceCategory.removeAll();
-        mReferenceLayerPref = createReferenceLayerPref(mContext, option.labelId, option.provider);
-        referenceCategory.addPreference(mReferenceLayerPref);
+        referenceCategory.addPreference(
+            createReferenceLayerPref(mContext, option.labelId, option.source));
     }
 
     /** Creates the Reference Layer preference for a given base layer source. */

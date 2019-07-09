@@ -9,24 +9,26 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PrefUtils;
 import org.odk.collect.android.spatial.TileSourceFactory;
 
+import java.io.File;
+
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASE_LAYER_SOURCE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 
-/** A static class that defines the set of available base layer sources. */
 /** A static class that configures a MapFragment according to the user's preferences. */
-public class BaseLayerSourceRegistry {
-    private BaseLayerSourceRegistry() { }  // prevent instantiation
+public class MapConfigurator {
+    private MapConfigurator() { }  // prevent instantiation
 
-    private static Option[] OPTIONS = initOptions();
+    private static final Option[] BASE_LAYER_SOURCE_OPTIONS = initOptions();
 
     public static class Option {
         public final String id;  // preference value to store
         public final int labelId;  // string resource ID
-        public final BaseLayerSource provider;
+        public final BaseLayerSource source;
 
-        public Option(String id, int labelId, BaseLayerSource provider) {
+        public Option(String id, int labelId, BaseLayerSource source) {
             this.id = id;
             this.labelId = labelId;
-            this.provider = provider;
+            this.source = source;
         }
     }
 
@@ -64,12 +66,12 @@ public class BaseLayerSourceRegistry {
 
     /** Gets the Option with the given ID, or the first option if the ID is unknown. */
     public static Option get(String id) {
-        for (Option option : OPTIONS) {
+        for (Option option : BASE_LAYER_SOURCE_OPTIONS) {
             if (option.id.equals(id)) {
                 return option;
             }
         }
-        return OPTIONS[0];
+        return BASE_LAYER_SOURCE_OPTIONS[0];
     }
 
     /** Gets the Option corresponding to the current base_layer_source preference. */
@@ -77,7 +79,7 @@ public class BaseLayerSourceRegistry {
         return get(PrefUtils.getSharedPrefs(context).getString(KEY_BASE_LAYER_SOURCE, null));
     }
 
-    /** Asks the currently selected BaseLayerSource to make us a MapFragment. */
+    /** Creates a MapFragment with the selected base layer and reference layer. */
     public static MapFragment createMapFragment(Context context) {
         Option option = getCurrent(context);
         if (option == null) {
@@ -93,20 +95,20 @@ public class BaseLayerSourceRegistry {
         return map;
     }
 
-    /** Gets a list of the IDs of the options, in order. */
+    /** Gets a list of the IDs of the base layer source, in order. */
     public static String[] getIds() {
-        String[] ids = new String[OPTIONS.length];
+        String[] ids = new String[BASE_LAYER_SOURCE_OPTIONS.length];
         for (int i = 0; i < ids.length; i++) {
-            ids[i] = OPTIONS[i].id;
+            ids[i] = BASE_LAYER_SOURCE_OPTIONS[i].id;
         }
         return ids;
     }
 
-    /** Gets a list of the label string IDs of the options, in order. */
+    /** Gets a list of the label string IDs of the base layer sources, in order. */
     public static int[] getLabelIds() {
-        int[] labelIds = new int[OPTIONS.length];
+        int[] labelIds = new int[BASE_LAYER_SOURCE_OPTIONS.length];
         for (int i = 0; i < labelIds.length; i++) {
-            labelIds[i] = OPTIONS[i].labelId;
+            labelIds[i] = BASE_LAYER_SOURCE_OPTIONS[i].labelId;
         }
         return labelIds;
     }

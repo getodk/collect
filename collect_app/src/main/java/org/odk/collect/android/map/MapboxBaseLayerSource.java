@@ -16,7 +16,6 @@ import java.io.File;
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_MAP_STYLE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 
 public class MapboxBaseLayerSource implements BaseLayerSource {
     @Override public void onSelected() {
@@ -62,11 +61,7 @@ public class MapboxBaseLayerSource implements BaseLayerSource {
         }
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String styleUrl = prefs.getString(KEY_MAPBOX_MAP_STYLE, Style.MAPBOX_STREETS);
-        MapFragment map = new MapboxMapFragment(styleUrl);
-        String referencePath = prefs.getString(KEY_REFERENCE_LAYER, null);
-        map.setReferenceLayer(referencePath == null ? null : new File(referencePath));
-        return map;
-
+        return new MapboxMapFragment(styleUrl);
     }
 
     @Override public boolean supportsLayer(File file) {
