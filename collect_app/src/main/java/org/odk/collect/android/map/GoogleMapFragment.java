@@ -101,7 +101,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
-    @Override public void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener) {
+    @Override public void addTo(
+        @NonNull FragmentActivity activity, int containerId,
+        @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         // If the containing activity is being re-created upon screen rotation,
         // the FragmentManager will have also re-created a copy of the previous
         // OsmMapFragment.  We don't want these useless copies of old fragments
@@ -111,6 +113,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
         getMapAsync((GoogleMap map) -> {
             if (map == null) {
                 ToastUtils.showShortToast(R.string.google_play_services_error_occured);
+                if (errorListener != null) {
+                    errorListener.onError();
+                }
                 return;
             }
             this.map = map;
@@ -125,15 +130,15 @@ public class GoogleMapFragment extends SupportMapFragment implements
             map.setMinZoomPreference(1);
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(INITIAL_CENTER, INITIAL_ZOOM));
             loadReferenceOverlay();
-            if (listener != null) {
-                listener.onReady(this);
+            if (readyListener != null) {
+                readyListener.onReady(this);
             }
         });
 
         // In Robolectric tests, getMapAsync() never gets around to calling its
         // callback; we have to invoke the ready listener directly.
-        if (testMode) {
-            listener.onReady(this);
+        if (testMode && readyListener != null) {
+            readyListener.onReady(this);
         }
     }
 

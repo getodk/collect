@@ -139,7 +139,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
 
         Context context = getApplicationContext();
         MapConfigurator.createMapFragment(context)
-            .addTo(this, R.id.map_container, this::initMap);
+            .addTo(this, R.id.map_container, this::initMap, this::finish);
     }
 
     @Override protected void onStart() {
@@ -193,10 +193,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
     }
 
     public void initMap(MapFragment newMapFragment) {
-        if (newMapFragment == null) {  // could not create the map
-            finish();
-            return;
-        }
         if (newMapFragment.getFragment().getActivity() == null) {
             // If the screen is rotated just after the activity starts but
             // before initMap() is called, then when the activity is re-created

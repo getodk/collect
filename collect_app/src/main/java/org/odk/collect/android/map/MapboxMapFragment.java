@@ -115,12 +115,13 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
         this.styleUrl = styleUrl;
     }
 
-    @Override
-    public void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener) {
+    @Override public void addTo(
+        @NonNull FragmentActivity activity, int containerId,
+        @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         if (MapboxUtils.initMapbox() == null) {
             MapboxUtils.warnMapboxUnsupported(Collect.getInstance());
-            if (listener != null) {
-                listener.onReady(null);
+            if (errorListener != null) {
+                errorListener.onError();
             }
             return;
         }
@@ -160,15 +161,15 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
                 enableLocationComponent();
 
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(INITIAL_CENTER, INITIAL_ZOOM));
-                if (listener != null) {
-                    listener.onReady(this);
+                if (readyListener != null) {
+                    readyListener.onReady(this);
                 }
             });
 
             // In Robolectric tests, getMapAsync() never gets around to calling its
             // callback; we have to invoke the ready listener directly.
-            if (testMode && listener != null) {
-                listener.onReady(this);
+            if (testMode && readyListener != null) {
+                readyListener.onReady(this);
             }
         });
     }

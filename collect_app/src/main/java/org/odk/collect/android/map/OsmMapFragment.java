@@ -114,8 +114,10 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         return this;
     }
 
-    @Override public void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener) {
-        readyListener = listener;
+    @Override public void addTo(
+        @NonNull FragmentActivity activity, int containerId,
+        @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
+        this.readyListener = readyListener;
         // If the containing activity is being re-created upon screen rotation,
         // the FragmentManager will have also re-created a copy of the previous
         // OsmMapFragment.  We don't want these useless copies of old fragments

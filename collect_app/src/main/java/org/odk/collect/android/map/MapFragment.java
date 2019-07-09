@@ -49,10 +49,13 @@ public interface MapFragment {
     /**
      * Adds the map Fragment to an activity.  The containerId should be the
      * resource ID of a View, into which the map view will be placed.  The
-     * listener will be invoked on the UI thread, with this MapFragment when the
-     * map is ready, or with null if there is a problem initializing the map.
+     * readyListener will be invoked on the UI thread with this MapFragment when
+     * the map is ready, or the errorListener will be invoked if there is a
+     * problem initializing the map.
      */
-    void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener);
+    void addTo(
+        @NonNull FragmentActivity activity, int containerId,
+        @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener);
 
     /** Sets a file to be shown as a reference layer, or turns off the layer. */
     void setReferenceLayerFile(@Nullable File file);
@@ -171,6 +174,10 @@ public interface MapFragment {
      */
     void setGpsLocationListener(@Nullable PointListener listener);
 
+    interface ErrorListener {
+        void onError();
+    }
+
     interface ReadyListener {
         void onReady(@NonNull MapFragment mapFragment);
     }
@@ -180,6 +187,6 @@ public interface MapFragment {
     }
 
     interface FeatureListener {
-        void onFeature(@NonNull int featureId);
+        void onFeature(int featureId);
     }
 }
