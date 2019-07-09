@@ -14,6 +14,7 @@ import org.odk.collect.android.espressoutils.MainMenu;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 
+import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.pressBack;
 
 // Issue number NODK-251
@@ -54,8 +55,8 @@ public class FormValidationTest extends BaseRegressionTest {
         FormEntry.checkIsTextDisplayed("YY MM");
         FormEntry.checkIsTextDisplayed("YY");
         pressBack();
+        closeSoftKeyboard();
         pressBack();
-        pressBack();
-        FormEntry.ignoreChanges();
+        FormEntry.checkIgnoreChangesDisplayed();
     }
 }

@@ -89,7 +89,7 @@ public final class FormEntry {
         onView(withId(R.id.questionholder)).perform(swipeLeft());
     }
 
-    public static void ignoreChanges() {
+    public static void checkIgnoreChangesDisplayed() {
         onView(withText(getInstrumentation().getTargetContext().getString(R.string.do_not_save))).perform(click());
     }
 }
