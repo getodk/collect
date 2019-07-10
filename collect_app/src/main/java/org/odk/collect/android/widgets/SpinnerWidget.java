@@ -28,6 +28,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.SpinnerAdapter;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
+import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.views.ScrolledToTopSpinner;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
@@ -149,10 +150,10 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
         }
     }
 
-    private String[] getChoices(FormEntryPrompt prompt) {
-        String[] choices = new String[items.size() + 1];
+    private CharSequence[] getChoices(FormEntryPrompt prompt) {
+        CharSequence[] choices = new CharSequence[items.size() + 1];
         for (int i = 0; i < items.size(); i++) {
-            choices[i] = prompt.getSelectChoiceText(items.get(i));
+            choices[i] = FormEntryPromptUtils.getItemText(prompt, items.get(i));
         }
         choices[items.size()] = getContext().getString(R.string.select_one);
         return choices;

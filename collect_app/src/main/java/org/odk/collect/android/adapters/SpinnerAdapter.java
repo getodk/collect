@@ -14,13 +14,13 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.ThemeUtils;
 
-public class SpinnerAdapter extends ArrayAdapter<String> {
+public class SpinnerAdapter extends ArrayAdapter<CharSequence> {
     private final Context context;
-    private final String[] items;
+    private final CharSequence[] items;
     private final ThemeUtils themeUtils;
     private int selectedPosition;
 
-    public SpinnerAdapter(final Context context, final String[] objects) {
+    public SpinnerAdapter(final Context context, final CharSequence[] objects) {
         super(context, android.R.layout.simple_spinner_item, objects);
         this.items = objects;
         this.context = context;
