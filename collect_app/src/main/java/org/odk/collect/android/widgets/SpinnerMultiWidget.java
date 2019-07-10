@@ -30,6 +30,7 @@ import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
@@ -77,7 +78,7 @@ public class SpinnerMultiWidget extends ItemsWidget implements ButtonWidget, Mul
 
         // Build View
         for (int i = 0; i < items.size(); i++) {
-            answerItems[i] = prompt.getSelectChoiceText(items.get(i));
+            answerItems[i] = FormEntryPromptUtils.getItemText(prompt, items.get(i));
         }
 
         selectionText = getAnswerTextView();
