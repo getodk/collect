@@ -7,53 +7,44 @@
   OR CONDITIONS OF ANY KIND, either express or implied. See the License for
   the specific language governing permissions and limitations under the License.
 -->
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginBottom="0dp"
-    android:layout_marginLeft="0dp"
-    android:layout_marginRight="0dp"
-    android:layout_marginTop="0dp"
-    android:orientation="vertical"
-    android:padding="0dp">
+    android:layout_height="match_parent">
 
     <!-- Toolbar -->
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar" />
 
     <include
         layout="@layout/toolbar_action_bar_shadow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"/>
+        android:layout_below="@id/toolbar" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="@dimen/margin_large">
 
         <TextView
             android:id="@+id/main_menu_header"
-            android:layout_width="match_parent"
+            style="@style/TextAppearance.Collect.Headline6"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="1dp"
-            android:paddingTop="6dp"
+            android:layout_gravity="center"
             android:text="@string/app_name"
-            android:textColor="?primaryTextColor"
-            android:textSize="21sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textAlignment="center" />
 
         <TextView
-            android:layout_width="match_parent"
+            style="@style/TextAppearance.Collect.Subtitle1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="10dp"
-            android:paddingTop="1dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_medium"
             android:text="@string/main_menu_details"
-            android:textColor="?primaryTextColor"
-            android:textSize="17sp"/>
+            android:textAlignment="center" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -64,91 +55,64 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingEnd="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingStart="10dp">
+                android:padding="@dimen/margin_medium">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"/>
-
-                <Button
-                    android:id="@+id/enter_data"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:textAllCaps="false"
-                    android:textSize="21sp"
-                    android:textStyle="normal"/>
+                    android:orientation="vertical">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp"/>
+                    <Button
+                        android:id="@+id/enter_data"
+                        style="@style/MainMenuBigButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small" />
 
-                <Button
-                    android:id="@+id/review_data"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:textAllCaps="false"
-                    android:textSize="21sp"
-                    android:textStyle="normal"/>
+                    <Button
+                        android:id="@+id/review_data"
+                        style="@style/MainMenuBigButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small" />
 
-                <View
-                    android:id="@+id/review_spacer"
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp"/>
+                    <Button
+                        android:id="@+id/send_data"
+                        style="@style/MainMenuBigButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small" />
 
-                <Button
-                    android:id="@+id/send_data"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:textAllCaps="false"
-                    android:textSize="21sp"
-                    android:textStyle="normal"/>
+                    <Button
+                        android:id="@+id/view_sent_forms"
+                        style="@style/MainMenuBigButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:text="@string/view_sent_forms" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp"/>
+                </LinearLayout>
 
-                <Button
-                    android:id="@+id/view_sent_forms"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:text="@string/view_sent_forms"
-                    android:textAllCaps="false"
-                    android:textSize="21sp"
-                    android:textStyle="normal"/>
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:orientation="vertical">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"/>
+                    <Button
+                        android:id="@+id/get_forms"
+                        style="@style/MainMenuBigButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small" />
 
-                <Button
-                    android:id="@+id/get_forms"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:textAllCaps="false"
-                    android:textSize="21sp"
-                    android:textStyle="normal"/>
-
-                <View
-                    android:id="@+id/get_forms_spacer"
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp"/>
-
-                <Button
-                    android:id="@+id/manage_forms"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:textAllCaps="false"
-                    android:textSize="21sp"
-                    android:textStyle="normal"/>
+                    <Button
+                        android:id="@+id/manage_forms"
+                        style="@style/MainMenuBigButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small" />
+                </LinearLayout>
             </LinearLayout>
 
         </ScrollView>
