@@ -155,6 +155,10 @@
             <source14/>
             <target14/>
           </external_app>
+          <search_in_field_list_group>
+            <source15/>
+            <target15/>
+          </search_in_field_list_group>
           <meta>
             <instanceID/>
           </meta>
@@ -316,6 +320,8 @@
       <bind nodeset="/fieldlist-updates/rating/target13" relevant=" /fieldlist-updates/rating/source13  != ''" type="string"/>
       <bind nodeset="/fieldlist-updates/external_app/source14" type="int"/>
       <bind nodeset="/fieldlist-updates/external_app/target14" relevant=" /fieldlist-updates/external_app/source14  != ''" type="string"/>
+      <bind nodeset="/fieldlist-updates/search_in_field_list_group/source15" type="select1"/>
+      <bind nodeset="/fieldlist-updates/search_in_field_list_group/target15" relevant=" /fieldlist-updates/search_in_field_list_group/source15  != ''" type="string"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/fieldlist-updates/meta/instanceID" readonly="true()" type="string"/>
     </model>
   </h:head>
@@ -583,6 +589,19 @@
       </input>
       <input ref="/fieldlist-updates/external_app/target14">
         <label>Target14</label>
+      </input>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/search_in_field_list_group">
+      <label>Search in field-list</label>
+      <select1 appearance="minimal search('fruits')" ref="/fieldlist-updates/search_in_field_list_group/source15">
+        <label>Source15</label>
+        <item>
+          <label>name</label>
+          <value>name_key</value>
+        </item>
+      </select1>
+      <input ref="/fieldlist-updates/search_in_field_list_group/target15">
+        <label>Target15</label>
       </input>
     </group>
   </h:body>

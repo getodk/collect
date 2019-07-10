@@ -44,6 +44,7 @@ import org.odk.collect.android.test.FormLoadingUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Random;
 import java.util.UUID;
 
@@ -85,7 +86,7 @@ public class FieldListUpdateTest {
                     Manifest.permission.CAMERA)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule(FIELD_LIST_TEST_FORM));
+            .around(new CopyFormRule(FIELD_LIST_TEST_FORM, "", Collections.singletonList("fruits.csv")));
 
     @Test
     public void relevanceChangeAtEnd_ShouldToggleLastWidgetVisibility() {
@@ -378,6 +379,19 @@ public class FieldListUpdateTest {
         onView(withClassName(endsWith("EditText"))).perform(replaceText(String.valueOf(new Random().nextInt())));
 
         onView(withText("Target14")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void search_function_in_field_list() throws InterruptedException {
+        jumpToGroupWithText("Search in field-list");
+        onView(withText(startsWith("Source15"))).perform(click());
+        Thread.sleep(1000);
+        onView(withText("Select One Answer")).check(matches(isDisplayed())).perform(click());
+        onView(withText("Mango")).check(matches(isDisplayed()));
+        onView(withText("Oranges")).check(matches(isDisplayed()));
+        onView(withText("Strawberries")).check(matches(isDisplayed())).perform(click());
+        onView(withText("Strawberries")).check(matches(isDisplayed()));
+        onView(withText("Target15")).check(matches(isDisplayed()));
     }
 
     // Scroll down until the desired group name is visible. This is needed to make the tests work
