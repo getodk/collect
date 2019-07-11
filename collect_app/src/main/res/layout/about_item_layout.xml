@@ -21,15 +21,17 @@ limitations under the License.
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentTop="true"
         tools:src="@drawable/ic_website" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_large"
-        android:layout_marginLeft="@dimen/margin_large"
+        android:layout_alignTop="@id/imageView"
+        android:layout_marginStart="@dimen/margin_extra_extra_large"
+        android:layout_marginLeft="@dimen/margin_extra_extra_large"
         android:layout_toEndOf="@id/imageView"
         android:layout_toRightOf="@id/imageView"
         android:orientation="vertical">
@@ -47,6 +49,7 @@ limitations under the License.
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
+            android:textColor="?attr/colorOnSurfaceMediumEmphasis"
             tools:text="@string/odk_website_summary" />
 
     </LinearLayout>
