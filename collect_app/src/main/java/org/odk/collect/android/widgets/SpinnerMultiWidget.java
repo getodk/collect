@@ -28,7 +28,6 @@ import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
@@ -51,7 +50,8 @@ import java.util.List;
 public class SpinnerMultiWidget extends ItemsWidget implements ButtonWidget, MultiChoiceWidget {
 
     // The possible select answers
-    CharSequence[] answerItems;
+    String[] answerItems;
+    CharSequence[] styledAnswerItems;
 
     // The button to push to display the answers to choose from
     Button button;
@@ -70,13 +70,15 @@ public class SpinnerMultiWidget extends ItemsWidget implements ButtonWidget, Mul
         super(context, prompt);
 
         selections = new boolean[items.size()];
-        answerItems = new CharSequence[items.size()];
+        answerItems = new String[items.size()];
+        styledAnswerItems = new CharSequence[items.size()];
         alertBuilder = new AlertDialog.Builder(context);
         button = getSimpleButton(context.getString(R.string.select_answer));
 
         // Build View
         for (int i = 0; i < items.size(); i++) {
-            answerItems[i] = FormEntryPromptUtils.getItemText(prompt, items.get(i));
+            answerItems[i] = prompt.getSelectChoiceText(items.get(i));
+            styledAnswerItems[i] = org.odk.collect.android.utilities.TextUtils.textToHtml(answerItems[i]);
         }
 
         selectionText = getAnswerTextView();
@@ -95,7 +97,7 @@ public class SpinnerMultiWidget extends ItemsWidget implements ButtonWidget, Mul
                 for (Selection s : ve) {
                     if (value.equals(s.getValue())) {
                         selections[i] = true;
-                        selectedValues.add(answerItems[i].toString());
+                        selectedValues.add(answerItems[i]);
                         break;
                     }
                 }
@@ -163,13 +165,13 @@ public class SpinnerMultiWidget extends ItemsWidget implements ButtonWidget, Mul
 
                     for (int i = 0; i < selections.length; i++) {
                         if (selections[i]) {
-                            selectedValues.add(answerItems[i].toString());
+                            selectedValues.add(answerItems[i]);
                         }
                     }
                     showSelectedValues(selectedValues);
                 });
 
-        alertBuilder.setMultiChoiceItems(answerItems, selections,
+        alertBuilder.setMultiChoiceItems(styledAnswerItems, selections,
                 (dialog, which, isChecked) -> {
                     selections[which] = isChecked;
                     widgetValueChanged();
@@ -181,8 +183,9 @@ public class SpinnerMultiWidget extends ItemsWidget implements ButtonWidget, Mul
         if (selectedValues.isEmpty()) {
             clearAnswer();
         } else {
-            selectionText.setText(String.format(getContext().getString(R.string.selected_answer),
+            CharSequence answerText = org.odk.collect.android.utilities.TextUtils.textToHtml(String.format(getContext().getString(R.string.selected_answer),
                     TextUtils.join(", ", selectedValues)));
+            selectionText.setText(answerText);
             selectionText.setVisibility(View.VISIBLE);
         }
     }
