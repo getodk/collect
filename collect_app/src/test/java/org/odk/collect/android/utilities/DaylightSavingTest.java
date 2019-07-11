@@ -107,9 +107,7 @@ public class DaylightSavingTest {
         when(datePickerDialog.getDatePicker().getMonth()).thenReturn(month);
         when(datePickerDialog.getDatePicker().getDayOfMonth()).thenReturn(day);
 
-        DateWidget dateWidget = new DateWidget(Robolectric.buildActivity(FormEntryActivity.class).create().get(), formEntryPromptStub);
-        dateWidget.setDatePickerDialog(datePickerDialog);
-        return dateWidget;
+        return new DateWidget(Robolectric.buildActivity(FormEntryActivity.class).create().get(), formEntryPromptStub);
     }
 
     private DateTimeWidget prepareDateTimeWidget(int year, int month, int day, int hour, int minute) {
