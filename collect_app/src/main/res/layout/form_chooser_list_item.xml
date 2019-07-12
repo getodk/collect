@@ -1,16 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="56dp"
-        android:padding="16dp">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_large">
 
     <!-- Material Design reference: https://material.io/design/components/lists.html#specs -->
 
-    <include layout="@layout/form_chooser_list_item_icon"/>
+    <FrameLayout
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
 
-    <include layout="@layout/form_chooser_list_item_text"/>
+        <include layout="@layout/form_chooser_list_item_icon" />
 
-</LinearLayout>
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/imageView"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginLeft="@dimen/margin_large"
+        android:layout_toEndOf="@id/imageView"
+        android:layout_toRightOf="@id/imageView">
+
+        <include layout="@layout/form_chooser_list_item_text" />
+
+    </FrameLayout>
+
+
+</RelativeLayout>
