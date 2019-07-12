@@ -124,7 +124,7 @@ the specific language governing permissions and limitations under the License.
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activities.InstanceChooserList" />
-        <activity android:name=".activities.FormChooserList" />
+        <activity android:name=".activities.FormChooserListActivity" />
         <activity android:name=".activities.FormDownloadList" />
         <activity
             android:name=".activities.FileManagerTabs"
@@ -244,7 +244,7 @@ the specific language governing permissions and limitations under the License.
 
         <activity-alias
             android:name=".activities.FormChooserList"
-            android:targetActivity=".activities.FormChooserList">
+            android:targetActivity=".activities.FormChooserListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
