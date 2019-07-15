@@ -26,6 +26,7 @@ import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.SubmissionProfile;
 import org.javarosa.core.model.ValidateOutcome;
+import org.javarosa.core.model.actions.setlocation.SetLocationActionHandler;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -1301,7 +1302,7 @@ public class FormController {
      * because of the audit configuration or because it contains odk:setlocation actions.
      */
     public boolean currentFormCollectsBackgroundLocation() {
-        return currentFormAuditsLocation() || getFormDef().hasSetLocationAction();
+        return currentFormAuditsLocation() || getFormDef().hasAction(SetLocationActionHandler.ELEMENT_NAME);
     }
 
     /**
