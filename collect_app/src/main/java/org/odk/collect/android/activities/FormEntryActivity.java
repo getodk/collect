@@ -2966,9 +2966,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             questionsAfterSaveByIndex.put(question.getIndex(), question);
         }
 
+        // Identify widgets to remove or rebuild (by removing and re-adding). We'd like to do the
+        // identification and removal in the same pass but removal has to be done in a loop that
+        // starts from the end and itemset-based select choices will only be correctly recomputed
+        // if accessed from beginning to end because the call on sameAs is what calls
+        // populateDynamicChoices. See https://github.com/opendatakit/javarosa/issues/436
         List<FormEntryPrompt> questionsThatHaveNotChanged = new ArrayList<>();
-        for (int i = immutableQuestionsBeforeSave.size() - 1; i >= 0; i--) {
-            ImmutableDisplayableQuestion questionBeforeSave = immutableQuestionsBeforeSave.get(i);
+        List<FormIndex> formIndexesToRemove = new ArrayList<>();
+        for (ImmutableDisplayableQuestion questionBeforeSave : immutableQuestionsBeforeSave) {
             FormEntryPrompt questionAtSameFormIndex = questionsAfterSaveByIndex.get(questionBeforeSave.getFormIndex());
 
             // Always rebuild questions that use database-driven external data features since they
@@ -2977,6 +2982,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     && !getFormController().usesDatabaseExternalDataFeature(questionBeforeSave.getFormIndex())) {
                 questionsThatHaveNotChanged.add(questionAtSameFormIndex);
             } else if (!lastChangedIndex.equals(questionBeforeSave.getFormIndex())) {
+                formIndexesToRemove.add(questionBeforeSave.getFormIndex());
+            }
+        }
+
+        for (int i = immutableQuestionsBeforeSave.size() - 1; i >= 0; i--) {
+            ImmutableDisplayableQuestion questionBeforeSave = immutableQuestionsBeforeSave.get(i);
+
+            if (formIndexesToRemove.contains(questionBeforeSave.getFormIndex())) {
                 // Some widgets may call widgetValueChanged from a non-main thread but odkView can
                 // only be modified from the main thread
                 final int indexToRemove = i;
