@@ -2,14 +2,15 @@ package org.odk.collect.android.map;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 
 import com.mapbox.mapboxsdk.maps.Style;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PrefUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 
@@ -18,14 +19,13 @@ import timber.log.Timber;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_MAP_STYLE;
 
 public class MapboxBaseLayerSource implements BaseLayerSource {
-    @Override public void onSelected() {
-        // To keep our APK from getting too big, we decided to include the
-        // Mapbox native library only for the most common binary architectures.
-        // So, on a small minority of Android devices, the Mapbox SDK will not
-        // run; let's warn the user when they choose Mapbox in the settings.
-        if (MapboxUtils.initMapbox() == null) {
-            MapboxUtils.warnMapboxUnsupported(Collect.getInstance());
-        }
+    @Override public boolean isAvailable(Context context) {
+        return MapboxUtils.initMapbox() != null;
+    }
+
+    @Override public void showUnavailableMessage(Context context) {
+        ToastUtils.showLongToast(context.getString(
+            R.string.mapbox_unsupported_warning, Build.CPU_ABI));
     }
 
     @Override public void addPrefs(PreferenceCategory category) {
@@ -56,7 +56,6 @@ public class MapboxBaseLayerSource implements BaseLayerSource {
 
     @Override public MapFragment createMapFragment(Context context) {
         if (MapboxUtils.initMapbox() == null) {
-            MapboxUtils.warnMapboxUnsupported(Collect.getInstance());
             return null;
         }
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

@@ -731,4 +731,5 @@
     <string name="qr_code_not_found">QR Code not found in the selected image</string>
     <string name="not_granted_permission">The activity you are trying to start requires a permission which is not granted.</string>
     <string name="mapbox_unsupported_warning">Mapbox is not supported on this device (%s).  Please choose another mapping SDK in General Settings &gt; User interface.</string>
+    <string name="google_maps_sdk_unavailable_warning">The Google Maps SDK is not available on this device.  Please choose another mapping SDK in General Settings &gt; User interface.</string>
 </resources>

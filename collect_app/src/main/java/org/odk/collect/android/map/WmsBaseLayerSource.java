@@ -33,7 +33,12 @@ public class WmsBaseLayerSource implements BaseLayerSource {
         this.options = options;
     }
 
-    @Override public void onSelected() { }
+    @Override public boolean isAvailable(Context context) {
+        // OSMdroid is always supported, as far as we know.
+        return true;
+    }
+
+    @Override public void showUnavailableMessage(Context context) { }
 
     @Override public void addPrefs(PreferenceCategory category) {
         if (options.length > 1) {

@@ -17,8 +17,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,8 +27,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
@@ -72,17 +68,9 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
     }
 
     private void startGeoShapeActivity() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String mapSDK = prefs.getString(GeneralKeys.KEY_BASE_LAYER_SOURCE, GeneralKeys.DEFAULT_BASEMAP_KEY);
-
-        if (mapSDK.equals(GeneralKeys.GOOGLE_MAPS_BASEMAP_KEY) && !PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
-            PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
-            return;
-        }
         Intent intent = new Intent(getContext(), GeoPolyActivity.class)
             .putExtra(GeoPolyActivity.ANSWER_KEY, answerDisplay.getText().toString())
-            .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOSHAPE)
-            .putExtra(GeneralKeys.KEY_BASE_LAYER_SOURCE, mapSDK);
+            .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOSHAPE);
         ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOSHAPE_CAPTURE);
     }
 

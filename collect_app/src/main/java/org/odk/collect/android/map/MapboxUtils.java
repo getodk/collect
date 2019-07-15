@@ -1,13 +1,8 @@
 package org.odk.collect.android.map;
 
-import android.content.Context;
-import android.os.Build;
-import android.widget.Toast;
-
 import com.mapbox.mapboxsdk.Mapbox;
 
 import org.odk.collect.android.BuildConfig;
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
 public class MapboxUtils {
@@ -24,13 +19,15 @@ public class MapboxUtils {
             return mapbox;
         }
 
-        // To use the Mapbox base maps, we have to initialize the Mapbox SDK with
-        // an access token. Configure this token in collect_app/secrets.properties.
         try {
+            // To use the Mapbox base maps, we have to initialize the Mapbox SDK with
+            // an access token. Configure this token in collect_app/secrets.properties.
             mapbox = Mapbox.getInstance(Collect.getInstance(), BuildConfig.MAPBOX_ACCESS_TOKEN);
         } catch (Exception | Error e) {
-            // Initialization failed (usually because the Mapbox native library for
-            // the current architecture could not be found or loaded).
+            // To keep our APK from getting too big, we decided to include the
+            // Mapbox native library only for the most common binary architectures.
+            // So, on a small minority of Android devices, initialization of the
+            // Mapbox SDK will fail.
             mapbox = null;
         }
 
@@ -39,14 +36,5 @@ public class MapboxUtils {
         // crashy Mapbox object.  We trust only the result of the first attempt.
         initAttempted = true;
         return mapbox;
-    }
-
-    /** Shows a warning that Mapbox is not supported by this device. */
-    public static void warnMapboxUnsupported(Context context) {
-        Toast.makeText(
-            context,
-            context.getString(R.string.mapbox_unsupported_warning, Build.CPU_ABI),
-            Toast.LENGTH_LONG
-        ).show();
     }
 }

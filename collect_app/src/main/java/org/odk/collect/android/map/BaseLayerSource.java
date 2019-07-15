@@ -16,8 +16,15 @@ import androidx.annotation.Nullable;
  * a "Google map style" preference with choices such as Terrain or Satellite.
  */
 public interface BaseLayerSource {
-    /** Invoked when the user selects this provider in the Maps preferences. */
-    void onSelected();
+    /** Returns true if this source is available on this platform and device. */
+    boolean isAvailable(Context context);
+
+    /**
+     * Displays a warning to the user that this source is unavailable.  This
+     * will be invoked when isSupported() is false or createMapFragment(context)
+     * returns null.
+     */
+    void showUnavailableMessage(Context context);
 
     /** Adds any preferences that are specific to this base layer source. */
     void addPrefs(PreferenceCategory category);

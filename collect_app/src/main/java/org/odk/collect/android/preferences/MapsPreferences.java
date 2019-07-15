@@ -95,7 +95,9 @@ public class MapsPreferences extends BasePreferenceFragment {
         MapConfigurator.Option option = id == null ?
             MapConfigurator.getCurrent(mContext) :
             MapConfigurator.get(id);
-        option.source.onSelected();
+        if (!option.source.isAvailable(context)) {
+            option.source.showUnavailableMessage(context);
+        }
 
         PreferenceCategory baseCategory = getCategory(CATEGORY_BASE_LAYER);
         baseCategory.removeAll();

@@ -1,5 +1,6 @@
 package org.odk.collect.android.map;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -43,7 +44,6 @@ import com.mapbox.mapboxsdk.utils.ColorUtils;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.map.MbtilesFile.LayerType;
 import org.odk.collect.android.map.MbtilesFile.MbtilesException;
 import org.odk.collect.android.mapboxsdk.MapFragment;
@@ -118,8 +118,9 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
     @Override public void addTo(
         @NonNull FragmentActivity activity, int containerId,
         @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
+        Context context = getContext();
         if (MapboxUtils.initMapbox() == null) {
-            MapboxUtils.warnMapboxUnsupported(Collect.getInstance());
+            MapConfigurator.getCurrent(context).source.showUnavailableMessage(context);
             if (errorListener != null) {
                 errorListener.onError();
             }
