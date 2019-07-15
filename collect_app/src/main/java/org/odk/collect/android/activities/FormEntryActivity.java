@@ -2969,15 +2969,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         List<FormEntryPrompt> questionsThatHaveNotChanged = new ArrayList<>();
         for (int i = immutableQuestionsBeforeSave.size() - 1; i >= 0; i--) {
             ImmutableDisplayableQuestion questionBeforeSave = immutableQuestionsBeforeSave.get(i);
-            // We'd like to use questionsAfterSaveByIndex.get but we can't because FormIndex
-            // doesn't implement hashCode and we're not guaranteed the two FormIndexes will be
-            // the same reference
-            FormEntryPrompt questionAtSameFormIndex = null;
-            for (FormIndex index : questionsAfterSaveByIndex.keySet()) {
-                if (questionBeforeSave.getFormIndex().equals(index)) {
-                    questionAtSameFormIndex = questionsAfterSaveByIndex.get(index);
-                }
-            }
+            FormEntryPrompt questionAtSameFormIndex = questionsAfterSaveByIndex.get(questionBeforeSave.getFormIndex());
 
             // Always rebuild questions that use database-driven external data features since they
             // bypass SelectChoices stored in ImmutableDisplayableQuestion
