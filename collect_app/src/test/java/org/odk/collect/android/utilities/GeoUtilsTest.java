@@ -5,16 +5,16 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class GeoPointUtilsTest {
+public class GeoUtilsTest {
     @Test
     public void capitalizesGps() {
         String input = "gps";
-        assertEquals("GPS", GeoPointUtils.capitalizeGps(input));
+        assertEquals("GPS", GeoUtils.capitalizeGps(input));
 
         String locationProvider = "network";
-        assertEquals("network", GeoPointUtils.capitalizeGps(locationProvider));
+        assertEquals("network", GeoUtils.capitalizeGps(locationProvider));
 
         String nullLocationProvider = null;
-        assertNull(GeoPointUtils.capitalizeGps(nullLocationProvider));
+        assertNull(GeoUtils.capitalizeGps(nullLocationProvider));
     }
 }

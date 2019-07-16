@@ -29,7 +29,7 @@ import org.odk.collect.android.map.MapPoint;
 import org.odk.collect.android.map.MapboxMapFragment;
 import org.odk.collect.android.map.OsmMapFragment;
 import org.odk.collect.android.spatial.MapHelper;
-import org.odk.collect.android.utilities.GeoPointUtils;
+import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 import org.osmdroid.tileprovider.IRegisterReceiver;
@@ -389,7 +389,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
     public String formatLocationStatus(String provider, double sd) {
         return getString(
             R.string.location_provider_accuracy,
-            GeoPointUtils.capitalizeGps(provider),
+            GeoUtils.capitalizeGps(provider),
             new DecimalFormat("#.##").format(sd)
         );
     }

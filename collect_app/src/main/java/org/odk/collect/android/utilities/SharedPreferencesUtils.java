@@ -109,7 +109,7 @@ public final class SharedPreferencesUtils {
 
             new PreferenceSaver(GeneralSharedPreferences.getInstance(), AdminSharedPreferences.getInstance()).fromJSON(builder.toString(), null);
 
-            Collect.getInstance().initProperties();
+            Collect.getInstance().initializeJavaRosa();
             res = true;
         } catch (IOException e) {
             Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());

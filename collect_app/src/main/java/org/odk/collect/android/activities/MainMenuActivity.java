@@ -585,7 +585,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             for (Entry<String, ?> entry : adminEntries.entrySet()) {
                 AdminSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
             }
-            Collect.getInstance().initProperties();
+            Collect.getInstance().initializeJavaRosa();
             res = true;
         } catch (IOException | ClassNotFoundException e) {
             Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());

@@ -29,6 +29,7 @@ import org.robolectric.android.controller.ActivityController;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.odk.collect.android.location.LocationTestUtils.createLocation;
 
 @RunWith(RobolectricTestRunner.class)
 public class GeoPolyActivityTest extends BaseGeoActivityTest {

@@ -17,7 +17,6 @@
 package org.odk.collect.android.location.activities;
 
 import android.content.Intent;
-import android.location.Location;
 
 import org.junit.Before;
 import org.odk.collect.android.location.client.FakeLocationClient;
@@ -42,14 +41,5 @@ public abstract class BaseGeoActivityTest {
         MapboxMapFragment.testMode = true;
         fakeLocationClient = new FakeLocationClient();
         LocationClients.setTestClient(fakeLocationClient);
-    }
-
-    protected Location createLocation(String provider, double lat, double lon, double alt, float sd) {
-        Location location = new Location(provider);
-        location.setLatitude(lat);
-        location.setLongitude(lon);
-        location.setAltitude(alt);
-        location.setAccuracy(sd);
-        return location;
     }
 }

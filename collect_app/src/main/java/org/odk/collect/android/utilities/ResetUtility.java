@@ -87,7 +87,7 @@ public class ResetUtility {
             failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_PREFERENCES));
         }
 
-        Collect.getInstance().initProperties();
+        Collect.getInstance().initializeJavaRosa();
     }
 
     private void resetInstances() {
