@@ -16,8 +16,6 @@ import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 
-import timber.log.Timber;
-
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_GOOGLE_MAP_STYLE;
 
 public class GoogleBaseLayerSource implements BaseLayerSource {
@@ -76,14 +74,15 @@ public class GoogleBaseLayerSource implements BaseLayerSource {
     }
 
     @Override public boolean supportsLayer(File file) {
-        if (file.getName().endsWith(".mbtiles")) {
-            try {
-                // GoogleMapFragment supports only raster tiles.
-                return new MbtilesFile(file).getLayerType() == LayerType.RASTER;
-            } catch (MbtilesFile.MbtilesException e) {
-                Timber.d(e);
-            }
+        // GoogleMapFragment supports only raster tiles;
+        return MbtilesFile.getLayerType(file) == LayerType.RASTER;
+    }
+
+    @Override public String getDisplayName(File file) {
+        String name = MbtilesFile.getName(file);
+        if (name == null || name.trim().isEmpty()) {
+            name = file.getName();
         }
-        return false;
+        return name;
     }
 }

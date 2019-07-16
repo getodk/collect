@@ -42,4 +42,7 @@ public interface BaseLayerSource {
      * check determines which files appear as available Reference Layers.
      */
     boolean supportsLayer(File file);
+
+    /** Returns a String name for a given overlay file, or null if unsupported. */
+    String getDisplayName(File file);
 }

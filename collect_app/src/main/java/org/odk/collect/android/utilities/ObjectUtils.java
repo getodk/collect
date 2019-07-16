@@ -1,12 +1,16 @@
 package org.odk.collect.android.utilities;
 
 import androidx.annotation.Nullable;
-
 import timber.log.Timber;
 
 public class ObjectUtils {
 
     private ObjectUtils() {
+    }
+
+    /** Implementation of Objects.equals for API levels before 19. */
+    public static boolean equals(Object a, Object b) {
+        return (a == b) || (a != null && a.equals(b));
     }
 
     @SuppressWarnings("unchecked")

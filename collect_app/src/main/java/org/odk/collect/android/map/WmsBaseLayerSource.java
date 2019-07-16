@@ -69,8 +69,12 @@ public class WmsBaseLayerSource implements BaseLayerSource {
         return new OsmMapFragment(source);
     }
 
-    @Override public boolean supportsLayer(File path) {
+    @Override public boolean supportsLayer(File file) {
         return false;
+    }
+
+    @Override public String getDisplayName(File file) {
+        return null;
     }
 
     public static class WmsOption {

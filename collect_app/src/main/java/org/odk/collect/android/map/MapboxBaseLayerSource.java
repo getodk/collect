@@ -14,8 +14,6 @@ import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 
-import timber.log.Timber;
-
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_MAP_STYLE;
 
 public class MapboxBaseLayerSource implements BaseLayerSource {
@@ -64,15 +62,15 @@ public class MapboxBaseLayerSource implements BaseLayerSource {
     }
 
     @Override public boolean supportsLayer(File file) {
-        if (file.getName().endsWith(".mbtiles")) {
-            try {
-                // MapboxMapFragment supports any file that MbtilesFile can read.
-                new MbtilesFile(file);
-                return true;
-            } catch (MbtilesFile.MbtilesException e) {
-                Timber.d(e);
-            }
+        // MapboxMapFragment supports any file that MbtilesFile can read.
+        return MbtilesFile.getLayerType(file) != null;
+    }
+
+    @Override public String getDisplayName(File file) {
+        String name = MbtilesFile.getName(file);
+        if (name == null || name.trim().isEmpty()) {
+            name = file.getName();
         }
-        return false;
+        return name;
     }
 }

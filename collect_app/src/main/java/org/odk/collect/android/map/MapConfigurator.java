@@ -22,12 +22,12 @@ public class MapConfigurator {
 
     public static class Option {
         public final String id;  // preference value to store
-        public final int labelId;  // string resource ID
+        public final int sourceLabelId;  // string resource ID
         public final BaseLayerSource source;
 
-        public Option(String id, int labelId, BaseLayerSource source) {
+        public Option(String id, int sourceLabelId, BaseLayerSource source) {
             this.id = id;
-            this.labelId = labelId;
+            this.sourceLabelId = sourceLabelId;
             this.source = source;
         }
     }
@@ -108,7 +108,7 @@ public class MapConfigurator {
     public static int[] getLabelIds() {
         int[] labelIds = new int[BASE_LAYER_SOURCE_OPTIONS.length];
         for (int i = 0; i < labelIds.length; i++) {
-            labelIds[i] = BASE_LAYER_SOURCE_OPTIONS[i].labelId;
+            labelIds[i] = BASE_LAYER_SOURCE_OPTIONS[i].sourceLabelId;
         }
         return labelIds;
     }

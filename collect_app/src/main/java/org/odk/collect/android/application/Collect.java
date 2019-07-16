@@ -26,9 +26,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import androidx.annotation.Nullable;
-import androidx.multidex.MultiDex;
-import androidx.appcompat.app.AppCompatDelegate;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
@@ -69,6 +66,9 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.Locale;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.multidex.MultiDex;
 import timber.log.Timber;
 
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
