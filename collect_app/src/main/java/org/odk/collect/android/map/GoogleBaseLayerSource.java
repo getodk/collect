@@ -68,7 +68,7 @@ public class GoogleBaseLayerSource implements BaseLayerSource {
 
     @Override public MapFragment createMapFragment(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int mapType = Integer.valueOf(prefs.getString(
+        int mapType = Integer.parseInt(prefs.getString(
             KEY_GOOGLE_MAP_STYLE, Integer.toString(GoogleMap.MAP_TYPE_NORMAL)));
         return new GoogleMapFragment(mapType);
     }

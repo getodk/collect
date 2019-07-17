@@ -52,9 +52,10 @@ public class CaptionedListPreference extends ListPreference {
     }
 
     @Override protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
-        // Instead of using the AlertDialog.Builder, we're inflating a custom dialog.
+        // We aren't using the AlertDialog.Builder; we're inflating a custom dialog.
     }
 
+    /** When the dialog is constructed, locates certain useful views in the dialog. */
     @Override protected void onBindDialogView(View view) {
         super.onBindDialogView(view);
         listView = view.findViewById(R.id.list);
@@ -62,10 +63,7 @@ public class CaptionedListPreference extends ListPreference {
         updateContent();
     }
 
-    /**
-     * Updates the contents of the dialog according to the data passed in via
-     * setItems (or setEntryValues, setEntries, setCaptions) and setDialogCaption.
-     */
+    /** Updates the contents of the dialog to show the items passed in by setItems etc. */
     public void updateContent() {
         CharSequence[] values = getEntryValues();
         CharSequence[] labels = getEntries();
@@ -83,6 +81,7 @@ public class CaptionedListPreference extends ListPreference {
         }
     }
 
+    /** Creates the view for an item in the list. */
     protected RadioButton inflateItem(ViewGroup parent, final int i, Object value, Object label, Object caption) {
         LinearLayout item = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.captioned_item, null);
         RadioButton button = item.findViewById(R.id.button);
@@ -96,6 +95,7 @@ public class CaptionedListPreference extends ListPreference {
         return button;
     }
 
+    /** When an item is clicked, records which item, and updates the radio buttons. */
     protected void onItemClicked(int index) {
         clickedIndex = index;
         for (int i = 0; i < radioButtons.size(); i++) {
@@ -103,6 +103,7 @@ public class CaptionedListPreference extends ListPreference {
         }
     }
 
+    /** Saves the selected value to the preferences when the dialog is closed. */
     protected void onDialogClosed(boolean positiveResult) {
         if (positiveResult && clickedIndex >= 0) {
             Object value = getEntryValues()[clickedIndex];

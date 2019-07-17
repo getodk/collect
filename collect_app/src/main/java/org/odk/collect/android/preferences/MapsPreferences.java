@@ -101,6 +101,7 @@ public class MapsPreferences extends BasePreferenceFragment {
         });
     }
 
+    /** Sets the summary text for the reference layer to show the selected file. */
     private void updateReferenceLayerSummary(Object value) {
         if (referenceLayerPref != null) {
             referenceLayerPref.setSummary(

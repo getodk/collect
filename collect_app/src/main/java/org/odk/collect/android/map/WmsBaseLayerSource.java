@@ -15,8 +15,7 @@ public class WmsBaseLayerSource implements BaseLayerSource {
     private final int prefTitleId;
     private final WmsOption[] options;
 
-    /**
-    /** Constructs a base layer that provides just one Web Map Service. */
+    /** Constructs a base layer source that renders one Web Map Service. */
     public WmsBaseLayerSource(OnlineTileSourceBase source) {
         prefKey = "";
         prefTitleId = 0;
@@ -24,7 +23,7 @@ public class WmsBaseLayerSource implements BaseLayerSource {
     }
 
     /**
-     * Constructs a base layer that provides a few Web Map Services to choose from.
+     * Constructs a base layer source that offers a few Web Map Services to choose from.
      * The choice of which Web Map Service will be stored in a string preference.
      */
     public WmsBaseLayerSource(String prefKey, int prefTitleId, WmsOption... options) {
