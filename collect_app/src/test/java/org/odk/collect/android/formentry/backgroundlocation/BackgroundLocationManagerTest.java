@@ -241,7 +241,7 @@ public class BackgroundLocationManagerTest {
     }
 
     @Test
-    public void locationChanges_AreNotSentToAuditLogger_WhenFormHasSetlocationAndNoAudit() {
+    public void locationChanges_AreNotSentToAuditLogger_WhenFormHasSetGeopointAndNoAudit() {
         when(locationHelper.currentFormCollectsBackgroundLocation()).thenReturn(true);
         when(locationHelper.currentFormAuditsLocation()).thenReturn(false);
 

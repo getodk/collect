@@ -3,15 +3,15 @@
         xmlns:h="http://www.w3.org/1999/xhtml"
         xmlns:odk="http://www.opendatakit.org/xforms">
     <h:head>
-        <h:title>setlocation-action-instance-load</h:title>
+        <h:title>setgeopoint-action-instance-load</h:title>
         <model>
             <instance>
-                <data id="setlocation-action-instance-load">
+                <data id="setgeopoint-action-instance-load">
                     <location/>
                 </data>
             </instance>
             <bind nodeset="/data/location" type="string" />
-            <odk:setlocation ref="/data/location" event="odk-instance-first-load" />
+            <odk:setgeopoint ref="/data/location" event="odk-instance-first-load" />
         </model>
     </h:head>
     <h:body />
