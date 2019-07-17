@@ -31,7 +31,6 @@ public class Form {
     private final String formFilePath;
     private final String submissionUri;
     private final String base64RSAPublicKey;
-    private final String displaySubtext;
     private final String md5Hash;
     private final Long date;
     private final String jrCacheFilePath;
@@ -50,7 +49,6 @@ public class Form {
         formFilePath = builder.formFilePath;
         submissionUri = builder.submissionUri;
         base64RSAPublicKey = builder.base64RSAPublicKey;
-        displaySubtext = builder.displaySubtext;
         md5Hash = builder.md5Hash;
         date = builder.date;
         jrCacheFilePath = builder.jrCacheFilePath;
@@ -70,7 +68,6 @@ public class Form {
         private String formFilePath;
         private String submissionUri;
         private String base64RSAPublicKey;
-        private String displaySubtext;
         private String md5Hash;
         private Long date;
         private String jrCacheFilePath;
@@ -117,11 +114,6 @@ public class Form {
 
         public Builder base64RSAPublicKey(String base64RSAPublicKey) {
             this.base64RSAPublicKey = base64RSAPublicKey;
-            return this;
-        }
-
-        public Builder displaySubtext(String displaySubtext) {
-            this.displaySubtext = displaySubtext;
             return this;
         }
 
@@ -200,10 +192,6 @@ public class Form {
 
     public String getBASE64RSAPublicKey() {
         return base64RSAPublicKey;
-    }
-
-    public String getDisplaySubtext() {
-        return displaySubtext;
     }
 
     public String getMD5Hash() {
