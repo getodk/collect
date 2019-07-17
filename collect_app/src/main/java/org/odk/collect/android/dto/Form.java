@@ -225,4 +225,20 @@ public class Form {
     public String getLastDetectedFormVersionHash() {
         return lastDetectedFormVersionHash;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this || other instanceof Form
+                && this.displayName.equals(((Form) other).displayName)
+                && this.jrFormId.equals(((Form) other).jrFormId)
+                && this.md5Hash.equals(((Form) other).md5Hash);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = displayName.hashCode();
+        result = result * 31 + jrFormId.hashCode();
+        result = result * 31 + md5Hash.hashCode();
+        return result;
+    }
 }
