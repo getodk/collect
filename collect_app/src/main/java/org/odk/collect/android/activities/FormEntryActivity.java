@@ -2095,13 +2095,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     protected void onStop() {
         viewModel.activityHidden();
 
-        try {
-            unregisterReceiver(locationProvidersReceiver);
-        } catch (IllegalArgumentException e) {
-            // This is the common case -- the form didn't have location audits enabled so the
-            // receiver was not registered.
-        }
-
         super.onStop();
     }
 
@@ -2258,8 +2251,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         releaseOdkView();
         compositeDisposable.dispose();
 
-        super.onDestroy();
+        try {
+            unregisterReceiver(locationProvidersReceiver);
+        } catch (IllegalArgumentException e) {
+            // This is the common case -- the form didn't have location audits enabled so the
+            // receiver was not registered.
+        }
 
+        super.onDestroy();
     }
 
     private int animationCompletionSet;
@@ -2436,6 +2435,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     } else {
                         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true);
                     }
+                }
+
+                // Register to receive location provider change updates and write them to the audit
+                // log. onStart has already run but the formController was null so try again.
+                if (formController.currentFormAuditsLocation()
+                        && LocationClients.areGooglePlayServicesAvailable(this)) {
+                    registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
                 }
 
                 // onStart ran before the form was loaded. Let the viewModel know that the activity
