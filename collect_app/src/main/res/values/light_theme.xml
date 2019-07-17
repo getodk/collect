@@ -26,6 +26,8 @@
         <item name="warningColor">@color/red_500</item>
         <item name="dividerCompat">@android:drawable/divider_horizontal_bright</item>
         <item name="android:tintMode" tools:targetApi="21">src_in</item>
+        <item name="spinnerItemBackgroundColor">#F9F9F9</item>
+
     </style>
 
     <style name="Theme.Collect.BaseLight.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert">

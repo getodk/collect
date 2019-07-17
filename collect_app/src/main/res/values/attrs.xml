@@ -8,5 +8,6 @@
         <attr name="warningColor" format="color" />
         <attr name="rankItemColor" format="color" />
         <attr name="dividerCompat" format="reference" />
+        <attr name="spinnerItemBackgroundColor" format="color" />
     </declare-styleable>
 </resources>

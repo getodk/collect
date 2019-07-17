@@ -1,7 +1,7 @@
 package org.odk.collect.android.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.content.res.Resources;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,9 +37,7 @@ public class SpinnerAdapter extends ArrayAdapter<CharSequence> {
             convertView = inflater.inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
         }
 
-        if (themeUtils.isDarkTheme()) {
-            convertView.setBackgroundColor(Color.parseColor("#3f3f3f"));
-        }
+        setBackgroundColor(convertView);
 
         TextView tv = convertView.findViewById(android.R.id.text1);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize());
@@ -80,5 +78,14 @@ public class SpinnerAdapter extends ArrayAdapter<CharSequence> {
 
     public void updateSelectedItemPosition(int selectedPosition) {
         this.selectedPosition = selectedPosition;
+    }
+
+    private void setBackgroundColor(View convertView) {
+        TypedValue typedValue = new TypedValue();
+
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(R.attr.spinnerItemBackgroundColor, typedValue, true);
+
+        convertView.setBackgroundColor(typedValue.data);
     }
 }

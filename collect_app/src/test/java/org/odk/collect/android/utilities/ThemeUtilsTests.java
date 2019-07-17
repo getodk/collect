@@ -64,7 +64,7 @@ public class ThemeUtilsTests {
     @Test
     public void correctStylesShouldBeAppliedForLightTheme() {
         applyLightTheme();
-        assertEquals(themeUtils.getAppTheme(), R.style.LightAppTheme);
+        assertEquals(themeUtils.getAppTheme(), R.style.Theme_Collect_Light);
         assertEquals(themeUtils.getSettingsTheme(), R.style.Theme_Collect_Settings_Light);
         assertEquals(themeUtils.getBottomDialogTheme(), R.style.LightMaterialDialogSheet);
         assertEquals(themeUtils.getMaterialDialogTheme(), android.R.style.Theme_Material_Light_Dialog);
@@ -101,7 +101,7 @@ public class ThemeUtilsTests {
     }
 
     private Resources.Theme getLightTheme() {
-        return createTheme(R.style.LightAppTheme);
+        return createTheme(R.style.Theme_Collect_Light);
     }
 
     private Resources.Theme createTheme(int styleResId) {
