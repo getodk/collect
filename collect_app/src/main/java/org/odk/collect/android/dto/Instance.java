@@ -156,4 +156,20 @@ public class Instance {
     public Long getDatabaseId() {
         return databaseId;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this || other instanceof Instance
+                && this.displayName.equals(((Instance) other).displayName)
+                && this.jrFormId.equals(((Instance) other).jrFormId)
+                && this.instanceFilePath.equals(((Instance) other).instanceFilePath);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = displayName.hashCode();
+        result = result * 31 + jrFormId.hashCode();
+        result = result * 31 + instanceFilePath.hashCode();
+        return result;
+    }
 }
