@@ -1,6 +1,7 @@
 package org.odk.collect.android.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +38,7 @@ public class SpinnerAdapter extends ArrayAdapter<CharSequence> {
         }
 
         if (themeUtils.isDarkTheme()) {
-            convertView.setBackgroundColor(context.getResources().getColor(R.color.darkPopupDialogColor));
+            convertView.setBackgroundColor(Color.parseColor("#3f3f3f"));
         }
 
         TextView tv = convertView.findViewById(android.R.id.text1);

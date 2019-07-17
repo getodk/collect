@@ -21,26 +21,6 @@ the License.
     <color name="deep_purple_500">#673AB7</color>
     <color name="amber_500">#FFC107</color>
 
-    <!-- Dark Theme Palette -->
-    <color name="darkPrimaryTextColor">#deffffff</color>
-    <color name="darkSecondaryTextColor">#99ffffff</color>
-    <color name="darkPopupDialogColor">#3f3f3f</color>
-    <color name="defaultDarkIconColor">#deffffff</color>
-    <color name="darkDividerColor">#1effffff</color>
-    <color name="darkRankItemColor">@android:color/black</color>
-    <color name="darkIconColorDisabled">#61ffffff</color>
-    <color name="darkIconColorEnabled">#deffffff</color>
-
-    <!-- Light Theme Palette -->
-    <color name="lightPrimaryTextColor">#de000000</color>
-    <color name="lightSecondaryTextColor">#99000000</color>
-    <color name="defaultLightIconColor">#de000000</color>
-    <color name="lightDividerColor">#1e000000</color>
-    <color name="lightRankItemColor">#EEEEEE</color>
-    <color name="lightAccentColor">@color/blue_500</color>
-    <color name="lightIconColorDisabled">#61000000</color>
-    <color name="lightIconColorEnabled">#de000000</color>
-
     <color name="highContrastHighlight">#ff8c00</color>
     <color name="displaySubtextColor">@color/green_500</color>
 
