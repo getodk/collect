@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="BaseDarkAppTheme.Collect">
+    <style name="Theme.Collect.Dark" parent="Theme.Collect.BaseDark">
         <item name="android:buttonStyle">@style/CustomButtonStyle</item>
         <item name="imageButtonStyle">@style/CustomImageButtonDark</item>
     </style>
 
-    <style name="BaseLightAppTheme.Collect">
+    <style name="Theme.Collect.Light" parent="Theme.Collect.BaseLight">
         <item name="android:buttonStyle">@style/CustomButtonStyle</item>
         <item name="imageButtonStyle">@style/CustomImageButtonLight</item>
     </style>
