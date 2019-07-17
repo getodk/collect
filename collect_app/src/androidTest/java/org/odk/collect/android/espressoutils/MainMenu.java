@@ -1,7 +1,6 @@
 package org.odk.collect.android.espressoutils;
 
 import androidx.test.espresso.Espresso;
-
 import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -31,4 +30,8 @@ public final class MainMenu {
         onView(withId(R.id.enter_data)).perform(click());
     }
 
+    public static void clickOnSortByButton() {
+        onView(withId(R.id.menu_sort)).perform(click());
+    }
 }
+

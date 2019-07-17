@@ -88,4 +88,17 @@ public final class Settings {
             onView(withId(android.R.id.button1)).perform(click());
         }
     }
+
+    public static void clickOnUserInterface() {
+        onData(PreferenceMatchers.withKey("user_interface")).perform(click());
+    }
+
+    public static void clickOnLanguage() {
+        onData(PreferenceMatchers.withKey("app_language")).perform(click());
+    }
+
+    public static void clickOnSelectedLanguage(String text) {
+        onView(withText(text)).perform(click());
+    }
+
 }
