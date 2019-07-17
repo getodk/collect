@@ -15,6 +15,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.test.FormLoadingUtils;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -37,6 +38,7 @@ public class SetLocationActionTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.ACCESS_FINE_LOCATION)
             )
+            .around(new ResetStateRule())
             .around(new CopyFormRule(SETLOCATION_ACTION_FORM, "forms"));
 
     @Before
