@@ -35,6 +35,9 @@ public class MbtilesFile implements Closeable, TileSource {
 
     public MbtilesFile(File file) throws MbtilesException {
         this.file = file;
+        if (!file.exists() || !file.isFile()) {
+            throw new NotFileException(file);
+        }
 
         // SQLite will create a "-journal" file for every file it touches, whether
         // or not it's a valid SQLite file; and if invalid, it will also create a
@@ -190,6 +193,12 @@ public class MbtilesFile implements Closeable, TileSource {
 
         public MbtilesException(String message) {
             super(message);
+        }
+    }
+
+    public class NotFileException extends MbtilesException {
+        public NotFileException(File file) {
+            super("Not a file: " + file);
         }
     }
 

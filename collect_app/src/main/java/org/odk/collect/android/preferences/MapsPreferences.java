@@ -24,6 +24,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.map.BaseLayerSource;
 import org.odk.collect.android.map.MapConfigurator;
+import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -162,7 +163,7 @@ public class MapsPreferences extends BasePreferenceFragment {
     /** Gets the list of layer data files supported by the current BaseLayerSource. */
     private static List<File> getSupportedLayerFiles(BaseLayerSource source) {
         List<File> files = new ArrayList<>();
-        for (File file : new File(Collect.OFFLINE_LAYERS).listFiles()) {
+        for (File file : FileUtils.walk(new File(Collect.OFFLINE_LAYERS))) {
             if (source.supportsLayer(file)) {
                 files.add(file);
             }

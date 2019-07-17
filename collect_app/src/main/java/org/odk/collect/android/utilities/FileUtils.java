@@ -32,6 +32,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -46,7 +47,9 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -579,6 +582,38 @@ public class FileUtils {
                 String packageName = resolveInfo.activityInfo.packageName;
                 context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             }
+        }
+    }
+
+    /** Iterates over all directories and files under a root path. */
+    public static Iterable<File> walk(File root) {
+        return () -> new Walker(root, true);
+    }
+
+    public static Iterable<File> walkBreadthFirst(File root) {
+        return () -> new Walker(root, false);
+    }
+
+    /** An iterator that walks over all the directories and files under a given path. */
+    private static class Walker implements Iterator<File> {
+        private List<File> queue;
+        private boolean depthFirst;
+
+        public Walker(File root, boolean depthFirst) {
+            queue = Arrays.asList(root);
+            this.depthFirst = depthFirst;
+        }
+
+        @Override public boolean hasNext() {
+            return !queue.isEmpty();
+        }
+
+        @Override public File next() {
+            File next = queue.remove(0);
+            if (next.isDirectory()) {
+                queue.addAll(depthFirst ? 0 : queue.size(), Arrays.asList(next.listFiles()));
+            }
+            return next;
         }
     }
 }
