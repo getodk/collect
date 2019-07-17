@@ -35,6 +35,16 @@ public class MbtilesFile implements Closeable, TileSource {
 
     public MbtilesFile(File file) throws MbtilesException {
         this.file = file;
+
+        // SQLite will create a "-journal" file for every file it touches, whether
+        // or not it's a valid SQLite file; and if invalid, it will also create a
+        // ".corrupt" file.  That means every time we scan some files to see whether
+        // they are valid SQLite databases, SQLite will triple all the invalid files.
+        // After several triplings, this quickly explodes into thousands of useless files.
+        // Thus, we refuse to even attempt to open any "-journal" or ".corrupt" files.
+        if (file.getName().endsWith("-journal") || file.getName().endsWith(".corrupt")) {
+            throw new UnsupportedFilenameException(file);
+        }
         try {
             db = SQLiteDatabase.openOrCreateDatabase(file, null);
 
@@ -141,6 +151,24 @@ public class MbtilesFile implements Closeable, TileSource {
         return layers;
     }
 
+    /** Gets the internal name of an MBTiles file, or null if the file is invalid. */
+    public static String getName(File file) {
+        try {
+            return new MbtilesFile(file).getMetadata("name");
+        } catch (MbtilesException e) {
+            return null;
+        }
+    }
+
+    /** Gets the layer type of an MBTiles file, or null if the file is invalid. */
+    public static LayerType getLayerType(File file) {
+        try {
+            return new MbtilesFile(file).getLayerType();
+        } catch (MbtilesException e) {
+            return null;
+        }
+    }
+
     /** Vector layer metadata.  See https://github.com/mapbox/mbtiles-spec for details. */
     public static class VectorLayer {
         public final String name;
@@ -162,6 +190,12 @@ public class MbtilesFile implements Closeable, TileSource {
 
         public MbtilesException(String message) {
             super(message);
+        }
+    }
+
+    public class UnsupportedFilenameException extends MbtilesException {
+        public UnsupportedFilenameException(File file) {
+            super("Illegal filename for SQLite file: " + file);
         }
     }
 
