@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.logic.actions.setlocation;
+package org.odk.collect.android.logic.actions.setgeopoint;
 
-import org.javarosa.core.model.actions.setlocation.SetLocationAction;
-import org.javarosa.core.model.actions.setlocation.SetLocationActionHandler;
+import org.javarosa.core.model.actions.setgeopoint.SetGeopointAction;
+import org.javarosa.core.model.actions.setgeopoint.SetGeopointActionHandler;
 
 /**
- * Handler for Collect's implementation of the odk:setlocation action.
+ * Handler for Collect's implementation of the odk:setgeopoint action.
  */
-public class CollectSetLocationActionHandler extends SetLocationActionHandler {
-    public SetLocationAction getSetLocationAction() {
-        return new CollectSetLocationAction(null);
+public class CollectSetGeopointActionHandler extends SetGeopointActionHandler {
+    public SetGeopointAction getSetGeopointAction() {
+        return new CollectSetGeopointAction(null);
     }
 }

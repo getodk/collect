@@ -26,7 +26,7 @@ import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.SubmissionProfile;
 import org.javarosa.core.model.ValidateOutcome;
-import org.javarosa.core.model.actions.setlocation.SetLocationActionHandler;
+import org.javarosa.core.model.actions.setgeopoint.SetGeopointActionHandler;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -50,7 +50,7 @@ import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataUtil;
-import org.odk.collect.android.logic.actions.setlocation.CollectSetLocationActionHandler;
+import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.utilities.AuditEventLogger;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.RegexUtils;
@@ -130,8 +130,8 @@ public class FormController {
             PrototypeManager.registerPrototypes(CoreModelModule.classNames);
             new XFormsModule().registerModule();
 
-            PrototypeManager.registerPrototype("org.odk.collect.android.logic.actions.setlocation.CollectSetLocationAction");
-            XFormParser.registerActionHandler(CollectSetLocationActionHandler.ELEMENT_NAME, new CollectSetLocationActionHandler());
+            PrototypeManager.registerPrototype("org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointAction");
+            XFormParser.registerActionHandler(CollectSetGeopointActionHandler.ELEMENT_NAME, new CollectSetGeopointActionHandler());
 
             isJavaRosaInitialized = true;
         }
@@ -1299,10 +1299,10 @@ public class FormController {
 
     /**
      * Returns true if the current form definition collects user location in the background either
-     * because of the audit configuration or because it contains odk:setlocation actions.
+     * because of the audit configuration or because it contains odk:setgeopoint actions.
      */
     public boolean currentFormCollectsBackgroundLocation() {
-        return currentFormAuditsLocation() || getFormDef().hasAction(SetLocationActionHandler.ELEMENT_NAME);
+        return currentFormAuditsLocation() || getFormDef().hasAction(SetGeopointActionHandler.ELEMENT_NAME);
     }
 
     /**

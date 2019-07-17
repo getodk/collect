@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.logic.actions.setlocation;
+package org.odk.collect.android.logic.actions.setgeopoint;
 
 import android.location.Location;
 
 import com.google.android.gms.location.LocationListener;
 
-import org.javarosa.core.model.actions.setlocation.SetLocationAction;
+import org.javarosa.core.model.actions.setgeopoint.SetGeopointAction;
 import org.javarosa.core.model.instance.TreeReference;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.GoogleLocationClient;
-import org.odk.collect.android.location.client.MaxAccuracyWithinTimeoutLocationClient;
 import org.odk.collect.android.location.client.LocationClients;
+import org.odk.collect.android.location.client.MaxAccuracyWithinTimeoutLocationClient;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.GeoUtils;
 
@@ -34,7 +34,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 
 /**
- * An Android-specific implementation of {@link SetLocationAction}.
+ * An Android-specific implementation of {@link SetGeopointAction}.
  *
  * When the action is triggered, the first location available is saved and the highest-accuracy
  * reading within {@link #SECONDS_TO_CONSIDER_UPDATES} seconds will replace it. If no location is
@@ -49,17 +49,17 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOC
  * the target node the first time it was triggered. In that case, only the current target node is
  * updated.
  */
-public class CollectSetLocationAction extends SetLocationAction implements LocationListener {
+public class CollectSetGeopointAction extends SetGeopointAction implements LocationListener {
     private static final int SECONDS_TO_CONSIDER_UPDATES = 20;
 
     private MaxAccuracyWithinTimeoutLocationClient maxAccuracyLocationClient;
 
-    public CollectSetLocationAction() {
+    public CollectSetGeopointAction() {
         // For serialization
     }
 
     // Needed to set the action name.
-    CollectSetLocationAction(TreeReference targetReference) {
+    CollectSetGeopointAction(TreeReference targetReference) {
         super(targetReference);
     }
 
@@ -89,7 +89,7 @@ public class CollectSetLocationAction extends SetLocationAction implements Locat
     @Override
     public void onLocationChanged(Location location) {
         if (GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true)) {
-            Timber.i("Setlocation action for " + getContextualizedTargetReference() + ": location update");
+            Timber.i("Setgeopoint action for " + getContextualizedTargetReference() + ": location update");
 
             String formattedLocation = GeoUtils.formatLocationResultString(location);
             saveLocationValue(formattedLocation);

@@ -10,19 +10,19 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.logic.AuditConfig;
 import org.odk.collect.android.logic.AuditEvent;
+import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointAction;
 
 /**
- * Manages background location for the location audit logging and odk:setlocation action features.
+ * Manages background location for the location audit logging and odk:setgeopoint action features.
  * Provides precondition checking and user feedback for both features.
  *
  * For location audit logging, manages all the audit logging as well as fetching the location using
  * Google Play Services.
  *
- * {@link org.odk.collect.android.logic.actions.setlocation.CollectSetLocationAction} fetches
- * location for odk:setlocation actions.
+ * {@link CollectSetGeopointAction} fetches location for odk:setgeopoint actions.
  *
- * The implementation uses a state machine concept. Public method represent user or system actions
- * that clients of this class capture. Based on those actions and various preconditions (Google Play
+ * The implementation uses a state machine concept. Public methods represent user or system actions
+ * that clients of this class react to. Based on those actions and various preconditions (Google Play
  * Services available, location permissions granted, etc), the manager's state changes.
  */
 public class BackgroundLocationManager implements LocationClient.LocationClientListener, LocationListener {
@@ -125,9 +125,9 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
         switch (currentState) {
             case PENDING_PERMISSION_CHECK:
                 if (!helper.currentFormAuditsLocation()) {
-                    // Since setlocation actions manage their own location clients, we can't warn about
+                    // Since setgeopoint actions manage their own location clients, we can't warn about
                     // providers turned off or any other failure state
-                    currentState = BackgroundLocationState.SETLOCATION_ONLY;
+                    currentState = BackgroundLocationState.SETGEOPOINT_ONLY;
                     return BackgroundLocationMessage.COLLECTING_LOCATION;
                 }
 
@@ -159,7 +159,7 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
         switch (currentState) {
             case PENDING_PERMISSION_CHECK:
                 if (!helper.currentFormAuditsLocation()) {
-                    currentState = BackgroundLocationState.SETLOCATION_ONLY;
+                    currentState = BackgroundLocationState.SETGEOPOINT_ONLY;
                     return;
                 }
 
@@ -269,8 +269,8 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
         PENDING_PERMISSION_CHECK,
 
         /** Terminal state: all checks have been performed and messaging has been displayed to the
-         * user, it's now up to the setlocation action implementation to manage location fetching */
-        SETLOCATION_ONLY,
+         * user, it's now up to the setgeopoint action implementation to manage location fetching */
+        SETGEOPOINT_ONLY,
 
         /** The current form requests location audits but some preconditions to location capture are
          * currently unmet. Once this state is reached, it's only possible to go between it and
