@@ -17,6 +17,11 @@ import org.odk.collect.android.support.ResetStateRule;
 
 import java.util.Collections;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withRecyclerView;
+
 //Issue NODK-244
 @RunWith(AndroidJUnit4.class)
 public class FillBlankFormPart1Test extends BaseRegressionTest {
@@ -57,8 +62,22 @@ public class FillBlankFormPart1Test extends BaseRegressionTest {
         MainMenu.clickFillBlankForm();
         MainMenu.clickOnSortByButton();
         FormEntry.checkIsTextDisplayed("Sortieren nach");
-        FormEntry.checkIsTextDisplayed("Datum, neuestes zuerst");
-        FormEntry.checkIsTextDisplayed("Datum, ältestes zuerst");
+
+        onView(withRecyclerView(R.id.recyclerView)
+                .atPositionOnView(0, R.id.title))
+                .check(matches(withText("Name, A-Z")));
+
+        onView(withRecyclerView(R.id.recyclerView)
+                .atPositionOnView(1, R.id.title))
+                .check(matches(withText("Name, Z-A")));
+
+        onView(withRecyclerView(R.id.recyclerView)
+                .atPositionOnView(2, R.id.title))
+                .check(matches(withText("Datum, neuestes zuerst")));
+
+        onView(withRecyclerView(R.id.recyclerView)
+                .atPositionOnView(3, R.id.title))
+                .check(matches(withText("Datum, ältestes zuerst")));
     }
 
     @Test
