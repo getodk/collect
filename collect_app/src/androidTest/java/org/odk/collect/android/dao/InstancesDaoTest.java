@@ -167,7 +167,6 @@ public class InstancesDaoTest {
                 .jrFormId("N_Biggest")
                 .status(InstanceProviderAPI.STATUS_SUBMITTED)
                 .lastStatusChangeDate(1487597090653L)
-                .displaySubtext("Finalized on Mon, Feb 20, 2017 at 14:24")
                 .build();
 
         String where = InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + "=?";
@@ -191,7 +190,6 @@ public class InstancesDaoTest {
                 .jrFormId("hypertension")
                 .status(InstanceProviderAPI.STATUS_INCOMPLETE)
                 .lastStatusChangeDate(1487595836793L)
-                .displaySubtext("Saved on Mon, Feb 20, 2017 at 14:03")
                 .build();
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(instance1));
 
@@ -201,7 +199,6 @@ public class InstancesDaoTest {
                 .jrFormId("CascadingSelect")
                 .status(InstanceProviderAPI.STATUS_INCOMPLETE)
                 .lastStatusChangeDate(1487596015000L)
-                .displaySubtext("Saved on Mon, Feb 20, 2017 at 14:06")
                 .build();
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(instance2));
 
@@ -211,7 +208,6 @@ public class InstancesDaoTest {
                 .jrFormId("N_Biggest")
                 .status(InstanceProviderAPI.STATUS_SUBMITTED)
                 .lastStatusChangeDate(1487596015100L)
-                .displaySubtext("Saved on Mon, Feb 20, 2017 at 14:06")
                 .build();
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(instance3));
 
@@ -221,7 +217,6 @@ public class InstancesDaoTest {
                 .jrFormId("widgets")
                 .status(InstanceProviderAPI.STATUS_SUBMITTED)
                 .lastStatusChangeDate(1487596020803L)
-                .displaySubtext("Saved on Mon, Feb 20, 2017 at 14:07")
                 .deletedDate(1487596020803L)
                 .build();
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(instance4));
@@ -232,7 +227,6 @@ public class InstancesDaoTest {
                 .jrFormId("sample")
                 .status(InstanceProviderAPI.STATUS_INCOMPLETE)
                 .lastStatusChangeDate(1487596026373L)
-                .displaySubtext("Saved on Mon, Feb 20, 2017 at 14:07")
                 .build();
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(instance5));
 
@@ -242,7 +236,6 @@ public class InstancesDaoTest {
                 .jrFormId("N_Biggest")
                 .status(InstanceProviderAPI.STATUS_COMPLETE)
                 .lastStatusChangeDate(1487597090653L)
-                .displaySubtext("Finalized on Mon, Feb 20, 2017 at 14:24")
                 .build();
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(instance6));
     }
