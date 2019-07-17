@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+<h:html
+	xmlns="http://www.w3.org/2002/xforms"
+	xmlns:ev="http://www.w3.org/2001/xml-events"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:jr="http://openrosa.org/javarosa"
+	xmlns:odk="http://www.opendatakit.org/xforms"
+	xmlns:orx="http://openrosa.org/xforms"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<h:head>
+		<h:title>formulaire_adherent</h:title>
+		<model>
+			<instance>
+				<formulaire_adherent id="formulaire_adherent" version="436216299">
+					<observation jr:template="">
+						<regne/>
+						<recherche_espece/>
+						<nom_espece/>
+						<url_calculation/>
+						<url_espece/>
+						<detail>
+							<stade/>
+							<sexe/>
+							<effectif/>
+						</detail>
+						<prendre_image/>
+						<prise_image/>
+						<detail_optionel>
+							<comportement/>
+							<remarque/>
+						</detail_optionel>
+						<date_time/>
+						<position>
+							<methode/>
+							<gps/>
+							<carte/>
+						</position>
+						<email_utilisateur/>
+						<observateur/>
+					</observation>
+					<meta>
+						<instanceID/>
+					</meta>
+				</formulaire_adherent>
+			</instance>
+			<bind nodeset="/formulaire_adherent/observation/regne" required="true()" type="select1"/>
+			<bind constraint="string-length( ../recherche_espece )&gt;2" nodeset="/formulaire_adherent/observation/recherche_espece" required="true()" type="string"/>
+			<bind nodeset="/formulaire_adherent/observation/nom_espece" relevant="string-length( ../recherche_espece )&gt;2" required="true()" type="select1"/>
+			<bind calculate="concat('https://inpn.mnhn.fr/espece/cd_nom/', ../nom_espece )" nodeset="/formulaire_adherent/observation/url_calculation" type="string"/>
+			<bind calculate=" ../url_calculation " nodeset="/formulaire_adherent/observation/url_espece" type="string"/>
+			<bind nodeset="/formulaire_adherent/observation/detail/stade" required="true()" type="select1"/>
+			<bind nodeset="/formulaire_adherent/observation/detail/sexe" required="true()" type="select1"/>
+			<bind nodeset="/formulaire_adherent/observation/detail/effectif" required="true()" type="int"/>
+			<bind nodeset="/formulaire_adherent/observation/prendre_image" required="true()" type="select1"/>
+			<bind nodeset="/formulaire_adherent/observation/prise_image" relevant=" ../prendre_image ='oui'" required="true()" type="binary"/>
+			<bind nodeset="/formulaire_adherent/observation/detail_optionel/comportement" type="string"/>
+			<bind nodeset="/formulaire_adherent/observation/detail_optionel/remarque" type="string"/>
+			<bind nodeset="/formulaire_adherent/observation/date_time" required="true()" type="dateTime"/>
+			<bind nodeset="/formulaire_adherent/observation/position" required="true()"/>
+			<bind nodeset="/formulaire_adherent/observation/position/methode" required="true()" type="select1"/>
+			<bind nodeset="/formulaire_adherent/observation/position/gps" relevant=" ../methode ='gps'" required="true()" type="geopoint"/>
+			<bind nodeset="/formulaire_adherent/observation/position/carte" relevant=" ../methode ='carte'" required="true()" type="geopoint"/>
+			<bind jr:preload="property" jr:preloadParams="email" nodeset="/formulaire_adherent/observation/email_utilisateur" type="string"/>
+			<bind calculate="once( ../email_utilisateur )" nodeset="/formulaire_adherent/observation/observateur" required="true()" type="string"/>
+			<bind calculate="concat('uuid:', uuid())" nodeset="/formulaire_adherent/meta/instanceID" readonly="true()" type="string"/>
+		</model>
+	</h:head>
+	<h:body>
+		<group ref="/formulaire_adherent/observation">
+			<label>Ajouté une observation</label>
+			<repeat nodeset="/formulaire_adherent/observation">
+				<select1 appearance="quick" ref="/formulaire_adherent/observation/regne">
+					<label>Quel regne ?</label>
+					<item>
+						<label>Plante</label>
+						<value>Plantae</value>
+					</item>
+					<item>
+						<label>Animal</label>
+						<value>Animalia</value>
+					</item>
+					<item>
+						<label>Champignon</label>
+						<value>Fungi</value>
+					</item>
+				</select1>
+				<input ref="/formulaire_adherent/observation/recherche_espece">
+					<label>Nom latin de l'espece :</label>
+					<hint>au moins 3 lettres</hint>
+				</input>
+				<select1 appearance="autocompletion search('espece', 'startswith', 'lb_nom_key',  ../recherche_espece ,'regne', ../regne )" ref="/formulaire_adherent/observation/nom_espece">
+					<label>Nom latin de l'espece :</label>
+					<item>
+						<label>lb_nom_key</label>
+						<value>cd_nom</value>
+					</item>
+				</select1>
+				<input appearance="url" ref="/formulaire_adherent/observation/url_espece">
+					<label>voir l'espece en ligne ? :</label>
+					<hint>necessite une connexion internet</hint>
+				</input>
+				<group appearance="field-list" ref="/formulaire_adherent/observation/detail">
+					<label>Détails sur l'observation :</label>
+					<select1 ref="/formulaire_adherent/observation/detail/stade">
+						<label>Age / Stade :</label>
+						<item>
+							<label>Juvenile</label>
+							<value>juvenile</value>
+						</item>
+						<item>
+							<label>Adulte</label>
+							<value>adulte</value>
+						</item>
+						<item>
+							<label>Indeterminé / autre</label>
+							<value>indetermine</value>
+						</item>
+					</select1>
+					<select1 ref="/formulaire_adherent/observation/detail/sexe">
+						<label>Sexe :</label>
+						<item>
+							<label>Mâle</label>
+							<value>male</value>
+						</item>
+						<item>
+							<label>femelle</label>
+							<value>femelle</value>
+						</item>
+						<item>
+							<label>Indeterminé / autre</label>
+							<value>indetermine</value>
+						</item>
+					</select1>
+					<input ref="/formulaire_adherent/observation/detail/effectif">
+						<label>Effectif :</label>
+					</input>
+				</group>
+				<select1 appearance="quick" ref="/formulaire_adherent/observation/prendre_image">
+					<label>Prendre image ?</label>
+					<item>
+						<label>oui</label>
+						<value>oui</value>
+					</item>
+					<item>
+						<label>non</label>
+						<value>non</value>
+					</item>
+				</select1>
+				<upload appearance="new" mediatype="image/*" ref="/formulaire_adherent/observation/prise_image">
+					<label>Prendre une photo</label>
+				</upload>
+				<group appearance="field-list" ref="/formulaire_adherent/observation/detail_optionel">
+					<label>Détails optionels</label>
+					<input ref="/formulaire_adherent/observation/detail_optionel/comportement">
+						<label>Comportement :</label>
+						<hint>optionel</hint>
+					</input>
+					<input ref="/formulaire_adherent/observation/detail_optionel/remarque">
+						<label>Remarque :</label>
+						<hint>optionel</hint>
+					</input>
+				</group>
+				<input ref="/formulaire_adherent/observation/date_time">
+					<label>Date et heure :</label>
+				</input>
+				<group ref="/formulaire_adherent/observation/position">
+					<label>position geographique</label>
+					<select1 appearance="quick" ref="/formulaire_adherent/observation/position/methode">
+						<label>Comment souhaitez vous saisir la position geographique ?</label>
+						<item>
+							<label>Sur la Carte</label>
+							<value>carte</value>
+						</item>
+						<item>
+							<label>Avec le GPS du téléphone</label>
+							<value>gps</value>
+						</item>
+					</select1>
+					<input ref="/formulaire_adherent/observation/position/gps">
+						<label>localisation de l'observation par GPS</label>
+					</input>
+					<input appearance="placement-map" ref="/formulaire_adherent/observation/position/carte">
+						<label>localisation de l'observation sur la Carte</label>
+					</input>
+				</group>
+				<input ref="/formulaire_adherent/observation/observateur">
+					<label>Observateur :</label>
+					<hint>votre adresse mail cen lr</hint>
+				</input>
+			</repeat>
+		</group>
+	</h:body>
+</h:html>

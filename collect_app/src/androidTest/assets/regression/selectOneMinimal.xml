@@ -1,0 +1,155 @@
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+  <h:head>
+    <h:title>selectOneMinimal</h:title>
+    <model>
+      <instance>
+        <data id="build_selectOneMinimal_1519643571">
+          <meta>
+            <instanceID/>
+          </meta>
+          <selectOne/>
+        </data>
+      </instance>
+      <itext>
+        <translation lang="English">
+          <text id="/data/selectOne:label">
+            <value>selectOne</value>
+          </text>
+          <text id="/data/selectOne:option0">
+            <value>a</value>
+          </text>
+          <text id="/data/selectOne:option1">
+            <value>b</value>
+          </text>
+          <text id="/data/selectOne:option2">
+            <value>c</value>
+          </text>
+          <text id="/data/selectOne:option3">
+            <value>d</value>
+          </text>
+          <text id="/data/selectOne:option4">
+            <value>e</value>
+          </text>
+          <text id="/data/selectOne:option5">
+            <value>f</value>
+          </text>
+          <text id="/data/selectOne:option6">
+            <value>g</value>
+          </text>
+          <text id="/data/selectOne:option7">
+            <value>h</value>
+          </text>
+          <text id="/data/selectOne:option8">
+            <value>i</value>
+          </text>
+          <text id="/data/selectOne:option9">
+            <value>j</value>
+          </text>
+          <text id="/data/selectOne:option10">
+            <value>k</value>
+          </text>
+          <text id="/data/selectOne:option11">
+            <value>l</value>
+          </text>
+          <text id="/data/selectOne:option12">
+            <value>m</value>
+          </text>
+          <text id="/data/selectOne:option13">
+            <value>n</value>
+          </text>
+          <text id="/data/selectOne:option14">
+            <value>o</value>
+          </text>
+          <text id="/data/selectOne:option15">
+            <value>p</value>
+          </text>
+          <text id="/data/selectOne:option16">
+            <value>r</value>
+          </text>
+          <text id="/data/selectOne:option17">
+            <value>s</value>
+          </text>
+        </translation>
+      </itext>
+      <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" calculate="concat('uuid:', uuid())"/>
+      <bind nodeset="/data/selectOne" type="select1"/>
+    </model>
+  </h:head>
+  <h:body>
+    <select1 ref="/data/selectOne" appearance="minimal">
+      <label ref="jr:itext('/data/selectOne:label')"/>
+      <item>
+        <label ref="jr:itext('/data/selectOne:option0')"/>
+        <value>a</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/data/selectOne:option1')"/>
+        <value>b</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/data/selectOne:option2')"/>
+        <value>c</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/data/selectOne:option3')"/>
+        <value>d</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/data/selectOne:option4')"/>
+        <value>e</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/data/selectOne:option5')"/>
+        <value>f</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/data/selectOne:option6')"/>
+        <value>g</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/data/selectOne:option7')"/>
+        <value>h</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/data/selectOne:option8')"/>
+        <value>i</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/data/selectOne:option9')"/>
+        <value>j</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/data/selectOne:option10')"/>
+        <value>k</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/data/selectOne:option11')"/>
+        <value>l</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/data/selectOne:option12')"/>
+        <value>m</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/data/selectOne:option13')"/>
+        <value>n</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/data/selectOne:option14')"/>
+        <value>o</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/data/selectOne:option15')"/>
+        <value>p</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/data/selectOne:option16')"/>
+        <value>r</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/data/selectOne:option17')"/>
+        <value>s</value>
+      </item>
+    </select1>
+  </h:body>
+</h:html>

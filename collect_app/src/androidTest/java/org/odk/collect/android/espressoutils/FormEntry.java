@@ -1,13 +1,17 @@
 package org.odk.collect.android.espressoutils;
 
+import androidx.test.espresso.matcher.PreferenceMatchers;
 import androidx.test.rule.ActivityTestRule;
-
 import org.odk.collect.android.R;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
+import static androidx.test.espresso.action.ViewActions.swipeRight;
+import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -47,6 +51,10 @@ public final class FormEntry {
 
     public static void checkIsTextDisplayed(String text) {
         onView(withText(text)).check(matches(isDisplayed()));
+    }
+
+    public static void checkIfTextDoesNotExist(String text) {
+        onView(withText(text)).check(doesNotExist());
     }
 
     public static void putTextOnIndex(int index, String text) {
@@ -89,7 +97,27 @@ public final class FormEntry {
         onView(withId(R.id.questionholder)).perform(swipeLeft());
     }
 
+    public static void swipeToPrevoiusQuestion() {
+        onView(withId(R.id.questionholder)).perform(swipeRight());
+    }
+
     public static void clickIgnoreChanges() {
         onView(withText(getInstrumentation().getTargetContext().getString(R.string.do_not_save))).perform(click());
+    }
+
+    public static void clickOnAreaWithIndex(String text, Integer index) {
+        onView(withIndex(withClassName(endsWith(text)), index)).perform(click());
+    }
+
+    public static void clickOnAreaWithKey(String text) {
+        onData(PreferenceMatchers.withKey(text)).perform(click());
+    }
+
+    public static void focusOnTextAndTextInput(String text1, String text2) {
+        onView(withText(text1)).perform(typeText(text2));
+    }
+
+    public static void clickOk() {
+        onView(withId(android.R.id.button1)).perform(click());
     }
 }
