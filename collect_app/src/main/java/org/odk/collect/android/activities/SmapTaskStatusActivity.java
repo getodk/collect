@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import timber.log.Timber;
 
-public class TaskAddressActivity extends CollectAbstractActivity implements OnClickListener {
+public class SmapTaskStatusActivity extends CollectAbstractActivity implements OnClickListener {
 
 	private class Address {
 		String name;
@@ -58,7 +58,7 @@ public class TaskAddressActivity extends CollectAbstractActivity implements OnCl
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        setContentView(R.layout.task_address);  
+        setContentView(R.layout.smap_task_status);
         
         // Get the id of the selected list item
         Bundle bundle = getIntent().getExtras();

@@ -36,6 +36,7 @@ import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.FormChooserList;
 import org.odk.collect.android.activities.FormDownloadList;
 import org.odk.collect.android.activities.SmapMain;
+import org.odk.collect.android.activities.SmapTaskStatusActivity;
 import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.adapters.TaskListArrayAdapter;
 import org.odk.collect.android.application.Collect;
@@ -517,7 +518,7 @@ public class SmapTaskListFragment extends ListFragment
         TaskEntry task = (TaskEntry) getListAdapter().getItem(position);
 
         if(task.type.equals("task")) {
-            Intent i = new Intent(getActivity(), org.odk.collect.android.activities.TaskAddressActivity.class);
+            Intent i = new Intent(getActivity(), SmapTaskStatusActivity.class);
             i.putExtra("id", task.id);
 
             startActivity(i);
