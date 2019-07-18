@@ -22,7 +22,7 @@ package org.odk.collect.android.dto;
  * For more information about this pattern go to https://en.wikipedia.org/wiki/Data_transfer_object
  * Objects of this class are created using builder pattern: https://en.wikipedia.org/wiki/Builder_pattern
  */
-public class Form {
+public final class Form {
     private final int id;
     private final String displayName;
     private final String description;
@@ -228,17 +228,11 @@ public class Form {
 
     @Override
     public boolean equals(Object other) {
-        return other == this || other instanceof Form
-                && this.displayName.equals(((Form) other).displayName)
-                && this.jrFormId.equals(((Form) other).jrFormId)
-                && this.md5Hash.equals(((Form) other).md5Hash);
+        return other == this || other instanceof Form && this.md5Hash.equals(((Form) other).md5Hash);
     }
 
     @Override
     public int hashCode() {
-        int result = displayName.hashCode();
-        result = result * 31 + jrFormId.hashCode();
-        result = result * 31 + md5Hash.hashCode();
-        return result;
+        return md5Hash.hashCode();
     }
 }

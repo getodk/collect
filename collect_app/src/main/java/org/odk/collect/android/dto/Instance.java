@@ -22,7 +22,7 @@ package org.odk.collect.android.dto;
  * For more information about this pattern go to https://en.wikipedia.org/wiki/Data_transfer_object
  * Objects of this class are created using builder pattern: https://en.wikipedia.org/wiki/Builder_pattern
  */
-public class Instance {
+public final class Instance {
     private final String displayName;
     private final String submissionUri;
     private final String canEditWhenComplete;
@@ -160,16 +160,11 @@ public class Instance {
     @Override
     public boolean equals(Object other) {
         return other == this || other instanceof Instance
-                && this.displayName.equals(((Instance) other).displayName)
-                && this.jrFormId.equals(((Instance) other).jrFormId)
                 && this.instanceFilePath.equals(((Instance) other).instanceFilePath);
     }
 
     @Override
     public int hashCode() {
-        int result = displayName.hashCode();
-        result = result * 31 + jrFormId.hashCode();
-        result = result * 31 + instanceFilePath.hashCode();
-        return result;
+        return instanceFilePath.hashCode();
     }
 }
