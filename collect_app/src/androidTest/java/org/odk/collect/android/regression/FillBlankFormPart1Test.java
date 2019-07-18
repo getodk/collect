@@ -1,6 +1,9 @@
 package org.odk.collect.android.regression;
 
 import android.Manifest;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
@@ -9,17 +12,22 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.espressoutils.FormEntry;
 import org.odk.collect.android.espressoutils.MainMenu;
 import org.odk.collect.android.espressoutils.Settings;
+import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.TestCase.assertNotSame;
 import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withRecyclerView;
 
 //Issue NODK-244
@@ -170,21 +178,48 @@ public class FillBlankFormPart1Test extends BaseRegressionTest {
 
     @Test
     public void values_ShouldBeRandom() {
+        List<String> firstQuestionAnswers = new ArrayList<>();
+        List<String> secondQuestionAnswers = new ArrayList<>();
+
         //TestCase1
         for (int i = 1; i <= 3; i++) {
             MainMenu.startBlankForm("random");
+            firstQuestionAnswers.add(getQuestionText());
             FormEntry.swipeToNextQuestion();
+            secondQuestionAnswers.add(getQuestionText());
             FormEntry.swipeToNextQuestion();
             FormEntry.clickSaveAndExit();
         }
+
+        assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(1));
+        assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(2));
+        assertNotSame(firstQuestionAnswers.get(1), firstQuestionAnswers.get(2));
+
+        assertNotSame(secondQuestionAnswers.get(0), secondQuestionAnswers.get(1));
+        assertNotSame(secondQuestionAnswers.get(0), secondQuestionAnswers.get(2));
+        assertNotSame(secondQuestionAnswers.get(1), secondQuestionAnswers.get(2));
+
+        firstQuestionAnswers.clear();
+
         //TestCase2
         for (int i = 1; i <= 3; i++) {
             MainMenu.startBlankForm("random test");
             FormEntry.putText("3");
             FormEntry.swipeToNextQuestion();
+            firstQuestionAnswers.add(getQuestionText());
             FormEntry.swipeToNextQuestion();
             FormEntry.clickSaveAndExit();
         }
+
+        assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(1));
+        assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(2));
+        assertNotSame(firstQuestionAnswers.get(1), firstQuestionAnswers.get(2));
     }
 
+    private String getQuestionText() {
+        FormEntryActivity formEntryActivity = (FormEntryActivity) ActivityHelpers.getActivity();
+        FrameLayout questionContainer = formEntryActivity.findViewById(R.id.select_container);
+        TextView questionView = (TextView) questionContainer.getChildAt(0);
+        return questionView.getText().toString();
+    }
 }
