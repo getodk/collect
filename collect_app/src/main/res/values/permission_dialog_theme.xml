@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="PermissionAlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <style name="Theme.Collect.Dialog.PermissionAlert" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:textColor">@android:color/black</item>
     </style>
 </resources>

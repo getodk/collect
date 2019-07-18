@@ -321,7 +321,7 @@ public class PermissionUtils {
     }
 
     protected void showAdditionalExplanation(Activity activity, int title, int message, int drawable, @NonNull PermissionListener action) {
-        AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.PermissionAlertDialogTheme)
+        AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.Theme_Collect_Dialog_PermissionAlert)
                 .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
