@@ -43,12 +43,19 @@ public class MapsPreferences extends BasePreferenceFragment {
     private ListPreference baseLayerSourcePref;
     private CaptionedListPreference referenceLayerPref;
     private boolean autoShowReferenceLayerDialog;
+    private boolean lockBaseLayerSource;
 
     public static MapsPreferences newInstance(boolean adminMode) {
         Bundle bundle = new Bundle();
         bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
         MapsPreferences prefs = new MapsPreferences();
         prefs.setArguments(bundle);
+        return prefs;
+    }
+
+    public static MapsPreferences newInstanceLockedBaseLayerSource() {
+        MapsPreferences prefs = new MapsPreferences();
+        prefs.lockBaseLayerSource = true;
         return prefs;
     }
 
@@ -87,6 +94,7 @@ public class MapsPreferences extends BasePreferenceFragment {
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        view.setBackgroundColor(getResources().getColor(android.R.color.background_light));
         toolbar.setTitle(R.string.maps);
     }
 
@@ -111,6 +119,7 @@ public class MapsPreferences extends BasePreferenceFragment {
             onBaseLayerSourceChanged(value.toString());
             return true;
         });
+        baseLayerSourcePref.setEnabled(!lockBaseLayerSource);
     }
 
     /** Sets up listeners for the Reference Layer preference widget. */
