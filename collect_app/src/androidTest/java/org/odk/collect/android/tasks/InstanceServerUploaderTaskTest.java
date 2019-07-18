@@ -90,7 +90,6 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
                 .jrFormId("test_form")
                 .status(InstanceProviderAPI.STATUS_COMPLETE)
                 .lastStatusChangeDate(123L)
-                .displaySubtext("A form used in testing")
                 .build();
 
         Uri contentUri = dao.saveInstance(dao.getValuesFromInstanceObject(i));
