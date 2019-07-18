@@ -46,7 +46,7 @@ public class InstanceProvider extends ContentProvider {
 
 
     private static final String DATABASE_NAME = "instances.db";
-    private static final int DATABASE_VERSION = 11;		// smap
+    private static final int DATABASE_VERSION = 12;		// smap
     private static final String INSTANCES_TABLE_NAME = "instances";
 
     private static HashMap<String, String> sInstancesProjectionMap;
@@ -92,6 +92,7 @@ public class InstanceProvider extends ContentProvider {
                + InstanceColumns.T_IS_SYNC + " text, "		    // smap
                + InstanceColumns.T_ASS_ID + " long, "		    // smap
                + InstanceColumns.T_TASK_STATUS + " text, "		// smap
+               + InstanceColumns.T_TASK_COMMENT + " text, "		// smap
                + InstanceColumns.T_REPEAT + " integer, "		// smap
                + InstanceColumns.T_UPDATEID + " text, "		    // smap
                + InstanceColumns.T_LOCATION_TRIGGER + " text, " // smap
@@ -223,6 +224,16 @@ public class InstanceProvider extends ContentProvider {
                 } catch(Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
                     Timber.w("Error in upgrading to database version 11");
+                    e.printStackTrace();
+                }
+            }
+            if (oldVersion < 12) {
+                try {
+                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                            InstanceColumns.T_TASK_COMMENT + " text;");
+                } catch(Exception e) {
+                    // Catch errors, its possible the user upgraded then downgraded
+                    Timber.w("Error in upgrading to database version 12");
                     e.printStackTrace();
                 }
             }
@@ -614,6 +625,7 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns.T_IS_SYNC, InstanceColumns.T_IS_SYNC);          // smap
         sInstancesProjectionMap.put(InstanceColumns.T_ASS_ID, InstanceColumns.T_ASS_ID);            // smap
         sInstancesProjectionMap.put(InstanceColumns.T_TASK_STATUS, InstanceColumns.T_TASK_STATUS);  // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_TASK_COMMENT, InstanceColumns.T_TASK_COMMENT);  // smap
         sInstancesProjectionMap.put(InstanceColumns.T_SHOW_DIST, InstanceColumns.T_SHOW_DIST);      // smap
         sInstancesProjectionMap.put(InstanceColumns.T_HIDE, InstanceColumns.T_HIDE);                // smap
         sInstancesProjectionMap.put(InstanceColumns.UUID, InstanceColumns.UUID);                    // smap

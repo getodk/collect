@@ -361,6 +361,7 @@ public class Utilities {
                 InstanceColumns.T_TITLE,
                 InstanceColumns.DISPLAY_NAME,
                 InstanceColumns.T_TASK_STATUS,
+                InstanceColumns.T_TASK_COMMENT,
                 InstanceColumns.T_REPEAT,
                 InstanceColumns.T_SCHED_START,
                 InstanceColumns.T_ADDRESS,
@@ -440,6 +441,7 @@ public class Utilities {
                 entry.name = c.getString(c.getColumnIndex(InstanceColumns.T_TITLE));
                 entry.displayName = c.getString(c.getColumnIndex(InstanceColumns.DISPLAY_NAME));
                 entry.taskStatus = c.getString(c.getColumnIndex(InstanceColumns.T_TASK_STATUS));
+                entry.taskComment = c.getString(c.getColumnIndex(InstanceColumns.T_TASK_COMMENT));
                 entry.repeat = (c.getInt(c.getColumnIndex(InstanceColumns.T_REPEAT)) > 0);
                 entry.taskStart = c.getLong(c.getColumnIndex(InstanceColumns.T_SCHED_START));
                 entry.taskAddress = c.getString(c.getColumnIndex(InstanceColumns.T_ADDRESS));
@@ -598,12 +600,13 @@ public class Utilities {
     /*
      * Mark the status of a task
      */
-    public static void setStatusForTask(Long id, String status) {
+    public static void setStatusForTask(Long id, String status, String reason) {
 
         Uri taskUri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id.toString());
 
         ContentValues values = new ContentValues();
         values.put(InstanceColumns.T_TASK_STATUS, status);
+        values.put(InstanceColumns.T_TASK_COMMENT, reason);
         values.put(InstanceColumns.T_IS_SYNC, Utilities.STATUS_SYNC_NO);
 
         Collect.getInstance().getContentResolver().update(taskUri, values, null, null);

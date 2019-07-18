@@ -9,6 +9,7 @@ public class TaskEntry {
     public long id;
     public String type;    // form or task
     public String taskStatus;
+    public String taskComment;  // Comment added by a user
     public boolean repeat;  // A task that can be repeated multiple times
     public String name;
     public String displayName;

@@ -22,6 +22,7 @@
     <string name="smap_cannot_accept">Unable to accept task</string> 
     <string name="smap_cannot_complete">Unable to complete task</string>  
     <string name="smap_cannot_reject">Unable to reject task</string>
+    <string name="smap_cannot_restore">Unable to restore the task</string>
     <string name="smap_complete_task">Complete Task</string>
     <string name="smap_data_collection">Data Collection</string>
     <string name="smap_destination_not_found">The destination for the route is not set</string>
@@ -104,5 +105,6 @@
     <string name="smap_login_failed">Could not connect to server</string>
     <string name="smap_login_unauthorized">Login failed</string>
     <string name="smap_geofence_tasks">New local tasks</string>
+    <string name="smap_reason">Reason</string>
     <string name="smap_continue_tracking">Exit has been disabled.  To stop tracking of the phone it should be turned off.</string>
 </resources>

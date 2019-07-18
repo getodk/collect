@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -42,9 +43,13 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class SmapTaskStatusActivity extends CollectAbstractActivity implements OnClickListener {
+
+    @BindView(R.id.reject_reason) EditText rejectReason;
 
 	private class Address {
 		String name;
@@ -59,6 +64,7 @@ public class SmapTaskStatusActivity extends CollectAbstractActivity implements O
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.smap_task_status);
+        ButterKnife.bind(this);
         
         // Get the id of the selected list item
         Bundle bundle = getIntent().getExtras();
@@ -123,6 +129,7 @@ public class SmapTaskStatusActivity extends CollectAbstractActivity implements O
             // Create the buttons
             LinearLayout buttons = (LinearLayout)findViewById(R.id.task_address_buttons);
     		//menu.setHeaderTitle(taskTitle);
+            rejectReason.setVisibility(View.GONE);
             boolean triggeredTask = false;
             if (taskEntry.type.equals("task") &&
                     taskEntry.locationTrigger != null &&
@@ -131,6 +138,8 @@ public class SmapTaskStatusActivity extends CollectAbstractActivity implements O
             }
 
     		if(Utilities.canReject(taskEntry.taskStatus)) {
+
+                rejectReason.setVisibility(View.VISIBLE);
 
     	        Button b = new Button(this);
     	        b.setText(getString(R.string.smap_reject_task));
@@ -171,9 +180,7 @@ public class SmapTaskStatusActivity extends CollectAbstractActivity implements O
         switch (v.getId()) {
 
         case R.id.complete_button:
-    		try {   				
-
-    			Log.i("Complete Button", "");
+    		try {
 
     			boolean canComplete = Utilities.canComplete(taskEntry.taskStatus);
     			String taskForm = taskEntry.taskForm;
@@ -195,13 +202,20 @@ public class SmapTaskStatusActivity extends CollectAbstractActivity implements O
         case R.id.reject_button:
         	try {
 
-                Log.i("Reject Button", "");
-
 	    		if(Utilities.canReject(taskEntry.taskStatus)) {
-                    Utilities.setStatusForTask(taskEntry.id, Utilities.STATUS_T_REJECTED);
-                    Intent intent = new Intent("org.smap.smapTask.refresh");      // Notify map and task list of change
-                    LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(intent);
-                    Timber.i("######## send org.smap.smapTask.refresh from taskAddressActivity");  // smap
+
+	    		    String reason = rejectReason.getText().toString();
+	    		    if(reason != null && reason.trim().length() > 5) {
+                        Toast.makeText(getApplicationContext(), rejectReason.getText().toString(),
+                                Toast.LENGTH_LONG).show();
+                    } else {
+
+                        Utilities.setStatusForTask(taskEntry.id, Utilities.STATUS_T_REJECTED, reason);
+                        Intent intent = new Intent("org.smap.smapTask.refresh");      // Notify map and task list of change
+                        LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(intent);
+                        Timber.i("######## send org.smap.smapTask.refresh from taskAddressActivity");
+                        finish();
+                    }
 	    		} else {
 	    			Toast.makeText(getApplicationContext(), getString(R.string.smap_cannot_reject),
 			                Toast.LENGTH_LONG).show();
@@ -210,26 +224,25 @@ public class SmapTaskStatusActivity extends CollectAbstractActivity implements O
 	    	} catch (Exception e) {
 	    		e.printStackTrace();
 	    	}
-        	finish();
         	break;
 
             case R.id.restore_button:
                 try {
 
                     if(Utilities.canRestore(taskEntry.taskStatus)) {
-                        Utilities.setStatusForTask(taskEntry.id, Utilities.STATUS_T_ACCEPTED);
+                        Utilities.setStatusForTask(taskEntry.id, Utilities.STATUS_T_ACCEPTED, "");
                         Intent intent = new Intent("org.smap.smapTask.refresh");      // Notify map and task list of change
                         LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(intent);
-                        Timber.i("######## send org.smap.smapTask.refresh from instanceUploaderActivity2");  // smap
+                        Timber.i("######## send org.smap.smapTask.refresh from instanceUploaderActivity2");
+                        finish();
                     } else {
-                        Toast.makeText(getApplicationContext(), getString(R.string.smap_cannot_reject),
+                        Toast.makeText(getApplicationContext(), getString(R.string.smap_cannot_restore),
                                 Toast.LENGTH_LONG).show();
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                finish();
                 break;
 
         }

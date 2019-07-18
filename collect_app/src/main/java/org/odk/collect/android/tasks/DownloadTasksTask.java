@@ -635,6 +635,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
   	  			ta.assignment.assignment_id = (int) t.assId;
   	  			ta.assignment.dbId = (int) t.id;
   	  			ta.assignment.assignment_status = t.taskStatus;
+                ta.assignment.task_comment = t.taskComment;
 
 	            updateResponse.taskAssignments.add(ta);
   	  		}

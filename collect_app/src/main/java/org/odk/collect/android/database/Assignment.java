@@ -5,5 +5,6 @@ public class Assignment {
 	public String assignee;
 	public String manager;
 	public String assignment_status;    // task_status
+    public String task_comment;    // task_status
 	public int dbId;
 }
