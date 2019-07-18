@@ -94,9 +94,24 @@ In addition to contributing code, you can help to triage issues. This can includ
 ## Code style guidelines
 Follow the [Android style rules](http://source.android.com/source/code-style.html) and the [Google Java style guide](https://google.github.io/styleguide/javaguide.html).
 
+## XML style guidelines
+
+Follow these naming conventions in Android XML files:
+
+* Attributes (`attr`): `shouldBeCamelCased`
+* String, dimension and color names: `should_be_snake_cased`
+* Themes and Styles: `ShouldBePascalCased` and should also be qualified in a similar manner to Java package names like `<Type>.<Package>.<Name>...`. For instance:
+
+  ```xml
+  Theme.Collect.Light
+  TextAppearance.Collect.H1.Purple
+  Widget.Collect.Button
+  Widget.Collect.Button.BigRed
+  ```
+
 ## UI Components Style guidelines
 Ensure that the added UI components are compatible with both light and dark themes.
-Follow the below points to get the color for coloring the UI components like text and icons instead of directly using color values (eg. #000000 or R.color.colorName).
+Follow the below points to get the color for coloring the UI components like text and icons instead of directly using color values (eg. #000000 or R.color.color_name).
 
 UI Component | Java | Xml _(layouts, drawables, vectors)_:
 --- | --- | ---
