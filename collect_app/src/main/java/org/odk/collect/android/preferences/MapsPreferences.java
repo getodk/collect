@@ -18,7 +18,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.preference.ListPreference;
-import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.util.Log;
 import android.view.View;
@@ -44,7 +43,6 @@ public class MapsPreferences extends BasePreferenceFragment {
     private ListPreference baseLayerSourcePref;
     private CaptionedListPreference referenceLayerPref;
     private boolean autoShowReferenceLayerDialog;
-    private Preference.OnPreferenceChangeListener referenceLayerPrefListener;
 
     public static MapsPreferences newInstance(boolean adminMode) {
         Bundle bundle = new Bundle();
@@ -55,17 +53,14 @@ public class MapsPreferences extends BasePreferenceFragment {
     }
 
     /** Constructor that immediately opens the Reference Layer dialog. */
-    public static MapsPreferences newInstanceForReferenceLayerDialog(
-        Preference.OnPreferenceChangeListener listener) {
+    public static MapsPreferences newInstanceForReferenceLayerDialog() {
         MapsPreferences prefs = new MapsPreferences();
         prefs.autoShowReferenceLayerDialog = true;
-        prefs.referenceLayerPrefListener = listener;
         return prefs;
     }
 
     /** Pops up the preference dialog that lets the user choose a reference layer. */
-    public static void showReferenceLayerDialog(
-        Activity activity, Preference.OnPreferenceChangeListener listener) {
+    public static void showReferenceLayerDialog(Activity activity) {
         // Unfortunately, the Preference class is designed so that it is impossible
         // to just open a preference dialog without building a PreferenceFragment
         // and attaching it to an activity.  So, we instantiate a MapsPreference
@@ -73,7 +68,7 @@ public class MapsPreferences extends BasePreferenceFragment {
         // attached, then instantiate it and attach it.
         activity.getFragmentManager()
             .beginTransaction()
-            .add(newInstanceForReferenceLayerDialog(listener), null)
+            .add(newInstanceForReferenceLayerDialog(), null)
             .commit();
     }
 
@@ -86,7 +81,6 @@ public class MapsPreferences extends BasePreferenceFragment {
         initReferenceLayerPref();
         if (autoShowReferenceLayerDialog) {
             populateReferenceLayerPref();
-            referenceLayerPref.setOnPreferenceChangeListener(referenceLayerPrefListener);
             referenceLayerPref.showDialog();
         }
     }

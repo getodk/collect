@@ -39,7 +39,6 @@ import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -296,11 +295,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
         buildDialogs();
 
         findViewById(R.id.layers).setOnClickListener(v -> {
-            MapsPreferences.showReferenceLayerDialog(this, (pref, value) -> {
-                File file = value != null ? new File(String.valueOf(value)) : null;
-                map.setReferenceLayerFile(file);
-                return true;
-            });
+            MapsPreferences.showReferenceLayerDialog(this);
         });
 
         zoomButton = findViewById(R.id.zoom);

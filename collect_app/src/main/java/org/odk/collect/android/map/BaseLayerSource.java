@@ -11,9 +11,9 @@ import androidx.annotation.Nullable;
  * Instances of this interface represent "Source" options available in the
  * "Base Layer" preferences.  Each BaseLayerSource can define its own
  * preferences that customize the base layer, and its primary job is to
- * construct a MapFragment configured with an initial base layer according
- * to those preferences.  For example, the GoogleBaseLayerSource can define
- * a "Google map style" preference with choices such as Terrain or Satellite.
+ * construct a MapFragment configured according to those preferences.
+ * For example, the GoogleBaseLayerSource can define a "Google map style"
+ * preference with choices such as Terrain or Satellite.
  */
 public interface BaseLayerSource {
     /** Returns true if this source is available on this platform and device. */

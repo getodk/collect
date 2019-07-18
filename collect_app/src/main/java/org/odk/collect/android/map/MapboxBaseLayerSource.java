@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceCategory;
-import android.preference.PreferenceManager;
 
 import com.mapbox.mapboxsdk.maps.Style;
 
@@ -15,8 +14,13 @@ import org.odk.collect.android.utilities.ToastUtils;
 import java.io.File;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_MAP_STYLE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 
 public class MapboxBaseLayerSource implements BaseLayerSource {
+    // We must hold on to the listener or it will be garbage-collected.
+    // See SharedPreferences.registerOnSharedPreferenceChangeListener().
+    private SharedPreferences.OnSharedPreferenceChangeListener listener;
+
     @Override public boolean isAvailable(Context context) {
         return MapboxUtils.initMapbox() != null;
     }
@@ -56,9 +60,30 @@ public class MapboxBaseLayerSource implements BaseLayerSource {
         if (MapboxUtils.initMapbox() == null) {
             return null;
         }
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String styleUrl = prefs.getString(KEY_MAPBOX_MAP_STYLE, Style.MAPBOX_STREETS);
-        return new MapboxMapFragment(styleUrl);
+        SharedPreferences prefs = PrefUtils.getSharedPrefs(context);
+        MapboxMapFragment map = new MapboxMapFragment();
+        setStyleUrlFromPrefs(prefs, map);
+        setReferenceLayerFromPrefs(prefs, map);
+
+        listener = (SharedPreferences p, String key) -> {
+            if (key.equals(KEY_MAPBOX_MAP_STYLE)) {
+                setStyleUrlFromPrefs(prefs, map);
+            }
+            if (key.equals(KEY_REFERENCE_LAYER)) {
+                setReferenceLayerFromPrefs(prefs, map);
+            }
+        };
+        prefs.registerOnSharedPreferenceChangeListener(listener);
+        return map;
+    }
+
+    private void setStyleUrlFromPrefs(SharedPreferences prefs, MapboxMapFragment map) {
+        map.setStyleUrl(prefs.getString(KEY_MAPBOX_MAP_STYLE, Style.MAPBOX_STREETS));
+    }
+
+    private void setReferenceLayerFromPrefs(SharedPreferences prefs, MapboxMapFragment map) {
+        String path = prefs.getString(KEY_REFERENCE_LAYER, null);
+        map.setReferenceLayerFile(path != null ? new File(path) : null);
     }
 
     @Override public boolean supportsLayer(File file) {
@@ -68,9 +93,6 @@ public class MapboxBaseLayerSource implements BaseLayerSource {
 
     @Override public String getDisplayName(File file) {
         String name = MbtilesFile.getName(file);
-        if (name == null || name.trim().isEmpty()) {
-            name = file.getName();
-        }
-        return name;
+        return name != null ? name : file.getName();
     }
 }

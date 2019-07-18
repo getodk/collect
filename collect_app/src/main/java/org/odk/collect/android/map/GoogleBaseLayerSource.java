@@ -17,8 +17,13 @@ import org.odk.collect.android.utilities.ToastUtils;
 import java.io.File;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_GOOGLE_MAP_STYLE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 
 public class GoogleBaseLayerSource implements BaseLayerSource {
+    // We must hold on to the listener or it will be garbage-collected.
+    // See SharedPreferences.registerOnSharedPreferenceChangeListener().
+    private SharedPreferences.OnSharedPreferenceChangeListener listener;
+
     @Override public boolean isAvailable(Context context) {
         return isGoogleMapsSdkAvailable(context) && isGooglePlayServicesAvailable(context);
     }
@@ -68,21 +73,39 @@ public class GoogleBaseLayerSource implements BaseLayerSource {
 
     @Override public MapFragment createMapFragment(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int mapType = Integer.parseInt(prefs.getString(
-            KEY_GOOGLE_MAP_STYLE, Integer.toString(GoogleMap.MAP_TYPE_NORMAL)));
-        return new GoogleMapFragment(mapType);
+        GoogleMapFragment map = new GoogleMapFragment();
+        setMapTypeFromPrefs(prefs, map);
+        setReferenceLayerFromPrefs(prefs, map);
+
+        listener = (SharedPreferences p, String key) -> {
+            if (key.equals(KEY_GOOGLE_MAP_STYLE)) {
+                setMapTypeFromPrefs(prefs, map);
+            }
+            if (key.equals(KEY_REFERENCE_LAYER)) {
+                setReferenceLayerFromPrefs(prefs, map);
+            }
+        };
+        prefs.registerOnSharedPreferenceChangeListener(listener);
+        return map;
+    }
+
+    private void setMapTypeFromPrefs(SharedPreferences prefs, GoogleMapFragment map) {
+        map.setMapType(Integer.parseInt(prefs.getString(
+            KEY_GOOGLE_MAP_STYLE, Integer.toString(GoogleMap.MAP_TYPE_NORMAL))));
+    }
+
+    private void setReferenceLayerFromPrefs(SharedPreferences prefs, GoogleMapFragment map) {
+        String path = prefs.getString(KEY_REFERENCE_LAYER, null);
+        map.setReferenceLayerFile(path != null ? new File(path) : null);
     }
 
     @Override public boolean supportsLayer(File file) {
-        // GoogleMapFragment supports only raster tiles;
+        // GoogleMapFragment supports only raster tiles.
         return MbtilesFile.getLayerType(file) == LayerType.RASTER;
     }
 
     @Override public String getDisplayName(File file) {
         String name = MbtilesFile.getName(file);
-        if (name == null || name.trim().isEmpty()) {
-            name = file.getName();
-        }
-        return name;
+        return name != null ? name : file.getName();
     }
 }

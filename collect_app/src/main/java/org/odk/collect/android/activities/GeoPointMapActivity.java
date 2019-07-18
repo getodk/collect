@@ -30,13 +30,12 @@ import org.odk.collect.android.map.MapFragment;
 import org.odk.collect.android.map.MapPoint;
 import org.odk.collect.android.map.MapboxMapFragment;
 import org.odk.collect.android.map.OsmMapFragment;
-import org.odk.collect.android.preferences.MapsPreferences;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
-import java.io.File;
 import java.text.DecimalFormat;
 
 import androidx.annotation.VisibleForTesting;
@@ -247,11 +246,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
 
         // Menu Layer Toggle
         findViewById(R.id.layer_menu).setOnClickListener(v -> {
-            MapsPreferences.showReferenceLayerDialog(this, (pref, value) -> {
-                File file = value != null ? new File(String.valueOf(value)) : null;
-                map.setReferenceLayerFile(file);
-                return true;
-            });
+            startActivity(new Intent(this, PreferencesActivity.class).putExtra("openMapsPrefs", true));
         });
 
         clearButton = findViewById(R.id.clear);

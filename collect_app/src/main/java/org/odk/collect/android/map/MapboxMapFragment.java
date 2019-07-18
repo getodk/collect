@@ -44,6 +44,7 @@ import com.mapbox.mapboxsdk.utils.ColorUtils;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.map.MbtilesFile.LayerType;
 import org.odk.collect.android.map.MbtilesFile.MbtilesException;
 import org.odk.collect.android.mapboxsdk.MapFragment;
@@ -99,7 +100,7 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
     protected SymbolManager symbolManager;
     protected LineManager lineManager;
     protected boolean isDragging;
-    protected final String styleUrl;
+    protected String styleUrl = Style.MAPBOX_STREETS;;
     protected File referenceLayerFile;
     protected List<Layer> overlayLayers = new ArrayList<>();
     protected List<Source> overlaySources = new ArrayList<>();
@@ -110,10 +111,6 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
     // "map" field will be null and many operations will need to be stubbed out.
     @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL", justification = "This flag is exposed for Robolectric tests to set")
     @VisibleForTesting public static boolean testMode;
-
-    public MapboxMapFragment(String styleUrl) {
-        this.styleUrl = styleUrl;
-    }
 
     @Override public void addTo(
         @NonNull FragmentActivity activity, int containerId,
@@ -144,10 +141,6 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
             map.setStyle(getDesiredStyleBuilder(), style -> {
                 map.getUiSettings().setCompassGravity(Gravity.TOP | Gravity.START);
                 map.getUiSettings().setCompassMargins(36, 36, 36, 36);
-                map.getStyle().setTransition(new TransitionOptions(0, 0, false));
-
-                Drawable pointIcon = ContextCompat.getDrawable(getContext(), R.drawable.ic_map_point);
-                map.getStyle().addImage(POINT_ICON_ID, pointIcon);
 
                 map.addOnMapClickListener(this);
                 map.addOnMapLongClickListener(this);
@@ -198,7 +191,18 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
                 .withSource(new RasterSource("[osm]", tiles, 256))
                 .withLayer(new RasterLayer("[osm]", "[osm]"));
         }
-        return new Style.Builder().fromUrl(styleUrl);
+        Context context = Collect.getInstance().getApplicationContext();
+        Drawable pointIcon = ContextCompat.getDrawable(context, R.drawable.ic_map_point);
+        return new Style.Builder().fromUrl(styleUrl)
+            .withImage(POINT_ICON_ID, pointIcon)
+            .withTransition(new TransitionOptions(0, 0, false));
+    }
+
+    public void setStyleUrl(String url) {
+        styleUrl = url;
+        if (map != null) {
+            map.setStyle(getDesiredStyleBuilder());
+        }
     }
 
     @Override public void setReferenceLayerFile(File file) {

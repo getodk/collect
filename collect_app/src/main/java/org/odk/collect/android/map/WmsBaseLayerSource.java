@@ -10,10 +10,16 @@ import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 
 import java.io.File;
 
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
+
 public class WmsBaseLayerSource implements BaseLayerSource {
     private final String prefKey;
     private final int prefTitleId;
     private final WmsOption[] options;
+
+    // We must hold on to the listener or it will be garbage-collected.
+    // See SharedPreferences.registerOnSharedPreferenceChangeListener().
+    private SharedPreferences.OnSharedPreferenceChangeListener listener;
 
     /** Constructs a base layer source that renders one Web Map Service. */
     public WmsBaseLayerSource(OnlineTileSourceBase source) {
@@ -56,24 +62,50 @@ public class WmsBaseLayerSource implements BaseLayerSource {
 
     @Override public MapFragment createMapFragment(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        OnlineTileSourceBase source = options[0].source;
-        if (options.length > 1) {
+        OsmMapFragment map = new OsmMapFragment();
+        setTileSourceFromPrefs(prefs, map);
+        setReferenceLayerFromPrefs(prefs, map);
+
+        listener = (SharedPreferences p, String key) -> {
+            if (key.equals(prefKey)) {
+                setTileSourceFromPrefs(prefs, map);
+            }
+            if (key.equals(KEY_REFERENCE_LAYER)) {
+                setReferenceLayerFromPrefs(prefs, map);
+            }
+        };
+        prefs.registerOnSharedPreferenceChangeListener(listener);
+        return map;
+    }
+
+    private void setTileSourceFromPrefs(SharedPreferences prefs, OsmMapFragment map) {
+        if (options.length == 1) {
+            map.setTileSource(options[0].source);
+            return;
+        } else {
             String value = prefs.getString(prefKey, null);
             for (int i = 0; i < options.length; i++) {
                 if (options[i].id.equals(value)) {
-                    source = options[i].source;
+                    map.setTileSource(options[i].source);
+                    return;
                 }
             }
         }
-        return new OsmMapFragment(source);
+    }
+
+    private void setReferenceLayerFromPrefs(SharedPreferences prefs, OsmMapFragment map) {
+        String path = prefs.getString(KEY_REFERENCE_LAYER, null);
+        map.setReferenceLayerFile(path != null ? new File(path) : null);
     }
 
     @Override public boolean supportsLayer(File file) {
-        return false;
+        // OSMdroid supports only raster tiles.
+        return MbtilesFile.getLayerType(file) == MbtilesFile.LayerType.RASTER;
     }
 
     @Override public String getDisplayName(File file) {
-        return null;
+        String name = MbtilesFile.getName(file);
+        return name != null ? name : file.getName();
     }
 
     public static class WmsOption {

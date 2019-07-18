@@ -88,13 +88,9 @@ public class OsmMapFragment extends Fragment implements MapFragment,
     protected AlertDialog gpsErrorDialog;
     protected boolean gpsLocationEnabled;
     protected IGeoPoint lastMapCenter;
-    protected final ITileSource tiles;
+    protected ITileSource tiles;
     protected File referenceLayerFile;
     protected TilesOverlay referenceOverlay;
-
-    public OsmMapFragment(ITileSource tiles) {
-        this.tiles = tiles;
-    }
 
     @Override public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
         Context context = getActivity();
@@ -159,6 +155,13 @@ public class OsmMapFragment extends Fragment implements MapFragment,
             new Handler().postDelayed(() -> readyListener.onReady(this), 100);
         }
         return view;
+    }
+
+    public void setTileSource(ITileSource tiles) {
+        this.tiles = tiles;
+        if (map != null) {
+            map.setTileSource(tiles);
+        }
     }
 
     @Override public void setReferenceLayerFile(@Nullable File file) {

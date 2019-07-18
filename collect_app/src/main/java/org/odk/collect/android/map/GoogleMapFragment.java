@@ -83,7 +83,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     protected Map<Integer, MapFeature> features = new HashMap<>();
     protected AlertDialog gpsErrorDialog;
     protected boolean gpsLocationEnabled;
-    protected final int mapType;
+    protected int mapType;
     protected File referenceLayerFile;
     protected TileOverlay referenceOverlay;
 
@@ -91,10 +91,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
     // "map" field will be null and many operations will need to be stubbed out.
     @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL", justification = "This flag is exposed for Robolectric tests to set")
     @VisibleForTesting public static boolean testMode;
-
-    public GoogleMapFragment(int mapType) {
-        this.mapType = mapType;
-    }
 
     @Override public Fragment getFragment() {
         return this;
@@ -139,6 +135,13 @@ public class GoogleMapFragment extends SupportMapFragment implements
         // callback; we have to invoke the ready listener directly.
         if (testMode && readyListener != null) {
             readyListener.onReady(this);
+        }
+    }
+
+    public void setMapType(int mapType) {
+        this.mapType = mapType;
+        if (map != null) {
+            map.setMapType(mapType);
         }
     }
 
