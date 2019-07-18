@@ -28,6 +28,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertNotSame;
+import static org.odk.collect.android.support.matchers.DrawableMatcher.withImageDrawable;
 import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withRecyclerView;
 
 //Issue NODK-244
@@ -61,7 +62,7 @@ public class FillBlankFormPart1Test extends BaseRegressionTest {
     }
 
     @Test
-    public void sortByDialog_ShouldBeTranslated() {
+    public void sortByDialog_ShouldBeTranslatedAndDisplayProperIcons() {
         MainMenu.clickOnMenu();
         MainMenu.clickGeneralSettings();
         Settings.clickOnUserInterface();
@@ -74,18 +75,30 @@ public class FillBlankFormPart1Test extends BaseRegressionTest {
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(0, R.id.title))
                 .check(matches(withText("Name, A-Z")));
+        onView(withRecyclerView(R.id.recyclerView)
+                .atPositionOnView(0, R.id.icon))
+                .check(matches(withImageDrawable(R.drawable.ic_sort_by_alpha)));
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(1, R.id.title))
                 .check(matches(withText("Name, Z-A")));
+        onView(withRecyclerView(R.id.recyclerView)
+                .atPositionOnView(1, R.id.icon))
+                .check(matches(withImageDrawable(R.drawable.ic_sort_by_alpha)));
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(2, R.id.title))
                 .check(matches(withText("Datum, neuestes zuerst")));
+        onView(withRecyclerView(R.id.recyclerView)
+                .atPositionOnView(2, R.id.icon))
+                .check(matches(withImageDrawable(R.drawable.ic_access_time)));
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(3, R.id.title))
                 .check(matches(withText("Datum, ältestes zuerst")));
+        onView(withRecyclerView(R.id.recyclerView)
+                .atPositionOnView(3, R.id.icon))
+                .check(matches(withImageDrawable(R.drawable.ic_access_time)));
     }
 
     @Test
