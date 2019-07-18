@@ -33,7 +33,7 @@ import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withR
 
 //Issue NODK-244
 @RunWith(AndroidJUnit4.class)
-public class FillBlankFormPart1Test extends BaseRegressionTest {
+public class FillBlankFormTest extends BaseRegressionTest {
     @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(GrantPermissionRule.grant(
@@ -45,7 +45,12 @@ public class FillBlankFormPart1Test extends BaseRegressionTest {
             .around(new CopyFormRule("CSVerrorForm.xml", "regression", Collections.singletonList("TrapLists.csv")))
             .around(new CopyFormRule("different-search-appearances.xml", "regression", Collections.singletonList("fruits.csv")))
             .around(new CopyFormRule("random.xml", "regression"))
-            .around(new CopyFormRule("randomTest_broken.xml", "regression"));
+            .around(new CopyFormRule("randomTest_broken.xml", "regression"))
+            .around(new CopyFormRule("g6Error.xml", "regression"))
+            .around(new CopyFormRule("g6Error2.xml", "regression"))
+            .around(new CopyFormRule("emptyGroupFieldList.xml", "regression"))
+            .around(new CopyFormRule("emptyGroupFieldList2.xml", "regression"))
+            .around(new CopyFormRule("metadata2.xml", "regression"));
 
     @Test
     public void answers_ShouldBeSuggestedInComplianceWithSelectedLetters() {
@@ -227,6 +232,45 @@ public class FillBlankFormPart1Test extends BaseRegressionTest {
         assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(1));
         assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(2));
         assertNotSame(firstQuestionAnswers.get(1), firstQuestionAnswers.get(2));
+    }
+
+    @Test
+    public void app_ShouldNotCrash() {
+        //TestCase1
+        MainMenu.startBlankForm("g6Error");
+        FormEntry.checkIsStringDisplayed(R.string.error_occured);
+        FormEntry.clickOk();
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickSaveAndExit();
+        FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
+        //TestCase2
+        MainMenu.startBlankForm("g6Error2");
+        FormEntry.putText("bla");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.checkIsStringDisplayed(R.string.error_occured);
+        FormEntry.clickOk();
+        FormEntry.swipeToNextQuestion();
+        FormEntry.putText("ble");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickSaveAndExit();
+        FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
+        //TestCase3
+        MainMenu.startBlankForm("emptyGroupFieldList");
+        FormEntry.clickSaveAndExit();
+        FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
+        //TestCase4
+        MainMenu.startBlankForm("emptyGroupFieldList2");
+        FormEntry.putText("nana");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickSaveAndExit();
+        FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
+    }
+
+    @Test
+    public void user_ShouldBeAbleToFillTheForm() {
+        MainMenu.startBlankForm("metadata2");
+        FormEntry.clickSaveAndExit();
+        FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
     }
 
     private String getQuestionText() {
