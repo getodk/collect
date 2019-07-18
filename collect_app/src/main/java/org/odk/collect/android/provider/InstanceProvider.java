@@ -101,8 +101,8 @@ public class InstanceProvider extends ContentProvider {
                + InstanceColumns.STATUS + " text not null, "
                + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
                + InstanceColumns.DISPLAY_SUBTEXT + " text not null, "
-               + InstanceColumns.T_SHOW_DIST + " integer default 0, "   // smap
-               + InstanceColumns.T_HIDE + " integer default 0, "        // smap
+               + InstanceColumns.T_SHOW_DIST + " integer, "   // smap
+               + InstanceColumns.T_HIDE + " integer, "        // smap
                + InstanceColumns.DELETED_DATE + " date );" );
         }
 
@@ -217,12 +217,12 @@ public class InstanceProvider extends ContentProvider {
             if (oldVersion < 11) {
                 try {
                     db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                            InstanceColumns.T_SHOW_DIST + " integer default 0;");
+                            InstanceColumns.T_SHOW_DIST + " integer;");
                     db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                            InstanceColumns.T_HIDE + " integer default 0;");
+                            InstanceColumns.T_HIDE + " integer;");
                 } catch(Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
-                    Timber.w("Error in upgrading to database version 10");
+                    Timber.w("Error in upgrading to database version 11");
                     e.printStackTrace();
                 }
             }
