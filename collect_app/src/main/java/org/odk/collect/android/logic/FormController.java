@@ -130,6 +130,7 @@ public class FormController {
             PrototypeManager.registerPrototypes(CoreModelModule.classNames);
             new XFormsModule().registerModule();
 
+            // When registering prototypes from Collect, a proguard exception also needs to be added
             PrototypeManager.registerPrototype("org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointAction");
             XFormParser.registerActionHandler(CollectSetGeopointActionHandler.ELEMENT_NAME, new CollectSetGeopointActionHandler());
 
