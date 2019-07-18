@@ -95,7 +95,7 @@ public class MapConfigurator {
         return map;
     }
 
-    /** Gets a list of the IDs of the base layer source, in order. */
+    /** Gets a list of the IDs of the base layer sources, in order. */
     public static String[] getIds() {
         String[] ids = new String[BASE_LAYER_SOURCE_OPTIONS.length];
         for (int i = 0; i < ids.length; i++) {

@@ -32,7 +32,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -47,6 +46,7 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -600,7 +600,8 @@ public class FileUtils {
         private boolean depthFirst;
 
         public Walker(File root, boolean depthFirst) {
-            queue = Arrays.asList(root);
+            queue = new ArrayList<>();
+            queue.add(root);
             this.depthFirst = depthFirst;
         }
 

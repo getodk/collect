@@ -29,15 +29,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.map.MapConfigurator;
 import org.odk.collect.android.map.GoogleMapFragment;
+import org.odk.collect.android.map.MapConfigurator;
 import org.odk.collect.android.map.MapFragment;
 import org.odk.collect.android.map.MapPoint;
 import org.odk.collect.android.map.MapboxMapFragment;
 import org.odk.collect.android.map.OsmMapFragment;
+import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.ToastUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -293,7 +295,13 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
 
         buildDialogs();
 
-        findViewById(R.id.layers).setOnClickListener(v -> helper.showLayersDialog());
+        findViewById(R.id.layers).setOnClickListener(v -> {
+            MapsPreferences.showReferenceLayerDialog(this, (pref, value) -> {
+                File file = value != null ? new File(String.valueOf(value)) : null;
+                map.setReferenceLayerFile(file);
+                return true;
+            });
+        });
 
         zoomButton = findViewById(R.id.zoom);
         zoomButton.setOnClickListener(v -> map.zoomToPoint(map.getGpsLocation(), true));

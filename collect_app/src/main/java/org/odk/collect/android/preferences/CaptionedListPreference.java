@@ -2,6 +2,7 @@ package org.odk.collect.android.preferences;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -52,10 +53,11 @@ public class CaptionedListPreference extends ListPreference {
     }
 
     @Override protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
-        // We aren't using the AlertDialog.Builder; we're inflating a custom dialog.
+        // Selecting an item will close the dialog, so we don't need the "OK" button.
+        builder.setPositiveButton(null, null);
     }
 
-    /** When the dialog is constructed, locates certain useful views in the dialog. */
+    /** Called just after the dialog's main view has been created. */
     @Override protected void onBindDialogView(View view) {
         super.onBindDialogView(view);
         listView = view.findViewById(R.id.list);
@@ -72,8 +74,7 @@ public class CaptionedListPreference extends ListPreference {
             listView.removeAllViews();
             radioButtons = new ArrayList<>();
             for (int i = 0; i < values.length; i++) {
-                RadioButton button = inflateItem(listView, i, values[i], labels[i], captions[i]);
-                radioButtons.add(button);
+                radioButtons.add(inflateItem(listView, i, values[i], labels[i], captions[i]));
             }
         }
         if (captionView != null) {
@@ -81,7 +82,7 @@ public class CaptionedListPreference extends ListPreference {
         }
     }
 
-    /** Creates the view for an item in the list. */
+    /** Creates the view for one item in the list. */
     protected RadioButton inflateItem(ViewGroup parent, final int i, Object value, Object label, Object caption) {
         LinearLayout item = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.captioned_item, null);
         RadioButton button = item.findViewById(R.id.button);
@@ -90,26 +91,29 @@ public class CaptionedListPreference extends ListPreference {
         labelView.setText(String.valueOf(label));
         captionView.setText(String.valueOf(caption));
         button.setChecked(ObjectUtils.equals(value, getSharedPreferences().getString(getKey(), null)));
-        item.setOnClickListener(view -> onItemClicked(i));
+        item.setOnClickListener(view -> {
+            // When an item is clicked, record which item and then dismiss the dialog.
+            clickedIndex = i;
+            onClick(getDialog(), DialogInterface.BUTTON_POSITIVE);
+            getDialog().dismiss();
+        });
         parent.addView(item);
         return button;
     }
 
-    /** When an item is clicked, records which item, and updates the radio buttons. */
-    protected void onItemClicked(int index) {
-        clickedIndex = index;
-        for (int i = 0; i < radioButtons.size(); i++) {
-            radioButtons.get(i).setChecked(i == clickedIndex);
-        }
-    }
-
     /** Saves the selected value to the preferences when the dialog is closed. */
     protected void onDialogClosed(boolean positiveResult) {
-        if (positiveResult && clickedIndex >= 0) {
-            Object value = getEntryValues()[clickedIndex];
+        CharSequence[] values = getEntryValues();
+        if (positiveResult && clickedIndex >= 0 && values != null) {
+            Object value = values[clickedIndex];
             if (callChangeListener(value)) {
                 setValue(value != null ? value.toString() : null);
             }
         }
+    }
+
+    /** Opens the dialog programmatically, rather than by a click from the user. */
+    public void showDialog() {
+        showDialog(null);
     }
 }

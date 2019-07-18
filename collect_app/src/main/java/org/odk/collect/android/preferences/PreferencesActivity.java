@@ -28,6 +28,7 @@ public class PreferencesActivity extends CollectAbstractActivity {
 
     public static final String TAG = "GeneralPreferencesFragment";
     public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
+    public static final String INTENT_KEY_PREF_PAGE = "prefPage";
 
     private OnBackPressedListener onBackPressedListener;
 

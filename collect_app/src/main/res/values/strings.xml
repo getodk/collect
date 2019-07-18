@@ -358,7 +358,7 @@
     <string name="reference_layer">Reference layer</string>
     <string name="layer_data_caption_none">There are no layer files in %1$s that are supported by the %2$s base layer.</string>
     <string name="layer_data_caption">Above are all the layer files in %1$s that are supported by the %2$s base layer.</string>
-    <string name="layer_data">Layer data</string>
+    <string name="layer_data_file">Layer data file</string>
     <string name="layer_data_dialog_title">Files in %1$s that work with the %2$s base layer:</string>
 
     <string name="save_point">Save GeoPoint</string>

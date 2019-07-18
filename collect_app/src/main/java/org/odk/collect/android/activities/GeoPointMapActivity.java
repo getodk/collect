@@ -24,17 +24,19 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.map.MapConfigurator;
 import org.odk.collect.android.map.GoogleMapFragment;
+import org.odk.collect.android.map.MapConfigurator;
 import org.odk.collect.android.map.MapFragment;
 import org.odk.collect.android.map.MapPoint;
 import org.odk.collect.android.map.MapboxMapFragment;
 import org.odk.collect.android.map.OsmMapFragment;
+import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
+import java.io.File;
 import java.text.DecimalFormat;
 
 import androidx.annotation.VisibleForTesting;
@@ -106,7 +108,6 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        registerReceiver(null, null);
 
         if (!areLocationPermissionsGranted(this)) {
             finish();
@@ -245,8 +246,13 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
         zoomButton.setOnClickListener(v -> map.zoomToPoint(map.getGpsLocation(), true));
 
         // Menu Layer Toggle
-        ImageButton layers = findViewById(R.id.layer_menu);
-        layers.setOnClickListener(v -> helper.showLayersDialog());
+        findViewById(R.id.layer_menu).setOnClickListener(v -> {
+            MapsPreferences.showReferenceLayerDialog(this, (pref, value) -> {
+                File file = value != null ? new File(String.valueOf(value)) : null;
+                map.setReferenceLayerFile(file);
+                return true;
+            });
+        });
 
         clearButton = findViewById(R.id.clear);
         clearButton.setEnabled(false);

@@ -14,10 +14,13 @@
 
 package org.odk.collect.android.preferences;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceCategory;
+import android.util.Log;
 import android.view.View;
 
 import org.odk.collect.android.R;
@@ -40,14 +43,38 @@ public class MapsPreferences extends BasePreferenceFragment {
     private Context context;
     private ListPreference baseLayerSourcePref;
     private CaptionedListPreference referenceLayerPref;
+    private boolean autoShowReferenceLayerDialog;
+    private Preference.OnPreferenceChangeListener referenceLayerPrefListener;
 
     public static MapsPreferences newInstance(boolean adminMode) {
         Bundle bundle = new Bundle();
         bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
-
         MapsPreferences prefs = new MapsPreferences();
         prefs.setArguments(bundle);
         return prefs;
+    }
+
+    /** Constructor that immediately opens the Reference Layer dialog. */
+    public static MapsPreferences newInstanceForReferenceLayerDialog(
+        Preference.OnPreferenceChangeListener listener) {
+        MapsPreferences prefs = new MapsPreferences();
+        prefs.autoShowReferenceLayerDialog = true;
+        prefs.referenceLayerPrefListener = listener;
+        return prefs;
+    }
+
+    /** Pops up the preference dialog that lets the user choose a reference layer. */
+    public static void showReferenceLayerDialog(
+        Activity activity, Preference.OnPreferenceChangeListener listener) {
+        // Unfortunately, the Preference class is designed so that it is impossible
+        // to just open a preference dialog without building a PreferenceFragment
+        // and attaching it to an activity.  So, we instantiate a MapsPreference
+        // fragment that is configured to immediately open the dialog when it's
+        // attached, then instantiate it and attach it.
+        activity.getFragmentManager()
+            .beginTransaction()
+            .add(newInstanceForReferenceLayerDialog(listener), null)
+            .commit();
     }
 
     @Override public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +84,11 @@ public class MapsPreferences extends BasePreferenceFragment {
         context = getPreferenceScreen().getContext();
         initBaseLayerSourcePref();
         initReferenceLayerPref();
+        if (autoShowReferenceLayerDialog) {
+            populateReferenceLayerPref();
+            referenceLayerPref.setOnPreferenceChangeListener(referenceLayerPrefListener);
+            referenceLayerPref.showDialog();
+        }
     }
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -114,7 +146,7 @@ public class MapsPreferences extends BasePreferenceFragment {
         MapConfigurator.Option option = id != null ? MapConfigurator.get(id)
             : MapConfigurator.getCurrent(context);
         if (option != null) {
-            // Set up the prefences in the "Base Layer" section.
+            // Set up the preferences in the "Base Layer" section.
             PreferenceCategory baseCategory = (PreferenceCategory) findPreference(CATEGORY_BASE_LAYER);
             baseCategory.removeAll();
             baseCategory.addPreference(baseLayerSourcePref);
@@ -165,7 +197,9 @@ public class MapsPreferences extends BasePreferenceFragment {
     private static List<File> getSupportedLayerFiles(BaseLayerSource source) {
         List<File> files = new ArrayList<>();
         for (File file : FileUtils.walk(new File(Collect.OFFLINE_LAYERS))) {
+            Log.i("MapsPref", "check " + file);
             if (source.supportsLayer(file)) {
+                Log.i("MapsPref", "accept " + file);
                 files.add(file);
             }
         }
