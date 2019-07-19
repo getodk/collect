@@ -2,7 +2,6 @@ package org.odk.collect.android.map;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,41 +23,53 @@ import timber.log.Timber;
  * columns, including tiles that may contain raster images or vector geometry.
  * See https://github.com/mapbox/mbtiles-spec for the detailed specification.
  */
-public class MbtilesFile implements Closeable, TileHttpServer.TileSource {
-    public enum Type { RASTER, VECTOR }
+public class MbtilesFile implements Closeable, TileSource {
+    public enum LayerType { RASTER, VECTOR }
 
     protected File file;
     protected SQLiteDatabase db;
     protected String format;
-    protected Type type;
+    protected LayerType layerType;
     protected String contentType = "application/octet-stream";
     protected String contentEncoding = "identity";
 
-    public MbtilesFile(File file) throws SQLiteException, UnsupportedFormatException {
+    public MbtilesFile(File file) throws MbtilesException {
         this.file = file;
-        db = SQLiteDatabase.openOrCreateDatabase(file, null);
+        try {
+            db = SQLiteDatabase.openOrCreateDatabase(file, null);
 
-        // The "format" code indicates whether the binary tiles are raster image
-        // files (JPEG, PNG) or protobuf-encoded vector geometry (PBF, MVT).
-        format = getMetadata("format").toLowerCase(Locale.US);
-        if (format.equals("pbf") || format.equals("mvt")) {
-            contentType = "application/protobuf";
-            contentEncoding = "gzip";
-            type = Type.VECTOR;
-        } else if (format.equals("jpg") || format.equals("jpeg")) {
-            contentType = "image/jpeg";
-            type = Type.RASTER;
-        } else if (format.equals("png")) {
-            contentType = "image/png";
-            type = Type.RASTER;
-        } else {
-            db.close();
-            throw new UnsupportedFormatException(file, format);
+            // The "format" code indicates whether the binary tiles are raster image
+            // files (JPEG, PNG) or protobuf-encoded vector geometry (PBF, MVT).
+            format = getMetadata("format").toLowerCase(Locale.US);
+            if (format.equals("pbf") || format.equals("mvt")) {
+                contentType = "application/protobuf";
+                contentEncoding = "gzip";
+                layerType = LayerType.VECTOR;
+            } else if (format.equals("jpg") || format.equals("jpeg")) {
+                contentType = "image/jpeg";
+                layerType = LayerType.RASTER;
+            } else if (format.equals("png")) {
+                contentType = "image/png";
+                layerType = LayerType.RASTER;
+            } else {
+                db.close();
+                throw new UnsupportedFormatException(format);
+            }
+        } catch (Throwable e) {
+            throw new MbtilesException(e);
         }
     }
 
-    public Type getType() {
-        return type;
+    public LayerType getLayerType() {
+        return layerType;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public String getContentEncoding() {
+        return contentEncoding;
     }
 
     public void close() {
@@ -66,33 +77,30 @@ public class MbtilesFile implements Closeable, TileHttpServer.TileSource {
     }
 
     /** Queries the "metadata" table, which has just "name" and "value" columns. */
-    public @NonNull String getMetadata(String key) {
+    public @NonNull String getMetadata(String key) throws MbtilesException {
         try (Cursor results = db.query("metadata", new String[] {"value"},
             "name = ?", new String[] {key}, null, null, null, null)) {
             return results.moveToFirst() ? results.getString(0) : "";
+        } catch (Throwable e) {
+            throw new MbtilesException(e);
         }
-    }
-
-    /** Puts together the HTTP response for a given tile. */
-    public TileHttpServer.Response getTile(int zoom, int x, int y) {
-        // TMS coordinates are used in .mbtiles files, so Y needs to be flipped.
-        byte[] data = getTileBlob(zoom, x, (1 << zoom) - 1 - y);
-        return data == null ? null :
-            new TileHttpServer.Response(data, contentType, contentEncoding);
     }
 
     /** Fetches a tile out of the .mbtiles SQLite database. */
     // PMD complains about returning null for an array return type, but we
     // really do want to return null when there is no tile available.
     @SuppressWarnings("PMD.ReturnEmptyArrayRatherThanNull")
-    public byte[] getTileBlob(int zoom, int column, int row) {
+    public byte[] getTileBlob(int zoom, int x, int y) {
+        // TMS coordinates are used in .mbtiles files, so Y needs to be flipped.
+        y = (1 << zoom) - 1 - y;
+
         // We have to use String.format because the templating mechanism in
         // SQLiteDatabase.query is written for a strange alternate universe
         // in which numbers don't exist -- it only supports strings!
         String selection = String.format(
             Locale.US,
             "zoom_level = %d and tile_column = %d and tile_row = %d",
-            zoom, column, row
+            zoom, x, y
         );
 
         try (Cursor results = db.query("tiles", new String[] {"tile_data"},
@@ -101,7 +109,7 @@ public class MbtilesFile implements Closeable, TileHttpServer.TileSource {
                 try {
                     return results.getBlob(0);
                 } catch (IllegalStateException e) {
-                    Timber.w(e, "Could not select tile data at zoom %d, column %d, row %d", zoom, column, row);
+                    Timber.w(e, "Could not select tile data at zoom=%d, x=%d, y=%d", zoom, x, y);
                     // In Android, the SQLite cursor can handle at most 2 MB in one row;
                     // exceeding 2 MB in an .mbtiles file is rare, but it can happen.
                     // When an attempt to fetch a large row fails, the database ends up
@@ -111,6 +119,8 @@ public class MbtilesFile implements Closeable, TileHttpServer.TileSource {
                     db = SQLiteDatabase.openOrCreateDatabase(file, null);
                 }
             }
+        } catch (Throwable e) {
+            Timber.w(e);
         }
         return null;
     }
@@ -125,7 +135,9 @@ public class MbtilesFile implements Closeable, TileHttpServer.TileSource {
             for (int i = 0; i < jsonLayers.length(); i++) {
                 layers.add(new VectorLayer(jsonLayers.getJSONObject(i)));
             }
-        } catch (JSONException e) { /* ignore */ }
+        } catch (MbtilesException | JSONException e) {
+            Timber.w(e);
+        }
         return layers;
     }
 
@@ -138,8 +150,23 @@ public class MbtilesFile implements Closeable, TileHttpServer.TileSource {
         }
     }
 
-    public class UnsupportedFormatException extends IOException {
-        public UnsupportedFormatException(File file, String format) {
+    public class MbtilesException extends IOException {
+        public MbtilesException() {
+            this(String.format("Unable to process %s", file));
+        }
+
+        public MbtilesException(Throwable cause) {
+            this(cause.getMessage());
+            initCause(cause);
+        }
+
+        public MbtilesException(String message) {
+            super(message);
+        }
+    }
+
+    public class UnsupportedFormatException extends MbtilesException {
+        public UnsupportedFormatException(String format) {
             super(String.format("Unrecognized .mbtiles format \"%s\" in %s", format, file));
         }
     }

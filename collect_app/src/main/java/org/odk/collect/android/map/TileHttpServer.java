@@ -5,9 +5,11 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -135,19 +137,24 @@ public class TileHttpServer {
 
         protected Response getResponse(String request) {
             if (request.startsWith("GET /")) {
-                String path = request.substring(5).split("[. ]", 2)[0];
+                String path = request.substring(5).split(" ", 2)[0];
                 String[] parts = path.split("/");
                 if (parts.length == 4) {
                     try {
-                        String key = parts[0];
+                        String key = URLDecoder.decode(parts[0], "utf-8");
                         int zoom = Integer.parseInt(parts[1]);
                         int x = Integer.parseInt(parts[2]);
                         int y = Integer.parseInt(parts[3]);
                         TileSource source = sources.get(key);
                         if (source != null) {
-                            return source.getTile(zoom, x, y);
+                            byte[] data = source.getTileBlob(zoom, x, y);
+                            if (data != null) {
+                                return new Response(data, source.getContentType(), source.getContentEncoding());
+                            }
                         }
-                    } catch (NumberFormatException e) { /* ignore */ }
+                    } catch (NumberFormatException e) {
+                        Timber.w(e, "Bad request %s", request);
+                    } catch (UnsupportedEncodingException e) { /* cannot happen because UTF-8 is built in */ }
                 }
             }
             Timber.w("Ignoring request: %s", request);
@@ -187,9 +194,5 @@ public class TileHttpServer {
             this.contentType = contentType;
             this.contentEncoding = contentEncoding;
         }
-    }
-
-    public interface TileSource {
-        Response getTile(int zoom, int x, int y);
     }
 }
