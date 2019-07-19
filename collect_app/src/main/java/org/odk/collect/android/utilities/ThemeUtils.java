@@ -52,7 +52,7 @@ public final class ThemeUtils {
 
     @StyleRes
     public int getBottomDialogTheme() {
-        return isDarkTheme() ? R.style.DarkMaterialDialogSheet : R.style.LightMaterialDialogSheet;
+        return isDarkTheme() ? R.style.Theme_Collect_MaterialDialogSheet_Dark : R.style.Theme_Collect_MaterialDialogSheet_Light;
     }
 
     @DrawableRes

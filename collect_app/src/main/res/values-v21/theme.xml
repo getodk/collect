@@ -2,12 +2,12 @@
 <resources>
 
     <style name="Theme.Collect.Dark" parent="Theme.Collect.BaseDark">
-        <item name="android:buttonStyle">@style/CustomButtonStyle</item>
-        <item name="imageButtonStyle">@style/CustomImageButtonDark</item>
+        <item name="android:buttonStyle">@style/Widget.Collect.Button.Custom</item>
+        <item name="imageButtonStyle">@style/Widget.Collect.ImageButton.Custom.Dark</item>
     </style>
 
     <style name="Theme.Collect.Light" parent="Theme.Collect.BaseLight">
-        <item name="android:buttonStyle">@style/CustomButtonStyle</item>
-        <item name="imageButtonStyle">@style/CustomImageButtonLight</item>
+        <item name="android:buttonStyle">@style/Widget.Collect.Button.Custom</item>
+        <item name="imageButtonStyle">@style/Widget.Collect.ImageButton.Custom.Light</item>
     </style>
 </resources>
