@@ -319,10 +319,15 @@ public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFrag
             style.removeLayer(layer);
         }
         overlayLayers.clear();
+        // NOTE(ping): It would make sense to remove the overlaySources from
+        // the map here, but that can lead to a SEGV in libmapbox-gl.so.  See
+        // https://github.com/mapbox/mapbox-gl-native/issues/15182 for details.
+        /*
         for (Source source : overlaySources) {
             style.removeSource(source);
         }
         overlaySources.clear();
+        */
     }
 
     private void addOverlayLayer(Layer layer) {
