@@ -63,14 +63,8 @@ public final class GeneralKeys {
     // map_preferences.xml
     public static final String CATEGORY_BASE_LAYER          = "category_base_layer";
     public static final String KEY_BASE_LAYER_SOURCE        = "base_layer_source";
-    public static final String CATEGORY_REFERENCE_LAYER     = "category_reference_layer";
     public static final String KEY_REFERENCE_LAYER          = "reference_layer";
     public static final String BASE_LAYER_SOURCE_GOOGLE     = "base_layer_source_google";
-    public static final String BASE_LAYER_SOURCE_MAPBOX     = "base_layer_source_mapbox";
-    public static final String BASE_LAYER_SOURCE_OSM        = "base_layer_source_osm";
-    public static final String BASE_LAYER_SOURCE_USGS       = "base_layer_source_usgs";
-    public static final String BASE_LAYER_SOURCE_STAMEN     = "base_layer_source_stamen";
-    public static final String BASE_LAYER_SOURCE_CARTO      = "base_layer_source_carto";
 
     public static final String KEY_GOOGLE_MAP_STYLE         = "google_map_style";
     public static final String KEY_MAPBOX_MAP_STYLE         = "mapbox_map_style";
@@ -91,25 +85,6 @@ public final class GeneralKeys {
     public static final String NAVIGATION_BUTTONS           = "buttons";
     private static final String AUTOSEND_OFF                = "off";
     private static final String GUIDANCE_HINT_OFF           = "no";
-
-    // These values match those in map_sdk_selector_entry_values.
-    public static final String GOOGLE_MAPS_BASEMAP_KEY      = "google_maps";
-    public static final String OSM_BASEMAP_KEY              = "osmdroid";
-    public static final String MAPBOX_BASEMAP_KEY           = "mapbox_maps";
-    public static final String DEFAULT_BASEMAP_KEY = GOOGLE_MAPS_BASEMAP_KEY;
-
-    public static final String GOOGLE_MAPS_BASEMAP_DEFAULT  = "streets";
-
-    public static final String OSM_MAPS_BASEMAP_DEFAULT     = "openmap_streets";
-
-    // These values match those in map_mapbox_basemap_selector_entry_values.
-    public static final String MAPBOX_MAP_STREETS           = "mapbox_streets";
-    public static final String MAPBOX_MAP_LIGHT             = "mapbox_light";
-    public static final String MAPBOX_MAP_DARK              = "mapbox_dark";
-    public static final String MAPBOX_MAP_SATELLITE         = "mapbox_satellite";
-    public static final String MAPBOX_MAP_SATELLITE_STREETS = "mapbox_satellite_streets";
-    public static final String MAPBOX_MAP_OUTDOORS          = "mapbox_outdoors";
-    public static final String MAPBOX_BASEMAP_DEFAULT       = "mapbox_streets";
 
     private static HashMap<String, Object> getHashMap() {
         HashMap<String, Object> hashMap = new HashMap<>();

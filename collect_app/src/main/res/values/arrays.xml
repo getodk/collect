@@ -86,65 +86,6 @@ the specific language governing permissions and limitations under the License. -
         <item>@string/image_size_medium</item>
         <item>@string/image_size_large</item>
     </string-array>
-    <string-array name="map_sdk_selector_entries">
-        <item>@string/google_maps_sdk</item>
-        <item>@string/openstreetmap_sdk</item>
-        <item>@string/mapbox_maps_sdk</item>
-    </string-array>
-    <string-array name="map_sdk_selector_entry_values" translatable="false">
-        <item>google_maps</item>
-        <item>osmdroid</item>
-        <item>mapbox_maps</item>
-    </string-array>
-
-    <!-- Basemaps-->
-    <string-array name="map_google_basemap_selector_entry_values" translatable="false">
-        <item>streets</item>
-        <item>satellite</item>
-        <item>terrain‎</item>
-        <item>hybrid</item>
-    </string-array>
-    <string-array name="map_google_basemap_selector_entries">
-        <item>@string/streets</item>
-        <item>@string/satellite</item>
-        <item>@string/terrain</item>
-        <item>@string/hybrid</item>
-    </string-array>
-
-    <string-array name="map_osm_basemap_selector_entry_values" translatable="false">
-        <item>openmap_streets</item>
-        <item>openmap_usgs_topo</item>
-        <item>openmap_usgs_sat</item>
-        <item>openmap_usgs_img</item>
-        <item>openmap_stamen_terrain</item>
-        <item>openmap_cartodb_positron</item>
-        <item>openmap_cartodb_darkmatter</item>
-    </string-array>
-    <string-array name="map_osm_basemap_selector_entries">
-        <item>@string/openmap_streets</item>
-        <item>@string/openmap_usgs_topo</item>
-        <item>@string/openmap_usgs_sat</item>
-        <item>@string/openmap_usgs_img</item>
-        <item>@string/openmap_stamen_terrain</item>
-        <item>@string/openmap_cartodb_positron</item>
-        <item>@string/openmap_cartodb_darkmatter</item>
-    </string-array>
-    <string-array name="map_mapbox_basemap_selector_entry_values" translatable="false">
-        <item>mapbox_streets</item>
-        <item>mapbox_light</item>
-        <item>mapbox_dark</item>
-        <item>mapbox_satellite</item>
-        <item>mapbox_satellite_streets</item>
-        <item>mapbox_outdoors</item>
-    </string-array>
-    <string-array name="map_mapbox_basemap_selector_entries">
-        <item>@string/mapbox_streets</item>
-        <item>@string/mapbox_light</item>
-        <item>@string/mapbox_dark</item>
-        <item>@string/mapbox_satellite</item>
-        <item>@string/mapbox_satellite_streets</item>
-        <item>@string/mapbox_outdoors</item>
-    </string-array>
     <string-array name="autosend_selector_entries">
         <item>@string/off</item>
         <item>@string/wifi_autosend</item>
