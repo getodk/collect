@@ -18,6 +18,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.location.Location;
+import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 
@@ -68,6 +69,10 @@ public class GoogleMapFragment extends SupportMapFragment implements
     public static final float INITIAL_ZOOM = 2;
     public static final float POINT_ZOOM = 16;
 
+    // Bundle keys understood by applyConfig().
+    public static final String KEY_MAP_TYPE = "MAP_TYPE";
+    public static final String KEY_REFERENCE_LAYER = "REFERENCE_LAYER";
+
     protected GoogleMap map;
     protected Marker locationCrosshairs;
     protected Circle accuracyCircle;
@@ -91,10 +96,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
     // "map" field will be null and many operations will need to be stubbed out.
     @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL", justification = "This flag is exposed for Robolectric tests to set")
     @VisibleForTesting public static boolean testMode;
-
-    @Override public Fragment getFragment() {
-        return this;
-    }
 
     @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     @Override public void addTo(
@@ -138,16 +139,26 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    public void setMapType(int mapType) {
-        this.mapType = mapType;
-        if (map != null) {
-            map.setMapType(mapType);
-        }
+    @Override public void onStart() {
+        super.onStart();
+        MapConfigurator.onMapFragmentStart(this);
     }
 
-    @Override public void setReferenceLayerFile(File file) {
-        referenceLayerFile = file;
+    @Override public void onStop() {
+        MapConfigurator.onMapFragmentStop(this);
+        super.onStop();
+    }
+
+    @Override public Fragment getFragment() {
+        return this;
+    }
+
+    @Override public void applyConfig(Bundle config) {
+        mapType = config.getInt(KEY_MAP_TYPE, GoogleMap.MAP_TYPE_NORMAL);
+        String path = config.getString(KEY_REFERENCE_LAYER);
+        referenceLayerFile = path != null ? new File(path) : null;
         if (map != null) {
+            map.setMapType(mapType);
             loadReferenceOverlay();
         }
     }

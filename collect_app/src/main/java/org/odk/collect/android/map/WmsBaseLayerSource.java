@@ -2,13 +2,17 @@ package org.odk.collect.android.map;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceCategory;
-import android.preference.PreferenceManager;
+import android.os.Bundle;
+import android.preference.Preference;
+
+import com.google.common.collect.ImmutableSet;
 
 import org.odk.collect.android.preferences.PrefUtils;
-import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 
@@ -21,11 +25,11 @@ public class WmsBaseLayerSource implements BaseLayerSource {
     // See SharedPreferences.registerOnSharedPreferenceChangeListener().
     private SharedPreferences.OnSharedPreferenceChangeListener listener;
 
-    /** Constructs a base layer source that renders one Web Map Service. */
-    public WmsBaseLayerSource(OnlineTileSourceBase source) {
+    /** Constructs a base layer source that renders just one Web Map Service. */
+    public WmsBaseLayerSource(WebMapService service) {
         prefKey = "";
         prefTitleId = 0;
-        options = new WmsOption[] {new WmsOption("", 0, source)};
+        options = new WmsOption[] {new WmsOption("", 0, service)};
     }
 
     /**
@@ -45,7 +49,11 @@ public class WmsBaseLayerSource implements BaseLayerSource {
 
     @Override public void showUnavailableMessage(Context context) { }
 
-    @Override public void addPrefs(PreferenceCategory category) {
+    @Override public MapFragment createMapFragment(Context context) {
+        return new OsmMapFragment();
+    }
+
+    @Override public List<Preference> createPrefs(Context context) {
         if (options.length > 1) {
             int[] labelIds = new int[options.length];
             String[] values = new String[options.length];
@@ -55,47 +63,33 @@ public class WmsBaseLayerSource implements BaseLayerSource {
                 values[i] = option.id;
                 i++;
             }
-            category.addPreference(PrefUtils.createListPref(
-                category.getContext(), prefKey, prefTitleId, labelIds, values));
+            return Collections.singletonList(PrefUtils.createListPref(
+                context, prefKey, prefTitleId, labelIds, values
+            ));
         }
+        return Collections.emptyList();
     }
 
-    @Override public MapFragment createMapFragment(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        OsmMapFragment map = new OsmMapFragment();
-        setTileSourceFromPrefs(prefs, map);
-        setReferenceLayerFromPrefs(prefs, map);
-
-        listener = (SharedPreferences p, String key) -> {
-            if (key.equals(prefKey)) {
-                setTileSourceFromPrefs(prefs, map);
-            }
-            if (key.equals(KEY_REFERENCE_LAYER)) {
-                setReferenceLayerFromPrefs(prefs, map);
-            }
-        };
-        prefs.registerOnSharedPreferenceChangeListener(listener);
-        return map;
+    @Override public Collection<String> getPrefKeys() {
+        return prefKey.isEmpty() ? ImmutableSet.of(KEY_REFERENCE_LAYER) :
+            ImmutableSet.of(prefKey, KEY_REFERENCE_LAYER);
     }
 
-    private void setTileSourceFromPrefs(SharedPreferences prefs, OsmMapFragment map) {
+    @Override public Bundle buildConfig(SharedPreferences prefs) {
+        Bundle config = new Bundle();
         if (options.length == 1) {
-            map.setTileSource(options[0].source);
-            return;
+            config.putSerializable(OsmMapFragment.KEY_WEB_MAP_SERVICE, options[0].service);
         } else {
             String value = prefs.getString(prefKey, null);
             for (int i = 0; i < options.length; i++) {
                 if (options[i].id.equals(value)) {
-                    map.setTileSource(options[i].source);
-                    return;
+                    config.putSerializable(OsmMapFragment.KEY_WEB_MAP_SERVICE, options[i].service);
                 }
             }
         }
-    }
-
-    private void setReferenceLayerFromPrefs(SharedPreferences prefs, OsmMapFragment map) {
-        String path = prefs.getString(KEY_REFERENCE_LAYER, null);
-        map.setReferenceLayerFile(path != null ? new File(path) : null);
+        config.putString(OsmMapFragment.KEY_REFERENCE_LAYER,
+            prefs.getString(KEY_REFERENCE_LAYER, null));
+        return config;
     }
 
     @Override public boolean supportsLayer(File file) {
@@ -111,12 +105,12 @@ public class WmsBaseLayerSource implements BaseLayerSource {
     public static class WmsOption {
         final String id;
         final int labelId;
-        final OnlineTileSourceBase source;
+        final WebMapService service;
 
-        WmsOption(String id, int labelId, OnlineTileSourceBase source) {
+        WmsOption(String id, int labelId, WebMapService service) {
             this.id = id;
             this.labelId = labelId;
-            this.source = source;
+            this.service = service;
         }
     }
 }

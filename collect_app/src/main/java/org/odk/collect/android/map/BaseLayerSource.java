@@ -1,9 +1,13 @@
 package org.odk.collect.android.map;
 
 import android.content.Context;
-import android.preference.PreferenceCategory;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.Preference;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.List;
 
 import androidx.annotation.Nullable;
 
@@ -26,15 +30,20 @@ public interface BaseLayerSource {
      */
     void showUnavailableMessage(Context context);
 
-    /** Adds any preferences that are specific to this base layer source. */
-    void addPrefs(PreferenceCategory category);
-
     /**
-     * Creates a map fragment configured with a base layer according to the
-     * preference settings.  This method can return null to indicate that
-     * there is no suitable MapFragment implementation available.
+     * Creates an unconfigured map fragment.  This method can return null to
+     * indicate that there is no suitable MapFragment implementation available.
      */
     @Nullable MapFragment createMapFragment(Context context);
+
+    /** Constructs any preferences that are specific to this base layer source. */
+    List<Preference> createPrefs(Context context);
+
+    /** Gets the set of keys for preferences that should be watched for changes. */
+    Collection<String> getPrefKeys();
+
+    /** Packs map-related preferences into a Bundle for MapFragment.applyConfig(). */
+    Bundle buildConfig(SharedPreferences prefs);
 
     /**
      * Returns true if map fragments obtained from this BaseLayerSource are

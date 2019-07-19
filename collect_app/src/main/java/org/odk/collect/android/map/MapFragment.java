@@ -14,7 +14,8 @@
 
 package org.odk.collect.android.map;
 
-import java.io.File;
+import android.os.Bundle;
+
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -47,6 +48,16 @@ public interface MapFragment {
     Fragment getFragment();
 
     /**
+     * Configures the map according to settings such as styling preferences and
+     * layer data sources.  For now, this means anything that is configurable
+     * in the Maps preferences; the intention is to anticipate the possibility
+     * of a map configuration delivered with a form.  MapFragment implementations
+     * do not interact directly with the preferences; instead, they receive a
+     * config bundle, which may be derived from the preferences or another source.
+     */
+    void applyConfig(Bundle config);
+
+    /**
      * Adds the map Fragment to an activity.  The containerId should be the
      * resource ID of a View, into which the map view will be placed.  The
      * readyListener will be invoked on the UI thread with this MapFragment when
@@ -56,9 +67,6 @@ public interface MapFragment {
     void addTo(
         @NonNull FragmentActivity activity, int containerId,
         @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener);
-
-    /** Sets a file to be shown as a reference layer, or turns off the layer. */
-    void setReferenceLayerFile(@Nullable File file);
 
     /** Gets the point currently shown at the center of the map view. */
     @NonNull MapPoint getCenter();

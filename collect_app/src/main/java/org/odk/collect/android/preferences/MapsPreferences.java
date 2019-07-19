@@ -18,8 +18,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceCategory;
-import android.util.Log;
 import android.view.View;
 
 import org.odk.collect.android.R;
@@ -146,23 +146,25 @@ public class MapsPreferences extends BasePreferenceFragment {
 
     /** Updates the rest of the preference UI when the Base Layer Source is changed. */
     private void onBaseLayerSourceChanged(String id) {
-        MapConfigurator.Option option = id != null ? MapConfigurator.get(id)
-            : MapConfigurator.getCurrent(context);
-        if (option != null) {
+        BaseLayerSource source = id != null ? MapConfigurator.get(id).source :
+            MapConfigurator.getCurrentSource(context);
+        if (source != null) {
             // Set up the preferences in the "Base Layer" section.
             PreferenceCategory baseCategory = (PreferenceCategory) findPreference(CATEGORY_BASE_LAYER);
             baseCategory.removeAll();
             baseCategory.addPreference(baseLayerSourcePref);
-            if (!option.source.isAvailable(context)) {
-                option.source.showUnavailableMessage(context);
+            if (!source.isAvailable(context)) {
+                source.showUnavailableMessage(context);
                 return;
             }
-            option.source.addPrefs(baseCategory);
+            for (Preference pref : source.createPrefs(context)) {
+                baseCategory.addPreference(pref);
+            }
 
             // Clear the reference layer if it isn't supported by the new base layer.
             if (referenceLayerPref != null) {
                 String path = referenceLayerPref.getValue();
-                if (path != null && !option.source.supportsLayer(new File(path))) {
+                if (path != null && !source.supportsLayer(new File(path))) {
                     referenceLayerPref.setValue(null);
                     updateReferenceLayerSummary(null);
                 }
@@ -172,7 +174,8 @@ public class MapsPreferences extends BasePreferenceFragment {
 
     /** Sets up the contents of the reference layer selection dialog. */
     private void populateReferenceLayerPref() {
-        MapConfigurator.Option option = MapConfigurator.getCurrent(context);
+        MapConfigurator.Option option = MapConfigurator.getCurrentOption(context);
+        BaseLayerSource source = MapConfigurator.getCurrentSource(context);
 
         List<File> files = getSupportedLayerFiles(option.source);
         String[] values = new String[files.size() + 1];
@@ -183,7 +186,7 @@ public class MapsPreferences extends BasePreferenceFragment {
         captions[0] = "";
         for (int i = 0; i < files.size(); i++) {
             values[i + 1] = files.get(i).getAbsolutePath();
-            labels[i + 1] = option.source.getDisplayName(files.get(i));
+            labels[i + 1] = source.getDisplayName(files.get(i));
             captions[i + 1] = files.get(i).getAbsolutePath();
         }
         referenceLayerPref.setItems(values, labels, captions);
@@ -200,9 +203,7 @@ public class MapsPreferences extends BasePreferenceFragment {
     private static List<File> getSupportedLayerFiles(BaseLayerSource source) {
         List<File> files = new ArrayList<>();
         for (File file : FileUtils.walk(new File(Collect.OFFLINE_LAYERS))) {
-            Log.i("MapsPref", "check " + file);
             if (source.supportsLayer(file)) {
-                Log.i("MapsPref", "accept " + file);
                 files.add(file);
             }
         }

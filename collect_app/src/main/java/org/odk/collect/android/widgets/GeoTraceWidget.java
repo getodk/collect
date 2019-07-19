@@ -71,13 +71,13 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
 
     private void startGeoTraceActivity() {
         Context context = getContext();
-        if (MapConfigurator.getCurrent(context).source.isAvailable(context)) {
+        if (MapConfigurator.getCurrentSource(context).isAvailable(context)) {
             Intent intent = new Intent(context, GeoPolyActivity.class)
                 .putExtra(GeoPolyActivity.ANSWER_KEY, answerDisplay.getText().toString())
                 .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOTRACE);
             ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOTRACE_CAPTURE);
         } else {
-            MapConfigurator.getCurrent(context).source.showUnavailableMessage(context);
+            MapConfigurator.getCurrentSource(context).showUnavailableMessage(context);
         }
     }
 

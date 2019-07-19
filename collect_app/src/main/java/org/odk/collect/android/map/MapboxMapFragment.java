@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
 
@@ -47,7 +48,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.map.MbtilesFile.LayerType;
 import org.odk.collect.android.map.MbtilesFile.MbtilesException;
-import org.odk.collect.android.mapboxsdk.MapFragment;
 
 import java.io.File;
 import java.io.IOException;
@@ -73,8 +73,9 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.rasterOpacity;
 
-public class MapboxMapFragment extends MapFragment implements org.odk.collect.android.map.MapFragment,
-    OnMapReadyCallback, MapboxMap.OnMapClickListener, MapboxMap.OnMapLongClickListener,
+public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFragment
+    implements MapFragment, OnMapReadyCallback,
+    MapboxMap.OnMapClickListener, MapboxMap.OnMapLongClickListener,
     LocationEngineCallback<LocationEngineResult> {
 
     public static final LatLng INITIAL_CENTER = new LatLng(0, -30);
@@ -83,6 +84,10 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
     public static final String POINT_ICON_ID = "point-icon-id";
     public static final long LOCATION_INTERVAL_MILLIS = 1000;
     public static final long LOCATION_MAX_WAIT_MILLIS = 5*LOCATION_INTERVAL_MILLIS;
+
+    // Bundle keys understood by applyConfig().
+    public static final String KEY_STYLE_URL = "STYLE_URL";
+    public static final String KEY_REFERENCE_LAYER = "REFERENCE_LAYER";
 
     protected MapboxMap map;
     protected List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
@@ -117,7 +122,7 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
         @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         Context context = getContext();
         if (MapboxUtils.initMapbox() == null) {
-            MapConfigurator.getCurrent(context).source.showUnavailableMessage(context);
+            MapConfigurator.getCurrentSource(context).showUnavailableMessage(context);
             if (errorListener != null) {
                 errorListener.onError();
             }
@@ -168,6 +173,16 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
         });
     }
 
+    @Override public void onStart() {
+        super.onStart();
+        MapConfigurator.onMapFragmentStart(this);
+    }
+
+    @Override public void onStop() {
+        MapConfigurator.onMapFragmentStop(this);
+        super.onStop();
+    }
+
     @Override public void onDestroy() {
         if (tileServer != null) {
             tileServer.destroy();
@@ -177,6 +192,16 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
 
     @Override public Fragment getFragment() {
         return this;
+    }
+
+    @Override public void applyConfig(Bundle config) {
+        styleUrl = config.getString(KEY_STYLE_URL);
+        String path = config.getString(KEY_REFERENCE_LAYER);
+        referenceLayerFile = path != null ? new File(path) : null;
+        if (map != null) {
+            map.setStyle(getDesiredStyleBuilder());
+            loadReferenceOverlay();
+        }
     }
 
     private Style.Builder getDesiredStyleBuilder() {
@@ -196,20 +221,6 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
         return new Style.Builder().fromUrl(styleUrl)
             .withImage(POINT_ICON_ID, pointIcon)
             .withTransition(new TransitionOptions(0, 0, false));
-    }
-
-    public void setStyleUrl(String url) {
-        styleUrl = url;
-        if (map != null) {
-            map.setStyle(getDesiredStyleBuilder());
-        }
-    }
-
-    @Override public void setReferenceLayerFile(File file) {
-        referenceLayerFile = file;
-        if (map != null) {
-            loadReferenceOverlay();
-        }
     }
 
     /** Updates the map to reflect the value of referenceLayerFile. */

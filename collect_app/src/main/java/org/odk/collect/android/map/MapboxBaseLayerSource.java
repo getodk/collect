@@ -2,9 +2,12 @@ package org.odk.collect.android.map;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Build;
-import android.preference.PreferenceCategory;
+import android.os.Bundle;
+import android.preference.Preference;
 
+import com.google.common.collect.ImmutableSet;
 import com.mapbox.mapboxsdk.maps.Style;
 
 import org.odk.collect.android.R;
@@ -12,14 +15,17 @@ import org.odk.collect.android.preferences.PrefUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_MAP_STYLE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 
 public class MapboxBaseLayerSource implements BaseLayerSource {
-    // We must hold on to the listener or it will be garbage-collected.
-    // See SharedPreferences.registerOnSharedPreferenceChangeListener().
-    private SharedPreferences.OnSharedPreferenceChangeListener listener;
+    protected Map<MapFragment, OnSharedPreferenceChangeListener> prefListenersByMap = new WeakHashMap<>();
 
     @Override public boolean isAvailable(Context context) {
         return MapboxUtils.initMapbox() != null;
@@ -30,10 +36,15 @@ public class MapboxBaseLayerSource implements BaseLayerSource {
             R.string.mapbox_unsupported_warning, Build.CPU_ABI));
     }
 
-    @Override public void addPrefs(PreferenceCategory category) {
-        category.addPreference(
+    @Override public MapFragment createMapFragment(Context context) {
+        return MapboxUtils.initMapbox() != null ? new MapboxMapFragment() : null;
+    }
+
+
+    @Override public List<Preference> createPrefs(Context context) {
+        return Arrays.asList(
             PrefUtils.createListPref(
-                category.getContext(),
+                context,
                 KEY_MAPBOX_MAP_STYLE,
                 R.string.mapbox_map_style,
                 new int[] {
@@ -56,34 +67,17 @@ public class MapboxBaseLayerSource implements BaseLayerSource {
         );
     }
 
-    @Override public MapFragment createMapFragment(Context context) {
-        if (MapboxUtils.initMapbox() == null) {
-            return null;
-        }
-        SharedPreferences prefs = PrefUtils.getSharedPrefs(context);
-        MapboxMapFragment map = new MapboxMapFragment();
-        setStyleUrlFromPrefs(prefs, map);
-        setReferenceLayerFromPrefs(prefs, map);
-
-        listener = (SharedPreferences p, String key) -> {
-            if (key.equals(KEY_MAPBOX_MAP_STYLE)) {
-                setStyleUrlFromPrefs(prefs, map);
-            }
-            if (key.equals(KEY_REFERENCE_LAYER)) {
-                setReferenceLayerFromPrefs(prefs, map);
-            }
-        };
-        prefs.registerOnSharedPreferenceChangeListener(listener);
-        return map;
+    @Override public Set<String> getPrefKeys() {
+        return ImmutableSet.of(KEY_MAPBOX_MAP_STYLE, KEY_REFERENCE_LAYER);
     }
 
-    private void setStyleUrlFromPrefs(SharedPreferences prefs, MapboxMapFragment map) {
-        map.setStyleUrl(prefs.getString(KEY_MAPBOX_MAP_STYLE, Style.MAPBOX_STREETS));
-    }
-
-    private void setReferenceLayerFromPrefs(SharedPreferences prefs, MapboxMapFragment map) {
-        String path = prefs.getString(KEY_REFERENCE_LAYER, null);
-        map.setReferenceLayerFile(path != null ? new File(path) : null);
+    @Override public Bundle buildConfig(SharedPreferences prefs) {
+        Bundle config = new Bundle();
+        config.putString(MapboxMapFragment.KEY_STYLE_URL,
+            prefs.getString(KEY_MAPBOX_MAP_STYLE, Style.MAPBOX_STREETS));
+        config.putString(MapboxMapFragment.KEY_REFERENCE_LAYER,
+            prefs.getString(KEY_REFERENCE_LAYER, null));
+        return config;
     }
 
     @Override public boolean supportsLayer(File file) {

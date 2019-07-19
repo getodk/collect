@@ -44,7 +44,6 @@ import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.tileprovider.IRegisterReceiver;
-import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -68,12 +67,20 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import timber.log.Timber;
 
+/**
+ * A MapFragment drawn by OSMdroid.  This class is specific to OSMdroid, not OSM,
+ * and should be named OsmDroidMapFragment.
+ */
 public class OsmMapFragment extends Fragment implements MapFragment,
     MapEventsReceiver, IRegisterReceiver,
     LocationListener, LocationClient.LocationClientListener {
     public static final GeoPoint INITIAL_CENTER = new GeoPoint(0.0, -30.0);
     public static final int INITIAL_ZOOM = 2;
     public static final int POINT_ZOOM = 16;
+
+    // Bundle keys understood by applyConfig().
+    public static final String KEY_WEB_MAP_SERVICE = "WEB_MAP_SERVICE";
+    public static final String KEY_REFERENCE_LAYER = "REFERENCE_LAYER";
 
     protected MapView map;
     protected ReadyListener readyListener;
@@ -88,7 +95,7 @@ public class OsmMapFragment extends Fragment implements MapFragment,
     protected AlertDialog gpsErrorDialog;
     protected boolean gpsLocationEnabled;
     protected IGeoPoint lastMapCenter;
-    protected ITileSource tiles;
+    protected WebMapService webMapService;
     protected File referenceLayerFile;
     protected TilesOverlay referenceOverlay;
 
@@ -106,10 +113,6 @@ public class OsmMapFragment extends Fragment implements MapFragment,
 
     @Override public void destroy() { }
 
-    @Override public Fragment getFragment() {
-        return this;
-    }
-
     @Override public void addTo(
         @NonNull FragmentActivity activity, int containerId,
         @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
@@ -122,6 +125,30 @@ public class OsmMapFragment extends Fragment implements MapFragment,
             .beginTransaction().replace(containerId, this).commit();
     }
 
+    @Override public void onStart() {
+        super.onStart();
+        MapConfigurator.onMapFragmentStart(this);
+    }
+
+    @Override public void onStop() {
+        MapConfigurator.onMapFragmentStop(this);
+        super.onStop();
+    }
+
+    @Override public Fragment getFragment() {
+        return this;
+    }
+
+    @Override public void applyConfig(Bundle config) {
+        webMapService = (WebMapService) config.getSerializable(KEY_WEB_MAP_SERVICE);
+        String path = config.getString(KEY_REFERENCE_LAYER);
+        referenceLayerFile = path != null ? new File(path) : null;
+        if (map != null) {
+            map.setTileSource(webMapService.asOnlineTileSource());
+            loadReferenceOverlay();
+        }
+    }
+
     // TOOD(ping): This method is only used by MapHelper.  Remove this after
     // MapFragment adds support for selectable basemaps.
     public MapView getMapView() {
@@ -132,7 +159,9 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.osm_map_layout, container, false);
         map = view.findViewById(R.id.osm_map_view);
-        map.setTileSource(tiles);
+        if (webMapService != null) {
+            map.setTileSource(webMapService.asOnlineTileSource());
+        }
         map.setMultiTouchControls(true);
         map.setBuiltInZoomControls(true);
         map.setMinZoomLevel(2);
@@ -157,24 +186,11 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         return view;
     }
 
-    public void setTileSource(ITileSource tiles) {
-        this.tiles = tiles;
-        if (map != null) {
-            map.setTileSource(tiles);
-        }
-    }
-
-    @Override public void setReferenceLayerFile(@Nullable File file) {
-        referenceLayerFile = file;
-        if (map != null) {
-            loadReferenceOverlay();
-        }
-    }
-
     /** Updates the map to reflect the value of referenceLayerFile. */
     protected void loadReferenceOverlay() {
         if (referenceOverlay != null) {
             map.getOverlays().remove(referenceOverlay);
+            referenceOverlay = null;
         }
         if (referenceLayerFile != null) {
             OsmMBTileProvider mbprovider = new OsmMBTileProvider(this, referenceLayerFile);

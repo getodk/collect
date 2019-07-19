@@ -3,10 +3,12 @@ package org.odk.collect.android.map;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceCategory;
-import android.preference.PreferenceManager;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.Bundle;
+import android.preference.Preference;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.common.collect.ImmutableSet;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.map.MbtilesFile.LayerType;
@@ -15,6 +17,12 @@ import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_GOOGLE_MAP_STYLE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
@@ -22,7 +30,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYE
 public class GoogleBaseLayerSource implements BaseLayerSource {
     // We must hold on to the listener or it will be garbage-collected.
     // See SharedPreferences.registerOnSharedPreferenceChangeListener().
-    private SharedPreferences.OnSharedPreferenceChangeListener listener;
+    protected Map<MapFragment, OnSharedPreferenceChangeListener> prefListenersByMap = new WeakHashMap<>();
 
     @Override public boolean isAvailable(Context context) {
         return isGoogleMapsSdkAvailable(context) && isGooglePlayServicesAvailable(context);
@@ -48,9 +56,12 @@ public class GoogleBaseLayerSource implements BaseLayerSource {
         return PlayServicesUtil.isGooglePlayServicesAvailable(context);
     }
 
-    @Override public void addPrefs(PreferenceCategory category) {
-        Context context = category.getContext();
-        category.addPreference(
+    @Override public MapFragment createMapFragment(Context context) {
+        return new GoogleMapFragment();
+    }
+
+    @Override public List<Preference> createPrefs(Context context) {
+        return Collections.singletonList(
             PrefUtils.createListPref(
                 context,
                 KEY_GOOGLE_MAP_STYLE,
@@ -71,32 +82,22 @@ public class GoogleBaseLayerSource implements BaseLayerSource {
         );
     }
 
-    @Override public MapFragment createMapFragment(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        GoogleMapFragment map = new GoogleMapFragment();
-        setMapTypeFromPrefs(prefs, map);
-        setReferenceLayerFromPrefs(prefs, map);
-
-        listener = (SharedPreferences p, String key) -> {
-            if (key.equals(KEY_GOOGLE_MAP_STYLE)) {
-                setMapTypeFromPrefs(prefs, map);
-            }
-            if (key.equals(KEY_REFERENCE_LAYER)) {
-                setReferenceLayerFromPrefs(prefs, map);
-            }
-        };
-        prefs.registerOnSharedPreferenceChangeListener(listener);
-        return map;
+    @Override public Collection<String> getPrefKeys() {
+        return ImmutableSet.of(KEY_GOOGLE_MAP_STYLE, KEY_REFERENCE_LAYER);
     }
 
-    private void setMapTypeFromPrefs(SharedPreferences prefs, GoogleMapFragment map) {
-        map.setMapType(Integer.parseInt(prefs.getString(
-            KEY_GOOGLE_MAP_STYLE, Integer.toString(GoogleMap.MAP_TYPE_NORMAL))));
-    }
-
-    private void setReferenceLayerFromPrefs(SharedPreferences prefs, GoogleMapFragment map) {
-        String path = prefs.getString(KEY_REFERENCE_LAYER, null);
-        map.setReferenceLayerFile(path != null ? new File(path) : null);
+    @Override public Bundle buildConfig(SharedPreferences prefs) {
+        int mapType;
+        try {
+            mapType = Integer.parseInt(prefs.getString(KEY_GOOGLE_MAP_STYLE, ""));
+        } catch (NumberFormatException e) {
+            mapType = GoogleMap.MAP_TYPE_NORMAL;
+        }
+        Bundle config = new Bundle();
+        config.putInt(GoogleMapFragment.KEY_MAP_TYPE, mapType);
+        config.putString(GoogleMapFragment.KEY_REFERENCE_LAYER,
+            prefs.getString(KEY_REFERENCE_LAYER, null));
+        return config;
     }
 
     @Override public boolean supportsLayer(File file) {
