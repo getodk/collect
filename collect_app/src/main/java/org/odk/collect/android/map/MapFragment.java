@@ -14,12 +14,12 @@
 
 package org.odk.collect.android.map;
 
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-
-import java.util.List;
 
 /**
  * Interface for a Fragment that renders a map view.  The plan is to have one
@@ -168,7 +168,7 @@ public interface MapFragment {
     void setGpsLocationListener(@Nullable PointListener listener);
 
     interface ReadyListener {
-        void onReady(@Nullable MapFragment mapFragment);
+        void onReady(@NonNull MapFragment mapFragment);
     }
 
     interface PointListener {

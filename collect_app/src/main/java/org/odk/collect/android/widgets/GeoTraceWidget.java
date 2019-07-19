@@ -74,15 +74,15 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
 
     private void startGeoTraceActivity() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String mapSDK = prefs.getString(GeneralKeys.KEY_MAP_SDK, GeneralKeys.DEFAULT_BASEMAP_KEY);
-        if (mapSDK.equals(GeneralKeys.GOOGLE_MAPS_BASEMAP_KEY) && !PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
+        String mapSDK = prefs.getString(GeneralKeys.KEY_BASE_LAYER_SOURCE, GeneralKeys.DEFAULT_BASEMAP_KEY);
+        if (mapSDK.equals(GeneralKeys.BASE_LAYER_SOURCE_GOOGLE) && !PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
             PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
             return;
         }
         Intent intent = new Intent(getContext(), GeoPolyActivity.class)
             .putExtra(GeoPolyActivity.ANSWER_KEY, answerDisplay.getText().toString())
             .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOTRACE)
-            .putExtra(GeneralKeys.KEY_MAP_SDK, mapSDK);
+            .putExtra(GeneralKeys.KEY_BASE_LAYER_SOURCE, mapSDK);
         ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOTRACE_CAPTURE);
     }
 

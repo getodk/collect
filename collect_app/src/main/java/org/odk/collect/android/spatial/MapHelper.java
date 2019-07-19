@@ -115,11 +115,11 @@ public class MapHelper {
     }
 
     private static String getGoogleBasemap() {
-        return sharedPreferences.getString(GeneralKeys.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
+        return sharedPreferences.getString(GeneralKeys.KEY_GOOGLE_MAP_STYLE, GOOGLE_MAP_STREETS);
     }
 
     private static String getOsmBasemap() {
-        return sharedPreferences.getString(GeneralKeys.KEY_MAP_BASEMAP, OPENMAP_STREETS);
+        return OPENMAP_STREETS;
     }
 
     public void setBasemap() {

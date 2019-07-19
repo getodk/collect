@@ -39,6 +39,7 @@ import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
+import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -47,6 +48,7 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -79,6 +81,13 @@ public class OsmMapFragment extends Fragment implements MapFragment,
     protected AlertDialog gpsErrorDialog;
     protected boolean gpsLocationEnabled;
     protected IGeoPoint lastMapCenter;
+    protected final ITileSource tiles;
+    protected File referenceLayer;
+
+    public OsmMapFragment(ITileSource tiles, File referenceLayer) {
+        this.tiles = tiles;
+        this.referenceLayer = referenceLayer;
+    }
 
     @Override public Fragment getFragment() {
         return this;
@@ -104,6 +113,7 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.osm_map_layout, container, false);
         map = view.findViewById(R.id.osm_map_view);
+        map.setTileSource(tiles);
         map.setMultiTouchControls(true);
         map.setBuiltInZoomControls(true);
         map.setMinZoomLevel(2);

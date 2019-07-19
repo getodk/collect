@@ -1,11 +1,9 @@
 package org.odk.collect.android.map;
 
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.view.Gravity;
 
 import com.mapbox.android.core.location.LocationEngine;
@@ -44,13 +42,13 @@ import com.mapbox.mapboxsdk.utils.ColorUtils;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.map.MbtilesFile.LayerType;
+import org.odk.collect.android.map.MbtilesFile.MbtilesException;
 import org.odk.collect.android.mapboxsdk.MapFragment;
-import org.odk.collect.android.preferences.GeneralKeys;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,22 +81,6 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
     public static final long LOCATION_INTERVAL_MILLIS = 1000;
     public static final long LOCATION_MAX_WAIT_MILLIS = 5 * LOCATION_INTERVAL_MILLIS;
 
-    // Map from preference values (defined by map_mapbox_basemap_selector_entry_values)
-    // to base map style URLs.
-    private static Map<String, String> initStyleUrls() {
-        Map<String, String> map = new HashMap<>();
-        map.put(GeneralKeys.MAPBOX_MAP_STREETS, Style.MAPBOX_STREETS);
-        map.put(GeneralKeys.MAPBOX_MAP_LIGHT, Style.LIGHT);
-        map.put(GeneralKeys.MAPBOX_MAP_DARK, Style.DARK);
-        map.put(GeneralKeys.MAPBOX_MAP_SATELLITE, Style.SATELLITE);
-        map.put(GeneralKeys.MAPBOX_MAP_SATELLITE_STREETS, Style.SATELLITE_STREETS);
-        map.put(GeneralKeys.MAPBOX_MAP_OUTDOORS, Style.OUTDOORS);
-        return Collections.unmodifiableMap(map);
-    }
-
-    protected static final Map<String, String> STYLE_URLS = initStyleUrls();
-    protected static final String DEFAULT_STYLE_URL = Style.MAPBOX_STREETS;
-
     protected MapboxMap map;
     protected List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
     protected PointListener gpsLocationListener;
@@ -115,6 +97,8 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
     protected SymbolManager symbolManager;
     protected LineManager lineManager;
     protected boolean isDragging;
+    protected final String styleUrl;
+    protected final File referenceLayer;
 
     protected TileHttpServer tileServer;
 
@@ -122,6 +106,11 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
     // "map" field will be null and many operations will need to be stubbed out.
     @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL", justification = "This flag is exposed for Robolectric tests to set")
     @VisibleForTesting public static boolean testMode;
+
+    public MapboxMapFragment(String styleUrl, File referenceLayer) {
+        this.styleUrl = styleUrl;
+        this.referenceLayer = referenceLayer;
+    }
 
     @Override public void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener) {
         if (MapboxUtils.initMapbox() == null) {
@@ -147,12 +136,8 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
             this.map = map;  // signature of getMapAsync() ensures map is never null
 
             map.setStyle(getDesiredStyleBuilder(), style -> {
-                for (File file : new File(Collect.OFFLINE_LAYERS).listFiles()) {
-                    String name = file.getName();
-                    if (name.endsWith(".mbtiles")) {
-                        String id = name.substring(0, name.length() - ".mbtiles".length());
-                        addMbtiles(style, id, file);
-                    }
+                if (referenceLayer != null) {
+                    addMbtiles(style, referenceLayer.getName(), referenceLayer);
                 }
 
                 map.getUiSettings().setCompassGravity(Gravity.TOP | Gravity.START);
@@ -210,9 +195,7 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
                 .withSource(new RasterSource("[osm]", tiles, 256))
                 .withLayer(new RasterLayer("[osm]", "[osm]"));
         }
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String url = STYLE_URLS.get(prefs.getString(GeneralKeys.KEY_MAP_BASEMAP, null));
-        return new Style.Builder().fromUrl(url == null ? DEFAULT_STYLE_URL : url);
+        return new Style.Builder().fromUrl(styleUrl);
     }
 
     @SuppressWarnings("TimberExceptionLogging")
@@ -220,7 +203,7 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
         MbtilesFile mbtiles;
         try {
             mbtiles = new MbtilesFile(file);
-        } catch (MbtilesFile.UnsupportedFormatException e) {
+        } catch (MbtilesException e) {
             Timber.w(e.getMessage());
             return;
         }
@@ -228,7 +211,7 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
         TileSet tileSet = createTileSet(mbtiles, tileServer.getUrlTemplate(id));
         tileServer.addSource(id, mbtiles);
 
-        if (mbtiles.getType() == MbtilesFile.Type.VECTOR) {
+        if (mbtiles.getLayerType() == LayerType.VECTOR) {
             style.addSource(new VectorSource(id, tileSet));
             List<MbtilesFile.VectorLayer> layers = mbtiles.getVectorLayers();
             for (MbtilesFile.VectorLayer layer : layers) {
@@ -245,43 +228,47 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
                 ).withSourceLayer(layer.name));
             }
         }
-        if (mbtiles.getType() == MbtilesFile.Type.RASTER) {
+        if (mbtiles.getLayerType() == LayerType.RASTER) {
             style.addSource(new RasterSource(id, tileSet));
             style.addLayer(new RasterLayer(id + ".raster", id).withProperties(
                 rasterOpacity(0.5f)
             ));
         }
-        Timber.i("Added %s as a %s layer at /%s", file, mbtiles.getType(), id);
+        Timber.i("Added %s as a %s layer at /%s", file, mbtiles.getLayerType(), id);
     }
 
     private TileSet createTileSet(MbtilesFile mbtiles, String urlTemplate) {
         TileSet tileSet = new TileSet("2.2.0", urlTemplate);
 
         // Configure the TileSet using the metadata in the .mbtiles file.
-        tileSet.setName(mbtiles.getMetadata("name"));
         try {
-            tileSet.setMinZoom(Integer.parseInt(mbtiles.getMetadata("minzoom")));
-            tileSet.setMaxZoom(Integer.parseInt(mbtiles.getMetadata("maxzoom")));
-        } catch (NumberFormatException e) { /* ignore */ }
-
-        String[] parts = mbtiles.getMetadata("center").split(",");
-        if (parts.length == 3) {  // latitude, longitude, zoom
+            tileSet.setName(mbtiles.getMetadata("name"));
             try {
-                tileSet.setCenter(
-                    Float.parseFloat(parts[0]), Float.parseFloat(parts[1]),
-                    (float) Integer.parseInt(parts[2])
-                );
+                tileSet.setMinZoom(Integer.parseInt(mbtiles.getMetadata("minzoom")));
+                tileSet.setMaxZoom(Integer.parseInt(mbtiles.getMetadata("maxzoom")));
             } catch (NumberFormatException e) { /* ignore */ }
-        }
 
-        parts = mbtiles.getMetadata("bounds").split(",");
-        if (parts.length == 4) {  // left, bottom, right, top
-            try {
-                tileSet.setBounds(
-                    Float.parseFloat(parts[0]), Float.parseFloat(parts[1]),
-                    Float.parseFloat(parts[2]), Float.parseFloat(parts[3])
-                );
-            } catch (NumberFormatException e) { /* ignore */ }
+            String[] parts = mbtiles.getMetadata("center").split(",");
+            if (parts.length == 3) {  // latitude, longitude, zoom
+                try {
+                    tileSet.setCenter(
+                        Float.parseFloat(parts[0]), Float.parseFloat(parts[1]),
+                        (float) Integer.parseInt(parts[2])
+                    );
+                } catch (NumberFormatException e) { /* ignore */ }
+            }
+
+            parts = mbtiles.getMetadata("bounds").split(",");
+            if (parts.length == 4) {  // left, bottom, right, top
+                try {
+                    tileSet.setBounds(
+                        Float.parseFloat(parts[0]), Float.parseFloat(parts[1]),
+                        Float.parseFloat(parts[2]), Float.parseFloat(parts[3])
+                    );
+                } catch (NumberFormatException e) { /* ignore */ }
+            }
+        } catch (MbtilesException e) {
+            Timber.w(e.getMessage());
         }
 
         return tileSet;

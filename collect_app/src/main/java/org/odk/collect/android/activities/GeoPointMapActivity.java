@@ -15,6 +15,7 @@
 package org.odk.collect.android.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -23,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.map.BaseLayerSourceRegistry;
 import org.odk.collect.android.map.GoogleMapFragment;
 import org.odk.collect.android.map.MapFragment;
 import org.odk.collect.android.map.MapPoint;
@@ -127,7 +129,9 @@ public class GeoPointMapActivity extends BaseGeoMapActivity implements IRegister
         placeMarkerButton = findViewById(R.id.place_marker);
         zoomButton = findViewById(R.id.zoom);
 
-        createMapFragment().addTo(this, R.id.map_container, this::initMap);
+        Context context = getApplicationContext();
+        BaseLayerSourceRegistry.createMapFragment(context)
+            .addTo(this, R.id.map_container, this::initMap);
     }
 
     @Override protected void onStart() {

@@ -288,7 +288,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
     private void startGeoPoint() {
         Activity activity = (Activity) getContext();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        String mapSDK = prefs.getString(GeneralKeys.KEY_MAP_SDK, GeneralKeys.DEFAULT_BASEMAP_KEY);
+        String mapSDK = prefs.getString(GeneralKeys.KEY_BASE_LAYER_SOURCE, GeneralKeys.DEFAULT_BASEMAP_KEY);
         if (mapSDK.equals(GeneralKeys.GOOGLE_MAPS_BASEMAP_KEY) &&
             !PlayServicesUtil.isGooglePlayServicesAvailable(activity)) {
             PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(activity);
@@ -296,7 +296,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
         }
         Intent intent = (useMapsV2 && useMaps) ?
             new Intent(activity, GeoPointMapActivity.class)
-                .putExtra(GeneralKeys.KEY_MAP_SDK, mapSDK) :
+                .putExtra(GeneralKeys.KEY_BASE_LAYER_SOURCE, mapSDK) :
             new Intent(activity, GeoPointActivity.class);
 
         if (stringAnswer != null && !stringAnswer.isEmpty()) {

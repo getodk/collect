@@ -59,8 +59,7 @@ public final class AdminKeys {
     private static final String KEY_NAVIGATION                  = "change_navigation";
     static final String KEY_CONSTRAINT_BEHAVIOR                 = "change_constraint_behavior";
 
-    private static final String KEY_SHOW_MAP_SDK                = "show_map_sdk";
-    private static final String KEY_SHOW_MAP_BASEMAP            = "show_map_basemap";
+    private static final String KEY_BASE_LAYER                  = "base_layer";
 
     private static final String KEY_ANALYTICS                   = "analytics";
     public static final String KEY_MOVING_BACKWARDS             = "moving_backwards";
@@ -98,8 +97,7 @@ public final class AdminKeys {
             ag(KEY_NAVIGATION,                 GeneralKeys.KEY_NAVIGATION),
             ag(KEY_CONSTRAINT_BEHAVIOR,        GeneralKeys.KEY_CONSTRAINT_BEHAVIOR),
 
-            ag(KEY_SHOW_MAP_SDK,               GeneralKeys.KEY_MAP_SDK),
-            ag(KEY_SHOW_MAP_BASEMAP,           GeneralKeys.KEY_MAP_BASEMAP),
+            ag(KEY_BASE_LAYER,                 GeneralKeys.KEY_BASE_LAYER_SOURCE),
 
             ag(KEY_ANALYTICS,                  GeneralKeys.KEY_ANALYTICS)
     };
@@ -154,8 +152,7 @@ public final class AdminKeys {
     );
 
     static Collection<String> mapsKeys = Arrays.asList(
-            KEY_SHOW_MAP_BASEMAP,
-            KEY_SHOW_MAP_SDK
+            KEY_BASE_LAYER
     );
 
     private static Collection<String> allKeys() {

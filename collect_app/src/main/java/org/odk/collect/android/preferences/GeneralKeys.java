@@ -59,8 +59,23 @@ public final class GeneralKeys {
     public static final String KEY_NAVIGATION               = "navigation";
     public static final String KEY_SHOW_SPLASH              = "showSplash";
     public static final String KEY_SPLASH_PATH              = "splashPath";
-    public static final String KEY_MAP_SDK                  = "map_sdk_behavior";
-    public static final String KEY_MAP_BASEMAP              = "map_basemap_behavior";
+
+    // map_preferences.xml
+    public static final String CATEGORY_BASE_LAYER          = "category_base_layer";
+    public static final String KEY_BASE_LAYER_SOURCE        = "base_layer_source";
+    public static final String CATEGORY_REFERENCE_LAYER     = "category_reference_layer";
+    public static final String KEY_REFERENCE_LAYER          = "reference_layer";
+    public static final String BASE_LAYER_SOURCE_GOOGLE     = "base_layer_source_google";
+    public static final String BASE_LAYER_SOURCE_MAPBOX     = "base_layer_source_mapbox";
+    public static final String BASE_LAYER_SOURCE_OSM        = "base_layer_source_osm";
+    public static final String BASE_LAYER_SOURCE_USGS       = "base_layer_source_usgs";
+    public static final String BASE_LAYER_SOURCE_STAMEN     = "base_layer_source_stamen";
+    public static final String BASE_LAYER_SOURCE_CARTO      = "base_layer_source_carto";
+
+    public static final String KEY_GOOGLE_MAP_STYLE         = "google_map_style";
+    public static final String KEY_MAPBOX_MAP_STYLE         = "mapbox_map_style";
+    public static final String KEY_USGS_MAP_STYLE           = "usgs_map_style";
+    public static final String KEY_CARTO_MAP_STYLE          = "carto_map_style";
 
     // other keys
     public static final String KEY_LAST_VERSION             = "lastVersion";
@@ -138,8 +153,8 @@ public final class GeneralKeys {
         hashMap.put(KEY_NAVIGATION,                 NAVIGATION_SWIPE);
         hashMap.put(KEY_SHOW_SPLASH,                false);
         hashMap.put(KEY_SPLASH_PATH,                Collect.getInstance().getString(R.string.default_splash_path));
-        hashMap.put(KEY_MAP_SDK,                    GOOGLE_MAPS_BASEMAP_KEY);
-        hashMap.put(KEY_MAP_BASEMAP,                GOOGLE_MAPS_BASEMAP_DEFAULT);
+        // map_preferences.xml
+        hashMap.put(KEY_BASE_LAYER_SOURCE, BASE_LAYER_SOURCE_GOOGLE);
         return hashMap;
     }
 

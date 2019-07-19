@@ -73,7 +73,7 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
 
     private void startGeoShapeActivity() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String mapSDK = prefs.getString(GeneralKeys.KEY_MAP_SDK, GeneralKeys.DEFAULT_BASEMAP_KEY);
+        String mapSDK = prefs.getString(GeneralKeys.KEY_BASE_LAYER_SOURCE, GeneralKeys.DEFAULT_BASEMAP_KEY);
 
         if (mapSDK.equals(GeneralKeys.GOOGLE_MAPS_BASEMAP_KEY) && !PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
             PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
@@ -82,7 +82,7 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
         Intent intent = new Intent(getContext(), GeoPolyActivity.class)
             .putExtra(GeoPolyActivity.ANSWER_KEY, answerDisplay.getText().toString())
             .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOSHAPE)
-            .putExtra(GeneralKeys.KEY_MAP_SDK, mapSDK);
+            .putExtra(GeneralKeys.KEY_BASE_LAYER_SOURCE, mapSDK);
         ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOSHAPE_CAPTURE);
     }
 

@@ -18,11 +18,6 @@ package org.odk.collect.android.activities;
 
 import android.os.Bundle;
 
-import org.odk.collect.android.map.GoogleMapFragment;
-import org.odk.collect.android.map.MapFragment;
-import org.odk.collect.android.map.MapboxMapFragment;
-import org.odk.collect.android.map.OsmMapFragment;
-import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.spatial.MapHelper;
 
 public abstract class BaseGeoMapActivity extends CollectAbstractActivity {
@@ -37,18 +32,6 @@ public abstract class BaseGeoMapActivity extends CollectAbstractActivity {
         previousState = savedInstanceState;
         if (savedInstanceState != null) {
             selectedLayer = savedInstanceState.getInt(MAP_LAYER_KEY);
-        }
-    }
-
-    public MapFragment createMapFragment() {
-        switch (getIntent().getStringExtra(GeneralKeys.KEY_MAP_SDK)) {
-            case GeneralKeys.OSM_BASEMAP_KEY:
-                return new OsmMapFragment();
-            case GeneralKeys.MAPBOX_BASEMAP_KEY:
-                return new MapboxMapFragment();
-            case GeneralKeys.GOOGLE_MAPS_BASEMAP_KEY:
-            default:
-                return new GoogleMapFragment();
         }
     }
 
