@@ -231,11 +231,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
 
         // Menu Layer Toggle
         findViewById(R.id.layer_menu).setOnClickListener(v -> {
-            getFragmentManager()
-                .beginTransaction()
-                .replace(android.R.id.content, MapsPreferences.newInstanceLockedBaseLayerSource())
-                .addToBackStack(null)
-                .commit();
+            MapsPreferences.showReferenceLayerDialog(this);
         });
 
         clearButton = findViewById(R.id.clear);

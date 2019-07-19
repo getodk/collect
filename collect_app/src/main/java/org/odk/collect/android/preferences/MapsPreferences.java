@@ -53,12 +53,6 @@ public class MapsPreferences extends BasePreferenceFragment {
         return prefs;
     }
 
-    public static MapsPreferences newInstanceLockedBaseLayerSource() {
-        MapsPreferences prefs = new MapsPreferences();
-        prefs.lockBaseLayerSource = true;
-        return prefs;
-    }
-
     /** Constructor that immediately opens the Reference Layer dialog. */
     public static MapsPreferences newInstanceForReferenceLayerDialog() {
         MapsPreferences prefs = new MapsPreferences();
