@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    This file contains the base light theme definition used by all API levels
+    and any styles it needs for its attributes
+-->
+
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Theme.Collect.BaseLight" parent="Theme.AppCompat.Light.NoActionBar">

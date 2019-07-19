@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    This file contains the app's light and dark theme definitions for
+    API 21 and above
+-->
+
 <resources>
 
     <style name="Theme.Collect.Dark" parent="Theme.Collect.BaseDark">
