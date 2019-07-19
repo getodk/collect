@@ -4,8 +4,4 @@
     <style name="Theme.Collect.Dark" parent="Theme.Collect.BaseDark" />
 
     <style name="Theme.Collect.Light" parent="Theme.Collect.BaseLight" />
-
-    <style name="Widget.Collect.Toolbar" parent="Widget.AppCompat.Toolbar">
-        <item name="titleTextAppearance">@style/TextAppearance.Collect.Headline6</item>
-    </style>
 </resources>
