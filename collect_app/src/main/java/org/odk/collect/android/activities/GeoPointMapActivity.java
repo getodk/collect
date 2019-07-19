@@ -24,14 +24,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.map.GoogleMapFragment;
 import org.odk.collect.android.map.MapConfigurator;
 import org.odk.collect.android.map.MapFragment;
 import org.odk.collect.android.map.MapPoint;
-import org.odk.collect.android.map.MapboxMapFragment;
-import org.odk.collect.android.map.OsmMapFragment;
 import org.odk.collect.android.preferences.MapsPreferences;
-import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
@@ -49,7 +45,6 @@ import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermi
  * at the current location (obtained from GPS or other location sensors).
  */
 public class GeoPointMapActivity extends BaseGeoMapActivity {
-
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
     public static final String POINT_KEY = "point";
@@ -221,16 +216,6 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
         map.setDragEndListener(this::onDragEnd);
         map.setLongPressListener(this::onLongPress);
 
-        if (map instanceof GoogleMapFragment) {
-            helper = new MapHelper(this, ((GoogleMapFragment) map).getGoogleMap(), selectedLayer);
-        } else if (map instanceof MapboxMapFragment) {
-            helper = new MapHelper(this);
-        } else if (map instanceof OsmMapFragment) {
-            OsmMapFragment osmMap = (OsmMapFragment) map;
-            helper = new MapHelper(this, osmMap.getMapView(), osmMap, selectedLayer);
-        }
-        helper.setBasemap();
-
         ImageButton acceptLocation = findViewById(R.id.accept_location);
         acceptLocation.setOnClickListener(v -> returnLocation());
 
@@ -300,8 +285,6 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
                 zoomToMarker(false);
             }
         }
-
-        helper.setBasemap();
 
         map.setGpsLocationListener(this::onLocationChanged);
         map.setGpsLocationEnabled(true);

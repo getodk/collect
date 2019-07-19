@@ -176,12 +176,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    // TOOD(ping): This method is only used by MapHelper.  Remove this after
-    // MapFragment adds support for selectable basemaps.
-    public GoogleMap getGoogleMap() {
-        return map;
-    }
-
     @Override public @NonNull MapPoint getCenter() {
         if (map == null) {  // during Robolectric tests, map will be null
             return fromLatLng(INITIAL_CENTER);

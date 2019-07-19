@@ -69,7 +69,7 @@ import timber.log.Timber;
 
 /**
  * A MapFragment drawn by OSMdroid.  This class is specific to OSMdroid, not OSM,
- * and should be named OsmDroidMapFragment.
+ * and should properly be named OsmDroidMapFragment.
  */
 public class OsmMapFragment extends Fragment implements MapFragment,
     MapEventsReceiver, IRegisterReceiver,
@@ -147,12 +147,6 @@ public class OsmMapFragment extends Fragment implements MapFragment,
             map.setTileSource(webMapService.asOnlineTileSource());
             loadReferenceOverlay();
         }
-    }
-
-    // TOOD(ping): This method is only used by MapHelper.  Remove this after
-    // MapFragment adds support for selectable basemaps.
-    public MapView getMapView() {
-        return map;
     }
 
     @Override public View onCreateView(@NonNull LayoutInflater inflater,

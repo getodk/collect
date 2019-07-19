@@ -18,30 +18,16 @@ package org.odk.collect.android.activities;
 
 import android.os.Bundle;
 
-import org.odk.collect.android.spatial.MapHelper;
-
+/**
+ * Implementation details common to the geo activities.  (After the migration
+ * to storing user selections in the preferences, there's not a lot left here,
+ * though this will probably grow as we add more geospatial capabilities.)
+ */
 public abstract class BaseGeoMapActivity extends CollectAbstractActivity {
-    private static final String MAP_LAYER_KEY = "map_layer_key";
-    protected MapHelper helper;
     protected Bundle previousState;
-    protected Integer selectedLayer;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         previousState = savedInstanceState;
-        if (savedInstanceState != null) {
-            selectedLayer = savedInstanceState.getInt(MAP_LAYER_KEY);
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        // Initialization of helper is not guaranteed, as it is possible
-        // for the activity to be stopped before initialization is complete.
-        if (helper != null) {
-            outState.putInt(MAP_LAYER_KEY, helper.getSelectedLayer());
-        }
     }
 }

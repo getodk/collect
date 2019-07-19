@@ -29,14 +29,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.map.GoogleMapFragment;
 import org.odk.collect.android.map.MapConfigurator;
 import org.odk.collect.android.map.MapFragment;
 import org.odk.collect.android.map.MapPoint;
-import org.odk.collect.android.map.MapboxMapFragment;
-import org.odk.collect.android.map.OsmMapFragment;
 import org.odk.collect.android.preferences.MapsPreferences;
-import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.ArrayList;
@@ -52,7 +48,6 @@ import androidx.annotation.VisibleForTesting;
 import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
 
 public class GeoPolyActivity extends BaseGeoMapActivity {
-
     public static final String ANSWER_KEY = "answer";
     public static final String OUTPUT_MODE_KEY = "output_mode";
     public static final String MAP_CENTER_KEY = "map_center";
@@ -204,15 +199,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
         }
 
         map = newMapFragment;
-        if (map instanceof GoogleMapFragment) {
-            helper = new MapHelper(this, ((GoogleMapFragment) map).getGoogleMap(), selectedLayer);
-        } else if (map instanceof MapboxMapFragment) {
-            helper = new MapHelper(this);
-        } else if (map instanceof OsmMapFragment) {
-            OsmMapFragment osmMap = (OsmMapFragment) map;
-            helper = new MapHelper(this, osmMap.getMapView(), osmMap, selectedLayer);
-        }
-        helper.setBasemap();
 
         locationStatus = findViewById(R.id.location_status);
         collectionStatus = findViewById(R.id.collection_status);
