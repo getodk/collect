@@ -199,8 +199,9 @@ public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFrag
         String path = config.getString(KEY_REFERENCE_LAYER);
         referenceLayerFile = path != null ? new File(path) : null;
         if (map != null) {
-            map.setStyle(getDesiredStyleBuilder());
-            loadReferenceOverlay();
+            map.setStyle(getDesiredStyleBuilder(), style -> {
+                loadReferenceOverlay();
+            });
         }
     }
 
@@ -223,7 +224,11 @@ public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFrag
             .withTransition(new TransitionOptions(0, 0, false));
     }
 
-    /** Updates the map to reflect the value of referenceLayerFile. */
+    /**
+     * Updates the map to reflect the value of referenceLayerFile.  Because this
+     * involves adding things to the map's Style, call this only after the Style
+     * is fully loaded, in setStyle()'s OnStyleLoaded callback.
+     */
     private void loadReferenceOverlay() {
         clearOverlays();
         if (referenceLayerFile != null) {
