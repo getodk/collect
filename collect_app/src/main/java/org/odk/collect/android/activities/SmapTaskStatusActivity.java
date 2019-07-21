@@ -205,8 +205,8 @@ public class SmapTaskStatusActivity extends CollectAbstractActivity implements O
 	    		if(Utilities.canReject(taskEntry.taskStatus)) {
 
 	    		    String reason = rejectReason.getText().toString();
-	    		    if(reason != null && reason.trim().length() > 5) {
-                        Toast.makeText(getApplicationContext(), rejectReason.getText().toString(),
+	    		    if(reason != null && reason.trim().length() < 5) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.smap_reason_not_specified),
                                 Toast.LENGTH_LONG).show();
                     } else {
 
