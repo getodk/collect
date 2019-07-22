@@ -50,7 +50,7 @@ public class OsmDroidMapConfigurator implements MapConfigurator {
     @Override public void showUnavailableMessage(Context context) { }
 
     @Override public MapFragment createMapFragment(Context context) {
-        return new OsmMapFragment();
+        return new OsmDroidMapFragment();
     }
 
     @Override public List<Preference> createPrefs(Context context) {
@@ -78,16 +78,16 @@ public class OsmDroidMapConfigurator implements MapConfigurator {
     @Override public Bundle buildConfig(SharedPreferences prefs) {
         Bundle config = new Bundle();
         if (options.length == 1) {
-            config.putSerializable(OsmMapFragment.KEY_WEB_MAP_SERVICE, options[0].service);
+            config.putSerializable(OsmDroidMapFragment.KEY_WEB_MAP_SERVICE, options[0].service);
         } else {
             String value = prefs.getString(prefKey, null);
             for (int i = 0; i < options.length; i++) {
                 if (options[i].id.equals(value)) {
-                    config.putSerializable(OsmMapFragment.KEY_WEB_MAP_SERVICE, options[i].service);
+                    config.putSerializable(OsmDroidMapFragment.KEY_WEB_MAP_SERVICE, options[i].service);
                 }
             }
         }
-        config.putString(OsmMapFragment.KEY_REFERENCE_LAYER,
+        config.putString(OsmDroidMapFragment.KEY_REFERENCE_LAYER,
             prefs.getString(KEY_REFERENCE_LAYER, null));
         return config;
     }

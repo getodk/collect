@@ -103,7 +103,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         // If the containing activity is being re-created upon screen rotation,
         // the FragmentManager will have also re-created a copy of the previous
-        // OsmMapFragment.  We don't want these useless copies of old fragments
+        // OsmDroidMapFragment.  We don't want these useless copies of old fragments
         // to linger, so the following line calls .replace() instead of .add().
         activity.getSupportFragmentManager()
             .beginTransaction().replace(containerId, this).commitNow();

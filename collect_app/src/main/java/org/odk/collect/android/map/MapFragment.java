@@ -25,7 +25,7 @@ import androidx.fragment.app.FragmentActivity;
 
 /**
  * Interface for a Fragment that renders a map view.  The plan is to have one
- * implementation for each map SDK, e.g. GoogleMapFragment, OsmMapFragment, etc.
+ * implementation for each map SDK, e.g. GoogleMapFragment, OsmDroidMapFragment, etc.
  *
  * This is intended to be a single map API that provides all functionality needed
  * for the three geo widgets (collecting or editing a point, a trace, or a shape):

@@ -67,11 +67,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import timber.log.Timber;
 
-/**
- * A MapFragment drawn by OSMdroid.  This class is specific to OSMdroid, not OSM,
- * and should properly be named OsmDroidMapFragment.
- */
-public class OsmMapFragment extends Fragment implements MapFragment,
+/** A MapFragment drawn by OSMDroid. */
+public class OsmDroidMapFragment extends Fragment implements MapFragment,
     MapEventsReceiver, IRegisterReceiver,
     LocationListener, LocationClient.LocationClientListener {
     public static final GeoPoint INITIAL_CENTER = new GeoPoint(0.0, -30.0);
@@ -119,7 +116,7 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         this.readyListener = readyListener;
         // If the containing activity is being re-created upon screen rotation,
         // the FragmentManager will have also re-created a copy of the previous
-        // OsmMapFragment.  We don't want these useless copies of old fragments
+        // OsmDroidMapFragment.  We don't want these useless copies of old fragments
         // to linger, so the following line calls .replace() instead of .add().
         activity.getSupportFragmentManager()
             .beginTransaction().replace(containerId, this).commit();
