@@ -70,9 +70,6 @@ import timber.log.Timber;
 public class OsmDroidMapFragment extends Fragment implements MapFragment,
     MapEventsReceiver, IRegisterReceiver,
     LocationListener, LocationClient.LocationClientListener {
-    private static final GeoPoint INITIAL_CENTER = new GeoPoint(0.0, -30.0);
-    private static final int INITIAL_ZOOM = 2;
-    private static final int POINT_ZOOM = 16;
 
     // Bundle keys understood by applyConfig().
     static final String KEY_WEB_MAP_SERVICE = "WEB_MAP_SERVICE";
@@ -156,8 +153,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         map.setBuiltInZoomControls(true);
         map.setMinZoomLevel(2);
         map.setMaxZoomLevel(22);
-        map.getController().setCenter(INITIAL_CENTER);
-        map.getController().setZoom(INITIAL_ZOOM);
+        map.getController().setCenter(toGeoPoint(INITIAL_CENTER));
+        map.getController().setZoom((int) INITIAL_ZOOM);
         map.setTilesScaledToDpi(true);
         map.getOverlays().add(new MapEventsOverlay(this));
         loadReferenceOverlay();

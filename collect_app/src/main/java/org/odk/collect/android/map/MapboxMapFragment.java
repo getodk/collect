@@ -78,12 +78,9 @@ public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFrag
     MapboxMap.OnMapClickListener, MapboxMap.OnMapLongClickListener,
     LocationEngineCallback<LocationEngineResult> {
 
-    private static final LatLng INITIAL_CENTER = new LatLng(0, -30);
-    private static final float INITIAL_ZOOM = 2;
-    private static final float POINT_ZOOM = 16;
     private static final String POINT_ICON_ID = "point-icon-id";
     private static final long LOCATION_INTERVAL_MILLIS = 1000;
-    private static final long LOCATION_MAX_WAIT_MILLIS = 5*LOCATION_INTERVAL_MILLIS;
+    private static final long LOCATION_MAX_WAIT_MILLIS = 5 * LOCATION_INTERVAL_MILLIS;
 
     // Bundle keys understood by applyConfig().
     static final String KEY_STYLE_URL = "STYLE_URL";
@@ -159,7 +156,8 @@ public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFrag
                 loadReferenceOverlay();
                 enableLocationComponent();
 
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(INITIAL_CENTER, INITIAL_ZOOM));
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                    toLatLng(INITIAL_CENTER), INITIAL_ZOOM));
                 if (readyListener != null) {
                     readyListener.onReady(this);
                 }
@@ -394,7 +392,7 @@ public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFrag
 
     @Override public @NonNull MapPoint getCenter() {
         if (map == null) {  // during Robolectric tests, map will be null
-            return fromLatLng(INITIAL_CENTER);
+            return INITIAL_CENTER;
         }
         return fromLatLng(map.getCameraPosition().target);
     }

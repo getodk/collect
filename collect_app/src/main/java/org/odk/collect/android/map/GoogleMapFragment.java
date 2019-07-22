@@ -65,9 +65,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
     MapFragment, LocationListener, LocationClient.LocationClientListener,
     GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener,
     GoogleMap.OnMarkerDragListener, GoogleMap.OnMarkerClickListener {
-    private static final LatLng INITIAL_CENTER = new LatLng(0, -30);
-    private static final float INITIAL_ZOOM = 2;
-    private static final float POINT_ZOOM = 16;
 
     // Bundle keys understood by applyConfig().
     static final String KEY_MAP_TYPE = "MAP_TYPE";
@@ -125,7 +122,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
             // Don't show the blue dot on the map; we'll draw crosshairs instead.
             map.setMyLocationEnabled(false);
             map.setMinZoomPreference(1);
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(INITIAL_CENTER, INITIAL_ZOOM));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                toLatLng(INITIAL_CENTER), INITIAL_ZOOM));
             loadReferenceOverlay();
             if (readyListener != null) {
                 readyListener.onReady(this);
@@ -178,7 +176,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public @NonNull MapPoint getCenter() {
         if (map == null) {  // during Robolectric tests, map will be null
-            return fromLatLng(INITIAL_CENTER);
+            return INITIAL_CENTER;
         }
         LatLng target = map.getCameraPosition().target;
         return new MapPoint(target.latitude, target.longitude);

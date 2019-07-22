@@ -44,6 +44,10 @@ import androidx.fragment.app.FragmentActivity;
  * even though the geo widgets only use one kind of feature at a time.
  */
 public interface MapFragment {
+    MapPoint INITIAL_CENTER = new MapPoint(0, -30);
+    float INITIAL_ZOOM = 2;
+    float POINT_ZOOM = 16;
+
     /** Gets the MapFragment as a Fragment. */
     Fragment getFragment();
 
