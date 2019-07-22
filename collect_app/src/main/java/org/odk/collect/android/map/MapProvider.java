@@ -28,7 +28,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASE_LAYER_SOU
 public class MapProvider {
     private MapProvider() { }  // prevent instantiation
 
-    private static final Option[] BASE_LAYER_SOURCE_OPTIONS = initOptions();
+    private static final Option[] SOURCE_OPTIONS = initOptions();
     private static final String USGS_URL_BASE =
         "https://basemap.nationalmap.gov/arcgis/rest/services";
     private static final String OSM_COPYRIGHT = "© OpenStreetMap contributors";
@@ -45,7 +45,11 @@ public class MapProvider {
         }
     }
 
-    /** Defines the available base layer sources, in their order of appearance. */
+    /**
+     * In the preference UI, the available basemaps are organized into "sources"
+     * to make them easier to find.  This defines the basemap sources and the
+     * basemap options available under each one, in their order of appearance.
+     */
     private static Option[] initOptions() {
         return new Option[] {
             new Option(BASE_LAYER_SOURCE_GOOGLE, R.string.base_layer_source_google,
@@ -105,12 +109,12 @@ public class MapProvider {
 
     /** Gets the Option with the given ID, or the first option if the ID is unknown. */
     public static Option get(String id) {
-        for (Option option : BASE_LAYER_SOURCE_OPTIONS) {
+        for (Option option : SOURCE_OPTIONS) {
             if (option.id.equals(id)) {
                 return option;
             }
         }
-        return BASE_LAYER_SOURCE_OPTIONS[0];
+        return SOURCE_OPTIONS[0];
     }
 
     /** Gets the Option corresponding to the current base_layer_source preference. */
@@ -165,20 +169,20 @@ public class MapProvider {
         }
     }
 
-    /** Gets a list of the IDs of the base layer sources, in order. */
+    /** Gets a list of the IDs of the basemap sources, in order. */
     public static String[] getIds() {
-        String[] ids = new String[BASE_LAYER_SOURCE_OPTIONS.length];
+        String[] ids = new String[SOURCE_OPTIONS.length];
         for (int i = 0; i < ids.length; i++) {
-            ids[i] = BASE_LAYER_SOURCE_OPTIONS[i].id;
+            ids[i] = SOURCE_OPTIONS[i].id;
         }
         return ids;
     }
 
-    /** Gets a list of the label string IDs of the base layer sources, in order. */
+    /** Gets a list of the label string IDs of the basemap sources, in order. */
     public static int[] getLabelIds() {
-        int[] labelIds = new int[BASE_LAYER_SOURCE_OPTIONS.length];
+        int[] labelIds = new int[SOURCE_OPTIONS.length];
         for (int i = 0; i < labelIds.length; i++) {
-            labelIds[i] = BASE_LAYER_SOURCE_OPTIONS[i].sourceLabelId;
+            labelIds[i] = SOURCE_OPTIONS[i].sourceLabelId;
         }
         return labelIds;
     }

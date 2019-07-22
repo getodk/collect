@@ -40,10 +40,10 @@ import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY
 
 public class MapsPreferences extends BasePreferenceFragment {
     private Context context;
-    private ListPreference baseLayerSourcePref;
+    private ListPreference basemapSourcePref;
     private CaptionedListPreference referenceLayerPref;
     private boolean autoShowReferenceLayerDialog;
-    private boolean lockBaseLayerSource;
+    private boolean lockBasemapSource;
 
     public static MapsPreferences newInstance(boolean adminMode) {
         Bundle bundle = new Bundle();
@@ -78,7 +78,7 @@ public class MapsPreferences extends BasePreferenceFragment {
         addPreferencesFromResource(R.xml.maps_preferences);
 
         context = getPreferenceScreen().getContext();
-        initBaseLayerSourcePref();
+        initBasemapSourcePref();
         initReferenceLayerPref();
         if (autoShowReferenceLayerDialog) {
             populateReferenceLayerPref();
@@ -99,20 +99,20 @@ public class MapsPreferences extends BasePreferenceFragment {
     }
 
     /**
-     * Creates the Base Layer Source preference widget (but doesn't add it to
-     * the screen; onBaseLayerSourceChanged will do that part).
+     * Creates the Basemap Source preference widget (but doesn't add it to
+     * the screen; onBasemapSourceChanged will do that part).
      */
-    private void initBaseLayerSourcePref() {
-        baseLayerSourcePref = PrefUtils.createListPref(
+    private void initBasemapSourcePref() {
+        basemapSourcePref = PrefUtils.createListPref(
             context, KEY_BASE_LAYER_SOURCE, R.string.base_layer_source,
             MapProvider.getLabelIds(), MapProvider.getIds()
         );
-        onBaseLayerSourceChanged(null);
-        baseLayerSourcePref.setOnPreferenceChangeListener((pref, value) -> {
-            onBaseLayerSourceChanged(value.toString());
+        onBasemapSourceChanged(null);
+        basemapSourcePref.setOnPreferenceChangeListener((pref, value) -> {
+            onBasemapSourceChanged(value.toString());
             return true;
         });
-        baseLayerSourcePref.setEnabled(!lockBaseLayerSource);
+        basemapSourcePref.setEnabled(!lockBasemapSource);
     }
 
     /** Sets up listeners for the Reference Layer preference widget. */
@@ -143,15 +143,15 @@ public class MapsPreferences extends BasePreferenceFragment {
         }
     }
 
-    /** Updates the rest of the preference UI when the Base Layer Source is changed. */
-    private void onBaseLayerSourceChanged(String id) {
+    /** Updates the rest of the preference UI when the Basemap Source is changed. */
+    private void onBasemapSourceChanged(String id) {
         MapConfigurator source = id != null ? MapProvider.get(id).source :
             MapProvider.getCurrentSource(context);
         if (source != null) {
-            // Set up the preferences in the "Base Layer" section.
+            // Set up the preferences in the "Basemap" section.
             PreferenceCategory baseCategory = (PreferenceCategory) findPreference(CATEGORY_BASE_LAYER);
             baseCategory.removeAll();
-            baseCategory.addPreference(baseLayerSourcePref);
+            baseCategory.addPreference(basemapSourcePref);
             if (!source.isAvailable(context)) {
                 source.showUnavailableMessage(context);
                 return;
@@ -160,7 +160,7 @@ public class MapsPreferences extends BasePreferenceFragment {
                 baseCategory.addPreference(pref);
             }
 
-            // Clear the reference layer if it isn't supported by the new base layer.
+            // Clear the reference layer if it isn't supported by the new basemap.
             if (referenceLayerPref != null) {
                 String path = referenceLayerPref.getValue();
                 if (path != null && !source.supportsLayer(new File(path))) {

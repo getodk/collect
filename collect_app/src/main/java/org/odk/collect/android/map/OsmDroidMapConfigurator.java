@@ -25,7 +25,7 @@ public class OsmDroidMapConfigurator implements MapConfigurator {
     // See SharedPreferences.registerOnSharedPreferenceChangeListener().
     private SharedPreferences.OnSharedPreferenceChangeListener listener;
 
-    /** Constructs a base layer source that renders just one Web Map Service. */
+    /** Constructs a configurator that renders just one Web Map Service. */
     public OsmDroidMapConfigurator(WebMapService service) {
         prefKey = "";
         prefTitleId = 0;
@@ -33,7 +33,7 @@ public class OsmDroidMapConfigurator implements MapConfigurator {
     }
 
     /**
-     * Constructs a base layer source that offers a few Web Map Services to choose from.
+     * Constructs a configurator that offers a few Web Map Services to choose from.
      * The choice of which Web Map Service will be stored in a string preference.
      */
     public OsmDroidMapConfigurator(String prefKey, int prefTitleId, WmsOption... options) {
