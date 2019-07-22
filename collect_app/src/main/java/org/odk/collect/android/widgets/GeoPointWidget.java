@@ -29,7 +29,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.map.MapProvider;
+import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.text.DecimalFormat;

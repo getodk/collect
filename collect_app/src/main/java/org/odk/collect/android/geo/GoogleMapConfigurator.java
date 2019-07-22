@@ -1,4 +1,4 @@
-package org.odk.collect.android.map;
+package org.odk.collect.android.geo;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -10,7 +10,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.common.collect.ImmutableSet;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.map.MbtilesFile.LayerType;
+import org.odk.collect.android.geo.MbtilesFile.LayerType;
 import org.odk.collect.android.preferences.PrefUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;

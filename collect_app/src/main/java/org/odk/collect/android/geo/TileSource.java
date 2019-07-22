@@ -1,4 +1,4 @@
-package org.odk.collect.android.map;
+package org.odk.collect.android.geo;
 
 interface TileSource {
     byte[] getTileBlob(int zoom, int x, int y);

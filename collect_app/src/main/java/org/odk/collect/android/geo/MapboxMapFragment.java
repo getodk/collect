@@ -1,4 +1,4 @@
-package org.odk.collect.android.map;
+package org.odk.collect.android.geo;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -46,8 +46,8 @@ import com.mapbox.mapboxsdk.utils.ColorUtils;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.map.MbtilesFile.LayerType;
-import org.odk.collect.android.map.MbtilesFile.MbtilesException;
+import org.odk.collect.android.geo.MbtilesFile.LayerType;
+import org.odk.collect.android.geo.MbtilesFile.MbtilesException;
 
 import java.io.File;
 import java.io.IOException;
@@ -73,7 +73,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.rasterOpacity;
 
-public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFragment
+public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.MapFragment
     implements MapFragment, OnMapReadyCallback,
     MapboxMap.OnMapClickListener, MapboxMap.OnMapLongClickListener,
     LocationEngineCallback<LocationEngineResult> {

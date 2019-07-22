@@ -21,8 +21,8 @@ import android.content.Intent;
 import org.junit.Before;
 import org.odk.collect.android.location.client.FakeLocationClient;
 import org.odk.collect.android.location.client.LocationClients;
-import org.odk.collect.android.map.GoogleMapFragment;
-import org.odk.collect.android.map.MapboxMapFragment;
+import org.odk.collect.android.geo.GoogleMapFragment;
+import org.odk.collect.android.geo.MapboxMapFragment;
 import org.robolectric.shadows.ShadowApplication;
 
 public abstract class BaseGeoActivityTest {

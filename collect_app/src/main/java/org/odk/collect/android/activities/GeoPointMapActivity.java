@@ -24,9 +24,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.map.MapProvider;
-import org.odk.collect.android.map.MapFragment;
-import org.odk.collect.android.map.MapPoint;
+import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.geo.MapFragment;
+import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.ToastUtils;

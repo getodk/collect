@@ -1,4 +1,4 @@
-package org.odk.collect.android.map;
+package org.odk.collect.android.geo;
 
 import org.odk.collect.android.application.Collect;
 import org.osmdroid.tileprovider.MapTile;

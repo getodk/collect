@@ -24,8 +24,8 @@ import android.view.View;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.map.MapConfigurator;
-import org.odk.collect.android.map.MapProvider;
+import org.odk.collect.android.geo.MapConfigurator;
+import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;

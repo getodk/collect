@@ -1,11 +1,11 @@
-package org.odk.collect.android.map;
+package org.odk.collect.android.geo;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.map.OsmDroidMapConfigurator.WmsOption;
+import org.odk.collect.android.geo.OsmDroidMapConfigurator.WmsOption;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PrefUtils;
 

@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.map;
+package org.odk.collect.android.geo;
 
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -36,7 +36,6 @@ import com.google.android.gms.location.LocationListener;
 import org.odk.collect.android.R;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
-import org.odk.collect.android.spatial.OsmMBTileProvider;
 import org.odk.collect.android.utilities.IconUtils;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.events.MapEventsReceiver;

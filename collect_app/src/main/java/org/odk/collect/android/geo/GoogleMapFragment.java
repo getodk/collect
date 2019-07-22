@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.map;
+package org.odk.collect.android.geo;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -43,7 +43,6 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import org.odk.collect.android.R;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
-import org.odk.collect.android.spatial.GoogleMapsMapBoxOfflineTileProvider;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 

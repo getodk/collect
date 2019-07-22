@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.spatial;
+package org.odk.collect.android.geo;
 
 /**
  * Created by jnordling on 12/29/15.

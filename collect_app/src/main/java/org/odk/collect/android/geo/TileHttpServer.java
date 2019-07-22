@@ -1,4 +1,4 @@
-package org.odk.collect.android.map;
+package org.odk.collect.android.geo;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
