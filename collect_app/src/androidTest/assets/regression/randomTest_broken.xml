@@ -26,11 +26,6 @@
             </itext>
             <instance>
                 <randomTest_broken id="randomTest" version="2018041801">
-                    <deviceid />
-                    <username />
-                    <start />
-                    <end />
-                    <today />
                     <cGroup1>
                         <c2 />
                     </cGroup1>

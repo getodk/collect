@@ -49,9 +49,7 @@
         </select1>
         <input ref="/different-search-appearances/note_fruit">
             <label>
-                The fruit
-                <output value=" /different-search-appearances/fruit1 " />
-                pulled from csv
+                The fruit <output value=" /different-search-appearances/fruit1 " /> pulled from csv
             </label>
         </input>
         <select1 ref="/different-search-appearances/animal1">
