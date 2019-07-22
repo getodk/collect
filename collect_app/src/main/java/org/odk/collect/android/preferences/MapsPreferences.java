@@ -145,7 +145,7 @@ public class MapsPreferences extends BasePreferenceFragment {
 
     /** Updates the rest of the preference UI when the Basemap Source is changed. */
     private void onBasemapSourceChanged(String id) {
-        MapConfigurator source = id != null ? MapProvider.get(id).source :
+        MapConfigurator source = id != null ? MapProvider.getOption(id).source :
             MapProvider.getCurrentSource(context);
         if (source != null) {
             // Set up the preferences in the "Basemap" section.
@@ -173,7 +173,7 @@ public class MapsPreferences extends BasePreferenceFragment {
 
     /** Sets up the contents of the reference layer selection dialog. */
     private void populateReferenceLayerPref() {
-        MapProvider.Option option = MapProvider.getCurrentOption(context);
+        MapProvider.SourceOption option = MapProvider.getCurrentOption(context);
         MapConfigurator source = MapProvider.getCurrentSource(context);
 
         List<File> files = getSupportedLayerFiles(option.source);

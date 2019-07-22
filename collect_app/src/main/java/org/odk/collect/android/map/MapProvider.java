@@ -28,17 +28,17 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE
 public class MapProvider {
     private MapProvider() { }  // prevent instantiation
 
-    private static final Option[] SOURCE_OPTIONS = initOptions();
+    private static final SourceOption[] SOURCE_OPTIONS = initOptions();
     private static final String USGS_URL_BASE =
         "https://basemap.nationalmap.gov/arcgis/rest/services";
     private static final String OSM_COPYRIGHT = "© OpenStreetMap contributors";
 
-    public static class Option {
+    public static class SourceOption {
         public final String id;  // preference value to store
         public final int sourceLabelId;  // string resource ID
         public final MapConfigurator source;
 
-        public Option(String id, int sourceLabelId, MapConfigurator source) {
+        public SourceOption(String id, int sourceLabelId, MapConfigurator source) {
             this.id = id;
             this.sourceLabelId = sourceLabelId;
             this.source = source;
@@ -50,13 +50,13 @@ public class MapProvider {
      * to make them easier to find.  This defines the basemap sources and the
      * basemap options available under each one, in their order of appearance.
      */
-    private static Option[] initOptions() {
-        return new Option[] {
-            new Option(BASEMAP_SOURCE_GOOGLE, R.string.basemap_source_google,
+    private static SourceOption[] initOptions() {
+        return new SourceOption[] {
+            new SourceOption(BASEMAP_SOURCE_GOOGLE, R.string.basemap_source_google,
                 new GoogleMapConfigurator()),
-            new Option(BASEMAP_SOURCE_MAPBOX, R.string.basemap_source_mapbox,
+            new SourceOption(BASEMAP_SOURCE_MAPBOX, R.string.basemap_source_mapbox,
                 new MapboxMapConfigurator()),
-            new Option(BASEMAP_SOURCE_OSM, R.string.basemap_source_osm,
+            new SourceOption(BASEMAP_SOURCE_OSM, R.string.basemap_source_osm,
                 new OsmDroidMapConfigurator(
                     new WebMapService(
                         "Mapnik", 0, 19, 256, OSM_COPYRIGHT,
@@ -66,7 +66,7 @@ public class MapProvider {
                     )
                 )
             ),
-            new Option(BASEMAP_SOURCE_USGS, R.string.basemap_source_usgs,
+            new SourceOption(BASEMAP_SOURCE_USGS, R.string.basemap_source_usgs,
                 new OsmDroidMapConfigurator(
                     GeneralKeys.KEY_USGS_MAP_STYLE, R.string.usgs_map_style,
                     new WmsOption("topo", R.string.usgs_map_style_topo, new WebMapService(
@@ -83,7 +83,7 @@ public class MapProvider {
                     ))
                 )
             ),
-            new Option(BASEMAP_SOURCE_STAMEN, R.string.basemap_source_stamen,
+            new SourceOption(BASEMAP_SOURCE_STAMEN, R.string.basemap_source_stamen,
                 new OsmDroidMapConfigurator(
                     new WebMapService(
                         R.string.openmap_stamen_terrain, 0, 18, 256, OSM_COPYRIGHT,
@@ -91,7 +91,7 @@ public class MapProvider {
                     )
                 )
             ),
-            new Option(BASEMAP_SOURCE_CARTO, R.string.basemap_source_carto,
+            new SourceOption(BASEMAP_SOURCE_CARTO, R.string.basemap_source_carto,
                 new OsmDroidMapConfigurator(
                     GeneralKeys.KEY_CARTO_MAP_STYLE, R.string.carto_map_style,
                     new WmsOption("positron", R.string.carto_map_style_positron, new WebMapService(
@@ -107,9 +107,9 @@ public class MapProvider {
         };
     }
 
-    /** Gets the Option with the given ID, or the first option if the ID is unknown. */
-    public static Option get(String id) {
-        for (Option option : SOURCE_OPTIONS) {
+    /** Gets the SourceOption with the given ID, or the first option if the ID is unknown. */
+    public static SourceOption getOption(String id) {
+        for (SourceOption option : SOURCE_OPTIONS) {
             if (option.id.equals(id)) {
                 return option;
             }
@@ -117,13 +117,13 @@ public class MapProvider {
         return SOURCE_OPTIONS[0];
     }
 
-    /** Gets the Option corresponding to the current basemap_source preference. */
-    public static Option getCurrentOption(Context context) {
-        return get(PrefUtils.getSharedPrefs(context).getString(KEY_BASEMAP_SOURCE, null));
+    /** Gets the SourceOption corresponding to the current basemap_source preference. */
+    public static SourceOption getCurrentOption(Context context) {
+        return getOption(PrefUtils.getSharedPrefs(context).getString(KEY_BASEMAP_SOURCE, null));
     }
 
     public static MapConfigurator getCurrentSource(Context context) {
-        Option option = getCurrentOption(context);
+        SourceOption option = getCurrentOption(context);
         return option != null ? option.source : null;
     }
 
