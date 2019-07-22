@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.views;
+package org.odk.collect.android.audio;
 
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -45,7 +45,7 @@
         android:gravity="end"
         android:orientation="vertical">
 
-        <org.odk.collect.android.views.AudioButton
+        <org.odk.collect.android.audio.AudioButton
             android:id="@+id/audioButton"
             style="@style/Widget.Collect.ImageButton.Media"
             android:layout_width="wrap_content"

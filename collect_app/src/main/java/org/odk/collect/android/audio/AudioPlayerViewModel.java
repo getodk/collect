@@ -1,4 +1,4 @@
-package org.odk.collect.android.viewmodel;
+package org.odk.collect.android.audio;
 
 import android.content.Context;
 import android.media.MediaPlayer;
