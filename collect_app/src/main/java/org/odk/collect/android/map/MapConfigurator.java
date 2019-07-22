@@ -12,6 +12,12 @@ import org.odk.collect.android.preferences.PrefUtils;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import static org.odk.collect.android.preferences.GeneralKeys.BASE_LAYER_SOURCE_CARTO;
+import static org.odk.collect.android.preferences.GeneralKeys.BASE_LAYER_SOURCE_GOOGLE;
+import static org.odk.collect.android.preferences.GeneralKeys.BASE_LAYER_SOURCE_MAPBOX;
+import static org.odk.collect.android.preferences.GeneralKeys.BASE_LAYER_SOURCE_OSM;
+import static org.odk.collect.android.preferences.GeneralKeys.BASE_LAYER_SOURCE_STAMEN;
+import static org.odk.collect.android.preferences.GeneralKeys.BASE_LAYER_SOURCE_USGS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASE_LAYER_SOURCE;
 
 /** A static class that configures a MapFragment according to the user's preferences. */
@@ -38,11 +44,11 @@ public class MapConfigurator {
     /** Defines the available base layer sources, in their order of appearance. */
     private static Option[] initOptions() {
         return new Option[] {
-            new Option("google", R.string.base_layer_source_google,
+            new Option(BASE_LAYER_SOURCE_GOOGLE, R.string.base_layer_source_google,
                 new GoogleBaseLayerSource()),
-            new Option("mapbox", R.string.base_layer_source_mapbox,
+            new Option(BASE_LAYER_SOURCE_MAPBOX, R.string.base_layer_source_mapbox,
                 new MapboxBaseLayerSource()),
-            new Option("osm", R.string.base_layer_source_osm,
+            new Option(BASE_LAYER_SOURCE_OSM, R.string.base_layer_source_osm,
                 new WmsBaseLayerSource(
                     new WebMapService(
                         "Mapnik", 0, 19, 256, OSM_COPYRIGHT,
@@ -52,7 +58,7 @@ public class MapConfigurator {
                     )
                 )
             ),
-            new Option("usgs", R.string.base_layer_source_usgs,
+            new Option(BASE_LAYER_SOURCE_USGS, R.string.base_layer_source_usgs,
                 new WmsBaseLayerSource(
                     GeneralKeys.KEY_USGS_MAP_STYLE, R.string.usgs_map_style,
                     new WmsOption("topo", R.string.usgs_map_style_topo, new WebMapService(
@@ -69,7 +75,7 @@ public class MapConfigurator {
                     ))
                 )
             ),
-            new Option("stamen", R.string.base_layer_source_stamen,
+            new Option(BASE_LAYER_SOURCE_STAMEN, R.string.base_layer_source_stamen,
                 new WmsBaseLayerSource(
                     new WebMapService(
                         R.string.openmap_stamen_terrain, 0, 18, 256, OSM_COPYRIGHT,
@@ -77,7 +83,7 @@ public class MapConfigurator {
                     )
                 )
             ),
-            new Option("carto", R.string.base_layer_source_carto,
+            new Option(BASE_LAYER_SOURCE_CARTO, R.string.base_layer_source_carto,
                 new WmsBaseLayerSource(
                     GeneralKeys.KEY_CARTO_MAP_STYLE, R.string.carto_map_style,
                     new WmsOption("positron", R.string.carto_map_style_positron, new WebMapService(

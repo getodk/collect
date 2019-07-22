@@ -63,8 +63,14 @@ public final class GeneralKeys {
     // map_preferences.xml
     public static final String CATEGORY_BASE_LAYER          = "category_base_layer";
     public static final String KEY_BASE_LAYER_SOURCE        = "base_layer_source";
+    public static final String BASE_LAYER_SOURCE_GOOGLE     = "google";
+    public static final String BASE_LAYER_SOURCE_MAPBOX     = "mapbox";
+    public static final String BASE_LAYER_SOURCE_OSM        = "osm";
+    public static final String BASE_LAYER_SOURCE_USGS       = "usgs";
+    public static final String BASE_LAYER_SOURCE_STAMEN     = "stamen";
+    public static final String BASE_LAYER_SOURCE_CARTO      = "carto";
+
     public static final String KEY_REFERENCE_LAYER          = "reference_layer";
-    public static final String BASE_LAYER_SOURCE_GOOGLE     = "base_layer_source_google";
 
     public static final String KEY_GOOGLE_MAP_STYLE         = "google_map_style";
     public static final String KEY_MAPBOX_MAP_STYLE         = "mapbox_map_style";
