@@ -9,10 +9,10 @@ import com.mapbox.mapboxsdk.maps.Style;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.odk.collect.android.preferences.GeneralKeys.BASE_LAYER_SOURCE_GOOGLE;
-import static org.odk.collect.android.preferences.GeneralKeys.BASE_LAYER_SOURCE_MAPBOX;
-import static org.odk.collect.android.preferences.GeneralKeys.BASE_LAYER_SOURCE_OSM;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASE_LAYER_SOURCE;
+import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_GOOGLE;
+import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_MAPBOX;
+import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_OSM;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_GOOGLE_MAP_STYLE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_MAP_STYLE;
 
@@ -24,10 +24,10 @@ public class PrefMigrator {
     // Convention below: the new (destination) key comes first, followed by
     // old keys; the new value comes first, followed by old values.
     public static final Migration[] MIGRATIONS = {
-        new Translator(KEY_BASE_LAYER_SOURCE, "map_sdk_behavior")
-            .withValue(BASE_LAYER_SOURCE_GOOGLE, "google_maps")
-            .withValue(BASE_LAYER_SOURCE_OSM, "osmdroid")
-            .withValue(BASE_LAYER_SOURCE_MAPBOX, "mapbox_maps"),
+        new Translator(KEY_BASEMAP_SOURCE, "map_sdk_behavior")
+            .withValue(BASEMAP_SOURCE_GOOGLE, "google_maps")
+            .withValue(BASEMAP_SOURCE_OSM, "osmdroid")
+            .withValue(BASEMAP_SOURCE_MAPBOX, "mapbox_maps"),
 
         new Translator(KEY_GOOGLE_MAP_STYLE, "map_basemap_behavior")
             .withValue(GoogleMap.MAP_TYPE_NORMAL, "streets")

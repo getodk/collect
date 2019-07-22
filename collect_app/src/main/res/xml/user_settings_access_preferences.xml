@@ -26,7 +26,7 @@
             android:title="@string/show_splash_title" />
         <CheckBoxPreference
             android:key="show_base_layer"
-            android:title="@string/base_layer_source" />
+            android:title="@string/basemap_source" />
         <CheckBoxPreference
             android:key="periodic_form_updates_check"
             android:title="@string/periodic_form_updates_check_title" />

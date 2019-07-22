@@ -61,14 +61,14 @@ public final class GeneralKeys {
     public static final String KEY_SPLASH_PATH              = "splashPath";
 
     // map_preferences.xml
-    public static final String CATEGORY_BASE_LAYER          = "category_base_layer";
-    public static final String KEY_BASE_LAYER_SOURCE        = "base_layer_source";
-    public static final String BASE_LAYER_SOURCE_GOOGLE     = "google";
-    public static final String BASE_LAYER_SOURCE_MAPBOX     = "mapbox";
-    public static final String BASE_LAYER_SOURCE_OSM        = "osm";
-    public static final String BASE_LAYER_SOURCE_USGS       = "usgs";
-    public static final String BASE_LAYER_SOURCE_STAMEN     = "stamen";
-    public static final String BASE_LAYER_SOURCE_CARTO      = "carto";
+    public static final String CATEGORY_BASEMAP             = "category_basemap";
+    public static final String KEY_BASEMAP_SOURCE           = "basemap_source";
+    public static final String BASEMAP_SOURCE_GOOGLE        = "google";
+    public static final String BASEMAP_SOURCE_MAPBOX        = "mapbox";
+    public static final String BASEMAP_SOURCE_OSM           = "osm";
+    public static final String BASEMAP_SOURCE_USGS          = "usgs";
+    public static final String BASEMAP_SOURCE_STAMEN        = "stamen";
+    public static final String BASEMAP_SOURCE_CARTO         = "carto";
 
     public static final String KEY_REFERENCE_LAYER          = "reference_layer";
 
@@ -135,7 +135,7 @@ public final class GeneralKeys {
         hashMap.put(KEY_SHOW_SPLASH,                false);
         hashMap.put(KEY_SPLASH_PATH,                Collect.getInstance().getString(R.string.default_splash_path));
         // map_preferences.xml
-        hashMap.put(KEY_BASE_LAYER_SOURCE, BASE_LAYER_SOURCE_GOOGLE);
+        hashMap.put(KEY_BASEMAP_SOURCE,             BASEMAP_SOURCE_GOOGLE);
         return hashMap;
     }
 

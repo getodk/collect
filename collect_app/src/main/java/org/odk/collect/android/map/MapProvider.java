@@ -12,13 +12,13 @@ import org.odk.collect.android.preferences.PrefUtils;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import static org.odk.collect.android.preferences.GeneralKeys.BASE_LAYER_SOURCE_CARTO;
-import static org.odk.collect.android.preferences.GeneralKeys.BASE_LAYER_SOURCE_GOOGLE;
-import static org.odk.collect.android.preferences.GeneralKeys.BASE_LAYER_SOURCE_MAPBOX;
-import static org.odk.collect.android.preferences.GeneralKeys.BASE_LAYER_SOURCE_OSM;
-import static org.odk.collect.android.preferences.GeneralKeys.BASE_LAYER_SOURCE_STAMEN;
-import static org.odk.collect.android.preferences.GeneralKeys.BASE_LAYER_SOURCE_USGS;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASE_LAYER_SOURCE;
+import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_CARTO;
+import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_GOOGLE;
+import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_MAPBOX;
+import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_OSM;
+import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_STAMEN;
+import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_USGS;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE;
 
 /**
  * A static class that obtains a MapFragment according to the user's preferences.
@@ -52,11 +52,11 @@ public class MapProvider {
      */
     private static Option[] initOptions() {
         return new Option[] {
-            new Option(BASE_LAYER_SOURCE_GOOGLE, R.string.base_layer_source_google,
+            new Option(BASEMAP_SOURCE_GOOGLE, R.string.basemap_source_google,
                 new GoogleMapConfigurator()),
-            new Option(BASE_LAYER_SOURCE_MAPBOX, R.string.base_layer_source_mapbox,
+            new Option(BASEMAP_SOURCE_MAPBOX, R.string.basemap_source_mapbox,
                 new MapboxMapConfigurator()),
-            new Option(BASE_LAYER_SOURCE_OSM, R.string.base_layer_source_osm,
+            new Option(BASEMAP_SOURCE_OSM, R.string.basemap_source_osm,
                 new OsmDroidMapConfigurator(
                     new WebMapService(
                         "Mapnik", 0, 19, 256, OSM_COPYRIGHT,
@@ -66,7 +66,7 @@ public class MapProvider {
                     )
                 )
             ),
-            new Option(BASE_LAYER_SOURCE_USGS, R.string.base_layer_source_usgs,
+            new Option(BASEMAP_SOURCE_USGS, R.string.basemap_source_usgs,
                 new OsmDroidMapConfigurator(
                     GeneralKeys.KEY_USGS_MAP_STYLE, R.string.usgs_map_style,
                     new WmsOption("topo", R.string.usgs_map_style_topo, new WebMapService(
@@ -83,7 +83,7 @@ public class MapProvider {
                     ))
                 )
             ),
-            new Option(BASE_LAYER_SOURCE_STAMEN, R.string.base_layer_source_stamen,
+            new Option(BASEMAP_SOURCE_STAMEN, R.string.basemap_source_stamen,
                 new OsmDroidMapConfigurator(
                     new WebMapService(
                         R.string.openmap_stamen_terrain, 0, 18, 256, OSM_COPYRIGHT,
@@ -91,7 +91,7 @@ public class MapProvider {
                     )
                 )
             ),
-            new Option(BASE_LAYER_SOURCE_CARTO, R.string.base_layer_source_carto,
+            new Option(BASEMAP_SOURCE_CARTO, R.string.basemap_source_carto,
                 new OsmDroidMapConfigurator(
                     GeneralKeys.KEY_CARTO_MAP_STYLE, R.string.carto_map_style,
                     new WmsOption("positron", R.string.carto_map_style_positron, new WebMapService(
@@ -117,9 +117,9 @@ public class MapProvider {
         return SOURCE_OPTIONS[0];
     }
 
-    /** Gets the Option corresponding to the current base_layer_source preference. */
+    /** Gets the Option corresponding to the current basemap_source preference. */
     public static Option getCurrentOption(Context context) {
-        return get(PrefUtils.getSharedPrefs(context).getString(KEY_BASE_LAYER_SOURCE, null));
+        return get(PrefUtils.getSharedPrefs(context).getString(KEY_BASEMAP_SOURCE, null));
     }
 
     public static MapConfigurator getCurrentSource(Context context) {

@@ -34,8 +34,8 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 
-import static org.odk.collect.android.preferences.GeneralKeys.CATEGORY_BASE_LAYER;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASE_LAYER_SOURCE;
+import static org.odk.collect.android.preferences.GeneralKeys.CATEGORY_BASEMAP;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class MapsPreferences extends BasePreferenceFragment {
@@ -104,7 +104,7 @@ public class MapsPreferences extends BasePreferenceFragment {
      */
     private void initBasemapSourcePref() {
         basemapSourcePref = PrefUtils.createListPref(
-            context, KEY_BASE_LAYER_SOURCE, R.string.base_layer_source,
+            context, KEY_BASEMAP_SOURCE, R.string.basemap_source,
             MapProvider.getLabelIds(), MapProvider.getIds()
         );
         onBasemapSourceChanged(null);
@@ -149,7 +149,7 @@ public class MapsPreferences extends BasePreferenceFragment {
             MapProvider.getCurrentSource(context);
         if (source != null) {
             // Set up the preferences in the "Basemap" section.
-            PreferenceCategory baseCategory = (PreferenceCategory) findPreference(CATEGORY_BASE_LAYER);
+            PreferenceCategory baseCategory = (PreferenceCategory) findPreference(CATEGORY_BASEMAP);
             baseCategory.removeAll();
             baseCategory.addPreference(basemapSourcePref);
             if (!source.isAvailable(context)) {

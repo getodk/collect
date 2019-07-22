@@ -323,13 +323,13 @@
     <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
 
     <string name="base_layer">Base layer</string>
-    <string name="base_layer_source">Source</string>
-    <string name="base_layer_source_google">Google</string>
-    <string name="base_layer_source_mapbox">Mapbox</string>
-    <string name="base_layer_source_osm">OpenStreetMap</string>
-    <string name="base_layer_source_usgs">USGS</string>
-    <string name="base_layer_source_stamen">Stamen</string>
-    <string name="base_layer_source_carto">Carto</string>
+    <string name="basemap_source">Source</string>
+    <string name="basemap_source_google">Google</string>
+    <string name="basemap_source_mapbox">Mapbox</string>
+    <string name="basemap_source_osm">OpenStreetMap</string>
+    <string name="basemap_source_usgs">USGS</string>
+    <string name="basemap_source_stamen">Stamen</string>
+    <string name="basemap_source_carto">Carto</string>
 
     <string name="google_map_style">Google map style</string>
     <string name="mapbox_map_style">Mapbox map style</string>

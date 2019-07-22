@@ -59,7 +59,7 @@ public final class AdminKeys {
     private static final String KEY_NAVIGATION                  = "change_navigation";
     static final String KEY_CONSTRAINT_BEHAVIOR                 = "change_constraint_behavior";
 
-    private static final String KEY_BASE_LAYER                  = "base_layer";
+    private static final String KEY_BASEMAP_SOURCE              = "basemap_source";
 
     private static final String KEY_ANALYTICS                   = "analytics";
     public static final String KEY_MOVING_BACKWARDS             = "moving_backwards";
@@ -97,7 +97,7 @@ public final class AdminKeys {
             ag(KEY_NAVIGATION,                 GeneralKeys.KEY_NAVIGATION),
             ag(KEY_CONSTRAINT_BEHAVIOR,        GeneralKeys.KEY_CONSTRAINT_BEHAVIOR),
 
-            ag(KEY_BASE_LAYER,                 GeneralKeys.KEY_BASE_LAYER_SOURCE),
+            ag(KEY_BASEMAP_SOURCE,             GeneralKeys.KEY_BASEMAP_SOURCE),
 
             ag(KEY_ANALYTICS,                  GeneralKeys.KEY_ANALYTICS)
     };
@@ -152,7 +152,7 @@ public final class AdminKeys {
     );
 
     static Collection<String> mapsKeys = Arrays.asList(
-            KEY_BASE_LAYER
+            KEY_BASEMAP_SOURCE
     );
 
     private static Collection<String> allKeys() {
