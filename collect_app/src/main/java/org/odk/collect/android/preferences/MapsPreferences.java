@@ -145,26 +145,25 @@ public class MapsPreferences extends BasePreferenceFragment {
     private void onBasemapSourceChanged(String id) {
         MapConfigurator cftor = id != null ? MapProvider.getOption(id).cftor :
             MapProvider.getConfigurator();
-        if (cftor != null) {
-            // Set up the preferences in the "Basemap" section.
-            PreferenceCategory baseCategory = (PreferenceCategory) findPreference(CATEGORY_BASEMAP);
-            baseCategory.removeAll();
-            baseCategory.addPreference(basemapSourcePref);
-            if (!cftor.isAvailable(context)) {
-                cftor.showUnavailableMessage(context);
-                return;
-            }
-            for (Preference pref : cftor.createPrefs(context)) {
-                baseCategory.addPreference(pref);
-            }
 
-            // Clear the reference layer if it isn't supported by the new basemap.
-            if (referenceLayerPref != null) {
-                String path = referenceLayerPref.getValue();
-                if (path != null && !cftor.supportsLayer(new File(path))) {
-                    referenceLayerPref.setValue(null);
-                    updateReferenceLayerSummary(null);
-                }
+        // Set up the preferences in the "Basemap" section.
+        PreferenceCategory baseCategory = (PreferenceCategory) findPreference(CATEGORY_BASEMAP);
+        baseCategory.removeAll();
+        baseCategory.addPreference(basemapSourcePref);
+        if (!cftor.isAvailable(context)) {
+            cftor.showUnavailableMessage(context);
+            return;
+        }
+        for (Preference pref : cftor.createPrefs(context)) {
+            baseCategory.addPreference(pref);
+        }
+
+        // Clear the reference layer if it isn't supported by the new basemap.
+        if (referenceLayerPref != null) {
+            String path = referenceLayerPref.getValue();
+            if (path != null && !cftor.supportsLayer(new File(path))) {
+                referenceLayerPref.setValue(null);
+                updateReferenceLayerSummary(null);
             }
         }
     }

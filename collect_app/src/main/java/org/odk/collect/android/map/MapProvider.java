@@ -134,14 +134,12 @@ public class MapProvider {
 
     public static MapFragment createMapFragment(Context context) {
         MapConfigurator cftor = getConfigurator();
-        if (cftor != null) {
-            MapFragment map = cftor.createMapFragment(context);
-            if (map != null) {
-                sourcesByMap.put(map, cftor);
-                return map;
-            }
-            cftor.showUnavailableMessage(context);
+        MapFragment map = cftor.createMapFragment(context);
+        if (map != null) {
+            sourcesByMap.put(map, cftor);
+            return map;
         }
+        cftor.showUnavailableMessage(context);
         return null;
     }
 
