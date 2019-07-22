@@ -6,6 +6,7 @@
   <string name="smap_cannot_accept">No es posible aceptar la tarea</string>
   <string name="smap_cannot_complete">No es posible completar la tarea</string>
   <string name="smap_cannot_reject">No es posible rechazar la tarea</string>
+  <string name="smap_cannot_restore">No se puede restaurar la tarea</string>
   <string name="smap_complete_task">Completar Tarea</string>
   <string name="smap_data_collection">Captura de Datos</string>
   <string name="smap_destination_not_found">No se ha especificado la ruta de destino</string>
@@ -88,5 +89,7 @@
   <string name="smap_login_failed">No se pudo conectar al servidor</string>
   <string name="smap_login_unauthorized">Error de Inicio de sesión</string>
   <string name="smap_geofence_tasks">Nuevas tareas locales</string>
+  <string name="smap_reason">Razón</string>
+  <string name="smap_reason_not_specified">Debe especificar una razón mayor a 5 caracteres</string>
   <string name="smap_continue_tracking">La opción Salir ha sido deshabilitada. </string>
 </resources>
