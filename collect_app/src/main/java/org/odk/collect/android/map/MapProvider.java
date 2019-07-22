@@ -35,12 +35,12 @@ public class MapProvider {
         "https://basemap.nationalmap.gov/arcgis/rest/services";
     private static final String OSM_COPYRIGHT = "© OpenStreetMap contributors";
 
-    public static class SourceOption {
-        public final String id;  // preference value to store
-        public final int labelId;  // string resource ID
-        public final MapConfigurator cftor;
+    private static class SourceOption {
+        private final String id;  // preference value to store
+        private final int labelId;  // string resource ID
+        private final MapConfigurator cftor;
 
-        public SourceOption(String id, int labelId, MapConfigurator cftor) {
+        private SourceOption(String id, int labelId, MapConfigurator cftor) {
             this.id = id;
             this.labelId = labelId;
             this.cftor = cftor;
@@ -113,7 +113,7 @@ public class MapProvider {
      * Gets the SourceOption with the given id, or the currently selected option
      * if id is null, or the first option if the id is unknown.  Never null.
      */
-    public static @NonNull SourceOption getOption(String id) {
+    private static @NonNull SourceOption getOption(String id) {
         if (id == null) {
             id = PrefUtils.getSharedPrefs().getString(KEY_BASEMAP_SOURCE, null);
         }
@@ -125,7 +125,7 @@ public class MapProvider {
         return SOURCE_OPTIONS[0];
     }
 
-    /** Gets the currently selected SourceOption's labelId. */
+    /** Gets the currently selected SourceOption's label string resource ID. */
     public static int getSourceLabelId() {
         return getOption(null).labelId;
     }
@@ -157,7 +157,7 @@ public class MapProvider {
         return null;
     }
 
-    public static void onMapFragmentStart(MapFragment map) {
+    static void onMapFragmentStart(MapFragment map) {
         MapConfigurator cftor = sourcesByMap.get(map);
         if (cftor != null) {
             OnSharedPreferenceChangeListener listener = (prefs, key) -> {
@@ -172,7 +172,7 @@ public class MapProvider {
         }
     }
 
-    public static void onMapFragmentStop(MapFragment map) {
+    static void onMapFragmentStop(MapFragment map) {
         OnSharedPreferenceChangeListener listener = listenersByMap.get(map);
         if (listener != null) {
             SharedPreferences prefs = PrefUtils.getSharedPrefs();

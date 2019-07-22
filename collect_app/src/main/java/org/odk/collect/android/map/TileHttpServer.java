@@ -17,13 +17,13 @@ import java.util.Map;
 import timber.log.Timber;
 
 /** A minimal HTTP server that serves tiles from a set of TileSources. */
-public class TileHttpServer {
-    public static final int PORT_MIN = 8000;
-    public static final int PORT_MAX = 8999;
+class TileHttpServer {
+    private static final int PORT_MIN = 8000;
+    private static final int PORT_MAX = 8999;
 
-    final Map<String, TileSource> sources = new HashMap<>();
-    final ServerThread server;
-    final ServerSocket socket;
+    private final Map<String, TileSource> sources = new HashMap<>();
+    private final ServerThread server;
+    private final ServerSocket socket;
 
     public TileHttpServer() throws IOException {
         socket = createBoundSocket(PORT_MIN, PORT_MAX);

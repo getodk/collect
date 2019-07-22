@@ -2,7 +2,6 @@ package org.odk.collect.android.map;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -17,14 +16,12 @@ import org.odk.collect.android.utilities.ToastUtils;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.WeakHashMap;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_MAP_STYLE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 
-public class MapboxMapConfigurator implements MapConfigurator {
+class MapboxMapConfigurator implements MapConfigurator {
     @Override public boolean isAvailable(Context context) {
         return MapboxUtils.initMapbox() != null;
     }
@@ -37,7 +34,6 @@ public class MapboxMapConfigurator implements MapConfigurator {
     @Override public MapFragment createMapFragment(Context context) {
         return MapboxUtils.initMapbox() != null ? new MapboxMapFragment() : null;
     }
-
 
     @Override public List<Preference> createPrefs(Context context) {
         return Arrays.asList(

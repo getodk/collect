@@ -23,7 +23,7 @@ import timber.log.Timber;
  * columns, including tiles that may contain raster images or vector geometry.
  * See https://github.com/mapbox/mbtiles-spec for the detailed specification.
  */
-public class MbtilesFile implements Closeable, TileSource {
+class MbtilesFile implements Closeable, TileSource {
     public enum LayerType { RASTER, VECTOR }
 
     protected File file;

@@ -10,14 +10,14 @@ import java.io.Serializable;
  * A serializable definition of a Web Map Service in terms of its URL structure
  * and the parameters for fetching tiles from it.
  */
-public class WebMapService implements Serializable {
+class WebMapService implements Serializable {
     public final String cacheName;
     public final int minZoomLevel;
     public final int maxZoomLevel;
     public final int tileSize;
     public final String copyright;
     public final String[] urlTemplates;
-    public OnlineTileSourceBase onlineTileSource = null;
+    private OnlineTileSourceBase onlineTileSource = null;
 
     public WebMapService(String cacheName, int minZoomLevel, int maxZoomLevel,
         int tileSize, String copyright, String... urlTemplates) {

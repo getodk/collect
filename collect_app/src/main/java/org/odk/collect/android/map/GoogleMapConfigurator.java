@@ -23,7 +23,7 @@ import java.util.List;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_GOOGLE_MAP_STYLE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 
-public class GoogleMapConfigurator implements MapConfigurator {
+class GoogleMapConfigurator implements MapConfigurator {
     @Override public boolean isAvailable(Context context) {
         return isGoogleMapsSdkAvailable(context) && isGooglePlayServicesAvailable(context);
     }

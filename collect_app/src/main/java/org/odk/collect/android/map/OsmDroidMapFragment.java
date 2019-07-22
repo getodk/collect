@@ -70,13 +70,13 @@ import timber.log.Timber;
 public class OsmDroidMapFragment extends Fragment implements MapFragment,
     MapEventsReceiver, IRegisterReceiver,
     LocationListener, LocationClient.LocationClientListener {
-    public static final GeoPoint INITIAL_CENTER = new GeoPoint(0.0, -30.0);
-    public static final int INITIAL_ZOOM = 2;
-    public static final int POINT_ZOOM = 16;
+    private static final GeoPoint INITIAL_CENTER = new GeoPoint(0.0, -30.0);
+    private static final int INITIAL_ZOOM = 2;
+    private static final int POINT_ZOOM = 16;
 
     // Bundle keys understood by applyConfig().
-    public static final String KEY_WEB_MAP_SERVICE = "WEB_MAP_SERVICE";
-    public static final String KEY_REFERENCE_LAYER = "REFERENCE_LAYER";
+    static final String KEY_WEB_MAP_SERVICE = "WEB_MAP_SERVICE";
+    static final String KEY_REFERENCE_LAYER = "REFERENCE_LAYER";
 
     protected MapView map;
     protected ReadyListener readyListener;

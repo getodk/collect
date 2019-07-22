@@ -65,13 +65,13 @@ public class GoogleMapFragment extends SupportMapFragment implements
     MapFragment, LocationListener, LocationClient.LocationClientListener,
     GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener,
     GoogleMap.OnMarkerDragListener, GoogleMap.OnMarkerClickListener {
-    public static final LatLng INITIAL_CENTER = new LatLng(0, -30);
-    public static final float INITIAL_ZOOM = 2;
-    public static final float POINT_ZOOM = 16;
+    private static final LatLng INITIAL_CENTER = new LatLng(0, -30);
+    private static final float INITIAL_ZOOM = 2;
+    private static final float POINT_ZOOM = 16;
 
     // Bundle keys understood by applyConfig().
-    public static final String KEY_MAP_TYPE = "MAP_TYPE";
-    public static final String KEY_REFERENCE_LAYER = "REFERENCE_LAYER";
+    static final String KEY_MAP_TYPE = "MAP_TYPE";
+    static final String KEY_REFERENCE_LAYER = "REFERENCE_LAYER";
 
     protected GoogleMap map;
     protected Marker locationCrosshairs;

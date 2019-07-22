@@ -78,16 +78,16 @@ public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFrag
     MapboxMap.OnMapClickListener, MapboxMap.OnMapLongClickListener,
     LocationEngineCallback<LocationEngineResult> {
 
-    public static final LatLng INITIAL_CENTER = new LatLng(0, -30);
-    public static final float INITIAL_ZOOM = 2;
-    public static final float POINT_ZOOM = 16;
-    public static final String POINT_ICON_ID = "point-icon-id";
-    public static final long LOCATION_INTERVAL_MILLIS = 1000;
-    public static final long LOCATION_MAX_WAIT_MILLIS = 5*LOCATION_INTERVAL_MILLIS;
+    private static final LatLng INITIAL_CENTER = new LatLng(0, -30);
+    private static final float INITIAL_ZOOM = 2;
+    private static final float POINT_ZOOM = 16;
+    private static final String POINT_ICON_ID = "point-icon-id";
+    private static final long LOCATION_INTERVAL_MILLIS = 1000;
+    private static final long LOCATION_MAX_WAIT_MILLIS = 5*LOCATION_INTERVAL_MILLIS;
 
     // Bundle keys understood by applyConfig().
-    public static final String KEY_STYLE_URL = "STYLE_URL";
-    public static final String KEY_REFERENCE_LAYER = "REFERENCE_LAYER";
+    static final String KEY_STYLE_URL = "STYLE_URL";
+    static final String KEY_REFERENCE_LAYER = "REFERENCE_LAYER";
 
     protected MapboxMap map;
     protected List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();

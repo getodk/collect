@@ -16,7 +16,7 @@ import java.util.List;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 
-public class OsmDroidMapConfigurator implements MapConfigurator {
+class OsmDroidMapConfigurator implements MapConfigurator {
     private final String prefKey;
     private final int prefTitleId;
     private final WmsOption[] options;
