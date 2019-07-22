@@ -132,8 +132,14 @@ public class MapsPreferences extends BasePreferenceFragment {
     /** Sets the summary text for the reference layer to show the selected file. */
     private void updateReferenceLayerSummary(Object value) {
         if (referenceLayerPref != null) {
-            referenceLayerPref.setSummary(
-                value != null ? value.toString() : getString(R.string.none));
+            String summary;
+            if (value == null) {
+                summary = getString(R.string.none);
+            } else {
+                BaseLayerSource source = MapConfigurator.getCurrentSource(context);
+                summary = source.getDisplayName(new File(value.toString()));
+            }
+            referenceLayerPref.setSummary(summary);
         }
     }
 
