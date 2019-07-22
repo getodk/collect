@@ -322,7 +322,7 @@
     <string name="openmap_cartodb_positron">CartoDB Positron</string>
     <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
 
-    <string name="base_layer">Base layer</string>
+    <string name="basemap">Basemap</string>
     <string name="basemap_source">Source</string>
     <string name="basemap_source_google">Google</string>
     <string name="basemap_source_mapbox">Mapbox</string>
