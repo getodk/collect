@@ -37,19 +37,6 @@ class TileHttpServer {
         server.start();
     }
 
-    /** Finds an available port and binds a ServerSocket to it. */
-    protected static ServerSocket createBoundSocket(int portMin, int portMax) throws IOException {
-        for (int port = portMin; port <= portMax; port++) {
-            try {
-                return new ServerSocket(port);
-            } catch (BindException e) {
-                continue;  // this port is in use; try another one
-            }
-        }
-        Timber.e("No ports available from %d to %d", portMin, portMax);
-        return null;
-    }
-
     /**
      * Constructs a URL template for fetching tiles from this server for a given
      * tileset, with placeholders {z} for zoom level and {x} and {y} for coordinates.
@@ -81,6 +68,19 @@ class TileHttpServer {
                 } catch (IOException e) { /* ignore */ }
             }
         }
+    }
+
+    /** Finds an available port and binds a ServerSocket to it. */
+    protected static ServerSocket createBoundSocket(int portMin, int portMax) throws IOException {
+        for (int port = portMin; port <= portMax; port++) {
+            try {
+                return new ServerSocket(port);
+            } catch (BindException e) {
+                continue;  // this port is in use; try another one
+            }
+        }
+        Timber.e("No ports available from %d to %d", portMin, portMax);
+        return null;
     }
 
     class ServerThread extends Thread {

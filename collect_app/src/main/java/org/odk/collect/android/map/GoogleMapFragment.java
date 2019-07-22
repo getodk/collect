@@ -161,19 +161,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    /** Updates the map to reflect the value of referenceLayerFile. */
-    protected void loadReferenceOverlay() {
-        if (referenceOverlay != null) {
-            referenceOverlay.remove();
-            referenceOverlay = null;
-        }
-        if (referenceLayerFile != null) {
-            referenceOverlay = this.map.addTileOverlay(new TileOverlayOptions().tileProvider(
-                new GoogleMapsMapBoxOfflineTileProvider(referenceLayerFile)
-            ));
-        }
-    }
-
     @Override public @NonNull MapPoint getCenter() {
         if (map == null) {  // during Robolectric tests, map will be null
             return INITIAL_CENTER;
@@ -233,35 +220,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
                     moveOrAnimateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), animate);
                 }, 100);
             }
-        }
-    }
-
-    protected LatLngBounds expandBounds(LatLngBounds bounds, double factor) {
-        double north = bounds.northeast.latitude;
-        double south = bounds.southwest.latitude;
-        double latCenter = (north + south) / 2;
-        double latRadius = ((north - south) / 2) * factor;
-        north = Math.min(90, latCenter + latRadius);
-        south = Math.max(-90, latCenter - latRadius);
-
-        double east = bounds.northeast.longitude;
-        double west = bounds.southwest.longitude;
-        while (east < west) {
-            east += 360;
-        }
-        double lonCenter = (east + west) / 2;
-        double lonRadius = Math.min(180 - 1e-6, ((east - west) / 2) * factor);
-        east = lonCenter + lonRadius;
-        west = lonCenter - lonRadius;
-
-        return new LatLngBounds(new LatLng(south, west), new LatLng(north, east));
-    }
-
-    protected void moveOrAnimateCamera(CameraUpdate movement, boolean animate) {
-        if (animate) {
-            map.animateCamera(movement);
-        } else {
-            map.moveCamera(movement);
         }
     }
 
@@ -375,34 +333,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    protected void updateLocationIndicator(LatLng loc, double radius) {
-        if (map == null) {
-            return;
-        }
-        if (locationCrosshairs == null) {
-            locationCrosshairs = map.addMarker(new MarkerOptions()
-                .position(loc)
-                .icon(getBitmapDescriptor(R.drawable.ic_crosshairs))
-                .anchor(0.5f, 0.5f)  // center the crosshairs on the position
-            );
-        }
-        if (accuracyCircle == null) {
-            int stroke = getResources().getColor(R.color.locationAccuracyCircle);
-            int fill = getResources().getColor(R.color.locationAccuracyFill);
-            accuracyCircle = map.addCircle(new CircleOptions()
-                .center(loc)
-                .radius(radius)
-                .strokeWidth(1)
-                .strokeColor(stroke)
-                .fillColor(fill)
-            );
-        }
-
-        locationCrosshairs.setPosition(loc);
-        accuracyCircle.setCenter(loc);
-        accuracyCircle.setRadius(radius);
-    }
-
     @Override public @Nullable MapPoint getGpsLocation() {
         return lastLocationFix;
     }
@@ -467,36 +397,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
         locationClient.stopLocationUpdates();
     }
 
-    protected void showGpsDisabledAlert() {
-        gpsErrorDialog = new AlertDialog.Builder(getActivity())
-            .setMessage(getString(R.string.gps_enable_message))
-            .setCancelable(false)
-            .setPositiveButton(getString(R.string.enable_gps),
-                (dialog, id) -> startActivityForResult(
-                    new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0))
-            .setNegativeButton(getString(R.string.cancel),
-                (dialog, id) -> dialog.cancel())
-            .create();
-        gpsErrorDialog.show();
-    }
-
-    /** Finds the feature to which the given marker belongs. */
-    protected int findFeature(Marker marker) {
-        for (int featureId : features.keySet()) {
-            if (features.get(featureId).ownsMarker(marker)) {
-                return featureId;
-            }
-        }
-        return -1;  // not found
-    }
-
-    protected void updateFeature(int featureId) {
-        MapFeature feature = features.get(featureId);
-        if (feature != null) {
-            feature.update();
-        }
-    }
-
     protected static @NonNull MapPoint fromLatLng(@NonNull LatLng latLng) {
         return new MapPoint(latLng.latitude, latLng.longitude);
     }
@@ -532,6 +432,93 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return new LatLng(point.lat, point.lon);
     }
 
+    /** Updates the map to reflect the value of referenceLayerFile. */
+    protected void loadReferenceOverlay() {
+        if (referenceOverlay != null) {
+            referenceOverlay.remove();
+            referenceOverlay = null;
+        }
+        if (referenceLayerFile != null) {
+            referenceOverlay = this.map.addTileOverlay(new TileOverlayOptions().tileProvider(
+                new GoogleMapsMapBoxOfflineTileProvider(referenceLayerFile)
+            ));
+        }
+    }
+
+    protected LatLngBounds expandBounds(LatLngBounds bounds, double factor) {
+        double north = bounds.northeast.latitude;
+        double south = bounds.southwest.latitude;
+        double latCenter = (north + south) / 2;
+        double latRadius = ((north - south) / 2) * factor;
+        north = Math.min(90, latCenter + latRadius);
+        south = Math.max(-90, latCenter - latRadius);
+
+        double east = bounds.northeast.longitude;
+        double west = bounds.southwest.longitude;
+        while (east < west) {
+            east += 360;
+        }
+        double lonCenter = (east + west) / 2;
+        double lonRadius = Math.min(180 - 1e-6, ((east - west) / 2) * factor);
+        east = lonCenter + lonRadius;
+        west = lonCenter - lonRadius;
+
+        return new LatLngBounds(new LatLng(south, west), new LatLng(north, east));
+    }
+
+    protected void moveOrAnimateCamera(CameraUpdate movement, boolean animate) {
+        if (animate) {
+            map.animateCamera(movement);
+        } else {
+            map.moveCamera(movement);
+        }
+    }
+
+    protected void updateLocationIndicator(LatLng loc, double radius) {
+        if (map == null) {
+            return;
+        }
+        if (locationCrosshairs == null) {
+            locationCrosshairs = map.addMarker(new MarkerOptions()
+                .position(loc)
+                .icon(getBitmapDescriptor(R.drawable.ic_crosshairs))
+                .anchor(0.5f, 0.5f)  // center the crosshairs on the position
+            );
+        }
+        if (accuracyCircle == null) {
+            int stroke = getResources().getColor(R.color.locationAccuracyCircle);
+            int fill = getResources().getColor(R.color.locationAccuracyFill);
+            accuracyCircle = map.addCircle(new CircleOptions()
+                .center(loc)
+                .radius(radius)
+                .strokeWidth(1)
+                .strokeColor(stroke)
+                .fillColor(fill)
+            );
+        }
+
+        locationCrosshairs.setPosition(loc);
+        accuracyCircle.setCenter(loc);
+        accuracyCircle.setRadius(radius);
+    }
+
+    /** Finds the feature to which the given marker belongs. */
+    protected int findFeature(Marker marker) {
+        for (int featureId : features.keySet()) {
+            if (features.get(featureId).ownsMarker(marker)) {
+                return featureId;
+            }
+        }
+        return -1;  // not found
+    }
+
+    protected void updateFeature(int featureId) {
+        MapFeature feature = features.get(featureId);
+        if (feature != null) {
+            feature.update();
+        }
+    }
+
     protected Marker createMarker(GoogleMap map, MapPoint point, boolean draggable) {
         if (map == null || getActivity() == null) {  // during Robolectric tests, map will be null
             return null;
@@ -551,6 +538,19 @@ public class GoogleMapFragment extends SupportMapFragment implements
     protected BitmapDescriptor getBitmapDescriptor(int drawableId) {
         return BitmapDescriptorFactory.fromBitmap(
             IconUtils.getBitmap(getActivity(), drawableId));
+    }
+
+    protected void showGpsDisabledAlert() {
+        gpsErrorDialog = new AlertDialog.Builder(getActivity())
+            .setMessage(getString(R.string.gps_enable_message))
+            .setCancelable(false)
+            .setPositiveButton(getString(R.string.enable_gps),
+                (dialog, id) -> startActivityForResult(
+                    new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0))
+            .setNegativeButton(getString(R.string.cancel),
+                (dialog, id) -> dialog.cancel())
+            .create();
+        gpsErrorDialog.show();
     }
 
     /**

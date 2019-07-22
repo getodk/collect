@@ -173,21 +173,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         return view;
     }
 
-    /** Updates the map to reflect the value of referenceLayerFile. */
-    protected void loadReferenceOverlay() {
-        if (referenceOverlay != null) {
-            map.getOverlays().remove(referenceOverlay);
-            referenceOverlay = null;
-        }
-        if (referenceLayerFile != null) {
-            OsmMBTileProvider mbprovider = new OsmMBTileProvider(this, referenceLayerFile);
-            referenceOverlay = new TilesOverlay(mbprovider, getContext());
-            referenceOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
-            map.getOverlays().add(0, referenceOverlay);
-        }
-        map.invalidate();
-    }
-
     @Override public boolean singleTapConfirmedHelper(GeoPoint geoPoint) {
         if (clickListener != null) {
             clickListener.onPoint(fromGeoPoint(geoPoint));
@@ -381,19 +366,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         }
     }
 
-    protected void showGpsDisabledAlert() {
-        gpsErrorDialog = new AlertDialog.Builder(getContext())
-            .setMessage(getString(R.string.gps_enable_message))
-            .setCancelable(false)
-            .setPositiveButton(getString(R.string.enable_gps),
-                (dialog, id) -> startActivityForResult(
-                    new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0))
-            .setNegativeButton(getString(R.string.cancel),
-                (dialog, id) -> dialog.cancel())
-            .create();
-        gpsErrorDialog.show();
-    }
-
     @Override public void onClientStart() {
         locationClient.requestLocationUpdates(this);
     }
@@ -403,31 +375,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     @Override public void onClientStop() { }
-
-    /**
-     * Adds a listener that keeps track of the map center, and another
-     * listener that restores the map center when the MapView's layout changes.
-     * We have to do this because the MapView is buggy and fails to preserve its
-     * view on a layout change, causing the map viewport to jump around when the
-     * screen is resized or rotated in a way that doesn't restart the activity.
-     */
-    protected void addMapLayoutChangeListener(MapView map) {
-        lastMapCenter = map.getMapCenter();
-        map.setMapListener(new MapListener() {
-            @Override public boolean onScroll(ScrollEvent event) {
-                lastMapCenter = map.getMapCenter();
-                return false;
-            }
-
-            @Override public boolean onZoom(ZoomEvent event) {
-                lastMapCenter = map.getMapCenter();
-                return false;
-            }
-        });
-        map.addOnLayoutChangeListener(
-            (view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) ->
-            map.getController().setCenter(lastMapCenter));
-    }
 
     protected static @Nullable MapPoint fromLocation(@NonNull MyLocationNewOverlay overlay) {
         GeoPoint geoPoint = overlay.getMyLocation();
@@ -463,6 +410,59 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     protected static @NonNull GeoPoint toGeoPoint(@NonNull MapPoint point) {
         return new GeoPoint(point.lat, point.lon, point.alt);
+    }
+
+    /** Updates the map to reflect the value of referenceLayerFile. */
+    protected void loadReferenceOverlay() {
+        if (referenceOverlay != null) {
+            map.getOverlays().remove(referenceOverlay);
+            referenceOverlay = null;
+        }
+        if (referenceLayerFile != null) {
+            OsmMBTileProvider mbprovider = new OsmMBTileProvider(this, referenceLayerFile);
+            referenceOverlay = new TilesOverlay(mbprovider, getContext());
+            referenceOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
+            map.getOverlays().add(0, referenceOverlay);
+        }
+        map.invalidate();
+    }
+
+    protected void showGpsDisabledAlert() {
+        gpsErrorDialog = new AlertDialog.Builder(getContext())
+            .setMessage(getString(R.string.gps_enable_message))
+            .setCancelable(false)
+            .setPositiveButton(getString(R.string.enable_gps),
+                (dialog, id) -> startActivityForResult(
+                    new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0))
+            .setNegativeButton(getString(R.string.cancel),
+                (dialog, id) -> dialog.cancel())
+            .create();
+        gpsErrorDialog.show();
+    }
+
+    /**
+     * Adds a listener that keeps track of the map center, and another
+     * listener that restores the map center when the MapView's layout changes.
+     * We have to do this because the MapView is buggy and fails to preserve its
+     * view on a layout change, causing the map viewport to jump around when the
+     * screen is resized or rotated in a way that doesn't restart the activity.
+     */
+    protected void addMapLayoutChangeListener(MapView map) {
+        lastMapCenter = map.getMapCenter();
+        map.setMapListener(new MapListener() {
+            @Override public boolean onScroll(ScrollEvent event) {
+                lastMapCenter = map.getMapCenter();
+                return false;
+            }
+
+            @Override public boolean onZoom(ZoomEvent event) {
+                lastMapCenter = map.getMapCenter();
+                return false;
+            }
+        });
+        map.addOnLayoutChangeListener(
+            (view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) ->
+                map.getController().setCenter(lastMapCenter));
     }
 
     protected Marker createMarker(MapView map, MapPoint point, MapFeature feature) {

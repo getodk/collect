@@ -35,17 +35,19 @@ public class MapProvider {
         "https://basemap.nationalmap.gov/arcgis/rest/services";
     private static final String OSM_COPYRIGHT = "© OpenStreetMap contributors";
 
-    private static class SourceOption {
-        private final String id;  // preference value to store
-        private final int labelId;  // string resource ID
-        private final MapConfigurator cftor;
+    // In general, there will only be one MapFragment, and thus one entry, in
+    // each of these two Maps at any given time.  Nonetheless, it's a little
+    // tidier and less error-prone to use a Map than to track the key and value
+    // in separate fields, and the WeakHashMap will conveniently drop the key
+    // automatically when it's no longer needed.
 
-        private SourceOption(String id, int labelId, MapConfigurator cftor) {
-            this.id = id;
-            this.labelId = labelId;
-            this.cftor = cftor;
-        }
-    }
+    /** Keeps track of the listener associated with a given MapFragment. */
+    private static Map<MapFragment, OnSharedPreferenceChangeListener>
+        listenersByMap = new WeakHashMap<>();
+
+    /** Keeps track of the configurator associated with a given MapFragment. */
+    private static Map<MapFragment, MapConfigurator>
+        configuratorsByMap = new WeakHashMap<>();
 
     /**
      * In the preference UI, the available basemaps are organized into "sources"
@@ -109,6 +111,54 @@ public class MapProvider {
         };
     }
 
+    /** Gets a new MapFragment from the selected MapConfigurator. */
+    public static MapFragment createMapFragment(Context context) {
+        MapConfigurator cftor = getConfigurator();
+        MapFragment map = cftor.createMapFragment(context);
+        if (map != null) {
+            configuratorsByMap.put(map, cftor);
+            return map;
+        }
+        cftor.showUnavailableMessage(context);
+        return null;
+    }
+
+    /** Gets the currently selected MapConfigurator. */
+    public static @NonNull MapConfigurator getConfigurator() {
+        return getOption(null).cftor;
+    }
+
+    /**
+     * Gets the MapConfigurator for the SourceOption with the given id, or the
+     * currently selected MapConfigurator if id is null.
+     */
+    public static @NonNull MapConfigurator getConfigurator(String id) {
+        return getOption(id).cftor;
+    }
+
+    /** Gets the currently selected SourceOption's label string resource ID. */
+    public static int getSourceLabelId() {
+        return getOption(null).labelId;
+    }
+
+    /** Gets a list of the IDs of the basemap sources, in order. */
+    public static String[] getIds() {
+        String[] ids = new String[SOURCE_OPTIONS.length];
+        for (int i = 0; i < ids.length; i++) {
+            ids[i] = SOURCE_OPTIONS[i].id;
+        }
+        return ids;
+    }
+
+    /** Gets a list of the label string IDs of the basemap sources, in order. */
+    public static int[] getLabelIds() {
+        int[] labelIds = new int[SOURCE_OPTIONS.length];
+        for (int i = 0; i < labelIds.length; i++) {
+            labelIds[i] = SOURCE_OPTIONS[i].labelId;
+        }
+        return labelIds;
+    }
+
     /**
      * Gets the SourceOption with the given id, or the currently selected option
      * if id is null, or the first option if the id is unknown.  Never null.
@@ -125,40 +175,8 @@ public class MapProvider {
         return SOURCE_OPTIONS[0];
     }
 
-    /** Gets the currently selected SourceOption's label string resource ID. */
-    public static int getSourceLabelId() {
-        return getOption(null).labelId;
-    }
-
-    /**
-     * Gets the MapConfigurator for the SourceOption with the given id, or the
-     * currently selected MapConfigurator if id is null.
-     */
-    public static @NonNull MapConfigurator getConfigurator(String id) {
-        return getOption(id).cftor;
-    }
-
-    /** Gets the currently selected MapConfigurator. */
-    public static @NonNull MapConfigurator getConfigurator() {
-        return getConfigurator(null);
-    }
-
-    private static Map<MapFragment, OnSharedPreferenceChangeListener> listenersByMap = new WeakHashMap<>();
-    private static Map<MapFragment, MapConfigurator> sourcesByMap = new WeakHashMap<>();
-
-    public static MapFragment createMapFragment(Context context) {
-        MapConfigurator cftor = getConfigurator();
-        MapFragment map = cftor.createMapFragment(context);
-        if (map != null) {
-            sourcesByMap.put(map, cftor);
-            return map;
-        }
-        cftor.showUnavailableMessage(context);
-        return null;
-    }
-
     static void onMapFragmentStart(MapFragment map) {
-        MapConfigurator cftor = sourcesByMap.get(map);
+        MapConfigurator cftor = configuratorsByMap.get(map);
         if (cftor != null) {
             OnSharedPreferenceChangeListener listener = (prefs, key) -> {
                 if (cftor.getPrefKeys().contains(key)) {
@@ -181,21 +199,15 @@ public class MapProvider {
         }
     }
 
-    /** Gets a list of the IDs of the basemap sources, in order. */
-    public static String[] getIds() {
-        String[] ids = new String[SOURCE_OPTIONS.length];
-        for (int i = 0; i < ids.length; i++) {
-            ids[i] = SOURCE_OPTIONS[i].id;
-        }
-        return ids;
-    }
+    private static class SourceOption {
+        private final String id;  // preference value to store
+        private final int labelId;  // string resource ID
+        private final MapConfigurator cftor;
 
-    /** Gets a list of the label string IDs of the basemap sources, in order. */
-    public static int[] getLabelIds() {
-        int[] labelIds = new int[SOURCE_OPTIONS.length];
-        for (int i = 0; i < labelIds.length; i++) {
-            labelIds[i] = SOURCE_OPTIONS[i].labelId;
+        private SourceOption(String id, int labelId, MapConfigurator cftor) {
+            this.id = id;
+            this.labelId = labelId;
+            this.cftor = cftor;
         }
-        return labelIds;
     }
 }

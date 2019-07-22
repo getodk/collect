@@ -26,12 +26,12 @@ import timber.log.Timber;
 class MbtilesFile implements Closeable, TileSource {
     public enum LayerType { RASTER, VECTOR }
 
-    protected File file;
-    protected SQLiteDatabase db;
-    protected String format;
-    protected LayerType layerType;
-    protected String contentType = "application/octet-stream";
-    protected String contentEncoding = "identity";
+    private File file;
+    private SQLiteDatabase db;
+    private String format;
+    private LayerType layerType;
+    private String contentType = "application/octet-stream";
+    private String contentEncoding = "identity";
 
     public MbtilesFile(File file) throws MbtilesException {
         this.file = file;
@@ -66,7 +66,7 @@ class MbtilesFile implements Closeable, TileSource {
                 layerType = LayerType.RASTER;
             } else {
                 db.close();
-                throw new UnsupportedFormatException(format);
+                throw new UnsupportedFormatException(format, file);
             }
         } catch (Throwable e) {
             throw new MbtilesException(e);
@@ -181,11 +181,7 @@ class MbtilesFile implements Closeable, TileSource {
         }
     }
 
-    public class MbtilesException extends IOException {
-        public MbtilesException() {
-            this(String.format("Unable to process %s", file));
-        }
-
+    public static class MbtilesException extends IOException {
         public MbtilesException(Throwable cause) {
             this(cause.getMessage());
             initCause(cause);
@@ -196,20 +192,20 @@ class MbtilesFile implements Closeable, TileSource {
         }
     }
 
-    public class NotFileException extends MbtilesException {
+    public static class NotFileException extends MbtilesException {
         public NotFileException(File file) {
             super("Not a file: " + file);
         }
     }
 
-    public class UnsupportedFilenameException extends MbtilesException {
+    public static class UnsupportedFilenameException extends MbtilesException {
         public UnsupportedFilenameException(File file) {
             super("Illegal filename for SQLite file: " + file);
         }
     }
 
-    public class UnsupportedFormatException extends MbtilesException {
-        public UnsupportedFormatException(String format) {
+    public static class UnsupportedFormatException extends MbtilesException {
+        public UnsupportedFormatException(String format, File file) {
             super(String.format("Unrecognized .mbtiles format \"%s\" in %s", format, file));
         }
     }

@@ -52,13 +52,6 @@ public class MapsPreferences extends BasePreferenceFragment {
         return prefs;
     }
 
-    /** Constructor that immediately opens the Reference Layer dialog. */
-    public static MapsPreferences newInstanceForReferenceLayerDialog() {
-        MapsPreferences prefs = new MapsPreferences();
-        prefs.autoShowReferenceLayerDialog = true;
-        return prefs;
-    }
-
     /** Pops up the preference dialog that lets the user choose a reference layer. */
     public static void showReferenceLayerDialog(Activity activity) {
         // Unfortunately, the Preference class is designed so that it is impossible
@@ -66,9 +59,11 @@ public class MapsPreferences extends BasePreferenceFragment {
         // and attaching it to an activity.  So, we instantiate a MapsPreference
         // fragment that is configured to immediately open the dialog when it's
         // attached, then instantiate it and attach it.
+        MapsPreferences prefs = newInstance(false);
+        prefs.autoShowReferenceLayerDialog = true;  // makes dialog open immediately
         activity.getFragmentManager()
             .beginTransaction()
-            .add(newInstanceForReferenceLayerDialog(), null)
+            .add(prefs, null)
             .commit();
     }
 
@@ -106,11 +101,35 @@ public class MapsPreferences extends BasePreferenceFragment {
             context, KEY_BASEMAP_SOURCE, R.string.basemap_source,
             MapProvider.getLabelIds(), MapProvider.getIds()
         );
-        onBasemapSourceChanged(null);
+        onBasemapSourceChanged(MapProvider.getConfigurator());
         basemapSourcePref.setOnPreferenceChangeListener((pref, value) -> {
-            onBasemapSourceChanged(value.toString());
+            onBasemapSourceChanged(MapProvider.getConfigurator(value.toString()));
             return true;
         });
+    }
+
+    /** Updates the rest of the preference UI when the Basemap Source is changed. */
+    private void onBasemapSourceChanged(MapConfigurator cftor) {
+        // Set up the preferences in the "Basemap" section.
+        PreferenceCategory baseCategory = (PreferenceCategory) findPreference(CATEGORY_BASEMAP);
+        baseCategory.removeAll();
+        baseCategory.addPreference(basemapSourcePref);
+        if (!cftor.isAvailable(context)) {
+            cftor.showUnavailableMessage(context);
+            return;
+        }
+        for (Preference pref : cftor.createPrefs(context)) {
+            baseCategory.addPreference(pref);
+        }
+
+        // Clear the reference layer if it isn't supported by the new basemap.
+        if (referenceLayerPref != null) {
+            String path = referenceLayerPref.getValue();
+            if (path != null && !cftor.supportsLayer(new File(path))) {
+                referenceLayerPref.setValue(null);
+                updateReferenceLayerSummary(null);
+            }
+        }
     }
 
     /** Sets up listeners for the Reference Layer preference widget. */
@@ -138,33 +157,6 @@ public class MapsPreferences extends BasePreferenceFragment {
                 summary = cftor.getDisplayName(new File(value.toString()));
             }
             referenceLayerPref.setSummary(summary);
-        }
-    }
-
-    /** Updates the rest of the preference UI when the Basemap Source is changed. */
-    private void onBasemapSourceChanged(String id) {
-        MapConfigurator cftor = id != null ? MapProvider.getConfigurator(id) :
-            MapProvider.getConfigurator();
-
-        // Set up the preferences in the "Basemap" section.
-        PreferenceCategory baseCategory = (PreferenceCategory) findPreference(CATEGORY_BASEMAP);
-        baseCategory.removeAll();
-        baseCategory.addPreference(basemapSourcePref);
-        if (!cftor.isAvailable(context)) {
-            cftor.showUnavailableMessage(context);
-            return;
-        }
-        for (Preference pref : cftor.createPrefs(context)) {
-            baseCategory.addPreference(pref);
-        }
-
-        // Clear the reference layer if it isn't supported by the new basemap.
-        if (referenceLayerPref != null) {
-            String path = referenceLayerPref.getValue();
-            if (path != null && !cftor.supportsLayer(new File(path))) {
-                referenceLayerPref.setValue(null);
-                updateReferenceLayerSummary(null);
-            }
         }
     }
 

@@ -203,6 +203,264 @@ public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFrag
         }
     }
 
+    @Override public @NonNull MapPoint getCenter() {
+        if (map == null) {  // during Robolectric tests, map will be null
+            return INITIAL_CENTER;
+        }
+        return fromLatLng(map.getCameraPosition().target);
+    }
+
+    @Override public double getZoom() {
+        if (map == null) {  // during Robolectric tests, map will be null
+            return INITIAL_ZOOM;
+        }
+        return map.getCameraPosition().zoom;
+    }
+
+    @Override public void setCenter(@Nullable MapPoint center, boolean animate) {
+        if (map == null) {  // during Robolectric tests, map will be null
+            return;
+        }
+        if (center != null) {
+            moveOrAnimateCamera(CameraUpdateFactory.newLatLng(toLatLng(center)), animate);
+        }
+    }
+
+    @Override public void zoomToPoint(@Nullable MapPoint center, boolean animate) {
+        zoomToPoint(center, POINT_ZOOM, animate);
+    }
+
+    @Override public void zoomToPoint(@Nullable MapPoint center, double zoom, boolean animate) {
+        if (map == null) {  // during Robolectric tests, map will be null
+            return;
+        }
+        if (center != null) {
+            moveOrAnimateCamera(
+                CameraUpdateFactory.newLatLngZoom(toLatLng(center), (float) zoom), animate);
+        }
+    }
+
+    @Override public void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor, boolean animate) {
+        if (map == null) {  // during Robolectric tests, map will be null
+            return;
+        }
+        if (points != null) {
+            int count = 0;
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            MapPoint lastPoint = null;
+            for (MapPoint point : points) {
+                lastPoint = point;
+                builder.include(toLatLng(point));
+                count++;
+            }
+            if (count == 1) {
+                zoomToPoint(lastPoint, animate);
+            } else if (count > 1) {
+                final LatLngBounds bounds = expandBounds(builder.build(), 1 / scaleFactor);
+                new Handler().postDelayed(() -> {
+                    moveOrAnimateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), animate);
+                }, 100);
+            }
+        }
+    }
+
+    @Override public int addMarker(MapPoint point, boolean draggable) {
+        int featureId = nextFeatureId++;
+        features.put(featureId, new MarkerFeature(featureId, symbolManager, point, draggable));
+        return featureId;
+    }
+
+    @Override public @Nullable MapPoint getMarkerPoint(int featureId) {
+        MapFeature feature = features.get(featureId);
+        return feature instanceof MarkerFeature ?
+            ((MarkerFeature) feature).getPoint() : null;
+    }
+
+    @Override public @NonNull List<MapPoint> getPolyPoints(int featureId) {
+        MapFeature feature = features.get(featureId);
+        if (feature instanceof PolyFeature) {
+            return ((PolyFeature) feature).getPoints();
+        }
+        return new ArrayList<>();
+    }
+
+    @Override public void setDragEndListener(@Nullable FeatureListener listener) {
+        dragEndListener = listener;
+    }
+
+    @Override public @Nullable String getLocationProvider() {
+        return null;
+    }
+
+    @Override public boolean onMapClick(@NonNull LatLng point) {
+        // MAPBOX ISSUE: Dragging can also generate map click events, and the
+        // Mapbox SDK seems to provide no way to prevent drag touches from being
+        // passed through to the map and being interpreted as a map click.
+        // Our workaround is to track drags in progress with the isDragging flag.
+        if (clickListener != null && !isDragging) {
+            clickListener.onPoint(fromLatLng(point));
+        }
+        return true;
+    }
+
+    @Override public boolean onMapLongClick(@NonNull LatLng latLng) {
+        // MAPBOX ISSUE: Dragging can also generate map long-click events, and the
+        // Mapbox SDK seems to provide no way to prevent drag touches from being
+        // passed through to the map and being interpreted as a map click.
+        // Our workaround is to track drags in progress with the isDragging flag.
+        if (longPressListener != null && !isDragging) {
+            longPressListener.onPoint(fromLatLng(latLng));
+        }
+        return true;
+    }
+
+    @Override public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
+        int featureId = nextFeatureId++;
+        features.put(featureId, new PolyFeature(featureId, lineManager, symbolManager, points, closedPolygon));
+        return featureId;
+    }
+
+    @Override public void appendPointToPoly(int featureId, @NonNull MapPoint point) {
+        MapFeature feature = features.get(featureId);
+        if (feature instanceof PolyFeature) {
+            ((PolyFeature) feature).appendPoint(point);
+        }
+    }
+
+    @Override public void removePolyLastPoint(int featureId) {
+        MapFeature feature = features.get(featureId);
+        if (feature instanceof PolyFeature) {
+            ((PolyFeature) feature).removeLastPoint();
+        }
+    }
+
+    @Override public void removeFeature(int featureId) {
+        MapFeature feature = features.remove(featureId);
+        if (feature != null) {
+            feature.dispose();
+        }
+    }
+
+    @Override public void clearFeatures() {
+        if (map != null) {  // during Robolectric tests, map will be null
+            for (MapFeature feature : features.values()) {
+                feature.dispose();
+            }
+        }
+        features.clear();
+    }
+
+    @Override public void setClickListener(@Nullable PointListener listener) {
+        clickListener = listener;
+    }
+
+    @Override public void setLongPressListener(@Nullable PointListener listener) {
+        longPressListener = listener;
+    }
+
+    @Override public void setGpsLocationListener(@Nullable PointListener listener) {
+        gpsLocationListener = listener;
+    }
+
+    @Override public void setGpsLocationEnabled(boolean enable) {
+        locationEnabled = enable;
+        if (locationComponent != null) {
+            locationComponent.setLocationComponentEnabled(enable);
+        }
+    }
+
+    @Override public void runOnGpsLocationReady(@NonNull ReadyListener listener) {
+        if (lastLocationFix != null) {
+            listener.onReady(this);
+        } else {
+            gpsLocationReadyListeners.add(listener);
+        }
+    }
+
+    @Override public @Nullable MapPoint getGpsLocation() {
+        return lastLocationFix;
+    }
+
+    @Override public void onSuccess(LocationEngineResult result) {
+        lastLocationFix = fromLocation(result.getLastLocation());
+        if (locationComponent != null) {
+            locationComponent.forceLocationUpdate(result.getLastLocation());
+        }
+        for (ReadyListener listener : gpsLocationReadyListeners) {
+            listener.onReady(this);
+        }
+        gpsLocationReadyListeners.clear();
+        if (gpsLocationListener != null) {
+            gpsLocationListener.onPoint(lastLocationFix);
+        }
+    }
+
+    @Override public void onFailure(@NonNull Exception exception) { }
+
+    protected static @NonNull MapPoint fromLatLng(@NonNull LatLng latLng) {
+        return new MapPoint(latLng.getLatitude(), latLng.getLongitude());
+    }
+
+    protected static @Nullable MapPoint fromLocation(@Nullable Location location) {
+        if (location == null) {
+            return null;
+        }
+        return new MapPoint(location.getLatitude(), location.getLongitude(),
+            location.getAltitude(), location.getAccuracy());
+    }
+
+    protected static @NonNull MapPoint fromSymbol(@NonNull Symbol symbol, double alt, double sd) {
+        LatLng position = symbol.getLatLng();
+        return new MapPoint(position.getLatitude(), position.getLongitude(), alt, sd);
+    }
+
+    protected static @NonNull LatLng toLatLng(@NonNull MapPoint point) {
+        return new LatLng(point.lat, point.lon);
+    }
+
+    protected Symbol createSymbol(SymbolManager symbolManager, MapPoint point, boolean draggable) {
+        return symbolManager.create(new SymbolOptions()
+            .withLatLng(toLatLng(point))
+            .withIconImage(POINT_ICON_ID)
+            .withIconSize(1f)
+            .withZIndex(10)
+            .withDraggable(draggable)
+            .withTextOpacity(0f)
+        );
+    }
+
+    protected void moveOrAnimateCamera(CameraUpdate movement, boolean animate) {
+        if (animate) {
+            map.animateCamera(movement);
+        } else {
+            map.moveCamera(movement);
+        }
+    }
+
+    protected LatLngBounds expandBounds(LatLngBounds bounds, double factor) {
+        double north = bounds.getNorthEast().getLatitude();
+        double south = bounds.getSouthWest().getLatitude();
+        double latCenter = (north + south) / 2;
+        double latRadius = ((north - south) / 2) * factor;
+        north = Math.min(90, latCenter + latRadius);
+        south = Math.max(-90, latCenter - latRadius);
+
+        double east = bounds.getNorthEast().getLongitude();
+        double west = bounds.getSouthWest().getLongitude();
+        while (east < west) {
+            east += 360;
+        }
+        double lonCenter = (east + west) / 2;
+        double lonRadius = Math.min(180 - 1e-6, ((east - west) / 2) * factor);
+        east = lonCenter + lonRadius;
+        west = lonCenter - lonRadius;
+
+        return new LatLngBounds.Builder()
+            .include(new LatLng(south, west))
+            .include(new LatLng(north, east))
+            .build();
+    }
+
     private Style.Builder getDesiredStyleBuilder() {
         if (BuildConfig.MAPBOX_ACCESS_TOKEN.isEmpty()) {
             // When the MAPBOX_ACCESS_TOKEN is missing, any attempt to load
@@ -388,264 +646,6 @@ public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFrag
         locationComponent.setCameraMode(CameraMode.NONE);
         locationComponent.setRenderMode(RenderMode.NORMAL);
         locationComponent.setLocationComponentEnabled(locationEnabled);
-    }
-
-    @Override public @NonNull MapPoint getCenter() {
-        if (map == null) {  // during Robolectric tests, map will be null
-            return INITIAL_CENTER;
-        }
-        return fromLatLng(map.getCameraPosition().target);
-    }
-
-    @Override public double getZoom() {
-        if (map == null) {  // during Robolectric tests, map will be null
-            return INITIAL_ZOOM;
-        }
-        return map.getCameraPosition().zoom;
-    }
-
-    @Override public void setCenter(@Nullable MapPoint center, boolean animate) {
-        if (map == null) {  // during Robolectric tests, map will be null
-            return;
-        }
-        if (center != null) {
-            moveOrAnimateCamera(CameraUpdateFactory.newLatLng(toLatLng(center)), animate);
-        }
-    }
-
-    @Override public void zoomToPoint(@Nullable MapPoint center, boolean animate) {
-        zoomToPoint(center, POINT_ZOOM, animate);
-    }
-
-    @Override public void zoomToPoint(@Nullable MapPoint center, double zoom, boolean animate) {
-        if (map == null) {  // during Robolectric tests, map will be null
-            return;
-        }
-        if (center != null) {
-            moveOrAnimateCamera(
-                CameraUpdateFactory.newLatLngZoom(toLatLng(center), (float) zoom), animate);
-        }
-    }
-
-    protected void moveOrAnimateCamera(CameraUpdate movement, boolean animate) {
-        if (animate) {
-            map.animateCamera(movement);
-        } else {
-            map.moveCamera(movement);
-        }
-    }
-
-    @Override public void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor, boolean animate) {
-        if (map == null) {  // during Robolectric tests, map will be null
-            return;
-        }
-        if (points != null) {
-            int count = 0;
-            LatLngBounds.Builder builder = new LatLngBounds.Builder();
-            MapPoint lastPoint = null;
-            for (MapPoint point : points) {
-                lastPoint = point;
-                builder.include(toLatLng(point));
-                count++;
-            }
-            if (count == 1) {
-                zoomToPoint(lastPoint, animate);
-            } else if (count > 1) {
-                final LatLngBounds bounds = expandBounds(builder.build(), 1 / scaleFactor);
-                new Handler().postDelayed(() -> {
-                    moveOrAnimateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), animate);
-                }, 100);
-            }
-        }
-    }
-
-    @Override public int addMarker(MapPoint point, boolean draggable) {
-        int featureId = nextFeatureId++;
-        features.put(featureId, new MarkerFeature(featureId, symbolManager, point, draggable));
-        return featureId;
-    }
-
-    @Override public @Nullable MapPoint getMarkerPoint(int featureId) {
-        MapFeature feature = features.get(featureId);
-        return feature instanceof MarkerFeature ?
-            ((MarkerFeature) feature).getPoint() : null;
-    }
-
-    @Override public @NonNull List<MapPoint> getPolyPoints(int featureId) {
-        MapFeature feature = features.get(featureId);
-        if (feature instanceof PolyFeature) {
-            return ((PolyFeature) feature).getPoints();
-        }
-        return new ArrayList<>();
-    }
-
-    @Override public void setDragEndListener(@Nullable FeatureListener listener) {
-        dragEndListener = listener;
-    }
-
-    @Override public @Nullable String getLocationProvider() {
-        return null;
-    }
-
-    @Override public boolean onMapClick(@NonNull LatLng point) {
-        // MAPBOX ISSUE: Dragging can also generate map click events, and the
-        // Mapbox SDK seems to provide no way to prevent drag touches from being
-        // passed through to the map and being interpreted as a map click.
-        // Our workaround is to track drags in progress with the isDragging flag.
-        if (clickListener != null && !isDragging) {
-            clickListener.onPoint(fromLatLng(point));
-        }
-        return true;
-    }
-
-    @Override public boolean onMapLongClick(@NonNull LatLng latLng) {
-        // MAPBOX ISSUE: Dragging can also generate map long-click events, and the
-        // Mapbox SDK seems to provide no way to prevent drag touches from being
-        // passed through to the map and being interpreted as a map click.
-        // Our workaround is to track drags in progress with the isDragging flag.
-        if (longPressListener != null && !isDragging) {
-            longPressListener.onPoint(fromLatLng(latLng));
-        }
-        return true;
-    }
-
-    protected LatLngBounds expandBounds(LatLngBounds bounds, double factor) {
-        double north = bounds.getNorthEast().getLatitude();
-        double south = bounds.getSouthWest().getLatitude();
-        double latCenter = (north + south) / 2;
-        double latRadius = ((north - south) / 2) * factor;
-        north = Math.min(90, latCenter + latRadius);
-        south = Math.max(-90, latCenter - latRadius);
-
-        double east = bounds.getNorthEast().getLongitude();
-        double west = bounds.getSouthWest().getLongitude();
-        while (east < west) {
-            east += 360;
-        }
-        double lonCenter = (east + west) / 2;
-        double lonRadius = Math.min(180 - 1e-6, ((east - west) / 2) * factor);
-        east = lonCenter + lonRadius;
-        west = lonCenter - lonRadius;
-
-        return new LatLngBounds.Builder()
-            .include(new LatLng(south, west))
-            .include(new LatLng(north, east))
-            .build();
-    }
-
-    @Override public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
-        int featureId = nextFeatureId++;
-        features.put(featureId, new PolyFeature(featureId, lineManager, symbolManager, points, closedPolygon));
-        return featureId;
-    }
-
-    @Override public void appendPointToPoly(int featureId, @NonNull MapPoint point) {
-        MapFeature feature = features.get(featureId);
-        if (feature instanceof PolyFeature) {
-            ((PolyFeature) feature).appendPoint(point);
-        }
-    }
-
-    @Override public void removePolyLastPoint(int featureId) {
-        MapFeature feature = features.get(featureId);
-        if (feature instanceof PolyFeature) {
-            ((PolyFeature) feature).removeLastPoint();
-        }
-    }
-
-    @Override public void removeFeature(int featureId) {
-        MapFeature feature = features.remove(featureId);
-        if (feature != null) {
-            feature.dispose();
-        }
-    }
-
-    @Override public void clearFeatures() {
-        if (map != null) {  // during Robolectric tests, map will be null
-            for (MapFeature feature : features.values()) {
-                feature.dispose();
-            }
-        }
-        features.clear();
-    }
-
-    @Override public void setClickListener(@Nullable PointListener listener) {
-        clickListener = listener;
-    }
-
-    @Override public void setLongPressListener(@Nullable PointListener listener) {
-        longPressListener = listener;
-    }
-
-    @Override public void setGpsLocationListener(@Nullable PointListener listener) {
-        gpsLocationListener = listener;
-    }
-
-    @Override public void setGpsLocationEnabled(boolean enable) {
-        locationEnabled = enable;
-        if (locationComponent != null) {
-            locationComponent.setLocationComponentEnabled(enable);
-        }
-    }
-
-    @Override public void runOnGpsLocationReady(@NonNull ReadyListener listener) {
-        if (lastLocationFix != null) {
-            listener.onReady(this);
-        } else {
-            gpsLocationReadyListeners.add(listener);
-        }
-    }
-
-    @Override public @Nullable MapPoint getGpsLocation() {
-        return lastLocationFix;
-    }
-
-    @Override public void onSuccess(LocationEngineResult result) {
-        lastLocationFix = fromLocation(result.getLastLocation());
-        if (locationComponent != null) {
-            locationComponent.forceLocationUpdate(result.getLastLocation());
-        }
-        for (ReadyListener listener : gpsLocationReadyListeners) {
-            listener.onReady(this);
-        }
-        gpsLocationReadyListeners.clear();
-        if (gpsLocationListener != null) {
-            gpsLocationListener.onPoint(lastLocationFix);
-        }
-    }
-
-    @Override public void onFailure(@NonNull Exception exception) { }
-
-    protected static @NonNull MapPoint fromLatLng(@NonNull LatLng latLng) {
-        return new MapPoint(latLng.getLatitude(), latLng.getLongitude());
-    }
-
-    protected static @Nullable MapPoint fromLocation(@Nullable Location location) {
-        if (location == null) {
-            return null;
-        }
-        return new MapPoint(location.getLatitude(), location.getLongitude(),
-            location.getAltitude(), location.getAccuracy());
-    }
-
-    protected static @NonNull MapPoint fromSymbol(@NonNull Symbol symbol, double alt, double sd) {
-        LatLng position = symbol.getLatLng();
-        return new MapPoint(position.getLatitude(), position.getLongitude(), alt, sd);
-    }
-
-    protected static @NonNull LatLng toLatLng(@NonNull MapPoint point) {
-        return new LatLng(point.lat, point.lon);
-    }
-
-    protected Symbol createSymbol(SymbolManager symbolManager, MapPoint point, boolean draggable) {
-        return symbolManager.create(new SymbolOptions()
-            .withLatLng(toLatLng(point))
-            .withIconImage(POINT_ICON_ID)
-            .withIconSize(1f)
-            .withZIndex(10)
-            .withDraggable(draggable)
-            .withTextOpacity(0f)
-        );
     }
 
     /**
