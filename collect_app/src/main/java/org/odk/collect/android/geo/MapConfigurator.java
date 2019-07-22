@@ -14,7 +14,9 @@ import androidx.annotation.Nullable;
 /**
  * For each MapFragment implementation class, there is one instance of this
  * interface that encapsulates the details of how to configure that MapFragment
- * and reconfigure it as settings are changed.  Each MapConfigurator can
+ * and reconfigure it as settings are changed.  In particular, the buildConfig()
+ * method builds a Bundle object containing configuration details, which the
+ * MapFragment.applyConfig() method should understand.  Each MapConfigurator can
  * define its own preference widgets for customizing the MapFragment, and
  * those preferences will be inserted on the Maps preference screen.
  * For example, the GoogleMapConfigurator can define a "Google map style"
