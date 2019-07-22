@@ -12,6 +12,8 @@ import org.odk.collect.android.preferences.PrefUtils;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import androidx.annotation.NonNull;
+
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_CARTO;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_GOOGLE;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_MAPBOX;
@@ -108,7 +110,7 @@ public class MapProvider {
     }
 
     /** Gets the SourceOption with the given ID, or the first option if the ID is unknown. */
-    public static SourceOption getOption(String id) {
+    public static @NonNull SourceOption getOption(String id) {
         for (SourceOption option : SOURCE_OPTIONS) {
             if (option.id.equals(id)) {
                 return option;
@@ -118,14 +120,13 @@ public class MapProvider {
     }
 
     /** Gets the currently selected SourceOption. */
-    public static SourceOption getOption(Context context) {
+    public static @NonNull SourceOption getOption(Context context) {
         return getOption(PrefUtils.getSharedPrefs(context).getString(KEY_BASEMAP_SOURCE, null));
     }
 
     /** Gets the currently selected MapConfigurator. */
-    public static MapConfigurator getConfigurator(Context context) {
-        SourceOption option = getOption(context);
-        return option != null ? option.cftor : null;
+    public static @NonNull MapConfigurator getConfigurator(Context context) {
+        return getOption(context).cftor;
     }
 
     private static Map<MapFragment, OnSharedPreferenceChangeListener> listenersByMap = new WeakHashMap<>();
