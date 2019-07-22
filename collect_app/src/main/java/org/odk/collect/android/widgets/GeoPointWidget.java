@@ -76,7 +76,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
 
         // Determine whether to use the map and whether the point should be draggable.
         useMap = false;
-        if (MapProvider.getConfigurator(context).isAvailable(context)) {
+        if (MapProvider.getConfigurator().isAvailable(context)) {
             if (hasAppearance(prompt, PLACEMENT_MAP)) {
                 draggable = true;
                 useMap = true;

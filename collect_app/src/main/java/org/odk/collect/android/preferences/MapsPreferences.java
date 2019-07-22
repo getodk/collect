@@ -136,7 +136,7 @@ public class MapsPreferences extends BasePreferenceFragment {
             if (value == null) {
                 summary = getString(R.string.none);
             } else {
-                MapConfigurator cftor = MapProvider.getConfigurator(context);
+                MapConfigurator cftor = MapProvider.getConfigurator();
                 summary = cftor.getDisplayName(new File(value.toString()));
             }
             referenceLayerPref.setSummary(summary);
@@ -146,7 +146,7 @@ public class MapsPreferences extends BasePreferenceFragment {
     /** Updates the rest of the preference UI when the Basemap Source is changed. */
     private void onBasemapSourceChanged(String id) {
         MapConfigurator cftor = id != null ? MapProvider.getOption(id).cftor :
-            MapProvider.getConfigurator(context);
+            MapProvider.getConfigurator();
         if (cftor != null) {
             // Set up the preferences in the "Basemap" section.
             PreferenceCategory baseCategory = (PreferenceCategory) findPreference(CATEGORY_BASEMAP);
@@ -173,8 +173,8 @@ public class MapsPreferences extends BasePreferenceFragment {
 
     /** Sets up the contents of the reference layer selection dialog. */
     private void populateReferenceLayerPref() {
-        MapProvider.SourceOption option = MapProvider.getOption(context);
-        MapConfigurator cftor = MapProvider.getConfigurator(context);
+        MapProvider.SourceOption option = MapProvider.getOption();
+        MapConfigurator cftor = MapProvider.getConfigurator();
 
         List<File> files = getSupportedLayerFiles(option.cftor);
         String[] values = new String[files.size() + 1];

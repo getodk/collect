@@ -120,20 +120,20 @@ public class MapProvider {
     }
 
     /** Gets the currently selected SourceOption. */
-    public static @NonNull SourceOption getOption(Context context) {
-        return getOption(PrefUtils.getSharedPrefs(context).getString(KEY_BASEMAP_SOURCE, null));
+    public static @NonNull SourceOption getOption() {
+        return getOption(PrefUtils.getSharedPrefs().getString(KEY_BASEMAP_SOURCE, null));
     }
 
     /** Gets the currently selected MapConfigurator. */
-    public static @NonNull MapConfigurator getConfigurator(Context context) {
-        return getOption(context).cftor;
+    public static @NonNull MapConfigurator getConfigurator() {
+        return getOption().cftor;
     }
 
     private static Map<MapFragment, OnSharedPreferenceChangeListener> listenersByMap = new WeakHashMap<>();
     private static Map<MapFragment, MapConfigurator> sourcesByMap = new WeakHashMap<>();
 
     public static MapFragment createMapFragment(Context context) {
-        MapConfigurator cftor = getConfigurator(context);
+        MapConfigurator cftor = getConfigurator();
         if (cftor != null) {
             MapFragment map = cftor.createMapFragment(context);
             if (map != null) {
@@ -146,7 +146,6 @@ public class MapProvider {
     }
 
     public static void onMapFragmentStart(MapFragment map) {
-        Context context = map.getFragment().getContext();
         MapConfigurator cftor = sourcesByMap.get(map);
         if (cftor != null) {
             OnSharedPreferenceChangeListener listener = (prefs, key) -> {
@@ -154,7 +153,7 @@ public class MapProvider {
                     map.applyConfig(cftor.buildConfig(prefs));
                 }
             };
-            SharedPreferences prefs = PrefUtils.getSharedPrefs(context);
+            SharedPreferences prefs = PrefUtils.getSharedPrefs();
             map.applyConfig(cftor.buildConfig(prefs));
             prefs.registerOnSharedPreferenceChangeListener(listener);
             listenersByMap.put(map, listener);
@@ -164,8 +163,7 @@ public class MapProvider {
     public static void onMapFragmentStop(MapFragment map) {
         OnSharedPreferenceChangeListener listener = listenersByMap.get(map);
         if (listener != null) {
-            Context context = map.getFragment().getContext();
-            SharedPreferences prefs = PrefUtils.getSharedPrefs(context);
+            SharedPreferences prefs = PrefUtils.getSharedPrefs();
             prefs.unregisterOnSharedPreferenceChangeListener(listener);
             listenersByMap.remove(listener);
         }

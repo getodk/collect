@@ -122,7 +122,7 @@ public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFrag
         @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         Context context = getContext();
         if (MapboxUtils.initMapbox() == null) {
-            MapProvider.getConfigurator(context).showUnavailableMessage(context);
+            MapProvider.getConfigurator().showUnavailableMessage(context);
             if (errorListener != null) {
                 errorListener.onError();
             }

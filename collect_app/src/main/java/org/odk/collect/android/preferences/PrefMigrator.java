@@ -50,6 +50,10 @@ public class PrefMigrator {
         }
     }
 
+    public static void migrateSharedPrefs() {
+        migrate(PrefUtils.getSharedPrefs(), MIGRATIONS);
+    }
+
     public interface Migration {
         void apply(SharedPreferences prefs);
     }
