@@ -179,9 +179,10 @@ public class MapsPreferences extends BasePreferenceFragment {
         labels[0] = getString(R.string.none);
         captions[0] = "";
         for (int i = 0; i < files.size(); i++) {
-            values[i + 1] = files.get(i).getAbsolutePath();
+            String path = FileUtils.simplifyPath(files.get(i)).toString();
+            values[i + 1] = path;
             labels[i + 1] = source.getDisplayName(files.get(i));
-            captions[i + 1] = files.get(i).getAbsolutePath();
+            captions[i + 1] = path;
         }
         referenceLayerPref.setItems(values, labels, captions);
 
