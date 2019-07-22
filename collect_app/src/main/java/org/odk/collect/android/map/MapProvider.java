@@ -20,7 +20,11 @@ import static org.odk.collect.android.preferences.GeneralKeys.BASE_LAYER_SOURCE_
 import static org.odk.collect.android.preferences.GeneralKeys.BASE_LAYER_SOURCE_USGS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASE_LAYER_SOURCE;
 
-/** A static class that obtains a MapFragment according to the user's preferences. */
+/**
+ * A static class that obtains a MapFragment according to the user's preferences.
+ * This is the top-level class that should be used by the rest of the application.
+ * The available options on the Maps preferences screen are also defined here.
+ */
 public class MapProvider {
     private MapProvider() { }  // prevent instantiation
 
