@@ -22,8 +22,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import androidx.core.content.FileProvider;
-import androidx.appcompat.widget.AppCompatImageButton;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -33,6 +31,10 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.core.content.FileProvider;
 
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
@@ -192,8 +194,15 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         // Setup audio button
         if (audioURI != null) {
             audioButton.setVisibility(VISIBLE);
-            audioButton.init(audioURI, player);
-            audioButton.setOnClickListener(this);
+
+            String uri = null;
+            try {
+                uri = ReferenceManager.instance().DeriveReference(audioURI).getLocalURI();
+            } catch (InvalidReferenceException e) {
+                Timber.e(e);
+            }
+
+            audioButton.setAudio(uri, (AppCompatActivity) getContext(), MediaPlayer::new);
         }
 
         // Setup video button

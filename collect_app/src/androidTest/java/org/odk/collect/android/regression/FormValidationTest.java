@@ -1,4 +1,4 @@
-package org.odk.collect.android.regression;
+    package org.odk.collect.android.regression;
 
 import android.Manifest;
 

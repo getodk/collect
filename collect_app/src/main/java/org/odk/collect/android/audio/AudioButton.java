@@ -18,11 +18,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
-import androidx.appcompat.widget.AppCompatImageButton;
 import android.util.AttributeSet;
+import android.view.View;
 
-import org.javarosa.core.reference.InvalidReferenceException;
-import org.javarosa.core.reference.ReferenceManager;
+import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -35,12 +37,13 @@ import timber.log.Timber;
  * @author ctsims
  * @author carlhartung
  */
-public class AudioButton extends AppCompatImageButton {
+public class AudioButton extends AppCompatImageButton implements View.OnClickListener {
 
-    private AudioHandler handler;
-    private MediaPlayer player;
     private Bitmap bitmapPlay;
     private Bitmap bitmapStop;
+    private String uri;
+    private AudioPlayerViewModel viewModel;
+    private Boolean playing;
 
     public AudioButton(Context context) {
         super(context);
@@ -57,28 +60,40 @@ public class AudioButton extends AppCompatImageButton {
         bitmapStop = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_media_pause);
 
         resetBitmap();
+        this.setOnClickListener(this);
     }
 
-    public void init(String uri, MediaPlayer player) {
-        this.player = player;
-        handler = new AudioHandler(uri, player);
+    public void setAudio(String uri, FragmentActivity activity, MediaPlayerFactory mediaPlayerFactory) {
+        this.uri = uri;
+        this.viewModel = ViewModelProviders
+                .of(activity, new AudioPlayerViewModelFactory(mediaPlayerFactory))
+                .get(AudioPlayerViewModel.class);
+
+        viewModel.isPlaying(uri).observe(activity, isPlaying -> {
+            playing = isPlaying;
+
+            if (isPlaying) {
+                setImageBitmap(bitmapStop);
+            } else {
+                setImageBitmap(bitmapPlay);
+            }
+        });
     }
 
     public void resetBitmap() {
         setImageBitmap(bitmapPlay);
     }
 
-    public void playAudio() {
-        handler.playAudio(getContext());
-        setImageBitmap(bitmapStop);
+    public void onClick() {
+
     }
 
-    public void onClick() {
-        if (player.isPlaying()) {
-            player.stop();
-            resetBitmap();
+    @Override
+    public void onClick(View view) {
+        if (playing) {
+            viewModel.stop();
         } else {
-            playAudio();
+            viewModel.play(uri);
         }
     }
 
@@ -106,14 +121,7 @@ public class AudioButton extends AppCompatImageButton {
                 return;
             }
 
-            String audioFilename = "";
-            try {
-                audioFilename = ReferenceManager.instance().DeriveReference(uri).getLocalURI();
-            } catch (InvalidReferenceException e) {
-                Timber.e(e);
-            }
-
-            File audioFile = new File(audioFilename);
+            File audioFile = new File(uri);
             if (!audioFile.exists()) {
                 // We should have an audio clip, but the file doesn't exist.
                 String errorMsg = c.getString(R.string.file_missing, audioFile);
@@ -124,11 +132,11 @@ public class AudioButton extends AppCompatImageButton {
 
             try {
                 mediaPlayer.reset();
-                mediaPlayer.setDataSource(audioFilename);
+                mediaPlayer.setDataSource(uri);
                 mediaPlayer.prepare();
                 mediaPlayer.start();
             } catch (IOException e) {
-                String errorMsg = c.getString(R.string.audio_file_invalid, audioFilename);
+                String errorMsg = c.getString(R.string.audio_file_invalid, uri);
                 Timber.e(errorMsg);
                 ToastUtils.showLongToast(errorMsg);
             }

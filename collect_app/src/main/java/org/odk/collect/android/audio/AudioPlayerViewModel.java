@@ -1,8 +1,6 @@
 package org.odk.collect.android.audio;
 
-import android.content.Context;
 import android.media.MediaPlayer;
-import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -14,14 +12,12 @@ import java.io.IOException;
 
 public class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletionListener {
 
-    private final Context context;
     private final MediaPlayerFactory mediaPlayerFactory;
     private MediaPlayer mediaPlayer;
 
     private final MutableLiveData<String> playingURI = new MutableLiveData<>();
 
-    public AudioPlayerViewModel(Context context, MediaPlayerFactory mediaPlayerFactory) {
-        this.context = context;
+    public AudioPlayerViewModel(MediaPlayerFactory mediaPlayerFactory) {
         this.mediaPlayerFactory = mediaPlayerFactory;
 
         playingURI.setValue(null);
@@ -30,7 +26,7 @@ public class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCom
     public void play(String uri) {
         try {
             getMediaPlayer().reset();
-            getMediaPlayer().setDataSource(context, Uri.parse(uri));
+            getMediaPlayer().setDataSource(uri);
             getMediaPlayer().prepare();
             getMediaPlayer().start();
             playingURI.setValue(uri);
@@ -75,9 +71,5 @@ public class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCom
         }
 
         return mediaPlayer;
-    }
-
-    public interface MediaPlayerFactory {
-        MediaPlayer create();
     }
 }

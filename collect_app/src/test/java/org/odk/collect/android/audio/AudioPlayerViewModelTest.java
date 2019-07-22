@@ -1,7 +1,6 @@
 package org.odk.collect.android.audio;
 
 import android.media.MediaPlayer;
-import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
@@ -18,7 +17,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +37,7 @@ public class AudioPlayerViewModelTest {
 
     @Before
     public void setup() {
-        viewModel = new AudioPlayerViewModel(RuntimeEnvironment.application, () -> mediaPlayer);
+        viewModel = new AudioPlayerViewModel(() -> mediaPlayer);
     }
 
     @After
@@ -110,7 +108,7 @@ public class AudioPlayerViewModelTest {
         InOrder inOrder = Mockito.inOrder(mediaPlayer);
 
         inOrder.verify(mediaPlayer).reset();
-        inOrder.verify(mediaPlayer).setDataSource(RuntimeEnvironment.application, Uri.parse("file://audio.mp3"));
+        inOrder.verify(mediaPlayer).setDataSource("file://audio.mp3");
         inOrder.verify(mediaPlayer).prepare();
         inOrder.verify(mediaPlayer).start();
     }
@@ -118,7 +116,7 @@ public class AudioPlayerViewModelTest {
     @Test
     public void play_afterBackground_createsANewMediaPlayer() {
         RecordingMockMediaPlayerFactory factory = new RecordingMockMediaPlayerFactory();
-        AudioPlayerViewModel viewModel = new AudioPlayerViewModel(RuntimeEnvironment.application, factory);
+        AudioPlayerViewModel viewModel = new AudioPlayerViewModel(factory);
 
         viewModel.play("file://audio.mp3");
         assertThat(factory.createdInstances.size(), equalTo(1));
@@ -148,7 +146,7 @@ public class AudioPlayerViewModelTest {
         verify(mediaPlayer).release();
     }
 
-    private static class RecordingMockMediaPlayerFactory implements AudioPlayerViewModel.MediaPlayerFactory {
+    private static class RecordingMockMediaPlayerFactory implements MediaPlayerFactory {
 
         public List<MediaPlayer> createdInstances = new ArrayList<>();
 
@@ -173,20 +171,20 @@ public class AudioPlayerViewModelTest {
         public void teardown() {
             owner.lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
         }
+    }
 
-        private static class FakeLifecycleOwner implements LifecycleOwner {
+    public static class FakeLifecycleOwner implements LifecycleOwner {
 
-            private final LifecycleRegistry lifecycle = new LifecycleRegistry(this);
+        private final LifecycleRegistry lifecycle = new LifecycleRegistry(this);
 
-            FakeLifecycleOwner() {
-                lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
-            }
+        FakeLifecycleOwner() {
+            lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
+        }
 
-            @NonNull
-            @Override
-            public Lifecycle getLifecycle() {
-                return lifecycle;
-            }
+        @NonNull
+        @Override
+        public Lifecycle getLifecycle() {
+            return lifecycle;
         }
     }
 }
