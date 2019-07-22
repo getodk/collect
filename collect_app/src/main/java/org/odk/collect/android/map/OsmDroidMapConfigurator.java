@@ -21,10 +21,6 @@ public class OsmDroidMapConfigurator implements MapConfigurator {
     private final int prefTitleId;
     private final WmsOption[] options;
 
-    // We must hold on to the listener or it will be garbage-collected.
-    // See SharedPreferences.registerOnSharedPreferenceChangeListener().
-    private SharedPreferences.OnSharedPreferenceChangeListener listener;
-
     /** Constructs a configurator that renders just one Web Map Service. */
     public OsmDroidMapConfigurator(WebMapService service) {
         prefKey = "";

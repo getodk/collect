@@ -3,7 +3,6 @@ package org.odk.collect.android.map;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.Preference;
 
@@ -20,17 +19,11 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_GOOGLE_MAP_STYLE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 
 public class GoogleMapConfigurator implements MapConfigurator {
-    // We must hold on to the listener or it will be garbage-collected.
-    // See SharedPreferences.registerOnSharedPreferenceChangeListener().
-    protected Map<MapFragment, OnSharedPreferenceChangeListener> prefListenersByMap = new WeakHashMap<>();
-
     @Override public boolean isAvailable(Context context) {
         return isGoogleMapsSdkAvailable(context) && isGooglePlayServicesAvailable(context);
     }

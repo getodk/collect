@@ -25,8 +25,6 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_MAP_STY
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 
 public class MapboxMapConfigurator implements MapConfigurator {
-    protected Map<MapFragment, OnSharedPreferenceChangeListener> prefListenersByMap = new WeakHashMap<>();
-
     @Override public boolean isAvailable(Context context) {
         return MapboxUtils.initMapbox() != null;
     }

@@ -555,10 +555,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
             IconUtils.getBitmap(getActivity(), drawableId));
     }
 
-    @VisibleForTesting public boolean isGpsErrorDialogShowing() {
-        return gpsErrorDialog != null && gpsErrorDialog.isShowing();
-    }
-
     /**
      * A MapFeature is a physical feature on a map, such as a point, a road,
      * a building, a region, etc.  It is presented to the user as one editable

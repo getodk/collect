@@ -61,7 +61,6 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -408,10 +407,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     @Override public void onClientStop() { }
 
-    @VisibleForTesting public AlertDialog getGpsErrorDialog() {
-        return gpsErrorDialog;
-    }
-
     /**
      * Adds a listener that keeps track of the map center, and another
      * listener that restores the map center when the MapView's layout changes.
@@ -526,10 +521,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         if (feature != null) {
             feature.update();
         }
-    }
-
-    @VisibleForTesting public boolean isGpsErrorDialogShowing() {
-        return gpsErrorDialog != null && gpsErrorDialog.isShowing();
     }
 
     /**

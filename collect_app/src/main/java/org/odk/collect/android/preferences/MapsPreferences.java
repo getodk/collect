@@ -43,7 +43,6 @@ public class MapsPreferences extends BasePreferenceFragment {
     private ListPreference basemapSourcePref;
     private CaptionedListPreference referenceLayerPref;
     private boolean autoShowReferenceLayerDialog;
-    private boolean lockBasemapSource;
 
     public static MapsPreferences newInstance(boolean adminMode) {
         Bundle bundle = new Bundle();
@@ -112,7 +111,6 @@ public class MapsPreferences extends BasePreferenceFragment {
             onBasemapSourceChanged(value.toString());
             return true;
         });
-        basemapSourcePref.setEnabled(!lockBasemapSource);
     }
 
     /** Sets up listeners for the Reference Layer preference widget. */
