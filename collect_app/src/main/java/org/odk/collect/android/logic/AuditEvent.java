@@ -217,12 +217,6 @@ public class AuditEvent {
     @NonNull
     public String toString() {
         String node = formIndex == null || formIndex.getReference() == null ? "" : formIndex.getReference().toString();
-        if (auditEventType == AuditEvent.AuditEventType.QUESTION || auditEventType == AuditEvent.AuditEventType.GROUP) {
-            int idx = node.lastIndexOf('[');
-            if (idx > 0) {
-                node = node.substring(0, idx);
-            }
-        }
 
         String event;
         if (isTrackingLocationsEnabled && isTrackingChangesEnabled) {
