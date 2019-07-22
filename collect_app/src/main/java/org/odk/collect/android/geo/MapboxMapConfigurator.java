@@ -14,7 +14,7 @@ import org.odk.collect.android.preferences.PrefUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -22,6 +22,17 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_MAP_STY
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 
 class MapboxMapConfigurator implements MapConfigurator {
+    private final String prefKey;
+    private final int prefTitleId;
+    private final MapboxUrlOption[] options;
+
+    /** Constructs a configurator with a few Mapbox style URL options to choose from. */
+    public MapboxMapConfigurator(String prefKey, int prefTitleId, MapboxUrlOption... options) {
+        this.prefKey = prefKey;
+        this.prefTitleId = prefTitleId;
+        this.options = options;
+    }
+
     @Override public boolean isAvailable(Context context) {
         return MapboxUtils.initMapbox() != null;
     }
@@ -36,33 +47,20 @@ class MapboxMapConfigurator implements MapConfigurator {
     }
 
     @Override public List<Preference> createPrefs(Context context) {
-        return Arrays.asList(
-            PrefUtils.createListPref(
-                context,
-                KEY_MAPBOX_MAP_STYLE,
-                R.string.mapbox_map_style,
-                new int[] {
-                    R.string.mapbox_map_style_streets,
-                    R.string.mapbox_map_style_light,
-                    R.string.mapbox_map_style_dark,
-                    R.string.mapbox_map_style_satellite,
-                    R.string.mapbox_map_style_satellite_streets,
-                    R.string.mapbox_map_style_outdoors,
-                },
-                new String[] {
-                    Style.MAPBOX_STREETS,
-                    Style.LIGHT,
-                    Style.DARK,
-                    Style.SATELLITE,
-                    Style.SATELLITE_STREETS,
-                    Style.OUTDOORS
-                }
-            )
-        );
+        int[] labelIds = new int[options.length];
+        String[] values = new String[options.length];
+        for (int i = 0; i < options.length; i++) {
+            labelIds[i] = options[i].labelId;
+            values[i] = options[i].url;
+        }
+        return Collections.singletonList(PrefUtils.createListPref(
+            context, prefKey, prefTitleId, labelIds, values
+        ));
     }
 
     @Override public Set<String> getPrefKeys() {
-        return ImmutableSet.of(KEY_MAPBOX_MAP_STYLE, KEY_REFERENCE_LAYER);
+        return prefKey.isEmpty() ? ImmutableSet.of(KEY_REFERENCE_LAYER) :
+            ImmutableSet.of(prefKey, KEY_REFERENCE_LAYER);
     }
 
     @Override public Bundle buildConfig(SharedPreferences prefs) {
@@ -82,5 +80,15 @@ class MapboxMapConfigurator implements MapConfigurator {
     @Override public String getDisplayName(File file) {
         String name = MbtilesFile.getName(file);
         return name != null ? name : file.getName();
+    }
+
+    static class MapboxUrlOption {
+        final String url;
+        final int labelId;
+
+        MapboxUrlOption(String url, int labelId) {
+            this.url = url;
+            this.labelId = labelId;
+        }
     }
 }

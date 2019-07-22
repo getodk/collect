@@ -53,11 +53,9 @@ class OsmDroidMapConfigurator implements MapConfigurator {
         if (options.length > 1) {
             int[] labelIds = new int[options.length];
             String[] values = new String[options.length];
-            int i = 0;
-            for (WmsOption option : options) {
-                labelIds[i] = option.labelId;
-                values[i] = option.id;
-                i++;
+            for (int i = 0; i < options.length; i++) {
+                labelIds[i] = options[i].labelId;
+                values[i] = options[i].id;
             }
             return Collections.singletonList(PrefUtils.createListPref(
                 context, prefKey, prefTitleId, labelIds, values
@@ -98,7 +96,7 @@ class OsmDroidMapConfigurator implements MapConfigurator {
         return name != null ? name : file.getName();
     }
 
-    public static class WmsOption {
+    static class WmsOption {
         final String id;
         final int labelId;
         final WebMapService service;

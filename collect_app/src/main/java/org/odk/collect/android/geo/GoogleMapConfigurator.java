@@ -16,14 +16,25 @@ import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_GOOGLE_MAP_STYLE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 
 class GoogleMapConfigurator implements MapConfigurator {
+    private final String prefKey;
+    private final int prefTitleId;
+    private final GoogleMapTypeOption[] options;
+
+    /** Constructs a configurator with a few Google map type options to choose from. */
+    public GoogleMapConfigurator(String prefKey, int prefTitleId, GoogleMapTypeOption... options) {
+        this.prefKey = prefKey;
+        this.prefTitleId = prefTitleId;
+        this.options = options;
+    }
+
     @Override public boolean isAvailable(Context context) {
         return isGoogleMapsSdkAvailable(context) && isGooglePlayServicesAvailable(context);
     }
@@ -53,29 +64,20 @@ class GoogleMapConfigurator implements MapConfigurator {
     }
 
     @Override public List<Preference> createPrefs(Context context) {
-        return Collections.singletonList(
-            PrefUtils.createListPref(
-                context,
-                KEY_GOOGLE_MAP_STYLE,
-                R.string.google_map_style,
-                new int[] {
-                    R.string.google_map_style_streets,
-                    R.string.google_map_style_terrain,
-                    R.string.google_map_style_hybrid,
-                    R.string.google_map_style_satellite,
-                },
-                new String[] {
-                    Integer.toString(GoogleMap.MAP_TYPE_NORMAL),
-                    Integer.toString(GoogleMap.MAP_TYPE_TERRAIN),
-                    Integer.toString(GoogleMap.MAP_TYPE_HYBRID),
-                    Integer.toString(GoogleMap.MAP_TYPE_SATELLITE)
-                }
-            )
-        );
+        int[] labelIds = new int[options.length];
+        String[] values = new String[options.length];
+        for (int i = 0; i < options.length; i++) {
+            labelIds[i] = options[i].labelId;
+            values[i] = Integer.toString(options[i].mapType);
+        }
+        return Collections.singletonList(PrefUtils.createListPref(
+            context, prefKey, prefTitleId, labelIds, values
+        ));
     }
 
-    @Override public Collection<String> getPrefKeys() {
-        return ImmutableSet.of(KEY_GOOGLE_MAP_STYLE, KEY_REFERENCE_LAYER);
+    @Override public Set<String> getPrefKeys() {
+        return prefKey.isEmpty() ? ImmutableSet.of(KEY_REFERENCE_LAYER) :
+            ImmutableSet.of(prefKey, KEY_REFERENCE_LAYER);
     }
 
     @Override public Bundle buildConfig(SharedPreferences prefs) {
@@ -100,5 +102,15 @@ class GoogleMapConfigurator implements MapConfigurator {
     @Override public String getDisplayName(File file) {
         String name = MbtilesFile.getName(file);
         return name != null ? name : file.getName();
+    }
+
+    static class GoogleMapTypeOption {
+        final int mapType;
+        final int labelId;
+
+        GoogleMapTypeOption(int mapType, int labelId) {
+            this.mapType = mapType;
+            this.labelId = labelId;
+        }
     }
 }

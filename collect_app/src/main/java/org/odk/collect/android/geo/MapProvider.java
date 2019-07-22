@@ -4,9 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.mapbox.mapboxsdk.maps.Style;
+
 import org.odk.collect.android.R;
+import org.odk.collect.android.geo.GoogleMapConfigurator.GoogleMapTypeOption;
+import org.odk.collect.android.geo.MapboxMapConfigurator.MapboxUrlOption;
 import org.odk.collect.android.geo.OsmDroidMapConfigurator.WmsOption;
-import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PrefUtils;
 
 import java.util.Map;
@@ -21,6 +25,10 @@ import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_OSM
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_STAMEN;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_USGS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_CARTO_MAP_STYLE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_GOOGLE_MAP_STYLE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_MAP_STYLE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_USGS_MAP_STYLE;
 
 /**
  * A static class that obtains a MapFragment according to the user's preferences.
@@ -57,9 +65,25 @@ public class MapProvider {
     private static SourceOption[] initOptions() {
         return new SourceOption[] {
             new SourceOption(BASEMAP_SOURCE_GOOGLE, R.string.basemap_source_google,
-                new GoogleMapConfigurator()),
+                new GoogleMapConfigurator(
+                    KEY_GOOGLE_MAP_STYLE, R.string.google_map_style,
+                    new GoogleMapTypeOption(GoogleMap.MAP_TYPE_NORMAL, R.string.google_map_style_streets),
+                    new GoogleMapTypeOption(GoogleMap.MAP_TYPE_TERRAIN, R.string.google_map_style_terrain),
+                    new GoogleMapTypeOption(GoogleMap.MAP_TYPE_HYBRID, R.string.google_map_style_hybrid),
+                    new GoogleMapTypeOption(GoogleMap.MAP_TYPE_SATELLITE, R.string.google_map_style_satellite)
+                )
+            ),
             new SourceOption(BASEMAP_SOURCE_MAPBOX, R.string.basemap_source_mapbox,
-                new MapboxMapConfigurator()),
+                new MapboxMapConfigurator(
+                    KEY_MAPBOX_MAP_STYLE, R.string.mapbox_map_style,
+                    new MapboxUrlOption(Style.MAPBOX_STREETS, R.string.mapbox_map_style_streets),
+                    new MapboxUrlOption(Style.LIGHT, R.string.mapbox_map_style_light),
+                    new MapboxUrlOption(Style.DARK, R.string.mapbox_map_style_dark),
+                    new MapboxUrlOption(Style.SATELLITE, R.string.mapbox_map_style_satellite),
+                    new MapboxUrlOption(Style.SATELLITE_STREETS, R.string.mapbox_map_style_satellite_streets),
+                    new MapboxUrlOption(Style.OUTDOORS, R.string.mapbox_map_style_outdoors)
+                )
+            ),
             new SourceOption(BASEMAP_SOURCE_OSM, R.string.basemap_source_osm,
                 new OsmDroidMapConfigurator(
                     new WebMapService(
@@ -72,7 +96,7 @@ public class MapProvider {
             ),
             new SourceOption(BASEMAP_SOURCE_USGS, R.string.basemap_source_usgs,
                 new OsmDroidMapConfigurator(
-                    GeneralKeys.KEY_USGS_MAP_STYLE, R.string.usgs_map_style,
+                    KEY_USGS_MAP_STYLE, R.string.usgs_map_style,
                     new WmsOption("topo", R.string.usgs_map_style_topo, new WebMapService(
                         R.string.openmap_usgs_topo, 0, 18, 256, "USGS",
                         USGS_URL_BASE + "/USGSTopo/MapServer/tile/{z}/{y}/{x}"
@@ -97,7 +121,7 @@ public class MapProvider {
             ),
             new SourceOption(BASEMAP_SOURCE_CARTO, R.string.basemap_source_carto,
                 new OsmDroidMapConfigurator(
-                    GeneralKeys.KEY_CARTO_MAP_STYLE, R.string.carto_map_style,
+                    KEY_CARTO_MAP_STYLE, R.string.carto_map_style,
                     new WmsOption("positron", R.string.carto_map_style_positron, new WebMapService(
                         R.string.openmap_cartodb_positron, 0, 18, 256, OSM_COPYRIGHT,
                         "http://1.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
