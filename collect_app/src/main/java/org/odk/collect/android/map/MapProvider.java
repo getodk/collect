@@ -165,7 +165,7 @@ public class MapProvider {
         if (listener != null) {
             SharedPreferences prefs = PrefUtils.getSharedPrefs();
             prefs.unregisterOnSharedPreferenceChangeListener(listener);
-            listenersByMap.remove(listener);
+            listenersByMap.remove(map);
         }
     }
 
