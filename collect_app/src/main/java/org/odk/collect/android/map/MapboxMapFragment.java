@@ -86,28 +86,28 @@ public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFrag
     static final String KEY_STYLE_URL = "STYLE_URL";
     static final String KEY_REFERENCE_LAYER = "REFERENCE_LAYER";
 
-    protected MapboxMap map;
-    protected List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
-    protected PointListener gpsLocationListener;
-    protected PointListener clickListener;
-    protected PointListener longPressListener;
-    protected FeatureListener dragEndListener;
+    private MapboxMap map;
+    private List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
+    private PointListener gpsLocationListener;
+    private PointListener clickListener;
+    private PointListener longPressListener;
+    private FeatureListener dragEndListener;
 
-    protected LocationComponent locationComponent;
-    protected boolean locationEnabled;
-    protected MapPoint lastLocationFix;
+    private LocationComponent locationComponent;
+    private boolean locationEnabled;
+    private MapPoint lastLocationFix;
 
-    protected int nextFeatureId = 1;
-    protected Map<Integer, MapFeature> features = new HashMap<>();
-    protected SymbolManager symbolManager;
-    protected LineManager lineManager;
-    protected boolean isDragging;
-    protected String styleUrl = Style.MAPBOX_STREETS;;
-    protected File referenceLayerFile;
-    protected List<Layer> overlayLayers = new ArrayList<>();
-    protected List<Source> overlaySources = new ArrayList<>();
+    private int nextFeatureId = 1;
+    private Map<Integer, MapFeature> features = new HashMap<>();
+    private SymbolManager symbolManager;
+    private LineManager lineManager;
+    private boolean isDragging;
+    private String styleUrl = Style.MAPBOX_STREETS;;
+    private File referenceLayerFile;
+    private List<Layer> overlayLayers = new ArrayList<>();
+    private List<Source> overlaySources = new ArrayList<>();
 
-    protected TileHttpServer tileServer;
+    private TileHttpServer tileServer;
 
     // During Robolectric tests, Google Play Services is unavailable; sadly, the
     // "map" field will be null and many operations will need to be stubbed out.
@@ -397,11 +397,11 @@ public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFrag
 
     @Override public void onFailure(@NonNull Exception exception) { }
 
-    protected static @NonNull MapPoint fromLatLng(@NonNull LatLng latLng) {
+    private static @NonNull MapPoint fromLatLng(@NonNull LatLng latLng) {
         return new MapPoint(latLng.getLatitude(), latLng.getLongitude());
     }
 
-    protected static @Nullable MapPoint fromLocation(@Nullable Location location) {
+    private static @Nullable MapPoint fromLocation(@Nullable Location location) {
         if (location == null) {
             return null;
         }
@@ -409,16 +409,16 @@ public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFrag
             location.getAltitude(), location.getAccuracy());
     }
 
-    protected static @NonNull MapPoint fromSymbol(@NonNull Symbol symbol, double alt, double sd) {
+    private static @NonNull MapPoint fromSymbol(@NonNull Symbol symbol, double alt, double sd) {
         LatLng position = symbol.getLatLng();
         return new MapPoint(position.getLatitude(), position.getLongitude(), alt, sd);
     }
 
-    protected static @NonNull LatLng toLatLng(@NonNull MapPoint point) {
+    private static @NonNull LatLng toLatLng(@NonNull MapPoint point) {
         return new LatLng(point.lat, point.lon);
     }
 
-    protected Symbol createSymbol(SymbolManager symbolManager, MapPoint point, boolean draggable) {
+    private Symbol createSymbol(SymbolManager symbolManager, MapPoint point, boolean draggable) {
         return symbolManager.create(new SymbolOptions()
             .withLatLng(toLatLng(point))
             .withIconImage(POINT_ICON_ID)
@@ -429,7 +429,7 @@ public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFrag
         );
     }
 
-    protected void moveOrAnimateCamera(CameraUpdate movement, boolean animate) {
+    private void moveOrAnimateCamera(CameraUpdate movement, boolean animate) {
         if (animate) {
             map.animateCamera(movement);
         } else {
@@ -437,7 +437,7 @@ public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFrag
         }
     }
 
-    protected LatLngBounds expandBounds(LatLngBounds bounds, double factor) {
+    private LatLngBounds expandBounds(LatLngBounds bounds, double factor) {
         double north = bounds.getNorthEast().getLatitude();
         double south = bounds.getSouthWest().getLatitude();
         double latCenter = (north + south) / 2;
@@ -660,7 +660,7 @@ public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFrag
     }
 
     /** A Symbol that can optionally be dragged by the user. */
-    protected class MarkerFeature implements MapFeature {
+    private class MarkerFeature implements MapFeature {
         private final int featureId;
         private final SymbolManager symbolManager;
         private final DragListener dragListener = new DragListener();
@@ -711,7 +711,7 @@ public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFrag
     }
 
     /** A polyline or polygon that can be manipulated by dragging Symbols at its vertices. */
-    protected class PolyFeature implements MapFeature {
+    private class PolyFeature implements MapFeature {
         public static final float STROKE_WIDTH = 5;
 
         private final int featureId;
@@ -777,7 +777,7 @@ public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFrag
             }
         }
 
-        protected void updateLine() {
+        private void updateLine() {
             List<LatLng> latLngs = new ArrayList<>();
             for (MapPoint point : points) {
                 latLngs.add(toLatLng(point));

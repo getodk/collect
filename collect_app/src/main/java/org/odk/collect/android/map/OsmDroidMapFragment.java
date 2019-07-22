@@ -75,22 +75,22 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     static final String KEY_WEB_MAP_SERVICE = "WEB_MAP_SERVICE";
     static final String KEY_REFERENCE_LAYER = "REFERENCE_LAYER";
 
-    protected MapView map;
-    protected ReadyListener readyListener;
-    protected PointListener clickListener;
-    protected PointListener longPressListener;
-    protected PointListener gpsLocationListener;
-    protected FeatureListener dragEndListener;
-    protected MyLocationNewOverlay myLocationOverlay;
-    protected LocationClient locationClient;
-    protected int nextFeatureId = 1;
-    protected Map<Integer, MapFeature> features = new HashMap<>();
-    protected AlertDialog gpsErrorDialog;
-    protected boolean gpsLocationEnabled;
-    protected IGeoPoint lastMapCenter;
-    protected WebMapService webMapService;
-    protected File referenceLayerFile;
-    protected TilesOverlay referenceOverlay;
+    private MapView map;
+    private ReadyListener readyListener;
+    private PointListener clickListener;
+    private PointListener longPressListener;
+    private PointListener gpsLocationListener;
+    private FeatureListener dragEndListener;
+    private MyLocationNewOverlay myLocationOverlay;
+    private LocationClient locationClient;
+    private int nextFeatureId = 1;
+    private Map<Integer, MapFeature> features = new HashMap<>();
+    private AlertDialog gpsErrorDialog;
+    private boolean gpsLocationEnabled;
+    private IGeoPoint lastMapCenter;
+    private WebMapService webMapService;
+    private File referenceLayerFile;
+    private TilesOverlay referenceOverlay;
 
     @Override public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
         Context context = getActivity();
@@ -376,7 +376,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     @Override public void onClientStop() { }
 
-    protected static @Nullable MapPoint fromLocation(@NonNull MyLocationNewOverlay overlay) {
+    private static @Nullable MapPoint fromLocation(@NonNull MyLocationNewOverlay overlay) {
         GeoPoint geoPoint = overlay.getMyLocation();
         if (geoPoint == null) {
             return null;
@@ -387,15 +387,15 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         );
     }
 
-    protected static @NonNull MapPoint fromGeoPoint(@NonNull IGeoPoint geoPoint) {
+    private static @NonNull MapPoint fromGeoPoint(@NonNull IGeoPoint geoPoint) {
         return new MapPoint(geoPoint.getLatitude(), geoPoint.getLongitude());
     }
 
-    protected static @NonNull MapPoint fromGeoPoint(@NonNull GeoPoint geoPoint) {
+    private static @NonNull MapPoint fromGeoPoint(@NonNull GeoPoint geoPoint) {
         return new MapPoint(geoPoint.getLatitude(), geoPoint.getLongitude(), geoPoint.getAltitude());
     }
 
-    protected static @NonNull MapPoint fromMarker(@NonNull Marker marker) {
+    private static @NonNull MapPoint fromMarker(@NonNull Marker marker) {
         GeoPoint geoPoint = marker.getPosition();
         double sd = 0;
         try {
@@ -408,12 +408,12 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         );
     }
 
-    protected static @NonNull GeoPoint toGeoPoint(@NonNull MapPoint point) {
+    private static @NonNull GeoPoint toGeoPoint(@NonNull MapPoint point) {
         return new GeoPoint(point.lat, point.lon, point.alt);
     }
 
     /** Updates the map to reflect the value of referenceLayerFile. */
-    protected void loadReferenceOverlay() {
+    private void loadReferenceOverlay() {
         if (referenceOverlay != null) {
             map.getOverlays().remove(referenceOverlay);
             referenceOverlay = null;
@@ -427,7 +427,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         map.invalidate();
     }
 
-    protected void showGpsDisabledAlert() {
+    private void showGpsDisabledAlert() {
         gpsErrorDialog = new AlertDialog.Builder(getContext())
             .setMessage(getString(R.string.gps_enable_message))
             .setCancelable(false)
@@ -447,7 +447,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
      * view on a layout change, causing the map viewport to jump around when the
      * screen is resized or rotated in a way that doesn't restart the activity.
      */
-    protected void addMapLayoutChangeListener(MapView map) {
+    private void addMapLayoutChangeListener(MapView map) {
         lastMapCenter = map.getMapCenter();
         map.setMapListener(new MapListener() {
             @Override public boolean onScroll(ScrollEvent event) {
@@ -465,7 +465,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
                 map.getController().setCenter(lastMapCenter));
     }
 
-    protected Marker createMarker(MapView map, MapPoint point, MapFeature feature) {
+    private Marker createMarker(MapView map, MapPoint point, MapFeature feature) {
         // A Marker's position is a GeoPoint with latitude, longitude, and
         // altitude fields.  We need to store the standard deviation value
         // somewhere, so it goes in the marker's sub-description field.
@@ -504,7 +504,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     /** Finds the feature to which the given marker belongs. */
-    protected int findFeature(Marker marker) {
+    private int findFeature(Marker marker) {
         for (int featureId : features.keySet()) {
             if (features.get(featureId).ownsMarker(marker)) {
                 return featureId;
@@ -513,7 +513,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         return -1;  // not found
     }
 
-    protected void updateFeature(int featureId) {
+    private void updateFeature(int featureId) {
         MapFeature feature = features.get(featureId);
         if (feature != null) {
             feature.update();
@@ -538,7 +538,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     /** A marker that can optionally be dragged by the user. */
-    protected class MarkerFeature implements MapFeature {
+    private class MarkerFeature implements MapFeature {
         final MapView map;
         Marker marker;
 
@@ -564,7 +564,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     /** A polyline or polygon that can be manipulated by dragging markers at its vertices. */
-    protected class PolyFeature implements MapFeature {
+    private class PolyFeature implements MapFeature {
         final MapView map;
         final List<Marker> markers = new ArrayList<>();
         final Polyline polyline;
