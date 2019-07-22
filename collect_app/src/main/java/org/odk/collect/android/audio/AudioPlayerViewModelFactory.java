@@ -4,11 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-public class AudioPlayerViewModelFactory implements ViewModelProvider.Factory {
+class AudioPlayerViewModelFactory implements ViewModelProvider.Factory {
 
     private final MediaPlayerFactory mediaPlayerFactory;
 
-    public AudioPlayerViewModelFactory(MediaPlayerFactory mediaPlayerFactory) {
+    AudioPlayerViewModelFactory(MediaPlayerFactory mediaPlayerFactory) {
         this.mediaPlayerFactory = mediaPlayerFactory;
     }
 

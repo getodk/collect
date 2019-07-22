@@ -10,14 +10,14 @@ import androidx.lifecycle.ViewModel;
 
 import java.io.IOException;
 
-public class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletionListener {
+class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletionListener {
 
     private final MediaPlayerFactory mediaPlayerFactory;
     private MediaPlayer mediaPlayer;
 
     private final MutableLiveData<String> playingURI = new MutableLiveData<>();
 
-    public AudioPlayerViewModel(MediaPlayerFactory mediaPlayerFactory) {
+    AudioPlayerViewModel(MediaPlayerFactory mediaPlayerFactory) {
         this.mediaPlayerFactory = mediaPlayerFactory;
 
         playingURI.setValue(null);

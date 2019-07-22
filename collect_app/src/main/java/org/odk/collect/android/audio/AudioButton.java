@@ -22,8 +22,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProviders;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -41,9 +39,8 @@ public class AudioButton extends AppCompatImageButton implements View.OnClickLis
 
     private Bitmap bitmapPlay;
     private Bitmap bitmapStop;
-    private String uri;
-    private AudioPlayerViewModel viewModel;
     private Boolean playing;
+    private OnPlayStopListener onPlayStopListener;
 
     public AudioButton(Context context) {
         super(context);
@@ -63,21 +60,18 @@ public class AudioButton extends AppCompatImageButton implements View.OnClickLis
         this.setOnClickListener(this);
     }
 
-    public void setAudio(String uri, FragmentActivity activity, MediaPlayerFactory mediaPlayerFactory) {
-        this.uri = uri;
-        this.viewModel = ViewModelProviders
-                .of(activity, new AudioPlayerViewModelFactory(mediaPlayerFactory))
-                .get(AudioPlayerViewModel.class);
+    public void setPlaying(Boolean isPlaying) {
+        playing = isPlaying;
 
-        viewModel.isPlaying(uri).observe(activity, isPlaying -> {
-            playing = isPlaying;
+        if (isPlaying) {
+            setImageBitmap(bitmapStop);
+        } else {
+            setImageBitmap(bitmapPlay);
+        }
+    }
 
-            if (isPlaying) {
-                setImageBitmap(bitmapStop);
-            } else {
-                setImageBitmap(bitmapPlay);
-            }
-        });
+    public void setOnPlayStopListener(OnPlayStopListener onPlayStopListener) {
+        this.onPlayStopListener = onPlayStopListener;
     }
 
     public void resetBitmap() {
@@ -91,9 +85,9 @@ public class AudioButton extends AppCompatImageButton implements View.OnClickLis
     @Override
     public void onClick(View view) {
         if (playing) {
-            viewModel.stop();
+            onPlayStopListener.onStop();
         } else {
-            viewModel.play(uri);
+            onPlayStopListener.onPlay();
         }
     }
 
@@ -141,5 +135,12 @@ public class AudioButton extends AppCompatImageButton implements View.OnClickLis
                 ToastUtils.showLongToast(errorMsg);
             }
         }
+    }
+
+    public interface OnPlayStopListener {
+
+        void onPlay();
+
+        void onStop();
     }
 }

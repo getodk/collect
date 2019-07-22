@@ -41,6 +41,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioButton;
+import org.odk.collect.android.audio.AudioButtons;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -202,7 +203,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
                 Timber.e(e);
             }
 
-            audioButton.setAudio(uri, (AppCompatActivity) getContext(), MediaPlayer::new);
+            AudioButtons.setAudio(audioButton, uri, (AppCompatActivity) getContext(), MediaPlayer::new);
         }
 
         // Setup video button

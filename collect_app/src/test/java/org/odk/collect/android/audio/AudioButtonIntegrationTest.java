@@ -31,7 +31,7 @@ public class AudioButtonIntegrationTest {
         final DataSource dataSource = setupDataSource(testFile);
 
         AudioButton button = new AudioButton(activity);
-        button.setAudio(testFile, activity, () -> mediaPlayer);
+        AudioButtons.setAudio(button, testFile, activity, () -> mediaPlayer);
 
         assertThat(getCreatedFromResId(button), equalTo(android.R.drawable.ic_lock_silent_mode_off));
 
@@ -57,10 +57,10 @@ public class AudioButtonIntegrationTest {
         final DataSource dataSource2 = setupDataSource(testFile2);
 
         AudioButton button1 = new AudioButton(activity);
-        button1.setAudio(testFile1, activity, () -> mediaPlayer);
+        AudioButtons.setAudio(button1, testFile1, activity, () -> mediaPlayer);
 
         AudioButton button2 = new AudioButton(activity);
-        button2.setAudio(testFile2, activity, () -> mediaPlayer);
+        AudioButtons.setAudio(button2, testFile2, activity, () -> mediaPlayer);
 
         button1.performClick();
         button2.performClick();
