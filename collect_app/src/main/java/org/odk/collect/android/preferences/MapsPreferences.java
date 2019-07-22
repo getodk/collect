@@ -143,7 +143,7 @@ public class MapsPreferences extends BasePreferenceFragment {
 
     /** Updates the rest of the preference UI when the Basemap Source is changed. */
     private void onBasemapSourceChanged(String id) {
-        MapConfigurator cftor = id != null ? MapProvider.getOption(id).cftor :
+        MapConfigurator cftor = id != null ? MapProvider.getConfigurator(id) :
             MapProvider.getConfigurator();
 
         // Set up the preferences in the "Basemap" section.
@@ -170,10 +170,9 @@ public class MapsPreferences extends BasePreferenceFragment {
 
     /** Sets up the contents of the reference layer selection dialog. */
     private void populateReferenceLayerPref() {
-        MapProvider.SourceOption option = MapProvider.getOption();
         MapConfigurator cftor = MapProvider.getConfigurator();
 
-        List<File> files = getSupportedLayerFiles(option.cftor);
+        List<File> files = getSupportedLayerFiles(cftor);
         String[] values = new String[files.size() + 1];
         String[] labels = new String[files.size() + 1];
         String[] captions = new String[files.size() + 1];
@@ -190,7 +189,7 @@ public class MapsPreferences extends BasePreferenceFragment {
 
         referenceLayerPref.setDialogCaption(context.getString(
             files.isEmpty() ? R.string.layer_data_caption_none : R.string.layer_data_caption,
-            Collect.OFFLINE_LAYERS, context.getString(option.labelId)
+            Collect.OFFLINE_LAYERS, context.getString(MapProvider.getSourceLabelId())
         ));
 
         referenceLayerPref.updateContent();

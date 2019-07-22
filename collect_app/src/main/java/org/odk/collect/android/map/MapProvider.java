@@ -109,8 +109,14 @@ public class MapProvider {
         };
     }
 
-    /** Gets the SourceOption with the given ID, or the first option if the ID is unknown. */
+    /**
+     * Gets the SourceOption with the given id, or the currently selected option
+     * if id is null, or the first option if the id is unknown.  Never null.
+     */
     public static @NonNull SourceOption getOption(String id) {
+        if (id == null) {
+            id = PrefUtils.getSharedPrefs().getString(KEY_BASEMAP_SOURCE, null);
+        }
         for (SourceOption option : SOURCE_OPTIONS) {
             if (option.id.equals(id)) {
                 return option;
@@ -119,14 +125,22 @@ public class MapProvider {
         return SOURCE_OPTIONS[0];
     }
 
-    /** Gets the currently selected SourceOption. */
-    public static @NonNull SourceOption getOption() {
-        return getOption(PrefUtils.getSharedPrefs().getString(KEY_BASEMAP_SOURCE, null));
+    /** Gets the currently selected SourceOption's labelId. */
+    public static int getSourceLabelId() {
+        return getOption(null).labelId;
+    }
+
+    /**
+     * Gets the MapConfigurator for the SourceOption with the given id, or the
+     * currently selected MapConfigurator if id is null.
+     */
+    public static @NonNull MapConfigurator getConfigurator(String id) {
+        return getOption(id).cftor;
     }
 
     /** Gets the currently selected MapConfigurator. */
     public static @NonNull MapConfigurator getConfigurator() {
-        return getOption().cftor;
+        return getConfigurator(null);
     }
 
     private static Map<MapFragment, OnSharedPreferenceChangeListener> listenersByMap = new WeakHashMap<>();
