@@ -88,7 +88,6 @@ public class MapsPreferences extends BasePreferenceFragment {
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.setBackgroundColor(getResources().getColor(android.R.color.background_light));
         toolbar.setTitle(R.string.maps);
     }
 
