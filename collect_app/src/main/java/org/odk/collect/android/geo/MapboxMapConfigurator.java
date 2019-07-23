@@ -75,11 +75,11 @@ class MapboxMapConfigurator implements MapConfigurator {
 
     @Override public boolean supportsLayer(File file) {
         // MapboxMapFragment supports any file that MbtilesFile can read.
-        return MbtilesFile.getLayerType(file) != null;
+        return MbtilesFile.readLayerType(file) != null;
     }
 
     @Override public String getDisplayName(File file) {
-        String name = MbtilesFile.getName(file);
+        String name = MbtilesFile.readName(file);
         return name != null ? name : file.getName();
     }
 

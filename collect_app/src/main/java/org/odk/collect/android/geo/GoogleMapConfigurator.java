@@ -94,11 +94,11 @@ class GoogleMapConfigurator implements MapConfigurator {
 
     @Override public boolean supportsLayer(File file) {
         // GoogleMapFragment supports only raster tiles.
-        return MbtilesFile.getLayerType(file) == LayerType.RASTER;
+        return MbtilesFile.readLayerType(file) == LayerType.RASTER;
     }
 
     @Override public String getDisplayName(File file) {
-        String name = MbtilesFile.getName(file);
+        String name = MbtilesFile.readName(file);
         return name != null ? name : file.getName();
     }
 

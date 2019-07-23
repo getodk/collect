@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 import timber.log.Timber;
 
 /**
- * This class provides access to the metadata and tiles in a .mbtiles file.
+ * This class provides access to the metadata and tiles in an .mbtiles file.
  * An .mbtiles file is a SQLite database file containing specific tables and
  * columns, including tiles that may contain raster images or vector geometry.
  * See https://github.com/mapbox/mbtiles-spec for the detailed specification.
@@ -27,51 +27,32 @@ class MbtilesFile implements Closeable, TileSource {
     public enum LayerType { RASTER, VECTOR }
 
     private final File file;
-    private SQLiteDatabase db;
-    private LayerType layerType;
+    private final LayerType layerType;
     private final String contentType;
     private final String contentEncoding;
+    private SQLiteDatabase db;  // see getTileBlob for why this is not final
 
     MbtilesFile(File file) throws MbtilesException {
+        this(file, detectContentType(file));
+    }
+
+    private MbtilesFile(File file, String contentType) throws MbtilesException {
         this.file = file;
-        if (!file.exists() || !file.isFile()) {
-            throw new NotFileException(file);
-        }
-
-        // SQLite will create a "-journal" file for every file it touches, whether
-        // or not it's a valid SQLite file; and if invalid, it will also create a
-        // ".corrupt" file.  That means every time we scan some files to see whether
-        // they are valid SQLite databases, SQLite will triple all the invalid files.
-        // After several triplings, this quickly explodes into thousands of useless files.
-        // Thus, we refuse to even attempt to open any "-journal" or ".corrupt" files.
-        if (file.getName().endsWith("-journal") || file.getName().endsWith(".corrupt")) {
-            throw new UnsupportedFilenameException(file);
-        }
-        try {
-            db = SQLiteDatabase.openOrCreateDatabase(file, null);
-
-            // The "format" code indicates whether the binary tiles are raster image
-            // files (JPEG, PNG) or protobuf-encoded vector geometry (PBF, MVT).
-            String format = getMetadata("format").toLowerCase(Locale.US);
-            if (format.equals("pbf") || format.equals("mvt")) {
-                contentType = "application/protobuf";
+        this.db = SQLiteDatabase.openOrCreateDatabase(file, null);
+        this.contentType = contentType;
+        switch (contentType) {
+            case "application/protobuf":
                 contentEncoding = "gzip";
                 layerType = LayerType.VECTOR;
-            } else if (format.equals("jpg") || format.equals("jpeg")) {
-                contentType = "image/jpeg";
+                return;
+            case "image/jpeg":
+            case "image/png":
                 contentEncoding = "identity";
                 layerType = LayerType.RASTER;
-            } else if (format.equals("png")) {
-                contentType = "image/png";
-                contentEncoding = "identity";
-                layerType = LayerType.RASTER;
-            } else {
-                db.close();
-                throw new UnsupportedFormatException(format, file);
-            }
-        } catch (Throwable e) {
-            throw new MbtilesException(e);
+                return;
         }
+        throw new MbtilesException(String.format(
+            "Unrecognized content type \"%s\" in %s", contentType, file));
     }
 
     public String getContentType() {
@@ -82,18 +63,16 @@ class MbtilesFile implements Closeable, TileSource {
         return contentEncoding;
     }
 
-    public void close() {
-        db.close();
+    public LayerType getLayerType() {
+        return layerType;
     }
 
-    /** Queries the "metadata" table, which has just "name" and "value" columns. */
-    @NonNull String getMetadata(String key) throws MbtilesException {
-        try (Cursor results = db.query("metadata", new String[] {"value"},
-            "name = ?", new String[] {key}, null, null, null, null)) {
-            return results.moveToFirst() ? results.getString(0) : "";
-        } catch (Throwable e) {
-            throw new MbtilesException(e);
-        }
+    public @NonNull String getMetadata(String key) throws MbtilesException {
+        return queryMetadata(db, key);
+    }
+
+    public void close() {
+        db.close();
     }
 
     /** Fetches a tile out of the .mbtiles SQLite database. */
@@ -151,8 +130,8 @@ class MbtilesFile implements Closeable, TileSource {
         return layers;
     }
 
-    /** Gets the internal name of an MBTiles file, or null if the file is invalid. */
-    public static String getName(File file) {
+    /** Reads the internal name from an MBTiles file, or null if the file is invalid. */
+    public static String readName(File file) {
         try {
             return new MbtilesFile(file).getMetadata("name");
         } catch (MbtilesException e) {
@@ -160,12 +139,8 @@ class MbtilesFile implements Closeable, TileSource {
         }
     }
 
-    LayerType getLayerType() {
-        return layerType;
-    }
-
-    /** Gets the layer type of an MBTiles file, or null if the file is invalid. */
-    static LayerType getLayerType(File file) {
+    /** Reads the layer type from an MBTiles file, or null if the file is invalid. */
+    public static LayerType readLayerType(File file) {
         try {
             return new MbtilesFile(file).getLayerType();
         } catch (MbtilesException e) {
@@ -179,6 +154,81 @@ class MbtilesFile implements Closeable, TileSource {
 
         VectorLayer(JSONObject json) {
             name = json.optString("id", "");
+        }
+    }
+
+    /** Reads or guesses the tile data content type in an .mbtiles file. */
+    private static String detectContentType(File file) throws MbtilesException {
+        if (!file.exists() || !file.isFile()) {
+            throw new NotFileException(file);
+        }
+        // SQLite will create a "-journal" file for every file it touches, whether
+        // or not it's a valid SQLite file; and if invalid, it will also create a
+        // ".corrupt" file.  That means every time we scan some files to see whether
+        // they are valid SQLite databases, SQLite will triple all the invalid files.
+        // After several triplings, this quickly explodes into thousands of useless files.
+        // Thus, we refuse to even attempt to open any "-journal" or ".corrupt" files.
+        if (file.getName().endsWith("-journal") || file.getName().endsWith(".corrupt")) {
+            throw new UnsupportedFilenameException(file);
+        }
+        try (SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(file, null)) {
+            // The "format" code indicates whether the binary tiles are raster image
+            // files (JPEG, PNG) or protobuf-encoded vector geometry (PBF, MVT).
+            String format = queryMetadata(db, "format");
+            switch (format.toLowerCase(Locale.US)) {
+                case "pbf":
+                case "mvt":
+                    return "application/protobuf";
+                case "jpg":
+                case "jpeg":
+                    return "image/jpeg";
+                case "png":
+                    return "image/png";
+            }
+
+            // We have seen some raster .mbtiles files in the wild that are
+            // missing the "format" field, so let's attempt autodetection.
+            byte[] tileHeader = queryAnyTileHeader(db);
+            if (startsWithBytes(tileHeader, 0xff, 0xd8, 0xff, 0xe0)) {
+                return "image/jpeg";
+            }
+            if (startsWithBytes(tileHeader, 0x89, 'P', 'N', 'G')) {
+                return "image/png";
+            }
+            if (startsWithBytes(tileHeader, 0x1f, 0x8b)) {  // gzip header
+                return "application/protobuf";
+            }
+            throw new UnsupportedFormatException(format, file);
+        } catch (Throwable e) {
+            throw new MbtilesException(e);
+        }
+    }
+
+    private static boolean startsWithBytes(byte[] actual, int... expected) {
+        int count = 0;
+        for (int i = 0; i < actual.length && i < expected.length; i++) {
+            count += (actual[i] == (byte) expected[i]) ? 1 : 0;
+        }
+        return count == expected.length;
+    }
+
+    /** Queries the "metadata" table, which has just "name" and "value" columns. */
+    private static @NonNull String queryMetadata(SQLiteDatabase db, String key) throws MbtilesException {
+        try (Cursor results = db.query("metadata", new String[] {"value"},
+            "name = ?", new String[] {key}, null, null, null, "1")) {
+            return results.moveToFirst() ? results.getString(0) : "";
+        } catch (Throwable e) {
+            throw new MbtilesException(e);
+        }
+    }
+
+    /** Fetches the first 16 bytes of any tile blob found in the "tiles" table. */
+    private static @NonNull byte[] queryAnyTileHeader(SQLiteDatabase db) throws MbtilesException {
+        try (Cursor results = db.query("tiles", new String[] {"substr(tile_data, 1, 16)"},
+            null, null, null, null, null, "1")) {
+            return results.moveToFirst() ? results.getBlob(0) : new byte[0];
+        } catch (Throwable e) {
+            throw new MbtilesException(e);
         }
     }
 

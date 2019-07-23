@@ -91,11 +91,11 @@ class OsmDroidMapConfigurator implements MapConfigurator {
 
     @Override public boolean supportsLayer(File file) {
         // OSMdroid supports only raster tiles.
-        return MbtilesFile.getLayerType(file) == MbtilesFile.LayerType.RASTER;
+        return MbtilesFile.readLayerType(file) == MbtilesFile.LayerType.RASTER;
     }
 
     @Override public String getDisplayName(File file) {
-        String name = MbtilesFile.getName(file);
+        String name = MbtilesFile.readName(file);
         return name != null ? name : file.getName();
     }
 
