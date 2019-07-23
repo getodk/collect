@@ -26,7 +26,7 @@ public class PrefUtils {
         return createListPref(context, key, title, labels, values);
     }
 
-    public static ListPreference createListPref(
+    private static ListPreference createListPref(
         Context context, String key, String title, String[] labels, String[] values) {
         ensurePrefHasValidValue(key, values);
         ListPreference pref = new ListPreference(context);
@@ -40,7 +40,7 @@ public class PrefUtils {
         return pref;
     }
 
-    public static void ensurePrefHasValidValue(String key, String[] validValues) {
+    private static void ensurePrefHasValidValue(String key, String[] validValues) {
         SharedPreferences prefs = getSharedPrefs();
         String value = prefs.getString(key, null);
         if (Arrays.asList(validValues).indexOf(value) < 0) {
