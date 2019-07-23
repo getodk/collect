@@ -61,4 +61,21 @@ public class PrefUtils {
         }
     }
 
+    /**
+     * Gets an integer value from the shared preferences.  If the preference has
+     * a string value, attempts to convert it to an integer.  If the preference
+     * is not found or is not a valid integer, returns the defaultValue.
+     */
+    public static int getInt(String key, int defaultValue) {
+        Object value = getSharedPrefs().getAll().get(key);
+        if (value instanceof Integer) {
+            return (Integer) value;
+        }
+        if (value instanceof String) {
+            try {
+                return Integer.parseInt((String) value);
+            } catch (NumberFormatException e) { /* ignore */ }
+        }
+        return defaultValue;
+    }
 }

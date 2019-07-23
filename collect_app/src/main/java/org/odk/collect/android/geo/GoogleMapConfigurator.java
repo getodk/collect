@@ -81,14 +81,9 @@ class GoogleMapConfigurator implements MapConfigurator {
     }
 
     @Override public Bundle buildConfig(SharedPreferences prefs) {
-        int mapType;
-        try {
-            mapType = Integer.parseInt(prefs.getString(KEY_GOOGLE_MAP_STYLE, ""));
-        } catch (NumberFormatException e) {
-            mapType = GoogleMap.MAP_TYPE_NORMAL;
-        }
         Bundle config = new Bundle();
-        config.putInt(GoogleMapFragment.KEY_MAP_TYPE, mapType);
+        config.putInt(GoogleMapFragment.KEY_MAP_TYPE,
+            PrefUtils.getInt(KEY_GOOGLE_MAP_STYLE, GoogleMap.MAP_TYPE_NORMAL));
         config.putString(GoogleMapFragment.KEY_REFERENCE_LAYER,
             prefs.getString(KEY_REFERENCE_LAYER, null));
         return config;
