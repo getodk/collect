@@ -38,8 +38,8 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.external.ExternalSelectChoice;
+import org.odk.collect.android.utilities.AudioHandler;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
@@ -72,7 +72,7 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
 
     List<Integer> selectedItems = new ArrayList<>();
     View[] itemViews;
-    AudioButton.AudioHandler[] audioHandlers;
+    AudioHandler[] audioHandlers;
 
     public BaseGridWidget(Context context, FormEntryPrompt prompt, boolean quickAdvance) {
         super(context, prompt);
@@ -80,7 +80,7 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         this.quickAdvance = quickAdvance;
         noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(prompt) || WidgetAppearanceUtils.isNoButtonsAppearance(prompt);
         itemViews = new View[items.size()];
-        audioHandlers = new AudioButton.AudioHandler[items.size()];
+        audioHandlers = new AudioHandler[items.size()];
 
         setUpItems();
         setUpGridView();
@@ -118,7 +118,7 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
     private void setUpAudioHandler(int index) {
         // Create an audioHandler if there is an audio prompt associated with this selection.
         String audioURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_AUDIO);
-        audioHandlers[index] = audioURI != null ? new AudioButton.AudioHandler(audioURI, getPlayer()) : null;
+        audioHandlers[index] = audioURI != null ? new AudioHandler(audioURI, getPlayer()) : null;
     }
 
     private View setUpNoButtonsItem(int index) {

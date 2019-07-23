@@ -115,8 +115,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
             audioPlayListener.resetAudioButtonImage();
         }
 
-        audioButton.onClick();
-
         // have to call toString() to remove the html formatting
         // (it's a spanned thing...)
         viewText.setText(viewText.getText().toString());
@@ -260,9 +258,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.audioButton:
-                playAudio();
-                break;
             case R.id.videoButton:
                 playVideo();
                 break;
