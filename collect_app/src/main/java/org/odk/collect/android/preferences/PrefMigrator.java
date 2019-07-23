@@ -229,6 +229,7 @@ public class PrefMigrator {
     }
 
     /** Removes an old key and sets a new key. */
+    @SuppressLint("ApplySharedPref")
     private static void replace(SharedPreferences prefs, String oldKey, String newKey, Object newValue) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.remove(oldKey);
