@@ -179,9 +179,10 @@ public class MapsPreferences extends BasePreferenceFragment {
         }
         referenceLayerPref.setItems(values, labels, captions);
 
+        File layerDir = FileUtils.simplifyPath(new File(Collect.OFFLINE_LAYERS));
         referenceLayerPref.setDialogCaption(context.getString(
             files.isEmpty() ? R.string.layer_data_caption_none : R.string.layer_data_caption,
-            Collect.OFFLINE_LAYERS, context.getString(MapProvider.getSourceLabelId())
+            layerDir, context.getString(MapProvider.getSourceLabelId())
         ));
 
         referenceLayerPref.updateContent();

@@ -2,7 +2,6 @@ package org.odk.collect.android.geo;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 
@@ -39,7 +38,7 @@ class MapboxMapConfigurator implements MapConfigurator {
 
     @Override public void showUnavailableMessage(Context context) {
         ToastUtils.showLongToast(context.getString(
-            R.string.mapbox_unsupported_warning, Build.CPU_ABI));
+            R.string.basemap_source_unavailable, context.getString(sourceLabelId)));
     }
 
     @Override public MapFragment createMapFragment(Context context) {

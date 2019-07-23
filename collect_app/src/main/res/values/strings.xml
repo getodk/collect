@@ -345,10 +345,9 @@
     <string name="carto_map_style_dark_matter">Dark Matter</string>
 
     <string name="reference_layer">Reference layer</string>
-    <string name="layer_data_caption_none">There are no layer files in %1$s that are supported by the %2$s base layer.</string>
-    <string name="layer_data_caption">Above are all the layer files in %1$s that are supported by the %2$s base layer.</string>
+    <string name="layer_data_caption_none">There are no layer files in %1$s that are supported by the %2$s basemap.</string>
+    <string name="layer_data_caption">Above are all the layer files in %1$s that are supported by the %2$s basemap.</string>
     <string name="layer_data_file">Layer data file</string>
-    <string name="layer_data_dialog_title">Files in %1$s that work with the %2$s base layer:</string>
 
     <string name="save_point">Save GeoPoint</string>
     <string name="get_point">Start GeoPoint</string>
@@ -721,6 +720,5 @@
     <string name="copying_media_files_failed">Copying media files failed</string>
     <string name="qr_code_not_found">QR Code not found in the selected image</string>
     <string name="not_granted_permission">The activity you are trying to start requires a permission which is not granted.</string>
-    <string name="mapbox_unsupported_warning">Mapbox is not supported on this device (%s).  Please choose another mapping SDK in General Settings &gt; User interface.</string>
-    <string name="google_maps_sdk_unavailable_warning">The Google Maps SDK is not available on this device.  Please choose another mapping SDK in General Settings &gt; User interface.</string>
+    <string name="basemap_source_unavailable">Sorry, %s basemaps are not available on this device.  Please choose another basemap in General Settings &gt; Maps.</string>
 </resources>
