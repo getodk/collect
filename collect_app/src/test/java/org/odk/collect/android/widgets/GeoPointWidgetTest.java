@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Intent;
-import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.GeoPointData;
@@ -13,6 +12,8 @@ import org.odk.collect.android.ShadowPlayServicesUtil;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
 import org.robolectric.annotation.Config;
+
+import androidx.annotation.NonNull;
 
 import static org.mockito.Mockito.when;
 
@@ -94,10 +95,7 @@ public class GeoPointWidgetTest extends BinaryWidgetTest<GeoPointWidget, GeoPoin
     public void buttonsShouldLaunchCorrectIntents() {
         stubAllRuntimePermissionsGranted(true);
 
-        Intent intent = getIntentLaunchedByClick(R.id.get_point);
-        assertComponentEquals(activity, GeoPointActivity.class, intent);
-
-        intent = getIntentLaunchedByClick(R.id.get_location);
+        Intent intent = getIntentLaunchedByClick(R.id.get_location);
         assertComponentEquals(activity, GeoPointActivity.class, intent);
     }
 
@@ -105,7 +103,6 @@ public class GeoPointWidgetTest extends BinaryWidgetTest<GeoPointWidget, GeoPoin
     public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
         stubAllRuntimePermissionsGranted(false);
 
-        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.get_point));
         assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.get_location));
     }
 }
