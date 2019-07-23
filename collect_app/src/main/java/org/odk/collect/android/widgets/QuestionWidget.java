@@ -91,6 +91,7 @@ public abstract class QuestionWidget
     private Bundle state;
     protected ThemeUtils themeUtils;
     private int playColor;
+    private final ReferenceManager referenceManager = ReferenceManager.instance();
 
     private WidgetValueChangedListener valueChangedListener;
 
@@ -283,7 +284,7 @@ public abstract class QuestionWidget
         // Create the layout for audio, image, text
         MediaLayout questionMediaLayout = new MediaLayout(getContext());
         questionMediaLayout.setId(ViewIds.generateViewId()); // assign random id
-        questionMediaLayout.setAVT(questionText, audioURI, imageURI, videoURI, bigImageURI, getPlayer(), ReferenceManager.instance());
+        questionMediaLayout.setAVT(questionText, audioURI, imageURI, videoURI, bigImageURI, getPlayer(), getReferenceManager());
         questionMediaLayout.setAudioListener(this);
 
         String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
@@ -683,6 +684,10 @@ public abstract class QuestionWidget
 
     public MediaPlayer getPlayer() {
         return player;
+    }
+
+    public ReferenceManager getReferenceManager() {
+        return referenceManager;
     }
 
     public int getPlayColor() {
