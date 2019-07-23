@@ -70,7 +70,16 @@ public class PrefMigrator {
             .withValues("osmdroid", "openmap_carto_positron")
                 .toPairs(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_CARTO, KEY_CARTO_MAP_STYLE, "positron")
             .withValues("osmdroid", "openmap_carto_darkmatter")
-                .toPairs(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_CARTO, KEY_CARTO_MAP_STYLE, "dark_matter")
+                .toPairs(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_CARTO, KEY_CARTO_MAP_STYLE, "dark_matter"),
+    };
+
+    static final Migration[] ADMIN_MIGRATIONS = {
+        // When either the map SDK or the basemap selection were previously
+        // hidden, we want to hide the entire Maps preference screen.
+        translateKey("show_map_sdk").toKey("maps")
+            .fromValue(false).toValue(false),
+        translateKey("show_map_basemap").toKey("maps")
+            .fromValue(false).toValue(false)
     };
 
     public static void migrate(SharedPreferences prefs, Migration... migrations) {
@@ -81,6 +90,7 @@ public class PrefMigrator {
 
     public static void migrateSharedPrefs() {
         migrate(PrefUtils.getSharedPrefs(), MIGRATIONS);
+        migrate(PrefUtils.getAdminSharedPrefs(), ADMIN_MIGRATIONS);
     }
 
     public interface Migration {

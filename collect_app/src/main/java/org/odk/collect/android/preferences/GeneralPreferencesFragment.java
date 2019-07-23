@@ -27,6 +27,7 @@ import java.util.Collection;
 
 import androidx.annotation.Nullable;
 
+import static org.odk.collect.android.preferences.AdminKeys.KEY_MAPS;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class GeneralPreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener {
@@ -104,7 +105,8 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
             preferenceScreen.removePreference(findPreference("user_interface"));
         }
 
-        if (!hasAtleastOneSettingEnabled(AdminKeys.mapsKeys)) {
+        boolean mapsScreenEnabled = (boolean) AdminSharedPreferences.getInstance().get(KEY_MAPS);
+        if (!mapsScreenEnabled) {
             preferenceScreen.removePreference(findPreference("maps"));
         }
 

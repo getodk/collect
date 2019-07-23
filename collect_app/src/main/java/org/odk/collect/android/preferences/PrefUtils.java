@@ -17,6 +17,10 @@ public class PrefUtils {
             Collect.getInstance().getApplicationContext());
     }
 
+    public static SharedPreferences getAdminSharedPrefs() {
+        return AdminSharedPreferences.getInstance().getSharedPreferences();
+    }
+
     public static ListPreference createListPref(
         Context context, String key, String title, int[] labelIds, String[] values) {
         String[] labels = new String[labelIds.length];

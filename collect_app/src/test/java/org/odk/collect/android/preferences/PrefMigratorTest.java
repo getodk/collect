@@ -318,4 +318,28 @@ public class PrefMigratorTest {
         PrefMigrator.migrateSharedPrefs();
         assertPrefs("basemap_source", "carto", "carto_map_style", "dark_matter");
     }
+
+    @Test public void shouldMigrateAdminSettings() {
+        prefs = AdminSharedPreferences.getInstance().getSharedPreferences();
+
+        initPrefs("unrelated", "value");
+        PrefMigrator.migrateSharedPrefs();
+        assertPrefs("unrelated", "value");
+
+        initPrefs("show_map_sdk", true);
+        PrefMigrator.migrateSharedPrefs();
+        assertPrefs("show_map_sdk", true);
+
+        initPrefs("show_map_sdk", false);
+        PrefMigrator.migrateSharedPrefs();
+        assertPrefs("maps", false);
+
+        initPrefs("show_map_basemap", true);
+        PrefMigrator.migrateSharedPrefs();
+        assertPrefs("show_map_basemap", true);
+
+        initPrefs("show_map_basemap", false);
+        PrefMigrator.migrateSharedPrefs();
+        assertPrefs("maps", false);
+    }
 }

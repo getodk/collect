@@ -247,6 +247,11 @@ public class Collect extends Application {
             Timber.e(e);
         }
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        FormMetadataMigrator.migrate(prefs);
+        PrefMigrator.migrateSharedPrefs();
+        AutoSendPreferenceMigrator.migrate();
+
         reloadSharedPreferences();
 
         PRNGFixes.apply();
@@ -255,11 +260,6 @@ public class Collect extends Application {
 
         defaultSysLanguage = Locale.getDefault().getLanguage();
         new LocaleHelper().updateLocale(this);
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        FormMetadataMigrator.migrate(prefs);
-        PrefMigrator.migrate(prefs, PrefMigrator.MIGRATIONS);
-        AutoSendPreferenceMigrator.migrate();
 
         initializeJavaRosa();
 

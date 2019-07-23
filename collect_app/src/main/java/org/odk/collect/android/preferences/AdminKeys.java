@@ -59,7 +59,7 @@ public final class AdminKeys {
     private static final String KEY_NAVIGATION                  = "change_navigation";
     static final String KEY_CONSTRAINT_BEHAVIOR                 = "change_constraint_behavior";
 
-    private static final String KEY_BASEMAP_SOURCE              = "basemap_source";
+    static final String KEY_MAPS                        = "maps";
 
     private static final String KEY_ANALYTICS                   = "analytics";
     public static final String KEY_MOVING_BACKWARDS             = "moving_backwards";
@@ -97,8 +97,6 @@ public final class AdminKeys {
             ag(KEY_NAVIGATION,                 GeneralKeys.KEY_NAVIGATION),
             ag(KEY_CONSTRAINT_BEHAVIOR,        GeneralKeys.KEY_CONSTRAINT_BEHAVIOR),
 
-            ag(KEY_BASEMAP_SOURCE,             GeneralKeys.KEY_BASEMAP_SOURCE),
-
             ag(KEY_ANALYTICS,                  GeneralKeys.KEY_ANALYTICS)
     };
 
@@ -117,7 +115,8 @@ public final class AdminKeys {
             KEY_MARK_AS_FINALIZED,
             KEY_CHANGE_ADMIN_PASSWORD,
             KEY_MOVING_BACKWARDS,
-            ALLOW_OTHER_WAYS_OF_EDITING_FORM
+            ALLOW_OTHER_WAYS_OF_EDITING_FORM,
+            KEY_MAPS
     );
 
     static Collection<String> serverKeys = Collections.singletonList(
@@ -149,10 +148,6 @@ public final class AdminKeys {
             KEY_CHANGE_FONT_SIZE,
             KEY_NAVIGATION,
             KEY_SHOW_SPLASH_SCREEN
-    );
-
-    static Collection<String> mapsKeys = Arrays.asList(
-            KEY_BASEMAP_SOURCE
     );
 
     private static Collection<String> allKeys() {
