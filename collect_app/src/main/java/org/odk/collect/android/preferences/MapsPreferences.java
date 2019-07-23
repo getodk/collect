@@ -136,8 +136,8 @@ public class MapsPreferences extends BasePreferenceFragment {
             if (value == null) {
                 summary = getString(R.string.none);
             } else {
-                MapConfigurator source = MapProvider.getCurrentSource(context);
-                summary = source.getDisplayName(new File(value.toString()));
+                MapConfigurator cftor = MapProvider.getConfigurator(context);
+                summary = cftor.getDisplayName(new File(value.toString()));
             }
             referenceLayerPref.setSummary(summary);
         }
@@ -145,25 +145,25 @@ public class MapsPreferences extends BasePreferenceFragment {
 
     /** Updates the rest of the preference UI when the Basemap Source is changed. */
     private void onBasemapSourceChanged(String id) {
-        MapConfigurator source = id != null ? MapProvider.getOption(id).source :
-            MapProvider.getCurrentSource(context);
-        if (source != null) {
+        MapConfigurator cftor = id != null ? MapProvider.getOption(id).cftor :
+            MapProvider.getConfigurator(context);
+        if (cftor != null) {
             // Set up the preferences in the "Basemap" section.
             PreferenceCategory baseCategory = (PreferenceCategory) findPreference(CATEGORY_BASEMAP);
             baseCategory.removeAll();
             baseCategory.addPreference(basemapSourcePref);
-            if (!source.isAvailable(context)) {
-                source.showUnavailableMessage(context);
+            if (!cftor.isAvailable(context)) {
+                cftor.showUnavailableMessage(context);
                 return;
             }
-            for (Preference pref : source.createPrefs(context)) {
+            for (Preference pref : cftor.createPrefs(context)) {
                 baseCategory.addPreference(pref);
             }
 
             // Clear the reference layer if it isn't supported by the new basemap.
             if (referenceLayerPref != null) {
                 String path = referenceLayerPref.getValue();
-                if (path != null && !source.supportsLayer(new File(path))) {
+                if (path != null && !cftor.supportsLayer(new File(path))) {
                     referenceLayerPref.setValue(null);
                     updateReferenceLayerSummary(null);
                 }
@@ -173,10 +173,10 @@ public class MapsPreferences extends BasePreferenceFragment {
 
     /** Sets up the contents of the reference layer selection dialog. */
     private void populateReferenceLayerPref() {
-        MapProvider.SourceOption option = MapProvider.getCurrentOption(context);
-        MapConfigurator source = MapProvider.getCurrentSource(context);
+        MapProvider.SourceOption option = MapProvider.getOption(context);
+        MapConfigurator cftor = MapProvider.getConfigurator(context);
 
-        List<File> files = getSupportedLayerFiles(option.source);
+        List<File> files = getSupportedLayerFiles(option.cftor);
         String[] values = new String[files.size() + 1];
         String[] labels = new String[files.size() + 1];
         String[] captions = new String[files.size() + 1];
@@ -186,24 +186,24 @@ public class MapsPreferences extends BasePreferenceFragment {
         for (int i = 0; i < files.size(); i++) {
             String path = FileUtils.simplifyPath(files.get(i)).toString();
             values[i + 1] = path;
-            labels[i + 1] = source.getDisplayName(files.get(i));
+            labels[i + 1] = cftor.getDisplayName(files.get(i));
             captions[i + 1] = path;
         }
         referenceLayerPref.setItems(values, labels, captions);
 
         referenceLayerPref.setDialogCaption(context.getString(
             files.isEmpty() ? R.string.layer_data_caption_none : R.string.layer_data_caption,
-            Collect.OFFLINE_LAYERS, context.getString(option.sourceLabelId)
+            Collect.OFFLINE_LAYERS, context.getString(option.labelId)
         ));
 
         referenceLayerPref.updateContent();
     }
 
     /** Gets the list of layer data files supported by the current MapConfigurator. */
-    private static List<File> getSupportedLayerFiles(MapConfigurator source) {
+    private static List<File> getSupportedLayerFiles(MapConfigurator cftor) {
         List<File> files = new ArrayList<>();
         for (File file : FileUtils.walk(new File(Collect.OFFLINE_LAYERS))) {
-            if (source.supportsLayer(file)) {
+            if (cftor.supportsLayer(file)) {
                 files.add(file);
             }
         }

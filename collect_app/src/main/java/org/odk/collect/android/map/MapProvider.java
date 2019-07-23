@@ -35,13 +35,13 @@ public class MapProvider {
 
     public static class SourceOption {
         public final String id;  // preference value to store
-        public final int sourceLabelId;  // string resource ID
-        public final MapConfigurator source;
+        public final int labelId;  // string resource ID
+        public final MapConfigurator cftor;
 
-        public SourceOption(String id, int sourceLabelId, MapConfigurator source) {
+        public SourceOption(String id, int labelId, MapConfigurator cftor) {
             this.id = id;
-            this.sourceLabelId = sourceLabelId;
-            this.source = source;
+            this.labelId = labelId;
+            this.cftor = cftor;
         }
     }
 
@@ -117,43 +117,44 @@ public class MapProvider {
         return SOURCE_OPTIONS[0];
     }
 
-    /** Gets the SourceOption corresponding to the current basemap_source preference. */
-    public static SourceOption getCurrentOption(Context context) {
+    /** Gets the currently selected SourceOption. */
+    public static SourceOption getOption(Context context) {
         return getOption(PrefUtils.getSharedPrefs(context).getString(KEY_BASEMAP_SOURCE, null));
     }
 
-    public static MapConfigurator getCurrentSource(Context context) {
-        SourceOption option = getCurrentOption(context);
-        return option != null ? option.source : null;
+    /** Gets the currently selected MapConfigurator. */
+    public static MapConfigurator getConfigurator(Context context) {
+        SourceOption option = getOption(context);
+        return option != null ? option.cftor : null;
     }
 
     private static Map<MapFragment, OnSharedPreferenceChangeListener> listenersByMap = new WeakHashMap<>();
     private static Map<MapFragment, MapConfigurator> sourcesByMap = new WeakHashMap<>();
 
     public static MapFragment createMapFragment(Context context) {
-        MapConfigurator source = getCurrentSource(context);
-        if (source != null) {
-            MapFragment map = source.createMapFragment(context);
+        MapConfigurator cftor = getConfigurator(context);
+        if (cftor != null) {
+            MapFragment map = cftor.createMapFragment(context);
             if (map != null) {
-                sourcesByMap.put(map, source);
+                sourcesByMap.put(map, cftor);
                 return map;
             }
-            source.showUnavailableMessage(context);
+            cftor.showUnavailableMessage(context);
         }
         return null;
     }
 
     public static void onMapFragmentStart(MapFragment map) {
         Context context = map.getFragment().getContext();
-        MapConfigurator source = sourcesByMap.get(map);
-        if (source != null) {
+        MapConfigurator cftor = sourcesByMap.get(map);
+        if (cftor != null) {
             OnSharedPreferenceChangeListener listener = (prefs, key) -> {
-                if (source.getPrefKeys().contains(key)) {
-                    map.applyConfig(source.buildConfig(prefs));
+                if (cftor.getPrefKeys().contains(key)) {
+                    map.applyConfig(cftor.buildConfig(prefs));
                 }
             };
             SharedPreferences prefs = PrefUtils.getSharedPrefs(context);
-            map.applyConfig(source.buildConfig(prefs));
+            map.applyConfig(cftor.buildConfig(prefs));
             prefs.registerOnSharedPreferenceChangeListener(listener);
             listenersByMap.put(map, listener);
         }
@@ -182,7 +183,7 @@ public class MapProvider {
     public static int[] getLabelIds() {
         int[] labelIds = new int[SOURCE_OPTIONS.length];
         for (int i = 0; i < labelIds.length; i++) {
-            labelIds[i] = SOURCE_OPTIONS[i].sourceLabelId;
+            labelIds[i] = SOURCE_OPTIONS[i].labelId;
         }
         return labelIds;
     }
