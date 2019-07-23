@@ -3,13 +3,13 @@ package org.odk.collect.android.preferences;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Rect;
 import android.os.Parcelable;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -85,16 +85,19 @@ public class CaptionedListPreference extends ListPreference {
 
     /** Creates the view for one item in the list. */
     protected RadioButton inflateItem(ViewGroup parent, final int i, Object value, Object label, Object caption) {
-        LinearLayout item = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.captioned_item, null);
+        View item = LayoutInflater.from(context).inflate(R.layout.captioned_item, null);
         RadioButton button = item.findViewById(R.id.button);
         TextView labelView = item.findViewById(R.id.label);
         TextView captionView = item.findViewById(R.id.caption);
         labelView.setText(String.valueOf(label));
         captionView.setText(String.valueOf(caption));
-        button.setChecked(ObjectUtils.equals(value, getSharedPreferences().getString(getKey(), null)));
         button.setOnClickListener(view -> onItemClicked(i));
         item.setOnClickListener(view -> onItemClicked(i));
         parent.addView(item);
+        if (ObjectUtils.equals(value, getSharedPreferences().getString(getKey(), null))) {
+            button.setChecked(true);
+            item.post(() -> item.requestRectangleOnScreen(new Rect(0, 0, item.getWidth(), item.getHeight())));
+        }
         return button;
     }
 
