@@ -332,21 +332,14 @@
     <string name="basemap_source">Source</string>
     <string name="map_style_label">%s map style</string>
 
-    <string name="google_map_style_streets">Streets</string>
-    <string name="google_map_style_terrain">Terrain</string>
-    <string name="google_map_style_hybrid">Hybrid</string>
-    <string name="google_map_style_satellite">Satellite</string>
-
-    <string name="mapbox_map_style_streets">Streets</string>
-    <string name="mapbox_map_style_light">Light</string>
-    <string name="mapbox_map_style_dark">Dark</string>
-    <string name="mapbox_map_style_satellite">Satellite</string>
-    <string name="mapbox_map_style_satellite_streets">Satellite Streets</string>
-    <string name="mapbox_map_style_outdoors">Outdoors</string>
-
-    <string name="usgs_map_style_topographic">Topographic</string>
-    <string name="usgs_map_style_hybrid">Hybrid</string>
-    <string name="usgs_map_style_satellite">Satellite</string>
+    <string name="streets">Streets</string>
+    <string name="terrain">Terrain</string>
+    <string name="hybrid">Hybrid</string>
+    <string name="satellite">Satellite</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="outdoors">Outdoors</string>
+    <string name="topographic">Topographic</string>
 
     <string name="carto_map_style_positron">Positron</string>
     <string name="carto_map_style_dark_matter">Dark Matter</string>
