@@ -307,12 +307,6 @@
   <string name="leave_a_review">Napiši Play Store recenziju</string>
   <string name="leave_a_review_msg">Vaša (nadamo se pozitivna) recenzija povećava vidljivost aplikacije u Play Storu.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">Mapiranje SDK</string>
-  <string name="map_sdk_behavior">Mapiranje SDK</string>
-  <string name="google_maps_sdk">Google Maps SDK</string>
-  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
-  <string name="mapbox_maps_sdk">Mapbox Maps SDK</string>
-  <string name="show_map_sdk">Prikaži opcije Mape SDP</string>
   <string name="openmap_streets">OSM ulice</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">USCG National Map Hybrid</string>
@@ -324,14 +318,6 @@
   <string name="terrain">Teren</string>
   <string name="hybrid">Hibrid</string>
   <string name="satellite">Satelit</string>
-  <string name="map_basemap_selector_title">Osnovne mape</string>
-  <string name="show_map_basemap">Prikaži opcije za osnovne mane</string>
-  <string name="mapbox_streets">Mapbox Streets</string>
-  <string name="mapbox_light">Mapbox Light</string>
-  <string name="mapbox_dark">Mapbox Dark</string>
-  <string name="mapbox_satellite">Mapbox Satellite</string>
-  <string name="mapbox_satellite_streets">Mapbox Satellite Streets</string>
-  <string name="mapbox_outdoors">Mapbox Outdoors</string>
   <string name="save_point">Sačuvaj GeoPoint</string>
   <string name="get_point">Započni GeoPoint</string>
   <string name="geopoint_view_read_only">Vidi GeoPoint</string>
@@ -523,7 +509,6 @@
   <string name="wifi_autosend">Samo Wifi</string>
   <string name="cellular_autosend">Samo mrežni podaci</string>
   <string name="wifi_cellular_autosend">Wifi ili mrežni podaci</string>
-  <string name="map_basemap_behavior_title">Osnovna mapa</string>
   <string name="form_management_preferences">Upravljanje formularima</string>
   <string name="form_submission_category">Otpremanje formulara</string>
   <string name="form_filling_category">Ispunjavanje formulara</string>

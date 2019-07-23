@@ -301,11 +301,6 @@
   <string name="leave_a_review">Оставить отзыв в Play Store</string>
   <string name="leave_a_review_msg">Ваш отзыв (надеемся, положительный) делает приложение более заметным в Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">Источник карт</string>
-  <string name="map_sdk_behavior">Источник карт</string>
-  <string name="google_maps_sdk">Google</string>
-  <string name="openstreetmap_sdk">OpenStreetMap</string>
-  <string name="show_map_sdk">Показать параметры картографии</string>
   <string name="openmap_streets">Улицы OSM</string>
   <string name="openmap_usgs_topo">Национальная карта USGS: топографическая</string>
   <string name="openmap_usgs_sat">Национальная карта USGS: спутниковая</string>
@@ -316,8 +311,6 @@
   <string name="terrain">Ландшафт</string>
   <string name="hybrid">Гибридная</string>
   <string name="satellite">Спутник</string>
-  <string name="map_basemap_selector_title">Подложка</string>
-  <string name="show_map_basemap">Показать параметры подложки</string>
   <string name="save_point">Сохранить местоположение</string>
   <string name="get_point">Определить местоположение</string>
   <string name="geopoint_view_read_only">Просмотреть геоточку</string>
@@ -470,7 +463,6 @@
   <string name="wifi_autosend">Только Wi-Fi</string>
   <string name="cellular_autosend">Только сотовая связь</string>
   <string name="wifi_cellular_autosend">Wi-Fi или сотовая связь</string>
-  <string name="map_basemap_behavior_title">Подложка</string>
   <string name="form_management_preferences">Управление опросниками</string>
   <string name="form_submission_category">ВЫГРУЗКА ОПРОСОВ</string>
   <string name="form_filling_category">Заполнение опросника</string>

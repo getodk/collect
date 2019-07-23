@@ -277,8 +277,6 @@
   <string name="terrain">Terren</string>
   <string name="hybrid">Hibride</string>
   <string name="satellite">Satelit</string>
-  <string name="map_basemap_selector_title">Harta bazë</string>
-  <string name="show_map_basemap">Trago parametrat e hartës bazë</string>
   <string name="save_point">Ruaj vendndodhjen gjeografike</string>
   <string name="get_point">Regjistro vendndodhjen gjeografike</string>
   <string name="geopoint_view_read_only">Shih vendndodhjen gjeografike</string>
@@ -429,7 +427,6 @@
   <string name="wifi_autosend">Vetëm wifi</string>
   <string name="cellular_autosend">Vetëm celular</string>
   <string name="wifi_cellular_autosend">Wifi ose celular</string>
-  <string name="map_basemap_behavior_title">Harta bazë</string>
   <string name="form_management_preferences">Administrimi i formularëve</string>
   <string name="form_submission_category">Dërgimi i formularëve</string>
   <string name="form_filling_category">Plotësimi i formularëve</string>

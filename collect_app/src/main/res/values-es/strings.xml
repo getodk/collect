@@ -309,12 +309,6 @@
   <string name="leave_a_review">Ir a Play Store - Comentar y/o Actualizar</string>
   <string name="leave_a_review_msg">Su comentario (ojalá positivo) incrementa la visibilidad de la App en Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">Cartografía SDK</string>
-  <string name="map_sdk_behavior">Cartografía SDK</string>
-  <string name="google_maps_sdk">Google Maps SDK</string>
-  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
-  <string name="mapbox_maps_sdk">SDK de Mapas Mapbox</string>
-  <string name="show_map_sdk">Mostrar Opciones del Mapa SDK</string>
   <string name="openmap_streets">Calles OSM</string>
   <string name="openmap_usgs_topo">USGS Mapa Topográfico Nacional</string>
   <string name="openmap_usgs_sat">USGS Mapa Nacional Hibrido</string>
@@ -326,14 +320,6 @@
   <string name="terrain">Terreno</string>
   <string name="hybrid">Híbrido</string>
   <string name="satellite">Satélite</string>
-  <string name="map_basemap_selector_title">Mapa Base</string>
-  <string name="show_map_basemap">Mostrar opciones de Mapa Base</string>
-  <string name="mapbox_streets">Mapbox Calles</string>
-  <string name="mapbox_light">Mapbox Claro</string>
-  <string name="mapbox_dark">Mapbox Oscuro</string>
-  <string name="mapbox_satellite">Mapbox Satélite</string>
-  <string name="mapbox_satellite_streets">Mapbox Satelite y Calles</string>
-  <string name="mapbox_outdoors">Mapbox Exteriores</string>
   <string name="save_point">Guardar Ubicación</string>
   <string name="get_point">Buscar Ubicación</string>
   <string name="geopoint_view_read_only">Ver Ubicación</string>
@@ -522,7 +508,6 @@
   <string name="wifi_autosend">Solo con WIFI</string>
   <string name="cellular_autosend">Solo con Datos Móviles</string>
   <string name="wifi_cellular_autosend">Wifi o Datos Móviles</string>
-  <string name="map_basemap_behavior_title">Mapa Base</string>
   <string name="form_management_preferences">Manejo de formularios</string>
   <string name="form_submission_category">Enviar formulario</string>
   <string name="form_filling_category">Llenado de Formularios</string>

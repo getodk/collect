@@ -307,11 +307,6 @@
   <string name="leave_a_review">Laissez un avis sur Play Store</string>
   <string name="leave_a_review_msg">Votre avis (ce qu\'on espère est positif) augmente la visibilité de l\'application dans le Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">Moteur cartographique - SDK</string>
-  <string name="map_sdk_behavior">Moteur cartographique - SDK</string>
-  <string name="google_maps_sdk">Google Maps SDK</string>
-  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
-  <string name="show_map_sdk">Options fond de carte SDK</string>
   <string name="openmap_streets">OSM Streets</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">USGS Carte nationale hybride</string>
@@ -323,8 +318,6 @@
   <string name="terrain">Terrain</string>
   <string name="hybrid">Hybride</string>
   <string name="satellite">Satellite</string>
-  <string name="map_basemap_selector_title">Fonds de carte</string>
-  <string name="show_map_basemap">Voir les options du fond de carte</string>
   <string name="save_point">Enregistrer le PointGéo</string>
   <string name="get_point">Démarrer le PointGéo</string>
   <string name="geopoint_view_read_only">Voir le PointGéo</string>
@@ -513,7 +506,6 @@
   <string name="wifi_autosend">Seulement Wifi</string>
   <string name="cellular_autosend">Seulement Cellulaire</string>
   <string name="wifi_cellular_autosend">Wifi ou Cellulaire</string>
-  <string name="map_basemap_behavior_title">Fonds de carte</string>
   <string name="form_management_preferences">Gestion de formulaire</string>
   <string name="form_submission_category">Soumission de formulaire</string>
   <string name="form_filling_category">Remplissage de formulaire</string>

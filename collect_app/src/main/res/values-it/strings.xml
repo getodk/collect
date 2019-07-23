@@ -306,11 +306,6 @@
   <string name="leave_a_review">Lascia un commento su Play Store</string>
   <string name="leave_a_review_msg">Il tuo commento (speriamo positivo) aumenta la visibilità dell\'applicazione su Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">Mappatura SDK</string>
-  <string name="map_sdk_behavior">Mappatura SDK</string>
-  <string name="google_maps_sdk">Google Maps SDK</string>
-  <string name="openstreetmap_sdk">SDK OpenStreetMap</string>
-  <string name="show_map_sdk">Mostra Opzioni per mappa SDK</string>
   <string name="openmap_streets">Strade OSM</string>
   <string name="openmap_usgs_topo">Mappa Topologia Nazionale USGS</string>
   <string name="openmap_usgs_sat">Mappa Ibrida Nazionale USGS</string>
@@ -322,8 +317,6 @@
   <string name="terrain">Terrain - Territoriale</string>
   <string name="hybrid">Hybrid - Ibrida</string>
   <string name="satellite">Satellite - Satellitare</string>
-  <string name="map_basemap_selector_title">Mappe base</string>
-  <string name="show_map_basemap">Mostra opzioni mappa base</string>
   <string name="save_point">Salva Geo-punto</string>
   <string name="get_point">Inizia Geo-punto</string>
   <string name="geopoint_view_read_only">Guarda Geo-punto</string>
@@ -500,7 +493,6 @@
   <string name="wifi_autosend">Solo WiFi</string>
   <string name="cellular_autosend">Solo cellulare</string>
   <string name="wifi_cellular_autosend">WiFi o cellulare</string>
-  <string name="map_basemap_behavior_title">Mappa Base</string>
   <string name="form_management_preferences">Gestione modulo</string>
   <string name="form_submission_category">Sottomissione modulo</string>
   <string name="form_filling_category">Riempimento modulo</string>

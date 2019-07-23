@@ -305,11 +305,6 @@
   <string name="leave_a_review">Berikan ulasan di Play Store</string>
   <string name="leave_a_review_msg">Ulasan anda (semoga positif) dapat mempromosikan aplikasi ODK di Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">SDK Pemetaan</string>
-  <string name="map_sdk_behavior">Pemetaan SDK</string>
-  <string name="google_maps_sdk">Google Maps SDK</string>
-  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
-  <string name="show_map_sdk">Tampilkan opsi SDK Peta </string>
   <string name="openmap_streets">OSM dengan layer jalan</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">Peta Nasional Gabungan USGS</string>
@@ -321,8 +316,6 @@
   <string name="terrain">Lahan</string>
   <string name="hybrid">Hibrida</string>
   <string name="satellite">Satelit</string>
-  <string name="map_basemap_selector_title">Peta dasar</string>
-  <string name="show_map_basemap">Tampilkan opsi peta dasar</string>
   <string name="save_point">Simpan GeoPoint</string>
   <string name="get_point">Mulai GeoPoint</string>
   <string name="geopoint_view_read_only">Tampilkan GeoPoint</string>
@@ -480,7 +473,6 @@
   <string name="wifi_autosend">Hanya Wifi</string>
   <string name="cellular_autosend">Hanya Selular</string>
   <string name="wifi_cellular_autosend">Wifi atau selular</string>
-  <string name="map_basemap_behavior_title">Peta dasar</string>
   <string name="form_management_preferences">Manajemen Formulir</string>
   <string name="form_submission_category">Pengiriman Formulir</string>
   <string name="form_filling_category">Mengisi Formulir</string>

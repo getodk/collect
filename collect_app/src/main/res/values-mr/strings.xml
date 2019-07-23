@@ -275,11 +275,6 @@
   <string name="google_play_services_error_occured">गूगल नकाशे मध्ये प्रवेश करण्यात अक्षम. गूगल प्ले सेवा स्थापित केली आहे का?</string>
   <string name="about_preferences">विषयी</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">मॅपिंग एसडीके</string>
-  <string name="map_sdk_behavior">मॅपिंग एसडीके</string>
-  <string name="google_maps_sdk">गूगल नकाशे एसडीके</string>
-  <string name="openstreetmap_sdk">ओपन स्ट्रीट नकाशा एसडीके.</string>
-  <string name="show_map_sdk">नकाशा एसडीके पर्याय दर्शवा</string>
   <string name="openmap_streets">ओपन स्ट्रीट नकाशा रस्ते</string>
   <string name="openmap_usgs_topo">यूएसजीएस राष्ट्रीय नकाशा टोपो</string>
   <string name="openmap_stamen_terrain">स्टेमेन टेरेइन</string>
@@ -289,8 +284,6 @@
   <string name="terrain">भूप्रदेश</string>
   <string name="hybrid">संकरित</string>
   <string name="satellite">उपग्रह</string>
-  <string name="map_basemap_selector_title">बेसमॅप्स</string>
-  <string name="show_map_basemap">बेसमॅप पर्याय दर्शवा</string>
   <string name="save_point">जिओ पॉईंट जतन करा</string>
   <string name="get_point">जिओ पॉईंट प्रारंभ करा</string>
   <string name="geopoint_view_read_only">जिओ पॉईंट पहा</string>
@@ -430,7 +423,6 @@
   <string name="wifi_autosend">केवळ Wifi</string>
   <string name="cellular_autosend">केवळ सेल्यूलर</string>
   <string name="wifi_cellular_autosend">वायफाय किंवा सेल्यूलर</string>
-  <string name="map_basemap_behavior_title">बेसमॅप</string>
   <string name="form_management_preferences">फॉर्म व्यवस्थापन</string>
   <string name="form_submission_category">फॉर्म सबमिशन</string>
   <string name="form_filling_category">फॉर्म भरणे</string>

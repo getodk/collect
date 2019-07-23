@@ -295,11 +295,6 @@
   <string name="leave_a_review">ទុកមតិនៅក្នុងហាង Play</string>
   <string name="leave_a_review_msg">ការ​ផ្តល់​មតិ​ (សង្ឃឹមថាជាវិជ្ជមាន) របស់​អ្នក​បង្កើន​ភាព​មើល​ឃើញ​នៃ​កម្មវិធី​នៅ​ក្នុង Play Store ។</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">ផែនទី SDK</string>
-  <string name="map_sdk_behavior">ផែនទី SDK</string>
-  <string name="google_maps_sdk">ផែនទី Google SDK</string>
-  <string name="openstreetmap_sdk">ផែនទី​ OpenStreetMap SDK</string>
-  <string name="show_map_sdk">បង្ហាញ​ជម្រើស​ផែនទី​ SDK</string>
   <string name="openmap_streets">ផ្លូវ OSM</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">ផែនទីជាតិ Hybrid USGS </string>
@@ -311,8 +306,6 @@
   <string name="terrain">លក្ខណៈភូមិសាស្ត្រ</string>
   <string name="hybrid">ផែនទីកូនកាត់</string>
   <string name="satellite">ផ្កាយរណប</string>
-  <string name="map_basemap_selector_title">មូលដ្ឋានផែនទី</string>
-  <string name="show_map_basemap">បង្ហាញជម្រើសផែនទីមូលដ្ឋាន</string>
   <string name="save_point">រក្សា GeoPoint</string>
   <string name="get_point">ចាប់ផ្តើម GeoPoint</string>
   <string name="geopoint_view_read_only">មើល GeoPoint</string>
@@ -469,7 +462,6 @@
   <string name="wifi_autosend">តែ Wifi ប៉ុណ្ណោះ</string>
   <string name="cellular_autosend">តែ Cellular ប៉ុណ្ណោះ</string>
   <string name="wifi_cellular_autosend">Wifi ឬ Cellular</string>
-  <string name="map_basemap_behavior_title">ផែនទីមូលដ្ឋាន</string>
   <string name="form_management_preferences">ការគ្រប់គ្រងទម្រង់</string>
   <string name="form_submission_category">ការដាក់ស្នើរទម្រង់</string>
   <string name="form_filling_category">ការបំពេញទម្រង់</string>

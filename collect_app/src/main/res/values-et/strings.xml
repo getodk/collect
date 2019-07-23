@@ -267,11 +267,6 @@
   <string name="google_play_services_error_occured">Puudub ligipääs Google Maps-ile. Veenduge, et Google Play teenused on paigaldatud.</string>
   <string name="about_preferences">Teave</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">Kaardistus SDK</string>
-  <string name="map_sdk_behavior">Kaardistus SDK</string>
-  <string name="google_maps_sdk">Google Maps SDK</string>
-  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
-  <string name="show_map_sdk">Näita Map SDK valikuid</string>
   <string name="openmap_streets">OSM Streets</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
@@ -281,8 +276,6 @@
   <string name="terrain">Maastik</string>
   <string name="hybrid">Hübriid</string>
   <string name="satellite">Satelliit</string>
-  <string name="map_basemap_selector_title">Aluskaardid</string>
-  <string name="show_map_basemap">Näita aluskaardi valikuid</string>
   <string name="save_point">Salvesta asukohapunkt</string>
   <string name="get_point">Loo asukohapunkt</string>
   <string name="geopoint_view_read_only">Vaata asukohapunkti</string>

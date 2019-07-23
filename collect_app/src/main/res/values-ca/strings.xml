@@ -268,17 +268,11 @@
   <string name="google_play_services_error_occured">No pot accedir a Google Maps. Teniu el servei instal·lat ?</string>
   <string name="about_preferences">Sobre</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">Mapejant SDK</string>
-  <string name="map_sdk_behavior">Mapejant SDK</string>
-  <string name="google_maps_sdk">Google Maps SDK</string>
-  <string name="show_map_sdk">Veure Map SDK Options</string>
   <string name="openmap_streets">Carrers OSM</string>
   <string name="streets">Carrers</string>
   <string name="terrain">Terreny</string>
   <string name="hybrid">Híbrid</string>
   <string name="satellite">Satel·lit</string>
-  <string name="map_basemap_selector_title">Mapes base</string>
-  <string name="show_map_basemap">Veure opcions de mapa base</string>
   <string name="save_point">Desar posició gps</string>
   <string name="get_point">Comença localització gps</string>
   <string name="geopoint_view_read_only">Veure localització gps</string>

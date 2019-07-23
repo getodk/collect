@@ -301,11 +301,6 @@
   <string name="leave_a_review">پلے اسٹور پر رائے دیجیے</string>
   <string name="leave_a_review_msg">آپ ( امید ہے مثبت) کی رائے سے پلے اسٹورمیں اپپ کی نمائش میں اضافہ ہوتا ہے </string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title"> ایس ڈی کے میپنگ</string>
-  <string name="map_sdk_behavior"> ایس ڈی کے میپنگ</string>
-  <string name="google_maps_sdk">گوگل میپس ایس ڈی کے </string>
-  <string name="openstreetmap_sdk">اوپن سٹریٹ میپ ایس ڈی کے </string>
-  <string name="show_map_sdk">میپ ایس ڈی کے آپشنز دکھائیں</string>
   <string name="openmap_streets">او ایس ایم سٹریٹ </string>
   <string name="openmap_usgs_topo">یو ایس جی ایس نیشنل میپ ٹوپو </string>
   <string name="openmap_usgs_sat">یو ایس جی ایس نیشنل میپ ہائبرڈ </string>
@@ -317,8 +312,6 @@
   <string name="terrain">ٹیرین</string>
   <string name="hybrid">ہائبرڈ</string>
   <string name="satellite">سیٹیلائٹ</string>
-  <string name="map_basemap_selector_title">بیس میپس</string>
-  <string name="show_map_basemap">بیس میپ آپشنزدکھائیں</string>
   <string name="save_point">جیو پوائنٹ محفوظ کریں</string>
   <string name="get_point">جیو پوائنٹ شروع کریں</string>
   <string name="geopoint_view_read_only">جیوپوائنٹ دیکھیں</string>
@@ -476,7 +469,6 @@
   <string name="wifi_autosend">صرف وائی فائی </string>
   <string name="cellular_autosend">صرف سیلولر</string>
   <string name="wifi_cellular_autosend">وائی فائی یا سیلولر</string>
-  <string name="map_basemap_behavior_title">بیس میپ</string>
   <string name="form_management_preferences">فارم مینجمنٹ</string>
   <string name="form_submission_category">فارم سبمیشن</string>
   <string name="form_filling_category">فارم فلنگ</string>

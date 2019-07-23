@@ -307,11 +307,6 @@
   <string name="leave_a_review">اترك تعليق في Play Store</string>
   <string name="leave_a_review_msg">رأيك (نأمل إيجابيا) يزيد من رؤية التطبيق في Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">خدمة الخريطة</string>
-  <string name="map_sdk_behavior">الخريطة</string>
-  <string name="google_maps_sdk">خريطة جوجل</string>
-  <string name="openstreetmap_sdk">خريطة OpenStreet</string>
-  <string name="show_map_sdk">عرض خيارات الخريطة</string>
   <string name="openmap_streets">اخريطة لطرق</string>
   <string name="openmap_usgs_topo">خرطة البنية</string>
   <string name="openmap_usgs_sat">خريطة وطنية هجين USGS</string>
@@ -323,8 +318,6 @@
   <string name="terrain">التضاريس</string>
   <string name="hybrid">الكل</string>
   <string name="satellite">اقمار اصطناعية</string>
-  <string name="map_basemap_selector_title">الخريطة</string>
-  <string name="show_map_basemap">عرض خيارات الخريطة</string>
   <string name="save_point">حفظ GeoPint</string>
   <string name="get_point">تشغيل GeoPoint</string>
   <string name="geopoint_view_read_only">عرض نقاط الخريطة</string>
@@ -526,7 +519,6 @@
   <string name="wifi_autosend">ارسال تلقائي عبر Wifi</string>
   <string name="cellular_autosend">ارسال تلقائي عبر شبكة الاتصال</string>
   <string name="wifi_cellular_autosend">ارسال تلقائي عبر Wifi و شبكة الاتصال</string>
-  <string name="map_basemap_behavior_title">الخريطة</string>
   <string name="form_management_preferences">إعدادات ادارة الاستمارة</string>
   <string name="form_submission_category">ارسال الاستماراة</string>
   <string name="form_filling_category">تعبئة الاستمارة</string>

@@ -295,11 +295,6 @@ Escolher Imagem</string>
   <string name="leave_a_review">Deixe um opinião sua na Play Store</string>
   <string name="leave_a_review_msg">A sua opinião (possivelmente positiva) aumenta a visibilidade da App na Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">Cartografia SDK</string>
-  <string name="map_sdk_behavior">Cartografia SDK</string>
-  <string name="google_maps_sdk">Google Maps SDK</string>
-  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
-  <string name="show_map_sdk">Opções SDK de Mostrar Mapa</string>
   <string name="openmap_streets">Ruas OSM</string>
   <string name="openmap_usgs_topo">Mapa Topográfico Nacional USGS</string>
   <string name="openmap_usgs_sat">Mapa Híbrido Nacional USGS</string>
@@ -308,8 +303,6 @@ Escolher Imagem</string>
   <string name="terrain">Terreno</string>
   <string name="hybrid">Hibrido</string>
   <string name="satellite">Satélite</string>
-  <string name="map_basemap_selector_title">Mapa base</string>
-  <string name="show_map_basemap">Mostra Opções Mapa Base</string>
   <string name="save_point">Salva GeoPoint</string>
   <string name="get_point">Inicia GeoPoint</string>
   <string name="geopoint_view_read_only">Visualiza GeoPoint</string>
@@ -466,7 +459,6 @@ Escolher Imagem</string>
   <string name="wifi_autosend">Somente wifi</string>
   <string name="cellular_autosend">Somente celular</string>
   <string name="wifi_cellular_autosend">Wifi ou celular</string>
-  <string name="map_basemap_behavior_title">Mapa base</string>
   <string name="form_management_preferences">Gestão de formulários</string>
   <string name="form_submission_category">Envio de formulários</string>
   <string name="form_filling_category">Preenchimento de formulários</string>

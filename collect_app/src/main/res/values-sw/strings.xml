@@ -301,11 +301,6 @@
   <string name="leave_a_review">Acha tathmini katika Play Store</string>
   <string name="leave_a_review_msg">Tathmini yako (tunatumaini itakuwa chanya) inaongeza nafasi ya programu hii kuonekana Pay Store</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">Ramani SDK</string>
-  <string name="map_sdk_behavior">Ramani SDK</string>
-  <string name="google_maps_sdk">Ramani za Google SDK</string>
-  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
-  <string name="show_map_sdk">Onyesha chaguzi za ramani SDK</string>
   <string name="openmap_streets">Mitaa iliyopo kwenye OSM</string>
   <string name="openmap_usgs_topo">USGS ramani za kitaifa za topo</string>
   <string name="openmap_usgs_sat">USGS National Map Hybrid</string>
@@ -317,8 +312,6 @@
   <string name="terrain">Ardhi ya eneo</string>
   <string name="hybrid">Mseto</string>
   <string name="satellite">Satelaiti</string>
-  <string name="map_basemap_selector_title">Ramani za msingi</string>
-  <string name="show_map_basemap">Onyesha chaguzi za ramani za msingi</string>
   <string name="save_point">Hifadhi geopoint</string>
   <string name="get_point">Anza geopoint</string>
   <string name="geopoint_view_read_only">Tazama geopoint</string>
@@ -476,7 +469,6 @@
   <string name="wifi_autosend">Wifi tu</string>
   <string name="cellular_autosend">Simu tu</string>
   <string name="wifi_cellular_autosend">Wifi au simu</string>
-  <string name="map_basemap_behavior_title">Ramani msingi</string>
   <string name="form_management_preferences">Usimamizi wa fomu</string>
   <string name="form_submission_category">Uwasilishaji wa fomu</string>
   <string name="form_filling_category">Ujazaji wa fomu</string>
