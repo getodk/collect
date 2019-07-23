@@ -127,11 +127,11 @@ public class OsmMapFragment extends Fragment implements MapFragment,
 
     @Override public void onStart() {
         super.onStart();
-        MapConfigurator.onMapFragmentStart(this);
+        MapProvider.onMapFragmentStart(this);
     }
 
     @Override public void onStop() {
-        MapConfigurator.onMapFragmentStop(this);
+        MapProvider.onMapFragmentStop(this);
         super.onStop();
     }
 

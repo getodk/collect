@@ -28,7 +28,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.map.MapConfigurator;
+import org.odk.collect.android.map.MapProvider;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
@@ -71,13 +71,13 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
 
     private void startGeoTraceActivity() {
         Context context = getContext();
-        if (MapConfigurator.getCurrentSource(context).isAvailable(context)) {
+        if (MapProvider.getCurrentSource(context).isAvailable(context)) {
             Intent intent = new Intent(context, GeoPolyActivity.class)
                 .putExtra(GeoPolyActivity.ANSWER_KEY, answerDisplay.getText().toString())
                 .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOTRACE);
             ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOTRACE_CAPTURE);
         } else {
-            MapConfigurator.getCurrentSource(context).showUnavailableMessage(context);
+            MapProvider.getCurrentSource(context).showUnavailableMessage(context);
         }
     }
 

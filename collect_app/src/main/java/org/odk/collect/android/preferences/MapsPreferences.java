@@ -24,8 +24,8 @@ import android.view.View;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.map.BaseLayerSource;
 import org.odk.collect.android.map.MapConfigurator;
+import org.odk.collect.android.map.MapProvider;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
@@ -105,7 +105,7 @@ public class MapsPreferences extends BasePreferenceFragment {
     private void initBaseLayerSourcePref() {
         baseLayerSourcePref = PrefUtils.createListPref(
             context, KEY_BASE_LAYER_SOURCE, R.string.base_layer_source,
-            MapConfigurator.getLabelIds(), MapConfigurator.getIds()
+            MapProvider.getLabelIds(), MapProvider.getIds()
         );
         onBaseLayerSourceChanged(null);
         baseLayerSourcePref.setOnPreferenceChangeListener((pref, value) -> {
@@ -136,7 +136,7 @@ public class MapsPreferences extends BasePreferenceFragment {
             if (value == null) {
                 summary = getString(R.string.none);
             } else {
-                BaseLayerSource source = MapConfigurator.getCurrentSource(context);
+                MapConfigurator source = MapProvider.getCurrentSource(context);
                 summary = source.getDisplayName(new File(value.toString()));
             }
             referenceLayerPref.setSummary(summary);
@@ -145,8 +145,8 @@ public class MapsPreferences extends BasePreferenceFragment {
 
     /** Updates the rest of the preference UI when the Base Layer Source is changed. */
     private void onBaseLayerSourceChanged(String id) {
-        BaseLayerSource source = id != null ? MapConfigurator.get(id).source :
-            MapConfigurator.getCurrentSource(context);
+        MapConfigurator source = id != null ? MapProvider.get(id).source :
+            MapProvider.getCurrentSource(context);
         if (source != null) {
             // Set up the preferences in the "Base Layer" section.
             PreferenceCategory baseCategory = (PreferenceCategory) findPreference(CATEGORY_BASE_LAYER);
@@ -173,8 +173,8 @@ public class MapsPreferences extends BasePreferenceFragment {
 
     /** Sets up the contents of the reference layer selection dialog. */
     private void populateReferenceLayerPref() {
-        MapConfigurator.Option option = MapConfigurator.getCurrentOption(context);
-        BaseLayerSource source = MapConfigurator.getCurrentSource(context);
+        MapProvider.Option option = MapProvider.getCurrentOption(context);
+        MapConfigurator source = MapProvider.getCurrentSource(context);
 
         List<File> files = getSupportedLayerFiles(option.source);
         String[] values = new String[files.size() + 1];
@@ -199,8 +199,8 @@ public class MapsPreferences extends BasePreferenceFragment {
         referenceLayerPref.updateContent();
     }
 
-    /** Gets the list of layer data files supported by the current BaseLayerSource. */
-    private static List<File> getSupportedLayerFiles(BaseLayerSource source) {
+    /** Gets the list of layer data files supported by the current MapConfigurator. */
+    private static List<File> getSupportedLayerFiles(MapConfigurator source) {
         List<File> files = new ArrayList<>();
         for (File file : FileUtils.walk(new File(Collect.OFFLINE_LAYERS))) {
             if (source.supportsLayer(file)) {

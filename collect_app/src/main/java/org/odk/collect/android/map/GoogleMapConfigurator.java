@@ -26,7 +26,7 @@ import java.util.WeakHashMap;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_GOOGLE_MAP_STYLE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 
-public class GoogleBaseLayerSource implements BaseLayerSource {
+public class GoogleMapConfigurator implements MapConfigurator {
     // We must hold on to the listener or it will be garbage-collected.
     // See SharedPreferences.registerOnSharedPreferenceChangeListener().
     protected Map<MapFragment, OnSharedPreferenceChangeListener> prefListenersByMap = new WeakHashMap<>();

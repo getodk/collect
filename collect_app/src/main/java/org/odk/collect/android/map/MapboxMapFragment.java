@@ -122,7 +122,7 @@ public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFrag
         @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         Context context = getContext();
         if (MapboxUtils.initMapbox() == null) {
-            MapConfigurator.getCurrentSource(context).showUnavailableMessage(context);
+            MapProvider.getCurrentSource(context).showUnavailableMessage(context);
             if (errorListener != null) {
                 errorListener.onError();
             }
@@ -175,11 +175,11 @@ public class MapboxMapFragment extends org.odk.collect.android.mapboxsdk.MapFrag
 
     @Override public void onStart() {
         super.onStart();
-        MapConfigurator.onMapFragmentStart(this);
+        MapProvider.onMapFragmentStart(this);
     }
 
     @Override public void onStop() {
-        MapConfigurator.onMapFragmentStop(this);
+        MapProvider.onMapFragmentStop(this);
         super.onStop();
     }
 

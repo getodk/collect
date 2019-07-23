@@ -29,7 +29,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.map.MapConfigurator;
+import org.odk.collect.android.map.MapProvider;
 import org.odk.collect.android.map.MapFragment;
 import org.odk.collect.android.map.MapPoint;
 import org.odk.collect.android.preferences.MapsPreferences;
@@ -134,7 +134,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
         setContentView(R.layout.geopoly_layout);
 
         Context context = getApplicationContext();
-        MapConfigurator.createMapFragment(context)
+        MapProvider.createMapFragment(context)
             .addTo(this, R.id.map_container, this::initMap, this::finish);
     }
 

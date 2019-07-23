@@ -29,7 +29,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.map.MapConfigurator;
+import org.odk.collect.android.map.MapProvider;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.text.DecimalFormat;
@@ -76,7 +76,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
 
         // Determine whether to use the map and whether the point should be draggable.
         useMap = false;
-        if (MapConfigurator.getCurrentSource(context).isAvailable(context)) {
+        if (MapProvider.getCurrentSource(context).isAvailable(context)) {
             if (hasAppearance(prompt, PLACEMENT_MAP)) {
                 draggable = true;
                 useMap = true;

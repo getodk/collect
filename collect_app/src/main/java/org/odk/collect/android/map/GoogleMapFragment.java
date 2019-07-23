@@ -141,11 +141,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public void onStart() {
         super.onStart();
-        MapConfigurator.onMapFragmentStart(this);
+        MapProvider.onMapFragmentStart(this);
     }
 
     @Override public void onStop() {
-        MapConfigurator.onMapFragmentStop(this);
+        MapProvider.onMapFragmentStop(this);
         super.onStop();
     }
 

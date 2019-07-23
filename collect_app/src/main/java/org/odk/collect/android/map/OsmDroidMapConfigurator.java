@@ -16,7 +16,7 @@ import java.util.List;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 
-public class WmsBaseLayerSource implements BaseLayerSource {
+public class OsmDroidMapConfigurator implements MapConfigurator {
     private final String prefKey;
     private final int prefTitleId;
     private final WmsOption[] options;
@@ -26,7 +26,7 @@ public class WmsBaseLayerSource implements BaseLayerSource {
     private SharedPreferences.OnSharedPreferenceChangeListener listener;
 
     /** Constructs a base layer source that renders just one Web Map Service. */
-    public WmsBaseLayerSource(WebMapService service) {
+    public OsmDroidMapConfigurator(WebMapService service) {
         prefKey = "";
         prefTitleId = 0;
         options = new WmsOption[] {new WmsOption("", 0, service)};
@@ -36,7 +36,7 @@ public class WmsBaseLayerSource implements BaseLayerSource {
      * Constructs a base layer source that offers a few Web Map Services to choose from.
      * The choice of which Web Map Service will be stored in a string preference.
      */
-    public WmsBaseLayerSource(String prefKey, int prefTitleId, WmsOption... options) {
+    public OsmDroidMapConfigurator(String prefKey, int prefTitleId, WmsOption... options) {
         this.prefKey = prefKey;
         this.prefTitleId = prefTitleId;
         this.options = options;

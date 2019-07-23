@@ -24,7 +24,7 @@ import java.util.WeakHashMap;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_MAP_STYLE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 
-public class MapboxBaseLayerSource implements BaseLayerSource {
+public class MapboxMapConfigurator implements MapConfigurator {
     protected Map<MapFragment, OnSharedPreferenceChangeListener> prefListenersByMap = new WeakHashMap<>();
 
     @Override public boolean isAvailable(Context context) {
