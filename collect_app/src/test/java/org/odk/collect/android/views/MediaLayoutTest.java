@@ -94,7 +94,7 @@ public class MediaLayoutTest {
         if (new Random().nextBoolean()) {
             stubReferenceManager();
         } else {
-            when(referenceManager.DeriveReference(RANDOM_URI)).thenThrow(InvalidReferenceException.class);
+            when(referenceManager.deriveReference(RANDOM_URI)).thenThrow(InvalidReferenceException.class);
         }
     }
 
@@ -126,7 +126,7 @@ public class MediaLayoutTest {
     private void stubReferenceManager() throws InvalidReferenceException {
         isReferenceManagerStubbed = true;
 
-        doReturn(reference).when(referenceManager).DeriveReference(RANDOM_URI);
+        doReturn(reference).when(referenceManager).deriveReference(RANDOM_URI);
         doReturn(RANDOM_URI).when(reference).getLocalURI();
     }
 

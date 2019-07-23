@@ -32,9 +32,10 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.LiveData;
 
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
@@ -73,9 +74,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     @BindView(R.id.missingImage)
     TextView missingImage;
 
-    @BindView(R.id.divider)
-    ImageView divider;
-
     @BindView(R.id.select_container)
     FrameLayout flContainer;
 
@@ -104,19 +102,12 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
 
     public void playAudio() {
         if (audioPlayListener != null) {
-            audioPlayListener.resetQuestionTextColor();
             audioPlayListener.resetAudioButtonImage();
         }
 
         // have to call toString() to remove the html formatting
         // (it's a spanned thing...)
         viewText.setText(viewText.getText().toString());
-
-        if (player.isPlaying()) {
-            viewText.setTextColor(playTextColor);
-        } else {
-            resetTextFormatting();
-        }
 
         player.setOnCompletionListener(mediaPlayer -> {
             resetTextFormatting();
@@ -147,7 +138,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     public void playVideo() {
         String videoFilename = "";
         try {
-            videoFilename = referenceManager.DeriveReference(videoURI).getLocalURI();
+            videoFilename = referenceManager.deriveReference(videoURI).getLocalURI();
         } catch (InvalidReferenceException e) {
             Timber.e(e, "Invalid reference exception due to %s ", e.getMessage());
         }
@@ -186,59 +177,17 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
 
         // Setup audio button
         if (audioURI != null) {
-            audioButton.setVisibility(VISIBLE);
-
-            String uri = null;
-            try {
-                uri = this.referenceManager.DeriveReference(audioURI).getLocalURI();
-            } catch (InvalidReferenceException e) {
-                Timber.e(e);
-            }
-
-            AudioButtons.setAudio(audioButton, uri, (AppCompatActivity) getContext(), MediaPlayer::new);
+            setupAudioButton(audioURI, referenceManager);
         }
 
         // Setup video button
         if (videoURI != null) {
-            videoButton.setVisibility(VISIBLE);
-            Bitmap b = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_media_play);
-            videoButton.setImageBitmap(b);
-            videoButton.setOnClickListener(this);
+            setupVideoButton();
         }
 
         // Setup image view
-        String errorMsg = null;
         if (imageURI != null) {
-            try {
-                String imageFilename = this.referenceManager.DeriveReference(imageURI).getLocalURI();
-                final File imageFile = new File(imageFilename);
-                if (imageFile.exists()) {
-                    DisplayMetrics metrics = getResources().getDisplayMetrics();
-                    int screenWidth = metrics.widthPixels;
-                    int screenHeight = metrics.heightPixels;
-                    Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
-                    if (b != null) {
-                        imageView.setVisibility(VISIBLE);
-                        imageView.setImageBitmap(b);
-                        imageView.setOnClickListener(this);
-                    } else {
-                        // Loading the image failed, so it's likely a bad file.
-                        errorMsg = getContext().getString(R.string.file_invalid, imageFile);
-                    }
-                } else {
-                    // We should have an image, but the file doesn't exist.
-                    errorMsg = getContext().getString(R.string.file_missing, imageFile);
-                }
-
-                if (errorMsg != null) {
-                    // errorMsg is only set when an error has occurred
-                    Timber.e(errorMsg);
-                    missingImage.setVisibility(VISIBLE);
-                    missingImage.setText(errorMsg);
-                }
-            } catch (InvalidReferenceException e) {
-                Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
-            }
+            setupBigImage(imageURI);
         }
 
         flContainer.removeAllViews();
@@ -306,7 +255,66 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         audioPlayListener = listener;
     }
 
-    public void addDivider() {
-        divider.setVisibility(VISIBLE);
+    private void setupBigImage(String imageURI) {
+        String errorMsg = null;
+
+        try {
+            String imageFilename = this.referenceManager.deriveReference(imageURI).getLocalURI();
+            final File imageFile = new File(imageFilename);
+            if (imageFile.exists()) {
+                DisplayMetrics metrics = getResources().getDisplayMetrics();
+                int screenWidth = metrics.widthPixels;
+                int screenHeight = metrics.heightPixels;
+                Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
+                if (b != null) {
+                    imageView.setVisibility(VISIBLE);
+                    imageView.setImageBitmap(b);
+                    imageView.setOnClickListener(this);
+                } else {
+                    // Loading the image failed, so it's likely a bad file.
+                    errorMsg = getContext().getString(R.string.file_invalid, imageFile);
+                }
+            } else {
+                // We should have an image, but the file doesn't exist.
+                errorMsg = getContext().getString(R.string.file_missing, imageFile);
+            }
+
+            if (errorMsg != null) {
+                // errorMsg is only set when an error has occurred
+                Timber.e(errorMsg);
+                missingImage.setVisibility(VISIBLE);
+                missingImage.setText(errorMsg);
+            }
+        } catch (InvalidReferenceException e) {
+            Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
+        }
+    }
+
+    private void setupVideoButton() {
+        videoButton.setVisibility(VISIBLE);
+        Bitmap b = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_media_play);
+        videoButton.setImageBitmap(b);
+        videoButton.setOnClickListener(this);
+    }
+
+    private void setupAudioButton(String audioURI, ReferenceManager referenceManager) {
+        audioButton.setVisibility(VISIBLE);
+
+        String uri = null;
+        try {
+            uri = referenceManager.deriveReference(audioURI).getLocalURI();
+        } catch (InvalidReferenceException e) {
+            Timber.e(e);
+        }
+
+        FragmentActivity activity = (FragmentActivity) getContext();
+        LiveData<Boolean> isPlayingLiveData = AudioButtons.setAudio(audioButton, uri, activity, MediaPlayer::new);
+        isPlayingLiveData.observe(activity, isPlaying -> {
+            if (isPlaying) {
+                viewText.setTextColor(playTextColor);
+            } else {
+                resetTextFormatting();
+            }
+        });
     }
 }

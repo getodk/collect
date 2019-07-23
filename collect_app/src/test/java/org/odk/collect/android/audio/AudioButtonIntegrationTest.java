@@ -3,9 +3,11 @@ package org.odk.collect.android.audio;
 import android.media.MediaPlayer;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.LiveData;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.support.LiveDataTester;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowMediaPlayer;
@@ -22,6 +24,7 @@ import static org.robolectric.Shadows.shadowOf;
 public class AudioButtonIntegrationTest {
 
     private final MediaPlayer mediaPlayer = new MediaPlayer();
+    private final LiveDataTester liveDataTester = new LiveDataTester();
 
     @Test
     public void canPlayAndStopAudio() throws Exception {
@@ -88,6 +91,27 @@ public class AudioButtonIntegrationTest {
 
         assertThat(getCreatedFromResId(button1), equalTo(android.R.drawable.ic_lock_silent_mode_off));
         assertThat(getCreatedFromResId(button2), equalTo(android.R.drawable.ic_media_pause));
+    }
+
+    @Test
+    public void setAudio_returnsIsPlayingStateForButton() throws Exception {
+        FragmentActivity activity = Robolectric.setupActivity(FragmentActivity.class);
+
+        String testFile1 = File.createTempFile("audio1", ".mp3").getAbsolutePath();
+        setupDataSource(testFile1);
+
+        AudioButton button1 = new AudioButton(activity);
+        LiveData<Boolean> isPlaying = liveDataTester.activate(AudioButtons.setAudio(button1, testFile1, activity, () -> mediaPlayer));
+
+        assertThat(isPlaying.getValue(), equalTo(false));
+
+        button1.performClick();
+
+        assertThat(isPlaying.getValue(), equalTo(true));
+
+        button1.performClick();
+
+        assertThat(isPlaying.getValue(), equalTo(false));
     }
 
     private DataSource setupDataSource(String testFile) {

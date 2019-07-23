@@ -2,12 +2,7 @@ package org.odk.collect.android.audio;
 
 import android.media.MediaPlayer;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LifecycleRegistry;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
+import org.odk.collect.android.support.LiveDataTester;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.ArrayList;
@@ -148,7 +144,7 @@ public class AudioPlayerViewModelTest {
 
     private static class RecordingMockMediaPlayerFactory implements MediaPlayerFactory {
 
-        public List<MediaPlayer> createdInstances = new ArrayList<>();
+        List<MediaPlayer> createdInstances = new ArrayList<>();
 
         @Override
         public MediaPlayer create() {
@@ -156,35 +152,6 @@ public class AudioPlayerViewModelTest {
             createdInstances.add(mock);
 
             return mock;
-        }
-    }
-
-    private static class LiveDataTester {
-
-        private final FakeLifecycleOwner owner = new FakeLifecycleOwner();
-
-        public <T> LiveData<T> activate(LiveData<T> liveData) {
-            liveData.observe(owner, (Observer<Object>) any -> { });
-            return liveData;
-        }
-
-        public void teardown() {
-            owner.lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
-        }
-    }
-
-    public static class FakeLifecycleOwner implements LifecycleOwner {
-
-        private final LifecycleRegistry lifecycle = new LifecycleRegistry(this);
-
-        FakeLifecycleOwner() {
-            lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
-        }
-
-        @NonNull
-        @Override
-        public Lifecycle getLifecycle() {
-            return lifecycle;
         }
     }
 }
