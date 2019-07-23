@@ -71,6 +71,25 @@ public class AudioButtonIntegrationTest {
         assertThat(getCreatedFromResId(button1), equalTo(android.R.drawable.ic_lock_silent_mode_off));
     }
 
+    @Test
+    public void whenTwoButtonsUseTheSameFile_andOneisPlayed_theyDontBothPlay() throws Exception {
+        FragmentActivity activity = Robolectric.setupActivity(FragmentActivity.class);
+
+        String testFile1 = File.createTempFile("audio1", ".mp3").getAbsolutePath();
+        setupDataSource(testFile1);
+
+        AudioButton button1 = new AudioButton(activity);
+        AudioButtons.setAudio(button1, testFile1, activity, () -> mediaPlayer);
+
+        AudioButton button2 = new AudioButton(activity);
+        AudioButtons.setAudio(button2, testFile1, activity, () -> mediaPlayer);
+
+        button2.performClick();
+
+        assertThat(getCreatedFromResId(button1), equalTo(android.R.drawable.ic_lock_silent_mode_off));
+        assertThat(getCreatedFromResId(button2), equalTo(android.R.drawable.ic_media_pause));
+    }
+
     private DataSource setupDataSource(String testFile) {
         DataSource dataSource = DataSource.toDataSource(testFile);
         ShadowMediaPlayer.addMediaInfo(dataSource, new ShadowMediaPlayer.MediaInfo());

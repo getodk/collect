@@ -47,42 +47,42 @@ public class AudioPlayerViewModelTest {
 
     @Test
     public void isPlaying_whenNothingPlaying_returnsFalse() {
-        LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("file://audio.mp3"));
+        LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
         assertThat(isPlaying.getValue(), is(false));
     }
 
     @Test
-    public void isPlaying_whenURIPlaying_returnsTrue() {
-        LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("file://audio.mp3"));
+    public void isPlaying_whenClipIDPlaying_returnsTrue() {
+        LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
-        viewModel.play("file://audio.mp3");
+        viewModel.play("clip1", "file://audio.mp3");
         assertThat(isPlaying.getValue(), is(true));
     }
 
     @Test
-    public void isPlaying_whenDifferentURIPlaying_returnsFalse() {
-        LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("file://audio.mp3"));
+    public void isPlaying_whenDifferentClipIDPlaying_returnsFalse() {
+        LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip2"));
 
-        viewModel.play("file://other.mp3");
+        viewModel.play("clip1", "file://other.mp3");
         assertThat(isPlaying.getValue(), is(false));
     }
 
     @Test
-    public void isPlaying_whenURIPlaying_thenPaused_returnsFalse() {
-        LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("file://audio.mp3"));
+    public void isPlaying_whenClipIDPlaying_thenStopped_returnsFalse() {
+        LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
-        viewModel.play("file://audio.mp3");
+        viewModel.play("clip1", "file://audio.mp3");
         viewModel.stop();
 
         assertThat(isPlaying.getValue(), is(false));
     }
 
     @Test
-    public void isPlaying_whenURIPlaying_thenCompleted_returnsFalse() {
-        final LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("file://audio.mp3"));
+    public void isPlaying_whenClipIDPlaying_thenCompleted_returnsFalse() {
+        final LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
-        viewModel.play("file://audio.mp3");
+        viewModel.play("clip1", "file://audio.mp3");
 
         ArgumentCaptor<MediaPlayer.OnCompletionListener> captor = ArgumentCaptor.forClass(MediaPlayer.OnCompletionListener.class);
         verify(mediaPlayer).setOnCompletionListener(captor.capture());
@@ -93,9 +93,9 @@ public class AudioPlayerViewModelTest {
 
     @Test
     public void isPlaying_whenPlayingAndThenBackgrounding_returnsFalse() {
-        LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("file://audio.mp3"));
+        LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
-        viewModel.play("file://audio.mp3");
+        viewModel.play("clip1", "file://audio.mp3");
         viewModel.background();
 
         assertThat(isPlaying.getValue(), is(false));
@@ -103,7 +103,7 @@ public class AudioPlayerViewModelTest {
 
     @Test
     public void play_resetsAndPreparesAndStartsMediaPlayer() throws Exception {
-        viewModel.play("file://audio.mp3");
+        viewModel.play("clip1", "file://audio.mp3");
 
         InOrder inOrder = Mockito.inOrder(mediaPlayer);
 
@@ -118,12 +118,12 @@ public class AudioPlayerViewModelTest {
         RecordingMockMediaPlayerFactory factory = new RecordingMockMediaPlayerFactory();
         AudioPlayerViewModel viewModel = new AudioPlayerViewModel(factory);
 
-        viewModel.play("file://audio.mp3");
+        viewModel.play("clip1", "file://audio.mp3");
         assertThat(factory.createdInstances.size(), equalTo(1));
         verify(factory.createdInstances.get(0)).start();
 
         viewModel.background();
-        viewModel.play("file://audio.mp3");
+        viewModel.play("clip1", "file://audio.mp3");
         assertThat(factory.createdInstances.size(), equalTo(2));
         verify(factory.createdInstances.get(1)).start();
     }

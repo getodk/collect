@@ -15,21 +15,21 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     private final MediaPlayerFactory mediaPlayerFactory;
     private MediaPlayer mediaPlayer;
 
-    private final MutableLiveData<String> playingURI = new MutableLiveData<>();
+    private final MutableLiveData<String> playingClipID = new MutableLiveData<>();
 
     AudioPlayerViewModel(MediaPlayerFactory mediaPlayerFactory) {
         this.mediaPlayerFactory = mediaPlayerFactory;
 
-        playingURI.setValue(null);
+        playingClipID.setValue(null);
     }
 
-    public void play(String uri) {
+    public void play(String clipID, String uri) {
         try {
             getMediaPlayer().reset();
             getMediaPlayer().setDataSource(uri);
             getMediaPlayer().prepare();
             getMediaPlayer().start();
-            playingURI.setValue(uri);
+            playingClipID.setValue(clipID);
         } catch (IOException ignored) {
             throw new RuntimeException();
         }
@@ -37,21 +37,21 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
 
     public void stop() {
         getMediaPlayer().stop();
-        playingURI.setValue(null);
+        playingClipID.setValue(null);
     }
 
-    public LiveData<Boolean> isPlaying(@NonNull String uri) {
-        return Transformations.map(playingURI, playingURI -> uri.equals(playingURI));
+    public LiveData<Boolean> isPlaying(@NonNull String clipID) {
+        return Transformations.map(playingClipID, clipID::equals);
     }
 
     public void background() {
         release();
-        playingURI.setValue(null);
+        playingClipID.setValue(null);
     }
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
-        playingURI.setValue(null);
+        playingClipID.setValue(null);
     }
 
     @Override
