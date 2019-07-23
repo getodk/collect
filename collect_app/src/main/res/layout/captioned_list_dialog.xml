@@ -32,7 +32,10 @@
         android:id="@+id/dialog_caption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:textAppearance="@android:style/TextAppearance.Medium"
         tools:text="This caption appears below all the items in the dialog."/>
 
