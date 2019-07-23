@@ -85,9 +85,9 @@ public class AudioButton extends AppCompatImageButton implements View.OnClickLis
     @Override
     public void onClick(View view) {
         if (playing) {
-            onPlayStopListener.onStop();
+            onPlayStopListener.onStopClicked();
         } else {
-            onPlayStopListener.onPlay();
+            onPlayStopListener.onPlayClicked();
         }
     }
 
@@ -139,8 +139,8 @@ public class AudioButton extends AppCompatImageButton implements View.OnClickLis
 
     public interface OnPlayStopListener {
 
-        void onPlay();
+        void onPlayClicked();
 
-        void onStop();
+        void onStopClicked();
     }
 }

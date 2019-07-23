@@ -27,12 +27,12 @@ public final class AudioButtons {
         }
 
         @Override
-        public void onPlay() {
+        public void onPlayClicked() {
             viewModel.play(uri);
         }
 
         @Override
-        public void onStop() {
+        public void onStopClicked() {
             viewModel.stop();
         }
     }
