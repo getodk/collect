@@ -23,13 +23,13 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYE
 
 class MapboxMapConfigurator implements MapConfigurator {
     private final String prefKey;
-    private final int prefTitleId;
+    private final int sourceLabelId;
     private final MapboxUrlOption[] options;
 
     /** Constructs a configurator with a few Mapbox style URL options to choose from. */
-    public MapboxMapConfigurator(String prefKey, int prefTitleId, MapboxUrlOption... options) {
+    public MapboxMapConfigurator(String prefKey, int sourceLabelId, MapboxUrlOption... options) {
         this.prefKey = prefKey;
-        this.prefTitleId = prefTitleId;
+        this.sourceLabelId = sourceLabelId;
         this.options = options;
     }
 
@@ -53,8 +53,10 @@ class MapboxMapConfigurator implements MapConfigurator {
             labelIds[i] = options[i].labelId;
             values[i] = options[i].url;
         }
+        String prefTitle = context.getString(
+            R.string.map_style_label, context.getString(sourceLabelId));
         return Collections.singletonList(PrefUtils.createListPref(
-            context, prefKey, prefTitleId, labelIds, values
+            context, prefKey, prefTitle, labelIds, values
         ));
     }
 

@@ -25,13 +25,13 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYE
 
 class GoogleMapConfigurator implements MapConfigurator {
     private final String prefKey;
-    private final int prefTitleId;
+    private final int sourceLabelId;
     private final GoogleMapTypeOption[] options;
 
     /** Constructs a configurator with a few Google map type options to choose from. */
-    public GoogleMapConfigurator(String prefKey, int prefTitleId, GoogleMapTypeOption... options) {
+    public GoogleMapConfigurator(String prefKey, int sourceLabelId, GoogleMapTypeOption... options) {
         this.prefKey = prefKey;
-        this.prefTitleId = prefTitleId;
+        this.sourceLabelId = sourceLabelId;
         this.options = options;
     }
 
@@ -70,8 +70,10 @@ class GoogleMapConfigurator implements MapConfigurator {
             labelIds[i] = options[i].labelId;
             values[i] = Integer.toString(options[i].mapType);
         }
+        String prefTitle = context.getString(
+            R.string.map_style_label, context.getString(sourceLabelId));
         return Collections.singletonList(PrefUtils.createListPref(
-            context, prefKey, prefTitleId, labelIds, values
+            context, prefKey, prefTitle, labelIds, values
         ));
     }
 

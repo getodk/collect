@@ -7,6 +7,7 @@ import android.preference.Preference;
 
 import com.google.common.collect.ImmutableSet;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.PrefUtils;
 
 import java.io.File;
@@ -18,13 +19,13 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYE
 
 class OsmDroidMapConfigurator implements MapConfigurator {
     private final String prefKey;
-    private final int prefTitleId;
+    private final int sourceLabelId;
     private final WmsOption[] options;
 
     /** Constructs a configurator that renders just one Web Map Service. */
     public OsmDroidMapConfigurator(WebMapService service) {
         prefKey = "";
-        prefTitleId = 0;
+        sourceLabelId = 0;
         options = new WmsOption[] {new WmsOption("", 0, service)};
     }
 
@@ -32,9 +33,9 @@ class OsmDroidMapConfigurator implements MapConfigurator {
      * Constructs a configurator that offers a few Web Map Services to choose from.
      * The choice of which Web Map Service will be stored in a string preference.
      */
-    public OsmDroidMapConfigurator(String prefKey, int prefTitleId, WmsOption... options) {
+    public OsmDroidMapConfigurator(String prefKey, int sourceLabelId, WmsOption... options) {
         this.prefKey = prefKey;
-        this.prefTitleId = prefTitleId;
+        this.sourceLabelId = sourceLabelId;
         this.options = options;
     }
 
@@ -57,8 +58,10 @@ class OsmDroidMapConfigurator implements MapConfigurator {
                 labelIds[i] = options[i].labelId;
                 values[i] = options[i].id;
             }
+            String prefTitle = context.getString(
+                R.string.map_style_label, context.getString(sourceLabelId));
             return Collections.singletonList(PrefUtils.createListPref(
-                context, prefKey, prefTitleId, labelIds, values
+                context, prefKey, prefTitle, labelIds, values
             ));
         }
         return Collections.emptyList();

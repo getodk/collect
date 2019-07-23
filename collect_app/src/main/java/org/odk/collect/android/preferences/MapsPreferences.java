@@ -98,7 +98,7 @@ public class MapsPreferences extends BasePreferenceFragment {
      */
     private void initBasemapSourcePref() {
         basemapSourcePref = PrefUtils.createListPref(
-            context, KEY_BASEMAP_SOURCE, R.string.basemap_source,
+            context, KEY_BASEMAP_SOURCE, getString(R.string.basemap_source),
             MapProvider.getLabelIds(), MapProvider.getIds()
         );
         onBasemapSourceChanged(MapProvider.getConfigurator());

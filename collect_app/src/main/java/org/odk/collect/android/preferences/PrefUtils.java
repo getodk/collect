@@ -2,7 +2,6 @@ package org.odk.collect.android.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.preference.ListPreference;
 import android.preference.PreferenceManager;
 
@@ -19,30 +18,22 @@ public class PrefUtils {
     }
 
     public static ListPreference createListPref(
-        Context context, String key, int titleId, int labelsId, int valuesId) {
-        Resources resources = context.getResources();
-        return createListPref(context, key, titleId,
-            resources.getStringArray(labelsId), resources.getStringArray(valuesId));
-    }
-
-    public static ListPreference createListPref(
-        Context context, String key, int titleId, int[] labelIds, String[] values) {
-        Resources resources = context.getResources();
+        Context context, String key, String title, int[] labelIds, String[] values) {
         String[] labels = new String[labelIds.length];
         for (int i = 0; i < labels.length; i++) {
-            labels[i] = resources.getString(labelIds[i]);
+            labels[i] = context.getString(labelIds[i]);
         }
-        return createListPref(context, key, titleId, labels, values);
+        return createListPref(context, key, title, labels, values);
     }
 
     public static ListPreference createListPref(
-        Context context, String key, int titleId, String[] labels, String[] values) {
+        Context context, String key, String title, String[] labels, String[] values) {
         ensurePrefHasValidValue(key, values);
         ListPreference pref = new ListPreference(context);
         pref.setKey(key);
         pref.setPersistent(true);
-        pref.setTitle(titleId);
-        pref.setDialogTitle(titleId);
+        pref.setTitle(title);
+        pref.setDialogTitle(title);
         pref.setEntries(labels);
         pref.setEntryValues(values);
         pref.setSummary("%s");
