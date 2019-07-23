@@ -49,7 +49,6 @@ public class MediaLayoutTest {
     private ImageView imageView;
     private TextView textView;
     private TextView missingImage;
-    private ImageView divider;
     private boolean isReferenceManagerStubbed;
 
     public MediaLayoutTest(String audioURI, String imageURI, String videoURI) {
@@ -85,7 +84,6 @@ public class MediaLayoutTest {
         videoButton = mediaLayout.videoButton;
         imageView = mediaLayout.imageView;
         missingImage = mediaLayout.missingImage;
-        divider = mediaLayout.divider;
 
         /*
          * Stub reference manager randomly to account for both illegal URI and proper URI while
@@ -102,7 +100,7 @@ public class MediaLayoutTest {
     public void viewShouldBecomeVisibleIfUriPresent() {
         Assert.assertNotNull(mediaLayout);
         Assert.assertEquals(VISIBLE, mediaLayout.getVisibility());
-        assertVisibility(GONE, audioButton, videoButton, imageView, missingImage, divider);
+        assertVisibility(GONE, audioButton, videoButton, imageView, missingImage);
 
         mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, null, mediaPlayer, referenceManager);
 
