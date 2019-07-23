@@ -3,6 +3,7 @@ package org.odk.collect.android.preferences;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Parcelable;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -102,6 +103,16 @@ public class CaptionedListPreference extends ListPreference {
         clickedIndex = index;
         onClick(getDialog(), DialogInterface.BUTTON_POSITIVE);
         getDialog().dismiss();
+    }
+
+    /** Closes the dialog when the screen is rotated. */
+    public Parcelable onSaveInstanceState() {
+        // If the dialog is left open, it becomes empty when restored.  For now,
+        // instead of building all the save/restore machinery, just close it.
+        if (getDialog() != null) {
+            getDialog().dismiss();
+        }
+        return super.onSaveInstanceState();
     }
 
     /** Saves the selected value to the preferences when the dialog is closed. */
