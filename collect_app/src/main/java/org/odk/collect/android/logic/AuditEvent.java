@@ -16,10 +16,16 @@
 
 package org.odk.collect.android.logic;
 
+import android.text.TextUtils;
+
 import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AuditEvent {
 
@@ -216,7 +222,7 @@ public class AuditEvent {
      */
     @NonNull
     public String toString() {
-        String node = formIndex == null || formIndex.getReference() == null ? "" : formIndex.getReference().toString();
+        String node = formIndex == null || formIndex.getReference() == null ? "" : getXPathPath(formIndex);
 
         String event;
         if (isTrackingLocationsEnabled && isTrackingChangesEnabled) {
@@ -266,5 +272,37 @@ public class AuditEvent {
         }
 
         return "\"" + value + "\"";
+    }
+
+    /**
+     * Get the XPath path of the node at a particular {@link FormIndex}.
+     *
+     * Differs from {@link TreeReference#toString()} in that position predicates are only
+     * included for repeats. For example, given a group named {@code my-group} that contains a
+     * repeat named {@code my-repeat} which in turn contains a question named {@code my-question},
+     * {@link TreeReference#toString()} would return paths that look like
+     * {@code /my-group[1]/my-repeat[3]/my-question[1]}. In contrast, this method would return
+     * {@code /my-group/my-repeat[3]/my-question}.
+     *
+     * TODO: consider moving to {@link FormIndex}
+     */
+    private static String getXPathPath(FormIndex formIndex) {
+        List<String> nodeNames = new ArrayList<>();
+        nodeNames.add(formIndex.getReference().getName(0));
+
+        FormIndex walker = formIndex;
+        int i = 1;
+        while (walker != null) {
+            String currentNodeName = formIndex.getReference().getName(i);
+            if (walker.getInstanceIndex() != -1) {
+                currentNodeName = currentNodeName + "[" + (walker.getInstanceIndex() + 1) + "]";
+            }
+            nodeNames.add(currentNodeName);
+
+            walker = walker.getNextLevel();
+            i++;
+        }
+
+        return "/" + TextUtils.join("/", nodeNames);
     }
 }
