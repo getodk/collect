@@ -91,14 +91,17 @@ public class CaptionedListPreference extends ListPreference {
         labelView.setText(String.valueOf(label));
         captionView.setText(String.valueOf(caption));
         button.setChecked(ObjectUtils.equals(value, getSharedPreferences().getString(getKey(), null)));
-        item.setOnClickListener(view -> {
-            // When an item is clicked, record which item and then dismiss the dialog.
-            clickedIndex = i;
-            onClick(getDialog(), DialogInterface.BUTTON_POSITIVE);
-            getDialog().dismiss();
-        });
+        button.setOnClickListener(view -> onItemClicked(i));
+        item.setOnClickListener(view -> onItemClicked(i));
         parent.addView(item);
         return button;
+    }
+
+    /** When an item is clicked, record which item and then dismiss the dialog. */
+    protected void onItemClicked(int index) {
+        clickedIndex = index;
+        onClick(getDialog(), DialogInterface.BUTTON_POSITIVE);
+        getDialog().dismiss();
     }
 
     /** Saves the selected value to the preferences when the dialog is closed. */
