@@ -83,10 +83,10 @@ public class FileUtils {
     private static final String STUB_XML = "<?xml version='1.0' ?><stub />";
 
     /** True if we have checked whether /sdcard points to getExternalStorageDirectory(). */
-    private static boolean isSdcardSymlinkChecked = false;
+    private static boolean isSdcardSymlinkChecked;
 
     /** The result of checking whether /sdcard points to getExternalStorageDirectory(). */
-    private static boolean isSdcardSymlinkSameAsExternalStorageDirectory = false;
+    private static boolean isSdcardSymlinkSameAsExternalStorageDirectory;
 
 
     static int bufSize = 16 * 1024; // May be set by unit test
@@ -594,6 +594,7 @@ public class FileUtils {
     }
 
     /** Uses the /sdcard symlink to shorten a path, if it's valid to do so. */
+    @SuppressWarnings("PMD.DoNotHardCodeSDCard")
     public static File simplifyPath(File file) {
         // The symlink at /sdcard points to the same location as the storage
         // path returned by getExternalStorageDirectory() on every Android
@@ -616,6 +617,7 @@ public class FileUtils {
     }
 
     /** Checks whether /sdcard points to the same place as getExternalStorageDirectory(). */
+    @SuppressWarnings("PMD.DoNotHardCodeSDCard")
     private static void checkIfSdcardSymlinkSameAsExternalStorageDirectory() {
         try {
             // createTempFile() guarantees a randomly named file that did not previously exist.
@@ -651,11 +653,10 @@ public class FileUtils {
 
     /** An iterator that walks over all the directories and files under a given path. */
     private static class Walker implements Iterator<File> {
-        private List<File> queue;
-        private boolean depthFirst;
+        private final List<File> queue = new ArrayList<>();
+        private final boolean depthFirst;
 
         public Walker(File root, boolean depthFirst) {
-            queue = new ArrayList<>();
             queue.add(root);
             this.depthFirst = depthFirst;
         }

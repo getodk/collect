@@ -87,7 +87,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     static final String KEY_REFERENCE_LAYER = "REFERENCE_LAYER";
 
     private MapboxMap map;
-    private List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
+    private final List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
     private PointListener gpsLocationListener;
     private PointListener clickListener;
     private PointListener longPressListener;
@@ -98,14 +98,14 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private MapPoint lastLocationFix;
 
     private int nextFeatureId = 1;
-    private Map<Integer, MapFeature> features = new HashMap<>();
+    private final Map<Integer, MapFeature> features = new HashMap<>();
     private SymbolManager symbolManager;
     private LineManager lineManager;
     private boolean isDragging;
     private String styleUrl = Style.MAPBOX_STREETS;;
     private File referenceLayerFile;
-    private List<Layer> overlayLayers = new ArrayList<>();
-    private List<Source> overlaySources = new ArrayList<>();
+    private final List<Layer> overlayLayers = new ArrayList<>();
+    private final List<Source> overlaySources = new ArrayList<>();
 
     private TileHttpServer tileServer;
 

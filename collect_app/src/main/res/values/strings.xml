@@ -360,7 +360,7 @@
     <string name="start">Start</string>
     <string name="enable_gps">Enable GPS</string>
     <string name="geotrace_title">GeoTrace</string>
-    <string name="gps_enable_message">GPS is disabled in your device. Would you like to enable it?</string>
+    <string name="gps_enable_message">GPS is disabled on your device. Would you like to enable it?</string>
     <string name="select_offline_layer">Select Offline Layer</string>
     <string name="geo_clear_warning">Feature already created. Would you like to clear the feature?</string>
     <string name="geo_exit_warning">Discard changes and return to ODK?</string>

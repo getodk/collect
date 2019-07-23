@@ -72,7 +72,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private GoogleMap map;
     private Marker locationCrosshairs;
     private Circle accuracyCircle;
-    private List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
+    private final List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
     private PointListener clickListener;
     private PointListener longPressListener;
     private PointListener gpsLocationListener;
@@ -81,8 +81,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private MapPoint lastLocationFix;
     private String lastLocationProvider;
     private int nextFeatureId = 1;
-    private Map<Integer, MapFeature> features = new HashMap<>();
-    private AlertDialog gpsErrorDialog;
+    private final Map<Integer, MapFeature> features = new HashMap<>();
     private boolean gpsLocationEnabled;
     private int mapType;
     private File referenceLayerFile;
@@ -540,7 +539,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     private void showGpsDisabledAlert() {
-        gpsErrorDialog = new AlertDialog.Builder(getActivity())
+        new AlertDialog.Builder(getActivity())
             .setMessage(getString(R.string.gps_enable_message))
             .setCancelable(false)
             .setPositiveButton(getString(R.string.enable_gps),
@@ -548,8 +547,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
                     new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0))
             .setNegativeButton(getString(R.string.cancel),
                 (dialog, id) -> dialog.cancel())
-            .create();
-        gpsErrorDialog.show();
+            .create()
+            .show();
     }
 
     /**

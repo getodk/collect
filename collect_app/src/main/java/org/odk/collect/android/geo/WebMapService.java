@@ -17,7 +17,8 @@ class WebMapService implements Serializable {
     public final int tileSize;
     public final String copyright;
     public final String[] urlTemplates;
-    private OnlineTileSourceBase onlineTileSource = null;
+
+    private OnlineTileSourceBase onlineTileSource;
 
     public WebMapService(String cacheName, int minZoomLevel, int maxZoomLevel,
         int tileSize, String copyright, String... urlTemplates) {

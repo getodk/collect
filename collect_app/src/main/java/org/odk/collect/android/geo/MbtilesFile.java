@@ -26,12 +26,11 @@ import timber.log.Timber;
 class MbtilesFile implements Closeable, TileSource {
     public enum LayerType { RASTER, VECTOR }
 
-    private File file;
+    private final File file;
     private SQLiteDatabase db;
-    private String format;
     private LayerType layerType;
-    private String contentType = "application/octet-stream";
-    private String contentEncoding = "identity";
+    private final String contentType;
+    private final String contentEncoding;
 
     public MbtilesFile(File file) throws MbtilesException {
         this.file = file;
@@ -53,16 +52,18 @@ class MbtilesFile implements Closeable, TileSource {
 
             // The "format" code indicates whether the binary tiles are raster image
             // files (JPEG, PNG) or protobuf-encoded vector geometry (PBF, MVT).
-            format = getMetadata("format").toLowerCase(Locale.US);
+            String format = getMetadata("format").toLowerCase(Locale.US);
             if (format.equals("pbf") || format.equals("mvt")) {
                 contentType = "application/protobuf";
                 contentEncoding = "gzip";
                 layerType = LayerType.VECTOR;
             } else if (format.equals("jpg") || format.equals("jpeg")) {
                 contentType = "image/jpeg";
+                contentEncoding = "identity";
                 layerType = LayerType.RASTER;
             } else if (format.equals("png")) {
                 contentType = "image/png";
+                contentEncoding = "identity";
                 layerType = LayerType.RASTER;
             } else {
                 db.close();

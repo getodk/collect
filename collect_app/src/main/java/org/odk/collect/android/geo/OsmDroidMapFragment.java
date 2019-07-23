@@ -83,8 +83,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private MyLocationNewOverlay myLocationOverlay;
     private LocationClient locationClient;
     private int nextFeatureId = 1;
-    private Map<Integer, MapFeature> features = new HashMap<>();
-    private AlertDialog gpsErrorDialog;
+    private final Map<Integer, MapFeature> features = new HashMap<>();
     private boolean gpsLocationEnabled;
     private IGeoPoint lastMapCenter;
     private WebMapService webMapService;
@@ -427,7 +426,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     private void showGpsDisabledAlert() {
-        gpsErrorDialog = new AlertDialog.Builder(getContext())
+        new AlertDialog.Builder(getContext())
             .setMessage(getString(R.string.gps_enable_message))
             .setCancelable(false)
             .setPositiveButton(getString(R.string.enable_gps),
@@ -435,8 +434,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
                     new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0))
             .setNegativeButton(getString(R.string.cancel),
                 (dialog, id) -> dialog.cancel())
-            .create();
-        gpsErrorDialog.show();
+            .create()
+            .show();
     }
 
     /**

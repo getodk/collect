@@ -29,9 +29,6 @@ public abstract class BaseGeoActivityTest {
     protected FakeLocationClient fakeLocationClient;
     protected final Intent intent = new Intent();
 
-    public BaseGeoActivityTest() {
-    }
-
     @Before public void setUp() throws Exception {
         ShadowApplication.getInstance().grantPermissions("android.permission.ACCESS_FINE_LOCATION");
         ShadowApplication.getInstance().grantPermissions("android.permission.ACCESS_COARSE_LOCATION");
