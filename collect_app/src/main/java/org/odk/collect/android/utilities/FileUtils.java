@@ -88,7 +88,6 @@ public class FileUtils {
     /** The result of checking whether /sdcard points to getExternalStorageDirectory(). */
     private static boolean isSdcardSymlinkSameAsExternalStorageDirectory;
 
-
     static int bufSize = 16 * 1024; // May be set by unit test
 
     private FileUtils() {
@@ -656,7 +655,7 @@ public class FileUtils {
         private final List<File> queue = new ArrayList<>();
         private final boolean depthFirst;
 
-        public Walker(File root, boolean depthFirst) {
+        Walker(File root, boolean depthFirst) {
             queue.add(root);
             this.depthFirst = depthFirst;
         }

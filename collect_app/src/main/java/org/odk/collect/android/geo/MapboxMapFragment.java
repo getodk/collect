@@ -102,7 +102,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private SymbolManager symbolManager;
     private LineManager lineManager;
     private boolean isDragging;
-    private String styleUrl = Style.MAPBOX_STREETS;;
+    private String styleUrl = Style.MAPBOX_STREETS;
     private File referenceLayerFile;
     private final List<Layer> overlayLayers = new ArrayList<>();
     private final List<Source> overlaySources = new ArrayList<>();
@@ -667,7 +667,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         private MapPoint point;
         private Symbol symbol;
 
-        public MarkerFeature(int featureId, SymbolManager symbolManager, MapPoint point, boolean draggable) {
+        MarkerFeature(int featureId, SymbolManager symbolManager, MapPoint point, boolean draggable) {
             this.featureId = featureId;
             this.symbolManager = symbolManager;
             this.point = point;
@@ -723,7 +723,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         private final boolean closedPolygon;
         private Line line;
 
-        public PolyFeature(int featureId, LineManager lineManager, SymbolManager symbolManager,
+        PolyFeature(int featureId, LineManager lineManager, SymbolManager symbolManager,
             Iterable<MapPoint> points, boolean closedPolygon) {
             this.featureId = featureId;
             this.lineManager = lineManager;

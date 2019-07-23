@@ -32,7 +32,7 @@ class MbtilesFile implements Closeable, TileSource {
     private final String contentType;
     private final String contentEncoding;
 
-    public MbtilesFile(File file) throws MbtilesException {
+    MbtilesFile(File file) throws MbtilesException {
         this.file = file;
         if (!file.exists() || !file.isFile()) {
             throw new NotFileException(file);
@@ -74,10 +74,6 @@ class MbtilesFile implements Closeable, TileSource {
         }
     }
 
-    public LayerType getLayerType() {
-        return layerType;
-    }
-
     public String getContentType() {
         return contentType;
     }
@@ -91,7 +87,7 @@ class MbtilesFile implements Closeable, TileSource {
     }
 
     /** Queries the "metadata" table, which has just "name" and "value" columns. */
-    public @NonNull String getMetadata(String key) throws MbtilesException {
+    @NonNull String getMetadata(String key) throws MbtilesException {
         try (Cursor results = db.query("metadata", new String[] {"value"},
             "name = ?", new String[] {key}, null, null, null, null)) {
             return results.moveToFirst() ? results.getString(0) : "";
@@ -140,7 +136,7 @@ class MbtilesFile implements Closeable, TileSource {
     }
 
     /** Returns information about the vector layers available in the tiles. */
-    public List<VectorLayer> getVectorLayers() {
+    List<VectorLayer> getVectorLayers() {
         List<VectorLayer> layers = new ArrayList<>();
         JSONArray jsonLayers;
         try {
@@ -164,8 +160,12 @@ class MbtilesFile implements Closeable, TileSource {
         }
     }
 
+    LayerType getLayerType() {
+        return layerType;
+    }
+
     /** Gets the layer type of an MBTiles file, or null if the file is invalid. */
-    public static LayerType getLayerType(File file) {
+    static LayerType getLayerType(File file) {
         try {
             return new MbtilesFile(file).getLayerType();
         } catch (MbtilesException e) {
@@ -177,36 +177,36 @@ class MbtilesFile implements Closeable, TileSource {
     public static class VectorLayer {
         public final String name;
 
-        public VectorLayer(JSONObject json) {
+        VectorLayer(JSONObject json) {
             name = json.optString("id", "");
         }
     }
 
-    public static class MbtilesException extends IOException {
-        public MbtilesException(Throwable cause) {
+    static class MbtilesException extends IOException {
+        MbtilesException(Throwable cause) {
             this(cause.getMessage());
             initCause(cause);
         }
 
-        public MbtilesException(String message) {
+        MbtilesException(String message) {
             super(message);
         }
     }
 
     public static class NotFileException extends MbtilesException {
-        public NotFileException(File file) {
+        NotFileException(File file) {
             super("Not a file: " + file);
         }
     }
 
     public static class UnsupportedFilenameException extends MbtilesException {
-        public UnsupportedFilenameException(File file) {
+        UnsupportedFilenameException(File file) {
             super("Illegal filename for SQLite file: " + file);
         }
     }
 
     public static class UnsupportedFormatException extends MbtilesException {
-        public UnsupportedFormatException(String format, File file) {
+        UnsupportedFormatException(String format, File file) {
             super(String.format("Unrecognized .mbtiles format \"%s\" in %s", format, file));
         }
     }

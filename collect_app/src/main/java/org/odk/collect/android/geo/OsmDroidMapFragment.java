@@ -540,7 +540,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         final MapView map;
         Marker marker;
 
-        public MarkerFeature(MapView map, MapPoint point, boolean draggable) {
+        MarkerFeature(MapView map, MapPoint point, boolean draggable) {
             this.map = map;
             this.marker = createMarker(map, point, draggable ? this : null);
         }
@@ -567,9 +567,9 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         final List<Marker> markers = new ArrayList<>();
         final Polyline polyline;
         final boolean closedPolygon;
-        public static final int STROKE_WIDTH = 5;
+        static final int STROKE_WIDTH = 5;
 
-        public PolyFeature(MapView map, Iterable<MapPoint> points, boolean closedPolygon) {
+        PolyFeature(MapView map, Iterable<MapPoint> points, boolean closedPolygon) {
             this.map = map;
             this.closedPolygon = closedPolygon;
             polyline = new Polyline();

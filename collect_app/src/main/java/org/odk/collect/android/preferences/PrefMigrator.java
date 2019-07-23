@@ -101,7 +101,7 @@ public class PrefMigrator {
         String oldKey;
         String newKey;
 
-        public KeyRenamer(String oldKey) {
+        KeyRenamer(String oldKey) {
             this.oldKey = oldKey;
         }
 
@@ -137,7 +137,7 @@ public class PrefMigrator {
         Object tempOldValue;
         Map<Object, Object> translatedValues = new HashMap<>();
 
-        public KeyTranslator(String oldKey) {
+        KeyTranslator(String oldKey) {
             this.oldKey = oldKey;
         }
 
@@ -189,7 +189,7 @@ public class PrefMigrator {
         List<Object[]> oldValueArrays = new ArrayList<>();
         List<Pair[]> newPairArrays = new ArrayList<>();
 
-        public KeyCombiner(String... oldKeys) {
+        KeyCombiner(String... oldKeys) {
             this.oldKeys = oldKeys;
         }
 

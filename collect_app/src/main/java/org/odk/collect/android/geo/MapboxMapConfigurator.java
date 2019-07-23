@@ -26,7 +26,7 @@ class MapboxMapConfigurator implements MapConfigurator {
     private final MapboxUrlOption[] options;
 
     /** Constructs a configurator with a few Mapbox style URL options to choose from. */
-    public MapboxMapConfigurator(String prefKey, int sourceLabelId, MapboxUrlOption... options) {
+    MapboxMapConfigurator(String prefKey, int sourceLabelId, MapboxUrlOption... options) {
         this.prefKey = prefKey;
         this.sourceLabelId = sourceLabelId;
         this.options = options;

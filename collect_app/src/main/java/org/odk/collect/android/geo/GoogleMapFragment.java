@@ -571,7 +571,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private class MarkerFeature implements MapFeature {
         private Marker marker;
 
-        public MarkerFeature(GoogleMap map, MapPoint point, boolean draggable) {
+        MarkerFeature(GoogleMap map, MapPoint point, boolean draggable) {
             this.marker = createMarker(map, point, draggable);
         }
 
@@ -600,7 +600,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         private final boolean closedPolygon;
         private Polyline polyline;
 
-        public PolyFeature(GoogleMap map, Iterable<MapPoint> points, boolean closedPolygon) {
+        PolyFeature(GoogleMap map, Iterable<MapPoint> points, boolean closedPolygon) {
             this.map = map;
             this.closedPolygon = closedPolygon;
             if (map == null) {  // during Robolectric tests, map will be null

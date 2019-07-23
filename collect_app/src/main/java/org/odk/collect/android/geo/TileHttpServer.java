@@ -25,7 +25,7 @@ class TileHttpServer {
     private final ServerThread server;
     private final ServerSocket socket;
 
-    public TileHttpServer() throws IOException {
+    TileHttpServer() throws IOException {
         socket = createBoundSocket(PORT_MIN, PORT_MAX);
         if (socket == null) {
             throw new IOException("Could not find an available port");
@@ -189,7 +189,7 @@ class TileHttpServer {
         String contentType;
         String contentEncoding;
 
-        public Response(byte[] data, String contentType, String contentEncoding) {
+        Response(byte[] data, String contentType, String contentEncoding) {
             this.data = data;
             this.contentType = contentType;
             this.contentEncoding = contentEncoding;

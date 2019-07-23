@@ -20,7 +20,7 @@ class WebMapService implements Serializable {
 
     private OnlineTileSourceBase onlineTileSource;
 
-    public WebMapService(String cacheName, int minZoomLevel, int maxZoomLevel,
+    WebMapService(String cacheName, int minZoomLevel, int maxZoomLevel,
         int tileSize, String copyright, String... urlTemplates) {
         this.cacheName = cacheName;
         this.minZoomLevel = minZoomLevel;
@@ -30,7 +30,7 @@ class WebMapService implements Serializable {
         this.urlTemplates = urlTemplates;
     }
 
-    @Deprecated public WebMapService(int cacheNameStringId, int minZoomLevel,
+    @Deprecated WebMapService(int cacheNameStringId, int minZoomLevel,
         int maxZoomLevel, int tileSize, String copyright, String... urlTemplates) {
         this(Collect.getInstance().getString(cacheNameStringId),
             minZoomLevel, maxZoomLevel, tileSize, copyright, urlTemplates);

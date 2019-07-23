@@ -94,7 +94,7 @@ public class PrefMigratorTest {
         for (int i = 0; i + 1 < pairs.length; i += 2) {
             assertEquals(pairs[i + 1], prefs.getAll().get(pairs[i]));
         }
-        assertEquals(pairs.length/2, prefs.getAll().size());
+        assertEquals(pairs.length / 2, prefs.getAll().size());
     }
 
     @Test public void renamerShouldRenameKeys() {

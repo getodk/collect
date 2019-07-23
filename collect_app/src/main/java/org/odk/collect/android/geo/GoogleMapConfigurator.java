@@ -29,7 +29,7 @@ class GoogleMapConfigurator implements MapConfigurator {
     private final GoogleMapTypeOption[] options;
 
     /** Constructs a configurator with a few Google map type options to choose from. */
-    public GoogleMapConfigurator(String prefKey, int sourceLabelId, GoogleMapTypeOption... options) {
+    GoogleMapConfigurator(String prefKey, int sourceLabelId, GoogleMapTypeOption... options) {
         this.prefKey = prefKey;
         this.sourceLabelId = sourceLabelId;
         this.options = options;

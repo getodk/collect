@@ -23,7 +23,7 @@ class OsmDroidMapConfigurator implements MapConfigurator {
     private final WmsOption[] options;
 
     /** Constructs a configurator that renders just one Web Map Service. */
-    public OsmDroidMapConfigurator(WebMapService service) {
+    OsmDroidMapConfigurator(WebMapService service) {
         prefKey = "";
         sourceLabelId = 0;
         options = new WmsOption[] {new WmsOption("", 0, service)};
@@ -33,7 +33,7 @@ class OsmDroidMapConfigurator implements MapConfigurator {
      * Constructs a configurator that offers a few Web Map Services to choose from.
      * The choice of which Web Map Service will be stored in a string preference.
      */
-    public OsmDroidMapConfigurator(String prefKey, int sourceLabelId, WmsOption... options) {
+    OsmDroidMapConfigurator(String prefKey, int sourceLabelId, WmsOption... options) {
         this.prefKey = prefKey;
         this.sourceLabelId = sourceLabelId;
         this.options = options;
