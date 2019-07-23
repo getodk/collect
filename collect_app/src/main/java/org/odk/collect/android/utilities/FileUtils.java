@@ -601,7 +601,7 @@ public class FileUtils {
         // that we don't lie to the user, we'll confirm that's really true.
         if (!isSdcardSymlinkChecked) {
             checkIfSdcardSymlinkSameAsExternalStorageDirectory();
-            isSdcardSymlinkChecked = true;
+            isSdcardSymlinkChecked = true;  // this check is expensive; only do it once
         }
         if (isSdcardSymlinkSameAsExternalStorageDirectory) {
             // They point to the same place, so it's safe to replace the longer
@@ -617,21 +617,24 @@ public class FileUtils {
 
     /** Checks whether /sdcard points to the same place as getExternalStorageDirectory(). */
     private static void checkIfSdcardSymlinkSameAsExternalStorageDirectory() {
-        isSdcardSymlinkChecked = true;  // this check is expensive; only do it once
         try {
             // createTempFile() guarantees a randomly named file that did not previously exist.
             File shortPathFile = File.createTempFile("odk", null, new File("/sdcard"));
-            String name = shortPathFile.getName();
-            File longPathFile = new File(Environment.getExternalStorageDirectory(), name);
+            try {
+                String name = shortPathFile.getName();
+                File longPathFile = new File(Environment.getExternalStorageDirectory(), name);
 
-            // If we delete the file via one path and the file disappears at the other path,
-            // then we know the two paths point to the same place.
-            if (shortPathFile.exists() && longPathFile.exists()) {
-                longPathFile.delete();
-                if (!shortPathFile.exists()) {
-                    isSdcardSymlinkSameAsExternalStorageDirectory = true;
-                    return;
+                // If we delete the file via one path and the file disappears at the
+                // other path, then we know that both paths point to the same place.
+                if (shortPathFile.exists() && longPathFile.exists()) {
+                    longPathFile.delete();
+                    if (!shortPathFile.exists()) {
+                        isSdcardSymlinkSameAsExternalStorageDirectory = true;
+                        return;
+                    }
                 }
+            } finally {
+                shortPathFile.delete();
             }
         } catch (IOException e) { /* ignore */ }
         isSdcardSymlinkSameAsExternalStorageDirectory = false;
