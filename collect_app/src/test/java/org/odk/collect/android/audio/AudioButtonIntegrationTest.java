@@ -5,6 +5,8 @@ import android.media.MediaPlayer;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LiveData;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.support.LiveDataTester;
@@ -26,10 +28,20 @@ public class AudioButtonIntegrationTest {
     private final MediaPlayer mediaPlayer = new MediaPlayer();
     private final LiveDataTester liveDataTester = new LiveDataTester();
 
+    private FragmentActivity activity;
+
+    @Before
+    public void setup() {
+        activity = Robolectric.setupActivity(FragmentActivity.class);
+    }
+
+    @After
+    public void teardown() {
+        liveDataTester.teardown();
+    }
+
     @Test
     public void canPlayAndStopAudio() throws Exception {
-        FragmentActivity activity = Robolectric.setupActivity(FragmentActivity.class);
-
         String testFile = File.createTempFile("audio", ".mp3").getAbsolutePath();
         final DataSource dataSource = setupDataSource(testFile);
 
@@ -52,8 +64,6 @@ public class AudioButtonIntegrationTest {
 
     @Test
     public void playingAudio_stopsOtherAudio() throws Exception {
-        FragmentActivity activity = Robolectric.setupActivity(FragmentActivity.class);
-
         String testFile1 = File.createTempFile("audio1", ".mp3").getAbsolutePath();
         String testFile2 = File.createTempFile("audio2", ".mp3").getAbsolutePath();
         setupDataSource(testFile1);
@@ -76,8 +86,6 @@ public class AudioButtonIntegrationTest {
 
     @Test
     public void whenTwoButtonsUseTheSameFile_andOneisPlayed_theyDontBothPlay() throws Exception {
-        FragmentActivity activity = Robolectric.setupActivity(FragmentActivity.class);
-
         String testFile1 = File.createTempFile("audio1", ".mp3").getAbsolutePath();
         setupDataSource(testFile1);
 
@@ -95,8 +103,6 @@ public class AudioButtonIntegrationTest {
 
     @Test
     public void setAudio_returnsIsPlayingStateForButton() throws Exception {
-        FragmentActivity activity = Robolectric.setupActivity(FragmentActivity.class);
-
         String testFile1 = File.createTempFile("audio1", ".mp3").getAbsolutePath();
         setupDataSource(testFile1);
 
@@ -106,11 +112,9 @@ public class AudioButtonIntegrationTest {
         assertThat(isPlaying.getValue(), equalTo(false));
 
         button1.performClick();
-
         assertThat(isPlaying.getValue(), equalTo(true));
 
         button1.performClick();
-
         assertThat(isPlaying.getValue(), equalTo(false));
     }
 
