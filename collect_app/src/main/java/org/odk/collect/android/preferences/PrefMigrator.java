@@ -27,7 +27,7 @@ public class PrefMigrator {
 
     private PrefMigrator() { } // prevent instantiation
 
-    public static final Migration[] MIGRATIONS = {
+    static final Migration[] MIGRATIONS = {
         translateKey("map_sdk_behavior").toKey(KEY_BASEMAP_SOURCE)
             .fromValue("google_maps").toValue("google")
             .fromValue("mapbox_maps").toValue("mapbox"),

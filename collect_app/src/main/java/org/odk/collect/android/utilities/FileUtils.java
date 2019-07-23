@@ -53,7 +53,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import timber.log.Timber;
 
 /**
@@ -617,6 +619,10 @@ public class FileUtils {
 
     /** Checks whether /sdcard points to the same place as getExternalStorageDirectory(). */
     @SuppressWarnings("PMD.DoNotHardCodeSDCard")
+    @SuppressFBWarnings(
+        value = "DMI_HARDCODED_ABSOLUTE_FILENAME",
+        justification = "The purpose of this function is to test this specific path."
+    )
     private static void checkIfSdcardSymlinkSameAsExternalStorageDirectory() {
         try {
             // createTempFile() guarantees a randomly named file that did not previously exist.
@@ -665,6 +671,9 @@ public class FileUtils {
         }
 
         @Override public File next() {
+            if (queue.isEmpty()) {
+                throw new NoSuchElementException();
+            }
             File next = queue.remove(0);
             if (next.isDirectory()) {
                 queue.addAll(depthFirst ? 0 : queue.size(), Arrays.asList(next.listFiles()));
