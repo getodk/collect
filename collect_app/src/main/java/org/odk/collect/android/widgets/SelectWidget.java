@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.javarosa.core.model.SelectChoice;
+import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
@@ -143,7 +144,7 @@ public abstract class SelectWidget extends ItemsWidget {
         String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "video");
         String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
 
-        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI, getPlayer());
+        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI, getPlayer(), ReferenceManager.instance());
     }
 
     protected RecyclerView setUpRecyclerView() {

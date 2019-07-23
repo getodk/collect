@@ -86,7 +86,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     private CharSequence originalText;
     private String bigImageURI;
     private MediaPlayer player;
-    private ReferenceManager referenceManager = ReferenceManager.instance();
+    private ReferenceManager referenceManager;
 
     public MediaLayout(Context context) {
         super(context);
@@ -100,13 +100,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
 
         View.inflate(context, R.layout.media_layout, this);
         ButterKnife.bind(this);
-    }
-
-    /**
-     * For stubbing during unit testing
-     */
-    public void setReferenceManager(ReferenceManager referenceManager) {
-        this.referenceManager = referenceManager;
     }
 
     public void playAudio() {
@@ -181,10 +174,11 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     }
 
     public void setAVT(TextView text, String audioURI, String imageURI, String videoURI,
-                       String bigImageURI, MediaPlayer player) {
+                       String bigImageURI, MediaPlayer player, ReferenceManager referenceManager) {
         this.bigImageURI = bigImageURI;
         this.player = player;
         this.videoURI = videoURI;
+        this.referenceManager = referenceManager;
 
         viewText = text;
         originalText = text.getText();
@@ -196,7 +190,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
 
             String uri = null;
             try {
-                uri = ReferenceManager.instance().DeriveReference(audioURI).getLocalURI();
+                uri = this.referenceManager.DeriveReference(audioURI).getLocalURI();
             } catch (InvalidReferenceException e) {
                 Timber.e(e);
             }
@@ -216,7 +210,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         String errorMsg = null;
         if (imageURI != null) {
             try {
-                String imageFilename = referenceManager.DeriveReference(imageURI).getLocalURI();
+                String imageFilename = this.referenceManager.DeriveReference(imageURI).getLocalURI();
                 final File imageFile = new File(imageFilename);
                 if (imageFile.exists()) {
                     DisplayMetrics metrics = getResources().getDisplayMetrics();

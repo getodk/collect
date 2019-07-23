@@ -1,10 +1,11 @@
 package org.odk.collect.android.views;
 
 import android.media.MediaPlayer;
-import androidx.appcompat.widget.AppCompatImageButton;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatImageButton;
 
 import junit.framework.Assert;
 
@@ -27,6 +28,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(ParameterizedRobolectricTestRunner.class)
 public class MediaLayoutTest {
@@ -91,6 +93,8 @@ public class MediaLayoutTest {
          */
         if (new Random().nextBoolean()) {
             stubReferenceManager();
+        } else {
+            when(referenceManager.DeriveReference(RANDOM_URI)).thenThrow(InvalidReferenceException.class);
         }
     }
 
@@ -100,7 +104,7 @@ public class MediaLayoutTest {
         Assert.assertEquals(VISIBLE, mediaLayout.getVisibility());
         assertVisibility(GONE, audioButton, videoButton, imageView, missingImage, divider);
 
-        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, null, mediaPlayer);
+        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, null, mediaPlayer, referenceManager);
 
         // we do not check for the validity of the URIs for the audio and video while loading MediaLayout
         assertVisibility(audioURI == null ? GONE : VISIBLE, audioButton);
@@ -124,7 +128,6 @@ public class MediaLayoutTest {
 
         doReturn(reference).when(referenceManager).DeriveReference(RANDOM_URI);
         doReturn(RANDOM_URI).when(reference).getLocalURI();
-        mediaLayout.setReferenceManager(referenceManager);
     }
 
     /**
