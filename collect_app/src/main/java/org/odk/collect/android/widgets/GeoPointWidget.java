@@ -206,10 +206,6 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
                 truncateDouble(parts[2]),
                 truncateDouble(parts[3])
             ));
-            answerDisplay.setText(String.format(getContext().getString(R.string.gps_result),
-                    formatGps(Double.parseDouble(parts[0]), "lat"),
-                    formatGps(Double.parseDouble(parts[1]), "lon"), truncateDouble(parts[2]),
-                    truncateDouble(parts[3])));
         } else {
             answerDisplay.setText("");
         }
