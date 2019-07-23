@@ -102,7 +102,7 @@ public class WidgetAppearanceUtils {
         return appearance;
     }
 
-    /** Returns whether the specified appearance constant (defined above) is present. */
+    /** Returns whether an appearance is present.  (Appearances are the constants above.) */
     public static boolean hasAppearance(FormEntryPrompt fep, String appearance) {
         return getSanitizedAppearanceHint(fep).contains(appearance);
     }
