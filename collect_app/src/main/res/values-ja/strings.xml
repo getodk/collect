@@ -307,7 +307,6 @@
   <string name="leave_a_review">Play ストアにレビューを残す</string>
   <string name="leave_a_review_msg">あなたの (肯定的な) レビューが Play ストアでアプリの認知度を向上させてくれます</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="openmap_streets">OSM 道路</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">USGS ナショナルマップ ハイブリッド</string>
   <string name="openmap_usgs_img">USGS ナショナルマップ画像</string>
@@ -329,7 +328,6 @@
   <string name="enable_gps">GPS を有効にする</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="gps_enable_message">お使いのデバイスで GPS は無効になっています。有効にしますか?</string>
-  <string name="select_offline_layer">オフライン レイヤーを選択</string>
   <string name="geo_clear_warning">機能は既に作成済です。機能をクリアしますか?</string>
   <string name="geo_exit_warning">変更を破棄して ODK の戻りますか?</string>
   <string name="polygon_validator">ポリゴンを作成するには、少なくとも 3 点指定する必要があります</string>
@@ -516,7 +514,6 @@
   <string name="type">種類</string>
   <string name="form_entry">チェックを外すとフォーム入力から非表示にします</string>
   <string name="use_device_language">デバイスの言語を使用する</string>
-  <string name="not_supported_offline_layer_format">選択されたオフラインレイヤーファイルは、サポートされていない PBF フォーマットを使用しています!</string>
   <string name="invalid_email_address">メールアドレスが無効です!</string>
   <string name="sort_by">並び順</string>
   <string name="server">サーバー</string>

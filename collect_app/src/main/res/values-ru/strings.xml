@@ -301,7 +301,6 @@
   <string name="leave_a_review">Оставить отзыв в Play Store</string>
   <string name="leave_a_review_msg">Ваш отзыв (надеемся, положительный) делает приложение более заметным в Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="openmap_streets">Улицы OSM</string>
   <string name="openmap_usgs_topo">Национальная карта USGS: топографическая</string>
   <string name="openmap_usgs_sat">Национальная карта USGS: спутниковая</string>
   <string name="openmap_usgs_img">Национальная карта USGS: съёмка с воздуха</string>
@@ -321,7 +320,6 @@
   <string name="enable_gps">Включить GPS</string>
   <string name="geotrace_title">Геослед</string>
   <string name="gps_enable_message">На вашем устройстве отключен GPS. Хотите включить его?</string>
-  <string name="select_offline_layer">Выберите оффлайн-слой</string>
   <string name="geo_exit_warning">Отказаться от изменений и вернуться к ODK?</string>
   <string name="polygon_validator">В многоугольнике должно быть как минимум 3 точки</string>
   <string name="polyline_validator">Должно быть как минимум 2 точки, что бы создать ломаную линию</string>
@@ -476,7 +474,6 @@
   <string name="type">Платформа</string>
   <string name="form_entry">Снимите галочку, чтобы скрыть пункт при заполнении опросника</string>
   <string name="use_device_language">Использовать язык устройства</string>
-  <string name="not_supported_offline_layer_format">Выбранный файл оффлайн-слоя использует неподдерживаемый формат PBF!</string>
   <string name="invalid_email_address">Неверный адрес почты!</string>
   <string name="sort_by">Сортировать по</string>
   <string name="server">Сервер</string>

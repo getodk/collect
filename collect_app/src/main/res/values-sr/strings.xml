@@ -307,7 +307,6 @@
   <string name="leave_a_review">Napiši Play Store recenziju</string>
   <string name="leave_a_review_msg">Vaša (nadamo se pozitivna) recenzija povećava vidljivost aplikacije u Play Storu.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="openmap_streets">OSM ulice</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">USCG National Map Hybrid</string>
   <string name="openmap_usgs_img">USGC National Map Imagery</string>
@@ -329,7 +328,6 @@
   <string name="enable_gps">Omogući GPS</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="gps_enable_message">GPS je onemogućen na Vašem uređaju. Da li biste željeli da ga uključite?</string>
-  <string name="select_offline_layer">Odaberi oflajn podlogu</string>
   <string name="geo_clear_warning">Karakteristika je već kreirana. Da li biste željeli da obrišete karakteristiku?</string>
   <string name="geo_exit_warning">Odbaci izmjene i vrati se na ODK?</string>
   <string name="polygon_validator">Moram imati makar 3 tačke kako bih kreirao Polygon</string>
@@ -522,7 +520,6 @@
   <string name="type">Vrsta</string>
   <string name="form_entry">Ukloni oznaku kako bi sakrio stavku iz Form Entry</string>
   <string name="use_device_language">Koristi jezik uređaja</string>
-  <string name="not_supported_offline_layer_format">Odabrana podloga bez pristupa mreži koristi PBF format koji nije podržan!</string>
   <string name="invalid_email_address">Pogrešna email adresa!</string>
   <string name="sort_by">Sortiraj na osnovu</string>
   <string name="server">Server</string>

@@ -307,7 +307,6 @@
   <string name="leave_a_review">Zostaw swoją opinię na Play Store</string>
   <string name="leave_a_review_msg">Twoja (mamy nadzieję pozytywna) recenzja przyczyni się do zwiększenia widoczności Aplikacji w Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="openmap_streets">Ulice OSM</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">USGS National Map Hybrid</string>
   <string name="openmap_usgs_img">USGS National Map Imagery</string>
@@ -329,7 +328,6 @@
   <string name="enable_gps">Włącz GPS</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="gps_enable_message">GPS jest jest wyłączony na twoim urządzeniu. Czy chciałbyś go włączyć?</string>
-  <string name="select_offline_layer">Wybierz Warstwę Offline</string>
   <string name="geo_clear_warning">Właściwość już stworzona. Chcesz usunąć właściwość?</string>
   <string name="geo_exit_warning">Usunąć zmiany i wrócić do ODK?</string>
   <string name="polygon_validator">Wymagane są przynajmniej 3 punkty aby utworzyć wielokąt</string>
@@ -525,7 +523,6 @@
   <string name="type">Typ</string>
   <string name="form_entry">Odznacz aby ukryć z Wypełniania Formularza</string>
   <string name="use_device_language">Użyj języka urządzenia</string>
-  <string name="not_supported_offline_layer_format">Wybrany plik wartwy używa formatu PBF, który nie jest obsługiwany!</string>
   <string name="invalid_email_address">Nieprawidłowy adres email!</string>
   <string name="sort_by">Sortuj według</string>
   <string name="server">Serwer</string>

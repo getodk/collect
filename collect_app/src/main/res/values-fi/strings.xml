@@ -307,7 +307,6 @@
   <string name="leave_a_review">Kirjoita Play Store -arvio</string>
   <string name="leave_a_review_msg">Sinun (toivottavasti myönteinen) arviosi lisää sovelluksen näkyvyyttä Play Store -kaupassa.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="openmap_streets">OSM Streets</string>
   <string name="openmap_usgs_topo">USGS National Map topografinen</string>
   <string name="openmap_usgs_sat">USGS National Map hybridi</string>
   <string name="openmap_usgs_img">USGS National Map kuvat</string>
@@ -329,7 +328,6 @@
   <string name="enable_gps">Ota GPS käyttöön</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="gps_enable_message">GPS on poistettu käytöstä laitteellasi. Haluaisitko ottaa sen käyttöön?</string>
-  <string name="select_offline_layer">Valitse Offline-taso</string>
   <string name="geo_clear_warning">Ominaisuus on jo luotu. Haluatko tyhjentää ominaisuuden?</string>
   <string name="geo_exit_warning">Hylätäänkö muutokset ja palataan ODK:hon?</string>
   <string name="polygon_validator">Monikulmion luomiseen tarvitaan vähintään 3 pistettä</string>
@@ -519,7 +517,6 @@
   <string name="type">Tyyppi</string>
   <string name="form_entry">Poista rasti piiloittaaksesi lomakesyötöstä</string>
   <string name="use_device_language">Käytä laitteen oletuskieltä</string>
-  <string name="not_supported_offline_layer_format">Valittu offline-tasotiedosto käyttää PBF-formaattia, jota ei tueta!</string>
   <string name="invalid_email_address">Virheellinen sähköpostiosoite!</string>
   <string name="sort_by">Lajitteluperuste</string>
   <string name="server">Palvelin</string>

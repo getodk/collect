@@ -309,7 +309,6 @@
   <string name="leave_a_review">Ir a Play Store - Comentar y/o Actualizar</string>
   <string name="leave_a_review_msg">Su comentario (ojalá positivo) incrementa la visibilidad de la App en Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="openmap_streets">Calles OSM</string>
   <string name="openmap_usgs_topo">USGS Mapa Topográfico Nacional</string>
   <string name="openmap_usgs_sat">USGS Mapa Nacional Hibrido</string>
   <string name="openmap_usgs_img">USGS Mapa Nacional Satélite</string>
@@ -331,7 +330,6 @@
   <string name="enable_gps">Activar el GPS</string>
   <string name="geotrace_title">GeoLínea</string>
   <string name="gps_enable_message">GPS esta deshabilitado. ¿Activar?</string>
-  <string name="select_offline_layer">Seleccione la capa sin conexión</string>
   <string name="geo_clear_warning">Función ya creada. ¿Desea borrar la función?</string>
   <string name="geo_exit_warning">¿Ignorar los cambios y regresar?</string>
   <string name="polygon_validator">Debe tener al menos 3 puntos para crear un polígono</string>
@@ -521,7 +519,6 @@
   <string name="type">Tipo</string>
   <string name="form_entry">Desmarque para ocultar el formulario</string>
   <string name="use_device_language">Usar el idioma del dispositivo</string>
-  <string name="not_supported_offline_layer_format">La capa de archivo seleccionada offline usa el formato PBF el cual no es soportado!</string>
   <string name="invalid_email_address">Email inválido</string>
   <string name="sort_by">Ordenar por</string>
   <string name="server">Servidor</string>

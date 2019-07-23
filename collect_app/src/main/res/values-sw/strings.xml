@@ -301,7 +301,6 @@
   <string name="leave_a_review">Acha tathmini katika Play Store</string>
   <string name="leave_a_review_msg">Tathmini yako (tunatumaini itakuwa chanya) inaongeza nafasi ya programu hii kuonekana Pay Store</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="openmap_streets">Mitaa iliyopo kwenye OSM</string>
   <string name="openmap_usgs_topo">USGS ramani za kitaifa za topo</string>
   <string name="openmap_usgs_sat">USGS National Map Hybrid</string>
   <string name="openmap_usgs_img">USGS National Map Imagery</string>
@@ -322,7 +321,6 @@
   <string name="enable_gps">Wezesha GPS</string>
   <string name="geotrace_title">Fatilisha mstari kijografia</string>
   <string name="gps_enable_message">GPS kwenye kifaa chako imezimwa. Je ungependa kuiwasha?</string>
-  <string name="select_offline_layer">Chagua tabaka la nje ya mtandao</string>
   <string name="geo_clear_warning">Umbo lishatengenezwa. Ungependa kufuta Umbo?</string>
   <string name="geo_exit_warning">Sitisha mabadiliko na rudi kwenye ODK?</string>
   <string name="polygon_validator">Lazima uwe na angalau  nukta 3 ili kutengeneza poligoni</string>
@@ -482,7 +480,6 @@
   <string name="type">Aina</string>
   <string name="form_entry">Ondoa alama kuficha  kujaza fomu</string>
   <string name="use_device_language">Tumia lugha ya kifaa</string>
-  <string name="not_supported_offline_layer_format">Safu ya nje ya mtandao iliyochaguliwa inatumia muundo wa PBF ambao haukubali!</string>
   <string name="invalid_email_address">Anwani ya barua pepe ni batili!</string>
   <string name="sort_by">Panga kwa</string>
   <string name="server">Seva</string>

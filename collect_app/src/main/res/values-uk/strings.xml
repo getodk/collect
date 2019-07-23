@@ -307,7 +307,6 @@
   <string name="leave_a_review">Залишити відгук в Play Store</string>
   <string name="leave_a_review_msg">Ваш (сподіваємось позитивний) відгук покращить помітність програми в Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="openmap_streets">OSM Вулиці</string>
   <string name="openmap_usgs_topo">USGS топографічна національна карта</string>
   <string name="openmap_usgs_sat">USGS Національна мапа Гібрид</string>
   <string name="openmap_usgs_img">USGS Національна мапа Картинки</string>
@@ -329,7 +328,6 @@
   <string name="enable_gps">Увімкнути GPS</string>
   <string name="geotrace_title">ГеоМаршрут</string>
   <string name="gps_enable_message">GPS на Вашому пристрої вимкнено. Бажаєте увімкнути?</string>
-  <string name="select_offline_layer">Обрати офлайн шар</string>
   <string name="geo_clear_warning">Ознака вже створена. Бажаєте очистити ознаку?</string>
   <string name="geo_exit_warning">Скасувати зміни і повернутись до ODK?</string>
   <string name="polygon_validator">Для багатокутника необхідно мінімум 3 точки</string>
@@ -525,7 +523,6 @@
   <string name="type">Тип</string>
   <string name="form_entry">Зніміть позначку аби прибрати з Заповнити Анкету</string>
   <string name="use_device_language">Використовувати мову пристрою</string>
-  <string name="not_supported_offline_layer_format">Обраний локальний файл використовує формат PBF, що не підтримується!</string>
   <string name="invalid_email_address">Некоректна електронна адреса!</string>
   <string name="sort_by">Сортувати за</string>
   <string name="server">Сервер</string>

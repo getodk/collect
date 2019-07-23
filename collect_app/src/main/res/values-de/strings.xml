@@ -307,7 +307,6 @@
   <string name="leave_a_review">Geben Sie eine Play Store Bewertung ab</string>
   <string name="leave_a_review_msg">Ihre (hoffentlich positive) Bewertung steigert die Bekanntheit der App im Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="openmap_streets">OSM Straßen</string>
   <string name="openmap_usgs_topo">USGS Topografische Karte</string>
   <string name="openmap_usgs_sat">USGS National Karte Hybrid</string>
   <string name="openmap_usgs_img">USGS National Karte Imagery</string>
@@ -329,7 +328,6 @@
   <string name="enable_gps">GPS aktivieren</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="gps_enable_message">GPS ist auf ihrem Gerät deaktiviert. Möchten Sie es aktivieren?</string>
-  <string name="select_offline_layer">Offline-Ebene auswählen</string>
   <string name="geo_clear_warning">Merkmal bereits erzeugt. Möchten Sie das Merkmal löschen?</string>
   <string name="geo_exit_warning">Änderungen verwerfen und zu ODK zurückkehren?</string>
   <string name="polygon_validator">Min. 3 Punkte notwendig um ein Polygon zu erzeugen</string>
@@ -519,7 +517,6 @@
   <string name="type">Typ</string>
   <string name="form_entry">Deaktivieren, um in der Formular-Eingabe auszublenden</string>
   <string name="use_device_language">Gerätesprache benutzen</string>
-  <string name="not_supported_offline_layer_format">Das ausgewählte Offline-Layer benutzt das PBF-Format, das nicht unterstützt wird.</string>
   <string name="invalid_email_address">Ungültige E-Mail-Adresse!</string>
   <string name="sort_by">Sortieren nach</string>
   <string name="server">Server</string>

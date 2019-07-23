@@ -305,7 +305,6 @@
   <string name="leave_a_review">Berikan ulasan di Play Store</string>
   <string name="leave_a_review_msg">Ulasan anda (semoga positif) dapat mempromosikan aplikasi ODK di Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="openmap_streets">OSM dengan layer jalan</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">Peta Nasional Gabungan USGS</string>
   <string name="openmap_usgs_img">Citra Peta Nasional USGS</string>
@@ -326,7 +325,6 @@
   <string name="enable_gps">Hidupkan GPS</string>
   <string name="geotrace_title">Lacak GeoTrace </string>
   <string name="gps_enable_message">GPS perangkatmu tidak aktif, apakah ingin menghidupkan?</string>
-  <string name="select_offline_layer">Pilih layer offline</string>
   <string name="geo_clear_warning">Fitur sudah dibuat. Apakah anda ingin menghapus fitur ini?</string>
   <string name="geo_exit_warning">Abaikan perubahan dan kembali ke ODK?</string>
   <string name="polygon_validator">Minimal harus memiliki 3 poin untuk membuat Polygon</string>
@@ -486,7 +484,6 @@
   <string name="type">Tipe</string>
   <string name="form_entry">Centang disembunyikan saat Isi Formulir</string>
   <string name="use_device_language">Gunakan bahasa perangkat</string>
-  <string name="not_supported_offline_layer_format">Berkas offline layer menggunakan format PBF yang tidak didukung!</string>
   <string name="invalid_email_address">Alamat email tidak valid</string>
   <string name="sort_by">Urutkan dengan</string>
   <string name="server">Server</string>

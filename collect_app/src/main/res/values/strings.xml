@@ -320,7 +320,6 @@
       These strings are only being used to preserve compatibility with pre-existing
        tile caches, and are not shown in the UI.
     -->
-    <string name="openmap_streets">OSM Streets</string>
     <string name="openmap_usgs_topo">USGS National Map Topo</string>
     <string name="openmap_usgs_sat">USGS National Map Hybrid</string>
     <string name="openmap_usgs_img">USGS National Map Imagery</string>
@@ -361,7 +360,6 @@
     <string name="enable_gps">Enable GPS</string>
     <string name="geotrace_title">GeoTrace</string>
     <string name="gps_enable_message">GPS is disabled on your device. Would you like to enable it?</string>
-    <string name="select_offline_layer">Select Offline Layer</string>
     <string name="geo_clear_warning">Feature already created. Would you like to clear the feature?</string>
     <string name="geo_exit_warning">Discard changes and return to ODK?</string>
     <string name="polygon_validator">Must have at least 3 points to create Polygon</string>
@@ -553,7 +551,6 @@
     <string name="type">Type</string>
     <string name="form_entry">Uncheck to hide from Form Entry</string>
     <string name="use_device_language">Use device language</string>
-    <string name="not_supported_offline_layer_format">Selected offline layer file uses the PBF format which is not supported!</string>
     <string name="invalid_email_address">Invalid email address!</string>
     <string name="sort_by">Sort by</string>
     <string name="server">Server</string>

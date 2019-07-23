@@ -272,7 +272,6 @@
   <string name="tell_your_friends_msg">Kolegët tuaj i mbledhin të dhënat me letër akoma? Ndaj ODK Collect me ta.</string>
   <string name="leave_a_review">Vlerëso në Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="openmap_streets">Rrugë OSM</string>
   <string name="streets">Rrugë</string>
   <string name="terrain">Terren</string>
   <string name="hybrid">Hibride</string>
@@ -287,7 +286,6 @@
   <string name="enable_gps">Aktivizo GPS-in</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="gps_enable_message">GPS-i në telefonin tuaj është i ç\'aktivizuar. A do të donit ta aktivizonit?</string>
-  <string name="select_offline_layer">Përzgjidh shtresë offline</string>
   <string name="geo_clear_warning">Tipari është krijuar tanimë. A doni ta pastroni këtë tipar?</string>
   <string name="geo_exit_warning">Elimino ndryshimet dhe kthehu në ODK?</string>
   <string name="polygon_validator">Duhen së paku 3 pika për të krijuar Poligonin</string>
@@ -440,7 +438,6 @@
   <string name="type">Tipi</string>
   <string name="form_entry">Hiq përzgjedhjen për ta fshehur nga Form Entry</string>
   <string name="use_device_language">Përdor gjuhën e aparatit</string>
-  <string name="not_supported_offline_layer_format">Shtresa offline që përzgjodhët përdor format PBF, i cili nuk është i suportuar.</string>
   <string name="invalid_email_address">Adresa email nuk është e vlefshme</string>
   <string name="sort_by">Rendit sipas</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->

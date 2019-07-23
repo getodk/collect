@@ -295,7 +295,6 @@ Escolher Imagem</string>
   <string name="leave_a_review">Deixe um opinião sua na Play Store</string>
   <string name="leave_a_review_msg">A sua opinião (possivelmente positiva) aumenta a visibilidade da App na Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="openmap_streets">Ruas OSM</string>
   <string name="openmap_usgs_topo">Mapa Topográfico Nacional USGS</string>
   <string name="openmap_usgs_sat">Mapa Híbrido Nacional USGS</string>
   <string name="openmap_usgs_img">Mapa de Imagem Nacional USGS</string>
@@ -313,7 +312,6 @@ Escolher Imagem</string>
   <string name="enable_gps">Habilitar GPS</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="gps_enable_message">O GPS está desabilitado em seu aparelho. Gostaria de habilitá-lo?</string>
-  <string name="select_offline_layer">Selecionar Layer Desligado</string>
   <string name="geo_clear_warning">A feature já foi criada. Gostaria de limpar a feature?</string>
   <string name="geo_exit_warning">Descartar mudanças e retornar ao ODK?</string>
   <string name="polygon_validator">Precisa ter pelo menos 3 pontos para criar Polígono</string>
@@ -472,7 +470,6 @@ Escolher Imagem</string>
   <string name="type">Tipo</string>
   <string name="form_entry">Desmarque para ocultar da entrada de formulário</string>
   <string name="use_device_language">Utilizar idioma do dispositivo</string>
-  <string name="not_supported_offline_layer_format">O arquivo do layer selecionado utiliza o formato PBF que não é suportado!</string>
   <string name="invalid_email_address">Endereço de e-mail inválido!</string>
   <string name="sort_by">Organizar por</string>
   <string name="server">Servidor</string>
