@@ -314,6 +314,12 @@
     <!-- Geo string added in feature-geofeatures branch-->
 
     <string name="maps">Maps</string>
+
+    <!--
+      TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.
+    -->
     <string name="openmap_streets">OSM Streets</string>
     <string name="openmap_usgs_topo">USGS National Map Topo</string>
     <string name="openmap_usgs_sat">USGS National Map Hybrid</string>
@@ -338,9 +344,9 @@
     <string name="mapbox_map_style_satellite_streets">Satellite Streets</string>
     <string name="mapbox_map_style_outdoors">Outdoors</string>
 
-    <string name="usgs_map_style_topo">National Topo</string>
+    <string name="usgs_map_style_topographic">National Topographic</string>
     <string name="usgs_map_style_hybrid">National Hybrid</string>
-    <string name="usgs_map_style_imagery">National Imagery</string>
+    <string name="usgs_map_style_satellite">National Satellite</string>
 
     <string name="carto_map_style_positron">Positron</string>
     <string name="carto_map_style_dark_matter">Dark Matter</string>

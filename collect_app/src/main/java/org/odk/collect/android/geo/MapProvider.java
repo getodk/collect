@@ -97,7 +97,7 @@ public class MapProvider {
             new SourceOption(BASEMAP_SOURCE_USGS, R.string.basemap_source_usgs,
                 new OsmDroidMapConfigurator(
                     KEY_USGS_MAP_STYLE, R.string.basemap_source_usgs,
-                    new WmsOption("topo", R.string.usgs_map_style_topo, new WebMapService(
+                    new WmsOption("topographic", R.string.usgs_map_style_topographic, new WebMapService(
                         R.string.openmap_usgs_topo, 0, 18, 256, "USGS",
                         USGS_URL_BASE + "/USGSTopo/MapServer/tile/{z}/{y}/{x}"
                     )),
@@ -105,7 +105,7 @@ public class MapProvider {
                         R.string.openmap_usgs_sat, 0, 18, 256, "USGS",
                         USGS_URL_BASE + "/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}"
                     )),
-                    new WmsOption("imagery", R.string.usgs_map_style_imagery, new WebMapService(
+                    new WmsOption("satellite", R.string.usgs_map_style_satellite, new WebMapService(
                         R.string.openmap_usgs_img, 0, 18, 256, "USGS",
                         USGS_URL_BASE + "/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}"
                     ))

@@ -296,7 +296,7 @@ public class PrefMigratorTest {
 
         initPrefs("map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_usgs_topo");
         PrefMigrator.migrateSharedPrefs();
-        assertPrefs("basemap_source", "usgs", "usgs_map_style", "topo");
+        assertPrefs("basemap_source", "usgs", "usgs_map_style", "topographic");
 
         initPrefs("map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_usgs_sat");
         PrefMigrator.migrateSharedPrefs();
@@ -304,7 +304,7 @@ public class PrefMigratorTest {
 
         initPrefs("map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_usgs_img");
         PrefMigrator.migrateSharedPrefs();
-        assertPrefs("basemap_source", "usgs", "usgs_map_style", "imagery");
+        assertPrefs("basemap_source", "usgs", "usgs_map_style", "satellite");
 
         initPrefs("map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_stamen_terrain");
         PrefMigrator.migrateSharedPrefs();

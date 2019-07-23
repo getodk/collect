@@ -58,11 +58,11 @@ public class PrefMigrator {
                 .toPairs(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_OSM)
 
             .withValues("osmdroid", "openmap_usgs_topo")
-                .toPairs(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_USGS, KEY_USGS_MAP_STYLE, "topo")
+                .toPairs(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_USGS, KEY_USGS_MAP_STYLE, "topographic")
             .withValues("osmdroid", "openmap_usgs_sat")
                 .toPairs(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_USGS, KEY_USGS_MAP_STYLE, "hybrid")
             .withValues("osmdroid", "openmap_usgs_img")
-                .toPairs(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_USGS, KEY_USGS_MAP_STYLE, "imagery")
+                .toPairs(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_USGS, KEY_USGS_MAP_STYLE, "satellite")
 
             .withValues("osmdroid", "openmap_stamen_terrain")
                 .toPairs(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_STAMEN)
