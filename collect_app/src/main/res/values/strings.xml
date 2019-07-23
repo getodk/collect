@@ -344,9 +344,9 @@
     <string name="mapbox_map_style_satellite_streets">Satellite Streets</string>
     <string name="mapbox_map_style_outdoors">Outdoors</string>
 
-    <string name="usgs_map_style_topographic">National Topographic</string>
-    <string name="usgs_map_style_hybrid">National Hybrid</string>
-    <string name="usgs_map_style_satellite">National Satellite</string>
+    <string name="usgs_map_style_topographic">Topographic</string>
+    <string name="usgs_map_style_hybrid">Hybrid</string>
+    <string name="usgs_map_style_satellite">Satellite</string>
 
     <string name="carto_map_style_positron">Positron</string>
     <string name="carto_map_style_dark_matter">Dark Matter</string>
