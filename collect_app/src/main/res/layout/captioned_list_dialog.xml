@@ -13,7 +13,14 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp">
 
-        <RadioGroup
+        <!--
+          Even though this contains RadioButtons, we're using a LinearLayout
+          instead of a RadioGroup here, because a RadioGroup forces all its
+          children to have layout_width="wrap_content"; we want the items in
+          this list to be touchable across the entire width of the dialog.
+        -->
+
+        <LinearLayout
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
