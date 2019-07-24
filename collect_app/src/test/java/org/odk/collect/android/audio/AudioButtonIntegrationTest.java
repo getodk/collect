@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.support.LiveDataTester;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.android.controller.ActivityController;
 import org.robolectric.shadows.ShadowMediaPlayer;
 import org.robolectric.shadows.util.DataSource;
 
@@ -30,10 +31,12 @@ public class AudioButtonIntegrationTest {
     private final AudioButtonManager audioButtonManager = new AudioButtonManager();
 
     private FragmentActivity activity;
+    private ActivityController<FragmentActivity> activityController;
 
     @Before
     public void setup() {
-        activity = Robolectric.setupActivity(FragmentActivity.class);
+        activityController = Robolectric.buildActivity(FragmentActivity.class);
+        activity = activityController.setup().get();
     }
 
     @After
@@ -100,6 +103,19 @@ public class AudioButtonIntegrationTest {
 
         assertThat(getCreatedFromResId(button1), equalTo(android.R.drawable.ic_lock_silent_mode_off));
         assertThat(getCreatedFromResId(button2), equalTo(android.R.drawable.ic_media_pause));
+    }
+
+    @Test
+    public void pausingActivity_releaseMediaPlayer() throws Exception {
+        String testFile1 = File.createTempFile("audio1", ".mp3").getAbsolutePath();
+        setupDataSource(testFile1);
+
+        AudioButton button = new AudioButton(activity);
+        audioButtonManager.setAudio(button, testFile1, activity, () -> mediaPlayer);
+
+        activityController.pause();
+
+        assertThat(shadowOf(mediaPlayer).getState(), equalTo(ShadowMediaPlayer.State.END));
     }
 
     @Test
