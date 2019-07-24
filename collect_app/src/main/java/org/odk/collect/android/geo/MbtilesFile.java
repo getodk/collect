@@ -17,6 +17,9 @@ import java.util.Locale;
 import androidx.annotation.NonNull;
 import timber.log.Timber;
 
+import static android.database.sqlite.SQLiteDatabase.NO_LOCALIZED_COLLATORS;
+import static android.database.sqlite.SQLiteDatabase.OPEN_READONLY;
+
 /**
  * This class provides access to the metadata and tiles in an .mbtiles file.
  * An .mbtiles file is a SQLite database file containing specific tables and
@@ -38,7 +41,7 @@ class MbtilesFile implements Closeable, TileSource {
 
     private MbtilesFile(File file, String contentType) throws MbtilesException {
         this.file = file;
-        this.db = SQLiteDatabase.openOrCreateDatabase(file, null);
+        this.db = openSqliteReadOnly(file);
         this.contentType = contentType;
         switch (contentType) {
             case "application/protobuf":
@@ -105,7 +108,7 @@ class MbtilesFile implements Closeable, TileSource {
                     // in an unusable state, so we need to close it and reopen it.
                     // See https://stackoverflow.com/questions/20094421/cursor-window-window-is-full
                     db.close();
-                    db = SQLiteDatabase.openOrCreateDatabase(file, null);
+                    db = openSqliteReadOnly(file);
                 }
             }
         } catch (Throwable e) {
@@ -162,16 +165,10 @@ class MbtilesFile implements Closeable, TileSource {
         if (!file.exists() || !file.isFile()) {
             throw new NotFileException(file);
         }
-        // SQLite will create a "-journal" file for every file it touches, whether
-        // or not it's a valid SQLite file; and if invalid, it will also create a
-        // ".corrupt" file.  That means every time we scan some files to see whether
-        // they are valid SQLite databases, SQLite will triple all the invalid files.
-        // After several triplings, this quickly explodes into thousands of useless files.
-        // Thus, we refuse to even attempt to open any "-journal" or ".corrupt" files.
-        if (file.getName().endsWith("-journal") || file.getName().endsWith(".corrupt")) {
+        if (!file.getName().toLowerCase(Locale.US).endsWith(".mbtiles")) {
             throw new UnsupportedFilenameException(file);
         }
-        try (SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(file, null)) {
+        try (SQLiteDatabase db = openSqliteReadOnly(file)) {
             // The "format" code indicates whether the binary tiles are raster image
             // files (JPEG, PNG) or protobuf-encoded vector geometry (PBF, MVT).
             String format = queryMetadata(db, "format");
@@ -202,6 +199,11 @@ class MbtilesFile implements Closeable, TileSource {
         } catch (Throwable e) {
             throw new MbtilesException(e);
         }
+    }
+
+    private static SQLiteDatabase openSqliteReadOnly(File file) {
+        return SQLiteDatabase.openDatabase(
+            file.getPath(), null, OPEN_READONLY | NO_LOCALIZED_COLLATORS);
     }
 
     private static boolean startsWithBytes(byte[] actual, int... expected) {
