@@ -165,13 +165,7 @@ class MbtilesFile implements Closeable, TileSource {
         if (!file.exists() || !file.isFile()) {
             throw new NotFileException(file);
         }
-        // SQLite will create a "-journal" file for every file it touches, whether
-        // or not it's a valid SQLite file; and if invalid, it will also create a
-        // ".corrupt" file.  That means every time we scan some files to see whether
-        // they are valid SQLite databases, SQLite will triple all the invalid files.
-        // After several triplings, this quickly explodes into thousands of useless files.
-        // Thus, we refuse to even attempt to open any "-journal" or ".corrupt" files.
-        if (file.getName().endsWith("-journal") || file.getName().endsWith(".corrupt")) {
+        if (!file.getName().toLowerCase(Locale.US).endsWith(".mbtiles")) {
             throw new UnsupportedFilenameException(file);
         }
         try (SQLiteDatabase db = openSqliteReadOnly(file)) {
