@@ -259,6 +259,12 @@
 </string>
   <string name="about_preferences">เกี่ยวกับ</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="map_sdk_selector_title">Mapping SDK</string>
+  <string name="map_sdk_behavior">Mapping SDK</string>
+  <string name="google_maps_sdk">Google Maps SDK</string>
+  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
+  <string name="show_map_sdk">แสดงตัวเลือกของ Map SDK</string>
+  <string name="openmap_streets">OSM Streets</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
@@ -267,6 +273,8 @@
   <string name="terrain">Terrain</string>
   <string name="hybrid">Hybrid</string>
   <string name="satellite">Satellite</string>
+  <string name="map_basemap_selector_title">Basemaps</string>
+  <string name="show_map_basemap">แสดงตัวเลือกของ Basemap</string>
   <string name="save_point">บันทึกจุดพิกัด</string>
   <string name="get_point">เริ่มต้นจุดพิกัด</string>
   <string name="geopoint_view_read_only">แสดงจุดพิกัด</string>
@@ -277,6 +285,7 @@
   <string name="enable_gps">เปิด GPS</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="gps_enable_message">GPS ถูกปิดไว้ ต้องการเปิดใช้งานหรือไม่?</string>
+  <string name="select_offline_layer">เลือกเลเยอร์ที่บันทึกไว้</string>
   <string name="geo_exit_warning">ยกเลิกการเปลี่ยนแปลงและกลับไปที่ ODK?</string>
   <string name="polygon_validator">ต้องมีจุดพิกัด 3 จุดขึ้นไปเพื่อสร้าง Polygon</string>
   <string name="clear">ลบ</string>

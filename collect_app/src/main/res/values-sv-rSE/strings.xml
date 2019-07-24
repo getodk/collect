@@ -297,6 +297,12 @@ Dela ODK Collect med dem.</string>
   <string name="leave_a_review">Lämna ett omdöme på Play Store</string>
   <string name="leave_a_review_msg">Din (förhoppningsvis positiva) recension ökar synligheten av Appen i Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="map_sdk_selector_title">SDK för kartor</string>
+  <string name="map_sdk_behavior">SDK för kartor</string>
+  <string name="google_maps_sdk">Google Maps SDK</string>
+  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
+  <string name="show_map_sdk">Visa Map SDK alternativ</string>
+  <string name="openmap_streets">OSM Streets</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">USGS nationell hybridkarta</string>
   <string name="openmap_usgs_img">USGS nationell satellitkarta</string>
@@ -307,6 +313,8 @@ Dela ODK Collect med dem.</string>
   <string name="terrain">Terrain</string>
   <string name="hybrid">Hybrid</string>
   <string name="satellite">Satellite</string>
+  <string name="map_basemap_selector_title">Grundkartor</string>
+  <string name="show_map_basemap">Visa alternativ för grundkarta</string>
   <string name="save_point">Spara GeoPoint</string>
   <string name="get_point">Starta GeoPoint</string>
   <string name="geopoint_view_read_only">Visa GeoPoint</string>
@@ -317,6 +325,7 @@ Dela ODK Collect med dem.</string>
   <string name="enable_gps">Aktivera GPS</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="gps_enable_message">GPS är inaktiverat på din enhet. Vill du aktivera den?</string>
+  <string name="select_offline_layer">Välj offline-lager</string>
   <string name="geo_clear_warning">Objekt redan skapat. Vill du rensa objektet?</string>
   <string name="geo_exit_warning">Ignorera ändringar och återgå till ODK?</string>
   <string name="polygon_validator">Minst tre punkter krävs för att skapa en polygon</string>
@@ -463,6 +472,7 @@ Dela ODK Collect med dem.</string>
   <string name="wifi_autosend">Endast WiFi</string>
   <string name="cellular_autosend">Endast mobilt nätverk</string>
   <string name="wifi_cellular_autosend">WiFi eller mobilt nätverk</string>
+  <string name="map_basemap_behavior_title">Grundkarta</string>
   <string name="form_management_preferences">Formulärhantering</string>
   <string name="form_submission_category">Formulärinskickning</string>
   <string name="form_filling_category">Formulärifyllnad</string>
@@ -476,6 +486,7 @@ Dela ODK Collect med dem.</string>
   <string name="type">Typ</string>
   <string name="form_entry">Avmarkera för att dölja i formulärinmatning</string>
   <string name="use_device_language">Använd enhetens språk</string>
+  <string name="not_supported_offline_layer_format">Det valda offline-lagret använder PBF-formatet som inte stöds!</string>
   <string name="invalid_email_address">Ogiltig e-postadress!</string>
   <string name="sort_by">Sorteringsordning</string>
   <string name="server">Server</string>
@@ -535,6 +546,7 @@ Dela ODK Collect med dem.</string>
   <string name="islamic_month_10">Shawwal</string>
   <string name="islamic_month_11">Dhu al-Qidah</string>
   <string name="islamic_month_12">Dhu al-Hijjah</string>
+  <string name="persian_month_4">Tir</string>
   <string name="moving_backwards_title">Navigera bakåt</string>
   <string name="moving_backwards_disabled_title">Bakåtnavigering inaktiverad</string>
   <string name="moving_backwards_disabled_message">Vill du konfigurera enheten så att användare förhindras att åsidosätta dessa inställningar?\n\nÄndringarna är:\n\u2022 Avaktivera ändra sparat formulär\n\u2022 Avaktivera spara formulär\n\u2022 Avaktivera gå till post\n\u2022 Aktivera hantering av restriktioner till validering vid navigering framåt</string>

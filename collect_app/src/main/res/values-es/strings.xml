@@ -31,7 +31,7 @@
   <string name="clear_answer">Borrar respuesta</string>
   <string name="clear_answer_ask">¿Borrar esta respuesta?</string>
   <string name="clear_answer_no">Cancelar</string>
-  <string name="data">F. GUARDADOS</string>
+  <string name="data">F. LLENOS</string>
   <string name="data_saved_error">¡Atención, el formulario no se ha guardado correctamente!</string>
   <string name="data_saved_ok">Formulario guardado correctamente</string>
   <string name="save_point_error">Error al guardar punto de recuperación: %s</string>
@@ -309,6 +309,14 @@
   <string name="leave_a_review">Ir a Play Store - Comentar y/o Actualizar</string>
   <string name="leave_a_review_msg">Su comentario (ojalá positivo) incrementa la visibilidad de la App en Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="maps">Mapas</string>
+  <string name="map_sdk_selector_title">Cartografía SDK</string>
+  <string name="map_sdk_behavior">Cartografía SDK</string>
+  <string name="google_maps_sdk">Google Maps SDK</string>
+  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
+  <string name="mapbox_maps_sdk">Mapbox SDK</string>
+  <string name="show_map_sdk">Mostrar Opciones del Mapa SDK</string>
+  <string name="openmap_streets">Calles OSM</string>
   <string name="openmap_usgs_topo">USGS Mapa Topográfico Nacional</string>
   <string name="openmap_usgs_sat">USGS Mapa Nacional Hibrido</string>
   <string name="openmap_usgs_img">USGS Mapa Nacional Satélite</string>
@@ -319,6 +327,14 @@
   <string name="terrain">Terreno</string>
   <string name="hybrid">Híbrido</string>
   <string name="satellite">Satélite</string>
+  <string name="map_basemap_selector_title">Mapa Base</string>
+  <string name="show_map_basemap">Mostrar opciones de Mapa Base</string>
+  <string name="mapbox_streets">Mapbox Calles</string>
+  <string name="mapbox_light">Mapbox Claro</string>
+  <string name="mapbox_dark">Mapbox Oscuro</string>
+  <string name="mapbox_satellite">Mapbox Satélite</string>
+  <string name="mapbox_satellite_streets">Mapbox Satelite y Calles</string>
+  <string name="mapbox_outdoors">Mapbox Exteriores</string>
   <string name="save_point">Guardar Ubicación</string>
   <string name="get_point">Buscar Ubicación</string>
   <string name="geopoint_view_read_only">Ver Ubicación</string>
@@ -330,6 +346,7 @@
   <string name="enable_gps">Activar el GPS</string>
   <string name="geotrace_title">GeoLínea</string>
   <string name="gps_enable_message">GPS esta deshabilitado. ¿Activar?</string>
+  <string name="select_offline_layer">Seleccione la capa sin conexión</string>
   <string name="geo_clear_warning">Función ya creada. ¿Desea borrar la función?</string>
   <string name="geo_exit_warning">¿Ignorar los cambios y regresar?</string>
   <string name="polygon_validator">Debe tener al menos 3 puntos para crear un polígono</string>
@@ -506,6 +523,7 @@
   <string name="wifi_autosend">Solo con WIFI</string>
   <string name="cellular_autosend">Solo con Datos Móviles</string>
   <string name="wifi_cellular_autosend">Wifi o Datos Móviles</string>
+  <string name="map_basemap_behavior_title">Mapa Base</string>
   <string name="form_management_preferences">Manejo de formularios</string>
   <string name="form_submission_category">Enviar formulario</string>
   <string name="form_filling_category">Llenado de Formularios</string>
@@ -519,6 +537,7 @@
   <string name="type">Tipo</string>
   <string name="form_entry">Desmarque para ocultar el formulario</string>
   <string name="use_device_language">Usar el idioma del dispositivo</string>
+  <string name="not_supported_offline_layer_format">La capa de archivo seleccionada offline usa el formato PBF el cual no es soportado!</string>
   <string name="invalid_email_address">Email inválido</string>
   <string name="sort_by">Ordenar por</string>
   <string name="server">Servidor</string>
@@ -578,6 +597,18 @@
   <string name="islamic_month_10">Shawwal</string>
   <string name="islamic_month_11">Dhu al-Qidah</string>
   <string name="islamic_month_12">Dhu al-Hijjah</string>
+  <string name="persian_month_1">Farvardin</string>
+  <string name="persian_month_2">Ordibehesht</string>
+  <string name="persian_month_3">Khordad</string>
+  <string name="persian_month_4">Tir</string>
+  <string name="persian_month_5">Mordad</string>
+  <string name="persian_month_6">Shahrivar</string>
+  <string name="persian_month_7">Mehr</string>
+  <string name="persian_month_8">Aban</string>
+  <string name="persian_month_9">Azar</string>
+  <string name="persian_month_10">Dey</string>
+  <string name="persian_month_11">Bahman</string>
+  <string name="persian_month_12">Esfand</string>
   <string name="moving_backwards_title">Retroceder en Preguntas</string>
   <string name="moving_backwards_disabled_title">Retroceder en Preguntas Desactivado</string>
   <string name="moving_backwards_disabled_message">Configure el dispositivo para prevenir que los usuarios se salten esta configuración?\n\nLos cambios son:\n\u2022 Desactivar Editar Formularios Guardados\n\u2022 Desactivar Guardar Formularios\n\u2022 Desactivar Ir a Pregunta\n\u2022 Establecer Manejo de Restricciones como Validar al desplazar hacia adelante</string>
@@ -670,4 +701,5 @@
   <string name="copying_media_files_failed">La copia de los archivos de medios falló</string>
   <string name="qr_code_not_found">Código QR no encontrado en la imagen seleccionada</string>
   <string name="not_granted_permission">La actividad que está intentando iniciar requiere un permiso que no se ha concedido.</string>
+  <string name="mapbox_unsupported_warning">Mapbox no es soportado en este dispositivo (%s).  Por favor escoja otro SDK de mapas en Ajustes &gt; interfaz de usuario.</string>
 </resources>

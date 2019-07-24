@@ -307,6 +307,14 @@
   <string name="leave_a_review">Play ストアにレビューを残す</string>
   <string name="leave_a_review_msg">あなたの (肯定的な) レビューが Play ストアでアプリの認知度を向上させてくれます</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="maps">地図</string>
+  <string name="map_sdk_selector_title">マッピング SDK</string>
+  <string name="map_sdk_behavior">マッピング SDK</string>
+  <string name="google_maps_sdk">Google マップ SDK</string>
+  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
+  <string name="mapbox_maps_sdk">Mapbox マップ SDK</string>
+  <string name="show_map_sdk">マップ SDK オプションを表示</string>
+  <string name="openmap_streets">OSM 道路</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">USGS ナショナルマップ ハイブリッド</string>
   <string name="openmap_usgs_img">USGS ナショナルマップ画像</string>
@@ -317,6 +325,14 @@
   <string name="terrain">地形</string>
   <string name="hybrid">ハイブリッド</string>
   <string name="satellite">衛星</string>
+  <string name="map_basemap_selector_title">基本地図</string>
+  <string name="show_map_basemap">基本地図オプションを表示</string>
+  <string name="mapbox_streets">Mapbox 道路</string>
+  <string name="mapbox_light">Mapbox ライト</string>
+  <string name="mapbox_dark">Mapbox ダーク</string>
+  <string name="mapbox_satellite">Mapbox 衛星</string>
+  <string name="mapbox_satellite_streets">Mapbox 衛星道路</string>
+  <string name="mapbox_outdoors">Mapbox アウトドア</string>
   <string name="save_point">地理位置を保存</string>
   <string name="get_point">地理位置を開始</string>
   <string name="geopoint_view_read_only">地理位置を表示</string>
@@ -328,6 +344,7 @@
   <string name="enable_gps">GPS を有効にする</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="gps_enable_message">お使いのデバイスで GPS は無効になっています。有効にしますか?</string>
+  <string name="select_offline_layer">オフライン レイヤーを選択</string>
   <string name="geo_clear_warning">機能は既に作成済です。機能をクリアしますか?</string>
   <string name="geo_exit_warning">変更を破棄して ODK の戻りますか?</string>
   <string name="polygon_validator">ポリゴンを作成するには、少なくとも 3 点指定する必要があります</string>
@@ -501,6 +518,7 @@
   <string name="wifi_autosend">Wifi のみ</string>
   <string name="cellular_autosend">データ通信のみ</string>
   <string name="wifi_cellular_autosend">Wifi またはデータ通信</string>
+  <string name="map_basemap_behavior_title">基本地図</string>
   <string name="form_management_preferences">フォーム管理</string>
   <string name="form_submission_category">フォーム送信</string>
   <string name="form_filling_category">フォーム入力</string>
@@ -514,6 +532,7 @@
   <string name="type">種類</string>
   <string name="form_entry">チェックを外すとフォーム入力から非表示にします</string>
   <string name="use_device_language">デバイスの言語を使用する</string>
+  <string name="not_supported_offline_layer_format">選択されたオフラインレイヤーファイルは、サポートされていない PBF フォーマットを使用しています!</string>
   <string name="invalid_email_address">メールアドレスが無効です!</string>
   <string name="sort_by">並び順</string>
   <string name="server">サーバー</string>
@@ -573,6 +592,18 @@
   <string name="islamic_month_10">シャッワール</string>
   <string name="islamic_month_11">ズルカーダ</string>
   <string name="islamic_month_12">ズルヒッジャ</string>
+  <string name="persian_month_1">ファルヴァルディーン</string>
+  <string name="persian_month_2">オルディーベヘシュト</string>
+  <string name="persian_month_3">ホルダード</string>
+  <string name="persian_month_4">トルウ</string>
+  <string name="persian_month_5">モルダード</string>
+  <string name="persian_month_6">シャハリーヴァル</string>
+  <string name="persian_month_7">メフル</string>
+  <string name="persian_month_8">アーバーン</string>
+  <string name="persian_month_9">アーザル</string>
+  <string name="persian_month_10">デイ</string>
+  <string name="persian_month_11">バフマン</string>
+  <string name="persian_month_12">エスファンド</string>
   <string name="moving_backwards_title">後ろへの移動</string>
   <string name="moving_backwards_disabled_title">後ろへの移動は無効です</string>
   <string name="moving_backwards_disabled_message">ユーザーがこの設定をバイパスできないようにデバイスを設定しますか?\n\n変更は:\n\u2022 保存したフォームの編集を無効にする\n\u2022 フォームの保存を無効にする\n\u2022 プロンプトへの移動を無効にする\n\u2022 制約処理を設定して、次画面にスワイプ時に検証する</string>
@@ -664,4 +695,5 @@
   <string name="copying_media_files_failed">メディアファイルのコピーに失敗しました</string>
   <string name="qr_code_not_found">選択した画像に QR コードが見つかりませんでした</string>
   <string name="not_granted_permission">開始しようとしているアクティビティは、必要なアクセス許可が付与されていません。</string>
+  <string name="mapbox_unsupported_warning">Mapbox はこのデバイス (%s) でサポートされていません。 全般設定 &gt; ユーザーインターフェースで別のマッピング SDK を選択してください。</string>
 </resources>
