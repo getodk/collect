@@ -307,7 +307,7 @@
   <string name="leave_a_review">Zostaw swoją opinię na Play Store</string>
   <string name="leave_a_review_msg">Twoja (mamy nadzieję pozytywna) recenzja przyczyni się do zwiększenia widoczności Aplikacji w Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="openmap_usgs_topo">USGS National Map Topo</string>
+    <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">USGS National Map Hybrid</string>
   <string name="openmap_usgs_img">USGS National Map Imagery</string>
   <string name="openmap_stamen_terrain">Teren Stamen</string>
@@ -317,7 +317,7 @@
   <string name="terrain">Teren</string>
   <string name="hybrid">Hybryda</string>
   <string name="satellite">Satelita</string>
-  <string name="save_point">Zapisz GeoPoint</string>
+    <string name="save_point">Zapisz GeoPoint</string>
   <string name="get_point">Zacznij GeoPoint</string>
   <string name="geopoint_view_read_only">Pokaż GeoPoint</string>
   <string name="get_shape">Zacznij GeoShape</string>
@@ -328,7 +328,7 @@
   <string name="enable_gps">Włącz GPS</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="gps_enable_message">GPS jest jest wyłączony na twoim urządzeniu. Czy chciałbyś go włączyć?</string>
-  <string name="geo_clear_warning">Właściwość już stworzona. Chcesz usunąć właściwość?</string>
+    <string name="geo_clear_warning">Właściwość już stworzona. Chcesz usunąć właściwość?</string>
   <string name="geo_exit_warning">Usunąć zmiany i wrócić do ODK?</string>
   <string name="polygon_validator">Wymagane są przynajmniej 3 punkty aby utworzyć wielokąt</string>
   <string name="polyline_validator">Wymagane co najmniej 2 punkty, by utworzyć polilinię</string>
@@ -510,7 +510,7 @@
   <string name="wifi_autosend">Tylko wifi</string>
   <string name="cellular_autosend">Tylko sieć</string>
   <string name="wifi_cellular_autosend">Wifi oraz sieć</string>
-  <string name="form_management_preferences">Zarządzanie formularzem</string>
+    <string name="form_management_preferences">Zarządzanie formularzem</string>
   <string name="form_submission_category">Przesyłanie formularzu</string>
   <string name="form_filling_category">Wypełnianie formularzu</string>
   <string name="high_resolution_title">Wideo w wysokiej rozdzielczości</string>
@@ -523,7 +523,7 @@
   <string name="type">Typ</string>
   <string name="form_entry">Odznacz aby ukryć z Wypełniania Formularza</string>
   <string name="use_device_language">Użyj języka urządzenia</string>
-  <string name="invalid_email_address">Nieprawidłowy adres email!</string>
+    <string name="invalid_email_address">Nieprawidłowy adres email!</string>
   <string name="sort_by">Sortuj według</string>
   <string name="server">Serwer</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
@@ -582,6 +582,7 @@
   <string name="islamic_month_10">Shawwal</string>
   <string name="islamic_month_11">Dhu al-Qidah</string>
   <string name="islamic_month_12">Dhu al-Hijjah</string>
+  <string name="persian_month_4">Tir</string>
   <string name="moving_backwards_title">Cofanie się</string>
   <string name="moving_backwards_disabled_title">Cofanie się nie jest możliwe</string>
   <string name="moving_backwards_disabled_message">Skonfiguruj urządzenie, aby uniemożliwić użytkownikom ominięcie tego ustawienia? \n\nZmiany są następujące:\n\u2022 Wyłącz Edycję Zapisanego Formularzu\n\u2022 Wyłącz Zapis Fromularzu\n\u2022 Wyłącz podpowiedź Przejdź Do\n\u2022 Ustaw Przetwarzanie Ograniczeń na Sprawdź po przewinięciu do przodu</string>

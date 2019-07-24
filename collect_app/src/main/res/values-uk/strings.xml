@@ -307,7 +307,7 @@
   <string name="leave_a_review">Залишити відгук в Play Store</string>
   <string name="leave_a_review_msg">Ваш (сподіваємось позитивний) відгук покращить помітність програми в Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="openmap_usgs_topo">USGS топографічна національна карта</string>
+    <string name="openmap_usgs_topo">USGS топографічна національна карта</string>
   <string name="openmap_usgs_sat">USGS Національна мапа Гібрид</string>
   <string name="openmap_usgs_img">USGS Національна мапа Картинки</string>
   <string name="openmap_stamen_terrain">Stamen Ландшафт</string>
@@ -317,7 +317,7 @@
   <string name="terrain">Ландшафт</string>
   <string name="hybrid">Змішана</string>
   <string name="satellite">Супутник</string>
-  <string name="save_point">Зберегти ГеоТочку</string>
+    <string name="save_point">Зберегти ГеоТочку</string>
   <string name="get_point">Записати ГеоТочку</string>
   <string name="geopoint_view_read_only">Переглянути ГеоТочку</string>
   <string name="get_shape">Почати ГеоФігуру</string>
@@ -328,7 +328,7 @@
   <string name="enable_gps">Увімкнути GPS</string>
   <string name="geotrace_title">ГеоМаршрут</string>
   <string name="gps_enable_message">GPS на Вашому пристрої вимкнено. Бажаєте увімкнути?</string>
-  <string name="geo_clear_warning">Ознака вже створена. Бажаєте очистити ознаку?</string>
+    <string name="geo_clear_warning">Ознака вже створена. Бажаєте очистити ознаку?</string>
   <string name="geo_exit_warning">Скасувати зміни і повернутись до ODK?</string>
   <string name="polygon_validator">Для багатокутника необхідно мінімум 3 точки</string>
   <string name="polyline_validator">Для створення лінії необхідні принаймні дві точки</string>
@@ -510,7 +510,7 @@
   <string name="wifi_autosend">Тільки Wi-Fi</string>
   <string name="cellular_autosend">Тільки мобільна мережа</string>
   <string name="wifi_cellular_autosend">Wi-Fi або мобільна мережа</string>
-  <string name="form_management_preferences">Управління анкетою</string>
+    <string name="form_management_preferences">Управління анкетою</string>
   <string name="form_submission_category">Відправка анкети</string>
   <string name="form_filling_category">Заповнення анкети</string>
   <string name="high_resolution_title">Відео високої роздільної здатності</string>
@@ -523,7 +523,7 @@
   <string name="type">Тип</string>
   <string name="form_entry">Зніміть позначку аби прибрати з Заповнити Анкету</string>
   <string name="use_device_language">Використовувати мову пристрою</string>
-  <string name="invalid_email_address">Некоректна електронна адреса!</string>
+    <string name="invalid_email_address">Некоректна електронна адреса!</string>
   <string name="sort_by">Сортувати за</string>
   <string name="server">Сервер</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
@@ -582,6 +582,7 @@
   <string name="islamic_month_10">Шаваль</string>
   <string name="islamic_month_11">Ду аль-кідах</string>
   <string name="islamic_month_12">Ду аль-хіджах</string>
+  <string name="persian_month_4">Тір</string>
   <string name="moving_backwards_title">Переміщення назад</string>
   <string name="moving_backwards_disabled_title">Переміщення назад відключене</string>
   <string name="moving_backwards_disabled_message">Бажаєте налаштувати цей пристрій аби заборонити користувачам оминати ці налаштування?\n\nВнесені зміни:\n\u2022 Відключено Виправити Збережену Анкету\n\u2022 Відключено Зберегти Анкету\n\u2022 Відключено Швидкій Перехід\n\u2022 Обробка обмежень встановлена на Перевіряти під час переходу вперед</string>

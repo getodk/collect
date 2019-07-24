@@ -220,6 +220,7 @@
   <string name="found_in_settings">Deseleziona per nascondere da Impostazioni Generali</string>
   <string name="save_preferences">Salvataggio Impostazioni su Disco</string>
   <string name="form_forward">Prossimo</string>
+  <string name="form_backward">Indietro</string>
   <string name="navigation">Navigazione</string>
   <string name="swipe_navigation">Scorri il dito orizzontalmente</string>
   <string name="buttons_navigation">Usa pulsanti avanti/indietro</string>
@@ -306,7 +307,8 @@
   <string name="leave_a_review">Lascia un commento su Play Store</string>
   <string name="leave_a_review_msg">Il tuo commento (speriamo positivo) aumenta la visibilità dell\'applicazione su Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="openmap_usgs_topo">Mappa Topologia Nazionale USGS</string>
+  <string name="maps">Mappe</string>
+    <string name="openmap_usgs_topo">Mappa Topologia Nazionale USGS</string>
   <string name="openmap_usgs_sat">Mappa Ibrida Nazionale USGS</string>
   <string name="openmap_usgs_img">Immagini di Mappe Nazionali USGS</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
@@ -316,7 +318,7 @@
   <string name="terrain">Terrain - Territoriale</string>
   <string name="hybrid">Hybrid - Ibrida</string>
   <string name="satellite">Satellite - Satellitare</string>
-  <string name="save_point">Salva Geo-punto</string>
+    <string name="save_point">Salva Geo-punto</string>
   <string name="get_point">Inizia Geo-punto</string>
   <string name="geopoint_view_read_only">Guarda Geo-punto</string>
   <string name="get_shape">Inizia Geo-contorno</string>
@@ -327,7 +329,7 @@
   <string name="enable_gps">Abilita GPS</string>
   <string name="geotrace_title">Geo-tracciatura</string>
   <string name="gps_enable_message">Il GPS è disabilitato nel tuo dispositivo. Vuoi abilitarlo?</string>
-  <string name="geo_clear_warning">Caratteristica già creata. Vuoi cancellarla?</string>
+    <string name="geo_clear_warning">Caratteristica già creata. Vuoi cancellarla?</string>
   <string name="geo_exit_warning">Vuoi scartare le modifiche e ritornare ad ODK?</string>
   <string name="polygon_validator">Devi avere almeno 3 punti per creare un Poligono</string>
   <string name="polyline_validator">Devi avere almeno 2 punti per creare una Polilinea</string>
@@ -336,8 +338,20 @@
   <string name="manual_mode">Memorizzazione manuale localizzazione</string>
   <string name="automatic_mode">Memorizzazione automatica localizzazione</string>
   <string name="recording_interval">Memorizzazione intervallo:</string>
+  <plurals name="number_of_seconds">
+    <item quantity="one">%d</item>
+    <item quantity="other">%dsecondi</item>
+  </plurals>
+  <plurals name="number_of_minutes">
+    <item quantity="one">%dminuti</item>
+    <item quantity="other">%dminuti</item>
+  </plurals>
   <string name="accuracy_requirement">Requisiti di precisione:</string>
   <string name="none">Nessuno</string>
+  <plurals name="number_of_meters">
+    <item quantity="one">%dmetri</item>
+    <item quantity="other">%d metri</item>
+  </plurals>
   <string name="location_status_searching">Sto ricercando segnale GPS, prego attendere…</string>
   <string name="location_status_accuracy">Precisione localizzazione GPS: %.1f m</string>
   <string name="location_status_acceptable">Precisione localizzazione GPS: %.1f m (accettabile)</string>
@@ -491,7 +505,7 @@
   <string name="wifi_autosend">Solo WiFi</string>
   <string name="cellular_autosend">Solo cellulare</string>
   <string name="wifi_cellular_autosend">WiFi o cellulare</string>
-  <string name="form_management_preferences">Gestione modulo</string>
+    <string name="form_management_preferences">Gestione modulo</string>
   <string name="form_submission_category">Sottomissione modulo</string>
   <string name="form_filling_category">Riempimento modulo</string>
   <string name="high_resolution_title">Video ad alta definizione</string>
@@ -504,7 +518,7 @@
   <string name="type">Tipo</string>
   <string name="form_entry">Deseleziona per nascondere dal Modulo d\'Entrata</string>
   <string name="use_device_language">Utilizza lingua del dispositivo</string>
-  <string name="invalid_email_address">Indirizzo email invalido!</string>
+    <string name="invalid_email_address">Indirizzo email invalido!</string>
   <string name="sort_by">Ordina per</string>
   <string name="server">Server</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
@@ -553,6 +567,7 @@
   <string name="islamic_month_2">Safar</string>
   <string name="islamic_month_3">Rabi\' al-awwal</string>
   <string name="islamic_month_4">Rabi\' al-thani</string>
+  <string name="persian_month_4">Tir</string>
   <string name="moving_backwards_title">Sfoglia indietro</string>
   <string name="moving_backwards_disabled_title">Sfoglia indietro disabilitato</string>
   <string name="moving_backwards_enabled_title">Sfoglia indietro abilitato</string>
@@ -564,6 +579,7 @@
   <string name="stop_video_capture_instruction">Registrazione avviata. Per fermare, tocca lo schermo</string>
   <string name="no_columns_to_upload">Nessuna colonna nel file caricato</string>
   <string name="storage_runtime_permission_denied_title">Autorizzazione all\'uso della memoria</string>
+  <string name="storage_runtime_permission_denied_desc">Senza questi permessi Collect non può accedere ai tuoi questionari o salvare le risposte. Riapri la applicazione quando sei pronto ad autorizzarli.</string>
   <string name="location_runtime_permissions_denied_title">Autorizzazione all\'uso dei servizi di localizzazione</string>
   <string name="location_runtime_permissions_denied_desc">Senza queste autorizzazioni Collect non può registrare la tua posizione. Prova di nuovo quando hai autorizzato l\'uso dei servizi di localizzazione</string>
   <string name="camera_runtime_permission_denied_title">Autorizzazione uso fotocamera</string>
@@ -575,6 +591,7 @@
   <string name="send_sms_runtime_permission_denied_title">Autorizzazione invio SMS</string>
   <string name="send_sms_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può inviare SMS. Prova di nuovo quando hai autorizzato l\'invio di SMS</string>
   <string name="form_update_category">Aggiornamento Modulo</string>
+  <string name="periodic_form_updates_check_title">Controllo periodico di aggiornamento questionari</string>
   <string name="never">Mai</string>
   <string name="every_fifteen_minutes">Ogni 15 minuti</string>
   <string name="every_one_hour">Ogni ora</string>
@@ -582,8 +599,21 @@
   <string name="every_24_hours">Ogni 24 ore</string>
   <string name="form_updates_available">Aggiornamenti Modulo disponibili</string>
   <string name="automatic_download">Download automatico</string>
+  <string name="automatic_download_summary">Scarica automaticamente i questionari aggiornati</string>
+  <string name="not_a_directory">%sesiste, ma non è una cartella</string>
+  <string name="location_metadata">Satelliti disponibili:%1$d/24\n\nTempo trascorso: %2$s</string>
+  <string name="hide_old_form_versions_setting_title">Nascondi le vecchie versioni dei questionario</string>
+  <string name="hide_old_form_versions_setting_summary">Solo l\'ultima versione apparirà in Compila Formulario Vuoto</string>
+  <string name="sms_pref_dialog_title">Numero telefono destinatario</string>
+  <string name="sms_pref_title">Numero telefono destinatario</string>
   <string name="sms_invalid_phone_number">Numero di telefono non valido!</string>
   <!--Sms submission-->
+  <string name="sms_submission_queued">In coda per essere inviato</string>
   <string name="transport_type_sms">SMS</string>
   <string name="rank_items">Ordina gli elementi</string>
+  <string name="notification_channel_name">Impostazioni Generali</string>
+  <string name="go_to_settings">Vai a impostazioni</string>
+  <string name="open_file">Apri documento</string>
+  <string name="read_details">Lettura dettagli</string>
+  <string name="qr_code_not_found">Il codice QR non è stato rilevato nell\'immagine selezionata</string>
 </resources>

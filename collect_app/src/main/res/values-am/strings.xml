@@ -285,6 +285,7 @@
   <string name="ethiopian_month_12">ነሐሴ</string>
   <string name="ethiopian_month_13">ጳጉሜን</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="persian_month_4">ጥር</string>
   <string name="moving_backwards_title">ወደኋላ መሄድ</string>
   <string name="moving_backwards_disabled_title">ወደኋላ መሄድ አልተመረጠም</string>
   <string name="moving_backwards_enabled_title">ወደኋላ መሄድ ተመርጧል</string>

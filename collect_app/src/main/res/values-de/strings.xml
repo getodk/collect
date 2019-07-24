@@ -307,7 +307,8 @@
   <string name="leave_a_review">Geben Sie eine Play Store Bewertung ab</string>
   <string name="leave_a_review_msg">Ihre (hoffentlich positive) Bewertung steigert die Bekanntheit der App im Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="openmap_usgs_topo">USGS Topografische Karte</string>
+  <string name="maps">Karten</string>
+    <string name="openmap_usgs_topo">USGS Topografische Karte</string>
   <string name="openmap_usgs_sat">USGS National Karte Hybrid</string>
   <string name="openmap_usgs_img">USGS National Karte Imagery</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
@@ -317,7 +318,7 @@
   <string name="terrain">Gelände</string>
   <string name="hybrid">Hybrid</string>
   <string name="satellite">Satellit</string>
-  <string name="save_point">Standort speichern</string>
+    <string name="save_point">Standort speichern</string>
   <string name="get_point">Standort erfassen</string>
   <string name="geopoint_view_read_only">Standort anzeigen</string>
   <string name="get_shape">GeoShape starten</string>
@@ -328,7 +329,7 @@
   <string name="enable_gps">GPS aktivieren</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="gps_enable_message">GPS ist auf ihrem Gerät deaktiviert. Möchten Sie es aktivieren?</string>
-  <string name="geo_clear_warning">Merkmal bereits erzeugt. Möchten Sie das Merkmal löschen?</string>
+    <string name="geo_clear_warning">Merkmal bereits erzeugt. Möchten Sie das Merkmal löschen?</string>
   <string name="geo_exit_warning">Änderungen verwerfen und zu ODK zurückkehren?</string>
   <string name="polygon_validator">Min. 3 Punkte notwendig um ein Polygon zu erzeugen</string>
   <string name="polyline_validator">Min. 2 Punkte notwendig um eine Polylinie zu erzeugen</string>
@@ -504,7 +505,7 @@
   <string name="wifi_autosend">Nur WLAN</string>
   <string name="cellular_autosend">Nur Mobilfunk</string>
   <string name="wifi_cellular_autosend">WLAN oder Mobilfunk</string>
-  <string name="form_management_preferences">Formularverwaltung</string>
+    <string name="form_management_preferences">Formularverwaltung</string>
   <string name="form_submission_category">Formulareinsendung</string>
   <string name="form_filling_category">Formulareingabe</string>
   <string name="high_resolution_title">HD-Video</string>
@@ -517,7 +518,7 @@
   <string name="type">Typ</string>
   <string name="form_entry">Deaktivieren, um in der Formular-Eingabe auszublenden</string>
   <string name="use_device_language">Gerätesprache benutzen</string>
-  <string name="invalid_email_address">Ungültige E-Mail-Adresse!</string>
+    <string name="invalid_email_address">Ungültige E-Mail-Adresse!</string>
   <string name="sort_by">Sortieren nach</string>
   <string name="server">Server</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
@@ -576,6 +577,18 @@
   <string name="islamic_month_10">Shawwal</string>
   <string name="islamic_month_11">Dhu al-Qidah</string>
   <string name="islamic_month_12">Dhu al-Hijjah</string>
+  <string name="persian_month_1">Farwardin</string>
+  <string name="persian_month_2">Ordibehescht</string>
+  <string name="persian_month_3">Chordād</string>
+  <string name="persian_month_4">Tir</string>
+  <string name="persian_month_5">Mordād</string>
+  <string name="persian_month_6">Schahriwar</string>
+  <string name="persian_month_7">Mehr</string>
+  <string name="persian_month_8">Ābān</string>
+  <string name="persian_month_9">Āsar</string>
+  <string name="persian_month_10">Déi</string>
+  <string name="persian_month_11">Bahman</string>
+  <string name="persian_month_12">Essfand</string>
   <string name="moving_backwards_title">Rückwärts bewegen</string>
   <string name="moving_backwards_disabled_title">Rückwärts bewegen deaktiviert</string>
   <string name="moving_backwards_disabled_message">Das Gerät so konfigurieren, dass Anwender diese Einstellung nicht umgehen können?\n\nDie Änderungen sind:\n\n\u2022 Deaktiviere \"Gespeichertes Formular bearbeiten\"\n\u2022 Deaktiviere \"Formular speichern\"\n\u2022 Deakktiviere \"Gehe zum Prompt\"\n\u2022 Aktiviere \"Validierung beim Vorwärts-Wischen\"</string>

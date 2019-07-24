@@ -307,7 +307,8 @@
   <string name="leave_a_review">Kirjoita Play Store -arvio</string>
   <string name="leave_a_review_msg">Sinun (toivottavasti myönteinen) arviosi lisää sovelluksen näkyvyyttä Play Store -kaupassa.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="openmap_usgs_topo">USGS National Map topografinen</string>
+  <string name="maps">Kartat</string>
+    <string name="openmap_usgs_topo">USGS National Map topografinen</string>
   <string name="openmap_usgs_sat">USGS National Map hybridi</string>
   <string name="openmap_usgs_img">USGS National Map kuvat</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
@@ -317,7 +318,7 @@
   <string name="terrain">Maasto</string>
   <string name="hybrid">Hybridi</string>
   <string name="satellite">Satelliitti</string>
-  <string name="save_point">Tallenna GeoPoint</string>
+    <string name="save_point">Tallenna GeoPoint</string>
   <string name="get_point">Käynnistä GeoPoint</string>
   <string name="geopoint_view_read_only">Tarkastele GeoPoint</string>
   <string name="get_shape">Aloita GeoShape</string>
@@ -328,7 +329,7 @@
   <string name="enable_gps">Ota GPS käyttöön</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="gps_enable_message">GPS on poistettu käytöstä laitteellasi. Haluaisitko ottaa sen käyttöön?</string>
-  <string name="geo_clear_warning">Ominaisuus on jo luotu. Haluatko tyhjentää ominaisuuden?</string>
+    <string name="geo_clear_warning">Ominaisuus on jo luotu. Haluatko tyhjentää ominaisuuden?</string>
   <string name="geo_exit_warning">Hylätäänkö muutokset ja palataan ODK:hon?</string>
   <string name="polygon_validator">Monikulmion luomiseen tarvitaan vähintään 3 pistettä</string>
   <string name="polyline_validator">Polyline-kuvion luomiseen tarvitaan vähintään 2 pistettä</string>
@@ -504,7 +505,7 @@
   <string name="wifi_autosend">Vain Wifi</string>
   <string name="cellular_autosend">Vain puhelinverkko</string>
   <string name="wifi_cellular_autosend">Wifi tai puhelinverkko</string>
-  <string name="form_management_preferences">Lomakkeen hallinta</string>
+    <string name="form_management_preferences">Lomakkeen hallinta</string>
   <string name="form_submission_category">Lomakkeen lähetys</string>
   <string name="form_filling_category">Lomakkeen täyttö</string>
   <string name="high_resolution_title">Korkean resoluution video</string>
@@ -517,7 +518,7 @@
   <string name="type">Tyyppi</string>
   <string name="form_entry">Poista rasti piiloittaaksesi lomakesyötöstä</string>
   <string name="use_device_language">Käytä laitteen oletuskieltä</string>
-  <string name="invalid_email_address">Virheellinen sähköpostiosoite!</string>
+    <string name="invalid_email_address">Virheellinen sähköpostiosoite!</string>
   <string name="sort_by">Lajitteluperuste</string>
   <string name="server">Palvelin</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
@@ -576,6 +577,18 @@
   <string name="islamic_month_10">šawwal</string>
   <string name="islamic_month_11">dhu-l-qada</string>
   <string name="islamic_month_12">dhu-l-hiddža</string>
+  <string name="persian_month_1">Farvardīn</string>
+  <string name="persian_month_2">Ordībehešt</string>
+  <string name="persian_month_3">Khordād</string>
+  <string name="persian_month_4">Tīr</string>
+  <string name="persian_month_5">A-Mordād</string>
+  <string name="persian_month_6">Shahrīvar</string>
+  <string name="persian_month_7">Mehr</string>
+  <string name="persian_month_8">Aban</string>
+  <string name="persian_month_9">Azar</string>
+  <string name="persian_month_10">Dey</string>
+  <string name="persian_month_11">Bahman</string>
+  <string name="persian_month_12">Esfand</string>
   <string name="moving_backwards_title">Siirtyminen taaksepäin</string>
   <string name="moving_backwards_disabled_title">Siirtyminen taaksepäin pois päältä</string>
   <string name="moving_backwards_disabled_message">Määritä laitetta estääksesi käyttäjiä ohittamasta tätä asetusta?\n\nMuutokset ovat:\n\u2022 Muokkaa talletettua tomaketta pois päältä\n\u2022 Tallenna lomake pois päältä\n\u2022 Siirtyminen kehotteeseen pois päältä\n\u2022 Aseta rajoiteprosessointi vahvistustilaan eteenpäin pyyhkäistäessä</string>

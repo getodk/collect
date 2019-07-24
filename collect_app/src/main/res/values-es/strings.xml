@@ -31,7 +31,7 @@
   <string name="clear_answer">Borrar respuesta</string>
   <string name="clear_answer_ask">¿Borrar esta respuesta?</string>
   <string name="clear_answer_no">Cancelar</string>
-  <string name="data">F. GUARDADOS</string>
+  <string name="data">F. LLENOS</string>
   <string name="data_saved_error">¡Atención, el formulario no se ha guardado correctamente!</string>
   <string name="data_saved_ok">Formulario guardado correctamente</string>
   <string name="save_point_error">Error al guardar punto de recuperación: %s</string>
@@ -309,7 +309,8 @@
   <string name="leave_a_review">Ir a Play Store - Comentar y/o Actualizar</string>
   <string name="leave_a_review_msg">Su comentario (ojalá positivo) incrementa la visibilidad de la App en Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="openmap_usgs_topo">USGS Mapa Topográfico Nacional</string>
+  <string name="maps">Mapas</string>
+    <string name="openmap_usgs_topo">USGS Mapa Topográfico Nacional</string>
   <string name="openmap_usgs_sat">USGS Mapa Nacional Hibrido</string>
   <string name="openmap_usgs_img">USGS Mapa Nacional Satélite</string>
   <string name="openmap_stamen_terrain">Terreno Stamen</string>
@@ -319,7 +320,7 @@
   <string name="terrain">Terreno</string>
   <string name="hybrid">Híbrido</string>
   <string name="satellite">Satélite</string>
-  <string name="save_point">Guardar Ubicación</string>
+    <string name="save_point">Guardar Ubicación</string>
   <string name="get_point">Buscar Ubicación</string>
   <string name="geopoint_view_read_only">Ver Ubicación</string>
   <string name="get_shape">Iniciar GeoArea</string>
@@ -330,7 +331,7 @@
   <string name="enable_gps">Activar el GPS</string>
   <string name="geotrace_title">GeoLínea</string>
   <string name="gps_enable_message">GPS esta deshabilitado. ¿Activar?</string>
-  <string name="geo_clear_warning">Función ya creada. ¿Desea borrar la función?</string>
+    <string name="geo_clear_warning">Función ya creada. ¿Desea borrar la función?</string>
   <string name="geo_exit_warning">¿Ignorar los cambios y regresar?</string>
   <string name="polygon_validator">Debe tener al menos 3 puntos para crear un polígono</string>
   <string name="polyline_validator">Deben existir al menos 2 puntos para crear una Polilínea</string>
@@ -506,7 +507,7 @@
   <string name="wifi_autosend">Solo con WIFI</string>
   <string name="cellular_autosend">Solo con Datos Móviles</string>
   <string name="wifi_cellular_autosend">Wifi o Datos Móviles</string>
-  <string name="form_management_preferences">Manejo de formularios</string>
+    <string name="form_management_preferences">Manejo de formularios</string>
   <string name="form_submission_category">Enviar formulario</string>
   <string name="form_filling_category">Llenado de Formularios</string>
   <string name="high_resolution_title">Video de alta resolución</string>
@@ -519,7 +520,7 @@
   <string name="type">Tipo</string>
   <string name="form_entry">Desmarque para ocultar el formulario</string>
   <string name="use_device_language">Usar el idioma del dispositivo</string>
-  <string name="invalid_email_address">Email inválido</string>
+    <string name="invalid_email_address">Email inválido</string>
   <string name="sort_by">Ordenar por</string>
   <string name="server">Servidor</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
@@ -578,6 +579,18 @@
   <string name="islamic_month_10">Shawwal</string>
   <string name="islamic_month_11">Dhu al-Qidah</string>
   <string name="islamic_month_12">Dhu al-Hijjah</string>
+  <string name="persian_month_1">Farvardin</string>
+  <string name="persian_month_2">Ordibehesht</string>
+  <string name="persian_month_3">Khordad</string>
+  <string name="persian_month_4">Tir</string>
+  <string name="persian_month_5">Mordad</string>
+  <string name="persian_month_6">Shahrivar</string>
+  <string name="persian_month_7">Mehr</string>
+  <string name="persian_month_8">Aban</string>
+  <string name="persian_month_9">Azar</string>
+  <string name="persian_month_10">Dey</string>
+  <string name="persian_month_11">Bahman</string>
+  <string name="persian_month_12">Esfand</string>
   <string name="moving_backwards_title">Retroceder en Preguntas</string>
   <string name="moving_backwards_disabled_title">Retroceder en Preguntas Desactivado</string>
   <string name="moving_backwards_disabled_message">Configure el dispositivo para prevenir que los usuarios se salten esta configuración?\n\nLos cambios son:\n\u2022 Desactivar Editar Formularios Guardados\n\u2022 Desactivar Guardar Formularios\n\u2022 Desactivar Ir a Pregunta\n\u2022 Establecer Manejo de Restricciones como Validar al desplazar hacia adelante</string>
