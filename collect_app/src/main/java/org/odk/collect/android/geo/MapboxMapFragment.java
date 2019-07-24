@@ -32,7 +32,6 @@ import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolDragListener;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
-import com.mapbox.mapboxsdk.style.layers.FillLayer;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.style.layers.RasterLayer;
@@ -66,8 +65,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import timber.log.Timber;
 
 import static android.os.Looper.getMainLooper;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillColor;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
@@ -511,11 +508,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             for (MbtilesFile.VectorLayer layer : layers) {
                 // Pick a colour that's a function of the filename and layer name.
                 int hue = (((id + "." + layer.name).hashCode()) & 0x7fffffff) % 360;
-                addOverlayLayer(new FillLayer(id + "/" + layer.name + ".fill", id).withProperties(
-                    fillColor(Color.HSVToColor(new float[] {hue, 0.3f, 1})),
-                    fillOpacity(0.1f)
-                ).withSourceLayer(layer.name));
-                addOverlayLayer(new LineLayer(id + "/" + layer.name + ".line", id).withProperties(
+                addOverlayLayer(new LineLayer(id + "/" + layer.name, id).withProperties(
                     lineColor(Color.HSVToColor(new float[] {hue, 0.7f, 1})),
                     lineWidth(1f),
                     lineOpacity(0.7f)
