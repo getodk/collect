@@ -308,14 +308,7 @@
   <string name="leave_a_review_msg">Ihre (hoffentlich positive) Bewertung steigert die Bekanntheit der App im Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="maps">Karten</string>
-  <string name="map_sdk_selector_title">Karten-SDK</string>
-  <string name="map_sdk_behavior">Karten-SDK</string>
-  <string name="google_maps_sdk">Google Maps SDK</string>
-  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
-  <string name="mapbox_maps_sdk">Mapbox Maps SDK</string>
-  <string name="show_map_sdk">Map-SDK-Optionen anzeigen</string>
-  <string name="openmap_streets">OSM Straßen</string>
-  <string name="openmap_usgs_topo">USGS Topografische Karte</string>
+    <string name="openmap_usgs_topo">USGS Topografische Karte</string>
   <string name="openmap_usgs_sat">USGS National Karte Hybrid</string>
   <string name="openmap_usgs_img">USGS National Karte Imagery</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
@@ -325,15 +318,7 @@
   <string name="terrain">Gelände</string>
   <string name="hybrid">Hybrid</string>
   <string name="satellite">Satellit</string>
-  <string name="map_basemap_selector_title">Basiskarten</string>
-  <string name="show_map_basemap">Basiskartenoptionen anzeigen</string>
-  <string name="mapbox_streets">Mapbox Streets</string>
-  <string name="mapbox_light">Mapbox Light</string>
-  <string name="mapbox_dark">Mapbox Dark</string>
-  <string name="mapbox_satellite">Mapbox Satellite</string>
-  <string name="mapbox_satellite_streets">Mapbox Satellite Streets</string>
-  <string name="mapbox_outdoors">Mapbox Outdoors</string>
-  <string name="save_point">Standort speichern</string>
+    <string name="save_point">Standort speichern</string>
   <string name="get_point">Standort erfassen</string>
   <string name="geopoint_view_read_only">Standort anzeigen</string>
   <string name="get_shape">GeoShape starten</string>
@@ -344,8 +329,7 @@
   <string name="enable_gps">GPS aktivieren</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="gps_enable_message">GPS ist auf ihrem Gerät deaktiviert. Möchten Sie es aktivieren?</string>
-  <string name="select_offline_layer">Offline-Ebene auswählen</string>
-  <string name="geo_clear_warning">Merkmal bereits erzeugt. Möchten Sie das Merkmal löschen?</string>
+    <string name="geo_clear_warning">Merkmal bereits erzeugt. Möchten Sie das Merkmal löschen?</string>
   <string name="geo_exit_warning">Änderungen verwerfen und zu ODK zurückkehren?</string>
   <string name="polygon_validator">Min. 3 Punkte notwendig um ein Polygon zu erzeugen</string>
   <string name="polyline_validator">Min. 2 Punkte notwendig um eine Polylinie zu erzeugen</string>
@@ -521,8 +505,7 @@
   <string name="wifi_autosend">Nur WLAN</string>
   <string name="cellular_autosend">Nur Mobilfunk</string>
   <string name="wifi_cellular_autosend">WLAN oder Mobilfunk</string>
-  <string name="map_basemap_behavior_title">Basiskarte</string>
-  <string name="form_management_preferences">Formularverwaltung</string>
+    <string name="form_management_preferences">Formularverwaltung</string>
   <string name="form_submission_category">Formulareinsendung</string>
   <string name="form_filling_category">Formulareingabe</string>
   <string name="high_resolution_title">HD-Video</string>
@@ -535,8 +518,7 @@
   <string name="type">Typ</string>
   <string name="form_entry">Deaktivieren, um in der Formular-Eingabe auszublenden</string>
   <string name="use_device_language">Gerätesprache benutzen</string>
-  <string name="not_supported_offline_layer_format">Das ausgewählte Offline-Layer benutzt das PBF-Format, das nicht unterstützt wird.</string>
-  <string name="invalid_email_address">Ungültige E-Mail-Adresse!</string>
+    <string name="invalid_email_address">Ungültige E-Mail-Adresse!</string>
   <string name="sort_by">Sortieren nach</string>
   <string name="server">Server</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
@@ -699,5 +681,4 @@
   <string name="copying_media_files_failed">Kopieren von Mediendateien fehlgeschlagen</string>
   <string name="qr_code_not_found">Kein QR-Code im ausgewählten Bild gefunden</string>
   <string name="not_granted_permission">Die Aktivität, die du versuchst zu starten, benötigt eine Berechtigung, die nicht gewährt wurde. </string>
-  <string name="mapbox_unsupported_warning">Map box wird auf diesem Gerät nicht unterstützt (%s).  Bitte wählen Sie ein anderes Karten-SDK unter Allgemeine Einstellungen &gt; Bedienung. </string>
 </resources>

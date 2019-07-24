@@ -262,20 +262,12 @@
   <string name="google_play_services_error_occured">Nu am putut accesa Google Maps. Aveți instalat Google Play Services?</string>
   <string name="about_preferences">Descriere</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">SDK cartografiere</string>
-  <string name="map_sdk_behavior">SDK cartografiere</string>
-  <string name="google_maps_sdk">SDK Google Maps</string>
-  <string name="openstreetmap_sdk">SDK OpenStreetMap</string>
-  <string name="show_map_sdk">Afișați opțiuni SDK hartă</string>
-  <string name="openmap_streets">OSM Streets</string>
-  <string name="openmap_usgs_topo">USGS National Map Topo</string>
+    <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="streets">Străzi</string>
   <string name="terrain">Teren</string>
   <string name="hybrid">Hibrid</string>
   <string name="satellite">Satelit</string>
-  <string name="map_basemap_selector_title">Hărți de bază</string>
-  <string name="show_map_basemap">Afișați opțiunile hărții de bază</string>
-  <string name="save_point">Salvați GeoPoint</string>
+    <string name="save_point">Salvați GeoPoint</string>
   <string name="get_point">Start GeoPoint</string>
   <string name="get_shape">Start GeoShape</string>
   <string name="get_trace">Start GeoTrace</string>

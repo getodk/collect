@@ -308,14 +308,7 @@
   <string name="leave_a_review_msg">మీ ( సానుకూల) సమీక్ష Play Store లో ఈ App గురించి ఎక్కువ మందికి తెలిసేలా చేస్తుంది </string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="maps">మ్యాప్స్</string>
-  <string name="map_sdk_selector_title">SDK మ్యాపింగ్</string>
-  <string name="map_sdk_behavior">SDK మ్యాపింగ్</string>
-  <string name="google_maps_sdk">గూగుల్ మ్యాప్స్ SDK</string>
-  <string name="openstreetmap_sdk">ఓపెన్‌స్ట్రీట్ మ్యాప్ SDK</string>
-  <string name="mapbox_maps_sdk">మ్యాప్‌బాక్స్ మ్యాప్స్ SDK</string>
-  <string name="show_map_sdk">మ్యాప్ SDK ఎంపికలను చూపించు</string>
-  <string name="openmap_streets">OSM వీధులు</string>
-  <string name="openmap_usgs_topo">USGS నేషనల్ మ్యాప్ టోపో</string>
+    <string name="openmap_usgs_topo">USGS నేషనల్ మ్యాప్ టోపో</string>
   <string name="openmap_usgs_sat">USGS నేషనల్ మ్యాప్ హైబ్రిడ్</string>
   <string name="openmap_usgs_img">USGS నేషనల్ మ్యాప్ ఇమేజరీ</string>
   <string name="openmap_stamen_terrain">స్టామిన్ భూభాగం</string>
@@ -325,15 +318,7 @@
   <string name="terrain">భుభాగము</string>
   <string name="hybrid">హైబ్రిడ్</string>
   <string name="satellite">ఉపగ్రహం</string>
-  <string name="map_basemap_selector_title">బేస్ మ్యాప్స్ </string>
-  <string name="show_map_basemap">బేస్ మ్యాప్ ఎంపికలను చూపించు</string>
-  <string name="mapbox_streets">మ్యాప్‌బాక్స్ వీధులు</string>
-  <string name="mapbox_light">మ్యాప్‌బాక్స్ లైట్</string>
-  <string name="mapbox_dark">మ్యాప్‌బాక్స్ డార్క్</string>
-  <string name="mapbox_satellite">మ్యాప్‌బాక్స్ ఉపగ్రహం</string>
-  <string name="mapbox_satellite_streets">మ్యాప్‌బాక్స్ ఉపగ్రహ వీధులు</string>
-  <string name="mapbox_outdoors">మ్యాప్‌బాక్స్ అవుట్ డోర్స్ </string>
-  <string name="save_point">జియోపాయింట్‌ను సేవ్ చేయండి</string>
+    <string name="save_point">జియోపాయింట్‌ను సేవ్ చేయండి</string>
   <string name="get_point">జియోపాయింట్ ప్రారంభించండి</string>
   <string name="geopoint_view_read_only">జియోపాయింట్ చూడండి</string>
   <string name="get_shape">జియోషాప్ ప్రారంభించండి</string>
@@ -344,8 +329,7 @@
   <string name="enable_gps">GPS ని ప్రారంభించండి</string>
   <string name="geotrace_title">జియోట్రేస్</string>
   <string name="gps_enable_message">మీ పరికరంలో GPS నిలిపివేయబడింది. మీరు దీన్ని ప్రారంభించాలనుకుంటున్నారా?</string>
-  <string name="select_offline_layer">ఆఫ్‌లైన్ లేయర్ ఎంచుకోండి</string>
-  <string name="geo_clear_warning">ఫీచర్ ఇప్పటికే క్రియేట్ చేయబడింది. మీరు ఫీచర్ తీసెయ్యాలనుకుంటున్నారా?</string>
+    <string name="geo_clear_warning">ఫీచర్ ఇప్పటికే క్రియేట్ చేయబడింది. మీరు ఫీచర్ తీసెయ్యాలనుకుంటున్నారా?</string>
   <string name="geo_exit_warning">మార్పులను విస్మరించి, ODK కి తిరిగి వెళ్లాలా?</string>
   <string name="polygon_validator">బహుభుజిని సృష్టించడానికి కనీసం 3 పాయింట్లు ఉండాలి</string>
   <string name="polyline_validator">పాలిలైన్ సృష్టించడానికి కనీసం 2 పాయింట్లు ఉండాలి</string>
@@ -521,8 +505,7 @@
   <string name="wifi_autosend">వైఫై మాత్రమే</string>
   <string name="cellular_autosend">సెల్యులార్ మాత్రమే</string>
   <string name="wifi_cellular_autosend">వైఫై లేదా సెల్యులార్</string>
-  <string name="map_basemap_behavior_title">బేస్ మ్యాప్</string>
-  <string name="form_management_preferences">ఫారం నిర్వహణ</string>
+    <string name="form_management_preferences">ఫారం నిర్వహణ</string>
   <string name="form_submission_category">ఫారం సమర్పణ</string>
   <string name="form_filling_category">ఫారం నింపడం</string>
   <string name="high_resolution_title">హై రెసొల్యూషన్ వీడియో </string>
@@ -535,8 +518,7 @@
   <string name="type">టైపు</string>
   <string name="form_entry">ఫారం ఎంట్రీ నుండి దాచడానికి ఎంపిక చేయవద్దు</string>
   <string name="use_device_language">పరికర భాషను ఉపయోగించండి</string>
-  <string name="not_supported_offline_layer_format">ఎంచుకున్న ఆఫ్‌లైన్ లేయర్ ఫైల్ మద్దతు లేని PBF ఫార్మాట్ ని ఉపయోగిస్తుంది!</string>
-  <string name="invalid_email_address">చెల్లని ఇమెయిల్ చిరునామా!</string>
+    <string name="invalid_email_address">చెల్లని ఇమెయిల్ చిరునామా!</string>
   <string name="sort_by">అమరిక </string>
   <string name="server">సర్వర్</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
@@ -700,5 +682,4 @@
   <string name="copying_media_files_failed">మీడియా ఫైళ్ళను కాపీ చేయడం విఫలమైంది</string>
   <string name="qr_code_not_found">ఎంచుకున్న ఫోటో లో QR కోడ్ కనపడటం లేదు</string>
   <string name="not_granted_permission">మీరు మొదులు పెట్టడానికి ప్రయత్నిస్తున్న పనికి అనుమతి అవసరం. అది మీకు ఇవ్వబడలేదు.</string>
-  <string name="mapbox_unsupported_warning">ఈ పరికరంలో మ్యాప్‌బాక్స్‌కు మద్దతు లేదు (1%s). దయచేసి సాధారణ సెట్టింగులలో మరొక మ్యాపింగ్ SDK ని ఎంచుకోండి &amp; gt; వినియోగ మార్గము.</string>
 </resources>

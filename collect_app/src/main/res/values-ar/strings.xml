@@ -307,13 +307,7 @@
   <string name="leave_a_review">اترك تعليق في Play Store</string>
   <string name="leave_a_review_msg">رأيك (نأمل إيجابيا) يزيد من رؤية التطبيق في Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">خدمة الخريطة</string>
-  <string name="map_sdk_behavior">الخريطة</string>
-  <string name="google_maps_sdk">خريطة جوجل</string>
-  <string name="openstreetmap_sdk">خريطة OpenStreet</string>
-  <string name="show_map_sdk">عرض خيارات الخريطة</string>
-  <string name="openmap_streets">اخريطة لطرق</string>
-  <string name="openmap_usgs_topo">خرطة البنية</string>
+    <string name="openmap_usgs_topo">خرطة البنية</string>
   <string name="openmap_usgs_sat">خريطة وطنية هجين USGS</string>
   <string name="openmap_usgs_img">صور الخريطة الوطنية USGS</string>
   <string name="openmap_stamen_terrain">خريطة التضاريس</string>
@@ -323,9 +317,7 @@
   <string name="terrain">التضاريس</string>
   <string name="hybrid">الكل</string>
   <string name="satellite">اقمار اصطناعية</string>
-  <string name="map_basemap_selector_title">الخريطة</string>
-  <string name="show_map_basemap">عرض خيارات الخريطة</string>
-  <string name="save_point">حفظ GeoPint</string>
+    <string name="save_point">حفظ GeoPint</string>
   <string name="get_point">تشغيل GeoPoint</string>
   <string name="geopoint_view_read_only">عرض نقاط الخريطة</string>
   <string name="get_shape">تشغيل ٍShape</string>
@@ -336,8 +328,7 @@
   <string name="enable_gps">تفعيل ال GPS</string>
   <string name="geotrace_title">Trace</string>
   <string name="gps_enable_message">خاصية الـ GPS غير مفعلة في جهازك هل تريد تفعيلها ؟</string>
-  <string name="select_offline_layer">طبقة غير متصلة</string>
-  <string name="geo_clear_warning">الميزة تم انشائها مسبقاً</string>
+    <string name="geo_clear_warning">الميزة تم انشائها مسبقاً</string>
   <string name="geo_exit_warning">تجاهل التعديلات والعودة الى ODK؟</string>
   <string name="polygon_validator">يجب توفر 3 نقاط GeoPoint لانشاء Polygon</string>
   <string name="polyline_validator">يجب توفر 2 نقاط لانشاء إحداث Polyline</string>
@@ -526,8 +517,7 @@
   <string name="wifi_autosend">ارسال تلقائي عبر Wifi</string>
   <string name="cellular_autosend">ارسال تلقائي عبر شبكة الاتصال</string>
   <string name="wifi_cellular_autosend">ارسال تلقائي عبر Wifi و شبكة الاتصال</string>
-  <string name="map_basemap_behavior_title">الخريطة</string>
-  <string name="form_management_preferences">إعدادات ادارة الاستمارة</string>
+    <string name="form_management_preferences">إعدادات ادارة الاستمارة</string>
   <string name="form_submission_category">ارسال الاستماراة</string>
   <string name="form_filling_category">تعبئة الاستمارة</string>
   <string name="high_resolution_title">دقة عالية للواسائط</string>
@@ -540,8 +530,7 @@
   <string name="type">النوع</string>
   <string name="form_entry">خيارات تعبئة الاستمارة</string>
   <string name="use_device_language">لغة الجهاز</string>
-  <string name="not_supported_offline_layer_format">غير مدعومة في وضع عدم الاتصال</string>
-  <string name="invalid_email_address">البريد الالكتروني غير صحيح</string>
+    <string name="invalid_email_address">البريد الالكتروني غير صحيح</string>
   <string name="sort_by">ترتيب حسب</string>
   <string name="server">الخادم</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
