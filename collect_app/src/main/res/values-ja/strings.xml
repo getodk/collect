@@ -307,13 +307,6 @@
   <string name="leave_a_review">Play ストアにレビューを残す</string>
   <string name="leave_a_review_msg">あなたの (肯定的な) レビューが Play ストアでアプリの認知度を向上させてくれます</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">マッピング SDK</string>
-  <string name="map_sdk_behavior">マッピング SDK</string>
-  <string name="google_maps_sdk">Google マップ SDK</string>
-  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
-  <string name="mapbox_maps_sdk">Mapbox マップ SDK</string>
-  <string name="show_map_sdk">マップ SDK オプションを表示</string>
-  <string name="openmap_streets">OSM 道路</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">USGS ナショナルマップ ハイブリッド</string>
   <string name="openmap_usgs_img">USGS ナショナルマップ画像</string>
@@ -324,14 +317,6 @@
   <string name="terrain">地形</string>
   <string name="hybrid">ハイブリッド</string>
   <string name="satellite">衛星</string>
-  <string name="map_basemap_selector_title">基本地図</string>
-  <string name="show_map_basemap">基本地図オプションを表示</string>
-  <string name="mapbox_streets">Mapbox 道路</string>
-  <string name="mapbox_light">Mapbox ライト</string>
-  <string name="mapbox_dark">Mapbox ダーク</string>
-  <string name="mapbox_satellite">Mapbox 衛星</string>
-  <string name="mapbox_satellite_streets">Mapbox 衛星道路</string>
-  <string name="mapbox_outdoors">Mapbox アウトドア</string>
   <string name="save_point">地理位置を保存</string>
   <string name="get_point">地理位置を開始</string>
   <string name="geopoint_view_read_only">地理位置を表示</string>
@@ -343,7 +328,6 @@
   <string name="enable_gps">GPS を有効にする</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="gps_enable_message">お使いのデバイスで GPS は無効になっています。有効にしますか?</string>
-  <string name="select_offline_layer">オフライン レイヤーを選択</string>
   <string name="geo_clear_warning">機能は既に作成済です。機能をクリアしますか?</string>
   <string name="geo_exit_warning">変更を破棄して ODK の戻りますか?</string>
   <string name="polygon_validator">ポリゴンを作成するには、少なくとも 3 点指定する必要があります</string>
@@ -517,7 +501,6 @@
   <string name="wifi_autosend">Wifi のみ</string>
   <string name="cellular_autosend">データ通信のみ</string>
   <string name="wifi_cellular_autosend">Wifi またはデータ通信</string>
-  <string name="map_basemap_behavior_title">基本地図</string>
   <string name="form_management_preferences">フォーム管理</string>
   <string name="form_submission_category">フォーム送信</string>
   <string name="form_filling_category">フォーム入力</string>
@@ -531,7 +514,6 @@
   <string name="type">種類</string>
   <string name="form_entry">チェックを外すとフォーム入力から非表示にします</string>
   <string name="use_device_language">デバイスの言語を使用する</string>
-  <string name="not_supported_offline_layer_format">選択されたオフラインレイヤーファイルは、サポートされていない PBF フォーマットを使用しています!</string>
   <string name="invalid_email_address">メールアドレスが無効です!</string>
   <string name="sort_by">並び順</string>
   <string name="server">サーバー</string>

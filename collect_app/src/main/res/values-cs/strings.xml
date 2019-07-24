@@ -307,12 +307,6 @@
   <string name="leave_a_review">Nechte recenzi v Play Store</string>
   <string name="leave_a_review_msg">Vaše recenze (snad pozitivní) zvyšuje viditelnost aplikace v Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">SDK Mapování</string>
-  <string name="map_sdk_behavior">SDK Mapování</string>
-  <string name="google_maps_sdk">SDK Google Maps</string>
-  <string name="openstreetmap_sdk">SDK OpenStreetMap</string>
-  <string name="show_map_sdk">Zobrazit možnosti SDK Mapy </string>
-  <string name="openmap_streets">OSM Ulice</string>
   <string name="openmap_usgs_topo">Topologická mapa USGS National Map </string>
   <string name="openmap_usgs_sat">Hybridní mapa USGS National Map</string>
   <string name="openmap_usgs_img">Snímková mapa USGS National Map</string>
@@ -323,8 +317,6 @@
   <string name="terrain">Terén</string>
   <string name="hybrid">Hybridní</string>
   <string name="satellite">Satelitní</string>
-  <string name="map_basemap_selector_title">Základní mapy</string>
-  <string name="show_map_basemap">Zobrazit vlastnosti základní mapy</string>
   <string name="save_point">Uložit GeoPoint</string>
   <string name="get_point">Začít GeoPoint</string>
   <string name="geopoint_view_read_only">Zobrazit GeoPoint</string>
@@ -336,7 +328,6 @@
   <string name="enable_gps">Zapnout GPS</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="gps_enable_message">GPS je v přístroji zakázáno. Chcete jej povolit?</string>
-  <string name="select_offline_layer">Vybrat Offline Layer</string>
   <string name="geo_clear_warning">Funkce již vytvořena. Chcete tuto funkci vymazat?</string>
   <string name="geo_exit_warning">Zrušit změny a vrátit se do ODK?</string>
   <string name="polygon_validator">Musí mít alespoň 3 body pro vytvoření polygonu</string>
@@ -519,7 +510,6 @@
   <string name="wifi_autosend">Pouze Wifi</string>
   <string name="cellular_autosend">Pouze mobilní</string>
   <string name="wifi_cellular_autosend">Wifi nebo mobilní</string>
-  <string name="map_basemap_behavior_title">Základní mapa</string>
   <string name="form_management_preferences">Správa dotazníků</string>
   <string name="form_submission_category">Odeslání dotazníku</string>
   <string name="form_filling_category">Plnění dotazníku</string>
@@ -533,7 +523,6 @@
   <string name="type">Typ</string>
   <string name="form_entry">Odškrtnout, chcete-li skrýt z nabídky Dotazníků</string>
   <string name="use_device_language">Použít jazyk zařízení</string>
-  <string name="not_supported_offline_layer_format">Vybraný soubor offline vrstvy používá formát PBF, který není podporován!</string>
   <string name="invalid_email_address">Neplatná emailová adresa!</string>
   <string name="sort_by">Seřazeno podle</string>
   <string name="server">Server</string>

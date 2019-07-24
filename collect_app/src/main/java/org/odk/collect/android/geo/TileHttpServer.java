@@ -1,13 +1,15 @@
-package org.odk.collect.android.map;
+package org.odk.collect.android.geo;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -15,15 +17,15 @@ import java.util.Map;
 import timber.log.Timber;
 
 /** A minimal HTTP server that serves tiles from a set of TileSources. */
-public class TileHttpServer {
-    public static final int PORT_MIN = 8000;
-    public static final int PORT_MAX = 8999;
+class TileHttpServer {
+    private static final int PORT_MIN = 8000;
+    private static final int PORT_MAX = 8999;
 
-    final Map<String, TileSource> sources = new HashMap<>();
-    final ServerThread server;
-    final ServerSocket socket;
+    private final Map<String, TileSource> sources = new HashMap<>();
+    private final ServerThread server;
+    private final ServerSocket socket;
 
-    public TileHttpServer() throws IOException {
+    TileHttpServer() throws IOException {
         socket = createBoundSocket(PORT_MIN, PORT_MAX);
         if (socket == null) {
             throw new IOException("Could not find an available port");
@@ -33,19 +35,6 @@ public class TileHttpServer {
 
     public void start() {
         server.start();
-    }
-
-    /** Finds an available port and binds a ServerSocket to it. */
-    protected static ServerSocket createBoundSocket(int portMin, int portMax) throws IOException {
-        for (int port = portMin; port <= portMax; port++) {
-            try {
-                return new ServerSocket(port);
-            } catch (BindException e) {
-                continue;  // this port is in use; try another one
-            }
-        }
-        Timber.e("No ports available from %d to %d", portMin, portMax);
-        return null;
     }
 
     /**
@@ -79,6 +68,19 @@ public class TileHttpServer {
                 } catch (IOException e) { /* ignore */ }
             }
         }
+    }
+
+    /** Finds an available port and binds a ServerSocket to it. */
+    protected static ServerSocket createBoundSocket(int portMin, int portMax) throws IOException {
+        for (int port = portMin; port <= portMax; port++) {
+            try {
+                return new ServerSocket(port);
+            } catch (BindException e) {
+                continue;  // this port is in use; try another one
+            }
+        }
+        Timber.e("No ports available from %d to %d", portMin, portMax);
+        return null;
     }
 
     class ServerThread extends Thread {
@@ -135,19 +137,24 @@ public class TileHttpServer {
 
         protected Response getResponse(String request) {
             if (request.startsWith("GET /")) {
-                String path = request.substring(5).split("[. ]", 2)[0];
+                String path = request.substring(5).split(" ", 2)[0];
                 String[] parts = path.split("/");
                 if (parts.length == 4) {
                     try {
-                        String key = parts[0];
+                        String key = URLDecoder.decode(parts[0], "utf-8");
                         int zoom = Integer.parseInt(parts[1]);
                         int x = Integer.parseInt(parts[2]);
                         int y = Integer.parseInt(parts[3]);
                         TileSource source = sources.get(key);
                         if (source != null) {
-                            return source.getTile(zoom, x, y);
+                            byte[] data = source.getTileBlob(zoom, x, y);
+                            if (data != null) {
+                                return new Response(data, source.getContentType(), source.getContentEncoding());
+                            }
                         }
-                    } catch (NumberFormatException e) { /* ignore */ }
+                    } catch (NumberFormatException e) {
+                        Timber.w(e, "Bad request %s", request);
+                    } catch (UnsupportedEncodingException e) { /* cannot happen because UTF-8 is built in */ }
                 }
             }
             Timber.w("Ignoring request: %s", request);
@@ -182,14 +189,10 @@ public class TileHttpServer {
         String contentType;
         String contentEncoding;
 
-        public Response(byte[] data, String contentType, String contentEncoding) {
+        Response(byte[] data, String contentType, String contentEncoding) {
             this.data = data;
             this.contentType = contentType;
             this.contentEncoding = contentEncoding;
         }
-    }
-
-    public interface TileSource {
-        Response getTile(int zoom, int x, int y);
     }
 }

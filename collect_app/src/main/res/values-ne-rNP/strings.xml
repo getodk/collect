@@ -295,12 +295,6 @@
   <string name="tell_your_friends_msg">के तपाईँका सहकर्मीहरू अझै कागजमा डाटा संकलन गर्दै हुनुहुन्छ? तिनीहरुसँग ODK Collect शेयर गर्नुहोस् ।</string>
   <string name="leave_a_review">हामीलाई  प्ले स्टोर आफ्नो मा समीक्षा छोड्नुहोस् ।</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">SDK नक्शाकंन गर्न</string>
-  <string name="map_sdk_behavior">SDK नक्शाकंन गर्न</string>
-  <string name="google_maps_sdk">गुगल म्याप्स् SDK</string>
-  <string name="openstreetmap_sdk">ओपन स्ट्रीट म्याप SDK</string>
-  <string name="show_map_sdk">SDK म्याप्स् का विकल्प</string>
-  <string name="openmap_streets">ओपन स्ट्रीट म्यापका गल्लीहरु</string>
   <string name="openmap_usgs_topo">अमेरिकी भूगर्भीय सर्वेक्षण राष्ट्रिय नक्शा Topo</string>
   <string name="openmap_usgs_sat">अमेरिकी भूगर्भीय सर्वेक्षण राष्ट्रिय नक्शा Hybrid</string>
   <string name="openmap_usgs_img">अमेरिकी भूगर्भीय सर्वेक्षण राष्ट्रिय नक्शा Imagery</string>
@@ -311,8 +305,6 @@
   <string name="terrain">भूभाग</string>
   <string name="hybrid">हाइव्रिड</string>
   <string name="satellite">उपग्रह</string>
-  <string name="map_basemap_selector_title">आधार म्यापहरु</string>
-  <string name="show_map_basemap">आधार म्यापका विकल्पहरु</string>
   <string name="save_point">जियो पोइन्ट संचित गर्नुहोस्</string>
   <string name="get_point">जियो पोइन्ट शुरू गर्नुहोस्</string>
   <string name="geopoint_view_read_only">जियो पोइन्ट हेर्नुहोस्</string>
@@ -322,7 +314,6 @@
   <string name="start">शुरू</string>
   <string name="enable_gps">GPS शुरु गर्नुहोस्</string>
   <string name="gps_enable_message">तपाईंको यन्त्रमा GPS बन्द छ । यसलाई अन गर्न चाहनु हुन्छ ?</string>
-  <string name="select_offline_layer">अफलाइन तह चयन गर्नुहोस्।</string>
   <string name="clear">मेटाउनुहोस्</string>
   <string name="discard">त्याग्नुहोस्</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->

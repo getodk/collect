@@ -12,12 +12,15 @@
  * the License.
  */
 
-package org.odk.collect.android.map;
+package org.odk.collect.android.geo;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.location.Location;
 import android.location.LocationManager;
@@ -39,14 +42,17 @@ import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
+import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
+import org.osmdroid.views.overlay.TilesOverlay;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,64 +60,102 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import timber.log.Timber;
 
-public class OsmMapFragment extends Fragment implements MapFragment,
-    MapEventsReceiver, LocationListener, LocationClient.LocationClientListener {
-    public static final GeoPoint INITIAL_CENTER = new GeoPoint(0.0, -30.0);
-    public static final int INITIAL_ZOOM = 2;
-    public static final int POINT_ZOOM = 16;
+/** A MapFragment drawn by OSMDroid. */
+public class OsmDroidMapFragment extends Fragment implements MapFragment,
+    MapEventsReceiver, IRegisterReceiver,
+    LocationListener, LocationClient.LocationClientListener {
 
-    protected MapView map;
-    protected ReadyListener readyListener;
-    protected PointListener clickListener;
-    protected PointListener longPressListener;
-    protected PointListener gpsLocationListener;
-    protected FeatureListener dragEndListener;
-    protected MyLocationNewOverlay myLocationOverlay;
-    protected LocationClient locationClient;
-    protected int nextFeatureId = 1;
-    protected Map<Integer, MapFeature> features = new HashMap<>();
-    protected AlertDialog gpsErrorDialog;
-    protected boolean gpsLocationEnabled;
-    protected IGeoPoint lastMapCenter;
+    // Bundle keys understood by applyConfig().
+    static final String KEY_WEB_MAP_SERVICE = "WEB_MAP_SERVICE";
+    static final String KEY_REFERENCE_LAYER = "REFERENCE_LAYER";
 
-    @Override public Fragment getFragment() {
-        return this;
+    private MapView map;
+    private ReadyListener readyListener;
+    private PointListener clickListener;
+    private PointListener longPressListener;
+    private PointListener gpsLocationListener;
+    private FeatureListener dragEndListener;
+    private MyLocationNewOverlay myLocationOverlay;
+    private LocationClient locationClient;
+    private int nextFeatureId = 1;
+    private final Map<Integer, MapFeature> features = new HashMap<>();
+    private boolean gpsLocationEnabled;
+    private IGeoPoint lastMapCenter;
+    private WebMapService webMapService;
+    private File referenceLayerFile;
+    private TilesOverlay referenceOverlay;
+
+    @Override public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
+        Context context = getActivity();
+        return context != null ? context.registerReceiver(receiver, filter) : null;
     }
 
-    @Override public void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener) {
-        readyListener = listener;
+    @Override public void unregisterReceiver(BroadcastReceiver receiver) {
+        Context context = getActivity();
+        if (context != null) {
+            context.unregisterReceiver(receiver);
+        }
+    }
+
+    @Override public void destroy() { }
+
+    @Override public void addTo(
+        @NonNull FragmentActivity activity, int containerId,
+        @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
+        this.readyListener = readyListener;
         // If the containing activity is being re-created upon screen rotation,
         // the FragmentManager will have also re-created a copy of the previous
-        // OsmMapFragment.  We don't want these useless copies of old fragments
+        // OsmDroidMapFragment.  We don't want these useless copies of old fragments
         // to linger, so the following line calls .replace() instead of .add().
         activity.getSupportFragmentManager()
             .beginTransaction().replace(containerId, this).commit();
     }
 
-    // TOOD(ping): This method is only used by MapHelper.  Remove this after
-    // MapFragment adds support for selectable basemaps.
-    public MapView getMapView() {
-        return map;
+    @Override public void onStart() {
+        super.onStart();
+        MapProvider.onMapFragmentStart(this);
+    }
+
+    @Override public void onStop() {
+        MapProvider.onMapFragmentStop(this);
+        super.onStop();
+    }
+
+    @Override public Fragment getFragment() {
+        return this;
+    }
+
+    @Override public void applyConfig(Bundle config) {
+        webMapService = (WebMapService) config.getSerializable(KEY_WEB_MAP_SERVICE);
+        String path = config.getString(KEY_REFERENCE_LAYER);
+        referenceLayerFile = path != null ? new File(path) : null;
+        if (map != null) {
+            map.setTileSource(webMapService.asOnlineTileSource());
+            loadReferenceOverlay();
+        }
     }
 
     @Override public View onCreateView(@NonNull LayoutInflater inflater,
         @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.osm_map_layout, container, false);
         map = view.findViewById(R.id.osm_map_view);
+        if (webMapService != null) {
+            map.setTileSource(webMapService.asOnlineTileSource());
+        }
         map.setMultiTouchControls(true);
         map.setBuiltInZoomControls(true);
         map.setMinZoomLevel(2);
         map.setMaxZoomLevel(22);
-        map.getController().setCenter(INITIAL_CENTER);
-        map.getController().setZoom(INITIAL_ZOOM);
+        map.getController().setCenter(toGeoPoint(INITIAL_CENTER));
+        map.getController().setZoom((int) INITIAL_ZOOM);
         map.setTilesScaledToDpi(true);
         map.getOverlays().add(new MapEventsOverlay(this));
+        loadReferenceOverlay();
         addMapLayoutChangeListener(map);
         myLocationOverlay = new MyLocationNewOverlay(map);
         myLocationOverlay.setDrawAccuracyEnabled(true);
@@ -320,19 +364,6 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         }
     }
 
-    protected void showGpsDisabledAlert() {
-        gpsErrorDialog = new AlertDialog.Builder(getContext())
-            .setMessage(getString(R.string.gps_enable_message))
-            .setCancelable(false)
-            .setPositiveButton(getString(R.string.enable_gps),
-                (dialog, id) -> startActivityForResult(
-                    new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0))
-            .setNegativeButton(getString(R.string.cancel),
-                (dialog, id) -> dialog.cancel())
-            .create();
-        gpsErrorDialog.show();
-    }
-
     @Override public void onClientStart() {
         locationClient.requestLocationUpdates(this);
     }
@@ -343,8 +374,68 @@ public class OsmMapFragment extends Fragment implements MapFragment,
 
     @Override public void onClientStop() { }
 
-    @VisibleForTesting public AlertDialog getGpsErrorDialog() {
-        return gpsErrorDialog;
+    private static @Nullable MapPoint fromLocation(@NonNull MyLocationNewOverlay overlay) {
+        GeoPoint geoPoint = overlay.getMyLocation();
+        if (geoPoint == null) {
+            return null;
+        }
+        return new MapPoint(
+            geoPoint.getLatitude(), geoPoint.getLongitude(),
+            geoPoint.getAltitude(), overlay.getLastFix().getAccuracy()
+        );
+    }
+
+    private static @NonNull MapPoint fromGeoPoint(@NonNull IGeoPoint geoPoint) {
+        return new MapPoint(geoPoint.getLatitude(), geoPoint.getLongitude());
+    }
+
+    private static @NonNull MapPoint fromGeoPoint(@NonNull GeoPoint geoPoint) {
+        return new MapPoint(geoPoint.getLatitude(), geoPoint.getLongitude(), geoPoint.getAltitude());
+    }
+
+    private static @NonNull MapPoint fromMarker(@NonNull Marker marker) {
+        GeoPoint geoPoint = marker.getPosition();
+        double sd = 0;
+        try {
+            sd = Double.parseDouble(marker.getSubDescription());
+        } catch (NumberFormatException e) {
+            Timber.w("Marker.getSubDescription() did not contain a number");
+        }
+        return new MapPoint(
+            geoPoint.getLatitude(), geoPoint.getLongitude(), geoPoint.getAltitude(), sd
+        );
+    }
+
+    private static @NonNull GeoPoint toGeoPoint(@NonNull MapPoint point) {
+        return new GeoPoint(point.lat, point.lon, point.alt);
+    }
+
+    /** Updates the map to reflect the value of referenceLayerFile. */
+    private void loadReferenceOverlay() {
+        if (referenceOverlay != null) {
+            map.getOverlays().remove(referenceOverlay);
+            referenceOverlay = null;
+        }
+        if (referenceLayerFile != null) {
+            OsmMBTileProvider mbprovider = new OsmMBTileProvider(this, referenceLayerFile);
+            referenceOverlay = new TilesOverlay(mbprovider, getContext());
+            referenceOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
+            map.getOverlays().add(0, referenceOverlay);
+        }
+        map.invalidate();
+    }
+
+    private void showGpsDisabledAlert() {
+        new AlertDialog.Builder(getContext())
+            .setMessage(getString(R.string.gps_enable_message))
+            .setCancelable(false)
+            .setPositiveButton(getString(R.string.enable_gps),
+                (dialog, id) -> startActivityForResult(
+                    new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0))
+            .setNegativeButton(getString(R.string.cancel),
+                (dialog, id) -> dialog.cancel())
+            .create()
+            .show();
     }
 
     /**
@@ -354,7 +445,7 @@ public class OsmMapFragment extends Fragment implements MapFragment,
      * view on a layout change, causing the map viewport to jump around when the
      * screen is resized or rotated in a way that doesn't restart the activity.
      */
-    protected void addMapLayoutChangeListener(MapView map) {
+    private void addMapLayoutChangeListener(MapView map) {
         lastMapCenter = map.getMapCenter();
         map.setMapListener(new MapListener() {
             @Override public boolean onScroll(ScrollEvent event) {
@@ -369,46 +460,10 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         });
         map.addOnLayoutChangeListener(
             (view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) ->
-            map.getController().setCenter(lastMapCenter));
+                map.getController().setCenter(lastMapCenter));
     }
 
-    protected static @Nullable MapPoint fromLocation(@NonNull MyLocationNewOverlay overlay) {
-        GeoPoint geoPoint = overlay.getMyLocation();
-        if (geoPoint == null) {
-            return null;
-        }
-        return new MapPoint(
-            geoPoint.getLatitude(), geoPoint.getLongitude(),
-            geoPoint.getAltitude(), overlay.getLastFix().getAccuracy()
-        );
-    }
-
-    protected static @NonNull MapPoint fromGeoPoint(@NonNull IGeoPoint geoPoint) {
-        return new MapPoint(geoPoint.getLatitude(), geoPoint.getLongitude());
-    }
-
-    protected static @NonNull MapPoint fromGeoPoint(@NonNull GeoPoint geoPoint) {
-        return new MapPoint(geoPoint.getLatitude(), geoPoint.getLongitude(), geoPoint.getAltitude());
-    }
-
-    protected static @NonNull MapPoint fromMarker(@NonNull Marker marker) {
-        GeoPoint geoPoint = marker.getPosition();
-        double sd = 0;
-        try {
-            sd = Double.parseDouble(marker.getSubDescription());
-        } catch (NumberFormatException e) {
-            Timber.w("Marker.getSubDescription() did not contain a number");
-        }
-        return new MapPoint(
-            geoPoint.getLatitude(), geoPoint.getLongitude(), geoPoint.getAltitude(), sd
-        );
-    }
-
-    protected static @NonNull GeoPoint toGeoPoint(@NonNull MapPoint point) {
-        return new GeoPoint(point.lat, point.lon, point.alt);
-    }
-
-    protected Marker createMarker(MapView map, MapPoint point, MapFeature feature) {
+    private Marker createMarker(MapView map, MapPoint point, MapFeature feature) {
         // A Marker's position is a GeoPoint with latitude, longitude, and
         // altitude fields.  We need to store the standard deviation value
         // somewhere, so it goes in the marker's sub-description field.
@@ -447,7 +502,7 @@ public class OsmMapFragment extends Fragment implements MapFragment,
     }
 
     /** Finds the feature to which the given marker belongs. */
-    protected int findFeature(Marker marker) {
+    private int findFeature(Marker marker) {
         for (int featureId : features.keySet()) {
             if (features.get(featureId).ownsMarker(marker)) {
                 return featureId;
@@ -456,15 +511,11 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         return -1;  // not found
     }
 
-    protected void updateFeature(int featureId) {
+    private void updateFeature(int featureId) {
         MapFeature feature = features.get(featureId);
         if (feature != null) {
             feature.update();
         }
-    }
-
-    @VisibleForTesting public boolean isGpsErrorDialogShowing() {
-        return gpsErrorDialog != null && gpsErrorDialog.isShowing();
     }
 
     /**
@@ -485,11 +536,11 @@ public class OsmMapFragment extends Fragment implements MapFragment,
     }
 
     /** A marker that can optionally be dragged by the user. */
-    protected class MarkerFeature implements MapFeature {
+    private class MarkerFeature implements MapFeature {
         final MapView map;
         Marker marker;
 
-        public MarkerFeature(MapView map, MapPoint point, boolean draggable) {
+        MarkerFeature(MapView map, MapPoint point, boolean draggable) {
             this.map = map;
             this.marker = createMarker(map, point, draggable ? this : null);
         }
@@ -511,14 +562,14 @@ public class OsmMapFragment extends Fragment implements MapFragment,
     }
 
     /** A polyline or polygon that can be manipulated by dragging markers at its vertices. */
-    protected class PolyFeature implements MapFeature {
+    private class PolyFeature implements MapFeature {
         final MapView map;
         final List<Marker> markers = new ArrayList<>();
         final Polyline polyline;
         final boolean closedPolygon;
-        public static final int STROKE_WIDTH = 5;
+        static final int STROKE_WIDTH = 5;
 
-        public PolyFeature(MapView map, Iterable<MapPoint> points, boolean closedPolygon) {
+        PolyFeature(MapView map, Iterable<MapPoint> points, boolean closedPolygon) {
             this.map = map;
             this.closedPolygon = closedPolygon;
             polyline = new Polyline();

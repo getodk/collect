@@ -16,7 +16,7 @@
  * @author Jon Nordling (jonnordling@gmail.com)
  */
 
-package org.odk.collect.android.spatial;
+package org.odk.collect.android.geo;
 
 import android.graphics.drawable.Drawable;
 

@@ -275,12 +275,6 @@
   <string name="google_play_services_error_occured">गूगल नकाशे मध्ये प्रवेश करण्यात अक्षम. गूगल प्ले सेवा स्थापित केली आहे का?</string>
   <string name="about_preferences">विषयी</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">मॅपिंग एसडीके</string>
-  <string name="map_sdk_behavior">मॅपिंग एसडीके</string>
-  <string name="google_maps_sdk">गूगल नकाशे एसडीके</string>
-  <string name="openstreetmap_sdk">ओपन स्ट्रीट नकाशा एसडीके.</string>
-  <string name="show_map_sdk">नकाशा एसडीके पर्याय दर्शवा</string>
-  <string name="openmap_streets">ओपन स्ट्रीट नकाशा रस्ते</string>
   <string name="openmap_usgs_topo">यूएसजीएस राष्ट्रीय नकाशा टोपो</string>
   <string name="openmap_stamen_terrain">स्टेमेन टेरेइन</string>
   <string name="openmap_cartodb_positron">कार्टो डीबी पॉझिट्रॉन</string>
@@ -289,8 +283,6 @@
   <string name="terrain">भूप्रदेश</string>
   <string name="hybrid">संकरित</string>
   <string name="satellite">उपग्रह</string>
-  <string name="map_basemap_selector_title">बेसमॅप्स</string>
-  <string name="show_map_basemap">बेसमॅप पर्याय दर्शवा</string>
   <string name="save_point">जिओ पॉईंट जतन करा</string>
   <string name="get_point">जिओ पॉईंट प्रारंभ करा</string>
   <string name="geopoint_view_read_only">जिओ पॉईंट पहा</string>
@@ -301,7 +293,6 @@
   <string name="enable_gps">जीपीएस सक्षम करा</string>
   <string name="geotrace_title">जिओ ट्रेस</string>
   <string name="gps_enable_message">आपल्या डिव्हाइसमध्ये जीपीएस अक्षम केले आहे आपण ते सक्षम करू इच्छिता?</string>
-  <string name="select_offline_layer">ऑफलाइन स्तर निवडा</string>
   <string name="geo_clear_warning">वैशिष्ट्य आधीच तयार केले आपण वैशिष्ट्य साफ करू इच्छिता?</string>
   <string name="geo_exit_warning">बदल टाकून ओडीके कडे परत जा?</string>
   <string name="polygon_validator">बहुभुज तयार करण्यासाठी किमान 3 गुण असणे आवश्यक आहे</string>
@@ -430,7 +421,6 @@
   <string name="wifi_autosend">केवळ Wifi</string>
   <string name="cellular_autosend">केवळ सेल्यूलर</string>
   <string name="wifi_cellular_autosend">वायफाय किंवा सेल्यूलर</string>
-  <string name="map_basemap_behavior_title">बेसमॅप</string>
   <string name="form_management_preferences">फॉर्म व्यवस्थापन</string>
   <string name="form_submission_category">फॉर्म सबमिशन</string>
   <string name="form_filling_category">फॉर्म भरणे</string>
@@ -443,7 +433,6 @@
   <string name="type">प्रकार</string>
   <string name="form_entry">फॉर्म एन्ट्रीमधून लपविण्यासाठी अनचेक करा</string>
   <string name="use_device_language">डिव्हाइस भाषा वापरा</string>
-  <string name="not_supported_offline_layer_format">निवडलेली ऑफलाइन स्तर फाइल PBF स्वरूपन वापरते जी समर्थित नाही!</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <!--Sms submission-->

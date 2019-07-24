@@ -12,18 +12,20 @@
  * the License.
  */
 
-package org.odk.collect.android.map;
+package org.odk.collect.android.geo;
+
+import android.os.Bundle;
+
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-import java.util.List;
-
 /**
  * Interface for a Fragment that renders a map view.  The plan is to have one
- * implementation for each map SDK, e.g. GoogleMapFragment, OsmMapFragment, etc.
+ * implementation for each map SDK, e.g. GoogleMapFragment, OsmDroidMapFragment, etc.
  *
  * This is intended to be a single map API that provides all functionality needed
  * for the three geo widgets (collecting or editing a point, a trace, or a shape):
@@ -42,16 +44,33 @@ import java.util.List;
  * even though the geo widgets only use one kind of feature at a time.
  */
 public interface MapFragment {
+    MapPoint INITIAL_CENTER = new MapPoint(0, -30);
+    float INITIAL_ZOOM = 2;
+    float POINT_ZOOM = 16;
+
     /** Gets the MapFragment as a Fragment. */
     Fragment getFragment();
 
     /**
+     * Configures the map according to settings such as styling preferences and
+     * layer data sources.  For now, this means anything that is configurable
+     * in the Maps preferences; the intention is to anticipate the possibility
+     * of a map configuration delivered with a form.  MapFragment implementations
+     * do not interact directly with the preferences; instead, they receive a
+     * config bundle, which may be derived from the preferences or another source.
+     */
+    void applyConfig(Bundle config);
+
+    /**
      * Adds the map Fragment to an activity.  The containerId should be the
      * resource ID of a View, into which the map view will be placed.  The
-     * listener will be invoked on the UI thread, with this MapFragment when the
-     * map is ready, or with null if there is a problem initializing the map.
+     * readyListener will be invoked on the UI thread with this MapFragment when
+     * the map is ready, or the errorListener will be invoked if there is a
+     * problem initializing the map.
      */
-    void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener);
+    void addTo(
+        @NonNull FragmentActivity activity, int containerId,
+        @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener);
 
     /** Gets the point currently shown at the center of the map view. */
     @NonNull MapPoint getCenter();
@@ -167,8 +186,12 @@ public interface MapFragment {
      */
     void setGpsLocationListener(@Nullable PointListener listener);
 
+    interface ErrorListener {
+        void onError();
+    }
+
     interface ReadyListener {
-        void onReady(@Nullable MapFragment mapFragment);
+        void onReady(@NonNull MapFragment mapFragment);
     }
 
     interface PointListener {
@@ -176,6 +199,6 @@ public interface MapFragment {
     }
 
     interface FeatureListener {
-        void onFeature(@NonNull int featureId);
+        void onFeature(int featureId);
     }
 }

@@ -1,11 +1,11 @@
-package org.odk.collect.android.map;
+package org.odk.collect.android.geo;
 
-import android.content.SharedPreferences;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.view.Gravity;
 
 import com.mapbox.android.core.location.LocationEngine;
@@ -33,10 +33,12 @@ import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 import com.mapbox.mapboxsdk.style.layers.FillLayer;
+import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.style.layers.RasterLayer;
 import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
 import com.mapbox.mapboxsdk.style.sources.RasterSource;
+import com.mapbox.mapboxsdk.style.sources.Source;
 import com.mapbox.mapboxsdk.style.sources.TileSet;
 import com.mapbox.mapboxsdk.style.sources.VectorSource;
 import com.mapbox.mapboxsdk.utils.ColorUtils;
@@ -44,13 +46,12 @@ import com.mapbox.mapboxsdk.utils.ColorUtils;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.mapboxsdk.MapFragment;
-import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.geo.MbtilesFile.LayerType;
+import org.odk.collect.android.geo.MbtilesFile.MbtilesException;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,62 +73,55 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.rasterOpacity;
 
-public class MapboxMapFragment extends MapFragment implements org.odk.collect.android.map.MapFragment,
-    OnMapReadyCallback, MapboxMap.OnMapClickListener, MapboxMap.OnMapLongClickListener,
+public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.MapFragment
+    implements MapFragment, OnMapReadyCallback,
+    MapboxMap.OnMapClickListener, MapboxMap.OnMapLongClickListener,
     LocationEngineCallback<LocationEngineResult> {
 
-    public static final LatLng INITIAL_CENTER = new LatLng(0, -30);
-    public static final float INITIAL_ZOOM = 2;
-    public static final float POINT_ZOOM = 16;
-    public static final String POINT_ICON_ID = "point-icon-id";
-    public static final long LOCATION_INTERVAL_MILLIS = 1000;
-    public static final long LOCATION_MAX_WAIT_MILLIS = 5 * LOCATION_INTERVAL_MILLIS;
+    private static final String POINT_ICON_ID = "point-icon-id";
+    private static final long LOCATION_INTERVAL_MILLIS = 1000;
+    private static final long LOCATION_MAX_WAIT_MILLIS = 5 * LOCATION_INTERVAL_MILLIS;
 
-    // Map from preference values (defined by map_mapbox_basemap_selector_entry_values)
-    // to base map style URLs.
-    private static Map<String, String> initStyleUrls() {
-        Map<String, String> map = new HashMap<>();
-        map.put(GeneralKeys.MAPBOX_MAP_STREETS, Style.MAPBOX_STREETS);
-        map.put(GeneralKeys.MAPBOX_MAP_LIGHT, Style.LIGHT);
-        map.put(GeneralKeys.MAPBOX_MAP_DARK, Style.DARK);
-        map.put(GeneralKeys.MAPBOX_MAP_SATELLITE, Style.SATELLITE);
-        map.put(GeneralKeys.MAPBOX_MAP_SATELLITE_STREETS, Style.SATELLITE_STREETS);
-        map.put(GeneralKeys.MAPBOX_MAP_OUTDOORS, Style.OUTDOORS);
-        return Collections.unmodifiableMap(map);
-    }
+    // Bundle keys understood by applyConfig().
+    static final String KEY_STYLE_URL = "STYLE_URL";
+    static final String KEY_REFERENCE_LAYER = "REFERENCE_LAYER";
 
-    protected static final Map<String, String> STYLE_URLS = initStyleUrls();
-    protected static final String DEFAULT_STYLE_URL = Style.MAPBOX_STREETS;
+    private MapboxMap map;
+    private final List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
+    private PointListener gpsLocationListener;
+    private PointListener clickListener;
+    private PointListener longPressListener;
+    private FeatureListener dragEndListener;
 
-    protected MapboxMap map;
-    protected List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
-    protected PointListener gpsLocationListener;
-    protected PointListener clickListener;
-    protected PointListener longPressListener;
-    protected FeatureListener dragEndListener;
+    private LocationComponent locationComponent;
+    private boolean locationEnabled;
+    private MapPoint lastLocationFix;
 
-    protected LocationComponent locationComponent;
-    protected boolean locationEnabled;
-    protected MapPoint lastLocationFix;
+    private int nextFeatureId = 1;
+    private final Map<Integer, MapFeature> features = new HashMap<>();
+    private SymbolManager symbolManager;
+    private LineManager lineManager;
+    private boolean isDragging;
+    private String styleUrl = Style.MAPBOX_STREETS;
+    private File referenceLayerFile;
+    private final List<Layer> overlayLayers = new ArrayList<>();
+    private final List<Source> overlaySources = new ArrayList<>();
 
-    protected int nextFeatureId = 1;
-    protected Map<Integer, MapFeature> features = new HashMap<>();
-    protected SymbolManager symbolManager;
-    protected LineManager lineManager;
-    protected boolean isDragging;
-
-    protected TileHttpServer tileServer;
+    private TileHttpServer tileServer;
 
     // During Robolectric tests, Google Play Services is unavailable; sadly, the
     // "map" field will be null and many operations will need to be stubbed out.
     @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL", justification = "This flag is exposed for Robolectric tests to set")
     @VisibleForTesting public static boolean testMode;
 
-    @Override public void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener) {
+    @Override public void addTo(
+        @NonNull FragmentActivity activity, int containerId,
+        @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
+        Context context = getContext();
         if (MapboxUtils.initMapbox() == null) {
-            MapboxUtils.warnMapboxUnsupported(Collect.getInstance());
-            if (listener != null) {
-                listener.onReady(null);
+            MapProvider.getConfigurator().showUnavailableMessage(context);
+            if (errorListener != null) {
+                errorListener.onError();
             }
             return;
         }
@@ -147,20 +141,8 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
             this.map = map;  // signature of getMapAsync() ensures map is never null
 
             map.setStyle(getDesiredStyleBuilder(), style -> {
-                for (File file : new File(Collect.OFFLINE_LAYERS).listFiles()) {
-                    String name = file.getName();
-                    if (name.endsWith(".mbtiles")) {
-                        String id = name.substring(0, name.length() - ".mbtiles".length());
-                        addMbtiles(style, id, file);
-                    }
-                }
-
                 map.getUiSettings().setCompassGravity(Gravity.TOP | Gravity.START);
                 map.getUiSettings().setCompassMargins(36, 36, 36, 36);
-                map.getStyle().setTransition(new TransitionOptions(0, 0, false));
-
-                Drawable pointIcon = ContextCompat.getDrawable(getContext(), R.drawable.ic_map_point);
-                map.getStyle().addImage(POINT_ICON_ID, pointIcon);
 
                 map.addOnMapClickListener(this);
                 map.addOnMapLongClickListener(this);
@@ -171,20 +153,32 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
                 lineManager = createLineManager();
                 symbolManager = createSymbolManager();
 
+                loadReferenceOverlay();
                 enableLocationComponent();
 
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(INITIAL_CENTER, INITIAL_ZOOM));
-                if (listener != null) {
-                    listener.onReady(this);
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                    toLatLng(INITIAL_CENTER), INITIAL_ZOOM));
+                if (readyListener != null) {
+                    readyListener.onReady(this);
                 }
             });
 
             // In Robolectric tests, getMapAsync() never gets around to calling its
             // callback; we have to invoke the ready listener directly.
-            if (testMode && listener != null) {
-                listener.onReady(this);
+            if (testMode && readyListener != null) {
+                readyListener.onReady(this);
             }
         });
+    }
+
+    @Override public void onStart() {
+        super.onStart();
+        MapProvider.onMapFragmentStart(this);
+    }
+
+    @Override public void onStop() {
+        MapProvider.onMapFragmentStop(this);
+        super.onStop();
     }
 
     @Override public void onDestroy() {
@@ -198,150 +192,20 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
         return this;
     }
 
-    private Style.Builder getDesiredStyleBuilder() {
-        if (BuildConfig.MAPBOX_ACCESS_TOKEN.isEmpty()) {
-            // When the MAPBOX_ACCESS_TOKEN is missing, any attempt to load
-            // map data from Mapbox will cause the Mapbox SDK to abort with an
-            // uncatchable assertion failure, so we have to be careful to avoid
-            // requesting any Mapbox-sourced layers!  Since we can't use the
-            // Mapbox base map, we fall back to the OSM raster base map.
-            TileSet tiles = new TileSet("2.2.0", "http://a.tile.openstreetmap.org/{z}/{x}/{y}.png");
-            return new Style.Builder()
-                .withSource(new RasterSource("[osm]", tiles, 256))
-                .withLayer(new RasterLayer("[osm]", "[osm]"));
+    @Override public void applyConfig(Bundle config) {
+        styleUrl = config.getString(KEY_STYLE_URL);
+        String path = config.getString(KEY_REFERENCE_LAYER);
+        referenceLayerFile = path != null ? new File(path) : null;
+        if (map != null) {
+            map.setStyle(getDesiredStyleBuilder(), style -> {
+                loadReferenceOverlay();
+            });
         }
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String url = STYLE_URLS.get(prefs.getString(GeneralKeys.KEY_MAP_BASEMAP, null));
-        return new Style.Builder().fromUrl(url == null ? DEFAULT_STYLE_URL : url);
-    }
-
-    @SuppressWarnings("TimberExceptionLogging")
-    private void addMbtiles(Style style, String id, File file) {
-        MbtilesFile mbtiles;
-        try {
-            mbtiles = new MbtilesFile(file);
-        } catch (MbtilesFile.UnsupportedFormatException e) {
-            Timber.w(e.getMessage());
-            return;
-        }
-
-        TileSet tileSet = createTileSet(mbtiles, tileServer.getUrlTemplate(id));
-        tileServer.addSource(id, mbtiles);
-
-        if (mbtiles.getType() == MbtilesFile.Type.VECTOR) {
-            style.addSource(new VectorSource(id, tileSet));
-            List<MbtilesFile.VectorLayer> layers = mbtiles.getVectorLayers();
-            for (MbtilesFile.VectorLayer layer : layers) {
-                // Pick a colour that's a function of the filename and layer name.
-                int hue = (((id + "." + layer.name).hashCode()) & 0x7fffffff) % 360;
-                style.addLayer(new FillLayer(id + "/" + layer.name + ".fill", id).withProperties(
-                    fillColor(Color.HSVToColor(new float[] {hue, 0.3f, 1})),
-                    fillOpacity(0.1f)
-                ).withSourceLayer(layer.name));
-                style.addLayer(new LineLayer(id + "/" + layer.name + ".line", id).withProperties(
-                    lineColor(Color.HSVToColor(new float[] {hue, 0.7f, 1})),
-                    lineWidth(1f),
-                    lineOpacity(0.7f)
-                ).withSourceLayer(layer.name));
-            }
-        }
-        if (mbtiles.getType() == MbtilesFile.Type.RASTER) {
-            style.addSource(new RasterSource(id, tileSet));
-            style.addLayer(new RasterLayer(id + ".raster", id).withProperties(
-                rasterOpacity(0.5f)
-            ));
-        }
-        Timber.i("Added %s as a %s layer at /%s", file, mbtiles.getType(), id);
-    }
-
-    private TileSet createTileSet(MbtilesFile mbtiles, String urlTemplate) {
-        TileSet tileSet = new TileSet("2.2.0", urlTemplate);
-
-        // Configure the TileSet using the metadata in the .mbtiles file.
-        tileSet.setName(mbtiles.getMetadata("name"));
-        try {
-            tileSet.setMinZoom(Integer.parseInt(mbtiles.getMetadata("minzoom")));
-            tileSet.setMaxZoom(Integer.parseInt(mbtiles.getMetadata("maxzoom")));
-        } catch (NumberFormatException e) { /* ignore */ }
-
-        String[] parts = mbtiles.getMetadata("center").split(",");
-        if (parts.length == 3) {  // latitude, longitude, zoom
-            try {
-                tileSet.setCenter(
-                    Float.parseFloat(parts[0]), Float.parseFloat(parts[1]),
-                    (float) Integer.parseInt(parts[2])
-                );
-            } catch (NumberFormatException e) { /* ignore */ }
-        }
-
-        parts = mbtiles.getMetadata("bounds").split(",");
-        if (parts.length == 4) {  // left, bottom, right, top
-            try {
-                tileSet.setBounds(
-                    Float.parseFloat(parts[0]), Float.parseFloat(parts[1]),
-                    Float.parseFloat(parts[2]), Float.parseFloat(parts[3])
-                );
-            } catch (NumberFormatException e) { /* ignore */ }
-        }
-
-        return tileSet;
-    }
-
-    private SymbolManager createSymbolManager() {
-        SymbolManager symbolManager = new SymbolManager(getMapView(), map, map.getStyle());
-        // Turning on allowOverlap and ignorePlacement causes the symbols to
-        // always be shown (otherwise Mapbox hides them automatically when they
-        // come too close to other symbols or labels on the map).
-        symbolManager.setIconAllowOverlap(true);
-        symbolManager.setIconIgnorePlacement(true);
-        symbolManager.setIconPadding(0f);
-        return symbolManager;
-    }
-
-    private LineManager createLineManager() {
-        return new LineManager(getMapView(), map, map.getStyle());
-    }
-
-    @SuppressWarnings({"MissingPermission"})  // Permission checks for location services handled in widgets
-    private void enableLocationComponent() {
-        if (map == null) {  // map is null during Robolectric tests
-            return;
-        }
-
-        LocationEngineRequest request = new LocationEngineRequest.Builder(LOCATION_INTERVAL_MILLIS)
-            .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
-            .setMaxWaitTime(LOCATION_MAX_WAIT_MILLIS)
-            .build();
-
-        LocationEngine engine = LocationEngineProvider.getBestLocationEngine(getContext());
-        engine.requestLocationUpdates(request, this, getMainLooper());
-        engine.getLastLocation(this);
-
-        locationComponent = map.getLocationComponent();
-        if (map.getStyle() != null) {
-            locationComponent.activateLocationComponent(
-                LocationComponentActivationOptions.builder(getContext(), map.getStyle())
-                    .locationEngine(engine)
-                    .locationComponentOptions(
-                        LocationComponentOptions.builder(getContext())
-                            .foregroundDrawable(R.drawable.ic_crosshairs)
-                            .backgroundDrawable(R.drawable.empty)
-                            .enableStaleState(false)
-                            .elevation(0)  // removes the shadow
-                            .build()
-                    )
-                    .build()
-            );
-        }
-
-        locationComponent.setCameraMode(CameraMode.NONE);
-        locationComponent.setRenderMode(RenderMode.NORMAL);
-        locationComponent.setLocationComponentEnabled(locationEnabled);
     }
 
     @Override public @NonNull MapPoint getCenter() {
         if (map == null) {  // during Robolectric tests, map will be null
-            return fromLatLng(INITIAL_CENTER);
+            return INITIAL_CENTER;
         }
         return fromLatLng(map.getCameraPosition().target);
     }
@@ -373,14 +237,6 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
         if (center != null) {
             moveOrAnimateCamera(
                 CameraUpdateFactory.newLatLngZoom(toLatLng(center), (float) zoom), animate);
-        }
-    }
-
-    protected void moveOrAnimateCamera(CameraUpdate movement, boolean animate) {
-        if (animate) {
-            map.animateCamera(movement);
-        } else {
-            map.moveCamera(movement);
         }
     }
 
@@ -456,30 +312,6 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
             longPressListener.onPoint(fromLatLng(latLng));
         }
         return true;
-    }
-
-    protected LatLngBounds expandBounds(LatLngBounds bounds, double factor) {
-        double north = bounds.getNorthEast().getLatitude();
-        double south = bounds.getSouthWest().getLatitude();
-        double latCenter = (north + south) / 2;
-        double latRadius = ((north - south) / 2) * factor;
-        north = Math.min(90, latCenter + latRadius);
-        south = Math.max(-90, latCenter - latRadius);
-
-        double east = bounds.getNorthEast().getLongitude();
-        double west = bounds.getSouthWest().getLongitude();
-        while (east < west) {
-            east += 360;
-        }
-        double lonCenter = (east + west) / 2;
-        double lonRadius = Math.min(180 - 1e-6, ((east - west) / 2) * factor);
-        east = lonCenter + lonRadius;
-        west = lonCenter - lonRadius;
-
-        return new LatLngBounds.Builder()
-            .include(new LatLng(south, west))
-            .include(new LatLng(north, east))
-            .build();
     }
 
     @Override public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
@@ -565,11 +397,11 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
 
     @Override public void onFailure(@NonNull Exception exception) { }
 
-    protected static @NonNull MapPoint fromLatLng(@NonNull LatLng latLng) {
+    private static @NonNull MapPoint fromLatLng(@NonNull LatLng latLng) {
         return new MapPoint(latLng.getLatitude(), latLng.getLongitude());
     }
 
-    protected static @Nullable MapPoint fromLocation(@Nullable Location location) {
+    private static @Nullable MapPoint fromLocation(@Nullable Location location) {
         if (location == null) {
             return null;
         }
@@ -577,16 +409,16 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
             location.getAltitude(), location.getAccuracy());
     }
 
-    protected static @NonNull MapPoint fromSymbol(@NonNull Symbol symbol, double alt, double sd) {
+    private static @NonNull MapPoint fromSymbol(@NonNull Symbol symbol, double alt, double sd) {
         LatLng position = symbol.getLatLng();
         return new MapPoint(position.getLatitude(), position.getLongitude(), alt, sd);
     }
 
-    protected static @NonNull LatLng toLatLng(@NonNull MapPoint point) {
+    private static @NonNull LatLng toLatLng(@NonNull MapPoint point) {
         return new LatLng(point.lat, point.lon);
     }
 
-    protected Symbol createSymbol(SymbolManager symbolManager, MapPoint point, boolean draggable) {
+    private Symbol createSymbol(SymbolManager symbolManager, MapPoint point, boolean draggable) {
         return symbolManager.create(new SymbolOptions()
             .withLatLng(toLatLng(point))
             .withIconImage(POINT_ICON_ID)
@@ -595,6 +427,225 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
             .withDraggable(draggable)
             .withTextOpacity(0f)
         );
+    }
+
+    private void moveOrAnimateCamera(CameraUpdate movement, boolean animate) {
+        if (animate) {
+            map.animateCamera(movement);
+        } else {
+            map.moveCamera(movement);
+        }
+    }
+
+    private LatLngBounds expandBounds(LatLngBounds bounds, double factor) {
+        double north = bounds.getNorthEast().getLatitude();
+        double south = bounds.getSouthWest().getLatitude();
+        double latCenter = (north + south) / 2;
+        double latRadius = ((north - south) / 2) * factor;
+        north = Math.min(90, latCenter + latRadius);
+        south = Math.max(-90, latCenter - latRadius);
+
+        double east = bounds.getNorthEast().getLongitude();
+        double west = bounds.getSouthWest().getLongitude();
+        while (east < west) {
+            east += 360;
+        }
+        double lonCenter = (east + west) / 2;
+        double lonRadius = Math.min(180 - 1e-6, ((east - west) / 2) * factor);
+        east = lonCenter + lonRadius;
+        west = lonCenter - lonRadius;
+
+        return new LatLngBounds.Builder()
+            .include(new LatLng(south, west))
+            .include(new LatLng(north, east))
+            .build();
+    }
+
+    private Style.Builder getDesiredStyleBuilder() {
+        if (BuildConfig.MAPBOX_ACCESS_TOKEN.isEmpty()) {
+            // When the MAPBOX_ACCESS_TOKEN is missing, any attempt to load
+            // map data from Mapbox will cause the Mapbox SDK to abort with an
+            // uncatchable assertion failure, so we have to be careful to avoid
+            // requesting any Mapbox-sourced layers!  Since we can't use the
+            // Mapbox base map, we fall back to the OSM raster base map.
+            TileSet tiles = new TileSet("2.2.0", "http://a.tile.openstreetmap.org/{z}/{x}/{y}.png");
+            return new Style.Builder()
+                .withSource(new RasterSource("[osm]", tiles, 256))
+                .withLayer(new RasterLayer("[osm]", "[osm]"));
+        }
+        Context context = Collect.getInstance().getApplicationContext();
+        Drawable pointIcon = ContextCompat.getDrawable(context, R.drawable.ic_map_point);
+        return new Style.Builder().fromUrl(styleUrl)
+            .withImage(POINT_ICON_ID, pointIcon)
+            .withTransition(new TransitionOptions(0, 0, false));
+    }
+
+    /**
+     * Updates the map to reflect the value of referenceLayerFile.  Because this
+     * involves adding things to the map's Style, call this only after the Style
+     * is fully loaded, in setStyle()'s OnStyleLoaded callback.
+     */
+    private void loadReferenceOverlay() {
+        clearOverlays();
+        if (referenceLayerFile != null) {
+            addMbtiles(referenceLayerFile.getName(), referenceLayerFile);
+        }
+    }
+
+    @SuppressWarnings("TimberExceptionLogging")
+    private void addMbtiles(String id, File file) {
+        MbtilesFile mbtiles;
+        try {
+            mbtiles = new MbtilesFile(file);
+        } catch (MbtilesException e) {
+            Timber.w(e.getMessage());
+            return;
+        }
+
+        TileSet tileSet = createTileSet(mbtiles, tileServer.getUrlTemplate(id));
+        tileServer.addSource(id, mbtiles);
+
+        if (mbtiles.getLayerType() == LayerType.VECTOR) {
+            addOverlaySource(new VectorSource(id, tileSet));
+            List<MbtilesFile.VectorLayer> layers = mbtiles.getVectorLayers();
+            for (MbtilesFile.VectorLayer layer : layers) {
+                // Pick a colour that's a function of the filename and layer name.
+                int hue = (((id + "." + layer.name).hashCode()) & 0x7fffffff) % 360;
+                addOverlayLayer(new FillLayer(id + "/" + layer.name + ".fill", id).withProperties(
+                    fillColor(Color.HSVToColor(new float[] {hue, 0.3f, 1})),
+                    fillOpacity(0.1f)
+                ).withSourceLayer(layer.name));
+                addOverlayLayer(new LineLayer(id + "/" + layer.name + ".line", id).withProperties(
+                    lineColor(Color.HSVToColor(new float[] {hue, 0.7f, 1})),
+                    lineWidth(1f),
+                    lineOpacity(0.7f)
+                ).withSourceLayer(layer.name));
+            }
+        }
+        if (mbtiles.getLayerType() == LayerType.RASTER) {
+            addOverlaySource(new RasterSource(id, tileSet));
+            addOverlayLayer(new RasterLayer(id + ".raster", id).withProperties(
+                rasterOpacity(0.5f)
+            ));
+        }
+        Timber.i("Added %s as a %s layer at /%s", file, mbtiles.getLayerType(), id);
+    }
+
+    @SuppressWarnings("TimberExceptionLogging")
+    private TileSet createTileSet(MbtilesFile mbtiles, String urlTemplate) {
+        TileSet tileSet = new TileSet("2.2.0", urlTemplate);
+
+        // Configure the TileSet using the metadata in the .mbtiles file.
+        try {
+            tileSet.setName(mbtiles.getMetadata("name"));
+            try {
+                tileSet.setMinZoom(Integer.parseInt(mbtiles.getMetadata("minzoom")));
+                tileSet.setMaxZoom(Integer.parseInt(mbtiles.getMetadata("maxzoom")));
+            } catch (NumberFormatException e) { /* ignore */ }
+
+            String[] parts = mbtiles.getMetadata("center").split(",");
+            if (parts.length == 3) {  // latitude, longitude, zoom
+                try {
+                    tileSet.setCenter(
+                        Float.parseFloat(parts[0]), Float.parseFloat(parts[1]),
+                        (float) Integer.parseInt(parts[2])
+                    );
+                } catch (NumberFormatException e) { /* ignore */ }
+            }
+
+            parts = mbtiles.getMetadata("bounds").split(",");
+            if (parts.length == 4) {  // left, bottom, right, top
+                try {
+                    tileSet.setBounds(
+                        Float.parseFloat(parts[0]), Float.parseFloat(parts[1]),
+                        Float.parseFloat(parts[2]), Float.parseFloat(parts[3])
+                    );
+                } catch (NumberFormatException e) { /* ignore */ }
+            }
+        } catch (MbtilesException e) {
+            Timber.w(e.getMessage());
+        }
+
+        return tileSet;
+    }
+
+    private void clearOverlays() {
+        Style style = map.getStyle();
+        for (Layer layer : overlayLayers) {
+            style.removeLayer(layer);
+        }
+        overlayLayers.clear();
+        // NOTE(ping): It would make sense to remove the overlaySources from
+        // the map here, but that can lead to a SEGV in libmapbox-gl.so.  See
+        // https://github.com/mapbox/mapbox-gl-native/issues/15182 for details.
+        /*
+        for (Source source : overlaySources) {
+            style.removeSource(source);
+        }
+        overlaySources.clear();
+        */
+    }
+
+    private void addOverlayLayer(Layer layer) {
+        map.getStyle().addLayer(layer);
+        overlayLayers.add(layer);
+    }
+
+    private void addOverlaySource(Source source) {
+        map.getStyle().addSource(source);
+        overlaySources.add(source);
+    }
+
+    private SymbolManager createSymbolManager() {
+        SymbolManager symbolManager = new SymbolManager(getMapView(), map, map.getStyle());
+        // Turning on allowOverlap and ignorePlacement causes the symbols to
+        // always be shown (otherwise Mapbox hides them automatically when they
+        // come too close to other symbols or labels on the map).
+        symbolManager.setIconAllowOverlap(true);
+        symbolManager.setIconIgnorePlacement(true);
+        symbolManager.setIconPadding(0f);
+        return symbolManager;
+    }
+
+    private LineManager createLineManager() {
+        return new LineManager(getMapView(), map, map.getStyle());
+    }
+
+    @SuppressWarnings({"MissingPermission"})  // Permission checks for location services handled in widgets
+    private void enableLocationComponent() {
+        if (map == null) {  // map is null during Robolectric tests
+            return;
+        }
+
+        LocationEngineRequest request = new LocationEngineRequest.Builder(LOCATION_INTERVAL_MILLIS)
+            .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
+            .setMaxWaitTime(LOCATION_MAX_WAIT_MILLIS)
+            .build();
+
+        LocationEngine engine = LocationEngineProvider.getBestLocationEngine(getContext());
+        engine.requestLocationUpdates(request, this, getMainLooper());
+        engine.getLastLocation(this);
+
+        locationComponent = map.getLocationComponent();
+        if (map.getStyle() != null) {
+            locationComponent.activateLocationComponent(
+                LocationComponentActivationOptions.builder(getContext(), map.getStyle())
+                    .locationEngine(engine)
+                    .locationComponentOptions(
+                        LocationComponentOptions.builder(getContext())
+                            .foregroundDrawable(R.drawable.ic_crosshairs)
+                            .backgroundDrawable(R.drawable.empty)
+                            .enableStaleState(false)
+                            .elevation(0)  // removes the shadow
+                            .build()
+                    )
+                    .build()
+            );
+        }
+
+        locationComponent.setCameraMode(CameraMode.NONE);
+        locationComponent.setRenderMode(RenderMode.NORMAL);
+        locationComponent.setLocationComponentEnabled(locationEnabled);
     }
 
     /**
@@ -609,14 +660,14 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
     }
 
     /** A Symbol that can optionally be dragged by the user. */
-    protected class MarkerFeature implements MapFeature {
+    private class MarkerFeature implements MapFeature {
         private final int featureId;
         private final SymbolManager symbolManager;
         private final DragListener dragListener = new DragListener();
         private MapPoint point;
         private Symbol symbol;
 
-        public MarkerFeature(int featureId, SymbolManager symbolManager, MapPoint point, boolean draggable) {
+        MarkerFeature(int featureId, SymbolManager symbolManager, MapPoint point, boolean draggable) {
             this.featureId = featureId;
             this.symbolManager = symbolManager;
             this.point = point;
@@ -660,7 +711,7 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
     }
 
     /** A polyline or polygon that can be manipulated by dragging Symbols at its vertices. */
-    protected class PolyFeature implements MapFeature {
+    private class PolyFeature implements MapFeature {
         public static final float STROKE_WIDTH = 5;
 
         private final int featureId;
@@ -672,7 +723,7 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
         private final boolean closedPolygon;
         private Line line;
 
-        public PolyFeature(int featureId, LineManager lineManager, SymbolManager symbolManager,
+        PolyFeature(int featureId, LineManager lineManager, SymbolManager symbolManager,
             Iterable<MapPoint> points, boolean closedPolygon) {
             this.featureId = featureId;
             this.lineManager = lineManager;
@@ -726,7 +777,7 @@ public class MapboxMapFragment extends MapFragment implements org.odk.collect.an
             }
         }
 
-        protected void updateLine() {
+        private void updateLine() {
             List<LatLng> latLngs = new ArrayList<>();
             for (MapPoint point : points) {
                 latLngs.add(toLatLng(point));

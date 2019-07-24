@@ -25,4 +25,12 @@ the specific language governing permissions and limitations under the License. -
     <string name="every_24_hours_value" translatable="false">every_24_hours</string>
     <string name="app_theme_light" translatable="false">light_theme</string>
     <string name="app_theme_dark" translatable="false">dark_theme</string>
+
+    <!-- For consistency, we don't translate these brand/organization names. -->
+    <string name="basemap_source_google" translatable="false">Google</string>
+    <string name="basemap_source_mapbox" translatable="false">Mapbox</string>
+    <string name="basemap_source_osm" translatable="false">OpenStreetMap</string>
+    <string name="basemap_source_usgs" translatable="false">USGS</string>
+    <string name="basemap_source_stamen" translatable="false">Stamen</string>
+    <string name="basemap_source_carto" translatable="false">Carto</string>
 </resources>

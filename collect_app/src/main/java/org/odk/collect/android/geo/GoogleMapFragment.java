@@ -12,12 +12,13 @@
  * the License.
  */
 
-package org.odk.collect.android.map;
+package org.odk.collect.android.geo;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.location.Location;
+import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 
@@ -36,6 +37,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.TileOverlay;
+import com.google.android.gms.maps.model.TileOverlayOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.location.client.LocationClient;
@@ -43,6 +46,7 @@ import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,52 +64,54 @@ public class GoogleMapFragment extends SupportMapFragment implements
     MapFragment, LocationListener, LocationClient.LocationClientListener,
     GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener,
     GoogleMap.OnMarkerDragListener, GoogleMap.OnMarkerClickListener {
-    public static final LatLng INITIAL_CENTER = new LatLng(0, -30);
-    public static final float INITIAL_ZOOM = 2;
-    public static final float POINT_ZOOM = 16;
 
-    protected GoogleMap map;
-    protected Marker locationCrosshairs;
-    protected Circle accuracyCircle;
-    protected List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
-    protected PointListener clickListener;
-    protected PointListener longPressListener;
-    protected PointListener gpsLocationListener;
-    protected FeatureListener dragEndListener;
-    protected LocationClient locationClient;
-    protected MapPoint lastLocationFix;
-    protected String lastLocationProvider;
-    protected int nextFeatureId = 1;
-    protected Map<Integer, MapFeature> features = new HashMap<>();
-    protected AlertDialog gpsErrorDialog;
-    protected boolean gpsLocationEnabled;
+    // Bundle keys understood by applyConfig().
+    static final String KEY_MAP_TYPE = "MAP_TYPE";
+    static final String KEY_REFERENCE_LAYER = "REFERENCE_LAYER";
+
+    private GoogleMap map;
+    private Marker locationCrosshairs;
+    private Circle accuracyCircle;
+    private final List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
+    private PointListener clickListener;
+    private PointListener longPressListener;
+    private PointListener gpsLocationListener;
+    private FeatureListener dragEndListener;
+    private LocationClient locationClient;
+    private MapPoint lastLocationFix;
+    private String lastLocationProvider;
+    private int nextFeatureId = 1;
+    private final Map<Integer, MapFeature> features = new HashMap<>();
+    private boolean gpsLocationEnabled;
+    private int mapType;
+    private File referenceLayerFile;
+    private TileOverlay referenceOverlay;
 
     // During Robolectric tests, Google Play Services is unavailable; sadly, the
     // "map" field will be null and many operations will need to be stubbed out.
     @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL", justification = "This flag is exposed for Robolectric tests to set")
     @VisibleForTesting public static boolean testMode;
 
-    @Override public Fragment getFragment() {
-        return this;
-    }
-
     @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
-    @Override public void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener) {
+    @Override public void addTo(
+        @NonNull FragmentActivity activity, int containerId,
+        @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         // If the containing activity is being re-created upon screen rotation,
         // the FragmentManager will have also re-created a copy of the previous
-        // OsmMapFragment.  We don't want these useless copies of old fragments
+        // OsmDroidMapFragment.  We don't want these useless copies of old fragments
         // to linger, so the following line calls .replace() instead of .add().
         activity.getSupportFragmentManager()
             .beginTransaction().replace(containerId, this).commitNow();
         getMapAsync((GoogleMap map) -> {
             if (map == null) {
                 ToastUtils.showShortToast(R.string.google_play_services_error_occured);
-                if (listener != null) {
-                    listener.onReady(null);
+                if (errorListener != null) {
+                    errorListener.onError();
                 }
                 return;
             }
             this.map = map;
+            map.setMapType(mapType);
             map.setOnMapClickListener(this);
             map.setOnMapLongClickListener(this);
             map.setOnMarkerClickListener(this);
@@ -114,28 +120,48 @@ public class GoogleMapFragment extends SupportMapFragment implements
             // Don't show the blue dot on the map; we'll draw crosshairs instead.
             map.setMyLocationEnabled(false);
             map.setMinZoomPreference(1);
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(INITIAL_CENTER, INITIAL_ZOOM));
-            if (listener != null) {
-                listener.onReady(this);
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                toLatLng(INITIAL_CENTER), INITIAL_ZOOM));
+            loadReferenceOverlay();
+            if (readyListener != null) {
+                readyListener.onReady(this);
             }
         });
 
         // In Robolectric tests, getMapAsync() never gets around to calling its
         // callback; we have to invoke the ready listener directly.
-        if (testMode) {
-            listener.onReady(this);
+        if (testMode && readyListener != null) {
+            readyListener.onReady(this);
         }
     }
 
-    // TOOD(ping): This method is only used by MapHelper.  Remove this after
-    // MapFragment adds support for selectable basemaps.
-    public GoogleMap getGoogleMap() {
-        return map;
+    @Override public void onStart() {
+        super.onStart();
+        MapProvider.onMapFragmentStart(this);
+    }
+
+    @Override public void onStop() {
+        MapProvider.onMapFragmentStop(this);
+        super.onStop();
+    }
+
+    @Override public Fragment getFragment() {
+        return this;
+    }
+
+    @Override public void applyConfig(Bundle config) {
+        mapType = config.getInt(KEY_MAP_TYPE, GoogleMap.MAP_TYPE_NORMAL);
+        String path = config.getString(KEY_REFERENCE_LAYER);
+        referenceLayerFile = path != null ? new File(path) : null;
+        if (map != null) {
+            map.setMapType(mapType);
+            loadReferenceOverlay();
+        }
     }
 
     @Override public @NonNull MapPoint getCenter() {
         if (map == null) {  // during Robolectric tests, map will be null
-            return fromLatLng(INITIAL_CENTER);
+            return INITIAL_CENTER;
         }
         LatLng target = map.getCameraPosition().target;
         return new MapPoint(target.latitude, target.longitude);
@@ -192,35 +218,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
                     moveOrAnimateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), animate);
                 }, 100);
             }
-        }
-    }
-
-    protected LatLngBounds expandBounds(LatLngBounds bounds, double factor) {
-        double north = bounds.northeast.latitude;
-        double south = bounds.southwest.latitude;
-        double latCenter = (north + south) / 2;
-        double latRadius = ((north - south) / 2) * factor;
-        north = Math.min(90, latCenter + latRadius);
-        south = Math.max(-90, latCenter - latRadius);
-
-        double east = bounds.northeast.longitude;
-        double west = bounds.southwest.longitude;
-        while (east < west) {
-            east += 360;
-        }
-        double lonCenter = (east + west) / 2;
-        double lonRadius = Math.min(180 - 1e-6, ((east - west) / 2) * factor);
-        east = lonCenter + lonRadius;
-        west = lonCenter - lonRadius;
-
-        return new LatLngBounds(new LatLng(south, west), new LatLng(north, east));
-    }
-
-    protected void moveOrAnimateCamera(CameraUpdate movement, boolean animate) {
-        if (animate) {
-            map.animateCamera(movement);
-        } else {
-            map.moveCamera(movement);
         }
     }
 
@@ -334,34 +331,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    protected void updateLocationIndicator(LatLng loc, double radius) {
-        if (map == null) {
-            return;
-        }
-        if (locationCrosshairs == null) {
-            locationCrosshairs = map.addMarker(new MarkerOptions()
-                .position(loc)
-                .icon(getBitmapDescriptor(R.drawable.ic_crosshairs))
-                .anchor(0.5f, 0.5f)  // center the crosshairs on the position
-            );
-        }
-        if (accuracyCircle == null) {
-            int stroke = getResources().getColor(R.color.locationAccuracyCircle);
-            int fill = getResources().getColor(R.color.locationAccuracyFill);
-            accuracyCircle = map.addCircle(new CircleOptions()
-                .center(loc)
-                .radius(radius)
-                .strokeWidth(1)
-                .strokeColor(stroke)
-                .fillColor(fill)
-            );
-        }
-
-        locationCrosshairs.setPosition(loc);
-        accuracyCircle.setCenter(loc);
-        accuracyCircle.setRadius(radius);
-    }
-
     @Override public @Nullable MapPoint getGpsLocation() {
         return lastLocationFix;
     }
@@ -426,41 +395,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
         locationClient.stopLocationUpdates();
     }
 
-    protected void showGpsDisabledAlert() {
-        gpsErrorDialog = new AlertDialog.Builder(getActivity())
-            .setMessage(getString(R.string.gps_enable_message))
-            .setCancelable(false)
-            .setPositiveButton(getString(R.string.enable_gps),
-                (dialog, id) -> startActivityForResult(
-                    new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0))
-            .setNegativeButton(getString(R.string.cancel),
-                (dialog, id) -> dialog.cancel())
-            .create();
-        gpsErrorDialog.show();
-    }
-
-    /** Finds the feature to which the given marker belongs. */
-    protected int findFeature(Marker marker) {
-        for (int featureId : features.keySet()) {
-            if (features.get(featureId).ownsMarker(marker)) {
-                return featureId;
-            }
-        }
-        return -1;  // not found
-    }
-
-    protected void updateFeature(int featureId) {
-        MapFeature feature = features.get(featureId);
-        if (feature != null) {
-            feature.update();
-        }
-    }
-
-    protected static @NonNull MapPoint fromLatLng(@NonNull LatLng latLng) {
+    private static @NonNull MapPoint fromLatLng(@NonNull LatLng latLng) {
         return new MapPoint(latLng.latitude, latLng.longitude);
     }
 
-    protected static @Nullable MapPoint fromLocation(@Nullable Location location) {
+    private static @Nullable MapPoint fromLocation(@Nullable Location location) {
         if (location == null) {
             return null;
         }
@@ -468,7 +407,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             location.getAltitude(), location.getAccuracy());
     }
 
-    protected static @NonNull MapPoint fromMarker(@NonNull Marker marker) {
+    private static @NonNull MapPoint fromMarker(@NonNull Marker marker) {
         LatLng position = marker.getPosition();
         String snippet = marker.getSnippet();
         String[] parts = (snippet != null ? snippet : "").split(";");
@@ -487,11 +426,98 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return new MapPoint(position.latitude, position.longitude, alt, sd);
     }
 
-    protected static @NonNull LatLng toLatLng(@NonNull MapPoint point) {
+    private static @NonNull LatLng toLatLng(@NonNull MapPoint point) {
         return new LatLng(point.lat, point.lon);
     }
 
-    protected Marker createMarker(GoogleMap map, MapPoint point, boolean draggable) {
+    /** Updates the map to reflect the value of referenceLayerFile. */
+    private void loadReferenceOverlay() {
+        if (referenceOverlay != null) {
+            referenceOverlay.remove();
+            referenceOverlay = null;
+        }
+        if (referenceLayerFile != null) {
+            referenceOverlay = this.map.addTileOverlay(new TileOverlayOptions().tileProvider(
+                new GoogleMapsMapBoxOfflineTileProvider(referenceLayerFile)
+            ));
+        }
+    }
+
+    private LatLngBounds expandBounds(LatLngBounds bounds, double factor) {
+        double north = bounds.northeast.latitude;
+        double south = bounds.southwest.latitude;
+        double latCenter = (north + south) / 2;
+        double latRadius = ((north - south) / 2) * factor;
+        north = Math.min(90, latCenter + latRadius);
+        south = Math.max(-90, latCenter - latRadius);
+
+        double east = bounds.northeast.longitude;
+        double west = bounds.southwest.longitude;
+        while (east < west) {
+            east += 360;
+        }
+        double lonCenter = (east + west) / 2;
+        double lonRadius = Math.min(180 - 1e-6, ((east - west) / 2) * factor);
+        east = lonCenter + lonRadius;
+        west = lonCenter - lonRadius;
+
+        return new LatLngBounds(new LatLng(south, west), new LatLng(north, east));
+    }
+
+    private void moveOrAnimateCamera(CameraUpdate movement, boolean animate) {
+        if (animate) {
+            map.animateCamera(movement);
+        } else {
+            map.moveCamera(movement);
+        }
+    }
+
+    private void updateLocationIndicator(LatLng loc, double radius) {
+        if (map == null) {
+            return;
+        }
+        if (locationCrosshairs == null) {
+            locationCrosshairs = map.addMarker(new MarkerOptions()
+                .position(loc)
+                .icon(getBitmapDescriptor(R.drawable.ic_crosshairs))
+                .anchor(0.5f, 0.5f)  // center the crosshairs on the position
+            );
+        }
+        if (accuracyCircle == null) {
+            int stroke = getResources().getColor(R.color.locationAccuracyCircle);
+            int fill = getResources().getColor(R.color.locationAccuracyFill);
+            accuracyCircle = map.addCircle(new CircleOptions()
+                .center(loc)
+                .radius(radius)
+                .strokeWidth(1)
+                .strokeColor(stroke)
+                .fillColor(fill)
+            );
+        }
+
+        locationCrosshairs.setPosition(loc);
+        accuracyCircle.setCenter(loc);
+        accuracyCircle.setRadius(radius);
+    }
+
+    /** Finds the feature to which the given marker belongs. */
+    private int findFeature(Marker marker) {
+        for (int featureId : features.keySet()) {
+            if (features.get(featureId).ownsMarker(marker)) {
+                return featureId;
+            }
+        }
+        return -1;  // not found
+    }
+
+    private void updateFeature(int featureId) {
+        MapFeature feature = features.get(featureId);
+        if (feature != null) {
+            feature.update();
+        }
+    }
+
+    private Marker createMarker(GoogleMap map, MapPoint point, boolean draggable) {
         if (map == null || getActivity() == null) {  // during Robolectric tests, map will be null
             return null;
         }
@@ -507,13 +533,22 @@ public class GoogleMapFragment extends SupportMapFragment implements
         );
     }
 
-    protected BitmapDescriptor getBitmapDescriptor(int drawableId) {
+    private BitmapDescriptor getBitmapDescriptor(int drawableId) {
         return BitmapDescriptorFactory.fromBitmap(
             IconUtils.getBitmap(getActivity(), drawableId));
     }
 
-    @VisibleForTesting public boolean isGpsErrorDialogShowing() {
-        return gpsErrorDialog != null && gpsErrorDialog.isShowing();
+    private void showGpsDisabledAlert() {
+        new AlertDialog.Builder(getActivity())
+            .setMessage(getString(R.string.gps_enable_message))
+            .setCancelable(false)
+            .setPositiveButton(getString(R.string.enable_gps),
+                (dialog, id) -> startActivityForResult(
+                    new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0))
+            .setNegativeButton(getString(R.string.cancel),
+                (dialog, id) -> dialog.cancel())
+            .create()
+            .show();
     }
 
     /**
@@ -533,10 +568,10 @@ public class GoogleMapFragment extends SupportMapFragment implements
         void dispose();
     }
 
-    protected class MarkerFeature implements MapFeature {
-        Marker marker;
+    private class MarkerFeature implements MapFeature {
+        private Marker marker;
 
-        public MarkerFeature(GoogleMap map, MapPoint point, boolean draggable) {
+        MarkerFeature(GoogleMap map, MapPoint point, boolean draggable) {
             this.marker = createMarker(map, point, draggable);
         }
 
@@ -557,14 +592,15 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     /** A polyline or polygon that can be manipulated by dragging markers at its vertices. */
-    protected class PolyFeature implements MapFeature {
-        final GoogleMap map;
-        final List<Marker> markers = new ArrayList<>();
-        final boolean closedPolygon;
-        Polyline polyline;
+    private class PolyFeature implements MapFeature {
         public static final int STROKE_WIDTH = 5;
 
-        public PolyFeature(GoogleMap map, Iterable<MapPoint> points, boolean closedPolygon) {
+        private final GoogleMap map;
+        private final List<Marker> markers = new ArrayList<>();
+        private final boolean closedPolygon;
+        private Polyline polyline;
+
+        PolyFeature(GoogleMap map, Iterable<MapPoint> points, boolean closedPolygon) {
             this.map = map;
             this.closedPolygon = closedPolygon;
             if (map == null) {  // during Robolectric tests, map will be null
@@ -635,7 +671,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             }
         }
 
-        protected void clearPolyline() {
+        private void clearPolyline() {
             if (polyline != null) {
                 polyline.remove();
                 polyline = null;

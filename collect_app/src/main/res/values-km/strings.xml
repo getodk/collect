@@ -295,12 +295,6 @@
   <string name="leave_a_review">ទុកមតិនៅក្នុងហាង Play</string>
   <string name="leave_a_review_msg">ការ​ផ្តល់​មតិ​ (សង្ឃឹមថាជាវិជ្ជមាន) របស់​អ្នក​បង្កើន​ភាព​មើល​ឃើញ​នៃ​កម្មវិធី​នៅ​ក្នុង Play Store ។</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">ផែនទី SDK</string>
-  <string name="map_sdk_behavior">ផែនទី SDK</string>
-  <string name="google_maps_sdk">ផែនទី Google SDK</string>
-  <string name="openstreetmap_sdk">ផែនទី​ OpenStreetMap SDK</string>
-  <string name="show_map_sdk">បង្ហាញ​ជម្រើស​ផែនទី​ SDK</string>
-  <string name="openmap_streets">ផ្លូវ OSM</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">ផែនទីជាតិ Hybrid USGS </string>
   <string name="openmap_usgs_img">ផែនទីជាតិរូបភាព USGS </string>
@@ -311,8 +305,6 @@
   <string name="terrain">លក្ខណៈភូមិសាស្ត្រ</string>
   <string name="hybrid">ផែនទីកូនកាត់</string>
   <string name="satellite">ផ្កាយរណប</string>
-  <string name="map_basemap_selector_title">មូលដ្ឋានផែនទី</string>
-  <string name="show_map_basemap">បង្ហាញជម្រើសផែនទីមូលដ្ឋាន</string>
   <string name="save_point">រក្សា GeoPoint</string>
   <string name="get_point">ចាប់ផ្តើម GeoPoint</string>
   <string name="geopoint_view_read_only">មើល GeoPoint</string>
@@ -323,7 +315,6 @@
   <string name="enable_gps">ដំណើរ​ការ​ប្រព័ន្ធ​ចាប់​ទីតាំង</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="gps_enable_message">ប្រព័ន្ធ​ចាប់​ទី​តាំង​ក្នុងឧបករណ៍​របស់​អ្នក​បានបិទ។ តើ​អ្នក​ចង់​បើក​ដំណើរ​ការ​វា​ដែរ​ឬ​ទេ?</string>
-  <string name="select_offline_layer">ជ្រើសរើសស្រទាប់ក្រៅបណ្តាញ</string>
   <string name="geo_clear_warning">លក្ខណះ​ពិសេស​ត្រូវ​បាន​បង្កើត។ តើ​អ្នក​ចង់​លុប​លក្ខណះ​នេះ​ដែរ​ឬ​ទេ?</string>
   <string name="geo_exit_warning">បោះបង់​ការផ្លាស់​ប្តូរ និងត្រឡប់ទៅកាន់ ODK វិញ?</string>
   <string name="polygon_validator">ត្រូវការចំនុចយ៉ាងតិច 3 ដើម្បី​បង្កើតពហុកោណ</string>
@@ -469,7 +460,6 @@
   <string name="wifi_autosend">តែ Wifi ប៉ុណ្ណោះ</string>
   <string name="cellular_autosend">តែ Cellular ប៉ុណ្ណោះ</string>
   <string name="wifi_cellular_autosend">Wifi ឬ Cellular</string>
-  <string name="map_basemap_behavior_title">ផែនទីមូលដ្ឋាន</string>
   <string name="form_management_preferences">ការគ្រប់គ្រងទម្រង់</string>
   <string name="form_submission_category">ការដាក់ស្នើរទម្រង់</string>
   <string name="form_filling_category">ការបំពេញទម្រង់</string>
@@ -483,7 +473,6 @@
   <string name="type">ប្រភេទ</string>
   <string name="form_entry">ដោះ​ធីក​ដើម្បី​លាក់ពី​ទម្រង់​បញ្ចូល</string>
   <string name="use_device_language">ប្រើ​ប្រាស់​ភាសារបស់​ឧបករណ៍</string>
-  <string name="not_supported_offline_layer_format">បានជ្រើសរើសយក​ឯកសារស្រទាប់​ក្រៅ​បណ្តាញដើម្បីប្រើប្រាស់ទ្រង់ទ្រាយ PBF ដែល​មិនត្រូវ​បាន​គាំ​ទ្រ</string>
   <string name="invalid_email_address">អាសយដ្ឋាន​អ៊ីម៉េល​មិនត្រឹមត្រូវ!</string>
   <string name="sort_by">តំរៀបតាម</string>
   <string name="server">ម៉ាស៊ីនម៉េ</string>

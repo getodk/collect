@@ -85,8 +85,7 @@ public class WidgetAppearanceUtils {
     }
 
     // Get appearance hint and clean it up so it is lower case, without the search function and never null.
-    @NonNull
-    public static String getSanitizedAppearanceHint(FormEntryPrompt fep) {
+    public static @NonNull String getSanitizedAppearanceHint(FormEntryPrompt fep) {
         String appearance = fep.getAppearanceHint();
         if (appearance == null) {
             appearance = NO_APPEARANCE;
@@ -101,6 +100,11 @@ public class WidgetAppearanceUtils {
         }
 
         return appearance;
+    }
+
+    /** Returns whether an appearance is present.  (Appearances are the constants above.) */
+    public static boolean hasAppearance(FormEntryPrompt fep, String appearance) {
+        return getSanitizedAppearanceHint(fep).contains(appearance);
     }
 
     /*

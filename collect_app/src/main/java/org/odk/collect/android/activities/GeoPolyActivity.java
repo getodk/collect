@@ -15,6 +15,7 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -28,14 +29,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.map.GoogleMapFragment;
-import org.odk.collect.android.map.MapFragment;
-import org.odk.collect.android.map.MapPoint;
-import org.odk.collect.android.map.MapboxMapFragment;
-import org.odk.collect.android.map.OsmMapFragment;
-import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.geo.MapFragment;
+import org.odk.collect.android.geo.MapPoint;
+import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.osmdroid.tileprovider.IRegisterReceiver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +47,7 @@ import androidx.annotation.VisibleForTesting;
 
 import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
 
-public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterReceiver {
-
+public class GeoPolyActivity extends BaseGeoMapActivity {
     public static final String ANSWER_KEY = "answer";
     public static final String OUTPUT_MODE_KEY = "output_mode";
     public static final String MAP_CENTER_KEY = "map_center";
@@ -135,7 +132,10 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
         setTitle(getString(outputMode == OutputMode.GEOTRACE ?
             R.string.geotrace_title : R.string.geoshape_title));
         setContentView(R.layout.geopoly_layout);
-        createMapFragment().addTo(this, R.id.map_container, this::initMap);
+
+        Context context = getApplicationContext();
+        MapProvider.createMapFragment(context)
+            .addTo(this, R.id.map_container, this::initMap, this::finish);
     }
 
     @Override protected void onStart() {
@@ -188,13 +188,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
         super.onDestroy();
     }
 
-    @Override public void destroy() { }
-
     public void initMap(MapFragment newMapFragment) {
-        if (newMapFragment == null) {  // could not create the map
-            finish();
-            return;
-        }
         if (newMapFragment.getFragment().getActivity() == null) {
             // If the screen is rotated just after the activity starts but
             // before initMap() is called, then when the activity is re-created
@@ -205,14 +199,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
         }
 
         map = newMapFragment;
-        if (map instanceof GoogleMapFragment) {
-            helper = new MapHelper(this, ((GoogleMapFragment) map).getGoogleMap(), selectedLayer);
-        } else if (map instanceof MapboxMapFragment) {
-            helper = new MapHelper(this);
-        } else if (map instanceof OsmMapFragment) {
-            helper = new MapHelper(this, ((OsmMapFragment) map).getMapView(), this, selectedLayer);
-        }
-        helper.setBasemap();
 
         locationStatus = findViewById(R.id.location_status);
         collectionStatus = findViewById(R.id.collection_status);
@@ -294,7 +280,9 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements IRegisterRece
 
         buildDialogs();
 
-        findViewById(R.id.layers).setOnClickListener(v -> helper.showLayersDialog());
+        findViewById(R.id.layers).setOnClickListener(v -> {
+            MapsPreferences.showReferenceLayerDialog(this);
+        });
 
         zoomButton = findViewById(R.id.zoom);
         zoomButton.setOnClickListener(v -> map.zoomToPoint(map.getGpsLocation(), true));

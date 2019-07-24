@@ -307,13 +307,6 @@
   <string name="leave_a_review">Kirjoita Play Store -arvio</string>
   <string name="leave_a_review_msg">Sinun (toivottavasti myönteinen) arviosi lisää sovelluksen näkyvyyttä Play Store -kaupassa.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">Mapping SDK</string>
-  <string name="map_sdk_behavior">Mapping SDK</string>
-  <string name="google_maps_sdk">Google Maps SDK</string>
-  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
-  <string name="mapbox_maps_sdk">Mapbox Maps SDK</string>
-  <string name="show_map_sdk">Näytä Map SDK:n valikko</string>
-  <string name="openmap_streets">OSM Streets</string>
   <string name="openmap_usgs_topo">USGS National Map topografinen</string>
   <string name="openmap_usgs_sat">USGS National Map hybridi</string>
   <string name="openmap_usgs_img">USGS National Map kuvat</string>
@@ -324,14 +317,6 @@
   <string name="terrain">Maasto</string>
   <string name="hybrid">Hybridi</string>
   <string name="satellite">Satelliitti</string>
-  <string name="map_basemap_selector_title">Basemaps</string>
-  <string name="show_map_basemap">Näytä peruskarttavalikko</string>
-  <string name="mapbox_streets">Mapbox Streets</string>
-  <string name="mapbox_light">Mapbox Light</string>
-  <string name="mapbox_dark">Mapbox Dark</string>
-  <string name="mapbox_satellite">Mapbox Satellite</string>
-  <string name="mapbox_satellite_streets">Mapbox Satellite Streets</string>
-  <string name="mapbox_outdoors">Mapbox Outdoors</string>
   <string name="save_point">Tallenna GeoPoint</string>
   <string name="get_point">Käynnistä GeoPoint</string>
   <string name="geopoint_view_read_only">Tarkastele GeoPoint</string>
@@ -343,7 +328,6 @@
   <string name="enable_gps">Ota GPS käyttöön</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="gps_enable_message">GPS on poistettu käytöstä laitteellasi. Haluaisitko ottaa sen käyttöön?</string>
-  <string name="select_offline_layer">Valitse Offline-taso</string>
   <string name="geo_clear_warning">Ominaisuus on jo luotu. Haluatko tyhjentää ominaisuuden?</string>
   <string name="geo_exit_warning">Hylätäänkö muutokset ja palataan ODK:hon?</string>
   <string name="polygon_validator">Monikulmion luomiseen tarvitaan vähintään 3 pistettä</string>
@@ -520,7 +504,6 @@
   <string name="wifi_autosend">Vain Wifi</string>
   <string name="cellular_autosend">Vain puhelinverkko</string>
   <string name="wifi_cellular_autosend">Wifi tai puhelinverkko</string>
-  <string name="map_basemap_behavior_title">Peruskartta</string>
   <string name="form_management_preferences">Lomakkeen hallinta</string>
   <string name="form_submission_category">Lomakkeen lähetys</string>
   <string name="form_filling_category">Lomakkeen täyttö</string>
@@ -534,7 +517,6 @@
   <string name="type">Tyyppi</string>
   <string name="form_entry">Poista rasti piiloittaaksesi lomakesyötöstä</string>
   <string name="use_device_language">Käytä laitteen oletuskieltä</string>
-  <string name="not_supported_offline_layer_format">Valittu offline-tasotiedosto käyttää PBF-formaattia, jota ei tueta!</string>
   <string name="invalid_email_address">Virheellinen sähköpostiosoite!</string>
   <string name="sort_by">Lajitteluperuste</string>
   <string name="server">Palvelin</string>

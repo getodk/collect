@@ -307,13 +307,6 @@
   <string name="leave_a_review">Zostaw swoją opinię na Play Store</string>
   <string name="leave_a_review_msg">Twoja (mamy nadzieję pozytywna) recenzja przyczyni się do zwiększenia widoczności Aplikacji w Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_sdk_selector_title">SDK Mapowania</string>
-  <string name="map_sdk_behavior">SDK Mapowania</string>
-  <string name="google_maps_sdk">Google Maps SDK</string>
-  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
-  <string name="mapbox_maps_sdk">Mapbox Maps SDK</string>
-  <string name="show_map_sdk">Pokaż Opcje Map SDK</string>
-  <string name="openmap_streets">Ulice OSM</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">USGS National Map Hybrid</string>
   <string name="openmap_usgs_img">USGS National Map Imagery</string>
@@ -324,14 +317,6 @@
   <string name="terrain">Teren</string>
   <string name="hybrid">Hybryda</string>
   <string name="satellite">Satelita</string>
-  <string name="map_basemap_selector_title">Mapy bazowe</string>
-  <string name="show_map_basemap">Pokaż opcje mapy bazowej</string>
-  <string name="mapbox_streets">Mapbox Streets</string>
-  <string name="mapbox_light">Mapbox Light - tryb jasny</string>
-  <string name="mapbox_dark">Mapbox Dark - tryb ciemny</string>
-  <string name="mapbox_satellite">Mapbox Satellite</string>
-  <string name="mapbox_satellite_streets">Mapbox Satellite Streets</string>
-  <string name="mapbox_outdoors">Mapbox Outdoors</string>
   <string name="save_point">Zapisz GeoPoint</string>
   <string name="get_point">Zacznij GeoPoint</string>
   <string name="geopoint_view_read_only">Pokaż GeoPoint</string>
@@ -343,7 +328,6 @@
   <string name="enable_gps">Włącz GPS</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="gps_enable_message">GPS jest jest wyłączony na twoim urządzeniu. Czy chciałbyś go włączyć?</string>
-  <string name="select_offline_layer">Wybierz Warstwę Offline</string>
   <string name="geo_clear_warning">Właściwość już stworzona. Chcesz usunąć właściwość?</string>
   <string name="geo_exit_warning">Usunąć zmiany i wrócić do ODK?</string>
   <string name="polygon_validator">Wymagane są przynajmniej 3 punkty aby utworzyć wielokąt</string>
@@ -526,7 +510,6 @@
   <string name="wifi_autosend">Tylko wifi</string>
   <string name="cellular_autosend">Tylko sieć</string>
   <string name="wifi_cellular_autosend">Wifi oraz sieć</string>
-  <string name="map_basemap_behavior_title">Mapa bazowa</string>
   <string name="form_management_preferences">Zarządzanie formularzem</string>
   <string name="form_submission_category">Przesyłanie formularzu</string>
   <string name="form_filling_category">Wypełnianie formularzu</string>
@@ -540,7 +523,6 @@
   <string name="type">Typ</string>
   <string name="form_entry">Odznacz aby ukryć z Wypełniania Formularza</string>
   <string name="use_device_language">Użyj języka urządzenia</string>
-  <string name="not_supported_offline_layer_format">Wybrany plik wartwy używa formatu PBF, który nie jest obsługiwany!</string>
   <string name="invalid_email_address">Nieprawidłowy adres email!</string>
   <string name="sort_by">Sortuj według</string>
   <string name="server">Serwer</string>

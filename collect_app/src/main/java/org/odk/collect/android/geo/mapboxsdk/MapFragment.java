@@ -1,4 +1,4 @@
-package org.odk.collect.android.mapboxsdk;
+package org.odk.collect.android.geo.mapboxsdk;
 
 import android.content.Context;
 import android.os.Bundle;
