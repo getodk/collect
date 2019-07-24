@@ -101,4 +101,16 @@ public final class Settings {
         onView(withText(text)).perform(click());
     }
 
+    public static void clickUserInterface() {
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.client))).perform(click());
+    }
+
+    public static void clickNavigation() {
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.navigation))).perform(click());
+    }
+
+    public static void clickUseSwipesAndButtons() {
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.swipe_buttons_navigation))).perform(click());
+    }
+
 }

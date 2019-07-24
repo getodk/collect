@@ -31,6 +31,8 @@ import static junit.framework.TestCase.assertNotSame;
 import static org.odk.collect.android.support.matchers.DrawableMatcher.withImageDrawable;
 import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withRecyclerView;
 
+import static androidx.test.espresso.Espresso.pressBack;
+
 //Issue NODK-244
 @RunWith(AndroidJUnit4.class)
 public class FillBlankFormTest extends BaseRegressionTest {
@@ -41,6 +43,11 @@ public class FillBlankFormTest extends BaseRegressionTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
             .around(new ResetStateRule())
+            .around(new CopyFormRule("All_widgets.xml", "regression"))
+            .around(new CopyFormRule("1560_DateData.xml", "regression"))
+            .around(new CopyFormRule("1560_IntegerData.xml", "regression"))
+            .around(new CopyFormRule("1560_IntegerData_instanceID.xml", "regression"))
+            .around(new CopyFormRule("predicate-warning.xml", "regression"))
             .around(new CopyFormRule("formulaire_adherent.xml", "regression", Collections.singletonList("espece.csv")))
             .around(new CopyFormRule("CSVerrorForm.xml", "regression", Collections.singletonList("TrapLists.csv")))
             .around(new CopyFormRule("different-search-appearances.xml", "regression", Collections.singletonList("fruits.csv")))
@@ -51,6 +58,80 @@ public class FillBlankFormTest extends BaseRegressionTest {
             .around(new CopyFormRule("emptyGroupFieldList.xml", "regression"))
             .around(new CopyFormRule("emptyGroupFieldList2.xml", "regression"))
             .around(new CopyFormRule("metadata2.xml", "regression"));
+
+    @Test
+    public void subtext_ShouldDisplayAdditionalInformation() {
+
+        //TestCase2
+        MainMenu.clickFillBlankForm();
+        MainMenu.checkIsFormSubtextDisplayed();
+
+    }
+
+    @Test
+    public void exitDialog_ShouldDisplaySaveAndIgnoreOptions() {
+
+        //TestCase6 , TestCase9
+        MainMenu.startBlankForm("All widgets");
+        pressBack();
+        FormEntry.checkIsStringDisplayed(R.string.keep_changes);
+        FormEntry.checkIsStringDisplayed(R.string.do_not_save);
+        FormEntry.clickOnString(R.string.do_not_save);
+        FormEntry.checkIsIdDisplayed(R.id.enter_data);
+        FormEntry.checkIsIdDisplayed(R.id.get_forms);
+
+    }
+
+    @Test
+    public void searchBar_ShouldSearchForm() {
+
+        //TestCase12
+        MainMenu.clickFillBlankForm();
+        MainMenu.clickMenuFilter();
+        MainMenu.searchInBar("Aaa");
+        pressBack();
+        pressBack();
+
+    }
+
+    @Test
+    public void navigationButtons_ShouldBeVisibleWhenAreSetInTheMiddleOfForm() {
+
+        //TestCase16
+        MainMenu.startBlankForm("All widgets");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickOptionsIcon();
+        FormEntry.clickGeneralSettings();
+        Settings.clickUserInterface();
+        Settings.clickNavigation();
+        Settings.clickUseSwipesAndButtons();
+        pressBack();
+        pressBack();
+        FormEntry.checkAreNavigationButtonsDisplayed();
+
+    }
+
+    @Test
+    public void formsWithDate_ShouldSaveFormsWithSuccess() {
+
+        //TestCase17
+        MainMenu.startBlankForm("1560_DateData");
+        FormEntry.checkIsTextDisplayed("Jan 01, 1900");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickSaveAndExit();
+
+        MainMenu.startBlankForm("1560_IntegerData");
+        FormEntry.checkIsTextDisplayed("5");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.checkIsTextDisplayed("5");
+        FormEntry.clickSaveAndExit();
+
+        MainMenu.startBlankForm("1560_IntegerData_instanceID");
+        FormEntry.checkIsTextDisplayed("5");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickSaveAndExit();
+
+    }
 
     @Test
     public void answers_ShouldBeSuggestedInComplianceWithSelectedLetters() {
