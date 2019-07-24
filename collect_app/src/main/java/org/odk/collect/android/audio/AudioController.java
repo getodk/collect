@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.widgets;
+package org.odk.collect.android.audio;
 
 import android.content.Context;
 import android.media.AudioManager;
@@ -90,7 +90,7 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
         return new DateTime(millis, DateTimeZone.UTC).toString("mm:ss");
     }
 
-    void init(Context context, MediaPlayer mediaPlayer) {
+    public void init(Context context, MediaPlayer mediaPlayer) {
         this.context = context;
         this.mediaPlayer = mediaPlayer;
 
@@ -219,15 +219,15 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
         }
     }
 
-    void hidePlayer() {
+    public void hidePlayer() {
         view.setVisibility(GONE);
     }
 
-    void showPlayer() {
+    public void showPlayer() {
         view.setVisibility(View.VISIBLE);
     }
 
-    View getPlayerLayout(ViewGroup parent) {
+    public View getPlayerLayout(ViewGroup parent) {
         initControlsLayout(parent);
         return view;
     }

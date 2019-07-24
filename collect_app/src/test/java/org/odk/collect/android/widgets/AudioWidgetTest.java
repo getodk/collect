@@ -14,6 +14,7 @@ import org.javarosa.core.model.data.StringData;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.R;
+import org.odk.collect.android.audio.AudioController;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
