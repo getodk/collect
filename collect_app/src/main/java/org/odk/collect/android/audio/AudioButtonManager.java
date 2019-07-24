@@ -6,7 +6,10 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.OnLifecycleEvent;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModelProviders;
+
+import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYING;
 
 public class AudioButtonManager {
 
@@ -18,7 +21,8 @@ public class AudioButtonManager {
         activity.getLifecycle().addObserver(new AudioPlayerViewModelBackgroundObserver(viewModel));
 
         String buttonID = String.valueOf(ViewCompat.generateViewId());
-        LiveData<Boolean> isPlaying = viewModel.isPlaying(buttonID);
+        LiveData<Boolean> isPlaying = Transformations.map(viewModel.isPlaying(buttonID), value -> value == PLAYING);
+
         isPlaying.observe(activity, button::setPlaying);
         button.setOnPlayStopListener(new AudioPlayerViewModelOnPlayStopListener(
                 viewModel,
