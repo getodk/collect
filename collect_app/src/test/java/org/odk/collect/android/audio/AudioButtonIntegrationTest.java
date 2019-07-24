@@ -27,6 +27,7 @@ public class AudioButtonIntegrationTest {
 
     private final MediaPlayer mediaPlayer = new MediaPlayer();
     private final LiveDataTester liveDataTester = new LiveDataTester();
+    private final AudioButtonManager audioButtonManager = new AudioButtonManager();
 
     private FragmentActivity activity;
 
@@ -46,7 +47,7 @@ public class AudioButtonIntegrationTest {
         final DataSource dataSource = setupDataSource(testFile);
 
         AudioButton button = new AudioButton(activity);
-        AudioButtons.setAudio(button, testFile, activity, () -> mediaPlayer);
+        audioButtonManager.setAudio(button, testFile, activity, () -> mediaPlayer);
 
         assertThat(getCreatedFromResId(button), equalTo(android.R.drawable.ic_lock_silent_mode_off));
 
@@ -70,10 +71,10 @@ public class AudioButtonIntegrationTest {
         final DataSource dataSource2 = setupDataSource(testFile2);
 
         AudioButton button1 = new AudioButton(activity);
-        AudioButtons.setAudio(button1, testFile1, activity, () -> mediaPlayer);
+        audioButtonManager.setAudio(button1, testFile1, activity, () -> mediaPlayer);
 
         AudioButton button2 = new AudioButton(activity);
-        AudioButtons.setAudio(button2, testFile2, activity, () -> mediaPlayer);
+        audioButtonManager.setAudio(button2, testFile2, activity, () -> mediaPlayer);
 
         button1.performClick();
         button2.performClick();
@@ -90,10 +91,10 @@ public class AudioButtonIntegrationTest {
         setupDataSource(testFile1);
 
         AudioButton button1 = new AudioButton(activity);
-        AudioButtons.setAudio(button1, testFile1, activity, () -> mediaPlayer);
+        audioButtonManager.setAudio(button1, testFile1, activity, () -> mediaPlayer);
 
         AudioButton button2 = new AudioButton(activity);
-        AudioButtons.setAudio(button2, testFile1, activity, () -> mediaPlayer);
+        audioButtonManager.setAudio(button2, testFile1, activity, () -> mediaPlayer);
 
         button2.performClick();
 
@@ -107,7 +108,7 @@ public class AudioButtonIntegrationTest {
         setupDataSource(testFile1);
 
         AudioButton button1 = new AudioButton(activity);
-        LiveData<Boolean> isPlaying = liveDataTester.activate(AudioButtons.setAudio(button1, testFile1, activity, () -> mediaPlayer));
+        LiveData<Boolean> isPlaying = liveDataTester.activate(audioButtonManager.setAudio(button1, testFile1, activity, () -> mediaPlayer));
 
         assertThat(isPlaying.getValue(), equalTo(false));
 

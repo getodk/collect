@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.R;
+import org.odk.collect.android.audio.AudioButtonManager;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowMediaPlayer;
@@ -46,7 +47,8 @@ public class MediaLayoutTest {
                 null,
                 null,
                 null,
-                referenceManager);
+                referenceManager,
+                new AudioButtonManager());
 
         int originalTextColor = mediaLayout.getTextView().getCurrentTextColor();
 

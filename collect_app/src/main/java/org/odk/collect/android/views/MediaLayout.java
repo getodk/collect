@@ -42,7 +42,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioButton;
-import org.odk.collect.android.audio.AudioButtons;
+import org.odk.collect.android.audio.AudioButtonManager;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -154,7 +154,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     }
 
     public void setAVT(TextView text, String audioURI, String imageURI, String videoURI,
-                       String bigImageURI, ReferenceManager referenceManager) {
+                       String bigImageURI, ReferenceManager referenceManager, AudioButtonManager audioButtonManager) {
         this.bigImageURI = bigImageURI;
         this.videoURI = videoURI;
         this.referenceManager = referenceManager;
@@ -165,7 +165,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
 
         // Setup audio button
         if (audioURI != null) {
-            setupAudioButton(audioURI, referenceManager);
+            setupAudioButton(audioURI, audioButtonManager, referenceManager);
         }
 
         // Setup video button
@@ -285,7 +285,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         videoButton.setOnClickListener(this);
     }
 
-    private void setupAudioButton(String audioURI, ReferenceManager referenceManager) {
+    private void setupAudioButton(String audioURI, AudioButtonManager audioButtonManager, ReferenceManager referenceManager) {
         audioButton.setVisibility(VISIBLE);
 
         String uri = null;
@@ -296,7 +296,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         }
 
         FragmentActivity activity = (FragmentActivity) getContext();
-        LiveData<Boolean> isPlayingLiveData = AudioButtons.setAudio(audioButton, uri, activity, MediaPlayer::new);
+        LiveData<Boolean> isPlayingLiveData = audioButtonManager.setAudio(audioButton, uri, activity, MediaPlayer::new);
         isPlayingLiveData.observe(activity, isPlaying -> {
             if (isPlaying) {
                 viewText.setTextColor(playTextColor);

@@ -5,12 +5,9 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 
-public final class AudioButtons {
+public class AudioButtonManager {
 
-    private AudioButtons() {
-    }
-
-    public static LiveData<Boolean> setAudio(AudioButton button, String uri, FragmentActivity activity, MediaPlayerFactory mediaPlayerFactory) {
+    public LiveData<Boolean> setAudio(AudioButton button, String uri, FragmentActivity activity, MediaPlayerFactory mediaPlayerFactory) {
         AudioPlayerViewModel viewModel = ViewModelProviders
                 .of(activity, new AudioPlayerViewModelFactory(mediaPlayerFactory))
                 .get(AudioPlayerViewModel.class);

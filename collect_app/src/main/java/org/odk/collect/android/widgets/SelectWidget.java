@@ -33,6 +33,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
+import org.odk.collect.android.audio.AudioButtonManager;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.views.MediaLayout;
@@ -143,7 +144,7 @@ public abstract class SelectWidget extends ItemsWidget {
         String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "video");
         String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
 
-        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager());
+        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), new AudioButtonManager());
     }
 
     protected RecyclerView setUpRecyclerView() {

@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.audio.AudioButton;
+import org.odk.collect.android.audio.AudioButtonManager;
 import org.odk.collect.android.logic.FileReference;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 import org.robolectric.Robolectric;
@@ -99,7 +100,7 @@ public class MediaLayoutVisibilityTest {
         Assert.assertEquals(VISIBLE, mediaLayout.getVisibility());
         assertVisibility(GONE, audioButton, videoButton, imageView, missingImage);
 
-        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, null, referenceManager);
+        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, null, referenceManager, new AudioButtonManager());
 
         // we do not check for the validity of the URIs for the audio and video while loading MediaLayout
         assertVisibility(audioURI == null ? GONE : VISIBLE, audioButton);
