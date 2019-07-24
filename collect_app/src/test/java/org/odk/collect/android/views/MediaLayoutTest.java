@@ -1,6 +1,5 @@
 package org.odk.collect.android.views;
 
-import android.media.MediaPlayer;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
@@ -47,17 +46,16 @@ public class MediaLayoutTest {
                 null,
                 null,
                 null,
-                new MediaPlayer(),
                 referenceManager);
 
-        int originalTextColor = mediaLayout.getView_Text().getCurrentTextColor();
+        int originalTextColor = mediaLayout.getTextView().getCurrentTextColor();
 
         mediaLayout.findViewById(R.id.audioButton).performClick();
-        int textColor = mediaLayout.getView_Text().getCurrentTextColor();
+        int textColor = mediaLayout.getTextView().getCurrentTextColor();
         assertThat(textColor, not(equalTo(originalTextColor)));
 
         mediaLayout.findViewById(R.id.audioButton).performClick();
-        textColor = mediaLayout.getView_Text().getCurrentTextColor();
+        textColor = mediaLayout.getTextView().getCurrentTextColor();
         assertThat(textColor, equalTo(originalTextColor));
     }
 

@@ -1,6 +1,5 @@
 package org.odk.collect.android.views;
 
-import android.media.MediaPlayer;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,7 +38,6 @@ public class MediaLayoutVisibilityTest {
     private final String imageURI;
     private final String videoURI;
 
-    private MediaPlayer mediaPlayer;
     private ReferenceManager referenceManager;
     private FileReference reference;
 
@@ -73,7 +71,6 @@ public class MediaLayoutVisibilityTest {
 
     @Before
     public void setUp() throws InvalidReferenceException {
-        mediaPlayer = mock(MediaPlayer.class);
         reference = mock(FileReference.class);
         referenceManager = mock(ReferenceManager.class);
         textView = new TextView(RuntimeEnvironment.application);
@@ -102,7 +99,7 @@ public class MediaLayoutVisibilityTest {
         Assert.assertEquals(VISIBLE, mediaLayout.getVisibility());
         assertVisibility(GONE, audioButton, videoButton, imageView, missingImage);
 
-        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, null, mediaPlayer, referenceManager);
+        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, null, referenceManager);
 
         // we do not check for the validity of the URIs for the audio and video while loading MediaLayout
         assertVisibility(audioURI == null ? GONE : VISIBLE, audioButton);

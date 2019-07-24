@@ -83,7 +83,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     private int playTextColor = Color.BLUE;
     private CharSequence originalText;
     private String bigImageURI;
-    private MediaPlayer player;
     private ReferenceManager referenceManager;
 
     public MediaLayout(Context context) {
@@ -104,16 +103,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         if (audioPlayListener != null) {
             audioPlayListener.resetAudioButtonImage();
         }
-
-        // have to call toString() to remove the html formatting
-        // (it's a spanned thing...)
-        viewText.setText(viewText.getText().toString());
-
-        player.setOnCompletionListener(mediaPlayer -> {
-            resetTextFormatting();
-            mediaPlayer.reset();
-            audioButton.resetBitmap();
-        });
     }
 
     public void setPlayTextColor(int textColor) {
@@ -165,9 +154,8 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     }
 
     public void setAVT(TextView text, String audioURI, String imageURI, String videoURI,
-                       String bigImageURI, MediaPlayer player, ReferenceManager referenceManager) {
+                       String bigImageURI, ReferenceManager referenceManager) {
         this.bigImageURI = bigImageURI;
-        this.player = player;
         this.videoURI = videoURI;
         this.referenceManager = referenceManager;
 
@@ -194,7 +182,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         flContainer.addView(viewText);
     }
 
-    public TextView getView_Text() {
+    public TextView getTextView() {
         return viewText;
     }
 
