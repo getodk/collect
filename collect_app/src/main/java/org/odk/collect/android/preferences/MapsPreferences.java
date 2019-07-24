@@ -26,10 +26,12 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.preferences.CaptionedListPreference.Item;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.Nullable;
@@ -164,24 +166,36 @@ public class MapsPreferences extends BasePreferenceFragment {
     private void populateReferenceLayerPref() {
         MapConfigurator cftor = MapProvider.getConfigurator();
 
-        List<File> files = getSupportedLayerFiles(cftor);
-        String[] values = new String[files.size() + 1];
-        String[] labels = new String[files.size() + 1];
-        String[] captions = new String[files.size() + 1];
-        values[0] = null;
-        labels[0] = getString(R.string.none);
-        captions[0] = "";
-        for (int i = 0; i < files.size(); i++) {
-            String path = FileUtils.simplifyPath(files.get(i)).toString();
-            values[i + 1] = path;
-            labels[i + 1] = cftor.getDisplayName(files.get(i));
-            captions[i + 1] = path;
+        List<Item> items = new ArrayList<>();
+        items.add(new Item(null, getString(R.string.none), ""));
+        for (File file : getSupportedLayerFiles(cftor)) {
+            String path = FileUtils.simplifyPath(file).toString();
+            String name = cftor.getDisplayName(file);
+            items.add(new Item(path, name, path));
         }
-        referenceLayerPref.setItems(values, labels, captions);
+
+        // Sort by display name, then by path for files with identical names.
+        Collections.sort(items, (a, b) -> {
+            if ((a.value == null) != (b.value == null)) {  // one or the other is null
+                return a.value == null ? -1 : 1;
+            }
+            if (!a.label.equalsIgnoreCase(b.label)) {
+                return a.label.compareToIgnoreCase(b.label);
+            }
+            if (!a.label.equals(b.label)) {
+                return a.label.compareTo(b.label);
+            }
+            if (a.value != null && b.value != null) {
+                return FileUtils.comparePaths(a.value, b.value);
+            }
+            return 0;  // both a.value and b.value are null
+        });
+
+        referenceLayerPref.setItems(items);
 
         File layerDir = FileUtils.simplifyPath(new File(Collect.OFFLINE_LAYERS));
         referenceLayerPref.setDialogCaption(context.getString(
-            files.isEmpty() ? R.string.layer_data_caption_none : R.string.layer_data_caption,
+            items.size() > 1 ? R.string.layer_data_caption : R.string.layer_data_caption_none,
             layerDir, context.getString(MapProvider.getSourceLabelId())
         ));
 
