@@ -65,7 +65,6 @@ import androidx.fragment.app.FragmentActivity;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import timber.log.Timber;
 
-import static android.os.Looper.getMainLooper;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
@@ -80,7 +79,12 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
     private static final String POINT_ICON_ID = "point-icon-id";
     private static final long LOCATION_INTERVAL_MILLIS = 1000;
-    private static final long LOCATION_MAX_WAIT_MILLIS = 5 * LOCATION_INTERVAL_MILLIS;
+    private static final long LOCATION_MAX_WAIT_MILLIS = 5000;
+    private static final LocationEngineRequest LOCATION_REQUEST =
+        new LocationEngineRequest.Builder(LOCATION_INTERVAL_MILLIS)
+            .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
+            .setMaxWaitTime(LOCATION_MAX_WAIT_MILLIS)
+            .build();
 
     // Bundle keys understood by applyConfig().
     static final String KEY_STYLE_URL = "STYLE_URL";
@@ -94,7 +98,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private FeatureListener dragEndListener;
 
     private LocationComponent locationComponent;
-    private boolean locationEnabled;
+    private boolean clientWantsLocationUpdates;
     private MapPoint lastLocationFix;
 
     private int nextFeatureId = 1;
@@ -154,7 +158,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 symbolManager = createSymbolManager();
 
                 loadReferenceOverlay();
-                enableLocationComponent();
+                initLocationComponent();
 
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                     toLatLng(INITIAL_CENTER), INITIAL_ZOOM));
@@ -174,9 +178,11 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     @Override public void onStart() {
         super.onStart();
         MapProvider.onMapFragmentStart(this);
+        enableLocationUpdates(clientWantsLocationUpdates);
     }
 
     @Override public void onStop() {
+        enableLocationUpdates(false);
         MapProvider.onMapFragmentStop(this);
         super.onStop();
     }
@@ -363,9 +369,9 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     }
 
     @Override public void setGpsLocationEnabled(boolean enable) {
-        locationEnabled = enable;
-        if (locationComponent != null) {
-            locationComponent.setLocationComponentEnabled(enable);
+        if (enable != clientWantsLocationUpdates) {
+            clientWantsLocationUpdates = enable;
+            enableLocationUpdates(clientWantsLocationUpdates);
         }
     }
 
@@ -383,6 +389,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
     @Override public void onSuccess(LocationEngineResult result) {
         lastLocationFix = fromLocation(result.getLastLocation());
+        Timber.i("Received LocationEngineResult: %s", lastLocationFix);
         if (locationComponent != null) {
             locationComponent.forceLocationUpdate(result.getLastLocation());
         }
@@ -611,41 +618,47 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         return new LineManager(getMapView(), map, map.getStyle());
     }
 
-    @SuppressWarnings({"MissingPermission"})  // Permission checks for location services handled in widgets
-    private void enableLocationComponent() {
-        if (map == null) {  // map is null during Robolectric tests
+    private void initLocationComponent() {
+        if (map == null || map.getStyle() == null) {  // map is null during Robolectric tests
             return;
         }
 
-        LocationEngineRequest request = new LocationEngineRequest.Builder(LOCATION_INTERVAL_MILLIS)
-            .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
-            .setMaxWaitTime(LOCATION_MAX_WAIT_MILLIS)
-            .build();
-
         LocationEngine engine = LocationEngineProvider.getBestLocationEngine(getContext());
-        engine.requestLocationUpdates(request, this, getMainLooper());
-        engine.getLastLocation(this);
-
         locationComponent = map.getLocationComponent();
-        if (map.getStyle() != null) {
-            locationComponent.activateLocationComponent(
-                LocationComponentActivationOptions.builder(getContext(), map.getStyle())
-                    .locationEngine(engine)
-                    .locationComponentOptions(
-                        LocationComponentOptions.builder(getContext())
-                            .foregroundDrawable(R.drawable.ic_crosshairs)
-                            .backgroundDrawable(R.drawable.empty)
-                            .enableStaleState(false)
-                            .elevation(0)  // removes the shadow
-                            .build()
-                    )
-                    .build()
-            );
-        }
+        locationComponent.activateLocationComponent(
+            LocationComponentActivationOptions.builder(getContext(), map.getStyle())
+                .locationEngine(engine)
+                .locationComponentOptions(
+                    LocationComponentOptions.builder(getContext())
+                        .foregroundDrawable(R.drawable.ic_crosshairs)
+                        .backgroundDrawable(R.drawable.empty)
+                        .enableStaleState(false)  // don't switch to other drawables
+                        .elevation(0)  // remove the shadow
+                        .build()
+                )
+                .build()
+        );
 
         locationComponent.setCameraMode(CameraMode.NONE);
         locationComponent.setRenderMode(RenderMode.NORMAL);
-        locationComponent.setLocationComponentEnabled(locationEnabled);
+        enableLocationUpdates(clientWantsLocationUpdates);
+    }
+
+    @SuppressWarnings({"MissingPermission"})  // permission checks for location services are handled in widgets
+    private void enableLocationUpdates(boolean enable) {
+        if (locationComponent != null) {
+            LocationEngine engine = locationComponent.getLocationEngine();
+            if (enable) {
+                Timber.i("Requesting location updates from %s (to %s)", engine, this);
+                engine.requestLocationUpdates(LOCATION_REQUEST, this, null);
+                engine.getLastLocation(this);
+            } else {
+                Timber.i("Stopping location updates from %s (to %s)", engine, this);
+                engine.removeLocationUpdates(this);
+            }
+            Timber.i("setLocationComponentEnabled to %s (for %s)", enable, locationComponent);
+            locationComponent.setLocationComponentEnabled(enable);
+        }
     }
 
     /**

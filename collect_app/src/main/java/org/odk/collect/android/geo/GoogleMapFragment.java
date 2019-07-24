@@ -77,12 +77,14 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private PointListener longPressListener;
     private PointListener gpsLocationListener;
     private FeatureListener dragEndListener;
+
     private LocationClient locationClient;
+    private boolean clientWantsLocationUpdates;
     private MapPoint lastLocationFix;
     private String lastLocationProvider;
+
     private int nextFeatureId = 1;
     private final Map<Integer, MapFeature> features = new HashMap<>();
-    private boolean gpsLocationEnabled;
     private int mapType;
     private File referenceLayerFile;
     private TileOverlay referenceOverlay;
@@ -138,9 +140,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @Override public void onStart() {
         super.onStart();
         MapProvider.onMapFragmentStart(this);
+        enableLocationUpdates(clientWantsLocationUpdates);
     }
 
     @Override public void onStop() {
+        enableLocationUpdates(false);
         MapProvider.onMapFragmentStop(this);
         super.onStop();
     }
@@ -293,17 +297,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     @Override public void setGpsLocationEnabled(boolean enable) {
-        if (enable != gpsLocationEnabled) {
-            gpsLocationEnabled = enable;
-            if (locationClient == null) {
-                locationClient = LocationClients.clientForContext(getActivity());
-                locationClient.setListener(this);
-            }
-            if (enable) {
-                locationClient.start();
-            } else {
-                locationClient.stop();
-            }
+        if (enable != clientWantsLocationUpdates) {
+            clientWantsLocationUpdates = enable;
+            enableLocationUpdates(clientWantsLocationUpdates);
         }
     }
 
@@ -316,6 +312,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     @Override public void onLocationChanged(Location location) {
+        Timber.i("onLocationChanged: location = %s", location);
         lastLocationFix = fromLocation(location);
         lastLocationProvider = location.getProvider();
         for (ReadyListener listener : gpsLocationReadyListeners) {
@@ -381,6 +378,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public void onClientStart() {
         lastLocationFix = fromLocation(locationClient.getLastLocation());
+        Timber.i("Requesting location updates (to %s)", this);
         locationClient.requestLocationUpdates(this);
         if (!locationClient.isLocationAvailable()) {
             showGpsDisabledAlert();
@@ -392,6 +390,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     @Override public void onClientStop() {
+        Timber.i("Stopping location updates (to %s)", this);
         locationClient.stopLocationUpdates();
     }
 
@@ -469,6 +468,20 @@ public class GoogleMapFragment extends SupportMapFragment implements
             map.animateCamera(movement);
         } else {
             map.moveCamera(movement);
+        }
+    }
+
+    private void enableLocationUpdates(boolean enable) {
+        if (locationClient == null) {
+            locationClient = LocationClients.clientForContext(getActivity());
+            locationClient.setListener(this);
+        }
+        if (enable) {
+            Timber.i("Starting LocationClient %s (for MapFragment %s)", locationClient, this);
+            locationClient.start();
+        } else {
+            Timber.i("Stopping LocationClient %s (for MapFragment %s)", locationClient, this);
+            locationClient.stop();
         }
     }
 

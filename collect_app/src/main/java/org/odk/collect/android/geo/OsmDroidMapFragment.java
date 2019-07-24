@@ -84,7 +84,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private LocationClient locationClient;
     private int nextFeatureId = 1;
     private final Map<Integer, MapFeature> features = new HashMap<>();
-    private boolean gpsLocationEnabled;
+    private boolean clientWantsLocationUpdates;
     private IGeoPoint lastMapCenter;
     private WebMapService webMapService;
     private File referenceLayerFile;
@@ -119,9 +119,11 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override public void onStart() {
         super.onStart();
         MapProvider.onMapFragmentStart(this);
+        enableLocationUpdates(clientWantsLocationUpdates);
     }
 
     @Override public void onStop() {
+        enableLocationUpdates(false);
         MapProvider.onMapFragmentStop(this);
         super.onStop();
     }
@@ -321,28 +323,9 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     @Override public void setGpsLocationEnabled(boolean enable) {
-        if (enable != gpsLocationEnabled) {
-            gpsLocationEnabled = enable;
-            if (locationClient == null) {
-                locationClient = LocationClients.clientForContext(getActivity());
-                locationClient.setListener(this);
-            }
-            if (gpsLocationEnabled) {
-                LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-                if (locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    map.getOverlays().add(myLocationOverlay);
-                    myLocationOverlay.setEnabled(true);
-                    myLocationOverlay.enableMyLocation();
-                    locationClient.start();
-                } else {
-                    showGpsDisabledAlert();
-                }
-            } else {
-                locationClient.stop();
-                myLocationOverlay.setEnabled(false);
-                myLocationOverlay.disableFollowLocation();
-                myLocationOverlay.disableMyLocation();
-            }
+        if (enable != clientWantsLocationUpdates) {
+            clientWantsLocationUpdates = enable;
+            enableLocationUpdates(clientWantsLocationUpdates);
         }
     }
 
@@ -356,6 +339,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     @Override public void onLocationChanged(Location location) {
+        Timber.i("onLocationChanged: location = %s", location);
         if (gpsLocationListener != null) {
             MapPoint point = fromLocation(myLocationOverlay);
             if (point != null) {
@@ -365,6 +349,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     @Override public void onClientStart() {
+        Timber.i("Requesting location updates (to %s)", this);
         locationClient.requestLocationUpdates(this);
     }
 
@@ -373,6 +358,31 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     @Override public void onClientStop() { }
+
+    private void enableLocationUpdates(boolean enable) {
+        if (locationClient == null) {
+            locationClient = LocationClients.clientForContext(getActivity());
+            locationClient.setListener(this);
+        }
+        if (enable) {
+            LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+            if (locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                map.getOverlays().add(myLocationOverlay);
+                myLocationOverlay.setEnabled(true);
+                myLocationOverlay.enableMyLocation();
+                Timber.i("Starting LocationClient %s (for MapFragment %s)", locationClient, this);
+                locationClient.start();
+            } else {
+                showGpsDisabledAlert();
+            }
+        } else {
+            Timber.i("Stopping LocationClient %s (for MapFragment %s)", locationClient, this);
+            locationClient.stop();
+            myLocationOverlay.setEnabled(false);
+            myLocationOverlay.disableFollowLocation();
+            myLocationOverlay.disableMyLocation();
+        }
+    }
 
     private static @Nullable MapPoint fromLocation(@NonNull MyLocationNewOverlay overlay) {
         GeoPoint geoPoint = overlay.getMyLocation();

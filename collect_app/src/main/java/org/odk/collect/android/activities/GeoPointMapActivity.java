@@ -129,28 +129,6 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
             .addTo(this, R.id.map_container, this::initMap, this::finish);
     }
 
-    @Override protected void onStart() {
-        super.onStart();
-        // initMap() is called asynchronously, so map might not be initialized yet.
-        if (map != null) {
-            map.setGpsLocationEnabled(true);
-        }
-    }
-
-    @Override protected void onStop() {
-        // To avoid a memory leak, we have to shut down GPS when the activity
-        // quits for good. But if it's only a screen rotation, we don't want to
-        // stop/start GPS and make the user wait to get a GPS lock again.
-        if (!isChangingConfigurations()) {
-            // initMap() is called asynchronously, so map can be null if the activity
-            // is stopped (e.g. by screen rotation) before initMap() gets to run.
-            if (map != null) {
-                map.setGpsLocationEnabled(false);
-            }
-        }
-        super.onStop();
-    }
-
     @Override protected void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
         if (map == null) {
@@ -342,8 +320,6 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
         this.location = point;
 
         if (point != null) {
-            Timber.i("onLocationChanged: location = %s", point);
-
             if (previousLocation != null) {
                 enableZoomButton(true);
 
@@ -359,9 +335,6 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
 
                 locationStatus.setText(formatLocationStatus(map.getLocationProvider(), point.sd));
             }
-
-        } else {
-            Timber.i("onLocationChanged: null location");
         }
     }
 
