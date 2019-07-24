@@ -135,7 +135,7 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     }
 
     private void initControlsLayout(ViewGroup parent) {
-        view = LayoutInflater.from(context).inflate(R.layout.media_player_layout, parent, false);
+        view = LayoutInflater.from(context).inflate(R.layout.audio_controller_layout, parent, false);
         ButterKnife.bind(this, view);
         seekBar.setOnSeekBarChangeListener(this);
     }
