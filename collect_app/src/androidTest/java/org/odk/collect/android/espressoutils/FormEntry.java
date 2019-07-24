@@ -16,6 +16,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
@@ -119,5 +120,18 @@ public final class FormEntry {
 
     public static void clickOk() {
         onView(withId(android.R.id.button1)).perform(click());
+    }
+
+    public static void clickOptionsIcon() {
+        onView(withContentDescription("More options")).perform(click());
+    }
+
+    public static void clickGeneralSettings() {
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.general_preferences))).perform(click());
+    }
+
+    public static void checkAreNavigationButtonsDisplayed() {
+        onView(withId(R.id.form_forward_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.form_back_button)).check(matches(isDisplayed()));
     }
 }
