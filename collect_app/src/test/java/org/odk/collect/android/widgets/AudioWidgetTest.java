@@ -14,7 +14,7 @@ import org.javarosa.core.model.data.StringData;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.R;
-import org.odk.collect.android.audio.AudioController;
+import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
@@ -40,7 +40,7 @@ public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
     FileUtil fileUtil;
 
     @Mock
-    AudioController audioController;
+    AudioControllerView audioController;
 
     private String destinationName;
 

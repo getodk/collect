@@ -41,7 +41,7 @@ import timber.log.Timber;
 
 import static android.view.View.GONE;
 
-public class AudioController implements SeekBar.OnSeekBarChangeListener {
+public class AudioControllerView implements SeekBar.OnSeekBarChangeListener {
 
     private static final int SEEK_FORWARD_TIME = 5000; // 5 seconds
     private static final int SEEK_BACKWARD_TIME = 5000; // 5 seconds

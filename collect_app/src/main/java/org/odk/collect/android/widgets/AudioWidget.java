@@ -32,7 +32,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.audio.AudioController;
+import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
@@ -64,17 +64,17 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     @NonNull
     private MediaUtil mediaUtil;
 
-    private AudioController audioController;
+    private AudioControllerView audioController;
     private Button captureButton;
     private Button chooseButton;
 
     private String binaryName;
 
     public AudioWidget(Context context, FormEntryPrompt prompt) {
-        this(context, prompt, new FileUtil(), new MediaUtil(), new AudioController());
+        this(context, prompt, new FileUtil(), new MediaUtil(), new AudioControllerView());
     }
 
-    AudioWidget(Context context, FormEntryPrompt prompt, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioController audioController) {
+    AudioWidget(Context context, FormEntryPrompt prompt, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioControllerView audioController) {
         super(context, prompt);
 
         this.fileUtil = fileUtil;
