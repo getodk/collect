@@ -4,11 +4,9 @@ import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.espressoutils.FormEntry;
 import org.odk.collect.android.espressoutils.MainMenu;
 import org.odk.collect.android.espressoutils.Settings;
-
 
 import static androidx.test.espresso.Espresso.pressBack;
 
@@ -26,7 +24,7 @@ public class ServerOtherTest extends BaseRegressionTest {
         FormEntry.clickOnAreaWithIndex("CheckedTextView", 2);
         FormEntry.clickOnAreaWithKey("formlist_url");
         FormEntry.focusOnTextAndTextInput("/formList", "/sialala");
-        FormEntry.clickOnString(R.string.ok);
+        FormEntry.clickOk();
         FormEntry.checkIsTextDisplayed("/formList/sialala");
         pressBack();
         pressBack();
@@ -43,7 +41,7 @@ public class ServerOtherTest extends BaseRegressionTest {
          FormEntry.clickOnAreaWithIndex("CheckedTextView", 2);
          FormEntry.clickOnAreaWithKey("submission_url");
          FormEntry.focusOnTextAndTextInput("/submission", "/blabla");
-         FormEntry.clickOnString(R.string.ok);
+         FormEntry.clickOk();
          FormEntry.checkIsTextDisplayed("/submission/blabla");
          pressBack();
          pressBack();
