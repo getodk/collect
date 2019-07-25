@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.robolectric.RobolectricTestRunner;
 
@@ -41,6 +42,7 @@ public class QRCodeUtilsTest {
     @Before
     public void setup() {
         GeneralSharedPreferences.getInstance().loadDefaultPreferences();
+        AdminSharedPreferences.getInstance().loadDefaultPreferences();
         savedQrCodeImage.delete();
         md5File.delete();
     }
