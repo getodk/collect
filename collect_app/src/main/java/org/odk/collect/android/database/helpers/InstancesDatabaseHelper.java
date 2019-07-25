@@ -18,7 +18,6 @@ package org.odk.collect.android.database.helpers;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import org.odk.collect.android.application.Collect;
@@ -65,145 +64,104 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
 
-        boolean success = true;
         switch (oldVersion) {
             case 1:
-                success = upgradeToVersion2(db);
+                upgradeToVersion2(db);
             case 2:
-                success &= upgradeToVersion3(db);
+                upgradeToVersion3(db);
             case 3:
-                success &= upgradeToVersion4(db);
+                upgradeToVersion4(db);
             case 4:
-                success &= upgradeToVersion5(db);
+                upgradeToVersion5(db);
                 break;
             default:
-                Timber.i("Unknown version " + oldVersion);
+                Timber.i("Unknown version %d", oldVersion);
         }
 
-        if (success) {
-            Timber.i("Upgrading database from version " + oldVersion + " to " + newVersion + " completed with success.");
-        } else {
-            Timber.e("Upgrading database from version " + oldVersion + " to " + newVersion + " failed.");
-        }
+        Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
     }
 
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        boolean success = true;
+        Timber.i("Downgrading database from version %d to %d", oldVersion, newVersion);
         String temporaryTable = INSTANCES_TABLE_NAME + "_tmp";
 
-        try {
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .renameTable(INSTANCES_TABLE_NAME)
-                    .to(temporaryTable)
-                    .end();
+        CustomSQLiteQueryBuilder
+                .begin(db)
+                .renameTable(INSTANCES_TABLE_NAME)
+                .to(temporaryTable)
+                .end();
 
-            createInstancesTableV5(db);
+        createInstancesTableV5(db);
 
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .insertInto(INSTANCES_TABLE_NAME)
-                    .columnsForInsert(instancesTableColumnsInVersion5)
-                    .select()
-                    .columnsForSelect(instancesTableColumnsInVersion5)
-                    .from(temporaryTable)
-                    .end();
+        CustomSQLiteQueryBuilder
+                .begin(db)
+                .insertInto(INSTANCES_TABLE_NAME)
+                .columnsForInsert(instancesTableColumnsInVersion5)
+                .select()
+                .columnsForSelect(instancesTableColumnsInVersion5)
+                .from(temporaryTable)
+                .end();
 
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .dropIfExists(temporaryTable)
-                    .end();
-        } catch (SQLiteException e) {
-            Timber.i(e);
-            success = false;
-        }
+        CustomSQLiteQueryBuilder
+                .begin(db)
+                .dropIfExists(temporaryTable)
+                .end();
 
-        if (success) {
-            Timber.i("Downgrading database completed with success.");
-        } else {
-            Timber.e("Downgrading database from version " + oldVersion + " to " + newVersion + " failed.");
-        }
+        Timber.i("Downgrading database from version %d to %d completed with success.", oldVersion, newVersion);
     }
 
-    private boolean upgradeToVersion2(SQLiteDatabase db) {
-        boolean success = true;
-        try {
-            db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
-                    + CAN_EDIT_WHEN_COMPLETE + " text;");
-            db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET "
-                    + CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true)
-                    + "' WHERE " + STATUS + " IS NOT NULL AND "
-                    + STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
-                    + "'");
-        } catch (SQLiteException e) {
-            Timber.e(e);
-            success = false;
-        }
-        return success;
+    private void upgradeToVersion2(SQLiteDatabase db) {
+        db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
+                + CAN_EDIT_WHEN_COMPLETE + " text;");
+        db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET "
+                + CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true)
+                + "' WHERE " + STATUS + " IS NOT NULL AND "
+                + STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
+                + "'");
     }
 
-    private boolean upgradeToVersion3(SQLiteDatabase db) {
-        boolean success = true;
-        try {
-            db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
+    private void upgradeToVersion3(SQLiteDatabase db) {
+        db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
                     + JR_VERSION + " text;");
-        } catch (SQLiteException e) {
-            Timber.e(e);
-            success = false;
-        }
-        return success;
     }
 
-    private boolean upgradeToVersion4(SQLiteDatabase db) {
-        boolean success = true;
-        try {
-            Cursor cursor = db.rawQuery("SELECT * FROM " + INSTANCES_TABLE_NAME + " LIMIT 0", null);
-            int columnIndex = cursor.getColumnIndex(DELETED_DATE);
-            cursor.close();
+    private void upgradeToVersion4(SQLiteDatabase db) {
+        Cursor cursor = db.rawQuery("SELECT * FROM " + INSTANCES_TABLE_NAME + " LIMIT 0", null);
+        int columnIndex = cursor.getColumnIndex(DELETED_DATE);
+        cursor.close();
 
-            // Only add the column if it doesn't already exist
-            if (columnIndex == -1) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
-                        + DELETED_DATE + " date;");
-            }
-        } catch (SQLiteException e) {
-            Timber.e(e);
-            success = false;
+        // Only add the column if it doesn't already exist
+        if (columnIndex == -1) {
+            db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
+                    + DELETED_DATE + " date;");
         }
-        return success;
     }
 
-    private boolean upgradeToVersion5(SQLiteDatabase db) {
-        boolean success = true;
+    private void upgradeToVersion5(SQLiteDatabase db) {
         String temporaryTable = INSTANCES_TABLE_NAME + "_tmp";
-        try {
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .renameTable(INSTANCES_TABLE_NAME)
-                    .to(temporaryTable)
-                    .end();
 
-            createInstancesTableV5(db);
+        CustomSQLiteQueryBuilder
+                .begin(db)
+                .renameTable(INSTANCES_TABLE_NAME)
+                .to(temporaryTable)
+                .end();
 
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .insertInto(INSTANCES_TABLE_NAME)
-                    .columnsForInsert(instancesTableColumnsInVersion5)
-                    .select()
-                    .columnsForSelect(instancesTableColumnsInVersion5)
-                    .from(temporaryTable)
-                    .end();
+        createInstancesTableV5(db);
 
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .dropIfExists(temporaryTable)
-                    .end();
-        } catch (SQLiteException e) {
-            Timber.e(e);
-            success = false;
-        }
-        return success;
+        CustomSQLiteQueryBuilder
+                .begin(db)
+                .insertInto(INSTANCES_TABLE_NAME)
+                .columnsForInsert(instancesTableColumnsInVersion5)
+                .select()
+                .columnsForSelect(instancesTableColumnsInVersion5)
+                .from(temporaryTable)
+                .end();
+
+        CustomSQLiteQueryBuilder
+                .begin(db)
+                .dropIfExists(temporaryTable)
+                .end();
     }
 
     private void createInstancesTableV5(SQLiteDatabase db) {
