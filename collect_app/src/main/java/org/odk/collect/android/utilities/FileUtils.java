@@ -542,9 +542,9 @@ public class FileUtils {
         // '\u0000' and '\u0001' causes paths to sort correctly (assuming the paths
         // don't already contain '\u0000' or '\u0001').  This is a bit of a hack,
         // but it's a lot simpler and faster than comparing components one by one.
-        String aParts = a.replace('/', '\u0000').replace('.', '\u0001');
-        String bParts = b.replace('/', '\u0000').replace('.', '\u0001');
-        return aParts.compareTo(bParts);
+        String sortKeyA = a.replace('/', '\u0000').replace('.', '\u0001');
+        String sortKeyB = b.replace('/', '\u0000').replace('.', '\u0001');
+        return sortKeyA.compareTo(sortKeyB);
     }
 
     public static String getFileExtension(String fileName) {
