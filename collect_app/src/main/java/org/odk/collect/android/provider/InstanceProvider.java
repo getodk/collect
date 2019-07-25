@@ -24,8 +24,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import androidx.annotation.NonNull;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -171,7 +172,7 @@ public class InstanceProvider extends ContentProvider {
             }
         }
 
-        throw new SQLException("Failed to insert row into " + uri);
+        throw new SQLException("Failed to insert into the instances database.");
     }
 
     public static String getDisplaySubtext(Context context, String state, Date date) {
