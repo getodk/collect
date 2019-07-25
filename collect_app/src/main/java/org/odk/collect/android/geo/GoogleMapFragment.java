@@ -55,7 +55,6 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import timber.log.Timber;
@@ -100,7 +99,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         // If the containing activity is being re-created upon screen rotation,
         // the FragmentManager will have also re-created a copy of the previous
-        // OsmDroidMapFragment.  We don't want these useless copies of old fragments
+        // GoogleMapFragment.  We don't want these useless copies of old fragments
         // to linger, so the following line calls .replace() instead of .add().
         activity.getSupportFragmentManager()
             .beginTransaction().replace(containerId, this).commitNow();
@@ -125,7 +124,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                 toLatLng(INITIAL_CENTER), INITIAL_ZOOM));
             loadReferenceOverlay();
-            if (readyListener != null) {
+
+            // If the screen is rotated before the map is ready, this fragment
+            // could already be detached, which makes it unsafe to use.  Only
+            // call the ReadyListener if this fragment is still attached.
+            if (readyListener != null && getActivity() != null) {
                 readyListener.onReady(this);
             }
         });
@@ -147,10 +150,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
         enableLocationUpdates(false);
         MapProvider.onMapFragmentStop(this);
         super.onStop();
-    }
-
-    @Override public Fragment getFragment() {
-        return this;
     }
 
     @Override public void applyConfig(Bundle config) {

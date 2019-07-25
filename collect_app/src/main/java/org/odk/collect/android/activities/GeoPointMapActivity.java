@@ -181,15 +181,6 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
 
     @SuppressLint("MissingPermission") // Permission handled in Constructor
     public void initMap(MapFragment newMapFragment) {
-        if (newMapFragment.getFragment().getActivity() == null) {
-            // If the screen is rotated just after the activity starts but
-            // before initMap() is called, then when the activity is re-created
-            // in the new orientation, initMap() can sometimes be called on the
-            // old, dead Fragment that used to be attached to the old activity.
-            // Touching the dead Fragment will cause a crash; discard it.
-            return;
-        }
-
         map = newMapFragment;
         map.setDragEndListener(this::onDragEnd);
         map.setLongPressListener(this::onLongPress);

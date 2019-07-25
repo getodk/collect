@@ -20,7 +20,6 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 /**
@@ -47,9 +46,6 @@ public interface MapFragment {
     MapPoint INITIAL_CENTER = new MapPoint(0, -30);
     float INITIAL_ZOOM = 2;
     float POINT_ZOOM = 16;
-
-    /** Gets the MapFragment as a Fragment. */
-    Fragment getFragment();
 
     /**
      * Configures the map according to settings such as styling preferences and

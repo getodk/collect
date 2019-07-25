@@ -128,10 +128,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         super.onStop();
     }
 
-    @Override public Fragment getFragment() {
-        return this;
-    }
-
     @Override public void applyConfig(Bundle config) {
         webMapService = (WebMapService) config.getSerializable(KEY_WEB_MAP_SERVICE);
         String path = config.getString(KEY_REFERENCE_LAYER);
@@ -167,9 +163,15 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
         locationClient = LocationClients.clientForContext(getActivity());
         locationClient.setListener(this);
-        if (readyListener != null) {
-            new Handler().postDelayed(() -> readyListener.onReady(this), 100);
-        }
+
+        new Handler().postDelayed(() -> {
+            // If the screen is rotated before the map is ready, this fragment
+            // could already be detached, which makes it unsafe to use.  Only
+            // call the ReadyListener if this fragment is still attached.
+            if (readyListener != null && getActivity() != null) {
+                readyListener.onReady(this);
+            }
+        }, 100);
         return view;
     }
 
