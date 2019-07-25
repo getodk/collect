@@ -2512,7 +2512,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 String message;
                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true);
                 if (saveResult.getSaveErrorMessage() != null) {
-                    message = getString(R.string.data_saved_error) + ": "
+                    message = getString(R.string.data_saved_error) + " "
                             + saveResult.getSaveErrorMessage();
                 } else {
                     message = getString(R.string.data_saved_error);
