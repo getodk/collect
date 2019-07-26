@@ -25,6 +25,7 @@ import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -50,13 +51,16 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 5;
 
+    private final String[] instancesTableColumnsInVersion5 = new String[] {_ID, DISPLAY_NAME, SUBMISSION_URI, CAN_EDIT_WHEN_COMPLETE,
+            INSTANCE_FILE_PATH, JR_FORM_ID, JR_VERSION, STATUS, LAST_STATUS_CHANGE_DATE, DELETED_DATE};
+
     public InstancesDatabaseHelper() {
         super(new DatabaseContext(Collect.METADATA_PATH), DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        createInstancesTableV5(db);
+        createInstancesTableV5(db, INSTANCES_TABLE_NAME);
     }
 
     @SuppressWarnings({"checkstyle:FallThrough"})
@@ -116,39 +120,60 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Upgrade to version 5 by creating the new table with a temporary name, moving the contents of
+     * the existing instances table to that new table, dropping the old table and then renaming the
+     * new table to the permanent name.
+     *
+     * Prior versions of the instances table included a {@code displaySubtext} column which was
+     * redundant with the {@link InstanceProviderAPI.InstanceColumns#STATUS} and
+     * {@link InstanceProviderAPI.InstanceColumns#LAST_STATUS_CHANGE_DATE} columns and included
+     * unlocalized text. Version 5 removes this column.
+     *
+     * The move and copy strategy is used to overcome the fact that SQLITE does not directly support
+     * removing a column. See https://sqlite.org/lang_altertable.html
+     */
     private void moveInstancesTableToVersion5(SQLiteDatabase db) {
         List<String> columnNamesPrev = getColumnNames(db);
 
-        String temporaryTable = INSTANCES_TABLE_NAME + "_tmp";
+        String temporaryTableName = INSTANCES_TABLE_NAME + "_tmp";
 
+        // onDowngrade in Collect v1.22 always failed to clean up the temporary table so remove it now.
+        // Going from v1.23 to v1.22 and back to v1.23 will result in instance status information
+        // being lost.
         CustomSQLiteQueryBuilder
                 .begin(db)
-                .renameTable(INSTANCES_TABLE_NAME)
-                .to(temporaryTable)
+                .dropIfExists(temporaryTableName)
                 .end();
 
-        createInstancesTableV5(db);
+        createInstancesTableV5(db, temporaryTableName);
 
-        List<String> columnNamesV5 = getColumnNames(db);
-        columnNamesPrev.retainAll(columnNamesV5);
+        // Only select columns from the existing table that are also relevant to v5
+        columnNamesPrev.retainAll(new ArrayList<>(Arrays.asList(instancesTableColumnsInVersion5)));
 
         CustomSQLiteQueryBuilder
                 .begin(db)
-                .insertInto(INSTANCES_TABLE_NAME)
-                .columnsForInsert(columnNamesV5.toArray(new String[0]))
+                .insertInto(temporaryTableName)
+                .columnsForInsert(columnNamesPrev.toArray(new String[0]))
                 .select()
                 .columnsForSelect(columnNamesPrev.toArray(new String[0]))
-                .from(temporaryTable)
+                .from(INSTANCES_TABLE_NAME)
                 .end();
 
         CustomSQLiteQueryBuilder
                 .begin(db)
-                .dropIfExists(temporaryTable)
+                .dropIfExists(INSTANCES_TABLE_NAME)
+                .end();
+
+        CustomSQLiteQueryBuilder
+                .begin(db)
+                .renameTable(temporaryTableName)
+                .to(INSTANCES_TABLE_NAME)
                 .end();
     }
 
-    private void createInstancesTableV5(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + INSTANCES_TABLE_NAME + " ("
+    private void createInstancesTableV5(SQLiteDatabase db, String name) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + name + " ("
                 + _ID + " integer primary key, "
                 + DISPLAY_NAME + " text not null, "
                 + SUBMISSION_URI + " text, "
@@ -167,6 +192,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
             columnNames = c.getColumnNames();
         }
 
-        return Arrays.asList(columnNames);
+        // Build a full-featured ArrayList rather than the limited array-backed List from asList
+        return new ArrayList<>(Arrays.asList(columnNames));
     }
 }
