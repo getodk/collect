@@ -30,7 +30,7 @@ public class DrawWidgetTest extends BaseRegressionTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule("All_widgets.xml", "regression/"));
+            .around(new CopyFormRule("All_widgets.xml"));
 
     @Rule
     public TestRule screenshotFailRule = new ScreenshotOnFailureTestRule();

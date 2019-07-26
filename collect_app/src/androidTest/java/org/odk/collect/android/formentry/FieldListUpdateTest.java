@@ -87,7 +87,7 @@ public class FieldListUpdateTest {
                     Manifest.permission.CAMERA)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule(FIELD_LIST_TEST_FORM, "", Collections.singletonList("fruits.csv")));
+            .around(new CopyFormRule(FIELD_LIST_TEST_FORM, Collections.singletonList("fruits.csv")));
 
     @Test
     public void relevanceChangeAtEnd_ShouldToggleLastWidgetVisibility() {

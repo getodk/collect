@@ -28,8 +28,8 @@ public class ExternalSecondaryInstancesTest extends BaseRegressionTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule("internal_select_10.xml", "regression"))
-            .around(new CopyFormRule("external_select_10.xml", "regression", Collections.singletonList("external_data_10.xml")));
+            .around(new CopyFormRule("internal_select_10.xml"))
+            .around(new CopyFormRule("external_select_10.xml", Collections.singletonList("external_data_10.xml")));
 
     @Test
     public void external_ShouldFillTheForm() {

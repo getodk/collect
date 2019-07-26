@@ -36,7 +36,7 @@ public class LocationAuditTest {
                     Manifest.permission.ACCESS_FINE_LOCATION)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule(LOCATION_AUDIT_FORM, "forms"));
+            .around(new CopyFormRule(LOCATION_AUDIT_FORM));
 
     @Test
     public void locationCollectionSnackbar_ShouldBeDisplayedAtFormLaunch() {
