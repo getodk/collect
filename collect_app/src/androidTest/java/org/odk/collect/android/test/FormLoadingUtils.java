@@ -54,19 +54,12 @@ public class FormLoadingUtils {
      * Copies a form with the given file name and given associated media from the given assets
      * folder to the SD Card where it will be loaded by {@link FormLoaderTask}.
      */
-    public static void copyFormToSdCard(String formFilename, String formAssetPath, List<String> mediaFilenames) throws IOException {
+    public static void copyFormToSdCard(String formFilename, List<String> mediaFilenames) throws IOException {
         Collect.createODKDirs();
-
-        if (formAssetPath == null) {
-            formAssetPath = "";
-        } else if (!formAssetPath.isEmpty() && !formAssetPath.endsWith(File.separator)) {
-            formAssetPath = formAssetPath + File.separator;
-        }
-
-        copyForm(formFilename, formAssetPath);
+        copyForm(formFilename);
 
         if (mediaFilenames != null) {
-            copyFormMediaFiles(formFilename, formAssetPath, mediaFilenames);
+            copyFormMediaFiles(formFilename, mediaFilenames);
         }
     }
 
@@ -74,16 +67,8 @@ public class FormLoadingUtils {
      * Copies a form with the given file name from the from the given assets folder to the SD Card
      * where it will be loaded by {@link FormLoaderTask}.
      */
-    public static void copyFormToSdCard(String formFilename, String formAssetPath) throws IOException {
-        copyFormToSdCard(formFilename, formAssetPath, null);
-    }
-
-    /**
-     * Copies a form with the given file name from the assets root to the SD Card where it
-     * will be loaded by {@link FormLoaderTask}.
-     */
     public static void copyFormToSdCard(String formFilename) throws IOException {
-        copyFormToSdCard(formFilename, null, null);
+        copyFormToSdCard(formFilename, null);
     }
 
     private static void saveFormToDatabase(File outFile) {
@@ -119,11 +104,11 @@ public class FormLoadingUtils {
         };
     }
 
-    private static void copyForm(String formFilename, String formAssetPath) throws IOException {
+    private static void copyForm(String formFilename) throws IOException {
         String pathname = Collect.FORMS_PATH + "/" + formFilename;
 
         AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
-        InputStream inputStream = assetManager.open(formAssetPath + formFilename);
+        InputStream inputStream = assetManager.open("forms/" + formFilename);
 
         File outFile = new File(pathname);
         OutputStream outputStream = new FileOutputStream(outFile);
@@ -133,14 +118,14 @@ public class FormLoadingUtils {
         saveFormToDatabase(outFile);
     }
 
-    private static void copyFormMediaFiles(String formFilename, String formAssetPath, List<String> mediaFilenames) throws IOException {
+    private static void copyFormMediaFiles(String formFilename, List<String> mediaFilenames) throws IOException {
         String mediaPathName = Collect.FORMS_PATH + "/" + formFilename.replace(".xml", "") + FileUtils.MEDIA_SUFFIX + "/";
         FileUtils.checkMediaPath(new File(mediaPathName));
 
         AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
 
         for (String mediaFilename : mediaFilenames) {
-            InputStream mediaInputStream = assetManager.open(formAssetPath + mediaFilename);
+            InputStream mediaInputStream = assetManager.open("media/" + mediaFilename);
             File mediaOutFile = new File(mediaPathName + mediaFilename);
             OutputStream mediaOutputStream = new FileOutputStream(mediaOutFile);
 

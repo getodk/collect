@@ -27,7 +27,7 @@ public class SpinnerWidgetTest extends BaseRegressionTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule("selectOneMinimal.xml", "regression"));
+            .around(new CopyFormRule("selectOneMinimal.xml"));
 
     @Test
     public void spinnerList_ShouldDisplay() {

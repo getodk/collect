@@ -29,7 +29,7 @@ public class RequiredQuestionTest extends BaseRegressionTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule("requiredJR275.xml", "regression/"));
+            .around(new CopyFormRule("requiredJR275.xml"));
 
     @Test
     public void requiredQuestions_ShouldDisplayAsterisk() {
