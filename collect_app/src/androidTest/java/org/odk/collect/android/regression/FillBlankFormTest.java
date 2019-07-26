@@ -50,7 +50,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
             .around(new CopyFormRule("predicate-warning.xml", "regression"))
             .around(new CopyFormRule("formulaire_adherent.xml", "regression", Collections.singletonList("espece.csv")))
             .around(new CopyFormRule("CSVerrorForm.xml", "regression", Collections.singletonList("TrapLists.csv")))
-            .around(new CopyFormRule("different-search-appearances.xml", "regression", Collections.singletonList("fruits.csv")))
+            .around(new CopyFormRule("different-search-appearances.xml", "regression", Collections.singletonList("media/fruits.csv")))
             .around(new CopyFormRule("random.xml", "regression"))
             .around(new CopyFormRule("randomTest_broken.xml", "regression"))
             .around(new CopyFormRule("g6Error.xml", "regression"))

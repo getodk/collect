@@ -40,7 +40,7 @@ public class ExternalCsvSearchTest {
             )
             .around(new ResetStateRule())
             .around(new CopyFormRule(EXTERNAL_CSV_SEARCH_FORM, "forms",
-                    Collections.singletonList("external-csv-search-produce.csv")));
+                    Collections.singletonList("media/external-csv-search-produce.csv")));
 
     @Test
     public void simpleSearchStatement_ShouldDisplayAllCsvChoices() {

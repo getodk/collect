@@ -74,7 +74,7 @@ import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.odk.collect.android.test.CustomMatchers.withIndex;
 
 public class FieldListUpdateTest {
-    private static final String FIELD_LIST_TEST_FORM = "fieldlist-updates.xml";
+    private static final String FIELD_LIST_TEST_FORM = "forms/fieldlist-updates.xml";
 
     @Rule
     public IntentsTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(FIELD_LIST_TEST_FORM);
@@ -87,7 +87,7 @@ public class FieldListUpdateTest {
                     Manifest.permission.CAMERA)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule(FIELD_LIST_TEST_FORM, "", Collections.singletonList("fruits.csv")));
+            .around(new CopyFormRule(FIELD_LIST_TEST_FORM, "", Collections.singletonList("media/fruits.csv")));
 
     @Test
     public void relevanceChangeAtEnd_ShouldToggleLastWidgetVisibility() {
