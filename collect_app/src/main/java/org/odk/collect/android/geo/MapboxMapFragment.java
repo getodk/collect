@@ -44,7 +44,6 @@ import com.mapbox.mapboxsdk.utils.ColorUtils;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.geo.MbtilesFile.LayerType;
 import org.odk.collect.android.geo.MbtilesFile.MbtilesException;
 
@@ -470,8 +469,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 .withSource(new RasterSource("[osm]", tiles, 256))
                 .withLayer(new RasterLayer("[osm]", "[osm]"));
         }
-        Context context = Collect.getInstance().getApplicationContext();
-        Drawable pointIcon = ContextCompat.getDrawable(context, R.drawable.ic_map_point);
+        Drawable pointIcon = ContextCompat.getDrawable(getContext(), R.drawable.ic_map_point);
         return new Style.Builder().fromUrl(styleUrl)
             .withImage(POINT_ICON_ID, pointIcon)
             .withTransition(new TransitionOptions(0, 0, false));
