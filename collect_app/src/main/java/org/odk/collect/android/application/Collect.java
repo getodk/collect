@@ -29,6 +29,10 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.multidex.MultiDex;
+
 import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobManagerCreateException;
@@ -68,9 +72,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.Locale;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.multidex.MultiDex;
 import timber.log.Timber;
 
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
@@ -208,6 +209,19 @@ public class Collect extends Application {
         return getString(R.string.app_name) + versionName;
     }
 
+    /**
+     * Get a User-Agent string that provides the platform details followed by the application ID
+     * and application version name: {@code Dalvik/<version> (platform info) org.odk.collect.android/v<version>}.
+     *
+     * This deviates from the recommended format as described in https://github.com/opendatakit/collect/issues/3253.
+     */
+    public String getUserAgentString() {
+        return String.format("%s %s/%s",
+                System.getProperty("http.agent"),
+                BuildConfig.APPLICATION_ID,
+                BuildConfig.VERSION_NAME);
+    }
+
     public boolean isNetworkAvailable() {
         ConnectivityManager manager = (ConnectivityManager) getInstance()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -270,6 +284,8 @@ public class Collect extends Application {
         }
 
         setupLeakCanary();
+
+        org.osmdroid.config.Configuration.getInstance().setUserAgentValue(getUserAgentString());
     }
 
     private void setupDagger() {
