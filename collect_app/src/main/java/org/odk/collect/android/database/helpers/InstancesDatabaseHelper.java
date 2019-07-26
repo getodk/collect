@@ -72,7 +72,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
             case 3:
                 upgradeToVersion4(db);
             case 4:
-                upgradeToVersion5(db);
+                moveInstancesTableToVersion5(db);
                 break;
             default:
                 Timber.i("Unknown version %d", oldVersion);
@@ -84,33 +84,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Timber.i("Downgrading database from version %d to %d", oldVersion, newVersion);
-        List<String> columnNamesPrev = getColumnNames(db);
-
-        String temporaryTable = INSTANCES_TABLE_NAME + "_tmp";
-
-        CustomSQLiteQueryBuilder
-                .begin(db)
-                .renameTable(INSTANCES_TABLE_NAME)
-                .to(temporaryTable)
-                .end();
-
-        createInstancesTableV5(db);
-        List<String> columnNamesV5 = getColumnNames(db);
-        columnNamesPrev.retainAll(columnNamesV5);
-
-        CustomSQLiteQueryBuilder
-                .begin(db)
-                .insertInto(INSTANCES_TABLE_NAME)
-                .columnsForInsert(columnNamesV5.toArray(new String[0]))
-                .select()
-                .columnsForSelect(columnNamesPrev.toArray(new String[0]))
-                .from(temporaryTable)
-                .end();
-
-        CustomSQLiteQueryBuilder
-                .begin(db)
-                .dropIfExists(temporaryTable)
-                .end();
+        moveInstancesTableToVersion5(db);
 
         Timber.i("Downgrading database from version %d to %d completed with success.", oldVersion, newVersion);
     }
@@ -142,7 +116,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private void upgradeToVersion5(SQLiteDatabase db) {
+    private void moveInstancesTableToVersion5(SQLiteDatabase db) {
         List<String> columnNamesPrev = getColumnNames(db);
 
         String temporaryTable = INSTANCES_TABLE_NAME + "_tmp";
