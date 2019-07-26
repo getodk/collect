@@ -25,6 +25,9 @@ import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 
+import java.util.Arrays;
+import java.util.List;
+
 import timber.log.Timber;
 
 import static android.provider.BaseColumns._ID;
@@ -46,9 +49,6 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     public static final String INSTANCES_TABLE_NAME = "instances";
 
     private static final int DATABASE_VERSION = 5;
-
-    private final String[] instancesTableColumnsInVersion5 = new String[] {_ID, DISPLAY_NAME, SUBMISSION_URI, CAN_EDIT_WHEN_COMPLETE,
-            INSTANCE_FILE_PATH, JR_FORM_ID, JR_VERSION, STATUS, LAST_STATUS_CHANGE_DATE, DELETED_DATE};
 
     public InstancesDatabaseHelper() {
         super(new DatabaseContext(Collect.METADATA_PATH), DATABASE_NAME, null, DATABASE_VERSION);
@@ -84,6 +84,8 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Timber.i("Downgrading database from version %d to %d", oldVersion, newVersion);
+        List<String> columnNamesPrev = getColumnNames(db);
+
         String temporaryTable = INSTANCES_TABLE_NAME + "_tmp";
 
         CustomSQLiteQueryBuilder
@@ -93,13 +95,15 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
                 .end();
 
         createInstancesTableV5(db);
+        List<String> columnNamesV5 = getColumnNames(db);
+        columnNamesPrev.retainAll(columnNamesV5);
 
         CustomSQLiteQueryBuilder
                 .begin(db)
                 .insertInto(INSTANCES_TABLE_NAME)
-                .columnsForInsert(instancesTableColumnsInVersion5)
+                .columnsForInsert(columnNamesV5.toArray(new String[0]))
                 .select()
-                .columnsForSelect(instancesTableColumnsInVersion5)
+                .columnsForSelect(columnNamesPrev.toArray(new String[0]))
                 .from(temporaryTable)
                 .end();
 
@@ -139,6 +143,8 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void upgradeToVersion5(SQLiteDatabase db) {
+        List<String> columnNamesPrev = getColumnNames(db);
+
         String temporaryTable = INSTANCES_TABLE_NAME + "_tmp";
 
         CustomSQLiteQueryBuilder
@@ -149,12 +155,15 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
 
         createInstancesTableV5(db);
 
+        List<String> columnNamesV5 = getColumnNames(db);
+        columnNamesPrev.retainAll(columnNamesV5);
+
         CustomSQLiteQueryBuilder
                 .begin(db)
                 .insertInto(INSTANCES_TABLE_NAME)
-                .columnsForInsert(instancesTableColumnsInVersion5)
+                .columnsForInsert(columnNamesV5.toArray(new String[0]))
                 .select()
-                .columnsForSelect(instancesTableColumnsInVersion5)
+                .columnsForSelect(columnNamesPrev.toArray(new String[0]))
                 .from(temporaryTable)
                 .end();
 
@@ -176,5 +185,14 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
                 + STATUS + " text not null, "
                 + LAST_STATUS_CHANGE_DATE + " date not null, "
                 + DELETED_DATE + " date );");
+    }
+
+    private List<String> getColumnNames(SQLiteDatabase db) {
+        String[] columnNames;
+        try (Cursor c = db.query(INSTANCES_TABLE_NAME, null, null, null, null, null, null)) {
+            columnNames = c.getColumnNames();
+        }
+
+        return Arrays.asList(columnNames);
     }
 }
