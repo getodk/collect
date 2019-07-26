@@ -30,7 +30,7 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
                     Manifest.permission.READ_PHONE_STATE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule("Test.xml", "regression/"));
+            .around(new CopyFormRule("Test.xml"));
 
     @Test
     public void setEmail_ShouldRequireAtSign() {

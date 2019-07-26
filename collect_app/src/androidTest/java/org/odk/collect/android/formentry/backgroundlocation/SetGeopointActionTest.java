@@ -39,7 +39,7 @@ public class SetGeopointActionTest {
                     Manifest.permission.ACCESS_FINE_LOCATION)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule(SETGEOPOINT_ACTION_FORM, "forms"));
+            .around(new CopyFormRule(SETGEOPOINT_ACTION_FORM));
 
     @Before
     @After

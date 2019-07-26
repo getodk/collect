@@ -28,7 +28,7 @@ public class FormValidationTest extends BaseRegressionTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule("OnePageFormShort.xml", "regression/"));
+            .around(new CopyFormRule("OnePageFormShort.xml"));
 
     @Test
     public void invalidAnswer_ShouldDisplayAllQuestionsOnOnePage() {

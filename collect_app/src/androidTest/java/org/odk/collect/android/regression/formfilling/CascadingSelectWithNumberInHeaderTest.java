@@ -28,7 +28,7 @@ public class CascadingSelectWithNumberInHeaderTest extends BaseRegressionTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule("numberInCSV.xml", "regression", Collections.singletonList("itemSets.csv")));
+            .around(new CopyFormRule("numberInCSV.xml", Collections.singletonList("itemSets.csv")));
 
     @Test
     public void fillForm_ShouldFillFormWithNumberInCsvHeader() {
