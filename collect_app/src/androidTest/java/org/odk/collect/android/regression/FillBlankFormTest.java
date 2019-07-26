@@ -234,7 +234,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.swipeToNextQuestion();
         FormEntry.putText("r");
         FormEntry.checkIsTextDisplayed("Oranges");
-        FormEntry.checkIsTextDisplayed("Strawberris");
+        FormEntry.checkIsTextDisplayed("Strawberries");
         FormEntry.clickOnText("Oranges");
         FormEntry.swipeToNextQuestion();
         FormEntry.putText("n");
@@ -243,7 +243,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.clickOnText("Mango");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickOnText("Mango");
-        FormEntry.clickOnText("Strawberris");
+        FormEntry.clickOnText("Strawberries");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickOnText("Raccoon");
         FormEntry.clickOnText("Rabbit");
