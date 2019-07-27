@@ -32,21 +32,15 @@ public class CollectThenSystemContentTypeMapper implements OpenRosaHttpInterface
     }
 
     private enum CollectContentTypeMappings {
-        XML("xml",  "text/xml"),
-        _3GPP("3gpp", "audio/3gpp"),
-        _3GP("3gp",  "video/3gpp"),
         AVI("avi",  "video/avi"),
         AMR("amr",  "audio/amr"),
         CSV("csv",  "text/csv"),
-        JPG("jpg",  "image/jpeg"),
         MP3("mp3",  "audio/mp3"),
-        MP4("mp4",  "video/mp4"),
         OGA("oga",  "audio/ogg"),
         OGG("ogg",  "audio/ogg"),
         OGV("ogv",  "video/ogg"),
         WAV("wav",  "audio/wav"),
-        WEBM("webm", "video/webm"),
-        XLS("xls",  "application/vnd.ms-excel");
+        WEBM("webm", "video/webm");
 
         private String extension;
         private String contentType;
