@@ -636,19 +636,19 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     /** An overlay that draws an attribution message in the lower-right corner. */
     private static class AttributionOverlay extends Overlay {
-        public static final int FONT_SIZE = 12;
+        public static final int FONT_SIZE_DP = 12;
         public static final int MARGIN_DP = 10;
 
         private final Paint paint;
 
-        public AttributionOverlay(Context context) {
+        AttributionOverlay(Context context) {
             super();
 
-            float density = context.getResources().getDisplayMetrics().density;
             paint = new Paint();
             paint.setAntiAlias(true);
             paint.setColor(new ThemeUtils(context).getPrimaryTextColor());
-            paint.setTextSize(density * FONT_SIZE);
+            paint.setTextSize(FONT_SIZE_DP *
+                context.getResources().getDisplayMetrics().density);
             paint.setTextAlign(Paint.Align.RIGHT);
         }
 
