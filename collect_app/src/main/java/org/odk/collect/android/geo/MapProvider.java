@@ -44,8 +44,8 @@ public class MapProvider {
     private static final String OSM_COPYRIGHT = "© OpenStreetMap contributors";
     private static final String CARTO_COPYRIGHT = "© CARTO";
     private static final String CARTO_ATTRIBUTION = OSM_COPYRIGHT + ", " + CARTO_COPYRIGHT;
-    private static final String STAMEN_ATTRIBUTION = "Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under ODbL.";
-    private static final String USGS_ATTRIBUTION = "Map services and data available from U.S. Geological Survey, National Geospatial Program.";
+    private static final String STAMEN_ATTRIBUTION = "Map tiles by Stamen Design, under CC BY 3.0.\nData by OpenStreetMap, under ODbL.";
+    private static final String USGS_ATTRIBUTION = "Map services and data available from U.S. Geological Survey,\nNational Geospatial Program.";
 
     // In general, there will only be one MapFragment, and thus one entry, in
     // each of these two Maps at any given time.  Nonetheless, it's a little

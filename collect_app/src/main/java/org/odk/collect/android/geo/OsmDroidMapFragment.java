@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.location.Location;
@@ -47,9 +48,9 @@ import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.CopyrightOverlay;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.TilesOverlay;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
@@ -156,7 +157,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         map.getController().setCenter(toGeoPoint(INITIAL_CENTER));
         map.getController().setZoom((int) INITIAL_ZOOM);
         map.setTilesScaledToDpi(true);
-        map.getOverlays().add(createCopyrightOverlay(getContext()));
+        map.getOverlays().add(new CopyrightOverlay(getContext()));
         map.getOverlays().add(new MapEventsOverlay(this));
         loadReferenceOverlay();
         addMapLayoutChangeListener(map);
@@ -413,13 +414,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         return new GeoPoint(point.lat, point.lon, point.alt);
     }
 
-    private static CopyrightOverlay createCopyrightOverlay(Context context) {
-        CopyrightOverlay overlay = new CopyrightOverlay(context);
-        overlay.setAlignRight(true);
-        overlay.setTextColor(new ThemeUtils(context).getPrimaryTextColor());
-        return overlay;
-    }
-
     /** Updates the map to reflect the value of referenceLayerFile. */
     private void loadReferenceOverlay() {
         if (referenceOverlay != null) {
@@ -636,6 +630,42 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
                 map.getOverlays().remove(markers.get(last));
                 markers.remove(last);
                 update();
+            }
+        }
+    }
+
+    private static class CopyrightOverlay extends Overlay {
+        public static final int FONT_SIZE = 12;
+        public static final int MARGIN_DP = 10;
+
+        private Paint paint;
+
+        public CopyrightOverlay(Context context) {
+            super();
+
+            float density = context.getResources().getDisplayMetrics().density;
+            paint = new Paint();
+            paint.setAntiAlias(true);
+            paint.setColor(new ThemeUtils(context).getPrimaryTextColor());
+            paint.setTextSize(density * FONT_SIZE);
+            paint.setTextAlign(Paint.Align.RIGHT);
+        }
+
+        @Override public void draw(Canvas canvas, MapView map, boolean shadow) {
+            String attribution = map.getTileProvider().getTileSource().getCopyrightNotice();
+            if (!shadow && !map.isAnimating() && attribution != null && !attribution.isEmpty()) {
+                String[] lines = attribution.split("\n");
+                float lineHeight = paint.getFontSpacing();
+                float x = canvas.getWidth() - MARGIN_DP;
+                float y = canvas.getHeight() - MARGIN_DP - lineHeight * lines.length;
+
+                canvas.save();
+                canvas.concat(map.getProjection().getInvertedScaleRotateCanvasMatrix());
+                for (String line : lines) {
+                    y += lineHeight;
+                    canvas.drawText(line, x, y, paint);
+                }
+                canvas.restore();
             }
         }
     }
