@@ -157,7 +157,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         map.getController().setCenter(toGeoPoint(INITIAL_CENTER));
         map.getController().setZoom((int) INITIAL_ZOOM);
         map.setTilesScaledToDpi(true);
-        map.getOverlays().add(new CopyrightOverlay(getContext()));
+        map.getOverlays().add(new AttributionOverlay(getContext()));
         map.getOverlays().add(new MapEventsOverlay(this));
         loadReferenceOverlay();
         addMapLayoutChangeListener(map);
@@ -634,13 +634,14 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         }
     }
 
-    private static class CopyrightOverlay extends Overlay {
+    /** An overlay that draws an attribution message in the lower-right corner. */
+    private static class AttributionOverlay extends Overlay {
         public static final int FONT_SIZE = 12;
         public static final int MARGIN_DP = 10;
 
         private Paint paint;
 
-        public CopyrightOverlay(Context context) {
+        public AttributionOverlay(Context context) {
             super();
 
             float density = context.getResources().getDisplayMetrics().density;
