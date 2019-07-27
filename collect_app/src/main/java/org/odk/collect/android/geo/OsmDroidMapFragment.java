@@ -37,6 +37,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.events.MapListener;
@@ -46,6 +47,7 @@ import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.CopyrightOverlay;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
@@ -154,6 +156,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         map.getController().setCenter(toGeoPoint(INITIAL_CENTER));
         map.getController().setZoom((int) INITIAL_ZOOM);
         map.setTilesScaledToDpi(true);
+        map.getOverlays().add(createCopyrightOverlay(getContext()));
         map.getOverlays().add(new MapEventsOverlay(this));
         loadReferenceOverlay();
         addMapLayoutChangeListener(map);
@@ -408,6 +411,13 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     private static @NonNull GeoPoint toGeoPoint(@NonNull MapPoint point) {
         return new GeoPoint(point.lat, point.lon, point.alt);
+    }
+
+    private static CopyrightOverlay createCopyrightOverlay(Context context) {
+        CopyrightOverlay overlay = new CopyrightOverlay(context);
+        overlay.setAlignRight(true);
+        overlay.setTextColor(new ThemeUtils(context).getPrimaryTextColor());
+        return overlay;
     }
 
     /** Updates the map to reflect the value of referenceLayerFile. */
