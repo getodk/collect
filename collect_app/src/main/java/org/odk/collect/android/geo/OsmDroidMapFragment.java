@@ -639,7 +639,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         public static final int FONT_SIZE = 12;
         public static final int MARGIN_DP = 10;
 
-        private Paint paint;
+        private final Paint paint;
 
         public AttributionOverlay(Context context) {
             super();
