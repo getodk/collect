@@ -65,7 +65,6 @@ import timber.log.Timber;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.rasterOpacity;
 
 public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.MapFragment
     implements MapFragment, OnMapReadyCallback,
@@ -515,6 +514,9 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             List<MbtilesFile.VectorLayer> layers = mbtiles.getVectorLayers();
             for (MbtilesFile.VectorLayer layer : layers) {
                 // Pick a colour that's a function of the filename and layer name.
+                // The colour will appear essentially random; the only purpose here
+                // is to try to assign different colours to different layers, such
+                // that each individual layer appears in its own consistent colour.
                 int hue = (((id + "." + layer.name).hashCode()) & 0x7fffffff) % 360;
                 addOverlayLayer(new LineLayer(id + "/" + layer.name, id).withProperties(
                     lineColor(Color.HSVToColor(new float[] {hue, 0.7f, 1})),
@@ -525,9 +527,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         }
         if (mbtiles.getLayerType() == LayerType.RASTER) {
             addOverlaySource(new RasterSource(id, tileSet));
-            addOverlayLayer(new RasterLayer(id + ".raster", id).withProperties(
-                rasterOpacity(0.5f)
-            ));
+            addOverlayLayer(new RasterLayer(id + ".raster", id));
         }
         Timber.i("Added %s as a %s layer at /%s", file, mbtiles.getLayerType(), id);
     }
