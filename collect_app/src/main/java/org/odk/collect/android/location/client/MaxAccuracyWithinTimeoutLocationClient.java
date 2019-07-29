@@ -27,7 +27,7 @@ public class MaxAccuracyWithinTimeoutLocationClient implements LocationClient.Lo
     private Location highestAccuracyReading;
     private final Handler timerHandler;
 
-    private static final LocationClient.Priority DEFAULT_PRIORITY = LocationClient.Priority.PRIORITY_BALANCED_POWER_ACCURACY;
+    private static final LocationClient.Priority DEFAULT_PRIORITY = LocationClient.Priority.PRIORITY_HIGH_ACCURACY;
 
     public MaxAccuracyWithinTimeoutLocationClient(LocationClient locationClient, LocationListener listener) {
         this.locationClient = locationClient;
