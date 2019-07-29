@@ -58,12 +58,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import timber.log.Timber;
 
-import static android.os.Looper.getMainLooper;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
@@ -76,7 +74,12 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
     private static final String POINT_ICON_ID = "point-icon-id";
     private static final long LOCATION_INTERVAL_MILLIS = 1000;
-    private static final long LOCATION_MAX_WAIT_MILLIS = 5 * LOCATION_INTERVAL_MILLIS;
+    private static final long LOCATION_MAX_WAIT_MILLIS = 5000;
+    private static final LocationEngineRequest LOCATION_REQUEST =
+        new LocationEngineRequest.Builder(LOCATION_INTERVAL_MILLIS)
+            .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
+            .setMaxWaitTime(LOCATION_MAX_WAIT_MILLIS)
+            .build();
 
     // Bundle keys understood by applyConfig().
     static final String KEY_STYLE_URL = "STYLE_URL";
@@ -90,7 +93,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private FeatureListener dragEndListener;
 
     private LocationComponent locationComponent;
-    private boolean locationEnabled;
+    private boolean clientWantsLocationUpdates;
     private MapPoint lastLocationFix;
 
     private int nextFeatureId = 1;
@@ -131,6 +134,10 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             Timber.e(e, "Could not start the TileHttpServer");
         }
 
+        // If the containing activity is being re-created upon screen rotation,
+        // the FragmentManager will have also re-created a copy of the previous
+        // MapboxMapFragment.  We don't want these useless copies of old fragments
+        // to linger, so the following line calls .replace() instead of .add().
         activity.getSupportFragmentManager()
             .beginTransaction().replace(containerId, this).commitNow();
         getMapAsync(map -> {
@@ -150,11 +157,15 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 symbolManager = createSymbolManager();
 
                 loadReferenceOverlay();
-                enableLocationComponent();
+                initLocationComponent();
 
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                     toLatLng(INITIAL_CENTER), INITIAL_ZOOM));
-                if (readyListener != null) {
+
+                // If the screen is rotated before the map is ready, this fragment
+                // could already be detached, which makes it unsafe to use.  Only
+                // call the ReadyListener if this fragment is still attached.
+                if (readyListener != null && getActivity() != null) {
                     readyListener.onReady(this);
                 }
             });
@@ -170,9 +181,11 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     @Override public void onStart() {
         super.onStart();
         MapProvider.onMapFragmentStart(this);
+        enableLocationUpdates(clientWantsLocationUpdates);
     }
 
     @Override public void onStop() {
+        enableLocationUpdates(false);
         MapProvider.onMapFragmentStop(this);
         super.onStop();
     }
@@ -182,10 +195,6 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             tileServer.destroy();
         }
         super.onDestroy();
-    }
-
-    @Override public Fragment getFragment() {
-        return this;
     }
 
     @Override public void applyConfig(Bundle config) {
@@ -359,9 +368,9 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     }
 
     @Override public void setGpsLocationEnabled(boolean enable) {
-        locationEnabled = enable;
-        if (locationComponent != null) {
-            locationComponent.setLocationComponentEnabled(enable);
+        if (enable != clientWantsLocationUpdates) {
+            clientWantsLocationUpdates = enable;
+            enableLocationUpdates(clientWantsLocationUpdates);
         }
     }
 
@@ -379,6 +388,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
     @Override public void onSuccess(LocationEngineResult result) {
         lastLocationFix = fromLocation(result.getLastLocation());
+        Timber.i("Received LocationEngineResult: %s", lastLocationFix);
         if (locationComponent != null) {
             locationComponent.forceLocationUpdate(result.getLastLocation());
         }
@@ -602,41 +612,47 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         return new LineManager(getMapView(), map, map.getStyle());
     }
 
-    @SuppressWarnings({"MissingPermission"})  // Permission checks for location services handled in widgets
-    private void enableLocationComponent() {
-        if (map == null) {  // map is null during Robolectric tests
+    private void initLocationComponent() {
+        if (map == null || map.getStyle() == null) {  // map is null during Robolectric tests
             return;
         }
 
-        LocationEngineRequest request = new LocationEngineRequest.Builder(LOCATION_INTERVAL_MILLIS)
-            .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
-            .setMaxWaitTime(LOCATION_MAX_WAIT_MILLIS)
-            .build();
-
         LocationEngine engine = LocationEngineProvider.getBestLocationEngine(getContext());
-        engine.requestLocationUpdates(request, this, getMainLooper());
-        engine.getLastLocation(this);
-
         locationComponent = map.getLocationComponent();
-        if (map.getStyle() != null) {
-            locationComponent.activateLocationComponent(
-                LocationComponentActivationOptions.builder(getContext(), map.getStyle())
-                    .locationEngine(engine)
-                    .locationComponentOptions(
-                        LocationComponentOptions.builder(getContext())
-                            .foregroundDrawable(R.drawable.ic_crosshairs)
-                            .backgroundDrawable(R.drawable.empty)
-                            .enableStaleState(false)
-                            .elevation(0)  // removes the shadow
-                            .build()
-                    )
-                    .build()
-            );
-        }
+        locationComponent.activateLocationComponent(
+            LocationComponentActivationOptions.builder(getContext(), map.getStyle())
+                .locationEngine(engine)
+                .locationComponentOptions(
+                    LocationComponentOptions.builder(getContext())
+                        .foregroundDrawable(R.drawable.ic_crosshairs)
+                        .backgroundDrawable(R.drawable.empty)
+                        .enableStaleState(false)  // don't switch to other drawables
+                        .elevation(0)  // remove the shadow
+                        .build()
+                )
+                .build()
+        );
 
         locationComponent.setCameraMode(CameraMode.NONE);
         locationComponent.setRenderMode(RenderMode.NORMAL);
-        locationComponent.setLocationComponentEnabled(locationEnabled);
+        enableLocationUpdates(clientWantsLocationUpdates);
+    }
+
+    @SuppressWarnings({"MissingPermission"})  // permission checks for location services are handled in widgets
+    private void enableLocationUpdates(boolean enable) {
+        if (locationComponent != null) {
+            LocationEngine engine = locationComponent.getLocationEngine();
+            if (enable) {
+                Timber.i("Requesting location updates from %s (to %s)", engine, this);
+                engine.requestLocationUpdates(LOCATION_REQUEST, this, null);
+                engine.getLastLocation(this);
+            } else {
+                Timber.i("Stopping location updates from %s (to %s)", engine, this);
+                engine.removeLocationUpdates(this);
+            }
+            Timber.i("setLocationComponentEnabled to %s (for %s)", enable, locationComponent);
+            locationComponent.setLocationComponentEnabled(enable);
+        }
     }
 
     /**

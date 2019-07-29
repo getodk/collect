@@ -55,7 +55,6 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import timber.log.Timber;
@@ -77,12 +76,14 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private PointListener longPressListener;
     private PointListener gpsLocationListener;
     private FeatureListener dragEndListener;
+
     private LocationClient locationClient;
+    private boolean clientWantsLocationUpdates;
     private MapPoint lastLocationFix;
     private String lastLocationProvider;
+
     private int nextFeatureId = 1;
     private final Map<Integer, MapFeature> features = new HashMap<>();
-    private boolean gpsLocationEnabled;
     private int mapType;
     private File referenceLayerFile;
     private TileOverlay referenceOverlay;
@@ -98,7 +99,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         // If the containing activity is being re-created upon screen rotation,
         // the FragmentManager will have also re-created a copy of the previous
-        // OsmDroidMapFragment.  We don't want these useless copies of old fragments
+        // GoogleMapFragment.  We don't want these useless copies of old fragments
         // to linger, so the following line calls .replace() instead of .add().
         activity.getSupportFragmentManager()
             .beginTransaction().replace(containerId, this).commitNow();
@@ -123,7 +124,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                 toLatLng(INITIAL_CENTER), INITIAL_ZOOM));
             loadReferenceOverlay();
-            if (readyListener != null) {
+
+            // If the screen is rotated before the map is ready, this fragment
+            // could already be detached, which makes it unsafe to use.  Only
+            // call the ReadyListener if this fragment is still attached.
+            if (readyListener != null && getActivity() != null) {
                 readyListener.onReady(this);
             }
         });
@@ -138,15 +143,13 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @Override public void onStart() {
         super.onStart();
         MapProvider.onMapFragmentStart(this);
+        enableLocationUpdates(clientWantsLocationUpdates);
     }
 
     @Override public void onStop() {
+        enableLocationUpdates(false);
         MapProvider.onMapFragmentStop(this);
         super.onStop();
-    }
-
-    @Override public Fragment getFragment() {
-        return this;
     }
 
     @Override public void applyConfig(Bundle config) {
@@ -293,17 +296,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     @Override public void setGpsLocationEnabled(boolean enable) {
-        if (enable != gpsLocationEnabled) {
-            gpsLocationEnabled = enable;
-            if (locationClient == null) {
-                locationClient = LocationClients.clientForContext(getActivity());
-                locationClient.setListener(this);
-            }
-            if (enable) {
-                locationClient.start();
-            } else {
-                locationClient.stop();
-            }
+        if (enable != clientWantsLocationUpdates) {
+            clientWantsLocationUpdates = enable;
+            enableLocationUpdates(clientWantsLocationUpdates);
         }
     }
 
@@ -316,6 +311,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     @Override public void onLocationChanged(Location location) {
+        Timber.i("onLocationChanged: location = %s", location);
         lastLocationFix = fromLocation(location);
         lastLocationProvider = location.getProvider();
         for (ReadyListener listener : gpsLocationReadyListeners) {
@@ -381,6 +377,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public void onClientStart() {
         lastLocationFix = fromLocation(locationClient.getLastLocation());
+        Timber.i("Requesting location updates (to %s)", this);
         locationClient.requestLocationUpdates(this);
         if (!locationClient.isLocationAvailable()) {
             showGpsDisabledAlert();
@@ -392,6 +389,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     @Override public void onClientStop() {
+        Timber.i("Stopping location updates (to %s)", this);
         locationClient.stopLocationUpdates();
     }
 
@@ -469,6 +467,20 @@ public class GoogleMapFragment extends SupportMapFragment implements
             map.animateCamera(movement);
         } else {
             map.moveCamera(movement);
+        }
+    }
+
+    private void enableLocationUpdates(boolean enable) {
+        if (locationClient == null) {
+            locationClient = LocationClients.clientForContext(getActivity());
+            locationClient.setListener(this);
+        }
+        if (enable) {
+            Timber.i("Starting LocationClient %s (for MapFragment %s)", locationClient, this);
+            locationClient.start();
+        } else {
+            Timber.i("Stopping LocationClient %s (for MapFragment %s)", locationClient, this);
+            locationClient.stop();
         }
     }
 

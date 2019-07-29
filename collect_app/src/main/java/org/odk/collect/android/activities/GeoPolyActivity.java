@@ -138,28 +138,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
             .addTo(this, R.id.map_container, this::initMap, this::finish);
     }
 
-    @Override protected void onStart() {
-        super.onStart();
-        // initMap() is called asynchronously, so map might not be initialized yet.
-        if (map != null) {
-            map.setGpsLocationEnabled(true);
-        }
-    }
-
-    @Override protected void onStop() {
-        // To avoid a memory leak, we have to shut down GPS when the activity
-        // quits for good. But if it's only a screen rotation, we don't want to
-        // stop/start GPS and make the user wait to get a GPS lock again.
-        if (!isChangingConfigurations()) {
-            // initMap() is called asynchronously, so map can be null if the activity
-            // is stopped (e.g. by screen rotation) before initMap() gets to run.
-            if (map != null) {
-                map.setGpsLocationEnabled(false);
-            }
-        }
-        super.onStop();
-    }
-
     @Override protected void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
         if (map == null) {
@@ -189,15 +167,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
     }
 
     public void initMap(MapFragment newMapFragment) {
-        if (newMapFragment.getFragment().getActivity() == null) {
-            // If the screen is rotated just after the activity starts but
-            // before initMap() is called, then when the activity is re-created
-            // in the new orientation, initMap() can sometimes be called on the
-            // old, dead Fragment that used to be attached to the old activity.
-            // Touching the dead Fragment will cause a crash; discard it.
-            return;
-        }
-
         map = newMapFragment;
 
         locationStatus = findViewById(R.id.location_status);
