@@ -26,6 +26,8 @@ import org.odk.collect.android.utilities.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 public class AuditEvent {
 
     public enum AuditEventType {
@@ -292,11 +294,15 @@ public class AuditEvent {
         FormIndex walker = formIndex;
         int i = 1;
         while (walker != null) {
-            String currentNodeName = formIndex.getReference().getName(i);
-            if (walker.getInstanceIndex() != -1) {
-                currentNodeName = currentNodeName + "[" + (walker.getInstanceIndex() + 1) + "]";
+            try {
+                String currentNodeName = formIndex.getReference().getName(i);
+                if (walker.getInstanceIndex() != -1) {
+                    currentNodeName = currentNodeName + "[" + (walker.getInstanceIndex() + 1) + "]";
+                }
+                nodeNames.add(currentNodeName);
+            } catch (IndexOutOfBoundsException e) {
+                Timber.i(e);
             }
-            nodeNames.add(currentNodeName);
 
             walker = walker.getNextLevel();
             i++;
