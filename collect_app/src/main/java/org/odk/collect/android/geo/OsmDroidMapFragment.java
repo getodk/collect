@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.location.Location;
@@ -37,6 +38,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.events.MapListener;
@@ -48,6 +50,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.TilesOverlay;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
@@ -152,6 +155,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         map.getController().setCenter(toGeoPoint(INITIAL_CENTER));
         map.getController().setZoom((int) INITIAL_ZOOM);
         map.setTilesScaledToDpi(true);
+        map.getOverlays().add(new AttributionOverlay(getContext()));
         map.getOverlays().add(new MapEventsOverlay(this));
         loadReferenceOverlay();
         addMapLayoutChangeListener(map);
@@ -638,6 +642,43 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
                 map.getOverlays().remove(markers.get(last));
                 markers.remove(last);
                 update();
+            }
+        }
+    }
+
+    /** An overlay that draws an attribution message in the lower-right corner. */
+    private static class AttributionOverlay extends Overlay {
+        public static final int FONT_SIZE_DP = 12;
+        public static final int MARGIN_DP = 10;
+
+        private final Paint paint;
+
+        AttributionOverlay(Context context) {
+            super();
+
+            paint = new Paint();
+            paint.setAntiAlias(true);
+            paint.setColor(new ThemeUtils(context).getPrimaryTextColor());
+            paint.setTextSize(FONT_SIZE_DP *
+                context.getResources().getDisplayMetrics().density);
+            paint.setTextAlign(Paint.Align.RIGHT);
+        }
+
+        @Override public void draw(Canvas canvas, MapView map, boolean shadow) {
+            String attribution = map.getTileProvider().getTileSource().getCopyrightNotice();
+            if (!shadow && !map.isAnimating() && attribution != null && !attribution.isEmpty()) {
+                String[] lines = attribution.split("\n");
+                float lineHeight = paint.getFontSpacing();
+                float x = canvas.getWidth() - MARGIN_DP;
+                float y = canvas.getHeight() - MARGIN_DP - lineHeight * lines.length;
+
+                canvas.save();
+                canvas.concat(map.getProjection().getInvertedScaleRotateCanvasMatrix());
+                for (String line : lines) {
+                    y += lineHeight;
+                    canvas.drawText(line, x, y, paint);
+                }
+                canvas.restore();
             }
         }
     }
