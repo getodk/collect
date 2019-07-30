@@ -4,6 +4,7 @@ import androidx.test.espresso.Espresso;
 import androidx.test.espresso.matcher.PreferenceMatchers;
 import androidx.test.rule.ActivityTestRule;
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.ActivityHelpers;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -123,7 +124,7 @@ public final class FormEntry {
     }
 
     public static void clickOptionsIcon() {
-        Espresso.openContextualActionModeOverflowMenu();
+        Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
     }
 
     public static void clickGeneralSettings() {

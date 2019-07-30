@@ -3,6 +3,7 @@ package org.odk.collect.android.espressoutils;
 import androidx.test.espresso.Espresso;
 import org.odk.collect.android.R;
 import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.support.ActivityHelpers;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -21,7 +22,7 @@ public final class MainMenu {
     }
 
     public static void clickOnMenu() {
-        Espresso.openContextualActionModeOverflowMenu();
+        Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
     }
 
     public static void startBlankForm(String text) {
