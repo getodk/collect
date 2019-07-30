@@ -1,5 +1,6 @@
 package org.odk.collect.android.espressoutils;
 
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.matcher.PreferenceMatchers;
 import androidx.test.rule.ActivityTestRule;
 import org.odk.collect.android.R;
@@ -16,7 +17,6 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
@@ -123,7 +123,7 @@ public final class FormEntry {
     }
 
     public static void clickOptionsIcon() {
-        onView(withContentDescription("More options")).perform(click());
+        Espresso.openContextualActionModeOverflowMenu();
     }
 
     public static void clickGeneralSettings() {
