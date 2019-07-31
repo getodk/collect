@@ -34,6 +34,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.content.FileProvider;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LiveData;
 
@@ -296,7 +297,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         }
 
         FragmentActivity activity = (FragmentActivity) getContext();
-        LiveData<Boolean> isPlayingLiveData = audioButtonManager.setAudio(audioButton, uri, activity, MediaPlayer::new);
+        LiveData<Boolean> isPlayingLiveData = audioButtonManager.setAudio(audioButton, uri, String.valueOf(ViewCompat.generateViewId()), MediaPlayer::new, activity);
         isPlayingLiveData.observe(activity, isPlaying -> {
             if (isPlaying) {
                 viewText.setTextColor(playTextColor);
