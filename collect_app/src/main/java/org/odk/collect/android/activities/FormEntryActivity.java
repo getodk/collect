@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -86,6 +87,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.audio.AudioPlayerViewModel;
+import org.odk.collect.android.audio.AudioPlayerViewModelFactory;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.dao.helpers.FormsDaoHelper;
@@ -1225,6 +1228,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void releaseOdkView() {
+        AudioPlayerViewModel viewModel = ViewModelProviders
+                .of(this, new AudioPlayerViewModelFactory(MediaPlayer::new))
+                .get(AudioPlayerViewModel.class);
+
+        viewModel.background();
+
         if (odkView != null) {
             odkView.releaseWidgetResources();
             odkView = null;
