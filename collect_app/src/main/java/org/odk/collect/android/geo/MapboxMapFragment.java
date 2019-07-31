@@ -467,6 +467,13 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     }
 
     private Style.Builder getDesiredStyleBuilder() {
+        Drawable pointIcon = ContextCompat.getDrawable(getContext(), R.drawable.ic_map_point);
+        return getBasemapStyleBuilder()
+            .withImage(POINT_ICON_ID, pointIcon)
+            .withTransition(new TransitionOptions(0, 0, false));
+    }
+
+    private Style.Builder getBasemapStyleBuilder() {
         if (BuildConfig.MAPBOX_ACCESS_TOKEN.isEmpty()) {
             // When the MAPBOX_ACCESS_TOKEN is missing, any attempt to load
             // map data from Mapbox will cause the Mapbox SDK to abort with an
@@ -478,10 +485,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 .withSource(new RasterSource("[osm]", tiles, 256))
                 .withLayer(new RasterLayer("[osm]", "[osm]"));
         }
-        Drawable pointIcon = ContextCompat.getDrawable(getContext(), R.drawable.ic_map_point);
-        return new Style.Builder().fromUrl(styleUrl)
-            .withImage(POINT_ICON_ID, pointIcon)
-            .withTransition(new TransitionOptions(0, 0, false));
+        return new Style.Builder().fromUrl(styleUrl);
     }
 
     /**
