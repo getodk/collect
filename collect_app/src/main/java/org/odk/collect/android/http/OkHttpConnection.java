@@ -1,7 +1,5 @@
 package org.odk.collect.android.http;
 
-import android.text.format.DateFormat;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -24,8 +22,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -331,9 +329,9 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     }
 
     private String getHeaderDate() {
-        GregorianCalendar g = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
-        g.setTime(new Date());
-        return DateFormat.format("E, dd MMM yyyy hh:mm:ss zz", g).toString();
+        SimpleDateFormat dateFormatGmt = new SimpleDateFormat("E, dd MMM yyyy hh:mm:ss zz", Locale.US);
+        dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return dateFormatGmt.format(new Date());
     }
 
     /**
