@@ -1,5 +1,6 @@
 package org.odk.collect.android.views;
 
+import android.media.MediaPlayer;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -48,6 +49,7 @@ public class MediaLayoutVisibilityTest {
     private TextView textView;
     private TextView missingImage;
     private boolean isReferenceManagerStubbed;
+    private AudioButtonManager audioButtonManager;
 
     public MediaLayoutVisibilityTest(String audioURI, String imageURI, String videoURI) {
         this.audioURI = audioURI;
@@ -75,7 +77,10 @@ public class MediaLayoutVisibilityTest {
         referenceManager = mock(ReferenceManager.class);
         textView = new TextView(RuntimeEnvironment.application);
 
-        mediaLayout = new MediaLayout(Robolectric.buildActivity(MediaLayoutTest.ScreenContextFragmentActivity.class).create().get());
+        MediaLayoutTest.ScreenContextFragmentActivity activity = Robolectric.buildActivity(MediaLayoutTest.ScreenContextFragmentActivity.class).create().get();
+        audioButtonManager = new AudioButtonManager(activity, MediaPlayer::new);
+
+        mediaLayout = new MediaLayout(activity);
 
         audioButton = mediaLayout.audioButton;
         videoButton = mediaLayout.videoButton;
@@ -99,7 +104,7 @@ public class MediaLayoutVisibilityTest {
         Assert.assertEquals(VISIBLE, mediaLayout.getVisibility());
         assertVisibility(GONE, audioButton, videoButton, imageView, missingImage);
 
-        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, null, referenceManager, new AudioButtonManager());
+        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, null, referenceManager, audioButtonManager);
 
         // we do not check for the validity of the URIs for the audio and video while loading MediaLayout
         assertVisibility(audioURI == null ? GONE : VISIBLE, audioButton);

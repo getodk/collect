@@ -46,7 +46,7 @@ public class MediaLayoutTest {
 
         MutableLiveData<Boolean> isPlaying = new MutableLiveData<>();
         isPlaying.setValue(false);
-        when(audioButtonManager.setAudio(any(), any(), any(), any(), any())).thenReturn(isPlaying);
+        when(audioButtonManager.setAudio(any(), any(), any())).thenReturn(isPlaying);
 
         Activity activity = RobolectricHelpers.createThemedActivity(ScreenContextFragmentActivity.class);
 

@@ -17,6 +17,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -34,6 +35,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.audio.AudioButtonManager;
+import org.odk.collect.android.audio.ScreenContext;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.views.MediaLayout;
@@ -56,12 +58,14 @@ public abstract class SelectWidget extends ItemsWidget {
     protected LinearLayout answerLayout;
     protected int numColumns = 1;
     private int playcounter;
+    private final AudioButtonManager audioButtonManager;
 
     public SelectWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
         answerLayout = new LinearLayout(context);
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         playList = new ArrayList<>();
+        audioButtonManager = new AudioButtonManager((ScreenContext) getContext(), MediaPlayer::new);
     }
 
     @Override
@@ -74,14 +78,6 @@ public abstract class SelectWidget extends ItemsWidget {
         super.resetQuestionTextColor();
         for (MediaLayout layout : playList) {
             layout.resetTextFormatting();
-        }
-    }
-
-    @Override
-    public void resetAudioButtonImage() {
-        super.resetAudioButtonImage();
-        for (MediaLayout layout : playList) {
-            layout.resetAudioButtonBitmap();
         }
     }
 
@@ -120,7 +116,6 @@ public abstract class SelectWidget extends ItemsWidget {
     }
 
     public void initMediaLayoutSetUp(MediaLayout mediaLayout) {
-        mediaLayout.setAudioListener(this);
         mediaLayout.setPlayTextColor(getPlayColor());
         playList.add(mediaLayout);
     }
@@ -144,7 +139,7 @@ public abstract class SelectWidget extends ItemsWidget {
         String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "video");
         String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
 
-        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), new AudioButtonManager());
+        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), audioButtonManager);
     }
 
     protected RecyclerView setUpRecyclerView() {

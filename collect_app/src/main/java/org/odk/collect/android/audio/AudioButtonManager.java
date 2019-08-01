@@ -11,9 +11,17 @@ import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYI
 
 public class AudioButtonManager {
 
-    public LiveData<Boolean> setAudio(AudioButton button, String uri, String clipID, MediaPlayerFactory mediaPlayerFactory, ScreenContext screenContext) {
+    private final ScreenContext screenContext;
+    private final MediaPlayerFactory mediaPlayerFactory;
+
+    public AudioButtonManager(ScreenContext screenContext, MediaPlayerFactory mediaPlayerFactory) {
+        this.screenContext = screenContext;
+        this.mediaPlayerFactory = mediaPlayerFactory;
+    }
+
+    public LiveData<Boolean> setAudio(AudioButton button, String uri, String clipID) {
         AudioPlayerViewModel viewModel = ViewModelProviders
-                .of(screenContext.getActivity(), new AudioPlayerViewModelFactory(mediaPlayerFactory))
+                .of(screenContext.getActivity(), new AudioPlayerViewModelFactory(this.mediaPlayerFactory))
                 .get(AudioPlayerViewModel.class);
 
         screenContext.getActivity().getLifecycle().addObserver(new AudioPlayerViewModelBackgroundObserver(viewModel));

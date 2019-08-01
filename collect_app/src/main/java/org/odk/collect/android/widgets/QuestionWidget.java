@@ -47,9 +47,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioButtonManager;
+import org.odk.collect.android.audio.ScreenContext;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
-import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -78,7 +78,7 @@ import timber.log.Timber;
 
 public abstract class QuestionWidget
         extends RelativeLayout
-        implements Widget, AudioPlayListener {
+        implements Widget {
 
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
@@ -97,6 +97,7 @@ public abstract class QuestionWidget
     protected ThemeUtils themeUtils;
     private int playColor;
     private final ReferenceManager referenceManager;
+    private final AudioButtonManager audioButtonManager;
 
     private WidgetValueChangedListener valueChangedListener;
 
@@ -105,6 +106,8 @@ public abstract class QuestionWidget
 
         AppDependencyComponent component = DaggerUtils.getComponent((Activity) getContext());
         this.referenceManager = component.referenceManager();
+
+        audioButtonManager = new AudioButtonManager((ScreenContext) getContext(), MediaPlayer::new);
 
         themeUtils = new ThemeUtils(context);
         playColor = themeUtils.getAccentColor();
@@ -292,8 +295,7 @@ public abstract class QuestionWidget
         // Create the layout for audio, image, text
         MediaLayout questionMediaLayout = new MediaLayout(getContext());
         questionMediaLayout.setId(ViewIds.generateViewId()); // assign random id
-        questionMediaLayout.setAVT(questionText, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), new AudioButtonManager());
-        questionMediaLayout.setAudioListener(this);
+        questionMediaLayout.setAVT(questionText, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), audioButtonManager);
 
         String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
         if (playColorString != null) {
@@ -513,10 +515,6 @@ public abstract class QuestionWidget
 
     public void resetQuestionTextColor() {
         getQuestionMediaLayout().resetTextFormatting();
-    }
-
-    public void resetAudioButtonImage() {
-        getQuestionMediaLayout().resetAudioButtonBitmap();
     }
 
     public void showWarning(String warningBody) {

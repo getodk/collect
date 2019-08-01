@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -44,7 +43,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioButtonManager;
 import org.odk.collect.android.audio.ScreenContext;
-import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -80,7 +78,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
 
     private TextView viewText;
     private String videoURI;
-    private AudioPlayListener audioPlayListener;
     private int playTextColor = Color.BLUE;
     private CharSequence originalText;
     private String bigImageURI;
@@ -101,9 +98,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     }
 
     public void playAudio() {
-        if (audioPlayListener != null) {
-            audioPlayListener.resetAudioButtonImage();
-        }
+
     }
 
     public void setPlayTextColor(int textColor) {
@@ -240,10 +235,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         }
     }
 
-    public void setAudioListener(AudioPlayListener listener) {
-        audioPlayListener = listener;
-    }
-
     private void setupBigImage(String imageURI) {
         String errorMsg = null;
 
@@ -297,7 +288,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         }
 
         ScreenContext activity = getScreenContext();
-        LiveData<Boolean> isPlayingLiveData = audioButtonManager.setAudio(audioButton, uri, String.valueOf(ViewCompat.generateViewId()), MediaPlayer::new, activity);
+        LiveData<Boolean> isPlayingLiveData = audioButtonManager.setAudio(audioButton, uri, String.valueOf(ViewCompat.generateViewId()));
         isPlayingLiveData.observe(activity.getViewLifecycle(), isPlaying -> {
             if (isPlaying) {
                 viewText.setTextColor(playTextColor);
