@@ -35,7 +35,6 @@ import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.content.FileProvider;
 import androidx.core.view.ViewCompat;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LiveData;
 
 import org.javarosa.core.reference.InvalidReferenceException;
@@ -44,6 +43,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioButtonManager;
+import org.odk.collect.android.audio.ScreenContext;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -296,14 +296,22 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
             Timber.e(e);
         }
 
-        FragmentActivity activity = (FragmentActivity) getContext();
+        ScreenContext activity = getScreenContext();
         LiveData<Boolean> isPlayingLiveData = audioButtonManager.setAudio(audioButton, uri, String.valueOf(ViewCompat.generateViewId()), MediaPlayer::new, activity);
-        isPlayingLiveData.observe(activity, isPlaying -> {
+        isPlayingLiveData.observe(activity.getActivity(), isPlaying -> {
             if (isPlaying) {
                 viewText.setTextColor(playTextColor);
             } else {
                 resetTextFormatting();
             }
         });
+    }
+
+    private ScreenContext getScreenContext() {
+        try {
+            return (ScreenContext) getContext();
+        } catch (ClassCastException e) {
+            throw new RuntimeException(getContext().toString() + " must implement " + ScreenContext.class.getName());
+        }
     }
 }

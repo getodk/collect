@@ -1,8 +1,10 @@
 package org.odk.collect.android.views;
 
+import android.app.Activity;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 
 import org.javarosa.core.reference.InvalidReferenceException;
@@ -15,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.audio.AudioButtonManager;
+import org.odk.collect.android.audio.ScreenContext;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
 
@@ -45,7 +48,8 @@ public class MediaLayoutTest {
         isPlaying.setValue(false);
         when(audioButtonManager.setAudio(any(), any(), any(), any(), any())).thenReturn(isPlaying);
 
-        FragmentActivity activity = RobolectricHelpers.createThemedActivity();
+        Activity activity = RobolectricHelpers.createThemedActivity(ScreenContextFragmentActivity.class);
+
         MediaLayout mediaLayout = new MediaLayout(activity);
         mediaLayout.setAVT(
                 new TextView(activity),
@@ -71,5 +75,18 @@ public class MediaLayoutTest {
         Reference reference = mock(Reference.class);
         when(reference.getLocalURI()).thenReturn(audioURI);
         when(referenceManager.deriveReference(audioURI)).thenReturn(reference);
+    }
+
+    private static class ScreenContextFragmentActivity extends FragmentActivity implements ScreenContext {
+
+        @Override
+        public FragmentActivity getActivity() {
+            return this;
+        }
+
+        @Override
+        public LifecycleOwner getViewLifecycle() {
+            return this;
+        }
     }
 }

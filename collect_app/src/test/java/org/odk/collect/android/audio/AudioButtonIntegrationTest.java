@@ -3,6 +3,7 @@ package org.odk.collect.android.audio;
 import android.media.MediaPlayer;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 
 import org.junit.After;
@@ -50,7 +51,7 @@ public class AudioButtonIntegrationTest {
         final DataSource dataSource = setupDataSource(testFile);
 
         AudioButton button = new AudioButton(activity);
-        audioButtonManager.setAudio(button, testFile, "clip1", () -> mediaPlayer, activity);
+        audioButtonManager.setAudio(button, testFile, "clip1", () -> mediaPlayer, new TestScreenContext(activity));
 
         assertThat(getCreatedFromResId(button), equalTo(android.R.drawable.ic_lock_silent_mode_off));
 
@@ -74,10 +75,10 @@ public class AudioButtonIntegrationTest {
         final DataSource dataSource2 = setupDataSource(testFile2);
 
         AudioButton button1 = new AudioButton(activity);
-        audioButtonManager.setAudio(button1, testFile1, "clip1", () -> mediaPlayer, activity);
+        audioButtonManager.setAudio(button1, testFile1, "clip1", () -> mediaPlayer, new TestScreenContext(activity));
 
         AudioButton button2 = new AudioButton(activity);
-        audioButtonManager.setAudio(button2, testFile2, "clip2", () -> mediaPlayer, activity);
+        audioButtonManager.setAudio(button2, testFile2, "clip2", () -> mediaPlayer, new TestScreenContext(activity));
 
         button1.performClick();
         button2.performClick();
@@ -94,10 +95,10 @@ public class AudioButtonIntegrationTest {
         setupDataSource(testFile1);
 
         AudioButton button1 = new AudioButton(activity);
-        audioButtonManager.setAudio(button1, testFile1, "clip1", () -> mediaPlayer, activity);
+        audioButtonManager.setAudio(button1, testFile1, "clip1", () -> mediaPlayer, new TestScreenContext(activity));
 
         AudioButton button2 = new AudioButton(activity);
-        audioButtonManager.setAudio(button2, testFile1, "clip2", () -> mediaPlayer, activity);
+        audioButtonManager.setAudio(button2, testFile1, "clip2", () -> mediaPlayer, new TestScreenContext(activity));
 
         button2.performClick();
 
@@ -111,7 +112,7 @@ public class AudioButtonIntegrationTest {
         setupDataSource(testFile1);
 
         AudioButton button = new AudioButton(activity);
-        audioButtonManager.setAudio(button, testFile1, "clip1", () -> mediaPlayer, activity);
+        audioButtonManager.setAudio(button, testFile1, "clip1", () -> mediaPlayer, new TestScreenContext(activity));
 
         activityController.pause();
 
@@ -124,7 +125,7 @@ public class AudioButtonIntegrationTest {
         setupDataSource(testFile1);
 
         AudioButton button1 = new AudioButton(activity);
-        LiveData<Boolean> isPlaying = liveDataTester.activate(audioButtonManager.setAudio(button1, testFile1, "clip1", () -> mediaPlayer, activity));
+        LiveData<Boolean> isPlaying = liveDataTester.activate(audioButtonManager.setAudio(button1, testFile1, "clip1", () -> mediaPlayer, new TestScreenContext(activity)));
 
         assertThat(isPlaying.getValue(), equalTo(false));
 
@@ -143,5 +144,24 @@ public class AudioButtonIntegrationTest {
 
     private int getCreatedFromResId(AudioButton button) {
         return shadowOf(button.getDrawable()).getCreatedFromResId();
+    }
+
+    private class TestScreenContext implements ScreenContext {
+
+        private final FragmentActivity activity;
+
+        TestScreenContext(FragmentActivity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        public FragmentActivity getActivity() {
+            return activity;
+        }
+
+        @Override
+        public LifecycleOwner getViewLifecycle() {
+            return activity;
+        }
     }
 }

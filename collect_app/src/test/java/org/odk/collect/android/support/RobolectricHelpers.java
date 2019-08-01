@@ -26,10 +26,14 @@ public class RobolectricHelpers {
         return ((Collect) RuntimeEnvironment.application).getComponent();
     }
 
-    public static FragmentActivity createThemedActivity() {
-        FragmentActivity activity = Robolectric.setupActivity(FragmentActivity.class);
+    public static <T extends FragmentActivity> T createThemedActivity(Class<T> clazz) {
+        T activity = Robolectric.setupActivity(clazz);
         activity.setTheme(R.style.LightAppTheme); // Needed so attrs are available
 
         return activity;
+    }
+
+    public static FragmentActivity createThemedActivity() {
+        return createThemedActivity(FragmentActivity.class);
     }
 }

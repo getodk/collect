@@ -1,6 +1,5 @@
 package org.odk.collect.android.audio;
 
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LiveData;
@@ -12,16 +11,16 @@ import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYI
 
 public class AudioButtonManager {
 
-    public LiveData<Boolean> setAudio(AudioButton button, String uri, String clipID, MediaPlayerFactory mediaPlayerFactory, FragmentActivity activity) {
+    public LiveData<Boolean> setAudio(AudioButton button, String uri, String clipID, MediaPlayerFactory mediaPlayerFactory, ScreenContext screenContext) {
         AudioPlayerViewModel viewModel = ViewModelProviders
-                .of(activity, new AudioPlayerViewModelFactory(mediaPlayerFactory))
+                .of(screenContext.getActivity(), new AudioPlayerViewModelFactory(mediaPlayerFactory))
                 .get(AudioPlayerViewModel.class);
 
-        activity.getLifecycle().addObserver(new AudioPlayerViewModelBackgroundObserver(viewModel));
+        screenContext.getActivity().getLifecycle().addObserver(new AudioPlayerViewModelBackgroundObserver(viewModel));
 
         LiveData<Boolean> isPlaying = Transformations.map(viewModel.isPlaying(clipID), value -> value == PLAYING);
 
-        isPlaying.observe(activity, button::setPlaying);
+        isPlaying.observe(screenContext.getActivity(), button::setPlaying);
         button.setOnPlayStopListener(new AudioPlayerViewModelOnPlayStopListener(
                 viewModel,
                 uri,

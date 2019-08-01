@@ -61,6 +61,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -89,6 +91,7 @@ import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioPlayerViewModel;
 import org.odk.collect.android.audio.AudioPlayerViewModelFactory;
+import org.odk.collect.android.audio.ScreenContext;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.dao.helpers.FormsDaoHelper;
@@ -188,6 +191,8 @@ import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivit
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  * option)
  */
+
+@SuppressWarnings("PMD.CouplingBetweenObjects")
 public class FormEntryActivity extends CollectAbstractActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
         OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener,
@@ -195,7 +200,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         CustomDatePickerDialog.CustomDatePickerDialogListener,
         RankingWidgetDialog.RankingListener,
         SaveFormIndexTask.SaveFormIndexListener, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
-        WidgetValueChangedListener {
+        WidgetValueChangedListener,
+        ScreenContext {
 
     // Defines for FormEntryActivity
     private static final boolean EXIT = true;
@@ -1225,6 +1231,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
                 return createView(event, advancingPage);
         }
+    }
+
+    @Override
+    public FragmentActivity getActivity() {
+        return this;
+    }
+
+    @Override
+    public LifecycleOwner getViewLifecycle() {
+        return this;
     }
 
     private void releaseOdkView() {
