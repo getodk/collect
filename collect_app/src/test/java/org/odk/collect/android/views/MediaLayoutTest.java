@@ -77,7 +77,7 @@ public class MediaLayoutTest {
         when(referenceManager.deriveReference(audioURI)).thenReturn(reference);
     }
 
-    private static class ScreenContextFragmentActivity extends FragmentActivity implements ScreenContext {
+    public static class ScreenContextFragmentActivity extends FragmentActivity implements ScreenContext {
 
         @Override
         public FragmentActivity getActivity() {

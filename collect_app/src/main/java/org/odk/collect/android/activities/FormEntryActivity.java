@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.location.LocationManager;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -84,13 +83,12 @@ import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.jetbrains.annotations.NotNull;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.audio.AudioPlayerViewModel;
-import org.odk.collect.android.audio.AudioPlayerViewModelFactory;
 import org.odk.collect.android.audio.ScreenContext;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
@@ -146,6 +144,7 @@ import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.RegexUtils;
+import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -192,7 +191,6 @@ import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivit
  * option)
  */
 
-@SuppressWarnings("PMD.CouplingBetweenObjects")
 public class FormEntryActivity extends CollectAbstractActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
         OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener,
@@ -279,6 +277,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private TextView backButton;
 
     private ODKView odkView;
+    private final DestroyableLifecyleOwner odkViewLifecycle = new DestroyableLifecyleOwner();
 
     private boolean doSwipe = true;
     private String instancePath;
@@ -1191,7 +1190,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     FormEntryCaption[] groups = formController
                             .getGroupsForCurrentIndex();
 
-                    odkView = new ODKView(this, prompts, groups, advancingPage);
+                    odkView = createODKView(advancingPage, prompts, groups);
                     odkView.setWidgetValueChangedListener(this);
                     Timber.i("Created view for group %s %s",
                             groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]",
@@ -1233,6 +1232,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
+    @NotNull
+    private ODKView createODKView(boolean advancingPage, FormEntryPrompt[] prompts, FormEntryCaption[] groups) {
+        odkViewLifecycle.start();
+        return new ODKView(this, prompts, groups, advancingPage);
+    }
+
     @Override
     public FragmentActivity getActivity() {
         return this;
@@ -1240,15 +1245,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     public LifecycleOwner getViewLifecycle() {
-        return this;
+        return odkViewLifecycle;
     }
 
     private void releaseOdkView() {
-        AudioPlayerViewModel viewModel = ViewModelProviders
-                .of(this, new AudioPlayerViewModelFactory(MediaPlayer::new))
-                .get(AudioPlayerViewModel.class);
-
-        viewModel.background();
+        odkViewLifecycle.destroy();
 
         if (odkView != null) {
             odkView.releaseWidgetResources();

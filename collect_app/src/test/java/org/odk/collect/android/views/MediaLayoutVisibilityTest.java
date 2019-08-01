@@ -13,7 +13,6 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioButtonManager;
 import org.odk.collect.android.logic.FileReference;
@@ -76,7 +75,7 @@ public class MediaLayoutVisibilityTest {
         referenceManager = mock(ReferenceManager.class);
         textView = new TextView(RuntimeEnvironment.application);
 
-        mediaLayout = new MediaLayout(Robolectric.buildActivity(FormEntryActivity.class).create().get());
+        mediaLayout = new MediaLayout(Robolectric.buildActivity(MediaLayoutTest.ScreenContextFragmentActivity.class).create().get());
 
         audioButton = mediaLayout.audioButton;
         videoButton = mediaLayout.videoButton;

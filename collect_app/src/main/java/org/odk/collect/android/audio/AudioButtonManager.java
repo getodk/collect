@@ -17,10 +17,11 @@ public class AudioButtonManager {
                 .get(AudioPlayerViewModel.class);
 
         screenContext.getActivity().getLifecycle().addObserver(new AudioPlayerViewModelBackgroundObserver(viewModel));
+        screenContext.getViewLifecycle().getLifecycle().addObserver(new AudioPlayerViewModelBackgroundObserver(viewModel));
 
         LiveData<Boolean> isPlaying = Transformations.map(viewModel.isPlaying(clipID), value -> value == PLAYING);
 
-        isPlaying.observe(screenContext.getActivity(), button::setPlaying);
+        isPlaying.observe(screenContext.getViewLifecycle(), button::setPlaying);
         button.setOnPlayStopListener(new AudioPlayerViewModelOnPlayStopListener(
                 viewModel,
                 uri,

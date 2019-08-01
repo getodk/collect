@@ -9,7 +9,7 @@ public class FakeLifecycleOwner implements LifecycleOwner {
 
     private final LifecycleRegistry lifecycle = new LifecycleRegistry(this);
 
-    FakeLifecycleOwner() {
+    public FakeLifecycleOwner() {
         lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
     }
 

@@ -298,7 +298,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
 
         ScreenContext activity = getScreenContext();
         LiveData<Boolean> isPlayingLiveData = audioButtonManager.setAudio(audioButton, uri, String.valueOf(ViewCompat.generateViewId()), MediaPlayer::new, activity);
-        isPlayingLiveData.observe(activity.getActivity(), isPlaying -> {
+        isPlayingLiveData.observe(activity.getViewLifecycle(), isPlaying -> {
             if (isPlaying) {
                 viewText.setTextColor(playTextColor);
             } else {

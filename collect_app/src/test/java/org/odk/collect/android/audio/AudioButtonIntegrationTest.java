@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.support.FakeLifecycleOwner;
 import org.odk.collect.android.support.LiveDataTester;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
@@ -120,6 +121,21 @@ public class AudioButtonIntegrationTest {
     }
 
     @Test
+    public void destroyingLifecycle_releaseMediaPlayer() throws Exception {
+        String testFile1 = File.createTempFile("audio1", ".mp3").getAbsolutePath();
+        setupDataSource(testFile1);
+
+        TestScreenContext screenContext = new TestScreenContext(activity);
+
+        AudioButton button = new AudioButton(activity);
+        audioButtonManager.setAudio(button, testFile1, "clip1", () -> mediaPlayer, screenContext);
+
+        screenContext.destroyLifecycle();
+
+        assertThat(shadowOf(mediaPlayer).getState(), equalTo(ShadowMediaPlayer.State.END));
+    }
+
+    @Test
     public void setAudio_returnsIsPlayingStateForButton() throws Exception {
         String testFile1 = File.createTempFile("audio1", ".mp3").getAbsolutePath();
         setupDataSource(testFile1);
@@ -149,6 +165,7 @@ public class AudioButtonIntegrationTest {
     private class TestScreenContext implements ScreenContext {
 
         private final FragmentActivity activity;
+        private final FakeLifecycleOwner lifecycleOwner = new FakeLifecycleOwner();
 
         TestScreenContext(FragmentActivity activity) {
             this.activity = activity;
@@ -161,7 +178,11 @@ public class AudioButtonIntegrationTest {
 
         @Override
         public LifecycleOwner getViewLifecycle() {
-            return activity;
+            return lifecycleOwner;
+        }
+
+        public void destroyLifecycle() {
+            lifecycleOwner.destroy();
         }
     }
 }
