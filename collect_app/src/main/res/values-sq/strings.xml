@@ -272,11 +272,15 @@
   <string name="tell_your_friends_msg">Kolegët tuaj i mbledhin të dhënat me letër akoma? Ndaj ODK Collect me ta.</string>
   <string name="leave_a_review">Vlerëso në Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
-    <string name="streets">Rrugë</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
+  <string name="basemap">Harta bazë</string>
+  <string name="streets">Rrugë</string>
   <string name="terrain">Terren</string>
   <string name="hybrid">Hibride</string>
   <string name="satellite">Satelit</string>
-    <string name="save_point">Ruaj vendndodhjen gjeografike</string>
+  <string name="save_point">Ruaj vendndodhjen gjeografike</string>
   <string name="get_point">Regjistro vendndodhjen gjeografike</string>
   <string name="geopoint_view_read_only">Shih vendndodhjen gjeografike</string>
   <string name="get_shape">Nis GeoShape</string>
@@ -285,8 +289,7 @@
   <string name="start">Fillo</string>
   <string name="enable_gps">Aktivizo GPS-in</string>
   <string name="geotrace_title">GeoTrace</string>
-  <string name="gps_enable_message">GPS-i në telefonin tuaj është i ç\'aktivizuar. A do të donit ta aktivizonit?</string>
-    <string name="geo_clear_warning">Tipari është krijuar tanimë. A doni ta pastroni këtë tipar?</string>
+  <string name="geo_clear_warning">Tipari është krijuar tanimë. A doni ta pastroni këtë tipar?</string>
   <string name="geo_exit_warning">Elimino ndryshimet dhe kthehu në ODK?</string>
   <string name="polygon_validator">Duhen së paku 3 pika për të krijuar Poligonin</string>
   <string name="clear">Pastro</string>
@@ -425,7 +428,7 @@
   <string name="wifi_autosend">Vetëm wifi</string>
   <string name="cellular_autosend">Vetëm celular</string>
   <string name="wifi_cellular_autosend">Wifi ose celular</string>
-    <string name="form_management_preferences">Administrimi i formularëve</string>
+  <string name="form_management_preferences">Administrimi i formularëve</string>
   <string name="form_submission_category">Dërgimi i formularëve</string>
   <string name="form_filling_category">Plotësimi i formularëve</string>
   <string name="high_resolution_title">Video me rezolucion të lartë</string>
@@ -438,7 +441,7 @@
   <string name="type">Tipi</string>
   <string name="form_entry">Hiq përzgjedhjen për ta fshehur nga Form Entry</string>
   <string name="use_device_language">Përdor gjuhën e aparatit</string>
-    <string name="invalid_email_address">Adresa email nuk është e vlefshme</string>
+  <string name="invalid_email_address">Adresa email nuk është e vlefshme</string>
   <string name="sort_by">Rendit sipas</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Përzgjidh vlerën</string>

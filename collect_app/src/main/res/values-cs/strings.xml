@@ -308,17 +308,21 @@
   <string name="leave_a_review_msg">Vaše recenze (snad pozitivní) zvyšuje viditelnost aplikace v Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="maps">Mapy</string>
-    <string name="openmap_usgs_topo">Topologická mapa USGS National Map </string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
+  <string name="openmap_usgs_topo">Topologická mapa USGS National Map </string>
   <string name="openmap_usgs_sat">Hybridní mapa USGS National Map</string>
   <string name="openmap_usgs_img">Snímková mapa USGS National Map</string>
   <string name="openmap_stamen_terrain">Plastická mapa</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
+  <string name="basemap">Základní mapa</string>
   <string name="streets">Ulice</string>
   <string name="terrain">Terén</string>
   <string name="hybrid">Hybridní</string>
   <string name="satellite">Satelitní</string>
-    <string name="save_point">Uložit GeoPoint</string>
+  <string name="save_point">Uložit GeoPoint</string>
   <string name="get_point">Začít GeoPoint</string>
   <string name="geopoint_view_read_only">Zobrazit GeoPoint</string>
   <string name="get_shape">Začít GeoShape</string>
@@ -328,8 +332,7 @@
   <string name="start">Začít</string>
   <string name="enable_gps">Zapnout GPS</string>
   <string name="geotrace_title">GeoTrace</string>
-  <string name="gps_enable_message">GPS je v přístroji zakázáno. Chcete jej povolit?</string>
-    <string name="geo_clear_warning">Funkce již vytvořena. Chcete tuto funkci vymazat?</string>
+  <string name="geo_clear_warning">Funkce již vytvořena. Chcete tuto funkci vymazat?</string>
   <string name="geo_exit_warning">Zrušit změny a vrátit se do ODK?</string>
   <string name="polygon_validator">Musí mít alespoň 3 body pro vytvoření polygonu</string>
   <string name="polyline_validator">Musí mít alespoň 2 body k vytvoření křivky</string>
@@ -511,7 +514,7 @@
   <string name="wifi_autosend">Pouze Wifi</string>
   <string name="cellular_autosend">Pouze mobilní</string>
   <string name="wifi_cellular_autosend">Wifi nebo mobilní</string>
-    <string name="form_management_preferences">Správa dotazníků</string>
+  <string name="form_management_preferences">Správa dotazníků</string>
   <string name="form_submission_category">Odeslání dotazníku</string>
   <string name="form_filling_category">Plnění dotazníku</string>
   <string name="high_resolution_title">Vysoké rozlišení videa</string>
@@ -524,7 +527,7 @@
   <string name="type">Typ</string>
   <string name="form_entry">Odškrtnout, chcete-li skrýt z nabídky Dotazníků</string>
   <string name="use_device_language">Použít jazyk zařízení</string>
-    <string name="invalid_email_address">Neplatná emailová adresa!</string>
+  <string name="invalid_email_address">Neplatná emailová adresa!</string>
   <string name="sort_by">Seřazeno podle</string>
   <string name="server">Server</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->

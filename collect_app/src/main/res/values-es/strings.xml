@@ -310,17 +310,33 @@
   <string name="leave_a_review_msg">Su comentario (ojalá positivo) incrementa la visibilidad de la App en Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="maps">Mapas</string>
-    <string name="openmap_usgs_topo">USGS Mapa Topográfico Nacional</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
+  <string name="openmap_usgs_topo">USGS Mapa Topográfico Nacional</string>
   <string name="openmap_usgs_sat">USGS Mapa Nacional Hibrido</string>
   <string name="openmap_usgs_img">USGS Mapa Nacional Satélite</string>
   <string name="openmap_stamen_terrain">Terreno Stamen</string>
   <string name="openmap_cartodb_positron">Positron CartoDB</string>
   <string name="openmap_cartodb_darkmatter">Materia Obscura CartoDB</string>
+  <string name="basemap">Mapa Base</string>
+  <string name="basemap_source">Fuente</string>
+  <string name="map_style_label">Estilo de Mapa %s </string>
   <string name="streets">Calles</string>
   <string name="terrain">Terreno</string>
   <string name="hybrid">Híbrido</string>
   <string name="satellite">Satélite</string>
-    <string name="save_point">Guardar Ubicación</string>
+  <string name="light">Claro</string>
+  <string name="dark">Oscuro</string>
+  <string name="outdoors">Exteriores</string>
+  <string name="topographic">Topográfico</string>
+  <string name="carto_map_style_positron">Positrón</string>
+  <string name="carto_map_style_dark_matter">Materia oscura</string>
+  <string name="reference_layer">Capa de referencia</string>
+  <string name="layer_data_caption_none">No hay archivos de capas en %1$s que estén soportados por el mapa base %2$s .</string>
+  <string name="layer_data_caption">Arriba están todos los archivos de capas en %1$s que están soportados por el mapa base %2$s .</string>
+  <string name="layer_data_file">Archivo de datos de capa</string>
+  <string name="save_point">Guardar Ubicación</string>
   <string name="get_point">Buscar Ubicación</string>
   <string name="geopoint_view_read_only">Ver Ubicación</string>
   <string name="get_shape">Iniciar GeoArea</string>
@@ -330,8 +346,8 @@
   <string name="start">Iniciar</string>
   <string name="enable_gps">Activar el GPS</string>
   <string name="geotrace_title">GeoLínea</string>
-  <string name="gps_enable_message">GPS esta deshabilitado. ¿Activar?</string>
-    <string name="geo_clear_warning">Función ya creada. ¿Desea borrar la función?</string>
+  <string name="gps_enable_message">El GPS está deshabilitado en este dispositivo. Le gustaría habilitarlo?</string>
+  <string name="geo_clear_warning">Función ya creada. ¿Desea borrar la función?</string>
   <string name="geo_exit_warning">¿Ignorar los cambios y regresar?</string>
   <string name="polygon_validator">Debe tener al menos 3 puntos para crear un polígono</string>
   <string name="polyline_validator">Deben existir al menos 2 puntos para crear una Polilínea</string>
@@ -507,7 +523,7 @@
   <string name="wifi_autosend">Solo con WIFI</string>
   <string name="cellular_autosend">Solo con Datos Móviles</string>
   <string name="wifi_cellular_autosend">Wifi o Datos Móviles</string>
-    <string name="form_management_preferences">Manejo de formularios</string>
+  <string name="form_management_preferences">Manejo de formularios</string>
   <string name="form_submission_category">Enviar formulario</string>
   <string name="form_filling_category">Llenado de Formularios</string>
   <string name="high_resolution_title">Video de alta resolución</string>
@@ -520,7 +536,7 @@
   <string name="type">Tipo</string>
   <string name="form_entry">Desmarque para ocultar el formulario</string>
   <string name="use_device_language">Usar el idioma del dispositivo</string>
-    <string name="invalid_email_address">Email inválido</string>
+  <string name="invalid_email_address">Email inválido</string>
   <string name="sort_by">Ordenar por</string>
   <string name="server">Servidor</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
@@ -683,4 +699,5 @@
   <string name="copying_media_files_failed">La copia de los archivos de medios falló</string>
   <string name="qr_code_not_found">Código QR no encontrado en la imagen seleccionada</string>
   <string name="not_granted_permission">La actividad que está intentando iniciar requiere un permiso que no se ha concedido.</string>
+  <string name="basemap_source_unavailable">Lo sentimos, Los mapas base %s no están disponibles en este dispositivo. Por favor escoja otro mapa base en   Please choose another basemap in Cambiar la configuración &gt; Mapas.</string>
 </resources>

@@ -301,17 +301,21 @@
   <string name="leave_a_review">Acha tathmini katika Play Store</string>
   <string name="leave_a_review_msg">Tathmini yako (tunatumaini itakuwa chanya) inaongeza nafasi ya programu hii kuonekana Pay Store</string>
   <!--Geo string added in feature-geofeatures branch-->
-    <string name="openmap_usgs_topo">USGS ramani za kitaifa za topo</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
+  <string name="openmap_usgs_topo">USGS ramani za kitaifa za topo</string>
   <string name="openmap_usgs_sat">USGS National Map Hybrid</string>
   <string name="openmap_usgs_img">USGS National Map Imagery</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
+  <string name="basemap">Ramani msingi</string>
   <string name="streets">Mitaa</string>
   <string name="terrain">Ardhi ya eneo</string>
   <string name="hybrid">Mseto</string>
   <string name="satellite">Satelaiti</string>
-    <string name="save_point">Hifadhi geopoint</string>
+  <string name="save_point">Hifadhi geopoint</string>
   <string name="get_point">Anza geopoint</string>
   <string name="geopoint_view_read_only">Tazama geopoint</string>
   <string name="get_shape">Anza umbo la kijografia</string>
@@ -320,8 +324,7 @@
   <string name="start">Anza</string>
   <string name="enable_gps">Wezesha GPS</string>
   <string name="geotrace_title">Fatilisha mstari kijografia</string>
-  <string name="gps_enable_message">GPS kwenye kifaa chako imezimwa. Je ungependa kuiwasha?</string>
-    <string name="geo_clear_warning">Umbo lishatengenezwa. Ungependa kufuta Umbo?</string>
+  <string name="geo_clear_warning">Umbo lishatengenezwa. Ungependa kufuta Umbo?</string>
   <string name="geo_exit_warning">Sitisha mabadiliko na rudi kwenye ODK?</string>
   <string name="polygon_validator">Lazima uwe na angalau  nukta 3 ili kutengeneza poligoni</string>
   <string name="polyline_validator">Ni lazima uwe angalau na pointi 2 kutengeneza Mistari </string>
@@ -467,7 +470,7 @@
   <string name="wifi_autosend">Wifi tu</string>
   <string name="cellular_autosend">Simu tu</string>
   <string name="wifi_cellular_autosend">Wifi au simu</string>
-    <string name="form_management_preferences">Usimamizi wa fomu</string>
+  <string name="form_management_preferences">Usimamizi wa fomu</string>
   <string name="form_submission_category">Uwasilishaji wa fomu</string>
   <string name="form_filling_category">Ujazaji wa fomu</string>
   <string name="high_resolution_title">Video yenye azimio la juu/kiwango kikubwa</string>
@@ -480,7 +483,7 @@
   <string name="type">Aina</string>
   <string name="form_entry">Ondoa alama kuficha  kujaza fomu</string>
   <string name="use_device_language">Tumia lugha ya kifaa</string>
-    <string name="invalid_email_address">Anwani ya barua pepe ni batili!</string>
+  <string name="invalid_email_address">Anwani ya barua pepe ni batili!</string>
   <string name="sort_by">Panga kwa</string>
   <string name="server">Seva</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->

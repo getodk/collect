@@ -295,14 +295,18 @@ Escolher Imagem</string>
   <string name="leave_a_review">Deixe um opinião sua na Play Store</string>
   <string name="leave_a_review_msg">A sua opinião (possivelmente positiva) aumenta a visibilidade da App na Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-    <string name="openmap_usgs_topo">Mapa Topográfico Nacional USGS</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
+  <string name="openmap_usgs_topo">Mapa Topográfico Nacional USGS</string>
   <string name="openmap_usgs_sat">Mapa Híbrido Nacional USGS</string>
   <string name="openmap_usgs_img">Mapa de Imagem Nacional USGS</string>
+  <string name="basemap">Mapa base</string>
   <string name="streets">Ruas</string>
   <string name="terrain">Terreno</string>
   <string name="hybrid">Hibrido</string>
   <string name="satellite">Satélite</string>
-    <string name="save_point">Salva GeoPoint</string>
+  <string name="save_point">Salva GeoPoint</string>
   <string name="get_point">Inicia GeoPoint</string>
   <string name="geopoint_view_read_only">Visualiza GeoPoint</string>
   <string name="get_shape">Inicia GeoShape</string>
@@ -311,8 +315,7 @@ Escolher Imagem</string>
   <string name="start">Iniciar</string>
   <string name="enable_gps">Habilitar GPS</string>
   <string name="geotrace_title">GeoTrace</string>
-  <string name="gps_enable_message">O GPS está desabilitado em seu aparelho. Gostaria de habilitá-lo?</string>
-    <string name="geo_clear_warning">A feature já foi criada. Gostaria de limpar a feature?</string>
+  <string name="geo_clear_warning">A feature já foi criada. Gostaria de limpar a feature?</string>
   <string name="geo_exit_warning">Descartar mudanças e retornar ao ODK?</string>
   <string name="polygon_validator">Precisa ter pelo menos 3 pontos para criar Polígono</string>
   <string name="polyline_validator">Precisa ter pelo menos 2 pontos para criar uma Cadeia de Linhas</string>
@@ -457,7 +460,7 @@ Escolher Imagem</string>
   <string name="wifi_autosend">Somente wifi</string>
   <string name="cellular_autosend">Somente celular</string>
   <string name="wifi_cellular_autosend">Wifi ou celular</string>
-    <string name="form_management_preferences">Gestão de formulários</string>
+  <string name="form_management_preferences">Gestão de formulários</string>
   <string name="form_submission_category">Envio de formulários</string>
   <string name="form_filling_category">Preenchimento de formulários</string>
   <string name="high_resolution_title">Vídeo de alta resolução</string>
@@ -470,7 +473,7 @@ Escolher Imagem</string>
   <string name="type">Tipo</string>
   <string name="form_entry">Desmarque para ocultar da entrada de formulário</string>
   <string name="use_device_language">Utilizar idioma do dispositivo</string>
-    <string name="invalid_email_address">Endereço de e-mail inválido!</string>
+  <string name="invalid_email_address">Endereço de e-mail inválido!</string>
   <string name="sort_by">Organizar por</string>
   <string name="server">Servidor</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->

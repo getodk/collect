@@ -295,17 +295,21 @@
   <string name="leave_a_review">ទុកមតិនៅក្នុងហាង Play</string>
   <string name="leave_a_review_msg">ការ​ផ្តល់​មតិ​ (សង្ឃឹមថាជាវិជ្ជមាន) របស់​អ្នក​បង្កើន​ភាព​មើល​ឃើញ​នៃ​កម្មវិធី​នៅ​ក្នុង Play Store ។</string>
   <!--Geo string added in feature-geofeatures branch-->
-    <string name="openmap_usgs_topo">USGS National Map Topo</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
+  <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">ផែនទីជាតិ Hybrid USGS </string>
   <string name="openmap_usgs_img">ផែនទីជាតិរូបភាព USGS </string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
+  <string name="basemap">ផែនទីមូលដ្ឋាន</string>
   <string name="streets">ផ្លូវ</string>
   <string name="terrain">លក្ខណៈភូមិសាស្ត្រ</string>
   <string name="hybrid">ផែនទីកូនកាត់</string>
   <string name="satellite">ផ្កាយរណប</string>
-    <string name="save_point">រក្សា GeoPoint</string>
+  <string name="save_point">រក្សា GeoPoint</string>
   <string name="get_point">ចាប់ផ្តើម GeoPoint</string>
   <string name="geopoint_view_read_only">មើល GeoPoint</string>
   <string name="get_shape">ចាប់ផ្តើម GeoShape</string>
@@ -314,8 +318,7 @@
   <string name="start">ចាប់ផ្តើម</string>
   <string name="enable_gps">ដំណើរ​ការ​ប្រព័ន្ធ​ចាប់​ទីតាំង</string>
   <string name="geotrace_title">GeoTrace</string>
-  <string name="gps_enable_message">ប្រព័ន្ធ​ចាប់​ទី​តាំង​ក្នុងឧបករណ៍​របស់​អ្នក​បានបិទ។ តើ​អ្នក​ចង់​បើក​ដំណើរ​ការ​វា​ដែរ​ឬ​ទេ?</string>
-    <string name="geo_clear_warning">លក្ខណះ​ពិសេស​ត្រូវ​បាន​បង្កើត។ តើ​អ្នក​ចង់​លុប​លក្ខណះ​នេះ​ដែរ​ឬ​ទេ?</string>
+  <string name="geo_clear_warning">លក្ខណះ​ពិសេស​ត្រូវ​បាន​បង្កើត។ តើ​អ្នក​ចង់​លុប​លក្ខណះ​នេះ​ដែរ​ឬ​ទេ?</string>
   <string name="geo_exit_warning">បោះបង់​ការផ្លាស់​ប្តូរ និងត្រឡប់ទៅកាន់ ODK វិញ?</string>
   <string name="polygon_validator">ត្រូវការចំនុចយ៉ាងតិច 3 ដើម្បី​បង្កើតពហុកោណ</string>
   <string name="clear">លុ​បចេញ</string>
@@ -460,7 +463,7 @@
   <string name="wifi_autosend">តែ Wifi ប៉ុណ្ណោះ</string>
   <string name="cellular_autosend">តែ Cellular ប៉ុណ្ណោះ</string>
   <string name="wifi_cellular_autosend">Wifi ឬ Cellular</string>
-    <string name="form_management_preferences">ការគ្រប់គ្រងទម្រង់</string>
+  <string name="form_management_preferences">ការគ្រប់គ្រងទម្រង់</string>
   <string name="form_submission_category">ការដាក់ស្នើរទម្រង់</string>
   <string name="form_filling_category">ការបំពេញទម្រង់</string>
   <string name="high_resolution_title">កំរិតច្បាស់វីដេអូ</string>
@@ -473,7 +476,7 @@
   <string name="type">ប្រភេទ</string>
   <string name="form_entry">ដោះ​ធីក​ដើម្បី​លាក់ពី​ទម្រង់​បញ្ចូល</string>
   <string name="use_device_language">ប្រើ​ប្រាស់​ភាសារបស់​ឧបករណ៍</string>
-    <string name="invalid_email_address">អាសយដ្ឋាន​អ៊ីម៉េល​មិនត្រឹមត្រូវ!</string>
+  <string name="invalid_email_address">អាសយដ្ឋាន​អ៊ីម៉េល​មិនត្រឹមត្រូវ!</string>
   <string name="sort_by">តំរៀបតាម</string>
   <string name="server">ម៉ាស៊ីនម៉េ</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->

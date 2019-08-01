@@ -259,7 +259,10 @@
 </string>
   <string name="about_preferences">เกี่ยวกับ</string>
   <!--Geo string added in feature-geofeatures branch-->
-    <string name="openmap_usgs_topo">USGS National Map Topo</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
+  <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
@@ -267,7 +270,7 @@
   <string name="terrain">Terrain</string>
   <string name="hybrid">Hybrid</string>
   <string name="satellite">Satellite</string>
-    <string name="save_point">บันทึกจุดพิกัด</string>
+  <string name="save_point">บันทึกจุดพิกัด</string>
   <string name="get_point">เริ่มต้นจุดพิกัด</string>
   <string name="geopoint_view_read_only">แสดงจุดพิกัด</string>
   <string name="get_shape">เริ่มต้น GeoShape</string>
@@ -276,8 +279,7 @@
   <string name="start">เริ่มต้น</string>
   <string name="enable_gps">เปิด GPS</string>
   <string name="geotrace_title">GeoTrace</string>
-  <string name="gps_enable_message">GPS ถูกปิดไว้ ต้องการเปิดใช้งานหรือไม่?</string>
-    <string name="geo_exit_warning">ยกเลิกการเปลี่ยนแปลงและกลับไปที่ ODK?</string>
+  <string name="geo_exit_warning">ยกเลิกการเปลี่ยนแปลงและกลับไปที่ ODK?</string>
   <string name="polygon_validator">ต้องมีจุดพิกัด 3 จุดขึ้นไปเพื่อสร้าง Polygon</string>
   <string name="clear">ลบ</string>
   <string name="geopoint_instruction">กดแช่ไว้เพื่อวางเครื่องหมายหรือแตะที่ปุ่มเพิ่มเครื่องหมาย</string>
