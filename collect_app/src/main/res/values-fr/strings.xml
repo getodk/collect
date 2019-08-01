@@ -308,17 +308,22 @@
   <string name="leave_a_review_msg">Votre avis (ce qu\'on espère est positif) augmente la visibilité de l\'application dans le Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="maps">Cartes</string>
-    <string name="openmap_usgs_topo">USGS National Map Topo</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
+  <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">USGS Carte nationale hybride</string>
   <string name="openmap_usgs_img">Les images de la carte nationale USGS</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
+  <string name="basemap">Fonds de carte</string>
   <string name="streets">Streets</string>
   <string name="terrain">Terrain</string>
   <string name="hybrid">Hybride</string>
   <string name="satellite">Satellite</string>
-    <string name="save_point">Enregistrer le PointGéo</string>
+  <string name="reference_layer">Couche de référence</string>
+  <string name="save_point">Enregistrer le PointGéo</string>
   <string name="get_point">Démarrer le PointGéo</string>
   <string name="geopoint_view_read_only">Voir le PointGéo</string>
   <string name="get_shape">Démarrer la FormeGéo</string>
@@ -328,8 +333,7 @@
   <string name="start">Démarrer</string>
   <string name="enable_gps">Activer le GPS</string>
   <string name="geotrace_title">TracéGéo</string>
-  <string name="gps_enable_message">Le GPS est désactivé. Voulez vous l\'activer ?</string>
-    <string name="geo_clear_warning">Objet déjà créé. Souhaitez-vous l\'effacer ?</string>
+  <string name="geo_clear_warning">Objet déjà créé. Souhaitez-vous l\'effacer ?</string>
   <string name="geo_exit_warning">Annuler les changements et revenir à ODK</string>
   <string name="polygon_validator">3 points minimum sont nécessaires pour créer un Polygone</string>
   <string name="polyline_validator">Il faut au moins 2 points pour créer une ligne</string>
@@ -505,7 +509,7 @@
   <string name="wifi_autosend">Seulement Wifi</string>
   <string name="cellular_autosend">Seulement Cellulaire</string>
   <string name="wifi_cellular_autosend">Wifi ou Cellulaire</string>
-    <string name="form_management_preferences">Gestion de formulaire</string>
+  <string name="form_management_preferences">Gestion de formulaire</string>
   <string name="form_submission_category">Soumission de formulaire</string>
   <string name="form_filling_category">Remplissage de formulaire</string>
   <string name="high_resolution_title">Vidéo Haute Définition</string>
@@ -518,7 +522,7 @@
   <string name="type">Type</string>
   <string name="form_entry">Décochez pour cacher depuis la saisie du formulaire</string>
   <string name="use_device_language">Utiliser la langue de l\'appareil</string>
-    <string name="invalid_email_address">Adresse mail invalide!</string>
+  <string name="invalid_email_address">Adresse mail invalide!</string>
   <string name="sort_by">Trier par</string>
   <string name="server">Serveur</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->

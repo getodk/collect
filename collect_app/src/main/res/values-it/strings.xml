@@ -308,17 +308,21 @@
   <string name="leave_a_review_msg">Il tuo commento (speriamo positivo) aumenta la visibilità dell\'applicazione su Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="maps">Mappe</string>
-    <string name="openmap_usgs_topo">Mappa Topologia Nazionale USGS</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
+  <string name="openmap_usgs_topo">Mappa Topologia Nazionale USGS</string>
   <string name="openmap_usgs_sat">Mappa Ibrida Nazionale USGS</string>
   <string name="openmap_usgs_img">Immagini di Mappe Nazionali USGS</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
+  <string name="basemap">Mappa Base</string>
   <string name="streets">Streets - Stradale</string>
   <string name="terrain">Terrain - Territoriale</string>
   <string name="hybrid">Hybrid - Ibrida</string>
   <string name="satellite">Satellite - Satellitare</string>
-    <string name="save_point">Salva Geo-punto</string>
+  <string name="save_point">Salva Geo-punto</string>
   <string name="get_point">Inizia Geo-punto</string>
   <string name="geopoint_view_read_only">Guarda Geo-punto</string>
   <string name="get_shape">Inizia Geo-contorno</string>
@@ -328,8 +332,7 @@
   <string name="start">Inizia</string>
   <string name="enable_gps">Abilita GPS</string>
   <string name="geotrace_title">Geo-tracciatura</string>
-  <string name="gps_enable_message">Il GPS è disabilitato nel tuo dispositivo. Vuoi abilitarlo?</string>
-    <string name="geo_clear_warning">Caratteristica già creata. Vuoi cancellarla?</string>
+  <string name="geo_clear_warning">Caratteristica già creata. Vuoi cancellarla?</string>
   <string name="geo_exit_warning">Vuoi scartare le modifiche e ritornare ad ODK?</string>
   <string name="polygon_validator">Devi avere almeno 3 punti per creare un Poligono</string>
   <string name="polyline_validator">Devi avere almeno 2 punti per creare una Polilinea</string>
@@ -505,7 +508,7 @@
   <string name="wifi_autosend">Solo WiFi</string>
   <string name="cellular_autosend">Solo cellulare</string>
   <string name="wifi_cellular_autosend">WiFi o cellulare</string>
-    <string name="form_management_preferences">Gestione modulo</string>
+  <string name="form_management_preferences">Gestione modulo</string>
   <string name="form_submission_category">Sottomissione modulo</string>
   <string name="form_filling_category">Riempimento modulo</string>
   <string name="high_resolution_title">Video ad alta definizione</string>
@@ -518,7 +521,7 @@
   <string name="type">Tipo</string>
   <string name="form_entry">Deseleziona per nascondere dal Modulo d\'Entrata</string>
   <string name="use_device_language">Utilizza lingua del dispositivo</string>
-    <string name="invalid_email_address">Indirizzo email invalido!</string>
+  <string name="invalid_email_address">Indirizzo email invalido!</string>
   <string name="sort_by">Ordina per</string>
   <string name="server">Server</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->

@@ -275,15 +275,19 @@
   <string name="google_play_services_error_occured">गूगल नकाशे मध्ये प्रवेश करण्यात अक्षम. गूगल प्ले सेवा स्थापित केली आहे का?</string>
   <string name="about_preferences">विषयी</string>
   <!--Geo string added in feature-geofeatures branch-->
-    <string name="openmap_usgs_topo">यूएसजीएस राष्ट्रीय नकाशा टोपो</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
+  <string name="openmap_usgs_topo">यूएसजीएस राष्ट्रीय नकाशा टोपो</string>
   <string name="openmap_stamen_terrain">स्टेमेन टेरेइन</string>
   <string name="openmap_cartodb_positron">कार्टो डीबी पॉझिट्रॉन</string>
   <string name="openmap_cartodb_darkmatter">कार्टो डीबी गडद बाब</string>
+  <string name="basemap">बेसमॅप</string>
   <string name="streets">रस्ते</string>
   <string name="terrain">भूप्रदेश</string>
   <string name="hybrid">संकरित</string>
   <string name="satellite">उपग्रह</string>
-    <string name="save_point">जिओ पॉईंट जतन करा</string>
+  <string name="save_point">जिओ पॉईंट जतन करा</string>
   <string name="get_point">जिओ पॉईंट प्रारंभ करा</string>
   <string name="geopoint_view_read_only">जिओ पॉईंट पहा</string>
   <string name="get_shape">जिओ पॉईंट प्रारंभ करा</string>
@@ -292,8 +296,7 @@
   <string name="start">प्रारंभ करा</string>
   <string name="enable_gps">जीपीएस सक्षम करा</string>
   <string name="geotrace_title">जिओ ट्रेस</string>
-  <string name="gps_enable_message">आपल्या डिव्हाइसमध्ये जीपीएस अक्षम केले आहे आपण ते सक्षम करू इच्छिता?</string>
-    <string name="geo_clear_warning">वैशिष्ट्य आधीच तयार केले आपण वैशिष्ट्य साफ करू इच्छिता?</string>
+  <string name="geo_clear_warning">वैशिष्ट्य आधीच तयार केले आपण वैशिष्ट्य साफ करू इच्छिता?</string>
   <string name="geo_exit_warning">बदल टाकून ओडीके कडे परत जा?</string>
   <string name="polygon_validator">बहुभुज तयार करण्यासाठी किमान 3 गुण असणे आवश्यक आहे</string>
   <string name="clear">साफ करा</string>
@@ -421,7 +424,7 @@
   <string name="wifi_autosend">केवळ Wifi</string>
   <string name="cellular_autosend">केवळ सेल्यूलर</string>
   <string name="wifi_cellular_autosend">वायफाय किंवा सेल्यूलर</string>
-    <string name="form_management_preferences">फॉर्म व्यवस्थापन</string>
+  <string name="form_management_preferences">फॉर्म व्यवस्थापन</string>
   <string name="form_submission_category">फॉर्म सबमिशन</string>
   <string name="form_filling_category">फॉर्म भरणे</string>
   <string name="high_resolution_title">उच्च रिझोल्यूशन व्हिडिओ</string>
@@ -433,7 +436,7 @@
   <string name="type">प्रकार</string>
   <string name="form_entry">फॉर्म एन्ट्रीमधून लपविण्यासाठी अनचेक करा</string>
   <string name="use_device_language">डिव्हाइस भाषा वापरा</string>
-    <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <!--Sms submission-->
 </resources>

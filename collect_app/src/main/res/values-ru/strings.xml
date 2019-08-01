@@ -301,16 +301,20 @@
   <string name="leave_a_review">Оставить отзыв в Play Store</string>
   <string name="leave_a_review_msg">Ваш отзыв (надеемся, положительный) делает приложение более заметным в Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
-    <string name="openmap_usgs_topo">Национальная карта USGS: топографическая</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
+  <string name="openmap_usgs_topo">Национальная карта USGS: топографическая</string>
   <string name="openmap_usgs_sat">Национальная карта USGS: спутниковая</string>
   <string name="openmap_usgs_img">Национальная карта USGS: съёмка с воздуха</string>
   <string name="openmap_stamen_terrain">Stamen ландшафт</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Тёмная материя</string>
+  <string name="basemap">Подложка</string>
   <string name="streets">Улицы</string>
   <string name="terrain">Ландшафт</string>
   <string name="hybrid">Гибридная</string>
   <string name="satellite">Спутник</string>
-    <string name="save_point">Сохранить местоположение</string>
+  <string name="save_point">Сохранить местоположение</string>
   <string name="get_point">Определить местоположение</string>
   <string name="geopoint_view_read_only">Просмотреть геоточку</string>
   <string name="get_shape">Начать геофигуру</string>
@@ -319,8 +323,7 @@
   <string name="start">Начать</string>
   <string name="enable_gps">Включить GPS</string>
   <string name="geotrace_title">Геослед</string>
-  <string name="gps_enable_message">На вашем устройстве отключен GPS. Хотите включить его?</string>
-    <string name="geo_exit_warning">Отказаться от изменений и вернуться к ODK?</string>
+  <string name="geo_exit_warning">Отказаться от изменений и вернуться к ODK?</string>
   <string name="polygon_validator">В многоугольнике должно быть как минимум 3 точки</string>
   <string name="polyline_validator">Должно быть как минимум 2 точки, что бы создать ломаную линию</string>
   <string name="clear">Очистить</string>
@@ -461,7 +464,7 @@
   <string name="wifi_autosend">Только Wi-Fi</string>
   <string name="cellular_autosend">Только сотовая связь</string>
   <string name="wifi_cellular_autosend">Wi-Fi или сотовая связь</string>
-    <string name="form_management_preferences">Управление опросниками</string>
+  <string name="form_management_preferences">Управление опросниками</string>
   <string name="form_submission_category">ВЫГРУЗКА ОПРОСОВ</string>
   <string name="form_filling_category">Заполнение опросника</string>
   <string name="high_resolution_title">HD-видео</string>
@@ -474,7 +477,7 @@
   <string name="type">Платформа</string>
   <string name="form_entry">Снимите галочку, чтобы скрыть пункт при заполнении опросника</string>
   <string name="use_device_language">Использовать язык устройства</string>
-    <string name="invalid_email_address">Неверный адрес почты!</string>
+  <string name="invalid_email_address">Неверный адрес почты!</string>
   <string name="sort_by">Сортировать по</string>
   <string name="server">Сервер</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->

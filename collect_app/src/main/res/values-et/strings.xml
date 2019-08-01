@@ -267,7 +267,10 @@
   <string name="google_play_services_error_occured">Puudub ligipääs Google Maps-ile. Veenduge, et Google Play teenused on paigaldatud.</string>
   <string name="about_preferences">Teave</string>
   <!--Geo string added in feature-geofeatures branch-->
-    <string name="openmap_usgs_topo">USGS National Map Topo</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
+  <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
@@ -275,7 +278,7 @@
   <string name="terrain">Maastik</string>
   <string name="hybrid">Hübriid</string>
   <string name="satellite">Satelliit</string>
-    <string name="save_point">Salvesta asukohapunkt</string>
+  <string name="save_point">Salvesta asukohapunkt</string>
   <string name="get_point">Loo asukohapunkt</string>
   <string name="geopoint_view_read_only">Vaata asukohapunkti</string>
   <string name="get_shape">Loo polügoon</string>
@@ -284,8 +287,7 @@
   <string name="start">Alusta</string>
   <string name="enable_gps">Luba GPS</string>
   <string name="geotrace_title">Rada</string>
-  <string name="gps_enable_message">Teie seadmel on GPS keelatud. Kas te soovite lubada?</string>
-    <string name="geo_clear_warning">Kujutis on juba loodud. Kas soovite kujutise eemaldada?</string>
+  <string name="geo_clear_warning">Kujutis on juba loodud. Kas soovite kujutise eemaldada?</string>
   <string name="geo_exit_warning">Loobu muudatustest ja ava ODK?</string>
   <string name="polygon_validator">Polügooni loomiseks on vaja vähemalt 3 punkti</string>
   <string name="clear">Eemalda</string>

@@ -297,17 +297,21 @@ Dela ODK Collect med dem.</string>
   <string name="leave_a_review">Lämna ett omdöme på Play Store</string>
   <string name="leave_a_review_msg">Din (förhoppningsvis positiva) recension ökar synligheten av Appen i Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-    <string name="openmap_usgs_topo">USGS National Map Topo</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
+  <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">USGS nationell hybridkarta</string>
   <string name="openmap_usgs_img">USGS nationell satellitkarta</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
+  <string name="basemap">Grundkarta</string>
   <string name="streets">Streets</string>
   <string name="terrain">Terrain</string>
   <string name="hybrid">Hybrid</string>
   <string name="satellite">Satellite</string>
-    <string name="save_point">Spara GeoPoint</string>
+  <string name="save_point">Spara GeoPoint</string>
   <string name="get_point">Starta GeoPoint</string>
   <string name="geopoint_view_read_only">Visa GeoPoint</string>
   <string name="get_shape">Starta GeoShape</string>
@@ -316,8 +320,7 @@ Dela ODK Collect med dem.</string>
   <string name="start">Starta</string>
   <string name="enable_gps">Aktivera GPS</string>
   <string name="geotrace_title">GeoTrace</string>
-  <string name="gps_enable_message">GPS är inaktiverat på din enhet. Vill du aktivera den?</string>
-    <string name="geo_clear_warning">Objekt redan skapat. Vill du rensa objektet?</string>
+  <string name="geo_clear_warning">Objekt redan skapat. Vill du rensa objektet?</string>
   <string name="geo_exit_warning">Ignorera ändringar och återgå till ODK?</string>
   <string name="polygon_validator">Minst tre punkter krävs för att skapa en polygon</string>
   <string name="polyline_validator">Det behövs minst 2 punkter för att skapa en polyline</string>
@@ -463,7 +466,7 @@ Dela ODK Collect med dem.</string>
   <string name="wifi_autosend">Endast WiFi</string>
   <string name="cellular_autosend">Endast mobilt nätverk</string>
   <string name="wifi_cellular_autosend">WiFi eller mobilt nätverk</string>
-    <string name="form_management_preferences">Formulärhantering</string>
+  <string name="form_management_preferences">Formulärhantering</string>
   <string name="form_submission_category">Formulärinskickning</string>
   <string name="form_filling_category">Formulärifyllnad</string>
   <string name="high_resolution_title">Högupplöst video</string>
@@ -476,7 +479,7 @@ Dela ODK Collect med dem.</string>
   <string name="type">Typ</string>
   <string name="form_entry">Avmarkera för att dölja i formulärinmatning</string>
   <string name="use_device_language">Använd enhetens språk</string>
-    <string name="invalid_email_address">Ogiltig e-postadress!</string>
+  <string name="invalid_email_address">Ogiltig e-postadress!</string>
   <string name="sort_by">Sorteringsordning</string>
   <string name="server">Server</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->

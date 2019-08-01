@@ -301,17 +301,21 @@
   <string name="leave_a_review">پلے اسٹور پر رائے دیجیے</string>
   <string name="leave_a_review_msg">آپ ( امید ہے مثبت) کی رائے سے پلے اسٹورمیں اپپ کی نمائش میں اضافہ ہوتا ہے </string>
   <!--Geo string added in feature-geofeatures branch-->
-    <string name="openmap_usgs_topo">یو ایس جی ایس نیشنل میپ ٹوپو </string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
+  <string name="openmap_usgs_topo">یو ایس جی ایس نیشنل میپ ٹوپو </string>
   <string name="openmap_usgs_sat">یو ایس جی ایس نیشنل میپ ہائبرڈ </string>
   <string name="openmap_usgs_img">یو ایس جی ایس نیشنل میپ امیجری </string>
   <string name="openmap_stamen_terrain">سٹامیں ٹیرین</string>
   <string name="openmap_cartodb_positron">کارٹو ڈی بی پوزٹران</string>
   <string name="openmap_cartodb_darkmatter">کارٹو ڈی ڈی ڈارک میٹر</string>
+  <string name="basemap">بیس میپ</string>
   <string name="streets">سٹریٹس </string>
   <string name="terrain">ٹیرین</string>
   <string name="hybrid">ہائبرڈ</string>
   <string name="satellite">سیٹیلائٹ</string>
-    <string name="save_point">جیو پوائنٹ محفوظ کریں</string>
+  <string name="save_point">جیو پوائنٹ محفوظ کریں</string>
   <string name="get_point">جیو پوائنٹ شروع کریں</string>
   <string name="geopoint_view_read_only">جیوپوائنٹ دیکھیں</string>
   <string name="get_shape">جیوشیپ شروع کریں</string>
@@ -320,8 +324,7 @@
   <string name="start">شروع </string>
   <string name="enable_gps">جی پی ایس کو فعال  کریں</string>
   <string name="geotrace_title">جیو ٹریس </string>
-  <string name="gps_enable_message">آپ کے آلے میں جی پی ایس غیر فعال ہے. کیا آپ اسے فعال کرنا چاہتے ہیں؟ </string>
-    <string name="geo_clear_warning">فیچر پہلے سے ہی بنائی گئی ہے. کیا آپ کو فیچرکو ختم کرنا چاہیں گے؟</string>
+  <string name="geo_clear_warning">فیچر پہلے سے ہی بنائی گئی ہے. کیا آپ کو فیچرکو ختم کرنا چاہیں گے؟</string>
   <string name="geo_exit_warning">تبدیلیوں کو ختم کریں اور او ڈی کے  کے پاس واپس جائیں؟</string>
   <string name="polygon_validator">قطبون بنانے کے لئے کم از کم 3 پوائنٹس لازمی ہیں</string>
   <string name="polyline_validator">پولی لائن بنانے کے لئے کم سے کم 2 پوائنٹس لازمی ہیں</string>
@@ -467,7 +470,7 @@
   <string name="wifi_autosend">صرف وائی فائی </string>
   <string name="cellular_autosend">صرف سیلولر</string>
   <string name="wifi_cellular_autosend">وائی فائی یا سیلولر</string>
-    <string name="form_management_preferences">فارم مینجمنٹ</string>
+  <string name="form_management_preferences">فارم مینجمنٹ</string>
   <string name="form_submission_category">فارم سبمیشن</string>
   <string name="form_filling_category">فارم فلنگ</string>
   <string name="high_resolution_title">ہائی کوالٹی ویڈیو </string>
@@ -480,7 +483,7 @@
   <string name="type">قسم</string>
   <string name="form_entry">فارم اندراج سے چھپانے کے لئے انچیک کریں</string>
   <string name="use_device_language">ڈیوائس کی زبان استعمال کریں</string>
-    <string name="invalid_email_address">غلط ای میل ایڈریس!</string>
+  <string name="invalid_email_address">غلط ای میل ایڈریس!</string>
   <string name="sort_by">بہ ترتیب</string>
   <string name="server">سرور </string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->

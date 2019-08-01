@@ -308,17 +308,21 @@
   <string name="leave_a_review_msg">Sinun (toivottavasti myönteinen) arviosi lisää sovelluksen näkyvyyttä Play Store -kaupassa.</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="maps">Kartat</string>
-    <string name="openmap_usgs_topo">USGS National Map topografinen</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
+  <string name="openmap_usgs_topo">USGS National Map topografinen</string>
   <string name="openmap_usgs_sat">USGS National Map hybridi</string>
   <string name="openmap_usgs_img">USGS National Map kuvat</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
+  <string name="basemap">Peruskartta</string>
   <string name="streets">Kadut</string>
   <string name="terrain">Maasto</string>
   <string name="hybrid">Hybridi</string>
   <string name="satellite">Satelliitti</string>
-    <string name="save_point">Tallenna GeoPoint</string>
+  <string name="save_point">Tallenna GeoPoint</string>
   <string name="get_point">Käynnistä GeoPoint</string>
   <string name="geopoint_view_read_only">Tarkastele GeoPoint</string>
   <string name="get_shape">Aloita GeoShape</string>
@@ -328,8 +332,7 @@
   <string name="start">Aloita</string>
   <string name="enable_gps">Ota GPS käyttöön</string>
   <string name="geotrace_title">GeoTrace</string>
-  <string name="gps_enable_message">GPS on poistettu käytöstä laitteellasi. Haluaisitko ottaa sen käyttöön?</string>
-    <string name="geo_clear_warning">Ominaisuus on jo luotu. Haluatko tyhjentää ominaisuuden?</string>
+  <string name="geo_clear_warning">Ominaisuus on jo luotu. Haluatko tyhjentää ominaisuuden?</string>
   <string name="geo_exit_warning">Hylätäänkö muutokset ja palataan ODK:hon?</string>
   <string name="polygon_validator">Monikulmion luomiseen tarvitaan vähintään 3 pistettä</string>
   <string name="polyline_validator">Polyline-kuvion luomiseen tarvitaan vähintään 2 pistettä</string>
@@ -505,7 +508,7 @@
   <string name="wifi_autosend">Vain Wifi</string>
   <string name="cellular_autosend">Vain puhelinverkko</string>
   <string name="wifi_cellular_autosend">Wifi tai puhelinverkko</string>
-    <string name="form_management_preferences">Lomakkeen hallinta</string>
+  <string name="form_management_preferences">Lomakkeen hallinta</string>
   <string name="form_submission_category">Lomakkeen lähetys</string>
   <string name="form_filling_category">Lomakkeen täyttö</string>
   <string name="high_resolution_title">Korkean resoluution video</string>
@@ -518,7 +521,7 @@
   <string name="type">Tyyppi</string>
   <string name="form_entry">Poista rasti piiloittaaksesi lomakesyötöstä</string>
   <string name="use_device_language">Käytä laitteen oletuskieltä</string>
-    <string name="invalid_email_address">Virheellinen sähköpostiosoite!</string>
+  <string name="invalid_email_address">Virheellinen sähköpostiosoite!</string>
   <string name="sort_by">Lajitteluperuste</string>
   <string name="server">Palvelin</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
