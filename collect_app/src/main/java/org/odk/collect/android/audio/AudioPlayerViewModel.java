@@ -14,7 +14,7 @@ import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.NOT_P
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PAUSED;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYING;
 
-public class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletionListener {
+class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletionListener {
 
     private final MediaPlayerFactory mediaPlayerFactory;
     private MediaPlayer mediaPlayer;
