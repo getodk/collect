@@ -34,7 +34,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
-import org.odk.collect.android.audio.AudioButtonManager;
+import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.ScreenContext;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
@@ -58,14 +58,14 @@ public abstract class SelectWidget extends ItemsWidget {
     protected LinearLayout answerLayout;
     protected int numColumns = 1;
     private int playcounter;
-    private final AudioButtonManager audioButtonManager;
+    private final AudioHelper audioHelper;
 
     public SelectWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
         answerLayout = new LinearLayout(context);
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         playList = new ArrayList<>();
-        audioButtonManager = new AudioButtonManager((ScreenContext) getContext(), MediaPlayer::new);
+        audioHelper = new AudioHelper((ScreenContext) getContext(), MediaPlayer::new);
     }
 
     @Override
@@ -139,7 +139,7 @@ public abstract class SelectWidget extends ItemsWidget {
         String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "video");
         String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
 
-        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), audioButtonManager);
+        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), audioHelper);
     }
 
     protected RecyclerView setUpRecyclerView() {

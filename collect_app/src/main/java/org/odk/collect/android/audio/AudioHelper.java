@@ -9,12 +9,12 @@ import androidx.lifecycle.ViewModelProviders;
 
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYING;
 
-public class AudioButtonManager {
+public class AudioHelper {
 
     private final ScreenContext screenContext;
     private final MediaPlayerFactory mediaPlayerFactory;
 
-    public AudioButtonManager(ScreenContext screenContext, MediaPlayerFactory mediaPlayerFactory) {
+    public AudioHelper(ScreenContext screenContext, MediaPlayerFactory mediaPlayerFactory) {
         this.screenContext = screenContext;
         this.mediaPlayerFactory = mediaPlayerFactory;
     }

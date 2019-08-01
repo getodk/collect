@@ -46,7 +46,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.audio.AudioButtonManager;
+import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.ScreenContext;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
@@ -97,7 +97,7 @@ public abstract class QuestionWidget
     protected ThemeUtils themeUtils;
     private int playColor;
     private final ReferenceManager referenceManager;
-    private final AudioButtonManager audioButtonManager;
+    private final AudioHelper audioHelper;
 
     private WidgetValueChangedListener valueChangedListener;
 
@@ -107,7 +107,7 @@ public abstract class QuestionWidget
         AppDependencyComponent component = DaggerUtils.getComponent((Activity) getContext());
         this.referenceManager = component.referenceManager();
 
-        audioButtonManager = new AudioButtonManager((ScreenContext) getContext(), MediaPlayer::new);
+        audioHelper = new AudioHelper((ScreenContext) getContext(), MediaPlayer::new);
 
         themeUtils = new ThemeUtils(context);
         playColor = themeUtils.getAccentColor();
@@ -295,7 +295,7 @@ public abstract class QuestionWidget
         // Create the layout for audio, image, text
         MediaLayout questionMediaLayout = new MediaLayout(getContext());
         questionMediaLayout.setId(ViewIds.generateViewId()); // assign random id
-        questionMediaLayout.setAVT(questionText, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), audioButtonManager);
+        questionMediaLayout.setAVT(questionText, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), audioHelper);
 
         String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
         if (playColorString != null) {

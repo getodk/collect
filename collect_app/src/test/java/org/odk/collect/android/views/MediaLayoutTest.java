@@ -16,7 +16,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-import org.odk.collect.android.audio.AudioButtonManager;
+import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.ScreenContext;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
@@ -38,7 +38,7 @@ public class MediaLayoutTest {
     public ReferenceManager referenceManager;
 
     @Mock
-    public AudioButtonManager audioButtonManager;
+    public AudioHelper audioHelper;
 
     @Test
     public void withTextView_andAudio_playingAudio_highlightsText() throws Exception {
@@ -46,7 +46,7 @@ public class MediaLayoutTest {
 
         MutableLiveData<Boolean> isPlaying = new MutableLiveData<>();
         isPlaying.setValue(false);
-        when(audioButtonManager.setAudio(any(), any(), any())).thenReturn(isPlaying);
+        when(audioHelper.setAudio(any(), any(), any())).thenReturn(isPlaying);
 
         Activity activity = RobolectricHelpers.createThemedActivity(ScreenContextFragmentActivity.class);
 
@@ -58,7 +58,7 @@ public class MediaLayoutTest {
                 null,
                 null,
                 referenceManager,
-                audioButtonManager);
+                audioHelper);
 
         int originalTextColor = mediaLayout.getTextView().getCurrentTextColor();
 
