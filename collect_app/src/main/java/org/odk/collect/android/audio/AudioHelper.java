@@ -7,6 +7,8 @@ import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModelProviders;
 
+import org.jetbrains.annotations.NotNull;
+
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYING;
 
 public class AudioHelper {
@@ -20,9 +22,7 @@ public class AudioHelper {
     }
 
     public LiveData<Boolean> setAudio(AudioButton button, String uri, String clipID) {
-        AudioPlayerViewModel viewModel = ViewModelProviders
-                .of(screenContext.getActivity(), new AudioPlayerViewModelFactory(this.mediaPlayerFactory))
-                .get(AudioPlayerViewModel.class);
+        AudioPlayerViewModel viewModel = getViewModel();
 
         screenContext.getActivity().getLifecycle().addObserver(new AudioPlayerViewModelBackgroundObserver(viewModel));
         screenContext.getViewLifecycle().getLifecycle().addObserver(new AudioPlayerViewModelBackgroundObserver(viewModel));
@@ -39,6 +39,17 @@ public class AudioHelper {
         return isPlaying;
     }
 
+    public void play(String clipID, String uri) {
+        getViewModel().play(clipID, uri);
+    }
+
+    @NotNull
+    private AudioPlayerViewModel getViewModel() {
+        return ViewModelProviders
+                .of(screenContext.getActivity(), new AudioPlayerViewModelFactory(this.mediaPlayerFactory))
+                .get(AudioPlayerViewModel.class);
+    }
+    
     private static class AudioPlayerViewModelOnPlayStopListener implements AudioButton.OnPlayStopListener {
 
         private final AudioPlayerViewModel viewModel;

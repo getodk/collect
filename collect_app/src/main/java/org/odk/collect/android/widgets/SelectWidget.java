@@ -39,6 +39,7 @@ import org.odk.collect.android.audio.ScreenContext;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.views.MediaLayout;
+import org.odk.collect.android.views.helpers.FormMediaHelpers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,7 +132,7 @@ public abstract class SelectWidget extends ItemsWidget {
         String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "video");
         String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
 
-        mediaLayout.setTag(getFormEntryPrompt().getIndex().toString() + " " + index);
+        mediaLayout.setTag(FormMediaHelpers.getClipID(getFormEntryPrompt()) + " " + index);
         mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), getAudioHelper());
 
         textView.setGravity(Gravity.CENTER_VERTICAL);

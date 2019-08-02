@@ -46,6 +46,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.views.helpers.FormMediaHelpers;
 
 import java.io.File;
 
@@ -279,12 +280,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     private void setupAudioButton(String audioURI, AudioHelper audioHelper, ReferenceManager referenceManager) {
         audioButton.setVisibility(VISIBLE);
 
-        String uri = null;
-        try {
-            uri = referenceManager.deriveReference(audioURI).getLocalURI();
-        } catch (InvalidReferenceException e) {
-            Timber.e(e);
-        }
+        String uri = FormMediaHelpers.getPlayableAudioURI(audioURI, referenceManager);
 
         ScreenContext activity = getScreenContext();
         String clipID = getTag() != null ? getTag().toString() : "";
