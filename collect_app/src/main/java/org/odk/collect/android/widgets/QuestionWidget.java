@@ -101,13 +101,12 @@ public abstract class QuestionWidget
 
     private WidgetValueChangedListener valueChangedListener;
 
-    public QuestionWidget(Context context, FormEntryPrompt prompt) {
+    public QuestionWidget(Context context, FormEntryPrompt prompt, AudioHelper audioHelper) {
         super(context);
+        this.audioHelper = audioHelper;
 
         AppDependencyComponent component = DaggerUtils.getComponent((Activity) getContext());
         this.referenceManager = component.referenceManager();
-
-        audioHelper = new AudioHelper((ScreenContext) getContext(), MediaPlayer::new);
 
         themeUtils = new ThemeUtils(context);
         playColor = themeUtils.getAccentColor();
@@ -162,6 +161,10 @@ public abstract class QuestionWidget
         if (context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
             registerToClearAnswerOnLongPress((FormEntryActivity) context);
         }
+    }
+
+    public QuestionWidget(Context context, FormEntryPrompt prompt) {
+        this(context, prompt, new AudioHelper((ScreenContext) context, MediaPlayer::new));
     }
 
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
@@ -295,6 +298,9 @@ public abstract class QuestionWidget
         // Create the layout for audio, image, text
         MediaLayout questionMediaLayout = new MediaLayout(getContext());
         questionMediaLayout.setId(ViewIds.generateViewId()); // assign random id
+
+        String tag = formEntryPrompt.getIndex() != null ? formEntryPrompt.getIndex().toString() : "";
+        questionMediaLayout.setTag(tag);
         questionMediaLayout.setAVT(questionText, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), audioHelper);
 
         String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
@@ -690,6 +696,10 @@ public abstract class QuestionWidget
 
     public MediaPlayer getPlayer() {
         return player;
+    }
+
+    public AudioHelper getAudioHelper() {
+        return audioHelper;
     }
 
     public ReferenceManager getReferenceManager() {

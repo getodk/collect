@@ -33,7 +33,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.content.FileProvider;
-import androidx.core.view.ViewCompat;
 import androidx.lifecycle.LiveData;
 
 import org.javarosa.core.reference.InvalidReferenceException;
@@ -288,7 +287,8 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         }
 
         ScreenContext activity = getScreenContext();
-        LiveData<Boolean> isPlayingLiveData = audioHelper.setAudio(audioButton, uri, String.valueOf(ViewCompat.generateViewId()));
+        String clipID = getTag() != null ? getTag().toString() : "";
+        LiveData<Boolean> isPlayingLiveData = audioHelper.setAudio(audioButton, uri, clipID);
         isPlayingLiveData.observe(activity.getViewLifecycle(), isPlaying -> {
             if (isPlaying) {
                 viewText.setTextColor(playTextColor);

@@ -3,12 +3,8 @@ package org.odk.collect.android.views;
 import android.app.Activity;
 import android.widget.TextView;
 
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 
-import org.javarosa.core.reference.InvalidReferenceException;
-import org.javarosa.core.reference.Reference;
 import org.javarosa.core.reference.ReferenceManager;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,16 +13,16 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.audio.ScreenContext;
 import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.support.ScreenContextFragmentActivity;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.support.Helpers.setupMockReference;
 
 @RunWith(RobolectricTestRunner.class)
 public class MediaLayoutTest {
@@ -42,7 +38,7 @@ public class MediaLayoutTest {
 
     @Test
     public void withTextView_andAudio_playingAudio_highlightsText() throws Exception {
-        setupAudioFile("file://audio.mp3", referenceManager);
+        setupMockReference("file://audio.mp3", referenceManager);
 
         MutableLiveData<Boolean> isPlaying = new MutableLiveData<>();
         isPlaying.setValue(false);
@@ -69,24 +65,5 @@ public class MediaLayoutTest {
         isPlaying.setValue(false);
         textColor = mediaLayout.getTextView().getCurrentTextColor();
         assertThat(textColor, equalTo(originalTextColor));
-    }
-
-    private static void setupAudioFile(String audioURI, ReferenceManager referenceManager) throws InvalidReferenceException {
-        Reference reference = mock(Reference.class);
-        when(reference.getLocalURI()).thenReturn(audioURI);
-        when(referenceManager.deriveReference(audioURI)).thenReturn(reference);
-    }
-
-    public static class ScreenContextFragmentActivity extends FragmentActivity implements ScreenContext {
-
-        @Override
-        public FragmentActivity getActivity() {
-            return this;
-        }
-
-        @Override
-        public LifecycleOwner getViewLifecycle() {
-            return this;
-        }
     }
 }

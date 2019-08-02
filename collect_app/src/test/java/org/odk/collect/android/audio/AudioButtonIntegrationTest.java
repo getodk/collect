@@ -34,13 +34,15 @@ public class AudioButtonIntegrationTest {
     private FragmentActivity activity;
     private ActivityController<FragmentActivity> activityController;
     private AudioHelper audioHelper;
+    private TestScreenContext screenContext;
 
     @Before
     public void setup() {
         activityController = Robolectric.buildActivity(FragmentActivity.class);
         activity = activityController.setup().get();
 
-        audioHelper = new AudioHelper(new TestScreenContext(activity), () -> mediaPlayer);
+        screenContext = new TestScreenContext(activity);
+        audioHelper = new AudioHelper(screenContext, () -> mediaPlayer);
     }
 
     @After
@@ -126,8 +128,6 @@ public class AudioButtonIntegrationTest {
     public void destroyingLifecycle_releaseMediaPlayer() throws Exception {
         String testFile1 = File.createTempFile("audio1", ".mp3").getAbsolutePath();
         setupDataSource(testFile1);
-
-        TestScreenContext screenContext = new TestScreenContext(activity);
 
         AudioButton button = new AudioButton(activity);
         audioHelper.setAudio(button, testFile1, "clip1");
