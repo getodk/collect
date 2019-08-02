@@ -5,6 +5,7 @@ import android.Manifest;
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -21,6 +22,7 @@ import static androidx.test.espresso.Espresso.pressBack;
 
 // Issue number NODK-209
 @RunWith(AndroidJUnit4.class)
+@Ignore("https://github.com/opendatakit/collect/issues/3205")
 public class DrawWidgetTest extends BaseRegressionTest {
 
     @Rule
