@@ -51,5 +51,5 @@ ext {
     daggerVersion = '2.16'
     rxLifecycleVersion = '2.2.1'
     workManagerVersion = "1.0.0-alpha10"
-    okhttp3Version = '3.12.0'
+    okhttp3Version = '3.12.3'
 }
