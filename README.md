@@ -160,6 +160,7 @@ All pull requests are verified on the following devices (ordered by Android vers
 * [Sony Xperia Z3 D6603](http://www.gsmarena.com/sony_xperia_z3-6539.php) - Android 6.0.1
 * [Samsung Galaxy S7 SM-G930F](https://www.gsmarena.com/samsung_galaxy_s7-7821.php) - Android 7.0.0
 * [LG Nexus 5X](https://www.gsmarena.com/lg_nexus_5x-7556.php) - Android 8.1
+* [Xiaomi Redmi 7](https://www.gsmarena.com/xiaomi_redmi_7-9498.php) - Android 9.0
 
 Our regular code contributors use these devices (ordered by Android version): 
 * [Alcatel One Touch 5020D](https://www.gsmarena.com/alcatel_one_touch_m_pop-5242.php) - Android 4.1.1
