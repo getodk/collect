@@ -25,11 +25,7 @@ import android.provider.MediaStore;
 import android.view.View;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.SmapMain;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.map.MapboxUtils;
-import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.MediaUtils;
 

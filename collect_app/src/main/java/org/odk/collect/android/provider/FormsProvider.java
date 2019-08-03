@@ -703,6 +703,19 @@ public class FormsProvider extends ContentProvider {
                                 deleteFileOrDir(oldFile);
                             }
 
+                                // we're updating our file, so update the md5
+                                // and get rid of the cache (doesn't harm anything)
+                                deleteFileOrDir(update
+                                        .getString(update
+                                                .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
+                                String newMd5 = FileUtils
+                                        .getMd5Hash(new File(formFile));
+                                values.put(FormsColumns.MD5_HASH, newMd5);
+                                values.put(FormsColumns.JRCACHE_FILE_PATH,
+                                        Collect.CACHE_PATH + File.separator + newMd5
+                                                + ".formdef");
+                            }
+
                             count = db.update(
                                     FORMS_TABLE_NAME,
                                     values,

@@ -23,7 +23,6 @@ import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -36,9 +35,6 @@ import androidx.multidex.MultiDex;
 import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobManagerCreateException;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.security.ProviderInstaller;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -68,12 +64,10 @@ import org.odk.collect.android.taskModel.FormRestartDetails;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.preferences.PrefMigrator;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.PRNGFixes;
 
@@ -499,6 +493,7 @@ public class Collect extends Application {
 
     public void logRemoteAnalytics(String event, String action, String label) {
         // Google Analytics
+        /* smap
         Collect.getInstance()
                 .getDefaultTracker()
                 .send(new HitBuilders.EventBuilder()
@@ -512,6 +507,7 @@ public class Collect extends Application {
         bundle.putString("action", action);
         bundle.putString("label", label);
         firebaseAnalytics.logEvent(event, bundle);
+        */
     }
 
     public void setAnalyticsCollectionEnabled(boolean isAnalyticsEnabled) {

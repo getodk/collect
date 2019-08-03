@@ -1699,7 +1699,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
                         // Collect.getInstance().logRemoteAnalytics("WidgetAttribute", "saveIncomplete", Collect.getCurrentFormIdentifierHash());  // smap comment out
 
-                        saveDataToDisk(false, false, null, false);
+                        saveDataToDisk(false, false, null, false, true);
                         autoSaved = true;
                     }
                 }

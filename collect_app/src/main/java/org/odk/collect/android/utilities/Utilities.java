@@ -37,7 +37,6 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.taskModel.InstanceXML;
-import org.opendatakit.httpclientandroidlib.HttpResponse;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -248,7 +247,6 @@ public class Utilities {
         InputStream is = httpInterface.executeGetRequest(uri, null, webCredentialsUtils.getCredentials(uri)).getInputStream();
 
 
-        HttpResponse response;
         try {
 
             // Create instance object
