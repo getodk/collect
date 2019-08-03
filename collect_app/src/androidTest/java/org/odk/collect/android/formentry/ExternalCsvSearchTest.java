@@ -5,13 +5,14 @@ import android.Manifest;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.rule.GrantPermissionRule;
 
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.test.FormLoadingUtils;
 
-import java.io.IOException;
 import java.util.Collections;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -32,15 +33,13 @@ public class ExternalCsvSearchTest {
     public IntentsTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(EXTERNAL_CSV_SEARCH_FORM);
 
     @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-    @BeforeClass
-    public static void copyFormToSdCard() throws IOException {
-        FormLoadingUtils.copyFormToSdCard(EXTERNAL_CSV_SEARCH_FORM, "forms",
-                Collections.singletonList("external-csv-search-produce.csv"));
-    }
+    public RuleChain copyFormChain = RuleChain
+            .outerRule(GrantPermissionRule.grant(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            )
+            .around(new ResetStateRule())
+            .around(new CopyFormRule(EXTERNAL_CSV_SEARCH_FORM, Collections.singletonList("external-csv-search-produce.csv")));
 
     @Test
     public void simpleSearchStatement_ShouldDisplayAllCsvChoices() {

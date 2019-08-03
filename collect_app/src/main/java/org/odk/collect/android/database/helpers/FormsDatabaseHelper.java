@@ -17,7 +17,6 @@
 package org.odk.collect.android.database.helpers;
 
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import org.odk.collect.android.application.Collect;
@@ -51,7 +50,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "forms.db";
     public static final String FORMS_TABLE_NAME = "forms";
 
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     // These exist in database versions 2 and 3, but not in 4...
     private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
@@ -63,7 +62,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        createFormsTable(db, FORMS_TABLE_NAME);
+        createFormsTableV7(db);
     }
 
     @SuppressWarnings({"checkstyle:FallThrough"})
@@ -71,235 +70,243 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
 
-        boolean success = true;
         switch (oldVersion) {
             case 1:
-                success = upgradeToVersion2(db);
+                upgradeToVersion2(db);
             case 2:
             case 3:
-                success &= upgradeToVersion4(db, oldVersion);
+                upgradeToVersion4(db, oldVersion);
             case 4:
-                success &= upgradeToVersion5(db);
+                upgradeToVersion5(db);
             case 5:
-                success &= upgradeToVersion6(db);
+                upgradeToVersion6(db);
+            case 6:
+                upgradeToVersion7(db);
                 break;
             default:
                 Timber.i("Unknown version %s", oldVersion);
         }
 
-        if (success) {
-            Timber.i("Upgrading database from version " + oldVersion + " to " + newVersion + " completed with success.");
-        } else {
-            Timber.e("Upgrading database from version " + oldVersion + " to " + newVersion + " failed.");
-        }
+        Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
     }
 
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        boolean success = true;
-        try {
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .dropIfExists(FORMS_TABLE_NAME)
-                    .end();
+        CustomSQLiteQueryBuilder
+                .begin(db)
+                .dropIfExists(FORMS_TABLE_NAME)
+                .end();
 
-            createFormsTable(db, FORMS_TABLE_NAME);
-        } catch (SQLiteException e) {
-            Timber.e(e);
-            success = false;
-        }
+        createFormsTableV7(db);
 
-        if (success) {
-            Timber.i("Downgrading database completed with success.");
-        } else {
-            Timber.e("Downgrading database from version " + oldVersion + " to " + newVersion + " failed.");
-        }
+        Timber.i("Downgrading database from %d to %d completed with success.", oldVersion, newVersion);
     }
 
-    private boolean upgradeToVersion2(SQLiteDatabase db) {
-        boolean success = true;
-        try {
-            db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
-            onCreate(db);
-        } catch (SQLiteException e) {
-            Timber.e(e);
-            success = false;
-        }
-        return success;
+    private void upgradeToVersion2(SQLiteDatabase db) {
+        db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
+        onCreate(db);
     }
 
-    private boolean upgradeToVersion4(SQLiteDatabase db, int oldVersion) {
-        boolean success = true;
-        try {
-            // adding BASE64_RSA_PUBLIC_KEY and changing type and name of
-            // integer MODEL_VERSION to text VERSION
-            db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
-            createFormsTable(db, TEMP_FORMS_TABLE_NAME);
-            db.execSQL("INSERT INTO "
-                    + TEMP_FORMS_TABLE_NAME
-                    + " ("
-                    + _ID
-                    + ", "
-                    + DISPLAY_NAME
-                    + ", "
-                    + DISPLAY_SUBTEXT
-                    + ", "
-                    + DESCRIPTION
-                    + ", "
-                    + JR_FORM_ID
-                    + ", "
-                    + MD5_HASH
-                    + ", "
-                    + DATE
-                    + ", " // milliseconds
-                    + FORM_MEDIA_PATH
-                    + ", "
-                    + FORM_FILE_PATH
-                    + ", "
-                    + LANGUAGE
-                    + ", "
-                    + SUBMISSION_URI
-                    + ", "
-                    + JR_VERSION
-                    + ", "
-                    + ((oldVersion != 3) ? ""
-                    : (BASE64_RSA_PUBLIC_KEY + ", "))
-                    + JRCACHE_FILE_PATH
-                    + ") SELECT "
-                    + _ID
-                    + ", "
-                    + DISPLAY_NAME
-                    + ", "
-                    + DISPLAY_SUBTEXT
-                    + ", "
-                    + DESCRIPTION
-                    + ", "
-                    + JR_FORM_ID
-                    + ", "
-                    + MD5_HASH
-                    + ", "
-                    + DATE
-                    + ", " // milliseconds
-                    + FORM_MEDIA_PATH
-                    + ", "
-                    + FORM_FILE_PATH
-                    + ", "
-                    + LANGUAGE
-                    + ", "
-                    + SUBMISSION_URI
-                    + ", "
-                    + "CASE WHEN "
-                    + MODEL_VERSION
-                    + " IS NOT NULL THEN "
-                    + "CAST("
-                    + MODEL_VERSION
-                    + " AS TEXT) ELSE NULL END, "
-                    + ((oldVersion != 3) ? ""
-                    : (BASE64_RSA_PUBLIC_KEY + ", "))
-                    + JRCACHE_FILE_PATH + " FROM "
-                    + FORMS_TABLE_NAME);
+    private void upgradeToVersion4(SQLiteDatabase db, int oldVersion) {
+        // adding BASE64_RSA_PUBLIC_KEY and changing type and name of
+        // integer MODEL_VERSION to text VERSION
+        db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
+        createFormsTableV4(db, TEMP_FORMS_TABLE_NAME);
+        db.execSQL("INSERT INTO "
+                + TEMP_FORMS_TABLE_NAME
+                + " ("
+                + _ID
+                + ", "
+                + DISPLAY_NAME
+                + ", "
+                + DISPLAY_SUBTEXT
+                + ", "
+                + DESCRIPTION
+                + ", "
+                + JR_FORM_ID
+                + ", "
+                + MD5_HASH
+                + ", "
+                + DATE
+                + ", " // milliseconds
+                + FORM_MEDIA_PATH
+                + ", "
+                + FORM_FILE_PATH
+                + ", "
+                + LANGUAGE
+                + ", "
+                + SUBMISSION_URI
+                + ", "
+                + JR_VERSION
+                + ", "
+                + ((oldVersion != 3) ? ""
+                : (BASE64_RSA_PUBLIC_KEY + ", "))
+                + JRCACHE_FILE_PATH
+                + ") SELECT "
+                + _ID
+                + ", "
+                + DISPLAY_NAME
+                + ", "
+                + DISPLAY_SUBTEXT
+                + ", "
+                + DESCRIPTION
+                + ", "
+                + JR_FORM_ID
+                + ", "
+                + MD5_HASH
+                + ", "
+                + DATE
+                + ", " // milliseconds
+                + FORM_MEDIA_PATH
+                + ", "
+                + FORM_FILE_PATH
+                + ", "
+                + LANGUAGE
+                + ", "
+                + SUBMISSION_URI
+                + ", "
+                + "CASE WHEN "
+                + MODEL_VERSION
+                + " IS NOT NULL THEN "
+                + "CAST("
+                + MODEL_VERSION
+                + " AS TEXT) ELSE NULL END, "
+                + ((oldVersion != 3) ? ""
+                : (BASE64_RSA_PUBLIC_KEY + ", "))
+                + JRCACHE_FILE_PATH + " FROM "
+                + FORMS_TABLE_NAME);
 
-            // risky failures here...
-            db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
-            createFormsTable(db, FORMS_TABLE_NAME);
-            db.execSQL("INSERT INTO "
-                    + FORMS_TABLE_NAME
-                    + " ("
-                    + _ID
-                    + ", "
-                    + DISPLAY_NAME
-                    + ", "
-                    + DISPLAY_SUBTEXT
-                    + ", "
-                    + DESCRIPTION
-                    + ", "
-                    + JR_FORM_ID
-                    + ", "
-                    + MD5_HASH
-                    + ", "
-                    + DATE
-                    + ", " // milliseconds
-                    + FORM_MEDIA_PATH + ", "
-                    + FORM_FILE_PATH + ", "
-                    + LANGUAGE + ", "
-                    + SUBMISSION_URI + ", "
-                    + JR_VERSION + ", "
-                    + BASE64_RSA_PUBLIC_KEY + ", "
-                    + JRCACHE_FILE_PATH + ") SELECT "
-                    + _ID + ", "
-                    + DISPLAY_NAME
-                    + ", "
-                    + DISPLAY_SUBTEXT
-                    + ", "
-                    + DESCRIPTION
-                    + ", "
-                    + JR_FORM_ID
-                    + ", "
-                    + MD5_HASH
-                    + ", "
-                    + DATE
-                    + ", " // milliseconds
-                    + FORM_MEDIA_PATH + ", "
-                    + FORM_FILE_PATH + ", "
-                    + LANGUAGE + ", "
-                    + SUBMISSION_URI + ", "
-                    + JR_VERSION + ", "
-                    + BASE64_RSA_PUBLIC_KEY + ", "
-                    + JRCACHE_FILE_PATH + " FROM "
-                    + TEMP_FORMS_TABLE_NAME);
-            db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
-        } catch (SQLiteException e) {
-            Timber.e(e);
-            success = false;
-        }
-
-        return success;
+        // risky failures here...
+        db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
+        createFormsTableV4(db, FORMS_TABLE_NAME);
+        db.execSQL("INSERT INTO "
+                + FORMS_TABLE_NAME
+                + " ("
+                + _ID
+                + ", "
+                + DISPLAY_NAME
+                + ", "
+                + DISPLAY_SUBTEXT
+                + ", "
+                + DESCRIPTION
+                + ", "
+                + JR_FORM_ID
+                + ", "
+                + MD5_HASH
+                + ", "
+                + DATE
+                + ", " // milliseconds
+                + FORM_MEDIA_PATH + ", "
+                + FORM_FILE_PATH + ", "
+                + LANGUAGE + ", "
+                + SUBMISSION_URI + ", "
+                + JR_VERSION + ", "
+                + BASE64_RSA_PUBLIC_KEY + ", "
+                + JRCACHE_FILE_PATH + ") SELECT "
+                + _ID + ", "
+                + DISPLAY_NAME
+                + ", "
+                + DISPLAY_SUBTEXT
+                + ", "
+                + DESCRIPTION
+                + ", "
+                + JR_FORM_ID
+                + ", "
+                + MD5_HASH
+                + ", "
+                + DATE
+                + ", " // milliseconds
+                + FORM_MEDIA_PATH + ", "
+                + FORM_FILE_PATH + ", "
+                + LANGUAGE + ", "
+                + SUBMISSION_URI + ", "
+                + JR_VERSION + ", "
+                + BASE64_RSA_PUBLIC_KEY + ", "
+                + JRCACHE_FILE_PATH + " FROM "
+                + TEMP_FORMS_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
     }
 
-    private boolean upgradeToVersion5(SQLiteDatabase db) {
-        boolean success = true;
-        try {
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .alter()
-                    .table(FORMS_TABLE_NAME)
-                    .addColumn(AUTO_SEND, "text")
-                    .end();
+    private void upgradeToVersion5(SQLiteDatabase db) {
+        CustomSQLiteQueryBuilder
+                .begin(db)
+                .alter()
+                .table(FORMS_TABLE_NAME)
+                .addColumn(AUTO_SEND, "text")
+                .end();
+
+        CustomSQLiteQueryBuilder
+                .begin(db)
+                .alter()
+                .table(FORMS_TABLE_NAME)
+                .addColumn(AUTO_DELETE, "text")
+                .end();
+    }
+
+    private void upgradeToVersion6(SQLiteDatabase db) {
+        CustomSQLiteQueryBuilder
+                .begin(db)
+                .alter()
+                .table(FORMS_TABLE_NAME)
+                .addColumn(LAST_DETECTED_FORM_VERSION_HASH, "text")
+                .end();
+    }
+
+    private void upgradeToVersion7(SQLiteDatabase db) {
+        String temporaryTable = FORMS_TABLE_NAME + "_tmp";
+        String[] formsTableColumnsInV7 = new String[] {_ID, DISPLAY_NAME, DESCRIPTION,
+                JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
+                SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
+                LAST_DETECTED_FORM_VERSION_HASH};
 
             CustomSQLiteQueryBuilder
                     .begin(db)
-                    .alter()
-                    .table(FORMS_TABLE_NAME)
-                    .addColumn(AUTO_DELETE, "text")
+                    .renameTable(FORMS_TABLE_NAME)
+                    .to(temporaryTable)
                     .end();
-        } catch (SQLiteException e) {
-            Timber.e(e);
-            success = false;
-        }
-        return success;
-    }
 
-    private boolean upgradeToVersion6(SQLiteDatabase db) {
-        boolean success = true;
-        try {
+            createFormsTableV7(db);
+
             CustomSQLiteQueryBuilder
                     .begin(db)
-                    .alter()
-                    .table(FORMS_TABLE_NAME)
-                    .addColumn(LAST_DETECTED_FORM_VERSION_HASH, "text")
+                    .insertInto(FORMS_TABLE_NAME)
+                    .columnsForInsert(formsTableColumnsInV7)
+                    .select()
+                    .columnsForSelect(formsTableColumnsInV7)
+                    .from(temporaryTable)
                     .end();
-        } catch (SQLiteException e) {
-            Timber.e(e);
-            success = false;
-        }
-        return success;
+
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .dropIfExists(temporaryTable)
+                    .end();
     }
 
-    private void createFormsTable(SQLiteDatabase db, String tableName) {
+    private void createFormsTableV4(SQLiteDatabase db, String tableName) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + tableName + " ("
                 + _ID + " integer primary key, "
                 + DISPLAY_NAME + " text not null, "
                 + DISPLAY_SUBTEXT + " text not null, "
+                + DESCRIPTION + " text, "
+                + JR_FORM_ID + " text not null, "
+                + JR_VERSION + " text, "
+                + MD5_HASH + " text not null, "
+                + DATE + " integer not null, " // milliseconds
+                + FORM_MEDIA_PATH + " text not null, "
+                + FORM_FILE_PATH + " text not null, "
+                + LANGUAGE + " text, "
+                + SUBMISSION_URI + " text, "
+                + BASE64_RSA_PUBLIC_KEY + " text, "
+                + JRCACHE_FILE_PATH + " text not null, "
+                + AUTO_SEND + " text, "
+                + AUTO_DELETE + " text, "
+                + LAST_DETECTED_FORM_VERSION_HASH + " text);");
+    }
+
+    private void createFormsTableV7(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
+                + _ID + " integer primary key, "
+                + DISPLAY_NAME + " text not null, "
                 + DESCRIPTION + " text, "
                 + JR_FORM_ID + " text not null, "
                 + JR_VERSION + " text, "

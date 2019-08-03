@@ -41,8 +41,10 @@ import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,20 +58,16 @@ public class ExternalAppsUtils {
     private static final String RIGHT_PARENTHESIS = ")";
 
     private ExternalAppsUtils() {
-
     }
 
     public static String extractIntentName(String exString) {
         if (!exString.contains(LEFT_PARENTHESIS)) {
-            if (exString.contains(RIGHT_PARENTHESIS)) {
-                return exString.substring(0, exString.indexOf(RIGHT_PARENTHESIS)).trim();
-            } else {
-                return exString;
-            }
+            return exString.contains(RIGHT_PARENTHESIS)
+                    ? exString.substring(0, exString.indexOf(RIGHT_PARENTHESIS)).trim()
+                    : exString;
         }
 
-        int leftParIndex = exString.indexOf(LEFT_PARENTHESIS);
-        return exString.substring(0, leftParIndex).trim();
+        return exString.substring(0, exString.indexOf(LEFT_PARENTHESIS)).trim();
     }
 
     public static Map<String, String> extractParameters(String exString) {
@@ -80,15 +78,12 @@ public class ExternalAppsUtils {
             return Collections.emptyMap();
         }
 
-        String paramsStr;
-        if (exString.endsWith(")")) {
-            paramsStr = exString.substring(leftParIndex + 1, exString.lastIndexOf(')'));
-        } else {
-            paramsStr = exString.substring(leftParIndex + 1, exString.length());
-        }
+        String paramsStr = exString.endsWith(")")
+                ? exString.substring(leftParIndex + 1, exString.lastIndexOf(')'))
+                : exString.substring(leftParIndex + 1);
 
-        Map<String, String> parameters = new LinkedHashMap<String, String>();
-        String[] paramsPairs = paramsStr.trim().split(",");
+        Map<String, String> parameters = new LinkedHashMap<>();
+        List<String> paramsPairs = getParamPairs(paramsStr.trim());
         for (String paramsPair : paramsPairs) {
             String[] keyValue = paramsPair.trim().split("=");
             if (keyValue.length == 2) {
@@ -98,12 +93,31 @@ public class ExternalAppsUtils {
         return parameters;
     }
 
+    private static List<String> getParamPairs(String paramsStr) {
+        List<String> paramPairs = new ArrayList<>();
+        int startPos = 0;
+        boolean inQuotes = false;
+        for (int current = 0; current < paramsStr.length(); current++) {
+            if (paramsStr.charAt(current) == '\'') {
+                inQuotes = !inQuotes;
+            }
+
+            if (current == paramsStr.length() - 1) {
+                paramPairs.add(paramsStr.substring(startPos));
+            } else if (paramsStr.charAt(current) == ',' && !inQuotes) {
+                paramPairs.add(paramsStr.substring(startPos, current));
+                startPos = current + 1;
+            }
+        }
+
+        return paramPairs;
+    }
+
     public static void populateParameters(Intent intent, Map<String, String> exParams,
             TreeReference reference) throws ExternalParamsException {
         if (exParams != null) {
             for (Map.Entry<String, String> paramEntry : exParams.entrySet()) {
                 String paramEntryValue = paramEntry.getValue();
-
                 try {
                     Object result = getValueRepresentedBy(paramEntry.getValue(), reference);
 
@@ -126,21 +140,15 @@ public class ExternalAppsUtils {
                 reference);
 
         if (text.startsWith("'")) {
-            // treat this as a constant parameter
-            // but not require an ending quote
-            if (text.endsWith("'")) {
-                return text.substring(1, text.length() - 1);
-            } else {
-                return text.substring(1, text.length());
-            }
+            // treat this as a constant parameter but not require an ending quote
+            return text.endsWith("'") ? text.substring(1, text.length() - 1) : text.substring(1);
         } else if (text.startsWith("/")) {
             // treat this is an xpath
             XPathPathExpr pathExpr = XPathReference.getPathExpr(text);
             XPathNodeset xpathNodeset = pathExpr.eval(formInstance, evaluationContext);
             return XPathFuncExpr.unpack(xpathNodeset);
         } else if (text.equals("instanceProviderID()")) {
-            // instanceProviderID returns -1 if the current instance has not been
-            // saved to disk already
+            // instanceProviderID returns -1 if the current instance has not been saved to disk already
             String path = Collect.getInstance().getFormController().getInstanceFile()
                     .getAbsolutePath();
 
@@ -158,18 +166,13 @@ public class ExternalAppsUtils {
             return instanceProviderID;
         } else {
             // treat this as a function
-            XPathExpression xpathExpression = XPathParseTool.parseXPath(
-                    text);
+            XPathExpression xpathExpression = XPathParseTool.parseXPath(text);
             return xpathExpression.eval(formInstance, evaluationContext);
         }
     }
 
     public static StringData asStringData(Object value) {
-        if (value == null) {
-            return null;
-        } else {
-            return new StringData(value.toString());
-        }
+        return value == null ? null : new StringData(value.toString());
     }
 
     public static IntegerData asIntegerData(Object value) {

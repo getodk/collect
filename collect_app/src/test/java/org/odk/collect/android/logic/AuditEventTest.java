@@ -26,15 +26,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.BEGINNING_OF_FORM;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.END_OF_FORM;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.GROUP;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_TRACKING_DISABLED;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_TRACKING_ENABLED;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.CONSTRAINT_ERROR;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.DELETE_REPEAT;
+import static org.odk.collect.android.logic.AuditEvent.AuditEventType.END_OF_FORM;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FINALIZE_ERROR;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FORM_EXIT;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FORM_FINALIZE;
@@ -42,11 +37,14 @@ import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FORM_RESUM
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FORM_SAVE;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FORM_START;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE;
+import static org.odk.collect.android.logic.AuditEvent.AuditEventType.GROUP;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.HIERARCHY;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_PERMISSIONS_NOT_GRANTED;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED;
+import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_TRACKING_DISABLED;
+import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_TRACKING_ENABLED;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.PROMPT_NEW_REPEAT;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.QUESTION;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.REPEAT;
@@ -60,7 +58,7 @@ public class AuditEventTest {
     @Ignore
     @Test
     public void testToString() {
-        AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, false, false, getMockedFormIndex(), "");
+        AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, false, false, getTestFormIndex(), "");
         assertNotNull(auditEvent);
         assertTrue(auditEvent.isIntervalAuditEventType());
         assertEquals("question,/data/text1,1545392727685,", auditEvent.toString());
@@ -73,7 +71,7 @@ public class AuditEventTest {
 
     @Test
     public void testToStringWithLocationCoordinates() {
-        AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, true, false, getMockedFormIndex(), "");
+        AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, true, false, getTestFormIndex(), "");
         assertNotNull(auditEvent);
         auditEvent.setLocationCoordinates("54.35202520000001", "18.64663840000003", "10");
         assertTrue(auditEvent.isIntervalAuditEventType());
@@ -86,7 +84,7 @@ public class AuditEventTest {
 
     @Test
     public void testToStringWithTrackingChanges() {
-        AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, false, true, getMockedFormIndex(), "First answer");
+        AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, false, true, getTestFormIndex(), "First answer");
         assertNotNull(auditEvent);
         assertTrue(auditEvent.isIntervalAuditEventType());
         assertFalse(auditEvent.isEndTimeSet());
@@ -99,7 +97,7 @@ public class AuditEventTest {
 
     @Test
     public void testToStringWithLocationCoordinatesAndTrackingChanges() {
-        AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, true, true, getMockedFormIndex(), "First answer");
+        AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, true, true, getTestFormIndex(), "First answer");
         assertNotNull(auditEvent);
         auditEvent.setLocationCoordinates("54.35202520000001", "18.64663840000003", "10");
         assertTrue(auditEvent.isIntervalAuditEventType());
@@ -113,7 +111,7 @@ public class AuditEventTest {
 
     @Test
     public void testToStringNullValues() {
-        AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, true, true, getMockedFormIndex(), "Old value");
+        AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, true, true, getTestFormIndex(), "Old value");
         assertNotNull(auditEvent);
         auditEvent.setLocationCoordinates("", "", "");
         assertTrue(auditEvent.isIntervalAuditEventType());
@@ -260,11 +258,11 @@ public class AuditEventTest {
         assertEquals(UNKNOWN_EVENT_TYPE, AuditEvent.getAuditEventTypeFromFecType(100));
     }
 
-    private FormIndex getMockedFormIndex() {
-        FormIndex formIndex = mock(FormIndex.class);
-        TreeReference treeReference = mock(TreeReference.class);
-        when(formIndex.getReference()).thenReturn(treeReference);
-        when(treeReference.toString()).thenReturn("/data/text1");
-        return formIndex;
+    private FormIndex getTestFormIndex() {
+        TreeReference treeReference = new TreeReference();
+        treeReference.add("data", 0);
+        treeReference.add("text1", 0);
+
+        return new FormIndex(0, treeReference);
     }
 }

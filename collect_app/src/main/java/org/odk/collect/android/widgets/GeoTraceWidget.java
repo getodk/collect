@@ -18,8 +18,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,8 +28,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
@@ -73,25 +70,22 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
     }
 
     private void startGeoTraceActivity() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String mapSDK = prefs.getString(GeneralKeys.KEY_MAP_SDK, GeneralKeys.DEFAULT_BASEMAP_KEY);
-        if (mapSDK.equals(GeneralKeys.GOOGLE_MAPS_BASEMAP_KEY) && !PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
-            PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
-            return;
+        Context context = getContext();
+        if (MapProvider.getConfigurator().isAvailable(context)) {
+            Intent intent = new Intent(context, GeoPolyActivity.class)
+                .putExtra(GeoPolyActivity.ANSWER_KEY, answerDisplay.getText().toString())
+                .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOTRACE);
+            ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOTRACE_CAPTURE);
+        } else {
+            MapProvider.getConfigurator().showUnavailableMessage(context);
         }
-        Intent intent = new Intent(getContext(), GeoPolyActivity.class)
-            .putExtra(GeoPolyActivity.ANSWER_KEY, answerDisplay.getText().toString())
-            .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOTRACE)
-            .putExtra(GeneralKeys.KEY_MAP_SDK, mapSDK);
-        ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOTRACE_CAPTURE);
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
         if (dataAvailable) {
-            createTraceButton.setText(
-                    getContext().getString(R.string.geotrace_view_change_location));
+            createTraceButton.setText(R.string.geotrace_view_change_location);
         } else {
-            createTraceButton.setText(getContext().getString(R.string.get_trace));
+            createTraceButton.setText(R.string.get_trace);
         }
     }
 

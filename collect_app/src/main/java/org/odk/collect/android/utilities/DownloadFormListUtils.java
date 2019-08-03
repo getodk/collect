@@ -16,16 +16,17 @@
 
 package org.odk.collect.android.utilities;
 
+import android.app.Application;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+
 import androidx.annotation.Nullable;
 
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.logic.FormDetails;
@@ -39,8 +40,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import timber.log.Timber;
 
 public class DownloadFormListUtils {
@@ -52,17 +51,20 @@ public class DownloadFormListUtils {
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST =
             "http://openrosa.org/xforms/xformsList";
 
-    @Inject
-    WebCredentialsUtils webCredentialsUtils;
+    private final WebCredentialsUtils webCredentialsUtils;
+    private final CollectServerClient collectServerClient;
+    private final Application application;
+    private final FormsDao formsDao;
 
-    private static boolean isXformsListNamespacedElement(Element e) {
-        return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST);
-    }
-
-    @Inject CollectServerClient collectServerClient;
-
-    public DownloadFormListUtils() {
-        Collect.getInstance().getComponent().inject(this);
+    public DownloadFormListUtils(
+            Application application,
+            CollectServerClient collectServerClient,
+            WebCredentialsUtils webCredentialsUtils,
+            FormsDao formsDao) {
+        this.application = application;
+        this.collectServerClient = collectServerClient;
+        this.webCredentialsUtils = webCredentialsUtils;
+        this.formsDao = formsDao;
     }
 
     public HashMap<String, FormDetails> downloadFormList(boolean alwaysCheckMediaFiles) {
@@ -72,22 +74,24 @@ public class DownloadFormListUtils {
     public HashMap<String, FormDetails> downloadFormList(@Nullable String url, @Nullable String username,
                                                          @Nullable String password, boolean alwaysCheckMediaFiles) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
-                        Collect.getInstance().getBaseContext());
-
-        // Remove trailing '/'
-        while (url != null && url.endsWith("/")) {
-            url = url.substring(0, url.length() - 1);
-        }
+                application);
 
         String downloadListUrl = url != null ? url :
                 settings.getString(GeneralKeys.KEY_SERVER_URL,
-                        Collect.getInstance().getString(R.string.default_server_url));
+                        application.getString(R.string.default_server_url));
+
+        while (downloadListUrl.endsWith("/")) {
+            downloadListUrl = downloadListUrl.substring(0, downloadListUrl.length() - 1);
+        }
+
         // NOTE: /formlist must not be translated! It is the well-known path on the server.
-        String formListUrl = Collect.getInstance().getApplicationContext().getString(
+        String formListUrl = application.getString(
                 R.string.default_odk_formlist);
 
         // When a url is supplied, we will use the default formList url
-        String downloadPath = (url != null) ? formListUrl : settings.getString(GeneralKeys.KEY_FORMLIST_URL, formListUrl);
+        String downloadPath = (url != null) ?
+                formListUrl : settings.getString(GeneralKeys.KEY_FORMLIST_URL, formListUrl);
+
         downloadListUrl += downloadPath;
 
         // We populate this with available forms from the specified server.
@@ -128,7 +132,7 @@ public class DownloadFormListUtils {
                 Timber.e("Parsing OpenRosa reply -- %s", error);
                 formList.put(
                         DL_ERROR_MSG,
-                        new FormDetails(Collect.getInstance().getString(
+                        new FormDetails(application.getString(
                                 R.string.parse_openrosa_formlist_failed, error)));
                 return formList;
             }
@@ -138,7 +142,7 @@ public class DownloadFormListUtils {
                 Timber.e("Parsing OpenRosa reply -- %s", error);
                 formList.put(
                         DL_ERROR_MSG,
-                        new FormDetails(Collect.getInstance().getString(
+                        new FormDetails(application.getString(
                                 R.string.parse_openrosa_formlist_failed, error)));
                 return formList;
             }
@@ -240,7 +244,7 @@ public class DownloadFormListUtils {
                     formList.clear();
                     formList.put(
                             DL_ERROR_MSG,
-                            new FormDetails(Collect.getInstance().getString(
+                            new FormDetails(application.getString(
                                     R.string.parse_openrosa_formlist_failed, error)));
                     return formList;
                 }
@@ -303,7 +307,7 @@ public class DownloadFormListUtils {
                         formList.clear();
                         formList.put(
                                 DL_ERROR_MSG,
-                                new FormDetails(Collect.getInstance().getString(
+                                new FormDetails(application.getString(
                                         R.string.parse_legacy_formlist_failed, error)));
                         return formList;
                     }
@@ -317,8 +321,18 @@ public class DownloadFormListUtils {
         return formList;
     }
 
-    private static boolean isThisFormAlreadyDownloaded(String formId) {
-        Cursor cursor = new FormsDao().getFormsCursorForFormId(formId);
+    private void clearTemporaryCredentials(@Nullable String url) {
+        if (url != null) {
+            String host = Uri.parse(url).getHost();
+
+            if (host != null) {
+                webCredentialsUtils.clearCredentials(url);
+            }
+        }
+    }
+
+    private boolean isThisFormAlreadyDownloaded(String formId) {
+        Cursor cursor = formsDao.getFormsCursorForFormId(formId);
         return cursor == null || cursor.getCount() > 0;
     }
 
@@ -333,10 +347,10 @@ public class DownloadFormListUtils {
             return null;
         }
 
-        String errMessage = Collect.getInstance().getString(R.string.access_error, manifestUrl);
+        String errMessage = application.getString(R.string.access_error, manifestUrl);
 
         if (!result.isOpenRosaResponse) {
-            errMessage += Collect.getInstance().getString(R.string.manifest_server_error);
+            errMessage += application.getString(R.string.manifest_server_error);
             Timber.e(errMessage);
             return null;
         }
@@ -345,14 +359,14 @@ public class DownloadFormListUtils {
         Element manifestElement = result.doc.getRootElement();
         if (!manifestElement.getName().equals("manifest")) {
             errMessage +=
-                    Collect.getInstance().getString(R.string.root_element_error,
+                    application.getString(R.string.root_element_error,
                             manifestElement.getName());
             Timber.e(errMessage);
             return null;
         }
         String namespace = manifestElement.getNamespace();
         if (!FormDownloader.isXformsManifestNamespacedElement(manifestElement)) {
-            errMessage += Collect.getInstance().getString(R.string.root_namespace_error, namespace);
+            errMessage += application.getString(R.string.root_namespace_error, namespace);
             Timber.e(errMessage);
             return null;
         }
@@ -409,7 +423,7 @@ public class DownloadFormListUtils {
                 }
                 if (filename == null || downloadUrl == null || hash == null) {
                     errMessage +=
-                            Collect.getInstance().getString(R.string.manifest_tag_error,
+                            application.getString(R.string.manifest_tag_error,
                                     Integer.toString(i));
                     Timber.e(errMessage);
                     return null;
@@ -421,17 +435,17 @@ public class DownloadFormListUtils {
         return new ManifestFile(result.getHash(), files);
     }
 
-    private static boolean isNewerFormVersionAvailable(String md5Hash) {
+    private boolean isNewerFormVersionAvailable(String md5Hash) {
         if (md5Hash == null) {
             return false;
         }
-        try (Cursor cursor = new FormsDao().getFormsCursorForMd5Hash(md5Hash)) {
+        try (Cursor cursor = formsDao.getFormsCursorForMd5Hash(md5Hash)) {
             return cursor != null && cursor.getCount() == 0;
         }
     }
 
-    private static boolean areNewerMediaFilesAvailable(String formId, String formVersion, List<MediaFile> newMediaFiles) {
-        String mediaDirPath = new FormsDao().getFormMediaPath(formId, formVersion);
+    private boolean areNewerMediaFilesAvailable(String formId, String formVersion, List<MediaFile> newMediaFiles) {
+        String mediaDirPath = formsDao.getFormMediaPath(formId, formVersion);
         if (mediaDirPath != null) {
             File[] localMediaFiles = new File(mediaDirPath).listFiles();
             if (localMediaFiles != null) {
@@ -464,13 +478,7 @@ public class DownloadFormListUtils {
         return false;
     }
 
-    private void clearTemporaryCredentials(@Nullable String url) {
-        if (url != null) {
-            String host = Uri.parse(url).getHost();
-
-            if (host != null) {
-                webCredentialsUtils.clearCredentials(url);
-            }
-        }
+    private static boolean isXformsListNamespacedElement(Element e) {
+        return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST);
     }
 }

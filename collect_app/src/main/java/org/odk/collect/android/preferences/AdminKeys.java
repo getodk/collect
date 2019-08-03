@@ -59,8 +59,7 @@ public final class AdminKeys {
     private static final String KEY_NAVIGATION                  = "change_navigation";
     static final String KEY_CONSTRAINT_BEHAVIOR                 = "change_constraint_behavior";
 
-    private static final String KEY_SHOW_MAP_SDK                = "show_map_sdk";
-    private static final String KEY_SHOW_MAP_BASEMAP            = "show_map_basemap";
+    static final String KEY_MAPS                        = "maps";
 
     private static final String KEY_ANALYTICS                   = "analytics";
     public static final String KEY_MOVING_BACKWARDS             = "moving_backwards";
@@ -102,9 +101,6 @@ public final class AdminKeys {
             ag(KEY_NAVIGATION,                 GeneralKeys.KEY_NAVIGATION),
             ag(KEY_CONSTRAINT_BEHAVIOR,        GeneralKeys.KEY_CONSTRAINT_BEHAVIOR),
 
-            ag(KEY_SHOW_MAP_SDK,               GeneralKeys.KEY_MAP_SDK),
-            ag(KEY_SHOW_MAP_BASEMAP,           GeneralKeys.KEY_MAP_BASEMAP),
-
             ag(KEY_ANALYTICS,                  GeneralKeys.KEY_ANALYTICS)
     };
 
@@ -123,7 +119,8 @@ public final class AdminKeys {
             KEY_MARK_AS_FINALIZED,
             KEY_CHANGE_ADMIN_PASSWORD,
             KEY_MOVING_BACKWARDS,
-            ALLOW_OTHER_WAYS_OF_EDITING_FORM
+            ALLOW_OTHER_WAYS_OF_EDITING_FORM,
+            KEY_MAPS
     );
 
     static Collection<String> serverKeys = Collections.singletonList(
@@ -154,9 +151,7 @@ public final class AdminKeys {
             KEY_APP_LANGUAGE,
             KEY_CHANGE_FONT_SIZE,
             KEY_NAVIGATION,
-            KEY_SHOW_SPLASH_SCREEN,
-            KEY_SHOW_MAP_BASEMAP,
-            KEY_SHOW_MAP_SDK
+            KEY_SHOW_SPLASH_SCREEN
     );
 
     private static Collection<String> allKeys() {

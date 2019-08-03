@@ -16,24 +16,20 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
-import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.SpinnerAdapter;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
+import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.views.ScrolledToTopSpinner;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
@@ -46,8 +42,11 @@ import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
  */
 @SuppressLint("ViewConstructor")
 public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
-    ScrolledToTopSpinner spinner;
-    String[] choices;
+    private final ScrolledToTopSpinner spinner;
+    private final SpinnerAdapter spinnerAdapter;
+
+    // used to ascertain whether the user selected an item on spinner (not programmatically)
+    private boolean firstSetSelectionCall = true;
 
     @Nullable
     private AdvanceToNextListener listener;
@@ -62,76 +61,46 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
         View view = inflate(context, R.layout.spinner_layout, null);
 
         spinner = view.findViewById(R.id.spinner);
-        choices = new String[items.size() + 1];
-        for (int i = 0; i < items.size(); i++) {
-            choices[i] = prompt.getSelectChoiceText(items.get(i));
-        }
-        choices[items.size()] = getContext().getString(R.string.select_one);
-
-        // The spinner requires a custom adapter. It is defined below
-        SpinnerAdapter adapter =
-                new SpinnerAdapter(getContext(), android.R.layout.simple_spinner_item, choices,
-                        TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize());
-
-        spinner.setAdapter(adapter);
+        spinnerAdapter = new SpinnerAdapter(getContext(), getChoices(prompt));
+        spinner.setAdapter(spinnerAdapter);
         spinner.setPrompt(prompt.getQuestionText());
         spinner.setEnabled(!prompt.isReadOnly());
         spinner.setFocusable(!prompt.isReadOnly());
-
-        // Fill in previous answer
-        String s = null;
-        if (prompt.getAnswerValue() != null) {
-            s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
-        }
-
-        spinner.setSelection(items.size());
-        if (s != null) {
-            for (int i = 0; i < items.size(); ++i) {
-                String match = items.get(i).getValue();
-                if (match.equals(s)) {
-                    spinner.setSelection(i);
-                }
-            }
-        }
-
+        spinner.setId(ViewIds.generateViewId());
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                if (position != items.size() && autoAdvance && listener != null) {
-                    listener.advance();
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!firstSetSelectionCall) {
+                    if (position != items.size() && autoAdvance && listener != null) {
+                        listener.advance();
+                    }
+                    widgetValueChanged();
                 }
-
-                widgetValueChanged();
+                spinnerAdapter.updateSelectedItemPosition(spinner.getSelectedItemPosition());
+                firstSetSelectionCall = false;
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
-
             }
         });
 
+        fillInPreviousAnswer(prompt);
         addAnswerView(view);
     }
 
     @Override
     public IAnswerData getAnswer() {
-        int i = spinner.getSelectedItemPosition();
-        if (i == -1 || i == items.size()) {
-            return null;
-        } else {
-            SelectChoice sc = items.get(i);
-            return new SelectOneData(new Selection(sc));
-        }
+        int selectedItemPosition = spinner.getSelectedItemPosition();
+        return selectedItemPosition < 0 || selectedItemPosition >= items.size()
+                ? null
+                : new SelectOneData(new Selection(items.get(selectedItemPosition)));
     }
 
     @Override
     public void clearAnswer() {
-        // It seems that spinners cannot return a null answer. This resets the answer
-        // to its original value, but it is not null.
+        // It seems that spinners cannot return a null answer. This resets the answer to its original value, but it is not null.
         spinner.setSelection(items.size());
-
         widgetValueChanged();
     }
 
@@ -155,79 +124,38 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
     public void setChoiceSelected(int choiceIndex, boolean isSelected) {
         if (isSelected) {
             spinner.setSelection(choiceIndex);
-
         } else if (spinner.getSelectedItemPosition() == choiceIndex) {
             clearAnswer();
         }
     }
 
-    // Defines how to display the select answers
-    private class SpinnerAdapter extends ArrayAdapter<String> {
-        Context context;
-        String[] items = new String[]{};
-        int textUnit;
-        float textSize;
-
-        SpinnerAdapter(final Context context, final int textViewResourceId,
-                       final String[] objects, int textUnit, float textSize) {
-            super(context, textViewResourceId, objects);
-            this.items = objects;
-            this.context = context;
-            this.textUnit = textUnit;
-            this.textSize = textSize;
+    private void fillInPreviousAnswer(FormEntryPrompt prompt) {
+        String selectedItemValue = null;
+        if (prompt.getAnswerValue() != null) {
+            selectedItemValue = ((Selection) prompt.getAnswerValue().getValue()).getValue();
         }
 
-        @Override
-        // Defines the text view parameters for the drop down list entries
-        public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
-
-            if (convertView == null) {
-                LayoutInflater inflater = LayoutInflater.from(context);
-                convertView = inflater.inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
+        boolean answerExists = false;
+        if (selectedItemValue != null) {
+            for (int i = 0; i < items.size(); ++i) {
+                String match = items.get(i).getValue();
+                if (match.equals(selectedItemValue)) {
+                    spinner.setSelection(i);
+                    answerExists = true;
+                }
             }
-
-            TextView tv = convertView.findViewById(android.R.id.text1);
-            tv.setTextSize(textUnit, textSize);
-            tv.setPadding(20, 10, 10, 10);
-
-            if (themeUtils.isDarkTheme()) {
-                convertView.setBackgroundColor(getResources().getColor(R.color.darkPopupDialogColor));
-            }
-
-            if (position == items.length - 1) {
-                tv.setText(parent.getContext().getString(R.string.clear_answer));
-            } else {
-                tv.setText(items[position]);
-            }
-
-            if (position == (items.length - 1) && spinner.getSelectedItemPosition() == position) {
-                tv.setEnabled(false);
-            } else {
-                tv.setTextColor(spinner.getSelectedItemPosition() == position ? themeUtils.getAccentColor() : themeUtils.getPrimaryTextColor());
-            }
-
-            return convertView;
         }
-
-        @Override
-        public int getCount() {
-            return items.length;
+        if (!answerExists) {
+            spinner.setSelection(items.size());
         }
+    }
 
-        @NonNull
-        @Override
-        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-            if (convertView == null) {
-                LayoutInflater inflater = LayoutInflater.from(context);
-                convertView = inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
-            }
-
-            TextView tv = convertView.findViewById(android.R.id.text1);
-            tv.setTextSize(textUnit, textSize);
-            tv.setPadding(10, 10, 10, 10);
-            tv.setText(items[position]);
-
-            return convertView;
+    private CharSequence[] getChoices(FormEntryPrompt prompt) {
+        CharSequence[] choices = new CharSequence[items.size() + 1];
+        for (int i = 0; i < items.size(); i++) {
+            choices[i] = FormEntryPromptUtils.getItemText(prompt, items.get(i));
         }
+        choices[items.size()] = getContext().getString(R.string.select_one);
+        return choices;
     }
 }

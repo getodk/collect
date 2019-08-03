@@ -61,7 +61,9 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
         int color = position == selectedSortingOrder ? themeUtils.getAccentColor() : themeUtils.getPrimaryTextColor();
         viewHolder.txtViewTitle.setTextColor(color);
         try {
-            viewHolder.imgViewIcon.setImageResource(ApplicationConstants.getSortLabelToIconMap().get(sortList[position]));
+            int iconId = ApplicationConstants.getSortLabelToIconMap().get(sortList[position]);
+            viewHolder.imgViewIcon.setImageResource(iconId);
+            viewHolder.imgViewIcon.setTag(iconId);
             viewHolder.imgViewIcon.setImageDrawable(DrawableCompat.wrap(viewHolder.imgViewIcon.getDrawable()).mutate());
             DrawableCompat.setTintList(viewHolder.imgViewIcon.getDrawable(), position == selectedSortingOrder ? ColorStateList.valueOf(color) : null);
         } catch (NullPointerException e) {

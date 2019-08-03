@@ -23,34 +23,35 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.GrantPermissionRule;
 
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
+import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.test.FormLoadingUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Random;
 import java.util.UUID;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
-import static androidx.test.espresso.action.ViewActions.repeatedlyUntil;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyAbove;
 import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyBelow;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
@@ -61,6 +62,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
 import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -73,21 +75,19 @@ import static org.odk.collect.android.test.CustomMatchers.withIndex;
 
 public class FieldListUpdateTest {
     private static final String FIELD_LIST_TEST_FORM = "fieldlist-updates.xml";
-    private static final int MAX_HIERARCHY_SWIPE_ATTEMPTS = 10;
 
     @Rule
     public IntentsTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(FIELD_LIST_TEST_FORM);
 
     @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.CAMERA);
-
-    @BeforeClass
-    public static void copyFormToSdCard() throws IOException {
-        FormLoadingUtils.copyFormToSdCard(FIELD_LIST_TEST_FORM);
-    }
+    public RuleChain copyFormChain = RuleChain
+            .outerRule(GrantPermissionRule.grant(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA)
+            )
+            .around(new ResetStateRule())
+            .around(new CopyFormRule(FIELD_LIST_TEST_FORM, Collections.singletonList("fruits.csv")));
 
     @Test
     public void relevanceChangeAtEnd_ShouldToggleLastWidgetVisibility() {
@@ -182,24 +182,25 @@ public class FieldListUpdateTest {
         onView(withText("Please don't use your calculator, !")).check(matches(isDisplayed()));
     }
 
-    /** TODO: calculation doesn't seem to be updated whether or not there's a fieldlist.
-    @Test
-    public void changeInValueUsedInOtherField_ShouldChangeValue() {
-        onView(withId(R.id.menu_goto)).perform(click());
-        onView(withId(R.id.menu_go_up)).perform(click());
-        onView(allOf(withText("Value change"), isDisplayed())).perform(click());
-        onView(withText(startsWith("What is your"))).perform(click());
-
-        String name = UUID.randomUUID().toString();
-
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
-        onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("0")));
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(name));
-        onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText(name.length())));
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
-        onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("0")));
-    }
-    **/
+    /**
+     * TODO: calculation doesn't seem to be updated whether or not there's a fieldlist.
+     *
+     * @Test public void changeInValueUsedInOtherField_ShouldChangeValue() {
+     * onView(withId(R.id.menu_goto)).perform(click());
+     * onView(withId(R.id.menu_go_up)).perform(click());
+     * onView(allOf(withText("Value change"), isDisplayed())).perform(click());
+     * onView(withText(startsWith("What is your"))).perform(click());
+     * <p>
+     * String name = UUID.randomUUID().toString();
+     * <p>
+     * onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
+     * onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("0")));
+     * onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(name));
+     * onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText(name.length())));
+     * onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
+     * onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("0")));
+     * }
+     **/
 
     @Test
     public void selectionChangeAtFirstCascadeLevel_ShouldUpdateNextLevels() {
@@ -233,29 +234,26 @@ public class FieldListUpdateTest {
         onView(withText("C1")).check(doesNotExist());
     }
 
-    // TODO: figure out why the third level isn't cleared. Wondering whether there might be an issue
-    // with populateDynamicChoices
-    //    @Test
-    //    public void clearingParentSelect_ShouldUpdateAllDependentLevels() {
-    //        onView(withId(R.id.menu_goto)).perform(click());
-    //        onView(withId(R.id.menu_go_up)).perform(click());
-    //        onView(allOf(withText("Cascading select"), isDisplayed())).perform(click());
-    //        onView(withText(startsWith("Level1"))).perform(click());
-    //
-    //        onView(withText("A")).perform(click());
-    //        onView(withText("A1")).perform(click());
-    //        onView(withText("A1B")).perform(click());
-    //
-    //        onView(withText("A")).perform(longClick());
-    //        onView(withText(R.string.clear_answer)).perform(click());
-    //        onView(withText(R.string.discard_answer)).perform(click());
-    //
-    //        onView(withIndex(withClassName(endsWith("RadioButton")), 0)).check(matches(isNotChecked()));
-    //        onView(withText("A1")).check(doesNotExist());
-    //        onView(withText("A1B")).check(doesNotExist());
-    //    }
+        @Test
+        public void clearingParentSelect_ShouldUpdateAllDependentLevels() {
+            onView(withId(R.id.menu_goto)).perform(click());
+            onView(withId(R.id.menu_go_up)).perform(click());
+            onView(allOf(withText("Cascading select"), isDisplayed())).perform(click());
+            onView(withText(startsWith("Level1"))).perform(click());
 
-    @Ignore("Fails on Firebase Test Lab Nexus 5, Virtual, API Level 21 for unknown reasons")
+            onView(withText("A")).perform(click());
+            onView(withText("A1")).perform(click());
+            onView(withText("A1B")).perform(click());
+
+            onView(withText("A")).perform(longClick());
+            onView(withText(R.string.clear_answer)).perform(click());
+            onView(withText(R.string.discard_answer)).perform(click());
+
+            onView(withIndex(withClassName(endsWith("RadioButton")), 0)).check(matches(isNotChecked()));
+            onView(withText("A1")).check(doesNotExist());
+            onView(withText("A1B")).check(doesNotExist());
+        }
+
     @Test
     public void selectionChangeAtOneCascadeLevelWithMinimalAppearance_ShouldUpdateNextLevels() {
         jumpToGroupWithText("Cascading select minimal");
@@ -350,13 +348,13 @@ public class FieldListUpdateTest {
         onView(withText("Target12")).check(doesNotExist());
 
         onView(withText(R.string.select_date)).perform(click());
-        onView(withText(R.string.ok)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click());
 
         onView(withText("Target12")).check(matches(isDisplayed()));
     }
 
     @Test
-    public void selectingARating_ShouldChangeRelevanceOfRelatedField() {
+    public void selectingARating_ShouldChangeRelevanceOfRelatedField() throws Exception {
         jumpToGroupWithText("Rating");
         onView(withText(startsWith("Source13"))).perform(click());
 
@@ -382,13 +380,26 @@ public class FieldListUpdateTest {
         onView(withText("Target14")).check(matches(isDisplayed()));
     }
 
+    @Test
+    public void search_function_in_field_list() throws InterruptedException {
+        jumpToGroupWithText("Search in field-list");
+        onView(withText(startsWith("Source15"))).perform(click());
+        Thread.sleep(1000);
+        onView(withText("Select One Answer")).check(matches(isDisplayed())).perform(click());
+        onView(withText("Mango")).check(matches(isDisplayed()));
+        onView(withText("Oranges")).check(matches(isDisplayed()));
+        onView(withText("Strawberries")).check(matches(isDisplayed())).perform(click());
+        onView(withText("Strawberries")).check(matches(isDisplayed()));
+        onView(withText("Target15")).check(matches(isDisplayed()));
+    }
+
     // Scroll down until the desired group name is visible. This is needed to make the tests work
     // on devices with screens of different heights.
     private void jumpToGroupWithText(String text) {
         onView(withId(R.id.menu_goto)).perform(click());
         onView(withId(R.id.menu_go_up)).perform(click());
-        onView(withId(R.id.list)).perform(repeatedlyUntil(swipeUp(),
-                hasDescendant(allOf(isDisplayed(), withText(text))), MAX_HIERARCHY_SWIPE_ATTEMPTS));
+        onView(withId(R.id.list)).perform(RecyclerViewActions.scrollTo(hasDescendant(withText(text))));
+
         onView(allOf(isDisplayed(), withText(text))).perform(click());
     }
 }

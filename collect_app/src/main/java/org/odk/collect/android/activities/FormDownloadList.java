@@ -16,7 +16,6 @@ package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,14 +25,16 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProviders;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormDownloadListViewModel;
@@ -51,6 +52,7 @@ import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
+import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -120,6 +122,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     @Inject
     WebCredentialsUtils webCredentialsUtils;
+
+    @Inject
+    DownloadFormListUtils downloadFormListUtils;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -320,7 +325,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 downloadFormListTask = null;
             }
 
-            downloadFormListTask = new DownloadFormListTask();
+            downloadFormListTask = new DownloadFormListTask(downloadFormListUtils);
             downloadFormListTask.setDownloaderListener(this);
 
             if (viewModel.isDownloadOnlyMode()) {
@@ -335,8 +340,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     @Override
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
-        toggleButtonLabel(toggleButton, listView);
-        updateAdapter();
+        if (PermissionUtils.areStoragePermissionsGranted(this)) {
+            updateAdapter();
+        }
     }
 
     @Override

@@ -32,21 +32,4 @@
         android:key="splashPath"
         android:layout="?android:attr/preferenceLayoutChild"
         android:title="@string/splash_path" />
-
-    <PreferenceCategory
-        android:key="@string/map_preferences"
-        android:title="@string/map_preferences">
-        <ListPreference
-            android:dialogTitle="@string/map_sdk_selector_title"
-            android:entries="@array/map_sdk_selector_entries"
-            android:entryValues="@array/map_sdk_selector_entry_values"
-            android:key="map_sdk_behavior"
-            android:title="@string/map_sdk_behavior" />
-        <ListPreference
-            android:dialogTitle="@string/map_basemap_selector_title"
-            android:entries="@array/map_google_basemap_selector_entries"
-            android:entryValues="@array/map_google_basemap_selector_entry_values"
-            android:key="map_basemap_behavior"
-            android:title="@string/map_basemap_behavior_title" />
-    </PreferenceCategory>
 </PreferenceScreen>

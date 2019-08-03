@@ -54,17 +54,6 @@ public interface OpenRosaHttpInterface {
     HttpHeadResult executeHeadRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception;
 
     /**
-     * Performs a Http Post Request.
-     *
-     * @param uri of which to post
-     * @param credentials to use on this post request
-     * @return HttpPostResult containing response code and response message
-     * @throws Exception various Exceptions such as IOException can be thrown
-     */
-    @NonNull
-    HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception;
-
-    /**
      * Uploads files to a Server.
      *
      * @param fileList List of Files to be uploaded
@@ -135,4 +124,9 @@ public interface OpenRosaHttpInterface {
     @NonNull
     String loginRequest(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception;
 
+    interface FileToContentTypeMapper {
+
+        @NonNull
+        String map(String fileName);
+    }
 }

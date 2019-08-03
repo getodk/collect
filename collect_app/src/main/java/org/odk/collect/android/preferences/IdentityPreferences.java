@@ -16,13 +16,13 @@ package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-import android.preference.Preference;
 import androidx.annotation.Nullable;
 import android.view.View;
 
 // import com.google.android.gms.analytics.GoogleAnalytics;  // smap
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_ANALYTICS;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
@@ -74,13 +74,12 @@ public class IdentityPreferences extends BasePreferenceFragment {
         final CheckBoxPreference analyticsPreference = (CheckBoxPreference) findPreference(KEY_ANALYTICS);
 
         if (analyticsPreference != null) {
-            analyticsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getActivity().getApplicationContext());
-                    googleAnalytics.setAppOptOut(!analyticsPreference.isChecked());
-                    return true;
-                }
+            analyticsPreference.setOnPreferenceClickListener(preference -> {
+                GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getActivity().getApplicationContext());
+                googleAnalytics.setAppOptOut(!analyticsPreference.isChecked());
+
+                Collect.getInstance().setAnalyticsCollectionEnabled(analyticsPreference.isChecked());
+                return true;
             });
         }
     }

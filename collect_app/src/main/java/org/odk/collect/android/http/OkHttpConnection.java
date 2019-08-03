@@ -2,17 +2,16 @@ package org.odk.collect.android.http;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.text.format.DateFormat;
-import android.webkit.MimeTypeMap;
 
 import com.burgstaller.okhttp.AuthenticationCacheInterceptor;
 import com.burgstaller.okhttp.CachingAuthenticatorDecorator;
 import com.burgstaller.okhttp.DispatchingAuthenticator;
 import com.burgstaller.okhttp.basic.BasicAuthenticator;
 import com.burgstaller.okhttp.digest.CachingAuthenticator;
+import com.burgstaller.okhttp.digest.Credentials;
+import com.burgstaller.okhttp.digest.DigestAuthenticator;
 
 import org.apache.commons.io.IOUtils;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.taskModel.TaskResponse;
@@ -25,8 +24,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -34,9 +33,6 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-
-import com.burgstaller.okhttp.digest.Credentials;
-import com.burgstaller.okhttp.digest.DigestAuthenticator;
 
 import okhttp3.Headers;
 import okhttp3.MediaType;
@@ -54,8 +50,6 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     private static final int CONNECTION_TIMEOUT = 30000;
     private static final int WRITE_CONNECTION_TIMEOUT = 60000; // it can take up to 27 seconds to spin up an Aggregate
     private static final int READ_CONNECTION_TIMEOUT = 60000; // it can take up to 27 seconds to spin up an Aggregate
-    private static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
-    private static final String CONTENT_ENCODING = "gzip,deflate";
     private static final String OPEN_ROSA_VERSION_HEADER = "X-OpenRosa-Version";
     private static final String OPEN_ROSA_VERSION = "1.0";
     private static final String DATE_HEADER = "Date";
@@ -78,16 +72,25 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
      */
     private static String lastRequestScheme = "";
 
-    MultipartBody multipartBody;
+    private MultipartBody multipartBody;
 
-    public OkHttpConnection() {
+    @Nullable
+    private final OkHttpClient.Builder baseClient;
+
+    @NonNull
+    private final FileToContentTypeMapper fileToContentTypeMapper;
+
+    public OkHttpConnection(@Nullable OkHttpClient.Builder baseClient, @NonNull  FileToContentTypeMapper fileToContentTypeMapper) {
+        this.baseClient = baseClient;
+        this.fileToContentTypeMapper = fileToContentTypeMapper;
+
         if (httpClient == null) {
             initializeHttpClient();
         }
     }
 
     private synchronized void initializeHttpClient() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        OkHttpClient.Builder builder = baseClient != null ? baseClient : new OkHttpClient.Builder();
         httpClient = builder
                 .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                 .writeTimeout(WRITE_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
@@ -182,15 +185,18 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     }
 
     @NonNull
-    @Override
-    public HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
+    private HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
         setCredentialsIfNeeded(credentials, uri.getScheme());
         HttpPostResult postResult;
         Request request = buildPostRequest(uri, multipartBody);
         Response response = httpClient.newCall(request).execute();
 
+        if (response.code() == 204) {
+            throw new Exception();
+        }
+
         postResult = new HttpPostResult(
-                response.toString(),
+                response.body().string(),
                 response.code(),
                 response.message());
 
@@ -215,9 +221,6 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         while (fileIndex < fileList.size() || first) {
             lastFileIndex = fileIndex;
             first = false;
-
-            MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-
             long byteCount = 0L;
 
             RequestBody requestBody = RequestBody.create(MediaType.parse(HTTP_CONTENT_TYPE_TEXT_XML), submissionFile);
@@ -232,14 +235,13 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
             for (; fileIndex < fileList.size(); fileIndex++) {
                 File file = fileList.get(fileIndex);
 
-                String mime = mimeTypeMap.getMimeTypeFromExtension(FileUtils.getFileExtension(file.getName()));
+                String contentType = fileToContentTypeMapper.map(file.getName());
 
-                RequestBody fileRequestBody = RequestBody.create(MediaType.parse(mime), file);
-
-                multipartBuilder.addPart(MultipartBody.Part.create(fileRequestBody));
+                RequestBody fileRequestBody = RequestBody.create(MediaType.parse(contentType), file);
+                multipartBuilder.addPart(MultipartBody.Part.createFormData(file.getName(), file.getName(), fileRequestBody));
 
                 byteCount += file.length();
-                Timber.i("added file of type '%s' %s", mime, file.getName());
+                Timber.i("added file of type '%s' %s", contentType, file.getName());
 
                 // we've added at least one attachment to the request...
                 if (fileIndex + 1 < fileList.size()) {
@@ -306,8 +308,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     private Request buildGetRequest(@NonNull URI uri) throws MalformedURLException {
         return new Request.Builder()
                 .url(uri.toURL())
-                .addHeader(ACCEPT_ENCODING_HEADER, CONTENT_ENCODING)
-                .addHeader(USER_AGENT_HEADER, getUserAgentString())
+                .addHeader(USER_AGENT_HEADER, Collect.getInstance().getUserAgentString())
                 .addHeader(OPEN_ROSA_VERSION_HEADER, OPEN_ROSA_VERSION)
                 .addHeader(DATE_HEADER, getHeaderDate())
                 .get()
@@ -317,8 +318,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     private Request buildHeadRequest(@NonNull URI uri) throws MalformedURLException {
         return new Request.Builder()
                 .url(uri.toURL())
-                .addHeader(ACCEPT_ENCODING_HEADER, CONTENT_ENCODING)
-                .addHeader(USER_AGENT_HEADER, getUserAgentString())
+                .addHeader(USER_AGENT_HEADER, Collect.getInstance().getUserAgentString())
                 .addHeader(OPEN_ROSA_VERSION_HEADER, OPEN_ROSA_VERSION)
                 .addHeader(DATE_HEADER, getHeaderDate())
                 .head()
@@ -328,25 +328,17 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     private Request buildPostRequest(@NonNull URI uri, RequestBody body) throws MalformedURLException {
         return new Request.Builder()
                 .url(uri.toURL())
-                .addHeader(ACCEPT_ENCODING_HEADER, CONTENT_ENCODING)
-                .addHeader(USER_AGENT_HEADER, getUserAgentString())
+                .addHeader(USER_AGENT_HEADER, Collect.getInstance().getUserAgentString())
                 .addHeader(OPEN_ROSA_VERSION_HEADER, OPEN_ROSA_VERSION)
                 .addHeader(DATE_HEADER, getHeaderDate())
                 .post(body)
                 .build();
     }
 
-    private String getUserAgentString() {
-        return String.format("%s %s/%s",
-                System.getProperty("http.agent"),
-                BuildConfig.APPLICATION_ID,
-                BuildConfig.VERSION_NAME);
-    }
-
     private String getHeaderDate() {
-        GregorianCalendar g = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
-        g.setTime(new Date());
-        return DateFormat.format("E, dd MMM yyyy hh:mm:ss zz", g).toString();
+        SimpleDateFormat dateFormatGmt = new SimpleDateFormat("E, dd MMM yyyy hh:mm:ss zz", Locale.US);
+        dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return dateFormatGmt.format(new Date());
     }
 
     /**

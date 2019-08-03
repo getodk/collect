@@ -1,0 +1,166 @@
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+  <h:head>
+    <h:title>OnePageFormShort</h:title>
+    <model>
+      <instance>
+        <data id="OnePageFormShort">
+          <meta>
+            <instanceID/>
+          </meta>
+          <one-page>
+            <text/>
+            <integer/>
+            <slider/>
+            <picker/>
+            <decimal/>
+            <date1/>
+            <date2/>
+            <date3/>
+            <date4/>
+            <time/>
+            <location/>
+            <image/>
+            <audio/>
+            <video/>
+            <barcode/>
+          </one-page>
+        </data>
+      </instance>
+      <itext>
+        <translation lang="English">
+          <text id="/data/one-page:label">
+            <value>One page</value>
+          </text>
+          <text id="/data/one-page/text:label">
+            <value form="long">Text</value>
+          </text>
+          <text id="/data/one-page/integer:label">
+            <value form="long">Integer</value>
+            <value form="short">int</value>
+          </text>
+          <text id="/data/one-page/slider:label">
+            <value form="long">Number slider</value>
+            <value form="short">slider</value>
+          </text>
+          <text id="/data/one-page/picker:label">
+            <value form="long">Number Picker</value>
+            <value form="short">picker</value>
+          </text>
+          <text id="/data/one-page/decimal:label">
+            <value form="long">Decimal</value>
+            <value form="short">dec</value>
+          </text>
+          <text id="/data/one-page/date1:label">
+            <value form="long">Full date</value>
+            <value form="short">date</value>
+          </text>
+          <text id="/data/one-page/date2:label">
+            <value form="long">Year Month</value>
+            <value form="short">YY MM</value>
+          </text>
+          <text id="/data/one-page/date3:label">
+            <value form="long">Year</value>
+            <value form="short">YY</value>
+          </text>
+          <text id="/data/one-page/date4:label">
+            <value form="long">Full date and time</value>
+            <value form="short">date time</value>
+          </text>
+          <text id="/data/one-page/time:label">
+            <value form="long">Time</value>
+            <value form="short">TT</value>
+          </text>
+          <text id="/data/one-page/location:label">
+            <value form="long">Location</value>
+            <value form="short">loc</value>
+          </text>
+          <text id="/data/one-page/image:label">
+            <value form="long">Image</value>
+            <value form="short">im</value>
+          </text>
+          <text id="/data/one-page/audio:label">
+            <value form="long">Audio</value>
+            <value form="short">aud</value>
+          </text>
+          <text id="/data/one-page/video:label">
+            <value form="long">Video</value>
+            <value form="short">vid</value>
+          </text>
+          <text id="/data/one-page/video:hint">
+            <value></value>
+          </text>
+          <text id="/data/one-page/barcode:label">
+            <value form="long">Barcode</value>
+          </text>
+        </translation>
+      </itext>
+      <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" calculate="concat('uuid:', uuid())"/>
+      <bind nodeset="/data/one-page/text" type="string" constraint="(regex(., &quot;^.{5,15}$&quot;))" jr:constraintMsg="Response length must be between 5 and 15"/>
+      <bind nodeset="/data/one-page/integer" type="int"/>
+      <bind nodeset="/data/one-page/slider" type="int"/>
+      <bind nodeset="/data/one-page/picker" type="int"/>
+      <bind nodeset="/data/one-page/decimal" type="decimal"/>
+      <bind nodeset="/data/one-page/date1" type="date"/>
+      <bind nodeset="/data/one-page/date2" type="date"/>
+      <bind nodeset="/data/one-page/date3" type="date"/>
+      <bind nodeset="/data/one-page/date4" type="dateTime"/>
+      <bind nodeset="/data/one-page/time" type="time"/>
+      <bind nodeset="/data/one-page/location" type="geopoint"/>
+      <bind nodeset="/data/one-page/image" type="binary"/>
+      <bind nodeset="/data/one-page/audio" type="binary"/>
+      <bind nodeset="/data/one-page/video" type="binary"/>
+      <bind nodeset="/data/one-page/barcode" type="barcode"/>
+    </model>
+  </h:head>
+  <h:body>
+    <group appearance="field-list">
+      <label ref="jr:itext('/data/one-page:label')"/>
+      <input ref="/data/one-page/text">
+        <label ref="jr:itext('/data/one-page/text:label')"/>
+      </input>
+      <input ref="/data/one-page/integer">
+        <label ref="jr:itext('/data/one-page/integer:label')"/>
+      </input>
+      <range ref="/data/one-page/slider" start="10" end="100" step="1">
+        <label ref="jr:itext('/data/one-page/slider:label')"/>
+      </range>
+      <range ref="/data/one-page/picker" start="15" end="30" step="1" appearance="picker">
+        <label ref="jr:itext('/data/one-page/picker:label')"/>
+      </range>
+      <input ref="/data/one-page/decimal">
+        <label ref="jr:itext('/data/one-page/decimal:label')"/>
+      </input>
+      <input ref="/data/one-page/date1">
+        <label ref="jr:itext('/data/one-page/date1:label')"/>
+      </input>
+      <input ref="/data/one-page/date2" appearance="month-year">
+        <label ref="jr:itext('/data/one-page/date2:label')"/>
+      </input>
+      <input ref="/data/one-page/date3" appearance="year">
+        <label ref="jr:itext('/data/one-page/date3:label')"/>
+      </input>
+      <input ref="/data/one-page/date4">
+        <label ref="jr:itext('/data/one-page/date4:label')"/>
+      </input>
+      <input ref="/data/one-page/time">
+        <label ref="jr:itext('/data/one-page/time:label')"/>
+      </input>
+      <input ref="/data/one-page/location">
+        <label ref="jr:itext('/data/one-page/location:label')"/>
+      </input>
+      <upload ref="/data/one-page/image" mediatype="image/*">
+        <label ref="jr:itext('/data/one-page/image:label')"/>
+      </upload>
+      <upload ref="/data/one-page/audio" mediatype="audio/*">
+        <label ref="jr:itext('/data/one-page/audio:label')"/>
+      </upload>
+      <upload ref="/data/one-page/video" mediatype="video/*">
+        <label ref="jr:itext('/data/one-page/video:label')"/>
+        <hint ref="jr:itext('/data/one-page/video:hint')"/>
+      </upload>
+      <input ref="/data/one-page/barcode">
+        <label ref="jr:itext('/data/one-page/barcode:label')"/>
+      </input>
+    </group>
+  </h:body>
+</h:html>

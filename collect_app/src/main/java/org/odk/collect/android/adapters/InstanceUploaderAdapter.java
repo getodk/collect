@@ -16,11 +16,14 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.events.SmsRxEvent;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.views.ProgressBar;
+
+import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -75,8 +78,11 @@ public class InstanceUploaderAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
+        long lastStatusChangeDate = getCursor().getLong(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE));
+        String status = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.STATUS));
+
         viewHolder.formTitle.setText(cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME)));
-        viewHolder.formSubtitle.setText(cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT)));
+        viewHolder.formSubtitle.setText(InstanceProvider.getDisplaySubtext(context, status, new Date(lastStatusChangeDate)));
 
         long instanceId = cursor.getLong(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
 
@@ -85,8 +91,6 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         boolean smsTransportEnabled = ((String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE)).equalsIgnoreCase(context.getString(R.string.transport_type_value_sms));
 
         boolean isSmsSubmission = model != null && smsTransportEnabled;
-
-        String status = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.STATUS));
 
         switch (status) {
             case STATUS_SUBMISSION_FAILED:

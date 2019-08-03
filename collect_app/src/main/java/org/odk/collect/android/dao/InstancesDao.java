@@ -348,7 +348,6 @@ public class InstancesDao {
                     int jrVersionColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_VERSION);
                     int statusColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.STATUS);
                     int lastStatusChangeDateColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE);
-                    int displaySubtextColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT);
                     int deletedDateColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE);
                     int repeatColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_REPEAT);                        // smap
                     int updateidColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_UPDATEID);                     // smap
@@ -367,7 +366,6 @@ public class InstancesDao {
                             .jrVersion(cursor.getString(jrVersionColumnIndex))
                             .status(cursor.getString(statusColumnIndex))
                             .lastStatusChangeDate(cursor.getLong(lastStatusChangeDateColumnIndex))
-                            .displaySubtext(cursor.getString(displaySubtextColumnIndex))
                             .deletedDate(cursor.getLong(deletedDateColumnIndex))
                             .databaseId(cursor.getLong(databaseIdIndex))
                             .repeat(cursor.getInt(repeatColumnIndex) > 0)                       // smap
@@ -402,7 +400,6 @@ public class InstancesDao {
         values.put(InstanceProviderAPI.InstanceColumns.JR_VERSION, instance.getJrVersion());
         values.put(InstanceProviderAPI.InstanceColumns.STATUS, instance.getStatus());
         values.put(InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE, instance.getLastStatusChangeDate());
-        values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT, instance.getDisplaySubtext());
         values.put(InstanceProviderAPI.InstanceColumns.DELETED_DATE, instance.getDeletedDate());
 
         return values;

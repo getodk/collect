@@ -41,6 +41,8 @@ public class DateTimeUtilsTest {
     private DatePickerDetails copticDatePickerDetails;
     private DatePickerDetails islamicDatePickerDetails;
     private DatePickerDetails bikramSambatDatePickerDetails;
+    private DatePickerDetails myanmarDatePickerDetails;
+    private DatePickerDetails persianDatePickerDetails;
 
     private Context context;
     private Locale defaultLocale;
@@ -53,6 +55,8 @@ public class DateTimeUtilsTest {
         copticDatePickerDetails = new DatePickerDetails(DatePickerDetails.DatePickerType.COPTIC, DatePickerDetails.DatePickerMode.SPINNERS);
         islamicDatePickerDetails = new DatePickerDetails(DatePickerDetails.DatePickerType.ISLAMIC, DatePickerDetails.DatePickerMode.SPINNERS);
         bikramSambatDatePickerDetails = new DatePickerDetails(DatePickerDetails.DatePickerType.BIKRAM_SAMBAT, DatePickerDetails.DatePickerMode.SPINNERS);
+        myanmarDatePickerDetails = new DatePickerDetails(DatePickerDetails.DatePickerType.MYANMAR, DatePickerDetails.DatePickerMode.SPINNERS);
+        persianDatePickerDetails = new DatePickerDetails(DatePickerDetails.DatePickerType.PERSIAN, DatePickerDetails.DatePickerMode.SPINNERS);
 
         context = Collect.getInstance();
         defaultLocale = Locale.getDefault();
@@ -83,6 +87,12 @@ public class DateTimeUtilsTest {
 
         assertEquals("3 कार्तिक 2048 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(date, bikramSambatDatePickerDetails, false, context));
         assertEquals("3 कार्तिक 2048, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(date, bikramSambatDatePickerDetails, true, context));
+
+        assertEquals("12 သီတင်းကျွတ် 1353 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(date, myanmarDatePickerDetails, false, context));
+        assertEquals("12 သီတင်းကျွတ် 1353, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(date, myanmarDatePickerDetails, true, context));
+
+        assertEquals("28 Mehr 1370 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(date, persianDatePickerDetails, false, context));
+        assertEquals("28 Mehr 1370, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(date, persianDatePickerDetails, true, context));
     }
 
     @After

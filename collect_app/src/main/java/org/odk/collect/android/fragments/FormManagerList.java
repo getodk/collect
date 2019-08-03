@@ -31,7 +31,7 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
+import org.odk.collect.android.adapters.VersionHidingCursorAdapter;
 
 import timber.log.Timber;
 
@@ -101,7 +101,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     }
 
     private void setupAdapter() {
-        String[] data = new String[]{FormsColumns.DISPLAY_NAME, FormsColumns.JR_VERSION, FormsColumns.DISPLAY_SUBTEXT,
+        String[] data = new String[]{FormsColumns.DISPLAY_NAME, FormsColumns.JR_VERSION, FormsColumns.DATE,
                                         FormsColumns.JR_FORM_ID};
         int[] view = new int[]{R.id.form_title, R.id.form_subtitle, R.id.form_subtitle2};
 

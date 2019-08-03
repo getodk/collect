@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<h:html
+    xmlns:h="http://www.w3.org/1999/xhtml">
+    <h:head>
+        <h:title>numberInCSV</h:title>
+        <model>
+            <instance>
+                <data id="a0e1C00000DA61ZQAT">
+                    <new_section>
+                        <number>
+                            <number_static />
+                            <a0R1C00000anTbn />
+                            <a0R1C00000anTbo />
+                            <a0R1C00000anTbp />
+                        </number>
+                    </new_section>
+                    <closemessage />
+                </data>
+            </instance>
+            <bind nodeset="/data/new_section" />
+            <bind nodeset="/data/new_section/number" />
+            <bind nodeset="/data/new_section/number/number_static" readonly="true()" />
+            <bind nodeset="/data/new_section/number/a0R1C00000anTbn" type="select1" />
+            <bind nodeset="/data/new_section/number/a0R1C00000anTbo" type="string" />
+            <bind nodeset="/data/new_section/number/a0R1C00000anTbp" type="string" />
+            <bind nodeset="/data/closemessage" type="string" readonly="true()" relevant="not(null)" />
+        </model>
+    </h:head>
+    <h:body>
+        <group nodeset="/data/new_section">
+            <label>New section</label>
+            <group nodeset="/data/new_section/number">
+                <label>number</label>
+                <input ref="/data/new_section/number/number_static">
+                    <label>number</label>
+                </input>
+                <select1 ref="/data/new_section/number/a0R1C00000anTbn">
+                    <label>﻿1a</label>
+                    <item>
+                        <label>Vendas agrícolas</label>
+                        <value>Vendas agrícolas</value>
+                    </item>
+                    <item>
+                        <label>Venda de animais</label>
+                        <value>Venda de animais</value>
+                    </item>
+                    <item>
+                        <label>Salário</label>
+                        <value>Salário</value>
+                    </item>
+                    <item>
+                        <label>Pensão</label>
+                        <value>Pensão</value>
+                    </item>
+                    <item>
+                        <label>Enviu de dinheiro de algum familiar/amigo que não vive na casa</label>
+                        <value>Enviu de dinheiro de algum familiar/amigo que não vive na casa</value>
+                    </item>
+                    <item>
+                        <label>Cobrança de rendas</label>
+                        <value>Cobrança de rendas</value>
+                    </item>
+                    <item>
+                        <label>Dinheiro do esposo/esposa ou outro familiar que vive na casa</label>
+                        <value>Dinheiro do esposo/esposa ou outro familiar que vive na casa</value>
+                    </item>
+                    <item>
+                        <label>Outro</label>
+                        <value>Outro</value>
+                    </item>
+                </select1>
+                <input ref="/data/new_section/number/a0R1C00000anTbo" query="instance('2a')/root/item[1a=/data/new_section/number/a0R1C00000anTbn]">
+                    <label>2a</label>
+                </input>
+                <input ref="/data/new_section/number/a0R1C00000anTbp" query="instance('3a')/root/item[1a=/data/new_section/number/a0R1C00000anTbn and 2a=/data/new_section/number/a0R1C00000anTbo]">
+                    <label>3a</label>
+                </input>
+            </group>
+        </group>
+        <input ref="/data/closemessage">
+            <hint>Thank you for taking the time to complete this form!</hint>
+        </input>
+    </h:body>
+</h:html>

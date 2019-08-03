@@ -89,8 +89,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
     private Button viewSentFormsButton;
     private Button reviewDataButton;
     private Button getFormsButton;
-    private View reviewSpacer;
-    private View getFormsSpacer;
     private AlertDialog alertDialog;
     private SharedPreferences adminPreferences;
     private int completedCount;
@@ -263,9 +261,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         }
 
-        reviewSpacer = findViewById(R.id.review_spacer);
-        getFormsSpacer = findViewById(R.id.get_forms_spacer);
-
         adminPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
@@ -334,15 +329,9 @@ public class MainMenuActivity extends CollectAbstractActivity {
             if (reviewDataButton != null) {
                 reviewDataButton.setVisibility(View.GONE);
             }
-            if (reviewSpacer != null) {
-                reviewSpacer.setVisibility(View.GONE);
-            }
         } else {
             if (reviewDataButton != null) {
                 reviewDataButton.setVisibility(View.VISIBLE);
-            }
-            if (reviewSpacer != null) {
-                reviewSpacer.setVisibility(View.VISIBLE);
             }
         }
 
@@ -376,15 +365,9 @@ public class MainMenuActivity extends CollectAbstractActivity {
             if (getFormsButton != null) {
                 getFormsButton.setVisibility(View.GONE);
             }
-            if (getFormsSpacer != null) {
-                getFormsSpacer.setVisibility(View.GONE);
-            }
         } else {
             if (getFormsButton != null) {
                 getFormsButton.setVisibility(View.VISIBLE);
-            }
-            if (getFormsSpacer != null) {
-                getFormsSpacer.setVisibility(View.VISIBLE);
             }
         }
 
@@ -607,7 +590,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             for (Entry<String, ?> entry : adminEntries.entrySet()) {
                 AdminSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
             }
-            Collect.getInstance().initProperties();
+            Collect.getInstance().initializeJavaRosa();
             res = true;
         } catch (IOException | ClassNotFoundException e) {
             Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());

@@ -1,0 +1,401 @@
+list_name,name,label,1a,2a
+1a,Vendas agrícolas,Vendas agrícolas
+1a,Venda de animais,Venda de animais
+1a,Salário,Salário
+1a,Pensão,Pensão
+1a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+1a,Cobrança de rendas,Cobrança de rendas
+1a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+1a,Outro,Outro
+2a,Venda de animais,Venda de animais,Vendas agrícolas
+2a,Salário,Salário,Vendas agrícolas
+2a,Pensão,Pensão,Vendas agrícolas
+2a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Vendas agrícolas
+2a,Cobrança de rendas,Cobrança de rendas,Vendas agrícolas
+2a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Vendas agrícolas
+2a,Outro,Outro,Vendas agrícolas
+2a,Vendas agrícolas,Vendas agrícolas,Venda de animais
+2a,Salário,Salário,Venda de animais
+2a,Pensão,Pensão,Venda de animais
+2a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Venda de animais
+2a,Cobrança de rendas,Cobrança de rendas,Venda de animais
+2a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Venda de animais
+2a,Outro,Outro,Venda de animais
+2a,Vendas agrícolas,Vendas agrícolas,Salário
+2a,Venda de animais,Venda de animais,Salário
+2a,Pensão,Pensão,Salário
+2a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Salário
+2a,Cobrança de rendas,Cobrança de rendas,Salário
+2a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Salário
+2a,Outro,Outro,Salário
+2a,Vendas agrícolas,Vendas agrícolas,Pensão
+2a,Venda de animais,Venda de animais,Pensão
+2a,Salário,Salário,Pensão
+2a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Pensão
+2a,Cobrança de rendas,Cobrança de rendas,Pensão
+2a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Pensão
+2a,Outro,Outro,Pensão
+2a,Vendas agrícolas,Vendas agrícolas,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+2a,Venda de animais,Venda de animais,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+2a,Salário,Salário,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+2a,Pensão,Pensão,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+2a,Cobrança de rendas,Cobrança de rendas,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+2a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+2a,Outro,Outro,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+2a,Vendas agrícolas,Vendas agrícolas,Cobrança de rendas
+2a,Venda de animais,Venda de animais,Cobrança de rendas
+2a,Salário,Salário,Cobrança de rendas
+2a,Pensão,Pensão,Cobrança de rendas
+2a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Cobrança de rendas
+2a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Cobrança de rendas
+2a,Outro,Outro,Cobrança de rendas
+2a,Vendas agrícolas,Vendas agrícolas,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+2a,Venda de animais,Venda de animais,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+2a,Salário,Salário,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+2a,Pensão,Pensão,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+2a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+2a,Cobrança de rendas,Cobrança de rendas,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+2a,Outro,Outro,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+2a,Vendas agrícolas,Vendas agrícolas,Outro
+2a,Venda de animais,Venda de animais,Outro
+2a,Salário,Salário,Outro
+2a,Pensão,Pensão,Outro
+2a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Outro
+2a,Cobrança de rendas,Cobrança de rendas,Outro
+2a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Outro
+3a,Salário,Salário,Vendas agrícolas,Venda de animais
+3a,Pensão,Pensão,Vendas agrícolas,Venda de animais
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Vendas agrícolas,Venda de animais
+3a,Cobrança de rendas,Cobrança de rendas,Vendas agrícolas,Venda de animais
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Vendas agrícolas,Venda de animais
+3a,Outro,Outro,Vendas agrícolas,Venda de animais
+3a,Venda de animais,Venda de animais,Vendas agrícolas,Salário
+3a,Pensão,Pensão,Vendas agrícolas,Salário
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Vendas agrícolas,Salário
+3a,Cobrança de rendas,Cobrança de rendas,Vendas agrícolas,Salário
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Vendas agrícolas,Salário
+3a,Outro,Outro,Vendas agrícolas,Salário
+3a,Venda de animais,Venda de animais,Vendas agrícolas,Pensão
+3a,Salário,Salário,Vendas agrícolas,Pensão
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Vendas agrícolas,Pensão
+3a,Cobrança de rendas,Cobrança de rendas,Vendas agrícolas,Pensão
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Vendas agrícolas,Pensão
+3a,Outro,Outro,Vendas agrícolas,Pensão
+3a,Venda de animais,Venda de animais,Vendas agrícolas,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Salário,Salário,Vendas agrícolas,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Pensão,Pensão,Vendas agrícolas,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Cobrança de rendas,Cobrança de rendas,Vendas agrícolas,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Vendas agrícolas,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Outro,Outro,Vendas agrícolas,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Venda de animais,Venda de animais,Vendas agrícolas,Cobrança de rendas
+3a,Salário,Salário,Vendas agrícolas,Cobrança de rendas
+3a,Pensão,Pensão,Vendas agrícolas,Cobrança de rendas
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Vendas agrícolas,Cobrança de rendas
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Vendas agrícolas,Cobrança de rendas
+3a,Outro,Outro,Vendas agrícolas,Cobrança de rendas
+3a,Venda de animais,Venda de animais,Vendas agrícolas,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Salário,Salário,Vendas agrícolas,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Pensão,Pensão,Vendas agrícolas,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Vendas agrícolas,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Cobrança de rendas,Cobrança de rendas,Vendas agrícolas,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Outro,Outro,Vendas agrícolas,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Venda de animais,Venda de animais,Vendas agrícolas,Outro
+3a,Salário,Salário,Vendas agrícolas,Outro
+3a,Pensão,Pensão,Vendas agrícolas,Outro
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Vendas agrícolas,Outro
+3a,Cobrança de rendas,Cobrança de rendas,Vendas agrícolas,Outro
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Vendas agrícolas,Outro
+3a,Salário,Salário,Venda de animais,Vendas agrícolas
+3a,Pensão,Pensão,Venda de animais,Vendas agrícolas
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Venda de animais,Vendas agrícolas
+3a,Cobrança de rendas,Cobrança de rendas,Venda de animais,Vendas agrícolas
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Venda de animais,Vendas agrícolas
+3a,Outro,Outro,Venda de animais,Vendas agrícolas
+3a,Vendas agrícolas,Vendas agrícolas,Venda de animais,Salário
+3a,Pensão,Pensão,Venda de animais,Salário
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Venda de animais,Salário
+3a,Cobrança de rendas,Cobrança de rendas,Venda de animais,Salário
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Venda de animais,Salário
+3a,Outro,Outro,Venda de animais,Salário
+3a,Vendas agrícolas,Vendas agrícolas,Venda de animais,Pensão
+3a,Salário,Salário,Venda de animais,Pensão
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Venda de animais,Pensão
+3a,Cobrança de rendas,Cobrança de rendas,Venda de animais,Pensão
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Venda de animais,Pensão
+3a,Outro,Outro,Venda de animais,Pensão
+3a,Vendas agrícolas,Vendas agrícolas,Venda de animais,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Salário,Salário,Venda de animais,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Pensão,Pensão,Venda de animais,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Cobrança de rendas,Cobrança de rendas,Venda de animais,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Venda de animais,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Outro,Outro,Venda de animais,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Vendas agrícolas,Vendas agrícolas,Venda de animais,Cobrança de rendas
+3a,Salário,Salário,Venda de animais,Cobrança de rendas
+3a,Pensão,Pensão,Venda de animais,Cobrança de rendas
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Venda de animais,Cobrança de rendas
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Venda de animais,Cobrança de rendas
+3a,Outro,Outro,Venda de animais,Cobrança de rendas
+3a,Vendas agrícolas,Vendas agrícolas,Venda de animais,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Salário,Salário,Venda de animais,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Pensão,Pensão,Venda de animais,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Venda de animais,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Cobrança de rendas,Cobrança de rendas,Venda de animais,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Outro,Outro,Venda de animais,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Vendas agrícolas,Vendas agrícolas,Venda de animais,Outro
+3a,Salário,Salário,Venda de animais,Outro
+3a,Pensão,Pensão,Venda de animais,Outro
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Venda de animais,Outro
+3a,Cobrança de rendas,Cobrança de rendas,Venda de animais,Outro
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Venda de animais,Outro
+3a,Venda de animais,Venda de animais,Salário,Vendas agrícolas
+3a,Pensão,Pensão,Salário,Vendas agrícolas
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Salário,Vendas agrícolas
+3a,Cobrança de rendas,Cobrança de rendas,Salário,Vendas agrícolas
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Salário,Vendas agrícolas
+3a,Outro,Outro,Salário,Vendas agrícolas
+3a,Vendas agrícolas,Vendas agrícolas,Salário,Venda de animais
+3a,Pensão,Pensão,Salário,Venda de animais
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Salário,Venda de animais
+3a,Cobrança de rendas,Cobrança de rendas,Salário,Venda de animais
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Salário,Venda de animais
+3a,Outro,Outro,Salário,Venda de animais
+3a,Vendas agrícolas,Vendas agrícolas,Salário,Pensão
+3a,Venda de animais,Venda de animais,Salário,Pensão
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Salário,Pensão
+3a,Cobrança de rendas,Cobrança de rendas,Salário,Pensão
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Salário,Pensão
+3a,Outro,Outro,Salário,Pensão
+3a,Vendas agrícolas,Vendas agrícolas,Salário,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Venda de animais,Venda de animais,Salário,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Pensão,Pensão,Salário,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Cobrança de rendas,Cobrança de rendas,Salário,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Salário,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Outro,Outro,Salário,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Vendas agrícolas,Vendas agrícolas,Salário,Cobrança de rendas
+3a,Venda de animais,Venda de animais,Salário,Cobrança de rendas
+3a,Pensão,Pensão,Salário,Cobrança de rendas
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Salário,Cobrança de rendas
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Salário,Cobrança de rendas
+3a,Outro,Outro,Salário,Cobrança de rendas
+3a,Vendas agrícolas,Vendas agrícolas,Salário,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Venda de animais,Venda de animais,Salário,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Pensão,Pensão,Salário,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Salário,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Cobrança de rendas,Cobrança de rendas,Salário,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Outro,Outro,Salário,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Vendas agrícolas,Vendas agrícolas,Salário,Outro
+3a,Venda de animais,Venda de animais,Salário,Outro
+3a,Pensão,Pensão,Salário,Outro
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Salário,Outro
+3a,Cobrança de rendas,Cobrança de rendas,Salário,Outro
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Salário,Outro
+3a,Venda de animais,Venda de animais,Pensão,Vendas agrícolas
+3a,Salário,Salário,Pensão,Vendas agrícolas
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Pensão,Vendas agrícolas
+3a,Cobrança de rendas,Cobrança de rendas,Pensão,Vendas agrícolas
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Pensão,Vendas agrícolas
+3a,Outro,Outro,Pensão,Vendas agrícolas
+3a,Vendas agrícolas,Vendas agrícolas,Pensão,Venda de animais
+3a,Salário,Salário,Pensão,Venda de animais
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Pensão,Venda de animais
+3a,Cobrança de rendas,Cobrança de rendas,Pensão,Venda de animais
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Pensão,Venda de animais
+3a,Outro,Outro,Pensão,Venda de animais
+3a,Vendas agrícolas,Vendas agrícolas,Pensão,Salário
+3a,Venda de animais,Venda de animais,Pensão,Salário
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Pensão,Salário
+3a,Cobrança de rendas,Cobrança de rendas,Pensão,Salário
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Pensão,Salário
+3a,Outro,Outro,Pensão,Salário
+3a,Vendas agrícolas,Vendas agrícolas,Pensão,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Venda de animais,Venda de animais,Pensão,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Salário,Salário,Pensão,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Cobrança de rendas,Cobrança de rendas,Pensão,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Pensão,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Outro,Outro,Pensão,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Vendas agrícolas,Vendas agrícolas,Pensão,Cobrança de rendas
+3a,Venda de animais,Venda de animais,Pensão,Cobrança de rendas
+3a,Salário,Salário,Pensão,Cobrança de rendas
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Pensão,Cobrança de rendas
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Pensão,Cobrança de rendas
+3a,Outro,Outro,Pensão,Cobrança de rendas
+3a,Vendas agrícolas,Vendas agrícolas,Pensão,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Venda de animais,Venda de animais,Pensão,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Salário,Salário,Pensão,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Pensão,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Cobrança de rendas,Cobrança de rendas,Pensão,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Outro,Outro,Pensão,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Vendas agrícolas,Vendas agrícolas,Pensão,Outro
+3a,Venda de animais,Venda de animais,Pensão,Outro
+3a,Salário,Salário,Pensão,Outro
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Pensão,Outro
+3a,Cobrança de rendas,Cobrança de rendas,Pensão,Outro
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Pensão,Outro
+3a,Venda de animais,Venda de animais,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Vendas agrícolas
+3a,Salário,Salário,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Vendas agrícolas
+3a,Pensão,Pensão,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Vendas agrícolas
+3a,Cobrança de rendas,Cobrança de rendas,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Vendas agrícolas
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Vendas agrícolas
+3a,Outro,Outro,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Vendas agrícolas
+3a,Vendas agrícolas,Vendas agrícolas,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Venda de animais
+3a,Salário,Salário,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Venda de animais
+3a,Pensão,Pensão,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Venda de animais
+3a,Cobrança de rendas,Cobrança de rendas,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Venda de animais
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Venda de animais
+3a,Outro,Outro,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Venda de animais
+3a,Vendas agrícolas,Vendas agrícolas,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Salário
+3a,Venda de animais,Venda de animais,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Salário
+3a,Pensão,Pensão,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Salário
+3a,Cobrança de rendas,Cobrança de rendas,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Salário
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Salário
+3a,Outro,Outro,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Salário
+3a,Vendas agrícolas,Vendas agrícolas,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Pensão
+3a,Venda de animais,Venda de animais,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Pensão
+3a,Salário,Salário,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Pensão
+3a,Cobrança de rendas,Cobrança de rendas,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Pensão
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Pensão
+3a,Outro,Outro,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Pensão
+3a,Vendas agrícolas,Vendas agrícolas,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Cobrança de rendas
+3a,Venda de animais,Venda de animais,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Cobrança de rendas
+3a,Salário,Salário,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Cobrança de rendas
+3a,Pensão,Pensão,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Cobrança de rendas
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Cobrança de rendas
+3a,Outro,Outro,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Cobrança de rendas
+3a,Vendas agrícolas,Vendas agrícolas,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Venda de animais,Venda de animais,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Salário,Salário,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Pensão,Pensão,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Cobrança de rendas,Cobrança de rendas,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Outro,Outro,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Vendas agrícolas,Vendas agrícolas,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Outro
+3a,Venda de animais,Venda de animais,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Outro
+3a,Salário,Salário,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Outro
+3a,Pensão,Pensão,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Outro
+3a,Cobrança de rendas,Cobrança de rendas,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Outro
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Outro
+3a,Venda de animais,Venda de animais,Cobrança de rendas,Vendas agrícolas
+3a,Salário,Salário,Cobrança de rendas,Vendas agrícolas
+3a,Pensão,Pensão,Cobrança de rendas,Vendas agrícolas
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Cobrança de rendas,Vendas agrícolas
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Cobrança de rendas,Vendas agrícolas
+3a,Outro,Outro,Cobrança de rendas,Vendas agrícolas
+3a,Vendas agrícolas,Vendas agrícolas,Cobrança de rendas,Venda de animais
+3a,Salário,Salário,Cobrança de rendas,Venda de animais
+3a,Pensão,Pensão,Cobrança de rendas,Venda de animais
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Cobrança de rendas,Venda de animais
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Cobrança de rendas,Venda de animais
+3a,Outro,Outro,Cobrança de rendas,Venda de animais
+3a,Vendas agrícolas,Vendas agrícolas,Cobrança de rendas,Salário
+3a,Venda de animais,Venda de animais,Cobrança de rendas,Salário
+3a,Pensão,Pensão,Cobrança de rendas,Salário
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Cobrança de rendas,Salário
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Cobrança de rendas,Salário
+3a,Outro,Outro,Cobrança de rendas,Salário
+3a,Vendas agrícolas,Vendas agrícolas,Cobrança de rendas,Pensão
+3a,Venda de animais,Venda de animais,Cobrança de rendas,Pensão
+3a,Salário,Salário,Cobrança de rendas,Pensão
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Cobrança de rendas,Pensão
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Cobrança de rendas,Pensão
+3a,Outro,Outro,Cobrança de rendas,Pensão
+3a,Vendas agrícolas,Vendas agrícolas,Cobrança de rendas,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Venda de animais,Venda de animais,Cobrança de rendas,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Salário,Salário,Cobrança de rendas,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Pensão,Pensão,Cobrança de rendas,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Cobrança de rendas,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Outro,Outro,Cobrança de rendas,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Vendas agrícolas,Vendas agrícolas,Cobrança de rendas,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Venda de animais,Venda de animais,Cobrança de rendas,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Salário,Salário,Cobrança de rendas,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Pensão,Pensão,Cobrança de rendas,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Cobrança de rendas,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Outro,Outro,Cobrança de rendas,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Vendas agrícolas,Vendas agrícolas,Cobrança de rendas,Outro
+3a,Venda de animais,Venda de animais,Cobrança de rendas,Outro
+3a,Salário,Salário,Cobrança de rendas,Outro
+3a,Pensão,Pensão,Cobrança de rendas,Outro
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Cobrança de rendas,Outro
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Cobrança de rendas,Outro
+3a,Venda de animais,Venda de animais,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Vendas agrícolas
+3a,Salário,Salário,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Vendas agrícolas
+3a,Pensão,Pensão,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Vendas agrícolas
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Vendas agrícolas
+3a,Cobrança de rendas,Cobrança de rendas,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Vendas agrícolas
+3a,Outro,Outro,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Vendas agrícolas
+3a,Vendas agrícolas,Vendas agrícolas,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Venda de animais
+3a,Salário,Salário,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Venda de animais
+3a,Pensão,Pensão,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Venda de animais
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Venda de animais
+3a,Cobrança de rendas,Cobrança de rendas,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Venda de animais
+3a,Outro,Outro,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Venda de animais
+3a,Vendas agrícolas,Vendas agrícolas,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Salário
+3a,Venda de animais,Venda de animais,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Salário
+3a,Pensão,Pensão,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Salário
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Salário
+3a,Cobrança de rendas,Cobrança de rendas,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Salário
+3a,Outro,Outro,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Salário
+3a,Vendas agrícolas,Vendas agrícolas,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Pensão
+3a,Venda de animais,Venda de animais,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Pensão
+3a,Salário,Salário,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Pensão
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Pensão
+3a,Cobrança de rendas,Cobrança de rendas,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Pensão
+3a,Outro,Outro,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Pensão
+3a,Vendas agrícolas,Vendas agrícolas,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Venda de animais,Venda de animais,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Salário,Salário,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Pensão,Pensão,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Cobrança de rendas,Cobrança de rendas,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Outro,Outro,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Vendas agrícolas,Vendas agrícolas,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Cobrança de rendas
+3a,Venda de animais,Venda de animais,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Cobrança de rendas
+3a,Salário,Salário,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Cobrança de rendas
+3a,Pensão,Pensão,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Cobrança de rendas
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Cobrança de rendas
+3a,Outro,Outro,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Cobrança de rendas
+3a,Vendas agrícolas,Vendas agrícolas,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Outro
+3a,Venda de animais,Venda de animais,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Outro
+3a,Salário,Salário,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Outro
+3a,Pensão,Pensão,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Outro
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Outro
+3a,Cobrança de rendas,Cobrança de rendas,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Outro
+3a,Venda de animais,Venda de animais,Outro,Vendas agrícolas
+3a,Salário,Salário,Outro,Vendas agrícolas
+3a,Pensão,Pensão,Outro,Vendas agrícolas
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Outro,Vendas agrícolas
+3a,Cobrança de rendas,Cobrança de rendas,Outro,Vendas agrícolas
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Outro,Vendas agrícolas
+3a,Vendas agrícolas,Vendas agrícolas,Outro,Venda de animais
+3a,Salário,Salário,Outro,Venda de animais
+3a,Pensão,Pensão,Outro,Venda de animais
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Outro,Venda de animais
+3a,Cobrança de rendas,Cobrança de rendas,Outro,Venda de animais
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Outro,Venda de animais
+3a,Vendas agrícolas,Vendas agrícolas,Outro,Salário
+3a,Venda de animais,Venda de animais,Outro,Salário
+3a,Pensão,Pensão,Outro,Salário
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Outro,Salário
+3a,Cobrança de rendas,Cobrança de rendas,Outro,Salário
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Outro,Salário
+3a,Vendas agrícolas,Vendas agrícolas,Outro,Pensão
+3a,Venda de animais,Venda de animais,Outro,Pensão
+3a,Salário,Salário,Outro,Pensão
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Outro,Pensão
+3a,Cobrança de rendas,Cobrança de rendas,Outro,Pensão
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Outro,Pensão
+3a,Vendas agrícolas,Vendas agrícolas,Outro,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Venda de animais,Venda de animais,Outro,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Salário,Salário,Outro,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Pensão,Pensão,Outro,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Cobrança de rendas,Cobrança de rendas,Outro,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Outro,Enviu de dinheiro de algum familiar/amigo que não vive na casa
+3a,Vendas agrícolas,Vendas agrícolas,Outro,Cobrança de rendas
+3a,Venda de animais,Venda de animais,Outro,Cobrança de rendas
+3a,Salário,Salário,Outro,Cobrança de rendas
+3a,Pensão,Pensão,Outro,Cobrança de rendas
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Outro,Cobrança de rendas
+3a,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Dinheiro do esposo/esposa ou outro familiar que vive na casa,Outro,Cobrança de rendas
+3a,Vendas agrícolas,Vendas agrícolas,Outro,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Venda de animais,Venda de animais,Outro,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Salário,Salário,Outro,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Pensão,Pensão,Outro,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Enviu de dinheiro de algum familiar/amigo que não vive na casa,Outro,Dinheiro do esposo/esposa ou outro familiar que vive na casa
+3a,Cobrança de rendas,Cobrança de rendas,Outro,Dinheiro do esposo/esposa ou outro familiar que vive na casa

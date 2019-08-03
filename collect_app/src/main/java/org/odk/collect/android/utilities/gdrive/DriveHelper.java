@@ -79,12 +79,6 @@ public class DriveHelper {
         driveService.downloadFile(fileId, file);
     }
 
-    public String createOrGetIDOfFolderWithName(String jrFormId)
-            throws IOException, MultipleFoldersFoundException {
-        String submissionsFolderId = createOrGetIDOfSubmissionsFolder();
-        return getIDOfFolderWithName(jrFormId, submissionsFolderId, true);
-    }
-
     public String createOrGetIDOfSubmissionsFolder()
             throws IOException, MultipleFoldersFoundException {
         String rootFolderId = getIDOfFolderWithName(ODK_GOOGLE_DRIVE_ROOT_FOLDER_NAME, null, true);

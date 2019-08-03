@@ -269,7 +269,10 @@ public class FormDownloader {
                     + "very beginning.");
         } else {
             if(fileResult.file.exists()) {  // smap
-            formsDao.deleteFormsFromMd5Hash(FileUtils.getMd5Hash(fileResult.file));
+            String md5Hash = FileUtils.getMd5Hash(fileResult.file);
+            if (md5Hash != null) {
+                formsDao.deleteFormsFromMd5Hash(md5Hash);
+            }
             FileUtils.deleteAndReport(fileResult.getFile());
         }
         }

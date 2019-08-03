@@ -13,6 +13,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.fragments.DataManagerList;
 import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.receivers.NetworkReceiver;
@@ -21,6 +22,7 @@ import org.odk.collect.android.tasks.SmapLoginTask;
 import org.odk.collect.android.tasks.SmapRemoteWebServicePostTask;
 import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
+import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSender;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
@@ -98,7 +100,7 @@ public interface AppDependencyComponent {
 
     void inject(FormDownloader formDownloader);
 
-    void inject(DownloadFormListUtils downloadFormListUtils);
+    void inject(ServerPollingJob serverPollingJob);
 
     void inject(AuthDialogUtility authDialogUtility);
 
@@ -127,4 +129,8 @@ public interface AppDependencyComponent {
     SmsSubmissionManagerContract smsSubmissionManagerContract();
 
     RxEventBus rxEventBus();
+
+    OpenRosaHttpInterface openRosaHttpInterface();
+
+    DownloadFormListUtils downloadFormListUtils();
 }

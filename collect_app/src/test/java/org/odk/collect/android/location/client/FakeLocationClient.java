@@ -6,6 +6,7 @@ import com.google.android.gms.location.LocationListener;
 
 public class FakeLocationClient implements LocationClient {
     private boolean failOnStart;
+    private boolean failOnRequest;
     private LocationClientListener clientListener;
     private LocationListener locationListener;
     private boolean running;
@@ -21,6 +22,10 @@ public class FakeLocationClient implements LocationClient {
 
     public void setFailOnStart(boolean fail) {
         failOnStart = fail;
+    }
+
+    public void setFailOnRequest(boolean fail) {
+        failOnRequest = fail;
     }
 
     public void receiveFix(Location location) {
@@ -49,6 +54,7 @@ public class FakeLocationClient implements LocationClient {
 
     public void stop() {
         running = false;
+        stopLocationUpdates();
         if (clientListener != null) {
             clientListener.onClientStop();
         }
@@ -59,6 +65,10 @@ public class FakeLocationClient implements LocationClient {
     }
 
     public void requestLocationUpdates(LocationListener locationListener) {
+        if (failOnRequest) {
+            throw new SecurityException();
+        }
+
         this.locationListener = locationListener;
     }
 

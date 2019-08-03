@@ -17,14 +17,16 @@ package org.odk.collect.android.provider;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import androidx.annotation.NonNull;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -346,15 +348,9 @@ public class InstanceProvider extends ContentProvider {
             values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
         }
 
-        if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
-            Date today = new Date();
-            String text = getDisplaySubtext(InstanceProviderAPI.STATUS_INCOMPLETE, today);
-            values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
-        }
-
-        if (!values.containsKey(InstanceColumns.STATUS)) {
-            values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
-        }
+            if (!values.containsKey(InstanceColumns.STATUS)) {
+                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
+            }
 
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
         long rowId = db.insert(INSTANCES_TABLE_NAME, null, values);
@@ -364,29 +360,29 @@ public class InstanceProvider extends ContentProvider {
             return instanceUri;
         }
 
-        throw new SQLException("Failed to insert row into " + uri);
+        throw new SQLException("Failed to insert into the instances database.");
     }
 
-    private String getDisplaySubtext(String state, Date date) {
+    public static String getDisplaySubtext(Context context, String state, Date date) {
         try {
             if (state == null) {
-                return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time),
+                return new SimpleDateFormat(context.getString(R.string.added_on_date_at_time),
                         Locale.getDefault()).format(date);
             } else if (InstanceProviderAPI.STATUS_INCOMPLETE.equalsIgnoreCase(state)) {
-                return new SimpleDateFormat(getContext().getString(R.string.saved_on_date_at_time),
+                return new SimpleDateFormat(context.getString(R.string.saved_on_date_at_time),
                         Locale.getDefault()).format(date);
             } else if (InstanceProviderAPI.STATUS_COMPLETE.equalsIgnoreCase(state)) {
-                return new SimpleDateFormat(getContext().getString(R.string.finalized_on_date_at_time),
+                return new SimpleDateFormat(context.getString(R.string.finalized_on_date_at_time),
                         Locale.getDefault()).format(date);
             } else if (InstanceProviderAPI.STATUS_SUBMITTED.equalsIgnoreCase(state)) {
-                return new SimpleDateFormat(getContext().getString(R.string.sent_on_date_at_time),
+                return new SimpleDateFormat(context.getString(R.string.sent_on_date_at_time),
                         Locale.getDefault()).format(date);
             } else if (InstanceProviderAPI.STATUS_SUBMISSION_FAILED.equalsIgnoreCase(state)) {
                 return new SimpleDateFormat(
-                        getContext().getString(R.string.sending_failed_on_date_at_time),
+                        context.getString(R.string.sending_failed_on_date_at_time),
                         Locale.getDefault()).format(date);
             } else {
-                return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time),
+                return new SimpleDateFormat(context.getString(R.string.added_on_date_at_time),
                         Locale.getDefault()).format(date);
             }
         } catch (IllegalArgumentException e) {
@@ -526,39 +522,18 @@ public class InstanceProvider extends ContentProvider {
 
         Long now = System.currentTimeMillis();
 
-        // Make sure that the fields are all set
-        if (!values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE)) {
-            values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
-        }
+            // Don't update last status change date if an instance is being deleted
+            if (values.containsKey(InstanceColumns.DELETED_DATE)) {
+                values.remove(InstanceColumns.LAST_STATUS_CHANGE_DATE);
+            }
 
-        String status;
             switch (URI_MATCHER.match(uri)) {
-            case INSTANCES:
-                if (values.containsKey(InstanceColumns.STATUS)) {
-                    status = values.getAsString(InstanceColumns.STATUS);
-
-                    if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
-                        Date today = new Date();
-                        String text = getDisplaySubtext(status, today);
-                        values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
-                    }
-                }
-
-                count = db.update(INSTANCES_TABLE_NAME, values, where, whereArgs);
-                break;
+                case INSTANCES:
+                    count = db.update(INSTANCES_TABLE_NAME, values, where, whereArgs);
+                    break;
 
             case INSTANCE_ID:
                 String instanceId = uri.getPathSegments().get(1);
-
-                if (values.containsKey(InstanceColumns.STATUS)) {
-                    status = values.getAsString(InstanceColumns.STATUS);
-
-                    if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
-                        Date today = new Date();
-                        String text = getDisplaySubtext(status, today);
-                        values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
-                    }
-                }
 
                     String[] newWhereArgs;
                     if (whereArgs == null || whereArgs.length == 0) {
@@ -629,8 +604,6 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns.T_SHOW_DIST, InstanceColumns.T_SHOW_DIST);      // smap
         sInstancesProjectionMap.put(InstanceColumns.T_HIDE, InstanceColumns.T_HIDE);                // smap
         sInstancesProjectionMap.put(InstanceColumns.UUID, InstanceColumns.UUID);                    // smap
-        sInstancesProjectionMap.put(InstanceColumns.DISPLAY_SUBTEXT,
-                InstanceColumns.DISPLAY_SUBTEXT);
         sInstancesProjectionMap.put(InstanceColumns.DELETED_DATE, InstanceColumns.DELETED_DATE);
     }
 }

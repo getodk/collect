@@ -22,7 +22,7 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.activities.GeoPolyActivity;
-import org.odk.collect.android.map.MapPoint;
+import org.odk.collect.android.geo.MapPoint;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;
@@ -30,6 +30,7 @@ import org.robolectric.android.controller.ActivityController;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.odk.collect.android.location.LocationTestUtils.createLocation;
 
 @RunWith(RobolectricTestRunner.class)
 public class GeoPolyActivityTest extends BaseGeoActivityTest {

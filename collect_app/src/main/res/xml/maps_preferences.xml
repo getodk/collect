@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="category_basemap"
+        android:title="@string/basemap" />
+    <PreferenceCategory
+        android:key="category_reference_layer"
+        android:title="@string/reference_layer">
+        <org.odk.collect.android.preferences.CaptionedListPreference
+            android:key="reference_layer"
+            android:title="@string/layer_data_file"
+            android:dialogTitle="@string/layer_data_file"
+            android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/ok" />
+    </PreferenceCategory>
+</PreferenceScreen>

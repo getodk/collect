@@ -301,25 +301,20 @@
   <string name="leave_a_review">Acha tathmini katika Play Store</string>
   <string name="leave_a_review_msg">Tathmini yako (tunatumaini itakuwa chanya) inaongeza nafasi ya programu hii kuonekana Pay Store</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Kuchora ramani</string>
-  <string name="map_sdk_selector_title">Ramani SDK</string>
-  <string name="map_sdk_behavior">Ramani SDK</string>
-  <string name="google_maps_sdk">Ramani za Google SDK</string>
-  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
-  <string name="show_map_sdk">Onyesha chaguzi za ramani SDK</string>
-  <string name="openmap_streets">Mitaa iliyopo kwenye OSM</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
   <string name="openmap_usgs_topo">USGS ramani za kitaifa za topo</string>
   <string name="openmap_usgs_sat">USGS National Map Hybrid</string>
   <string name="openmap_usgs_img">USGS National Map Imagery</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
+  <string name="basemap">Ramani msingi</string>
   <string name="streets">Mitaa</string>
   <string name="terrain">Ardhi ya eneo</string>
   <string name="hybrid">Mseto</string>
   <string name="satellite">Satelaiti</string>
-  <string name="map_basemap_selector_title">Ramani za msingi</string>
-  <string name="show_map_basemap">Onyesha chaguzi za ramani za msingi</string>
   <string name="save_point">Hifadhi geopoint</string>
   <string name="get_point">Anza geopoint</string>
   <string name="geopoint_view_read_only">Tazama geopoint</string>
@@ -329,8 +324,6 @@
   <string name="start">Anza</string>
   <string name="enable_gps">Wezesha GPS</string>
   <string name="geotrace_title">Fatilisha mstari kijografia</string>
-  <string name="gps_enable_message">GPS kwenye kifaa chako imezimwa. Je ungependa kuiwasha?</string>
-  <string name="select_offline_layer">Chagua tabaka la nje ya mtandao</string>
   <string name="geo_clear_warning">Umbo lishatengenezwa. Ungependa kufuta Umbo?</string>
   <string name="geo_exit_warning">Sitisha mabadiliko na rudi kwenye ODK?</string>
   <string name="polygon_validator">Lazima uwe na angalau  nukta 3 ili kutengeneza poligoni</string>
@@ -477,7 +470,6 @@
   <string name="wifi_autosend">Wifi tu</string>
   <string name="cellular_autosend">Simu tu</string>
   <string name="wifi_cellular_autosend">Wifi au simu</string>
-  <string name="map_basemap_behavior_title">Ramani msingi</string>
   <string name="form_management_preferences">Usimamizi wa fomu</string>
   <string name="form_submission_category">Uwasilishaji wa fomu</string>
   <string name="form_filling_category">Ujazaji wa fomu</string>
@@ -491,7 +483,6 @@
   <string name="type">Aina</string>
   <string name="form_entry">Ondoa alama kuficha  kujaza fomu</string>
   <string name="use_device_language">Tumia lugha ya kifaa</string>
-  <string name="not_supported_offline_layer_format">Safu ya nje ya mtandao iliyochaguliwa inatumia muundo wa PBF ambao haukubali!</string>
   <string name="invalid_email_address">Anwani ya barua pepe ni batili!</string>
   <string name="sort_by">Panga kwa</string>
   <string name="server">Seva</string>
@@ -551,6 +542,7 @@
   <string name="islamic_month_10">Shawwal</string>
   <string name="islamic_month_11">Dhul al-ahmad</string>
   <string name="islamic_month_12">Dhul al hijja</string>
+  <string name="persian_month_4">Tir</string>
   <string name="moving_backwards_title">Kusonga nyuma</string>
   <string name="moving_backwards_disabled_title">Kusonga nyuma kumesitishwa</string>
   <string name="moving_backwards_disabled_message">Sanidi kifaa kuzuia watumiaji kupitisha mipangilio?\n\nMabadiliko ni:\n\u2022 Zuia kuhariri fomu zilizohifadhiwa\n\u2022 Zuia kuhifadhi fomu\n\u2022Kuzuia haraka\n\u2022 Weka kikwazo kuchakata uhalalisha unapopeleka mbele</string>
