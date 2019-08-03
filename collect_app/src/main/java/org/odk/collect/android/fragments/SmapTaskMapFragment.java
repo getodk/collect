@@ -69,7 +69,6 @@ import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.KeyValueJsonFns;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.Utilities;
@@ -102,7 +101,6 @@ public class SmapTaskMapFragment extends Fragment
     private MapLocationObserver mo = null;
     private GoogleMap mMap;
     private Polyline mPath;
-    private MapHelper mHelper;
     private ImageButton layers_button;
     private ImageButton location_button;
 
@@ -246,9 +244,6 @@ public class SmapTaskMapFragment extends Fragment
 
         mMap.setMyLocationEnabled(true);
 
-        mHelper = new MapHelper(getActivity(), mMap, 0);    // Default selected layer
-        mHelper.setBasemap();
-
         complete = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_finalized));
         accepted = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_saved));
         repeat = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_repeat));
@@ -279,7 +274,7 @@ public class SmapTaskMapFragment extends Fragment
 
             @Override
             public void onClick(View v) {
-                mHelper.showLayersDialog();
+                //mHelper.showLayersDialog();
 
             }
         });
@@ -382,9 +377,9 @@ public class SmapTaskMapFragment extends Fragment
 
     @Override
     public void onResume() {
-        if(mHelper != null) {
-            mHelper.setBasemap();
-        }
+        //if(mHelper != null) {
+        //    mHelper.setBasemap();
+        //}
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_launcher);
         super.onResume();

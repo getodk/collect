@@ -733,7 +733,7 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
     }
 
     /*
-     * Begin smap
+     * Begin smap   ----    Point of conversion to OKHttp
      */
     @Override
     public @NonNull HttpPostResult uploadTaskStatus(@NonNull TaskResponse updateResponse,

@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -115,7 +116,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                     .getString(R.string.file_fetch_failed, uri.toString(), response.message(), String.valueOf(statusCode));
 
             Timber.e(errMsg);
-            return new HttpGetResult(null, new HashMap<String, String>(), "", statusCode);
+            throw new Exception(errMsg);    // smap
+            //return new HttpGetResult(null, new HashMap<String, String>(), "", statusCode);    // smap
         }
 
         ResponseBody body = response.body();
@@ -185,10 +187,17 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     }
 
     @NonNull
-    private HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
+    private HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials,
+                                              String status,         // smap
+                                              String location_trigger,   // smap
+                                              String survey_notes,      // smap
+                                              String assignment_id      // smap
+                                              ) throws Exception {
         setCredentialsIfNeeded(credentials, uri.getScheme());
         HttpPostResult postResult;
-        Request request = buildPostRequest(uri, multipartBody);
+        Request request = buildPostRequest(uri, multipartBody,
+                status, location_trigger, survey_notes, assignment_id);     // smap
+
         Response response = httpClient.newCall(request).execute();
 
         if (response.code() == 204) {
@@ -325,12 +334,21 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                 .build();
     }
 
-    private Request buildPostRequest(@NonNull URI uri, RequestBody body) throws MalformedURLException {
+    private Request buildPostRequest(@NonNull URI uri, RequestBody body,
+                                     String status,             // smap
+                                     String location_trigger,   // smap
+                                     String survey_notes,       // smap
+                                     String assignment_id       // smap
+                                     ) throws MalformedURLException {
         return new Request.Builder()
                 .url(uri.toURL())
                 .addHeader(USER_AGENT_HEADER, Collect.getInstance().getUserAgentString())
                 .addHeader(OPEN_ROSA_VERSION_HEADER, OPEN_ROSA_VERSION)
                 .addHeader(DATE_HEADER, getHeaderDate())
+                .addHeader("form_status", status)                       // smap
+                .addHeader("location_trigger", location_trigger)        // smap
+                .addHeader("survey_notes", survey_notes)                // smap
+                .addHeader("assignment_id", assignment_id)              // smap
                 .post(body)
                 .build();
     }
