@@ -320,7 +320,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 }
 
                 URI uri = URI.create(taskURL);
-                String resp = httpInterface.getRequest(uri, null, webCredentialsUtils.getCredentials(uri), headers);
+                String resp = httpInterface.getRequest(uri, "application/json", webCredentialsUtils.getCredentials(uri), headers);
                 GsonBuilder gb = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer());
                 gson = gb.create();
 

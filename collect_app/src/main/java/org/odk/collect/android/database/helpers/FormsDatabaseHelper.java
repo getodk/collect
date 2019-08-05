@@ -32,7 +32,6 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.BAS
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DATE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DESCRIPTION;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_NAME;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_FILE_PATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH;
@@ -119,8 +118,6 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                 + ", "
                 + DISPLAY_NAME
                 + ", "
-                + DISPLAY_SUBTEXT
-                + ", "
                 + DESCRIPTION
                 + ", "
                 + JR_FORM_ID
@@ -146,8 +143,6 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                 + _ID
                 + ", "
                 + DISPLAY_NAME
-                + ", "
-                + DISPLAY_SUBTEXT
                 + ", "
                 + DESCRIPTION
                 + ", "
@@ -186,8 +181,6 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                 + ", "
                 + DISPLAY_NAME
                 + ", "
-                + DISPLAY_SUBTEXT
-                + ", "
                 + DESCRIPTION
                 + ", "
                 + JR_FORM_ID
@@ -205,8 +198,6 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                 + JRCACHE_FILE_PATH + ") SELECT "
                 + _ID + ", "
                 + DISPLAY_NAME
-                + ", "
-                + DISPLAY_SUBTEXT
                 + ", "
                 + DESCRIPTION
                 + ", "
@@ -286,7 +277,6 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + tableName + " ("
                 + _ID + " integer primary key, "
                 + DISPLAY_NAME + " text not null, "
-                + DISPLAY_SUBTEXT + " text not null, "
                 + DESCRIPTION + " text, "
                 + JR_FORM_ID + " text not null, "
                 + JR_VERSION + " text, "

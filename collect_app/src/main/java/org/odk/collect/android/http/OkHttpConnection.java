@@ -64,6 +64,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     private static final String OPEN_ROSA_VERSION = "1.0";
     private static final String DATE_HEADER = "Date";
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
+    private static final String HTTP_CONTENT_TYPE_JSON = "application/json";
 
     /**
      * Shared client object used for all HTTP requests. Credentials are set on a per-request basis.
@@ -475,7 +476,6 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         setCredentialsIfNeeded(credentials, uri.getScheme());
         Request request = new Request.Builder()
                 .url(uri.toURL())
-                .addHeader(ACCEPT_ENCODING_HEADER, GZIP_CONTENT_ENCODING)
                 .get()
                 .build();
 
@@ -517,34 +517,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
         InputStream downloadStream = body.byteStream();
 
-        String hash = "";
-
-        if (HTTP_CONTENT_TYPE_TEXT_XML.equals(contentType)) {
-            byte[] bytes = IOUtils.toByteArray(downloadStream);
-            downloadStream = new ByteArrayInputStream(bytes);
-        }
-
-        String data = null;
-        try {
-
-            os = new ByteArrayOutputStream();
-            byte[] buf = new byte[4096];
-            int len;
-            while ((len = downloadStream.read(buf)) > 0) {
-                os.write(buf, 0, len);
-            }
-            os.flush();
-            data = os.toString();
-        } finally {
-
-            if (downloadStream != null) {
-                try {downloadStream.close();} catch (IOException e) {}
-            }
-            if (os != null) {
-                try { os.close(); } catch (IOException e) {}
-            }
-        }
-        return data;
+        return body.string();
     }
 
     @Override
