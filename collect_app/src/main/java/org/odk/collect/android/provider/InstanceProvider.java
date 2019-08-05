@@ -103,7 +103,6 @@ public class InstanceProvider extends ContentProvider {
                + InstanceColumns.T_UPDATED + " integer, "       // smap
                + InstanceColumns.STATUS + " text not null, "
                + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
-               + InstanceColumns.DISPLAY_SUBTEXT + " text not null, "
                + InstanceColumns.T_SHOW_DIST + " integer, "   // smap
                + InstanceColumns.T_HIDE + " integer, "        // smap
                + InstanceColumns.DELETED_DATE + " date );" );
@@ -584,7 +583,6 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns.T_UPDATED, InstanceColumns.T_UPDATED);              // smap
         sInstancesProjectionMap.put(InstanceColumns.LAST_STATUS_CHANGE_DATE,
                 InstanceColumns.LAST_STATUS_CHANGE_DATE);
-        sInstancesProjectionMap.put(InstanceColumns.DISPLAY_SUBTEXT, InstanceColumns.DISPLAY_SUBTEXT);
         sInstancesProjectionMap.put(InstanceColumns.SOURCE, InstanceColumns.SOURCE);                // smap
         sInstancesProjectionMap.put(InstanceColumns.FORM_PATH, InstanceColumns.FORM_PATH);          // smap
         sInstancesProjectionMap.put(InstanceColumns.ACT_LON, InstanceColumns.ACT_LON);              // smap

@@ -71,7 +71,6 @@ public final class FormsProviderAPI {
         public static final String AUTO_SEND = "autoSubmit"; // can be null
 
         // these are generated for you (but you can insert something else if you want)
-        public static final String DISPLAY_SUBTEXT = "displaySubtext"; // not used in the newest database version
         public static final String MD5_HASH = "md5Hash";
         public static final String DATE = "date";
         public static final String MAX_DATE = "MAX(date)"; // used only to get latest forms for each form_id
