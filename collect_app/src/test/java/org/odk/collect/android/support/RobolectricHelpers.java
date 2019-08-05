@@ -4,11 +4,14 @@ import androidx.fragment.app.FragmentActivity;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
+
+import static org.robolectric.Shadows.shadowOf;
 
 public class RobolectricHelpers {
 
@@ -35,5 +38,9 @@ public class RobolectricHelpers {
 
     public static FragmentActivity createThemedActivity() {
         return createThemedActivity(FragmentActivity.class);
+    }
+
+    public static int getCreatedFromResId(AudioButton button) {
+        return shadowOf(button.getDrawable()).getCreatedFromResId();
     }
 }

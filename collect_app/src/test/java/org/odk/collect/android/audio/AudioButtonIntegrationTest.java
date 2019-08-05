@@ -23,6 +23,7 @@ import java.io.File;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.odk.collect.android.support.RobolectricHelpers.getCreatedFromResId;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
@@ -64,12 +65,12 @@ public class AudioButtonIntegrationTest {
 
         assertThat(mediaPlayer.isPlaying(), is(true));
         assertThat(shadowOf(mediaPlayer).getDataSource(), equalTo(dataSource));
-        assertThat(getCreatedFromResId(button), equalTo(android.R.drawable.ic_media_pause));
+        assertThat(button.isPlaying(), equalTo(true));
 
         button.performClick();
 
         assertThat(mediaPlayer.isPlaying(), is(false));
-        assertThat(getCreatedFromResId(button), equalTo(android.R.drawable.ic_lock_silent_mode_off));
+        assertThat(button.isPlaying(), equalTo(false));
     }
 
     @Test
@@ -90,8 +91,8 @@ public class AudioButtonIntegrationTest {
 
         assertThat(mediaPlayer.isPlaying(), is(true));
         assertThat(shadowOf(mediaPlayer).getDataSource(), equalTo(dataSource2));
-        assertThat(getCreatedFromResId(button2), equalTo(android.R.drawable.ic_media_pause));
-        assertThat(getCreatedFromResId(button1), equalTo(android.R.drawable.ic_lock_silent_mode_off));
+        assertThat(button2.isPlaying(), equalTo(true));
+        assertThat(button1.isPlaying(), equalTo(false));
     }
 
     @Test
@@ -107,8 +108,8 @@ public class AudioButtonIntegrationTest {
 
         button2.performClick();
 
-        assertThat(getCreatedFromResId(button1), equalTo(android.R.drawable.ic_lock_silent_mode_off));
-        assertThat(getCreatedFromResId(button2), equalTo(android.R.drawable.ic_media_pause));
+        assertThat(button1.isPlaying(), equalTo(false));
+        assertThat(button2.isPlaying(), equalTo(true));
     }
 
     @Test
@@ -158,10 +159,6 @@ public class AudioButtonIntegrationTest {
         DataSource dataSource = DataSource.toDataSource(testFile);
         ShadowMediaPlayer.addMediaInfo(dataSource, new ShadowMediaPlayer.MediaInfo());
         return dataSource;
-    }
-
-    private int getCreatedFromResId(AudioButton button) {
-        return shadowOf(button.getDrawable()).getCreatedFromResId();
     }
 
     private class TestScreenContext implements ScreenContext {
