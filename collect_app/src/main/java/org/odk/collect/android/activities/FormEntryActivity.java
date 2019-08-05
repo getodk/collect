@@ -89,6 +89,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.audio.ScreenContext;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
@@ -137,6 +138,7 @@ import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DependencyProvider;
+import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageConverter;
@@ -144,7 +146,6 @@ import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.RegexUtils;
-import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -199,7 +200,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         RankingWidgetDialog.RankingListener,
         SaveFormIndexTask.SaveFormIndexListener, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
         WidgetValueChangedListener,
-        ScreenContext {
+        ScreenContext,
+        AudioControllerView.SwipableParent {
 
     // Defines for FormEntryActivity
     private static final boolean EXIT = true;
@@ -291,6 +293,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     MediaLoadingFragment mediaLoadingFragment;
 
+    @Override
     public void allowSwiping(boolean doSwipe) {
         this.doSwipe = doSwipe;
     }

@@ -28,7 +28,6 @@ import android.widget.TextView;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -158,7 +157,7 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
      */
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
-        ((FormEntryActivity) getContext()).allowSwiping(false);
+        ((SwipableParent) getContext()).allowSwiping(false);
 
         if (state == State.PLAYING) {
             pause();
@@ -170,7 +169,7 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
      */
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        ((FormEntryActivity) getContext()).allowSwiping(true);
+        ((SwipableParent) getContext()).allowSwiping(true);
 
         seekTo(seekBar.getProgress());
         if (state == State.PLAYING) {
@@ -225,5 +224,9 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
 
     private enum State {
         PAUSED, PLAYING, IDLE
+    }
+
+    public interface SwipableParent {
+        void allowSwiping(boolean allowSwiping);
     }
 }
