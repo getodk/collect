@@ -17,8 +17,12 @@ public final class Helpers {
     }
 
     public static void setupMockReference(String uri, ReferenceManager referenceManager) throws InvalidReferenceException {
+        setupMockReference(uri, uri, referenceManager);
+    }
+
+    public static void setupMockReference(String uri, String referenceURI, ReferenceManager referenceManager) throws InvalidReferenceException {
         Reference reference = mock(Reference.class);
-        when(reference.getLocalURI()).thenReturn(uri);
+        when(reference.getLocalURI()).thenReturn(referenceURI);
         when(referenceManager.deriveReference(uri)).thenReturn(reference);
     }
 
@@ -26,6 +30,7 @@ public final class Helpers {
         FormEntryPrompt formEntryPrompt = mock(FormEntryPrompt.class);
 
         when(formEntryPrompt.getIndex()).thenReturn(mock(FormIndex.class));
+        when(formEntryPrompt.getIndex().toString()).thenReturn("0, 0");
         when(formEntryPrompt.getFormElement()).thenReturn(mock(IFormElement.class));
 
         return formEntryPrompt;

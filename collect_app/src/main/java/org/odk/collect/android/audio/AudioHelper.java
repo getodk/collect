@@ -1,5 +1,7 @@
 package org.odk.collect.android.audio;
 
+import android.media.MediaPlayer;
+
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LiveData;
@@ -19,6 +21,10 @@ public class AudioHelper {
     public AudioHelper(ScreenContext screenContext, MediaPlayerFactory mediaPlayerFactory) {
         this.screenContext = screenContext;
         this.mediaPlayerFactory = mediaPlayerFactory;
+    }
+
+    public AudioHelper(ScreenContext screenContext) {
+        this(screenContext, MediaPlayer::new);
     }
 
     public LiveData<Boolean> setAudio(AudioButton button, String uri, String clipID) {

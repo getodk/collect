@@ -22,7 +22,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -63,6 +62,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.views.helpers.FormAutoplayHelper;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.StringWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
@@ -79,8 +79,6 @@ import java.util.Set;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.views.helpers.FormMediaHelpers.getClipID;
-import static org.odk.collect.android.views.helpers.FormMediaHelpers.getPlayableAudioURI;
 
 /**
  * Contains either one {@link QuestionWidget} if the current form element is a question or
@@ -149,24 +147,39 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
         ((NestedScrollView) findViewById(R.id.odk_view_container)).addView(view);
 
+        autoplayIfNeeded(advancingPage);
+    }
+
+    private void autoplayIfNeeded(boolean advancingPage) {
+
         // see if there is an autoplay option.
         // Only execute it during forward swipes through the form
         if (advancingPage && widgets.size() == 1) {
             FormEntryPrompt firstPrompt = widgets.get(0).getFormEntryPrompt();
-            final String autoPlayOption = firstPrompt.getFormElement().getAdditionalAttribute(null, "autoplay");
+            Boolean autoplayedAudio = autoplayAudio(firstPrompt);
 
-            if (autoPlayOption != null) {
-                if (autoPlayOption.equalsIgnoreCase("audio")) {
-                    AudioHelper audioHelper = new AudioHelper((ScreenContext) getContext(), MediaPlayer::new);
+            if (!autoplayedAudio) {
+                autoplayVideo(firstPrompt);
+            }
 
-                    String clipID = getClipID(firstPrompt);
-                    String audioURI = getPlayableAudioURI(firstPrompt.getAudioText(), ReferenceManager.instance());
-                    audioHelper.play(clipID, audioURI);
-                } else if (autoPlayOption.equalsIgnoreCase("video")) {
-                    new Handler().postDelayed(() -> {
-                        widgets.get(0).playVideo();
-                    }, 150);
-                }
+        }
+    }
+
+    private Boolean autoplayAudio(FormEntryPrompt firstPrompt) {
+        AudioHelper audioHelper = new AudioHelper((ScreenContext) getContext());
+        FormAutoplayHelper formAutoplayHelper = new FormAutoplayHelper(audioHelper, ReferenceManager.instance());
+
+        return formAutoplayHelper.autoplayIfNeeded(firstPrompt);
+    }
+
+    private void autoplayVideo(FormEntryPrompt prompt) {
+        final String autoplayOption = prompt.getFormElement().getAdditionalAttribute(null, "autoplay");
+
+        if (autoplayOption != null) {
+            if (autoplayOption.equalsIgnoreCase("video")) {
+                new Handler().postDelayed(() -> {
+                    widgets.get(0).playVideo();
+                }, 150);
             }
         }
     }
