@@ -35,6 +35,7 @@ import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import timber.log.Timber;
 
 public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBarChangeListener {
@@ -44,11 +45,15 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
 
     @BindView(R.id.currentDuration)
     TextView currentDurationLabel;
+
     @BindView(R.id.totalDuration)
     TextView totalDurationLabel;
+
     @BindView(R.id.playBtn)
     ImageButton playButton;
+
     @BindView(R.id.seekBar)
+    @SuppressFBWarnings("UR")
     SeekBar seekBar;
 
     private State state;
