@@ -10,6 +10,10 @@ import com.burgstaller.okhttp.basic.BasicAuthenticator;
 import com.burgstaller.okhttp.digest.CachingAuthenticator;
 import com.burgstaller.okhttp.digest.Credentials;
 import com.burgstaller.okhttp.digest.DigestAuthenticator;
+import com.burgstaller.okhttp.digest.fromhttpclient.BasicNameValuePair;
+import com.burgstaller.okhttp.digest.fromhttpclient.NameValuePair;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.apache.commons.io.IOUtils;
 import org.odk.collect.android.R;
@@ -18,6 +22,7 @@ import org.odk.collect.android.taskModel.TaskResponse;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +31,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +41,7 @@ import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -52,6 +59,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     private static final int WRITE_CONNECTION_TIMEOUT = 60000; // it can take up to 27 seconds to spin up an Aggregate
     private static final int READ_CONNECTION_TIMEOUT = 60000; // it can take up to 27 seconds to spin up an Aggregate
     private static final String OPEN_ROSA_VERSION_HEADER = "X-OpenRosa-Version";
+    private static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";     // smap
+    private static final String GZIP_CONTENT_ENCODING = "gzip";                 // smap
     private static final String OPEN_ROSA_VERSION = "1.0";
     private static final String DATE_HEADER = "Date";
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
@@ -266,7 +275,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
             }
 
             multipartBody = multipartBuilder.build();
-            postResult = executePostRequest(uri, credentials);
+            postResult = executePostRequest(uri, credentials, status, location_trigger, survey_notes, assignment_id);
             multipartBody = null;
 
             if (postResult.getResponseCode() != HttpURLConnection.HTTP_CREATED &&
@@ -381,14 +390,42 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
     /*
      * Begin smap
-     * These are just stubs at the moment
      */
     @Override
-    public @NonNull
-    String getRequest(@NonNull URI uri, @Nullable final String contentType,
-                      @Nullable HttpCredentialsInterface credentials,
-                      HashMap<String, String> headers) throws Exception {
-        return null;
+    public @NonNull HttpPostResult uploadTaskStatus(@NonNull TaskResponse updateResponse,
+                                                    @NonNull URI uri,
+                                                    @Nullable HttpCredentialsInterface credentials
+    ) throws IOException {
+
+        Gson gson = new GsonBuilder().disableHtmlEscaping().setDateFormat("yyyy-MM-dd").create();
+        String resp = gson.toJson(updateResponse);
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("assignInput", resp)
+                .build();
+
+        setCredentialsIfNeeded(credentials, uri.getScheme());
+        HttpPostResult postResult;
+        Request request = new Request.Builder()
+                .url(uri.toURL())
+                .post(formBody)
+                .build();
+
+        Response response = httpClient.newCall(request).execute();
+
+        if (response.code() == 204) {
+            throw new IOException();
+        }
+
+        postResult = new HttpPostResult(
+                response.body().string(),
+                response.code(),
+                response.message());
+
+        discardEntityBytes(response);
+
+        return postResult;
+
     }
 
     @Override
@@ -396,21 +433,152 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                                                  @NonNull File file,
                                                  @NonNull URI uri,
                                                  @Nullable HttpCredentialsInterface credentials) throws IOException {
-        return null;
+
+        HttpPostResult postResult = null;
+
+        String contentType = fileToContentTypeMapper.map(file.getName());
+        RequestBody requestBody = RequestBody.create(MediaType.parse(contentType), file);
+
+        MultipartBody.Builder multipartBuilder = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM);
+        multipartBuilder.addPart(MultipartBody.Part.createFormData(file.getName(), file.getName(), requestBody));
+        MultipartBody mpBody = multipartBuilder.build();
+
+        Request request = new Request.Builder()
+                .url(uri.toURL())
+                .post(mpBody)
+                .build();
+
+        Response response = httpClient.newCall(request).execute();
+
+        if (response.code() == 204) {
+            throw new IOException();
+        }
+
+        postResult = new HttpPostResult(
+                response.body().string(),
+                response.code(),
+                response.message());
+
+        discardEntityBytes(response);
+        mpBody = null;
+
+        return postResult.getReasonPhrase();
+    }
+
+    @Override
+    public @NonNull
+    String getRequest(@NonNull URI uri, @Nullable final String contentType,
+                      @Nullable HttpCredentialsInterface credentials,
+                      HashMap<String, String> headers) throws Exception {
+
+        setCredentialsIfNeeded(credentials, uri.getScheme());
+        Request request = new Request.Builder()
+                .url(uri.toURL())
+                .addHeader(ACCEPT_ENCODING_HEADER, GZIP_CONTENT_ENCODING)
+                .get()
+                .build();
+
+        Response response = httpClient.newCall(request).execute();
+        int statusCode = response.code();
+        ByteArrayOutputStream os = null;
+
+        if (statusCode != HttpURLConnection.HTTP_OK) {
+            discardEntityBytes(response);
+            String errMsg = Collect
+                    .getInstance()
+                    .getString(R.string.file_fetch_failed, uri.toString(), response.message(), String.valueOf(statusCode));
+
+            Timber.e(errMsg);
+            throw new Exception(errMsg);    // smap
+            //return new HttpGetResult(null, new HashMap<String, String>(), "", statusCode);    // smap
+        }
+
+        ResponseBody body = response.body();
+
+        if (body == null) {
+            throw new Exception("No entity body returned from: " + uri.toString());
+        }
+
+        if (contentType != null && contentType.length() > 0) {
+            MediaType type = body.contentType();
+
+            if (type != null && !type.toString().toLowerCase(Locale.ENGLISH).contains(contentType)) {
+                discardEntityBytes(response);
+
+                String error = "ContentType: " + type.toString() + " returned from: "
+                        + uri.toString() + " is not " + contentType
+                        + ".  This is often caused by a network proxy.  Do you need "
+                        + "to login to your network?";
+
+                throw new Exception(error);
+            }
+        }
+
+        InputStream downloadStream = body.byteStream();
+
+        String hash = "";
+
+        if (HTTP_CONTENT_TYPE_TEXT_XML.equals(contentType)) {
+            byte[] bytes = IOUtils.toByteArray(downloadStream);
+            downloadStream = new ByteArrayInputStream(bytes);
+        }
+
+        String data = null;
+        try {
+
+            os = new ByteArrayOutputStream();
+            byte[] buf = new byte[4096];
+            int len;
+            while ((len = downloadStream.read(buf)) > 0) {
+                os.write(buf, 0, len);
+            }
+            os.flush();
+            data = os.toString();
+        } finally {
+
+            if (downloadStream != null) {
+                try {downloadStream.close();} catch (IOException e) {}
+            }
+            if (os != null) {
+                try { os.close(); } catch (IOException e) {}
+            }
+        }
+        return data;
     }
 
     @Override
     public @NonNull
     String loginRequest(@NonNull URI uri, @Nullable final String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        return null;
-    }
+        setCredentialsIfNeeded(credentials, uri.getScheme());
+        Request request = new Request.Builder()
+                .url(uri.toURL())
+                .addHeader(ACCEPT_ENCODING_HEADER, GZIP_CONTENT_ENCODING)
+                .get()
+                .build();
 
-    @Override
-    public @NonNull HttpPostResult uploadTaskStatus(@NonNull TaskResponse updateResponse,
-                                                    @NonNull URI uri,
-                                                    @Nullable HttpCredentialsInterface credentials
-    ) throws IOException {
-        return null;
+        Response response = httpClient.newCall(request).execute();
+        int statusCode = response.code();
+        ByteArrayOutputStream os = null;
+
+        if (statusCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
+            return "unauthorized";
+
+        } else if (statusCode == HttpURLConnection.HTTP_NOT_FOUND) {
+            // Treat not found as "success" except for hosts that are known to support the login service
+            String host = uri.getHost();
+            if(host.equals("app.kontrolid.com") || host.endsWith("smap.com.au")) {
+                return "error";
+            } else {
+                return "success";
+            }
+
+        } else if (statusCode == HttpURLConnection.HTTP_OK) {
+            return "success";
+
+        } else {
+            return "error";
+        }
     }
 
     /*

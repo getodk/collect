@@ -84,7 +84,6 @@ public class AppDependencyModule {
         return new WebCredentialsUtils();
     }
 
-    /* smap
     @Provides
     DownloadFormListUtils provideDownloadFormListUtils(
             Application application,
@@ -99,6 +98,7 @@ public class AppDependencyModule {
         );
     }
 
+/* smap
     @Provides
     @Singleton
     public Tracker providesTracker(Application application) {
