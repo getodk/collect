@@ -381,10 +381,9 @@ public class FieldListUpdateTest {
     }
 
     @Test
-    public void search_function_in_field_list() throws InterruptedException {
+    public void searchInFieldList() throws InterruptedException {
         jumpToGroupWithText("Search in field-list");
         onView(withText(startsWith("Source15"))).perform(click());
-        Thread.sleep(1000);
         onView(withText("Select One Answer")).check(matches(isDisplayed())).perform(click());
         onView(withText("Mango")).check(matches(isDisplayed()));
         onView(withText("Oranges")).check(matches(isDisplayed()));
