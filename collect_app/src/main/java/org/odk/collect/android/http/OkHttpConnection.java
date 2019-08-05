@@ -350,6 +350,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                                      String survey_notes,       // smap
                                      String assignment_id       // smap
                                      ) throws MalformedURLException {
+        /* smap
         return new Request.Builder()
                 .url(uri.toURL())
                 .addHeader(USER_AGENT_HEADER, Collect.getInstance().getUserAgentString())
@@ -361,6 +362,26 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                 .addHeader("assignment_id", assignment_id)              // smap
                 .post(body)
                 .build();
+        */
+        // smap
+        Request.Builder b = new Request.Builder()
+                .url(uri.toURL())
+                .addHeader(USER_AGENT_HEADER, Collect.getInstance().getUserAgentString())
+                .addHeader(OPEN_ROSA_VERSION_HEADER, OPEN_ROSA_VERSION)
+                .addHeader(DATE_HEADER, getHeaderDate());
+        if(status != null) {
+            b.addHeader("form_status", status);
+        }
+        if(location_trigger != null) {
+            b.addHeader("location_trigger", location_trigger);
+        }
+        if(location_trigger != null) {
+            b.addHeader("survey_notes", survey_notes);
+        }
+        if(assignment_id != null) {
+            b.addHeader("assignment_id", assignment_id);
+        }
+        return b.post(body).build();
     }
 
     private String getHeaderDate() {
