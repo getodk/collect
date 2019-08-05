@@ -4,9 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
+
 import androidx.annotation.NonNull;
-import android.view.View;
-import android.view.ViewGroup;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -47,7 +46,6 @@ public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
     @NonNull
     @Override
     public AudioWidget createWidget() {
-        when(audioController.getPlayerLayout(any(ViewGroup.class))).thenReturn(mock(View.class));
         return new AudioWidget(activity, formEntryPrompt, fileUtil, mediaUtil, audioController);
     }
 

@@ -19,9 +19,8 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -39,9 +38,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
-import static android.view.View.GONE;
-
-public class AudioControllerView implements SeekBar.OnSeekBarChangeListener {
+public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBarChangeListener {
 
     private static final int SEEK_FORWARD_TIME = 5000; // 5 seconds
     private static final int SEEK_BACKWARD_TIME = 5000; // 5 seconds
@@ -55,9 +52,7 @@ public class AudioControllerView implements SeekBar.OnSeekBarChangeListener {
     @BindView(R.id.seekBar)
     SeekBar seekBar;
 
-    private View view;
     private State state;
-    private Context context;
     private MediaPlayer mediaPlayer;
     private final Handler seekHandler = new Handler();
 
@@ -81,17 +76,15 @@ public class AudioControllerView implements SeekBar.OnSeekBarChangeListener {
         }
     };
 
-    /**
-     * Converts {@param millis} to mm:ss format
-     *
-     * @return formatted time as string
-     */
-    private static String getTime(long millis) {
-        return new DateTime(millis, DateTimeZone.UTC).toString("mm:ss");
+    public AudioControllerView(Context context) {
+        super(context);
+
+        View.inflate(context, R.layout.audio_controller_layout, this);
+        ButterKnife.bind(this);
+        seekBar.setOnSeekBarChangeListener(this);
     }
 
-    public void init(Context context, MediaPlayer mediaPlayer) {
-        this.context = context;
+    public void init(MediaPlayer mediaPlayer) {
         this.mediaPlayer = mediaPlayer;
 
         initMediaPlayer();
@@ -134,12 +127,6 @@ public class AudioControllerView implements SeekBar.OnSeekBarChangeListener {
         seekBar.setProgress(mediaPlayer.getCurrentPosition());
     }
 
-    private void initControlsLayout(ViewGroup parent) {
-        view = LayoutInflater.from(context).inflate(R.layout.audio_controller_layout, parent, false);
-        ButterKnife.bind(this, view);
-        seekBar.setOnSeekBarChangeListener(this);
-    }
-
     private void initMediaPlayer() {
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mediaPlayer.setOnPreparedListener(player -> {
@@ -171,7 +158,7 @@ public class AudioControllerView implements SeekBar.OnSeekBarChangeListener {
      */
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
-        ((FormEntryActivity) context).allowSwiping(false);
+        ((FormEntryActivity) getContext()).allowSwiping(false);
 
         if (state == State.PLAYING) {
             pause();
@@ -183,7 +170,7 @@ public class AudioControllerView implements SeekBar.OnSeekBarChangeListener {
      */
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        ((FormEntryActivity) context).allowSwiping(true);
+        ((FormEntryActivity) getContext()).allowSwiping(true);
 
         seekTo(seekBar.getProgress());
         if (state == State.PLAYING) {
@@ -211,7 +198,7 @@ public class AudioControllerView implements SeekBar.OnSeekBarChangeListener {
     public void setMedia(File file) {
         try {
             mediaPlayer.reset();
-            mediaPlayer.setDataSource(context, Uri.fromFile(file));
+            mediaPlayer.setDataSource(getContext(), Uri.fromFile(file));
             mediaPlayer.prepareAsync();
             state = State.IDLE;
         } catch (IOException e) {
@@ -220,16 +207,20 @@ public class AudioControllerView implements SeekBar.OnSeekBarChangeListener {
     }
 
     public void hidePlayer() {
-        view.setVisibility(GONE);
+        setVisibility(GONE);
     }
 
     public void showPlayer() {
-        view.setVisibility(View.VISIBLE);
+        setVisibility(View.VISIBLE);
     }
 
-    public View getPlayerLayout(ViewGroup parent) {
-        initControlsLayout(parent);
-        return view;
+    /**
+     * Converts {@param millis} to mm:ss format
+     *
+     * @return formatted time as string
+     */
+    private static String getTime(long millis) {
+        return new DateTime(millis, DateTimeZone.UTC).toString("mm:ss");
     }
 
     private enum State {

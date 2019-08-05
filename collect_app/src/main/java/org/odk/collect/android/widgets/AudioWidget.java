@@ -22,11 +22,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore.Audio;
-import androidx.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -71,7 +72,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     private String binaryName;
 
     public AudioWidget(Context context, FormEntryPrompt prompt) {
-        this(context, prompt, new FileUtil(), new MediaUtil(), new AudioControllerView());
+        this(context, prompt, new FileUtil(), new MediaUtil(), new AudioControllerView(context));
     }
 
     AudioWidget(Context context, FormEntryPrompt prompt, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioControllerView audioController) {
@@ -85,14 +86,14 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_sound), R.id.choose_sound);
 
-        audioController.init(context, getPlayer());
+        audioController.init(getPlayer());
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(captureButton);
         answerLayout.addView(chooseButton);
-        answerLayout.addView(audioController.getPlayerLayout(answerLayout));
+        answerLayout.addView(audioController);
         addAnswerView(answerLayout);
 
         hideButtonsIfNeeded();
