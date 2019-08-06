@@ -100,7 +100,7 @@ public abstract class OpenRosaGetRequestTest {
     }
 
     @Test
-    public void withCredentials_whenBasicChallengeReceived_whenHttp_doesNotRetryWithCredentials() throws Exception {
+    public void withCredentials_whenBasicChallengeReceived_doesNotRetryWithCredentials() throws Exception {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(401)
                 .addHeader("WWW-Authenticate: Basic realm=\"protected area\"")
@@ -147,7 +147,25 @@ public abstract class OpenRosaGetRequestTest {
     }
 
     @Test
-    public void withCredentials_whenHttps_onceBasicChallenged_proactivelySendsCredentials() throws Exception {
+    public void withCredentials_whenDigestChallengeReceived_whenHttps_retriesWithCredentials() throws Exception {
+        startHttpsMockWebServer();
+
+        httpsMockWebServer.enqueue(new MockResponse()
+                .setResponseCode(401)
+                .addHeader("WWW-Authenticate: Digest realm=\"ODK Aggregate\", qop=\"auth\", nonce=\"MTU2NTA4MjEzODI4OTpmMjc4MDM5N2YxZTJiNDRiNjNiYTBiMThiOWQ4ZTlkMg==\"")
+                .setBody("Please authenticate."));
+        httpsMockWebServer.enqueue(new MockResponse());
+
+        subject.executeGetRequest(httpsMockWebServer.url("").uri(), null, new HttpCredentials("user", "pass"));
+
+        assertThat(httpsMockWebServer.getRequestCount(), equalTo(2));
+        httpsMockWebServer.takeRequest();
+        RecordedRequest request = httpsMockWebServer.takeRequest();
+        assertThat(request.getHeader("Authorization"), startsWith("Digest"));
+    }
+
+    @Test
+    public void withCredentials_onceBasicChallenged_whenHttps_proactivelySendsCredentials() throws Exception {
         startHttpsMockWebServer();
 
         httpsMockWebServer.enqueue(new MockResponse()
@@ -185,7 +203,28 @@ public abstract class OpenRosaGetRequestTest {
         RecordedRequest request = mockWebServer.takeRequest();
         assertThat(request.getHeader("Authorization"), startsWith("Digest"));
     }
-    
+
+    @Test
+    public void withCredentials_onceDigestChallenged_whenHttps_proactivelySendsCredentials() throws Exception {
+        startHttpsMockWebServer();
+
+        httpsMockWebServer.enqueue(new MockResponse()
+                .setResponseCode(401)
+                .addHeader("WWW-Authenticate: Digest realm=\"ODK Aggregate\", qop=\"auth\", nonce=\"MTU2NTA4MjEzODI4OTpmMjc4MDM5N2YxZTJiNDRiNjNiYTBiMThiOWQ4ZTlkMg==\"")
+                .setBody("Please authenticate."));
+        httpsMockWebServer.enqueue(new MockResponse());
+        httpsMockWebServer.enqueue(new MockResponse());
+
+        subject.executeGetRequest(httpsMockWebServer.url("").uri(), null, new HttpCredentials("user", "pass"));
+        subject.executeGetRequest(httpsMockWebServer.url("/different").uri(), null, new HttpCredentials("user", "pass"));
+
+        assertThat(httpsMockWebServer.getRequestCount(), equalTo(3));
+        httpsMockWebServer.takeRequest();
+        httpsMockWebServer.takeRequest();
+        RecordedRequest request = httpsMockWebServer.takeRequest();
+        assertThat(request.getHeader("Authorization"), startsWith("Digest"));
+    }
+
     @Test
     public void whenLastRequestSetCookies_nextRequestDoesNotSendThem() throws Exception {
         mockWebServer.enqueue(new MockResponse()
