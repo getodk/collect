@@ -65,9 +65,6 @@ import org.odk.collect.android.utilities.Utilities;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -761,7 +758,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
     	}
 
         // Remove any tasks that have been deleted from the server
-        Utilities.deleteObsoleteTasks(tr.taskAssignments);
+        Utilities.rejectObsoleteTasks(tr.taskAssignments);
+
+    	// Clean up the history table and remove old deleted instances
+        Utilities.cleanHistory();
     	
     	return;
 	}

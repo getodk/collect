@@ -533,11 +533,11 @@ public class Utilities {
     }
 
     /*
-     * Delete any tasks with that are not in the array of assignment identifiers
+     * Reject any tasks with that are not in the array of assignment identifiers
      * This can be used to remove tasks that have been removed from the server
-     * Do not delete repeating tasks
+     * (Do not reject repeating tasks?????? is this comment valid)
      */
-    public static int deleteObsoleteTasks(List<TaskAssignment> assignmentsToKeep) {
+    public static int rejectObsoleteTasks(List<TaskAssignment> assignmentsToKeep) {
 
         Uri dbUri = InstanceColumns.CONTENT_URI;
         int nIds = 0;
@@ -562,7 +562,10 @@ public class Utilities {
             selectClause.append(")");
         }
 
-        return Collect.getInstance().getContentResolver().delete(dbUri, selectClause.toString(), selectArgs);
+        ContentValues cv = new ContentValues();
+        cv.put(T_TASK_STATUS, Utilities.STATUS_T_REJECTED);
+
+        return Collect.getInstance().getContentResolver().update(dbUri, cv, selectClause.toString(), selectArgs);
     }
 
     /*
@@ -632,13 +635,26 @@ public class Utilities {
             }
         }
 
-        // Set the deleted date
+        // Set the deleted date in the instance table
         ContentValues cv = new ContentValues();
         cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
         Collect.getInstance().getContentResolver().update(dbUri, cv, where, whereArgs);
 
     }
 
+    /*
+     * Clean out history from the instances table that is older than 6 months
+     */
+    public static void cleanHistory() {
+
+        Uri dbUri = InstanceColumns.CONTENT_URI;
+
+        String selectClause = InstanceColumns.DELETED_DATE + " is not null and "
+                +"datetime(" + InstanceColumns.DELETED_DATE
+                + " / 1000, 'unixepoch') <  datetime('now','-6 months')";
+
+        Collect.getInstance().getContentResolver().delete(dbUri, selectClause, null);
+    }
 
     /*
     * Set the status for the provided assignment id
@@ -661,7 +677,7 @@ public class Utilities {
     }
 
     /*
-     * Set the status for the provided assignment id
+     * Update parameters for the provided assignment id
      */
     public static void updateParametersForAssignment(long assId, TaskAssignment ta) {
 
@@ -746,18 +762,6 @@ public class Utilities {
 
         boolean valid = false;
         if (currentStatus != null && currentStatus.equals(STATUS_T_ACCEPTED)) {
-            valid = true;
-        }
-
-        return valid;
-    }
-
-    /*
-     * Return true if the current task status allows it to be accepted
-     */
-    public boolean canAccept(String currentStatus) {
-        boolean valid = false;
-        if (currentStatus != null && currentStatus.equals(STATUS_T_REJECTED)) {
             valid = true;
         }
 

@@ -79,6 +79,7 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
         }
 
         long date = getCursor().getLong(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE));
+        String reason = getCursor().getString(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.T_TASK_COMMENT)); // smap
 
         if (date != 0 || !formExists || isFormEncrypted) {
             String disabledMessage;
@@ -90,6 +91,9 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
                 } catch (IllegalArgumentException e) {
                     Timber.e(e);
                     disabledMessage = context.getString(R.string.submission_deleted);
+                }
+                if(reason != null) {
+                    disabledMessage += "\n" + reason;
                 }
             } else if (!formExists) {
                 disabledMessage = context.getString(R.string.deleted_form);
