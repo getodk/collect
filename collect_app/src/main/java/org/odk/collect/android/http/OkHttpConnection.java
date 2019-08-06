@@ -276,9 +276,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
             return;
         }
 
-        final Map<String, CachingAuthenticator> authCache = new ConcurrentHashMap<>();
         Credentials cred = new Credentials(credentials.getUsername(), credentials.getPassword());
-
         DispatchingAuthenticator.Builder daBuilder = new DispatchingAuthenticator.Builder();
 
         if (scheme.equalsIgnoreCase("https")) {
@@ -286,11 +284,11 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         }
 
         daBuilder.with("digest", new DigestAuthenticator(cred));
-
         DispatchingAuthenticator authenticator = daBuilder.build();
 
         initializeHttpClient(); // Need to initalise the http client again to get rid of the cached credentials
 
+        final Map<String, CachingAuthenticator> authCache = new ConcurrentHashMap<>();
         httpClient = httpClient.newBuilder().authenticator(new CachingAuthenticatorDecorator(authenticator, authCache))
                 .addInterceptor(new AuthenticationCacheInterceptor(authCache)).build();
 
