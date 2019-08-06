@@ -34,6 +34,7 @@ import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.loaders.GeofenceEntry;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.taskModel.InstanceXML;
@@ -60,6 +61,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 import static java.lang.StrictMath.abs;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_TASK_STATUS;
 
 public class Utilities {
 
@@ -378,7 +380,6 @@ public class Utilities {
                 InstanceColumns.UUID,
                 InstanceColumns.SOURCE,
                 InstanceColumns.T_LOCATION_TRIGGER
-
         };
 
         String selectClause = null;
@@ -508,23 +509,27 @@ public class Utilities {
     }
 
     /*
-     * Delete any tasks with the matching status
-     * Only delete if the task status has been successfully synchronised with the server
+     * Mark closed any tasks with the matching status
+     * Only mark closed if the task status has been successfully synchronised with the server or
+     * it is a local task
      */
-    public static int deleteTasksWithStatus(String status) {
+    public static int markClosedTasksWithStatus(String status) {
 
         Uri dbUri = InstanceColumns.CONTENT_URI;
 
         String selectClause = InstanceColumns.T_TASK_STATUS + " = ? and "
                 + InstanceColumns.SOURCE + " = ? and "
-                + InstanceColumns.T_IS_SYNC + " = ?";
+                + "(" + InstanceColumns.T_IS_SYNC + " = ? or "
+                + InstanceColumns.T_ASS_ID + " is null)";           // Local task
 
         String[] selectArgs = {"", "", ""};
         selectArgs[0] = status;
         selectArgs[1] = Utilities.getSource();
         selectArgs[2] = Utilities.STATUS_SYNC_YES;
 
-        return Collect.getInstance().getContentResolver().delete(dbUri, selectClause, selectArgs);
+        ContentValues cv = new ContentValues();
+        cv.put(T_TASK_STATUS, Utilities.STATUS_T_CLOSED);
+        return Collect.getInstance().getContentResolver().update(dbUri, cv, selectClause, selectArgs);
     }
 
     /*
@@ -561,27 +566,6 @@ public class Utilities {
     }
 
     /*
-     * Close the task with the matching status
-     */
-    public static void closeTasksWithStatus(String status) {
-
-        Uri dbUri = InstanceColumns.CONTENT_URI;
-
-        ContentValues values = new ContentValues();
-        values.put(InstanceColumns.T_TASK_STATUS, Utilities.STATUS_T_CLOSED);
-
-        String selectClause = InstanceColumns.T_TASK_STATUS + " = ? and "
-                + InstanceColumns.SOURCE + "= ? ";
-
-        String[] selectArgs = {"", ""};
-        selectArgs[0] = status;
-        selectArgs[1] = Utilities.getSource();
-
-        Collect.getInstance().getContentResolver().update(dbUri, values, selectClause, selectArgs);
-
-    }
-
-    /*
      * Mark the task as synchronised
      */
     public static void setTaskSynchronized(Long id) {
@@ -611,6 +595,50 @@ public class Utilities {
 
     }
 
+    /*
+     * Delete rejected tasks (that have not already been deleted)
+     */
+    public static void deleteRejectedTasks() {
+
+        Uri dbUri = InstanceColumns.CONTENT_URI;
+
+        String where = InstanceColumns.T_TASK_STATUS + " = 'rejected' and "
+                + InstanceColumns.SOURCE + " = ? and "
+                + InstanceColumns.DELETED_DATE + " is null";
+
+        String[] whereArgs = {""};
+        whereArgs[0] = Utilities.getSource();
+
+        InstanceProvider ip = new InstanceProvider();
+
+        Cursor c = null;
+        String status = null;
+        try {
+            c = Collect.getInstance().getContentResolver().query(dbUri, null, where, whereArgs, null);
+            if (c != null && c.getCount() > 0) {
+                c.moveToFirst();
+                status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
+                do {
+                    String instanceFile = c.getString(
+                            c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+                    File instanceDir = (new File(instanceFile)).getParentFile();
+                    ip.deleteAllFilesInDirectory(instanceDir);
+
+                } while (c.moveToNext());
+            }
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+
+        // Set the deleted date
+        ContentValues cv = new ContentValues();
+        cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
+        Collect.getInstance().getContentResolver().update(dbUri, cv, where, whereArgs);
+
+    }
+
 
     /*
     * Set the status for the provided assignment id
@@ -621,7 +649,6 @@ public class Utilities {
 
         String selectClause = InstanceColumns.T_ASS_ID + " = " + assId + " and "
                 + InstanceColumns.SOURCE + " = ?";
-
 
         String[] selectArgs = {""};
         selectArgs[0] = Utilities.getSource();

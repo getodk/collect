@@ -126,15 +126,17 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
         final TextView disabledCause = view.findViewById(R.id.form_subtitle2);
         final ImageView imageView = view.findViewById(R.id.image);
 
-        view.setEnabled(false);
+        //view.setEnabled(false);       // smap we  don't want to disable this
         disabledCause.setVisibility(View.VISIBLE);
         disabledCause.setText(disabledMessage);
 
         // Material design "disabled" opacity is 38%.
+        /* smap show clear
         formTitle.setAlpha(0.38f);
         formSubtitle.setAlpha(0.38f);
         disabledCause.setAlpha(0.38f);
         imageView.setAlpha(0.38f);
+        */
     }
 
     private void setUpSubtext(View view) {
@@ -151,7 +153,7 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
 
         switch (formStatus) {
             case InstanceProviderAPI.STATUS_INCOMPLETE:
-                imageView.setImageResource(R.drawable.form_state_saved);
+                imageView.setImageResource(R.drawable.form_state_rejected);
                 break;
             case InstanceProviderAPI.STATUS_COMPLETE:
                 imageView.setImageResource(R.drawable.form_state_finalized);

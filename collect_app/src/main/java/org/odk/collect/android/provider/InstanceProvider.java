@@ -34,6 +34,7 @@ import org.odk.collect.android.database.ODKSQLiteOpenHelper;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.Utilities;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -571,12 +572,21 @@ public class InstanceProvider extends ContentProvider {
                     }
                 }
 
+                // smap we are only ever going to update the status
                 //We are going to update the status, if the form is submitted
                 //We will not delete the record in table but we will delete the file
-                if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
+                if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)) {      // smap
                     ContentValues cv = new ContentValues();
                     cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
                     count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
+                } else {
+                    // smap Update the deleted date and also change the assignment status to rejected
+                    ContentValues cv = new ContentValues();
+                    cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
+                    cv.put(T_TASK_STATUS, Utilities.STATUS_T_REJECTED);
+                    count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
+                }
+                /* smap
                 } else {
                         String[] newWhereArgs;
                         if (whereArgs == null || whereArgs.length == 0) {
@@ -594,6 +604,7 @@ public class InstanceProvider extends ContentProvider {
                                                 + (!TextUtils.isEmpty(where) ? " AND ("
                                                 + where + ')' : ""), newWhereArgs);
                 }
+                */
                 break;
 
             default:

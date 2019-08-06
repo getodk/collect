@@ -204,6 +204,9 @@ public class SmapTaskMapFragment extends Fragment
             case R.id.menu_gettasks:
                 ((SmapMain) getActivity()).processGetTask();
                 return true;
+            case R.id.menu_history:
+                ((SmapMain) getActivity()).processHistory();
+                return true;
             case R.id.menu_exit:
                 ((SmapMain) getActivity()).exit();
                 return true;

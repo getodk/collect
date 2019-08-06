@@ -315,6 +315,15 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         mDownloadTasks.execute();
     }
 
+    public void processHistory() {
+        if (Collect.allowClick(getClass().getName())) {
+            Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+            i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
+                    ApplicationConstants.FormModes.VIEW_SENT);
+            startActivity(i);
+        }
+    }
+
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {

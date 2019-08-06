@@ -80,7 +80,7 @@ public class InstanceChooserList extends InstanceListActivity implements
                     R.string.sort_by_status_asc, R.string.sort_by_status_desc
             };
         } else {
-            setTitle(getString(R.string.view_sent_forms));
+            setTitle(getString(R.string.smap_history));       // smap change to history
 
             sortingOptions = new int[] {
                     R.string.sort_by_name_asc, R.string.sort_by_name_desc,
@@ -123,6 +123,7 @@ public class InstanceChooserList extends InstanceListActivity implements
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        /* smap
         if (Collect.allowClick(getClass().getName())) {
             if (view.isEnabled()) {
                 Cursor c = (Cursor) listView.getAdapter().getItem(position);
@@ -166,6 +167,7 @@ public class InstanceChooserList extends InstanceListActivity implements
                 Toast.makeText(this, disabledCause.getText(), Toast.LENGTH_SHORT).show();
             }
         }
+        */
     }
 
     @Override
