@@ -56,19 +56,19 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     /**
      * Shared client object used for all HTTP requests. Credentials are set on a per-request basis.
      */
-    private static OkHttpClient httpClient;
+    private OkHttpClient httpClient;
 
     /**
      * The credentials used for the last request. When a new request is made, this is used to see
      * whether the {@link #httpClient} credentials need to be changed.
      */
-    private static HttpCredentialsInterface lastRequestCredentials;
+    private HttpCredentialsInterface lastRequestCredentials;
 
     /**
      * The scheme used for the last request. When a new request is made, this is used to see
      * whether the {@link #httpClient} credentials need to be changed.
      */
-    private static String lastRequestScheme = "";
+    private String lastRequestScheme = "";
 
     private MultipartBody multipartBody;
 

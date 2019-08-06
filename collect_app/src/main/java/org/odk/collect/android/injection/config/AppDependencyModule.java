@@ -70,6 +70,7 @@ public class AppDependencyModule {
     }
 
     @Provides
+    @Singleton
     OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap) {
         return new OkHttpConnection(null, new CollectThenSystemContentTypeMapper(mimeTypeMap));
     }
