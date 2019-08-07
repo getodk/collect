@@ -256,7 +256,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
                 playVideo();
                 break;
             case R.id.imageView:
-                openImage();
+                onImageClick();
                 break;
         }
     }
@@ -267,30 +267,38 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         imageView.setEnabled(enabled);
     }
 
-    private void openImage() {
+    private void onImageClick() {
         if (bigImageURI != null) {
-            try {
-                File bigImage = new File(referenceManager.DeriveReference(bigImageURI).getLocalURI());
-                Intent intent = new Intent("android.intent.action.VIEW");
-                Uri uri =
-                        FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", bigImage);
-                FileUtils.grantFileReadPermissions(intent, uri, getContext());
-                intent.setDataAndType(uri, "image/*");
-                getContext().startActivity(intent);
-            } catch (InvalidReferenceException e) {
-                Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
-            } catch (ActivityNotFoundException e) {
-                Timber.d(e, "No Activity found to handle due to %s", e.getMessage());
-                ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found,
-                        getContext().getString(R.string.view_image)));
-            }
+            openImage();
         } else {
-            if (viewText instanceof RadioButton) {
-                ((RadioButton) viewText).setChecked(true);
-            } else if (viewText instanceof CheckBox) {
-                CheckBox checkbox = (CheckBox) viewText;
-                checkbox.setChecked(!checkbox.isChecked());
-            }
+            selectItem();
+        }
+    }
+
+    private void openImage() {
+        try {
+            File bigImage = new File(referenceManager.DeriveReference(bigImageURI).getLocalURI());
+            Intent intent = new Intent("android.intent.action.VIEW");
+            Uri uri =
+                    FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", bigImage);
+            FileUtils.grantFileReadPermissions(intent, uri, getContext());
+            intent.setDataAndType(uri, "image/*");
+            getContext().startActivity(intent);
+        } catch (InvalidReferenceException e) {
+            Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
+        } catch (ActivityNotFoundException e) {
+            Timber.d(e, "No Activity found to handle due to %s", e.getMessage());
+            ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found,
+                    getContext().getString(R.string.view_image)));
+        }
+    }
+
+    private void selectItem() {
+        if (viewText instanceof RadioButton) {
+            ((RadioButton) viewText).setChecked(true);
+        } else if (viewText instanceof CheckBox) {
+            CheckBox checkbox = (CheckBox) viewText;
+            checkbox.setChecked(!checkbox.isChecked());
         }
     }
 
