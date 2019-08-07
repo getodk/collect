@@ -351,6 +351,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                     if (isLocationValid(answer)) {
                         answers.putAll(parseGeopoint(columnTitles, elementTitle, answer));
                     } else {
+                        // Avoid formatting answers https://stackoverflow.com/a/37827066/5479029
+                        answer = "'" + answer;
                         answers.put(elementTitle, answer);
                     }
                 }
