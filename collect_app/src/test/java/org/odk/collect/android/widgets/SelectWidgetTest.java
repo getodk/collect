@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.RobolectricHelpers;
@@ -49,7 +50,7 @@ public class SelectWidgetTest {
     @Before
     public void setup() {
         overrideDependencyModule();
-        when(audioHelper.setAudio(any(), any(), any())).thenReturn(new MutableLiveData<>());
+        when(audioHelper.setAudio(any(AudioButton.class), any(), any())).thenReturn(new MutableLiveData<>());
     }
 
     @Test
@@ -71,8 +72,8 @@ public class SelectWidgetTest {
         ScreenContextFragmentActivity activity = RobolectricHelpers.createThemedActivity(ScreenContextFragmentActivity.class);
         new TestWidget(activity, formEntryPrompt, audioHelper, selectChoices);
 
-        verify(audioHelper).setAudio(any(), eq("file://blah1.mp3"), eq("i am index 0"));
-        verify(audioHelper).setAudio(any(), eq("file://blah2.mp3"), eq("i am index 1"));
+        verify(audioHelper).setAudio(any(AudioButton.class), eq("file://blah1.mp3"), eq("i am index 0"));
+        verify(audioHelper).setAudio(any(AudioButton.class), eq("file://blah2.mp3"), eq("i am index 1"));
     }
 
     private void overrideDependencyModule() {

@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.ScreenContextFragmentActivity;
@@ -42,7 +43,7 @@ public class MediaLayoutTest {
 
         MutableLiveData<Boolean> isPlaying = new MutableLiveData<>();
         isPlaying.setValue(false);
-        when(audioHelper.setAudio(any(), any(), any())).thenReturn(isPlaying);
+        when(audioHelper.setAudio(any(AudioButton.class), any(), any())).thenReturn(isPlaying);
 
         Activity activity = RobolectricHelpers.createThemedActivity(ScreenContextFragmentActivity.class);
 

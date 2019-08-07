@@ -30,7 +30,7 @@ public class AudioButton extends AppCompatImageButton implements View.OnClickLis
 
     private Bitmap bitmapPlay;
     private Bitmap bitmapStop;
-    private OnPlayStopListener onPlayStopListener;
+    private Listener listener;
 
     private Boolean playing = false;
 
@@ -66,8 +66,8 @@ public class AudioButton extends AppCompatImageButton implements View.OnClickLis
         }
     }
 
-    public void setOnPlayStopListener(OnPlayStopListener onPlayStopListener) {
-        this.onPlayStopListener = onPlayStopListener;
+    public void setListener(Listener listener) {
+        this.listener = listener;
     }
 
     public void resetBitmap() {
@@ -77,13 +77,13 @@ public class AudioButton extends AppCompatImageButton implements View.OnClickLis
     @Override
     public void onClick(View view) {
         if (playing) {
-            onPlayStopListener.onStopClicked();
+            listener.onStopClicked();
         } else {
-            onPlayStopListener.onPlayClicked();
+            listener.onPlayClicked();
         }
     }
 
-    public interface OnPlayStopListener {
+    public interface Listener {
 
         void onPlayClicked();
 

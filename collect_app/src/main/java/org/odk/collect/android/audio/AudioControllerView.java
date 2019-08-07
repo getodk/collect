@@ -50,6 +50,7 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
     TextView totalDurationLabel;
 
     @BindView(R.id.playBtn)
+    @SuppressFBWarnings("UR")
     ImageButton playButton;
 
     @BindView(R.id.seekBar)
@@ -79,6 +80,7 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
             }
         }
     };
+    private Listener listener;
 
     public AudioControllerView(Context context) {
         super(context);
@@ -86,6 +88,7 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
         View.inflate(context, R.layout.audio_controller_layout, this);
         ButterKnife.bind(this);
         seekBar.setOnSeekBarChangeListener(this);
+        playButton.setImageResource(R.drawable.ic_play_arrow_24dp);
     }
 
     public void init(MediaPlayer mediaPlayer) {
@@ -114,12 +117,10 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
 
     @OnClick(R.id.playBtn)
     void playClicked() {
-        if (mediaPlayer.isPlaying()) {
-            pause();
-            state = State.PAUSED;
+        if (state == State.PLAYING) {
+            listener.onPauseClicked();
         } else {
-            play();
-            state = State.PLAYING;
+            listener.onPlayClicked();
         }
     }
 
@@ -184,18 +185,11 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
 
     private void play() {
         playButton.setImageResource(R.drawable.ic_pause_24dp);
-
-        if (seekBar.getProgress() == mediaPlayer.getDuration()) {
-            seekBar.setProgress(0);
-        }
-
-        mediaPlayer.start();
         updateProgressBar();
     }
 
     private void pause() {
         playButton.setImageResource(R.drawable.ic_play_arrow_24dp);
-        mediaPlayer.pause();
         seekHandler.removeCallbacks(updateTimeTask);
     }
 
@@ -227,11 +221,39 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
         return new DateTime(millis, DateTimeZone.UTC).toString("mm:ss");
     }
 
+    public void setPlayState(AudioPlayerViewModel.ClipState playState) {
+        switch (playState) {
+            case NOT_PLAYING:
+                playButton.setImageResource(R.drawable.ic_play_arrow_24dp);
+                state = State.IDLE;
+                break;
+            case PLAYING:
+                playButton.setImageResource(R.drawable.ic_pause_24dp);
+                state = State.PLAYING;
+                break;
+            case PAUSED:
+                playButton.setImageResource(R.drawable.ic_play_arrow_24dp);
+                state = State.PAUSED;
+                break;
+        }
+    }
+
+    public void setListener(Listener listener) {
+        this.listener = listener;
+    }
+
     private enum State {
         PAUSED, PLAYING, IDLE
     }
 
     public interface SwipableParent {
         void allowSwiping(boolean allowSwiping);
+    }
+
+    public interface Listener {
+
+        void onPlayClicked();
+
+        void onPauseClicked();
     }
 }

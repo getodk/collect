@@ -30,19 +30,20 @@ public class AudioHelper {
     public LiveData<Boolean> setAudio(AudioButton button, String uri, String clipID) {
         AudioPlayerViewModel viewModel = getViewModel();
 
-        screenContext.getActivity().getLifecycle().addObserver(new AudioPlayerViewModelBackgroundObserver(viewModel));
-        screenContext.getViewLifecycle().getLifecycle().addObserver(new AudioPlayerViewModelBackgroundObserver(viewModel));
-
         LiveData<Boolean> isPlaying = Transformations.map(viewModel.isPlaying(clipID), value -> value == PLAYING);
 
         isPlaying.observe(screenContext.getViewLifecycle(), button::setPlaying);
-        button.setOnPlayStopListener(new AudioPlayerViewModelOnPlayStopListener(
-                viewModel,
-                uri,
-                clipID
-        ));
+        button.setListener(new AudioButtonListener(viewModel, uri, clipID));
 
         return isPlaying;
+    }
+
+    public void setAudio(AudioControllerView view, String uri, String clipID) {
+        AudioPlayerViewModel viewModel = getViewModel();
+
+        LiveData<AudioPlayerViewModel.ClipState> playState = viewModel.isPlaying(clipID);
+        playState.observe(screenContext.getViewLifecycle(), view::setPlayState);
+        view.setListener(new AudioControllerViewListener(viewModel, uri, clipID));
     }
 
     public void play(String clipID, String uri) {
@@ -51,18 +52,46 @@ public class AudioHelper {
 
     @NotNull
     private AudioPlayerViewModel getViewModel() {
-        return ViewModelProviders
+        AudioPlayerViewModel viewModel = ViewModelProviders
                 .of(screenContext.getActivity(), new AudioPlayerViewModelFactory(this.mediaPlayerFactory))
                 .get(AudioPlayerViewModel.class);
+
+        screenContext.getActivity().getLifecycle().addObserver(new BackgroundObserver(viewModel));
+        screenContext.getViewLifecycle().getLifecycle().addObserver(new BackgroundObserver(viewModel));
+
+        return viewModel;
     }
-    
-    private static class AudioPlayerViewModelOnPlayStopListener implements AudioButton.OnPlayStopListener {
+
+    private static class AudioControllerViewListener implements AudioControllerView.Listener {
+
+        private final AudioPlayerViewModel viewModel;
+        private final String uri;
+        private final String clipID;
+
+        AudioControllerViewListener(AudioPlayerViewModel viewModel, String uri, String clipID) {
+            this.viewModel = viewModel;
+            this.uri = uri;
+            this.clipID = clipID;
+        }
+
+        @Override
+        public void onPlayClicked() {
+            viewModel.play(clipID, uri);
+        }
+
+        @Override
+        public void onPauseClicked() {
+            viewModel.pause();
+        }
+    }
+
+    private static class AudioButtonListener implements AudioButton.Listener {
 
         private final AudioPlayerViewModel viewModel;
         private final String uri;
         private final String buttonID;
 
-        AudioPlayerViewModelOnPlayStopListener(AudioPlayerViewModel viewModel, String uri, String buttonID) {
+        AudioButtonListener(AudioPlayerViewModel viewModel, String uri, String buttonID) {
             this.viewModel = viewModel;
             this.uri = uri;
             this.buttonID = buttonID;
@@ -79,11 +108,11 @@ public class AudioHelper {
         }
     }
 
-    private static class AudioPlayerViewModelBackgroundObserver implements LifecycleObserver {
+    private static class BackgroundObserver implements LifecycleObserver {
 
         private final AudioPlayerViewModel viewModel;
 
-        AudioPlayerViewModelBackgroundObserver(AudioPlayerViewModel viewModel) {
+        BackgroundObserver(AudioPlayerViewModel viewModel) {
             this.viewModel = viewModel;
         }
 
