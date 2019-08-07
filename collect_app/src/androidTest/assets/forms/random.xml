@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<h:head>
+		<h:title>random</h:title>
+		<model>
+			<instance>
+				<random id="random">
+					<rand/>
+					<rand_note/>
+					<rand_once/>
+					<rand_once_note/>
+					<meta>
+						<instanceID/>
+					</meta>
+				</random>
+			</instance>
+			<bind calculate="random()" nodeset="/random/rand" type="string"/>
+			<bind nodeset="/random/rand_note" readonly="true()" type="string"/>
+			<bind calculate="once(random())" nodeset="/random/rand_once" type="string"/>
+			<bind nodeset="/random/rand_once_note" readonly="true()" type="string"/>
+			<bind calculate="concat('uuid:', uuid())" nodeset="/random/meta/instanceID" readonly="true()" type="string"/>
+		</model>
+	</h:head>
+	<h:body>
+		<input ref="/random/rand_note">
+			<label>Your random value: 
+				<output value=" /random/rand "/></label>
+		</input>
+		<input ref="/random/rand_once_note">
+			<label>Your random once value: 
+				<output value=" /random/rand_once "/></label>
+		</input>
+	</h:body>
+</h:html>

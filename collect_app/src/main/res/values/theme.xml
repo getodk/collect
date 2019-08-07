@@ -11,6 +11,11 @@
     <style name="BaseDarkAppTheme.Collect" parent="BaseDarkAppTheme" />
 
     <style name="BaseDarkAppTheme" parent="Theme.AppCompat.NoActionBar">
+        <!--Material theme attributes-->
+        <item name="textAppearanceHeadline6">@style/TextAppearance.Collect.Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.Collect.Subtitle1</item>
+        <!--/Material theme attributes-->
+
         <item name="primaryTextColor">@color/darkPrimaryTextColor</item>
         <item name="secondaryTextColor">@color/darkSecondaryTextColor</item>
         <item name="android:scrollbarThumbHorizontal">@drawable/thumb</item>
@@ -61,6 +66,11 @@
     <style name="BaseLightAppTheme.Collect" parent="BaseLightAppTheme" />
 
     <style name="BaseLightAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!--Material theme attributes-->
+        <item name="textAppearanceHeadline6">@style/TextAppearance.Collect.Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.Collect.Subtitle1</item>
+        <!--/Material theme attributes-->
+
         <item name="primaryTextColor">@color/lightPrimaryTextColor</item>
         <item name="secondaryTextColor">@color/lightSecondaryTextColor</item>
         <item name="android:scrollbarThumbHorizontal">@drawable/thumb</item>
@@ -100,5 +110,9 @@
 
     <style name="SearchViewTheme.Light" parent="Widget.AppCompat.Light.SearchView">
         <item name="searchHintIcon">@null</item>
+    </style>
+
+    <style name="Widget.Collect.Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="titleTextAppearance">@style/TextAppearance.Collect.Headline6</item>
     </style>
 </resources>

@@ -8,11 +8,8 @@ import org.odk.collect.android.external.handler.SmapRemoteDataItem;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.listeners.SmapRemoteListener;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.opendatakit.httpclientandroidlib.HttpResponse;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 
@@ -64,7 +61,6 @@ public class SmapRemoteWebServicePostTask extends AsyncTask<String, Void, SmapRe
             File file = new File(filePath);
             String extension = getFileExtension(fileName);
             if(file.exists() && extension.equals("jpg")) {
-
 
                 URL url = new URL(lookupUrl);
                 URI uri = url.toURI();

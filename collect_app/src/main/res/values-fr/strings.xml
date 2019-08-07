@@ -307,25 +307,22 @@
   <string name="leave_a_review">Laissez un avis sur Play Store</string>
   <string name="leave_a_review_msg">Votre avis (ce qu\'on espère est positif) augmente la visibilité de l\'application dans le Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Cartographie</string>
-  <string name="map_sdk_selector_title">Moteur cartographique - SDK</string>
-  <string name="map_sdk_behavior">Moteur cartographique - SDK</string>
-  <string name="google_maps_sdk">Google Maps SDK</string>
-  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
-  <string name="show_map_sdk">Options fond de carte SDK</string>
-  <string name="openmap_streets">OSM Streets</string>
+  <string name="maps">Cartes</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">USGS Carte nationale hybride</string>
   <string name="openmap_usgs_img">Les images de la carte nationale USGS</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
+  <string name="basemap">Fonds de carte</string>
   <string name="streets">Streets</string>
   <string name="terrain">Terrain</string>
   <string name="hybrid">Hybride</string>
   <string name="satellite">Satellite</string>
-  <string name="map_basemap_selector_title">Fonds de carte</string>
-  <string name="show_map_basemap">Voir les options du fond de carte</string>
+  <string name="reference_layer">Couche de référence</string>
   <string name="save_point">Enregistrer le PointGéo</string>
   <string name="get_point">Démarrer le PointGéo</string>
   <string name="geopoint_view_read_only">Voir le PointGéo</string>
@@ -336,8 +333,6 @@
   <string name="start">Démarrer</string>
   <string name="enable_gps">Activer le GPS</string>
   <string name="geotrace_title">TracéGéo</string>
-  <string name="gps_enable_message">Le GPS est désactivé. Voulez vous l\'activer ?</string>
-  <string name="select_offline_layer">Sélectionner le fond de carte hors ligne </string>
   <string name="geo_clear_warning">Objet déjà créé. Souhaitez-vous l\'effacer ?</string>
   <string name="geo_exit_warning">Annuler les changements et revenir à ODK</string>
   <string name="polygon_validator">3 points minimum sont nécessaires pour créer un Polygone</string>
@@ -514,7 +509,6 @@
   <string name="wifi_autosend">Seulement Wifi</string>
   <string name="cellular_autosend">Seulement Cellulaire</string>
   <string name="wifi_cellular_autosend">Wifi ou Cellulaire</string>
-  <string name="map_basemap_behavior_title">Fonds de carte</string>
   <string name="form_management_preferences">Gestion de formulaire</string>
   <string name="form_submission_category">Soumission de formulaire</string>
   <string name="form_filling_category">Remplissage de formulaire</string>
@@ -528,7 +522,6 @@
   <string name="type">Type</string>
   <string name="form_entry">Décochez pour cacher depuis la saisie du formulaire</string>
   <string name="use_device_language">Utiliser la langue de l\'appareil</string>
-  <string name="not_supported_offline_layer_format">Les fonds cartographiques hors ligne sélectionnés utilisent le format PBF qui n\'est pas pris en charge!</string>
   <string name="invalid_email_address">Adresse mail invalide!</string>
   <string name="sort_by">Trier par</string>
   <string name="server">Serveur</string>
@@ -588,6 +581,7 @@
   <string name="islamic_month_10">Shawwal</string>
   <string name="islamic_month_11">Dhu al-Qidah</string>
   <string name="islamic_month_12">Dhu al-Hijjah</string>
+  <string name="persian_month_4">Ter</string>
   <string name="moving_backwards_title">mouvement en recul</string>
   <string name="moving_backwards_disabled_title">mouvement en recul désactivé</string>
   <string name="moving_backwards_disabled_message">Paramétrer le terminal à empêcher les utilisateurs de contourner ce paramètre ? \n\nLes modifications sont:\n\u2022 Désactiver Modifier formulaire sauvegardé\n\u2022 Désactiver sauvegarder le formulaire\n\u2022 Désactiver Aller à la ligne de saisie\n\u2022 Définir le traitement de contrainte au moment de balayage vers l\'avant</string>
@@ -678,4 +672,5 @@
   <string name="too_complex_form">Ce formulaire est trop complexe pour cet appareil. Essayez de simplifier les expressions ou demandez de l\'aide sur le forum.</string>
   <string name="reading_files">lecture des fichiers</string>
   <string name="copying_media_files_failed">Echec de la copie des fichiers media</string>
+  <string name="qr_code_not_found">Le code QR n\'a pas été trouvé dans l\'image sélectionnée. </string>
 </resources>

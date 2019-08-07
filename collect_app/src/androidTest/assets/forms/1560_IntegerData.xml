@@ -1,0 +1,25 @@
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+  <h:head>
+    <h:title>1560_IntegerData</h:title>
+    <model>
+      <instance>
+        <data id="1560_IntegerData">
+          <meta>
+            <instanceID/>
+	    <instanceName>5</instanceName>
+          </meta>
+        </data>
+      </instance>
+      <itext>
+        <translation lang="English">
+        </translation>
+      </itext>
+      <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" calculate="concat('uuid:', uuid())"/>
+      <bind nodeset="/data/meta/instanceName" type="int"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/data/meta/instanceName">
+    </input>
+  </h:body>
+</h:html>

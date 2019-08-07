@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.preferences;
 
+import android.app.Fragment;
 import android.os.Bundle;
 
 import org.odk.collect.android.R;
@@ -38,9 +39,11 @@ public class PreferencesActivity extends CollectAbstractActivity {
 
         setTitle(R.string.general_preferences);
         if (savedInstanceState == null) {
+            boolean adminMode = getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
+            Fragment fragment = GeneralPreferencesFragment.newInstance(adminMode);
             getFragmentManager()
                     .beginTransaction()
-                    .add(android.R.id.content, GeneralPreferencesFragment.newInstance(getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false)), TAG)
+                    .add(android.R.id.content, fragment, TAG)
                     .commit();
         }
     }
@@ -48,7 +51,7 @@ public class PreferencesActivity extends CollectAbstractActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Collect.getInstance().initProperties();
+        Collect.getInstance().initializeJavaRosa();
     }
 
     // If the onBackPressedListener is set then onBackPressed is delegated to it.

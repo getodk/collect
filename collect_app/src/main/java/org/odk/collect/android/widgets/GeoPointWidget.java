@@ -16,13 +16,8 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.ConfigurationInfo;
-import android.preference.PreferenceManager;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,15 +29,15 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.utilities.PlayServicesUtil;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.text.DecimalFormat;
-import java.util.Locale;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
+import static org.odk.collect.android.utilities.WidgetAppearanceUtils.PLACEMENT_MAP;
+import static org.odk.collect.android.utilities.WidgetAppearanceUtils.hasAppearance;
 
 /**
  * GeoPointWidget is the widget that allows the user to get GPS readings.
@@ -60,12 +55,10 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
 
     public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
     private final boolean readOnly;
-    private final boolean useMapsV2;
-    public final Button getLocationButton;
-    private final Button viewButton;
+    public final Button getLocationButton;	// smap fo auto ecord location
     private final TextView answerDisplay;
-    private boolean useMaps;
-    private double accuracyThreshold;
+    private boolean useMap;
+    private final double accuracyThreshold;
     private boolean draggable = true;
 
     private String stringAnswer;
@@ -73,7 +66,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
     public GeoPointWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        // Determine the activity threshold to use
+        // Determine the accuracy threshold to use.
         String acc = prompt.getQuestion().getAdditionalAttribute(null, ACCURACY_THRESHOLD);
         if (acc != null && acc.length() != 0) {
             accuracyThreshold = Double.parseDouble(acc);
@@ -81,80 +74,52 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
             accuracyThreshold = DEFAULT_LOCATION_ACCURACY;
         }
 
-        // Determine whether or not to use the plain, maps, or mapsV2 activity
-        String appearance = prompt.getAppearanceHint();
-
-        // use mapsV2 if it is available and was requested;
-        useMapsV2 = useMapsV2(context);
-        if (appearance != null && appearance.toLowerCase(Locale.US).contains(WidgetAppearanceUtils.PLACEMENT_MAP) && useMapsV2) {
-            draggable = true;
-            useMaps = true;
-        } else if (appearance != null && appearance.toLowerCase(Locale.US).contains(WidgetAppearanceUtils.MAPS) && useMapsV2) {
-            draggable = false;
-            useMaps = true;
-        } else {
-            useMaps = false;
+        // Determine whether to use the map and whether the point should be draggable.
+        useMap = false;
+        if (MapProvider.getConfigurator().isAvailable(context)) {
+            if (hasAppearance(prompt, PLACEMENT_MAP)) {
+                draggable = true;
+                useMap = true;
+            } else if (hasAppearance(prompt, MAPS)) {
+                draggable = false;
+                useMap = true;
+            }
         }
 
         readOnly = prompt.isReadOnly();
-
         answerDisplay = getCenteredAnswerTextView();
-
-        viewButton = getSimpleButton(getContext().getString(R.string.get_point), R.id.get_point);
 
         getLocationButton = getSimpleButton(R.id.get_location);
 
         // finish complex layout
-        // control what gets shown with setVisibility(View.GONE)
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(getLocationButton);
-        answerLayout.addView(viewButton);
         answerLayout.addView(answerDisplay);
         addAnswerView(answerLayout);
 
         // Set vars Label/text for button enable view or collect...
         boolean dataAvailable = false;
-        String s = prompt.getAnswerText();
-        if (s != null && !s.equals("")) {
+        String answer = prompt.getAnswerText();
+        if (answer != null && !answer.equals("")) {
             dataAvailable = true;
-            setBinaryData(s);
+            setBinaryData(answer);
         }
         updateButtonLabelsAndVisibility(dataAvailable);
-
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
-        // BUT for mapsV2, we only show the getLocationButton, altering its text.
-        // for maps, we show the view button.
-
-        if (useMapsV2 && useMaps) {
-            // hide the view button
-            viewButton.setVisibility(View.GONE);
+        if (useMap) {
             if (readOnly) {
-                //READ_ONLY View
-                getLocationButton.setText(
-                        getContext().getString(R.string.geopoint_view_read_only));
+                getLocationButton.setText(R.string.geopoint_view_read_only);
             } else {
-                if (stringAnswer != null && !stringAnswer.isEmpty()) {
-                    getLocationButton.setText(
-                            getContext().getString(R.string.view_change_location));
-                } else {
-                    getLocationButton.setText(getContext().getString(R.string.get_point));
-                }
+                getLocationButton.setText(
+                    dataAvailable ? R.string.view_change_location : R.string.get_point);
             }
         } else {
             if (!readOnly) {
-                getLocationButton.setText(getContext().getString(
-                        dataAvailable ? R.string.change_location : R.string.get_point));
-            }
-
-            if (useMaps) {
-                // show the view button
-                viewButton.setVisibility(View.VISIBLE);
-                viewButton.setEnabled(dataAvailable);
-            } else {
-                viewButton.setVisibility(View.GONE);
+                getLocationButton.setText(
+                    dataAvailable ? R.string.change_location : R.string.get_point);
             }
         }
     }
@@ -230,17 +195,18 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void setBinaryData(Object answer) {
-        String s = (String) answer;
+        stringAnswer = (String) answer;
 
-        if (s != null && !s.isEmpty()) {
-            stringAnswer = s;
-            String[] sa = s.split(" ");
-            answerDisplay.setText(String.format(getContext().getString(R.string.gps_result),
-                    formatGps(Double.parseDouble(sa[0]), "lat"),
-                    formatGps(Double.parseDouble(sa[1]), "lon"), truncateDouble(sa[2]),
-                    truncateDouble(sa[3])));
+        if (stringAnswer != null && !stringAnswer.isEmpty()) {
+            String[] parts = stringAnswer.split(" ");
+            answerDisplay.setText(getContext().getString(
+                R.string.gps_result,
+                formatGps(Double.parseDouble(parts[0]), "lat"),
+                formatGps(Double.parseDouble(parts[1]), "lon"),
+                truncateDouble(parts[2]),
+                truncateDouble(parts[3])
+            ));
         } else {
-            stringAnswer = s;
             answerDisplay.setText("");
         }
 
@@ -250,7 +216,6 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        viewButton.setOnLongClickListener(l);
         getLocationButton.setOnLongClickListener(l);
         answerDisplay.setOnLongClickListener(l);
     }
@@ -258,17 +223,8 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        viewButton.cancelLongPress();
         getLocationButton.cancelLongPress();
         answerDisplay.cancelLongPress();
-    }
-
-    private boolean useMapsV2(final Context context) {
-        final ActivityManager activityManager = (ActivityManager) context.getSystemService(
-                Context.ACTIVITY_SERVICE);
-        final ConfigurationInfo configurationInfo =
-                activityManager.getDeviceConfigurationInfo();
-        return configurationInfo.reqGlEsVersion >= 0x20000;
     }
 
     @Override
@@ -286,18 +242,9 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
     }
 
     private void startGeoPoint() {
-        Activity activity = (Activity) getContext();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        String mapSDK = prefs.getString(GeneralKeys.KEY_MAP_SDK, GeneralKeys.DEFAULT_BASEMAP_KEY);
-        if (mapSDK.equals(GeneralKeys.GOOGLE_MAPS_BASEMAP_KEY) &&
-            !PlayServicesUtil.isGooglePlayServicesAvailable(activity)) {
-            PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(activity);
-            return;
-        }
-        Intent intent = (useMapsV2 && useMaps) ?
-            new Intent(activity, GeoPointMapActivity.class)
-                .putExtra(GeneralKeys.KEY_MAP_SDK, mapSDK) :
-            new Intent(activity, GeoPointActivity.class);
+        Context context = getContext();
+        Intent intent = new Intent(
+            context, useMap ? GeoPointMapActivity.class : GeoPointActivity.class);
 
         if (stringAnswer != null && !stringAnswer.isEmpty()) {
             String[] sa = stringAnswer.split(" ");
@@ -313,6 +260,6 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
         intent.putExtra(ACCURACY_THRESHOLD, accuracyThreshold);
 
         waitForData();
-        activity.startActivityForResult(intent, RequestCodes.LOCATION_CAPTURE);
+        ((Activity) context).startActivityForResult(intent, RequestCodes.LOCATION_CAPTURE);
     }
 }

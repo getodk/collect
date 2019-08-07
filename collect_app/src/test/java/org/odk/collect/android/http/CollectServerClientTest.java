@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.http.mock.MockHttpClientConnection;
-import org.odk.collect.android.http.mock.MockHttpClientConnectionError;
+import org.odk.collect.android.http.stub.StubOpenRosaHttpInterface;
+import org.odk.collect.android.http.stub.StubOpenRosaHttpInterfaceError;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.robolectric.RobolectricTestRunner;
@@ -24,8 +24,8 @@ public class CollectServerClientTest {
 
     @Before
     public void setup() {
-        collectServerClient = new CollectServerClient(new MockHttpClientConnection(), new WebCredentialsUtils());
-        collectServerClientError = new CollectServerClient(new MockHttpClientConnectionError(), new WebCredentialsUtils());
+        collectServerClient = new CollectServerClient(new StubOpenRosaHttpInterface(), new WebCredentialsUtils());
+        collectServerClientError = new CollectServerClient(new StubOpenRosaHttpInterfaceError(), new WebCredentialsUtils());
     }
 
     @Ignore

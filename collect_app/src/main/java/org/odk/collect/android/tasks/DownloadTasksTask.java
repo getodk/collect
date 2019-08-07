@@ -65,9 +65,6 @@ import org.odk.collect.android.utilities.Utilities;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -257,10 +254,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 	        try {
 
                 /*
-                 * Delete tasks which were cancelled on the phone and and
+                 * Close tasks which were cancelled on the phone and
                  *  have been synchronised with the server
                  */
-                count = Utilities.deleteTasksWithStatus(Utilities.STATUS_T_CANCELLED);
+                count = Utilities.markClosedTasksWithStatus(Utilities.STATUS_T_CANCELLED);
                 if(count > 0) {
                     results.put(Collect.getInstance().getString(R.string.smap_cancelled), count +
                             " " + Collect.getInstance().getString(R.string.smap_deleted));
@@ -269,7 +266,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 /*
                  * Mark closed any surveys that were submitted last time and not deleted
                  */
-                Utilities.closeTasksWithStatus(Utilities.STATUS_T_SUBMITTED);
+                Utilities.markClosedTasksWithStatus(Utilities.STATUS_T_SUBMITTED);
 
 	            if(isCancelled()) { throw new CancelException("cancelled"); };		// Return if the user cancels
 
@@ -303,7 +300,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
                 Uri u = Uri.parse(taskURL);
 
-                // Send location with request (if available)  TODO check a paameter to see if this is turned on
+                // Send location with request (if available)  TODO check a parameter to see if this is turned on
                 String lat = null;
                 String lon = null;
                 HashMap<String, String> headers = new HashMap<String, String> ();
@@ -320,7 +317,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 }
 
                 URI uri = URI.create(taskURL);
-                String resp = httpInterface.getRequest(uri, null, webCredentialsUtils.getCredentials(uri), headers);
+                String resp = httpInterface.getRequest(uri, "application/json", webCredentialsUtils.getCredentials(uri), headers);
                 GsonBuilder gb = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer());
                 gson = gb.create();
 
@@ -472,9 +469,6 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                         editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_NAVIGATION, false);
                     }
 
-
-
-
                     editor.apply();
                 }
 
@@ -509,27 +503,17 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
                 if(isCancelled()) { throw new CancelException("cancelled"); };		// Return if the user cancels
 
+
             	/*
-            	 * Delete all entries in the database that we are finished with
+            	 * Mark entries that we are finished with as closed
             	 */
-                count = Utilities.deleteTasksWithStatus(Utilities.STATUS_T_REJECTED);
+                Utilities.deleteRejectedTasks();    // Adds the deleted date if it is not already there and removes files
+                count = Utilities.markClosedTasksWithStatus(Utilities.STATUS_T_REJECTED);
                 if(count > 0) {
                     results.put(Collect.getInstance().getString(R.string.smap_rejected), count +
                             " " + Collect.getInstance().getString(R.string.smap_deleted));
                 }
 
-                if(tr.settings !=null && tr.settings.ft_delete_submitted) {
-                    count = Utilities.deleteTasksWithStatus(Utilities.STATUS_T_SUBMITTED);
-                    if(count > 0) {
-                        results.put(Collect.getInstance().getString(R.string.smap_submitted), count +
-                                " " + Collect.getInstance().getString(R.string.smap_deleted));
-                    }
-                    count = Utilities.deleteTasksWithStatus(Utilities.STATUS_T_CLOSED);
-                    if(count > 0) {
-                        results.put(Collect.getInstance().getString(R.string.smap_closed), count +
-                                " " + Collect.getInstance().getString(R.string.smap_deleted));
-                    }
-                }
 
 	        } catch(JsonSyntaxException e) {
 	        	
@@ -774,7 +758,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
     	}
 
         // Remove any tasks that have been deleted from the server
-        Utilities.deleteObsoleteTasks(tr.taskAssignments);
+        Utilities.rejectObsoleteTasks(tr.taskAssignments);
+
+    	// Clean up the history table and remove old deleted instances
+        Utilities.cleanHistory();
     	
     	return;
 	}

@@ -97,7 +97,7 @@ android {
             }
             minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-            resValue("bool", "FIREBASE_CRASHLYTICS_ENABLED", "true")
+            resValue("bool", "FIREBASE_ENABLED", "true")
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
         }
@@ -115,7 +115,7 @@ android {
 
             debuggable(true)
             testCoverageEnabled(false)    // smap
-            resValue("bool", "FIREBASE_CRASHLYTICS_ENABLED", "false")
+            resValue("bool", "FIREBASE_ENABLED", "false")
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
         }
@@ -148,9 +148,8 @@ android {
 
         // To ensure that ODK Collect is installable on all devices, we don't use
         // abiFilters to exclude any ABIs; but to keep the APK slim, we include
-        // the Mapbox native library only for armeabi-v7a (which works on all
-        // ARMv7+ 32-bit and 64-bit devices), and omit it for all the other ABIs.
-        exclude 'lib/arm64-v8a/libmapbox-gl.so'
+        // the Mapbox native library only for 32-bit and 64-bit ARM devices and
+        // omit it for all X86 devices.
         exclude 'lib/x86/libmapbox-gl.so'
         exclude 'lib/x86_64/libmapbox-gl.so'
     }
@@ -236,6 +235,7 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:${rootProject.okhttp3Version}"
     implementation 'com.burgstaller:okhttp-digest:1.18'
 
+    implementation 'com.github.mohamadian:PersianJodaTime:1.2'
     implementation 'com.github.chanmratekoko:myanmar-calendar:1.0.6.RC3'
     implementation 'bikramsambat:bikram-sambat:1.1.0'
     implementation "com.evernote:android-job:1.2.5"
@@ -243,7 +243,7 @@ dependencies {
     implementation "commons-io:commons-io:2.6"
     implementation "net.sf.kxml:kxml2:2.3.0"
     implementation "net.sf.opencsv:opencsv:2.3"
-    implementation("org.opendatakit:opendatakit-javarosa:2.14.0") {
+    implementation("org.opendatakit:opendatakit-javarosa:2.15.0") {
         exclude group: 'joda-time'
         exclude group: 'org.slf4j'
     }
@@ -293,11 +293,14 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 
     // Dagger:
+    implementation "com.google.dagger:dagger:${rootProject.daggerVersion}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}"
+    testAnnotationProcessor "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}" // Needed for injection into Robolectric tests
+
+    // Dagger Android:
     implementation "com.google.dagger:dagger-android:${rootProject.daggerVersion}"
     implementation "com.google.dagger:dagger-android-support:${rootProject.daggerVersion}"
     annotationProcessor "com.google.dagger:dagger-android-processor:${rootProject.daggerVersion}"
-    annotationProcessor "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}"
-    testAnnotationProcessor "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}"
 
     // RxJava 2:
     implementation "io.reactivex.rxjava2:rxandroid:2.0.2"
@@ -339,6 +342,8 @@ dependencies {
     testImplementation "org.mockito:mockito-core:2.22.0"
     testImplementation "org.robolectric:robolectric:4.0.1"
     testImplementation "org.robolectric:shadows-multidex:4.0-beta-1"
+    testImplementation "com.squareup.okhttp3:mockwebserver:${rootProject.okhttp3Version}"
+    testImplementation "com.squareup.okhttp3:okhttp-tls:${rootProject.okhttp3Version}"
 
     // power mock (for mocking final methods which is not handled by mockito)
     testImplementation "org.powermock:powermock-module-junit4:2.0.2"
@@ -350,6 +355,7 @@ dependencies {
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
 
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
     androidTestImplementation("androidx.test.espresso:espresso-intents:3.2.0-alpha03") {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.google.code.findbugs', module: 'jsr305'

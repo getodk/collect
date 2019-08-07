@@ -1,0 +1,71 @@
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:odk="http://www.opendatakit.org/xforms">
+  <h:head>
+    <h:title>Audit with Location</h:title>
+    <model>
+      <instance>
+        <data id="location_audit">
+          <orx:meta>
+            <instanceID/>
+            <orx:audit/>
+          </orx:meta>
+          <text1/>
+          <text2/>
+          <text3/>
+          <text4/>
+          <text5/>
+          <text6/>
+        </data>
+      </instance>
+      <itext>
+        <translation lang="English">
+          <text id="/data/text1:label">
+            <value>Text1</value>
+          </text>
+          <text id="/data/text2:label">
+            <value>Text2</value>
+          </text>
+          <text id="/data/text3:label">
+            <value>Text3</value>
+          </text>
+          <text id="/data/text4:label">
+            <value>Text4</value>
+          </text>
+          <text id="/data/text5:label">
+            <value>Text5</value>
+          </text>
+          <text id="/data/text6:label">
+            <value>Text6</value>
+          </text>
+        </translation>
+      </itext>
+      <bind nodeset="/data/orx:meta/instanceID" type="string" readonly="true()" calculate="concat('uuid:', uuid())"/>
+      <bind nodeset="/data/orx:meta/audit" type="binary" odk:location-priority="high_priority" odk:location-min-interval="10" odk:location-max-age="60" />
+      <bind nodeset="/data/text1" type="string"/>
+      <bind nodeset="/data/text2" type="string"/>
+      <bind nodeset="/data/text3" type="string"/>
+      <bind nodeset="/data/text4" type="string"/>
+      <bind nodeset="/data/text5" type="string"/>
+      <bind nodeset="/data/text6" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/data/text1">
+      <label ref="jr:itext('/data/text1:label')"/>
+    </input>
+    <input ref="/data/text2">
+      <label ref="jr:itext('/data/text2:label')"/>
+    </input>
+    <input ref="/data/text3">
+      <label ref="jr:itext('/data/text3:label')"/>
+    </input>
+    <input ref="/data/text4">
+      <label ref="jr:itext('/data/text4:label')"/>
+    </input>
+    <input ref="/data/text5">
+      <label ref="jr:itext('/data/text5:label')"/>
+    </input>
+    <input ref="/data/text6">
+      <label ref="jr:itext('/data/text6:label')"/>
+    </input>
+  </h:body>
+</h:html>

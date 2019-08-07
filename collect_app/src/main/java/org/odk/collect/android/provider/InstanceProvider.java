@@ -17,36 +17,78 @@ package org.odk.collect.android.provider;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import androidx.annotation.NonNull;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.Utilities;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import timber.log.Timber;
 
+import static android.provider.BaseColumns._ID;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.ACT_LAT;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.ACT_LON;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DELETED_DATE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DISPLAY_NAME;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.FORM_PATH;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_FORM_ID;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_VERSION;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SCHED_LAT;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SCHED_LON;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SOURCE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.STATUS;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SUBMISSION_URI;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_ACT_FINISH;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_ACT_START;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_ADDRESS;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_ASS_ID;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_GEOM;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_GEOM_TYPE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_HIDE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_IS_SYNC;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_LOCATION_TRIGGER;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_REPEAT;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_SCHED_START;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_SHOW_DIST;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_SURVEY_NOTES;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_TASK_COMMENT;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_TASK_STATUS;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_TITLE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_UPDATED;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_UPDATEID;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.UUID;
 import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 
 public class InstanceProvider extends ContentProvider {
 
 
     private static final String DATABASE_NAME = "instances.db";
-    private static final int DATABASE_VERSION = 12;		// smap
+    private static final int DATABASE_VERSION = 13;		// smap
     private static final String INSTANCES_TABLE_NAME = "instances";
 
     private static HashMap<String, String> sInstancesProjectionMap;
@@ -55,6 +97,46 @@ public class InstanceProvider extends ContentProvider {
     private static final int INSTANCE_ID = 2;
 
     private static final UriMatcher URI_MATCHER;
+
+    private static final String[] COLUMN_NAMES_V13 = new String[] {
+            _ID,
+            DISPLAY_NAME,
+            SUBMISSION_URI,
+            CAN_EDIT_WHEN_COMPLETE,
+            INSTANCE_FILE_PATH,
+            JR_FORM_ID,
+            JR_VERSION,
+            STATUS,
+            LAST_STATUS_CHANGE_DATE,
+            DELETED_DATE,
+            SOURCE,             // smap
+            FORM_PATH,          // smap
+            ACT_LON,            // smap
+            ACT_LAT,            // smap
+            SCHED_LON,          // smap
+            SCHED_LAT,          // smap
+            T_TITLE,            // smap
+            T_SCHED_START,      // smap
+            T_ACT_START,        // smap
+            T_ACT_FINISH,       // smap
+            T_ADDRESS,          // smap
+            T_GEOM,             // smap
+            T_GEOM_TYPE,        // smap
+            T_IS_SYNC,          // smap
+            T_ASS_ID,           // smap
+            T_TASK_STATUS,      // smap
+            T_TASK_COMMENT,     // smap
+            T_REPEAT,           // smap
+            T_UPDATEID,         // smap
+            T_LOCATION_TRIGGER, // smap
+            T_SURVEY_NOTES,     // smap
+            UUID,               // smap
+            T_UPDATED,          // smap
+            T_SHOW_DIST,        // smap
+            T_HIDE              // smap
+
+    };
+    static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V13;
 
     /**
      * This class helps open, create, and upgrade the database file.
@@ -68,6 +150,9 @@ public class InstanceProvider extends ContentProvider {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
+
+            createInstancesTableV13(db, INSTANCES_TABLE_NAME);
+           /*
            db.execSQL("CREATE TABLE " + INSTANCES_TABLE_NAME + " ("
                + InstanceColumns._ID + " integer primary key, "
                + InstanceColumns.DISPLAY_NAME + " text not null, "
@@ -76,41 +161,42 @@ public class InstanceProvider extends ContentProvider {
                + InstanceColumns.INSTANCE_FILE_PATH + " text not null, "
                + InstanceColumns.JR_FORM_ID + " text not null, "
                + InstanceColumns.JR_VERSION + " text, "
-               + InstanceColumns.SOURCE + " text, "		        // smap
-               + InstanceColumns.FORM_PATH + " text, "		    // smap
-               + InstanceColumns.ACT_LON + " double, "		    // smap
-               + InstanceColumns.ACT_LAT + " double, "		    // smap
-               + InstanceColumns.SCHED_LON + " double, "		// smap
-               + InstanceColumns.SCHED_LAT + " double, "		// smap
-               + InstanceColumns.T_TITLE + " text, "		    // smap
-               + InstanceColumns.T_SCHED_START + " long, "		// smap
-               + InstanceColumns.T_ACT_START + " long, "		// smap
-               + InstanceColumns.T_ACT_FINISH + " long, "		// smap
-               + InstanceColumns.T_ADDRESS + " text, "		    // smap
-               + InstanceColumns.T_GEOM + " text, "		        // smap
-               + InstanceColumns.T_GEOM_TYPE + " text, "		// smap
-               + InstanceColumns.T_IS_SYNC + " text, "		    // smap
-               + InstanceColumns.T_ASS_ID + " long, "		    // smap
-               + InstanceColumns.T_TASK_STATUS + " text, "		// smap
-               + InstanceColumns.T_TASK_COMMENT + " text, "		// smap
-               + InstanceColumns.T_REPEAT + " integer, "		// smap
-               + InstanceColumns.T_UPDATEID + " text, "		    // smap
-               + InstanceColumns.T_LOCATION_TRIGGER + " text, " // smap
-               + InstanceColumns.T_SURVEY_NOTES + " text, "     // smap
-               + InstanceColumns.UUID + " text, "		        // smap
-               + InstanceColumns.T_UPDATED + " integer, "       // smap
+               + SOURCE + " text, "		        // smap
+               + FORM_PATH + " text, "		    // smap
+               + ACT_LON + " double, "		    // smap
+               + ACT_LAT + " double, "		    // smap
+               + SCHED_LON + " double, "		// smap
+               + SCHED_LAT + " double, "		// smap
+               + T_TITLE + " text, "		    // smap
+               + T_SCHED_START + " long, "		// smap
+               + T_ACT_START + " long, "		// smap
+               + T_ACT_FINISH + " long, "		// smap
+               + T_ADDRESS + " text, "		    // smap
+               + T_GEOM + " text, "		        // smap
+               + T_GEOM_TYPE + " text, "		// smap
+               + T_IS_SYNC + " text, "		    // smap
+               + T_ASS_ID + " long, "		    // smap
+               + T_TASK_STATUS + " text, "		// smap
+               + T_TASK_COMMENT + " text, "		// smap
+               + T_REPEAT + " integer, "		// smap
+               + T_UPDATEID + " text, "		    // smap
+               + T_LOCATION_TRIGGER + " text, " // smap
+               + T_SURVEY_NOTES + " text, "     // smap
+               + UUID + " text, "		        // smap
+               + T_UPDATED + " integer, "       // smap
                + InstanceColumns.STATUS + " text not null, "
                + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
-               + InstanceColumns.DISPLAY_SUBTEXT + " text not null, "
-               + InstanceColumns.T_SHOW_DIST + " integer, "   // smap
-               + InstanceColumns.T_HIDE + " integer, "        // smap
+               + T_SHOW_DIST + " integer, "   // smap
+               + T_HIDE + " integer, "        // smap
                + InstanceColumns.DELETED_DATE + " date );" );
+               */
         }
 
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         	int initialVersion = oldVersion;
+        	/*
         	if ( oldVersion < 2 ) {
         		db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
         					InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
@@ -126,48 +212,48 @@ public class InstanceProvider extends ContentProvider {
             // Smap Start
         	if ( oldVersion < 4 ) {
         		db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-    					InstanceColumns.SOURCE + " text;");
+    					SOURCE + " text;");
         	}
             if ( oldVersion < 5 ) {
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.FORM_PATH + " text;");
+                        FORM_PATH + " text;");
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.ACT_LON + " double;");
+                        ACT_LON + " double;");
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.ACT_LAT + " double;");
+                        ACT_LAT + " double;");
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.SCHED_LON + " double;");
+                        SCHED_LON + " double;");
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.SCHED_LAT + " double;");
+                        SCHED_LAT + " double;");
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.T_TITLE + " text;");
+                        T_TITLE + " text;");
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.T_SCHED_START + " long;");
+                        T_SCHED_START + " long;");
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.T_ACT_START + " long;");
+                        T_ACT_START + " long;");
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.T_ACT_FINISH + " long;");
+                        T_ACT_FINISH + " long;");
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.T_ADDRESS + " text;");
+                        T_ADDRESS + " text;");
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.T_GEOM + " text;");
+                        T_GEOM + " text;");
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.T_GEOM_TYPE + " text;");
+                        T_GEOM_TYPE + " text;");
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.T_IS_SYNC + " text;");
+                        T_IS_SYNC + " text;");
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.T_ASS_ID + " long;");
+                        T_ASS_ID + " long;");
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.T_TASK_STATUS + " text;");
+                        T_TASK_STATUS + " text;");
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.UUID + " text;");
+                        UUID + " text;");
             }
             if ( oldVersion < 6 ) {
                 try {
                     db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                            InstanceColumns.T_REPEAT + " integer;");
+                            T_REPEAT + " integer;");
                     db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                            InstanceColumns.T_UPDATEID + " text;");
+                            T_UPDATEID + " text;");
                 } catch(Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
                     Timber.w("Error in upgrading to database version 6");
@@ -177,7 +263,7 @@ public class InstanceProvider extends ContentProvider {
             if ( oldVersion < 7 ) {
                 try {
                     db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                            InstanceColumns.T_LOCATION_TRIGGER + " text;");
+                            T_LOCATION_TRIGGER + " text;");
                 } catch(Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
                     Timber.w("Error in upgrading to database version 7");
@@ -187,7 +273,7 @@ public class InstanceProvider extends ContentProvider {
             if ( oldVersion < 8 ) {
                 try {
                     db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                            InstanceColumns.T_SURVEY_NOTES + " text;");
+                            T_SURVEY_NOTES + " text;");
                 } catch(Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
                     Timber.w("Error in upgrading to database version 8");
@@ -208,7 +294,7 @@ public class InstanceProvider extends ContentProvider {
             if (oldVersion < 10) {
         	    try {
                     db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                            InstanceColumns.T_UPDATED + " integer;");
+                            T_UPDATED + " integer;");
                 } catch(Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
                     Timber.w("Error in upgrading to database version 10");
@@ -218,9 +304,9 @@ public class InstanceProvider extends ContentProvider {
             if (oldVersion < 11) {
                 try {
                     db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                            InstanceColumns.T_SHOW_DIST + " integer;");
+                            T_SHOW_DIST + " integer;");
                     db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                            InstanceColumns.T_HIDE + " integer;");
+                            T_HIDE + " integer;");
                 } catch(Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
                     Timber.w("Error in upgrading to database version 11");
@@ -230,10 +316,20 @@ public class InstanceProvider extends ContentProvider {
             if (oldVersion < 12) {
                 try {
                     db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                            InstanceColumns.T_TASK_COMMENT + " text;");
+                            T_TASK_COMMENT + " text;");
                 } catch(Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
                     Timber.w("Error in upgrading to database version 12");
+                    e.printStackTrace();
+                }
+            }
+            */
+            if (oldVersion < 13) {
+                try {
+                    moveInstancesTableToVersion13(db);
+                } catch(Exception e) {
+                    // Catch errors, its possible the user upgraded then downgraded
+                    Timber.w("Error in upgrading to database version 13");
                     e.printStackTrace();
                 }
             }
@@ -346,15 +442,9 @@ public class InstanceProvider extends ContentProvider {
             values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
         }
 
-        if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
-            Date today = new Date();
-            String text = getDisplaySubtext(InstanceProviderAPI.STATUS_INCOMPLETE, today);
-            values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
-        }
-
-        if (!values.containsKey(InstanceColumns.STATUS)) {
-            values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
-        }
+            if (!values.containsKey(InstanceColumns.STATUS)) {
+                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
+            }
 
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
         long rowId = db.insert(INSTANCES_TABLE_NAME, null, values);
@@ -364,29 +454,29 @@ public class InstanceProvider extends ContentProvider {
             return instanceUri;
         }
 
-        throw new SQLException("Failed to insert row into " + uri);
+        throw new SQLException("Failed to insert into the instances database.");
     }
 
-    private String getDisplaySubtext(String state, Date date) {
+    public static String getDisplaySubtext(Context context, String state, Date date) {
         try {
             if (state == null) {
-                return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time),
+                return new SimpleDateFormat(context.getString(R.string.added_on_date_at_time),
                         Locale.getDefault()).format(date);
             } else if (InstanceProviderAPI.STATUS_INCOMPLETE.equalsIgnoreCase(state)) {
-                return new SimpleDateFormat(getContext().getString(R.string.saved_on_date_at_time),
+                return new SimpleDateFormat(context.getString(R.string.saved_on_date_at_time),
                         Locale.getDefault()).format(date);
             } else if (InstanceProviderAPI.STATUS_COMPLETE.equalsIgnoreCase(state)) {
-                return new SimpleDateFormat(getContext().getString(R.string.finalized_on_date_at_time),
+                return new SimpleDateFormat(context.getString(R.string.finalized_on_date_at_time),
                         Locale.getDefault()).format(date);
             } else if (InstanceProviderAPI.STATUS_SUBMITTED.equalsIgnoreCase(state)) {
-                return new SimpleDateFormat(getContext().getString(R.string.sent_on_date_at_time),
+                return new SimpleDateFormat(context.getString(R.string.sent_on_date_at_time),
                         Locale.getDefault()).format(date);
             } else if (InstanceProviderAPI.STATUS_SUBMISSION_FAILED.equalsIgnoreCase(state)) {
                 return new SimpleDateFormat(
-                        getContext().getString(R.string.sending_failed_on_date_at_time),
+                        context.getString(R.string.sending_failed_on_date_at_time),
                         Locale.getDefault()).format(date);
             } else {
-                return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time),
+                return new SimpleDateFormat(context.getString(R.string.added_on_date_at_time),
                         Locale.getDefault()).format(date);
             }
         } catch (IllegalArgumentException e) {
@@ -395,7 +485,7 @@ public class InstanceProvider extends ContentProvider {
         }
     }
 
-    private void deleteAllFilesInDirectory(File directory) {
+    public void deleteAllFilesInDirectory(File directory) {
         if (directory.exists()) {
             // do not delete the directory if it might be an
             // ODK Tables instance data directory. Let ODK Tables
@@ -482,12 +572,21 @@ public class InstanceProvider extends ContentProvider {
                     }
                 }
 
+                // smap we are only ever going to update the status
                 //We are going to update the status, if the form is submitted
                 //We will not delete the record in table but we will delete the file
-                if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
+                if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)) {      // smap
                     ContentValues cv = new ContentValues();
                     cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
                     count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
+                } else {
+                    // smap Update the deleted date and also change the assignment status to rejected
+                    ContentValues cv = new ContentValues();
+                    cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
+                    cv.put(T_TASK_STATUS, Utilities.STATUS_T_REJECTED);
+                    count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
+                }
+                /* smap
                 } else {
                         String[] newWhereArgs;
                         if (whereArgs == null || whereArgs.length == 0) {
@@ -505,6 +604,7 @@ public class InstanceProvider extends ContentProvider {
                                                 + (!TextUtils.isEmpty(where) ? " AND ("
                                                 + where + ')' : ""), newWhereArgs);
                 }
+                */
                 break;
 
             default:
@@ -526,39 +626,18 @@ public class InstanceProvider extends ContentProvider {
 
         Long now = System.currentTimeMillis();
 
-        // Make sure that the fields are all set
-        if (!values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE)) {
-            values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
-        }
+            // Don't update last status change date if an instance is being deleted
+            if (values.containsKey(InstanceColumns.DELETED_DATE)) {
+                values.remove(InstanceColumns.LAST_STATUS_CHANGE_DATE);
+            }
 
-        String status;
             switch (URI_MATCHER.match(uri)) {
-            case INSTANCES:
-                if (values.containsKey(InstanceColumns.STATUS)) {
-                    status = values.getAsString(InstanceColumns.STATUS);
-
-                    if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
-                        Date today = new Date();
-                        String text = getDisplaySubtext(status, today);
-                        values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
-                    }
-                }
-
-                count = db.update(INSTANCES_TABLE_NAME, values, where, whereArgs);
-                break;
+                case INSTANCES:
+                    count = db.update(INSTANCES_TABLE_NAME, values, where, whereArgs);
+                    break;
 
             case INSTANCE_ID:
                 String instanceId = uri.getPathSegments().get(1);
-
-                if (values.containsKey(InstanceColumns.STATUS)) {
-                    status = values.getAsString(InstanceColumns.STATUS);
-
-                    if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
-                        Date today = new Date();
-                        String text = getDisplaySubtext(status, today);
-                        values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
-                    }
-                }
 
                     String[] newWhereArgs;
                     if (whereArgs == null || whereArgs.length == 0) {
@@ -602,35 +681,122 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns.JR_FORM_ID, InstanceColumns.JR_FORM_ID);
         sInstancesProjectionMap.put(InstanceColumns.JR_VERSION, InstanceColumns.JR_VERSION);
         sInstancesProjectionMap.put(InstanceColumns.STATUS, InstanceColumns.STATUS);
-        sInstancesProjectionMap.put(InstanceColumns.T_REPEAT, InstanceColumns.T_REPEAT);                // smap
-        sInstancesProjectionMap.put(InstanceColumns.T_UPDATEID, InstanceColumns.T_UPDATEID);            // smap
-        sInstancesProjectionMap.put(InstanceColumns.T_LOCATION_TRIGGER, InstanceColumns.T_LOCATION_TRIGGER);    // smap
-        sInstancesProjectionMap.put(InstanceColumns.T_SURVEY_NOTES, InstanceColumns.T_SURVEY_NOTES);    // smap
-        sInstancesProjectionMap.put(InstanceColumns.T_UPDATED, InstanceColumns.T_UPDATED);              // smap
+        sInstancesProjectionMap.put(T_REPEAT, T_REPEAT);                // smap
+        sInstancesProjectionMap.put(T_UPDATEID, T_UPDATEID);            // smap
+        sInstancesProjectionMap.put(T_LOCATION_TRIGGER, T_LOCATION_TRIGGER);    // smap
+        sInstancesProjectionMap.put(T_SURVEY_NOTES, T_SURVEY_NOTES);    // smap
+        sInstancesProjectionMap.put(T_UPDATED, T_UPDATED);              // smap
         sInstancesProjectionMap.put(InstanceColumns.LAST_STATUS_CHANGE_DATE,
                 InstanceColumns.LAST_STATUS_CHANGE_DATE);
-        sInstancesProjectionMap.put(InstanceColumns.DISPLAY_SUBTEXT, InstanceColumns.DISPLAY_SUBTEXT);
-        sInstancesProjectionMap.put(InstanceColumns.SOURCE, InstanceColumns.SOURCE);                // smap
-        sInstancesProjectionMap.put(InstanceColumns.FORM_PATH, InstanceColumns.FORM_PATH);          // smap
-        sInstancesProjectionMap.put(InstanceColumns.ACT_LON, InstanceColumns.ACT_LON);              // smap
-        sInstancesProjectionMap.put(InstanceColumns.ACT_LAT, InstanceColumns.ACT_LAT);              // smap
-        sInstancesProjectionMap.put(InstanceColumns.SCHED_LON, InstanceColumns.SCHED_LON);          // smap
-        sInstancesProjectionMap.put(InstanceColumns.SCHED_LAT, InstanceColumns.SCHED_LAT);          // smap
-        sInstancesProjectionMap.put(InstanceColumns.T_TITLE, InstanceColumns.T_TITLE);              // smap
-        sInstancesProjectionMap.put(InstanceColumns.T_SCHED_START, InstanceColumns.T_SCHED_START);  // smap
-        sInstancesProjectionMap.put(InstanceColumns.T_ACT_FINISH, InstanceColumns.T_ACT_FINISH);    // smap
-        sInstancesProjectionMap.put(InstanceColumns.T_ADDRESS, InstanceColumns.T_ADDRESS);          // smap
-        sInstancesProjectionMap.put(InstanceColumns.T_GEOM, InstanceColumns.T_GEOM);                // smap
-        sInstancesProjectionMap.put(InstanceColumns.T_GEOM_TYPE, InstanceColumns.T_GEOM_TYPE);      // smap
-        sInstancesProjectionMap.put(InstanceColumns.T_IS_SYNC, InstanceColumns.T_IS_SYNC);          // smap
-        sInstancesProjectionMap.put(InstanceColumns.T_ASS_ID, InstanceColumns.T_ASS_ID);            // smap
-        sInstancesProjectionMap.put(InstanceColumns.T_TASK_STATUS, InstanceColumns.T_TASK_STATUS);  // smap
-        sInstancesProjectionMap.put(InstanceColumns.T_TASK_COMMENT, InstanceColumns.T_TASK_COMMENT);  // smap
-        sInstancesProjectionMap.put(InstanceColumns.T_SHOW_DIST, InstanceColumns.T_SHOW_DIST);      // smap
-        sInstancesProjectionMap.put(InstanceColumns.T_HIDE, InstanceColumns.T_HIDE);                // smap
-        sInstancesProjectionMap.put(InstanceColumns.UUID, InstanceColumns.UUID);                    // smap
-        sInstancesProjectionMap.put(InstanceColumns.DISPLAY_SUBTEXT,
-                InstanceColumns.DISPLAY_SUBTEXT);
+        sInstancesProjectionMap.put(SOURCE, SOURCE);                // smap
+        sInstancesProjectionMap.put(FORM_PATH, FORM_PATH);          // smap
+        sInstancesProjectionMap.put(ACT_LON, ACT_LON);              // smap
+        sInstancesProjectionMap.put(ACT_LAT, ACT_LAT);              // smap
+        sInstancesProjectionMap.put(SCHED_LON, SCHED_LON);          // smap
+        sInstancesProjectionMap.put(SCHED_LAT, SCHED_LAT);          // smap
+        sInstancesProjectionMap.put(T_TITLE, T_TITLE);              // smap
+        sInstancesProjectionMap.put(T_SCHED_START, T_SCHED_START);  // smap
+        sInstancesProjectionMap.put(T_ACT_FINISH, T_ACT_FINISH);    // smap
+        sInstancesProjectionMap.put(T_ADDRESS, T_ADDRESS);          // smap
+        sInstancesProjectionMap.put(T_GEOM, T_GEOM);                // smap
+        sInstancesProjectionMap.put(T_GEOM_TYPE, T_GEOM_TYPE);      // smap
+        sInstancesProjectionMap.put(T_IS_SYNC, T_IS_SYNC);          // smap
+        sInstancesProjectionMap.put(T_ASS_ID, T_ASS_ID);            // smap
+        sInstancesProjectionMap.put(T_TASK_STATUS, T_TASK_STATUS);  // smap
+        sInstancesProjectionMap.put(T_TASK_COMMENT, T_TASK_COMMENT);  // smap
+        sInstancesProjectionMap.put(T_SHOW_DIST, T_SHOW_DIST);      // smap
+        sInstancesProjectionMap.put(T_HIDE, T_HIDE);                // smap
+        sInstancesProjectionMap.put(UUID, UUID);                    // smap
         sInstancesProjectionMap.put(InstanceColumns.DELETED_DATE, InstanceColumns.DELETED_DATE);
+    }
+
+
+    private static void moveInstancesTableToVersion13(SQLiteDatabase db) {
+        List<String> columnNamesPrev = getInstancesColumnNames(db);
+
+        String temporaryTableName = INSTANCES_TABLE_NAME + "_tmp";
+
+        // onDowngrade in Collect v1.22 always failed to clean up the temporary table so remove it now.
+        // Going from v1.23 to v1.22 and back to v1.23 will result in instance status information
+        // being lost.
+        CustomSQLiteQueryBuilder
+                .begin(db)
+                .dropIfExists(temporaryTableName)
+                .end();
+
+        createInstancesTableV13(db, temporaryTableName);
+
+        // Only select columns from the existing table that are also relevant to v13
+        columnNamesPrev.retainAll(new ArrayList<>(Arrays.asList(COLUMN_NAMES_V13)));
+
+        CustomSQLiteQueryBuilder
+                .begin(db)
+                .insertInto(temporaryTableName)
+                .columnsForInsert(columnNamesPrev.toArray(new String[0]))
+                .select()
+                .columnsForSelect(columnNamesPrev.toArray(new String[0]))
+                .from(INSTANCES_TABLE_NAME)
+                .end();
+
+        CustomSQLiteQueryBuilder
+                .begin(db)
+                .dropIfExists(INSTANCES_TABLE_NAME)
+                .end();
+
+        CustomSQLiteQueryBuilder
+                .begin(db)
+                .renameTable(temporaryTableName)
+                .to(INSTANCES_TABLE_NAME)
+                .end();
+    }
+
+    private static void createInstancesTableV13(SQLiteDatabase db, String name) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + name + " ("
+                + _ID + " integer primary key, "
+                + DISPLAY_NAME + " text not null, "
+                + SUBMISSION_URI + " text, "
+                + CAN_EDIT_WHEN_COMPLETE + " text, "
+                + INSTANCE_FILE_PATH + " text not null, "
+                + JR_FORM_ID + " text not null, "
+                + JR_VERSION + " text, "
+                + STATUS + " text not null, "
+                + LAST_STATUS_CHANGE_DATE + " date not null, "
+                + DELETED_DATE + " date, "
+                + SOURCE + " text, "		    // smap
+                + FORM_PATH + " text, "		    // smap
+                + ACT_LON + " double, "		    // smap
+                + ACT_LAT + " double, "		    // smap
+                + SCHED_LON + " double, "		// smap
+                + SCHED_LAT + " double, "		// smap
+                + T_TITLE + " text, "		    // smap
+                + T_SCHED_START + " long, "		// smap
+                + T_ACT_START + " long, "		// smap
+                + T_ACT_FINISH + " long, "		// smap
+                + T_ADDRESS + " text, "		    // smap
+                + T_GEOM + " text, "		    // smap
+                + T_GEOM_TYPE + " text, "		// smap
+                + T_IS_SYNC + " text, "		    // smap
+                + T_ASS_ID + " long, "		    // smap
+                + T_TASK_STATUS + " text, "		// smap
+                + T_TASK_COMMENT + " text, "    // smap
+                + T_REPEAT + " integer, "		// smap
+                + T_UPDATEID + " text, "		// smap
+                + T_LOCATION_TRIGGER + " text, " // smap
+                + T_SURVEY_NOTES + " text, "    // smap
+                + UUID + " text, "		        // smap
+                + T_UPDATED + " integer, "      // smap
+                + T_SHOW_DIST + " integer, "   // smap
+                + T_HIDE + " integer "        // smap
+                + ");");
+    }
+
+    static List<String> getInstancesColumnNames(SQLiteDatabase db) {
+        String[] columnNames;
+        try (Cursor c = db.query(INSTANCES_TABLE_NAME, null, null, null, null, null, null)) {
+            columnNames = c.getColumnNames();
+        }
+
+        // Build a full-featured ArrayList rather than the limited array-backed List from asList
+        return new ArrayList<>(Arrays.asList(columnNames));
     }
 }

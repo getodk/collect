@@ -111,7 +111,7 @@ Always use [string resources](https://developer.android.com/guide/topics/resourc
 
 As much as possible to facilitate simpler, more modular and more testable components you should follow the Dependency Inversion principle in Collect Code. An example tutorial on this concept can be found [here](https://www.seadowg.com/dip-lesson/).
 
-Because many Android components (Activity and Fragment for instance) don't allow us control over their constructors Collect uses [Dagger](https://google.github.io/dagger/) to 'inject' dependencies. The configuration for Dagger can be found in [AppDepdendencyComponent](collect_app/src/main/java/org/odk/collect/android/injection/config/AppDependencyComponent.java).
+Because many Android components (Activity and Fragment for instance) don't allow us control over their constructors Collect uses [Dagger](https://google.github.io/dagger/) to 'inject' dependencies. The configuration for Dagger can be found in [AppDepdendencyComponent](collect_app/src/main/java/org/odk/collect/android/injection/config/AppDependencyComponent.java). For any normal objects it is probably best to avoid Dagger and use normal Java constructors.
 
 While it's important to read the Dagger [documentation](https://google.github.io/dagger/users-guide) we've provided some basic instructions on how to use Dagger within Collect below.
 
@@ -171,7 +171,7 @@ To swap out depdendencies in a Robolectric test you can override the module the 
 @Before
 public void setup() {
     MyDependency mocked = mock(MyDependency.class);
-    RobolectricHelpers.overrideAppDependencyModule(new AppDepedencyModule() {
+    RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
       @Override
       public MyDependency providesMyDependency() {
         return mocked;

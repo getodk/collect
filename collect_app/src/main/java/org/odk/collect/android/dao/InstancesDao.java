@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class is used to encapsulate all access to the {@link org.odk.collect.android.provider.InstanceProvider#DATABASE_NAME}
+ * This class is used to encapsulate all access to the instances database
  * For more information about this pattern go to https://en.wikipedia.org/wiki/Data_access_object
  */
 public class InstancesDao {
@@ -50,10 +50,13 @@ public class InstancesDao {
             cursorLoader = getSentInstancesCursorLoader(sortOrder);
         } else {
             String selection =
-                    InstanceProviderAPI.InstanceColumns.STATUS + " =? and "
+                    "(" + InstanceProviderAPI.InstanceColumns.STATUS + " =? or "                        // smap add brackets
+                            + InstanceProviderAPI.InstanceColumns.DELETED_DATE + " is not null) and "   // smap
+                            + InstanceProviderAPI.InstanceColumns.SOURCE + " =? and "                   // smap
                             + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ?";
             String[] selectionArgs = {
                     InstanceProviderAPI.STATUS_SUBMITTED,
+                    Utilities.getSource(),      // smap
                     "%" + charSequence + "%"};
 
             cursorLoader = getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
@@ -63,8 +66,11 @@ public class InstancesDao {
     }
 
     public CursorLoader getSentInstancesCursorLoader(String sortOrder) {
-        String selection = InstanceProviderAPI.InstanceColumns.STATUS + " =? ";
-        String[] selectionArgs = {InstanceProviderAPI.STATUS_SUBMITTED};
+        String selection = "(" + InstanceProviderAPI.InstanceColumns.STATUS + " =? or "     // smap add brackets
+                + InstanceProviderAPI.InstanceColumns.DELETED_DATE + " is not null) and "   // smap
+                + InstanceProviderAPI.InstanceColumns.SOURCE + " =?";                       // smap
+        String[] selectionArgs = {InstanceProviderAPI.STATUS_SUBMITTED,
+                Utilities.getSource()};                                                     // smap
 
         return getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
     }
@@ -348,7 +354,6 @@ public class InstancesDao {
                     int jrVersionColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_VERSION);
                     int statusColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.STATUS);
                     int lastStatusChangeDateColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE);
-                    int displaySubtextColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT);
                     int deletedDateColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE);
                     int repeatColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_REPEAT);                        // smap
                     int updateidColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_UPDATEID);                     // smap
@@ -367,7 +372,6 @@ public class InstancesDao {
                             .jrVersion(cursor.getString(jrVersionColumnIndex))
                             .status(cursor.getString(statusColumnIndex))
                             .lastStatusChangeDate(cursor.getLong(lastStatusChangeDateColumnIndex))
-                            .displaySubtext(cursor.getString(displaySubtextColumnIndex))
                             .deletedDate(cursor.getLong(deletedDateColumnIndex))
                             .databaseId(cursor.getLong(databaseIdIndex))
                             .repeat(cursor.getInt(repeatColumnIndex) > 0)                       // smap
@@ -402,7 +406,6 @@ public class InstancesDao {
         values.put(InstanceProviderAPI.InstanceColumns.JR_VERSION, instance.getJrVersion());
         values.put(InstanceProviderAPI.InstanceColumns.STATUS, instance.getStatus());
         values.put(InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE, instance.getLastStatusChangeDate());
-        values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT, instance.getDisplaySubtext());
         values.put(InstanceProviderAPI.InstanceColumns.DELETED_DATE, instance.getDeletedDate());
 
         return values;

@@ -271,7 +271,7 @@ public class ShowQRCodeFragment extends Fragment {
         new PreferenceSaver(GeneralSharedPreferences.getInstance(), AdminSharedPreferences.getInstance()).fromJSON(content, new ActionListener() {
             @Override
             public void onSuccess() {
-                Collect.getInstance().initProperties();
+                Collect.getInstance().initializeJavaRosa();
                 ToastUtils.showLongToast(Collect.getInstance().getString(R.string.successfully_imported_settings));
                 getActivity().finish();
                 final LocaleHelper localeHelper = new LocaleHelper();

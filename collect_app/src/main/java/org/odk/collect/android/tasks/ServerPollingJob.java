@@ -45,6 +45,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import static org.odk.collect.android.activities.FormDownloadList.DISPLAY_ONLY_UPDATED_FORMS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
@@ -64,6 +66,13 @@ public class ServerPollingJob extends Job {
 
     public static final String TAG = "serverPollingJob";
 
+    @Inject
+    DownloadFormListUtils downloadFormListUtils;
+
+    public ServerPollingJob() {
+        Collect.getInstance().getComponent().inject(this);
+    }
+
     @Override
     @NonNull
     protected Result onRunJob(@NonNull Params params) {
@@ -71,12 +80,11 @@ public class ServerPollingJob extends Job {
             return Result.FAILURE;
         }
 
-        DownloadFormListUtils downloadFormListTask = new DownloadFormListUtils();
-        HashMap<String, FormDetails> formList = downloadFormListTask.downloadFormList(true);
+        HashMap<String, FormDetails> formList = downloadFormListUtils.downloadFormList(true);
 
         if (!formList.containsKey(DL_ERROR_MSG)) {
             if (formList.containsKey(DL_AUTH_REQUIRED)) {
-                formList = downloadFormListTask.downloadFormList(true);
+                formList = downloadFormListUtils.downloadFormList(true);
 
                 if (formList.containsKey(DL_AUTH_REQUIRED) || formList.containsKey(DL_ERROR_MSG)) {
                     return Result.FAILURE;

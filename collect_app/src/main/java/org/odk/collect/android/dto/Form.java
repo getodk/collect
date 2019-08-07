@@ -22,7 +22,7 @@ package org.odk.collect.android.dto;
  * For more information about this pattern go to https://en.wikipedia.org/wiki/Data_transfer_object
  * Objects of this class are created using builder pattern: https://en.wikipedia.org/wiki/Builder_pattern
  */
-public class Form {
+public final class Form {
     private final int id;
     private final String displayName;
     private final String description;
@@ -31,7 +31,6 @@ public class Form {
     private final String formFilePath;
     private final String submissionUri;
     private final String base64RSAPublicKey;
-    private final String displaySubtext;
     private final String md5Hash;
     private final Long date;
     private final String jrCacheFilePath;
@@ -50,7 +49,6 @@ public class Form {
         formFilePath = builder.formFilePath;
         submissionUri = builder.submissionUri;
         base64RSAPublicKey = builder.base64RSAPublicKey;
-        displaySubtext = builder.displaySubtext;
         md5Hash = builder.md5Hash;
         date = builder.date;
         jrCacheFilePath = builder.jrCacheFilePath;
@@ -70,7 +68,6 @@ public class Form {
         private String formFilePath;
         private String submissionUri;
         private String base64RSAPublicKey;
-        private String displaySubtext;
         private String md5Hash;
         private Long date;
         private String jrCacheFilePath;
@@ -117,11 +114,6 @@ public class Form {
 
         public Builder base64RSAPublicKey(String base64RSAPublicKey) {
             this.base64RSAPublicKey = base64RSAPublicKey;
-            return this;
-        }
-
-        public Builder displaySubtext(String displaySubtext) {
-            this.displaySubtext = displaySubtext;
             return this;
         }
 
@@ -202,10 +194,6 @@ public class Form {
         return base64RSAPublicKey;
     }
 
-    public String getDisplaySubtext() {
-        return displaySubtext;
-    }
-
     public String getMD5Hash() {
         return md5Hash;
     }
@@ -236,5 +224,15 @@ public class Form {
 
     public String getLastDetectedFormVersionHash() {
         return lastDetectedFormVersionHash;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this || other instanceof Form && this.md5Hash.equals(((Form) other).md5Hash);
+    }
+
+    @Override
+    public int hashCode() {
+        return md5Hash.hashCode();
     }
 }

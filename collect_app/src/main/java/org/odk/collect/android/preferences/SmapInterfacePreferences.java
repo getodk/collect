@@ -37,16 +37,10 @@ import androidx.annotation.Nullable;
 import timber.log.Timber;
 
 import static android.app.Activity.RESULT_CANCELED;
-import static org.odk.collect.android.preferences.GeneralKeys.GOOGLE_MAPS;
-import static org.odk.collect.android.preferences.GeneralKeys.GOOGLE_MAPS_BASEMAP_DEFAULT;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_LANGUAGE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAP_BASEMAP;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAP_SDK;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_NAVIGATION;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SPLASH_PATH;
-import static org.odk.collect.android.preferences.GeneralKeys.OSM_BASEMAP_KEY;
-import static org.odk.collect.android.preferences.GeneralKeys.OSM_MAPS_BASEMAP_DEFAULT;
 
 public class SmapInterfacePreferences extends BasePreferenceFragment {
 
@@ -172,6 +166,7 @@ public class SmapInterfacePreferences extends BasePreferenceFragment {
     }
 
     private void initMapPrefs() {
+        /*
         final ListPreference mapSdk = (ListPreference) findPreference(KEY_MAP_SDK);
         final ListPreference mapBasemap = (ListPreference) findPreference(KEY_MAP_BASEMAP);
 
@@ -223,6 +218,7 @@ public class SmapInterfacePreferences extends BasePreferenceFragment {
                 return true;
             }
         });
+        */
     }
 
     @Override

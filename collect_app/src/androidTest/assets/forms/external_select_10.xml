@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>external select 10</h:title>
+        <model>
+            <itext>
+                <translation default="true()" lang="default">
+                    <text id="static_instance-first-0">
+                        <value>a</value>
+                    </text>
+                    <text id="static_instance-first-1">
+                        <value>b</value>
+                    </text>
+                    <text id="static_instance-first-2">
+                        <value>c</value>
+                    </text>
+                    <text id="static_instance-second-0">
+                        <value>aa</value>
+                    </text>
+                    <text id="static_instance-second-1">
+                        <value>ab</value>
+                    </text>
+                    <text id="static_instance-second-2">
+                        <value>ac</value>
+                    </text>
+                    <text id="static_instance-second-3">
+                        <value>ba</value>
+                    </text>
+                    <text id="static_instance-second-4">
+                        <value>bb</value>
+                    </text>
+                    <text id="static_instance-second-5">
+                        <value>bc</value>
+                    </text>
+                    <text id="static_instance-second-6">
+                        <value>ca</value>
+                    </text>
+                    <text id="static_instance-second-7">
+                        <value>cb</value>
+                    </text>
+                    <text id="static_instance-second-8">
+                        <value>cc</value>
+                    </text>
+                </translation>
+            </itext>
+            <instance>
+                <external_select_10 id="external_select_10">
+                    <first/>
+                    <second/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </external_select_10>
+            </instance>
+            <instance id="first">
+                <root>
+                    <item>
+                        <itextId>static_instance-first-0</itextId>
+                        <name>a</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-first-1</itextId>
+                        <name>b</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-first-2</itextId>
+                        <name>c</name>
+                    </item>
+                </root>
+            </instance>
+            <instance id="second" src="jr://file/external_data_10.xml">
+            </instance>
+            <bind nodeset="/external_select_10/first" type="select1"/>
+            <bind nodeset="/external_select_10/second" type="select1"/>
+            <bind calculate="concat('uuid:', uuid())" nodeset="/external_select_10/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <select1 ref="/external_select_10/first">
+            <label>First</label>
+            <item>
+                <label>a</label>
+                <value>a</value>
+            </item>
+            <item>
+                <label>b</label>
+                <value>b</value>
+            </item>
+            <item>
+                <label>c</label>
+                <value>c</value>
+            </item>
+        </select1>
+        <select1 ref="/external_select_10/second">
+            <label>Second</label>
+            <itemset nodeset="instance('second')/root/item[first= /external_select_10/first ]">
+                <value ref="name"/>
+                <label ref="jr:itext(itextId)"/>
+            </itemset>
+        </select1>
+    </h:body>
+</h:html>

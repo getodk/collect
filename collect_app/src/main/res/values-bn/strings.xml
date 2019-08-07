@@ -185,13 +185,15 @@
   <string name="no_printer">প্রিন্টার নেই</string>
   <string name="constraint_behavior">constraint_behavior</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
   <string name="terrain">ভূখণ্ড</string>
   <string name="hybrid">হাইব্রিড</string>
   <string name="satellite">উপগ্রহ</string>
   <string name="save_point">অবস্থান সংরক্ষণ</string>
   <string name="start">শুরু</string>
   <string name="enable_gps">GPS সক্ষম</string>
-  <string name="gps_enable_message">জিপিএস বার্তা সক্রিয় করা</string>
   <string name="clear">মুছে ফেলুন।</string>
   <string name="direction">অভিমুখ: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->

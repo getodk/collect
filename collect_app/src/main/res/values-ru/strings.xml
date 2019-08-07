@@ -301,24 +301,19 @@
   <string name="leave_a_review">Оставить отзыв в Play Store</string>
   <string name="leave_a_review_msg">Ваш отзыв (надеемся, положительный) делает приложение более заметным в Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">КАРТЫ</string>
-  <string name="map_sdk_selector_title">Источник карт</string>
-  <string name="map_sdk_behavior">Источник карт</string>
-  <string name="google_maps_sdk">Google</string>
-  <string name="openstreetmap_sdk">OpenStreetMap</string>
-  <string name="show_map_sdk">Показать параметры картографии</string>
-  <string name="openmap_streets">Улицы OSM</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
   <string name="openmap_usgs_topo">Национальная карта USGS: топографическая</string>
   <string name="openmap_usgs_sat">Национальная карта USGS: спутниковая</string>
   <string name="openmap_usgs_img">Национальная карта USGS: съёмка с воздуха</string>
   <string name="openmap_stamen_terrain">Stamen ландшафт</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Тёмная материя</string>
+  <string name="basemap">Подложка</string>
   <string name="streets">Улицы</string>
   <string name="terrain">Ландшафт</string>
   <string name="hybrid">Гибридная</string>
   <string name="satellite">Спутник</string>
-  <string name="map_basemap_selector_title">Подложка</string>
-  <string name="show_map_basemap">Показать параметры подложки</string>
   <string name="save_point">Сохранить местоположение</string>
   <string name="get_point">Определить местоположение</string>
   <string name="geopoint_view_read_only">Просмотреть геоточку</string>
@@ -328,8 +323,6 @@
   <string name="start">Начать</string>
   <string name="enable_gps">Включить GPS</string>
   <string name="geotrace_title">Геослед</string>
-  <string name="gps_enable_message">На вашем устройстве отключен GPS. Хотите включить его?</string>
-  <string name="select_offline_layer">Выберите оффлайн-слой</string>
   <string name="geo_exit_warning">Отказаться от изменений и вернуться к ODK?</string>
   <string name="polygon_validator">В многоугольнике должно быть как минимум 3 точки</string>
   <string name="polyline_validator">Должно быть как минимум 2 точки, что бы создать ломаную линию</string>
@@ -461,7 +454,7 @@
   <string name="user_settings">Видимость настроек</string>
   <string name="user_setting_summary">Доступ к общими настройками пользователя</string>
   <string name="main_menu_settings">Кнопки главного меню…</string>
-  <string name="main_menu_settings_summary"> </string>
+  <string name="main_menu_settings_summary"> Доступ к кнопкам в главном меню</string>
   <string name="user_access_control">Контроль доступа пользователя</string>
   <string name="autosend_selector_title">Авто выгрузка</string>
   <string name="off">Выключено</string>
@@ -471,7 +464,6 @@
   <string name="wifi_autosend">Только Wi-Fi</string>
   <string name="cellular_autosend">Только сотовая связь</string>
   <string name="wifi_cellular_autosend">Wi-Fi или сотовая связь</string>
-  <string name="map_basemap_behavior_title">Подложка</string>
   <string name="form_management_preferences">Управление опросниками</string>
   <string name="form_submission_category">ВЫГРУЗКА ОПРОСОВ</string>
   <string name="form_filling_category">Заполнение опросника</string>
@@ -485,7 +477,6 @@
   <string name="type">Платформа</string>
   <string name="form_entry">Снимите галочку, чтобы скрыть пункт при заполнении опросника</string>
   <string name="use_device_language">Использовать язык устройства</string>
-  <string name="not_supported_offline_layer_format">Выбранный файл оффлайн-слоя использует неподдерживаемый формат PBF!</string>
   <string name="invalid_email_address">Неверный адрес почты!</string>
   <string name="sort_by">Сортировать по</string>
   <string name="server">Сервер</string>
@@ -545,6 +536,7 @@
   <string name="islamic_month_10">Шавваль</string>
   <string name="islamic_month_11">Зу-ль-када</string>
   <string name="islamic_month_12">Зу-ль-хиджа</string>
+  <string name="persian_month_4">Тир</string>
   <string name="moving_backwards_title">Возвращение назад</string>
   <string name="moving_backwards_disabled_title">Возвращение назад запрещено</string>
   <string name="moving_backwards_disabled_message">Настройть устройство для предотвращения обхода этой настройки?\n\nБудут включены:\n\u2022 Запрет на редактирование сохранённого опроса\n\u2022 Запрет на сохранение опроса\n\u2022 Отключение быстрого перехода\n\u2022 Проверка ограничений после каждого перехода вперёд</string>

@@ -80,7 +80,7 @@ public class InstanceChooserList extends InstanceListActivity implements
                     R.string.sort_by_status_asc, R.string.sort_by_status_desc
             };
         } else {
-            setTitle(getString(R.string.view_sent_forms));
+            setTitle(getString(R.string.smap_history));       // smap change to history
 
             sortingOptions = new int[] {
                     R.string.sort_by_name_asc, R.string.sort_by_name_desc,
@@ -123,6 +123,7 @@ public class InstanceChooserList extends InstanceListActivity implements
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        /* smap
         if (Collect.allowClick(getClass().getName())) {
             if (view.isEnabled()) {
                 Cursor c = (Cursor) listView.getAdapter().getItem(position);
@@ -166,6 +167,7 @@ public class InstanceChooserList extends InstanceListActivity implements
                 Toast.makeText(this, disabledCause.getText(), Toast.LENGTH_SHORT).show();
             }
         }
+        */
     }
 
     @Override
@@ -196,10 +198,10 @@ public class InstanceChooserList extends InstanceListActivity implements
 
     private void setupAdapter() {
         String[] data = new String[]{
-                InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT, InstanceColumns.DELETED_DATE
+                InstanceColumns.DISPLAY_NAME, InstanceColumns.DELETED_DATE
         };
         int[] view = new int[]{
-                R.id.form_title, R.id.form_subtitle, R.id.form_subtitle2
+                R.id.form_title, R.id.form_subtitle2
         };
 
         boolean shouldCheckDisabled = !editMode;

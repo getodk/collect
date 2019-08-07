@@ -35,6 +35,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.FormChooserList;
 import org.odk.collect.android.activities.FormDownloadList;
+import org.odk.collect.android.activities.InstanceChooserList;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.activities.SmapTaskStatusActivity;
 import org.odk.collect.android.adapters.SortDialogAdapter;
@@ -48,6 +49,7 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 
@@ -62,6 +64,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
@@ -83,6 +86,7 @@ public class SmapTaskListFragment extends ListFragment
     private static final int MENU_SENDDATA = Menu.FIRST + 4;
     private static final int MENU_MANAGEFILES = Menu.FIRST + 5;
     private static final int MENU_EXIT = Menu.FIRST + 6;
+    private static final int MENU_HISTORY = Menu.FIRST + 7;
 
     private static final String SEARCH_TEXT = "searchText";
     private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
@@ -310,6 +314,10 @@ public class SmapTaskListFragment extends ListFragment
         }
 
         menu
+                .add(0, MENU_HISTORY, 0, R.string.smap_history)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+
+        menu
                 .add(0, MENU_EXIT, 0, R.string.exit)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
@@ -409,6 +417,9 @@ public class SmapTaskListFragment extends ListFragment
                 return true;
             case MENU_MANAGEFILES:
                 processManageFiles();
+                return true;
+            case MENU_HISTORY:
+                ((SmapMain) getActivity()).processHistory();
                 return true;
             case R.id.menu_sort:
                 bottomSheetDialog.show();

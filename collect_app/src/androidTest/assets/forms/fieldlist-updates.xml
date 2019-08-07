@@ -1,0 +1,608 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>fieldlist-updates</h:title>
+    <model>
+      <itext>
+        <translation default="true()" lang="default">
+          <text id="/fieldlist-updates/guidance/target11:hint">
+            <value form="guidance"><output value=" /fieldlist-updates/guidance/calculate11 "/></value>
+          </text>
+          <text id="static_instance-level1-0">
+            <value>A</value>
+          </text>
+          <text id="static_instance-level1-1">
+            <value>B</value>
+          </text>
+          <text id="static_instance-level1-2">
+            <value>C</value>
+          </text>
+          <text id="static_instance-level2-0">
+            <value>A1</value>
+          </text>
+          <text id="static_instance-level2-1">
+            <value>A2</value>
+          </text>
+          <text id="static_instance-level2-2">
+            <value>A3</value>
+          </text>
+          <text id="static_instance-level2-3">
+            <value>B1</value>
+          </text>
+          <text id="static_instance-level2-4">
+            <value>B2</value>
+          </text>
+          <text id="static_instance-level2-5">
+            <value>B3</value>
+          </text>
+          <text id="static_instance-level2-6">
+            <value>C1</value>
+          </text>
+          <text id="static_instance-level2-7">
+            <value>C2</value>
+          </text>
+          <text id="static_instance-level2-8">
+            <value>C3</value>
+          </text>
+          <text id="static_instance-level2-9">
+            <value>C4</value>
+          </text>
+          <text id="static_instance-level3-0">
+            <value>A1A</value>
+          </text>
+          <text id="static_instance-level3-1">
+            <value>A1B</value>
+          </text>
+          <text id="static_instance-level3-2">
+            <value>B1A</value>
+          </text>
+          <text id="static_instance-level3-3">
+            <value>B1B</value>
+          </text>
+        </translation>
+      </itext>
+      <instance>
+        <fieldlist-updates id="fieldlist-updates">
+          <single_relevance_at_end>
+            <source1/>
+            <target1/>
+          </single_relevance_at_end>
+          <single_relevance_at_beginning>
+            <target2/>
+            <source2/>
+          </single_relevance_at_beginning>
+          <single_relevance_in_middle>
+            <source3/>
+            <target3/>
+            <filler3/>
+          </single_relevance_in_middle>
+          <label_change>
+            <target4/>
+            <source4/>
+          </label_change>
+          <hint_change>
+            <source5/>
+            <target5/>
+          </hint_change>
+          <value_change>
+            <source6/>
+            <target6/>
+          </value_change>
+          <cascading_select>
+            <source7/>
+            <target7/>
+            <target7-1/>
+          </cascading_select>
+          <cascading_select_minimal>
+            <source8/>
+            <target8/>
+            <target8-1/>
+          </cascading_select_minimal>
+          <push_off_screen>
+            <relevance_group>
+              <target9-1/>
+              <target9-2/>
+              <target9-3/>
+              <target9-4/>
+              <target9-5/>
+              <target9-6/>
+              <target9-7/>
+              <target9-8/>
+              <target9-9/>
+              <target9-10/>
+              <target9-11/>
+              <target9-12/>
+              <target9-13/>
+              <target9-14/>
+              <target9-15/>
+            </relevance_group>
+            <source9/>
+          </push_off_screen>
+          <push_off_screen_binary>
+            <relevance_group2>
+              <target10-1/>
+              <target10-2/>
+              <target10-3/>
+              <target10-4/>
+              <target10-5/>
+              <target10-6/>
+              <target10-7/>
+              <target10-8/>
+              <target10-9/>
+              <target10-10/>
+              <target10-11/>
+              <target10-12/>
+              <target10-13/>
+              <target10-14/>
+              <target10-15/>
+            </relevance_group2>
+            <source10/>
+          </push_off_screen_binary>
+          <guidance>
+            <source11/>
+            <calculate11/>
+            <target11/>
+          </guidance>
+          <date-time>
+            <source12/>
+            <target12/>
+          </date-time>
+          <rating>
+            <source13/>
+            <target13/>
+          </rating>
+          <external_app>
+            <source14/>
+            <target14/>
+          </external_app>
+          <search_in_field_list_group>
+            <source15/>
+            <target15/>
+          </search_in_field_list_group>
+          <meta>
+            <instanceID/>
+          </meta>
+        </fieldlist-updates>
+      </instance>
+      <instance id="level1">
+        <root>
+          <item>
+            <itextId>static_instance-level1-0</itextId>
+            <name>a</name>
+          </item>
+          <item>
+            <itextId>static_instance-level1-1</itextId>
+            <name>b</name>
+          </item>
+          <item>
+            <itextId>static_instance-level1-2</itextId>
+            <name>c</name>
+          </item>
+        </root>
+      </instance>
+      <instance id="level2">
+        <root>
+          <item>
+            <itextId>static_instance-level2-0</itextId>
+            <level1>a</level1>
+            <name>a1</name>
+          </item>
+          <item>
+            <itextId>static_instance-level2-1</itextId>
+            <level1>a</level1>
+            <name>a2</name>
+          </item>
+          <item>
+            <itextId>static_instance-level2-2</itextId>
+            <level1>a</level1>
+            <name>a3</name>
+          </item>
+          <item>
+            <itextId>static_instance-level2-3</itextId>
+            <level1>b</level1>
+            <name>b1</name>
+          </item>
+          <item>
+            <itextId>static_instance-level2-4</itextId>
+            <level1>b</level1>
+            <name>b2</name>
+          </item>
+          <item>
+            <itextId>static_instance-level2-5</itextId>
+            <level1>b</level1>
+            <name>b3</name>
+          </item>
+          <item>
+            <itextId>static_instance-level2-6</itextId>
+            <level1>c</level1>
+            <name>c1</name>
+          </item>
+          <item>
+            <itextId>static_instance-level2-7</itextId>
+            <level1>c</level1>
+            <name>c2</name>
+          </item>
+          <item>
+            <itextId>static_instance-level2-8</itextId>
+            <level1>c</level1>
+            <name>c3</name>
+          </item>
+          <item>
+            <itextId>static_instance-level2-9</itextId>
+            <level1>c</level1>
+            <name>c4</name>
+          </item>
+        </root>
+      </instance>
+      <instance id="level3">
+        <root>
+          <item>
+            <itextId>static_instance-level3-0</itextId>
+            <name>a1a</name>
+            <level2>a1</level2>
+          </item>
+          <item>
+            <itextId>static_instance-level3-1</itextId>
+            <name>a1b</name>
+            <level2>a1</level2>
+          </item>
+          <item>
+            <itextId>static_instance-level3-2</itextId>
+            <name>b1a</name>
+            <level2>b1</level2>
+          </item>
+          <item>
+            <itextId>static_instance-level3-3</itextId>
+            <name>b1b</name>
+            <level2>b1</level2>
+          </item>
+        </root>
+      </instance>
+      <bind nodeset="/fieldlist-updates/single_relevance_at_end/source1" type="string"/>
+      <bind nodeset="/fieldlist-updates/single_relevance_at_end/target1" relevant="string-length( /fieldlist-updates/single_relevance_at_end/source1 ) &gt; 0" type="string"/>
+      <bind nodeset="/fieldlist-updates/single_relevance_at_beginning/target2" relevant="string-length( /fieldlist-updates/single_relevance_at_beginning/source2 ) &gt; 0" type="string"/>
+      <bind nodeset="/fieldlist-updates/single_relevance_at_beginning/source2" type="string"/>
+      <bind nodeset="/fieldlist-updates/single_relevance_in_middle/source3" type="string"/>
+      <bind nodeset="/fieldlist-updates/single_relevance_in_middle/target3" relevant="string-length( /fieldlist-updates/single_relevance_in_middle/source3 ) &gt; 0" type="string"/>
+      <bind nodeset="/fieldlist-updates/single_relevance_in_middle/filler3" type="string"/>
+      <bind nodeset="/fieldlist-updates/label_change/target4" type="string"/>
+      <bind nodeset="/fieldlist-updates/label_change/source4" type="string"/>
+      <bind nodeset="/fieldlist-updates/hint_change/source5" type="string"/>
+      <bind nodeset="/fieldlist-updates/hint_change/target5" type="string"/>
+      <bind nodeset="/fieldlist-updates/value_change/source6" type="string"/>
+      <bind calculate="string-length( /fieldlist-updates/value_change/source6 )" nodeset="/fieldlist-updates/value_change/target6" type="int"/>
+      <bind nodeset="/fieldlist-updates/cascading_select/source7" type="select1"/>
+      <bind nodeset="/fieldlist-updates/cascading_select/target7" type="select1"/>
+      <bind nodeset="/fieldlist-updates/cascading_select/target7-1" type="select1"/>
+      <bind nodeset="/fieldlist-updates/cascading_select_minimal/source8" type="select1"/>
+      <bind nodeset="/fieldlist-updates/cascading_select_minimal/target8" type="select1"/>
+      <bind nodeset="/fieldlist-updates/cascading_select_minimal/target8-1" type="select1"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen/relevance_group" relevant="string-length( /fieldlist-updates/push_off_screen/source9 ) &gt; 0"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen/relevance_group/target9-1" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen/relevance_group/target9-2" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen/relevance_group/target9-3" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen/relevance_group/target9-4" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen/relevance_group/target9-5" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen/relevance_group/target9-6" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen/relevance_group/target9-7" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen/relevance_group/target9-8" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen/relevance_group/target9-9" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen/relevance_group/target9-10" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen/relevance_group/target9-11" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen/relevance_group/target9-12" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen/relevance_group/target9-13" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen/relevance_group/target9-14" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen/relevance_group/target9-15" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen/source9" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen_binary/relevance_group2" relevant=" /fieldlist-updates/push_off_screen_binary/source10  != ''"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-1" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-2" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-3" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-4" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-5" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-6" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-7" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-8" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-9" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-10" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-11" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-12" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-13" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-14" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-15" type="string"/>
+      <bind nodeset="/fieldlist-updates/push_off_screen_binary/source10" type="binary"/>
+      <bind nodeset="/fieldlist-updates/guidance/source11" type="int"/>
+      <bind calculate=" /fieldlist-updates/guidance/source11  * 2" nodeset="/fieldlist-updates/guidance/calculate11" type="string"/>
+      <bind nodeset="/fieldlist-updates/guidance/target11" type="string"/>
+      <bind nodeset="/fieldlist-updates/date-time/source12" type="dateTime"/>
+      <bind nodeset="/fieldlist-updates/date-time/target12" relevant=" /fieldlist-updates/date-time/source12  != ''" type="string"/>
+      <bind nodeset="/fieldlist-updates/rating/source13" type="int"/>
+      <bind nodeset="/fieldlist-updates/rating/target13" relevant=" /fieldlist-updates/rating/source13  != ''" type="string"/>
+      <bind nodeset="/fieldlist-updates/external_app/source14" type="int"/>
+      <bind nodeset="/fieldlist-updates/external_app/target14" relevant=" /fieldlist-updates/external_app/source14  != ''" type="string"/>
+      <bind nodeset="/fieldlist-updates/search_in_field_list_group/source15" type="select1"/>
+      <bind nodeset="/fieldlist-updates/search_in_field_list_group/target15" relevant=" /fieldlist-updates/search_in_field_list_group/source15  != ''" type="string"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/fieldlist-updates/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <group appearance="field-list" ref="/fieldlist-updates/single_relevance_at_end">
+      <label>Single relevance at end</label>
+      <input ref="/fieldlist-updates/single_relevance_at_end/source1">
+        <label>Source1</label>
+      </input>
+      <input ref="/fieldlist-updates/single_relevance_at_end/target1">
+        <label>Target1</label>
+      </input>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/single_relevance_at_beginning">
+      <label>Single relevance at beginning</label>
+      <input ref="/fieldlist-updates/single_relevance_at_beginning/target2">
+        <label>Target2</label>
+      </input>
+      <input ref="/fieldlist-updates/single_relevance_at_beginning/source2">
+        <label>Source2</label>
+      </input>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/single_relevance_in_middle">
+      <label>Single relevance in middle</label>
+      <input ref="/fieldlist-updates/single_relevance_in_middle/source3">
+        <label>Source3</label>
+      </input>
+      <input ref="/fieldlist-updates/single_relevance_in_middle/target3">
+        <label>Target3</label>
+      </input>
+      <input ref="/fieldlist-updates/single_relevance_in_middle/filler3">
+        <label>Filler3</label>
+      </input>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/label_change">
+      <label>Label change</label>
+      <input ref="/fieldlist-updates/label_change/target4">
+        <label> Hello, <output value=" /fieldlist-updates/label_change/source4 "/>, how are you today? </label>
+      </input>
+      <input ref="/fieldlist-updates/label_change/source4">
+        <label>What is your name?</label>
+      </input>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/hint_change">
+      <label>Hint change</label>
+      <input ref="/fieldlist-updates/hint_change/source5">
+        <label>What is your name?</label>
+      </input>
+      <input ref="/fieldlist-updates/hint_change/target5">
+        <label>What is 2 + 2?</label>
+        <hint> Please don't use your calculator, <output value=" /fieldlist-updates/hint_change/source5 "/>! </hint>
+      </input>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/value_change">
+      <label>Value change</label>
+      <input ref="/fieldlist-updates/value_change/source6">
+        <label>What is your name?</label>
+      </input>
+      <input ref="/fieldlist-updates/value_change/target6">
+        <label>Name length</label>
+      </input>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/cascading_select">
+      <label>Cascading select</label>
+      <select1 ref="/fieldlist-updates/cascading_select/source7">
+        <label>Level1</label>
+        <item>
+          <label>A</label>
+          <value>a</value>
+        </item>
+        <item>
+          <label>B</label>
+          <value>b</value>
+        </item>
+        <item>
+          <label>C</label>
+          <value>c</value>
+        </item>
+      </select1>
+      <select1 ref="/fieldlist-updates/cascading_select/target7">
+        <label>Level2</label>
+        <itemset nodeset="instance('level2')/root/item[level1 =  /fieldlist-updates/cascading_select/source7 ]">
+          <value ref="name"/>
+          <label ref="jr:itext(itextId)"/>
+        </itemset>
+      </select1>
+      <select1 ref="/fieldlist-updates/cascading_select/target7-1">
+        <label>Level3</label>
+        <itemset nodeset="instance('level3')/root/item[level2 =  /fieldlist-updates/cascading_select/target7 ]">
+          <value ref="name"/>
+          <label ref="jr:itext(itextId)"/>
+        </itemset>
+      </select1>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/cascading_select_minimal">
+      <label>Cascading select minimal</label>
+      <select1 appearance="minimal" ref="/fieldlist-updates/cascading_select_minimal/source8">
+        <label>Level1</label>
+        <item>
+          <label>A</label>
+          <value>a</value>
+        </item>
+        <item>
+          <label>B</label>
+          <value>b</value>
+        </item>
+        <item>
+          <label>C</label>
+          <value>c</value>
+        </item>
+      </select1>
+      <select1 appearance="minimal" ref="/fieldlist-updates/cascading_select_minimal/target8">
+        <label>Level2</label>
+        <itemset nodeset="instance('level2')/root/item[level1 =  /fieldlist-updates/cascading_select_minimal/source8 ]">
+          <value ref="name"/>
+          <label ref="jr:itext(itextId)"/>
+        </itemset>
+      </select1>
+      <select1 appearance="minimal" ref="/fieldlist-updates/cascading_select_minimal/target8-1">
+        <label>Level3</label>
+        <itemset nodeset="instance('level3')/root/item[level2 =  /fieldlist-updates/cascading_select_minimal/target8 ]">
+          <value ref="name"/>
+          <label ref="jr:itext(itextId)"/>
+        </itemset>
+      </select1>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/push_off_screen">
+      <label>Push off screen</label>
+      <group ref="/fieldlist-updates/push_off_screen/relevance_group">
+        <input ref="/fieldlist-updates/push_off_screen/relevance_group/target9-1">
+          <label>Target9-1</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen/relevance_group/target9-2">
+          <label>Target9-2</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen/relevance_group/target9-3">
+          <label>Target9-3</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen/relevance_group/target9-4">
+          <label>Target9-4</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen/relevance_group/target9-5">
+          <label>Target9-5</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen/relevance_group/target9-6">
+          <label>Target9-6</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen/relevance_group/target9-7">
+          <label>Target9-7</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen/relevance_group/target9-8">
+          <label>Target9-8</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen/relevance_group/target9-9">
+          <label>Target9-9</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen/relevance_group/target9-10">
+          <label>Target9-10</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen/relevance_group/target9-11">
+          <label>Target9-11</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen/relevance_group/target9-12">
+          <label>Target9-12</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen/relevance_group/target9-13">
+          <label>Target9-13</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen/relevance_group/target9-14">
+          <label>Target9-14</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen/relevance_group/target9-15">
+          <label>Target9-15</label>
+        </input>
+      </group>
+      <input ref="/fieldlist-updates/push_off_screen/source9">
+        <label>Source9</label>
+      </input>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/push_off_screen_binary">
+      <label>Push off screen binary</label>
+      <group ref="/fieldlist-updates/push_off_screen_binary/relevance_group2">
+        <input ref="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-1">
+          <label>Target10-1</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-2">
+          <label>Target10-2</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-3">
+          <label>Target10-3</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-4">
+          <label>Target10-4</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-5">
+          <label>Target10-5</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-6">
+          <label>Target10-6</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-7">
+          <label>Target10-7</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-8">
+          <label>Target10-8</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-9">
+          <label>Target10-9</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-10">
+          <label>Target10-10</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-11">
+          <label>Target10-11</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-12">
+          <label>Target10-12</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-13">
+          <label>Target10-13</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-14">
+          <label>Target10-14</label>
+        </input>
+        <input ref="/fieldlist-updates/push_off_screen_binary/relevance_group2/target10-15">
+          <label>Target10-15</label>
+        </input>
+      </group>
+      <upload mediatype="image/*" ref="/fieldlist-updates/push_off_screen_binary/source10">
+        <label>Source10</label>
+      </upload>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/guidance">
+      <label>Guidance hint</label>
+      <input ref="/fieldlist-updates/guidance/source11">
+        <label>Source11</label>
+      </input>
+      <input ref="/fieldlist-updates/guidance/target11">
+        <label>Target11</label>
+        <hint ref="jr:itext('/fieldlist-updates/guidance/target11:hint')"/>
+      </input>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/date-time">
+      <label>Date time</label>
+      <input ref="/fieldlist-updates/date-time/source12">
+        <label>Source12</label>
+      </input>
+      <input ref="/fieldlist-updates/date-time/target12">
+        <label>Target12</label>
+      </input>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/rating">
+      <label>Rating</label>
+      <range appearance="rating" end="10" ref="/fieldlist-updates/rating/source13" start="1" step="1">
+        <label>Source13</label>
+      </range>
+      <input ref="/fieldlist-updates/rating/target13">
+        <label>Target13</label>
+      </input>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/external_app">
+      <label>External app</label>
+      <input appearance="ex:org.fake.app(fake=&quot;fake&quot;)" ref="/fieldlist-updates/external_app/source14">
+        <label>Source14</label>
+      </input>
+      <input ref="/fieldlist-updates/external_app/target14">
+        <label>Target14</label>
+      </input>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/search_in_field_list_group">
+      <label>Search in field-list</label>
+      <select1 appearance="minimal search('fruits')" ref="/fieldlist-updates/search_in_field_list_group/source15">
+        <label>Source15</label>
+        <item>
+          <label>name</label>
+          <value>name_key</value>
+        </item>
+      </select1>
+      <input ref="/fieldlist-updates/search_in_field_list_group/target15">
+        <label>Target15</label>
+      </input>
+    </group>
+  </h:body>
+</h:html>

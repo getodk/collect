@@ -17,6 +17,7 @@
 package org.odk.collect.android.tasks;
 
 import android.os.Environment;
+
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
@@ -32,11 +33,10 @@ import org.odk.collect.android.logic.AuditEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.END_OF_FORM;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FORM_EXIT;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FORM_FINALIZE;
@@ -193,22 +193,22 @@ public class AuditEventSaveTaskTest {
         AuditEvent event;
         ArrayList<AuditEvent> auditEvents = new ArrayList<>();
         auditEvents.add(new AuditEvent(1548106927319L, FORM_START));
-        event = new AuditEvent(1548106927323L, QUESTION, false, false, getMockedFormIndex("/data/q1"), "");
+        event = new AuditEvent(1548106927323L, QUESTION, false, false, getTestFormIndex("/data/q1"), "");
         event.setEnd(1548106930112L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106930118L, PROMPT_NEW_REPEAT, false, false, getMockedFormIndex("/data/g1[1]"), "");
+        event = new AuditEvent(1548106930118L, PROMPT_NEW_REPEAT, false, false, getTestFormIndex("/data/g1[1]"), "");
         event.setEnd(1548106931611L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106931612L, QUESTION, false, false, getMockedFormIndex("/data/g1[1]/q2[1]"), "");
+        event = new AuditEvent(1548106931612L, QUESTION, false, false, getTestFormIndex("/data/g1[1]/q2"), "");
         event.setEnd(1548106937122L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106937123L, PROMPT_NEW_REPEAT, false, false, getMockedFormIndex("/data/g1[2]"), "");
+        event = new AuditEvent(1548106937123L, PROMPT_NEW_REPEAT, false, false, getTestFormIndex("/data/g1[2]"), "");
         event.setEnd(1548106938276L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106938277L, QUESTION, false, false, getMockedFormIndex("/data/g1[2]/q2[1]"), "");
+        event = new AuditEvent(1548106938277L, QUESTION, false, false, getTestFormIndex("/data/g1[2]/q2"), "");
         event.setEnd(1548106948127L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106948128L, PROMPT_NEW_REPEAT, false, false, getMockedFormIndex("/data/g1[3]"), "");
+        event = new AuditEvent(1548106948128L, PROMPT_NEW_REPEAT, false, false, getTestFormIndex("/data/g1[3]"), "");
         event.setEnd(1548106949446L);
         auditEvents.add(event);
         event = new AuditEvent(1548106949448L, END_OF_FORM);
@@ -304,27 +304,27 @@ public class AuditEventSaveTaskTest {
         event = new AuditEvent(548108908259L, LOCATION_PROVIDERS_ENABLED, true, false);
         event.setLocationCoordinates("", "", "");
         auditEvents.add(event);
-        event = new AuditEvent(1548106927323L, QUESTION, true,  false, getMockedFormIndex("/data/q1"), "");
+        event = new AuditEvent(1548106927323L, QUESTION, true,  false, getTestFormIndex("/data/q1"), "");
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.setEnd(1548106930112L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106930118L, PROMPT_NEW_REPEAT, true, false, getMockedFormIndex("/data/g1[1]"), "");
+        event = new AuditEvent(1548106930118L, PROMPT_NEW_REPEAT, true, false, getTestFormIndex("/data/g1[1]"), "");
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.setEnd(1548106931611L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106931612L, QUESTION, true, false, getMockedFormIndex("/data/g1[1]/q2[1]"), "");
+        event = new AuditEvent(1548106931612L, QUESTION, true, false, getTestFormIndex("/data/g1[1]/q2"), "");
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.setEnd(1548106937122L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106937123L, PROMPT_NEW_REPEAT, true, false, getMockedFormIndex("/data/g1[2]"), "");
+        event = new AuditEvent(1548106937123L, PROMPT_NEW_REPEAT, true, false, getTestFormIndex("/data/g1[2]"), "");
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.setEnd(1548106938276L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106938277L, QUESTION, true, false, getMockedFormIndex("/data/g1[2]/q2[1]"), "");
+        event = new AuditEvent(1548106938277L, QUESTION, true, false, getTestFormIndex("/data/g1[2]/q2"), "");
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.setEnd(1548106948127L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106948128L, PROMPT_NEW_REPEAT, true, false, getMockedFormIndex("/data/g1[3]"), "");
+        event = new AuditEvent(1548106948128L, PROMPT_NEW_REPEAT, true, false, getTestFormIndex("/data/g1[3]"), "");
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.setEnd(1548106949446L);
         auditEvents.add(event);
@@ -359,12 +359,12 @@ public class AuditEventSaveTaskTest {
         event = new AuditEvent(548108908259L, LOCATION_PROVIDERS_ENABLED, true, true);
         event.setLocationCoordinates("", "", "");
         auditEvents.add(event);
-        event = new AuditEvent(1548106927323L, QUESTION, true, true, getMockedFormIndex("/data/q1"), "Old value");
+        event = new AuditEvent(1548106927323L, QUESTION, true, true, getTestFormIndex("/data/q1"), "Old value");
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.recordValueChange("New Value");
         event.setEnd(1548106930112L);
         auditEvents.add(event);
-        event = new AuditEvent(1548106930118L, PROMPT_NEW_REPEAT, true, true, getMockedFormIndex("/data/g1[1]"), null);
+        event = new AuditEvent(1548106930118L, PROMPT_NEW_REPEAT, true, true, getTestFormIndex("/data/g1[1]"), null);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.setEnd(1548106931611L);
         auditEvents.add(event);
@@ -384,11 +384,39 @@ public class AuditEventSaveTaskTest {
         return auditEvents;
     }
 
-    private FormIndex getMockedFormIndex(String treeReferenceValue) {
-        FormIndex formIndex = mock(FormIndex.class);
-        TreeReference treeReference = mock(TreeReference.class);
-        when(formIndex.getReference()).thenReturn(treeReference);
-        when(treeReference.toString()).thenReturn(treeReferenceValue);
+    /**
+     * Given an XPath path, generate a corresponding {@link TreeReference} and a fake
+     * {@link FormIndex} that doesn't correspond to any real form definition. The only thing we care
+     * about for the {@link FormIndex} are the instance indexes at every level. Everything else can
+     * be faked.
+     *
+     * TODO: once {@link AuditEvent}'s getXPathPath moves to FormIndex, just use a mock
+     */
+    private FormIndex getTestFormIndex(String xpathPath) {
+        String[] nodes = xpathPath.split("/");
+        TreeReference treeReference = new TreeReference();
+        nodes = Arrays.copyOfRange(nodes, 1, nodes.length); // take care of leading /
+        ArrayList<Integer> positions = new ArrayList<>();
+
+        for (String node : nodes) {
+            String[] parts = node.split("\\[");
+
+            String nodeName = parts[0];
+            int position = 0;
+            if (parts.length > 1) {
+                position = Integer.parseInt(parts[1].replace("]", "")) - 1;
+                positions.add(position);
+            } else {
+                positions.add(-1);
+            }
+            treeReference.add(nodeName, position);
+        }
+
+        FormIndex formIndex = null;
+        for (int i = nodes.length - 1; i > 0; i--) { // exclude the root node
+            formIndex = new FormIndex(formIndex, -1, positions.get(i), treeReference);
+        }
+
         return formIndex;
     }
 }
