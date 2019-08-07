@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.http.CollectThenSystemContentTypeMapper;
-import org.odk.collect.android.http.OkHttpConnection;
+import org.odk.collect.android.http.okhttp.OkHttpConnection;
 import org.odk.collect.android.test.MockedServerTest;
 
 import okhttp3.mockwebserver.MockResponse;

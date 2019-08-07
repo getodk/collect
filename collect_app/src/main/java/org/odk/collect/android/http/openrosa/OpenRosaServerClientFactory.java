@@ -6,5 +6,5 @@ import org.odk.collect.android.http.HttpCredentialsInterface;
 
 public interface OpenRosaServerClientFactory {
 
-    OpenRosaServerClient create(String schema, @Nullable HttpCredentialsInterface credentialsInterface);
+    OpenRosaServerClient create(String schema, String userAgent, @Nullable HttpCredentialsInterface credentialsInterface);
 }
