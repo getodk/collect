@@ -300,7 +300,9 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
                 Uri u = Uri.parse(taskURL);
 
-                // Send location with request (if available)  TODO check a parameter to see if this is turned on
+                HashMap<String, String> headers = new HashMap<String, String> ();
+                /*
+                // Send location with request (if available)  TODO check a parameter to see if this is turned on otherwise don't do it
                 String lat = null;
                 String lon = null;
                 HashMap<String, String> headers = new HashMap<String, String> ();
@@ -315,6 +317,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 } catch (Exception e) {
 
                 }
+                */
 
                 URI uri = URI.create(taskURL);
                 String resp = httpInterface.getRequest(uri, "application/json", webCredentialsUtils.getCredentials(uri), headers);

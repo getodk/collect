@@ -19,12 +19,10 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -272,6 +270,7 @@ public class SmapTaskMapFragment extends Fragment
             }
         });
 
+        /*
         layers_button = getActivity().findViewById(R.id.layers);
         layers_button.setOnClickListener(new View.OnClickListener() {
 
@@ -281,6 +280,7 @@ public class SmapTaskMapFragment extends Fragment
 
             }
         });
+        */
 
         /*
          * Add multiline info window
