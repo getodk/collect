@@ -62,7 +62,6 @@ public class SmapRemoteWebServicePostTask extends AsyncTask<String, Void, SmapRe
             String extension = getFileExtension(fileName);
             if(file.exists() && extension.equals("jpg")) {
 
-
                 URL url = new URL(lookupUrl);
                 URI uri = url.toURI();
 

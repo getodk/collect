@@ -456,8 +456,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                                                  @NonNull URI uri,
                                                  @Nullable HttpCredentialsInterface credentials) throws IOException {
 
-        HttpPostResult postResult = null;
-
+        setCredentialsIfNeeded(credentials, uri.getScheme());
         String contentType = fileToContentTypeMapper.map(file.getName());
         RequestBody requestBody = RequestBody.create(MediaType.parse(contentType), file);
 
@@ -473,19 +472,17 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
         Response response = httpClient.newCall(request).execute();
 
-        if (response.code() == 204) {
-            throw new IOException();
+        int code = response.code();
+        String body = response.body().string();
+        Timber.i("%%%%%%%%%%%%%%%%%%%%: " + body);
+        String resp = null;
+        if(code == 201 || code == 200) {
+            resp = body;
+        } else {
+            resp = code + ": " + response.message();
         }
 
-        postResult = new HttpPostResult(
-                response.body().string(),
-                response.code(),
-                response.message());
-
-        discardEntityBytes(response);
-        mpBody = null;
-
-        return postResult.getReasonPhrase();
+        return resp;
     }
 
     @Override
@@ -535,8 +532,6 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                 throw new Exception(error);
             }
         }
-
-        InputStream downloadStream = body.byteStream();
 
         return body.string();
     }
