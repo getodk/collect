@@ -1,5 +1,6 @@
 package org.odk.collect.android.support;
 
+import android.media.MediaMetadataRetriever;
 import android.widget.ImageButton;
 
 import androidx.fragment.app.FragmentActivity;
@@ -11,6 +12,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.shadows.ShadowMediaMetadataRetriever;
 import org.robolectric.shadows.ShadowMediaPlayer;
 import org.robolectric.shadows.util.DataSource;
 
@@ -49,7 +51,8 @@ public class RobolectricHelpers {
 
     public static DataSource setupMediaPlayerDataSource(String testFile) {
         DataSource dataSource = DataSource.toDataSource(testFile);
-        ShadowMediaPlayer.addMediaInfo(dataSource, new ShadowMediaPlayer.MediaInfo());
+        ShadowMediaMetadataRetriever.addMetadata(dataSource, MediaMetadataRetriever.METADATA_KEY_DURATION, "14000");
+        ShadowMediaPlayer.addMediaInfo(dataSource, new ShadowMediaPlayer.MediaInfo(14000, 0));
         return dataSource;
     }
 }

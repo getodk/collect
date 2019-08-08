@@ -42,7 +42,7 @@ public class AudioButtonIntegrationTest {
         activity = activityController.setup().get();
 
         screenContext = new TestScreenContext(activity);
-        audioHelper = new AudioHelper(screenContext, () -> mediaPlayer);
+        audioHelper = new AudioHelper(screenContext, () -> mediaPlayer, new TimerScheduler());
     }
 
     @After

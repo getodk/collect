@@ -1,30 +1,37 @@
 package org.odk.collect.android.audio;
 
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 
+import androidx.core.util.Pair;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModelProviders;
 
 import org.jetbrains.annotations.NotNull;
 
+import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYING;
 
 public class AudioHelper {
 
     private final ScreenContext screenContext;
     private final MediaPlayerFactory mediaPlayerFactory;
+    private final Scheduler scheduler;
 
-    public AudioHelper(ScreenContext screenContext, MediaPlayerFactory mediaPlayerFactory) {
+    public AudioHelper(ScreenContext screenContext, MediaPlayerFactory mediaPlayerFactory, Scheduler scheduler) {
         this.screenContext = screenContext;
         this.mediaPlayerFactory = mediaPlayerFactory;
+        this.scheduler = scheduler;
     }
 
     public AudioHelper(ScreenContext screenContext) {
-        this(screenContext, MediaPlayer::new);
+        this(screenContext, MediaPlayer::new, new TimerScheduler());
     }
 
     public LiveData<Boolean> setAudio(AudioButton button, String uri, String clipID) {
@@ -40,10 +47,32 @@ public class AudioHelper {
 
     public void setAudio(AudioControllerView view, String uri, String clipID) {
         AudioPlayerViewModel viewModel = getViewModel();
+        LifecycleOwner lifecycle = screenContext.getViewLifecycle();
 
-        LiveData<AudioPlayerViewModel.ClipState> playState = viewModel.isPlaying(clipID);
-        playState.observe(screenContext.getViewLifecycle(), view::setPlayState);
+        view.setDuration(getDurationOfFile(uri));
+
+        LiveData<ClipState> playState = viewModel.isPlaying(clipID);
+        playState.observe(lifecycle, view::setPlayState);
+
+        LiveData<Integer> position = viewModel.getPosition();
+        LiveDataZipper<ClipState, Integer> liveDataZipper = new LiveDataZipper<>(playState, position);
+
+        liveDataZipper.zip().observe(lifecycle, (playStateAndPosition) -> {
+            if (playStateAndPosition.first == PLAYING) {
+                view.setPosition(playStateAndPosition.second);
+            } else {
+                view.setPosition(0);
+            }
+        });
+
         view.setListener(new AudioControllerViewListener(viewModel, uri, clipID));
+    }
+
+    private int getDurationOfFile(String uri) {
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        retriever.setDataSource(uri);
+        String durationString = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+        return Integer.parseInt(durationString) / 1000;
     }
 
     public void play(String clipID, String uri) {
@@ -52,8 +81,10 @@ public class AudioHelper {
 
     @NotNull
     private AudioPlayerViewModel getViewModel() {
+        AudioPlayerViewModelFactory factory = new AudioPlayerViewModelFactory(mediaPlayerFactory, scheduler);
+
         AudioPlayerViewModel viewModel = ViewModelProviders
-                .of(screenContext.getActivity(), new AudioPlayerViewModelFactory(this.mediaPlayerFactory))
+                .of(screenContext.getActivity(), factory)
                 .get(AudioPlayerViewModel.class);
 
         screenContext.getActivity().getLifecycle().addObserver(new BackgroundObserver(viewModel));
@@ -119,6 +150,36 @@ public class AudioHelper {
         @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
         void onPause() {
             viewModel.background();
+        }
+    }
+
+    private class LiveDataZipper<A, B> {
+
+        private final LiveData<A> liveDataOne;
+        private final LiveData<B> liveDataTwo;
+
+        private A one;
+        private B two;
+
+        LiveDataZipper(LiveData<A> liveDataOne, LiveData<B> liveDataTwo) {
+            this.liveDataOne = liveDataOne;
+            this.liveDataTwo = liveDataTwo;
+        }
+
+        public LiveData<Pair<A, B>> zip() {
+            MediatorLiveData<Pair<A, B>> mediatorLiveData = new MediatorLiveData<>();
+
+            mediatorLiveData.addSource(liveDataOne, (value) -> {
+                one = value;
+                mediatorLiveData.setValue(new Pair<>(one, two));
+            });
+
+            mediatorLiveData.addSource(liveDataTwo, (value) -> {
+                two = value;
+                mediatorLiveData.setValue(new Pair<>(one, two));
+            });
+
+            return mediatorLiveData;
         }
     }
 }

@@ -17,9 +17,13 @@ import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYI
 class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletionListener {
 
     private final MediaPlayerFactory mediaPlayerFactory;
+    private final Scheduler scheduler;
     private MediaPlayer mediaPlayer;
 
     private final MutableLiveData<CurrentlyPlaying> currentlyPlaying = new MutableLiveData<>();
+    private final MutableLiveData<Integer> currentPosition = new MutableLiveData<>();
+
+    private Boolean scheduledDurationUpdates = false;
 
     public enum ClipState {
         NOT_PLAYING,
@@ -27,8 +31,9 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         PAUSED
     }
 
-    AudioPlayerViewModel(MediaPlayerFactory mediaPlayerFactory) {
+    AudioPlayerViewModel(MediaPlayerFactory mediaPlayerFactory, Scheduler scheduler) {
         this.mediaPlayerFactory = mediaPlayerFactory;
+        this.scheduler = scheduler;
 
         currentlyPlaying.setValue(null);
     }
@@ -80,6 +85,13 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         });
     }
 
+    public LiveData<Integer> getPosition() {
+        currentPosition.setValue(getMediaPlayer().getCurrentPosition() / 1000);
+        schedulePositionUpdates();
+
+        return currentPosition;
+    }
+
     public void background() {
         release();
         currentlyPlaying.setValue(null);
@@ -93,6 +105,13 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     @Override
     protected void onCleared() {
         release();
+    }
+
+    private void schedulePositionUpdates() {
+        if (!scheduledDurationUpdates) {
+            scheduler.schedule(() -> currentPosition.postValue(getMediaPlayer().getCurrentPosition() / 1000), 500);
+            scheduledDurationUpdates = true;
+        }
     }
 
     private void release() {

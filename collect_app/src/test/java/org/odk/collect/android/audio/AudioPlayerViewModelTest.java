@@ -11,6 +11,8 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
+import org.odk.collect.android.audio.AudioPlayerViewModel.ClipState;
+import org.odk.collect.android.support.FakeScheduler;
 import org.odk.collect.android.support.LiveDataTester;
 import org.robolectric.RobolectricTestRunner;
 
@@ -22,6 +24,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.NOT_PLAYING;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PAUSED;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYING;
@@ -30,13 +33,14 @@ import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYI
 public class AudioPlayerViewModelTest {
 
     private final MediaPlayer mediaPlayer = mock(MediaPlayer.class);
+    private final FakeScheduler fakeScheduler = new FakeScheduler();
     private final LiveDataTester liveDataTester = new LiveDataTester();
 
     private AudioPlayerViewModel viewModel;
 
     @Before
     public void setup() {
-        viewModel = new AudioPlayerViewModel(() -> mediaPlayer);
+        viewModel = new AudioPlayerViewModel(() -> mediaPlayer, fakeScheduler);
     }
 
     @After
@@ -67,14 +71,14 @@ public class AudioPlayerViewModelTest {
 
     @Test
     public void isPlaying_whenNothingPlaying_is_NOT_PLAYING() {
-        LiveData<AudioPlayerViewModel.ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
+        LiveData<ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
         assertThat(isPlaying.getValue(), equalTo(NOT_PLAYING));
     }
 
     @Test
     public void isPlaying_whenClipIDPlaying_is_PLAYING() {
-        LiveData<AudioPlayerViewModel.ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
+        LiveData<ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
         viewModel.play("clip1", "file://audio.mp3");
         assertThat(isPlaying.getValue(), equalTo(PLAYING));
@@ -82,7 +86,7 @@ public class AudioPlayerViewModelTest {
 
     @Test
     public void isPlaying_whenDifferentClipIDPlaying_is_NOT_PLAYING() {
-        LiveData<AudioPlayerViewModel.ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip2"));
+        LiveData<ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip2"));
 
         viewModel.play("clip1", "file://other.mp3");
         assertThat(isPlaying.getValue(), equalTo(NOT_PLAYING));
@@ -90,7 +94,7 @@ public class AudioPlayerViewModelTest {
 
     @Test
     public void isPlaying_whenClipIDPlaying_thenCompleted_is_NOT_PLAYING() {
-        final LiveData<AudioPlayerViewModel.ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
+        final LiveData<ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
         viewModel.play("clip1", "file://audio.mp3");
 
@@ -109,7 +113,7 @@ public class AudioPlayerViewModelTest {
 
     @Test
     public void isPlaying_whenClipIDPlaying_thenStopped_is_NOT_PLAYING() {
-        LiveData<AudioPlayerViewModel.ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
+        LiveData<ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
         viewModel.play("clip1", "file://audio.mp3");
         viewModel.stop();
@@ -125,7 +129,7 @@ public class AudioPlayerViewModelTest {
 
     @Test
     public void isPlaying_whenPlayingAndThenBackgrounding_is_NOT_PLAYING() {
-        LiveData<AudioPlayerViewModel.ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
+        LiveData<ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
         viewModel.play("clip1", "file://audio.mp3");
         viewModel.background();
@@ -136,7 +140,7 @@ public class AudioPlayerViewModelTest {
     @Test
     public void play_afterBackground_createsANewMediaPlayer() {
         RecordingMockMediaPlayerFactory factory = new RecordingMockMediaPlayerFactory();
-        AudioPlayerViewModel viewModel = new AudioPlayerViewModel(factory);
+        AudioPlayerViewModel viewModel = new AudioPlayerViewModel(factory, new TimerScheduler());
 
         viewModel.play("clip1", "file://audio.mp3");
         assertThat(factory.createdInstances.size(), equalTo(1));
@@ -156,7 +160,7 @@ public class AudioPlayerViewModelTest {
 
     @Test
     public void isPlaying_afterPause_is_PAUSED() {
-        LiveData<AudioPlayerViewModel.ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
+        LiveData<ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
         viewModel.play("clip1", "file://audio.mp3");
         viewModel.pause();
@@ -166,13 +170,28 @@ public class AudioPlayerViewModelTest {
 
     @Test
     public void isPlaying_afterPause_andThenPlay_is_PLAYING() {
-        final LiveData<AudioPlayerViewModel.ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
+        final LiveData<ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
         viewModel.play("clip1", "file://audio.mp3");
         viewModel.pause();
         viewModel.play("clip1", "file://audio.mp3");
 
         assertThat(isPlaying.getValue(), equalTo(PLAYING));
+    }
+
+    @Test
+    public void getPosition_returnsMediaPlayerPositionInSeconds() {
+        when(mediaPlayer.getCurrentPosition()).thenReturn(0);
+        LiveData<Integer> duration = liveDataTester.activate(viewModel.getPosition());
+        assertThat(duration.getValue(), equalTo(0));
+
+        when(mediaPlayer.getCurrentPosition()).thenReturn(1000);
+        fakeScheduler.runTask();
+        assertThat(duration.getValue(), equalTo(1));
+
+        when(mediaPlayer.getCurrentPosition()).thenReturn(24135);
+        fakeScheduler.runTask();
+        assertThat(duration.getValue(), equalTo(24));
     }
 
     @Test

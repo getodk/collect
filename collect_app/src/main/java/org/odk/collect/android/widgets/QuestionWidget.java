@@ -48,6 +48,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.ScreenContext;
+import org.odk.collect.android.audio.TimerScheduler;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
@@ -164,7 +165,7 @@ public abstract class QuestionWidget
     }
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
-        this(context, prompt, new AudioHelper((ScreenContext) context, MediaPlayer::new));
+        this(context, prompt, new AudioHelper((ScreenContext) context, MediaPlayer::new, new TimerScheduler()));
     }
 
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {

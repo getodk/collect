@@ -80,6 +80,7 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
             }
         }
     };
+
     private Listener listener;
 
     public AudioControllerView(Context context) {
@@ -148,7 +149,6 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
      * Update timer on seekbar
      */
     private void updateProgressBar() {
-        seekHandler.postDelayed(updateTimeTask, 100);
     }
 
     @Override
@@ -217,8 +217,8 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
      *
      * @return formatted time as string
      */
-    private static String getTime(long millis) {
-        return new DateTime(millis, DateTimeZone.UTC).toString("mm:ss");
+    private static String getTime(long seconds) {
+        return new DateTime(seconds * 1000, DateTimeZone.UTC).toString("mm:ss");
     }
 
     public void setPlayState(AudioPlayerViewModel.ClipState playState) {
@@ -240,6 +240,14 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
 
     public void setListener(Listener listener) {
         this.listener = listener;
+    }
+
+    public void setPosition(Integer position) {
+        currentDurationLabel.setText(getTime(position));
+    }
+
+    public void setDuration(Integer duration) {
+        totalDurationLabel.setText(getTime(duration));
     }
 
     private enum State {
