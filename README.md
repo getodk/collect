@@ -181,7 +181,12 @@ Per-commit debug builds can be found on [CircleCI](https://circleci.com/gh/opend
 Current and previous production builds can be found on the [ODK website](https://opendatakit.org/downloads/download-info/odk-collect-apk).
 
 ## Creating signed releases for Google Play Store
-Project maintainers have the keys to upload signed releases to the Play Store. 
+Maintainers keep a folder with a clean checkout of the code and use [jenv.be](https://www.jenv.be) in that folder to ensure compilation with Java 1.8.
+
+Maintainers have a `local.properties` file in the root folder with the following:
+```
+sdk.dir=/path/to/android/sdk
+```
 
 Maintainers have a `secrets.properties` file in the `collect_app` folder with the following:
 ```
