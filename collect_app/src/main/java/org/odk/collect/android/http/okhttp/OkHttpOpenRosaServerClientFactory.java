@@ -14,10 +14,10 @@ import com.burgstaller.okhttp.digest.DigestAuthenticator;
 import org.odk.collect.android.http.HttpCredentialsInterface;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClient;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClientFactory;
+import org.odk.collect.android.utilities.Clock;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
@@ -39,9 +39,11 @@ public class OkHttpOpenRosaServerClientFactory implements OpenRosaServerClientFa
     private static final String DATE_HEADER = "Date";
 
     private final OkHttpClient.Builder baseClient;
+    private final Clock clock;
 
-    public OkHttpOpenRosaServerClientFactory(@NonNull OkHttpClient.Builder baseClient) {
+    public OkHttpOpenRosaServerClientFactory(@NonNull OkHttpClient.Builder baseClient, Clock clock) {
         this.baseClient = baseClient;
+        this.clock = clock;
     }
 
     @Override
@@ -68,17 +70,19 @@ public class OkHttpOpenRosaServerClientFactory implements OpenRosaServerClientFa
                     .addInterceptor(new AuthenticationCacheInterceptor(authCache)).build();
         }
 
-        return new OkHttpOpenRosaServerClient(builder.build(), userAgent);
+        return new OkHttpOpenRosaServerClient(builder.build(), userAgent, clock);
     }
 
     private static class OkHttpOpenRosaServerClient implements OpenRosaServerClient {
 
         private final OkHttpClient client;
         private final String userAgent;
+        private final Clock clock;
 
-        OkHttpOpenRosaServerClient(OkHttpClient client, String userAgent) {
+        OkHttpOpenRosaServerClient(OkHttpClient client, String userAgent, Clock clock) {
             this.client = client;
             this.userAgent = userAgent;
+            this.clock = clock;
         }
 
         @Override
@@ -97,7 +101,7 @@ public class OkHttpOpenRosaServerClientFactory implements OpenRosaServerClientFa
         private String getHeaderDate() {
             SimpleDateFormat dateFormatGmt = new SimpleDateFormat("E, dd MMM yyyy hh:mm:ss zz", Locale.US);
             dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-            return dateFormatGmt.format(new Date());
+            return dateFormatGmt.format(clock.getCurrentTime());
         }
     }
 }

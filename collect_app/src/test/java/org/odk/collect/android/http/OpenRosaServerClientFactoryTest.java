@@ -5,8 +5,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClient;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClientFactory;
+import org.odk.collect.android.utilities.Clock;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import okhttp3.Request;
 import okhttp3.mockwebserver.MockResponse;
@@ -17,21 +22,27 @@ import okhttp3.tls.internal.TlsUtil;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public abstract class OpenRosaServerClientFactoryTest {
 
-    protected abstract OpenRosaServerClientFactory buildSubject();
+    protected abstract OpenRosaServerClientFactory buildSubject(Clock clock);
 
     protected abstract Boolean useRealHttps();
 
     private final MockWebServer mockWebServer = new MockWebServer();
+    private final Clock mockClock = mock(Clock.class);
+
     private MockWebServer httpsMockWebServer;
     private OpenRosaServerClientFactory subject;
 
     @Before
     public void setup() throws Exception {
         mockWebServer.start();
-        subject = buildSubject();
+        when(mockClock.getCurrentTime()).thenReturn(new Date());
+
+        subject = buildSubject(mockClock);
     }
 
     @After
@@ -53,6 +64,23 @@ public abstract class OpenRosaServerClientFactoryTest {
 
         RecordedRequest request = mockWebServer.takeRequest();
         assertThat(request.getHeader("X-OpenRosa-Version"), equalTo("1.0"));
+    }
+
+    @Test
+    public void sendsDateHeader() throws Exception {
+        mockWebServer.enqueue(new MockResponse());
+
+        Date currentTime = new Date();
+        when(mockClock.getCurrentTime()).thenReturn(currentTime);
+
+        OpenRosaServerClient client = subject.create("http", "Android", null);
+        client.makeRequest(new Request.Builder().url(mockWebServer.url("")).build());
+
+        RecordedRequest request = mockWebServer.takeRequest();
+
+        SimpleDateFormat dateFormatGmt = new SimpleDateFormat("E, dd MMM yyyy hh:mm:ss zz", Locale.US);
+        dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+        assertThat(request.getHeader("Date"), equalTo(dateFormatGmt.format(currentTime)));
     }
 
     @Test
