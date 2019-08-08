@@ -365,7 +365,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return makeAnswersFormattingResistant(answers);
     }
 
-    private HashMap<String, String> makeAnswersFormattingResistant(HashMap<String, String> answers) {
+    public static HashMap<String, String> makeAnswersFormattingResistant(HashMap<String, String> answers) {
         HashMap<String, String> fixedAnswers = new HashMap<>();
         for (Map.Entry<String, String> item : answers.entrySet()) {
             String value = item.getValue();
