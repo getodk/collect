@@ -549,6 +549,7 @@ public class Utilities {
         selectArgs[0] = Utilities.getSource();
 
         StringBuffer selectClause = new StringBuffer(InstanceColumns.T_ASS_ID + " is not null and " + InstanceColumns.SOURCE + " = ?");
+        selectClause.append(" and " + InstanceColumns.DELETED_DATE + " is null");
 
         if (nIds > 0) {
             selectClause.append(" and " + InstanceColumns.T_ASS_ID + " not in (");
