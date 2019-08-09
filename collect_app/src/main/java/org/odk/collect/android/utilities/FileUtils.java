@@ -534,6 +534,19 @@ public class FileUtils {
         }
     }
 
+    /** Sorts file paths as if sorting the path components and extensions lexicographically. */
+    public static int comparePaths(String a, String b) {
+        // Regular string compareTo() is incorrect, because it will sort "/" and "."
+        // after other punctuation (e.g. "foo/bar" will sort AFTER "foo-2/bar" and
+        // "pic.jpg" will sort AFTER "pic-2.jpg").  Replacing these delimiters with
+        // '\u0000' and '\u0001' causes paths to sort correctly (assuming the paths
+        // don't already contain '\u0000' or '\u0001').  This is a bit of a hack,
+        // but it's a lot simpler and faster than comparing components one by one.
+        String sortKeyA = a.replace('/', '\u0000').replace('.', '\u0001');
+        String sortKeyB = b.replace('/', '\u0000').replace('.', '\u0001');
+        return sortKeyA.compareTo(sortKeyB);
+    }
+
     public static String getFileExtension(String fileName) {
         int dotIndex = fileName.lastIndexOf('.');
         if (dotIndex == -1) {
