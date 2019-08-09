@@ -88,7 +88,7 @@ public class InstanceProvider extends ContentProvider {
 
 
     private static final String DATABASE_NAME = "instances.db";
-    private static final int DATABASE_VERSION = 13;		// smap
+    private static final int DATABASE_VERSION = 15;		// smap
     private static final String INSTANCES_TABLE_NAME = "instances";
 
     private static HashMap<String, String> sInstancesProjectionMap;
@@ -98,7 +98,7 @@ public class InstanceProvider extends ContentProvider {
 
     private static final UriMatcher URI_MATCHER;
 
-    private static final String[] COLUMN_NAMES_V13 = new String[] {
+    private static final String[] COLUMN_NAMES_V15 = new String[] {
             _ID,
             DISPLAY_NAME,
             SUBMISSION_URI,
@@ -136,7 +136,6 @@ public class InstanceProvider extends ContentProvider {
             T_HIDE              // smap
 
     };
-    static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V13;
 
     /**
      * This class helps open, create, and upgrade the database file.
@@ -150,183 +149,17 @@ public class InstanceProvider extends ContentProvider {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-
-            createInstancesTableV13(db, INSTANCES_TABLE_NAME);
-           /*
-           db.execSQL("CREATE TABLE " + INSTANCES_TABLE_NAME + " ("
-               + InstanceColumns._ID + " integer primary key, "
-               + InstanceColumns.DISPLAY_NAME + " text not null, "
-               + InstanceColumns.SUBMISSION_URI + " text, "
-               + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text, "
-               + InstanceColumns.INSTANCE_FILE_PATH + " text not null, "
-               + InstanceColumns.JR_FORM_ID + " text not null, "
-               + InstanceColumns.JR_VERSION + " text, "
-               + SOURCE + " text, "		        // smap
-               + FORM_PATH + " text, "		    // smap
-               + ACT_LON + " double, "		    // smap
-               + ACT_LAT + " double, "		    // smap
-               + SCHED_LON + " double, "		// smap
-               + SCHED_LAT + " double, "		// smap
-               + T_TITLE + " text, "		    // smap
-               + T_SCHED_START + " long, "		// smap
-               + T_ACT_START + " long, "		// smap
-               + T_ACT_FINISH + " long, "		// smap
-               + T_ADDRESS + " text, "		    // smap
-               + T_GEOM + " text, "		        // smap
-               + T_GEOM_TYPE + " text, "		// smap
-               + T_IS_SYNC + " text, "		    // smap
-               + T_ASS_ID + " long, "		    // smap
-               + T_TASK_STATUS + " text, "		// smap
-               + T_TASK_COMMENT + " text, "		// smap
-               + T_REPEAT + " integer, "		// smap
-               + T_UPDATEID + " text, "		    // smap
-               + T_LOCATION_TRIGGER + " text, " // smap
-               + T_SURVEY_NOTES + " text, "     // smap
-               + UUID + " text, "		        // smap
-               + T_UPDATED + " integer, "       // smap
-               + InstanceColumns.STATUS + " text not null, "
-               + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
-               + T_SHOW_DIST + " integer, "   // smap
-               + T_HIDE + " integer, "        // smap
-               + InstanceColumns.DELETED_DATE + " date );" );
-               */
+            createInstancesTableV15(db, INSTANCES_TABLE_NAME);
         }
 
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         	int initialVersion = oldVersion;
-        	/*
-        	if ( oldVersion < 2 ) {
-        		db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-        					InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
-        		db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET " +
-        					InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true) + "' WHERE " +
-        					InstanceColumns.STATUS + " IS NOT NULL AND " +
-        					InstanceColumns.STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE + "'");
-        	}
-        	if ( oldVersion < 3 ) {
-        		db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-    					InstanceColumns.JR_VERSION + " text;");
-        	}
-            // Smap Start
-        	if ( oldVersion < 4 ) {
-        		db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-    					SOURCE + " text;");
-        	}
-            if ( oldVersion < 5 ) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        FORM_PATH + " text;");
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        ACT_LON + " double;");
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        ACT_LAT + " double;");
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        SCHED_LON + " double;");
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        SCHED_LAT + " double;");
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        T_TITLE + " text;");
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        T_SCHED_START + " long;");
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        T_ACT_START + " long;");
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        T_ACT_FINISH + " long;");
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        T_ADDRESS + " text;");
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        T_GEOM + " text;");
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        T_GEOM_TYPE + " text;");
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        T_IS_SYNC + " text;");
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        T_ASS_ID + " long;");
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        T_TASK_STATUS + " text;");
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        UUID + " text;");
-            }
-            if ( oldVersion < 6 ) {
-                try {
-                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                            T_REPEAT + " integer;");
-                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                            T_UPDATEID + " text;");
-                } catch(Exception e) {
-                    // Catch errors, its possible the user upgraded then downgraded
-                    Timber.w("Error in upgrading to database version 6");
-                    e.printStackTrace();
-                }
-            }
-            if ( oldVersion < 7 ) {
-                try {
-                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                            T_LOCATION_TRIGGER + " text;");
-                } catch(Exception e) {
-                    // Catch errors, its possible the user upgraded then downgraded
-                    Timber.w("Error in upgrading to database version 7");
-                    e.printStackTrace();
-                }
-            }
-            if ( oldVersion < 8 ) {
-                try {
-                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                            T_SURVEY_NOTES + " text;");
-                } catch(Exception e) {
-                    // Catch errors, its possible the user upgraded then downgraded
-                    Timber.w("Error in upgrading to database version 8");
-                    e.printStackTrace();
-                }
-            }
-            if (oldVersion < 9) {
-                try {
-                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                            InstanceColumns.DELETED_DATE + " date;");
-                } catch(Exception e) {
-                    // Catch errors, its possible the user upgraded then downgraded
-                    Timber.w("Error in upgrading to database version 9");
-                    e.printStackTrace();
-                }
 
-            }
-            if (oldVersion < 10) {
-        	    try {
-                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                            T_UPDATED + " integer;");
-                } catch(Exception e) {
-                    // Catch errors, its possible the user upgraded then downgraded
-                    Timber.w("Error in upgrading to database version 10");
-                    e.printStackTrace();
-                }
-            }
-            if (oldVersion < 11) {
+            if (oldVersion < 15) {
                 try {
-                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                            T_SHOW_DIST + " integer;");
-                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                            T_HIDE + " integer;");
-                } catch(Exception e) {
-                    // Catch errors, its possible the user upgraded then downgraded
-                    Timber.w("Error in upgrading to database version 11");
-                    e.printStackTrace();
-                }
-            }
-            if (oldVersion < 12) {
-                try {
-                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                            T_TASK_COMMENT + " text;");
-                } catch(Exception e) {
-                    // Catch errors, its possible the user upgraded then downgraded
-                    Timber.w("Error in upgrading to database version 12");
-                    e.printStackTrace();
-                }
-            }
-            */
-            if (oldVersion < 13) {
-                try {
-                    moveInstancesTableToVersion13(db);
+                    moveInstancesTableToVersion15(db);
                 } catch(Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
                     Timber.w("Error in upgrading to database version 13");
@@ -711,7 +544,7 @@ public class InstanceProvider extends ContentProvider {
     }
 
 
-    private static void moveInstancesTableToVersion13(SQLiteDatabase db) {
+    private static void moveInstancesTableToVersion15(SQLiteDatabase db) {
         List<String> columnNamesPrev = getInstancesColumnNames(db);
 
         String temporaryTableName = INSTANCES_TABLE_NAME + "_tmp";
@@ -724,10 +557,10 @@ public class InstanceProvider extends ContentProvider {
                 .dropIfExists(temporaryTableName)
                 .end();
 
-        createInstancesTableV13(db, temporaryTableName);
+        createInstancesTableV15(db, temporaryTableName);
 
         // Only select columns from the existing table that are also relevant to v13
-        columnNamesPrev.retainAll(new ArrayList<>(Arrays.asList(COLUMN_NAMES_V13)));
+        columnNamesPrev.retainAll(new ArrayList<>(Arrays.asList(COLUMN_NAMES_V15)));
 
         CustomSQLiteQueryBuilder
                 .begin(db)
@@ -750,7 +583,7 @@ public class InstanceProvider extends ContentProvider {
                 .end();
     }
 
-    private static void createInstancesTableV13(SQLiteDatabase db, String name) {
+    private static void createInstancesTableV15(SQLiteDatabase db, String name) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + name + " ("
                 + _ID + " integer primary key, "
                 + DISPLAY_NAME + " text not null, "
@@ -785,8 +618,11 @@ public class InstanceProvider extends ContentProvider {
                 + T_SURVEY_NOTES + " text, "    // smap
                 + UUID + " text, "		        // smap
                 + T_UPDATED + " integer, "      // smap
-                + T_SHOW_DIST + " integer, "   // smap
-                + T_HIDE + " integer "        // smap
+                + T_SHOW_DIST + " integer, "    // smap
+                + T_HIDE + " integer, "         // smap
+
+
+                + "displaySubtext text "   // Smap keep for downgrading
                 + ");");
     }
 

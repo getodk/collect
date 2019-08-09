@@ -69,7 +69,7 @@ public class FormsProvider extends ContentProvider {
     private static final String t = "FormsProvider";
 
     private static final String DATABASE_NAME = "forms.db";
-    private static final int DATABASE_VERSION = 10;    // smap must be greater than 7 (the odk version)
+    private static final int DATABASE_VERSION = 11;    // smap must be greater than 7 (the odk version)
     private static final String FORMS_TABLE_NAME = "forms";
 
     private static HashMap<String, String> sFormsProjectionMap;
@@ -99,193 +99,19 @@ public class FormsProvider extends ContentProvider {
         }
 
         private void onCreateNamed(SQLiteDatabase db) {
-            createFormsTableV10(db);
+            createFormsTableV11(db);
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             int initialVersion = oldVersion;
-            if (oldVersion < 2) {
-                Timber.w("Upgrading database from version " + oldVersion
-                        + " to " + newVersion
-                        + ", which will destroy all old data");
-                db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
-                onCreate(db);
-                return;
-            } else if (oldVersion < 6) {
-                Timber.w("Upgrading database from version " + oldVersion        // smap
-                        + " to " + newVersion);
-                // adding BASE64_RSA_PUBLIC_KEY and changing type and name of
-                // integer MODEL_VERSION to text VERSION
-                db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
-                createFormsTableV10(db);
-                db.execSQL("INSERT INTO "
-                        + TEMP_FORMS_TABLE_NAME
-                        + " ("
-                        + FormsColumns._ID
-                        + ", "
-                        + FormsColumns.DISPLAY_NAME
-                        + ", "
-                        + FormsColumns.DESCRIPTION
-                        + ", "
-                        + FormsColumns.JR_FORM_ID
-                        + ", "
-                        + FormsColumns.MD5_HASH
-                        + ", "
-                        + FormsColumns.DATE
-                        + ", " // milliseconds
-                        + FormsColumns.FORM_MEDIA_PATH
-                        + ", "
-                        + FormsColumns.FORM_FILE_PATH
-                        + ", "
-                        + FormsColumns.LANGUAGE
-                        + ", "
-                        + FormsColumns.SUBMISSION_URI
-                        + ", "
-                        + ((oldVersion > 3) ? ""                    // smap
-                        : (FormsColumns.JR_VERSION + ", "))    // smap
-                        + ((oldVersion < 5) ? ""                    // smap
-                        : (FormsColumns.PROJECT + ", "))    // smap
-                        + ((oldVersion < 6) ? ""                    // smap
-                        : (SOURCE + ", "))    // smap
-                        + ((oldVersion < 4) ? ""                    // smap
-                        : (FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
-                        + FormsColumns.JRCACHE_FILE_PATH
-                        + ") SELECT "
-                        + FormsColumns._ID
-                        + ", "
-                        + FormsColumns.DISPLAY_NAME
-                        + ", "
-                        + FormsColumns.DESCRIPTION
-                        + ", "
-                        + FormsColumns.JR_FORM_ID
-                        + ", "
-                        + FormsColumns.MD5_HASH
-                        + ", "
-                        + FormsColumns.DATE
-                        + ", " // milliseconds
-                        + FormsColumns.FORM_MEDIA_PATH
-                        + ", "
-                        + FormsColumns.FORM_FILE_PATH
-                        + ", "
-                        + FormsColumns.LANGUAGE
-                        + ", "
-                        + FormsColumns.SUBMISSION_URI
-                        + ", "
-                        + ((oldVersion > 3) ? ""                            // smap
-                        : (
-                        "CASE WHEN "        // smap
-                                + MODEL_VERSION
-                                + " IS NOT NULL THEN "
-                                + "CAST("
-                                + MODEL_VERSION
-                                + " AS TEXT) ELSE NULL END, "
-                ))
-                        + ((oldVersion < 5) ? ""                        // smap
-                        : (FormsColumns.PROJECT + ", "))        // smap
-                        + ((oldVersion < 6) ? ""                        // smap
-                        : (SOURCE + ", "))            // smap
-                        + ((oldVersion < 4) ? ""                        // smap
-                        : (FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
-                        + FormsColumns.JRCACHE_FILE_PATH + " FROM "
-                        + FORMS_TABLE_NAME);
 
-                // risky failures here...
-                db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
-                createFormsTableV10(db);
-                db.execSQL("INSERT INTO "
-                        + FORMS_TABLE_NAME
-                        + " ("
-                        + FormsColumns._ID
-                        + ", "
-                        + FormsColumns.DISPLAY_NAME
-                        + ", "
-                        + FormsColumns.DESCRIPTION
-                        + ", "
-                        + FormsColumns.JR_FORM_ID
-                        + ", "
-                        + FormsColumns.MD5_HASH
-                        + ", "
-                        + FormsColumns.DATE
-                        + ", " // milliseconds
-                        + FormsColumns.FORM_MEDIA_PATH + ", "
-                        + FormsColumns.FORM_FILE_PATH + ", "
-                        + FormsColumns.LANGUAGE + ", "
-                        + FormsColumns.SUBMISSION_URI + ", "
-                        + FormsColumns.JR_VERSION + ", "
-                        + FormsColumns.PROJECT + ", "                // smap
-                        + SOURCE + ", "                // smap
-                        + FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "
-                        + FormsColumns.JRCACHE_FILE_PATH + ") SELECT "
-                        + FormsColumns._ID + ", "
-                        + FormsColumns.DISPLAY_NAME
-                        + ", "
-                        + FormsColumns.DESCRIPTION
-                        + ", "
-                        + FormsColumns.JR_FORM_ID
-                        + ", "
-                        + FormsColumns.MD5_HASH
-                        + ", "
-                        + FormsColumns.DATE
-                        + ", " // milliseconds
-                        + FormsColumns.FORM_MEDIA_PATH + ", "
-                        + FormsColumns.FORM_FILE_PATH + ", "
-                        + FormsColumns.LANGUAGE + ", "
-                        + FormsColumns.SUBMISSION_URI + ", "
-                        + JR_VERSION + ", "
-                        + PROJECT + ", "                // smap
-                        + SOURCE + ", "                // smap
-                        + BASE64_RSA_PUBLIC_KEY + ", "
-                        + JRCACHE_FILE_PATH + " FROM "
-                        + TEMP_FORMS_TABLE_NAME);
-                db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
-
-                Timber.w("Successfully upgraded database from version "
-                        + initialVersion + " to " + newVersion
-                        + ", without destroying all the old data");
-            }
-
-            if (oldVersion < 7) {
+            if (oldVersion < 11) {
                 try {
-                    db.execSQL("ALTER TABLE " + FORMS_TABLE_NAME + " ADD COLUMN " +
-                            FormsColumns.TASKS_ONLY + " text;");
-                    db.execSQL("update " + FORMS_TABLE_NAME + " set " +
-                            TASKS_ONLY + " = 'no';");
+                    upgradeToVersion11(db);
                 } catch (Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
-                    Timber.w("Error in upgrading to forms database version 7");
-                    e.printStackTrace();
-                }
-            }
-
-            if (oldVersion < 8) {
-                try {
-                    db.execSQL("ALTER TABLE " + FORMS_TABLE_NAME + " ADD COLUMN " +
-                            AUTO_SEND + " text;");
-                    db.execSQL("ALTER TABLE " + FORMS_TABLE_NAME + " ADD COLUMN " +
-                            AUTO_DELETE + " text;");
-                } catch (Exception e) {
-                    // Catch errors, its possible the user upgraded then downgraded
-                    Timber.w("Error in upgrading to forms database version 8");
-                    e.printStackTrace();
-                }
-            }
-            if (oldVersion < 9) {
-                try {
-                    db.execSQL("ALTER TABLE " + FORMS_TABLE_NAME + " ADD COLUMN " +
-                            LAST_DETECTED_FORM_VERSION_HASH + " text;");
-                } catch (Exception e) {
-                    // Catch errors, its possible the user upgraded then downgraded
-                    Timber.w("Error in upgrading to forms database version 9");
-                    e.printStackTrace();
-                }
-            }
-            if (oldVersion < 10) {
-                try {
-                    upgradeToVersion10(db);
-                } catch (Exception e) {
-                    // Catch errors, its possible the user upgraded then downgraded
-                    Timber.w("Error in upgrading to forms database version 10");
+                    Timber.w("Error in upgrading to forms database version 11");
                     e.printStackTrace();
                 }
             }
@@ -293,9 +119,9 @@ public class FormsProvider extends ContentProvider {
     }
 
     // smap
-    private static void upgradeToVersion10(SQLiteDatabase db) {
+    private static void upgradeToVersion11(SQLiteDatabase db) {
         String temporaryTable = FORMS_TABLE_NAME + "_tmp";
-        String[] formsTableColumnsInV10 = new String[] {
+        String[] formsTableColumnsInV11 = new String[] {
                 _ID,
                 DISPLAY_NAME,
                 DESCRIPTION,
@@ -323,14 +149,14 @@ public class FormsProvider extends ContentProvider {
                 .to(temporaryTable)
                 .end();
 
-        createFormsTableV10(db);
+        createFormsTableV11(db);
 
         CustomSQLiteQueryBuilder
                 .begin(db)
                 .insertInto(FORMS_TABLE_NAME)
-                .columnsForInsert(formsTableColumnsInV10)
+                .columnsForInsert(formsTableColumnsInV11)
                 .select()
-                .columnsForSelect(formsTableColumnsInV10)
+                .columnsForSelect(formsTableColumnsInV11)
                 .from(temporaryTable)
                 .end();
 
@@ -340,7 +166,7 @@ public class FormsProvider extends ContentProvider {
                 .end();
     }
 
-    private static void createFormsTableV10(SQLiteDatabase db) {
+    private static void createFormsTableV11(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
                 + _ID + " integer primary key, "
                 + DISPLAY_NAME + " text not null, "
@@ -360,7 +186,9 @@ public class FormsProvider extends ContentProvider {
                 + LAST_DETECTED_FORM_VERSION_HASH + " text,"
                 + PROJECT + " text,"
                 + TASKS_ONLY + " text,"
-                + SOURCE + " text"
+                + SOURCE + " text,"
+
+                + "displaySubtext text "   // Smap keep for downgrading
                 +");");
     }
 
