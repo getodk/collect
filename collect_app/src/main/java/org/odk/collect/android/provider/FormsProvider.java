@@ -260,10 +260,7 @@ public class FormsProvider extends ContentProvider {
                 //throw new IllegalArgumentException("Unknown URI " + uri);     smap don't throw exception this prevents crash when launching from fill blank form
         }
 
-        // Get the database and run the query
-        SQLiteDatabase db = getDbHelper().getReadableDatabase();
-        Cursor c = qb.query(db, projection, selection, selectionArgs, null,
-                null, sortOrder);
+        Cursor c = qb.query(getDbHelper().getReadableDatabase(), projection, selection, selectionArgs, groupBy, null, sortOrder);
 
         // Tell the cursor what uri to watch, so it knows when its source data changes
         c.setNotificationUri(getContext().getContentResolver(), uri);
