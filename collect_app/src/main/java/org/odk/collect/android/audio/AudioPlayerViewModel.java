@@ -93,7 +93,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     }
 
     public void background() {
-        release();
+        releaseMediaPlayer();
         currentlyPlaying.setValue(null);
     }
 
@@ -104,7 +104,8 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
 
     @Override
     protected void onCleared() {
-        release();
+        releaseMediaPlayer();
+        scheduler.cancel();
     }
 
     private void schedulePositionUpdates() {
@@ -114,7 +115,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         }
     }
 
-    private void release() {
+    private void releaseMediaPlayer() {
         getMediaPlayer().release();
         mediaPlayer = null;
     }

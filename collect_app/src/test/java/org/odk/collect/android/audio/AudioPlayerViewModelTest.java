@@ -200,6 +200,12 @@ public class AudioPlayerViewModelTest {
         verify(mediaPlayer).release();
     }
 
+    @Test
+    public void onCleared_cancelsScheduler() {
+        viewModel.onCleared();
+        assertThat(fakeScheduler.isCancelled(), equalTo(true));
+    }
+
     private static class RecordingMockMediaPlayerFactory implements MediaPlayerFactory {
 
         List<MediaPlayer> createdInstances = new ArrayList<>();

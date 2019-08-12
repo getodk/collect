@@ -97,6 +97,10 @@ public class AudioControllerViewIntegrationTest {
         shadowOf(mediaPlayer).setCurrentPosition(322450);
         fakeScheduler.runTask();
         assertThat(innerText(view.findViewById(R.id.currentDuration)), equalTo("05:22"));
+
+        view.findViewById(R.id.playBtn).performClick(); // Make sure duration remains when paused
+        fakeScheduler.runTask();
+        assertThat(innerText(view.findViewById(R.id.currentDuration)), equalTo("05:22"));
     }
 
     @Test

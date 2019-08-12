@@ -5,13 +5,24 @@ import java.util.TimerTask;
 
 public class TimerScheduler implements Scheduler {
 
+    private final Timer timer;
+
+    public TimerScheduler() {
+        timer = new Timer();
+    }
+
     @Override
     public void schedule(Runnable task, long period) {
-        new Timer().scheduleAtFixedRate(new TimerTask() {
+        timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 task.run();
             }
         }, 0, period);
+    }
+
+    @Override
+    public void cancel() {
+        timer.cancel();
     }
 }
