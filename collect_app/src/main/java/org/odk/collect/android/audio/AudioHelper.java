@@ -64,11 +64,11 @@ public class AudioHelper {
         view.setListener(new AudioControllerViewListener(viewModel, uri, clipID));
     }
 
-    private int getDurationOfFile(String uri) {
+    private Integer getDurationOfFile(String uri) {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(uri);
         String durationString = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-        return Integer.parseInt(durationString) / 1000;
+        return durationString != null ? Integer.parseInt(durationString) / 1000 : 0;
     }
 
     public void play(String clipID, String uri) {

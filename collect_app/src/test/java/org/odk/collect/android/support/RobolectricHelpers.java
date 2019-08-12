@@ -12,6 +12,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.android.controller.ActivityController;
 import org.robolectric.shadows.ShadowMediaMetadataRetriever;
 import org.robolectric.shadows.ShadowMediaPlayer;
 import org.robolectric.shadows.util.DataSource;
@@ -43,6 +44,13 @@ public class RobolectricHelpers {
 
     public static FragmentActivity createThemedActivity() {
         return createThemedActivity(FragmentActivity.class);
+    }
+
+    public static <T extends FragmentActivity> ActivityController<T> buildThemedActivity(Class<T> clazz) {
+        ActivityController<T> activity = Robolectric.buildActivity(clazz);
+        activity.get().setTheme(R.style.LightAppTheme); // Needed so attrs are available
+
+        return activity;
     }
 
     public static int getCreatedFromResId(ImageButton button) {
