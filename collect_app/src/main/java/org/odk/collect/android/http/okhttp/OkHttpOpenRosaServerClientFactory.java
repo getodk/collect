@@ -87,15 +87,11 @@ public class OkHttpOpenRosaServerClientFactory implements OpenRosaServerClientFa
 
         @Override
         public Response makeRequest(Request request) throws IOException {
-            return client.newCall(addHeaders(request)).execute();
-        }
-
-        private Request addHeaders(Request request) {
-            return request.newBuilder()
+            return client.newCall(request.newBuilder()
                     .addHeader(USER_AGENT_HEADER, userAgent)
                     .addHeader(OPEN_ROSA_VERSION_HEADER, OPEN_ROSA_VERSION)
                     .addHeader(DATE_HEADER, getHeaderDate())
-                    .build();
+                    .build()).execute();
         }
 
         private String getHeaderDate() {
