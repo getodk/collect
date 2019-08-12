@@ -1,5 +1,6 @@
 package org.odk.collect.android.http;
 
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
@@ -15,6 +16,11 @@ public class OkHttpConnectionPostRequest extends OpenRosaPostRequestTest {
                 .sslSocketFactory(TlsUtil.localhost().sslSocketFactory(), TlsUtil.localhost().trustManager()),
                 mapper
         );
+    }
+
+    @Before
+    public void resetStaticState() {
+        OkHttpConnection.reset();
     }
 
     @Override

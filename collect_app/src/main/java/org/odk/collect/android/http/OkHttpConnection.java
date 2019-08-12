@@ -70,6 +70,12 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
      */
     private static String lastRequestScheme = "";
 
+    public static void reset() {
+        httpClient = null;
+        lastRequestCredentials = null;
+        lastRequestScheme = null;
+    }
+
     private MultipartBody multipartBody;
 
     @Nullable
@@ -351,5 +357,4 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
             }
         }
     }
-
 }
