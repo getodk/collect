@@ -3,17 +3,16 @@ package org.odk.collect.android.audio;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 
-import androidx.core.util.Pair;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModelProviders;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.utilities.LiveDataTransformations;
 
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYING;
@@ -49,15 +48,11 @@ public class AudioHelper {
         AudioPlayerViewModel viewModel = getViewModel();
         LifecycleOwner lifecycle = screenContext.getViewLifecycle();
 
-        view.setDuration(getDurationOfFile(uri));
-
         LiveData<ClipState> playState = viewModel.isPlaying(clipID);
-        playState.observe(lifecycle, view::setPlayState);
-
         LiveData<Integer> position = viewModel.getPosition();
-        LiveDataZipper<ClipState, Integer> liveDataZipper = new LiveDataZipper<>(playState, position);
 
-        liveDataZipper.zip().observe(lifecycle, (playStateAndPosition) -> {
+        playState.observe(lifecycle, view::setPlayState);
+        LiveDataTransformations.zip(playState, position).observe(lifecycle, (playStateAndPosition) -> {
             if (playStateAndPosition.first == PLAYING) {
                 view.setPosition(playStateAndPosition.second);
             } else {
@@ -65,6 +60,7 @@ public class AudioHelper {
             }
         });
 
+        view.setDuration(getDurationOfFile(uri));
         view.setListener(new AudioControllerViewListener(viewModel, uri, clipID));
     }
 
@@ -150,36 +146,6 @@ public class AudioHelper {
         @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
         void onPause() {
             viewModel.background();
-        }
-    }
-
-    private class LiveDataZipper<A, B> {
-
-        private final LiveData<A> liveDataOne;
-        private final LiveData<B> liveDataTwo;
-
-        private A one;
-        private B two;
-
-        LiveDataZipper(LiveData<A> liveDataOne, LiveData<B> liveDataTwo) {
-            this.liveDataOne = liveDataOne;
-            this.liveDataTwo = liveDataTwo;
-        }
-
-        public LiveData<Pair<A, B>> zip() {
-            MediatorLiveData<Pair<A, B>> mediatorLiveData = new MediatorLiveData<>();
-
-            mediatorLiveData.addSource(liveDataOne, (value) -> {
-                one = value;
-                mediatorLiveData.setValue(new Pair<>(one, two));
-            });
-
-            mediatorLiveData.addSource(liveDataTwo, (value) -> {
-                two = value;
-                mediatorLiveData.setValue(new Pair<>(one, two));
-            });
-
-            return mediatorLiveData;
         }
     }
 }
