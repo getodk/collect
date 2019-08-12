@@ -21,7 +21,7 @@ public class SpinnerAdapter extends ArrayAdapter<CharSequence> {
     private int selectedPosition;
 
     public SpinnerAdapter(final Context context, final CharSequence[] objects) {
-        super(context, android.R.layout.simple_spinner_item, objects);
+        super(context, android.R.layout.simple_list_item_1, objects);
         this.items = objects;
         this.context = context;
         themeUtils = new ThemeUtils(context);
@@ -33,7 +33,7 @@ public class SpinnerAdapter extends ArrayAdapter<CharSequence> {
 
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
-            convertView = inflater.inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
+            convertView = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
         }
 
         if (themeUtils.isDarkTheme()) {
@@ -66,7 +66,7 @@ public class SpinnerAdapter extends ArrayAdapter<CharSequence> {
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
-            convertView = inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
+            convertView = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
         }
 
         TextView tv = convertView.findViewById(android.R.id.text1);
