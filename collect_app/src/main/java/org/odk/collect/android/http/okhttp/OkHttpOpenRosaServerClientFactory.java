@@ -18,6 +18,7 @@ import org.odk.collect.android.utilities.Clock;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
@@ -90,14 +91,14 @@ public class OkHttpOpenRosaServerClientFactory implements OpenRosaServerClientFa
             return client.newCall(request.newBuilder()
                     .addHeader(USER_AGENT_HEADER, userAgent)
                     .addHeader(OPEN_ROSA_VERSION_HEADER, OPEN_ROSA_VERSION)
-                    .addHeader(DATE_HEADER, getHeaderDate())
+                    .addHeader(DATE_HEADER, getHeaderDate(clock.getCurrentTime()))
                     .build()).execute();
         }
 
-        private String getHeaderDate() {
+        private static String getHeaderDate(Date currentTime) {
             SimpleDateFormat dateFormatGmt = new SimpleDateFormat("E, dd MMM yyyy hh:mm:ss zz", Locale.US);
             dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-            return dateFormatGmt.format(clock.getCurrentTime());
+            return dateFormatGmt.format(currentTime);
         }
     }
 }
