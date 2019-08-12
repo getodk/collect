@@ -15,10 +15,6 @@
 package org.odk.collect.android.audio;
 
 import android.content.Context;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.Handler;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -29,19 +25,12 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.odk.collect.android.R;
 
-import java.io.File;
-import java.io.IOException;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import timber.log.Timber;
 
 public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBarChangeListener {
-
-    private static final int SEEK_FORWARD_TIME = 5000; // 5 seconds
-    private static final int SEEK_BACKWARD_TIME = 5000; // 5 seconds
 
     @BindView(R.id.currentDuration)
     TextView currentDurationLabel;
@@ -58,28 +47,6 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
     SeekBar seekBar;
 
     private State state;
-    private MediaPlayer mediaPlayer;
-    private final Handler seekHandler = new Handler();
-
-    /**
-     * Background Runnable thread
-     */
-    private final Runnable updateTimeTask = new Runnable() {
-        public void run() {
-            try {
-                if (mediaPlayer.isPlaying()) {
-                    updateTimer();
-                    seekHandler.postDelayed(this, 100);
-                } else {
-                    seekBar.setProgress(mediaPlayer.getDuration());
-                    seekHandler.removeCallbacks(updateTimeTask);
-                }
-            } catch (IllegalStateException e) {
-                seekHandler.removeCallbacks(updateTimeTask);
-                Timber.i(e, "Attempting to update timer when player is stopped");
-            }
-        }
-    };
 
     private Listener listener;
 
@@ -92,28 +59,14 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
         playButton.setImageResource(R.drawable.ic_play_arrow_24dp);
     }
 
-    public void init(MediaPlayer mediaPlayer) {
-        this.mediaPlayer = mediaPlayer;
-
-        initMediaPlayer();
-    }
-
     @OnClick(R.id.fastForwardBtn)
     void fastForwardMedia() {
-        seekTo(mediaPlayer.getCurrentPosition() + SEEK_FORWARD_TIME);
+
     }
 
     @OnClick(R.id.fastRewindBtn)
     void rewindMedia() {
-        seekTo(mediaPlayer.getCurrentPosition() - SEEK_BACKWARD_TIME);
-    }
 
-    /**
-     * Seeks media to the new position and updates timer
-     */
-    private void seekTo(int newPosition) {
-        mediaPlayer.seekTo(Math.min(Math.max(0, newPosition), mediaPlayer.getDuration()));
-        updateTimer();
     }
 
     @OnClick(R.id.playBtn)
@@ -125,37 +78,9 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
         }
     }
 
-    private void updateTimer() {
-        totalDurationLabel.setText(getTime(mediaPlayer.getDuration()));
-        currentDurationLabel.setText(getTime(mediaPlayer.getCurrentPosition()));
-
-        seekBar.setMax(mediaPlayer.getDuration());
-        seekBar.setProgress(mediaPlayer.getCurrentPosition());
-    }
-
-    private void initMediaPlayer() {
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setOnPreparedListener(player -> {
-            Timber.i("Media Prepared");
-            updateTimer();
-        });
-        mediaPlayer.setOnCompletionListener(player -> {
-            Timber.i("Completed");
-            playButton.setImageResource(R.drawable.ic_play_arrow_24dp);
-        });
-    }
-
-    /**
-     * Update timer on seekbar
-     */
-    private void updateProgressBar() {
-    }
-
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if (fromUser) {
-            seekTo(progress);
-        }
+
     }
 
     /**
@@ -177,31 +102,17 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
     public void onStopTrackingTouch(SeekBar seekBar) {
         ((SwipableParent) getContext()).allowSwiping(true);
 
-        seekTo(seekBar.getProgress());
         if (state == State.PLAYING) {
             play();
         }
     }
 
     private void play() {
-        playButton.setImageResource(R.drawable.ic_pause_24dp);
-        updateProgressBar();
+
     }
 
     private void pause() {
-        playButton.setImageResource(R.drawable.ic_play_arrow_24dp);
-        seekHandler.removeCallbacks(updateTimeTask);
-    }
 
-    public void setMedia(File file) {
-        try {
-            mediaPlayer.reset();
-            mediaPlayer.setDataSource(getContext(), Uri.fromFile(file));
-            mediaPlayer.prepareAsync();
-            state = State.IDLE;
-        } catch (IOException e) {
-            Timber.e(e);
-        }
     }
 
     public void hidePlayer() {
@@ -218,7 +129,7 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
      * @return formatted time as string
      */
     private static String getTime(long seconds) {
-        return new DateTime(seconds * 1000, DateTimeZone.UTC).toString("mm:ss");
+        return new DateTime(seconds, DateTimeZone.UTC).toString("mm:ss");
     }
 
     public void setPlayState(AudioPlayerViewModel.ClipState playState) {
@@ -244,10 +155,12 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
 
     public void setPosition(Integer position) {
         currentDurationLabel.setText(getTime(position));
+        seekBar.setProgress(position);
     }
 
     public void setDuration(Integer duration) {
         totalDurationLabel.setText(getTime(duration));
+        seekBar.setMax(duration);
     }
 
     private enum State {

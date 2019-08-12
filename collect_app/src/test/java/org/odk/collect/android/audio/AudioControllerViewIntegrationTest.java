@@ -1,7 +1,9 @@
 package org.odk.collect.android.audio;
 
 import android.media.MediaPlayer;
+import android.view.View;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -81,26 +83,33 @@ public class AudioControllerViewIntegrationTest {
         AudioControllerView view = new AudioControllerView(activity);
         audioHelper.setAudio(view, testFile, "clip1");
 
-        assertThat(innerText(view.findViewById(R.id.currentDuration)), equalTo("00:00"));
-        assertThat(innerText(view.findViewById(R.id.totalDuration)), equalTo("00:14"));
+        final View currentDuration = view.findViewById(R.id.currentDuration);
+        final SeekBar seekBar = view.findViewById(R.id.seekBar);
+
+        assertThat(innerText(currentDuration), equalTo("00:00"));
+        assertThat(innerText(view.findViewById(R.id.totalDuration)), equalTo("05:22"));
 
         view.findViewById(R.id.playBtn).performClick();
 
         shadowOf(mediaPlayer).setCurrentPosition(1005);
         fakeScheduler.runTask();
-        assertThat(innerText(view.findViewById(R.id.currentDuration)), equalTo("00:01"));
+        assertThat(innerText(currentDuration), equalTo("00:01"));
+        assertThat(seekBar.getProgress(), equalTo(1005));
 
         shadowOf(mediaPlayer).setCurrentPosition(12404);
         fakeScheduler.runTask();
-        assertThat(innerText(view.findViewById(R.id.currentDuration)), equalTo("00:12"));
+        assertThat(innerText(currentDuration), equalTo("00:12"));
+        assertThat(seekBar.getProgress(), equalTo(12404));
 
         shadowOf(mediaPlayer).setCurrentPosition(322450);
         fakeScheduler.runTask();
-        assertThat(innerText(view.findViewById(R.id.currentDuration)), equalTo("05:22"));
+        assertThat(innerText(currentDuration), equalTo("05:22"));
+        assertThat(seekBar.getProgress(), equalTo(322450));
 
         view.findViewById(R.id.playBtn).performClick(); // Make sure duration remains when paused
         fakeScheduler.runTask();
-        assertThat(innerText(view.findViewById(R.id.currentDuration)), equalTo("05:22"));
+        assertThat(innerText(currentDuration), equalTo("05:22"));
+        assertThat(seekBar.getProgress(), equalTo(322450));
     }
 
     @Test

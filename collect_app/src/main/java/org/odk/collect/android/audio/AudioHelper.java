@@ -8,14 +8,13 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.OnLifecycleEvent;
-import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModelProviders;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.utilities.LiveDataTransformations;
 
+import static androidx.lifecycle.Transformations.map;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState;
-import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.NOT_PLAYING;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYING;
 
 public class AudioHelper {
@@ -37,7 +36,7 @@ public class AudioHelper {
     public LiveData<Boolean> setAudio(AudioButton button, String uri, String clipID) {
         AudioPlayerViewModel viewModel = getViewModel();
 
-        LiveData<Boolean> isPlaying = Transformations.map(viewModel.isPlaying(clipID), value -> value == PLAYING);
+        LiveData<Boolean> isPlaying = map(viewModel.isPlaying(clipID), value -> value == PLAYING);
 
         isPlaying.observe(screenContext.getViewLifecycle(), button::setPlaying);
         button.setListener(new AudioButtonListener(viewModel, uri, clipID));
@@ -54,7 +53,7 @@ public class AudioHelper {
 
         playState.observe(lifecycle, view::setPlayState);
         LiveDataTransformations.zip(playState, position).observe(lifecycle, (playStateAndPosition) -> {
-            switch (playStateAndPosition.first != null ? playStateAndPosition.first : NOT_PLAYING) {
+            switch (playStateAndPosition.first) {
                 case NOT_PLAYING:
                     view.setPosition(0);
                     break;
@@ -78,7 +77,7 @@ public class AudioHelper {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(uri);
         String durationString = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-        return durationString != null ? Integer.parseInt(durationString) / 1000 : 0;
+        return durationString != null ? Integer.parseInt(durationString) : 0;
     }
 
     @NotNull

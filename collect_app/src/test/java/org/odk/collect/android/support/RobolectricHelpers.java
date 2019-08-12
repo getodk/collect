@@ -59,8 +59,8 @@ public class RobolectricHelpers {
 
     public static DataSource setupMediaPlayerDataSource(String testFile) {
         DataSource dataSource = DataSource.toDataSource(testFile);
-        ShadowMediaMetadataRetriever.addMetadata(dataSource, MediaMetadataRetriever.METADATA_KEY_DURATION, "14000");
-        ShadowMediaPlayer.addMediaInfo(dataSource, new ShadowMediaPlayer.MediaInfo(14000, 0));
+        ShadowMediaMetadataRetriever.addMetadata(dataSource, MediaMetadataRetriever.METADATA_KEY_DURATION, "322450");
+        ShadowMediaPlayer.addMediaInfo(dataSource, new ShadowMediaPlayer.MediaInfo(322450, 0));
         return dataSource;
     }
 }

@@ -89,8 +89,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_sound), R.id.choose_sound);
 
-        audioController.init(getPlayer());
-
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);

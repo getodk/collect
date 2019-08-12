@@ -10,6 +10,7 @@ public final class LiveDataTransformations {
 
     }
 
+    // TODO
     public static <A, B> LiveData<Pair<A, B>> zip(LiveData<A> first, LiveData<B> second) {
         MediatorLiveData<Pair<A, B>> mediatorLiveData = new MediatorLiveData<>();
         mediatorLiveData.addSource(first, (value) -> {

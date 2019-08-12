@@ -180,18 +180,18 @@ public class AudioPlayerViewModelTest {
     }
 
     @Test
-    public void getPosition_returnsMediaPlayerPositionInSeconds() {
+    public void getPosition_returnsMediaPlayerPositionInMilliseconds() {
         when(mediaPlayer.getCurrentPosition()).thenReturn(0);
         LiveData<Integer> duration = liveDataTester.activate(viewModel.getPosition());
         assertThat(duration.getValue(), equalTo(0));
 
         when(mediaPlayer.getCurrentPosition()).thenReturn(1000);
         fakeScheduler.runTask();
-        assertThat(duration.getValue(), equalTo(1));
+        assertThat(duration.getValue(), equalTo(1000));
 
         when(mediaPlayer.getCurrentPosition()).thenReturn(24135);
         fakeScheduler.runTask();
-        assertThat(duration.getValue(), equalTo(24));
+        assertThat(duration.getValue(), equalTo(24135));
     }
 
     @Test

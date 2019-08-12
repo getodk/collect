@@ -86,7 +86,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     }
 
     public LiveData<Integer> getPosition() {
-        currentPosition.setValue(getMediaPlayer().getCurrentPosition() / 1000);
+        currentPosition.setValue(getMediaPlayer().getCurrentPosition());
         schedulePositionUpdates();
 
         return currentPosition;
@@ -110,7 +110,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
 
     private void schedulePositionUpdates() {
         if (!scheduledDurationUpdates) {
-            scheduler.schedule(() -> currentPosition.postValue(getMediaPlayer().getCurrentPosition() / 1000), 500);
+            scheduler.schedule(() -> currentPosition.postValue(getMediaPlayer().getCurrentPosition()), 500);
             scheduledDurationUpdates = true;
         }
     }
