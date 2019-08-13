@@ -15,7 +15,7 @@ import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.support.RobolectricHelpers;
-import org.odk.collect.android.support.ScreenContextFragmentActivity;
+import org.odk.collect.android.support.WidgetTestActivity;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -45,7 +45,7 @@ public class MediaLayoutTest {
         isPlaying.setValue(false);
         when(audioHelper.setAudio(any(AudioButton.class), any(), any())).thenReturn(isPlaying);
 
-        Activity activity = RobolectricHelpers.createThemedActivity(ScreenContextFragmentActivity.class);
+        Activity activity = RobolectricHelpers.createThemedActivity(WidgetTestActivity.class);
 
         MediaLayout mediaLayout = new MediaLayout(activity);
         mediaLayout.setAVT(

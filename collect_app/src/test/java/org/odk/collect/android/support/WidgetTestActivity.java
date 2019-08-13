@@ -5,7 +5,7 @@ import androidx.lifecycle.LifecycleOwner;
 
 import org.odk.collect.android.audio.ScreenContext;
 
-public class ScreenContextFragmentActivity extends FragmentActivity implements ScreenContext {
+public class WidgetTestActivity extends FragmentActivity implements ScreenContext {
 
     @Override
     public FragmentActivity getActivity() {

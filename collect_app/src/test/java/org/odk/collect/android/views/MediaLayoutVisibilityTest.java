@@ -18,7 +18,7 @@ import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.TimerScheduler;
 import org.odk.collect.android.logic.FileReference;
-import org.odk.collect.android.support.ScreenContextFragmentActivity;
+import org.odk.collect.android.support.WidgetTestActivity;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
@@ -79,7 +79,7 @@ public class MediaLayoutVisibilityTest {
         referenceManager = mock(ReferenceManager.class);
         textView = new TextView(RuntimeEnvironment.application);
 
-        ScreenContextFragmentActivity activity = Robolectric.buildActivity(ScreenContextFragmentActivity.class).create().get();
+        WidgetTestActivity activity = Robolectric.buildActivity(WidgetTestActivity.class).create().get();
         audioHelper = new AudioHelper(activity, MediaPlayer::new, new TimerScheduler());
 
         mediaLayout = new MediaLayout(activity);
