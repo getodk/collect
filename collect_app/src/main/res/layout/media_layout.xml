@@ -47,14 +47,14 @@
 
         <org.odk.collect.android.views.AudioButton
             android:id="@+id/audioButton"
-            style="@style/MediaButtonStyle"
+            style="@style/Widget.Collect.ImageButton.Media"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/videoButton"
-            style="@style/MediaButtonStyle"
+            style="@style/Widget.Collect.ImageButton.Media"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone" />

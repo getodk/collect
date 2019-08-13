@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    This file contains the app's light and dark theme definitions for
+    API 21 and above
+-->
+
 <resources>
 
-    <style name="BaseDarkAppTheme.Collect">
-        <item name="android:buttonStyle">@style/CustomButtonStyle</item>
-        <item name="imageButtonStyle">@style/CustomImageButtonDark</item>
+    <style name="Theme.Collect.Dark" parent="Theme.Collect.BaseDark">
+        <item name="android:buttonStyle">@style/Widget.Collect.Button.Custom</item>
+        <item name="imageButtonStyle">@style/Widget.Collect.ImageButton.Custom.Dark</item>
     </style>
 
-    <style name="BaseLightAppTheme.Collect">
-        <item name="android:buttonStyle">@style/CustomButtonStyle</item>
-        <item name="imageButtonStyle">@style/CustomImageButtonLight</item>
+    <style name="Theme.Collect.Light" parent="Theme.Collect.BaseLight">
+        <item name="android:buttonStyle">@style/Widget.Collect.Button.Custom</item>
+        <item name="imageButtonStyle">@style/Widget.Collect.ImageButton.Custom.Light</item>
     </style>
 </resources>

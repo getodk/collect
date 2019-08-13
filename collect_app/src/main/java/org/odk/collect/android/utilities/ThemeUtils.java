@@ -37,22 +37,22 @@ public final class ThemeUtils {
 
     @StyleRes
     public int getAppTheme() {
-        return isDarkTheme() ? R.style.DarkAppTheme : R.style.LightAppTheme;
+        return isDarkTheme() ? R.style.Theme_Collect_Dark : R.style.Theme_Collect_Light;
     }
 
     @StyleRes
     public int getFormEntryActivityTheme() {
-        return isDarkTheme() ? R.style.FormEntryActivityDarkTheme : R.style.FormEntryActivityLightTheme;
+        return isDarkTheme() ? R.style.Theme_Collect_Activity_FormEntryActivity_Dark : R.style.Theme_Collect_Activity_FormEntryActivity_Light;
     }
 
     @StyleRes
     public int getSettingsTheme() {
-        return isDarkTheme() ? R.style.AppTheme_SettingsTheme_Dark : R.style.AppTheme_SettingsTheme_Light;
+        return isDarkTheme() ? R.style.Theme_Collect_Settings_Dark : R.style.Theme_Collect_Settings_Light;
     }
 
     @StyleRes
     public int getBottomDialogTheme() {
-        return isDarkTheme() ? R.style.DarkMaterialDialogSheet : R.style.LightMaterialDialogSheet;
+        return isDarkTheme() ? R.style.Theme_Collect_MaterialDialogSheet_Dark : R.style.Theme_Collect_MaterialDialogSheet_Light;
     }
 
     @DrawableRes
