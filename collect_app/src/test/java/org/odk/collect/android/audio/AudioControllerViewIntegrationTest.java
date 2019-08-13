@@ -134,19 +134,24 @@ public class AudioControllerViewIntegrationTest {
         view.findViewById(R.id.playBtn).performClick();
 
         view.findViewById(R.id.fastForwardBtn).performClick();
+        fakeScheduler.runTask();
         assertThat(mediaPlayer.isPlaying(), equalTo(true));
         assertThat(mediaPlayer.getCurrentPosition(), equalTo(5000));
 
         view.findViewById(R.id.fastForwardBtn).performClick();
+        fakeScheduler.runTask();
         assertThat(mediaPlayer.getCurrentPosition(), equalTo(10000));
 
         view.findViewById(R.id.fastRewindBtn).performClick();
+        fakeScheduler.runTask();
         assertThat(mediaPlayer.getCurrentPosition(), equalTo(5000));
 
         view.findViewById(R.id.fastForwardBtn).performClick();
+        fakeScheduler.runTask();
         assertThat(mediaPlayer.getCurrentPosition(), equalTo(10000));
 
         view.findViewById(R.id.fastForwardBtn).performClick();
+        fakeScheduler.runTask();
         assertThat(mediaPlayer.isPlaying(), equalTo(false));
         assertThat(mediaPlayer.getCurrentPosition(), equalTo(14000));
     }
@@ -160,15 +165,19 @@ public class AudioControllerViewIntegrationTest {
         final View currentDuration = view.findViewById(R.id.currentDuration);
 
         shadowOf(seekBar).getOnSeekBarChangeListener().onStartTrackingTouch(seekBar);
+        fakeScheduler.runTask();
         assertThat(mediaPlayer.isPlaying(), equalTo(false)); // Check seeking pauses playback
 
         shadowOf(seekBar).getOnSeekBarChangeListener().onProgressChanged(seekBar, 7000, true);
+        fakeScheduler.runTask();
         assertThat(innerText(currentDuration), equalTo("00:07"));
 
         shadowOf(seekBar).getOnSeekBarChangeListener().onProgressChanged(seekBar, 8000, true);
+        fakeScheduler.runTask();
         assertThat(innerText(currentDuration), equalTo("00:08"));
 
         shadowOf(seekBar).getOnSeekBarChangeListener().onStopTrackingTouch(seekBar);
+        fakeScheduler.runTask();
         assertThat(mediaPlayer.isPlaying(), equalTo(true));
         assertThat(mediaPlayer.getCurrentPosition(), equalTo(8000));
     }
@@ -191,6 +200,7 @@ public class AudioControllerViewIntegrationTest {
         assertThat(mediaPlayer.isPlaying(), equalTo(false));
 
         view.findViewById(R.id.playBtn).performClick();
+        fakeScheduler.runTask();
         assertThat(mediaPlayer.isPlaying(), equalTo(true));
         assertThat(mediaPlayer.getCurrentPosition(), equalTo(8000));
     }
@@ -202,20 +212,25 @@ public class AudioControllerViewIntegrationTest {
         view.findViewById(R.id.playBtn).performClick();
 
         SeekBar seekBar = view.findViewById(R.id.seekBar);
-        View currentDuration = view.findViewById(R.id.currentDuration);
+        final View currentDuration = view.findViewById(R.id.currentDuration);
 
         shadowOf(seekBar).getOnSeekBarChangeListener().onStartTrackingTouch(seekBar);
 
         shadowOf(seekBar).getOnSeekBarChangeListener().onProgressChanged(seekBar, 7000, true);
+        fakeScheduler.runTask();
         assertThat(innerText(currentDuration), equalTo("00:07"));
 
         shadowOf(seekBar).getOnSeekBarChangeListener().onProgressChanged(seekBar, 8000, true);
+        fakeScheduler.runTask();
         assertThat(innerText(currentDuration), equalTo("00:08"));
 
         shadowOf(seekBar).getOnSeekBarChangeListener().onStopTrackingTouch(seekBar);
+        fakeScheduler.runTask();
         assertThat(shadowOf(mediaPlayer).getState(), equalTo(ShadowMediaPlayer.State.PAUSED));
 
         view.findViewById(R.id.playBtn).performClick();
+
+        fakeScheduler.runTask();
         assertThat(mediaPlayer.getCurrentPosition(), equalTo(8000));
     }
 
@@ -240,8 +255,8 @@ public class AudioControllerViewIntegrationTest {
         view1.findViewById(R.id.playBtn).performClick();
 
         shadowOf(mediaPlayer).setCurrentPosition(1005);
-        fakeScheduler.runTask();
 
+        fakeScheduler.runTask();
         assertThat(innerText(view1.findViewById(R.id.currentDuration)), equalTo("00:01"));
         assertThat(innerText(view2.findViewById(R.id.currentDuration)), equalTo("00:00"));
     }

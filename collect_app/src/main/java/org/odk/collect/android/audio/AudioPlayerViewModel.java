@@ -39,6 +39,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         this.scheduler = scheduler;
 
         currentlyPlaying.setValue(null);
+        currentPosition.setValue(0);
     }
 
     public void play(String clipID, String uri) {
@@ -55,7 +56,9 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         }
 
         getMediaPlayer().start();
+
         currentlyPlaying.setValue(new CurrentlyPlaying(clipID, false));
+        schedulePositionUpdates();
     }
 
     private void loadClip(String uri) {
@@ -70,7 +73,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
 
     public void stop() {
         getMediaPlayer().stop();
-        currentlyPlaying.setValue(null);
+        resetState();
     }
 
     public void pause() {
@@ -98,8 +101,6 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
 
     public LiveData<Integer> getPosition() {
         currentPosition.setValue(getMediaPlayer().getCurrentPosition());
-        schedulePositionUpdates();
-
         return currentPosition;
     }
 
@@ -117,13 +118,24 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
+        resetState();
+    }
+
+    private void resetState() {
+        cancelPositionUpdates();
+        currentPosition.setValue(0);
         currentlyPlaying.setValue(null);
     }
 
     @Override
     protected void onCleared() {
         releaseMediaPlayer();
+        cancelPositionUpdates();
+    }
+
+    private void cancelPositionUpdates() {
         scheduler.cancel();
+        scheduledDurationUpdates = false;
     }
 
     private void schedulePositionUpdates() {

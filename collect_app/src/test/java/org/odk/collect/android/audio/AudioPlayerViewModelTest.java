@@ -112,16 +112,6 @@ public class AudioPlayerViewModelTest {
     }
 
     @Test
-    public void isPlaying_whenClipIDPlaying_thenStopped_is_NOT_PLAYING() {
-        LiveData<ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
-
-        viewModel.play("clip1", "file://audio.mp3");
-        viewModel.stop();
-
-        assertThat(isPlaying.getValue(), equalTo(NOT_PLAYING));
-    }
-
-    @Test
     public void background_releasesMediaPlayer() {
         viewModel.background();
         verify(mediaPlayer).release();
@@ -184,6 +174,8 @@ public class AudioPlayerViewModelTest {
         when(mediaPlayer.getCurrentPosition()).thenReturn(0);
         LiveData<Integer> duration = liveDataTester.activate(viewModel.getPosition());
         assertThat(duration.getValue(), equalTo(0));
+
+        viewModel.play("clip1", "file://audio.mp3");
 
         when(mediaPlayer.getCurrentPosition()).thenReturn(1000);
         fakeScheduler.runTask();

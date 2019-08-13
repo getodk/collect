@@ -56,7 +56,6 @@ public class AudioHelper {
         LiveDataTransformations.zip(playState, position).observe(lifecycle, (playStateAndPosition) -> {
             switch (playStateAndPosition.first != null ? playStateAndPosition.first : NOT_PLAYING) {
                 case NOT_PLAYING:
-                    view.setPosition(0);
                     break;
 
                 case PLAYING:

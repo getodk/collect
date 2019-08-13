@@ -5,7 +5,7 @@ import java.util.TimerTask;
 
 public class TimerScheduler implements Scheduler {
 
-    private final Timer timer;
+    private Timer timer;
 
     public TimerScheduler() {
         timer = new Timer();
@@ -24,5 +24,6 @@ public class TimerScheduler implements Scheduler {
     @Override
     public void cancel() {
         timer.cancel();
+        timer = new Timer();
     }
 }
