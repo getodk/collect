@@ -24,7 +24,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -37,7 +36,7 @@ public class InstanceUploaderUtils {
     private InstanceUploaderUtils() {
     }
 
-    public static String getUploadResultMessage(Context context, HashMap<String, String> result) {
+    public static String getUploadResultMessage(Context context, Map<String, String> result) {
         Set<String> keys = result.keySet();
         Iterator<String> it = keys.iterator();
 
