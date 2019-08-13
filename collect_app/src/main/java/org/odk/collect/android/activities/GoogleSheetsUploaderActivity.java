@@ -37,15 +37,12 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.fragments.dialogs.GoogleSheetsUploaderProgressDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploaderTask;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
@@ -54,8 +51,6 @@ import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -286,45 +281,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         Timber.i("uploadingComplete: Processing results ( %d ) from upload of %d instances!",
                 result.size(), instancesToSend.length);
 
-        Set<String> keys = result.keySet();
-        Iterator<String> it = keys.iterator();
-
-        StringBuilder message = new StringBuilder();
-        int count = keys.size();
-        while (count > 0) {
-            String[] selectionArgs;
-
-            if (count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER) {
-                selectionArgs = new String[ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER];
-            } else {
-                selectionArgs = new String[count];
-            }
-
-            StringBuilder selection = new StringBuilder();
-            selection.append(InstanceColumns._ID + " IN (");
-
-            int i = 0;
-            while (it.hasNext() && i < selectionArgs.length) {
-                selectionArgs[i] = it.next();
-                selection.append('?');
-
-                if (i != selectionArgs.length - 1) {
-                    selection.append(',');
-                }
-                i++;
-            }
-
-            selection.append(')');
-            count -= selectionArgs.length;
-
-            message.append(InstanceUploaderUtils
-                    .getUploadResultMessage(new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs), result));
-        }
-        if (message.length() == 0) {
-            message = new StringBuilder(getString(R.string.no_forms_uploaded));
-        }
-
-        createAlertDialog(message.toString().trim());
+        createAlertDialog(InstanceUploaderUtils.getUploadResultMessage(this, result));
     }
 
     @Override
