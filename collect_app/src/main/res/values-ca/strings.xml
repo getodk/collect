@@ -41,7 +41,6 @@
   <string name="discard_answer">Descartar resposta</string>
   <string name="discard_group">Esborrar grup</string>
   <string name="download">Descarregar seleccionats</string>
-  <string name="download_forms_result">Descarregar resultats</string>
   <string name="downloading_data">Connectant a servidor</string>
   <string name="do_not_change">Cancel·lar</string>
   <string name="do_not_exit">Cancel·lar</string>
@@ -200,7 +199,6 @@
   <string name="found_in_settings">Desmarcar per amagar en Configuració General</string>
   <string name="save_preferences">Salve Configuració a disc</string>
   <string name="form_forward">Següent</string>
-  <string name="form_backward">Previ</string>
   <string name="navigation">Navegació</string>
   <string name="swipe_navigation">Usar desplaçament horizontal</string>
   <string name="buttons_navigation">Usar botons avança/enrere</string>
@@ -263,7 +261,6 @@
   <string name="change_server_url">URL Servidor</string>
   <string name="google_search_browse">Cerca de formularis. O selecciona \'Meu Drive\' a sota per visualitzar.</string>
   <string name="send_in_progress">Enviament funcionant, si us plau, re-intenteu en un moment.</string>
-  <string name="sheets_max_columns">Numero max de columnes = 255, el vostre formulari en te %s. No es pot carregar la fulla de càlcul.</string>
   <string name="invalid_sheet_id">id de fulla invàlid: %1$s</string>
   <string name="google_sheets_missing_columns">Falten de la fulla de càlcul les columnes: %1$s</string>
   <string name="password_error_whitespace">No es permeten espais davant o darrera una clau d\'accés</string>
@@ -271,49 +268,29 @@
   <string name="google_play_services_error_occured">No pot accedir a Google Maps. Teniu el servei instal·lat ?</string>
   <string name="about_preferences">Sobre</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Mapejant</string>
-  <string name="map_sdk_selector_title">Mapejant SDK</string>
-  <string name="map_sdk_behavior">Mapejant SDK</string>
-  <string name="google_maps_sdk">Google Maps SDK</string>
-  <string name="show_map_sdk">Veure Map SDK Options</string>
-  <string name="openmap_streets">Carrers OSM</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
   <string name="streets">Carrers</string>
   <string name="terrain">Terreny</string>
   <string name="hybrid">Híbrid</string>
   <string name="satellite">Satel·lit</string>
-  <string name="map_basemap_selector_title">Mapes base</string>
-  <string name="show_map_basemap">Veure opcions de mapa base</string>
   <string name="save_point">Desar posició gps</string>
   <string name="get_point">Comença localització gps</string>
   <string name="geopoint_view_read_only">Veure localització gps</string>
   <string name="get_shape">Comença GeoForma</string>
   <string name="get_trace">Comença GeoTraça</string>
   <string name="geoshape_title">GeoForma</string>
-  <string name="select_geotrace_mode">Selecciona Mòdus GeoTraça</string>
   <string name="start">Comença</string>
   <string name="enable_gps">Activa GPS</string>
-  <string name="enable_gps_message">El GPS esta desactivat al teu dispositiu. Vols activar-lo?</string>
   <string name="geotrace_title">GeoTraça</string>
-  <string name="polygon_save">Desa com Poligon</string>
-  <string name="polyline_save">Desa com polilínea</string>
-  <string name="gps_enable_message">El GPS esta desactivat al teu dispositiu. Vols activar-lo?</string>
-  <string name="select_offline_layer">Selecciona capa autònoma</string>
-  <string name="polygon_or_polyline">Desa GeoTraça com</string>
-  <string name="minutes">Minuts</string>
   <string name="geo_clear_warning">Característica ja creada. Vols netejar-la?</string>
   <string name="geo_exit_warning">Descartar canvis i tornar a ODK?</string>
   <string name="polygon_validator">Per crear un polígon calen mínim 3 punts </string>
   <string name="clear">Neteja</string>
-  <string name="polyline_polygon_text">Desa GeoTraça com</string>
-  <string name="manual_mode">Mòdus Manual</string>
-  <string name="automatic_mode">Mòdus Automàtic</string>
-  <string name="geoshape_instruction">Prem una estona per situar marques.</string>
-  <string name="geotrace_instruction">Espera el posicionament, després prem botó d\'afegir fita per començar.</string>
   <string name="geopoint_instruction">Prem una estona o toca el botó d\'afegir fita.</string>
   <string name="geopoint_no_draggable_instruction">Toca el botó afegir fita</string>
   <string name="discard">Descarta</string>
-  <string name="zoom_to_location">Zoom a posició actual</string>
-  <string name="zoom_to_feature">Zoom a característica desada</string>
   <string name="geoshape_view_change_location">Visualitza o modifica GeoShape</string>
   <string name="geotrace_view_change_location">Visualitza o modifica GeoShape</string>
   <string name="bearing">Rumb: %.3f</string>
@@ -332,7 +309,6 @@
   <string name="install_openmapkit">Si us plau, instal·la OpenMapKit!</string>
   <string name="go_back">Enrera</string>
   <string name="download_selected">Descarrega seleccionat</string>
-  <string name="record_geopoint">Grava posicionament gps</string>
   <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nPrecisió: %4$sm</string>
   <string name="parser_exception">Exceptio XPathParser: \"%s\"</string>
   <string name="selected_answer">Seleccionat: %s</string>
@@ -381,5 +357,7 @@
   <string name="form_entry_setting">Característiques d\'omplir formulari</string>
   <string name="user_settings">Configuració d\'usuari</string>
   <string name="main_menu_settings">Menú principal de configuració</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Sms submission-->
 </resources>

@@ -14,7 +14,8 @@
 
 package org.odk.collect.android.logic;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.javarosa.core.model.CoreModelModule;
 import org.javarosa.core.model.FormDef;
@@ -25,11 +26,13 @@ import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.SubmissionProfile;
 import org.javarosa.core.model.ValidateOutcome;
+import org.javarosa.core.model.actions.setgeopoint.SetGeopointActionHandler;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.model.instance.TreeElement;
+import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.PrototypeManager;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
@@ -46,7 +49,11 @@ import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.exception.JavaRosaException;
-import org.odk.collect.android.utilities.TimerLogger;
+import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
+import org.odk.collect.android.utilities.AuditEventLogger;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.RegexUtils;
 import org.odk.collect.android.views.ODKView;
 
 import java.io.File;
@@ -57,6 +64,8 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.XML_OPENDATAKIT_NAMESPACE;
+
 /**
  * This class is a wrapper for Javarosa's FormEntryController. In theory, if you wanted to replace
  * javarosa as the form engine, you should only need to replace the methods in this file. Also, we
@@ -66,7 +75,6 @@ import timber.log.Timber;
  * @author carlhartung
  */
 public class FormController {
-
 
     public static final boolean STEP_INTO_GROUP = true;
     public static final boolean STEP_OVER_GROUP = false;
@@ -84,9 +92,9 @@ public class FormController {
     public static final String AUDIT_FILE_NAME = "audit.csv";
 
     /*
-     * Store the timerLogger object with the form controller state
+     * Store the auditEventLogger object with the form controller state
      */
-    private TimerLogger timerLogger;
+    private AuditEventLogger auditEventLogger;
 
     /**
      * OpenRosa metadata of a form instance.
@@ -99,12 +107,12 @@ public class FormController {
     public static final class InstanceMetadata {
         public final String instanceId;
         public final String instanceName;
-        public final boolean audit;
+        public final AuditConfig auditConfig;
 
-        public InstanceMetadata(String instanceId, String instanceName, boolean audit) {
+        public InstanceMetadata(String instanceId, String instanceName, AuditConfig auditConfig) {
             this.instanceId = instanceId;
-            this.instanceName = instanceName;
-            this.audit = audit;
+            this.instanceName = RegexUtils.normalizeFormName(instanceName, false);
+            this.auditConfig = auditConfig;
         }
     }
 
@@ -121,6 +129,10 @@ public class FormController {
             PrototypeManager.registerPrototypes(JavaRosaCoreModule.classNames);
             PrototypeManager.registerPrototypes(CoreModelModule.classNames);
             new XFormsModule().registerModule();
+
+            // When registering prototypes from Collect, a proguard exception also needs to be added
+            PrototypeManager.registerPrototype("org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointAction");
+            XFormParser.registerActionHandler(CollectSetGeopointActionHandler.ELEMENT_NAME, new CollectSetGeopointActionHandler());
 
             isJavaRosaInitialized = true;
         }
@@ -159,6 +171,16 @@ public class FormController {
         this.instanceFile = instanceFile;
     }
 
+    @Nullable
+    public String getAbsoluteInstancePath() {
+        return instanceFile != null ? instanceFile.getAbsolutePath() : null;
+    }
+
+    @Nullable
+    public String getLastSavedPath() {
+        return mediaFolder != null ? FileUtils.getLastSavedPath(mediaFolder) : null;
+    }
+
     public void setIndexWaitingForData(FormIndex index) {
         indexWaitingForData = index;
     }
@@ -167,15 +189,15 @@ public class FormController {
         return indexWaitingForData;
     }
 
-    public TimerLogger getTimerLogger() {
-        if (timerLogger == null) {
-            setTimerLogger(new TimerLogger(getInstanceFile(), this));
+    public AuditEventLogger getAuditEventLogger() {
+        if (auditEventLogger == null) {
+            setAuditEventLogger(new AuditEventLogger(getInstanceFile(), getSubmissionMetadata().auditConfig));
         }
-        return timerLogger;
+        return auditEventLogger;
     }
 
-    private void setTimerLogger(TimerLogger logger) {
-        timerLogger = logger;
+    private void setAuditEventLogger(AuditEventLogger logger) {
+        auditEventLogger = logger;
     }
 
     /**
@@ -254,7 +276,6 @@ public class FormController {
         return formEntryController.getModel().getEvent();
     }
 
-
     /**
      * returns the event for the given FormIndex.
      */
@@ -262,14 +283,12 @@ public class FormController {
         return formEntryController.getModel().getEvent(index);
     }
 
-
     /**
      * @return current FormIndex.
      */
     public FormIndex getFormIndex() {
         return formEntryController.getModel().getFormIndex();
     }
-
 
     /**
      * Return the langauges supported by the currently loaded form.
@@ -280,14 +299,12 @@ public class FormController {
         return formEntryController.getModel().getLanguages();
     }
 
-
     /**
      * @return A String containing the title of the current form.
      */
     public String getFormTitle() {
         return formEntryController.getModel().getFormTitle();
     }
-
 
     /**
      * @return the currently selected language.
@@ -331,14 +348,12 @@ public class FormController {
         return formEntryController.getModel().getCaptionPrompt(index);
     }
 
-
     /**
      * Return the caption for the current FormIndex. This is usually used for a repeat prompt.
      */
     public FormEntryCaption getCaptionPrompt() {
         return formEntryController.getModel().getCaptionPrompt();
     }
-
 
     /**
      * This fires off the jr:preload actions and events to save values like the
@@ -348,14 +363,12 @@ public class FormController {
         return formEntryController.getModel().getForm().postProcessInstance();
     }
 
-
     /**
      * TODO: We need a good description of what this does, exactly, and why.
      */
     private FormInstance getInstance() {
         return formEntryController.getModel().getForm().getInstance();
     }
-
 
     /**
      * A convenience method for determining if the current FormIndex is in a group that is/should
@@ -370,19 +383,38 @@ public class FormController {
             return false;
         }
 
-        GroupDef gd = (GroupDef) element; // exceptions?
-        return (ODKView.FIELD_LIST.equalsIgnoreCase(gd.getAppearanceAttr()));
+        return ODKView.FIELD_LIST.equalsIgnoreCase(element.getAppearanceAttr());
     }
 
     private boolean repeatIsFieldList(FormIndex index) {
-        // if this isn't a group, return right away
-        IFormElement element = formEntryController.getModel().getForm().getChild(index);
-        if (!(element instanceof GroupDef)) {
-            return false;
+        return groupIsFieldList(index);
+    }
+
+    /**
+     * Returns the `appearance` attribute of the current index, if any.
+     */
+    public String getAppearanceAttr(@NonNull FormIndex index) {
+        // FormDef can't have an appearance, it would throw an exception.
+        if (index.isBeginningOfFormIndex()) {
+            return null;
         }
 
-        GroupDef gd = (GroupDef) element; // exceptions?
-        return (ODKView.FIELD_LIST.equalsIgnoreCase(gd.getAppearanceAttr()));
+        IFormElement element = formEntryController.getModel().getForm().getChild(index);
+        return element.getAppearanceAttr();
+    }
+
+    /**
+     * Returns true if the question at the given FormIndex uses the search() appearance/function
+     * of "fast itemset" feature.
+     *
+     * Precondition: there is a question at the given FormIndex.
+     */
+    public boolean usesDatabaseExternalDataFeature(@NonNull FormIndex index) {
+        String queryAttribute = getFormDef().getChild(index).getAdditionalAttribute(null, "query");
+        String appearanceAttribute = getAppearanceAttr(index);
+
+        return appearanceAttribute != null && ExternalDataUtil.SEARCH_FUNCTION_REGEX.matcher(appearanceAttribute).find()
+                || queryAttribute != null && queryAttribute.length() > 0;
     }
 
     /**
@@ -430,10 +462,10 @@ public class FormController {
     }
 
     public boolean currentPromptIsQuestion() {
-        return (getEvent() == FormEntryController.EVENT_QUESTION
+        return getEvent() == FormEntryController.EVENT_QUESTION
                 || ((getEvent() == FormEntryController.EVENT_GROUP
                 || getEvent() == FormEntryController.EVENT_REPEAT)
-                && indexIsInFieldList()));
+                && indexIsInFieldList());
     }
 
     public boolean isCurrentQuestionFirstInForm() {
@@ -480,7 +512,6 @@ public class FormController {
         return FormEntryController.ANSWER_OK;
     }
 
-
     /**
      * saveAnswer attempts to save the current answer into the data model without doing any
      * constraint checking. Only use this if you know what you're doing. For normal form filling
@@ -497,7 +528,6 @@ public class FormController {
         }
     }
 
-
     /**
      * Navigates forward in the form.
      *
@@ -506,19 +536,18 @@ public class FormController {
     public int stepToNextEvent(boolean stepIntoGroup) {
         if ((getEvent() == FormEntryController.EVENT_GROUP
                 || getEvent() == FormEntryController.EVENT_REPEAT)
-                && indexIsInFieldList() && !stepIntoGroup) {
+                && indexIsInFieldList() && !isGroupEmpty() && !stepIntoGroup) {
             return stepOverGroup();
         } else {
             return formEntryController.stepToNextEvent();
         }
     }
 
-
     /**
      * If using a view like HierarchyView that doesn't support multi-question per screen, step over
      * the group represented by the FormIndex.
      */
-    private int stepOverGroup() {
+    public int stepOverGroup() {
         GroupDef gd =
                 (GroupDef) formEntryController.getModel().getForm()
                         .getChild(getFormIndex());
@@ -611,8 +640,7 @@ public class FormController {
                             break group_skip;
                         case FormEntryController.EVENT_GROUP:
                         case FormEntryController.EVENT_REPEAT:
-                            if (indexIsInFieldList()
-                                    && getQuestionPrompts().length != 0) {
+                            if (indexIsInFieldList() && getQuestionPrompts().length != 0) {
                                 break group_skip;
                             }
                             // otherwise it's not a field-list group, so just skip it
@@ -634,31 +662,58 @@ public class FormController {
         }
     }
 
+    /**
+     * Move the current form index to the next event of the given type
+     * (or the end if none is found).
+     */
+    public int stepToNextEventType(int eventType) {
+        int event = getEvent();
+        do {
+            if (event == FormEntryController.EVENT_END_OF_FORM) {
+                break;
+            }
+            event = stepToNextEvent(FormController.STEP_OVER_GROUP);
+        } while (event != eventType);
+
+        return event;
+    }
 
     /**
-     * Move the current form index to the index of the first enclosing repeat
+     * Move the current form index to the index of the first displayable group
+     * (that is, a repeatable group or a visible group),
      * or to the start of the form.
      */
     public int stepToOuterScreenEvent() {
-        FormIndex index = stepIndexOut(getFormIndex());
-        int currentEvent = getEvent();
+        FormIndex index = getFormIndex();
 
-        // Step out of any group indexes that are present.
+        // Step out once to begin with if we're coming from a question.
+        if (getEvent() == FormEntryController.EVENT_QUESTION) {
+            index = stepIndexOut(index);
+        }
+
+        // Save where we started from.
+        FormIndex startIndex = index;
+
+        // Step out once more no matter what.
+        index = stepIndexOut(index);
+
+        // Step out of any group indexes that are present, unless they're visible.
         while (index != null
-                && getEvent(index) == FormEntryController.EVENT_GROUP) {
+                && getEvent(index) == FormEntryController.EVENT_GROUP
+                && !isDisplayableGroup(index)) {
             index = stepIndexOut(index);
         }
 
         if (index == null) {
             jumpToIndex(FormIndex.createBeginningOfFormIndex());
         } else {
-            if (currentEvent == FormEntryController.EVENT_REPEAT) {
-                // We were at a repeat, so stepping back brought us to then previous level
+            if (isDisplayableGroup(startIndex)) {
+                // We were at a displayable group, so stepping back brought us to the previous level
                 jumpToIndex(index);
             } else {
                 // We were at a question, so stepping back brought us to either:
-                // The beginning. or The start of a repeat. So we need to step
-                // out again to go passed the repeat.
+                // The beginning, or the start of a displayable group. So we need to step
+                // out again to go past the group.
                 index = stepIndexOut(index);
                 if (index == null) {
                     jumpToIndex(FormIndex.createBeginningOfFormIndex());
@@ -670,6 +725,40 @@ public class FormController {
         return getEvent();
     }
 
+    /**
+     * Returns true if the index is either a repeatable group or a visible group.
+     */
+    public boolean isDisplayableGroup(FormIndex index) {
+        int event = getEvent(index);
+        return event == FormEntryController.EVENT_REPEAT
+                || event == FormEntryController.EVENT_PROMPT_NEW_REPEAT
+                || (event == FormEntryController.EVENT_GROUP
+                && isPresentationGroup(index) && isLogicalGroup(index));
+    }
+
+    /**
+     * Returns true if the group has a displayable label,
+     * i.e. it's a "presentation group".
+     */
+    private boolean isPresentationGroup(FormIndex groupIndex) {
+        String label = getCaptionPrompt(groupIndex).getShortText();
+        return label != null;
+    }
+
+    /**
+     * Returns true if the group has an XML `ref` attribute,
+     * i.e. it's a "logical group".
+     *
+     * TODO: Improve this nasty way to recreate what XFormParser#parseGroup does for nodes without a `ref`.
+     */
+    private boolean isLogicalGroup(FormIndex groupIndex) {
+        TreeReference groupRef = groupIndex.getReference();
+        TreeReference parentRef = groupRef.getParentRef();
+        IDataReference absRef = FormDef.getAbsRef(new XPathReference(groupRef), parentRef);
+        IDataReference bindRef = getCaptionPrompt(groupIndex).getFormElement().getBind();
+        // If the group's bind is equal to what it would have been set to during parsing, it must not have a ref.
+        return !absRef.equals(bindRef);
+    }
 
     public static class FailedConstraint {
         public final FormIndex index;
@@ -708,7 +797,6 @@ public class FormController {
         }
         return null;
     }
-
 
     /**
      * Navigates backward in the form.
@@ -769,7 +857,6 @@ public class FormController {
 
     }
 
-
     /**
      * Jumps to a given FormIndex.
      *
@@ -779,14 +866,12 @@ public class FormController {
         return formEntryController.jumpToIndex(index);
     }
 
-
     /**
      * Creates a new repeated instance of the group referenced by the current FormIndex.
      */
     public void newRepeat() {
         formEntryController.newRepeat();
     }
-
 
     /**
      * If the current FormIndex is within a repeated group, will find the innermost repeat, delete
@@ -799,7 +884,6 @@ public class FormController {
         formEntryController.jumpToIndex(fi);
     }
 
-
     /**
      * Sets the current language.
      */
@@ -807,14 +891,21 @@ public class FormController {
         formEntryController.setLanguage(language);
     }
 
-
     /**
-     * Returns an array of question promps.
+     * Returns an array of question prompts corresponding to the current {@link FormIndex}. These
+     * are the prompts that should be displayed to the user and don't include any non-relevant
+     * questions.
+     *
+     * The array has a single element if there is a question at this {@link FormIndex} or multiple
+     * elements if there is a group.
+     *
+     * @throws RuntimeException if there is a group at this {@link FormIndex} and it contains
+     * elements that are not questions or regular (non-repeat) groups.
      */
     public FormEntryPrompt[] getQuestionPrompts() throws RuntimeException {
         // For questions, there is only one.
         // For groups, there could be many, but we set that below
-        FormEntryPrompt[] questions = new FormEntryPrompt[1];
+        FormEntryPrompt[] questions = new FormEntryPrompt[0];
 
         IFormElement element = formEntryController.getModel().getForm().getChild(getFormIndex());
         if (element instanceof GroupDef) {
@@ -840,10 +931,16 @@ public class FormController {
             }
         } else {
             // We have a question, so just get the one prompt
+            questions = new FormEntryPrompt[1];
             questions[0] = getQuestionPrompt();
         }
 
         return questions;
+    }
+
+    private boolean isGroupEmpty() {
+        GroupDef group = (GroupDef) formEntryController.getModel().getForm().getChild(getFormIndex());
+        return getIndicesForGroup(group).isEmpty();
     }
 
     /**
@@ -851,21 +948,22 @@ public class FormController {
      */
     private List<FormIndex> getIndicesForGroup(GroupDef gd) {
         return getIndicesForGroup(gd,
-                formEntryController.getModel().incrementIndex(getFormIndex(), true));
+                formEntryController.getModel().incrementIndex(getFormIndex(), true), false);
     }
 
-    private List<FormIndex> getIndicesForGroup(GroupDef gd, FormIndex currentChildIndex) {
+    private List<FormIndex> getIndicesForGroup(GroupDef gd, FormIndex currentChildIndex, boolean jumpIntoRepeatGroups) {
         List<FormIndex> indices = new ArrayList<>();
         for (int i = 0; i < gd.getChildren().size(); i++) {
             final FormEntryModel formEntryModel = formEntryController.getModel();
-            if (getEvent(currentChildIndex) == FormEntryController.EVENT_GROUP) {
+            if (getEvent(currentChildIndex) == FormEntryController.EVENT_GROUP
+                    || (jumpIntoRepeatGroups && getEvent(currentChildIndex) == FormEntryController.EVENT_REPEAT)) {
                 IFormElement nestedElement = formEntryModel.getForm().getChild(currentChildIndex);
                 if (nestedElement instanceof GroupDef) {
                     indices.addAll(getIndicesForGroup((GroupDef) nestedElement,
-                            formEntryModel.incrementIndex(currentChildIndex, true)));
+                            formEntryModel.incrementIndex(currentChildIndex, true), jumpIntoRepeatGroups));
                     currentChildIndex = formEntryModel.incrementIndex(currentChildIndex, false);
                 }
-            } else {
+            } else if (!jumpIntoRepeatGroups || getEvent(currentChildIndex) != FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
                 indices.add(currentChildIndex);
                 currentChildIndex = formEntryModel.incrementIndex(currentChildIndex, false);
             }
@@ -873,10 +971,23 @@ public class FormController {
         return indices;
     }
 
+    /**
+     * @return true if a group contains at least one relevant question, otherwise false
+     */
+    public boolean isGroupRelevant() {
+        GroupDef groupDef = (GroupDef) getCaptionPrompt().getFormElement();
+        FormIndex currentChildIndex = formEntryController.getModel().incrementIndex(getFormIndex(), true);
+        for (FormIndex index : getIndicesForGroup(groupDef, currentChildIndex, true)) {
+            if (formEntryController.getModel().isIndexRelevant(index)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public FormEntryPrompt getQuestionPrompt(FormIndex index) {
         return formEntryController.getModel().getQuestionPrompt(index);
     }
-
 
     public FormEntryPrompt getQuestionPrompt() {
         return formEntryController.getModel().getQuestionPrompt();
@@ -954,7 +1065,6 @@ public class FormController {
         return groups;
     }
 
-
     /**
      * This is used to enable/disable the "Delete Repeat" menu option.
      */
@@ -970,7 +1080,6 @@ public class FormController {
         }
         return false;
     }
-
 
     /**
      * The count of the closest group that repeats or -1.
@@ -988,7 +1097,6 @@ public class FormController {
         return -1;
     }
 
-
     /**
      * The name of the closest group that repeats or null.
      */
@@ -1005,7 +1113,6 @@ public class FormController {
         return null;
     }
 
-
     /**
      * The closest group the prompt belongs to.
      *
@@ -1020,7 +1127,6 @@ public class FormController {
         }
     }
 
-
     /**
      * The repeat count of closest group the prompt belongs to.
      */
@@ -1031,7 +1137,6 @@ public class FormController {
         return -1;
 
     }
-
 
     /**
      * The text of closest group the prompt belongs to.
@@ -1069,7 +1174,7 @@ public class FormController {
      */
     public boolean isSubmissionEntireForm() {
         IDataReference sub = getSubmissionDataReference();
-        return (getInstance().resolveReference(sub) == null);
+        return getInstance().resolveReference(sub) == null;
     }
 
     /**
@@ -1139,7 +1244,7 @@ public class FormController {
 
         String instanceId = null;
         String instanceName = null;
-        boolean audit = false;
+        AuditConfig auditConfig = null;
 
         if (e != null) {
             List<TreeElement> v;
@@ -1165,14 +1270,40 @@ public class FormController {
             // timing element...
             v = e.getChildrenWithName(AUDIT);
             if (v.size() == 1) {
-                audit = true;
+
+                TreeElement auditElement = v.get(0);
+
+                String locationPriority = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-priority");
+                String locationMinInterval = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-min-interval");
+                String locationMaxAge = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-max-age");
+                boolean isTrackingChangesEnabled = Boolean.parseBoolean(auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "track-changes"));
+
+                auditConfig = new AuditConfig(locationPriority, locationMinInterval, locationMaxAge, isTrackingChangesEnabled);
+
                 IAnswerData answerData = new StringData();
                 answerData.setValue(AUDIT_FILE_NAME);
-                v.get(0).setValue(answerData);
+                auditElement.setValue(answerData);
             }
         }
 
-        return new InstanceMetadata(instanceId, instanceName, audit);
+        return new InstanceMetadata(instanceId, instanceName, auditConfig);
+    }
+
+    /**
+     * Returns true if the current form definition audits user location in the background.
+     */
+    public boolean currentFormAuditsLocation() {
+        AuditConfig auditConfig = getSubmissionMetadata().auditConfig;
+
+        return auditConfig != null && auditConfig.isLocationEnabled();
+    }
+
+    /**
+     * Returns true if the current form definition collects user location in the background either
+     * because of the audit configuration or because it contains odk:setgeopoint actions.
+     */
+    public boolean currentFormCollectsBackgroundLocation() {
+        return currentFormAuditsLocation() || getFormDef().hasAction(SetGeopointActionHandler.ELEMENT_NAME);
     }
 
     /**

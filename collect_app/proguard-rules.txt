@@ -3,8 +3,19 @@
 -dontwarn org.joda.time.**
 -dontwarn org.osmdroid.**
 -dontwarn org.xmlpull.v1.**
+-dontwarn org.hamcrest.**
+-dontwarn com.rarepebble.**
 
 -keep class org.javarosa.**
+-keep class org.odk.collect.android.logic.actions.**
 -keep class android.support.v7.widget.** { *; }
+-keep class com.google.android.gms.internal.firebase-perf.** { *; }
 
 -dontobfuscate
+
+# recommended okhttp rules
+# https://github.com/square/okhttp#r8--proguard
+-dontwarn javax.annotation.**
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+-dontwarn org.codehaus.mojo.animal_sniffer.*
+-dontwarn okhttp3.internal.platform.ConscryptPlatform

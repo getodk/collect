@@ -17,7 +17,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.AppCompatCheckBox;
 import android.util.TypedValue;
 
 import org.javarosa.core.model.data.BooleanData;
@@ -37,11 +37,16 @@ public class BooleanWidget extends QuestionWidget {
 
         setupBooleanButton();
         readSavedAnswer();
+
+        booleanButton.setOnClickListener(view -> {
+                widgetValueChanged();
+        });
     }
 
     @Override
     public void clearAnswer() {
         booleanButton.setChecked(false);
+        widgetValueChanged();
     }
 
     @Override

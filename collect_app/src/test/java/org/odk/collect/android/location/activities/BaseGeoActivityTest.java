@@ -16,12 +16,25 @@
 
 package org.odk.collect.android.location.activities;
 
+import android.content.Intent;
+
+import org.junit.Before;
+import org.odk.collect.android.location.client.FakeLocationClient;
+import org.odk.collect.android.location.client.LocationClients;
+import org.odk.collect.android.geo.GoogleMapFragment;
+import org.odk.collect.android.geo.MapboxMapFragment;
 import org.robolectric.shadows.ShadowApplication;
 
 public abstract class BaseGeoActivityTest {
+    protected FakeLocationClient fakeLocationClient;
+    protected final Intent intent = new Intent();
 
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         ShadowApplication.getInstance().grantPermissions("android.permission.ACCESS_FINE_LOCATION");
         ShadowApplication.getInstance().grantPermissions("android.permission.ACCESS_COARSE_LOCATION");
+        GoogleMapFragment.testMode = true;
+        MapboxMapFragment.testMode = true;
+        fakeLocationClient = new FakeLocationClient();
+        LocationClients.setTestClient(fakeLocationClient);
     }
 }

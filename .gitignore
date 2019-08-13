@@ -10,7 +10,6 @@ local.properties
 *.*~
 
 # gradle env props
-gradle.properties
 secrets.properties
 
 # built application files
@@ -32,3 +31,16 @@ out/
 .externalNativeBuild/
 .navigation/
 captures/
+
+# Visual Studio Code files
+.project
+.settings/
+collect_app/.classpath
+collect_app/.project
+collect_app/.settings/
+
+# Submodules
+javarosa/
+
+# Config for the official ODK Collect build
+collect_app/src/odkCollectRelease/

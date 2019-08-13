@@ -23,9 +23,8 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.IdRes;
+import androidx.annotation.Nullable;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -44,16 +43,16 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ActivityLogger;
-import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AudioPlayListener;
+import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.AnimateUtils;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -85,11 +84,14 @@ public abstract class QuestionWidget
     private final View guidanceTextLayout;
     private final View textLayout;
     private final TextView warningText;
+    private PermissionUtils permissionUtils;
     private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
     private AtomicBoolean expanded;
     private Bundle state;
     protected ThemeUtils themeUtils;
     private int playColor;
+
+    private WidgetValueChangedListener valueChangedListener;
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
@@ -99,6 +101,7 @@ public abstract class QuestionWidget
 
         if (context instanceof FormEntryActivity) {
             state = ((FormEntryActivity) context).getState();
+            permissionUtils = new PermissionUtils();
         }
 
         if (context instanceof DependencyProvider) {
@@ -142,12 +145,16 @@ public abstract class QuestionWidget
 
         addQuestionMediaLayout(getQuestionMediaLayout());
         addHelpTextLayout(getHelpTextLayout());
+
+        if (context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
+            registerToClearAnswerOnLongPress((FormEntryActivity) context);
+        }
     }
 
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
 
         TextView guidance = null;
-        GuidanceHint setting = GuidanceHint.get((String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_GUIDANCE_HINT));
+        GuidanceHint setting = GuidanceHint.get((String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_GUIDANCE_HINT));
 
         if (setting.equals(GuidanceHint.No)) {
             return null;
@@ -234,10 +241,14 @@ public abstract class QuestionWidget
     }
 
     private static boolean isRTL(Locale locale) {
+        if (locale.getDisplayName().isEmpty()) {
+            return false;
+        }
         final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
         return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
     }
 
+    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
     protected void injectDependencies(DependencyProvider dependencyProvider) {
         //dependencies for the widget will be wired here.
     }
@@ -269,10 +280,9 @@ public abstract class QuestionWidget
         String bigImageURI = prompt.getSpecialFormQuestionText("big-image");
 
         // Create the layout for audio, image, text
-        MediaLayout questionMediaLayout = new MediaLayout(getContext(), getPlayer());
+        MediaLayout questionMediaLayout = new MediaLayout(getContext());
         questionMediaLayout.setId(ViewIds.generateViewId()); // assign random id
-        questionMediaLayout.setAVT(prompt.getIndex(), "", questionText, audioURI, imageURI, videoURI,
-                bigImageURI);
+        questionMediaLayout.setAVT(questionText, audioURI, imageURI, videoURI, bigImageURI, getPlayer());
         questionMediaLayout.setAudioListener(this);
 
         String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
@@ -462,6 +472,15 @@ public abstract class QuestionWidget
     }
 
     /**
+     * Register this widget's child views to pop up a context menu to clear the widget when the
+     * user long presses on it. Widget subclasses may override this if some or all of their
+     * components need to intercept long presses.
+     */
+    protected void registerToClearAnswerOnLongPress(FormEntryActivity activity) {
+        activity.registerForContextMenu(this);
+    }
+
+    /**
      * Every subclassed widget should override this, adding any views they may contain, and calling
      * super.cancelLongPress()
      */
@@ -511,27 +530,28 @@ public abstract class QuestionWidget
     }
 
     protected Button getSimpleButton(String text, @IdRes final int withId) {
-        final QuestionWidget questionWidget = this;
         final Button button = new Button(getContext());
 
-        button.setId(withId);
-        button.setText(text);
-        button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        button.setPadding(20, 20, 20, 20);
+        if (getFormEntryPrompt().isReadOnly()) {
+            button.setVisibility(GONE);
+        } else {
+            button.setId(withId);
+            button.setText(text);
+            button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+            button.setPadding(20, 20, 20, 20);
 
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
+            TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+            params.setMargins(7, 5, 7, 5);
 
-        button.setLayoutParams(params);
+            button.setLayoutParams(params);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Collect.allowClick()) {
-                    ((ButtonWidget) questionWidget).onButtonClick(withId);
+            button.setOnClickListener(v -> {
+                if (Collect.allowClick(QuestionWidget.class.getName())) {
+                    ((ButtonWidget) this).onButtonClick(withId);
                 }
-            }
-        });
+            });
+        }
+
         return button;
     }
 
@@ -573,32 +593,6 @@ public abstract class QuestionWidget
         imageView.setAdjustViewBounds(true);
         imageView.setImageBitmap(bitmap);
         return imageView;
-    }
-
-    /**
-     * It's needed only for external choices. Everything works well and
-     * out of the box when we use internal choices instead
-     */
-    protected void clearNextLevelsOfCascadingSelect() {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController == null) {
-            return;
-        }
-
-        if (formController.currentCaptionPromptIsQuestion()) {
-            try {
-                FormIndex startFormIndex = formController.getQuestionPrompt().getIndex();
-                formController.stepToNextScreenEvent();
-                while (formController.currentCaptionPromptIsQuestion()
-                        && formController.getQuestionPrompt().getFormElement().getAdditionalAttribute(null, "query") != null) {
-                    formController.saveAnswer(formController.getQuestionPrompt().getIndex(), null);
-                    formController.stepToNextScreenEvent();
-                }
-                formController.jumpToIndex(startFormIndex);
-            } catch (JavaRosaException e) {
-                Timber.d(e);
-            }
-        }
     }
 
     //region Data waiting
@@ -666,16 +660,6 @@ public abstract class QuestionWidget
         return formController.getInstanceFile().getParent();
     }
 
-    @NonNull
-    public final ActivityLogger getActivityLogger() {
-        Collect collect = Collect.getInstance();
-        if (collect == null) {
-            throw new IllegalStateException("Collect application instance is null.");
-        }
-
-        return collect.getActivityLogger();
-    }
-
     public int getQuestionFontSize() {
         return questionFontSize;
     }
@@ -702,5 +686,23 @@ public abstract class QuestionWidget
 
     public int getPlayColor() {
         return playColor;
+    }
+
+    public PermissionUtils getPermissionUtils() {
+        return permissionUtils;
+    }
+
+    public void setPermissionUtils(PermissionUtils permissionUtils) {
+        this.permissionUtils = permissionUtils;
+    }
+
+    public void setValueChangedListener(WidgetValueChangedListener valueChangedListener) {
+        this.valueChangedListener = valueChangedListener;
+    }
+
+    public void widgetValueChanged() {
+        if (valueChangedListener != null) {
+            valueChangedListener.widgetValueChanged(this);
+        }
     }
 }

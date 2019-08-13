@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+		xmlns:ev="http://www.w3.org/2001/xml-events"
+		xmlns:h="http://www.w3.org/1999/xhtml"
+		xmlns:jr="http://openrosa.org/javarosa"
+		xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <h:head>
+    <h:title>CSV error Form</h:title>
+
+    <model>
+      <instance>
+
+		<CSVerrorForm id="CSV-error-Form" version="2018092703">
+		<!-- Remember to upload TrapLists.csv too -->
+			<PhoneNumber/>
+			<deviceid/>
+			<simid/>
+			<TimeStamp/>
+			<Date/>
+			<Time/>			
+
+			<TechList/>
+			<TechOth/>
+			<Technician/>
+
+			<TrapProgList/>
+			<TrapProgOth/>
+			<TrapProgram/>
+
+			<TrapNameList/>
+			<TrapNameOth/>
+			<TrapName/>
+
+			<SampleYN/>
+			<SampleNotes/>
+			
+			<SpecimenIntro/>
+			<Cerambycids/>
+			<Siricids/>
+			<Buprestids/>
+			<Scolytids/>
+			<SpecimenOtherNumber/>			
+			<SpecimenOtherNotes/>
+			<SpecimenTotal/>
+			
+			<Notes/>
+
+		</CSVerrorForm>
+      </instance>
+
+		<bind jr:preload="property" jr:preloadParams="PhoneNumber" nodeset="/CSVerrorForm/PhoneNumber" type="string"/>
+		<bind jr:preload="property" jr:preloadParams="deviceid" nodeset="/CSVerrorForm/deviceid" type="string"/>
+		<bind jr:preload="property" jr:preloadParams="simserial" nodeset="/CSVerrorForm/simid" type="string"/>
+		<bind jr:preload="timestamp" jr:preloadParams="start" nodeset="/CSVerrorForm/TimeStamp" type="dateTime"/>
+		
+		<bind nodeset="/CSVerrorForm/Date" type="date" calculate="date(format-date(/CSVerrorForm/TimeStamp,'%Y-%m-%d'))"/>
+		<bind nodeset="/CSVerrorForm/Time" type="time" calculate="/CSVerrorForm/TimeStamp"/>		
+		
+		<bind nodeset="/CSVerrorForm/TechList" required="true()" type="select"/>
+		<bind nodeset="/CSVerrorForm/TechOth" type="string" relevant="selected(/CSVerrorForm/TechList, 'Other')" jr:constraintMsg="Sorry, 255 characters maximum."  constraint="string-length(.) &lt; 256"/>
+		<bind nodeset="/CSVerrorForm/Technician" type="string" calculate="concat(if(selected(/CSVerrorForm/TechList, 'Other'),substr(/CSVerrorForm/TechList,0,(string-length(/CSVerrorForm/TechList)-5)),/CSVerrorForm/TechList),if((selected(/CSVerrorForm/TechList, 'Other') and string-length(/CSVerrorForm/TechList) &gt; 5),'| ',''),/CSVerrorForm/TechOth)"/>
+
+		<bind nodeset="/CSVerrorForm/TrapProgList" required="true()" type="select1"/>
+		<bind nodeset="/CSVerrorForm/TrapProgOth" type="string" relevant="selected(/CSVerrorForm/TrapProgList, 'Other')" jr:constraintMsg="Sorry, 255 characters maximum."  constraint="string-length(.) &lt; 256"/>
+		<bind nodeset="/CSVerrorForm/TrapProgram" type="string" calculate="concat(if(selected(/CSVerrorForm/TrapProgList, 'Other'),substr(/CSVerrorForm/TrapProgList,0,(string-length(/CSVerrorForm/TrapProgList)-5)),/CSVerrorForm/TrapProgList),if((selected(/CSVerrorForm/TrapProgList, 'Other') and string-length(/CSVerrorForm/TrapProgList) &gt; 5),'| ',''),/CSVerrorForm/TrapProgOth)"/>
+		
+		<bind nodeset="/CSVerrorForm/TrapNameList" type="select1" relevant="not(selected(/CSVerrorForm/TrapProgList, 'Other'))"/>
+		<bind nodeset="/CSVerrorForm/TrapNameOth" type="string" relevant="selected(/CSVerrorForm/TrapNameList, 'Other') or selected(/CSVerrorForm/TrapProgList, 'Other')" jr:constraintMsg="Sorry, 255 characters maximum."  constraint="string-length(.) &lt; 256"/>
+		<bind nodeset="/CSVerrorForm/TrapName" type="string" calculate="concat(if(selected(/CSVerrorForm/TrapNameList, 'Other'),substr(/CSVerrorForm/TrapNameList,0,(string-length(/CSVerrorForm/TrapNameList)-5)),/CSVerrorForm/TrapNameList),if((selected(/CSVerrorForm/TrapNameList, 'Other') and string-length(/CSVerrorForm/TrapNameList) &gt; 5),'| ',''),/CSVerrorForm/TrapNameOth)"/>
+
+		<bind nodeset="/CSVerrorForm/SampleYN" required="true()" type="select1"/>
+		<bind nodeset="/CSVerrorForm/SampleNotes" type="string" jr:constraintMsg="Sorry, 255 characters maximum."  constraint="string-length(.) &lt; 256"/>
+		
+		<bind nodeset="/CSVerrorForm/SpecimenIntro" relevant="selected(/CSVerrorForm/SampleYN, 'Yes')" type="string" readonly="true()" jr:constraintMsg="Sorry, 255 characters maximum."  constraint="string-length(.) &lt; 256"/>
+		<bind nodeset="/CSVerrorForm/Cerambycids" relevant="selected(/CSVerrorForm/SampleYN, 'Yes')" type="int"/>
+		<bind nodeset="/CSVerrorForm/Siricids" relevant="selected(/CSVerrorForm/SampleYN, 'Yes')" type="int"/>
+		<bind nodeset="/CSVerrorForm/Buprestids" relevant="selected(/CSVerrorForm/SampleYN, 'Yes')" type="int"/>
+		<bind nodeset="/CSVerrorForm/Scolytids" relevant="selected(/CSVerrorForm/SampleYN, 'Yes')" type="int"/>
+		<bind nodeset="/CSVerrorForm/SpecimenOtherNumber" relevant="selected(/CSVerrorForm/SampleYN, 'Yes')" type="int"/>
+		
+		<bind nodeset="/CSVerrorForm/SpecimenTotal" calculate="if(/CSVerrorForm/Cerambycids &gt; 0,/CSVerrorForm/Cerambycids,0) + if(/CSVerrorForm/Siricids &gt; 0,/CSVerrorForm/Siricids,0) + if(/CSVerrorForm/Buprestids &gt; 0,/CSVerrorForm/Buprestids,0) + if(/CSVerrorForm/Scolytids &gt; 0,/CSVerrorForm/Scolytids,0) + if(/CSVerrorForm/SpecimenOtherNumber &gt; 0,/CSVerrorForm/SpecimenOtherNumber,0)" type="int"/>
+		
+		<bind nodeset="/CSVerrorForm/SpecimenOtherNotes" relevant="/CSVerrorForm/SpecimenOtherNumber &gt; 0" type="string" jr:constraintMsg="Sorry, 255 characters maximum."  constraint="string-length(.) &lt; 256"/>
+
+		<bind nodeset="/CSVerrorForm/Notes" type="string" jr:constraintMsg="Sorry, 255 characters maximum."  constraint="string-length(.) &lt; 256"/>
+
+    </model>
+
+  </h:head>
+  <h:body>
+
+	<select ref="/CSVerrorForm/TechList">
+	  <label>Technician?</label>
+		<item><label>Greg Pommen</label><value>GrPo</value></item>
+		<item><label>Other</label><value>Other</value></item>
+	</select>
+	
+	<input ref="/CSVerrorForm/TechOth">
+      <label>Other technician's name?</label>
+    </input>
+	
+	<group appearance="field-list">
+		<select1 ref="/CSVerrorForm/TrapProgList">
+		  <label>Select trap program:</label>
+			<item><label>Mountain pine beetle</label><value>MPB</value></item>
+			<item><label>Invasive alien species</label><value>IAS</value></item>
+			<item><label>Longhorn beetles</label><value>LGH</value></item>
+			<item><label>Other</label><value>Other</value></item>
+		</select1>
+	
+		<input ref="/CSVerrorForm/Date">
+			<label>Date:</label>
+		</input>
+	
+		<input ref="/CSVerrorForm/Time">
+			<label>Time:</label>
+		</input>
+	</group>		
+
+	<input ref="/CSVerrorForm/TrapProgOth">
+      <label>Name of other trap program?</label>
+    </input>
+
+	<select1 appearance="search('TrapLists','contains','TrapProgram',/CSVerrorForm/TrapProgram)" ref="/CSVerrorForm/TrapNameList">
+		<label>Pick Trap Name:</label>
+		<item><label>TrapLabel</label><value>TrapValue</value></item>
+	</select1>
+
+	<input ref="/CSVerrorForm/TrapNameOth">
+      <label>Input name of other trap:</label>
+    </input>
+
+	<group appearance="field-list">
+		<select1 ref="/CSVerrorForm/SampleYN">
+			<label>Were there specimens in the trap:</label>
+			<item><label>Yes</label><value>Yes</value></item>
+			<item><label>No</label><value>No</value></item>
+		</select1>	
+		
+		<input ref="/CSVerrorForm/SampleNotes">
+		  <label>Notes about the sample?</label>
+		</input>	
+	</group>
+	
+	<group appearance="field-list">
+		<input ref="/CSVerrorForm/SpecimenIntro">
+		  <label>Input # of specimens found for each group. (If 0 found, leave blank.)</label>
+		</input>
+		<input ref="/CSVerrorForm/Cerambycids">
+		  <label>Cerambycids:</label>
+		</input>		
+		<input ref="/CSVerrorForm/Siricids">
+		  <label>Siricids:</label>
+		</input>	
+		<input ref="/CSVerrorForm/Buprestids">
+		  <label>Buprestids:</label>
+		</input>			
+		<input ref="/CSVerrorForm/Scolytids">
+		  <label>Scolytids:</label>
+		</input>
+		<input ref="/CSVerrorForm/SpecimenOtherNumber">
+		  <label>Other Specimens:</label>
+		</input>
+	</group>
+	
+	<group appearance="field-list">
+		<input ref="/CSVerrorForm/SpecimenOtherNotes">
+		  <label>Notes about Other Specimens?</label>
+		</input>	
+
+		<input ref="/CSVerrorForm/Notes">
+		  <label>Any other notes?</label>
+		  <hint>(You have counted <output value="/CSVerrorForm/SpecimenTotal"/> specimens total.)</hint>
+		</input>
+	</group>
+
+  </h:body>
+</h:html>

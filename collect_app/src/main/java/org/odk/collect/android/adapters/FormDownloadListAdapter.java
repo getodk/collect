@@ -17,12 +17,11 @@
 package org.odk.collect.android.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
@@ -42,7 +41,7 @@ public class FormDownloadListAdapter extends ArrayAdapter {
 
     public FormDownloadListAdapter(Context context, ArrayList<HashMap<String, String>> filteredFormList,
                                    HashMap<String, FormDetails> formIdsToDetails) {
-        super(context, R.layout.two_item_multiple_choice, filteredFormList);
+        super(context, R.layout.form_chooser_list_item_multiple_choice, filteredFormList);
         this.filteredFormList = filteredFormList;
         this.formIdsToDetails = formIdsToDetails;
     }
@@ -51,11 +50,10 @@ public class FormDownloadListAdapter extends ArrayAdapter {
         this.formIdsToDetails = formIdsToDetails;
     }
 
-    private class ViewHolder {
-        TextView text1;
-        TextView text2;
-        TextView updateInfo;
-        CheckBox checkBox;
+    private static class ViewHolder {
+        TextView formTitle;
+        TextView formSubtitle;
+        TextView formUpdateAlert;
     }
 
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -64,12 +62,11 @@ public class FormDownloadListAdapter extends ArrayAdapter {
         if (row == null) {
             holder = new ViewHolder();
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.two_item_multiple_choice, parent, false);
+            row = inflater.inflate(R.layout.form_chooser_list_item_multiple_choice, parent, false);
 
-            holder.text1 = row.findViewById(R.id.text1);
-            holder.text2 = row.findViewById(R.id.text2);
-            holder.updateInfo = row.findViewById(R.id.update_info);
-            holder.checkBox = row.findViewById(R.id.checkbox);
+            holder.formTitle = row.findViewById(R.id.form_title);
+            holder.formSubtitle = row.findViewById(R.id.form_subtitle);
+            holder.formUpdateAlert = row.findViewById(R.id.form_update_alert);
             row.setTag(holder);
         } else {
             holder = (ViewHolder) row.getTag();
@@ -78,15 +75,15 @@ public class FormDownloadListAdapter extends ArrayAdapter {
         final HashMap<String, String> formAtPosition = filteredFormList.get(position);
         final String formIDAtPosition = formAtPosition.get(FORM_ID_KEY);
 
-        holder.text1.setText(formAtPosition.get(FORMNAME));
-        holder.text2.setText(formAtPosition.get(FORMID_DISPLAY));
+        holder.formTitle.setText(formAtPosition.get(FORMNAME));
+        holder.formSubtitle.setText(formAtPosition.get(FORMID_DISPLAY));
 
         if (formIdsToDetails.get(formIDAtPosition) != null
                 && (formIdsToDetails.get(formIDAtPosition).isNewerFormVersionAvailable()
                 || formIdsToDetails.get(formIDAtPosition).areNewerMediaFilesAvailable())) {
-            holder.updateInfo.setVisibility(View.VISIBLE);
+            holder.formUpdateAlert.setVisibility(View.VISIBLE);
         } else {
-            holder.updateInfo.setVisibility(View.GONE);
+            holder.formUpdateAlert.setVisibility(View.GONE);
         }
         
         return row;

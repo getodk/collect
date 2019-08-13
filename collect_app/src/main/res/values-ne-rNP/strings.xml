@@ -4,9 +4,11 @@
   <string name="activity_not_found">प्रयोग गर्न कुनै पनि क्रियाकलाप भेटिएन: %s </string>
   <string name="view_image">तस्विर हेर्नुहोस्।</string>
   <string name="annotate_image">तस्विर एनोटेट गर्नुहोस्।</string>
+  <string name="signature_capture">हस्ताक्षर गर्नुहोस्</string>
   <string name="view_video">भिडियो हेर्नुहोस्।</string>
   <string name="choose_audio">अडियो रोज्नुहोस्।</string>
   <string name="add_another">समूह थप्नुहोस् </string>
+  <string name="add_another_menu">अर्को थप्नुहोस्</string>
   <string name="add_another_repeat">के अर्को \"%s\" समूह थप्नु हुन्छ ?</string>
   <string name="add_repeat">नयाँ \"%s\" समूह थप्न चाहनु हुन्छ ?</string>
   <string name="add_repeat_no">नथप्नु होला !</string>
@@ -46,7 +48,7 @@
   <string name="discard_answer">जवाफ हटाउनुहोस् </string>
   <string name="discard_group">ग्रुप हटाउनुहोस्</string>
   <string name="download">छानिएका/nपाउनुहोस्</string>
-  <string name="download_forms_result">डाउनलोड नतिजा</string>
+  <string name="download_forms_result">परिणामहरू डाउनलोड गर्नुहोस्।</string>
   <string name="downloading_data">सर्भरसँग कनेक्ट हुँदैछ</string>
   <string name="do_not_change">फिर्ता जानुहोस्</string>
   <string name="do_not_exit">फिर्ता जानुहोस्</string>
@@ -102,6 +104,8 @@
   <string name="quit_application">बाहिर निस्कनुहोस् %s </string>
   <string name="quit_entry">फारम संचित गरी बाहिर निस्कनुहोस् </string>
   <string name="refresh">रिफ्रेश/n/गर्नुहोस् </string>
+  <string name="group_label">समूह</string>
+  <string name="repeatable_group_label">दोहोरिने समूह</string>
   <string name="replace_barcode">बारकोड बदल्नुहोस् </string>
   <string name="required_answer_error">माफ गर्नुहोला, यो उत्तर अनिवार्य चाहिन्छ !</string>
   <string name="review_data">संचित फारम सम्पादन गर्न</string>
@@ -113,6 +117,8 @@
   <string name="send_data">भरिसकेको फारम पठाउन</string>
   <string name="send_data_button">भरिसकेको फारम पठाउन (%s)</string>
   <string name="send_selected_data">छानिएका पठाउनुहोस् </string>
+  <string name="send_selected_data_internet">पठाउनुहोस् (Internet)</string>
+  <string name="send_selected_data_sms">पठाउनुहोस् (SMS)</string>
   <string name="view_sent_forms">भरिसकेको फारम हेर्न</string>
   <string name="view_sent_forms_button">भरिसकेको फारम हेर्न (%s)</string>
   <string name="server_auth_credentials">सर्भरको प्रयोगकर्ता नाम वा पासवर्ड गलत छ %s</string>
@@ -152,6 +158,7 @@
   <string name="no_forms_uploaded">माफ गर्नुहोस्, कुनै फारम पनि अपलोड गरिएन |</string>
   <string name="upload_results">अपलोडको परिणामहरु </string>
   <string name="xform_parse_error">X फारमको शब्द-सम्मतीमा गल्ति भयो | %1$s मा %2$s तत्व छुटेको छ |</string>
+  <string name="choose_file">फाइलहरू छान्नुहोस्</string>
   <string name="choose_sound">आवाज छान्नुहोस् </string>
   <string name="choose_video">भिडियो छान्नुहोस् </string>
   <string name="choose_image">तस्विर छान्नुहोस् </string>
@@ -209,7 +216,7 @@
   <string name="found_in_settings">जेनेरल सेटिंगमा नदेखाउनको लागि ठीक चिन्ह हटाउनुहोस् </string>
   <string name="save_preferences">सेटिङ्सलाई डिस्कमा सेभ गर्नुहोस्</string>
   <string name="form_forward">अघि</string>
-  <string name="form_backward">पछि</string>
+  <string name="form_backward">पछाडि</string>
   <string name="navigation">संचालन</string>
   <string name="swipe_navigation">स्वाइप को प्रयोग गर्नुहोस् </string>
   <string name="buttons_navigation">अगाडि / पछाडी बटनहरुको प्रयोग गर्नुहोस् |</string>
@@ -220,6 +227,7 @@
   <string name="constraint_behavior_on_swipe">तेर्सो स्वाइप गरे पछी मान्य छ कि छैन हेर्नुहोला </string>
   <string name="constraint_behavior_on_finalize">अन्तिम रुप नदिए सम्म मान्यता दिन स्थगित गर्नुहोस् </string>
   <string name="view_change_location">स्थान हेर्नुहोस् वा परिवर्तन गर्नुहोस् </string>
+  <string name="change_location">स्थान परिवर्तन गर्नुहोस्</string>
   <string name="open_url">URL खोल्नुहोस्</string>
   <string name="get_bearing">दिशानिर्देश रेकर्ड गर्नुहोस् </string>
   <string name="replace_bearing">दिशानिर्देश बदल्नुहोस् </string>
@@ -235,6 +243,7 @@
   <string name="ext_search_return_error">खोज ह्याण्डलरले \'%s\' खालको वस्तु फिर्ता पठायो |</string>
   <string name="ext_import_generic_error">%1$s वाट तथ्यांक आयात गर्न सकिएन | कारण: %2$s</string>
   <string name="ext_import_progress_message">\'%1$s\' वाट तथ्यांक पूर्व-लोड गरिदैछ, कृपया पर्खिनुहोला…%2$s</string>
+  <string name="ext_import_cancelled_message">डेटा पढ्ने रद्द गरियो!</string>
   <string name="ext_import_finalizing_message">पूर्व-लोड गरिएका तथ्यांकहरुलाई अन्तिम रुप दिइदैछ…</string>
   <string name="ext_import_completed_message">तथ्यांक पढेर सकियो !</string>
   <string name="ext_not_initialized_error">ExternalDataManager लाई चालू गरिएको छैन |</string>
@@ -261,21 +270,20 @@
   <string name="go_shared">म संग साझा गरिएको </string>
   <string name="modified_on_date_at_time">EEE, MMM dd, yyyy \'को\' HH:mm \'मा परिवर्तन गरिएको\'</string>
   <string name="aggregate_preferences">ODK एग्रीगेट सेटिङ्स</string>
+  <string name="sms_submission_preferences">SMS सेटिङहरू</string>
+  <string name="submission_transport_types_title">फारमहरू कसरी पठाउने?</string>
   <string name="other_preferences">अन्य प्लेटफर्म सेटिङ्स</string>
   <string name="google_preferences">गुगल सिट्स सेटिङ्स</string>
   <string name="google_sheets_url_hint">फारमहरु पठाउनको लागि URL सेट गर्नुपर्दछ । अन्यथा यही URL प्रयोग हुनेछ ।</string>
   <string name="drive_get_file">%1$s र मिडिया फाइलहरु प्राप्त गरिदैछ |</string>
   <string name="no_google_account">एउटा गुगल खाता छान्नुहोस् ! </string>
   <string name="google_set_account">तपाईंले गुगल गुगल सिट्सलाई आफ्नो सर्भरको रूपमा छान्नुभयो , अघि बढ्नु पूर्व कृपया जनरल सेटिङ्समा त्यहि अनुरूपको गुगल खाता छान्नुहोस्</string>
-  <string name="odk_auth_auth_fail">ODK स्वत: प्रेषण प्रमाणीकरण असफल , कृपया आफ्नो सेटिङ्स सही छ छैन चेक गर्नुहोस्</string>
-  <string name="odk_auto_note">ODK स्वत: प्रेषण सूचना</string>
   <string name="notification_error">सूचना देखाउन गल्ती भयो </string>
   <string name="delete_after_send">पठाए पछि डिलिट गर्नुहोस् </string>
   <string name="delete_after_send_summary">अन्तिम रुप दिइएको फारम र मिडिया सर्भरमा पठाए पछि डिलिट गर्छ </string>
   <string name="change_server_url">सर्भर URL</string>
   <string name="google_search_browse">फारम सर्च गर्नुहोस् वा ब्राउज गर्न तल \'My Drive\' मा सेलेक्ट गर्नुहोस्</string>
   <string name="send_in_progress">पृष्‍ठभूमीमा send सन्चालित हुँदै , कृपया फेरी प्रयास गर्नुहोस् ।</string>
-  <string name="sheets_max_columns">अधिकतम पंक्ती (column) संख्या २५५ हो , तपाईंको फारममा %s छ । स्प्रेडसिट मा अपलोड गर्न असमर्थ ।</string>
   <string name="invalid_sheet_id">अमान्य शीट नम्बर 1 %1$s</string>
   <string name="google_sheets_access_denied">अस्वीकृत । स्प्रेडशीट धनीबाट तपाईंले सम्पादन गर्ने अनुमति प्राप्त गर्नुपर्दछ । </string>
   <string name="google_sheets_missing_columns">स्प्रेडशीटमा निम्न पंक्ती (column) हरु छैनन् : %1$s</string>
@@ -287,13 +295,9 @@
   <string name="tell_your_friends_msg">के तपाईँका सहकर्मीहरू अझै कागजमा डाटा संकलन गर्दै हुनुहुन्छ? तिनीहरुसँग ODK Collect शेयर गर्नुहोस् ।</string>
   <string name="leave_a_review">हामीलाई  प्ले स्टोर आफ्नो मा समीक्षा छोड्नुहोस् ।</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">नक्शाकंन</string>
-  <string name="map_sdk_selector_title">SDK नक्शाकंन गर्न</string>
-  <string name="map_sdk_behavior">SDK नक्शाकंन गर्न</string>
-  <string name="google_maps_sdk">गुगल म्याप्स् SDK</string>
-  <string name="openstreetmap_sdk">ओपन स्ट्रीट म्याप SDK</string>
-  <string name="show_map_sdk">SDK म्याप्स् का विकल्प</string>
-  <string name="openmap_streets">ओपन स्ट्रीट म्यापका गल्लीहरु</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
   <string name="openmap_usgs_topo">अमेरिकी भूगर्भीय सर्वेक्षण राष्ट्रिय नक्शा Topo</string>
   <string name="openmap_usgs_sat">अमेरिकी भूगर्भीय सर्वेक्षण राष्ट्रिय नक्शा Hybrid</string>
   <string name="openmap_usgs_img">अमेरिकी भूगर्भीय सर्वेक्षण राष्ट्रिय नक्शा Imagery</string>
@@ -304,33 +308,21 @@
   <string name="terrain">भूभाग</string>
   <string name="hybrid">हाइव्रिड</string>
   <string name="satellite">उपग्रह</string>
-  <string name="map_basemap_selector_title">आधार म्यापहरु</string>
-  <string name="show_map_basemap">आधार म्यापका विकल्पहरु</string>
   <string name="save_point">जियो पोइन्ट संचित गर्नुहोस्</string>
   <string name="get_point">जियो पोइन्ट शुरू गर्नुहोस्</string>
   <string name="geopoint_view_read_only">जियो पोइन्ट हेर्नुहोस्</string>
   <string name="get_shape">जियो सेप शुरू गर्नुहोस्</string>
   <string name="get_trace">जियो ट्रेस शुरू गर्नुहोस्</string>
   <string name="geoshape_title">जियो सेप</string>
-  <string name="select_geotrace_mode">जियो ट्रेस विधि छान्नुहोस्</string>
   <string name="start">शुरू</string>
   <string name="enable_gps">GPS शुरु गर्नुहोस्</string>
-  <string name="enable_gps_message">तपाईंको यन्त्रमा GPS बन्द छ । यसलाई अन गर्न चाहनु हुन्छ ?</string>
-  <string name="polygon_save">बहुभुज सुरक्षित गर्नुहोस्। </string>
-  <string name="gps_enable_message">तपाईंको यन्त्रमा GPS बन्द छ । यसलाई अन गर्न चाहनु हुन्छ ?</string>
-  <string name="select_offline_layer">अफलाइन तह चयन गर्नुहोस्।</string>
-  <string name="minutes">मिनेट</string>
   <string name="clear">मेटाउनुहोस्</string>
   <string name="discard">त्याग्नुहोस्</string>
-  <string name="zoom_to_where">जुम गर्नुहोस्।</string>
-  <string name="zoom_to_location">हालको स्थानमा जुम गर्नुहोस्।</string>
-  <string name="zoom_to_feature">बचत गरिएको स्थानमा फर्कनुहोस्।</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="alert">सावधान</string>
   <string name="install_openmapkit">कृपया ओपन म्याप स्ट्रीट इन्सटल गर्नुहोस् !</string>
   <string name="go_back">पछाडि जानुहोस्</string>
   <string name="download_selected">चुनिएका डाउनलोड गर्नुहोस्</string>
-  <string name="record_geopoint">जियो पोइन्ट रेकर्ड गर्नुहोस्</string>
   <string name="odk_forum">ODK मंचमा आवद्ध हुनुहोस्</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">पश्चिम%1$s%2$s%3$s</string>
@@ -396,8 +388,10 @@
   <string name="image_size_title">फोटो साइज</string>
   <string name="form_import_category">फारम ल्याउदा</string>
   <string name="user_and_device_identity_title">प्रयोगकर्ता तथा यन्त्र पहिचान</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="yes">हो</string>
   <string name="no">होइन</string>
   <string name="stop_video_capture_instruction">रेकर्डिङ सुरु भयो। रोक्न फेरि छुनुहोस् ।</string>
+  <!--Sms submission-->
 </resources>

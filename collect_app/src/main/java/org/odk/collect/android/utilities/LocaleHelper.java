@@ -8,7 +8,7 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 
 import java.util.Locale;
 import java.util.TreeMap;
@@ -39,7 +39,7 @@ public class LocaleHelper {
 
     private String getLocaleCode(Context context) {
         String localeCode = PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(PreferenceKeys.KEY_APP_LANGUAGE, "");
+                .getString(GeneralKeys.KEY_APP_LANGUAGE, "");
         boolean isUsingSysLanguage = localeCode.equals("");
         if (isUsingSysLanguage) {
             localeCode = Collect.defaultSysLanguage;

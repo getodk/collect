@@ -69,11 +69,11 @@ references:
     docker:
       # This needs to be in line with the configuration from gradle file.
       # Otherwise an unnecessary platform update is performed on every build
-      - image: circleci/android:api-27-alpha
+      - image: circleci/android:api-27
   gcloud_config: &gcloud_config
     working_directory: *workspace
     docker:
-      - image: google/cloud-sdk:latest
+      - image: google/cloud-sdk:216.0.0
 
 jobs:
 
@@ -120,7 +120,7 @@ jobs:
 #           This implies building the release and test flavors as well, which are out of scope for this job.
 #           Instead, using lintDebug it's running only once, for the 'debug' flavor that we are building here
 #           This means ~3x faster for the lint task.
-            command: ./gradlew pmd checkstyle lintDebug spotbugsDebug
+            command: ./gradlew checkCode
         - store_artifacts:
             path: collect_app/build/reports
             destination: reports
@@ -174,7 +174,7 @@ jobs:
               --type instrumentation \
               --app collect_app/build/outputs/apk/debug/*.apk \
               --test collect_app/build/outputs/apk/androidTest/debug/*.apk \
-              --device model=Nexus5,version=21,locale=en,orientation=portrait \
+              --device model=Pixel2,version=27,locale=en,orientation=portrait \
               --results-bucket opendatakit-collect-test-results \
               --environment-variables coverage=true,coverageFile=/sdcard/coverage.ec \
               --directories-to-pull /sdcard --timeout 20m
@@ -207,7 +207,7 @@ jobs:
           name: Move Firebase coverage report
           command: |
             if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
-              mkdir -p collect_app/build/outputs/code-coverage/connected && cp firebase/Nexus5-21-en-portrait/artifacts/coverage.ec collect_app/build/outputs/code-coverage/connected/coverage.ec
+              mkdir -p collect_app/build/outputs/code-coverage/connected && cp firebase/Pixel2-27-en-portrait/artifacts/coverage.ec collect_app/build/outputs/code-coverage/connected/coverage.ec
             fi
       - run:
           name: Generate JaCoCo report

@@ -26,7 +26,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -50,11 +50,11 @@ import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.Transport;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -68,6 +68,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Launches
@@ -87,8 +89,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
     private Button viewSentFormsButton;
     private Button reviewDataButton;
     private Button getFormsButton;
-    private View reviewSpacer;
-    private View getFormsSpacer;
     private AlertDialog alertDialog;
     private SharedPreferences adminPreferences;
     private int completedCount;
@@ -114,15 +114,15 @@ public class MainMenuActivity extends CollectAbstractActivity {
         setContentView(R.layout.main_menu);
         initToolbar();
 
+        disableSmsIfNeeded();
+
         // enter data button. expects a result.
         Button enterDataButton = findViewById(R.id.enter_data);
         enterDataButton.setText(getString(R.string.enter_data_button));
         enterDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Collect.allowClick()) {
-                    Collect.getInstance().getActivityLogger()
-                            .logAction(this, "fillBlankForm", "click");
+                if (Collect.allowClick(getClass().getName())) {
                     Intent i = new Intent(getApplicationContext(),
                             FormChooserList.class);
                     startActivity(i);
@@ -136,9 +136,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         reviewDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Collect.allowClick()) {
-                    Collect.getInstance().getActivityLogger()
-                            .logAction(this, ApplicationConstants.FormModes.EDIT_SAVED, "click");
+                if (Collect.allowClick(getClass().getName())) {
                     Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
                     i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
                             ApplicationConstants.FormModes.EDIT_SAVED);
@@ -153,11 +151,9 @@ public class MainMenuActivity extends CollectAbstractActivity {
         sendDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Collect.allowClick()) {
-                    Collect.getInstance().getActivityLogger()
-                            .logAction(this, "uploadForms", "click");
+                if (Collect.allowClick(getClass().getName())) {
                     Intent i = new Intent(getApplicationContext(),
-                            InstanceUploaderList.class);
+                            InstanceUploaderListActivity.class);
                     startActivity(i);
                 }
             }
@@ -168,9 +164,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         viewSentFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Collect.allowClick()) {
-                    Collect.getInstance().getActivityLogger().logAction(this,
-                            ApplicationConstants.FormModes.VIEW_SENT, "click");
+                if (Collect.allowClick(getClass().getName())) {
                     Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
                     i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
                             ApplicationConstants.FormModes.VIEW_SENT);
@@ -185,13 +179,11 @@ public class MainMenuActivity extends CollectAbstractActivity {
         getFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Collect.allowClick()) {
-                    Collect.getInstance().getActivityLogger()
-                            .logAction(this, "downloadBlankForms", "click");
+                if (Collect.allowClick(getClass().getName())) {
                     SharedPreferences sharedPreferences = PreferenceManager
                             .getDefaultSharedPreferences(MainMenuActivity.this);
                     String protocol = sharedPreferences.getString(
-                            PreferenceKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
+                            GeneralKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
                     Intent i = null;
                     if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
                         if (PlayServicesUtil.isGooglePlayServicesAvailable(MainMenuActivity.this)) {
@@ -216,9 +208,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         manageFilesButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Collect.allowClick()) {
-                    Collect.getInstance().getActivityLogger()
-                            .logAction(this, "deleteSavedForms", "click");
+                if (Collect.allowClick(getClass().getName())) {
                     Intent i = new Intent(getApplicationContext(),
                             FileManagerTabs.class);
                     startActivity(i);
@@ -270,9 +260,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
                 ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
             }
         }
-
-        reviewSpacer = findViewById(R.id.review_spacer);
-        getFormsSpacer = findViewById(R.id.get_forms_spacer);
 
         adminPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
@@ -342,15 +329,9 @@ public class MainMenuActivity extends CollectAbstractActivity {
             if (reviewDataButton != null) {
                 reviewDataButton.setVisibility(View.GONE);
             }
-            if (reviewSpacer != null) {
-                reviewSpacer.setVisibility(View.GONE);
-            }
         } else {
             if (reviewDataButton != null) {
                 reviewDataButton.setVisibility(View.VISIBLE);
-            }
-            if (reviewSpacer != null) {
-                reviewSpacer.setVisibility(View.VISIBLE);
             }
         }
 
@@ -384,15 +365,9 @@ public class MainMenuActivity extends CollectAbstractActivity {
             if (getFormsButton != null) {
                 getFormsButton.setVisibility(View.GONE);
             }
-            if (getFormsSpacer != null) {
-                getFormsSpacer.setVisibility(View.GONE);
-            }
         } else {
             if (getFormsButton != null) {
                 getFormsButton.setVisibility(View.VISIBLE);
-            }
-            if (getFormsSpacer != null) {
-                getFormsSpacer.setVisibility(View.VISIBLE);
             }
         }
 
@@ -422,21 +397,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Collect.getInstance().getActivityLogger()
-                .logAction(this, "onCreateOptionsMenu", "show");
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -445,30 +406,18 @@ public class MainMenuActivity extends CollectAbstractActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_about:
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logAction(this, "onOptionsItemSelected",
-                                "MENU_ABOUT");
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
             case R.id.menu_general_preferences:
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logAction(this, "onOptionsItemSelected",
-                                "MENU_PREFERENCES");
                 startActivity(new Intent(this, PreferencesActivity.class));
                 return true;
             case R.id.menu_admin_preferences:
-                Collect.getInstance().getActivityLogger()
-                        .logAction(this, "onOptionsItemSelected", "MENU_ADMIN");
                 String pw = adminPreferences.getString(
                         AdminKeys.KEY_ADMIN_PW, "");
                 if ("".equalsIgnoreCase(pw)) {
                     startActivity(new Intent(this, AdminPreferencesActivity.class));
                 } else {
                     showDialog(PASSWORD_DIALOG);
-                    Collect.getInstance().getActivityLogger()
-                            .logAction(this, "createAdminPasswordDialog", "show");
                 }
                 return true;
         }
@@ -476,8 +425,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
     }
 
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
-        Collect.getInstance().getActivityLogger()
-                .logAction(this, "createErrorDialog", "show");
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         alertDialog.setMessage(errorMsg);
@@ -486,10 +433,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        Collect.getInstance()
-                                .getActivityLogger()
-                                .logAction(this, "createErrorDialog",
-                                        shouldExit ? "exitApplication" : "OK");
                         if (shouldExit) {
                             finish();
                         }
@@ -541,10 +484,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
                                     passwordDialog.dismiss();
                                 } else {
                                     ToastUtils.showShortToast(R.string.admin_password_incorrect);
-                                    Collect.getInstance()
-                                            .getActivityLogger()
-                                            .logAction(this, "adminPasswordDialog",
-                                                    "PASSWORD_INCORRECT");
                                 }
                             }
                         });
@@ -554,10 +493,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
                         new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int which) {
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logAction(this, "adminPasswordDialog",
-                                                "cancel");
                                 input.setText("");
                             }
                         });
@@ -574,7 +509,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
     private void setupGoogleAnalytics() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
                 .getInstance());
-        boolean isAnalyticsEnabled = settings.getBoolean(PreferenceKeys.KEY_ANALYTICS, true);
+        boolean isAnalyticsEnabled = settings.getBoolean(GeneralKeys.KEY_ANALYTICS, true);
         GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getApplicationContext());
         googleAnalytics.setAppOptOut(!isAnalyticsEnabled);
     }
@@ -643,8 +578,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
                 GeneralSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
             }
 
-            AuthDialogUtility.setWebCredentialsFromPreferences();
-
             AdminSharedPreferences.getInstance().clear();
 
             // second object is admin options
@@ -652,7 +585,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             for (Entry<String, ?> entry : adminEntries.entrySet()) {
                 AdminSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
             }
-            Collect.getInstance().initProperties();
+            Collect.getInstance().initializeJavaRosa();
             res = true;
         } catch (IOException | ClassNotFoundException e) {
             Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());
@@ -703,4 +636,24 @@ public class MainMenuActivity extends CollectAbstractActivity {
         }
     }
 
+    private void disableSmsIfNeeded() {
+        if (Transport.Internet != Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE))) {
+            GeneralSharedPreferences.getInstance().save(KEY_SUBMISSION_TRANSPORT_TYPE, getString(R.string.transport_type_value_internet));
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder
+                    .setTitle(R.string.sms_feature_disabled_dialog_title)
+                    .setMessage(R.string.sms_feature_disabled_dialog_message)
+                    .setPositiveButton(R.string.read_details, (dialog, which) -> {
+                        Intent intent = new Intent(this, WebViewActivity.class);
+                        intent.putExtra("url", "https://forum.opendatakit.org/t/17973");
+                        startActivity(intent);
+                    })
+                    .setNegativeButton(R.string.ok, (dialog, which) -> dialog.dismiss());
+
+            builder
+                    .create()
+                    .show();
+        }
+    }
 }

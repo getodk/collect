@@ -19,6 +19,7 @@
 package org.odk.collect.android.external;
 
 import android.widget.Toast;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.instance.FormInstance;
@@ -56,7 +57,7 @@ public final class ExternalDataUtil {
     public static final String EXTERNAL_DATA_TABLE_NAME = "externalData";
     public static final String SORT_COLUMN_NAME = "c_sortby";
 
-    private static final Pattern SEARCH_FUNCTION_REGEX = Pattern.compile("search\\(.+\\)");
+    public static final Pattern SEARCH_FUNCTION_REGEX = Pattern.compile("search\\(.+\\)");
     private static final String COLUMN_SEPARATOR = ",";
     private static final String FALLBACK_COLUMN_SEPARATOR = " ";
     public static final String JR_IMAGES_PREFIX = "jr://images/";
@@ -107,6 +108,7 @@ public final class ExternalDataUtil {
 
         Matcher matcher = SEARCH_FUNCTION_REGEX.matcher(appearance);
         if (matcher.find()) {
+
             String function = matcher.group(0);
             try {
                 XPathExpression xpathExpression = XPathParseTool.parseXPath(function);

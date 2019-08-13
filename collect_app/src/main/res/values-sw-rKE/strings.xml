@@ -38,7 +38,6 @@
   <string name="discard_answer">Futa majibu</string>
   <string name="discard_group">Ondoa kikundi</string>
   <string name="download">Pata iliyochaguliwa</string>
-  <string name="download_forms_result">Pata matokeo</string>
   <string name="downloading_data">inawasiliana na server</string>
   <string name="do_not_change">Futa</string>
   <string name="do_not_exit">Futa</string>
@@ -185,7 +184,6 @@
   <string name="found_in_settings">Chagua kuficha usanidi wa jumla</string>
   <string name="save_preferences">Hifadhi mazingira kwa diski</string>
   <string name="form_forward">Ijayo</string>
-  <string name="form_backward">iliyopita</string>
   <string name="navigation">uelekezaji</string>
   <string name="swipe_navigation">Teleza kwa upande</string>
   <string name="buttons_navigation">Tumia vibonyezo vya mbele na nyuma</string>
@@ -221,6 +219,9 @@
   <string name="survey_saving_encrypting_message">usimbaji fiche wa takwimu…</string>
   <string name="high_resolution_summary">Ezesha kurekodi video za mwonekano wa hali ya juu</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
   <string name="streets">Barabara</string>
   <string name="start">Anza</string>
   <string name="clear">Futa</string>
@@ -235,5 +236,7 @@
   <string name="phone_number">Nambari ya simu</string>
   <string name="select_date">Changua tarehe</string>
   <string name="select_time">Chagua wakati</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Sms submission-->
 </resources>

@@ -20,6 +20,9 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.util.TypedValue;
@@ -33,6 +36,7 @@ import android.widget.Toast;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
@@ -42,6 +46,7 @@ import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.ObjectUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
@@ -49,6 +54,7 @@ import java.util.Map;
 
 import timber.log.Timber;
 
+import static android.content.Intent.ACTION_SENDTO;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -94,6 +100,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  */
 @SuppressLint("ViewConstructor")
 public class ExStringWidget extends QuestionWidget implements BinaryWidget {
+    // If an extra with this key is specified, it will be parsed as a URI and used as intent data
+    private static final String URI_KEY = "uri_data";
 
     protected EditText answer;
     private boolean hasExApp = true;
@@ -103,6 +111,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     private ActivityAvailability activityAvailability;
 
     public ExStringWidget(Context context, FormEntryPrompt prompt) {
+
         super(context, prompt);
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
@@ -138,7 +147,6 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         String buttonText = (v != null) ? v : context.getString(R.string.launch_app);
 
         launchIntentButton = getSimpleButton(buttonText);
-        launchIntentButton.setEnabled(!getFormEntryPrompt().isReadOnly());
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
@@ -146,28 +154,31 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         answerLayout.addView(launchIntentButton);
         answerLayout.addView(answer);
         addAnswerView(answerLayout);
+
+        Collect.getInstance().logRemoteAnalytics("WidgetType", "ExternalApp", Collect.getCurrentFormIdentifierHash());
     }
 
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
         i.putExtra("value", getFormEntryPrompt().getAnswerText());
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
-                i.getAction(), getFormEntryPrompt().getIndex());
-        ((Activity) getContext()).startActivityForResult(i,
-                RequestCodes.EX_STRING_CAPTURE);
+        try {
+            ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_STRING_CAPTURE);
+        } catch (SecurityException e) {
+            Timber.i(e);
+            ToastUtils.showLongToast(R.string.not_granted_permission);
+        }
     }
 
     @Override
     public void clearAnswer() {
         answer.setText(null);
+        widgetValueChanged();
     }
-
 
     @Override
     public IAnswerData getAnswer() {
         String s = answer.getText().toString();
         return !s.isEmpty() ? new StringData(s) : null;
     }
-
 
     /**
      * Allows answer to be set externally in {@link FormEntryActivity}.
@@ -176,6 +187,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     public void setBinaryData(Object answer) {
         StringData stringData = ExternalAppsUtils.asStringData(answer);
         this.answer.setText(stringData == null ? null : stringData.getValue().toString());
+        widgetValueChanged();
     }
 
     @Override
@@ -214,7 +226,6 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         launchIntentButton.setOnLongClickListener(l);
     }
 
-
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
@@ -245,15 +256,34 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         errorString = (v != null) ? v : getContext().getString(R.string.no_app);
 
         Intent i = new Intent(intentName);
+
+        // Use special "uri_data" key to set intent data. This must be done before checking if an
+        // activity is available to handle implicit intents.
+        if (exParams.containsKey(URI_KEY)) {
+            try {
+                String uriValue = (String) ExternalAppsUtils.getValueRepresentedBy(exParams.get(URI_KEY),
+                            getFormEntryPrompt().getIndex().getReference());
+                i.setData(Uri.parse(uriValue));
+                exParams.remove(URI_KEY);
+            } catch (XPathSyntaxException e) {
+                Timber.d(e);
+                onException(e.getMessage());
+            }
+        }
+
         if (activityAvailability.isActivityAvailable(i)) {
             try {
                 ExternalAppsUtils.populateParameters(i, exParams,
                         getFormEntryPrompt().getIndex().getReference());
 
                 waitForData();
-                fireActivity(i);
-
-            } catch (ExternalParamsException e) {
+                // ACTION_SENDTO used for sending text messages or emails doesn't require any results
+                if (ACTION_SENDTO.equals(i.getAction())) {
+                    getContext().startActivity(i);
+                } else {
+                    fireActivity(i);
+                }
+            } catch (ExternalParamsException | ActivityNotFoundException e) {
                 Timber.d(e);
                 onException(e.getMessage());
             }
@@ -273,6 +303,23 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
             answer.setFocusable(true);
             answer.setFocusableInTouchMode(true);
             answer.setEnabled(true);
+
+            answer.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    widgetValueChanged();
+                }
+            });
         }
         launchIntentButton.setEnabled(false);
         launchIntentButton.setFocusable(false);

@@ -82,7 +82,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     private ExternalDataManager externalDataManager;
     private FormDef formDef;
 
-    protected class FECWrapper {
+    protected static class FECWrapper {
         FormController controller;
         boolean usedSavepoint;
 
@@ -121,17 +121,40 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         errorMsg = null;
 
         final String formPath = path[0];
-        final File formXml = new File(formPath);
+        if (formPath == null) {
+            Timber.e("formPath is null");
+            errorMsg = "formPath is null, please post on the forum with a description of what you were doing when this happened.";
+            return null;
+        }
 
-        final FormDef formDef = createFormDefFromCacheOrXml(formPath, formXml);
+        final File formXml = new File(formPath);
+        final File formMediaDir = FileUtils.getFormMediaDir(formXml);
+
+        final ReferenceManager referenceManager = ReferenceManager.instance();
+
+        // Remove previous forms
+        referenceManager.clearSession();
+
+        // This should get moved to the Application Class
+        if (referenceManager.getFactories().length == 0) {
+            // this is /sdcard/odk
+            referenceManager.addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
+        }
+
+        addSessionRootTranslators(formMediaDir.getName(), referenceManager,
+                "images", "image", "audio", "video", "file");
+
+        FormDef formDef = null;
+        try {
+            formDef = createFormDefFromCacheOrXml(formPath, formXml);
+        } catch (StackOverflowError e) {
+            Timber.e(e);
+            errorMsg = Collect.getInstance().getString(R.string.too_complex_form);
+        }
 
         if (errorMsg != null || formDef == null) {
             return null;
         }
-
-        // set paths to /sdcard/odk/forms/formfilename-media/
-        final String formFileName = formXml.getName().substring(0, formXml.getName().lastIndexOf("."));
-        final File formMediaDir = new File(formXml.getParent(), formFileName + "-media");
 
         externalDataManager = new ExternalDataManagerImpl(formMediaDir);
 
@@ -164,7 +187,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             final long start = System.currentTimeMillis();
             usedSavepoint = initializeForm(formDef, fec);
             Timber.i("Form initialized in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
-        } catch (RuntimeException e) {
+        } catch (IOException | RuntimeException e) {
             Timber.e(e);
             if (e.getCause() instanceof XPathTypeMismatchException) {
                 // this is a case of
@@ -181,26 +204,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             }
         }
 
-        // Remove previous forms
-        ReferenceManager.instance().clearSession();
-
         processItemSets(formMediaDir);
-
-        // This should get moved to the Application Class
-        if (ReferenceManager.instance().getFactories().length == 0) {
-            // this is /sdcard/odk
-            ReferenceManager.instance().addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
-        }
-
-        // Set jr://... to point to /sdcard/odk/forms/filename-media/
-        ReferenceManager.instance().addSessionRootTranslator(
-                new RootTranslator("jr://images/", "jr://file/forms/" + formFileName + "-media/"));
-        ReferenceManager.instance().addSessionRootTranslator(
-                new RootTranslator("jr://image/", "jr://file/forms/" + formFileName + "-media/"));
-        ReferenceManager.instance().addSessionRootTranslator(
-                new RootTranslator("jr://audio/", "jr://file/forms/" + formFileName + "-media/"));
-        ReferenceManager.instance().addSessionRootTranslator(
-                new RootTranslator("jr://video/", "jr://file/forms/" + formFileName + "-media/"));
 
         final FormController fc = new FormController(formMediaDir, fec, instancePath == null ? null
                 : new File(instancePath));
@@ -218,6 +222,14 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         return data;
     }
 
+    private void addSessionRootTranslators(String formMediaDir, ReferenceManager referenceManager, String... hostStrings) {
+        // Set jr://... to point to /sdcard/odk/forms/formBasename-media/
+        final String translatedPrefix = String.format("jr://file/forms/" + formMediaDir + "/");
+        for (String t : hostStrings) {
+            referenceManager.addSessionRootTranslator(new RootTranslator(String.format("jr://%s/", t), translatedPrefix));
+        }
+    }
+
     private FormDef createFormDefFromCacheOrXml(String formPath, File formXml) {
         publishProgress(
                 Collect.getInstance().getString(R.string.survey_loading_reading_form_message));
@@ -233,7 +245,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             Timber.i("Attempting to load from: %s", formXml.getAbsolutePath());
             final long start = System.currentTimeMillis();
             fis = new FileInputStream(formXml);
-            FormDef formDefFromXml = XFormUtils.getFormFromInputStream(fis);
+            String lastSavedSrc = FileUtils.getOrCreateLastSavedSrc(formXml);
+            FormDef formDefFromXml = XFormUtils.getFormFromInputStream(fis, lastSavedSrc);
             if (formDefFromXml == null) {
                 errorMsg = "Error reading XForm file";
             } else {
@@ -293,7 +306,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
     }
 
-    private boolean initializeForm(FormDef formDef, FormEntryController fec) {
+    private boolean initializeForm(FormDef formDef, FormEntryController fec) throws IOException {
         final InstanceInitializationFactory instanceInit = new InstanceInitializationFactory();
         boolean usedSavepoint = false;
 
@@ -317,7 +330,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                     publishProgress(Collect.getInstance().getString(R.string.survey_loading_reading_data_message));
                     importData(instanceXml, fec);
                     formDef.initialize(false, instanceInit);
-                } catch (RuntimeException e) {
+                } catch (IOException | RuntimeException e) {
                     Timber.e(e);
 
                     // Skip a savepoint file that is corrupted or 0-sized
@@ -404,9 +417,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
     }
 
-    static void importData(File instanceFile, FormEntryController fec) {
+    public static void importData(File instanceFile, FormEntryController fec) throws IOException, RuntimeException {
         // convert files into a byte array
-        byte[] fileBytes = FileUtils.getFileAsBytes(instanceFile);
+        byte[] fileBytes = org.apache.commons.io.FileUtils.readFileToByteArray(instanceFile);
 
         // get the root of the saved and template instances
         TreeElement savedRoot = XFormParser.restoreDataModel(fileBytes, null).getRoot();

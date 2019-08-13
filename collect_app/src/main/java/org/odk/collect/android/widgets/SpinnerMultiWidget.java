@@ -17,21 +17,17 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
-import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
@@ -51,12 +47,11 @@ import java.util.List;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 @SuppressLint("ViewConstructor")
-public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, MultiChoiceWidget {
-
-    List<SelectChoice> items;
+public class SpinnerMultiWidget extends ItemsWidget implements ButtonWidget, MultiChoiceWidget {
 
     // The possible select answers
-    CharSequence[] answerItems;
+    String[] answerItems;
+    CharSequence[] styledAnswerItems;
 
     // The button to push to display the answers to choose from
     Button button;
@@ -74,37 +69,25 @@ public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, 
     public SpinnerMultiWidget(final Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
-                prompt.getAppearanceHint());
-        if (xpathFuncExpr != null) {
-            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
-        } else {
-            items = prompt.getSelectChoices();
-        }
-
         selections = new boolean[items.size()];
-        answerItems = new CharSequence[items.size()];
+        answerItems = new String[items.size()];
+        styledAnswerItems = new CharSequence[items.size()];
         alertBuilder = new AlertDialog.Builder(context);
         button = getSimpleButton(context.getString(R.string.select_answer));
 
         // Build View
         for (int i = 0; i < items.size(); i++) {
             answerItems[i] = prompt.getSelectChoiceText(items.get(i));
+            styledAnswerItems[i] = org.odk.collect.android.utilities.TextUtils.textToHtml(answerItems[i]);
         }
 
         selectionText = getAnswerTextView();
         selectionText.setVisibility(View.GONE);
 
-        if (prompt.isReadOnly()) {
-            button.setEnabled(false);
-        }
-
         // Fill in previous answers
-        List<Selection> ve = new ArrayList<>();
-        if (prompt.getAnswerValue() != null) {
-            ve = (List<Selection>) prompt.getAnswerValue().getValue();
-        }
+        List<Selection> ve = prompt.getAnswerValue() != null
+                ? (List<Selection>) prompt.getAnswerValue().getValue()
+                : new ArrayList<>();
 
         if (ve != null) {
             List<String> selectedValues = new ArrayList<>();
@@ -114,7 +97,7 @@ public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, 
                 for (Selection s : ve) {
                     if (value.equals(s.getValue())) {
                         selections[i] = true;
-                        selectedValues.add(answerItems[i].toString());
+                        selectedValues.add(answerItems[i]);
                         break;
                     }
                 }
@@ -133,20 +116,13 @@ public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, 
 
     @Override
     public IAnswerData getAnswer() {
-        clearFocus();
         List<Selection> vc = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
             if (selections[i]) {
-                SelectChoice sc = items.get(i);
-                vc.add(new Selection(sc));
+                vc.add(new Selection(items.get(i)));
             }
         }
-        if (vc.isEmpty()) {
-            return null;
-        } else {
-            return new SelectMultiData(vc);
-        }
-
+        return vc.isEmpty() ? null : new SelectMultiData(vc);
     }
 
     @Override
@@ -156,6 +132,8 @@ public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, 
         for (int i = 0; i < selections.length; i++) {
             selections[i] = false;
         }
+
+        widgetValueChanged();
     }
 
     @Override
@@ -182,38 +160,32 @@ public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, 
     @Override
     public void onButtonClick(int buttonId) {
         alertBuilder.setTitle(getFormEntryPrompt().getQuestionText()).setPositiveButton(R.string.ok,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        List<String> selectedValues = new ArrayList<>();
+                (dialog, id) -> {
+                    List<String> selectedValues = new ArrayList<>();
 
-                        for (int i = 0; i < selections.length; i++) {
-                            if (selections[i]) {
-                                selectedValues.add(answerItems[i].toString());
-                            }
+                    for (int i = 0; i < selections.length; i++) {
+                        if (selections[i]) {
+                            selectedValues.add(answerItems[i]);
                         }
-                        showSelectedValues(selectedValues);
                     }
+                    showSelectedValues(selectedValues);
                 });
 
-        alertBuilder.setMultiChoiceItems(answerItems, selections,
-                new DialogInterface.OnMultiChoiceClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which,
-                                        boolean isChecked) {
-                        selections[which] = isChecked;
-                    }
+        alertBuilder.setMultiChoiceItems(styledAnswerItems, selections,
+                (dialog, which, isChecked) -> {
+                    selections[which] = isChecked;
+                    widgetValueChanged();
                 });
-        AlertDialog alert = alertBuilder.create();
-        alert.show();
+        alertBuilder.create().show();
     }
 
     private void showSelectedValues(List<String> selectedValues) {
         if (selectedValues.isEmpty()) {
             clearAnswer();
         } else {
-            selectionText.setText(String.format(getContext().getString(R.string.selected_answer),
+            CharSequence answerText = org.odk.collect.android.utilities.TextUtils.textToHtml(String.format(getContext().getString(R.string.selected_answer),
                     TextUtils.join(", ", selectedValues)));
+            selectionText.setText(answerText);
             selectionText.setVisibility(View.VISIBLE);
         }
     }

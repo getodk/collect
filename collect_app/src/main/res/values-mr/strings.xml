@@ -41,7 +41,6 @@
   <string name="discard_answer">प्रतिसाद काढा.</string>
   <string name="discard_group">गट काढा</string>
   <string name="download">निवडलेले आणा</string>
-  <string name="download_forms_result">परिणाम डाउनलोड करा</string>
   <string name="downloading_data">सर्व्हरशी कनेक्ट करीत आहे</string>
   <string name="do_not_change">रद्द करा</string>
   <string name="do_not_exit">रद्द करा</string>
@@ -204,7 +203,6 @@
   <string name="found_in_settings">मुख्य मेनूमधून लपविण्यासाठी अनचेक करा</string>
   <string name="save_preferences">डिस्कवर सेटिंग्ज जतन करा</string>
   <string name="form_forward">पुढे</string>
-  <string name="form_backward">मागील</string>
   <string name="navigation">नेव्हिगेशन</string>
   <string name="swipe_navigation">क्षैतिज स्वाइप वापरा</string>
   <string name="buttons_navigation">फॉरवर्ड / बॅकवर्ड बटणे वापरा</string>
@@ -262,8 +260,6 @@
   <string name="drive_get_file"> %1$s आणि मीडिया फायली मिळवत आहे</string>
   <string name="no_google_account">कोणतेही गूगल खाते निवडलेले नाही!</string>
   <string name="google_set_account">आपण गूगल पत्रक आपल्या सर्व्हर म्हणून निवडले आहे, कृपया सुरू ठेवण्यापूर्वी सामान्य सेटिंग्जमध्ये संबंधित गूगल खाते निवडा</string>
-  <string name="odk_auth_auth_fail">ओडीके ऑटोसॅन्ड प्रमाणीकरण अयशस्वी, कृपया आपली सेटिंग्ज योग्य असल्याची खात्री करा.</string>
-  <string name="odk_auto_note">ओडीके ऑटोसॅन्ड सूचना.</string>
   <string name="notification_error">सूचना मजकूर प्रदर्शित करताना त्रुटी</string>
   <string name="delete_after_send">पाठवानंतर हटवा</string>
   <string name="delete_after_send_summary">सर्व्हरवर पाठविल्यानंतर अंतिम स्वरूप आणि मीडिया हटविते</string>
@@ -271,7 +267,6 @@
   <string name="google_search_browse">फॉर्म शोधा किंवा ब्राउझ करण्यासाठी खालील \'माझे ड्राइव्ह\' निवडा.</string>
   <string name="google_sheets_url">फॉलबॅक सबमिशन युरएल</string>
   <string name="send_in_progress">पार्श्वभूमी पाठविणे चालू आहे, कृपया लवकरच पुन्हा प्रयत्न करा</string>
-  <string name="sheets_max_columns">स्तंभांची कमाल संख्या 255 आहे, आपल्या फॉर्ममध्ये  %s आहे. स्प्रेडशीटवर अपलोड करण्यास अक्षम</string>
   <string name="invalid_sheet_id">अवैध पत्रक id: %1$s</string>
   <string name="google_sheets_access_denied">प्रवेश नाकारला. कृपया स्प्रेडशीटच्या मालकास आपल्याला संपादन परवानगी मंजूर केल्याची खात्री करा.</string>
   <string name="google_sheets_missing_columns">स्प्रेडशीटमध्ये खालील स्तंभ गहाळ आहेत:%1$s</string>
@@ -280,55 +275,34 @@
   <string name="google_play_services_error_occured">गूगल नकाशे मध्ये प्रवेश करण्यात अक्षम. गूगल प्ले सेवा स्थापित केली आहे का?</string>
   <string name="about_preferences">विषयी</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">मॅपिंग</string>
-  <string name="map_sdk_selector_title">मॅपिंग एसडीके</string>
-  <string name="map_sdk_behavior">मॅपिंग एसडीके</string>
-  <string name="google_maps_sdk">गूगल नकाशे एसडीके</string>
-  <string name="openstreetmap_sdk">ओपन स्ट्रीट नकाशा एसडीके.</string>
-  <string name="show_map_sdk">नकाशा एसडीके पर्याय दर्शवा</string>
-  <string name="openmap_streets">ओपन स्ट्रीट नकाशा रस्ते</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
   <string name="openmap_usgs_topo">यूएसजीएस राष्ट्रीय नकाशा टोपो</string>
   <string name="openmap_stamen_terrain">स्टेमेन टेरेइन</string>
   <string name="openmap_cartodb_positron">कार्टो डीबी पॉझिट्रॉन</string>
   <string name="openmap_cartodb_darkmatter">कार्टो डीबी गडद बाब</string>
+  <string name="basemap">बेसमॅप</string>
   <string name="streets">रस्ते</string>
   <string name="terrain">भूप्रदेश</string>
   <string name="hybrid">संकरित</string>
   <string name="satellite">उपग्रह</string>
-  <string name="map_basemap_selector_title">बेसमॅप्स</string>
-  <string name="show_map_basemap">बेसमॅप पर्याय दर्शवा</string>
   <string name="save_point">जिओ पॉईंट जतन करा</string>
   <string name="get_point">जिओ पॉईंट प्रारंभ करा</string>
   <string name="geopoint_view_read_only">जिओ पॉईंट पहा</string>
   <string name="get_shape">जिओ पॉईंट प्रारंभ करा</string>
   <string name="get_trace">जिओ ट्रेस प्रारंभ करा</string>
   <string name="geoshape_title">जिओ शेप</string>
-  <string name="select_geotrace_mode">जिओ ट्रेस च्या माध्यम निवडा</string>
   <string name="start">प्रारंभ करा</string>
   <string name="enable_gps">जीपीएस सक्षम करा</string>
-  <string name="enable_gps_message">आपल्या डिव्हाइसमध्ये जीपीएस अक्षम केले आहे आपण ते सक्षम करू इच्छिता?</string>
   <string name="geotrace_title">जिओ ट्रेस</string>
-  <string name="polygon_save">बहुभुज म्हणून जतन करा</string>
-  <string name="polyline_save">पॉलीलीन म्हणून जतन करा</string>
-  <string name="gps_enable_message">आपल्या डिव्हाइसमध्ये जीपीएस अक्षम केले आहे आपण ते सक्षम करू इच्छिता?</string>
-  <string name="select_offline_layer">ऑफलाइन स्तर निवडा</string>
-  <string name="polygon_or_polyline">जिओ ट्रेस जतन हे प्रमाणे करा</string>
-  <string name="minutes">मिनिटे</string>
   <string name="geo_clear_warning">वैशिष्ट्य आधीच तयार केले आपण वैशिष्ट्य साफ करू इच्छिता?</string>
   <string name="geo_exit_warning">बदल टाकून ओडीके कडे परत जा?</string>
   <string name="polygon_validator">बहुभुज तयार करण्यासाठी किमान 3 गुण असणे आवश्यक आहे</string>
   <string name="clear">साफ करा</string>
-  <string name="polyline_polygon_text">जिओ ट्रेस जतन हे प्रमाणे करा</string>
-  <string name="manual_mode">मॅन्युअल माध्यम</string>
-  <string name="automatic_mode">स्वयंचलित माध्यम</string>
-  <string name="geoshape_instruction">ठिकाणाच्या ठिकाणी ठेवण्यासाठी जास्त वेळ दाबा</string>
-  <string name="geotrace_instruction">लॉकची प्रतीक्षा करा, नंतर प्रारंभ करण्यासाठी जोडा मार्कर बटण टॅप करा.</string>
   <string name="geopoint_instruction">चिन्ह ठेवण्यासाठी जास्त वेळ दाबा किंवा जोडा मार्कर बटण टॅप करा</string>
   <string name="geopoint_no_draggable_instruction">जोडा मार्कर बटण टॅप करा</string>
   <string name="discard">टाकून द्या</string>
-  <string name="zoom_to_where">झूम टु …</string>
-  <string name="zoom_to_location">वर्तमान स्थानावर झूम</string>
-  <string name="zoom_to_feature">जतन केलेल्या वैशिष्ट्य पर्यंत झूम करा</string>
   <string name="geoshape_view_change_location">जिओ शेप पहा किंवा बदला</string>
   <string name="geotrace_view_change_location">जिओ ट्रेस पहा किंवा बदला</string>
   <string name="bearing">असणारा:%.3f</string>
@@ -347,7 +321,6 @@
   <string name="install_openmapkit">कृपया ओपन मॅप किट स्थापित करा!</string>
   <string name="go_back">परत जा</string>
   <string name="download_selected">निवडलेल्या डाउनलोड करा</string>
-  <string name="record_geopoint">जिओ पॉईंट रेकॉर्ड करा</string>
   <string name="gps_result">अक्षांश: %1$s\nरेखांश: %2$s\nअल्टिट्यूड: %3$sm\nअॅक्चुसीसी: %4$sm</string>
   <string name="parser_exception">एक्स पाथ पार्सर अपवादः  \"%s\"</string>
   <string name="selected_answer">निवडलेले: %s</string>
@@ -399,7 +372,6 @@
   <string name="instance_scan_completed">पूर्ण स्कॅनिंग</string>
   <string name="instance_scan_count">%1$d  फॉर्म जोडले.</string>
   <string name="sort_the_list">सूची क्रमवारी लावा</string>
-  <string name="request_permissions_google_account">ओडीके ची संकल्पना रिक्त फॉर्म प्राप्त करण्यासाठी आणि भरलेल्या फॉर्म सबमिट करण्यासाठी आपल्या गूगल खात्यात प्रवेश करण्याची आवश्यकता आहे.</string>
   <string name="filter_the_list">सूची फिल्टर करा</string>
   <string name="language">भाषा</string>
   <string name="google_auth_io_exception_msg">API कॉल करण्यात अक्षम. आपण स्थानिक बिल्ड चालवत असल्यास, कृपया प्रोजेक्ट रीडमेचे पुनरावलोकन करा.</string>
@@ -452,7 +424,6 @@
   <string name="wifi_autosend">केवळ Wifi</string>
   <string name="cellular_autosend">केवळ सेल्यूलर</string>
   <string name="wifi_cellular_autosend">वायफाय किंवा सेल्यूलर</string>
-  <string name="map_basemap_behavior_title">बेसमॅप</string>
   <string name="form_management_preferences">फॉर्म व्यवस्थापन</string>
   <string name="form_submission_category">फॉर्म सबमिशन</string>
   <string name="form_filling_category">फॉर्म भरणे</string>
@@ -465,6 +436,7 @@
   <string name="type">प्रकार</string>
   <string name="form_entry">फॉर्म एन्ट्रीमधून लपविण्यासाठी अनचेक करा</string>
   <string name="use_device_language">डिव्हाइस भाषा वापरा</string>
-  <string name="not_supported_offline_layer_format">निवडलेली ऑफलाइन स्तर फाइल PBF स्वरूपन वापरते जी समर्थित नाही!</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Sms submission-->
 </resources>

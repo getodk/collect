@@ -22,6 +22,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.xform.parse.XFormParser;
@@ -43,12 +44,18 @@ import java.math.BigInteger;
 import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import timber.log.Timber;
 
 /**
@@ -67,6 +74,22 @@ public class FileUtils {
     public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
     public static final String AUTO_DELETE = "autoDelete";
     public static final String AUTO_SEND = "autoSend";
+
+    /** Suffix for the form media directory. */
+    public static final String MEDIA_SUFFIX = "-media";
+
+    /** Filename of the last-saved instance data. */
+    public static final String LAST_SAVED_FILENAME = "last-saved.xml";
+
+    /** Valid XML stub that can be parsed without error. */
+    private static final String STUB_XML = "<?xml version='1.0' ?><stub />";
+
+    /** True if we have checked whether /sdcard points to getExternalStorageDirectory(). */
+    private static boolean isSdcardSymlinkChecked;
+
+    /** The result of checking whether /sdcard points to getExternalStorageDirectory(). */
+    private static boolean isSdcardSymlinkSameAsExternalStorageDirectory;
+
     static int bufSize = 16 * 1024; // May be set by unit test
 
     private FileUtils() {
@@ -80,49 +103,6 @@ public class FileUtils {
     public static boolean createFolder(String path) {
         File dir = new File(path);
         return dir.exists() || dir.mkdirs();
-    }
-
-    public static byte[] getFileAsBytes(File file) {
-        try (InputStream is = new FileInputStream(file)) {
-
-            // Get the size of the file
-            long length = file.length();
-            if (length > Integer.MAX_VALUE) {
-                Timber.e("File %s is too large", file.getName());
-                return null;
-            }
-
-            // Create the byte array to hold the data
-            byte[] bytes = new byte[(int) length];
-
-            // Read in the bytes
-            int offset = 0;
-            int read = 0;
-            try {
-                while (offset < bytes.length && read >= 0) {
-                    read = is.read(bytes, offset, bytes.length - offset);
-                    offset += read;
-                }
-            } catch (IOException e) {
-                Timber.e(e, "Cannot read file %s", file.getName());
-                return null;
-            }
-
-            // Ensure all the bytes have been read in
-            if (offset < bytes.length) {
-                try {
-                    throw new IOException("Could not completely read file " + file.getName());
-                } catch (IOException e) {
-                    Timber.e(e);
-                    return null;
-                }
-            }
-
-            return bytes;
-        } catch (IOException e) {
-            Timber.e(e);
-        }
-        return new byte[0];
     }
 
     public static String getMd5Hash(File file) {
@@ -400,9 +380,54 @@ public class FileUtils {
         }
     }
 
+    public static String getFormBasename(File formXml) {
+        return getFormBasename(formXml.getName());
+    }
+
+    public static String getFormBasename(String formFilePath) {
+        return formFilePath.substring(0, formFilePath.lastIndexOf('.'));
+    }
+
     public static String constructMediaPath(String formFilePath) {
-        String pathNoExtension = formFilePath.substring(0, formFilePath.lastIndexOf('.'));
-        return pathNoExtension + "-media";
+        return getFormBasename(formFilePath) + MEDIA_SUFFIX;
+    }
+
+    public static File getFormMediaDir(File formXml) {
+        final String formFileName = getFormBasename(formXml);
+        return new File(formXml.getParent(), formFileName + MEDIA_SUFFIX);
+    }
+
+    public static String getFormBasenameFromMediaFolder(File mediaFolder) {
+        /*
+         * TODO (from commit 37e3467): Apparently the form name is neither
+         * in the formController nor the formDef. In fact, it doesn't seem to
+         * be saved into any object in JavaRosa. However, the mediaFolder
+         * has the substring of the file name in it, so we extract the file name
+         * from here. Awkward...
+         */
+        return mediaFolder.getName().split(MEDIA_SUFFIX)[0];
+    }
+
+    public static File getLastSavedFile(File formXml) {
+        return new File(getFormMediaDir(formXml), LAST_SAVED_FILENAME);
+    }
+
+    public static String getLastSavedPath(File mediaFolder) {
+        return mediaFolder.getAbsolutePath() + File.separator + LAST_SAVED_FILENAME;
+    }
+
+    /**
+     * Returns the path to the last-saved file for this form,
+     * creating a valid stub if it doesn't yet exist.
+     */
+    public static String getOrCreateLastSavedSrc(File formXml) {
+        File lastSavedFile = getLastSavedFile(formXml);
+
+        if (!lastSavedFile.exists()) {
+            write(lastSavedFile, STUB_XML.getBytes(Charset.forName("UTF-8")));
+        }
+
+        return "jr://file/" + LAST_SAVED_FILENAME;
     }
 
     /**
@@ -488,12 +513,9 @@ public class FileUtils {
     }
 
     public static byte[] read(File file) {
-        byte[] bytes = {};
-        try {
-            bytes = new byte[(int) file.length()];
-            InputStream is = new FileInputStream(file);
+        byte[] bytes = new byte[(int) file.length()];
+        try (InputStream is = new FileInputStream(file)) {
             is.read(bytes);
-            is.close();
         } catch (IOException e) {
             Timber.e(e);
         }
@@ -501,6 +523,9 @@ public class FileUtils {
     }
 
     public static void write(File file, byte[] data) {
+        // Make sure the directory path to this file exists.
+        file.getParentFile().mkdirs();
+
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(data);
             fos.close();
@@ -509,53 +534,72 @@ public class FileUtils {
         }
     }
 
+    /** Sorts file paths as if sorting the path components and extensions lexicographically. */
+    public static int comparePaths(String a, String b) {
+        // Regular string compareTo() is incorrect, because it will sort "/" and "."
+        // after other punctuation (e.g. "foo/bar" will sort AFTER "foo-2/bar" and
+        // "pic.jpg" will sort AFTER "pic-2.jpg").  Replacing these delimiters with
+        // '\u0000' and '\u0001' causes paths to sort correctly (assuming the paths
+        // don't already contain '\u0000' or '\u0001').  This is a bit of a hack,
+        // but it's a lot simpler and faster than comparing components one by one.
+        String sortKeyA = a.replace('/', '\u0000').replace('.', '\u0001');
+        String sortKeyB = b.replace('/', '\u0000').replace('.', '\u0001');
+        return sortKeyA.compareTo(sortKeyB);
+    }
+
+    public static String getFileExtension(String fileName) {
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex == -1) {
+            return "";
+        }
+        return fileName.substring(dotIndex + 1).toLowerCase(Locale.ROOT);
+    }
+
     /**
-     * With the FileProvider you have to manually grant and revoke read/write permissions to files you
-     * are sharing. With this approach the access only lasts as long as the target activity on Api versions
-     * above Kit Kat. Once you are below that you have to manually revoke the permissions.
+     * Grants read and write permissions to a content URI added to the specified intent.
      *
-     * @param intent that needs to have the permission flags
-     * @param uri    that the permissions are being applied to
-     * @return intent that has read and write permissions
+     * For Android > 4.4, the permissions expire when the receiving app's stack is finished. For
+     * Android <= 4.4, the permissions are granted to all applications that can respond to the
+     * intent.
+     *
+     * For true security, the permissions for Android <= 4.4 should be revoked manually but we don't
+     * revoke them because we don't have many users on lower API levels and prior to targeting API
+     * 24+, all apps always had access to the files anyway.
      */
     public static void grantFilePermissions(Intent intent, Uri uri, Context context) {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
-        /*
-         Workaround for Android bug.
-         grantUriPermission also needed for KITKAT,
-         see https://code.google.com/p/android/issues/detail?id=76683
-         */
+        // The preferred flag-based strategy does not work with all intent types for Android <= 4.4
+        // bug report: https://issuetracker.google.com/issues/37005552
+        // workaround: https://stackoverflow.com/a/18332000/137744
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            List<ResolveInfo> resInfoList = context.getPackageManager()
+                    .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+
             for (ResolveInfo resolveInfo : resInfoList) {
                 String packageName = resolveInfo.activityInfo.packageName;
-                context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                context.grantUriPermission(packageName, uri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             }
         }
     }
 
-
     /**
-     * With the FileProvider you have to manually grant and revoke read/write permissions to files you
-     * are sharing. With this approach the access only lasts as long as the target activity on Api versions
-     * above Kit Kat. Once you are below that you have to manually revoke the permissions.
+     * Grants read permissions to a content URI added to the specified Intent.
      *
-     * @param intent that needs to have the permission flags
-     * @param uri    that the permissions are being applied to
-     * @return intent that has read and write permissions
+     * See {@link #grantFileReadPermissions(Intent, Uri, Context)} for details.
      */
     public static void grantFileReadPermissions(Intent intent, Uri uri, Context context) {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-        /*
-         Workaround for Android bug.
-         grantUriPermission also needed for KITKAT,
-         see https://code.google.com/p/android/issues/detail?id=76683
-         */
+        // The preferred flag-based strategy does not work with all intent types for Android <= 4.4
+        // bug report: https://issuetracker.google.com/issues/37005552
+        // workaround: https://stackoverflow.com/a/18332000/137744
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            List<ResolveInfo> resInfoList = context.getPackageManager()
+                    .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+
             for (ResolveInfo resolveInfo : resInfoList) {
                 String packageName = resolveInfo.activityInfo.packageName;
                 context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -563,9 +607,91 @@ public class FileUtils {
         }
     }
 
-    public static void revokeFileReadWritePermission(Context context, Uri uri) {
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            context.revokeUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+    /** Uses the /sdcard symlink to shorten a path, if it's valid to do so. */
+    @SuppressWarnings("PMD.DoNotHardCodeSDCard")
+    public static File simplifyPath(File file) {
+        // The symlink at /sdcard points to the same location as the storage
+        // path returned by getExternalStorageDirectory() on every Android
+        // device and emulator as far as we know; but, just to be certain
+        // that we don't lie to the user, we'll confirm that's really true.
+        if (!isSdcardSymlinkChecked) {
+            checkIfSdcardSymlinkSameAsExternalStorageDirectory();
+            isSdcardSymlinkChecked = true;  // this check is expensive; only do it once
+        }
+        if (isSdcardSymlinkSameAsExternalStorageDirectory) {
+            // They point to the same place, so it's safe to replace the longer
+            // storage path with the short symlink.
+            String storagePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+            String path = file.getAbsolutePath();
+            if (path.startsWith(storagePath + "/")) {
+                return new File("/sdcard" + path.substring(storagePath.length()));
+            }
+        }
+        return file;
+    }
+
+    /** Checks whether /sdcard points to the same place as getExternalStorageDirectory(). */
+    @SuppressWarnings("PMD.DoNotHardCodeSDCard")
+    @SuppressFBWarnings(
+        value = "DMI_HARDCODED_ABSOLUTE_FILENAME",
+        justification = "The purpose of this function is to test this specific path."
+    )
+    private static void checkIfSdcardSymlinkSameAsExternalStorageDirectory() {
+        try {
+            // createTempFile() guarantees a randomly named file that did not previously exist.
+            File shortPathFile = File.createTempFile("odk", null, new File("/sdcard"));
+            try {
+                String name = shortPathFile.getName();
+                File longPathFile = new File(Environment.getExternalStorageDirectory(), name);
+
+                // If we delete the file via one path and the file disappears at the
+                // other path, then we know that both paths point to the same place.
+                if (shortPathFile.exists() && longPathFile.exists()) {
+                    longPathFile.delete();
+                    if (!shortPathFile.exists()) {
+                        isSdcardSymlinkSameAsExternalStorageDirectory = true;
+                        return;
+                    }
+                }
+            } finally {
+                shortPathFile.delete();
+            }
+        } catch (IOException e) { /* ignore */ }
+        isSdcardSymlinkSameAsExternalStorageDirectory = false;
+    }
+
+    /** Iterates over all directories and files under a root path. */
+    public static Iterable<File> walk(File root) {
+        return () -> new Walker(root, true);
+    }
+
+    public static Iterable<File> walkBreadthFirst(File root) {
+        return () -> new Walker(root, false);
+    }
+
+    /** An iterator that walks over all the directories and files under a given path. */
+    private static class Walker implements Iterator<File> {
+        private final List<File> queue = new ArrayList<>();
+        private final boolean depthFirst;
+
+        Walker(File root, boolean depthFirst) {
+            queue.add(root);
+            this.depthFirst = depthFirst;
+        }
+
+        @Override public boolean hasNext() {
+            return !queue.isEmpty();
+        }
+
+        @Override public File next() {
+            if (queue.isEmpty()) {
+                throw new NoSuchElementException();
+            }
+            File next = queue.remove(0);
+            if (next.isDirectory()) {
+                queue.addAll(depthFirst ? 0 : queue.size(), Arrays.asList(next.listFiles()));
+            }
+            return next;
         }
     }
 }

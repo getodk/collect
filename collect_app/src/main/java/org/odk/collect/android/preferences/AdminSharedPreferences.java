@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.preferences;
 
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 import org.odk.collect.android.application.Collect;
@@ -25,7 +26,7 @@ import static org.odk.collect.android.preferences.AdminPreferencesFragment.ADMIN
 public class AdminSharedPreferences {
 
     private static AdminSharedPreferences instance;
-    private final android.content.SharedPreferences sharedPreferences;
+    private final SharedPreferences sharedPreferences;
 
     private AdminSharedPreferences() {
         sharedPreferences = Collect.getInstance().getSharedPreferences(ADMIN_PREFERENCES, 0);
@@ -91,5 +92,9 @@ public class AdminSharedPreferences {
         for (String key : ALL_KEYS) {
             save(key, get(key));
         }
+    }
+
+    public SharedPreferences getSharedPreferences() {
+        return sharedPreferences;
     }
 }

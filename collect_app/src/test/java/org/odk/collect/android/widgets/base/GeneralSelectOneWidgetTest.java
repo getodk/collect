@@ -1,13 +1,17 @@
 package org.odk.collect.android.widgets.base;
 
-import android.support.annotation.NonNull;
+import android.app.Activity;
+
+import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.junit.Test;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
+import org.robolectric.Robolectric;
 
 import java.util.List;
 
@@ -20,6 +24,8 @@ import static org.junit.Assert.assertNull;
 
 public abstract class GeneralSelectOneWidgetTest<W extends MultiChoiceWidget>
         extends SelectWidgetTest<W, SelectOneData> {
+
+    protected Activity activity = Robolectric.buildActivity(FormEntryActivity.class).create().get();
 
     @NonNull
     @Override

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>Select minimal</h:title>
+        <model>
+            <instance>
+                <selectMinimal id="selectMinimal">
+                    <selectone />
+                    <selectmulti />
+                    <meta>
+                        <instanceID />
+                    </meta>
+                </selectMinimal>
+            </instance>
+            <bind nodeset="/selectMinimal/selectone" type="select1" />
+            <bind nodeset="/selectMinimal/selectmulti" type="select" />
+            <bind jr:preload="uid" nodeset="/selectMinimal/meta/instanceID" readonly="true()" type="string" />
+        </model>
+    </h:head>
+    <h:body>
+        <select1 appearance="minimal" ref="/selectMinimal/selectone">
+            <label>Select one</label>
+            <item>
+                <label>Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel</label>
+                <value>a</value>
+            </item>
+            <item>
+                <label>Nam varius, lectus non consectetur tincidunt, augue augue dapibus dolor, nec convallis ligula erat eget</label>
+                <value>b</value>
+            </item>
+        </select1>
+        <select appearance="minimal" ref="/selectMinimal/selectmulti">
+            <label>Select multiple</label>
+            <item>
+                <label>Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel</label>
+                <value>a</value>
+            </item>
+            <item>
+                <label>Nam varius, lectus non consectetur tincidunt, augue augue dapibus dolor, nec convallis ligula erat eget</label>
+                <value>b</value>
+            </item>
+        </select>
+    </h:body>
+</h:html>

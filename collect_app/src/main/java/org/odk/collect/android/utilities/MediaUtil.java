@@ -2,7 +2,7 @@ package org.odk.collect.android.utilities;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * @author James Knight

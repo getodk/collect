@@ -68,13 +68,11 @@ public abstract class SelectImageMapWidget extends SelectWidget {
                     "        <script src=\"file:///android_asset/svg_map_helper.js\"></script>\n" +
                     "    </body>\n" +
                     "</html>";
-
+    private final boolean isSingleSelect;
+    protected List<Selection> selections = new ArrayList<>();
     private CustomWebView webView;
     private TextView selectedAreasLabel;
-
-    private final boolean isSingleSelect;
     private String imageMapFilePath;
-    protected List<Selection> selections = new ArrayList<>();
 
     public SelectImageMapWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -90,10 +88,27 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         createLayout();
     }
 
+    private static String convertDocumentToString(Document doc) {
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer;
+        try {
+            transformer = transformerFactory.newTransformer();
+            StringWriter writer = new StringWriter();
+            transformer.transform(new DOMSource(doc), new StreamResult(writer));
+
+            return writer.getBuffer().toString();
+        } catch (TransformerException e) {
+            Timber.w(e);
+        }
+
+        return null;
+    }
+
     @Override
     public void clearAnswer() {
         selections.clear();
         webView.loadUrl("javascript:clearAreas()");
+        widgetValueChanged();
     }
 
     @Override
@@ -102,9 +117,8 @@ public abstract class SelectImageMapWidget extends SelectWidget {
     }
 
     private void createLayout() {
-        readItems();
-
         webView = new CustomWebView(getContext());
+
         selectedAreasLabel = getAnswerTextView();
         answerLayout.addView(webView);
         answerLayout.addView(selectedAreasLabel);
@@ -133,6 +147,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
             webView.getSettings().setUseWideViewPort(true);
             int height = (int) (getResources().getDisplayMetrics().heightPixels / 1.7); // about 60% of a screen
             webView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
+            webView.setOnTouchListener((v, event) -> getFormEntryPrompt().isReadOnly());
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public void onPageFinished(WebView view, String url) {
@@ -146,7 +161,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         }
     }
 
-    private void selectArea(String areaId) {
+    protected void selectArea(String areaId) {
         SelectChoice selectChoice = null;
         for (SelectChoice sc : items) {
             if (areaId.equalsIgnoreCase(sc.getValue())) {
@@ -156,6 +171,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         if (selectChoice != null) {
             selections.add(new Selection(selectChoice));
         }
+        widgetValueChanged();
     }
 
     private void unselectArea(String areaId) {
@@ -168,6 +184,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         }
 
         selections.remove(selectionToRemove);
+        widgetValueChanged();
     }
 
     private void notifyChanges() {
@@ -175,13 +192,12 @@ public abstract class SelectImageMapWidget extends SelectWidget {
     }
 
     private String getParsedSVGFile() {
-        Document document;
-        try {
-            File initialFile = new File(imageMapFilePath);
+        File initialFile = new File(imageMapFilePath);
 
+        try (FileInputStream inputStream = new FileInputStream(initialFile)) {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            document = documentBuilder.parse(new FileInputStream(initialFile));
+            Document document = documentBuilder.parse(inputStream);
 
             Element element = document.getDocumentElement();
             element.normalize();
@@ -203,13 +219,11 @@ public abstract class SelectImageMapWidget extends SelectWidget {
             addOnClickAttributes(nodeList);
             nodeList = document.getElementsByTagName("polygon");
             addOnClickAttributes(nodeList);
-
+            return convertDocumentToString(document);
         } catch (Exception e) {
             Timber.w(e);
             return getContext().getString(R.string.svg_file_does_not_exist);
         }
-
-        return convertDocumentToString(document);
     }
 
     private void addOnClickAttributes(NodeList nodes) {
@@ -239,22 +253,6 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         if (svg.getAttributes().getNamedItem("height") == null) {
             ((Element) svg).setAttribute("height", "1000");
         }
-    }
-
-    private static String convertDocumentToString(Document doc) {
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer;
-        try {
-            transformer = transformerFactory.newTransformer();
-            StringWriter writer = new StringWriter();
-            transformer.transform(new DOMSource(doc), new StreamResult(writer));
-
-            return writer.getBuffer().toString();
-        } catch (TransformerException e) {
-            Timber.w(e);
-        }
-
-        return null;
     }
 
     protected void refreshSelectedItemsLabel() {

@@ -30,10 +30,12 @@ the specific language governing permissions and limitations under the License. -
     <string-array name="transport_type_entry_values" translatable="false">
         <item>@string/transport_type_value_internet</item>
         <item>@string/transport_type_value_sms</item>
+        <item>@string/transport_type_value_both</item>
     </string-array>
     <string-array name="transport_type_entries">
         <item>@string/transport_type_internet</item>
         <item>@string/transport_type_sms</item>
+        <item>@string/transport_type_both</item>
     </string-array>
 
     <!-- DO NOT alter font_size_entry_values - used internally in preferences activity -->
@@ -83,58 +85,6 @@ the specific language governing permissions and limitations under the License. -
         <item>@string/image_size_small</item>
         <item>@string/image_size_medium</item>
         <item>@string/image_size_large</item>
-    </string-array>
-    <string-array name="map_sdk_selector_entries">
-        <item>@string/google_maps_sdk</item>
-        <item>@string/openstreetmap_sdk</item>
-    </string-array>
-    <string-array name="map_sdk_selector_entry_values" translatable="false">
-        <item>google_maps</item>
-        <item>osmdroid</item>
-    </string-array>
-
-    <!-- Basemaps-->
-    <string-array name="map_google_basemap_selector_entry_values" translatable="false">
-        <item>streets</item>
-        <item>satellite</item>
-        <item>terrain‎</item>
-        <item>hybrid</item>
-    </string-array>
-    <string-array name="map_google_basemap_selector_entries">
-        <item>@string/streets</item>
-        <item>@string/satellite</item>
-        <item>@string/terrain</item>
-        <item>@string/hybrid</item>
-    </string-array>
-
-    <string-array name="map_osm_basemap_selector_entry_values" translatable="false">
-        <item>openmap_streets</item>
-        <item>openmap_usgs_topo</item>
-        <item>openmap_usgs_sat</item>
-        <item>openmap_usgs_img</item>
-        <item>openmap_stamen_terrain</item>
-        <item>openmap_cartodb_positron</item>
-        <item>openmap_cartodb_darkmatter</item>
-    </string-array>
-    <string-array name="map_osm_basemap_selector_entries">
-        <item>@string/openmap_streets</item>
-        <item>@string/openmap_usgs_topo</item>
-        <item>@string/openmap_usgs_sat</item>
-        <item>@string/openmap_usgs_img</item>
-        <item>@string/openmap_stamen_terrain</item>
-        <item>@string/openmap_cartodb_positron</item>
-        <item>@string/openmap_cartodb_darkmatter</item>
-    </string-array>
-    <string-array name="delay_scale" translatable="false">
-        <item>1</item>
-        <item>5</item>
-        <item>10</item>
-        <item>20</item>
-        <item>30</item>
-    </string-array>
-    <string-array name="time_scale" translatable="false">
-        <item>@string/seconds</item>
-        <item>@string/minutes</item>
     </string-array>
     <string-array name="autosend_selector_entries">
         <item>@string/off</item>
@@ -202,6 +152,20 @@ the specific language governing permissions and limitations under the License. -
         <item>@string/islamic_month_10</item>
         <item>@string/islamic_month_11</item>
         <item>@string/islamic_month_12</item>
+    </string-array>
+    <string-array name="persian_months">
+        <item>@string/persian_month_1</item>
+        <item>@string/persian_month_2</item>
+        <item>@string/persian_month_3</item>
+        <item>@string/persian_month_4</item>
+        <item>@string/persian_month_5</item>
+        <item>@string/persian_month_6</item>
+        <item>@string/persian_month_7</item>
+        <item>@string/persian_month_8</item>
+        <item>@string/persian_month_9</item>
+        <item>@string/persian_month_10</item>
+        <item>@string/persian_month_11</item>
+        <item>@string/persian_month_12</item>
     </string-array>
     <string-array name="periodic_form_updates_check_entry_values">
         <item>@string/never_value</item>

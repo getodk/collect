@@ -39,7 +39,6 @@
   <string name="discard_answer">Eemalda vastus</string>
   <string name="discard_group">Eemalda grupp</string>
   <string name="download">Lae alla</string>
-  <string name="download_forms_result">Lae tulemused alla</string>
   <string name="downloading_data">Serveriga ühendumine</string>
   <string name="do_not_change">Tühista</string>
   <string name="do_not_exit">Tühista</string>
@@ -199,7 +198,6 @@
   <string name="found_in_settings">Üldseadetest eemaldamiseks puhasta väli </string>
   <string name="save_preferences">Salvesta seaded mäluseadmele</string>
   <string name="form_forward">Järgmine</string>
-  <string name="form_backward">Eelmine</string>
   <string name="navigation">Rakenduses liikumine</string>
   <string name="swipe_navigation">Liikumiseks kasuta libistamist (swipe) käeliigutust</string>
   <string name="buttons_navigation">Liikumiseks kasuta edasi-tagasi nuppe</string>
@@ -262,7 +260,6 @@
   <string name="change_server_url">Serveri veebiaadress</string>
   <string name="google_search_browse">Otsi vorme. Või vali sirvimiseks \"Minu Drive\".</string>
   <string name="send_in_progress">Taustal jookseb andmete saatmine. Palun proovige varsti uuesti</string>
-  <string name="sheets_max_columns">Maksimum tulpade arv on 255, teie vormis on %s. Arvutustabeli üleslaadimine keelatud.</string>
   <string name="invalid_sheet_id">Vale lehe id: %1$s</string>
   <string name="google_sheets_missing_columns">Arvutustabelist on puudu järgmised tulbad: %1$s</string>
   <string name="password_error_whitespace">Salasõna alguses või lõpus ei ole lubatud kasutada tühikut</string>
@@ -270,13 +267,9 @@
   <string name="google_play_services_error_occured">Puudub ligipääs Google Maps-ile. Veenduge, et Google Play teenused on paigaldatud.</string>
   <string name="about_preferences">Teave</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Kaardistus</string>
-  <string name="map_sdk_selector_title">Kaardistus SDK</string>
-  <string name="map_sdk_behavior">Kaardistus SDK</string>
-  <string name="google_maps_sdk">Google Maps SDK</string>
-  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
-  <string name="show_map_sdk">Näita Map SDK valikuid</string>
-  <string name="openmap_streets">OSM Streets</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
@@ -285,39 +278,22 @@
   <string name="terrain">Maastik</string>
   <string name="hybrid">Hübriid</string>
   <string name="satellite">Satelliit</string>
-  <string name="map_basemap_selector_title">Aluskaardid</string>
-  <string name="show_map_basemap">Näita aluskaardi valikuid</string>
   <string name="save_point">Salvesta asukohapunkt</string>
   <string name="get_point">Loo asukohapunkt</string>
   <string name="geopoint_view_read_only">Vaata asukohapunkti</string>
   <string name="get_shape">Loo polügoon</string>
   <string name="get_trace">Alusta rada</string>
   <string name="geoshape_title">Polügoon</string>
-  <string name="select_geotrace_mode">Vali raja sisestusviis</string>
   <string name="start">Alusta</string>
   <string name="enable_gps">Luba GPS</string>
-  <string name="enable_gps_message">Teie seadmel on GPS keelatud. Kas te soovite lubada?</string>
   <string name="geotrace_title">Rada</string>
-  <string name="polygon_save">Salvesta polügoonina</string>
-  <string name="polyline_save">Salvesta polyline-ina</string>
-  <string name="gps_enable_message">Teie seadmel on GPS keelatud. Kas te soovite lubada?</string>
-  <string name="select_offline_layer">Vali offline kiht</string>
-  <string name="polygon_or_polyline">Salvesta rada kui</string>
-  <string name="minutes">Minutid</string>
   <string name="geo_clear_warning">Kujutis on juba loodud. Kas soovite kujutise eemaldada?</string>
   <string name="geo_exit_warning">Loobu muudatustest ja ava ODK?</string>
   <string name="polygon_validator">Polügooni loomiseks on vaja vähemalt 3 punkti</string>
   <string name="clear">Eemalda</string>
-  <string name="polyline_polygon_text">Salvesta rada kui</string>
-  <string name="manual_mode">Käsitsi sisestusviis</string>
-  <string name="automatic_mode">Automaatne sisestusviis</string>
-  <string name="geoshape_instruction">Märke paigutamiseks hoia pikalt soovitud asukohal.</string>
-  <string name="geotrace_instruction">Alustamiseks oota lukustust, seejärel puuduta markeri lisamise nuppu.</string>
   <string name="geopoint_instruction">Markeri paigutamiseks tuleb teha pikk hoidmine või valida marker nupp.</string>
   <string name="geopoint_no_draggable_instruction">Puuduta lisa marke nuppu.</string>
   <string name="discard">Loobu</string>
-  <string name="zoom_to_location">Liigu hetke asukohta</string>
-  <string name="zoom_to_feature">Liigu salvestatud asukohta</string>
   <string name="geoshape_view_change_location">Vaata või muuda polügooni</string>
   <string name="geotrace_view_change_location">Vaata või muuda rada</string>
   <string name="bearing">Suund: %.3f</string>
@@ -336,7 +312,6 @@
   <string name="install_openmapkit">Palun paigaldage OpenMapKit!</string>
   <string name="go_back">Liikuge tagasi</string>
   <string name="download_selected">Allalaadimine valitud</string>
-  <string name="record_geopoint">Salvesta asukohapunkt</string>
   <string name="gps_result">Laiuskraad: %1$s\nPikkuskraad: %2$s\nKõrgus: %3$sm\nTäpsusaste: %4$sm</string>
   <string name="parser_exception">XPathParser Viga: \"%s\"</string>
   <string name="selected_answer">Valitud: %s</string>
@@ -382,5 +357,7 @@
   <string name="encrypted_form">Krüptitud vorm</string>
   <string name="deleted_form">Kustutatud vorm</string>
   <string name="exit">Välju</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Sms submission-->
 </resources>

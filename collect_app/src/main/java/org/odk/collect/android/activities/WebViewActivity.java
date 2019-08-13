@@ -16,7 +16,7 @@ package org.odk.collect.android.activities;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -65,6 +65,7 @@ public class WebViewActivity extends CollectAbstractActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 progressBar.setVisibility(View.GONE);
+                getSupportActionBar().setTitle(view.getTitle());
             }
 
             @Override

@@ -16,7 +16,7 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Selection;
@@ -122,7 +122,6 @@ public class DecimalWidget extends StringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        clearFocus();
         String s = getAnswerTextField().getText().toString();
         if (useThousandSeparator) {
             s = ThousandsSeparatorTextWatcher.getOriginalString(s);

@@ -22,16 +22,16 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
+import androidx.annotation.NonNull;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import android.widget.Toast;
 import org.odk.collect.android.R;
-import org.odk.collect.android.adapters.ViewSentListAdapter;
+import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
@@ -40,10 +40,11 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.PermissionUtils;
+
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
-import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.
@@ -66,35 +67,34 @@ public class InstanceChooserList extends InstanceListActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chooser_list_layout);
+        setContentView(R.layout.form_chooser_list);
 
         String formMode = getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
 
             setTitle(getString(R.string.review_data));
             editMode = true;
-            sortingOptions = new String[]{
-                    getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
-                    getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc),
-                    getString(R.string.sort_by_status_asc), getString(R.string.sort_by_status_desc)
+            sortingOptions = new int[] {
+                    R.string.sort_by_name_asc, R.string.sort_by_name_desc,
+                    R.string.sort_by_date_asc, R.string.sort_by_date_desc,
+                    R.string.sort_by_status_asc, R.string.sort_by_status_desc
             };
         } else {
             setTitle(getString(R.string.view_sent_forms));
 
-            sortingOptions = new String[]{
-                    getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
-                    getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
+            sortingOptions = new int[] {
+                    R.string.sort_by_name_asc, R.string.sort_by_name_desc,
+                    R.string.sort_by_date_asc, R.string.sort_by_date_desc
             };
             ((TextView) findViewById(android.R.id.empty)).setText(R.string.no_items_display_sent_forms);
         }
 
-        requestStoragePermissions(this, new PermissionListener() {
+        new PermissionUtils().requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
                 try {
                     Collect.createODKDirs();
-                    Collect.getInstance().getActivityLogger().open();
                 } catch (RuntimeException e) {
                     createErrorDialog(e.getMessage(), EXIT);
                     return;
@@ -123,17 +123,13 @@ public class InstanceChooserList extends InstanceListActivity implements
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (Collect.allowClick()) {
-            Cursor c = (Cursor) listView.getAdapter().getItem(position);
-            startManagingCursor(c);
-            Uri instanceUri =
-                    ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,
-                            c.getLong(c.getColumnIndex(InstanceColumns._ID)));
+        if (Collect.allowClick(getClass().getName())) {
+            if (view.isEnabled()) {
+                Cursor c = (Cursor) listView.getAdapter().getItem(position);
+                Uri instanceUri =
+                        ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,
+                                c.getLong(c.getColumnIndex(InstanceColumns._ID)));
 
-            Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
-                    instanceUri.toString());
-
-            if (view.findViewById(R.id.visible_off).getVisibility() != View.VISIBLE) {
                 String action = getIntent().getAction();
                 if (Intent.ACTION_PICK.equals(action)) {
                     // caller is waiting on a picked form
@@ -165,6 +161,9 @@ public class InstanceChooserList extends InstanceListActivity implements
                     startActivity(intent);
                 }
                 finish();
+            } else {
+                TextView disabledCause = view.findViewById(R.id.form_subtitle2);
+                Toast.makeText(this, disabledCause.getText(), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -195,31 +194,17 @@ public class InstanceChooserList extends InstanceListActivity implements
         showSnackbar(result);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
-    }
-
     private void setupAdapter() {
         String[] data = new String[]{
-                InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT, InstanceColumns.DELETED_DATE
+                InstanceColumns.DISPLAY_NAME, InstanceColumns.DELETED_DATE
         };
         int[] view = new int[]{
-                R.id.text1, R.id.text2, R.id.text4
+                R.id.form_title, R.id.form_subtitle2
         };
 
-        if (editMode) {
-            listAdapter = new SimpleCursorAdapter(this, R.layout.two_item, null, data, view);
-        } else {
-            listAdapter = new ViewSentListAdapter(this, R.layout.two_item, null, data, view);
-        }
+        boolean shouldCheckDisabled = !editMode;
+        listAdapter = new InstanceListCursorAdapter(
+                this, R.layout.form_chooser_list_item, null, data, view, shouldCheckDisabled);
         listView.setAdapter(listAdapter);
     }
 
@@ -247,7 +232,7 @@ public class InstanceChooserList extends InstanceListActivity implements
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
         hideProgressBarIfAllowed();
-        listAdapter.changeCursor(cursor);
+        listAdapter.swapCursor(cursor);
     }
 
     @Override
@@ -256,8 +241,6 @@ public class InstanceChooserList extends InstanceListActivity implements
     }
 
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
-        Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", "show");
-
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         alertDialog.setMessage(errorMsg);
@@ -266,9 +249,6 @@ public class InstanceChooserList extends InstanceListActivity implements
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        Collect.getInstance().getActivityLogger().logAction(this,
-                                "createErrorDialog",
-                                shouldExit ? "exitApplication" : "OK");
                         if (shouldExit) {
                             finish();
                         }

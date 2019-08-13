@@ -134,7 +134,7 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
             boolean sortColumnAlreadyPresent = false;
 
             sb
-                    .append("CREATE TABLE ")
+                    .append("CREATE TABLE IF NOT EXISTS ")
                     .append(tableName)
                     .append(" ( ");
 

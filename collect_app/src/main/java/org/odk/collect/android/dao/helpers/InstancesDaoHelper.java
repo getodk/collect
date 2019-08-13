@@ -21,7 +21,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import timber.log.Timber;
@@ -47,7 +47,7 @@ public final class InstancesDaoHelper {
         if (formController != null && formController.getInstanceFile() != null) {
             // First check if we're at the end of the form, then check the preferences
             complete = end && (boolean) GeneralSharedPreferences.getInstance()
-                    .get(PreferenceKeys.KEY_COMPLETED_DEFAULT);
+                    .get(GeneralKeys.KEY_COMPLETED_DEFAULT);
 
             // Then see if we've already marked this form as complete before
             String path = formController.getInstanceFile().getAbsolutePath();
@@ -68,12 +68,14 @@ public final class InstancesDaoHelper {
     }
 
     public static Uri getLastInstanceUri(String path) {
-        try (Cursor c = new InstancesDao().getInstancesCursorForFilePath(path)) {
-            if (c != null && c.getCount() > 0) {
-                // should only be one...
-                c.moveToFirst();
-                String id = c.getString(c.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
-                return Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, id);
+        if (path != null) {
+            try (Cursor c = new InstancesDao().getInstancesCursorForFilePath(path)) {
+                if (c != null && c.getCount() > 0) {
+                    // should only be one...
+                    c.moveToFirst();
+                    String id = c.getString(c.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
+                    return Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, id);
+                }
             }
         }
         return null;
@@ -81,9 +83,11 @@ public final class InstancesDaoHelper {
 
     public static boolean isInstanceAvailable(String path) {
         boolean isAvailable = false;
-        try (Cursor c = new InstancesDao().getInstancesCursorForFilePath(path)) {
-            if (c != null) {
-                isAvailable = c.getCount() > 0;
+        if (path != null) {
+            try (Cursor c = new InstancesDao().getInstancesCursorForFilePath(path)) {
+                if (c != null) {
+                    isAvailable = c.getCount() > 0;
+                }
             }
         }
         return isAvailable;

@@ -20,7 +20,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.support.media.ExifInterface;
+import androidx.exifinterface.media.ExifInterface;
 
 import org.javarosa.core.model.instance.TreeElement;
 import org.odk.collect.android.R;
@@ -31,8 +31,8 @@ import java.io.IOException;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_IMAGE_SIZE;
-import static org.odk.collect.android.utilities.ApplicationConstants.XML_OPENROSA_NAMESPACE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_IMAGE_SIZE;
+import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.XML_OPENROSA_NAMESPACE;
 
 public class ImageConverter {
 
@@ -149,9 +149,18 @@ public class ImageConverter {
     }
 
     private static void rotateBitmap(Bitmap image, int degrees, String imagePath) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(degrees);
-        image = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
+        try {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(degrees);
+            image = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
+        } catch (OutOfMemoryError e) {
+            Timber.w(e);
+        }
         FileUtils.saveBitmapToFile(image, imagePath);
+    }
+
+    public static Bitmap scaleImageToNewWidth(Bitmap bitmap, int newWidth) {
+        int newHeight = (int) (((double) newWidth / (double) bitmap.getWidth()) * bitmap.getHeight());
+        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
     }
 }

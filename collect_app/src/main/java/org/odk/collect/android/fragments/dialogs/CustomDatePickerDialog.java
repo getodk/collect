@@ -20,8 +20,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AlertDialog;
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -119,8 +119,9 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        date = getDateAsGregorian(getOriginalDate());
         outState.putSerializable(FORM_INDEX, formIndex);
-        outState.putSerializable(DATE, getDateAsGregorian(getOriginalDate()));
+        outState.putSerializable(DATE, date);
         outState.putSerializable(DATE_PICKER_DETAILS, datePickerDetails);
 
         super.onSaveInstanceState(outState);
@@ -138,16 +139,14 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
         monthPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                updateDays();
-                updateGregorianDateLabel();
+                monthUpdated();
             }
         });
         yearPicker = getDialog().findViewById(R.id.year_picker);
         yearPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                updateDays();
-                updateGregorianDateLabel();
+                yearUpdated();
             }
         });
 
@@ -187,26 +186,43 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
         gregorianDateText.setText(label);
     }
 
-    protected void setUpDayPicker(LocalDateTime date) {
-        dayPicker.setMinValue(1);
-        dayPicker.setMaxValue(date.dayOfMonth().getMaximumValue());
+    protected void setUpDayPicker(int dayOfMonth, int daysInMonth) {
+        setUpDayPicker(1, dayOfMonth, daysInMonth);
+    }
+
+    protected void setUpDayPicker(int minDay, int dayOfMonth, int daysInMonth) {
+        dayPicker.setMinValue(minDay);
+        dayPicker.setMaxValue(daysInMonth);
         if (datePickerDetails.isSpinnerMode()) {
-            dayPicker.setValue(date.getDayOfMonth());
+            dayPicker.setValue(dayOfMonth);
         }
     }
 
-    protected void setUpMonthPicker(LocalDateTime date, String[] monthsArray) {
+    protected void setUpMonthPicker(int monthOfYear, String[] monthsArray) {
+        // In Myanmar calendar we don't have specified amount of months, it's dynamic so clear
+        // values first to avoid ArrayIndexOutOfBoundsException
+        monthPicker.setDisplayedValues(null);
         monthPicker.setMaxValue(monthsArray.length - 1);
         monthPicker.setDisplayedValues(monthsArray);
         if (!datePickerDetails.isYearMode()) {
-            monthPicker.setValue(date.getMonthOfYear() - 1);
+            monthPicker.setValue(monthOfYear - 1);
         }
     }
 
-    protected void setUpYearPicker(LocalDateTime date, int minSupportedYear, int maxSupportedYear) {
+    protected void setUpYearPicker(int year, int minSupportedYear, int maxSupportedYear) {
         yearPicker.setMinValue(minSupportedYear);
         yearPicker.setMaxValue(maxSupportedYear);
-        yearPicker.setValue(date.getYear());
+        yearPicker.setValue(year);
+    }
+
+    protected void monthUpdated() {
+        updateDays();
+        updateGregorianDateLabel();
+    }
+
+    protected void yearUpdated() {
+        updateDays();
+        updateGregorianDateLabel();
     }
 
     public int getDay() {
@@ -217,12 +233,23 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
         return monthPicker.getDisplayedValues()[monthPicker.getValue()];
     }
 
+    public int getMonthId() {
+        return monthPicker.getValue();
+    }
+
     public int getYear() {
         return yearPicker.getValue();
     }
 
     public LocalDateTime getDate() {
         return date;
+    }
+
+    public LocalDateTime getDateWithSkippedDaylightSavingGapIfExists() {
+        return DateTimeUtils
+                .skipDaylightSavingGapIfExists(getDate())
+                .toDateTime()
+                .toLocalDateTime();
     }
 
     protected abstract void updateDays();

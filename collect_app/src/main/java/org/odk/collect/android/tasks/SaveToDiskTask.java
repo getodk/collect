@@ -65,14 +65,12 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     public static final int SAVED_AND_EXIT = 504;
     public static final int ENCRYPTION_ERROR = 505;
 
-
     public SaveToDiskTask(Uri uri, boolean saveAndExit, boolean markCompleted, String updatedName) {
         this.uri = uri;
         save = saveAndExit;
         this.markCompleted = markCompleted;
         instanceName = updatedName;
     }
-
 
     /**
      * Initialize {@link FormEntryController} with {@link org.javarosa.core.model.FormDef} from binary or from XML. If
@@ -113,9 +111,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         if (markCompleted) {
             formController.postProcessInstance();
         }
-
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "save",
-                Boolean.toString(markCompleted));
 
         // close all open databases of external data.
         Collect.getInstance().getExternalDataManager().close();
@@ -265,7 +260,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
         publishProgress(Collect.getInstance().getString(R.string.survey_saving_collecting_message));
 
-
         ByteArrayPayload payload = formController.getFilledInFormXml();
         // write out xml
         String instancePath = formController.getInstanceFile().getAbsolutePath();
@@ -276,9 +270,13 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
         writeFile(payload, instancePath);
 
+        // Write SMS data
         final ByteArrayPayload payloadSms = formController.getFilledInFormSMS();
-        // Write SMS to card
         writeFile(payloadSms, getSmsInstancePath(instancePath));
+
+        // Write last-saved instance
+        String lastSavedPath = formController.getLastSavedPath();
+        writeFile(payload, lastSavedPath);
 
         // update the uri. We have exported the reloadable instance, so update status...
         // Since we saved a reloadable instance, it is flagged as re-openable so that if any error
@@ -337,30 +335,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             updateInstanceDatabase(false, canEditAfterCompleted);
 
             if (!canEditAfterCompleted) {
-                // AT THIS POINT, there is no going back.  We are committed
-                // to returning "success" (true) whether or not we can
-                // rename "submission.xml" to instanceXml and whether or
-                // not we can delete the plaintext media files.
-                //
-                // Handle the fall-out for a failed "submission.xml" rename
-                // in the InstanceUploader task.  Leftover plaintext media
-                // files are handled during form deletion.
-
-                // delete the restore Xml file.
-                if (!instanceXml.delete()) {
-                    String msg = "Error deleting " + instanceXml.getAbsolutePath()
-                            + " prior to renaming submission.xml";
-                    Timber.e(msg);
-                    throw new IOException(msg);
-                }
-
-                // rename the submission.xml to be the instanceXml
-                if (!submissionXml.renameTo(instanceXml)) {
-                    String msg =
-                            "Error renaming submission.xml to " + instanceXml.getAbsolutePath();
-                    Timber.e(msg);
-                    throw new IOException(msg);
-                }
+                manageFilesAfterSavingEncryptedForm(instanceXml, submissionXml);
             } else {
                 // try to delete the submissionXml file, since it is
                 // identical to the existing instanceXml file
@@ -375,10 +350,37 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             // if encrypted, delete all plaintext files
             // (anything not named instanceXml or anything not ending in .enc)
             if (isEncrypted) {
-                if (!EncryptionUtils.deletePlaintextFiles(instanceXml)) {
+                if (!EncryptionUtils.deletePlaintextFiles(instanceXml, new File(lastSavedPath))) {
                     Timber.e("Error deleting plaintext files for %s", instanceXml.getAbsolutePath());
                 }
             }
+        }
+    }
+
+    static void manageFilesAfterSavingEncryptedForm(File instanceXml, File submissionXml) throws IOException {
+        // AT THIS POINT, there is no going back.  We are committed
+        // to returning "success" (true) whether or not we can
+        // rename "submission.xml" to instanceXml and whether or
+        // not we can delete the plaintext media files.
+        //
+        // Handle the fall-out for a failed "submission.xml" rename
+        // in the InstanceUploaderTask task.  Leftover plaintext media
+        // files are handled during form deletion.
+
+        // delete the restore Xml file.
+        if (!instanceXml.delete()) {
+            String msg = "Error deleting " + instanceXml.getAbsolutePath()
+                    + " prior to renaming submission.xml";
+            Timber.e(msg);
+            throw new IOException(msg);
+        }
+
+        // rename the submission.xml to be the instanceXml
+        if (!submissionXml.renameTo(instanceXml)) {
+            String msg =
+                    "Error renaming submission.xml to " + instanceXml.getAbsolutePath();
+            Timber.e(msg);
+            throw new IOException(msg);
         }
     }
 
@@ -397,14 +399,13 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
         // read from data stream
         byte[] data = new byte[len];
-        // try {
         int read = is.read(data, 0, len);
         if (read > 0) {
+            // Make sure the directory path to this file exists.
+            file.getParentFile().mkdirs();
             // write xml file
             RandomAccessFile randomAccessFile = null;
             try {
-                // String filename = path + File.separator +
-                // path.substring(path.lastIndexOf(File.separator) + 1) + ".xml";
                 randomAccessFile = new RandomAccessFile(file, "rws");
                 randomAccessFile.write(data);
             } finally {

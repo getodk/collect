@@ -24,17 +24,23 @@ import android.telephony.TelephonyManager;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
+import org.odk.collect.android.events.RxEventBus;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_EMAIL;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_PHONENUMBER;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_USERNAME;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_EMAIL;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_PHONENUMBER;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_USERNAME;
+import static org.odk.collect.android.utilities.PermissionUtils.isReadPhoneStatePermissionGranted;
 
 /**
  * Returns device properties and metadata to JavaRosa
@@ -42,7 +48,6 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_US
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class PropertyManager implements IPropertyManager {
-
 
     public static final String PROPMGR_DEVICE_ID        = "deviceid";
     public static final String PROPMGR_SUBSCRIBER_ID    = "subscriberid";
@@ -63,11 +68,14 @@ public class PropertyManager implements IPropertyManager {
 
     private final Map<String, String> properties = new HashMap<>();
 
+    @Inject
+    RxEventBus eventBus;
+
     public String getName() {
         return "Property Manager";
     }
 
-    private class IdAndPrefix {
+    private static class IdAndPrefix {
         String id;
         String prefix;
 
@@ -80,6 +88,7 @@ public class PropertyManager implements IPropertyManager {
     public PropertyManager(Context context) {
         Timber.i("calling constructor");
 
+        Collect.getInstance().getComponent().inject(this);
         try {
             // Device-defined properties
             TelephonyManager telMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -88,24 +97,25 @@ public class PropertyManager implements IPropertyManager {
             putProperty(PROPMGR_PHONE_NUMBER,  SCHEME_TEL,          telMgr.getLine1Number());
             putProperty(PROPMGR_SUBSCRIBER_ID, SCHEME_IMSI,         telMgr.getSubscriberId());
             putProperty(PROPMGR_SIM_SERIAL,    SCHEME_SIMSERIAL,    telMgr.getSimSerialNumber());
-
-            // User-defined properties. Will replace any above with the same PROPMGR_ name.
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            initUserDefined(prefs, KEY_METADATA_USERNAME,    PROPMGR_USERNAME,      SCHEME_USERNAME);
-            initUserDefined(prefs, KEY_METADATA_PHONENUMBER, PROPMGR_PHONE_NUMBER,  SCHEME_TEL);
-            initUserDefined(prefs, KEY_METADATA_EMAIL,       PROPMGR_EMAIL,         SCHEME_MAILTO);
         } catch (SecurityException e) {
             Timber.e(e);
         }
+
+        // User-defined properties. Will replace any above with the same PROPMGR_ name.
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        initUserDefined(prefs, KEY_METADATA_USERNAME,    PROPMGR_USERNAME,      SCHEME_USERNAME);
+        initUserDefined(prefs, KEY_METADATA_PHONENUMBER, PROPMGR_PHONE_NUMBER,  SCHEME_TEL);
+        initUserDefined(prefs, KEY_METADATA_EMAIL,       PROPMGR_EMAIL,         SCHEME_MAILTO);
     }
 
-    private IdAndPrefix findDeviceId(Context context, TelephonyManager telephonyManager) {
+    // telephonyManager.getDeviceId() requires permission READ_PHONE_STATE (ISSUE #2506). Permission should be handled or exception caught.
+    private IdAndPrefix findDeviceId(Context context, TelephonyManager telephonyManager) throws SecurityException {
         final String androidIdName = Settings.Secure.ANDROID_ID;
         String deviceId = telephonyManager.getDeviceId();
         String scheme = null;
 
         if (deviceId != null) {
-            if ((deviceId.contains("*") || deviceId.contains("000000000000000"))) {
+            if (deviceId.contains("*") || deviceId.contains("000000000000000")) {
                 deviceId = Settings.Secure.getString(context.getContentResolver(), androidIdName);
                 scheme = androidIdName;
             } else {
@@ -161,8 +171,26 @@ public class PropertyManager implements IPropertyManager {
 
     @Override
     public String getSingularProperty(String propertyName) {
+        if (!isReadPhoneStatePermissionGranted(Collect.getInstance()) && isPropertyDangerous(propertyName)) {
+            eventBus.post(new ReadPhoneStatePermissionRxEvent());
+        }
+
         // for now, all property names are in english...
         return properties.get(propertyName.toLowerCase(Locale.ENGLISH));
+    }
+
+    /**
+     * Dangerous properties are those which require reading phone state:
+     * https://developer.android.com/reference/android/Manifest.permission#READ_PHONE_STATE
+     * @param propertyName The name of the property
+     * @return True if the given property is dangerous, false otherwise.
+     */
+    private boolean isPropertyDangerous(String propertyName) {
+        return propertyName != null
+                && (propertyName.equalsIgnoreCase(PROPMGR_DEVICE_ID)
+                || propertyName.equalsIgnoreCase(PROPMGR_SUBSCRIBER_ID)
+                || propertyName.equalsIgnoreCase(PROPMGR_SIM_SERIAL)
+                || propertyName.equalsIgnoreCase(PROPMGR_PHONE_NUMBER));
     }
 
     @Override

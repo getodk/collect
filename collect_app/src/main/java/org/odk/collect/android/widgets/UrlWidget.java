@@ -26,7 +26,6 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 
@@ -47,7 +46,6 @@ public class UrlWidget extends QuestionWidget implements ButtonWidget {
         super(context, prompt);
 
         openUrlButton = getSimpleButton(context.getString(R.string.open_url));
-        openUrlButton.setEnabled(!prompt.isReadOnly());
 
         stringAnswer = getCenteredAnswerTextView();
 
@@ -105,11 +103,6 @@ public class UrlWidget extends QuestionWidget implements ButtonWidget {
 
     @Override
     public void onButtonClick(int buttonId) {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "openUrl", "click",
-                        getFormEntryPrompt().getIndex());
-
         if (!isUrlEmpty(stringAnswer)) {
             customTabHelper.bindCustomTabsService(getContext(), null);
             customTabHelper.openUri(getContext(), uri);

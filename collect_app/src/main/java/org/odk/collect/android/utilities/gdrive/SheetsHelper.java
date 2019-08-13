@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.utilities.gdrive;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
@@ -186,14 +186,13 @@ public class SheetsHelper {
         return spreadsheet;
     }
 
-
     /**
      * This class only makes API calls using the sheets API and does not contain any business logic
      *
      * @author Shobhit Agarwal
      */
 
-    public class SheetsService {
+    public static class SheetsService {
         private final Sheets sheets;
 
         SheetsService(Sheets sheets) {
@@ -212,6 +211,7 @@ public class SheetsHelper {
             sheets.spreadsheets().values()
                     .append(spreadsheetId, sheetName, row)
                     .setIncludeValuesInResponse(true)
+                    .setInsertDataOption("INSERT_ROWS")
                     .setValueInputOption("USER_ENTERED").execute();
         }
 

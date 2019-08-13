@@ -40,7 +40,7 @@ public class ExpandedHeightGridView extends GridView {
     }
 
     public ExpandedHeightGridView(Context context, AttributeSet attrs,
-            int defStyle) {
+                                  int defStyle) {
         super(context, attrs, defStyle);
     }
 

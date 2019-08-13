@@ -22,7 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore.Audio;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -32,12 +32,11 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
@@ -46,7 +45,6 @@ import java.util.Locale;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.utilities.PermissionUtils.requestRecordAudioPermission;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -83,12 +81,10 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         this.audioController = audioController;
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_audio), R.id.capture_audio);
-        captureButton.setEnabled(!prompt.isReadOnly());
 
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_sound), R.id.choose_sound);
-        chooseButton.setEnabled(!prompt.isReadOnly());
 
-        audioController.init(context, getPlayer(), getFormEntryPrompt());
+        audioController.init(context, getPlayer());
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
@@ -100,13 +96,8 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
         hideButtonsIfNeeded();
 
-        // retrieve answer from data model and update ui
         binaryName = prompt.getAnswerText();
-        if (binaryName != null) {
-            audioController.setMedia(getAudioFile());
-        } else {
-            audioController.hidePlayer();
-        }
+        updatePlayerMedia();
     }
 
     @Override
@@ -125,6 +116,8 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
         // hide audio player
         audioController.hidePlayer();
+
+        widgetValueChanged();
     }
 
     @Override
@@ -165,11 +158,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
             return;
         }
 
-        if (newAudio == null) {
-            Timber.e("setBinaryData FAILED");
-            return;
-        }
-
         if (newAudio.exists()) {
             // Add the copy to the content provier
             ContentValues values = new ContentValues(6);
@@ -196,18 +184,27 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
             binaryName = newAudio.getName();
             Timber.i("Setting current answer to %s", newAudio.getName());
+
+            widgetValueChanged();
+            updatePlayerMedia();
         } else {
             Timber.e("Inserting Audio file FAILED");
         }
     }
 
     private void hideButtonsIfNeeded() {
-        if (getFormEntryPrompt().isReadOnly()) {
-            captureButton.setVisibility(View.GONE);
+        if (getFormEntryPrompt().getAppearanceHint() != null
+                && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains(WidgetAppearanceUtils.NEW)) {
             chooseButton.setVisibility(View.GONE);
-        } else if (getFormEntryPrompt().getAppearanceHint() != null
-                && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains("new")) {
-            chooseButton.setVisibility(View.GONE);
+        }
+    }
+
+    private void updatePlayerMedia() {
+        if (binaryName != null) {
+            audioController.setMedia(getAudioFile());
+            audioController.showPlayer();
+        } else {
+            audioController.hidePlayer();
         }
     }
 
@@ -238,7 +235,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     public void onButtonClick(int buttonId) {
         switch (buttonId) {
             case R.id.capture_audio:
-                requestRecordAudioPermission((FormEntryActivity) getContext(), new PermissionListener() {
+                getPermissionUtils().requestRecordAudioPermission((Activity) getContext(), new PermissionListener() {
                     @Override
                     public void granted() {
                         captureAudio();
@@ -256,10 +253,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     }
 
     private void captureAudio() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "captureButton", "click",
-                        getFormEntryPrompt().getIndex());
         Intent i = new Intent(
                 android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION);
         i.putExtra(
@@ -281,10 +274,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     }
 
     private void chooseSound() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "chooseButton", "click",
-                        getFormEntryPrompt().getIndex());
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("audio/*");
         try {

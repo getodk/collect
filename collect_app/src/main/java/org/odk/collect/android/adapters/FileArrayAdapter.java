@@ -18,8 +18,8 @@ package org.odk.collect.android.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,38 +36,44 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import timber.log.Timber;
+
 public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
 
     private final List<DriveListItem> items;
 
     public FileArrayAdapter(Context context, List<DriveListItem> filteredDriveList) {
-        super(context, R.layout.two_item_image, filteredDriveList);
+        super(context, R.layout.form_chooser_list_item_multiple_choice, filteredDriveList);
         items = filteredDriveList;
     }
 
     private class ViewHolder {
         ImageView imageView;
-        TextView text1;
-        TextView text2;
+        TextView formTitle;
+        TextView formSubtitle;
         CheckBox checkBox;
 
         ViewHolder(View view) {
             imageView = view.findViewById(R.id.image);
-            text1 = view.findViewById(R.id.text1);
-            text2 = view.findViewById(R.id.text2);
+            formTitle = view.findViewById(R.id.form_title);
+            formSubtitle = view.findViewById(R.id.form_subtitle);
             checkBox = view.findViewById(R.id.checkbox);
         }
 
         void onBind(DriveListItem item) {
             String dateModified = null;
             if (item.getDate() != null) {
-                dateModified = new SimpleDateFormat(getContext().getString(
-                        R.string.modified_on_date_at_time), Locale.getDefault())
-                        .format(new Date(item.getDate().getValue()));
+                try {
+                    dateModified = new SimpleDateFormat(getContext().getString(
+                            R.string.modified_on_date_at_time), Locale.getDefault())
+                            .format(new Date(item.getDate().getValue()));
+                } catch (IllegalArgumentException e) {
+                    Timber.e(e);
+                }
             }
 
             if (item.getType() == DriveListItem.FILE) {
-                Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.ic_file_download);
+                Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_blank);
                 imageView.setImageDrawable(d);
                 checkBox.setVisibility(View.VISIBLE);
             } else {
@@ -76,8 +82,8 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
                 checkBox.setVisibility(View.GONE);
             }
 
-            text1.setText(item.getName());
-            text2.setText(dateModified);
+            formTitle.setText(item.getName());
+            formSubtitle.setText(dateModified);
             checkBox.setChecked(item.isSelected());
         }
     }
@@ -87,7 +93,7 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
         final ViewHolder holder;
         View view;
         if (convertView == null) {
-            view = LayoutInflater.from(getContext()).inflate(R.layout.two_item_image, parent, false);
+            view = LayoutInflater.from(getContext()).inflate(R.layout.form_chooser_list_item_multiple_choice, parent, false);
             holder = new ViewHolder(view);
             view.setTag(holder);
         } else {

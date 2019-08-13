@@ -16,11 +16,8 @@
 
 package org.odk.collect.android;
 
-import android.content.res.AssetManager;
 import android.os.Environment;
-import android.support.test.InstrumentationRegistry;
 
-import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.FormDef;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,12 +26,9 @@ import org.junit.runners.Parameterized.Parameters;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.test.FormLoadingUtils;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
@@ -144,15 +138,7 @@ public class FormNavigationTestCase {
      * FormLoaderTask loads forms from SD card so we need to put each form there
      */
     private void copyToSdCard(String formName) throws IOException {
-        String pathname = formPath(formName);
-
-        AssetManager assetManager = InstrumentationRegistry.getContext().getAssets();
-        InputStream inputStream = assetManager.open("forms/formNavigationTestForms/" + formName);
-
-        File outFile = new File(pathname);
-        OutputStream outputStream = new FileOutputStream(outFile);
-
-        IOUtils.copy(inputStream, outputStream);
+        FormLoadingUtils.copyFormToSdCard(formName);
     }
 
     private static String formPath(String formName) {

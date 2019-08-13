@@ -12,6 +12,7 @@ import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
@@ -19,13 +20,13 @@ import org.odk.collect.android.events.SmsRxEvent;
 import org.odk.collect.android.jobs.SmsSenderJob;
 import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.tasks.InstanceUploader;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
 import org.odk.collect.android.tasks.sms.models.SmsProgress;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
+import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.utilities.ArrayUtils;
 
 import java.io.File;
@@ -42,6 +43,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 import static android.app.Activity.RESULT_OK;
+import static android.telephony.SmsManager.RESULT_ERROR_GENERIC_FAILURE;
 import static android.telephony.SmsManager.RESULT_ERROR_NO_SERVICE;
 import static android.telephony.SmsManager.RESULT_ERROR_RADIO_OFF;
 import static org.odk.collect.android.tasks.sms.SmsNotificationReceiver.SMS_NOTIFICATION_ACTION;
@@ -127,7 +129,6 @@ public class SmsService {
      * background job.
      */
     public boolean submitForm(String instanceId, FormInfo info, String displayName) {
-
         String text;
 
         if (formsDao.isFormEncrypted(info.getFormID(), info.getFormVersion())) {
@@ -163,19 +164,9 @@ public class SmsService {
         SmsSubmission model = smsSubmissionManager.getSubmissionModel(instanceId);
 
         /*
-         * Checks to see if a previous instance was sent successfully. If so
-         * remove that instance so a new one can be sent.
-         * */
-        if (model != null && model.isSubmissionComplete()) {
-            model = null;
-            smsSubmissionManager.forgetSubmission(instanceId);
-        }
-
-        /*
          * If the model exists that means this instance was probably sent in the past.
          */
         if (model != null) {
-
             /*
              * If the background job for this instance is running then the messages won't be sent again.
              */
@@ -189,7 +180,6 @@ public class SmsService {
             }
 
             for (Message message : model.getMessages()) {
-
                 /*
                  * If there's a message that hasn't sent then a job should be added to continue the process.
                  */
@@ -199,7 +189,6 @@ public class SmsService {
                 }
             }
         } else {
-
             final List<String> parts = smsManager.divideMessage(text);
 
             model = new SmsSubmission();
@@ -309,7 +298,6 @@ public class SmsService {
      * @param instanceId from instanceDao
      */
     protected void startSendMessagesJob(String instanceId) {
-
         PersistableBundleCompat extras = new PersistableBundleCompat();
         extras.putString(SmsSenderJob.INSTANCE_ID, instanceId);
 
@@ -337,11 +325,13 @@ public class SmsService {
         try (Cursor cursor = instancesDao.getInstancesCursorForId(instanceId)) {
             cursor.moveToPosition(-1);
 
-            boolean isFormAutoDeleteOptionEnabled = (boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_DELETE_AFTER_SEND);
-            String formId;
+            boolean isFormAutoDeleteOptionEnabled = (boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_DELETE_AFTER_SEND);
+            String formId = null;
+            String formVersion = null;
             while (cursor.moveToNext()) {
                 formId = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
-                if (InstanceUploader.isFormAutoDeleteEnabled(formId, isFormAutoDeleteOptionEnabled)) {
+                formVersion = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_VERSION));
+                if (InstanceServerUploader.formShouldBeAutoDeleted(formId, isFormAutoDeleteOptionEnabled)) {
 
                     List<String> instancesToDelete = new ArrayList<>();
                     instancesToDelete.add(instanceId);
@@ -351,6 +341,8 @@ public class SmsService {
                     instancesDao.updateInstance(contentValues, where, whereArgs);
                 }
             }
+
+            Collect.getInstance().logRemoteAnalytics("Submission", "SMS", Collect.getFormIdentifierHash(formId, formVersion));
         }
     }
 
@@ -358,20 +350,25 @@ public class SmsService {
      * @param instanceId of the instance being updated
      * @param event      with the specific failed status that's gonna be persisted
      */
-    private void updateInstanceStatusFailedText(String instanceId, SmsRxEvent event) {
+    public void updateInstanceStatusFailedText(String instanceId, SmsRxEvent event) {
         String where = InstanceProviderAPI.InstanceColumns._ID + "=?";
         String[] whereArgs = {instanceId};
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-        contentValues.put(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT, getDisplaySubtext(event.getResultCode(), event.getLastUpdated(), event.getProgress(), context));
 
         instancesDao.updateInstance(contentValues, where, whereArgs);
     }
 
     public static String getDisplaySubtext(int resultCode, Date date, SmsProgress progress, Context context) {
+        if (date == null) {
+            Timber.e("date is null");
+            return context.getString(R.string.error_occured);
+        }
+
         try {
             switch (resultCode) {
+                case RESULT_ERROR_GENERIC_FAILURE:
                 case RESULT_ERROR_NO_SERVICE:
                     return new SimpleDateFormat(context.getString(R.string.sms_no_reception), Locale.getDefault()).format(date);
                 case RESULT_ERROR_RADIO_OFF:
@@ -379,6 +376,8 @@ public class SmsService {
                 case RESULT_OK_OTHERS_PENDING:
                     return context.getResources().getQuantityString(R.plurals.sms_sending, (int) progress.getTotalCount(), progress.getCompletedCount(), progress.getTotalCount());
                 case RESULT_QUEUED:
+                case RESULT_SENDING:
+                case RESULT_MESSAGE_READY:
                     return context.getString(R.string.sms_submission_queued);
                 case RESULT_OK:
                     return new SimpleDateFormat(context.getString(R.string.sms_sent_on_date_at_time),
@@ -387,6 +386,9 @@ public class SmsService {
                     return context.getString(R.string.sms_no_message);
                 case RESULT_SUBMISSION_CANCELED:
                     return new SimpleDateFormat(context.getString(R.string.sms_last_submission_on_date_at_time),
+                            Locale.getDefault()).format(date);
+                case RESULT_INVALID_GATEWAY:
+                    return new SimpleDateFormat(context.getString(R.string.sms_no_number),
                             Locale.getDefault()).format(date);
                 case RESULT_ENCRYPTED:
                     return context.getString(R.string.sms_encrypted_message);

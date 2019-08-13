@@ -17,14 +17,16 @@ package org.odk.collect.android.provider;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -41,7 +43,7 @@ import java.util.Locale;
 import timber.log.Timber;
 
 import static org.odk.collect.android.database.helpers.InstancesDatabaseHelper.INSTANCES_TABLE_NAME;
-import static org.odk.collect.android.utilities.PermissionUtils.checkIfStoragePermissionsGranted;
+import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 
 public class InstanceProvider extends ContentProvider {
     private static HashMap<String, String> sInstancesProjectionMap;
@@ -50,27 +52,27 @@ public class InstanceProvider extends ContentProvider {
     private static final int INSTANCE_ID = 2;
 
     private static final UriMatcher URI_MATCHER;
+
+    private static InstancesDatabaseHelper dbHelper;
     
-    private InstancesDatabaseHelper getDbHelper() {
-        InstancesDatabaseHelper databaseHelper = null;
+    private synchronized InstancesDatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
             Collect.createODKDirs();
         } catch (RuntimeException e) {
-            databaseHelper = null;
             return null;
         }
 
-        if (databaseHelper != null) {
-            return databaseHelper;
+        if (dbHelper == null) {
+            dbHelper = new InstancesDatabaseHelper();
         }
-        databaseHelper = new InstancesDatabaseHelper();
-        return databaseHelper;
+
+        return dbHelper;
     }
 
     @Override
     public boolean onCreate() {
-        if (!checkIfStoragePermissionsGranted(getContext())) {
+        if (!areStoragePermissionsGranted(getContext())) {
             Timber.i("Read and write permissions are required for this content provider to function.");
             return false;
         }
@@ -84,7 +86,7 @@ public class InstanceProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
 
-        if (!checkIfStoragePermissionsGranted(getContext())) {
+        if (!areStoragePermissionsGranted(getContext())) {
             return null;
         }
 
@@ -138,7 +140,7 @@ public class InstanceProvider extends ContentProvider {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        if (!checkIfStoragePermissionsGranted(getContext())) {
+        if (!areStoragePermissionsGranted(getContext())) {
             return null;
         }
 
@@ -158,12 +160,6 @@ public class InstanceProvider extends ContentProvider {
                 values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
             }
 
-            if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
-                Date today = new Date();
-                String text = getDisplaySubtext(InstanceProviderAPI.STATUS_INCOMPLETE, today);
-                values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
-            }
-
             if (!values.containsKey(InstanceColumns.STATUS)) {
                 values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
             }
@@ -172,35 +168,33 @@ public class InstanceProvider extends ContentProvider {
             if (rowId > 0) {
                 Uri instanceUri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, rowId);
                 getContext().getContentResolver().notifyChange(instanceUri, null);
-                Collect.getInstance().getActivityLogger().logActionParam(this, "insert",
-                        instanceUri.toString(), values.getAsString(InstanceColumns.INSTANCE_FILE_PATH));
                 return instanceUri;
             }
         }
 
-        throw new SQLException("Failed to insert row into " + uri);
+        throw new SQLException("Failed to insert into the instances database.");
     }
 
-    private String getDisplaySubtext(String state, Date date) {
+    public static String getDisplaySubtext(Context context, String state, Date date) {
         try {
             if (state == null) {
-                return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time),
+                return new SimpleDateFormat(context.getString(R.string.added_on_date_at_time),
                         Locale.getDefault()).format(date);
             } else if (InstanceProviderAPI.STATUS_INCOMPLETE.equalsIgnoreCase(state)) {
-                return new SimpleDateFormat(getContext().getString(R.string.saved_on_date_at_time),
+                return new SimpleDateFormat(context.getString(R.string.saved_on_date_at_time),
                         Locale.getDefault()).format(date);
             } else if (InstanceProviderAPI.STATUS_COMPLETE.equalsIgnoreCase(state)) {
-                return new SimpleDateFormat(getContext().getString(R.string.finalized_on_date_at_time),
+                return new SimpleDateFormat(context.getString(R.string.finalized_on_date_at_time),
                         Locale.getDefault()).format(date);
             } else if (InstanceProviderAPI.STATUS_SUBMITTED.equalsIgnoreCase(state)) {
-                return new SimpleDateFormat(getContext().getString(R.string.sent_on_date_at_time),
+                return new SimpleDateFormat(context.getString(R.string.sent_on_date_at_time),
                         Locale.getDefault()).format(date);
             } else if (InstanceProviderAPI.STATUS_SUBMISSION_FAILED.equalsIgnoreCase(state)) {
                 return new SimpleDateFormat(
-                        getContext().getString(R.string.sending_failed_on_date_at_time),
+                        context.getString(R.string.sending_failed_on_date_at_time),
                         Locale.getDefault()).format(date);
             } else {
-                return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time),
+                return new SimpleDateFormat(context.getString(R.string.added_on_date_at_time),
                         Locale.getDefault()).format(date);
             }
         } catch (IllegalArgumentException e) {
@@ -226,10 +220,12 @@ public class InstanceProvider extends ContentProvider {
 
                 // delete all the files in the directory
                 File[] files = directory.listFiles();
-                for (File f : files) {
-                    // should make this recursive if we get worried about
-                    // the media directory containing directories
-                    f.delete();
+                if (files != null) {
+                    for (File f : files) {
+                        // should make this recursive if we get worried about
+                        // the media directory containing directories
+                        f.delete();
+                    }
                 }
             }
             directory.delete();
@@ -243,7 +239,7 @@ public class InstanceProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
-        if (!checkIfStoragePermissionsGranted(getContext())) {
+        if (!areStoragePermissionsGranted(getContext())) {
             return 0;
         }
         int count = 0;
@@ -261,8 +257,6 @@ public class InstanceProvider extends ContentProvider {
                             do {
                                 String instanceFile = del.getString(
                                         del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-                                Collect.getInstance().getActivityLogger().logAction(this, "delete",
-                                        instanceFile);
                                 File instanceDir = (new File(instanceFile)).getParentFile();
                                 deleteAllFilesInDirectory(instanceDir);
                             } while (del.moveToNext());
@@ -288,8 +282,6 @@ public class InstanceProvider extends ContentProvider {
                             do {
                                 String instanceFile = c.getString(
                                         c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-                                Collect.getInstance().getActivityLogger().logAction(this, "delete",
-                                        instanceFile);
                                 File instanceDir = (new File(instanceFile)).getParentFile();
                                 deleteAllFilesInDirectory(instanceDir);
                             } while (c.moveToNext());
@@ -311,7 +303,7 @@ public class InstanceProvider extends ContentProvider {
                         if (whereArgs == null || whereArgs.length == 0) {
                             newWhereArgs = new String[] {instanceId};
                         } else {
-                            newWhereArgs = new String[(whereArgs.length + 1)];
+                            newWhereArgs = new String[whereArgs.length + 1];
                             newWhereArgs[0] = instanceId;
                             System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
                         }
@@ -337,7 +329,7 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String where, String[] whereArgs) {
-        if (!checkIfStoragePermissionsGranted(getContext())) {
+        if (!areStoragePermissionsGranted(getContext())) {
             return 0;
         }
         int count = 0;
@@ -352,40 +344,24 @@ public class InstanceProvider extends ContentProvider {
                 values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
             }
 
-            String status;
+            // Don't update last status change date if an instance is being deleted
+            if (values.containsKey(InstanceColumns.DELETED_DATE)) {
+                values.remove(InstanceColumns.LAST_STATUS_CHANGE_DATE);
+            }
+
             switch (URI_MATCHER.match(uri)) {
                 case INSTANCES:
-                    if (values.containsKey(InstanceColumns.STATUS)) {
-                        status = values.getAsString(InstanceColumns.STATUS);
-
-                        if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
-                            Date today = new Date();
-                            String text = getDisplaySubtext(status, today);
-                            values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
-                        }
-                    }
-
                     count = db.update(INSTANCES_TABLE_NAME, values, where, whereArgs);
                     break;
 
                 case INSTANCE_ID:
                     String instanceId = uri.getPathSegments().get(1);
 
-                    if (values.containsKey(InstanceColumns.STATUS)) {
-                        status = values.getAsString(InstanceColumns.STATUS);
-
-                        if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
-                            Date today = new Date();
-                            String text = getDisplaySubtext(status, today);
-                            values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
-                        }
-                    }
-
                     String[] newWhereArgs;
                     if (whereArgs == null || whereArgs.length == 0) {
                         newWhereArgs = new String[] {instanceId};
                     } else {
-                        newWhereArgs = new String[(whereArgs.length + 1)];
+                        newWhereArgs = new String[whereArgs.length + 1];
                         newWhereArgs[0] = instanceId;
                         System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
                     }
@@ -427,8 +403,6 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns.STATUS, InstanceColumns.STATUS);
         sInstancesProjectionMap.put(InstanceColumns.LAST_STATUS_CHANGE_DATE,
                 InstanceColumns.LAST_STATUS_CHANGE_DATE);
-        sInstancesProjectionMap.put(InstanceColumns.DISPLAY_SUBTEXT,
-                InstanceColumns.DISPLAY_SUBTEXT);
         sInstancesProjectionMap.put(InstanceColumns.DELETED_DATE, InstanceColumns.DELETED_DATE);
     }
 }

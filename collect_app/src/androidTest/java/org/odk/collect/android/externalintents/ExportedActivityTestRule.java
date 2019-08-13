@@ -1,7 +1,7 @@
 package org.odk.collect.android.externalintents;
 
 import android.app.Activity;
-import android.support.test.rule.ActivityTestRule;
+import androidx.test.rule.ActivityTestRule;
 
 import static org.odk.collect.android.externalintents.ExportedActivitiesUtils.clearDirectories;
 

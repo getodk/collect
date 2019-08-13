@@ -38,8 +38,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.support.annotation.NonNull;
-import android.support.v13.app.FragmentCompat;
+import androidx.annotation.NonNull;
+import androidx.legacy.app.FragmentCompat;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -51,6 +51,7 @@ import android.view.ViewGroup;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.dialogs.ErrorDialog;
+import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
@@ -296,7 +297,7 @@ public class Camera2VideoFragment extends Fragment
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.texture) {
-            if (Collect.allowClick()) { // avoid multiple quick taps that may cause various problems
+            if (Collect.allowClick(getClass().getName())) { // avoid multiple quick taps that may cause various problems
                 if (isRecordingVideo) {
                     textureView.setClickable(false);
                     stopRecordingVideo();
@@ -502,7 +503,7 @@ public class Camera2VideoFragment extends Fragment
         mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         if (nextVideoAbsolutePath == null || nextVideoAbsolutePath.isEmpty()) {
-            nextVideoAbsolutePath = getVideoFilePath(getActivity());
+            nextVideoAbsolutePath = CameraUtils.getVideoFilePath(getActivity());
         }
         mediaRecorder.setOutputFile(nextVideoAbsolutePath);
         mediaRecorder.setVideoEncodingBitRate(10000000);
@@ -520,12 +521,6 @@ public class Camera2VideoFragment extends Fragment
                 break;
         }
         mediaRecorder.prepare();
-    }
-
-    private String getVideoFilePath(Context context) {
-        final File dir = context.getExternalFilesDir(null);
-        return (dir == null ? "" : (dir.getAbsolutePath() + "/"))
-                + System.currentTimeMillis() + ".mp4";
     }
 
     private void startRecordingVideo() {

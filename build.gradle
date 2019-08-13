@@ -1,31 +1,32 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
-        jcenter()
         google()
+        jcenter()
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.2'
-        classpath 'com.google.gms:google-services:3.2.0'
+        classpath 'com.android.tools.build:gradle:3.4.0'
+        classpath 'com.google.gms:google-services:4.0.1'
         classpath 'org.ow2.asm:asm:6.0' // https://github.com/jacoco/jacoco/issues/639#issuecomment-355424756
         classpath 'org.jacoco:org.jacoco.core:0.8.0'
-        classpath 'io.fabric.tools:gradle:1.25.2'
+        classpath 'io.fabric.tools:gradle:1.28.1'
     }
 }
 
 plugins {
-    id 'com.github.spotbugs' version '1.6.2'
+    id 'com.github.spotbugs' version '1.6.4'
 }
 
 allprojects {
     repositories {
+        // Needs to go first to get specialty libraries https://stackoverflow.com/a/48438866/137744
+        google()
+
         jcenter()
-        maven { url = 'https://oss.sonatype.org/content/groups/public' }
-        maven {
-            url "https://maven.google.com"
-        }
+        maven { url 'https://oss.sonatype.org/content/groups/public' }
         maven { url 'https://jitpack.io' }
+        maven { url 'https://staging.dev.medicmobile.org/_couch/maven-repo' }
     }
 }
 
@@ -33,13 +34,22 @@ configurations.all {
     transitive = true
 }
 
-ext {
-    // Play Services is a big download so it should only be upgraded if necessary and after
-    // community discussion and a warning period.
-    playServicesVersion = '10.0.1'
+task checkAll(type: GradleBuild) {
+    tasks = ['checkCode', 'checkTests']
+}
 
-    supportLibraryVersion = '27.1.1'
+task checkCode(type: GradleBuild) {
+    tasks = ['pmd', 'checkstyle', 'lintDebug', 'spotbugs']
+}
+
+task checkTests(type: GradleBuild) {
+    tasks = ['testDebugUnitTest', 'connectedDebugAndroidTest']
+}
+
+ext {
     leakyCanaryVersion = '1.5.4'
     daggerVersion = '2.16'
     rxLifecycleVersion = '2.2.1'
+    workManagerVersion = "1.0.0-alpha10"
+    okhttp3Version = '3.12.3'
 }

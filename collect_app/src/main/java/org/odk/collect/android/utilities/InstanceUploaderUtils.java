@@ -22,26 +22,37 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class InstanceUploaderUtils {
 
     public static final String DEFAULT_SUCCESSFUL_TEXT = "full submission upload was successful!";
+    public static final String SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE = "Failed. Records can only be submitted to spreadsheets created in Google Sheets. The submission spreadsheet specified was uploaded to Google Drive.";
 
     private InstanceUploaderUtils() {
     }
 
-    public static String getUploadResultMessage(Cursor results, HashMap<String, String> result) {
+
+    /**
+     * Returns a formatted message including submission results for all the filled forms accessible
+     * through instancesProcessed in the following structure:
+     *
+     * Form name 1 - result
+     *
+     * Form name 2 - result
+     */
+    public static String getUploadResultMessage(Cursor instancesProcessed,
+                                                Map<String, String> resultMessagesByInstanceId) {
         StringBuilder queryMessage = new StringBuilder();
         try {
-            if (results != null && results.getCount() > 0) {
-                results.moveToPosition(-1);
-                while (results.moveToNext()) {
+            if (instancesProcessed != null && instancesProcessed.getCount() > 0) {
+                instancesProcessed.moveToPosition(-1);
+                while (instancesProcessed.moveToNext()) {
                     String name =
-                            results.getString(
-                                    results.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME));
-                    String id = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
-                    String text = localizeDefaultAggregateSuccessfulText(result.get(id));
+                            instancesProcessed.getString(
+                                    instancesProcessed.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME));
+                    String id = instancesProcessed.getString(instancesProcessed.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
+                    String text = localizeDefaultAggregateSuccessfulText(resultMessagesByInstanceId.get(id));
                     queryMessage
                             .append(name)
                             .append(" - ")
@@ -50,17 +61,25 @@ public class InstanceUploaderUtils {
                 }
             }
         } finally {
-            if (results != null) {
-                results.close();
+            if (instancesProcessed != null) {
+                instancesProcessed.close();
             }
         }
         return String.valueOf(queryMessage);
     }
 
     private static String localizeDefaultAggregateSuccessfulText(String text) {
-        if (text.equals(DEFAULT_SUCCESSFUL_TEXT)) {
+        if (text != null && text.equals(DEFAULT_SUCCESSFUL_TEXT)) {
             text = Collect.getInstance().getString(R.string.success);
         }
         return text;
+    }
+
+    // If a spreadsheet is created using Excel (or a similar tool) and uploaded to GD it contains:
+    // drive.google.com/file/d/ instead of docs.google.com/spreadsheets/d/
+    // Such a file can't be used. We can write data only to documents generated via Google Sheets
+    // https://forum.opendatakit.org/t/error-400-bad-request-failed-precondition-on-collect-to-google-sheets/19801/5?u=grzesiek2010
+    public static boolean doesUrlRefersToGoogleSheetsFile(String url) {
+        return !url.contains("drive.google.com/file/d/");
     }
 }

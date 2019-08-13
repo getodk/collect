@@ -1,19 +1,22 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.NonNull;
+import android.provider.MediaStore;
+import androidx.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 
 import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
+import org.junit.Test;
 import org.mockito.Mock;
+import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
-import org.robolectric.RuntimeEnvironment;
 
 import java.io.File;
 
@@ -44,7 +47,7 @@ public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
     @Override
     public AudioWidget createWidget() {
         when(audioController.getPlayerLayout(any(ViewGroup.class))).thenReturn(mock(View.class));
-        return new AudioWidget(RuntimeEnvironment.application, formEntryPrompt, fileUtil, mediaUtil, audioController);
+        return new AudioWidget(activity, formEntryPrompt, fileUtil, mediaUtil, audioController);
     }
 
     @NonNull
@@ -80,5 +83,23 @@ public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
 
         when(firstFile.exists()).thenReturn(true);
         when(firstFile.getName()).thenReturn(destinationName);
+    }
+
+    @Test
+    public void buttonsShouldLaunchCorrectIntents() {
+        stubAllRuntimePermissionsGranted(true);
+
+        Intent intent = getIntentLaunchedByClick(R.id.capture_audio);
+        assertActionEquals(MediaStore.Audio.Media.RECORD_SOUND_ACTION, intent);
+
+        intent = getIntentLaunchedByClick(R.id.choose_sound);
+        assertActionEquals(Intent.ACTION_GET_CONTENT, intent);
+    }
+
+    @Test
+    public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
+        stubAllRuntimePermissionsGranted(false);
+
+        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.capture_audio));
     }
 }

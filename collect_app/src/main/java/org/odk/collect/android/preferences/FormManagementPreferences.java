@@ -17,21 +17,33 @@ package org.odk.collect.android.preferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.tasks.ServerPollingJob;
 
 import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOMATIC_UPDATE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_GUIDANCE_HINT;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_IMAGE_SIZE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOSEND;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_CONSTRAINT_BEHAVIOR;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_GUIDANCE_HINT;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_IMAGE_SIZE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
+import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class FormManagementPreferences extends BasePreferenceFragment {
+
+    public static FormManagementPreferences newInstance(boolean adminMode) {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
+
+        FormManagementPreferences formManagementPreferences = new FormManagementPreferences();
+        formManagementPreferences.setArguments(bundle);
+
+        return formManagementPreferences;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,8 +81,12 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
                 CharSequence entry = ((ListPreference) preference).getEntries()[index];
                 preference.setSummary(entry);
+
                 if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
                     ServerPollingJob.schedulePeriodicJob((String) newValue);
+
+                    Collect.getInstance().logRemoteAnalytics("PreferenceChange", "Periodic form updates check", (String) newValue);
+
                     if (newValue.equals(getString(R.string.never_value))) {
                         Preference automaticUpdatePreference = findPreference(KEY_AUTOMATIC_UPDATE);
                         if (automaticUpdatePreference != null) {
@@ -92,11 +108,20 @@ public class FormManagementPreferences extends BasePreferenceFragment {
 
         if (pref != null) {
             if (key.equals(KEY_AUTOMATIC_UPDATE)) {
-                pref.setEnabled(!GeneralSharedPreferences.getInstance().get(KEY_PERIODIC_FORM_UPDATES_CHECK).equals(getString(R.string.never_value)));
+                String formUpdateCheckPeriod = (String) GeneralSharedPreferences.getInstance()
+                        .get(KEY_PERIODIC_FORM_UPDATES_CHECK);
+
+                // Only enable automatic form updates if periodic updates are set
+                pref.setEnabled(!formUpdateCheckPeriod.equals(getString(R.string.never_value)));
+
+                pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                    Collect.getInstance().logRemoteAnalytics("PreferenceChange", "Automatic form updates", newValue + " " + formUpdateCheckPeriod);
+
+                    return true;
+                });
             }
         }
     }
-
 
     private void initGuidancePrefs() {
         final ListPreference guidance = (ListPreference) findPreference(KEY_GUIDANCE_HINT);

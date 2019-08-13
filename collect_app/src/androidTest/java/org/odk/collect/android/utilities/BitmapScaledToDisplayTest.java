@@ -1,7 +1,7 @@
 package org.odk.collect.android.utilities;
 
 import android.graphics.Bitmap;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +10,6 @@ import org.odk.collect.android.application.Collect;
 import java.io.File;
 
 import static org.junit.Assert.assertEquals;
-
 
 @RunWith(AndroidJUnit4.class)
 public class BitmapScaledToDisplayTest {
@@ -25,7 +24,6 @@ public class BitmapScaledToDisplayTest {
         runScaleTest(1000,   1000,    500,    500,    500,    500,    false);
         runScaleTest( 600,    800,    600,    200,    150,    200,    false);
         runScaleTest( 500,    400,    250,    200,    250,    200,    false);
-        runScaleTest(2000,    800,    300,    400,    500,    200,    false);
     }
 
     @Test

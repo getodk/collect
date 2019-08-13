@@ -16,17 +16,21 @@
 
 package org.odk.collect.android.preferences;
 
+import android.app.Fragment;
 import android.os.Bundle;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 public class PreferencesActivity extends CollectAbstractActivity {
 
     public static final String TAG = "GeneralPreferencesFragment";
     public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
+
+    private OnBackPressedListener onBackPressedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +39,11 @@ public class PreferencesActivity extends CollectAbstractActivity {
 
         setTitle(R.string.general_preferences);
         if (savedInstanceState == null) {
+            boolean adminMode = getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
+            Fragment fragment = GeneralPreferencesFragment.newInstance(adminMode);
             getFragmentManager()
                     .beginTransaction()
-                    .add(android.R.id.content, GeneralPreferencesFragment.newInstance(getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false)), TAG)
+                    .add(android.R.id.content, fragment, TAG)
                     .commit();
         }
     }
@@ -45,6 +51,20 @@ public class PreferencesActivity extends CollectAbstractActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Collect.getInstance().initProperties();
+        Collect.getInstance().initializeJavaRosa();
+    }
+
+    // If the onBackPressedListener is set then onBackPressed is delegated to it.
+    @Override
+    public void onBackPressed() {
+        if (onBackPressedListener != null) {
+            onBackPressedListener.doBack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+        this.onBackPressedListener = onBackPressedListener;
     }
 }

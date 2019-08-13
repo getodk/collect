@@ -16,17 +16,18 @@
 
 package org.odk.collect.android.preferences;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
-import android.support.annotation.Nullable;
 import android.view.View;
 
 import org.odk.collect.android.R;
 
 import java.util.Collection;
 
+import androidx.annotation.Nullable;
+
+import static org.odk.collect.android.preferences.AdminKeys.KEY_MAPS;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class GeneralPreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener {
@@ -48,6 +49,7 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
 
         findPreference("protocol").setOnPreferenceClickListener(this);
         findPreference("user_interface").setOnPreferenceClickListener(this);
+        findPreference("maps").setOnPreferenceClickListener(this);
         findPreference("form_management").setOnPreferenceClickListener(this);
         findPreference("user_and_device_identity").setOnPreferenceClickListener(this);
 
@@ -64,31 +66,32 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        Fragment fragment = null;
+        BasePreferenceFragment basePreferenceFragment = null;
+        boolean adminMode = getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false);
         switch (preference.getKey()) {
             case "protocol":
-                fragment = new ServerPreferences();
+                basePreferenceFragment = ServerPreferences.newInstance(adminMode);
                 break;
             case "user_interface":
-                fragment = new UserInterfacePreferences();
+                basePreferenceFragment = UserInterfacePreferences.newInstance(adminMode);
+                break;
+            case "maps":
+                basePreferenceFragment = MapsPreferences.newInstance(adminMode);
                 break;
             case "form_management":
-                fragment = new FormManagementPreferences();
+                basePreferenceFragment = FormManagementPreferences.newInstance(adminMode);
                 break;
             case "user_and_device_identity":
-                fragment = new IdentityPreferences();
+                basePreferenceFragment = IdentityPreferences.newInstance(adminMode);
                 break;
         }
-
-        if (fragment != null) {
-            getActivity()
-                    .getFragmentManager()
+        if (basePreferenceFragment != null) {
+            getActivity().getFragmentManager()
                     .beginTransaction()
-                    .replace(android.R.id.content, fragment)
+                    .replace(android.R.id.content, basePreferenceFragment)
                     .addToBackStack(null)
                     .commit();
         }
-
         return true;
     }
 
@@ -100,6 +103,11 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
 
         if (!hasAtleastOneSettingEnabled(AdminKeys.userInterfaceKeys)) {
             preferenceScreen.removePreference(findPreference("user_interface"));
+        }
+
+        boolean mapsScreenEnabled = (boolean) AdminSharedPreferences.getInstance().get(KEY_MAPS);
+        if (!mapsScreenEnabled) {
+            preferenceScreen.removePreference(findPreference("maps"));
         }
 
         if (!hasAtleastOneSettingEnabled(AdminKeys.formManagementKeys)) {

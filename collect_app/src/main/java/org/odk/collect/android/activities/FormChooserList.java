@@ -22,9 +22,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
+import androidx.annotation.NonNull;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -34,17 +34,16 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.FormUtils;
-import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
+import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.adapters.VersionHidingCursorAdapter;
 
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
-import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores the path to
@@ -63,17 +62,16 @@ public class FormChooserList extends FormListActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chooser_list_layout);
+        setContentView(R.layout.form_chooser_list);
 
         setTitle(getString(R.string.enter_data));
 
-        requestStoragePermissions(this, new PermissionListener() {
+        new PermissionUtils().requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
                 try {
                     Collect.createODKDirs();
-                    Collect.getInstance().getActivityLogger().open();
                     init();
                 } catch (RuntimeException e) {
                     createErrorDialog(e.getMessage(), EXIT);
@@ -101,9 +99,9 @@ public class FormChooserList extends FormListActivity implements
             diskSyncTask.setDiskSyncListener(this);
             diskSyncTask.execute((Void[]) null);
         }
-        sortingOptions = new String[]{
-                getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
-                getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc),
+        sortingOptions = new int[] {
+                R.string.sort_by_name_asc, R.string.sort_by_name_desc,
+                R.string.sort_by_date_asc, R.string.sort_by_date_desc,
         };
 
         setupAdapter();
@@ -121,13 +119,10 @@ public class FormChooserList extends FormListActivity implements
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (Collect.allowClick()) {
+        if (Collect.allowClick(getClass().getName())) {
             // get uri to form
             long idFormsTable = listView.getAdapter().getItemId(position);
             Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, idFormsTable);
-
-            Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
-                    formUri.toString());
 
             String action = getIntent().getAction();
             if (Intent.ACTION_PICK.equals(action)) {
@@ -164,18 +159,6 @@ public class FormChooserList extends FormListActivity implements
         super.onPause();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
-    }
-
     /**
      * Called by DiskSyncTask when the task is finished
      */
@@ -188,13 +171,13 @@ public class FormChooserList extends FormListActivity implements
 
     private void setupAdapter() {
         String[] data = new String[]{
-                FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT, FormsColumns.JR_VERSION
+                FormsColumns.DISPLAY_NAME, FormsColumns.JR_VERSION, hideOldFormVersions() ? FormsColumns.MAX_DATE : FormsColumns.DATE
         };
         int[] view = new int[]{
-                R.id.text1, R.id.text2, R.id.text3
+                R.id.form_title, R.id.form_subtitle, R.id.form_subtitle2
         };
 
-        listAdapter = new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.two_item, null, data, view);
+        listAdapter = new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.form_chooser_list_item, null, data, view);
         listView.setAdapter(listAdapter);
     }
 
@@ -214,8 +197,6 @@ public class FormChooserList extends FormListActivity implements
      */
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
 
-        Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", "show");
-
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         alertDialog.setMessage(errorMsg);
@@ -224,9 +205,6 @@ public class FormChooserList extends FormListActivity implements
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        Collect.getInstance().getActivityLogger().logAction(this,
-                                "createErrorDialog",
-                                shouldExit ? "exitApplication" : "OK");
                         if (shouldExit) {
                             finish();
                         }
@@ -243,20 +221,22 @@ public class FormChooserList extends FormListActivity implements
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         showProgressBar();
-        return new FormsDao().getFormsCursorLoader(getFilterText(), getSortingOrder());
+
+        return new FormsDao().getFormsCursorLoader(getFilterText(), getSortingOrder(), hideOldFormVersions());
     }
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
         hideProgressBarIfAllowed();
-        listAdapter.changeCursor(
-                GeneralSharedPreferences.getInstance().getBoolean(PreferenceKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
-                        ? FormUtils.removeOldForms(cursor)
-                        : cursor);
+        listAdapter.swapCursor(cursor);
     }
 
     @Override
     public void onLoaderReset(@NonNull Loader loader) {
         listAdapter.swapCursor(null);
+    }
+
+    private boolean hideOldFormVersions() {
+        return GeneralSharedPreferences.getInstance().getBoolean(GeneralKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
     }
 }

@@ -19,7 +19,7 @@ package org.odk.collect.android.utilities;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.runner.AndroidJUnit4;
 
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -40,7 +40,7 @@ import timber.log.Timber;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.utilities.ApplicationConstants.XML_OPENROSA_NAMESPACE;
+import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.XML_OPENROSA_NAMESPACE;
 
 @RunWith(AndroidJUnit4.class)
 public class ImageConverterTest {
@@ -337,6 +337,33 @@ public class ImageConverterTest {
         Bitmap image = FileUtils.getBitmap(TEST_IMAGE_PATH, new BitmapFactory.Options());
         assertEquals(2000, image.getWidth());
         assertEquals(1500, image.getHeight());
+    }
+
+    @Test
+    public void scaleImageToNewWidthTest() {
+        saveTestBitmap(2000, 1000, null);
+        Bitmap image = FileUtils.getBitmap(TEST_IMAGE_PATH, new BitmapFactory.Options());
+        image = ImageConverter.scaleImageToNewWidth(image, 500);
+        assertEquals(500, image.getWidth());
+        assertEquals(250, image.getHeight());
+
+        saveTestBitmap(1000, 2000, null);
+        image = FileUtils.getBitmap(TEST_IMAGE_PATH, new BitmapFactory.Options());
+        image = ImageConverter.scaleImageToNewWidth(image, 500);
+        assertEquals(500, image.getWidth());
+        assertEquals(1000, image.getHeight());
+
+        saveTestBitmap(500, 400, null);
+        image = FileUtils.getBitmap(TEST_IMAGE_PATH, new BitmapFactory.Options());
+        image = ImageConverter.scaleImageToNewWidth(image, 1000);
+        assertEquals(1000, image.getWidth());
+        assertEquals(800, image.getHeight());
+
+        saveTestBitmap(400, 500, null);
+        image = FileUtils.getBitmap(TEST_IMAGE_PATH, new BitmapFactory.Options());
+        image = ImageConverter.scaleImageToNewWidth(image, 1000);
+        assertEquals(1000, image.getWidth());
+        assertEquals(1250, image.getHeight());
     }
 
     private void saveTestBitmap(int width, int height, Integer orientation) {

@@ -18,6 +18,8 @@ package org.odk.collect.android.utilities;
 
 import android.content.Context;
 
+import org.javarosa.core.model.Constants;
+import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
@@ -45,14 +47,22 @@ public class FormEntryPromptUtils {
         final String appearance = fep.getQuestion().getAppearanceAttr();
 
         if (data instanceof MultipleItemsData) {
-            StringBuilder b = new StringBuilder();
-            String sep = "";
-            for (Selection value : (List<Selection>) data.getValue()) {
-                b.append(sep);
-                sep = ", ";
-                b.append(fep.getSelectItemText(value));
+            StringBuilder answerText = new StringBuilder();
+            List<Selection> values = (List<Selection>) data.getValue();
+            for (Selection value : values) {
+                if (fep.getControlType() == Constants.CONTROL_RANK) {
+                    answerText
+                            .append(values.indexOf(value) + 1)
+                            .append(". ");
+                }
+                answerText.append(fep.getSelectItemText(value));
+
+                if ((values.size() - 1) > values.indexOf(value)) {
+                    answerText.append(", ");
+                }
             }
-            return b.toString();
+
+            return answerText.toString();
         }
 
         if (data instanceof DateTimeData) {
@@ -65,7 +75,7 @@ public class FormEntryPromptUtils {
                     DateTimeUtils.getDatePickerDetails(appearance), false, context);
         }
 
-        if (data != null && appearance != null && appearance.contains("thousands-sep")) {
+        if (data != null && appearance != null && appearance.contains(WidgetAppearanceUtils.THOUSANDS_SEP)) {
             try {
                 final BigDecimal answerAsDecimal = new BigDecimal(fep.getAnswerText());
 
@@ -92,7 +102,13 @@ public class FormEntryPromptUtils {
 
         if (data != null && data.getValue() != null && fep.getDataType() == DATATYPE_TEXT
                 && fep.getQuestion().getAdditionalAttribute(null, "query") != null) { // ItemsetWidget
-            return new ItemsetDao().getItemLabel(fep.getAnswerValue().getDisplayText(), formController.getMediaFolder().getAbsolutePath(), formController.getLanguage());
+
+            String language = "";
+            if (formController.getLanguages() != null && formController.getLanguages().length > 0) {
+                language = formController.getLanguage();
+            }
+
+            return new ItemsetDao().getItemLabel(fep.getAnswerValue().getDisplayText(), formController.getMediaFolder().getAbsolutePath(), language);
         }
 
         return fep.getAnswerText();
@@ -107,5 +123,10 @@ public class FormEntryPromptUtils {
         }
 
         return questionText;
+    }
+
+    public static CharSequence getItemText(FormEntryPrompt formEntryPrompt, SelectChoice selectChoice) {
+        String choiceName = formEntryPrompt.getSelectChoiceText(selectChoice);
+        return choiceName != null ? TextUtils.textToHtml(choiceName) : "";
     }
 }

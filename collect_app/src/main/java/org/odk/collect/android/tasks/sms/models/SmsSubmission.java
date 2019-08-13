@@ -77,7 +77,7 @@ public class SmsSubmission {
 
     /***
      * Checks to see if the current message is the last or not based on the result code. If it's not the last it sends
-     * Sending as the status to the InstanceUploaderList so that it shows the current progress but if it's the last
+     * Sending as the status to the InstanceUploaderListActivity so that it shows the current progress but if it's the last
      * message then that means the submission has been completed so it should show Sent. This has to be done
      * because the SmsStatus is being used to serve SmsSender Layer and it's status is also tied to the UI.
      *
@@ -93,7 +93,6 @@ public class SmsSubmission {
 
         return resultCode;
     }
-
 
     public int getJobId() {
         return jobId;

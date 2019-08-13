@@ -1,7 +1,5 @@
 package org.odk.collect.android.utilities;
 
-import org.opendatakit.httpclientandroidlib.HttpEntity;
-import org.opendatakit.httpclientandroidlib.util.EntityUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -14,64 +12,38 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import timber.log.Timber;
 
-/**
- * Created by Jon Nordling on 2/21/17.
- * The purpose of this class is to handle the XML parsing
- * of the server responses
- */
-
 public class ResponseMessageParser {
-    private final HttpEntity httpEntity;
-    private static final String MESSAGE_XML_TAG = "message";
-    public boolean isValid;
-    public String messageResponse;
 
-    public ResponseMessageParser(HttpEntity httpEntity) {
-        this.httpEntity = httpEntity;
-        this.messageResponse = parseXMLMessage();
-        if (messageResponse != null) {
-            this.isValid = true;
-        }
-    }
+    private static final String MESSAGE_XML_TAG = "message";
+
+    private boolean isValid;
+    private String messageResponse;
 
     public boolean isValid() {
         return this.isValid;
     }
 
     public String getMessageResponse() {
-        return this.messageResponse;
+        return messageResponse;
     }
 
-    public String parseXMLMessage() {
-        String message = null;
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder;
+    public void setMessageResponse(String response) {
+        isValid = false;
         try {
-            builder = dbFactory.newDocumentBuilder();
-            Document doc = null;
-
-            String httpEntityString = EntityUtils.toString(httpEntity);
-
-            if (httpEntityString.contains("OpenRosaResponse")) {
-                doc = builder.parse(new ByteArrayInputStream(httpEntityString.getBytes()));
+            if (response.contains("OpenRosaResponse")) {
+                DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                Document doc = builder.parse(new ByteArrayInputStream(response.getBytes()));
                 doc.getDocumentElement().normalize();
 
                 if (doc.getElementsByTagName(MESSAGE_XML_TAG).item(0) != null) {
-                    message = doc.getElementsByTagName(MESSAGE_XML_TAG).item(0).getTextContent();
-                } else {
-                    isValid = false;
+                    messageResponse = doc.getElementsByTagName(MESSAGE_XML_TAG).item(0).getTextContent();
+                    isValid = true;
                 }
             }
 
-            return message;
-
         } catch (SAXException | IOException | ParserConfigurationException e) {
             Timber.e(e, "Error parsing XML message due to %s ", e.getMessage());
-            isValid = false;
         }
-
-        return message;
     }
-
 
 }

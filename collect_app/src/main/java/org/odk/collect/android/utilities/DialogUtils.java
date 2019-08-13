@@ -17,16 +17,24 @@
 package org.odk.collect.android.utilities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.widget.ListView;
 
 import org.odk.collect.android.R;
 
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.logic.AuditEvent;
+import org.odk.collect.android.logic.FormController;
 import timber.log.Timber;
+
+import static android.content.DialogInterface.BUTTON_NEGATIVE;
+import static android.content.DialogInterface.BUTTON_POSITIVE;
 
 /**
  * Reusable code between dialogs for keeping consistency
@@ -77,6 +85,45 @@ public final class DialogUtils {
     }
 
     /**
+     * Shows a confirm/cancel dialog for deleting the current repeat group.
+     */
+    public static void showDeleteRepeatConfirmDialog(Context context, Runnable onDeleted, Runnable onCanceled) {
+        FormController formController = Collect.getInstance().getFormController();
+        String name = formController.getLastRepeatedGroupName();
+        int repeatcount = formController.getLastRepeatedGroupRepeatCount();
+        if (repeatcount != -1) {
+            name += " (" + (repeatcount + 1) + ")";
+        }
+        androidx.appcompat.app.AlertDialog alertDialog = new androidx.appcompat.app.AlertDialog.Builder(context).create();
+        alertDialog.setTitle(context.getString(R.string.delete_repeat_ask));
+        alertDialog.setMessage(context.getString(R.string.delete_repeat_confirm, name));
+        DialogInterface.OnClickListener quitListener = (dialog, i) -> {
+            switch (i) {
+                case BUTTON_POSITIVE: // yes
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.DELETE_REPEAT, true);
+                    formController.deleteRepeat();
+
+                    if (onDeleted != null) {
+                        onDeleted.run();
+                    }
+
+                    break;
+
+                case BUTTON_NEGATIVE: // no
+                    if (onCanceled != null) {
+                        onCanceled.run();
+                    }
+
+                    break;
+            }
+        };
+        alertDialog.setCancelable(false);
+        alertDialog.setButton(BUTTON_POSITIVE, context.getString(R.string.discard_group), quitListener);
+        alertDialog.setButton(BUTTON_NEGATIVE, context.getString(R.string.delete_repeat_no), quitListener);
+        alertDialog.show();
+    }
+
+    /**
      * Ensures that a dialog is dismissed safely and doesn't causes a crash. Useful in the event
      * of a screen rotation, async operations or activity navigation.
      *
@@ -97,5 +144,30 @@ public final class DialogUtils {
         } catch (Exception e) {
             Timber.e(e);
         }
+    }
+
+    /**
+     * Creates an error dialog on an activity
+     *
+     * @param errorMsg The message to show on the dialog box
+     * @param shouldExit Finish the activity if Ok is clicked
+     */
+    public static Dialog createErrorDialog(@NonNull Activity activity, String errorMsg, final boolean shouldExit) {
+        AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
+        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
+        alertDialog.setMessage(errorMsg);
+        DialogInterface.OnClickListener errorListener = (dialog, i) -> {
+            switch (i) {
+                case BUTTON_POSITIVE:
+                    if (shouldExit) {
+                        activity.finish();
+                    }
+                    break;
+            }
+        };
+        alertDialog.setCancelable(false);
+        alertDialog.setButton(activity.getString(R.string.ok), errorListener);
+
+        return alertDialog;
     }
 }

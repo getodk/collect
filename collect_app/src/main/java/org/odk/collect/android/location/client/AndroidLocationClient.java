@@ -1,11 +1,12 @@
 package org.odk.collect.android.location.client;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.location.LocationListener;
 
@@ -83,6 +84,7 @@ class AndroidLocationClient
     }
 
     @Override
+    @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     public void requestLocationUpdates(@NonNull LocationListener locationListener) {
         if (!isConnected) {
             // This is to maintain expected behavior across LocationClient implementations.
@@ -112,6 +114,7 @@ class AndroidLocationClient
     }
 
     @Override
+    @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     public Location getLastLocation() {
         String provider = getProvider();
         if (provider != null) {
@@ -142,7 +145,6 @@ class AndroidLocationClient
         // Do nothing.
         Timber.e("Can't set updateInterval on AndroidLocationClient. You should check canSetUpdateIntervals before calling this method.");
     }
-
 
     // LocationListener:
 

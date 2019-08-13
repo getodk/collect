@@ -39,7 +39,6 @@
   <string name="discard_answer">ปิดคำตอบ</string>
   <string name="discard_group">ลบกลุ่ม</string>
   <string name="download">ดาวน์โหลดที่เลือกไว้</string>
-  <string name="download_forms_result">ดาวน์โหลดผลสำรวจ</string>
   <string name="downloading_data">กำลังเชื่อมต่อกับเซิร์ฟเวอร์</string>
   <string name="do_not_change">ยกเลิก</string>
   <string name="do_not_exit">ยกเลิก</string>
@@ -197,7 +196,6 @@
   <string name="found_in_settings">ปล่อยว่างเพื่อซ่อนจากเมนูตั้งค่าทั่วไป</string>
   <string name="save_preferences">บันทึกการตั้งค่า</string>
   <string name="form_forward">ต่อไป</string>
-  <string name="form_backward">ย้อนกลับ</string>
   <string name="navigation">ค้นหา</string>
   <string name="swipe_navigation">ใช้การเลื่อนหน้าจอไปด้านข้าง</string>
   <string name="buttons_navigation">ใช่ปุ่มเลื่อนไปข้างหน้า/ย้อนกลับ</string>
@@ -253,7 +251,6 @@
   <string name="change_server_url">URL ของเซิร์ฟเวอร์</string>
   <string name="google_search_browse">ค้นหาแบบฟอร์ม หรือเลือก \'My Drive\' ด้านล่างเพื่อค้นหา</string>
   <string name="send_in_progress">กำลังส่งข้อมูล โปรดลองใหม่อีกครั้ง</string>
-  <string name="sheets_max_columns">จำนวนคอลัมน์สูงสุดคือ 255 แบบฟอร์มของคุณมี %s ไม่สามารถอัพโหลดไปที่  spreadsheet ได้</string>
   <string name="invalid_sheet_id">หมายเลขชีทไม่ถุกต้อง: %1$s</string>
   <string name="google_sheets_missing_columns">ไม่มี Spreadsheet ของคอลัมภ์: %1$s</string>
   <string name="password_error_whitespace">ไม่สามารถใช้ช่องว่างนำหน้าและตามหลังรหัสผ่าน</string>
@@ -262,13 +259,9 @@
 </string>
   <string name="about_preferences">เกี่ยวกับ</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">ทำแผนที่</string>
-  <string name="map_sdk_selector_title">Mapping SDK</string>
-  <string name="map_sdk_behavior">Mapping SDK</string>
-  <string name="google_maps_sdk">Google Maps SDK</string>
-  <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
-  <string name="show_map_sdk">แสดงตัวเลือกของ Map SDK</string>
-  <string name="openmap_streets">OSM Streets</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
@@ -277,37 +270,21 @@
   <string name="terrain">Terrain</string>
   <string name="hybrid">Hybrid</string>
   <string name="satellite">Satellite</string>
-  <string name="map_basemap_selector_title">Basemaps</string>
-  <string name="show_map_basemap">แสดงตัวเลือกของ Basemap</string>
   <string name="save_point">บันทึกจุดพิกัด</string>
   <string name="get_point">เริ่มต้นจุดพิกัด</string>
   <string name="geopoint_view_read_only">แสดงจุดพิกัด</string>
   <string name="get_shape">เริ่มต้น GeoShape</string>
   <string name="get_trace">เริ่มต้น GeoTrace</string>
   <string name="geoshape_title">GeoShape</string>
-  <string name="select_geotrace_mode">เลือกโหมด GeoTrace</string>
   <string name="start">เริ่มต้น</string>
   <string name="enable_gps">เปิด GPS</string>
-  <string name="enable_gps_message">GPS ถูกปิดไว้ ต้องการเปิดใช้งานหรือไม่?</string>
   <string name="geotrace_title">GeoTrace</string>
-  <string name="polygon_save">บันทึกเป็น Polygon</string>
-  <string name="polyline_save">บันทึกเป็น Polyline</string>
-  <string name="gps_enable_message">GPS ถูกปิดไว้ ต้องการเปิดใช้งานหรือไม่?</string>
-  <string name="select_offline_layer">เลือกเลเยอร์ที่บันทึกไว้</string>
-  <string name="polygon_or_polyline">บันทึก GeoTrace เป็น</string>
-  <string name="minutes">นาที</string>
   <string name="geo_exit_warning">ยกเลิกการเปลี่ยนแปลงและกลับไปที่ ODK?</string>
   <string name="polygon_validator">ต้องมีจุดพิกัด 3 จุดขึ้นไปเพื่อสร้าง Polygon</string>
   <string name="clear">ลบ</string>
-  <string name="polyline_polygon_text">บันทึก GeoTrace เป็น</string>
-  <string name="manual_mode">โหมดตั้งค่าเอง</string>
-  <string name="automatic_mode">โหมดอัตโนมัติ</string>
-  <string name="geoshape_instruction">กดแช่ไว้เพื่อวางเครื่องหมาย</string>
   <string name="geopoint_instruction">กดแช่ไว้เพื่อวางเครื่องหมายหรือแตะที่ปุ่มเพิ่มเครื่องหมาย</string>
   <string name="geopoint_no_draggable_instruction">แตะที่ปุ่มเพิ่มเครื่องหมาย</string>
   <string name="discard">ยกเลิก</string>
-  <string name="zoom_to_where">ซูมไปที่…</string>
-  <string name="zoom_to_location">ซูมไปที่ตำแหน่งปัจจุบัน</string>
   <string name="geoshape_view_change_location">แสดงหรือแก้ไข GeoShape</string>
   <string name="geotrace_view_change_location">แสดงหรือแก้ไข GeoTrace</string>
   <string name="select_odk_shortcut">เลือก ODK Shortcut</string>
@@ -318,7 +295,6 @@
   <string name="alert">แจ้งเตือน</string>
   <string name="install_openmapkit">กรุณาติดตั้ง OpenMapKit</string>
   <string name="go_back">ย้อนกลับ</string>
-  <string name="record_geopoint">บันทึกจุดพิกัด</string>
   <string name="version_number">เวอร์ชั่น: %s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">ตะวันตก %1$s%2$s%3$s</string>
@@ -355,7 +331,6 @@
   <string name="deleted_form">แบบสำรวจที่ถูกลบ</string>
   <string name="instance_scan_completed">สแกนเสร็จสิ้น</string>
   <string name="sort_the_list">จัดเรียงรายการ</string>
-  <string name="request_permissions_google_account">ODK Collect ต้องการเชื่อมต่อกับบัญชี Google เพื่อนำเข้าแบบสำรวจเปล่าและส่งข้อมูลที่เก็บแล้ว</string>
   <string name="language">ภาษา</string>
   <string name="form_metadata_title">Metadata ของแบบสำรวจ</string>
   <string name="form_metadata">Form metadata</string>
@@ -371,5 +346,7 @@
   <string name="select_time">เลือกเวลา</string>
   <string name="no_date_selected">ยังไม่ได้เลือกวันที่</string>
   <string name="no_time_selected">ยังไม่ได้เลือกเวลา</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Sms submission-->
 </resources>

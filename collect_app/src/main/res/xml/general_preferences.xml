@@ -19,6 +19,10 @@ limitations under the License.
         android:key="user_interface"
         android:title="@string/client" />
     <Preference
+        android:icon="@drawable/ic_map"
+        android:key="maps"
+        android:title="@string/maps" />
+    <Preference
         android:icon="@drawable/ic_assignment"
         android:key="form_management"
         android:title="@string/form_management_preferences" />

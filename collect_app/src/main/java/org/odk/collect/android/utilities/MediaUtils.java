@@ -28,16 +28,21 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Video;
+import android.provider.OpenableColumns;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.apache.commons.io.IOUtils;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.GDriveConnectionException;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,28 +77,22 @@ public class MediaUtils {
         String selection = Images.ImageColumns.DATA + "=?";
         String[] selectArgs = {imageFile};
         String[] projection = {Images.ImageColumns._ID};
-        Cursor c = null;
-        try {
-            c = Collect
-                    .getInstance()
-                    .getContentResolver()
-                    .query(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                            projection, selection, selectArgs, null);
-            if (c.getCount() > 0) {
+        try (Cursor c = Collect
+                .getInstance()
+                .getContentResolver()
+                .query(Images.Media.EXTERNAL_CONTENT_URI,
+                        projection, selection, selectArgs, null)) {
+            if (c != null && c.getCount() > 0) {
                 c.moveToFirst();
                 String id = c.getString(c
                         .getColumnIndex(Images.ImageColumns._ID));
 
                 return Uri
                         .withAppendedPath(
-                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                                Images.Media.EXTERNAL_CONTENT_URI,
                                 id);
             }
             return null;
-        } finally {
-            if (c != null) {
-                c.close();
-            }
         }
     }
 
@@ -476,21 +475,49 @@ public class MediaUtils {
                 final String[] split = docId.split(":");
                 final String type = split[0];
 
-                if ("primary".equalsIgnoreCase(type)) {
-                    return Environment.getExternalStorageDirectory() + "/"
-                            + split[1];
+                if ("primary".equalsIgnoreCase(type) || !new File("/storage/" + type).exists()) {
+                    return Environment.getExternalStorageDirectory() + "/" + split[1];
                 }
-
-                // TODO handle non-primary volumes
+                // To support paths like /storage/4A50-B543/
+                return "/storage/" + type + "/" + split[1];
             } else if (isDownloadsDocument(uri)) {
                 // DownloadsProvider
 
                 final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"),
-                        Long.parseLong(id));
+                if (id.startsWith("raw:")) {
+                    return id.replaceFirst("raw:", "");
+                }
 
-                return getDataColumn(context, contentUri, null, null);
+                String[] contentUriPrefixesToTry = new String[]{
+                        "content://downloads/public_downloads",
+                        "content://downloads/my_downloads",
+                        "content://downloads/all_downloads"
+                };
+
+                for (String contentUriPrefix : contentUriPrefixesToTry) {
+                    Uri contentUri = ContentUris.withAppendedId(Uri.parse(contentUriPrefix), Long.parseLong(id));
+                    try {
+                        String path = getDataColumn(context, contentUri, null, null);
+                        if (path != null) {
+                            return path;
+                        }
+                    } catch (Exception e) {
+                        Timber.i(e);
+                    }
+                }
+
+                // path could not be retrieved using ContentResolver, therefore copy file to accessible cache using streams
+                // https://github.com/coltoscosmin/FileUtils/blob/master/FileUtils.java
+                String fileName = getFileName(context, uri);
+                File cacheDir = getDocumentCacheDir(context);
+                File file = generateFileName(fileName, cacheDir);
+                String destinationPath = null;
+                if (file != null) {
+                    destinationPath = file.getAbsolutePath();
+                    saveFileFromUri(context, uri, destinationPath);
+                }
+
+                return destinationPath;
             } else if (isMediaDocument(uri)) {
                 // MediaProvider
                 final String docId = DocumentsContract.getDocumentId(uri);
@@ -654,5 +681,112 @@ public class MediaUtils {
             }
         }
         return null;
+    }
+
+    private static String getFileName(@NonNull Context context, Uri uri) {
+        String mimeType = context.getContentResolver().getType(uri);
+        String filename = null;
+
+        if (mimeType == null) {
+            String path = getPath(context, uri);
+            if (path == null) {
+                filename = getName(uri.toString());
+            } else {
+                File file = new File(path);
+                filename = file.getName();
+            }
+        } else {
+            Cursor returnCursor = context.getContentResolver().query(uri, null, null, null, null);
+            if (returnCursor != null) {
+                int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                returnCursor.moveToFirst();
+                filename = returnCursor.getString(nameIndex);
+                returnCursor.close();
+            }
+        }
+
+        return filename;
+    }
+
+    private static String getName(String filename) {
+        if (filename == null) {
+            return null;
+        }
+        int index = filename.lastIndexOf('/');
+        return filename.substring(index + 1);
+    }
+
+    private static File getDocumentCacheDir(@NonNull Context context) {
+        File dir = new File(context.getCacheDir(), "documents");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        return dir;
+    }
+
+    @Nullable
+    private static File generateFileName(@Nullable String name, File directory) {
+        if (name == null) {
+            return null;
+        }
+
+        File file = new File(directory, name);
+
+        if (file.exists()) {
+            String fileName = name;
+            String extension = "";
+            int dotIndex = name.lastIndexOf('.');
+            if (dotIndex > 0) {
+                fileName = name.substring(0, dotIndex);
+                extension = name.substring(dotIndex);
+            }
+
+            int index = 0;
+
+            while (file.exists()) {
+                index++;
+                name = fileName + '(' + index + ')' + extension;
+                file = new File(directory, name);
+            }
+        }
+
+        try {
+            if (!file.createNewFile()) {
+                return null;
+            }
+        } catch (IOException e) {
+            Timber.w(e);
+            return null;
+        }
+
+        return file;
+    }
+
+    private static void saveFileFromUri(Context context, Uri uri, String destinationPath) {
+        InputStream is = null;
+        BufferedOutputStream bos = null;
+        try {
+            is = context.getContentResolver().openInputStream(uri);
+            bos = new BufferedOutputStream(new FileOutputStream(destinationPath, false));
+            byte[] buf = new byte[1024];
+            is.read(buf);
+            do {
+                bos.write(buf);
+            } while (is.read(buf) != -1);
+        } catch (IOException e) {
+            Timber.w(e);
+        } finally {
+            try {
+                if (is != null) {
+                    is.close();
+                }
+                if (bos != null) {
+                    bos.close();
+                }
+            } catch (IOException e) {
+                Timber.w(e);
+            }
+        }
     }
 }

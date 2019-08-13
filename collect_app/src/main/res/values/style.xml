@@ -7,6 +7,14 @@
         <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
     </style>
 
+    <style name="CustomImageButtonLight" parent="Widget.AppCompat.ImageButton">
+        <item name="android:tint">@color/light_theme_tint_list</item>
+    </style>
+
+    <style name="CustomImageButtonDark" parent="Widget.AppCompat.ImageButton">
+        <item name="android:tint">@color/dark_theme_tint_list</item>
+    </style>
+
     <style name="emptyViewStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -33,6 +41,26 @@
     <style name="MaterialDialogSheetAnimation">
         <item name="android:windowEnterAnimation">@anim/popup_show</item>
         <item name="android:windowExitAnimation">@anim/popup_hide</item>
+    </style>
+
+    <style name="MediaButtonStyle">
+        <item name="android:background">#ddd</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:paddingLeft">9dp</item>
+        <item name="android:paddingRight">9dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:layout_marginRight">2dp</item>
+        <item name="android:layout_marginBottom">0dp</item>
+    </style>
+
+    <style name="ListItemPrimaryTextStyle" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">?primaryTextColor</item>
+    </style>
+
+    <style name="ListItemSecondaryTextStyle" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">?secondaryTextColor</item>
     </style>
 
 </resources>

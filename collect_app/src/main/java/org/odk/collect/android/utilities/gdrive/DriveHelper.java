@@ -14,9 +14,8 @@
 
 package org.odk.collect.android.utilities.gdrive;
 
-
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.FileContent;
@@ -36,10 +35,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.GOOGLE_DRIVE_ROOT_FOLDER;
-import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.GOOGLE_DRIVE_SUBFOLDER;
-
 public class DriveHelper {
+    public static final String ODK_GOOGLE_DRIVE_ROOT_FOLDER_NAME = "Open Data Kit";
+    public static final String ODK_GOOGLE_DRIVE_SUBMISSION_FOLDER_NAME = "Submissions";
 
     public static final String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
     private final DriveService driveService;
@@ -77,24 +75,14 @@ public class DriveHelper {
         return null;
     }
 
-    public void downloadFile(@NonNull String fileId, @NonNull FileOutputStream fileOutputStream) throws IOException {
-        try {
-            driveService.downloadFile(fileId, fileOutputStream);
-        } finally {
-            fileOutputStream.close();
-        }
+    public void downloadFile(@NonNull String fileId, @NonNull File file) throws IOException {
+        driveService.downloadFile(fileId, file);
     }
 
-    public String createOrGetIDOfFolderWithName(String jrFormId)
+    public String createOrGetIDOfSubmissionsFolder()
             throws IOException, MultipleFoldersFoundException {
-        String submissionsFolderId = createOrGetIDOfSubmissionsFolder();
-        return getIDOfFolderWithName(jrFormId, submissionsFolderId, true);
-    }
-
-    private String createOrGetIDOfSubmissionsFolder()
-            throws IOException, MultipleFoldersFoundException {
-        String rootFolderId = getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null, true);
-        return getIDOfFolderWithName(GOOGLE_DRIVE_SUBFOLDER, rootFolderId, true);
+        String rootFolderId = getIDOfFolderWithName(ODK_GOOGLE_DRIVE_ROOT_FOLDER_NAME, null, true);
+        return getIDOfFolderWithName(ODK_GOOGLE_DRIVE_SUBMISSION_FOLDER_NAME, rootFolderId, true);
     }
 
     /**
@@ -270,14 +258,13 @@ public class DriveHelper {
         driveService.fetchFilesForCurrentPage(request, files);
     }
 
-
     /**
      * This class only makes API calls using the drives API and does not contain any business logic
      *
      * @author Shobhit Agarwal
      */
 
-    public class DriveService {
+    public static class DriveService {
         private final Drive drive;
 
         DriveService(Drive drive) {
@@ -299,10 +286,12 @@ public class DriveHelper {
                     .setFields(fields);
         }
 
-        public void downloadFile(String fileId, FileOutputStream fileOutputStream) throws IOException {
-            drive.files()
-                    .get(fileId)
-                    .executeMediaAndDownloadTo(fileOutputStream);
+        public void downloadFile(String fileId, File file) throws IOException {
+            try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+                drive.files()
+                        .get(fileId)
+                        .executeMediaAndDownloadTo(fileOutputStream);
+            }
         }
 
         String uploadFile(com.google.api.services.drive.model.File metadata, FileContent fileContent, String fields) throws IOException {

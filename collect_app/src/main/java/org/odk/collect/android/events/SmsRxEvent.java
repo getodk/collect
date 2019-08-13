@@ -18,8 +18,8 @@ public class SmsRxEvent extends RxEvent {
         this.instanceId = instanceId;
         this.resultCode = resultCode;
         progress = new SmsProgress();
+        lastUpdated = new Date();
     }
-
 
     public String getInstanceId() {
         return instanceId;

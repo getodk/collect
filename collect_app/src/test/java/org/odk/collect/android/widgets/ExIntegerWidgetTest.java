@@ -1,10 +1,9 @@
 package org.odk.collect.android.widgets;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.data.IntegerData;
 import org.odk.collect.android.widgets.base.GeneralExStringWidgetTest;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.mockito.Mockito.when;
 
@@ -17,7 +16,7 @@ public class ExIntegerWidgetTest extends GeneralExStringWidgetTest<ExIntegerWidg
     @NonNull
     @Override
     public ExIntegerWidget createWidget() {
-        return new ExIntegerWidget(RuntimeEnvironment.application, formEntryPrompt);
+        return new ExIntegerWidget(activity, formEntryPrompt);
     }
 
     @NonNull
@@ -31,7 +30,6 @@ public class ExIntegerWidgetTest extends GeneralExStringWidgetTest<ExIntegerWidg
         super.setUp();
         when(formEntryPrompt.getAppearanceHint()).thenReturn("");
     }
-
 
     private int randomInteger() {
         return Math.abs(random.nextInt()) % 1_000_000_000;

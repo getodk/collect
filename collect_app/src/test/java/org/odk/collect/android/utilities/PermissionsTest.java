@@ -4,9 +4,7 @@ import org.hamcrest.Description;
 import org.hamcrest.StringDescription;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.BuildConfig;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 import org.robolectric.manifest.AndroidManifest;
 import org.robolectric.res.Fs;
 
@@ -16,12 +14,11 @@ import java.util.List;
  * Test for checking permissions in {@link AndroidManifest}
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class)
 public class PermissionsTest {
 
     @Test
     public void permissionCheck() {
-        AndroidManifest androidManifest = new AndroidManifest(Fs.fileFromPath("build/intermediates/manifests/full/debug/AndroidManifest.xml"), null, null);
+        AndroidManifest androidManifest = new AndroidManifest(Fs.fileFromPath("build/intermediates/merged_manifests/debug/AndroidManifest.xml"), null, null);
         List<String> permissions = androidManifest.getUsedPermissions();
 
         //List of expected permissions to be present in AndroidManifest.xml

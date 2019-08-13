@@ -17,6 +17,7 @@ package org.odk.collect.android.utilities;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
+import androidx.annotation.Nullable;
 import android.util.Base64;
 
 import org.apache.commons.io.IOUtils;
@@ -64,7 +65,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.XML_OPENROSA_NAMESPACE;
+import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.XML_OPENROSA_NAMESPACE;
 
 /**
  * Utility class for encrypting submissions during the SaveToDiskTask.
@@ -137,7 +138,7 @@ public class EncryptionUtils {
                 byte[] messageDigest = md.digest();
                 ivSeedArray = new byte[IV_BYTE_LENGTH];
                 for (int i = 0; i < IV_BYTE_LENGTH; ++i) {
-                    ivSeedArray[i] = messageDigest[(i % messageDigest.length)];
+                    ivSeedArray[i] = messageDigest[i % messageDigest.length];
                 }
             } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
                 Timber.e(e, "Unable to set md5 hash for instanceid and symmetric key.");
@@ -261,7 +262,7 @@ public class EncryptionUtils {
 
         Cursor formCursor = null;
         try {
-            if (cr.getType(uri) == InstanceColumns.CONTENT_ITEM_TYPE) {
+            if (InstanceColumns.CONTENT_ITEM_TYPE.equals(cr.getType(uri))) {
                 // chain back to the Form record...
                 String[] selectionArgs = null;
                 String selection = null;
@@ -301,7 +302,7 @@ public class EncryptionUtils {
                     throw new EncryptionException(msg, null);
                 }
                 formCursor.moveToFirst();
-            } else if (cr.getType(uri) == FormsColumns.CONTENT_ITEM_TYPE) {
+            } else if (FormsColumns.CONTENT_ITEM_TYPE.equals(cr.getType(uri))) {
                 formCursor = cr.query(uri, null, null, null, null);
                 if (formCursor.getCount() != 1) {
                     String msg = Collect.getInstance().getString(R.string.not_exactly_one_blank_form_for_this_form_id);
@@ -427,16 +428,17 @@ public class EncryptionUtils {
         }
     }
 
-    public static boolean deletePlaintextFiles(File instanceXml) {
+    public static boolean deletePlaintextFiles(File instanceXml, @Nullable File lastSaved) {
         // NOTE: assume the directory containing the instanceXml contains ONLY
         // files related to this one instance.
         File instanceDir = instanceXml.getParentFile();
 
         boolean allSuccessful = true;
-        // encrypt files that do not end with ".enc", and do not start with ".";
+
+        // Delete files that do not end with ".enc", and do not start with ".";
         // ignore directories
-        File[] allFiles = instanceDir.listFiles();
-        for (File f : allFiles) {
+        File[] instanceFiles = instanceDir.listFiles();
+        for (File f : instanceFiles) {
             if (f.equals(instanceXml)) {
                 continue; // don't touch instance file
             }
@@ -449,6 +451,12 @@ public class EncryptionUtils {
                 // short-circuit
             }
         }
+
+        // Delete the last-saved instance, if one exists.
+        if (lastSaved != null && lastSaved.exists()) {
+            allSuccessful &= lastSaved.delete();
+        }
+
         return allSuccessful;
     }
 

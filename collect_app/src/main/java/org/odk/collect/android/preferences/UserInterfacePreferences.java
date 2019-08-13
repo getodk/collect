@@ -22,37 +22,40 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
 import android.view.View;
-
-import com.google.common.collect.ObjectArrays;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
-import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.MediaUtils;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import androidx.annotation.Nullable;
 import timber.log.Timber;
 
 import static android.app.Activity.RESULT_CANCELED;
-import static org.odk.collect.android.preferences.PreferenceKeys.GOOGLE_MAPS_BASEMAP_DEFAULT;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_LANGUAGE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_THEME;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_BASEMAP;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_SDK;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_NAVIGATION;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
-import static org.odk.collect.android.preferences.PreferenceKeys.OSM_BASEMAP_KEY;
-import static org.odk.collect.android.preferences.PreferenceKeys.OSM_MAPS_BASEMAP_DEFAULT;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_LANGUAGE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_THEME;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_NAVIGATION;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_SPLASH_PATH;
+import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class UserInterfacePreferences extends BasePreferenceFragment {
 
     protected static final int IMAGE_CHOOSER = 0;
+
+    public static UserInterfacePreferences newInstance(boolean adminMode) {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
+
+        UserInterfacePreferences userInterfacePreferences = new UserInterfacePreferences();
+        userInterfacePreferences.setArguments(bundle);
+
+        return userInterfacePreferences;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +67,6 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
         initFontSizePref();
         initLanguagePrefs();
         initSplashPrefs();
-        initMapPrefs();
     }
 
     @Override
@@ -173,66 +175,6 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
         }
     }
 
-    private void initMapPrefs() {
-        final ListPreference mapSdk = (ListPreference) findPreference(KEY_MAP_SDK);
-        final ListPreference mapBasemap = (ListPreference) findPreference(KEY_MAP_BASEMAP);
-
-        if (mapSdk == null || mapBasemap == null) {
-            return;
-        }
-
-        String[] onlineLayerEntryValues;
-        String[] onlineLayerEntries;
-
-        if (mapSdk.getValue().equals(OSM_BASEMAP_KEY)) {
-            onlineLayerEntryValues = getResources().getStringArray(R.array.map_osm_basemap_selector_entry_values);
-            onlineLayerEntries = getResources().getStringArray(R.array.map_osm_basemap_selector_entries);
-        } else {
-            onlineLayerEntryValues = getResources().getStringArray(R.array.map_google_basemap_selector_entry_values);
-            onlineLayerEntries = getResources().getStringArray(R.array.map_google_basemap_selector_entries);
-        }
-        mapBasemap.setEntryValues(ObjectArrays.concat(onlineLayerEntryValues, MapHelper.getOfflineLayerListWithTags(), String.class));
-        mapBasemap.setEntries(ObjectArrays.concat(onlineLayerEntries, MapHelper.getOfflineLayerListWithTags(), String.class));
-
-        mapSdk.setSummary(mapSdk.getEntry());
-        mapSdk.setOnPreferenceChangeListener((preference, newValue) -> {
-            String[] onlineLayerEntryValues1;
-            String[] onlineLayerEntries1;
-
-            int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-            if (index == 0) { // Google Maps
-                onlineLayerEntryValues1 = getResources().getStringArray(R.array.map_google_basemap_selector_entry_values);
-                onlineLayerEntries1 = getResources().getStringArray(R.array.map_google_basemap_selector_entries);
-                mapBasemap.setValue(GOOGLE_MAPS_BASEMAP_DEFAULT);
-            } else { // OSM Maps
-                onlineLayerEntryValues1 = getResources().getStringArray(R.array.map_osm_basemap_selector_entry_values);
-                onlineLayerEntries1 = getResources().getStringArray(R.array.map_osm_basemap_selector_entries);
-                mapBasemap.setValue(OSM_MAPS_BASEMAP_DEFAULT);
-            }
-
-            mapBasemap.setEntryValues(ObjectArrays.concat(onlineLayerEntryValues1, MapHelper.getOfflineLayerListWithTags(), String.class));
-            mapBasemap.setEntries(ObjectArrays.concat(onlineLayerEntries1, MapHelper.getOfflineLayerListWithTags(), String.class));
-            mapBasemap.setSummary(mapBasemap.getEntry());
-
-            preference.setSummary(((ListPreference) preference).getEntries()[index]);
-            return true;
-        });
-
-        CharSequence entry = mapBasemap.getEntry();
-        if (entry != null) {
-            mapBasemap.setSummary(entry);
-        } else {
-            mapBasemap.setSummary(mapBasemap.getEntries()[0]);
-            mapBasemap.setValueIndex(0);
-        }
-
-        mapBasemap.setOnPreferenceChangeListener((preference, newValue) -> {
-            int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-            preference.setSummary(((ListPreference) preference).getEntries()[index]);
-            return true;
-        });
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         Timber.d("onActivityResult %d %d", requestCode, resultCode);
@@ -251,6 +193,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
 
                 // setting image path
                 setSplashPath(sourceMediaPath);
+
                 break;
         }
     }

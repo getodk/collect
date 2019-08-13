@@ -16,15 +16,14 @@
 package org.odk.collect.android.activities;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.CardView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -125,16 +124,23 @@ public class DrawActivity extends CollectAbstractActivity {
                     AnimateUtils.scaleInAnimation(cardViewSaveAndClose, 100, 150, new OvershootInterpolator(), true);
                     AnimateUtils.scaleInAnimation(fabClear, 150, 150, new OvershootInterpolator(), true);
                     AnimateUtils.scaleInAnimation(cardViewClear, 150, 150, new OvershootInterpolator(), true);
+
+                    fabSetColor.show();
+                    cardViewSetColor.setVisibility(View.VISIBLE);
+                    fabSaveAndClose.show();
+                    cardViewSaveAndClose.setVisibility(View.VISIBLE);
+                    fabClear.show();
+                    cardViewClear.setVisibility(View.VISIBLE);
                 } else {
                     status = 0;
                     fabActions.animate().rotation(0).setInterpolator(new AccelerateDecelerateInterpolator())
                             .setDuration(100).start();
 
-                    fabSetColor.setVisibility(View.INVISIBLE);
+                    fabSetColor.hide();
                     cardViewSetColor.setVisibility(View.INVISIBLE);
-                    fabSaveAndClose.setVisibility(View.INVISIBLE);
+                    fabSaveAndClose.hide();
                     cardViewSaveAndClose.setVisibility(View.INVISIBLE);
-                    fabClear.setVisibility(View.INVISIBLE);
+                    fabClear.hide();
                     cardViewClear.setVisibility(View.INVISIBLE);
                 }
                 view.setTag(status);
@@ -231,10 +237,8 @@ public class DrawActivity extends CollectAbstractActivity {
             drawView.drawOnCanvas(canvas, 0, 0);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 70, fos);
             try {
-                if (fos != null) {
-                    fos.flush();
-                    fos.close();
-                }
+                fos.flush();
+                fos.close();
             } catch (Exception e) {
                 Timber.e(e);
             }
@@ -260,26 +264,11 @@ public class DrawActivity extends CollectAbstractActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
-                Collect.getInstance().getActivityLogger()
-                        .logInstanceAction(this, "onKeyDown.KEYCODE_BACK", "quit");
                 createQuitDrawDialog();
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
-                if (event.isAltPressed()) {
-                    Collect.getInstance()
-                            .getActivityLogger()
-                            .logInstanceAction(this,
-                                    "onKeyDown.KEYCODE_DPAD_RIGHT", "showNext");
-                    createQuitDrawDialog();
-                    return true;
-                }
-                break;
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 if (event.isAltPressed()) {
-                    Collect.getInstance()
-                            .getActivityLogger()
-                            .logInstanceAction(this, "onKeyDown.KEYCODE_DPAD_LEFT",
-                                    "showPrevious");
                     createQuitDrawDialog();
                     return true;
                 }
@@ -293,10 +282,6 @@ public class DrawActivity extends CollectAbstractActivity {
      * saving
      */
     private void createQuitDrawDialog() {
-
-        Collect.getInstance().getActivityLogger()
-                .logInstanceAction(this, "createQuitDrawDialog", "show");
-
         ListView listView = DialogUtils.createActionListView(this);
 
         List<IconMenuItem> items;
@@ -310,18 +295,8 @@ public class DrawActivity extends CollectAbstractActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 IconMenuItem item = (IconMenuItem) adapter.getItem(position);
                 if (item.getTextResId() == R.string.keep_changes) {
-                    Collect.getInstance()
-                            .getActivityLogger()
-                            .logInstanceAction(this,
-                                    "createQuitDrawDialog",
-                                    "saveAndExit");
                     saveAndClose();
                 } else {
-                    Collect.getInstance()
-                            .getActivityLogger()
-                            .logInstanceAction(this,
-                                    "createQuitDrawDialog",
-                                    "discardAndExit");
                     cancelAndClose();
                 }
                 alertDialog.dismiss();
@@ -329,16 +304,7 @@ public class DrawActivity extends CollectAbstractActivity {
         });
         alertDialog = new AlertDialog.Builder(this)
                 .setTitle(alertTitleString)
-                .setPositiveButton(getString(R.string.do_not_exit),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logInstanceAction(this,
-                                                "createQuitDrawDialog", "cancel");
-                            }
-                        })
+                .setPositiveButton(getString(R.string.do_not_exit), null)
                 .setView(listView).create();
         alertDialog.show();
     }

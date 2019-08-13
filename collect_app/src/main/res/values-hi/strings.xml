@@ -1,10 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">पासवर्ड दिखायें </string>
-  <string name="activity_not_found">%s:के नियंत्रण के लिए कोई क्रिया नहीं मिली</string>
+  <string name="activity_not_found">%s:के नियंत्रण के लिए कोई गतिविधि नहीं  मिली</string>
   <string name="view_image">इमेज देखें</string>
   <string name="annotate_image">इमेज पर टिप्पणी करें</string>
-  <string name="aligned_image_capture">संरेखित छवि कैद</string>
   <string name="view_video">वीडियो देखें</string>
   <string name="choose_audio">ऑडियो चुनें</string>
   <string name="add_another"> समूह जोड़ें</string>
@@ -23,7 +22,7 @@
   <string name="recapture_osm">OSM टैगिंग दुबारा करें</string>
   <string name="capture_video">विडियो रिकार्ड करे</string>
   <string name="change_language">भाषा बदलें</string>
-  <string name="change_password">ODK पासवर्ड</string>
+  <string name="change_password">odk पासवर्ड</string>
   <string name="change_username">ODK उपयोगकर्ता नाम</string>
   <string name="clearanswer_confirm">\"%s\" के लिए प्रतिउत्तर को हटायें क्या?</string>
   <string name="clear_answer">प्रतिउत्तर हटायें</string>
@@ -209,7 +208,6 @@
   <string name="found_in_settings">सामान्य सेटिंग्स से छुपाने के लिए अनचेक करें</string>
   <string name="save_preferences">सेटिंग्स डिस्क पर संरक्षित करे</string>
   <string name="form_forward">आगामी</string>
-  <string name="form_backward">पिछला</string>
   <string name="navigation">पथ प्रदर्शन</string>
   <string name="swipe_navigation">क्षैतिज स्वाइप प्रयोग करें</string>
   <string name="buttons_navigation">आगे / पीछे बटन का प्रयोग करें</string>
@@ -267,8 +265,6 @@
   <string name="drive_get_file"> %1$sऔर मीडिया फाइलों को प्राप्त कर रहा है.</string>
   <string name="no_google_account">कोई गूगल अकाउंट नही चुना!</string>
   <string name="google_set_account">आपने गूगल शीत को अपने सर्वर के रूप में चुना है, कृपया जारी रखने से पहले सामान्य सेटिंग में संबंधित  गूगल अकाउंट का चयन करें</string>
-  <string name="odk_auth_auth_fail">ODK स्वतः प्रमाणीकरण विफल, क्या सेटिंग सही हैं, कृपया जांचें.</string>
-  <string name="odk_auto_note">ODK स्वतः भेजने की सूचना</string>
   <string name="notification_error">सूचना वाकया प्रदर्शित करने में त्रुटि</string>
   <string name="delete_after_send">भेजने के बाद मिटायें</string>
   <string name="delete_after_send_summary">सर्वर को भेजने के बाद अंतिम फॉर्म और मीडिया मिटाता है</string>
@@ -276,7 +272,6 @@
   <string name="google_search_browse">फ़ॉर्म के लिए खोजें. या ब्राउज़ करने के लिए नीचे \'माय ड्राइव\' चुनें।</string>
   <string name="google_sheets_url">फ़ॉलबैक सबमिशन URL</string>
   <string name="send_in_progress">पृष्ठभूमि में भेजना जारी, कृपया शीघ्र पुनः प्रयास करें</string>
-  <string name="sheets_max_columns">कॉलम की अधिकतम संख्या 255 है, आपके फॉर्म में%sहैं. स्प्रैडशीट पर अपलोड करने में असमर्थ</string>
   <string name="invalid_sheet_id">अमान्य शीट आईडी: %1$s</string>
   <string name="google_sheets_access_denied">पहुंच अस्वीकृत। कृपया सुनिश्चित करें कि स्प्रैडशीट ओनर ने आपको संपादन अधिकार दिए हैं।</string>
   <string name="google_sheets_missing_columns">स्प्रेडशीट में निम्न कॉलम लापता हैं: %1$s</string>
@@ -285,55 +280,34 @@
   <string name="google_play_services_error_occured">गूगल मानचित्र तक पहुंचने में असमर्थ क्या गूगल प्ले सर्विस इनस्टॉल है?</string>
   <string name="about_preferences">बारे में </string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">मानचित्रण</string>
-  <string name="map_sdk_selector_title">मानचित्रण SDK</string>
-  <string name="map_sdk_behavior">मानचित्रण SDK</string>
-  <string name="google_maps_sdk">गूगल मैप SDK</string>
-  <string name="openstreetmap_sdk">ओपन स्ट्रीट मैप SDK</string>
-  <string name="show_map_sdk">मैप SDK विकल्प दिखायें </string>
-  <string name="openmap_streets">OSM स्ट्रीट</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_stamen_terrain">स्टैमन टेरेन</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB डार्क मैटर</string>
+  <string name="basemap">बेसमैप</string>
   <string name="streets">स्ट्रीट</string>
   <string name="terrain"> भूभाग</string>
   <string name="hybrid">हाइब्रिड </string>
   <string name="satellite">उपग्रह</string>
-  <string name="map_basemap_selector_title">बेसमैप्स</string>
-  <string name="show_map_basemap">बेसमैप विकल्प दिखाएं</string>
   <string name="save_point">जिओपॉइंट संरक्षित करे</string>
   <string name="get_point"> जिओपॉइंट शुरू करे </string>
   <string name="geopoint_view_read_only">जिओपॉइंट  देखे</string>
   <string name="get_shape">जिओशेप शुरू करे </string>
   <string name="get_trace">जीओट्रेस प्रारंभ करें</string>
   <string name="geoshape_title">जिओशेप</string>
-  <string name="select_geotrace_mode">जिओ ट्रेस मोड का चयन करे </string>
   <string name="start">शुरु करे</string>
   <string name="enable_gps">जीपीएस सक्षम करें</string>
-  <string name="enable_gps_message">आपके डिवाइस में जीपीएस सक्षम नही है क्या आप इसे सक्षम करना चाहेंगे?</string>
   <string name="geotrace_title">जिओ ट्रेस</string>
-  <string name="polygon_save">बहुभुज के रूप में संरक्षित करे</string>
-  <string name="polyline_save">पॉलीलाइन के रूप में संरक्षित करे </string>
-  <string name="gps_enable_message">आपके डिवाइस में जीपीएस सक्षम नही है. क्या आप इसे सक्षम करना चाहेंगे?</string>
-  <string name="select_offline_layer">ऑफ़लाइन लेयर चुनें</string>
-  <string name="polygon_or_polyline"> जिओ ट्रेस संरक्षित करे </string>
-  <string name="minutes">मिनट</string>
   <string name="geo_clear_warning">फीचर पहले से ही बना है. क्या आप फीचर को क्लियर करना चाहेंगे?</string>
   <string name="geo_exit_warning">परिवर्तनों को रद्द करें और वापस ODK पर लौटें?</string>
   <string name="polygon_validator">बहुभुज बनाने के लिए कम से कम 3 पॉइंट होने चाहिए</string>
   <string name="clear">स्पष्ट</string>
-  <string name="polyline_polygon_text">जिओ ट्रेस इस तरह संरक्षित करे </string>
-  <string name="manual_mode">मैन्युअल मोड</string>
-  <string name="automatic_mode">स्वचालित मोड</string>
-  <string name="geoshape_instruction">प्लेस मार्क के लिए लंबे समय तक दबाएं</string>
-  <string name="geotrace_instruction">लॉक होने के लिए प्रतीक्षा करें, तब शुरू करने के लिए मार्कर बटन जोड़ें पर टैप करें।</string>
   <string name="geopoint_instruction">प्लेस मार्क के लिए लंबे समय तक दबाएं या मार्कर बटन जोड़ने के लिए टैप करें।</string>
   <string name="geopoint_no_draggable_instruction">मार्कर बटन जोड़ें पर टैप करें</string>
   <string name="discard">छोड़ दें </string>
-  <string name="zoom_to_where">पर ज़ूम करें …</string>
-  <string name="zoom_to_location">वर्तमान लोकेशन पर ज़ूम करें</string>
-  <string name="zoom_to_feature">संरक्षित फीचर पर ज़ूम करें</string>
   <string name="geoshape_view_change_location">जिओ शेप देखें या बदलें </string>
   <string name="geotrace_view_change_location">जिओ ट्रेस देखें या बदलें </string>
   <string name="bearing">बीअरिंग: %.3f</string>
@@ -352,7 +326,6 @@
   <string name="install_openmapkit">कृपया ओपेन मैप किट  इनस्टॉल करें!</string>
   <string name="go_back">वापस जायें</string>
   <string name="download_selected">डाउनलोड चयनित</string>
-  <string name="record_geopoint">रिकॉर्ड जिओपॉइंट</string>
   <string name="gps_result">अक्षांश: %1$s \n देशांतर: %2$s \n ऊंचाई: %3$sm \n शुद्धता: %4$sm</string>
   <string name="parser_exception">XPathParser अपवाद:\"%s\"</string>
   <string name="selected_answer">चयनित :%s</string>
@@ -409,7 +382,6 @@
   <string name="sort_by_date_desc">दिनांक, सबसे पुराना पहले</string>
   <string name="sort_by_status_desc">अवस्था, बिना फाइनल हुए शब्द</string>
   <string name="sort_the_list">सूची को सॉर्ट करें</string>
-  <string name="request_permissions_google_account">ODK कलेक्ट को रिक्त फॉर्म प्राप्त करने के लिए, और भरे गए फॉर्म सबमिट करने के लिए, आपके गूगल अकाउंट तक पहुंच की आवश्यकता है।</string>
   <string name="filter_the_list">सूची को फ़िल्टर करें</string>
   <string name="language">भाषा</string>
   <string name="google_auth_io_exception_msg">API कॉल करने में असमर्थ यदि आप स्थानीय बिल्ड चला रहे हैं, तो कृपया  परियोजना readme की समीक्षा करें।</string>
@@ -463,7 +435,6 @@
   <string name="wifi_autosend">केवल वाई-फाई </string>
   <string name="cellular_autosend"> केवल सेलुलर</string>
   <string name="wifi_cellular_autosend">वाई-फाई या सेलुलर</string>
-  <string name="map_basemap_behavior_title">बेसमैप</string>
   <string name="form_management_preferences">फॉर्म मैनेजमेंट</string>
   <string name="form_submission_category">फॉर्म भेजना</string>
   <string name="form_filling_category">फॉर्म भरना</string>
@@ -476,11 +447,12 @@
   <string name="type">प्रकार</string>
   <string name="form_entry">फॉर्म एंट्री से छुपाने के लिए चेक हटायें</string>
   <string name="use_device_language">डिवाइस की भाषा प्रयोग करें </string>
-  <string name="not_supported_offline_layer_format">चयनित ऑफलाइन लेयर फाइल PBF फॉर्मेट उपयोग करती है जो कि समर्थित नहीं है! </string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="search">खोज</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="moving_backwards_title">पीछे की ओर बढ़ रहा है</string>
   <string name="yes">हाँ</string>
   <string name="no">नहीं</string>
   <string name="start_video_capture_instruction">रिकॉर्डिंग प्रारंभ करने के लिए स्क्रीन को टैप करें</string>
+  <!--Sms submission-->
 </resources>

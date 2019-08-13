@@ -14,25 +14,34 @@
 
 package org.odk.collect.android.application;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
-import android.support.multidex.MultiDex;
-import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.multidex.MultiDex;
 
 import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobManagerCreateException;
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.security.ProviderInstaller;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -40,10 +49,10 @@ import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.ActivityLogger;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.external.ExternalDataManager;
-import org.odk.collect.android.injection.config.AppComponent;
-import org.odk.collect.android.injection.config.DaggerAppComponent;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
+import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
@@ -51,36 +60,34 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.preferences.PrefMigrator;
+import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
+import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
+import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.PRNGFixes;
-import org.opendatakit.httpclientandroidlib.client.CookieStore;
-import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
-import org.opendatakit.httpclientandroidlib.client.protocol.HttpClientContext;
-import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
-import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.Locale;
 
-import javax.inject.Inject;
-
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasActivityInjector;
 import timber.log.Timber;
 
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
 import static org.odk.collect.android.logic.PropertyManager.SCHEME_USERNAME;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_LANGUAGE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_LANGUAGE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_USERNAME;
+import static org.odk.collect.android.tasks.sms.SmsNotificationReceiver.SMS_NOTIFICATION_ACTION;
+import static org.odk.collect.android.tasks.sms.SmsSender.SMS_SEND_ACTION;
 
 /**
  * The Open Data Kit Collect application.
  *
  * @author carlhartung
  */
-public class Collect extends Application implements HasActivityInjector {
+public class Collect extends Application {
 
     // Storage paths
     public static final String ODK_ROOT = Environment.getExternalStorageDirectory()
@@ -91,31 +98,24 @@ public class Collect extends Application implements HasActivityInjector {
     public static final String METADATA_PATH = ODK_ROOT + File.separator + "metadata";
     public static final String TMPFILE_PATH = CACHE_PATH + File.separator + "tmp.jpg";
     public static final String TMPDRAWFILE_PATH = CACHE_PATH + File.separator + "tmpDraw.jpg";
-    public static final String LOG_PATH = ODK_ROOT + File.separator + "log";
     public static final String DEFAULT_FONTSIZE = "21";
     public static final int DEFAULT_FONTSIZE_INT = 21;
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
     public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
 
+    public static final int CLICK_DEBOUNCE_MS = 1000;
+
     public static String defaultSysLanguage;
     private static Collect singleton;
     private static long lastClickTime;
-
-    @Inject
-    protected CookieStore cookieStore;
-    @Inject
-    protected CredentialsProvider credsProvider;
-
-    private ActivityLogger activityLogger;
+    private static String lastClickName;
 
     @Nullable
     private FormController formController;
     private ExternalDataManager externalDataManager;
     private Tracker tracker;
-    private AppComponent applicationComponent;
-
-    @Inject
-    DispatchingAndroidInjector<Activity> androidInjector;
+    private FirebaseAnalytics firebaseAnalytics;
+    private AppDependencyComponent applicationComponent;
 
     public static Collect getInstance() {
         return singleton;
@@ -186,10 +186,6 @@ public class Collect extends Application implements HasActivityInjector {
         return false;
     }
 
-    public ActivityLogger getActivityLogger() {
-        return activityLogger;
-    }
-
     @Nullable
     public FormController getFormController() {
         return formController;
@@ -213,6 +209,19 @@ public class Collect extends Application implements HasActivityInjector {
         return getString(R.string.app_name) + versionName;
     }
 
+    /**
+     * Get a User-Agent string that provides the platform details followed by the application ID
+     * and application version name: {@code Dalvik/<version> (platform info) org.odk.collect.android/v<version>}.
+     *
+     * This deviates from the recommended format as described in https://github.com/opendatakit/collect/issues/3253.
+     */
+    public String getUserAgentString() {
+        return String.format("%s %s/%s",
+                System.getProperty("http.agent"),
+                BuildConfig.APPLICATION_ID,
+                BuildConfig.VERSION_NAME);
+    }
+
     public boolean isNetworkAvailable() {
         ConnectivityManager manager = (ConnectivityManager) getInstance()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -230,40 +239,19 @@ public class Collect extends Application implements HasActivityInjector {
         MultiDex.install(this);
     }
 
-    /**
-     * Construct and return a session context with shared cookieStore and credsProvider so a user
-     * does not have to re-enter login information.
-     */
-    public synchronized HttpContext getHttpContext() {
-
-        // context holds authentication state machine, so it cannot be
-        // shared across independent activities.
-        HttpContext localContext = new BasicHttpContext();
-
-        localContext.setAttribute(HttpClientContext.COOKIE_STORE, cookieStore);
-        localContext.setAttribute(HttpClientContext.CREDS_PROVIDER, credsProvider);
-
-        return localContext;
-    }
-
-    public CredentialsProvider getCredentialsProvider() {
-        return credsProvider;
-    }
-
-    public CookieStore getCookieStore() {
-        return cookieStore;
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
         singleton = this;
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        applicationComponent = DaggerAppComponent.builder()
-                .application(this)
-                .build();
+        installTls12();
+        setupDagger();
 
-        applicationComponent.inject(this);
+        NotificationUtils.createNotificationChannel(singleton);
+
+        registerReceiver(new SmsSentBroadcastReceiver(), new IntentFilter(SMS_SEND_ACTION));
+        registerReceiver(new SmsNotificationReceiver(), new IntentFilter(SMS_NOTIFICATION_ACTION));
 
         try {
             JobManager
@@ -272,6 +260,11 @@ public class Collect extends Application implements HasActivityInjector {
         } catch (JobManagerCreateException e) {
             Timber.e(e);
         }
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        FormMetadataMigrator.migrate(prefs);
+        PrefMigrator.migrateSharedPrefs();
+        AutoSendPreferenceMigrator.migrate();
 
         reloadSharedPreferences();
 
@@ -282,12 +275,8 @@ public class Collect extends Application implements HasActivityInjector {
         defaultSysLanguage = Locale.getDefault().getLanguage();
         new LocaleHelper().updateLocale(this);
 
-        FormMetadataMigrator.migrate(PreferenceManager.getDefaultSharedPreferences(this));
-        AutoSendPreferenceMigrator.migrate();
+        initializeJavaRosa();
 
-        initProperties();
-
-        AuthDialogUtility.setWebCredentialsFromPreferences();
         if (BuildConfig.BUILD_TYPE.equals("odkCollectRelease")) {
             Timber.plant(new CrashReportingTree());
         } else {
@@ -295,6 +284,36 @@ public class Collect extends Application implements HasActivityInjector {
         }
 
         setupLeakCanary();
+        setupOSMDroid();
+    }
+
+    protected void setupOSMDroid() {
+        org.osmdroid.config.Configuration.getInstance().setUserAgentValue(getUserAgentString());
+    }
+
+    private void setupDagger() {
+        applicationComponent = DaggerAppDependencyComponent.builder()
+                .application(this)
+                .build();
+
+        applicationComponent.inject(this);
+    }
+
+    private void installTls12() {
+        if (Build.VERSION.SDK_INT <= 20) {
+            ProviderInstaller.installIfNeededAsync(getApplicationContext(), new ProviderInstaller.ProviderInstallListener() {
+                @Override
+                public void onProviderInstalled() {
+                }
+
+                @Override
+                public void onProviderInstallFailed(int i, Intent intent) {
+                    GoogleApiAvailability
+                            .getInstance()
+                            .showErrorNotification(getApplicationContext(), i);
+                }
+            });
+        }
     }
 
     protected RefWatcher setupLeakCanary() {
@@ -329,6 +348,26 @@ public class Collect extends Application implements HasActivityInjector {
         return tracker;
     }
 
+    public void logRemoteAnalytics(String event, String action, String label) {
+        // Google Analytics
+        Collect.getInstance()
+                .getDefaultTracker()
+                .send(new HitBuilders.EventBuilder()
+                        .setCategory(event)
+                        .setAction(action)
+                        .setLabel(label)
+                        .build());
+
+        // Firebase Analytics
+        Bundle bundle = new Bundle();
+        bundle.putString("action", action);
+        bundle.putString("label", label);
+        firebaseAnalytics.logEvent(event, bundle);
+    }
+
+    public void setAnalyticsCollectionEnabled(boolean isAnalyticsEnabled) {
+        firebaseAnalytics.setAnalyticsCollectionEnabled(isAnalyticsEnabled);
+    }
 
     private static class CrashReportingTree extends Timber.Tree {
         @Override
@@ -345,16 +384,15 @@ public class Collect extends Application implements HasActivityInjector {
         }
     }
 
-    public void initProperties() {
+    public void initializeJavaRosa() {
         PropertyManager mgr = new PropertyManager(this);
 
         // Use the server username by default if the metadata username is not defined
-        if ((mgr.getSingularProperty(PROPMGR_USERNAME) == null || mgr.getSingularProperty(PROPMGR_USERNAME).isEmpty())) {
+        if (mgr.getSingularProperty(PROPMGR_USERNAME) == null || mgr.getSingularProperty(PROPMGR_USERNAME).isEmpty()) {
             mgr.putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, (String) GeneralSharedPreferences.getInstance().get(KEY_USERNAME));
         }
 
         FormController.initializeJavaRosa(mgr);
-        activityLogger = new ActivityLogger(mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
     }
 
     // This method reloads shared preferences in order to load default values for new preferences
@@ -363,27 +401,61 @@ public class Collect extends Application implements HasActivityInjector {
         AdminSharedPreferences.getInstance().reloadPreferences();
     }
 
-    // Preventing multiple clicks, using threshold of 1000 ms
-    public static boolean allowClick() {
+    // Debounce multiple clicks within the same screen
+    public static boolean allowClick(String className) {
         long elapsedRealtime = SystemClock.elapsedRealtime();
-        boolean allowClick = (lastClickTime == 0 || lastClickTime == elapsedRealtime) // just for tests
-                || elapsedRealtime - lastClickTime > 1000;
+        boolean isSameClass = className.equals(lastClickName);
+        boolean isBeyondThreshold = elapsedRealtime - lastClickTime > CLICK_DEBOUNCE_MS;
+        boolean isBeyondTestThreshold = lastClickTime == 0 || lastClickTime == elapsedRealtime; // just for tests
+        boolean allowClick = !isSameClass || isBeyondThreshold || isBeyondTestThreshold;
         if (allowClick) {
             lastClickTime = elapsedRealtime;
+            lastClickName = className;
         }
         return allowClick;
     }
 
-    public AppComponent getComponent() {
+    public AppDependencyComponent getComponent() {
         return applicationComponent;
     }
 
-    public void setComponent(AppComponent applicationComponent) {
+    public void setComponent(AppDependencyComponent applicationComponent) {
         this.applicationComponent = applicationComponent;
+        applicationComponent.inject(this);
     }
 
-    @Override
-    public DispatchingAndroidInjector<Activity> activityInjector() {
-        return androidInjector;
+    /**
+     * Gets a unique, privacy-preserving identifier for the current form.
+     *
+     * @return md5 hash of the form title, a space, the form ID
+     */
+    public static String getCurrentFormIdentifierHash() {
+        String formIdentifier = "";
+        FormController formController = getInstance().getFormController();
+        if (formController != null) {
+            if (formController.getFormDef() != null) {
+                String formID = formController.getFormDef().getMainInstance()
+                        .getRoot().getAttributeValue("", "id");
+                formIdentifier = formController.getFormTitle() + " " + formID;
+            }
+        }
+
+        return FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
+    }
+
+
+    /**
+     * Gets a unique, privacy-preserving identifier for a form based on its id and version.
+     * @param formId id of a form
+     * @param formVersion version of a form
+     * @return md5 hash of the form title, a space, the form ID
+     */
+    public static String getFormIdentifierHash(String formId, String formVersion) {
+        String formIdentifier = new FormsDao().getFormTitleForFormIdAndFormVersion(formId, formVersion) + " " + formId;
+        return FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
+    }
+
+    public void logNullFormControllerEvent(String action) {
+        logRemoteAnalytics("NullFormControllerEvent", action, null);
     }
 }

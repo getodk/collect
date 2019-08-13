@@ -1,7 +1,7 @@
 package org.odk.collect.android.activities;
 
 import android.content.Intent;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -9,12 +9,10 @@ import android.widget.Button;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowIntent;
 
@@ -25,7 +23,6 @@ import static org.robolectric.Shadows.shadowOf;
 /**
  * Unit test for checking {@link Button}'s behaviour  in {@link MainMenuActivity}
  */
-@Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
 public class MainActivityTest {
     private MainMenuActivity mainMenuActivity;
@@ -148,7 +145,7 @@ public class MainActivityTest {
         ShadowActivity shadowActivity = shadowOf(mainMenuActivity);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
         ShadowIntent shadowIntent = shadowOf(startedIntent);
-        assertEquals(InstanceUploaderList.class.getName(),
+        assertEquals(InstanceUploaderListActivity.class.getName(),
                 shadowIntent.getIntentClass().getName());
     }
 

@@ -15,8 +15,11 @@
 package org.odk.collect.android.dao.helpers;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.OpenableColumns;
+import android.webkit.MimeTypeMap;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormInfo;
@@ -29,12 +32,14 @@ public final class ContentResolverHelper {
 
     }
 
+    private static ContentResolver getContentResolver() {
+        return Collect.getInstance().getContentResolver();
+    }
+
     public static FormInfo getFormDetails(Uri uri) {
         FormInfo formInfo = null;
 
-        ContentResolver contentResolver = Collect.getInstance().getContentResolver();
-
-        try (Cursor instanceCursor = contentResolver.query(uri, null, null, null, null)) {
+        try (Cursor instanceCursor = getContentResolver().query(uri, null, null, null, null)) {
             if (instanceCursor != null && instanceCursor.getCount() > 0) {
                 instanceCursor.moveToFirst();
                 String instancePath = instanceCursor
@@ -59,13 +64,40 @@ public final class ContentResolverHelper {
 
     public static String getFormPath(Uri uri) {
         String formPath = null;
-        ContentResolver contentResolver = Collect.getInstance().getContentResolver();
-        try (Cursor c = contentResolver.query(uri, null, null, null, null)) {
+        try (Cursor c = getContentResolver().query(uri, null, null, null, null)) {
             if (c != null && c.getCount() == 1) {
                 c.moveToFirst();
                 formPath = c.getString(c.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_FILE_PATH));
             }
         }
         return formPath;
+    }
+
+
+    /**
+     * Using contentResolver to get a file's extension by the uri
+     *
+     * @param fileUri Whose name we want to get
+     * @return The file's extension
+     */
+    public static String getFileExtensionFromUri(Context context, Uri fileUri) {
+        try (Cursor returnCursor = getContentResolver().query(fileUri, null, null, null, null)) {
+            if (returnCursor != null && returnCursor.getCount() > 0) {
+                String filename = null;
+                int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                if (nameIndex != -1) {
+                    returnCursor.moveToFirst();
+                    filename = returnCursor.getString(nameIndex);
+                }
+                if (filename != null && filename.lastIndexOf('.') != -1) {
+                    return filename.substring(filename.lastIndexOf('.'));
+                } else {
+                    return fileUri.getScheme() != null && fileUri.getScheme().equals(ContentResolver.SCHEME_CONTENT)
+                            ? MimeTypeMap.getSingleton().getExtensionFromMimeType(context.getContentResolver().getType(fileUri))
+                            : MimeTypeMap.getFileExtensionFromUrl(fileUri.toString());
+                }
+            }
+        }
+        return "";
     }
 }

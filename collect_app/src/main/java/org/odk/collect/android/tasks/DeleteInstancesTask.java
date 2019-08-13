@@ -18,7 +18,6 @@ import android.content.ContentResolver;
 import android.net.Uri;
 import android.os.AsyncTask;
 
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
@@ -31,7 +30,6 @@ import timber.log.Timber;
  * @author mitchellsundt@gmail.com
  */
 public class DeleteInstancesTask extends AsyncTask<Long, Integer, Integer> {
-
 
     private ContentResolver contentResolver;
     private DeleteInstancesListener deleteInstancesListener;
@@ -49,7 +47,6 @@ public class DeleteInstancesTask extends AsyncTask<Long, Integer, Integer> {
 
         toDeleteCount = params.length;
 
-
         // delete files from database and then from file system
         for (Long param : params) {
             if (isCancelled()) {
@@ -61,10 +58,6 @@ public class DeleteInstancesTask extends AsyncTask<Long, Integer, Integer> {
 
                 int wasDeleted = contentResolver.delete(deleteForm, null, null);
                 deleted += wasDeleted;
-
-                if (wasDeleted > 0) {
-                    Collect.getInstance().getActivityLogger().logAction(this, "delete", deleteForm.toString());
-                }
 
                 successCount++;
                 publishProgress(successCount, toDeleteCount);
@@ -106,7 +99,6 @@ public class DeleteInstancesTask extends AsyncTask<Long, Integer, Integer> {
     public void setDeleteListener(DeleteInstancesListener listener) {
         deleteInstancesListener = listener;
     }
-
 
     public void setContentResolver(ContentResolver resolver) {
         contentResolver = resolver;

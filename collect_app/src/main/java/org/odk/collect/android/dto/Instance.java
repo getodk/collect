@@ -22,8 +22,7 @@ package org.odk.collect.android.dto;
  * For more information about this pattern go to https://en.wikipedia.org/wiki/Data_transfer_object
  * Objects of this class are created using builder pattern: https://en.wikipedia.org/wiki/Builder_pattern
  */
-public class Instance {
-
+public final class Instance {
     private final String displayName;
     private final String submissionUri;
     private final String canEditWhenComplete;
@@ -32,8 +31,9 @@ public class Instance {
     private final String jrVersion;
     private final String status;
     private final Long lastStatusChangeDate;
-    private final String displaySubtext;
     private final Long deletedDate;
+
+    private final Long databaseId;
 
     private Instance(Builder builder) {
         displayName = builder.displayName;
@@ -44,8 +44,9 @@ public class Instance {
         jrVersion = builder.jrVersion;
         status = builder.status;
         lastStatusChangeDate = builder.lastStatusChangeDate;
-        displaySubtext = builder.displaySubtext;
         deletedDate = builder.deletedDate;
+
+        databaseId = builder.databaseId;
     }
 
     public static class Builder {
@@ -57,8 +58,9 @@ public class Instance {
         private String jrVersion;
         private String status;
         private Long lastStatusChangeDate;
-        private String displaySubtext;
         private Long deletedDate;
+
+        private Long databaseId;
 
         public Builder displayName(String displayName) {
             this.displayName = displayName;
@@ -100,13 +102,13 @@ public class Instance {
             return this;
         }
 
-        public Builder displaySubtext(String displaySubtext) {
-            this.displaySubtext = displaySubtext;
+        public Builder deletedDate(Long deletedDate) {
+            this.deletedDate = deletedDate;
             return this;
         }
 
-        public Builder deletedDate(Long deletedDate) {
-            this.deletedDate = deletedDate;
+        public Builder databaseId(Long databaseId) {
+            this.databaseId = databaseId;
             return this;
         }
 
@@ -147,11 +149,22 @@ public class Instance {
         return lastStatusChangeDate;
     }
 
-    public String getDisplaySubtext() {
-        return displaySubtext;
-    }
-
     public Long getDeletedDate() {
         return deletedDate;
+    }
+
+    public Long getDatabaseId() {
+        return databaseId;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this || other instanceof Instance
+                && this.instanceFilePath.equals(((Instance) other).instanceFilePath);
+    }
+
+    @Override
+    public int hashCode() {
+        return instanceFilePath.hashCode();
     }
 }

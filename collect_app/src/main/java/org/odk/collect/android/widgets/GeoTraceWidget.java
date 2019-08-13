@@ -18,8 +18,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,22 +26,16 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.activities.GeoTraceGoogleMapActivity;
-import org.odk.collect.android.activities.GeoTraceOsmMapActivity;
+import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.utilities.PermissionUtils.requestLocationPermissions;
 
 /**
- * GeoShapeTrace is the widget that allows the user to get Collect multiple GPS points based on the
- * locations.
- * <p>
- * Date
+ * GeoTraceWidget allows the user to collect a trace of GPS points as the
+ * device moves along a path.
  *
  * @author Jon Nordling (jonnordling@gmail.com)
  */
@@ -51,30 +43,15 @@ import static org.odk.collect.android.utilities.PermissionUtils.requestLocationP
 @SuppressLint("ViewConstructor")
 public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
 
-    public static final String GOOGLE_MAP_KEY = "google_maps";
-    public static final String TRACE_LOCATION = "gp";
-
-    public SharedPreferences sharedPreferences;
-    public String mapSDK;
-
     private final Button createTraceButton;
     private final TextView answerDisplay;
 
     public GeoTraceWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        LinearLayout layout = new LinearLayout(getContext());
-        layout.setOrientation(LinearLayout.VERTICAL);
-
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        mapSDK = sharedPreferences.getString(PreferenceKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
 
         answerDisplay = getCenteredAnswerTextView();
 
         createTraceButton = getSimpleButton(getContext().getString(R.string.get_trace));
-
-        if (prompt.isReadOnly()) {
-            createTraceButton.setEnabled(false);
-        }
 
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
@@ -93,36 +70,31 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
     }
 
     private void startGeoTraceActivity() {
-        Intent i;
-        if (mapSDK.equals(GOOGLE_MAP_KEY)) {
-            if (PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
-                i = new Intent(getContext(), GeoTraceGoogleMapActivity.class);
-            } else {
-                PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
-                return;
-            }
+        Context context = getContext();
+        if (MapProvider.getConfigurator().isAvailable(context)) {
+            Intent intent = new Intent(context, GeoPolyActivity.class)
+                .putExtra(GeoPolyActivity.ANSWER_KEY, answerDisplay.getText().toString())
+                .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOTRACE);
+            ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOTRACE_CAPTURE);
         } else {
-            i = new Intent(getContext(), GeoTraceOsmMapActivity.class);
+            MapProvider.getConfigurator().showUnavailableMessage(context);
         }
-        String s = answerDisplay.getText().toString();
-        if (s.length() != 0) {
-            i.putExtra(TRACE_LOCATION, s);
-        }
-        ((Activity) getContext()).startActivityForResult(i, RequestCodes.GEOTRACE_CAPTURE);
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
         if (dataAvailable) {
-            createTraceButton.setText(
-                    getContext().getString(R.string.geotrace_view_change_location));
+            createTraceButton.setText(R.string.geotrace_view_change_location);
         } else {
-            createTraceButton.setText(getContext().getString(R.string.get_trace));
+            createTraceButton.setText(R.string.get_trace);
         }
     }
 
     @Override
     public void setBinaryData(Object answer) {
-        answerDisplay.setText(answer.toString());
+        String answerText = answer.toString();
+        answerDisplay.setText(answerText);
+        updateButtonLabelsAndVisibility(!answerText.isEmpty());
+        widgetValueChanged();
     }
 
     @Override
@@ -137,6 +109,7 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
     public void clearAnswer() {
         answerDisplay.setText(null);
         updateButtonLabelsAndVisibility(false);
+        widgetValueChanged();
     }
 
     @Override
@@ -147,7 +120,7 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onButtonClick(int buttonId) {
-        requestLocationPermissions((FormEntryActivity) getContext(), new PermissionListener() {
+        getPermissionUtils().requestLocationPermissions((Activity) getContext(), new PermissionListener() {
             @Override
             public void granted() {
                 waitForData();

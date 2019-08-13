@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="show_password">Tunjuk Kata Laluan</string>
+  <string name="view_image">Lihat Gambar</string>
+  <string name="view_video">Lihat Video</string>
+  <string name="add_another">Tambah Kumpulan</string>
+  <string name="cancel">Batal</string>
+  <string name="cancel_loading_form">Batal</string>
+  <string name="cancel_location">Batal</string>
+  <string name="change_language">Tukar Bahasa</string>
+  <string name="clear_answer_no">Batal</string>
+  <string name="delete_repeat_no">Batal</string>
+  <string name="do_not_change">Batal</string>
+  <string name="do_not_exit">Batal</string>
+  <string name="entering_repeat">Tambah Kumpulan</string>
+  <string name="forms">Borang Kosong</string>
+  <string name="get_forms">Minta Borang Kosong</string>
+  <string name="password">Kata Laluan</string>
+  <string name="view_sent_forms">Lihat Borang DiMuat</string>
+  <string name="choose_image">Pilih Gambar</string>
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Geo string added in feature-geofeatures branch-->
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Sms submission-->
+</resources>

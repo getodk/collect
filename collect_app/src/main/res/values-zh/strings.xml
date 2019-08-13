@@ -45,7 +45,6 @@
   <string name="discard_answer">删除回答</string>
   <string name="discard_group">删除组</string>
   <string name="download">下载选中项</string>
-  <string name="download_forms_result">下载答案</string>
   <string name="downloading_data">连接到服务器</string>
   <string name="do_not_change">取消</string>
   <string name="do_not_exit">取消</string>
@@ -202,7 +201,6 @@
   <string name="found_in_settings">不选中以从设置中隐藏</string>
   <string name="save_preferences">保存设置到磁盘</string>
   <string name="form_forward">下一个</string>
-  <string name="form_backward">上一个</string>
   <string name="navigation">导航</string>
   <string name="swipe_navigation">使用水平滑动</string>
   <string name="buttons_navigation">使用前进/后退按钮</string>
@@ -231,11 +229,16 @@
   <string name="about_preferences">关于</string>
   <string name="tell_your_friends">分享ODK Collect</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="autosend_selector_title">自动发送</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Sms submission-->
 </resources>

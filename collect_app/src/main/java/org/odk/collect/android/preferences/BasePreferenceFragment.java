@@ -4,13 +4,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import org.odk.collect.android.R;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
@@ -23,7 +24,12 @@ public class BasePreferenceFragment extends PreferenceFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
         initToolbar(getPreferenceScreen(), view);
+        removeDisabledPrefs();
 
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    void removeDisabledPrefs() {
         // removes disabled preferences if in general settings
         if (getActivity() instanceof PreferencesActivity) {
             Bundle args = getArguments();
@@ -36,8 +42,6 @@ public class BasePreferenceFragment extends PreferenceFragment {
                 removeAllDisabledPrefs();
             }
         }
-
-        super.onViewCreated(view, savedInstanceState);
     }
 
     // inflates toolbar in the preference fragments

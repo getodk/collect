@@ -1,11 +1,11 @@
 package org.odk.collect.android.location.client;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-//import com.google.android.gms.common.ConnectionResult;
-//import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 /**
  * A helper class for getting a LocationClient based on whether or not Google Play Services are
@@ -45,10 +45,10 @@ public class LocationClients {
         LocationClients.testClient = testClient;
     }
 
-    //    private static boolean areGooglePlayServicesAvailable(@NonNull Context context) {
-    //        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
-    //        int status = googleApiAvailability.isGooglePlayServicesAvailable(context);
-    //
-    //        return status == ConnectionResult.SUCCESS;
-    //    }
+    public static boolean areGooglePlayServicesAvailable(@NonNull Context context) {
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+        int status = googleApiAvailability.isGooglePlayServicesAvailable(context);
+
+        return status == ConnectionResult.SUCCESS;
+    }
 }

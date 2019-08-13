@@ -22,7 +22,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.FormsDao;
@@ -41,7 +41,6 @@ public class AndroidShortcuts extends AppCompatActivity {
     private Uri[] commands;
     private String[] names;
 
-
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -54,7 +53,6 @@ public class AndroidShortcuts extends AppCompatActivity {
             buildMenuList();
         }
     }
-
 
     /**
      * Builds a list of shortcuts
@@ -107,7 +105,6 @@ public class AndroidShortcuts extends AppCompatActivity {
         AlertDialog alert = builder.create();
         alert.show();
     }
-
 
     /**
      * Returns the results to the calling intent.

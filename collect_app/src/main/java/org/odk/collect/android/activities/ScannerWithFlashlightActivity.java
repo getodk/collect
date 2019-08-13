@@ -26,6 +26,7 @@ import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 /**
  * Custom Scannner Activity extending from Activity to display a custom layout form scanner view.
@@ -52,7 +53,7 @@ public class ScannerWithFlashlightActivity extends CollectAbstractActivity imple
 
         // if the device does not have flashlight in its camera,
         // then remove the switch flashlight button...
-        if (!hasFlash()) {
+        if (!hasFlash() || frontCameraUsed()) {
             switchFlashlightButton.setVisibility(View.GONE);
         }
 
@@ -98,6 +99,11 @@ public class ScannerWithFlashlightActivity extends CollectAbstractActivity imple
     private boolean hasFlash() {
         return getApplicationContext().getPackageManager()
                 .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+    }
+
+    private boolean frontCameraUsed() {
+        Bundle bundle = getIntent().getExtras();
+        return bundle != null && bundle.getBoolean(WidgetAppearanceUtils.FRONT);
     }
 
     public void switchFlashlight(View view) {

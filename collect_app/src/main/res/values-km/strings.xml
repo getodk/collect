@@ -4,7 +4,6 @@
   <string name="activity_not_found">គ្មានសកម្មភាពដើម្បីដោះស្រាយបាន : %s</string>
   <string name="view_image">បង្ហាញរូបថត</string>
   <string name="annotate_image">Annotate Image</string>
-  <string name="aligned_image_capture">ការចាប់យករូបភាពតម្រឹម</string>
   <string name="signature_capture">ថតហត្ថលេខា</string>
   <string name="view_video">បង្ហាញវីដេអូ</string>
   <string name="choose_audio">ជ្រើសរើសសម្លេង</string>
@@ -117,6 +116,8 @@
   <string name="send_data">បញ្ជូនសំណុំ​បែប​បទ​ដែលបានបញ្ចប់</string>
   <string name="send_data_button">បញ្ជូនសំណុំ​បែប​បទ​ដែលបានបញ្ចប់ (%s)</string>
   <string name="send_selected_data">បញ្ជូនការជ្រើសរើស</string>
+  <string name="send_selected_data_internet">ផ្ញើចេញ (អ៊ិនធើណីត)</string>
+  <string name="send_selected_data_sms">ផ្ញើ (សារ)</string>
   <string name="view_sent_forms">បង្ហាញសំណុំ​បែប​បទដែលបានផ្ញើចេញ</string>
   <string name="view_sent_forms_button">បង្ហាញសំណុំ​បែប​បទដែលបានផ្ញើចេញ (%s)</string>
   <string name="server_auth_credentials">ឈ្មោះអ្នកប្រើប្រាស់ ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវសម្រាប់ម៉ាស៊ីនមេ៖ %s</string>
@@ -153,6 +154,7 @@
   <string name="file_fetch_failed">បញ្ហា: %2$s (%3$s) នៅ %1$s</string>
   <string name="fetching_manifest">%s. ការទាញបញ្ជី</string>
   <string name="success">ជោគជ័យ</string>
+  <string name="failures">បរាជ័យ</string>
   <string name="no_forms_uploaded">សុំទោស, គ្មានសំណុំ​បែប​បទសម្រាប់ផ្ទុកឡើង.</string>
   <string name="upload_results">លទ្ធផលនៃការផ្ទុកឡើង</string>
   <string name="xform_parse_error">XForm មាន​បញ្ហា​ក្នុង​ការ​ញែក​ដោយ​បាត់បង់ ឬ​មិន​ត្រឹម​ត្រូវ​សម្រាប់ %1$s: %2$s</string>
@@ -209,12 +211,11 @@
   <string name="admin_password_incorrect">សោកស្តាយផង, ពាក្យសម្ងាត់នេះមិនត្រឹមត្រូវ!</string>
   <string name="enter_admin_password">បញ្ចូលពាក្យសម្ងាត់របស់ Admin</string>
   <string name="change_admin_password">ផ្លាស់​ប្តូរ​ពាក្យ​សម្ងាត់​ Admin</string>
-  <string name="autosend">ផ្ញើរ​ចេញ​ដោយ​ស្វ័យ​ប្រវត្តិ</string>
+  <string name="autosend">ផ្ញើចេញ​ដោយ​ស្វ័យ​ប្រវត្តិ</string>
   <string name="found_in_main">ដោះ​ធីក​ដើម្បី​លាក់ចេញ​ពី​ម៉ឺនុយមេ</string>
   <string name="found_in_settings">ដោះធីក​ដើម្បី​លាក់ចេញ​ពីការ​កំណត់ទូទៅ</string>
   <string name="save_preferences">រក្សាទុកការកំណត់ទៅកាន់ថាស</string>
   <string name="form_forward">បន្ទាប់</string>
-  <string name="form_backward">មុន</string>
   <string name="navigation">ការ​ស្វែង​រកផ្លូវ</string>
   <string name="swipe_navigation">ប្រើការកកិតដេក</string>
   <string name="buttons_navigation">ប្រើប៊ូតុង ទៅមុខ/ថយក្រោយ</string>
@@ -275,8 +276,6 @@
   <string name="no_google_account">គ្មាន​គណនី​ Google បាន​ជ្រើស​រើស</string>
   <string name="google_set_account">អ្នក​បាន​ជ្រើស​សន្លឹក​ Google ជា​ម៉ាស៊ីន​មេ​របស់​អ្នក​សូម​ជ្រើស​រើស​គណនី Google ត្រូវគ្នា ដែលឋិតក្នុងការកំណត់ទូទៅមុននឹងបន្ត</string>
   <string name="media_upload_error">បរាជ័យក្នុងការផ្ទុកឯកសារមេឌៀដែលមិនមាន៖ %1$s</string>
-  <string name="odk_auth_auth_fail">​ការផ្ទៀង​ផ្ទាត់​បរាជ័យដើម្បីឲ្យ ODK ផ្ញើរចេញដោយស្វ័យប្រវត្តិ សូមធ្វើឲ្យប្រាកដថា​ការកំណត់របស់​អ្នក​ត្រឹម​ត្រូវ</string>
-  <string name="odk_auto_note">ការជូនដំណឹងពីការផ្ញើរចេញដោយ​ស្វ័យ​ប្រវត្តិរបស់​ ODK </string>
   <string name="notification_error">បង្ហាញសារជួនដំណឹងដែលមានបញ្ហា</string>
   <string name="delete_after_send">លុបទម្រង់បន្ទាប់ការផ្ញើចេញ</string>
   <string name="delete_after_send_summary">លុប​សំណុំ​​បែប​​បទ​ដែល​បាន​បញ្ចប់ និង​មីឌៀ ​បន្ទាប់​ពី​ការ​ផ្ញើ​ចេញ​ទៅ​កាន់​ម៉ាស៊ីន​មេ</string>
@@ -284,7 +283,6 @@
   <string name="google_search_browse">ការ​​ស្វែង​​រក​​សម្រាប់​​សំណុំ​​​បែប​​​បទ​។ ឬ​​រើស​ \'ថាស​​របស់​​ខ្ញុំ\' ខាង​​ក្រោម​​ដើម្បី​​រក​មើល</string>
   <string name="google_sheets_url">URL ដែលបានដាក់ស្នើ Fallback</string>
   <string name="send_in_progress">កំពុងផ្ញើផ្នែកខាងក្រោយ, សូមព្យាយាមម្តងទៀតក្នុងរយះពេលខ្លី</string>
-  <string name="sheets_max_columns">ចំនួន​​អតិបរមា​​នៃ​​ជួរ​​ឈរ​​គឺ 255, សំណុំ​​​បែប​​​បទ​​របស់​​អ្នក​​មាន​ %s​ ។ មិន​អាច​ផ្ទុក​ ទៅ​សៀវ​ភៅ​បញ្ជី​បាន​ទេ។</string>
   <string name="invalid_sheet_id">លេខសម្គាល់សន្លឹកកិច្ចការមិនត្រឹមត្រូវ៖ %1$s</string>
   <string name="google_sheets_access_denied">ដំណើរ​ការ​ត្រូវ​បាន​បដិសេធ។ សូមធ្វើឱ្យប្រាកដថាម្ចាស់សៀវភៅបញ្ជីប្រោសប្រណីអនុញ្ញាតឲ្យអ្នកកែសម្រួល។</string>
   <string name="google_sheets_missing_columns">សៀវភៅបញ្ជីគឺបាត់បង់ជួរឈ: %1$s</string>
@@ -297,57 +295,36 @@
   <string name="leave_a_review">ទុកមតិនៅក្នុងហាង Play</string>
   <string name="leave_a_review_msg">ការ​ផ្តល់​មតិ​ (សង្ឃឹមថាជាវិជ្ជមាន) របស់​អ្នក​បង្កើន​ភាព​មើល​ឃើញ​នៃ​កម្មវិធី​នៅ​ក្នុង Play Store ។</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">ដៅផែនទី</string>
-  <string name="map_sdk_selector_title">ផែនទី SDK</string>
-  <string name="map_sdk_behavior">ផែនទី SDK</string>
-  <string name="google_maps_sdk">ផែនទី Google SDK</string>
-  <string name="openstreetmap_sdk">ផែនទី​ OpenStreetMap SDK</string>
-  <string name="show_map_sdk">បង្ហាញ​ជម្រើស​ផែនទី​ SDK</string>
-  <string name="openmap_streets">ផ្លូវ OSM</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">ផែនទីជាតិ Hybrid USGS </string>
   <string name="openmap_usgs_img">ផែនទីជាតិរូបភាព USGS </string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
+  <string name="basemap">ផែនទីមូលដ្ឋាន</string>
   <string name="streets">ផ្លូវ</string>
   <string name="terrain">លក្ខណៈភូមិសាស្ត្រ</string>
   <string name="hybrid">ផែនទីកូនកាត់</string>
   <string name="satellite">ផ្កាយរណប</string>
-  <string name="map_basemap_selector_title">មូលដ្ឋានផែនទី</string>
-  <string name="show_map_basemap">បង្ហាញជម្រើសផែនទីមូលដ្ឋាន</string>
   <string name="save_point">រក្សា GeoPoint</string>
   <string name="get_point">ចាប់ផ្តើម GeoPoint</string>
   <string name="geopoint_view_read_only">មើល GeoPoint</string>
   <string name="get_shape">ចាប់ផ្តើម GeoShape</string>
   <string name="get_trace">ចាប់ផ្តើម GeoTrace</string>
   <string name="geoshape_title">GeoShape</string>
-  <string name="select_geotrace_mode">ជ្រើសរើសវិធី GeoTrace</string>
   <string name="start">ចាប់ផ្តើម</string>
   <string name="enable_gps">ដំណើរ​ការ​ប្រព័ន្ធ​ចាប់​ទីតាំង</string>
-  <string name="enable_gps_message">ប្រព័ន្ធ​ចាប់​ទី​តាំង​ក្នុងឧបករណ៍​របស់​អ្នក​បានបិទ។ តើ​អ្នក​ចង់​បើក​ដំណើរ​ការ​វា​ដែរ​ឬ​ទេ?</string>
   <string name="geotrace_title">GeoTrace</string>
-  <string name="polygon_save">រក្សាទុកជាពហុកោណ</string>
-  <string name="polyline_save">រក្សាទុកជាពហុបន្ទាត់</string>
-  <string name="gps_enable_message">ប្រព័ន្ធ​ចាប់​ទី​តាំង​ក្នុងឧបករណ៍​របស់​អ្នក​បានបិទ។ តើ​អ្នក​ចង់​បើក​ដំណើរ​ការ​វា​ដែរ​ឬ​ទេ?</string>
-  <string name="select_offline_layer">ជ្រើសរើសស្រទាប់ក្រៅបណ្តាញ</string>
-  <string name="polygon_or_polyline">រក្សាទុក GeoTrace ជា</string>
-  <string name="minutes">នាទី</string>
   <string name="geo_clear_warning">លក្ខណះ​ពិសេស​ត្រូវ​បាន​បង្កើត។ តើ​អ្នក​ចង់​លុប​លក្ខណះ​នេះ​ដែរ​ឬ​ទេ?</string>
   <string name="geo_exit_warning">បោះបង់​ការផ្លាស់​ប្តូរ និងត្រឡប់ទៅកាន់ ODK វិញ?</string>
   <string name="polygon_validator">ត្រូវការចំនុចយ៉ាងតិច 3 ដើម្បី​បង្កើតពហុកោណ</string>
   <string name="clear">លុ​បចេញ</string>
-  <string name="polyline_polygon_text">រក្សាទុក GeoTrace ជា</string>
-  <string name="manual_mode">របៀបធ្វើដោយដៃ</string>
-  <string name="automatic_mode">របៀបធ្វើដោយស័្វយប្រវត្តិ</string>
-  <string name="geoshape_instruction">ចុចយូរដើម្បីដាក់ស្លាកកន្លែង</string>
-  <string name="geotrace_instruction">រង​ចាំ​សម្រាប់​ចាក់​សោរ​, បន្ទាប់​មក​ប៉ះ​ប៊ូតុងបន្ថែម​ស្លាក​ដើម្បី​ចាប់​ផ្តើម។</string>
   <string name="geopoint_instruction">ចុចយូរដើម្បីដាក់ស្លាកកន្លែង ឬប៉ះប៊ូតុងបន្ថែមស្លាក</string>
   <string name="geopoint_no_draggable_instruction">ប៉ះដើម្បីបន្ថែមប៊ូតុងសម្គាល់</string>
   <string name="discard">បោះបង់</string>
-  <string name="zoom_to_where">ពង្រីកទៅ…</string>
-  <string name="zoom_to_location">ពង្រីក/បង្រួមទៅកាន់ទីតាំងរបស់អ្នក</string>
-  <string name="zoom_to_feature">ពង្រីក/បង្រួមទៅកាន់លក្ខណៈពិសេសដែលរក្សាទុក</string>
   <string name="geoshape_view_change_location">មើល ឬផ្លាស់ប្តូរ GeoShape</string>
   <string name="geotrace_view_change_location">មើល ឬផ្លាស់ប្តូរ GeoTrace</string>
   <string name="bearing">ទ្រង់ទ្រាយ៖ %.3f</string>
@@ -366,11 +343,11 @@
   <string name="install_openmapkit">សូមចុចដើម្បីដំឡើង OpenMapKit!</string>
   <string name="go_back">ត្រឡប់ក្រោយ</string>
   <string name="download_selected">ទាញយកនូវជំរើស</string>
-  <string name="record_geopoint">ថត GeoPoint</string>
   <string name="gps_result">រយៈទទឹង: %1$s\nរយៈបណ្ដោយ: %2$s\nរយៈកំពស់: %3$sm\nភាពត្រឹមត្រូវ: %4$sm</string>
   <string name="parser_exception">XPathParser Exception: \"%s\"</string>
   <string name="selected_answer">បានជ្រើសរើស៖ %s</string>
   <string name="version_number">ជំនាន់: %s</string>
+  <string name="id_number">ID: %s</string>
   <string name="odk_website">ចូលទៅកាន់គេហទំព័រ ODK</string>
   <string name="odk_website_summary">Open Data Kit (ODK) បាន​ប្រើ​ប្រាស់​ដើម្បី​ប្រមូល​ទិន្នន័យសម្រាប់ភាពប្រសើរ​របស់​សង្គមនៅក្នុងបរិយាកាស​ប្រកួត​ប្រជែង​។</string>
   <string name="odk_forum">ចូល​រួម​ជា​មួយ​វេទិកា ODK</string>
@@ -429,7 +406,6 @@
   <string name="sort_by_status_asc">ស្ថានភាព, បានបញ្ចប់មុនបំផុត</string>
   <string name="sort_by_status_desc">ស្ថានភាព, មិនបានបញ្ចប់មុនបំផុត</string>
   <string name="sort_the_list">តម្រៀបបញ្ជី</string>
-  <string name="request_permissions_google_account">កម្មវិធី ODK Collect ត្រូវ​ការ​ចូល​ទៅ​កាន់​គណនី​ Google របស់​អ្នក​ដើម្បី​ទាញ​យក​ទម្រង់​ទទេរ​ និង​បញ្ជូន​ទម្រង់​ដែល​បាន​បំពេញ​ហើយ។</string>
   <string name="filter_the_list">តម្រងបញ្ជី</string>
   <string name="language">ភាសា</string>
   <string name="google_auth_io_exception_msg">មិន​អាច​ប្រើប្រាស់​ API បាន​។ ប្រសិន​ជា​អ្នក​កំពុង​ដំណើរការ​កសាង​ក្នុង​ម៉ាស៊ីន (local), សូម​អាន​អំពី​គម្រោង​នេះ​សារ​ឡើង​វិញ​។</string>
@@ -479,7 +455,7 @@
   <string name="main_menu_settings">ការកំណត់ផ្ទាំងមេមីនុយ</string>
   <string name="main_menu_settings_summary">ប៉ះ​ដើម្បី​គ្រប់គ្រង​ធាតុ​នៃផ្ទាំងមេមីនុយ</string>
   <string name="user_access_control">ការត្រួតពិនិត្យការចូលប្រើរបស់អ្នកប្រើ</string>
-  <string name="autosend_selector_title">ផ្ញើរ​ចេញ​ដោយ​ស្វ័យ​ប្រវត្តិ</string>
+  <string name="autosend_selector_title">ផ្ញើ​ចេញ​ដោយ​ស្វ័យ​ប្រវត្តិ</string>
   <string name="off">បិទ</string>
   <string name="guidance_no">ទេ</string>
   <string name="guidance_yes">បាទ/ចាស - តែងតែបង្ហាញ</string>
@@ -487,7 +463,6 @@
   <string name="wifi_autosend">តែ Wifi ប៉ុណ្ណោះ</string>
   <string name="cellular_autosend">តែ Cellular ប៉ុណ្ណោះ</string>
   <string name="wifi_cellular_autosend">Wifi ឬ Cellular</string>
-  <string name="map_basemap_behavior_title">ផែនទីមូលដ្ឋាន</string>
   <string name="form_management_preferences">ការគ្រប់គ្រងទម្រង់</string>
   <string name="form_submission_category">ការដាក់ស្នើរទម្រង់</string>
   <string name="form_filling_category">ការបំពេញទម្រង់</string>
@@ -501,10 +476,10 @@
   <string name="type">ប្រភេទ</string>
   <string name="form_entry">ដោះ​ធីក​ដើម្បី​លាក់ពី​ទម្រង់​បញ្ចូល</string>
   <string name="use_device_language">ប្រើ​ប្រាស់​ភាសារបស់​ឧបករណ៍</string>
-  <string name="not_supported_offline_layer_format">បានជ្រើសរើសយក​ឯកសារស្រទាប់​ក្រៅ​បណ្តាញដើម្បីប្រើប្រាស់ទ្រង់ទ្រាយ PBF ដែល​មិនត្រូវ​បាន​គាំ​ទ្រ</string>
   <string name="invalid_email_address">អាសយដ្ឋាន​អ៊ីម៉េល​មិនត្រឹមត្រូវ!</string>
   <string name="sort_by">តំរៀបតាម</string>
   <string name="server">ម៉ាស៊ីនម៉េ</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">ជ្រើសរើសតម្លៃ</string>
   <string name="edit_value">កែប្រែ​តម្លៃ</string>
   <string name="no_value_selected">គ្មាន​តម្លៃត្រូវបានរើស</string>
@@ -560,6 +535,7 @@
   <string name="islamic_month_10">Shawwal</string>
   <string name="islamic_month_11">Dhu al-Qidah</string>
   <string name="islamic_month_12">Dhu al-Hijjah</string>
+  <string name="persian_month_4">Tir</string>
   <string name="moving_backwards_title">កំពុងរំកិលថយក្រោយ</string>
   <string name="moving_backwards_disabled_title">ការរំកិលថយក្រោយមិនបានអនុញ្ញាតិ</string>
   <string name="moving_backwards_disabled_message">កំណត់រចនាសម្ព័ន្ធឧបករណ៍ដើម្បីរារាំងអ្នកប្រើពីការឆ្លងកាត់ការកំណត់នេះ?\n\nការប្រែប្រួលមាន:\n\u2022 បិទដំណើរការកែប្រែទម្រង់រក្សាទុក\n\u2022 បិទដំណើរការរក្សាទុកទម្រង់\n\u2022 បិទដំណើរការទៅប្រអប់បញ្ចូល\n\u2022 កំណត់ដំណើរការការរឹតបន្តឹងដើម្បីធ្វើឱ្យមានសុពលភាពលើការបញ្ច្រាស់ទៅមុខ</string>
@@ -592,4 +568,9 @@
   <string name="not_a_directory">%s មានរួច, ប៉ុន្តែ​ពុំមែន​ជាថត​ឯក​សារ</string>
   <string name="location_metadata">ផ្កាយរណបមាន៖ %1$d/24\n\nពេលវេលាកន្លងទៅ៖ %2$s</string>
   <string name="instance_upload_cancelled">បានបោះបង់ការផ្ទុកឡើងភ្លាមៗ</string>
+  <!--Sms submission-->
+  <string name="transport_type_sms">សារ</string>
+  <string name="transport_type_both">ជ្រើសរើសនៅពេលផ្ញើ</string>
+  <string name="rank_items">ចំណាត់ថ្នាក់ធាតុ</string>
+  <string name="missing_google_account_dialog_title">មិនទាន់ដាក់គណនី Google</string>
 </resources>

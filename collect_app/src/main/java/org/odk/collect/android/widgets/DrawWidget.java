@@ -39,7 +39,7 @@ public class DrawWidget extends BaseImageWidget {
         super(context, prompt);
         imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_DRAW, RequestCodes.DRAW_IMAGE, R.string.draw_image);
         setUpLayout();
-        setUpBinary();
+        addCurrentImageToLayout();
         addAnswerView(answerLayout);
     }
 
@@ -47,14 +47,10 @@ public class DrawWidget extends BaseImageWidget {
     protected void setUpLayout() {
         super.setUpLayout();
         drawButton = getSimpleButton(getContext().getString(R.string.draw_image));
-        drawButton.setEnabled(!getFormEntryPrompt().isReadOnly());
 
         answerLayout.addView(drawButton);
         answerLayout.addView(errorTextView);
 
-        if (getFormEntryPrompt().isReadOnly()) {
-            drawButton.setVisibility(View.GONE);
-        }
         errorTextView.setVisibility(View.GONE);
     }
 

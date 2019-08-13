@@ -27,13 +27,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.BuildConfig;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.DateWidget;
 import org.odk.collect.android.widgets.TimeWidget;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
-import org.robolectric.annotation.Config;
 
 import java.util.TimeZone;
 
@@ -42,7 +41,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class)
 /** https://github.com/opendatakit/collect/issues/356
  * Verify that the {@link DateWidget} and {@link DateTimeWidget} widget skips over
  * "daylight savings gaps".
@@ -109,9 +107,7 @@ public class DaylightSavingTest {
         when(datePickerDialog.getDatePicker().getMonth()).thenReturn(month);
         when(datePickerDialog.getDatePicker().getDayOfMonth()).thenReturn(day);
 
-        DateWidget dateWidget = new DateWidget(RuntimeEnvironment.application, formEntryPromptStub);
-        dateWidget.setDatePickerDialog(datePickerDialog);
-        return dateWidget;
+        return new DateWidget(Robolectric.buildActivity(FormEntryActivity.class).create().get(), formEntryPromptStub);
     }
 
     private DateTimeWidget prepareDateTimeWidget(int year, int month, int day, int hour, int minute) {
@@ -131,7 +127,7 @@ public class DaylightSavingTest {
         when(timeWidget.getHour()).thenReturn(hour);
         when(timeWidget.getMinute()).thenReturn(minute);
 
-        DateTimeWidget dateTimeWidget = new DateTimeWidget(RuntimeEnvironment.application, formEntryPromptStub);
+        DateTimeWidget dateTimeWidget = new DateTimeWidget(Robolectric.buildActivity(FormEntryActivity.class).create().get(), formEntryPromptStub);
         dateTimeWidget.setDateWidget(dateWidget);
         dateTimeWidget.setTimeWidget(timeWidget);
 

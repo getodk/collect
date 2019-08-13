@@ -39,7 +39,6 @@
   <string name="discard_answer">Xoá nội dung trả lời</string>
   <string name="discard_group">Xoá nhóm</string>
   <string name="download">Tải lựa chọn</string>
-  <string name="download_forms_result">Tải kết quả</string>
   <string name="downloading_data">Kết nối máy chủ</string>
   <string name="do_not_change">Huỷ</string>
   <string name="do_not_exit">Huỷ</string>
@@ -188,7 +187,6 @@
   <string name="found_in_settings">Uncheck to hide from General Settings</string>
   <string name="save_preferences">Save Settings to Disk</string>
   <string name="form_forward">Next</string>
-  <string name="form_backward">Prev</string>
   <string name="navigation">Navigation</string>
   <string name="swipe_navigation">Use horizontal swipes</string>
   <string name="buttons_navigation">Use forward/backward buttons</string>
@@ -197,10 +195,15 @@
   <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
   <string name="change_server_url">Địa chỉ máy chủ</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Sms submission-->
 </resources>

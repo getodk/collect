@@ -1,6 +1,6 @@
 package org.odk.collect.android.widgets.base;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -13,7 +13,6 @@ import java.io.File;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 
 public abstract class FileWidgetTest<W extends FileWidget> extends BinaryWidgetTest<W, StringData> {
 
@@ -67,6 +66,7 @@ public abstract class FileWidgetTest<W extends FileWidget> extends BinaryWidgetT
     /**
      * Override this to provide additional set-up prior to testing any set answer methods.
      */
+    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
     protected void prepareForSetAnswer() {
         // Default implementation does nothing.
     }

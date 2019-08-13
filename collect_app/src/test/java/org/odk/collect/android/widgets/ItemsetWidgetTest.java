@@ -1,7 +1,7 @@
 package org.odk.collect.android.widgets;
 
 import android.database.Cursor;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -23,7 +23,6 @@ import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.XPathParseTool;
 import org.odk.collect.android.widgets.base.QuestionWidgetTest;
-import org.robolectric.RuntimeEnvironment;
 
 import java.io.File;
 import java.util.HashMap;
@@ -91,7 +90,7 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
     @NonNull
     @Override
     public ItemsetWidget createWidget() {
-        return new ItemsetWidget(RuntimeEnvironment.application, formEntryPrompt,
+        return new ItemsetWidget(activity, formEntryPrompt,
                 false, parseTool, adapter, fileUtil);
     }
 
@@ -139,7 +138,6 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
 
         when(adapter.query(anyString(), anyString(), any(String[].class))).thenReturn(cursorMocker.getCursor());
 
-
         when(formEntryPrompt.getQuestion()).thenReturn(questionDef);
         when(questionDef.getAdditionalAttribute(null, "query")).thenReturn("instance('cities')/root/item[state=/data/state]");
     }
@@ -149,7 +147,7 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
         ItemsetWidget widget = getWidget();
         assertNull(widget.getAnswer());
 
-        int randomIndex = (Math.abs(random.nextInt()) % widget.getChoiceCount());
+        int randomIndex = Math.abs(random.nextInt()) % widget.getChoiceCount();
         widget.setChoiceSelected(randomIndex, true);
 
         String selectedChoice = choices.get(Integer.toString(randomIndex));

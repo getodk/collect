@@ -38,7 +38,6 @@
   <string name="discard_answer">ምላሹን አስወግድ</string>
   <string name="discard_group">ቡድን አስወግድ</string>
   <string name="download">የተመረጠውን ያግኙ</string>
-  <string name="download_forms_result">ውጤቱን አውርድ</string>
   <string name="downloading_data">ከአገልጋይ ኮምፒውተር ጋር በመገናኘት ላይ</string>
   <string name="do_not_change">ሰርዝ</string>
   <string name="do_not_exit">ሰርዝ</string>
@@ -174,7 +173,6 @@
   <string name="found_in_settings">ከጠቅላላ ቅንብሮች ለመደበቅ አትምረጥ</string>
   <string name="save_preferences">ቅንብሮችን ዲስክ ላይ አስቀምጥ</string>
   <string name="form_forward">ቀጣይ</string>
-  <string name="form_backward">ቅድመ</string>
   <string name="navigation">ዳሰሳ</string>
   <string name="swipe_navigation">አግድም ማጠፊያዎችን ይጠቀሙ</string>
   <string name="buttons_navigation">ወደፊት/ወደኋላ አዝራሮችን ይጠቀሙ</string>
@@ -210,19 +208,16 @@
   <string name="google_search_browse">ቅጾችን ይፈልጉ፡፡ ወይም ለማሰስ ከታች \"የእኔ Drive\" ን ይምረጡ.</string>
   <string name="about_preferences">ስለ</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">ካርታ</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
   <string name="streets">መንገዶች</string>
   <string name="terrain">መልከአ ምድር</string>
   <string name="satellite">ሳተላይት</string>
   <string name="start">ይጀምሩ</string>
   <string name="enable_gps">GPSን አንቃ</string>
-  <string name="minutes">ደቂቃዎች</string>
   <string name="clear">አጽዳ</string>
-  <string name="automatic_mode">ራስ-ሰር ሁኔታ</string>
   <string name="discard">አስወግድ</string>
-  <string name="zoom_to_where">አጉላ ወደ …</string>
-  <string name="zoom_to_location">ወደ የአሁኑ አካባቢ አጉላ</string>
-  <string name="zoom_to_feature">ወደ የተቀመጠ ባህርይ አጉላ</string>
   <string name="geoshape_view_change_location">GeoShapeን ይመልከቱ ወይም ይቀይሩ</string>
   <string name="geotrace_view_change_location">GeoTraceን ይመልከቱ ወይም ይቀይሩ</string>
   <string name="direction">አቅጣጫ: 1 %s</string>
@@ -233,7 +228,6 @@
   <string name="install_openmapkit">እባክዎ OpenMapKitን ይጫኑ!</string>
   <string name="go_back">ተመለስ</string>
   <string name="download_selected">የተመረጠውን አውርድ</string>
-  <string name="record_geopoint">GeoPointን ይቅዱ</string>
   <string name="selected_answer">ተመርጧል: 1 %s</string>
   <string name="version_number">ሥሪት: 1 %s</string>
   <string name="odk_website">የODKን ድረ ገፅ ይጎብኙ</string>
@@ -274,6 +268,7 @@
   <string name="high_resolution_title">ከፍተኛ ጥራት ቪዲዮ</string>
   <string name="image_size_title">የምስል መጠን</string>
   <string name="sort_by">ቅደምተከተሉ የተስተካከለው</string>
+  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="search">ፈልግ</string>
   <string name="image_size_large">ትልቅ (3072 ፒክስል)</string>
   <string name="image_size_medium">መካከለኛ (2048 ፒክሰል)</string>
@@ -293,9 +288,11 @@
   <string name="ethiopian_month_12">ነሐሴ</string>
   <string name="ethiopian_month_13">ጳጉሜን</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="persian_month_4">ጥር</string>
   <string name="moving_backwards_title">ወደኋላ መሄድ</string>
   <string name="moving_backwards_disabled_title">ወደኋላ መሄድ አልተመረጠም</string>
   <string name="moving_backwards_enabled_title">ወደኋላ መሄድ ተመርጧል</string>
   <string name="yes">አዎ</string>
   <string name="no">አይ</string>
+  <!--Sms submission-->
 </resources>

@@ -1,12 +1,11 @@
 package org.odk.collect.android.widgets;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.widgets.base.QuestionWidgetTest;
-import org.robolectric.RuntimeEnvironment;
 
 /**
  * @author James Knight
@@ -16,7 +15,7 @@ public class UrlWidgetTest extends QuestionWidgetTest<UrlWidget, StringData> {
     @NonNull
     @Override
     public UrlWidget createWidget() {
-        return new UrlWidget(RuntimeEnvironment.application, formEntryPrompt);
+        return new UrlWidget(activity, formEntryPrompt);
     }
 
     @NonNull

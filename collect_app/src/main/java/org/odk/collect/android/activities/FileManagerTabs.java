@@ -17,13 +17,12 @@ package org.odk.collect.android.activities;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.widget.Toolbar;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.ViewPagerAdapter;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.DataManagerList;
 import org.odk.collect.android.fragments.FormManagerList;
 import org.odk.collect.android.views.SlidingTabLayout;
@@ -45,7 +44,7 @@ public class FileManagerTabs extends CollectAbstractActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.file_manager_layout);
+        setContentView(R.layout.file_manager_tabs);
         initToolbar();
 
         String[] tabNames = {getString(R.string.data), getString(R.string.forms)};
@@ -73,17 +72,5 @@ public class FileManagerTabs extends CollectAbstractActivity {
         super.onConfigurationChanged(newConfig);
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.notes);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
     }
 }

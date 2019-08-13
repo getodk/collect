@@ -68,6 +68,7 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
 
     @Override
     public Object eval(Object[] args, EvaluationContext ec) {
+
         if (args.length != 4) {
             Timber.e("4 arguments are needed to evaluate the %s function", HANDLER_NAME);
             return "";

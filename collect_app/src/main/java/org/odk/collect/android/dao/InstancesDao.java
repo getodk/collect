@@ -19,7 +19,7 @@ package org.odk.collect.android.dao;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.v4.content.CursorLoader;
+import androidx.loader.content.CursorLoader;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dto.Instance;
@@ -292,10 +292,14 @@ public class InstancesDao {
         }
     }
 
+    /**
+     * Returns all instances available through the cursor and closes the cursor.
+     */
     public List<Instance> getInstancesFromCursor(Cursor cursor) {
         List<Instance> instances = new ArrayList<>();
         if (cursor != null) {
             try {
+                cursor.moveToPosition(-1);
                 while (cursor.moveToNext()) {
                     int displayNameColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME);
                     int submissionUriColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.SUBMISSION_URI);
@@ -305,8 +309,9 @@ public class InstancesDao {
                     int jrVersionColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_VERSION);
                     int statusColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.STATUS);
                     int lastStatusChangeDateColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE);
-                    int displaySubtextColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT);
                     int deletedDateColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE);
+
+                    int databaseIdIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID);
 
                     Instance instance = new Instance.Builder()
                             .displayName(cursor.getString(displayNameColumnIndex))
@@ -317,8 +322,8 @@ public class InstancesDao {
                             .jrVersion(cursor.getString(jrVersionColumnIndex))
                             .status(cursor.getString(statusColumnIndex))
                             .lastStatusChangeDate(cursor.getLong(lastStatusChangeDateColumnIndex))
-                            .displaySubtext(cursor.getString(displaySubtextColumnIndex))
                             .deletedDate(cursor.getLong(deletedDateColumnIndex))
+                            .databaseId(cursor.getLong(databaseIdIndex))
                             .build();
 
                     instances.add(instance);
@@ -330,6 +335,12 @@ public class InstancesDao {
         return instances;
     }
 
+    /**
+     * Returns the values of an instance as a ContentValues object for use with
+     * {@link #saveInstance(ContentValues)} or {@link #updateInstance(ContentValues, String, String[])}
+     *
+     * Does NOT include the database ID.
+     */
     public ContentValues getValuesFromInstanceObject(Instance instance) {
         ContentValues values = new ContentValues();
         values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME, instance.getDisplayName());
@@ -340,7 +351,6 @@ public class InstancesDao {
         values.put(InstanceProviderAPI.InstanceColumns.JR_VERSION, instance.getJrVersion());
         values.put(InstanceProviderAPI.InstanceColumns.STATUS, instance.getStatus());
         values.put(InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE, instance.getLastStatusChangeDate());
-        values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT, instance.getDisplaySubtext());
         values.put(InstanceProviderAPI.InstanceColumns.DELETED_DATE, instance.getDeletedDate());
 
         return values;

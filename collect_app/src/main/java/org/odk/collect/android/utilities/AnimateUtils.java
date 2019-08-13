@@ -1,6 +1,6 @@
 package org.odk.collect.android.utilities;
 
-import android.support.v4.view.animation.PathInterpolatorCompat;
+import androidx.core.view.animation.PathInterpolatorCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;

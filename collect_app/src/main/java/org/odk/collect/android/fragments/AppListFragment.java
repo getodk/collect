@@ -15,14 +15,18 @@ limitations under the License.
 package org.odk.collect.android.fragments;
 
 import android.database.Cursor;
+import android.os.Build;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.v4.app.ListFragment;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import androidx.fragment.app.ListFragment;
+import androidx.core.view.MenuItemCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,7 +39,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -50,8 +53,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 
 abstract class AppListFragment extends ListFragment {
 
-    protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
-    protected String[] sortingOptions;
+    protected int[] sortingOptions;
     protected SimpleCursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
     protected View rootView;
@@ -98,8 +100,19 @@ abstract class AppListFragment extends ListFragment {
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // Use the nicer-looking drawable with Material Design insets.
+            ListView listView = getListView();
+            listView.setDivider(getResources().getDrawable(R.drawable.list_item_divider, getActivity().getTheme()));
+            listView.setDividerHeight(1);
+        }
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCreateOptionsMenu", "show");
         super.onCreateOptionsMenu(menu, inflater);
 
         inflater.inflate(R.menu.list_menu, menu);

@@ -21,7 +21,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import androidx.fragment.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
@@ -76,7 +76,7 @@ public class NumberPickerDialog extends DialogFragment {
         numberPicker.setValue(((String[]) getArguments().getSerializable(DISPLAYED_VALUES)).length - 1 - getArguments().getInt(PROGRESS));
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle("Number Picker")
+                .setTitle(R.string.number_picker_title)
                 .setView(view)
                 .setPositiveButton(R.string.ok,
                         new DialogInterface.OnClickListener() {

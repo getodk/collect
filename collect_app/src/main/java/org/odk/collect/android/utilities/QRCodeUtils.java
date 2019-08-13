@@ -17,7 +17,7 @@ package org.odk.collect.android.utilities;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
@@ -52,7 +52,6 @@ import java.util.zip.DataFormatException;
 
 import io.reactivex.Observable;
 import timber.log.Timber;
-
 
 public class QRCodeUtils {
     public static final String QR_CODE_FILEPATH = Collect.SETTINGS + File.separator + "collect-settings.png";
@@ -105,7 +104,7 @@ public class QRCodeUtils {
                 bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
             }
         }
-        Timber.i("QR Code generation took : %d ms", (System.currentTimeMillis() - time));
+        Timber.i("QR Code generation took : %d ms", System.currentTimeMillis() - time);
         return bmp;
     }
 

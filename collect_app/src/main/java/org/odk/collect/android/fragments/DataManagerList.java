@@ -19,16 +19,16 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.CursorLoader;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.loader.content.CursorLoader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
@@ -134,11 +134,11 @@ public class DataManagerList extends InstanceListFragment
     }
 
     private void setupAdapter() {
-        String[] data = new String[]{InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT};
-        int[] view = new int[]{R.id.text1, R.id.text2};
+        String[] data = new String[]{InstanceColumns.DISPLAY_NAME};
+        int[] view = new int[]{R.id.form_title};
 
-        listAdapter = new SimpleCursorAdapter(getActivity(),
-                R.layout.two_item_multiple_choice, null, data, view);
+        listAdapter = new InstanceListCursorAdapter(getActivity(),
+                R.layout.form_chooser_list_item_multiple_choice, null, data, view, false);
         setListAdapter(listAdapter);
         checkPreviouslyCheckedItems();
     }
@@ -157,9 +157,6 @@ public class DataManagerList extends InstanceListFragment
      * Create the instance delete dialog
      */
     private void createDeleteInstancesDialog() {
-        logger.logAction(this, "createDeleteInstancesDialog",
-                "show");
-
         alertDialog = new AlertDialog.Builder(getContext()).create();
         alertDialog.setTitle(getString(R.string.delete_file));
         alertDialog.setMessage(getString(R.string.delete_confirm,
@@ -170,16 +167,10 @@ public class DataManagerList extends InstanceListFragment
                     public void onClick(DialogInterface dialog, int i) {
                         switch (i) {
                             case DialogInterface.BUTTON_POSITIVE: // delete
-                                logger.logAction(this,
-                                        "createDeleteInstancesDialog", "delete");
                                 deleteSelectedInstances();
                                 if (getListView().getCount() == getCheckedCount()) {
                                     toggleButton.setEnabled(false);
                                 }
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE: // do nothing
-                                logger.logAction(this,
-                                        "createDeleteInstancesDialog", "cancel");
                                 break;
                         }
                     }
@@ -237,8 +228,6 @@ public class DataManagerList extends InstanceListFragment
     @Override
     public void deleteComplete(int deletedInstances) {
         Timber.i("Delete instances complete");
-        logger.logAction(this, "deleteComplete",
-                Integer.toString(deletedInstances));
         final int toDeleteCount = deleteInstancesTask.getToDeleteCount();
 
         if (deletedInstances == toDeleteCount) {
@@ -246,7 +235,7 @@ public class DataManagerList extends InstanceListFragment
             ToastUtils.showShortToast(getString(R.string.file_deleted_ok, String.valueOf(deletedInstances)));
         } else {
             // had some failures
-            Timber.e("Failed to delete %d instances", (toDeleteCount - deletedInstances));
+            Timber.e("Failed to delete %d instances", toDeleteCount - deletedInstances);
             ToastUtils.showLongToast(getString(R.string.file_deleted_error,
                     String.valueOf(toDeleteCount - deletedInstances),
                     String.valueOf(toDeleteCount)));
@@ -267,7 +256,6 @@ public class DataManagerList extends InstanceListFragment
         switch (v.getId()) {
             case R.id.delete_button:
                 int checkedItemCount = getCheckedCount();
-                logger.logAction(this, "deleteButton", Integer.toString(checkedItemCount));
                 if (checkedItemCount > 0) {
                     createDeleteInstancesDialog();
                 } else {

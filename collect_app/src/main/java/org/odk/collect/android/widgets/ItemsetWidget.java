@@ -18,7 +18,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.widget.TextView;
 
 import org.javarosa.core.model.FormDef;
@@ -53,7 +53,6 @@ public class ItemsetWidget extends AbstractSelectOneWidget {
 
     private static final String QUOTATION_MARK = "\"";
 
-    private final FormEntryPrompt formEntryPrompt;
     private final XPathParseTool parseTool;
     private final ItemsetDbAdapter adapter;
     private final FileUtil fileUtil;
@@ -71,17 +70,18 @@ public class ItemsetWidget extends AbstractSelectOneWidget {
 
         super(context, formEntryPrompt, autoAdvance);
 
-        this.formEntryPrompt = formEntryPrompt;
         this.parseTool = parseTool;
         this.adapter = adapter;
         this.fileUtil = fileUtil;
+
+        items = getItems();
 
         createLayout();
     }
 
     @Override
     protected void readItems() {
-        items = getItems();
+        // Do nothing here. We want to read items from an external csv later.
     }
 
     private List<SelectChoice> getItems() {
@@ -100,7 +100,7 @@ public class ItemsetWidget extends AbstractSelectOneWidget {
         // the format of the query should be something like this:
         // query="instance('cities')/root/item[state=/data/state and county=/data/county]"
         // "query" is what we're using to notify that this is an itemset widget.
-        return formEntryPrompt.getQuestion().getAdditionalAttribute(null, "query");
+        return getFormEntryPrompt().getQuestion().getAdditionalAttribute(null, "query");
     }
 
     private String getQueryString(String nodesetStr) {
@@ -204,7 +204,7 @@ public class ItemsetWidget extends AbstractSelectOneWidget {
             if (xpr != null) {
                 FormDef form = formController.getFormDef();
                 TreeElement treeElement = form.getMainInstance().resolveReference(
-                        formEntryPrompt.getIndex().getReference());
+                        getFormEntryPrompt().getIndex().getReference());
                 EvaluationContext ec = new EvaluationContext(form.getEvaluationContext(),
                         treeElement.getRef());
                 Object value = xpr.eval(form.getMainInstance(), ec);

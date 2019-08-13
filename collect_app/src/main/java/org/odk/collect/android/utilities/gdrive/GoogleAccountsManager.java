@@ -14,20 +14,16 @@
 
 package org.odk.collect.android.utilities.gdrive;
 
-
-import android.Manifest;
 import android.accounts.Account;
 import android.app.Activity;
-import android.app.Fragment;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
@@ -37,30 +33,19 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.ThemeUtils;
-import org.odk.collect.android.utilities.ToastUtils;
 
+import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 
-import pub.devrel.easypermissions.EasyPermissions;
-import timber.log.Timber;
+import javax.inject.Inject;
 
-public class GoogleAccountsManager implements EasyPermissions.PermissionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
-    public static final int REQUEST_ACCOUNT_PICKER = 1000;
-    private static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1002;
-    private static final int RESOLVE_CONNECTION_REQUEST_CODE = 5555;
+public class GoogleAccountsManager {
 
-    @Nullable
-    private Fragment fragment;
-    @Nullable
-    private Activity activity;
-    @Nullable
-    private GoogleAccountSelectionListener listener;
     @Nullable
     private HttpTransport transport;
     @Nullable
@@ -73,18 +58,8 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     private GoogleAccountCredential credential;
     private GeneralSharedPreferences preferences;
     private ThemeUtils themeUtils;
-    private boolean autoChooseAccount = true;
 
-    public GoogleAccountsManager(@NonNull Activity activity) {
-        this.activity = activity;
-        initCredential(activity);
-    }
-
-    public GoogleAccountsManager(@NonNull Fragment fragment) {
-        this.fragment = fragment;
-        initCredential(fragment.getActivity());
-    }
-
+    @Inject
     public GoogleAccountsManager(@NonNull Context context) {
         initCredential(context);
     }
@@ -95,7 +70,8 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     public GoogleAccountsManager(@NonNull GoogleAccountCredential credential,
                                  @NonNull GeneralSharedPreferences preferences,
                                  @NonNull Intent intentChooseAccount,
-                                 @NonNull ThemeUtils themeUtils) {
+                                 @NonNull ThemeUtils themeUtils
+    ) {
         this.credential = credential;
         this.preferences = preferences;
         this.intentChooseAccount = intentChooseAccount;
@@ -117,86 +93,58 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         themeUtils = new ThemeUtils(context);
     }
 
-    public void setSelectedAccountName(String accountName) {
-        if (accountName != null) {
-            preferences.save(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
-            selectAccount(accountName);
-        }
+    public static void showSettingsDialog(Activity activity) {
+        AlertDialog alertDialog = new AlertDialog.Builder(activity)
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setTitle(R.string.missing_google_account_dialog_title)
+                .setMessage(R.string.missing_google_account_dialog_desc)
+                .setOnCancelListener(dialog -> {
+                    dialog.dismiss();
+                    if (activity != null) {
+                        activity.finish();
+                    }
+                })
+                .setPositiveButton(activity.getString(R.string.ok), (dialog, which) -> {
+                    dialog.dismiss();
+                    activity.finish();
+                })
+                .create();
+
+        showDialog(alertDialog, activity);
     }
 
-    @Override
-    public void onPermissionsGranted(int requestCode, List<String> list) {
-        if (listener != null) {
-            listener.onGoogleAccountSelected(credential.getSelectedAccountName());
-        }
+    public boolean isAccountSelected() {
+        return credential.getSelectedAccountName() != null;
     }
 
-    @Override
-    public void onPermissionsDenied(int requestCode, List<String> list) {
-        ToastUtils.showShortToast("Permission denied");
-    }
+    @NonNull
+    public String getLastSelectedAccountIfValid() {
+        Account[] googleAccounts = credential.getAllAccounts();
+        String account = (String) preferences.get(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
 
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        EasyPermissions.onRequestPermissionsResult(
-                requestCode, permissions, grantResults, this);
-    }
-
-    public void chooseAccount() {
-        if (checkAccountPermission()) {
-            String accountName = getSelectedAccount();
-            if (autoChooseAccount && !accountName.isEmpty()) {
-                selectAccount(accountName);
-            } else {
-                showAccountPickerDialog();
+        if (googleAccounts != null && googleAccounts.length > 0) {
+            for (Account googleAccount : googleAccounts) {
+                if (googleAccount.name.equals(account)) {
+                    return account;
+                }
             }
-        } else {
-            requestAccountPermission();
+
+            preferences.reset(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
         }
-    }
 
-    public void requestAccountPermission() {
-        EasyPermissions.requestPermissions(
-                context,
-                context.getString(R.string.request_permissions_google_account),
-                REQUEST_PERMISSION_GET_ACCOUNTS, Manifest.permission.GET_ACCOUNTS);
-    }
-
-    /**
-     * Returns true if has accounts permission otherwise false
-     */
-    public boolean checkAccountPermission() {
-        return EasyPermissions.hasPermissions(context, Manifest.permission.GET_ACCOUNTS);
-    }
-
-    public String getSelectedAccount() {
-        return (String) preferences.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
-    }
-
-    public void showAccountPickerDialog() {
-        Account selectedAccount = getAccountPickerCurrentAccount();
-        intentChooseAccount.putExtra("selectedAccount", selectedAccount);
-        intentChooseAccount.putExtra("overrideTheme", themeUtils.getAccountPickerTheme());
-        intentChooseAccount.putExtra("overrideCustomTheme", 0);
-
-        if (fragment != null) {
-            fragment.startActivityForResult(intentChooseAccount, REQUEST_ACCOUNT_PICKER);
-        } else if (activity != null) {
-            activity.startActivityForResult(intentChooseAccount, REQUEST_ACCOUNT_PICKER);
-        }
+        return "";
     }
 
     public void selectAccount(String accountName) {
-        credential.setSelectedAccountName(accountName);
-        if (listener != null) {
-            listener.onGoogleAccountSelected(accountName);
+        if (accountName != null) {
+            preferences.save(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
+            credential.setSelectedAccountName(accountName);
         }
     }
 
-    public Account getAccountPickerCurrentAccount() {
-        String selectedAccountName = getSelectedAccount();
-        if (selectedAccountName == null || selectedAccountName.isEmpty()) {
+    private Account getAccountPickerCurrentAccount() {
+        String selectedAccountName = getLastSelectedAccountIfValid();
+        if (selectedAccountName.isEmpty()) {
             Account[] googleAccounts = credential.getAllAccounts();
             if (googleAccounts != null && googleAccounts.length > 0) {
                 selectedAccountName = googleAccounts[0].name;
@@ -205,23 +153,6 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
             }
         }
         return new Account(selectedAccountName, "com.google");
-    }
-
-    public boolean isGoogleAccountSelected() {
-        return credential.getSelectedAccountName() != null;
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        if (connectionResult.hasResolution()) {
-            try {
-                connectionResult.startResolutionForResult(activity, RESOLVE_CONNECTION_REQUEST_CODE);
-            } catch (IntentSender.SendIntentException e) {
-                Timber.e(e);
-            }
-        } else {
-            GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), activity, 0).show();
-        }
     }
 
     public DriveHelper getDriveHelper() {
@@ -238,29 +169,19 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         return sheetsHelper;
     }
 
-    @Nullable
-    public Activity getActivity() {
-        return activity;
+    public String getToken() throws IOException, GoogleAuthException {
+        String token = credential.getToken();
+
+        // Immediately invalidate so we get a different one if we have to try again
+        GoogleAuthUtil.invalidateToken(context, token);
+        return token;
     }
 
-    @NonNull
-    public Context getContext() {
-        return context;
-    }
-
-    public GoogleAccountCredential getCredential() {
-        return credential;
-    }
-
-    public void disableAutoChooseAccount() {
-        autoChooseAccount = false;
-    }
-
-    public void setListener(@Nullable GoogleAccountSelectionListener listener) {
-        this.listener = listener;
-    }
-
-    public interface GoogleAccountSelectionListener {
-        void onGoogleAccountSelected(String accountName);
+    public Intent getAccountChooserIntent() {
+        Account selectedAccount = getAccountPickerCurrentAccount();
+        intentChooseAccount.putExtra("selectedAccount", selectedAccount);
+        intentChooseAccount.putExtra("overrideTheme", themeUtils.getAccountPickerTheme());
+        intentChooseAccount.putExtra("overrideCustomTheme", 0);
+        return intentChooseAccount;
     }
 }

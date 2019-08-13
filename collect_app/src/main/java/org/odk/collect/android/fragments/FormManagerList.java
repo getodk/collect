@@ -18,8 +18,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.content.CursorLoader;
+import androidx.annotation.NonNull;
+import androidx.loader.content.CursorLoader;
 import android.view.View;
 import android.widget.ListView;
 
@@ -31,7 +31,7 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
+import org.odk.collect.android.adapters.VersionHidingCursorAdapter;
 
 import timber.log.Timber;
 
@@ -101,13 +101,13 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     }
 
     private void setupAdapter() {
-        String[] data = new String[]{FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT, FormsColumns.JR_VERSION,
+        String[] data = new String[]{FormsColumns.DISPLAY_NAME, FormsColumns.JR_VERSION, FormsColumns.DATE,
                                         FormsColumns.JR_FORM_ID};
-        int[] view = new int[]{R.id.text1, R.id.text2, R.id.text3};
+        int[] view = new int[]{R.id.form_title, R.id.form_subtitle, R.id.form_subtitle2};
 
         listAdapter = new VersionHidingCursorAdapter(
                 FormsColumns.JR_VERSION, getActivity(),
-                R.layout.two_item_multiple_choice, null, data, view);
+                R.layout.form_chooser_list_item_multiple_choice, null, data, view);
         setListAdapter(listAdapter);
         checkPreviouslyCheckedItems();
     }
@@ -126,7 +126,6 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
      * Create the form delete dialog
      */
     private void createDeleteFormsDialog() {
-        logger.logAction(this, "createDeleteFormsDialog", "show");
         alertDialog = new AlertDialog.Builder(getContext()).create();
         alertDialog.setTitle(getString(R.string.delete_file));
         alertDialog.setMessage(getString(R.string.delete_confirm,
@@ -137,14 +136,10 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
                     public void onClick(DialogInterface dialog, int i) {
                         switch (i) {
                             case DialogInterface.BUTTON_POSITIVE: // delete
-                                logger.logAction(this, "createDeleteFormsDialog", "delete");
                                 deleteSelectedForms();
                                 if (getListView().getCount() == getCheckedCount()) {
                                     toggleButton.setEnabled(false);
                                 }
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE: // do nothing
-                                logger.logAction(this, "createDeleteFormsDialog", "cancel");
                                 break;
                         }
                     }
@@ -189,7 +184,6 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     @Override
     public void deleteComplete(int deletedForms) {
         Timber.i("Delete forms complete");
-        logger.logAction(this, "deleteComplete", Integer.toString(deletedForms));
         final int toDeleteCount = backgroundTasks.deleteFormsTask.getToDeleteCount();
 
         if (deletedForms == toDeleteCount) {
@@ -197,7 +191,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
             ToastUtils.showShortToast(getString(R.string.file_deleted_ok, String.valueOf(deletedForms)));
         } else {
             // had some failures
-            Timber.e("Failed to delete %d forms", (toDeleteCount - deletedForms));
+            Timber.e("Failed to delete %d forms", toDeleteCount - deletedForms);
             ToastUtils.showLongToast(getString(R.string.file_deleted_error, String.valueOf(getCheckedCount()
                     - deletedForms), String.valueOf(getCheckedCount())));
         }
@@ -213,8 +207,6 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.delete_button:
-                logger.logAction(this, "deleteButton", Integer.toString(getCheckedCount()));
-
                 if (areCheckedItems()) {
                     createDeleteFormsDialog();
                 } else {

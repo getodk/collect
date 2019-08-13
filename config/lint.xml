@@ -29,12 +29,14 @@
     <issue id="IconLocation" severity="error"/>
     <issue id="UnknownIdInLayout" severity="error"/>
     <issue id="IconDuplicates" severity="error"/>
+    <issue id="PxUsage" severity="error"/>
     <issue id="UnusedNamespace" severity="error">
         <ignore path="res/values*"/>
     </issue>
     <issue id="UnusedResources" severity="error">
         <ignore path="res/values/dimens.xml"/>
         <ignore regexp="ga_trackingId|google_crash_reporting_api_key|project_id"/>
+        <ignore regexp="sms_invalid_phone_number_description"/>
     </issue>
 
     <issue id="TimberExceptionLogging" severity="error"/>
@@ -43,4 +45,5 @@
 
     <issue id="ContentDescription" severity="ignore"/>
     <issue id="HardwareIds" severity="ignore"/>
+    <issue id="MissingPermission" severity="error"/>
 </lint>

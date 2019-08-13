@@ -11,7 +11,7 @@ import android.telephony.SmsManager;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.events.SmsRxEvent;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
@@ -27,7 +27,7 @@ public class SmsSender {
     private final String instanceId;
 
     public static final String SMS_SEND_ACTION = "org.odk.collect.android.COLLECT_SMS_SEND_ACTION";
-    static final String SMS_INSTANCE_ID = "COLLECT_SMS_INSTANCE_ID";
+    public static final String SMS_INSTANCE_ID = "COLLECT_SMS_INSTANCE_ID";
     static final String SMS_MESSAGE_ID = "COLLECT_SMS_MESSAGE_ID";
     static final String SMS_RESULT_CODE = "COLLECT_SMS_RESULT_CODE";
 
@@ -37,6 +37,8 @@ public class SmsSender {
     SmsSubmissionManagerContract submissionManager;
     @Inject
     RxEventBus eventBus;
+    @Inject
+    SmsService smsService;
 
     public SmsSender(Context context, String instanceId) {
         this.context = context;
@@ -49,12 +51,7 @@ public class SmsSender {
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 
-        String gateway = settings.getString(PreferenceKeys.KEY_SMS_GATEWAY, null);
-
-        if (!PhoneNumberUtils.isGlobalPhoneNumber(gateway)) {
-            eventBus.post(new SmsRxEvent(instanceId, SmsService.RESULT_INVALID_GATEWAY));
-            return false;
-        }
+        String gateway = settings.getString(GeneralKeys.KEY_SMS_GATEWAY, null);
 
         SmsSubmission model = submissionManager.getSubmissionModel(instanceId);
 
@@ -71,6 +68,14 @@ public class SmsSender {
             sentIntents.add(sentPendingIntent);
 
             messages.add(message.getText());
+
+            if (!PhoneNumberUtils.isGlobalPhoneNumber(gateway)) {
+                SmsRxEvent event = new SmsRxEvent(instanceId, SmsService.RESULT_INVALID_GATEWAY);
+                eventBus.post(event);
+                smsService.updateInstanceStatusFailedText(instanceId, event);
+                submissionManager.updateMessageStatus(SmsService.RESULT_INVALID_GATEWAY, instanceId, message.getId());
+                return false;
+            }
 
             submissionManager.markMessageAsSending(instanceId, message.getId());
         }
