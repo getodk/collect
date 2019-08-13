@@ -92,6 +92,11 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         return currentPosition;
     }
 
+    public void setPosition(Integer newPosition) {
+        mediaPlayer.seekTo(newPosition);
+        currentPosition.setValue(newPosition);
+    }
+
     public void background() {
         releaseMediaPlayer();
         currentlyPlaying.setValue(null);

@@ -3,7 +3,7 @@ package org.odk.collect.android.audio;
 import android.media.MediaPlayer;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.SeekBar;
+import android.widget.ProgressBar;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -76,40 +76,89 @@ public class AudioControllerViewIntegrationTest {
     }
 
     @Test
-    public void showsPositionAndTotalDurationOfClip() throws Exception {
+    public void showsPositionAndTotalDuration() throws Exception {
         String testFile = File.createTempFile("audio", ".mp3").getAbsolutePath();
-        setupMediaPlayerDataSource(testFile);
+        setupMediaPlayerDataSource(testFile, 322450);
 
         AudioControllerView view = new AudioControllerView(activity);
         audioHelper.setAudio(view, testFile, "clip1");
 
         final View currentDuration = view.findViewById(R.id.currentDuration);
-        final SeekBar seekBar = view.findViewById(R.id.seekBar);
 
         assertThat(innerText(currentDuration), equalTo("00:00"));
         assertThat(innerText(view.findViewById(R.id.totalDuration)), equalTo("05:22"));
 
         view.findViewById(R.id.playBtn).performClick();
+        assertThat(innerText(currentDuration), equalTo("00:00"));
 
         shadowOf(mediaPlayer).setCurrentPosition(1005);
         fakeScheduler.runTask();
         assertThat(innerText(currentDuration), equalTo("00:01"));
-        assertThat(seekBar.getProgress(), equalTo(1005));
 
         shadowOf(mediaPlayer).setCurrentPosition(12404);
         fakeScheduler.runTask();
         assertThat(innerText(currentDuration), equalTo("00:12"));
-        assertThat(seekBar.getProgress(), equalTo(12404));
 
         shadowOf(mediaPlayer).setCurrentPosition(322450);
         fakeScheduler.runTask();
         assertThat(innerText(currentDuration), equalTo("05:22"));
-        assertThat(seekBar.getProgress(), equalTo(322450));
 
         view.findViewById(R.id.playBtn).performClick(); // Make sure duration remains when paused
         fakeScheduler.runTask();
         assertThat(innerText(currentDuration), equalTo("05:22"));
+    }
+
+    @Test
+    public void showsPositionOnProgressBar() throws Exception {
+        String testFile = File.createTempFile("audio", ".mp3").getAbsolutePath();
+        setupMediaPlayerDataSource(testFile, 322450);
+
+        AudioControllerView view = new AudioControllerView(activity);
+        audioHelper.setAudio(view, testFile, "clip1");
+
+        final ProgressBar seekBar = view.findViewById(R.id.seekBar);
+        view.findViewById(R.id.playBtn).performClick();
+        assertThat(seekBar.getProgress(), equalTo(0));
+
+        shadowOf(mediaPlayer).setCurrentPosition(1005);
+        fakeScheduler.runTask();
+        assertThat(seekBar.getProgress(), equalTo(1005));
+
+        shadowOf(mediaPlayer).setCurrentPosition(322450);
+        fakeScheduler.runTask();
         assertThat(seekBar.getProgress(), equalTo(322450));
+
+        view.findViewById(R.id.playBtn).performClick(); // Make sure duration remains when paused
+        fakeScheduler.runTask();
+        assertThat(seekBar.getProgress(), equalTo(322450));
+    }
+
+    @Test
+    public void canSkipForwardAndBackwards() throws Exception {
+        String testFile = File.createTempFile("audio", ".mp3").getAbsolutePath();
+        setupMediaPlayerDataSource(testFile, 14000);
+
+        AudioControllerView view = new AudioControllerView(activity);
+        audioHelper.setAudio(view, testFile, "clip1");
+
+        view.findViewById(R.id.playBtn).performClick();
+
+        view.findViewById(R.id.fastForwardBtn).performClick();
+        assertThat(mediaPlayer.isPlaying(), equalTo(true));
+        assertThat(mediaPlayer.getCurrentPosition(), equalTo(5000));
+
+        view.findViewById(R.id.fastForwardBtn).performClick();
+        assertThat(mediaPlayer.getCurrentPosition(), equalTo(10000));
+
+        view.findViewById(R.id.fastRewindBtn).performClick();
+        assertThat(mediaPlayer.getCurrentPosition(), equalTo(5000));
+
+        view.findViewById(R.id.fastForwardBtn).performClick();
+        assertThat(mediaPlayer.getCurrentPosition(), equalTo(10000));
+
+        view.findViewById(R.id.fastForwardBtn).performClick();
+        assertThat(mediaPlayer.isPlaying(), equalTo(false));
+        assertThat(mediaPlayer.getCurrentPosition(), equalTo(14000));
     }
 
     @Test

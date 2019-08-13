@@ -47,6 +47,7 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
     SeekBar seekBar;
 
     private State state;
+    private Integer position;
 
     private Listener listener;
 
@@ -61,12 +62,14 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
 
     @OnClick(R.id.fastForwardBtn)
     void fastForwardMedia() {
-
+        int newPosition = position + 5000;
+        listener.onPositionChanged(newPosition);
     }
 
     @OnClick(R.id.fastRewindBtn)
     void rewindMedia() {
-
+        int newPosition = position - 5000;
+        listener.onPositionChanged(newPosition);
     }
 
     @OnClick(R.id.playBtn)
@@ -154,6 +157,8 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
     }
 
     public void setPosition(Integer position) {
+        this.position = position;
+
         currentDurationLabel.setText(getTime(position));
         seekBar.setProgress(position);
     }
@@ -176,5 +181,7 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
         void onPlayClicked();
 
         void onPauseClicked();
+
+        void onPositionChanged(Integer newPosition);
     }
 }

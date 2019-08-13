@@ -15,6 +15,7 @@ import org.odk.collect.android.utilities.LiveDataTransformations;
 
 import static androidx.lifecycle.Transformations.map;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState;
+import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.NOT_PLAYING;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYING;
 
 public class AudioHelper {
@@ -53,7 +54,7 @@ public class AudioHelper {
 
         playState.observe(lifecycle, view::setPlayState);
         LiveDataTransformations.zip(playState, position).observe(lifecycle, (playStateAndPosition) -> {
-            switch (playStateAndPosition.first) {
+            switch (playStateAndPosition.first != null ? playStateAndPosition.first : NOT_PLAYING) {
                 case NOT_PLAYING:
                     view.setPosition(0);
                     break;
@@ -114,6 +115,11 @@ public class AudioHelper {
         @Override
         public void onPauseClicked() {
             viewModel.pause();
+        }
+
+        @Override
+        public void onPositionChanged(Integer newPosition) {
+            viewModel.setPosition(newPosition);
         }
     }
 
