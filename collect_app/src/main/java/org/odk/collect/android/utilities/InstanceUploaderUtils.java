@@ -36,6 +36,14 @@ public class InstanceUploaderUtils {
     private InstanceUploaderUtils() {
     }
 
+    /**
+     * Returns a formatted message including submission results for all the filled forms accessible
+     * through instancesProcessed in the following structure:
+     *
+     * Form name 1 - result
+     *
+     * Form name 2 - result
+     */
     public static String getUploadResultMessage(Context context, Map<String, String> result) {
         Set<String> keys = result.keySet();
         Iterator<String> it = keys.iterator();
@@ -69,7 +77,7 @@ public class InstanceUploaderUtils {
             count -= selectionArgs.length;
 
             message.append(InstanceUploaderUtils
-                    .getUploadResultMessage(new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs), result));
+                    .getUploadResultMessageForInstances(new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs), result));
         }
 
         if (message.length() == 0) {
@@ -79,16 +87,8 @@ public class InstanceUploaderUtils {
         return message.toString().trim();
     }
 
-    /**
-     * Returns a formatted message including submission results for all the filled forms accessible
-     * through instancesProcessed in the following structure:
-     *
-     * Form name 1 - result
-     *
-     * Form name 2 - result
-     */
-    public static String getUploadResultMessage(Cursor instancesProcessed,
-                                                Map<String, String> resultMessagesByInstanceId) {
+    private static String getUploadResultMessageForInstances(Cursor instancesProcessed,
+                                                             Map<String, String> resultMessagesByInstanceId) {
         StringBuilder queryMessage = new StringBuilder();
         try {
             if (instancesProcessed != null && instancesProcessed.getCount() > 0) {
