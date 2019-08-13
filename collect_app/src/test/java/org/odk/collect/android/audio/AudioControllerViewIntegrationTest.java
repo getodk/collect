@@ -4,9 +4,11 @@ import android.media.MediaPlayer;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 
 import androidx.fragment.app.FragmentActivity;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +21,7 @@ import org.robolectric.shadows.ShadowMediaPlayer;
 import org.robolectric.shadows.util.DataSource;
 
 import java.io.File;
+import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -77,11 +80,7 @@ public class AudioControllerViewIntegrationTest {
 
     @Test
     public void showsPositionAndTotalDuration() throws Exception {
-        String testFile = File.createTempFile("audio", ".mp3").getAbsolutePath();
-        setupMediaPlayerDataSource(testFile, 322450);
-
-        AudioControllerView view = new AudioControllerView(activity);
-        audioHelper.setAudio(view, testFile, "clip1");
+        AudioControllerView view = createAndSetupView("clip1", 322450);
 
         final View currentDuration = view.findViewById(R.id.currentDuration);
 
@@ -110,11 +109,7 @@ public class AudioControllerViewIntegrationTest {
 
     @Test
     public void showsPositionOnProgressBar() throws Exception {
-        String testFile = File.createTempFile("audio", ".mp3").getAbsolutePath();
-        setupMediaPlayerDataSource(testFile, 322450);
-
-        AudioControllerView view = new AudioControllerView(activity);
-        audioHelper.setAudio(view, testFile, "clip1");
+        AudioControllerView view = createAndSetupView("clip1", 322450);
 
         final ProgressBar seekBar = view.findViewById(R.id.seekBar);
         view.findViewById(R.id.playBtn).performClick();
@@ -135,12 +130,7 @@ public class AudioControllerViewIntegrationTest {
 
     @Test
     public void canSkipForwardAndBackwards() throws Exception {
-        String testFile = File.createTempFile("audio", ".mp3").getAbsolutePath();
-        setupMediaPlayerDataSource(testFile, 14000);
-
-        AudioControllerView view = new AudioControllerView(activity);
-        audioHelper.setAudio(view, testFile, "clip1");
-
+        AudioControllerView view = createAndSetupView("clip1", 14000);
         view.findViewById(R.id.playBtn).performClick();
 
         view.findViewById(R.id.fastForwardBtn).performClick();
@@ -162,12 +152,76 @@ public class AudioControllerViewIntegrationTest {
     }
 
     @Test
-    public void resetsBackToBeginningWhenPlaybackFinishes() throws Exception {
-        String testFile = File.createTempFile("audio", ".mp3").getAbsolutePath();
-        setupMediaPlayerDataSource(testFile);
+    public void swipingPosition_whenPlaying_pausesAndThenResumes() throws Exception {
+        AudioControllerView view = createAndSetupView("clip1", 14000);
+        view.findViewById(R.id.playBtn).performClick();
 
-        AudioControllerView view = new AudioControllerView(activity);
-        audioHelper.setAudio(view, testFile, "clip1");
+        SeekBar seekBar = view.findViewById(R.id.seekBar);
+        final View currentDuration = view.findViewById(R.id.currentDuration);
+
+        shadowOf(seekBar).getOnSeekBarChangeListener().onStartTrackingTouch(seekBar);
+        assertThat(mediaPlayer.isPlaying(), equalTo(false)); // Check seeking pauses playback
+
+        shadowOf(seekBar).getOnSeekBarChangeListener().onProgressChanged(seekBar, 7000, true);
+        assertThat(innerText(currentDuration), equalTo("00:07"));
+
+        shadowOf(seekBar).getOnSeekBarChangeListener().onProgressChanged(seekBar, 8000, true);
+        assertThat(innerText(currentDuration), equalTo("00:08"));
+
+        shadowOf(seekBar).getOnSeekBarChangeListener().onStopTrackingTouch(seekBar);
+        assertThat(mediaPlayer.isPlaying(), equalTo(true));
+        assertThat(mediaPlayer.getCurrentPosition(), equalTo(8000));
+    }
+
+    @Test
+    public void swipingPosition_whenIdle_justChangesPosition() throws Exception {
+        AudioControllerView view = createAndSetupView("clip1", 14000);
+        SeekBar seekBar = view.findViewById(R.id.seekBar);
+        View currentDuration = view.findViewById(R.id.currentDuration);
+
+        shadowOf(seekBar).getOnSeekBarChangeListener().onStartTrackingTouch(seekBar);
+
+        shadowOf(seekBar).getOnSeekBarChangeListener().onProgressChanged(seekBar, 7000, true);
+        assertThat(innerText(currentDuration), equalTo("00:07"));
+
+        shadowOf(seekBar).getOnSeekBarChangeListener().onProgressChanged(seekBar, 8000, true);
+        assertThat(innerText(currentDuration), equalTo("00:08"));
+
+        shadowOf(seekBar).getOnSeekBarChangeListener().onStopTrackingTouch(seekBar);
+        assertThat(mediaPlayer.isPlaying(), equalTo(false));
+
+        view.findViewById(R.id.playBtn).performClick();
+        assertThat(mediaPlayer.isPlaying(), equalTo(true));
+        assertThat(mediaPlayer.getCurrentPosition(), equalTo(8000));
+    }
+
+    @Test
+    public void swipingPosition_whenPaused_justChangesPosition() throws Exception {
+        AudioControllerView view = createAndSetupView("clip1", 14000);
+        view.findViewById(R.id.playBtn).performClick();
+        view.findViewById(R.id.playBtn).performClick();
+
+        SeekBar seekBar = view.findViewById(R.id.seekBar);
+        View currentDuration = view.findViewById(R.id.currentDuration);
+
+        shadowOf(seekBar).getOnSeekBarChangeListener().onStartTrackingTouch(seekBar);
+
+        shadowOf(seekBar).getOnSeekBarChangeListener().onProgressChanged(seekBar, 7000, true);
+        assertThat(innerText(currentDuration), equalTo("00:07"));
+
+        shadowOf(seekBar).getOnSeekBarChangeListener().onProgressChanged(seekBar, 8000, true);
+        assertThat(innerText(currentDuration), equalTo("00:08"));
+
+        shadowOf(seekBar).getOnSeekBarChangeListener().onStopTrackingTouch(seekBar);
+        assertThat(shadowOf(mediaPlayer).getState(), equalTo(ShadowMediaPlayer.State.PAUSED));
+
+        view.findViewById(R.id.playBtn).performClick();
+        assertThat(mediaPlayer.getCurrentPosition(), equalTo(8000));
+    }
+
+    @Test
+    public void resetsBackToBeginningWhenPlaybackFinishes() throws Exception {
+        AudioControllerView view = createAndSetupView("clip1", 14000);
 
         view.findViewById(R.id.playBtn).performClick();
 
@@ -180,17 +234,8 @@ public class AudioControllerViewIntegrationTest {
 
     @Test
     public void whenThereAreTwoViews_showsCorrectDuration() throws Exception {
-        String testFile1 = File.createTempFile("audio", ".mp3").getAbsolutePath();
-        setupMediaPlayerDataSource(testFile1);
-
-        String testFile2 = File.createTempFile("audio", ".mp3").getAbsolutePath();
-        setupMediaPlayerDataSource(testFile2);
-
-        AudioControllerView view1 = new AudioControllerView(activity);
-        audioHelper.setAudio(view1, testFile1, "clip1");
-
-        AudioControllerView view2 = new AudioControllerView(activity);
-        audioHelper.setAudio(view2, testFile1, "clip2");
+        AudioControllerView view1 = createAndSetupView("clip1", 14000);
+        final AudioControllerView view2 = createAndSetupView("clip2", 14000);
 
         view1.findViewById(R.id.playBtn).performClick();
 
@@ -199,5 +244,15 @@ public class AudioControllerViewIntegrationTest {
 
         assertThat(innerText(view1.findViewById(R.id.currentDuration)), equalTo("00:01"));
         assertThat(innerText(view2.findViewById(R.id.currentDuration)), equalTo("00:00"));
+    }
+
+    @NotNull
+    private AudioControllerView createAndSetupView(String clipID, int fileLength) throws IOException {
+        String testFile = File.createTempFile("audio", ".mp3").getAbsolutePath();
+        setupMediaPlayerDataSource(testFile, fileLength);
+
+        AudioControllerView view = new AudioControllerView(activity);
+        audioHelper.setAudio(view, testFile, clipID);
+        return view;
     }
 }

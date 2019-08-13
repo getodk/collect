@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBarChangeListener {
+public class AudioControllerView extends FrameLayout {
 
     @BindView(R.id.currentDuration)
     TextView currentDurationLabel;
@@ -56,7 +56,7 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
 
         View.inflate(context, R.layout.audio_controller_layout, this);
         ButterKnife.bind(this);
-        seekBar.setOnSeekBarChangeListener(this);
+        seekBar.setOnSeekBarChangeListener(new SwipeListener());
         playButton.setImageResource(R.drawable.ic_play_arrow_24dp);
     }
 
@@ -77,45 +77,8 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
         if (state == State.PLAYING) {
             listener.onPauseClicked();
         } else {
-            listener.onPlayClicked();
+            listener.onPlayClicked(position);
         }
-    }
-
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-    }
-
-    /**
-     * When user starts moving the progress handler
-     */
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-        ((SwipableParent) getContext()).allowSwiping(false);
-
-        if (state == State.PLAYING) {
-            pause();
-        }
-    }
-
-    /**
-     * When user stops moving the progress handler
-     */
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-        ((SwipableParent) getContext()).allowSwiping(true);
-
-        if (state == State.PLAYING) {
-            play();
-        }
-    }
-
-    private void play() {
-
-    }
-
-    private void pause() {
-
     }
 
     public void hidePlayer() {
@@ -126,11 +89,6 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
         setVisibility(View.VISIBLE);
     }
 
-    /**
-     * Converts {@param millis} to mm:ss format
-     *
-     * @return formatted time as string
-     */
     private static String getTime(long seconds) {
         return new DateTime(seconds, DateTimeZone.UTC).toString("mm:ss");
     }
@@ -178,10 +136,50 @@ public class AudioControllerView extends FrameLayout implements SeekBar.OnSeekBa
 
     public interface Listener {
 
-        void onPlayClicked();
+        void onPlayClicked(Integer position);
 
         void onPauseClicked();
 
         void onPositionChanged(Integer newPosition);
+    }
+
+    private class SwipeListener implements SeekBar.OnSeekBarChangeListener {
+
+        private State initialState;
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+            initialState = state;
+
+            switch (initialState) {
+                case PLAYING:
+                    listener.onPauseClicked();
+                    break;
+                case PAUSED:
+                case IDLE:
+                    break;
+            }
+        }
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int newProgress, boolean fromUser) {
+            if (fromUser) {
+                setPosition(newProgress);
+            }
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            switch (initialState) {
+                case PLAYING:
+                    listener.onPlayClicked(position);
+                    break;
+                case PAUSED:
+                case IDLE:
+                    break;
+            }
+
+            initialState = null;
+        }
     }
 }

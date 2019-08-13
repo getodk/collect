@@ -3,6 +3,7 @@ package org.odk.collect.android.audio;
 import android.media.MediaPlayer;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -41,8 +42,16 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     }
 
     public void play(String clipID, String uri) {
+        play(clipID, uri, null);
+    }
+
+    public void play(String clipID, String uri, @Nullable Integer position) {
         if (!isCurrentPlayingClip(clipID, currentlyPlaying.getValue())) {
             loadClip(uri);
+        }
+
+        if (position != null) {
+            getMediaPlayer().seekTo(position);
         }
 
         getMediaPlayer().start();

@@ -108,8 +108,8 @@ public class AudioHelper {
         }
 
         @Override
-        public void onPlayClicked() {
-            viewModel.play(clipID, uri);
+        public void onPlayClicked(Integer position) {
+            viewModel.play(clipID, uri, position);
         }
 
         @Override
