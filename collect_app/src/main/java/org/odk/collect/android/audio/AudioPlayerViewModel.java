@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModel;
 
 import java.io.IOException;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.NOT_PLAYING;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PAUSED;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYING;
@@ -93,8 +95,10 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     }
 
     public void setPosition(Integer newPosition) {
-        mediaPlayer.seekTo(newPosition);
-        currentPosition.setValue(newPosition);
+        Integer correctedPosition = min(getMediaPlayer().getDuration(), max(0, newPosition));
+
+        getMediaPlayer().seekTo(correctedPosition);
+        currentPosition.setValue(correctedPosition);
     }
 
     public void background() {

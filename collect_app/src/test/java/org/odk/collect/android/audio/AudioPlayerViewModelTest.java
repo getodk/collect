@@ -195,6 +195,44 @@ public class AudioPlayerViewModelTest {
     }
 
     @Test
+    public void setPosition_seeksMediaPlayer() {
+        when(mediaPlayer.getDuration()).thenReturn(100000);
+
+        viewModel.setPosition(54321);
+        verify(mediaPlayer).seekTo(54321);
+    }
+
+    @Test
+    public void setPosition_updatesPosition() {
+        when(mediaPlayer.getDuration()).thenReturn(100000);
+
+        LiveData<Integer> duration = liveDataTester.activate(viewModel.getPosition());
+
+        viewModel.setPosition(54321);
+        assertThat(duration.getValue(), equalTo(54321));
+    }
+
+    @Test
+    public void setPosition_whenNewPositionLessThanZero_setsPositionToZero() {
+        LiveData<Integer> duration = liveDataTester.activate(viewModel.getPosition());
+
+        viewModel.setPosition(-1);
+        verify(mediaPlayer).seekTo(0);
+        assertThat(duration.getValue(), equalTo(0));
+    }
+
+    @Test
+    public void setPosition_whenNewPositionGreaterThanDuration_setsPositionToDuration() {
+        when(mediaPlayer.getDuration()).thenReturn(54321);
+
+        LiveData<Integer> duration = liveDataTester.activate(viewModel.getPosition());
+
+        viewModel.setPosition(54322);
+        verify(mediaPlayer).seekTo(54321);
+        assertThat(duration.getValue(), equalTo(54321));
+    }
+
+    @Test
     public void onCleared_releasesMediaPlayer() {
         viewModel.onCleared();
         verify(mediaPlayer).release();
