@@ -169,7 +169,6 @@ public class AudioControllerView extends FrameLayout {
     private class SwipeListener implements SeekBar.OnSeekBarChangeListener {
 
         private ClipState initialState;
-        private int swipingPosition;
 
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
@@ -190,8 +189,7 @@ public class AudioControllerView extends FrameLayout {
         @Override
         public void onProgressChanged(SeekBar seekBar, int newProgress, boolean fromUser) {
             if (fromUser) {
-                swipingPosition = newProgress;
-                renderPosition(swipingPosition);
+                renderPosition(newProgress);
             }
         }
 
