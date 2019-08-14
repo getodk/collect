@@ -7,7 +7,7 @@ import org.odk.collect.android.http.HttpCredentialsInterface;
 import org.odk.collect.android.http.HttpGetResult;
 import org.odk.collect.android.http.HttpHeadResult;
 import org.odk.collect.android.http.HttpPostResult;
-import org.odk.collect.android.http.OpenRosaHttpInterface;
+import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
