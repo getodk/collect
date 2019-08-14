@@ -241,8 +241,6 @@ public class AudioControllerViewIntegrationTest {
         view.findViewById(R.id.playBtn).performClick();
 
         shadowOf(mediaPlayer).invokeCompletionListener();
-
-        fakeScheduler.runTask();
         assertThat(getCreatedFromResId(view.findViewById(R.id.playBtn)), equalTo(R.drawable.ic_play_arrow_24dp));
         assertThat(innerText(view.findViewById(R.id.currentDuration)), equalTo("00:00"));
     }

@@ -31,7 +31,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.NOT_PLAYING;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYING;
 
 public class AudioControllerView extends FrameLayout {
@@ -54,6 +55,7 @@ public class AudioControllerView extends FrameLayout {
 
     private ClipState state;
     private Integer position = 0;
+    private Integer duration;
 
     private Listener listener;
 
@@ -71,13 +73,13 @@ public class AudioControllerView extends FrameLayout {
     @OnClick(R.id.fastForwardBtn)
     void fastForwardMedia() {
         int newPosition = position + 5000;
-        updatePosition(newPosition);
+        onPositionChanged(newPosition);
     }
 
     @OnClick(R.id.fastRewindBtn)
     void rewindMedia() {
         int newPosition = position - 5000;
-        updatePosition(newPosition);
+        onPositionChanged(newPosition);
     }
 
     @OnClick(R.id.playBtn)
@@ -85,8 +87,15 @@ public class AudioControllerView extends FrameLayout {
         if (state == PLAYING) {
             listener.onPauseClicked();
         } else {
-            listener.onPlayClicked(position);
+            listener.onPlayClicked();
         }
+    }
+
+    private void onPositionChanged(Integer newPosition) {
+        Integer correctedPosition = max(0, min(duration, newPosition));
+
+        setPosition(correctedPosition);
+        listener.onPositionChanged(correctedPosition);
     }
 
     public void hidePlayer() {
@@ -126,18 +135,12 @@ public class AudioControllerView extends FrameLayout {
     }
 
     public void setDuration(Integer duration) {
+        this.duration = duration;
+
         totalDurationLabel.setText(getTime(duration));
         seekBar.setMax(duration);
 
         setPosition(0);
-    }
-
-    private void updatePosition(Integer newPosition) {
-        setPosition(newPosition);
-
-        if (state != NOT_PLAYING) {
-            listener.onPositionChanged(newPosition);
-        }
     }
 
     private void renderPosition(Integer position) {
@@ -153,7 +156,7 @@ public class AudioControllerView extends FrameLayout {
 
     public interface Listener {
 
-        void onPlayClicked(Integer position);
+        void onPlayClicked();
 
         void onPauseClicked();
 
@@ -163,6 +166,7 @@ public class AudioControllerView extends FrameLayout {
     private class SwipeListener implements SeekBar.OnSeekBarChangeListener {
 
         private ClipState initialState;
+        private int swipingPosition;
 
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
@@ -181,7 +185,8 @@ public class AudioControllerView extends FrameLayout {
         @Override
         public void onProgressChanged(SeekBar seekBar, int newProgress, boolean fromUser) {
             if (fromUser) {
-                renderPosition(newProgress);
+                swipingPosition = newProgress;
+                renderPosition(swipingPosition);
             }
         }
 
@@ -189,15 +194,14 @@ public class AudioControllerView extends FrameLayout {
         public void onStopTrackingTouch(SeekBar seekBar) {
             switch (initialState) {
                 case PLAYING:
-                    listener.onPlayClicked(position);
+                    listener.onPlayClicked();
                     break;
                 case PAUSED:
-                    updatePosition(position);
-                    break;
                 case NOT_PLAYING:
                     break;
             }
 
+            onPositionChanged(position);
             initialState = null;
         }
 

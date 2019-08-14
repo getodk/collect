@@ -3,16 +3,15 @@ package org.odk.collect.android.audio;
 import android.media.MediaPlayer;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.NOT_PLAYING;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PAUSED;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYING;
@@ -24,7 +23,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     private MediaPlayer mediaPlayer;
 
     private final MutableLiveData<CurrentlyPlaying> currentlyPlaying = new MutableLiveData<>();
-    private final MutableLiveData<Integer> currentPosition = new MutableLiveData<>();
+    private final Map<String, MutableLiveData<Integer>> positions = new HashMap<>();
 
     private Boolean scheduledDurationUpdates = false;
 
@@ -39,41 +38,23 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         this.scheduler = scheduler;
 
         currentlyPlaying.setValue(null);
-        currentPosition.setValue(0);
     }
 
     public void play(String clipID, String uri) {
-        play(clipID, uri, null);
-    }
-
-    public void play(String clipID, String uri, @Nullable Integer position) {
         if (!isCurrentPlayingClip(clipID, currentlyPlaying.getValue())) {
             loadClip(uri);
         }
 
-        if (position != null) {
-            getMediaPlayer().seekTo(position);
-        }
-
+        getMediaPlayer().seekTo(getPositionForClip(clipID).getValue());
         getMediaPlayer().start();
 
         currentlyPlaying.setValue(new CurrentlyPlaying(clipID, false));
         schedulePositionUpdates();
     }
 
-    private void loadClip(String uri) {
-        try {
-            getMediaPlayer().reset();
-            getMediaPlayer().setDataSource(uri);
-            getMediaPlayer().prepare();
-        } catch (IOException ignored) {
-            throw new RuntimeException();
-        }
-    }
-
     public void stop() {
         getMediaPlayer().stop();
-        resetState();
+        clearClip();
     }
 
     public void pause() {
@@ -99,50 +80,71 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         });
     }
 
-    public LiveData<Integer> getPosition() {
-        currentPosition.setValue(getMediaPlayer().getCurrentPosition());
-        return currentPosition;
+    public LiveData<Integer> getPosition(String clipID) {
+        return getPositionForClip(clipID);
     }
 
-    public void setPosition(Integer newPosition) {
-        Integer correctedPosition = min(getMediaPlayer().getDuration(), max(0, newPosition));
+    public void setPosition(String clipID, Integer newPosition) {
+        if (isCurrentPlayingClip(clipID, currentlyPlaying.getValue())) {
+            getMediaPlayer().seekTo(newPosition);
+        }
 
-        getMediaPlayer().seekTo(correctedPosition);
-        currentPosition.setValue(correctedPosition);
-    }
-
-    public void background() {
-        releaseMediaPlayer();
-        currentlyPlaying.setValue(null);
+        getPositionForClip(clipID).setValue(newPosition);
     }
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
-        resetState();
+        clearClip();
     }
 
-    private void resetState() {
-        cancelPositionUpdates();
-        currentPosition.setValue(0);
-        currentlyPlaying.setValue(null);
+    public void background() {
+        clearClip();
+        releaseMediaPlayer();
     }
 
     @Override
     protected void onCleared() {
+        clearClip();
         releaseMediaPlayer();
+    }
+
+    private void clearClip() {
         cancelPositionUpdates();
+        currentlyPlaying.setValue(null);
+    }
+
+    @NonNull
+    private MutableLiveData<Integer> getPositionForClip(String clipID) {
+        MutableLiveData<Integer> liveData;
+
+        if (positions.containsKey(clipID)) {
+            liveData = positions.get(clipID);
+        } else {
+            liveData = new MutableLiveData<>();
+            liveData.setValue(0);
+            positions.put(clipID, liveData);
+        }
+
+        return liveData;
+    }
+
+    private void schedulePositionUpdates() {
+        if (!scheduledDurationUpdates) {
+            scheduler.schedule(() -> {
+                CurrentlyPlaying currentlyPlaying = this.currentlyPlaying.getValue();
+
+                if (currentlyPlaying != null) {
+                    MutableLiveData<Integer> position = getPositionForClip(currentlyPlaying.clipID);
+                    position.postValue(getMediaPlayer().getCurrentPosition());
+                }
+            }, 500);
+            scheduledDurationUpdates = true;
+        }
     }
 
     private void cancelPositionUpdates() {
         scheduler.cancel();
         scheduledDurationUpdates = false;
-    }
-
-    private void schedulePositionUpdates() {
-        if (!scheduledDurationUpdates) {
-            scheduler.schedule(() -> currentPosition.postValue(getMediaPlayer().getCurrentPosition()), 500);
-            scheduledDurationUpdates = true;
-        }
     }
 
     private void releaseMediaPlayer() {
@@ -161,6 +163,16 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
 
     private boolean isCurrentPlayingClip(String clipID, CurrentlyPlaying currentlyPlayingValue) {
         return currentlyPlayingValue != null && currentlyPlayingValue.clipID.equals(clipID);
+    }
+
+    private void loadClip(String uri) {
+        try {
+            getMediaPlayer().reset();
+            getMediaPlayer().setDataSource(uri);
+            getMediaPlayer().prepare();
+        } catch (IOException ignored) {
+            throw new RuntimeException();
+        }
     }
 
     private static class CurrentlyPlaying {

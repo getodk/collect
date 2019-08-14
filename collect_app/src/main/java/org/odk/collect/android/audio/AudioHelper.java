@@ -11,11 +11,9 @@ import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModelProviders;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.utilities.LiveDataTransformations;
 
 import static androidx.lifecycle.Transformations.map;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState;
-import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.NOT_PLAYING;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYING;
 
 public class AudioHelper {
@@ -50,21 +48,10 @@ public class AudioHelper {
         LifecycleOwner lifecycle = screenContext.getViewLifecycle();
 
         LiveData<ClipState> playState = viewModel.isPlaying(clipID);
-        LiveData<Integer> position = viewModel.getPosition();
+        LiveData<Integer> position = viewModel.getPosition(clipID);
 
         playState.observe(lifecycle, view::setPlayState);
-        LiveDataTransformations.zip(playState, position).observe(lifecycle, (playStateAndPosition) -> {
-            switch (playStateAndPosition.first != null ? playStateAndPosition.first : NOT_PLAYING) {
-                case NOT_PLAYING:
-                    break;
-
-                case PLAYING:
-                case PAUSED:
-                    view.setPosition(playStateAndPosition.second);
-                    break;
-            }
-        });
-
+        position.observe(lifecycle, view::setPosition);
         view.setDuration(getDurationOfFile(uri));
         view.setListener(new AudioControllerViewListener(viewModel, uri, clipID));
     }
@@ -107,8 +94,8 @@ public class AudioHelper {
         }
 
         @Override
-        public void onPlayClicked(Integer position) {
-            viewModel.play(clipID, uri, position);
+        public void onPlayClicked() {
+            viewModel.play(clipID, uri);
         }
 
         @Override
@@ -118,7 +105,7 @@ public class AudioHelper {
 
         @Override
         public void onPositionChanged(Integer newPosition) {
-            viewModel.setPosition(newPosition);
+            viewModel.setPosition(clipID, newPosition);
         }
     }
 

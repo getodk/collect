@@ -21,7 +21,9 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -70,6 +72,17 @@ public class AudioPlayerViewModelTest {
     }
 
     @Test
+    public void play_whenClipHasPositionSet_startsAtPosition() {
+        viewModel.setPosition("clip1", 4321);
+        viewModel.play("clip1", "file://audio.mp3");
+
+        InOrder inOrder = Mockito.inOrder(mediaPlayer);
+
+        inOrder.verify(mediaPlayer).seekTo(4321);
+        inOrder.verify(mediaPlayer).start();
+    }
+
+    @Test
     public void isPlaying_whenNothingPlaying_is_NOT_PLAYING() {
         LiveData<ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
@@ -115,6 +128,12 @@ public class AudioPlayerViewModelTest {
     public void background_releasesMediaPlayer() {
         viewModel.background();
         verify(mediaPlayer).release();
+    }
+
+    @Test
+    public void background_cancelsScheduler() {
+        viewModel.background();
+        assertThat(fakeScheduler.isCancelled(), equalTo(true));
     }
 
     @Test
@@ -172,7 +191,7 @@ public class AudioPlayerViewModelTest {
     @Test
     public void getPosition_returnsMediaPlayerPositionInMilliseconds() {
         when(mediaPlayer.getCurrentPosition()).thenReturn(0);
-        LiveData<Integer> duration = liveDataTester.activate(viewModel.getPosition());
+        LiveData<Integer> duration = liveDataTester.activate(viewModel.getPosition("clip1"));
         assertThat(duration.getValue(), equalTo(0));
 
         viewModel.play("clip1", "file://audio.mp3");
@@ -187,40 +206,42 @@ public class AudioPlayerViewModelTest {
     }
 
     @Test
-    public void setPosition_seeksMediaPlayer() {
-        when(mediaPlayer.getDuration()).thenReturn(100000);
+    public void getPosition_worksWhenMultipleClipsArePlayed() {
+        when(mediaPlayer.getCurrentPosition()).thenReturn(0);
+        final LiveData<Integer> duration1 = liveDataTester.activate(viewModel.getPosition("clip1"));
+        final LiveData<Integer> duration2 = liveDataTester.activate(viewModel.getPosition("clip2"));
 
-        viewModel.setPosition(54321);
+        viewModel.play("clip1", "file://audio.mp3");
+        when(mediaPlayer.getCurrentPosition()).thenReturn(1000);
+        fakeScheduler.runTask();
+        assertThat(duration1.getValue(), equalTo(1000));
+
+        viewModel.play("clip2", "file://audio.mp3");
+        when(mediaPlayer.getCurrentPosition()).thenReturn(2500);
+        fakeScheduler.runTask();
+        assertThat(duration2.getValue(), equalTo(2500));
+    }
+
+    @Test
+    public void setPosition_whenClipIsPlaying_seeksMediaPlayer() {
+        when(mediaPlayer.getDuration()).thenReturn(100000);
+        viewModel.play("clip1", "file://audio.mp3");
+
+        viewModel.setPosition("clip1", 54321);
         verify(mediaPlayer).seekTo(54321);
+    }
+
+    @Test
+    public void setPosition_whenClipIsNotPlaying_doesNothing() {
+        viewModel.setPosition("clip1", 54321);
+        verify(mediaPlayer, never()).seekTo(anyInt());
     }
 
     @Test
     public void setPosition_updatesPosition() {
-        when(mediaPlayer.getDuration()).thenReturn(100000);
+        LiveData<Integer> duration = liveDataTester.activate(viewModel.getPosition("clip1"));
 
-        LiveData<Integer> duration = liveDataTester.activate(viewModel.getPosition());
-
-        viewModel.setPosition(54321);
-        assertThat(duration.getValue(), equalTo(54321));
-    }
-
-    @Test
-    public void setPosition_whenNewPositionLessThanZero_setsPositionToZero() {
-        LiveData<Integer> duration = liveDataTester.activate(viewModel.getPosition());
-
-        viewModel.setPosition(-1);
-        verify(mediaPlayer).seekTo(0);
-        assertThat(duration.getValue(), equalTo(0));
-    }
-
-    @Test
-    public void setPosition_whenNewPositionGreaterThanDuration_setsPositionToDuration() {
-        when(mediaPlayer.getDuration()).thenReturn(54321);
-
-        LiveData<Integer> duration = liveDataTester.activate(viewModel.getPosition());
-
-        viewModel.setPosition(54322);
-        verify(mediaPlayer).seekTo(54321);
+        viewModel.setPosition("clip1", 54321);
         assertThat(duration.getValue(), equalTo(54321));
     }
 
@@ -233,6 +254,17 @@ public class AudioPlayerViewModelTest {
     @Test
     public void onCleared_cancelsScheduler() {
         viewModel.onCleared();
+        assertThat(fakeScheduler.isCancelled(), equalTo(true));
+    }
+
+    @Test
+    public void whenPlaybackCompletes_cancelsScheduler() {
+        viewModel.play("clip1", "file://audio.mp3");
+
+        ArgumentCaptor<MediaPlayer.OnCompletionListener> captor = ArgumentCaptor.forClass(MediaPlayer.OnCompletionListener.class);
+        verify(mediaPlayer).setOnCompletionListener(captor.capture());
+        captor.getValue().onCompletion(mediaPlayer);
+
         assertThat(fakeScheduler.isCancelled(), equalTo(true));
     }
 
