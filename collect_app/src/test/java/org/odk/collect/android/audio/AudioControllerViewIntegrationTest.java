@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.FakeScheduler;
 import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.support.SwipableParentActivity;
 import org.odk.collect.android.support.TestScreenContext;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowMediaPlayer;
@@ -41,7 +42,7 @@ public class AudioControllerViewIntegrationTest {
 
     @Before
     public void setup() {
-        activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class);
+        activity = RobolectricHelpers.createThemedActivity(SwipableParentActivity.class);
 
         TestScreenContext screenContext = new TestScreenContext(activity);
         audioHelper = new AudioHelper(screenContext, () -> mediaPlayer, fakeScheduler);

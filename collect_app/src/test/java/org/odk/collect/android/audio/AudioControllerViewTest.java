@@ -1,10 +1,13 @@
 package org.odk.collect.android.audio;
 
+import android.widget.SeekBar;
+
 import androidx.fragment.app.FragmentActivity;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.SwipableParentActivity;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -12,6 +15,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.odk.collect.android.support.RobolectricHelpers.buildThemedActivity;
+import static org.robolectric.Shadows.shadowOf;
 import static org.robolectric.shadows.ShadowView.innerText;
 
 @RunWith(RobolectricTestRunner.class)
@@ -47,5 +51,18 @@ public class AudioControllerViewTest {
 
         assertThat(innerText(view.findViewById(R.id.currentDuration)), equalTo("00:00"));
         verify(listener).onPositionChanged(0);
+    }
+
+    @Test
+    public void whenSwiping_notifiesSwipableParent() {
+        SwipableParentActivity activity = buildThemedActivity(SwipableParentActivity.class).get();
+        AudioControllerView view = new AudioControllerView(activity);
+        SeekBar seekBar = view.findViewById(R.id.seekBar);
+
+        shadowOf(seekBar).getOnSeekBarChangeListener().onStartTrackingTouch(seekBar);
+        assertThat(activity.isSwipingAllowed(), equalTo(false));
+
+        shadowOf(seekBar).getOnSeekBarChangeListener().onStopTrackingTouch(seekBar);
+        assertThat(activity.isSwipingAllowed(), equalTo(true));
     }
 }

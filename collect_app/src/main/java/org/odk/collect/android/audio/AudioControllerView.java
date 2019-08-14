@@ -33,6 +33,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.NOT_PLAYING;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYING;
 
 public class AudioControllerView extends FrameLayout {
@@ -53,9 +54,9 @@ public class AudioControllerView extends FrameLayout {
 
     private final SwipeListener swipeListener;
 
-    private ClipState state;
+    private ClipState state = NOT_PLAYING;
     private Integer position = 0;
-    private Integer duration;
+    private Integer duration = 0;
 
     private Listener listener;
 
@@ -95,7 +96,9 @@ public class AudioControllerView extends FrameLayout {
         Integer correctedPosition = max(0, min(duration, newPosition));
 
         setPosition(correctedPosition);
-        listener.onPositionChanged(correctedPosition);
+        if (listener != null) {
+            listener.onPositionChanged(correctedPosition);
+        }
     }
 
     public void hidePlayer() {
@@ -170,6 +173,8 @@ public class AudioControllerView extends FrameLayout {
 
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
+            ((SwipableParent) getContext()).allowSwiping(false);
+
             initialState = state;
 
             switch (initialState) {
@@ -192,6 +197,8 @@ public class AudioControllerView extends FrameLayout {
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
+            ((SwipableParent) getContext()).allowSwiping(true);
+
             switch (initialState) {
                 case PLAYING:
                     listener.onPlayClicked();
