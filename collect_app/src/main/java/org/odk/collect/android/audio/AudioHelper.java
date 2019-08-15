@@ -15,10 +15,6 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.utilities.Scheduler;
 import org.odk.collect.android.utilities.TimerScheduler;
 
-import static androidx.lifecycle.Transformations.map;
-import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState;
-import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYING;
-
 /**
  * Object for setting up playback of audio clips with {@link AudioButton} and
  * {@link AudioControllerView} controls. Only one clip can be played at once so when a clip is
@@ -67,7 +63,7 @@ public class AudioHelper {
     public LiveData<Boolean> setAudio(AudioButton button, String uri, String clipID) {
         AudioPlayerViewModel viewModel = getViewModel();
 
-        LiveData<Boolean> isPlaying = map(viewModel.isPlaying(clipID), value -> value == PLAYING);
+        LiveData<Boolean> isPlaying = viewModel.isPlaying(clipID);
 
         isPlaying.observe(lifecycleOwner, button::setPlaying);
         button.setListener(new AudioButtonListener(viewModel, uri, clipID));
@@ -83,11 +79,8 @@ public class AudioHelper {
     public void setAudio(AudioControllerView view, String uri, String clipID) {
         AudioPlayerViewModel viewModel = getViewModel();
 
-        LiveData<ClipState> playState = viewModel.isPlaying(clipID);
-        LiveData<Integer> position = viewModel.getPosition(clipID);
-
-        playState.observe(lifecycleOwner, view::setPlayState);
-        position.observe(lifecycleOwner, view::setPosition);
+        viewModel.isPlaying(clipID).observe(lifecycleOwner, view::setPlaying);
+        viewModel.getPosition(clipID).observe(lifecycleOwner, view::setPosition);
         view.setDuration(getDurationOfFile(uri));
         view.setListener(new AudioControllerViewListener(viewModel, uri, clipID));
     }

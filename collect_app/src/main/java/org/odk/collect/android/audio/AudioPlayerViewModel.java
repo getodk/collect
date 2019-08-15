@@ -14,10 +14,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.NOT_PLAYING;
-import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PAUSED;
-import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYING;
-
 class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletionListener {
 
     private final MediaPlayerFactory mediaPlayerFactory;
@@ -28,12 +24,6 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     private final Map<String, MutableLiveData<Integer>> positions = new HashMap<>();
 
     private Boolean scheduledDurationUpdates = false;
-
-    public enum ClipState {
-        NOT_PLAYING,
-        PLAYING,
-        PAUSED
-    }
 
     AudioPlayerViewModel(MediaPlayerFactory mediaPlayerFactory, Scheduler scheduler) {
         this.mediaPlayerFactory = mediaPlayerFactory;
@@ -68,16 +58,12 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         }
     }
 
-    public LiveData<ClipState> isPlaying(@NonNull String clipID) {
+    public LiveData<Boolean> isPlaying(@NonNull String clipID) {
         return Transformations.map(currentlyPlaying, value -> {
             if (isCurrentPlayingClip(clipID, value)) {
-                if (value.isPaused()) {
-                    return PAUSED;
-                } else {
-                    return PLAYING;
-                }
+                return !value.isPaused();
             } else {
-                return NOT_PLAYING;
+                return false;
             }
         });
     }
@@ -177,6 +163,12 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         }
     }
 
+    private enum ClipState {
+        NOT_PLAYING,
+        PLAYING,
+        PAUSED
+    }
+
     private static class CurrentlyPlaying {
 
         private final String clipID;
@@ -185,10 +177,6 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         CurrentlyPlaying(String clipID, boolean paused) {
             this.clipID = clipID;
             this.paused = paused;
-        }
-
-        String getClipID() {
-            return clipID;
         }
 
         boolean isPaused() {

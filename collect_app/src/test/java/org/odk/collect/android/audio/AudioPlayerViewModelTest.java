@@ -11,7 +11,6 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
-import org.odk.collect.android.audio.AudioPlayerViewModel.ClipState;
 import org.odk.collect.android.support.FakeScheduler;
 import org.odk.collect.android.support.LiveDataTester;
 import org.robolectric.RobolectricTestRunner;
@@ -27,9 +26,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.NOT_PLAYING;
-import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PAUSED;
-import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYING;
 
 @RunWith(RobolectricTestRunner.class)
 public class AudioPlayerViewModelTest {
@@ -83,31 +79,31 @@ public class AudioPlayerViewModelTest {
     }
 
     @Test
-    public void isPlaying_whenNothingPlaying_is_NOT_PLAYING() {
-        LiveData<ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
+    public void isPlaying_whenNothingPlaying_is_false() {
+        LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
-        assertThat(isPlaying.getValue(), equalTo(NOT_PLAYING));
+        assertThat(isPlaying.getValue(), equalTo(false));
     }
 
     @Test
     public void isPlaying_whenClipIDPlaying_is_PLAYING() {
-        LiveData<ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
+        LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
         viewModel.play("clip1", "file://audio.mp3");
-        assertThat(isPlaying.getValue(), equalTo(PLAYING));
+        assertThat(isPlaying.getValue(), equalTo(true));
     }
 
     @Test
-    public void isPlaying_whenDifferentClipIDPlaying_is_NOT_PLAYING() {
-        LiveData<ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip2"));
+    public void isPlaying_whenDifferentClipIDPlaying_is_false() {
+        LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip2"));
 
         viewModel.play("clip1", "file://other.mp3");
-        assertThat(isPlaying.getValue(), equalTo(NOT_PLAYING));
+        assertThat(isPlaying.getValue(), equalTo(false));
     }
 
     @Test
-    public void isPlaying_whenClipIDPlaying_thenCompleted_is_NOT_PLAYING() {
-        final LiveData<ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
+    public void isPlaying_whenClipIDPlaying_thenCompleted_is_false() {
+        final LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
         viewModel.play("clip1", "file://audio.mp3");
 
@@ -115,7 +111,7 @@ public class AudioPlayerViewModelTest {
         verify(mediaPlayer).setOnCompletionListener(captor.capture());
         captor.getValue().onCompletion(mediaPlayer);
 
-        assertThat(isPlaying.getValue(), equalTo(NOT_PLAYING));
+        assertThat(isPlaying.getValue(), equalTo(false));
     }
 
     @Test
@@ -137,13 +133,13 @@ public class AudioPlayerViewModelTest {
     }
 
     @Test
-    public void isPlaying_whenPlayingAndThenBackgrounding_is_NOT_PLAYING() {
-        LiveData<ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
+    public void isPlaying_whenPlayingAndThenBackgrounding_is_false() {
+        LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
         viewModel.play("clip1", "file://audio.mp3");
         viewModel.background();
 
-        assertThat(isPlaying.getValue(), equalTo(NOT_PLAYING));
+        assertThat(isPlaying.getValue(), equalTo(false));
     }
 
     @Test
@@ -168,24 +164,24 @@ public class AudioPlayerViewModelTest {
     }
 
     @Test
-    public void isPlaying_afterPause_is_PAUSED() {
-        LiveData<ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
+    public void isPlaying_afterPause_is_false() {
+        LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
         viewModel.play("clip1", "file://audio.mp3");
         viewModel.pause();
 
-        assertThat(isPlaying.getValue(), equalTo(PAUSED));
+        assertThat(isPlaying.getValue(), equalTo(false));
     }
 
     @Test
-    public void isPlaying_afterPause_andThenPlay_is_PLAYING() {
-        final LiveData<ClipState> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
+    public void isPlaying_afterPause_andThenPlay_is_true() {
+        final LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
         viewModel.play("clip1", "file://audio.mp3");
         viewModel.pause();
         viewModel.play("clip1", "file://audio.mp3");
 
-        assertThat(isPlaying.getValue(), equalTo(PLAYING));
+        assertThat(isPlaying.getValue(), equalTo(true));
     }
 
     @Test

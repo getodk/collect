@@ -24,7 +24,6 @@ import android.widget.TextView;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.odk.collect.android.R;
-import org.odk.collect.android.audio.AudioPlayerViewModel.ClipState;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,8 +32,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
-import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.NOT_PLAYING;
-import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYING;
 
 public class AudioControllerView extends FrameLayout {
 
@@ -54,7 +51,7 @@ public class AudioControllerView extends FrameLayout {
 
     private final SwipeListener swipeListener;
 
-    private ClipState state = NOT_PLAYING;
+    private Boolean playing = false;
     private Integer position = 0;
     private Integer duration = 0;
 
@@ -85,7 +82,7 @@ public class AudioControllerView extends FrameLayout {
 
     @OnClick(R.id.playBtn)
     void playClicked() {
-        if (state == PLAYING) {
+        if (playing) {
             listener.onPauseClicked();
         } else {
             listener.onPlayClicked();
@@ -113,17 +110,13 @@ public class AudioControllerView extends FrameLayout {
         return new DateTime(seconds, DateTimeZone.UTC).toString("mm:ss");
     }
 
-    public void setPlayState(ClipState playState) {
-        state = playState;
+    public void setPlaying(Boolean playing) {
+        this.playing = playing;
 
-        switch (playState) {
-            case NOT_PLAYING:
-            case PAUSED:
-                playButton.setImageResource(R.drawable.ic_play_arrow_24dp);
-                break;
-            case PLAYING:
-                playButton.setImageResource(R.drawable.ic_pause_24dp);
-                break;
+        if (playing) {
+            playButton.setImageResource(R.drawable.ic_pause_24dp);
+        } else {
+            playButton.setImageResource(R.drawable.ic_play_arrow_24dp);
         }
     }
 
@@ -168,21 +161,17 @@ public class AudioControllerView extends FrameLayout {
 
     private class SwipeListener implements SeekBar.OnSeekBarChangeListener {
 
-        private ClipState initialState;
+        private Boolean wasPlaying = false;
+        private Boolean swiping = false;
 
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
+            swiping = true;
             ((SwipableParent) getContext()).allowSwiping(false);
 
-            initialState = state;
-
-            switch (initialState) {
-                case PLAYING:
-                    listener.onPauseClicked();
-                    break;
-                case PAUSED:
-                case NOT_PLAYING:
-                    break;
+            if (playing) {
+                listener.onPauseClicked();
+                wasPlaying = true;
             }
         }
 
@@ -195,23 +184,19 @@ public class AudioControllerView extends FrameLayout {
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
+            swiping = false;
             ((SwipableParent) getContext()).allowSwiping(true);
 
-            switch (initialState) {
-                case PLAYING:
-                    listener.onPlayClicked();
-                    break;
-                case PAUSED:
-                case NOT_PLAYING:
-                    break;
-            }
-
             onPositionChanged(position);
-            initialState = null;
+
+            if (wasPlaying) {
+                listener.onPlayClicked();
+                wasPlaying = false;
+            }
         }
 
         Boolean isSwiping() {
-            return initialState != null;
+            return swiping;
         }
     }
 }
