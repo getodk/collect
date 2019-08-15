@@ -19,6 +19,23 @@ import static androidx.lifecycle.Transformations.map;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYING;
 
+/**
+ * Object for setting up playback of audio clips with {@link AudioButton} and
+ * {@link AudioControllerView} controls. Only one clip can be played at once so when a clip is
+ * played from a view or from the `play` method any currently playing audio will stop.
+ * <p>
+ * Clips are identified using a `clipID` which enables the playback state of clips to survive
+ * configuration changes etc. Two views should not use the same `clipID` unless they are intended
+ * to have the same playback state i.e. when one is played the other also appears to be playing.
+ * This allows for different controls to play the same file but not appear to all be playing at once.
+ * <p>
+ * An {@link AudioHelper} instance is designed to live at an {@link android.app.Activity} level.
+ * However, the underlying implementation uses a {@link androidx.lifecycle.ViewModel} so it is safe to
+ * construct multiple instances (within a {@link android.view.View} or
+ * {@link androidx.fragment.app.Fragment} for instance) if needed within one
+ * {@link android.app.Activity}.
+ */
+
 public class AudioHelper {
 
     private final MediaPlayerFactory mediaPlayerFactory;
@@ -26,17 +43,27 @@ public class AudioHelper {
     private final FragmentActivity activity;
     private final LifecycleOwner lifecycleOwner;
 
-    public AudioHelper(FragmentActivity activity, LifecycleOwner lifecycleOwner, Scheduler scheduler, MediaPlayerFactory mediaPlayerFactory) {
+    /**
+     * @param activity       The activity where controls will be displayed
+     * @param lifecycleOwner A representative lifecycle for controls - allows for differing activity and control lifecycle
+     */
+    public AudioHelper(FragmentActivity activity, LifecycleOwner lifecycleOwner) {
+        this(activity, lifecycleOwner, new TimerScheduler(), MediaPlayer::new);
+    }
+
+    AudioHelper(FragmentActivity activity, LifecycleOwner lifecycleOwner, Scheduler scheduler, MediaPlayerFactory mediaPlayerFactory) {
         this.activity = activity;
         this.lifecycleOwner = lifecycleOwner;
         this.mediaPlayerFactory = mediaPlayerFactory;
         this.scheduler = scheduler;
     }
 
-    public AudioHelper(FragmentActivity activity, LifecycleOwner lifecycleOwner) {
-        this(activity, lifecycleOwner, new TimerScheduler(), MediaPlayer::new);
-    }
-
+    /**
+     * @param button The control being used for playback
+     * @param uri    The location of the clip
+     * @param clipID An identifier for this clip
+     * @return A {@link LiveData} value representing whether this clip is playing or not
+     */
     public LiveData<Boolean> setAudio(AudioButton button, String uri, String clipID) {
         AudioPlayerViewModel viewModel = getViewModel();
 
@@ -48,6 +75,11 @@ public class AudioHelper {
         return isPlaying;
     }
 
+    /**
+     * @param view   The control being used for playback
+     * @param uri    The location of the clip
+     * @param clipID An identifier for this clip
+     */
     public void setAudio(AudioControllerView view, String uri, String clipID) {
         AudioPlayerViewModel viewModel = getViewModel();
 
