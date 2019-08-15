@@ -78,7 +78,7 @@ public class MediaLayoutVisibilityTest {
         textView = new TextView(RuntimeEnvironment.application);
 
         TestScreenContextActivity activity = Robolectric.buildActivity(TestScreenContextActivity.class).create().get();
-        audioHelper = new AudioHelper(activity);
+        audioHelper = new AudioHelper(activity, activity.getViewLifecycle());
 
         mediaLayout = new MediaLayout(activity);
 

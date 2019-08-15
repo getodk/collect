@@ -204,7 +204,8 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
     private void updatePlayerMedia() {
         if (binaryName != null) {
-            AudioHelper audioHelper = new AudioHelper((ScreenContext) getContext());
+            ScreenContext screenContext = (ScreenContext) getContext();
+            AudioHelper audioHelper = new AudioHelper(screenContext.getActivity(), screenContext.getViewLifecycle());
             audioHelper.setAudio(audioController, getAudioFile().getAbsolutePath(), String.valueOf(ViewCompat.generateViewId()));
             audioController.showPlayer();
         } else {

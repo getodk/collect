@@ -9,9 +9,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.support.FakeLifecycleOwner;
 import org.odk.collect.android.support.FakeScheduler;
 import org.odk.collect.android.support.LiveDataTester;
-import org.odk.collect.android.support.TestScreenContext;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;
@@ -35,15 +35,15 @@ public class AudioButtonIntegrationTest {
     private FragmentActivity activity;
     private ActivityController<FragmentActivity> activityController;
     private AudioHelper audioHelper;
-    private TestScreenContext screenContext;
+    private FakeLifecycleOwner fakeLifecycleOwner;
 
     @Before
     public void setup() {
         activityController = Robolectric.buildActivity(FragmentActivity.class);
         activity = activityController.setup().get();
 
-        screenContext = new TestScreenContext(activity);
-        audioHelper = new AudioHelper(screenContext, () -> mediaPlayer, new FakeScheduler());
+        fakeLifecycleOwner = new FakeLifecycleOwner();
+        audioHelper = new AudioHelper(activity, fakeLifecycleOwner, new FakeScheduler(), () -> mediaPlayer);
     }
 
     @After
@@ -133,7 +133,7 @@ public class AudioButtonIntegrationTest {
         AudioButton button = new AudioButton(activity);
         audioHelper.setAudio(button, testFile1, "clip1");
 
-        screenContext.destroyLifecycle();
+        fakeLifecycleOwner.destroy();
 
         assertThat(shadowOf(mediaPlayer).getState(), equalTo(ShadowMediaPlayer.State.END));
     }

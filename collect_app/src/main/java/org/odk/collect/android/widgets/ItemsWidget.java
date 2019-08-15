@@ -36,7 +36,10 @@ public abstract class ItemsWidget extends QuestionWidget {
     List<SelectChoice> items;
 
     public ItemsWidget(Context context, FormEntryPrompt prompt) {
-        this(context, prompt, new AudioHelper((ScreenContext) context));
+        this(context, prompt, new AudioHelper(
+                ((ScreenContext) context).getActivity(),
+                ((ScreenContext) context).getViewLifecycle()
+        ));
     }
 
     public ItemsWidget(Context context, FormEntryPrompt prompt, AudioHelper audioHelper) {

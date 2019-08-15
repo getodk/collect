@@ -60,7 +60,10 @@ public abstract class SelectWidget extends ItemsWidget {
     private int playcounter;
 
     public SelectWidget(Context context, FormEntryPrompt prompt) {
-        this(context, prompt, new AudioHelper((ScreenContext) context));
+        this(context, prompt, new AudioHelper(
+                ((ScreenContext) context).getActivity(),
+                ((ScreenContext) context).getViewLifecycle()
+        ));
     }
 
     public SelectWidget(Context context, FormEntryPrompt prompt, AudioHelper audioHelper) {

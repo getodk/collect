@@ -3,6 +3,7 @@ package org.odk.collect.android.audio;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
@@ -12,7 +13,6 @@ import androidx.lifecycle.ViewModelProviders;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.utilities.Scheduler;
-import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.TimerScheduler;
 
 import static androidx.lifecycle.Transformations.map;
@@ -21,18 +21,20 @@ import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState.PLAYI
 
 public class AudioHelper {
 
-    private final ScreenContext screenContext;
     private final MediaPlayerFactory mediaPlayerFactory;
     private final Scheduler scheduler;
+    private final FragmentActivity activity;
+    private final LifecycleOwner lifecycleOwner;
 
-    public AudioHelper(ScreenContext screenContext, MediaPlayerFactory mediaPlayerFactory, Scheduler scheduler) {
-        this.screenContext = screenContext;
+    public AudioHelper(FragmentActivity activity, LifecycleOwner lifecycleOwner, Scheduler scheduler, MediaPlayerFactory mediaPlayerFactory) {
+        this.activity = activity;
+        this.lifecycleOwner = lifecycleOwner;
         this.mediaPlayerFactory = mediaPlayerFactory;
         this.scheduler = scheduler;
     }
 
-    public AudioHelper(ScreenContext screenContext) {
-        this(screenContext, MediaPlayer::new, new TimerScheduler());
+    public AudioHelper(FragmentActivity activity, LifecycleOwner lifecycleOwner) {
+        this(activity, lifecycleOwner, new TimerScheduler(), MediaPlayer::new);
     }
 
     public LiveData<Boolean> setAudio(AudioButton button, String uri, String clipID) {
@@ -40,7 +42,7 @@ public class AudioHelper {
 
         LiveData<Boolean> isPlaying = map(viewModel.isPlaying(clipID), value -> value == PLAYING);
 
-        isPlaying.observe(screenContext.getViewLifecycle(), button::setPlaying);
+        isPlaying.observe(lifecycleOwner, button::setPlaying);
         button.setListener(new AudioButtonListener(viewModel, uri, clipID));
 
         return isPlaying;
@@ -48,13 +50,12 @@ public class AudioHelper {
 
     public void setAudio(AudioControllerView view, String uri, String clipID) {
         AudioPlayerViewModel viewModel = getViewModel();
-        LifecycleOwner lifecycle = screenContext.getViewLifecycle();
 
         LiveData<ClipState> playState = viewModel.isPlaying(clipID);
         LiveData<Integer> position = viewModel.getPosition(clipID);
 
-        playState.observe(lifecycle, view::setPlayState);
-        position.observe(lifecycle, view::setPosition);
+        playState.observe(lifecycleOwner, view::setPlayState);
+        position.observe(lifecycleOwner, view::setPosition);
         view.setDuration(getDurationOfFile(uri));
         view.setListener(new AudioControllerViewListener(viewModel, uri, clipID));
     }
@@ -75,11 +76,11 @@ public class AudioHelper {
         AudioPlayerViewModelFactory factory = new AudioPlayerViewModelFactory(mediaPlayerFactory, scheduler);
 
         AudioPlayerViewModel viewModel = ViewModelProviders
-                .of(screenContext.getActivity(), factory)
+                .of(activity, factory)
                 .get(AudioPlayerViewModel.class);
 
-        screenContext.getActivity().getLifecycle().addObserver(new BackgroundObserver(viewModel));
-        screenContext.getViewLifecycle().getLifecycle().addObserver(new BackgroundObserver(viewModel));
+        activity.getLifecycle().addObserver(new BackgroundObserver(viewModel));
+        lifecycleOwner.getLifecycle().addObserver(new BackgroundObserver(viewModel));
 
         return viewModel;
     }

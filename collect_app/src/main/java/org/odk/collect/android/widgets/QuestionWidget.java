@@ -164,7 +164,10 @@ public abstract class QuestionWidget
     }
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
-        this(context, prompt, new AudioHelper((ScreenContext) context));
+        this(context, prompt, new AudioHelper(
+                ((ScreenContext) context).getActivity(),
+                ((ScreenContext) context).getViewLifecycle()
+        ));
     }
 
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
