@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.support.FakeScheduler;
 import org.odk.collect.android.support.LiveDataTester;
 import org.odk.collect.android.support.TestScreenContext;
 import org.robolectric.Robolectric;
@@ -42,7 +43,7 @@ public class AudioButtonIntegrationTest {
         activity = activityController.setup().get();
 
         screenContext = new TestScreenContext(activity);
-        audioHelper = new AudioHelper(screenContext, () -> mediaPlayer, new TimerScheduler());
+        audioHelper = new AudioHelper(screenContext, () -> mediaPlayer, new FakeScheduler());
     }
 
     @After

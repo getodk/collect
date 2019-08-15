@@ -1,6 +1,6 @@
 package org.odk.collect.android.support;
 
-import org.odk.collect.android.audio.Scheduler;
+import org.odk.collect.android.utilities.Scheduler;
 
 public class FakeScheduler implements Scheduler {
 

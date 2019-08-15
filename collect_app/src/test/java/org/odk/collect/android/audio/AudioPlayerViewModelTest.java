@@ -149,7 +149,7 @@ public class AudioPlayerViewModelTest {
     @Test
     public void play_afterBackground_createsANewMediaPlayer() {
         RecordingMockMediaPlayerFactory factory = new RecordingMockMediaPlayerFactory();
-        AudioPlayerViewModel viewModel = new AudioPlayerViewModel(factory, new TimerScheduler());
+        AudioPlayerViewModel viewModel = new AudioPlayerViewModel(factory, new FakeScheduler());
 
         viewModel.play("clip1", "file://audio.mp3");
         assertThat(factory.createdInstances.size(), equalTo(1));

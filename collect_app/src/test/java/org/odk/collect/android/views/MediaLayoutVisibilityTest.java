@@ -1,6 +1,5 @@
 package org.odk.collect.android.views;
 
-import android.media.MediaPlayer;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,7 +15,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.audio.TimerScheduler;
 import org.odk.collect.android.logic.FileReference;
 import org.odk.collect.android.support.WidgetTestActivity;
 import org.robolectric.ParameterizedRobolectricTestRunner;
@@ -80,7 +78,7 @@ public class MediaLayoutVisibilityTest {
         textView = new TextView(RuntimeEnvironment.application);
 
         WidgetTestActivity activity = Robolectric.buildActivity(WidgetTestActivity.class).create().get();
-        audioHelper = new AudioHelper(activity, MediaPlayer::new, new TimerScheduler());
+        audioHelper = new AudioHelper(activity);
 
         mediaLayout = new MediaLayout(activity);
 

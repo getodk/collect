@@ -17,7 +17,6 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
-import android.media.MediaPlayer;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -36,7 +35,6 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.ScreenContext;
-import org.odk.collect.android.audio.TimerScheduler;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.views.MediaLayout;
@@ -62,7 +60,7 @@ public abstract class SelectWidget extends ItemsWidget {
     private int playcounter;
 
     public SelectWidget(Context context, FormEntryPrompt prompt) {
-        this(context, prompt, new AudioHelper((ScreenContext) context, MediaPlayer::new, new TimerScheduler()));
+        this(context, prompt, new AudioHelper((ScreenContext) context));
     }
 
     public SelectWidget(Context context, FormEntryPrompt prompt, AudioHelper audioHelper) {

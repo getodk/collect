@@ -8,6 +8,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
+import org.odk.collect.android.utilities.Scheduler;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;

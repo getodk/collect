@@ -11,6 +11,8 @@ import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModelProviders;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.utilities.Scheduler;
+import org.odk.collect.android.utilities.TimerScheduler;
 
 import static androidx.lifecycle.Transformations.map;
 import static org.odk.collect.android.audio.AudioPlayerViewModel.ClipState;

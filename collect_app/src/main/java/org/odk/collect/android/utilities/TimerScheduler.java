@@ -1,8 +1,11 @@
-package org.odk.collect.android.audio;
+package org.odk.collect.android.utilities;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * An implementation of {@link Scheduler} that uses Java's {@link Timer} to schedule tasks.
+ */
 public class TimerScheduler implements Scheduler {
 
     private Timer timer;
