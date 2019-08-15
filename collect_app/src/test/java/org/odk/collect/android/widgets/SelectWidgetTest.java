@@ -21,7 +21,7 @@ import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.RobolectricHelpers;
-import org.odk.collect.android.support.WidgetTestActivity;
+import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.views.MediaLayout;
 import org.robolectric.RobolectricTestRunner;
 
@@ -69,7 +69,7 @@ public class SelectWidgetTest {
         setupMockReference("file://blah1.mp3", referenceManager);
         setupMockReference("file://blah2.mp3", referenceManager);
 
-        WidgetTestActivity activity = RobolectricHelpers.createThemedActivity(WidgetTestActivity.class);
+        TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
         new TestWidget(activity, formEntryPrompt, audioHelper, selectChoices);
 
         verify(audioHelper).setAudio(any(AudioButton.class), eq("file://blah1.mp3"), eq("i am index 0"));

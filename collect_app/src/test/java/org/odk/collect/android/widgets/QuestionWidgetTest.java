@@ -18,7 +18,7 @@ import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.RobolectricHelpers;
-import org.odk.collect.android.support.WidgetTestActivity;
+import org.odk.collect.android.support.TestScreenContextActivity;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -54,7 +54,7 @@ public class QuestionWidgetTest {
         when(formEntryPrompt.getAudioText()).thenReturn("file://blah.mp3");
         setupMockReference("file://blah.mp3", referenceManager);
 
-        WidgetTestActivity activity = RobolectricHelpers.createThemedActivity(WidgetTestActivity.class);
+        TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
         new TestWidget(activity, formEntryPrompt, audioHelper);
 
         verify(audioHelper).setAudio(any(AudioButton.class), eq("file://blah.mp3"), eq("i am index"));

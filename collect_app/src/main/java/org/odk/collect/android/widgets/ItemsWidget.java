@@ -22,8 +22,8 @@ import org.javarosa.core.model.SelectChoice;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.audio.ScreenContext;
 import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.utilities.ScreenContext;
 
 import java.util.List;
 

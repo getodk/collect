@@ -36,11 +36,11 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.audio.ScreenContext;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
+import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 

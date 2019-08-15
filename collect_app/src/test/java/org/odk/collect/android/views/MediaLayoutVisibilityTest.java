@@ -16,7 +16,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.logic.FileReference;
-import org.odk.collect.android.support.WidgetTestActivity;
+import org.odk.collect.android.support.TestScreenContextActivity;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
@@ -77,7 +77,7 @@ public class MediaLayoutVisibilityTest {
         referenceManager = mock(ReferenceManager.class);
         textView = new TextView(RuntimeEnvironment.application);
 
-        WidgetTestActivity activity = Robolectric.buildActivity(WidgetTestActivity.class).create().get();
+        TestScreenContextActivity activity = Robolectric.buildActivity(TestScreenContextActivity.class).create().get();
         audioHelper = new AudioHelper(activity);
 
         mediaLayout = new MediaLayout(activity);

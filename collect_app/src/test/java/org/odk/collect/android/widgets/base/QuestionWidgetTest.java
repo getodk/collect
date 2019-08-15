@@ -12,7 +12,7 @@ import org.mockito.Mock;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.support.RobolectricHelpers;
-import org.odk.collect.android.support.WidgetTestActivity;
+import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.widgets.ItemsetWidgetTest;
 import org.odk.collect.android.widgets.interfaces.Widget;
 
@@ -28,7 +28,7 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
         extends WidgetTest {
 
     protected Random random = new Random();
-    protected Activity activity = RobolectricHelpers.buildThemedActivity(WidgetTestActivity.class).get();
+    protected Activity activity = RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
 
     private W widget;
     private W actualWidget;

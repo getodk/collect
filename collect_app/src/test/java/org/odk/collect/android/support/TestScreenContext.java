@@ -3,7 +3,7 @@ package org.odk.collect.android.support;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 
-import org.odk.collect.android.audio.ScreenContext;
+import org.odk.collect.android.utilities.ScreenContext;
 
 public class TestScreenContext implements ScreenContext {
 
