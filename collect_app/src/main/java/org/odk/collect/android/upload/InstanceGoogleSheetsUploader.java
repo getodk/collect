@@ -362,7 +362,21 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         } else if (hasRepeatableGroups(element)) {
             answers.put(KEY, key);
         }
-        return answers;
+        return makeAnswersFormattingResistant(answers);
+    }
+
+    public static HashMap<String, String> makeAnswersFormattingResistant(HashMap<String, String> answers) {
+        HashMap<String, String> fixedAnswers = new HashMap<>();
+        for (Map.Entry<String, String> item : answers.entrySet()) {
+            String value = item.getValue();
+            if (!value.startsWith("http") && !value.startsWith("=HYPERLINK")) {
+                // Avoid formatting answers https://stackoverflow.com/a/37827066/5479029
+                value = "'" + value;
+            }
+            fixedAnswers.put(item.getKey(), value);
+        }
+
+        return fixedAnswers;
     }
 
     /**
