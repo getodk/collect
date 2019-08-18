@@ -12,8 +12,8 @@ import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModelProviders;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.utilities.HandlerScheduler;
 import org.odk.collect.android.utilities.Scheduler;
-import org.odk.collect.android.utilities.TimerScheduler;
 
 /**
  * Object for setting up playback of audio clips with {@link AudioButton} and
@@ -44,7 +44,7 @@ public class AudioHelper {
      * @param lifecycleOwner A representative lifecycle for controls - allows for differing activity and control lifecycle
      */
     public AudioHelper(FragmentActivity activity, LifecycleOwner lifecycleOwner) {
-        this(activity, lifecycleOwner, new TimerScheduler(), MediaPlayer::new);
+        this(activity, lifecycleOwner, new HandlerScheduler(), MediaPlayer::new);
     }
 
     AudioHelper(FragmentActivity activity, LifecycleOwner lifecycleOwner, Scheduler scheduler, MediaPlayerFactory mediaPlayerFactory) {
