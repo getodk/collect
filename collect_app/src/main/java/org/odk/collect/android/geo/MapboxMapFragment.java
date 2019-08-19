@@ -106,6 +106,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private File referenceLayerFile;
     private final List<Layer> overlayLayers = new ArrayList<>();
     private final List<Source> overlaySources = new ArrayList<>();
+    private static String lastLocationProvider;
 
     private TileHttpServer tileServer;
 
@@ -295,7 +296,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     }
 
     @Override public @Nullable String getLocationProvider() {
-        return null;
+        return lastLocationProvider;
     }
 
     @Override public boolean onMapClick(@NonNull LatLng point) {
@@ -389,6 +390,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
     @Override public void onSuccess(LocationEngineResult result) {
         lastLocationFix = fromLocation(result.getLastLocation());
+        lastLocationProvider = result.getLastLocation().getProvider();
         Timber.i("Received LocationEngineResult: %s", lastLocationFix);
         if (locationComponent != null) {
             locationComponent.forceLocationUpdate(result.getLastLocation());
