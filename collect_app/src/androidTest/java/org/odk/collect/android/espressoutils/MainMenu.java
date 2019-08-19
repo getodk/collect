@@ -54,5 +54,9 @@ public final class MainMenu {
         onView(withIndex(withId(R.id.form_subtitle2), 0)).check(matches(isDisplayed()));
     }
 
+    public static void clickAdminSettings(){
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.admin_preferences))).perform(click());
+    }
+
 }
 
