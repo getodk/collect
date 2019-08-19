@@ -2,7 +2,6 @@ package org.odk.collect.android.audio;
 
 import android.media.MediaPlayer;
 
-import androidx.core.util.Pair;
 import androidx.lifecycle.LiveData;
 
 import org.junit.After;
@@ -85,8 +84,8 @@ public class AudioPlayerViewModelTest {
     @Test
     public void playInOrder_playsClipsOneAfterTheOther() throws Exception {
         viewModel.playInOrder(asList(
-                new Pair<>("clip1", "file://audio1.mp3"),
-                new Pair<>("clip2", "file://audio2.mp3")
+                new Clip("clip1", "file://audio1.mp3"),
+                new Clip("clip2", "file://audio2.mp3")
         ));
 
         ArgumentCaptor<MediaPlayer.OnCompletionListener> captor = ArgumentCaptor.forClass(MediaPlayer.OnCompletionListener.class);
@@ -108,8 +107,8 @@ public class AudioPlayerViewModelTest {
     @Test
     public void play_afterAPlayInOrder_doesNotContinuePlayingClips() throws Exception {
         viewModel.playInOrder(asList(
-                new Pair<>("clip1", "file://audio1.mp3"),
-                new Pair<>("clip2", "file://audio2.mp3")
+                new Clip("clip1", "file://audio1.mp3"),
+                new Clip("clip2", "file://audio2.mp3")
         ));
 
         viewModel.play("clip3", "file://audio3.mp3");
@@ -122,7 +121,7 @@ public class AudioPlayerViewModelTest {
         verify(mediaPlayer).setOnCompletionListener(captor.capture());
         MediaPlayer.OnCompletionListener onCompletionListener = captor.getValue();
         onCompletionListener.onCompletion(mediaPlayer);
-        
+
         verify(mediaPlayer, never()).setDataSource("file://audio2.mp3");
         verify(mediaPlayer, times(2)).start();
     }

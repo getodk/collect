@@ -3,7 +3,6 @@ package org.odk.collect.android.audio;
 import android.media.MediaPlayer;
 
 import androidx.annotation.NonNull;
-import androidx.core.util.Pair;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -38,13 +37,13 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     }
 
     public void play(String clipID, String uri) {
-        LinkedList<Pair<String, String>> playlist = new LinkedList<>();
-        playlist.add(new Pair<>(clipID, uri));
+        LinkedList<Clip> playlist = new LinkedList<>();
+        playlist.add(new Clip(clipID, uri));
         playNext(playlist);
     }
 
-    public void playInOrder(List<Pair<String, String>> clips) {
-        Queue<Pair<String, String>> playlist = new LinkedList<>(clips);
+    public void playInOrder(List<Clip> clips) {
+        Queue<Clip> playlist = new LinkedList<>(clips);
         playNext(playlist);
     }
 
@@ -112,28 +111,28 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         releaseMediaPlayer();
     }
 
-    private void playNext(Queue<Pair<String, String>> playlist) {
-        Pair<String, String> nextClip = playlist.poll();
+    private void playNext(Queue<Clip> playlist) {
+        Clip nextClip = playlist.poll();
 
         if (nextClip != null) {
-            String clipID = nextClip.first;
-            String uri = nextClip.second;
 
-            if (!isCurrentPlayingClip(clipID, currentlyPlaying.getValue())) {
-                if (!isCurrentPlayingClip(clipID, currentlyPlaying.getValue())) {
-                    try {
-                        loadNewClip(uri);
-                    } catch (IOException ignored) {
-                        error.setValue(new PlaybackFailedException(uri));
-                        return;
-                    }
+            if (!isCurrentPlayingClip(nextClip.getClipID(), currentlyPlaying.getValue())) {
+                try {
+                    loadNewClip(nextClip.getUri());
+                } catch (IOException ignored) {
+                    error.setValue(new PlaybackFailedException(nextClip.getUri()));
+                    return;
                 }
             }
 
-            getMediaPlayer().seekTo(getPositionForClip(clipID).getValue());
+            getMediaPlayer().seekTo(getPositionForClip(nextClip.getClipID()).getValue());
             getMediaPlayer().start();
 
-            currentlyPlaying.setValue(new CurrentlyPlaying(clipID, false, playlist));
+            currentlyPlaying.setValue(new CurrentlyPlaying(
+                    new Clip(nextClip.getClipID(), nextClip.getUri()),
+                    false,
+                    playlist));
+
             schedulePositionUpdates();
         } else {
             resetClip();
@@ -166,7 +165,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
                 CurrentlyPlaying currentlyPlaying = this.currentlyPlaying.getValue();
 
                 if (currentlyPlaying != null) {
-                    MutableLiveData<Integer> position = getPositionForClip(currentlyPlaying.clipID);
+                    MutableLiveData<Integer> position = getPositionForClip(currentlyPlaying.clip.getClipID());
                     position.postValue(getMediaPlayer().getCurrentPosition());
                 }
             }, 500);
@@ -194,7 +193,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     }
 
     private boolean isCurrentPlayingClip(String clipID, CurrentlyPlaying currentlyPlayingValue) {
-        return currentlyPlayingValue != null && currentlyPlayingValue.clipID.equals(clipID);
+        return currentlyPlayingValue != null && currentlyPlayingValue.clip.getClipID().equals(clipID);
     }
 
     private void loadNewClip(String uri) throws IOException {
@@ -218,12 +217,12 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
 
     private static class CurrentlyPlaying {
 
-        private final String clipID;
+        private final Clip clip;
         private final boolean paused;
-        private final Queue<Pair<String, String>> playlist;
+        private final Queue<Clip> playlist;
 
-        CurrentlyPlaying(String clipID, boolean paused, Queue<Pair<String, String>> playlist) {
-            this.clipID = clipID;
+        CurrentlyPlaying(Clip clip, boolean paused, Queue<Clip> playlist) {
+            this.clip = clip;
             this.paused = paused;
             this.playlist = playlist;
         }
@@ -233,14 +232,14 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         }
 
         public String getClipID() {
-            return clipID;
+            return clip.getClipID();
         }
 
         CurrentlyPlaying paused() {
-            return new CurrentlyPlaying(clipID, true, playlist);
+            return new CurrentlyPlaying(clip, true, playlist);
         }
 
-        public Queue<Pair<String, String>> getPlaylist() {
+        public Queue<Clip> getPlaylist() {
             return playlist;
         }
     }
