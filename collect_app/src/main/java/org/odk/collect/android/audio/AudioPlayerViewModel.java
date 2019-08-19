@@ -163,12 +163,6 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         }
     }
 
-    private enum ClipState {
-        NOT_PLAYING,
-        PLAYING,
-        PAUSED
-    }
-
     private static class CurrentlyPlaying {
 
         private final String clipID;
