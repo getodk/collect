@@ -7,7 +7,7 @@ import org.odk.collect.android.audio.AudioHelper;
 import static org.odk.collect.android.views.helpers.FormMediaHelpers.getClipID;
 import static org.odk.collect.android.views.helpers.FormMediaHelpers.getPlayableAudioURI;
 
-public class FormAutoplayHelper {
+public class FormAutoplayer {
 
     private static final String AUTOPLAY_ATTRIBUTE = "autoplay";
     private static final String AUDIO_OPTION = "audio";
@@ -15,7 +15,7 @@ public class FormAutoplayHelper {
     private final AudioHelper audioHelper;
     private final ReferenceManager referenceManager;
 
-    public FormAutoplayHelper(AudioHelper audioHelper, ReferenceManager referenceManager) {
+    public FormAutoplayer(AudioHelper audioHelper, ReferenceManager referenceManager) {
         this.audioHelper = audioHelper;
         this.referenceManager = referenceManager;
     }

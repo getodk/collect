@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.Helpers.buildMockForm;
 import static org.odk.collect.android.support.Helpers.setupMockReference;
 
-public class FormAutoplayHelperTest {
+public class FormAutoplayerTest {
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
@@ -34,7 +34,7 @@ public class FormAutoplayHelperTest {
         setupMockReference("file://audio.mp3", referenceManager);
         FormEntryPrompt prompt = formWithAutoplayOption("audio", "file://audio.mp3");
 
-        FormAutoplayHelper helper = new FormAutoplayHelper(audioHelper, referenceManager);
+        FormAutoplayer helper = new FormAutoplayer(audioHelper, referenceManager);
         assertThat(helper.autoplayIfNeeded(prompt), equalTo(true));
     }
 
@@ -44,7 +44,7 @@ public class FormAutoplayHelperTest {
         FormEntryPrompt prompt = formWithAutoplayOption("audio", "file://audio.mp3");
 
         AudioHelper audioHelper = mock(AudioHelper.class);
-        FormAutoplayHelper helper = new FormAutoplayHelper(audioHelper, referenceManager);
+        FormAutoplayer helper = new FormAutoplayer(audioHelper, referenceManager);
 
         helper.autoplayIfNeeded(prompt);
         verify(audioHelper).play(prompt.getIndex().toString(), "file://reference.mp3");
@@ -55,14 +55,22 @@ public class FormAutoplayHelperTest {
         setupMockReference("file://audio.mp3", referenceManager);
         FormEntryPrompt prompt = formWithAutoplayOption("aUdio", "file://audio.mp3");
 
-        FormAutoplayHelper helper = new FormAutoplayHelper(audioHelper, referenceManager);
+        FormAutoplayer helper = new FormAutoplayer(audioHelper, referenceManager);
         assertThat(helper.autoplayIfNeeded(prompt), equalTo(true));
     }
 
     @Test
-    public void whenPromptHasAutoplayAudio_butNoAudioURI_andReturnsFalse() throws Exception {
+    public void whenPromptHasAutoplayAudio_butNoAudioURI_andReturnsFalse() {
         FormEntryPrompt prompt = formWithAutoplayOption("audio", null);
-        FormAutoplayHelper helper = new FormAutoplayHelper(audioHelper, referenceManager);
+        FormAutoplayer helper = new FormAutoplayer(audioHelper, referenceManager);
+
+        assertThat(helper.autoplayIfNeeded(prompt), equalTo(false));
+    }
+
+    @Test
+    public void whenPromptHasAutoplayAudio_andIsSelectList_returnsTrue() {
+        FormEntryPrompt prompt = formWithAutoplayOption("audio", null);
+        FormAutoplayer helper = new FormAutoplayer(audioHelper, referenceManager);
 
         assertThat(helper.autoplayIfNeeded(prompt), equalTo(false));
     }
@@ -71,7 +79,7 @@ public class FormAutoplayHelperTest {
     public void whenPromptHasAutoplayVideo_returnsFalse() {
         FormEntryPrompt prompt = formWithAutoplayOption("video", null);
 
-        FormAutoplayHelper helper = new FormAutoplayHelper(audioHelper, referenceManager);
+        FormAutoplayer helper = new FormAutoplayer(audioHelper, referenceManager);
         assertThat(helper.autoplayIfNeeded(prompt), equalTo(false));
     }
 
@@ -79,7 +87,7 @@ public class FormAutoplayHelperTest {
     public void whenPromptHasNoAutoplay_returnsFalse() {
         FormEntryPrompt prompt = formWithAutoplayOption(null, null);
 
-        FormAutoplayHelper helper = new FormAutoplayHelper(audioHelper, referenceManager);
+        FormAutoplayer helper = new FormAutoplayer(audioHelper, referenceManager);
         assertThat(helper.autoplayIfNeeded(prompt), equalTo(false));
     }
 
