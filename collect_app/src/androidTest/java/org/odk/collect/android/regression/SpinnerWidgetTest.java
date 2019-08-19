@@ -31,7 +31,7 @@ public class SpinnerWidgetTest extends BaseRegressionTest {
             .around(new CopyFormRule("selectOneMinimal.xml"));
 
     @Test
-    public void spinnerList_ShouldDisplay() throws InterruptedException {
+    public void spinnerList_ShouldDisplay() {
         MainMenu.startBlankForm("selectOneMinimal");
         FormEntry.clickOnString(R.string.select_one);
         FormEntry.clickOnAreaWithIndex("TextView", 2);
