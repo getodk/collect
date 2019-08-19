@@ -25,9 +25,13 @@ public class FormAutoplayHelper {
 
         if (autoplayOption != null && autoplayOption.equalsIgnoreCase(AUDIO_OPTION)) {
             String uri = prompt.getAudioText();
-            audioHelper.play(getClipID(prompt), getPlayableAudioURI(uri, referenceManager));
 
-            return true;
+            if (uri != null) {
+                audioHelper.play(getClipID(prompt), getPlayableAudioURI(uri, referenceManager));
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }

@@ -59,6 +59,14 @@ public class FormAutoplayHelperTest {
         assertThat(helper.autoplayIfNeeded(prompt), equalTo(true));
     }
 
+    @Test
+    public void whenPromptHasAutoplayAudio_butNoAudioURI_andReturnsFalse() throws Exception {
+        FormEntryPrompt prompt = formWithAutoplayOption("audio", null);
+        FormAutoplayHelper helper = new FormAutoplayHelper(audioHelper, referenceManager);
+
+        assertThat(helper.autoplayIfNeeded(prompt), equalTo(false));
+    }
+
     @Test // We only support audio autoplaying with the helper right now
     public void whenPromptHasAutoplayVideo_returnsFalse() {
         FormEntryPrompt prompt = formWithAutoplayOption("video", null);
