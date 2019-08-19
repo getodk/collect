@@ -3,6 +3,7 @@ package org.odk.collect.android.audio;
 import android.media.MediaPlayer;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -12,7 +13,10 @@ import org.odk.collect.android.utilities.Scheduler;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletionListener {
 
@@ -34,20 +38,14 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     }
 
     public void play(String clipID, String uri) {
-        if (!isCurrentPlayingClip(clipID, currentlyPlaying.getValue())) {
-            try {
-                loadNewClip(uri);
-            } catch (IOException ignored) {
-                error.setValue(new PlaybackFailedException(uri));
-                return;
-            }
-        }
+        LinkedList<Pair<String, String>> playlist = new LinkedList<>();
+        playlist.add(new Pair<>(clipID, uri));
+        playNext(playlist);
+    }
 
-        getMediaPlayer().seekTo(getPositionForClip(clipID).getValue());
-        getMediaPlayer().start();
-
-        currentlyPlaying.setValue(new CurrentlyPlaying(clipID, false));
-        schedulePositionUpdates();
+    public void playInOrder(List<Pair<String, String>> clips) {
+        Queue<Pair<String, String>> playlist = new LinkedList<>(clips);
+        playNext(playlist);
     }
 
     public void stop() {
@@ -55,8 +53,8 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
             getMediaPlayer().stop();
         }
 
-        resetCurrentlyPlaying();
-        clearCurrentlyPlaying();
+        resetClip();
+        unloadClip();
     }
 
     public void pause() {
@@ -92,13 +90,19 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
-        resetCurrentlyPlaying();
-        clearCurrentlyPlaying();
+        CurrentlyPlaying wasPlaying = this.currentlyPlaying.getValue();
+
+        resetClip();
+        unloadClip();
+
+        if (wasPlaying != null && !wasPlaying.getPlaylist().isEmpty()) {
+            playNext(wasPlaying.getPlaylist());
+        }
     }
 
     public void background() {
-        resetCurrentlyPlaying();
-        clearCurrentlyPlaying();
+        resetClip();
+        unloadClip();
         releaseMediaPlayer();
     }
 
@@ -108,17 +112,33 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         releaseMediaPlayer();
     }
 
-    private void resetCurrentlyPlaying() {
-        CurrentlyPlaying currentlyPlayingValue = currentlyPlaying.getValue();
+    private void playNext(Queue<Pair<String, String>> playlist) {
+        Pair<String, String> nextClip = playlist.poll();
 
-        if (currentlyPlayingValue != null) {
-            getPositionForClip(currentlyPlayingValue.getClipID()).setValue(0);
+        if (nextClip != null) {
+            String clipID = nextClip.first;
+            String uri = nextClip.second;
+
+            if (!isCurrentPlayingClip(clipID, currentlyPlaying.getValue())) {
+                if (!isCurrentPlayingClip(clipID, currentlyPlaying.getValue())) {
+                    try {
+                        loadNewClip(uri);
+                    } catch (IOException ignored) {
+                        error.setValue(new PlaybackFailedException(uri));
+                        return;
+                    }
+                }
+            }
+
+            getMediaPlayer().seekTo(getPositionForClip(clipID).getValue());
+            getMediaPlayer().start();
+
+            currentlyPlaying.setValue(new CurrentlyPlaying(clipID, false, playlist));
+            schedulePositionUpdates();
+        } else {
+            resetClip();
+            unloadClip();
         }
-    }
-
-    private void clearCurrentlyPlaying() {
-        cancelPositionUpdates();
-        currentlyPlaying.setValue(null);
     }
 
     @NonNull
@@ -183,14 +203,29 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         getMediaPlayer().prepare();
     }
 
+    private void resetClip() {
+        CurrentlyPlaying currentlyPlayingValue = currentlyPlaying.getValue();
+
+        if (currentlyPlayingValue != null) {
+            getPositionForClip(currentlyPlayingValue.getClipID()).setValue(0);
+        }
+    }
+
+    private void unloadClip() {
+        cancelPositionUpdates();
+        currentlyPlaying.setValue(null);
+    }
+
     private static class CurrentlyPlaying {
 
         private final String clipID;
         private final boolean paused;
+        private final Queue<Pair<String, String>> playlist;
 
-        CurrentlyPlaying(String clipID, boolean paused) {
+        CurrentlyPlaying(String clipID, boolean paused, Queue<Pair<String, String>> playlist) {
             this.clipID = clipID;
             this.paused = paused;
+            this.playlist = playlist;
         }
 
         boolean isPaused() {
@@ -202,7 +237,11 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         }
 
         CurrentlyPlaying paused() {
-            return new CurrentlyPlaying(clipID, true);
+            return new CurrentlyPlaying(clipID, true, playlist);
+        }
+
+        public Queue<Pair<String, String>> getPlaylist() {
+            return playlist;
         }
     }
 }

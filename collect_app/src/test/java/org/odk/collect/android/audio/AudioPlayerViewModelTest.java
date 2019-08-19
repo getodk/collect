@@ -2,6 +2,7 @@ package org.odk.collect.android.audio;
 
 import android.media.MediaPlayer;
 
+import androidx.core.util.Pair;
 import androidx.lifecycle.LiveData;
 
 import org.junit.After;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -78,6 +80,51 @@ public class AudioPlayerViewModelTest {
 
         inOrder.verify(mediaPlayer).seekTo(4321);
         inOrder.verify(mediaPlayer).start();
+    }
+
+    @Test
+    public void playInOrder_playsClipsOneAfterTheOther() throws Exception {
+        viewModel.playInOrder(asList(
+                new Pair<>("clip1", "file://audio1.mp3"),
+                new Pair<>("clip2", "file://audio2.mp3")
+        ));
+
+        ArgumentCaptor<MediaPlayer.OnCompletionListener> captor = ArgumentCaptor.forClass(MediaPlayer.OnCompletionListener.class);
+        verify(mediaPlayer).setOnCompletionListener(captor.capture());
+        MediaPlayer.OnCompletionListener onCompletionListener = captor.getValue();
+
+        verify(mediaPlayer).setDataSource("file://audio1.mp3");
+        verify(mediaPlayer, times(1)).start();
+
+        onCompletionListener.onCompletion(mediaPlayer);
+
+        verify(mediaPlayer).setDataSource("file://audio2.mp3");
+        verify(mediaPlayer, times(2)).start();
+
+        onCompletionListener.onCompletion(mediaPlayer);
+        verify(mediaPlayer, times(2)).start();
+    }
+
+    @Test
+    public void play_afterAPlayInOrder_doesNotContinuePlayingClips() throws Exception {
+        viewModel.playInOrder(asList(
+                new Pair<>("clip1", "file://audio1.mp3"),
+                new Pair<>("clip2", "file://audio2.mp3")
+        ));
+
+        viewModel.play("clip3", "file://audio3.mp3");
+
+        verify(mediaPlayer, times(2)).start();
+        verify(mediaPlayer).setDataSource("file://audio1.mp3");
+        verify(mediaPlayer).setDataSource("file://audio3.mp3");
+
+        ArgumentCaptor<MediaPlayer.OnCompletionListener> captor = ArgumentCaptor.forClass(MediaPlayer.OnCompletionListener.class);
+        verify(mediaPlayer).setOnCompletionListener(captor.capture());
+        MediaPlayer.OnCompletionListener onCompletionListener = captor.getValue();
+        onCompletionListener.onCompletion(mediaPlayer);
+        
+        verify(mediaPlayer, never()).setDataSource("file://audio2.mp3");
+        verify(mediaPlayer, times(2)).start();
     }
 
     @Test
