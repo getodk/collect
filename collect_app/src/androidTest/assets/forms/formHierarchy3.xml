@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>formHierarchy3</h:title>
+        <model>
+            <instance>
+                <formHierarchy3 id="formHierarchy3">
+                    <intro />
+                    <group1>
+                        <text />
+                        <group1_1>
+                            <intereg1_1 />
+                            <integer1_2 />
+                        </group1_1>
+                        <group1_2>
+                            <integer2_1 />
+                            <integer2_2 />
+                        </group1_2>
+                    </group1>
+                    <repeatGroup1 jr:template="">
+                        <barcode />
+                        <repeatGroup1_1 jr:template="">
+                            <date />
+                        </repeatGroup1_1>
+                    </repeatGroup1>
+                    <meta>
+                        <instanceID />
+                    </meta>
+                </formHierarchy3>
+            </instance>
+            <bind nodeset="/formHierarchy3/intro" readonly="true()" type="string" />
+            <bind nodeset="/formHierarchy3/group1/text" type="string" />
+            <bind nodeset="/formHierarchy3/group1/group1_1/intereg1_1" type="int" />
+            <bind nodeset="/formHierarchy3/group1/group1_1/integer1_2" type="int" />
+            <bind nodeset="/formHierarchy3/group1/group1_2/integer2_1" type="int" />
+            <bind nodeset="/formHierarchy3/group1/group1_2/integer2_2" type="int" />
+            <bind nodeset="/formHierarchy3/repeatGroup1/barcode" type="barcode" />
+            <bind nodeset="/formHierarchy3/repeatGroup1/repeatGroup1_1/date" type="date" />
+            <bind calculate="concat('uuid:', uuid())" nodeset="/formHierarchy3/meta/instanceID" readonly="true()" type="string" />
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/formHierarchy3/intro">
+            <label>Intro</label>
+        </input>
+        <group ref="/formHierarchy3/group1">
+            <label>Group 1</label>
+            <input ref="/formHierarchy3/group1/text">
+                <label>Text</label>
+            </input>
+            <group ref="/formHierarchy3/group1/group1_1">
+                <label>Group 1_1</label>
+                <input ref="/formHierarchy3/group1/group1_1/intereg1_1">
+                    <label>Integer 1_1</label>
+                </input>
+                <input ref="/formHierarchy3/group1/group1_1/integer1_2">
+                    <label>Integer 1_2</label>
+                </input>
+            </group>
+            <group ref="/formHierarchy3/group1/group1_2">
+                <label>Group 1_2</label>
+                <input ref="/formHierarchy3/group1/group1_2/integer2_1">
+                    <label>Integer 2_1</label>
+                </input>
+                <input ref="/formHierarchy3/group1/group1_2/integer2_2">
+                    <label>Integer 2_2</label>
+                </input>
+            </group>
+        </group>
+        <group ref="/formHierarchy3/repeatGroup1">
+            <label>Repeat Group 1</label>
+            <repeat nodeset="/formHierarchy3/repeatGroup1">
+                <input ref="/formHierarchy3/repeatGroup1/barcode">
+                    <label>Barcode</label>
+                </input>
+                <group ref="/formHierarchy3/repeatGroup1/repeatGroup1_1">
+                    <label>Repeat Group 1_1</label>
+                    <repeat nodeset="/formHierarchy3/repeatGroup1/repeatGroup1_1">
+                        <input ref="/formHierarchy3/repeatGroup1/repeatGroup1_1/date">
+                            <label>Date</label>
+                        </input>
+                    </repeat>
+                </group>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>
