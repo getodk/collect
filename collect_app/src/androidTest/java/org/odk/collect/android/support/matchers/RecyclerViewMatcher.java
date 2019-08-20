@@ -67,14 +67,14 @@ public class RecyclerViewMatcher {
     }
 
     public static Matcher<View> withListSize(int listId, final int size) {
-        return new TypeSafeMatcher<View> () {
-            @Override public boolean matchesSafely (final View view) {
+        return new TypeSafeMatcher<View>() {
+            @Override public boolean matchesSafely(final View view) {
                 RecyclerView recyclerView = view.getRootView().findViewById(listId);
                 return recyclerView.getChildCount() == size;
             }
 
-            @Override public void describeTo (final Description description) {
-                description.appendText ("RecyclerView should have " + size + " items");
+            @Override public void describeTo(final Description description) {
+                description.appendText("RecyclerView should have " + size + " items");
             }
         };
     }
