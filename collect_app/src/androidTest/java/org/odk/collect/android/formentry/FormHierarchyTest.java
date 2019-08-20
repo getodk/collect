@@ -56,7 +56,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
         MainMenu.startBlankForm("formHierarchy2");
         FormEntry.putText("2");
         FormEntry.clickGoToIconInForm();
-        onView(withId(R.id.list)).check(ViewAssertions.matches(RecyclerViewMatcher.withListSize(3)));
+        onView(withId(R.id.list)).check(ViewAssertions.matches(RecyclerViewMatcher.withListSize(R.id.list, 3)));
         onView(withRecyclerView(R.id.list)
                 .atPositionOnView(0, R.id.primary_text))
                 .check(matches(withText("How many guests are in your party?")));
@@ -73,7 +73,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
                 .atPositionOnView(2, R.id.secondary_text))
                 .check(matches(withText("Repeatable Group")));
         FormEntry.clickOnText("Guest details");
-        onView(withId(R.id.list)).check(ViewAssertions.matches(RecyclerViewMatcher.withListSize(2)));
+        onView(withId(R.id.list)).check(ViewAssertions.matches(RecyclerViewMatcher.withListSize(R.id.list, 2)));
         onView(withRecyclerView(R.id.list)
                 .atPositionOnView(0, R.id.primary_text))
                 .check(matches(withText("Guest details > 1")));
@@ -84,7 +84,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
         FormEntry.putText("1");
         FormEntry.clickGoToIconInForm();
         FormEntry.clickOnText("Guest details");
-        onView(withId(R.id.list)).check(ViewAssertions.matches(RecyclerViewMatcher.withListSize(1)));
+        onView(withId(R.id.list)).check(ViewAssertions.matches(RecyclerViewMatcher.withListSize(R.id.list, 1)));
         onView(withRecyclerView(R.id.list)
                 .atPositionOnView(0, R.id.primary_text))
                 .check(matches(withText("Guest details > 1")));
@@ -107,9 +107,9 @@ public class FormHierarchyTest extends BaseRegressionTest {
         FormEntry.clickOnString(R.string.add_repeat_no);
         FormEntry.clickOnString(R.string.add_repeat_no);
         FormEntry.clickGoToIconInForm();
-        onView(withId(R.id.list)).check(ViewAssertions.matches(RecyclerViewMatcher.withListSize(3)));
+        onView(withId(R.id.list)).check(ViewAssertions.matches(RecyclerViewMatcher.withListSize(R.id.list, 3)));
         FormEntry.clickOnText("Group 1");
-        onView(withId(R.id.list)).check(ViewAssertions.matches(RecyclerViewMatcher.withListSize(3)));
+        onView(withId(R.id.list)).check(ViewAssertions.matches(RecyclerViewMatcher.withListSize(R.id.list, 3)));
         FormEntry.checkIfTextDoesNotExist("Repeat Group 1");
     }
 
@@ -138,7 +138,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
         FormEntry.clickOnText("Repeat Group 1_1 > 2");
         FormEntry.clickDeleteChildIcon();
         FormEntry.clickOnString(R.string.delete_repeat);
-        onView(withId(R.id.list)).check(ViewAssertions.matches(RecyclerViewMatcher.withListSize(1)));
+        onView(withId(R.id.list)).check(ViewAssertions.matches(RecyclerViewMatcher.withListSize(R.id.list, 1)));
         FormEntry.checkIsTextDisplayed("Repeat Group 1_1 > 1");
     }
 }

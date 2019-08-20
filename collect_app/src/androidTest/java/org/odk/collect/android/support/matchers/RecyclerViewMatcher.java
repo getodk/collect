@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.odk.collect.android.R;
 
 // https://github.com/dannyroa/espresso-samples/blob/master/RecyclerView/app/src/androidTest/java/com/dannyroa/espresso_samples/recyclerview/RecyclerViewMatcher.java
 public class RecyclerViewMatcher {
@@ -20,10 +19,6 @@ public class RecyclerViewMatcher {
 
     public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
         return new RecyclerViewMatcher(recyclerViewId);
-    }
-
-    public Matcher<View> atPosition(final int position) {
-        return atPositionOnView(position, -1);
     }
 
     public Matcher<View> atPositionOnView(final int position, final int targetViewId) {
@@ -71,10 +66,10 @@ public class RecyclerViewMatcher {
         };
     }
 
-    public static Matcher<View> withListSize(final int size) {
+    public static Matcher<View> withListSize(int listId, final int size) {
         return new TypeSafeMatcher<View> () {
             @Override public boolean matchesSafely (final View view) {
-                RecyclerView recyclerView = view.getRootView().findViewById(R.id.list);
+                RecyclerView recyclerView = view.getRootView().findViewById(listId);
                 return recyclerView.getChildCount() == size;
             }
 
