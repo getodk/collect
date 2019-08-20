@@ -17,6 +17,7 @@ import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.robolectric.RobolectricTestRunner;
@@ -25,7 +26,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.Helpers.buildMockForm;
 import static org.odk.collect.android.support.Helpers.setupMockReference;
 
 @RunWith(RobolectricTestRunner.class)
@@ -48,14 +48,15 @@ public class QuestionWidgetTest {
 
     @Test
     public void whenQuestionHasAudio_audioButtonUsesIndexAsClipID() throws Exception {
-        FormEntryPrompt formEntryPrompt = buildMockForm();
-        when(formEntryPrompt.getIndex().toString()).thenReturn("i am index");
-
-        when(formEntryPrompt.getAudioText()).thenReturn("file://blah.mp3");
         setupMockReference("file://blah.mp3", "file://ref.mp3", referenceManager);
 
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withIndex("i am index")
+                .withAudioURI("file://blah.mp3")
+                .build();
+
         TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
-        new TestWidget(activity, formEntryPrompt, audioHelper);
+        new TestWidget(activity, prompt, audioHelper);
 
         verify(audioHelper).setAudio(any(AudioButton.class), eq("file://ref.mp3"), eq("i am index"));
     }

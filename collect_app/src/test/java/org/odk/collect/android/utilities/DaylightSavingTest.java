@@ -28,6 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.widgets.DateTimeWidget;
@@ -41,7 +42,6 @@ import java.util.TimeZone;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.Helpers.buildMockForm;
 
 @RunWith(RobolectricTestRunner.class)
 /** https://github.com/opendatakit/collect/issues/356
@@ -95,9 +95,11 @@ public class DaylightSavingTest {
 
     private DateWidget prepareDateWidget(int year, int month, int day) {
         QuestionDef questionDefStub = mock(QuestionDef.class);
-        FormEntryPrompt formEntryPromptStub = buildMockForm();
+
+        FormEntryPrompt formEntryPromptStub = new MockFormEntryPromptBuilder()
+                .withIndex("index")
+                .build();
         IFormElement iformElementStub = formEntryPromptStub.getFormElement();
-        when(formEntryPromptStub.getIndex().toString()).thenReturn("index");
 
         when(iformElementStub.getAdditionalAttribute(anyString(), anyString())).thenReturn(null);
         when(formEntryPromptStub.getQuestion()).thenReturn(questionDefStub);
@@ -116,9 +118,11 @@ public class DaylightSavingTest {
 
     private DateTimeWidget prepareDateTimeWidget(int year, int month, int day, int hour, int minute) {
         QuestionDef questionDefStub = mock(QuestionDef.class);
-        FormEntryPrompt formEntryPromptStub = buildMockForm();
+
+        FormEntryPrompt formEntryPromptStub = new MockFormEntryPromptBuilder()
+                .withIndex("index")
+                .build();
         IFormElement iformElementStub = formEntryPromptStub.getFormElement();
-        when(formEntryPromptStub.getIndex().toString()).thenReturn("index");
 
         when(iformElementStub.getAdditionalAttribute(anyString(), anyString())).thenReturn(null);
         when(formEntryPromptStub.getQuestion()).thenReturn(questionDefStub);

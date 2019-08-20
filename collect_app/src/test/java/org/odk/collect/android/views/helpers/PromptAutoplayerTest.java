@@ -14,15 +14,12 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.Clip;
-
-import java.util.List;
+import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.Helpers.buildMockForm;
 import static org.odk.collect.android.support.Helpers.setupMockReference;
 
 public class PromptAutoplayerTest {
@@ -205,46 +202,5 @@ public class PromptAutoplayerTest {
 
         PromptAutoplayer helper = new PromptAutoplayer(audioHelper, referenceManager);
         assertThat(helper.autoplayIfNeeded(prompt), equalTo(false));
-    }
-
-    private static class MockFormEntryPromptBuilder {
-
-        private final FormEntryPrompt prompt = buildMockForm();
-
-        MockFormEntryPromptBuilder withAudioURI(String audioURI) {
-            when(prompt.getAudioText()).thenReturn(audioURI);
-            return this;
-        }
-
-        MockFormEntryPromptBuilder withAdditionalAttribute(String name, String value) {
-            when(prompt.getFormElement().getAdditionalAttribute(null, name)).thenReturn(value);
-            return this;
-        }
-
-        MockFormEntryPromptBuilder withSelectChoices(List<SelectChoice> choices) {
-            for (int i = 0; i < choices.size(); i++) {
-                choices.get(i).setIndex(i);
-            }
-
-            when(prompt.getSelectChoices()).thenReturn(choices);
-            return this;
-        }
-
-        MockFormEntryPromptBuilder withSpecialFormSelectChoiceText(List<Pair<String, String>> formAndTexts) {
-            for (int i = 0; i < prompt.getSelectChoices().size(); i++) {
-                when(prompt.getSpecialFormSelectChoiceText(prompt.getSelectChoices().get(i), formAndTexts.get(i).first)).thenReturn(formAndTexts.get(i).second);
-            }
-
-            return this;
-        }
-
-        MockFormEntryPromptBuilder withControlType(int controlType) {
-            when(prompt.getControlType()).thenReturn(controlType);
-            return this;
-        }
-
-        FormEntryPrompt build() {
-            return prompt;
-        }
     }
 }

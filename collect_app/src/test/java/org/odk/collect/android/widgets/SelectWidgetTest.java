@@ -3,6 +3,7 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 import android.widget.TextView;
 
+import androidx.core.util.Pair;
 import androidx.lifecycle.MutableLiveData;
 
 import org.javarosa.core.model.SelectChoice;
@@ -20,6 +21,7 @@ import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.views.MediaLayout;
@@ -32,7 +34,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.Helpers.buildMockForm;
 import static org.odk.collect.android.support.Helpers.setupMockReference;
 
 @RunWith(RobolectricTestRunner.class)
@@ -54,27 +55,24 @@ public class SelectWidgetTest {
     }
 
     @Test
-    public void whenQuestionHasAudio_audioButtonUsesIndexAsClipID() throws Exception {
-        FormEntryPrompt formEntryPrompt = buildMockForm();
-        when(formEntryPrompt.getIndex().toString()).thenReturn("i am index");
-
-        List<SelectChoice> selectChoices = asList(
-                new SelectChoice("1", "1"),
-                new SelectChoice("2", "2")
-        );
-
-        for (int i = 0; i < selectChoices.size(); i++) {
-            selectChoices.get(i).setIndex(i);
-        }
-
-        when(formEntryPrompt.getSpecialFormSelectChoiceText(selectChoices.get(0), FormEntryCaption.TEXT_FORM_AUDIO)).thenReturn("file://blah1.mp3");
-        when(formEntryPrompt.getSpecialFormSelectChoiceText(selectChoices.get(1), FormEntryCaption.TEXT_FORM_AUDIO)).thenReturn("file://blah2.mp3");
-
+    public void whenChoicesHaveAudio_audioButtonUsesIndexAsClipID() throws Exception {
         setupMockReference("file://blah1.mp3", "ref1", referenceManager);
         setupMockReference("file://blah2.mp3", "ref2", referenceManager);
 
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withIndex("i am index")
+                .withSelectChoices(asList(
+                        new SelectChoice("1", "1"),
+                        new SelectChoice("2", "2")
+                ))
+                .withSpecialFormSelectChoiceText(asList(
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://blah1.mp3"),
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://blah2.mp3")
+                ))
+                .build();
+
         TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
-        new TestWidget(activity, formEntryPrompt, audioHelper, selectChoices);
+        new TestWidget(activity, prompt, audioHelper, prompt.getSelectChoices());
 
         verify(audioHelper).setAudio(any(AudioButton.class), eq("ref1"), eq("i am index 0"));
         verify(audioHelper).setAudio(any(AudioButton.class), eq("ref2"), eq("i am index 1"));
