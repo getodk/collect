@@ -46,7 +46,6 @@ import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
-import org.odk.collect.android.views.helpers.FormMediaHelpers;
 
 import java.io.File;
 
@@ -161,7 +160,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
 
         // Setup audio button
         if (audioURI != null) {
-            setupAudioButton(audioURI, audioHelper, referenceManager);
+            setupAudioButton(audioURI, audioHelper);
         }
 
         // Setup video button
@@ -277,14 +276,12 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         videoButton.setOnClickListener(this);
     }
 
-    private void setupAudioButton(String audioURI, AudioHelper audioHelper, ReferenceManager referenceManager) {
+    private void setupAudioButton(String audioURI, AudioHelper audioHelper) {
         audioButton.setVisibility(VISIBLE);
-
-        String uri = FormMediaHelpers.getPlayableAudioURI(audioURI, referenceManager);
 
         ScreenContext activity = getScreenContext();
         String clipID = getTag() != null ? getTag().toString() : "";
-        LiveData<Boolean> isPlayingLiveData = audioHelper.setAudio(audioButton, uri, clipID);
+        LiveData<Boolean> isPlayingLiveData = audioHelper.setAudio(audioButton, audioURI, clipID);
         isPlayingLiveData.observe(activity.getViewLifecycle(), isPlaying -> {
             if (isPlaying) {
                 viewText.setTextColor(playTextColor);

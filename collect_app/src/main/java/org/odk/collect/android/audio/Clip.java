@@ -20,7 +20,7 @@ public class Clip {
     }
 
     @NonNull
-    public String getUri() {
+    public String getURI() {
         return uri;
     }
 }

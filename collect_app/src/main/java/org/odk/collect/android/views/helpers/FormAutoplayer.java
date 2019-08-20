@@ -24,10 +24,10 @@ public class FormAutoplayer {
         String autoplayOption = prompt.getFormElement().getAdditionalAttribute(null, AUTOPLAY_ATTRIBUTE);
 
         if (autoplayOption != null && autoplayOption.equalsIgnoreCase(AUDIO_OPTION)) {
-            String uri = prompt.getAudioText();
+            String uri = getPlayableAudioURI(prompt, referenceManager);
 
             if (uri != null) {
-                audioHelper.play(getClipID(prompt), getPlayableAudioURI(uri, referenceManager));
+                audioHelper.play(getClipID(prompt), uri);
                 return true;
             } else {
                 return false;

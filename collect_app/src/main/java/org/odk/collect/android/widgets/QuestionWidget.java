@@ -76,6 +76,9 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.views.helpers.FormMediaHelpers.getClipID;
+import static org.odk.collect.android.views.helpers.FormMediaHelpers.getPlayableAudioURI;
+
 public abstract class QuestionWidget
         extends RelativeLayout
         implements Widget {
@@ -292,7 +295,6 @@ public abstract class QuestionWidget
         }
 
         String imageURI = this instanceof SelectImageMapWidget ? null : prompt.getImageText();
-        String audioURI = prompt.getAudioText();
         String videoURI = prompt.getSpecialFormQuestionText("video");
 
         // shown when image is clicked
@@ -302,9 +304,16 @@ public abstract class QuestionWidget
         MediaLayout questionMediaLayout = new MediaLayout(getContext());
         questionMediaLayout.setId(ViewIds.generateViewId()); // assign random id
 
-        String tag = formEntryPrompt.getIndex() != null ? formEntryPrompt.getIndex().toString() : "";
-        questionMediaLayout.setTag(tag);
-        questionMediaLayout.setAVT(questionText, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), audioHelper);
+        questionMediaLayout.setTag(getClipID(prompt));
+        questionMediaLayout.setAVT(
+                questionText,
+                getPlayableAudioURI(prompt, referenceManager),
+                imageURI,
+                videoURI,
+                bigImageURI,
+                getReferenceManager(),
+                audioHelper
+        );
 
         String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
         if (playColorString != null) {

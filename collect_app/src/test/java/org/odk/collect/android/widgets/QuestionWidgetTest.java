@@ -52,12 +52,12 @@ public class QuestionWidgetTest {
         when(formEntryPrompt.getIndex().toString()).thenReturn("i am index");
 
         when(formEntryPrompt.getAudioText()).thenReturn("file://blah.mp3");
-        setupMockReference("file://blah.mp3", referenceManager);
+        setupMockReference("file://blah.mp3", "file://ref.mp3", referenceManager);
 
         TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
         new TestWidget(activity, formEntryPrompt, audioHelper);
 
-        verify(audioHelper).setAudio(any(AudioButton.class), eq("file://blah.mp3"), eq("i am index"));
+        verify(audioHelper).setAudio(any(AudioButton.class), eq("file://ref.mp3"), eq("i am index"));
     }
 
     private void overrideDependencyModule() {

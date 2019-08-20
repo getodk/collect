@@ -118,9 +118,9 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
 
             if (!isCurrentPlayingClip(nextClip.getClipID(), currentlyPlaying.getValue())) {
                 try {
-                    loadNewClip(nextClip.getUri());
+                    loadNewClip(nextClip.getURI());
                 } catch (IOException ignored) {
-                    error.setValue(new PlaybackFailedException(nextClip.getUri()));
+                    error.setValue(new PlaybackFailedException(nextClip.getURI()));
                     return;
                 }
             }
@@ -129,7 +129,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
             getMediaPlayer().start();
 
             currentlyPlaying.setValue(new CurrentlyPlaying(
-                    new Clip(nextClip.getClipID(), nextClip.getUri()),
+                    new Clip(nextClip.getClipID(), nextClip.getURI()),
                     false,
                     playlist));
 

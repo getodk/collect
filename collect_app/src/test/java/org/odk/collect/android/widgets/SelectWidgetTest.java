@@ -63,17 +63,21 @@ public class SelectWidgetTest {
                 new SelectChoice("2", "2")
         );
 
+        for (int i = 0; i < selectChoices.size(); i++) {
+            selectChoices.get(i).setIndex(i);
+        }
+
         when(formEntryPrompt.getSpecialFormSelectChoiceText(selectChoices.get(0), FormEntryCaption.TEXT_FORM_AUDIO)).thenReturn("file://blah1.mp3");
         when(formEntryPrompt.getSpecialFormSelectChoiceText(selectChoices.get(1), FormEntryCaption.TEXT_FORM_AUDIO)).thenReturn("file://blah2.mp3");
 
-        setupMockReference("file://blah1.mp3", referenceManager);
-        setupMockReference("file://blah2.mp3", referenceManager);
+        setupMockReference("file://blah1.mp3", "ref1", referenceManager);
+        setupMockReference("file://blah2.mp3", "ref2", referenceManager);
 
         TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
         new TestWidget(activity, formEntryPrompt, audioHelper, selectChoices);
 
-        verify(audioHelper).setAudio(any(AudioButton.class), eq("file://blah1.mp3"), eq("i am index 0"));
-        verify(audioHelper).setAudio(any(AudioButton.class), eq("file://blah2.mp3"), eq("i am index 1"));
+        verify(audioHelper).setAudio(any(AudioButton.class), eq("ref1"), eq("i am index 0"));
+        verify(audioHelper).setAudio(any(AudioButton.class), eq("ref2"), eq("i am index 1"));
     }
 
     private void overrideDependencyModule() {
@@ -87,7 +91,7 @@ public class SelectWidgetTest {
     }
 
     private static class TestWidget extends SelectWidget {
-        
+
         TestWidget(Context context, FormEntryPrompt prompt, AudioHelper audioHelper, List<SelectChoice> choices) {
             super(context, prompt, audioHelper);
 

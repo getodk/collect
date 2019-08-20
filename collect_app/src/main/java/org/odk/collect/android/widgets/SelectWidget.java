@@ -38,10 +38,12 @@ import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.views.MediaLayout;
-import org.odk.collect.android.views.helpers.FormMediaHelpers;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.odk.collect.android.views.helpers.FormMediaHelpers.getClipID;
+import static org.odk.collect.android.views.helpers.FormMediaHelpers.getPlayableAudioURI;
 
 public abstract class SelectWidget extends ItemsWidget {
 
@@ -129,12 +131,14 @@ public abstract class SelectWidget extends ItemsWidget {
      * Pull media from the current item and add it to the media layout.
      */
     public void addMediaFromChoice(MediaLayout mediaLayout, int index, TextView textView, List<SelectChoice> items) {
-        String audioURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_AUDIO);
-        String imageURI = getImageURI(index, items);
-        String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "video");
-        String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
+        SelectChoice item = items.get(index);
 
-        mediaLayout.setTag(FormMediaHelpers.getClipID(getFormEntryPrompt()) + " " + index);
+        String audioURI = getPlayableAudioURI(getFormEntryPrompt(), item, getReferenceManager());
+        String imageURI = getImageURI(index, items);
+        String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "video");
+        String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "big-image");
+
+        mediaLayout.setTag(getClipID(getFormEntryPrompt(), item));
         mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), getAudioHelper());
 
         textView.setGravity(Gravity.CENTER_VERTICAL);

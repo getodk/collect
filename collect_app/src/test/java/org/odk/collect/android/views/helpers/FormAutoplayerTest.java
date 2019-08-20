@@ -31,7 +31,7 @@ public class FormAutoplayerTest {
 
     @Test
     public void whenPromptHasAutoplayAudio_returnsTrue() throws Exception {
-        setupMockReference("file://audio.mp3", referenceManager);
+        setupMockReference("file://audio.mp3", "file://reference.mp3", referenceManager);
         FormEntryPrompt prompt = formWithAutoplayOption("audio", "file://audio.mp3");
 
         FormAutoplayer helper = new FormAutoplayer(audioHelper, referenceManager);
@@ -52,7 +52,7 @@ public class FormAutoplayerTest {
 
     @Test
     public void whenPromptHasAutoplayAudio_withDifferentCapitalization_returnsTrue() throws Exception {
-        setupMockReference("file://audio.mp3", referenceManager);
+        setupMockReference("file://audio.mp3", "file://reference.mp3", referenceManager);
         FormEntryPrompt prompt = formWithAutoplayOption("aUdio", "file://audio.mp3");
 
         FormAutoplayer helper = new FormAutoplayer(audioHelper, referenceManager);

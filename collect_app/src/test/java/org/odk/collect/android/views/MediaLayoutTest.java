@@ -23,7 +23,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.Helpers.setupMockReference;
 
 @RunWith(RobolectricTestRunner.class)
 public class MediaLayoutTest {
@@ -39,8 +38,6 @@ public class MediaLayoutTest {
 
     @Test
     public void withTextView_andAudio_playingAudio_highlightsText() throws Exception {
-        setupMockReference("file://audio.mp3", referenceManager);
-
         MutableLiveData<Boolean> isPlaying = new MutableLiveData<>();
         isPlaying.setValue(false);
         when(audioHelper.setAudio(any(AudioButton.class), any(), any())).thenReturn(isPlaying);

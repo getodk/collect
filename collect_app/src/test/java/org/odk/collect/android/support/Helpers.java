@@ -16,10 +16,6 @@ public final class Helpers {
 
     }
 
-    public static void setupMockReference(String uri, ReferenceManager referenceManager) throws InvalidReferenceException {
-        setupMockReference(uri, uri, referenceManager);
-    }
-
     public static void setupMockReference(String uri, String referenceURI, ReferenceManager referenceManager) throws InvalidReferenceException {
         Reference reference = mock(Reference.class);
         when(reference.getLocalURI()).thenReturn(referenceURI);
