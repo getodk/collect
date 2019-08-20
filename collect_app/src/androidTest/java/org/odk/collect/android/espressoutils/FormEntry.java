@@ -63,6 +63,10 @@ public final class FormEntry {
         onView(withIndex(withClassName(endsWith("Text")), index)).perform(replaceText(text));
     }
 
+    public static void clickJumpStartButton() {
+        onView(withId(R.id.jumpBeginningButton)).perform(click());
+    }
+
     public static void clickJumpEndButton() {
         onView(withId(R.id.jumpEndButton)).perform(click());
     }
