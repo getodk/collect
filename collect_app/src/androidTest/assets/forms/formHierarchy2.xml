@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>formHierarchy2</h:title>
+        <model>
+            <instance>
+                <formHierarchy2 id="formHierarchy2">
+                    <number_in_party />
+                    <party_names_note />
+                    <guest_details_count />
+                    <guest_details jr:template="">
+                        <guest_details_gr>
+                            <guest_name />
+                            <guest_dietary />
+                        </guest_details_gr>
+                    </guest_details>
+                    <meta>
+                        <instanceID />
+                    </meta>
+                </formHierarchy2>
+            </instance>
+            <bind constraint=". &lt;= 8" nodeset="/formHierarchy2/number_in_party" type="int" />
+            <bind nodeset="/formHierarchy2/party_names_note" readonly="true()" type="string" />
+            <bind calculate=" /formHierarchy2/number_in_party " nodeset="/formHierarchy2/guest_details_count" readonly="true()" type="string" />
+            <bind nodeset="/formHierarchy2/guest_details/guest_details_gr" relevant="position(..)&lt;= /formHierarchy2/number_in_party " />
+            <bind nodeset="/formHierarchy2/guest_details/guest_details_gr/guest_name" type="string" />
+            <bind nodeset="/formHierarchy2/guest_details/guest_details_gr/guest_dietary" type="string" />
+            <bind calculate="concat('uuid:', uuid())" nodeset="/formHierarchy2/meta/instanceID" readonly="true()" type="string" />
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/formHierarchy2/number_in_party">
+            <label>How many guests are in your party?</label>
+        </input>
+        <input ref="/formHierarchy2/party_names_note">
+            <label>Please provide details for each guest.</label>
+        </input>
+        <group ref="/formHierarchy2/guest_details">
+            <label>Guest details</label>
+            <repeat jr:count=" /formHierarchy2/guest_details_count " nodeset="/formHierarchy2/guest_details">
+                <group ref="/formHierarchy2/guest_details/guest_details_gr">
+                    <input ref="/formHierarchy2/guest_details/guest_details_gr/guest_name">
+                        <label>Guest's name</label>
+                    </input>
+                    <input ref="/formHierarchy2/guest_details/guest_details_gr/guest_dietary">
+                        <label>Does this guest have any dietary restrictions?</label>
+                    </input>
+                </group>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>
