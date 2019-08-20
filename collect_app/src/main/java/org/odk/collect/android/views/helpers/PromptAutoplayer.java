@@ -29,30 +29,16 @@ public class PromptAutoplayer {
     public Boolean autoplayIfNeeded(FormEntryPrompt prompt) {
         String autoplayOption = prompt.getFormElement().getAdditionalAttribute(null, AUTOPLAY_ATTRIBUTE);
 
-        if (autoplayOption != null && autoplayOption.equalsIgnoreCase(AUDIO_OPTION)) {
-            String uri = getPlayableAudioURI(prompt, referenceManager);
+        if (hasAudioAutoplay(autoplayOption)) {
             List<Clip> clips = new ArrayList<>();
 
-            if (uri != null) {
-                clips.add(new Clip(getClipID(prompt), getPlayableAudioURI(prompt, referenceManager)));
-            }
-
-            if (prompt.getControlType() == Constants.CONTROL_SELECT_ONE) {
-                List<SelectChoice> selectChoices = prompt.getSelectChoices();
-
-                for (SelectChoice choice : selectChoices) {
-                    String selectURI = getPlayableAudioURI(prompt, choice, referenceManager);
-
-                    if (selectURI != null) {
-                        clips.add(new Clip(getClipID(prompt, choice), selectURI));
-                    }
-                }
-            }
+            addPromptAudio(prompt, clips);
+            addSelectAudio(prompt, clips);
 
             if (clips.isEmpty()) {
                 return false;
             } else if (clips.size() == 1) {
-                audioHelper.play(clips.get(0).getClipID(), clips.get(0).getURI());
+                audioHelper.play(clips.get(0));
                 return true;
             } else {
                 audioHelper.playInOrder(clips);
@@ -61,6 +47,31 @@ public class PromptAutoplayer {
 
         } else {
             return false;
+        }
+    }
+
+    private boolean hasAudioAutoplay(String autoplayOption) {
+        return autoplayOption != null && autoplayOption.equalsIgnoreCase(AUDIO_OPTION);
+    }
+
+    private void addSelectAudio(FormEntryPrompt prompt, List<Clip> clips) {
+        if (prompt.getControlType() == Constants.CONTROL_SELECT_ONE || prompt.getControlType() == Constants.CONTROL_SELECT_MULTI) {
+            List<SelectChoice> selectChoices = prompt.getSelectChoices();
+
+            for (SelectChoice choice : selectChoices) {
+                String selectURI = getPlayableAudioURI(prompt, choice, referenceManager);
+
+                if (selectURI != null) {
+                    clips.add(new Clip(getClipID(prompt, choice), selectURI));
+                }
+            }
+        }
+    }
+
+    private void addPromptAudio(FormEntryPrompt prompt, List<Clip> clips) {
+        String uri = getPlayableAudioURI(prompt, referenceManager);
+        if (uri != null) {
+            clips.add(new Clip(getClipID(prompt), getPlayableAudioURI(prompt, referenceManager)));
         }
     }
 }

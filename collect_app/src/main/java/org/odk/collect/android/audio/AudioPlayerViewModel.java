@@ -36,9 +36,9 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         currentlyPlaying.setValue(null);
     }
 
-    public void play(String clipID, String uri) {
+    public void play(Clip clip) {
         LinkedList<Clip> playlist = new LinkedList<>();
-        playlist.add(new Clip(clipID, uri));
+        playlist.add(clip);
         playNext(playlist);
     }
 

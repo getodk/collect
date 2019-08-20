@@ -87,8 +87,8 @@ public class AudioHelper {
         view.setListener(new AudioControllerViewListener(viewModel, uri, clipID));
     }
 
-    public void play(String clipID, String uri) {
-        getViewModel().play(clipID, uri);
+    public void play(Clip clip) {
+        getViewModel().play(clip);
     }
 
     public void playInOrder(List<Clip> clips) {
@@ -134,7 +134,7 @@ public class AudioHelper {
 
         @Override
         public void onPlayClicked() {
-            viewModel.play(clipID, uri);
+            viewModel.play(new Clip(clipID, uri));
         }
 
         @Override
@@ -162,7 +162,7 @@ public class AudioHelper {
 
         @Override
         public void onPlayClicked() {
-            viewModel.play(buttonID, uri);
+            viewModel.play(new Clip(buttonID, uri));
         }
 
         @Override

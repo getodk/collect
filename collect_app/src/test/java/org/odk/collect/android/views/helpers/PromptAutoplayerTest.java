@@ -56,7 +56,7 @@ public class PromptAutoplayerTest {
         PromptAutoplayer helper = new PromptAutoplayer(audioHelper, referenceManager);
 
         helper.autoplayIfNeeded(prompt);
-        verify(audioHelper).play(prompt.getIndex().toString(), "file://reference.mp3");
+        verify(audioHelper).play(new Clip(prompt.getIndex().toString(), "file://reference.mp3"));
     }
 
     @Test
@@ -138,6 +138,36 @@ public class PromptAutoplayerTest {
     }
 
     @Test
+    public void whenPromptHasAutoplayAudio_andIsSelectMultiple_playsAllAudioInOrder() throws Exception {
+        setupMockReference("file://audio.mp3", "file://reference.mp3", referenceManager);
+        setupMockReference("file://audio1.mp3", "file://reference1.mp3", referenceManager);
+        setupMockReference("file://audio2.mp3", "file://reference2.mp3", referenceManager);
+
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withControlType(Constants.CONTROL_SELECT_MULTI)
+                .withAudioURI("file://audio.mp3")
+                .withAdditionalAttribute("autoplay", "audio")
+                .withSelectChoices(asList(
+                        new SelectChoice("1", "1"),
+                        new SelectChoice("2", "2")
+                ))
+                .withSpecialFormSelectChoiceText(asList(
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://audio1.mp3"),
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://audio2.mp3")
+                ))
+                .build();
+
+        PromptAutoplayer helper = new PromptAutoplayer(audioHelper, referenceManager);
+
+        helper.autoplayIfNeeded(prompt);
+        verify(audioHelper).playInOrder(asList(
+                new Clip(prompt.getIndex().toString(), "file://reference.mp3"),
+                new Clip(prompt.getIndex().toString() + " 0", "file://reference1.mp3"),
+                new Clip(prompt.getIndex().toString() + " 1", "file://reference2.mp3")
+        ));
+    }
+
+    @Test
     public void whenPromptHasAutoplayAudio_butNoAudioURI_andIsSelectOne_playsAllSelectAudioInOrder() throws Exception {
         setupMockReference("file://audio1.mp3", "file://reference1.mp3", referenceManager);
         setupMockReference("file://audio2.mp3", "file://reference2.mp3", referenceManager);
@@ -181,7 +211,7 @@ public class PromptAutoplayerTest {
         PromptAutoplayer helper = new PromptAutoplayer(audioHelper, referenceManager);
 
         helper.autoplayIfNeeded(prompt);
-        verify(audioHelper).play(prompt.getIndex().toString(), "file://reference.mp3");
+        verify(audioHelper).play(new Clip(prompt.getIndex().toString(), "file://reference.mp3"));
     }
 
     @Test // We only support audio autoplaying with the helper right now
