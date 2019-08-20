@@ -26,7 +26,7 @@ import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withR
 public class FormHierarchyTest2 {
 
     @Rule
-    public IntentsTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor("repeatCount.xml");
+    public IntentsTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor("formHierarchy2.xml");
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -35,10 +35,11 @@ public class FormHierarchyTest2 {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule("repeatCount.xml", null));
+            .around(new CopyFormRule("formHierarchy2.xml", null));
 
     @Test
-    public void repeatCountTest() {
+    //https://github.com/opendatakit/collect/issues/2944
+    public void test() {
         FormEntry.putText("2");
         FormEntry.clickGoToIconInForm();
         onView(withId(R.id.list)).check(ViewAssertions.matches(RecyclerViewMatcher.withListSize(3)));

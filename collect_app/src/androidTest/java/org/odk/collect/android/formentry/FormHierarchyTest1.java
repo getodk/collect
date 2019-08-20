@@ -20,7 +20,6 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withRecyclerView;
 
-// https://github.com/opendatakit/collect/issues/2871
 public class FormHierarchyTest1 {
 
     @Rule
@@ -36,7 +35,8 @@ public class FormHierarchyTest1 {
             .around(new CopyFormRule("formHierarchy1.xml", null));
 
     @Test
-    public void questionsDisplayedInHierarchyTest() {
+    //https://github.com/opendatakit/collect/issues/2871
+    public void test() {
         FormEntry.clickGoToIconInForm();
 
         onView(withRecyclerView(R.id.list)
