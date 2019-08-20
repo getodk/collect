@@ -15,6 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.utilities.HandlerScheduler;
 import org.odk.collect.android.utilities.Scheduler;
 
+import java.util.List;
+
 /**
  * Object for setting up playback of audio clips with {@link AudioButton} and
  * {@link AudioControllerView} controls. Only one clip can be played at once so when a clip is
@@ -87,6 +89,10 @@ public class AudioHelper {
 
     public void play(String clipID, String uri) {
         getViewModel().play(clipID, uri);
+    }
+
+    public void playInOrder(List<Clip> clips) {
+        getViewModel().playInOrder(clips);
     }
 
     private Integer getDurationOfFile(String uri) {

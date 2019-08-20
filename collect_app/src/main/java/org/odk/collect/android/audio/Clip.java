@@ -1,6 +1,7 @@
 package org.odk.collect.android.audio;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.ObjectsCompat;
 
 public class Clip {
 
@@ -22,5 +23,33 @@ public class Clip {
     @NonNull
     public String getURI() {
         return uri;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Clip clip = (Clip) o;
+        return getClipID().equals(clip.getClipID()) &&
+                uri.equals(clip.uri);
+    }
+
+    @Override
+    public int hashCode() {
+        return ObjectsCompat.hash(getClipID(), uri);
+    }
+
+    @Override
+    public String toString() {
+        return "Clip{" +
+                "clipID='" + clipID + '\'' +
+                ", uri='" + uri + '\'' +
+                '}';
     }
 }
