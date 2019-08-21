@@ -167,7 +167,7 @@ public class AudioPlayerViewModelTest {
         doThrow(IOException.class).when(mediaPlayer).setDataSource("file://missing.mp3");
 
         final LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
-        viewModel.play("clip1", "file://missing.mp3");
+        viewModel.play(new Clip("clip1", "file://missing.mp3"));
         assertThat(isPlaying.getValue(), equalTo(false));
     }
 
@@ -345,7 +345,7 @@ public class AudioPlayerViewModelTest {
     public void whenPlaybackCompletes_resetsPosition() {
         final LiveData<Integer> position = liveDataTester.activate(viewModel.getPosition("clip1"));
 
-        viewModel.play("clip1", "file://audio.mp3");
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
 
         when(mediaPlayer.getCurrentPosition()).thenReturn(1000);
         fakeScheduler.runTask();
@@ -362,7 +362,7 @@ public class AudioPlayerViewModelTest {
         final LiveData<Exception> error = liveDataTester.activate(viewModel.getError());
 
         doThrow(IOException.class).when(mediaPlayer).setDataSource("file://missing.mp3");
-        viewModel.play("clip1", "file://missing.mp3");
+        viewModel.play(new Clip("clip1", "file://missing.mp3"));
 
         assertThat(error.getValue(), equalTo(new PlaybackFailedException("file://missing.mp3")));
     }

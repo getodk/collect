@@ -6,6 +6,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.Clip;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,9 +38,6 @@ public class PromptAutoplayer {
 
             if (clips.isEmpty()) {
                 return false;
-            } else if (clips.size() == 1) {
-                audioHelper.play(clips.get(0));
-                return true;
             } else {
                 audioHelper.playInOrder(clips);
                 return true;
@@ -55,7 +53,12 @@ public class PromptAutoplayer {
     }
 
     private void addSelectAudio(FormEntryPrompt prompt, List<Clip> clips) {
-        if (prompt.getControlType() == Constants.CONTROL_SELECT_ONE || prompt.getControlType() == Constants.CONTROL_SELECT_MULTI) {
+        String appearance = WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt);
+        int controlType = prompt.getControlType();
+
+        if ((controlType == Constants.CONTROL_SELECT_ONE) && !appearance.startsWith(WidgetAppearanceUtils.MINIMAL)
+                || controlType == Constants.CONTROL_SELECT_MULTI) {
+
             List<SelectChoice> selectChoices = prompt.getSelectChoices();
 
             for (SelectChoice choice : selectChoices) {

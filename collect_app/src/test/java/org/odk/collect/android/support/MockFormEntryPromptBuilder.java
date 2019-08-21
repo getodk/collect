@@ -62,4 +62,9 @@ public class MockFormEntryPromptBuilder {
     public FormEntryPrompt build() {
         return prompt;
     }
+
+    public MockFormEntryPromptBuilder withAppearance(String appearance) {
+        when(prompt.getAppearanceHint()).thenReturn(appearance);
+        return this;
+    }
 }
