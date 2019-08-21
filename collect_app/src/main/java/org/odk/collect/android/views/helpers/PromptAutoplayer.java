@@ -53,11 +53,12 @@ public class PromptAutoplayer {
     }
 
     private void addSelectAudio(FormEntryPrompt prompt, List<Clip> clips) {
-        String appearance = WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt);
-        int controlType = prompt.getControlType();
+        if (appearanceDoesNotShowControls(WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt))) {
+            return;
+        }
 
-        if ((controlType == Constants.CONTROL_SELECT_ONE) && !appearance.startsWith(WidgetAppearanceUtils.MINIMAL)
-                || controlType == Constants.CONTROL_SELECT_MULTI) {
+        int controlType = prompt.getControlType();
+        if (controlType == Constants.CONTROL_SELECT_ONE || controlType == Constants.CONTROL_SELECT_MULTI) {
 
             List<SelectChoice> selectChoices = prompt.getSelectChoices();
 
@@ -69,6 +70,10 @@ public class PromptAutoplayer {
                 }
             }
         }
+    }
+
+    private boolean appearanceDoesNotShowControls(String appearance) {
+        return appearance.startsWith(WidgetAppearanceUtils.MINIMAL) || appearance.startsWith(WidgetAppearanceUtils.COMPACT);
     }
 
     private void addPromptAudio(FormEntryPrompt prompt, List<Clip> clips) {
