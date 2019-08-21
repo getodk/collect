@@ -73,7 +73,10 @@ public class PromptAutoplayer {
     }
 
     private boolean appearanceDoesNotShowControls(String appearance) {
-        return appearance.startsWith(WidgetAppearanceUtils.MINIMAL) || appearance.startsWith(WidgetAppearanceUtils.COMPACT);
+        return appearance.startsWith(WidgetAppearanceUtils.MINIMAL) ||
+                appearance.startsWith(WidgetAppearanceUtils.COMPACT) ||
+                appearance.startsWith(WidgetAppearanceUtils.COLUMNS_PACK) ||
+                appearance.startsWith(WidgetAppearanceUtils.COLUMNS_N);
     }
 
     private void addPromptAudio(FormEntryPrompt prompt, List<Clip> clips) {
