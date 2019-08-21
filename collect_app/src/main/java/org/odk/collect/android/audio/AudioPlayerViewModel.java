@@ -45,8 +45,12 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     }
 
     public void stop() {
-        getMediaPlayer().stop();
-        clearClip();
+        if (currentlyPlaying.getValue() != null) {
+            getMediaPlayer().stop();
+        }
+
+        resetCurrentlyPlaying();
+        clearCurrentlyPlaying();
     }
 
     public void pause() {
@@ -82,21 +86,31 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
-        clearClip();
+        resetCurrentlyPlaying();
+        clearCurrentlyPlaying();
     }
 
     public void background() {
-        clearClip();
+        resetCurrentlyPlaying();
+        clearCurrentlyPlaying();
         releaseMediaPlayer();
     }
 
     @Override
     protected void onCleared() {
-        clearClip();
+        cancelPositionUpdates();
         releaseMediaPlayer();
     }
 
-    private void clearClip() {
+    private void resetCurrentlyPlaying() {
+        CurrentlyPlaying currentlyPlayingValue = currentlyPlaying.getValue();
+
+        if (currentlyPlayingValue != null) {
+            getPositionForClip(currentlyPlayingValue.getClipID()).setValue(0);
+        }
+    }
+
+    private void clearCurrentlyPlaying() {
         cancelPositionUpdates();
         currentlyPlaying.setValue(null);
     }
@@ -175,6 +189,10 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
 
         boolean isPaused() {
             return paused;
+        }
+
+        public String getClipID() {
+            return clipID;
         }
 
         CurrentlyPlaying paused() {

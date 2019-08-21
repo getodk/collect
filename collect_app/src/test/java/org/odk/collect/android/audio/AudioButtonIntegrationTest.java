@@ -36,6 +36,7 @@ public class AudioButtonIntegrationTest {
     private ActivityController<FragmentActivity> activityController;
     private AudioHelper audioHelper;
     private FakeLifecycleOwner fakeLifecycleOwner;
+    private FakeScheduler fakeScheduler;
 
     @Before
     public void setup() {
@@ -43,7 +44,8 @@ public class AudioButtonIntegrationTest {
         activity = activityController.setup().get();
 
         fakeLifecycleOwner = new FakeLifecycleOwner();
-        audioHelper = new AudioHelper(activity, fakeLifecycleOwner, new FakeScheduler(), () -> mediaPlayer);
+        fakeScheduler = new FakeScheduler();
+        audioHelper = new AudioHelper(activity, fakeLifecycleOwner, fakeScheduler, () -> mediaPlayer);
     }
 
     @After
@@ -123,6 +125,25 @@ public class AudioButtonIntegrationTest {
         activityController.pause();
 
         assertThat(shadowOf(mediaPlayer).getState(), equalTo(ShadowMediaPlayer.State.END));
+    }
+
+    @Test
+    public void pausingAndResumingActivity_andThenPressingPlay_startsClipFromTheBeginning() throws Exception {
+        String testFile1 = File.createTempFile("audio1", ".mp3").getAbsolutePath();
+        setupMediaPlayerDataSource(testFile1);
+
+        AudioButton button = new AudioButton(activity);
+        audioHelper.setAudio(button, testFile1, "clip1");
+
+        button.performClick();
+        shadowOf(mediaPlayer).setCurrentPosition(1000);
+        fakeScheduler.runTask();
+
+        activityController.pause();
+        activityController.resume();
+
+        button.performClick();
+        assertThat(mediaPlayer.getCurrentPosition(), equalTo(0));
     }
 
     @Test

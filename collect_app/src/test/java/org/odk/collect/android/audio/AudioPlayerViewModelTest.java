@@ -116,8 +116,28 @@ public class AudioPlayerViewModelTest {
 
     @Test
     public void stop_stopsMediaPlayer() {
+        viewModel.play("clip1", "file://audio.mp3");
         viewModel.stop();
         verify(mediaPlayer).stop();
+    }
+
+    @Test
+    public void stop_beforePlay_doesntCallStopOnMediaPlayer() {
+        viewModel.stop();
+        verify(mediaPlayer, never()).stop();
+    }
+
+    @Test
+    public void stop_resetsPosition() {
+        final LiveData<Integer> position = liveDataTester.activate(viewModel.getPosition("clip1"));
+
+        viewModel.play("clip1", "file://audio.mp3");
+
+        when(mediaPlayer.getCurrentPosition()).thenReturn(1000);
+        fakeScheduler.runTask();
+
+        viewModel.stop();
+        assertThat(position.getValue(), equalTo(0));
     }
 
     @Test
@@ -262,6 +282,22 @@ public class AudioPlayerViewModelTest {
         captor.getValue().onCompletion(mediaPlayer);
 
         assertThat(fakeScheduler.isCancelled(), equalTo(true));
+    }
+
+    @Test
+    public void whenPlaybackCompletes_resetsPosition() {
+        final LiveData<Integer> position = liveDataTester.activate(viewModel.getPosition("clip1"));
+
+        viewModel.play("clip1", "file://audio.mp3");
+
+        when(mediaPlayer.getCurrentPosition()).thenReturn(1000);
+        fakeScheduler.runTask();
+
+        ArgumentCaptor<MediaPlayer.OnCompletionListener> captor = ArgumentCaptor.forClass(MediaPlayer.OnCompletionListener.class);
+        verify(mediaPlayer).setOnCompletionListener(captor.capture());
+        captor.getValue().onCompletion(mediaPlayer);
+
+        assertThat(position.getValue(), equalTo(0));
     }
 
     private static class RecordingMockMediaPlayerFactory implements MediaPlayerFactory {
