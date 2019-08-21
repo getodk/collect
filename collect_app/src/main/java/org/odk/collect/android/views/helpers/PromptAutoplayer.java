@@ -11,6 +11,7 @@ import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.odk.collect.android.utilities.WidgetAppearanceUtils.NO_BUTTONS;
 import static org.odk.collect.android.views.helpers.FormMediaHelpers.getClipID;
 import static org.odk.collect.android.views.helpers.FormMediaHelpers.getPlayableAudioURI;
 
@@ -75,8 +76,7 @@ public class PromptAutoplayer {
     private boolean appearanceDoesNotShowControls(String appearance) {
         return appearance.startsWith(WidgetAppearanceUtils.MINIMAL) ||
                 appearance.startsWith(WidgetAppearanceUtils.COMPACT) ||
-                appearance.startsWith(WidgetAppearanceUtils.COLUMNS_PACK) ||
-                appearance.startsWith(WidgetAppearanceUtils.COLUMNS_N);
+                appearance.contains(NO_BUTTONS);
     }
 
     private void addPromptAudio(FormEntryPrompt prompt, List<Clip> clips) {
