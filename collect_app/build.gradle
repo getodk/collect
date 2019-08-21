@@ -240,7 +240,7 @@ dependencies {
     implementation "commons-io:commons-io:2.6"
     implementation "net.sf.kxml:kxml2:2.3.0"
     implementation "net.sf.opencsv:opencsv:2.3"
-    implementation("org.opendatakit:opendatakit-javarosa:2.15.0") {
+    implementation("org.opendatakit:opendatakit-javarosa:2.15.1") {
         exclude group: 'joda-time'
         exclude group: 'org.slf4j'
     }

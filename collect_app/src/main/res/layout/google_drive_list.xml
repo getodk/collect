@@ -85,7 +85,7 @@ the License.
             android:id="@android:id/empty"
             android:layout_above="@+id/buttonholder"
             android:layout_below="@id/toolbar"
-            style="@style/emptyViewStyle"
+            style="@style/Widget.Collect.TextView.Empty"
             android:text="@string/google_search_browse"/>
 
 </RelativeLayout>

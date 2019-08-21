@@ -268,11 +268,14 @@
   <string name="google_play_services_error_occured">No pot accedir a Google Maps. Teniu el servei instal·lat ?</string>
   <string name="about_preferences">Sobre</string>
   <!--Geo string added in feature-geofeatures branch-->
-    <string name="streets">Carrers</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
+  <string name="streets">Carrers</string>
   <string name="terrain">Terreny</string>
   <string name="hybrid">Híbrid</string>
   <string name="satellite">Satel·lit</string>
-    <string name="save_point">Desar posició gps</string>
+  <string name="save_point">Desar posició gps</string>
   <string name="get_point">Comença localització gps</string>
   <string name="geopoint_view_read_only">Veure localització gps</string>
   <string name="get_shape">Comença GeoForma</string>
@@ -281,8 +284,7 @@
   <string name="start">Comença</string>
   <string name="enable_gps">Activa GPS</string>
   <string name="geotrace_title">GeoTraça</string>
-  <string name="gps_enable_message">El GPS esta desactivat al teu dispositiu. Vols activar-lo?</string>
-    <string name="geo_clear_warning">Característica ja creada. Vols netejar-la?</string>
+  <string name="geo_clear_warning">Característica ja creada. Vols netejar-la?</string>
   <string name="geo_exit_warning">Descartar canvis i tornar a ODK?</string>
   <string name="polygon_validator">Per crear un polígon calen mínim 3 punts </string>
   <string name="clear">Neteja</string>

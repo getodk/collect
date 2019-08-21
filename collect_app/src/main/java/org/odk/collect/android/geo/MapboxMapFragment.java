@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
 
+import com.google.common.collect.ImmutableSet;
 import com.mapbox.android.core.location.LocationEngine;
 import com.mapbox.android.core.location.LocationEngineCallback;
 import com.mapbox.android.core.location.LocationEngineProvider;
@@ -53,6 +54,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -65,7 +67,6 @@ import timber.log.Timber;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.rasterOpacity;
 
 public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.MapFragment
     implements MapFragment, OnMapReadyCallback,
@@ -105,6 +106,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private File referenceLayerFile;
     private final List<Layer> overlayLayers = new ArrayList<>();
     private final List<Source> overlaySources = new ArrayList<>();
+    private static String lastLocationProvider;
 
     private TileHttpServer tileServer;
 
@@ -294,7 +296,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     }
 
     @Override public @Nullable String getLocationProvider() {
-        return null;
+        return lastLocationProvider;
     }
 
     @Override public boolean onMapClick(@NonNull LatLng point) {
@@ -388,6 +390,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
     @Override public void onSuccess(LocationEngineResult result) {
         lastLocationFix = fromLocation(result.getLastLocation());
+        lastLocationProvider = result.getLastLocation().getProvider();
         Timber.i("Received LocationEngineResult: %s", lastLocationFix);
         if (locationComponent != null) {
             locationComponent.forceLocationUpdate(result.getLastLocation());
@@ -468,6 +471,13 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     }
 
     private Style.Builder getDesiredStyleBuilder() {
+        Drawable pointIcon = ContextCompat.getDrawable(getContext(), R.drawable.ic_map_point);
+        return getBasemapStyleBuilder()
+            .withImage(POINT_ICON_ID, pointIcon)
+            .withTransition(new TransitionOptions(0, 0, false));
+    }
+
+    private Style.Builder getBasemapStyleBuilder() {
         if (BuildConfig.MAPBOX_ACCESS_TOKEN.isEmpty()) {
             // When the MAPBOX_ACCESS_TOKEN is missing, any attempt to load
             // map data from Mapbox will cause the Mapbox SDK to abort with an
@@ -479,10 +489,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 .withSource(new RasterSource("[osm]", tiles, 256))
                 .withLayer(new RasterLayer("[osm]", "[osm]"));
         }
-        Drawable pointIcon = ContextCompat.getDrawable(getContext(), R.drawable.ic_map_point);
-        return new Style.Builder().fromUrl(styleUrl)
-            .withImage(POINT_ICON_ID, pointIcon)
-            .withTransition(new TransitionOptions(0, 0, false));
+        return new Style.Builder().fromUrl(styleUrl);
     }
 
     /**
@@ -515,6 +522,9 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             List<MbtilesFile.VectorLayer> layers = mbtiles.getVectorLayers();
             for (MbtilesFile.VectorLayer layer : layers) {
                 // Pick a colour that's a function of the filename and layer name.
+                // The colour will appear essentially random; the only purpose here
+                // is to try to assign different colours to different layers, such
+                // that each individual layer appears in its own consistent colour.
                 int hue = (((id + "." + layer.name).hashCode()) & 0x7fffffff) % 360;
                 addOverlayLayer(new LineLayer(id + "/" + layer.name, id).withProperties(
                     lineColor(Color.HSVToColor(new float[] {hue, 0.7f, 1})),
@@ -525,9 +535,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         }
         if (mbtiles.getLayerType() == LayerType.RASTER) {
             addOverlaySource(new RasterSource(id, tileSet));
-            addOverlayLayer(new RasterLayer(id + ".raster", id).withProperties(
-                rasterOpacity(0.5f)
-            ));
+            addOverlayLayer(new RasterLayer(id + ".raster", id));
         }
         Timber.i("Added %s as a %s layer at /%s", file, mbtiles.getLayerType(), id);
     }
@@ -588,8 +596,35 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     }
 
     private void addOverlayLayer(Layer layer) {
-        map.getStyle().addLayer(layer);
         overlayLayers.add(layer);
+
+        // If there is a LocationComponent, it will have added some layers to the
+        // style.  The SymbolManager and LineManager also add their own layers
+        // where they place their symbols and lines.  We need to insert the new
+        // overlay just under all these upper layers to keep it from covering up
+        // the crosshairs, the point markers, and the traced lines.
+        Set<String> upperLayerIds = ImmutableSet.of(
+            SymbolManager.ID_GEOJSON_LAYER,
+            LineManager.ID_GEOJSON_LAYER,
+
+            // These are exactly the layer IDs defined in LocationComponentConstants,
+            // but unfortunately we can't refer to them because it's package-private.
+            "mapbox-location-shadow-layer",
+            "mapbox-location-foreground-layer",
+            "mapbox-location-background-layer",
+            "mapbox-location-accuracy-layer",
+            "mapbox-location-bearing-layer"
+        );
+
+        for (Layer l : map.getStyle().getLayers()) {
+            if (upperLayerIds.contains(l.getId())) {
+                // We've found the first (lowest) upper layer; insert just below it.
+                map.getStyle().addLayerBelow(layer, l.getId());
+                return;
+            }
+        }
+        // No upper layers were found, so let's put the overlay on top.
+        map.getStyle().addLayer(layer);
     }
 
     private void addOverlaySource(Source source) {

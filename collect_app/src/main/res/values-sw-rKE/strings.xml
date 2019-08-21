@@ -219,6 +219,9 @@
   <string name="survey_saving_encrypting_message">usimbaji fiche wa takwimu…</string>
   <string name="high_resolution_summary">Ezesha kurekodi video za mwonekano wa hali ya juu</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
   <string name="streets">Barabara</string>
   <string name="start">Anza</string>
   <string name="clear">Futa</string>

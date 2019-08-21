@@ -307,17 +307,21 @@
   <string name="leave_a_review">Napiši Play Store recenziju</string>
   <string name="leave_a_review_msg">Vaša (nadamo se pozitivna) recenzija povećava vidljivost aplikacije u Play Storu.</string>
   <!--Geo string added in feature-geofeatures branch-->
-    <string name="openmap_usgs_topo">USGS National Map Topo</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
+  <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">USCG National Map Hybrid</string>
   <string name="openmap_usgs_img">USGC National Map Imagery</string>
   <string name="openmap_stamen_terrain">Rastresito zemljište</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
+  <string name="basemap">Osnovna mapa</string>
   <string name="streets">Ulice</string>
   <string name="terrain">Teren</string>
   <string name="hybrid">Hibrid</string>
   <string name="satellite">Satelit</string>
-    <string name="save_point">Sačuvaj GeoPoint</string>
+  <string name="save_point">Sačuvaj GeoPoint</string>
   <string name="get_point">Započni GeoPoint</string>
   <string name="geopoint_view_read_only">Vidi GeoPoint</string>
   <string name="get_shape">Započni GeoShape</string>
@@ -327,8 +331,7 @@
   <string name="start">Početak</string>
   <string name="enable_gps">Omogući GPS</string>
   <string name="geotrace_title">GeoTrace</string>
-  <string name="gps_enable_message">GPS je onemogućen na Vašem uređaju. Da li biste željeli da ga uključite?</string>
-    <string name="geo_clear_warning">Karakteristika je već kreirana. Da li biste željeli da obrišete karakteristiku?</string>
+  <string name="geo_clear_warning">Karakteristika je već kreirana. Da li biste željeli da obrišete karakteristiku?</string>
   <string name="geo_exit_warning">Odbaci izmjene i vrati se na ODK?</string>
   <string name="polygon_validator">Moram imati makar 3 tačke kako bih kreirao Polygon</string>
   <string name="polyline_validator">Moraju postojati najmanje 2 tačke kako bi se kreirao Polyline</string>
@@ -507,7 +510,7 @@
   <string name="wifi_autosend">Samo Wifi</string>
   <string name="cellular_autosend">Samo mrežni podaci</string>
   <string name="wifi_cellular_autosend">Wifi ili mrežni podaci</string>
-    <string name="form_management_preferences">Upravljanje formularima</string>
+  <string name="form_management_preferences">Upravljanje formularima</string>
   <string name="form_submission_category">Otpremanje formulara</string>
   <string name="form_filling_category">Ispunjavanje formulara</string>
   <string name="high_resolution_title">Video visoke rezolucije</string>
@@ -520,7 +523,7 @@
   <string name="type">Vrsta</string>
   <string name="form_entry">Ukloni oznaku kako bi sakrio stavku iz Form Entry</string>
   <string name="use_device_language">Koristi jezik uređaja</string>
-    <string name="invalid_email_address">Pogrešna email adresa!</string>
+  <string name="invalid_email_address">Pogrešna email adresa!</string>
   <string name="sort_by">Sortiraj na osnovu</string>
   <string name="server">Server</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->

@@ -4,6 +4,7 @@ import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
 
+import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.utilities.FileUtils;
 
 public class CollectThenSystemContentTypeMapper implements OpenRosaHttpInterface.FileToContentTypeMapper {

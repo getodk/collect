@@ -13,7 +13,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.fragments.DataManagerList;
 import org.odk.collect.android.http.CollectServerClient;
-import org.odk.collect.android.http.OpenRosaHttpInterface;
+import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;

@@ -287,10 +287,12 @@
   <string name="username_error_whitespace">Presledki na začetku ali na koncu uporabniškega imena niso dovoljeni</string>
   <string name="tell_your_friends_msg">Ali vaši kolegi še vedno zbirajo podatke na papirju? Delite ODK Collect z njimi.</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
   <string name="satellite">Satelit</string>
   <string name="start">Začni</string>
   <string name="enable_gps">Omogoči GPS</string>
-  <string name="gps_enable_message">GPS v napravi je onemogočen. Želite omogočiti?</string>
   <string name="geo_clear_warning">Funkcija je že narejena. Želite izbrisati funkcijo?</string>
   <string name="geo_exit_warning">Želite zavreči spremembe in se vrniti v ODK?</string>
   <string name="clear">Počisti</string>

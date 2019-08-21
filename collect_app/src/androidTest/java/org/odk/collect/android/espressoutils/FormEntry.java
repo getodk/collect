@@ -91,6 +91,10 @@ public final class FormEntry {
         onView(withId(R.id.simple_button)).perform(click());
     }
 
+    public static void showSpinnerMultipleDialog() {
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.select_answer))).perform(click());
+    }
+
     public static void checkIsDisplayedInTextClassAndSwipe(String message) {
         onView(withClassName(endsWith("EditText"))).check(matches(withText(message))).perform(swipeLeft());
     }

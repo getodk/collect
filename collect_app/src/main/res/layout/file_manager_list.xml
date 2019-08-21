@@ -35,7 +35,7 @@ the License.
 
     <TextView
             android:id="@android:id/empty"
-            style="@style/emptyViewStyle"
+            style="@style/Widget.Collect.TextView.Empty"
             android:text="@string/no_items_display"/>
 
     <LinearLayout

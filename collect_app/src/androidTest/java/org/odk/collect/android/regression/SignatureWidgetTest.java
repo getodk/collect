@@ -5,6 +5,7 @@ import android.Manifest;
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -21,13 +22,15 @@ import static androidx.test.espresso.Espresso.pressBack;
 
 // Issue number NODK-211
 @RunWith(AndroidJUnit4.class)
+@Ignore("https://github.com/opendatakit/collect/issues/3205")
 public class SignatureWidgetTest extends BaseRegressionTest {
 
     @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(GrantPermissionRule.grant(
                     Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_PHONE_STATE)
             )
             .around(new ResetStateRule())
             .around(new CopyFormRule("All_widgets.xml"));

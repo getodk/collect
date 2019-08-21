@@ -284,7 +284,10 @@ public class Collect extends Application {
         }
 
         setupLeakCanary();
+        setupOSMDroid();
+    }
 
+    protected void setupOSMDroid() {
         org.osmdroid.config.Configuration.getInstance().setUserAgentValue(getUserAgentString());
     }
 

@@ -262,12 +262,15 @@
   <string name="google_play_services_error_occured">Nu am putut accesa Google Maps. Aveți instalat Google Play Services?</string>
   <string name="about_preferences">Descriere</string>
   <!--Geo string added in feature-geofeatures branch-->
-    <string name="openmap_usgs_topo">USGS National Map Topo</string>
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+      These strings are only being used to preserve compatibility with pre-existing
+       tile caches, and are not shown in the UI.-->
+  <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="streets">Străzi</string>
   <string name="terrain">Teren</string>
   <string name="hybrid">Hibrid</string>
   <string name="satellite">Satelit</string>
-    <string name="save_point">Salvați GeoPoint</string>
+  <string name="save_point">Salvați GeoPoint</string>
   <string name="get_point">Start GeoPoint</string>
   <string name="get_shape">Start GeoShape</string>
   <string name="get_trace">Start GeoTrace</string>
@@ -275,7 +278,6 @@
   <string name="start">Start</string>
   <string name="enable_gps">Activați GPS</string>
   <string name="geotrace_title">GeoTrace</string>
-  <string name="gps_enable_message">GPS-ul este dezactivat în dispozitivul dumneavoastră. Doriți să-l activați?</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="alert">Alertă</string>
   <string name="install_openmapkit">Vă rugăm instalați OpenMapKit!</string>
