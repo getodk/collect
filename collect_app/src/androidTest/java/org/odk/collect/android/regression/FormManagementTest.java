@@ -33,6 +33,7 @@ public class FormManagementTest extends  BaseRegressionTest{
             .around(new CopyFormRule("OnePageFormValid2.xml"))
             .around(new CopyFormRule("hints_textq.xml"));
 
+    @SuppressWarnings("PMD.AvoidCallingFinalize")
     @Test
     public void validationUponSwipe_ShouldDisplay() {
         //TestCase7,8
