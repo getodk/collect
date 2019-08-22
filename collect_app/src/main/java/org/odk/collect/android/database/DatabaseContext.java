@@ -35,7 +35,7 @@ public class DatabaseContext extends ContextWrapper {
 
     @Override
     public File getDatabasePath(String name) {
-        return new File(path + File.separator + name);
+        return new File(path);
     }
 
     @Override

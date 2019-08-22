@@ -23,6 +23,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 
+import java.io.File;
+
 import timber.log.Timber;
 
 import static android.provider.BaseColumns._ID;
@@ -47,7 +49,8 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SUB
  * This class helps open, create, and upgrade the database file.
  */
 public class FormsDatabaseHelper extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME = "forms.db";
+    private static final String DATABASE_NAME = "forms.db";
+    public static final String DATABASE_PATH = Collect.METADATA_PATH + File.separator + DATABASE_NAME;
     public static final String FORMS_TABLE_NAME = "forms";
 
     public static final int DATABASE_VERSION = 7;
@@ -57,7 +60,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private static final String MODEL_VERSION = "modelVersion";
 
     public FormsDatabaseHelper() {
-        super(new DatabaseContext(Collect.METADATA_PATH), DATABASE_NAME, null, DATABASE_VERSION);
+        super(new DatabaseContext(DATABASE_PATH), DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override

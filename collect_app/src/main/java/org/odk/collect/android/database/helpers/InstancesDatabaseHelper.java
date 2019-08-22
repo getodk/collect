@@ -25,6 +25,7 @@ import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,7 +47,8 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColum
  * This class helps open, create, and upgrade the database file.
  */
 public class InstancesDatabaseHelper extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME = "instances.db";
+    private static final String DATABASE_NAME = "instances.db";
+    public static final String DATABASE_PATH = Collect.METADATA_PATH + File.separator + DATABASE_NAME;
     public static final String INSTANCES_TABLE_NAME = "instances";
 
     public static final int DATABASE_VERSION = 5;
@@ -56,7 +58,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V5;
 
     public InstancesDatabaseHelper() {
-        super(new DatabaseContext(Collect.METADATA_PATH), DATABASE_NAME, null, DATABASE_VERSION);
+        super(new DatabaseContext(DATABASE_PATH), DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override

@@ -387,7 +387,7 @@ public class InstanceProvider extends ContentProvider {
 
     private boolean isDatabaseHelperOutOfDate() {
         return InstancesDatabaseHelper.DATABASE_VERSION != SQLiteDatabase
-                .openDatabase(Collect.METADATA_PATH + File.separator + InstancesDatabaseHelper.DATABASE_NAME, null, SQLiteDatabase.OPEN_READONLY)
+                .openDatabase(InstancesDatabaseHelper.DATABASE_PATH, null, SQLiteDatabase.OPEN_READONLY)
                 .getVersion();
     }
 
