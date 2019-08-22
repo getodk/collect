@@ -20,7 +20,7 @@ import static androidx.test.espresso.Espresso.pressBack;
 
 //Issue NODK-237
 @RunWith(AndroidJUnit4.class)
-public class FormManagementTest extends  BaseRegressionTest{
+public class FormManagementTest extends  BaseRegressionTest {
 
     @Rule
     public RuleChain copyFormChain = RuleChain

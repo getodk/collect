@@ -114,6 +114,7 @@ public final class Settings {
     public static void clickUseSwipesAndButtons() {
         onView(withText(getInstrumentation().getTargetContext().getString(R.string.swipe_buttons_navigation))).perform(click());
     }
+
     public static void openFormManagement() {
         onData(PreferenceMatchers.withKey("form_management")).perform(click());
     }
