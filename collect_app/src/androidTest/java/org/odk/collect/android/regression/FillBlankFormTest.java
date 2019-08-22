@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -58,7 +59,9 @@ public class FillBlankFormTest extends BaseRegressionTest {
             .around(new CopyFormRule("g6Error2.xml"))
             .around(new CopyFormRule("emptyGroupFieldList.xml"))
             .around(new CopyFormRule("emptyGroupFieldList2.xml"))
-            .around(new CopyFormRule("metadata2.xml"));
+            .around(new CopyFormRule("metadata2.xml"))
+            .around(new CopyFormRule("manyQ.xml"))
+            .around(new CopyFormRule("nigeria-wards.xml"));
 
     @Test
     public void subtext_ShouldDisplayAdditionalInformation() {
@@ -136,6 +139,8 @@ public class FillBlankFormTest extends BaseRegressionTest {
 
     @Test
     public void answers_ShouldBeSuggestedInComplianceWithSelectedLetters() {
+
+        //TestCase41
         MainMenu.startBlankForm("formulaire_adherent");
         FormEntry.clickOnString(R.string.add_another);
         FormEntry.clickOnText("Plante");
@@ -150,6 +155,8 @@ public class FillBlankFormTest extends BaseRegressionTest {
 
     @Test
     public void sortByDialog_ShouldBeTranslatedAndDisplayProperIcons() {
+
+        //TestCase37
         MainMenu.clickOnMenu();
         MainMenu.clickGeneralSettings();
         Settings.clickOnUserInterface();
@@ -186,10 +193,19 @@ public class FillBlankFormTest extends BaseRegressionTest {
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(3, R.id.icon))
                 .check(matches(withImageDrawable(R.drawable.ic_access_time)));
+        pressBack();
+        pressBack();
+        MainMenu.clickOnMenu();
+        MainMenu.clickGeneralSettings();
+        Settings.clickOnUserInterface();
+        Settings.clickOnLanguage();
+        Settings.clickOnSelectedLanguage("English");
     }
 
     @Test
     public void searchExpression_ShouldDisplayWhenItContainsOtherAppearanceName() {
+
+        //TestCase26
         MainMenu.startBlankForm("CSV error Form");
         FormEntry.clickOnText("Greg Pommen");
         FormEntry.swipeToNextQuestion();
@@ -215,6 +231,8 @@ public class FillBlankFormTest extends BaseRegressionTest {
 
     @Test
     public void searchAppearance_ShouldDisplayWhenSearchAppearanceIsSpecified() {
+
+        //TestCase25
         MainMenu.startBlankForm("different-search-appearances");
         FormEntry.clickOnText("Mango");
         FormEntry.swipeToNextQuestion();
@@ -256,6 +274,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.clickOnText("Warthog");
         FormEntry.swipeToNextQuestion();
         FormEntry.putText("r");
+        closeSoftKeyboard();
         FormEntry.checkIsTextDisplayed("Warthog");
         FormEntry.checkIsTextDisplayed("Raccoon");
         FormEntry.checkIsTextDisplayed("Rabbit");
@@ -267,6 +286,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.clickOnText("Mango");
         FormEntry.swipeToNextQuestion();
         FormEntry.putText("n");
+        closeSoftKeyboard();
         FormEntry.checkIsTextDisplayed("Mango");
         FormEntry.checkIsTextDisplayed("Oranges");
         FormEntry.clickOnText("Mango");
@@ -278,10 +298,11 @@ public class FillBlankFormTest extends BaseRegressionTest {
 
     @Test
     public void values_ShouldBeRandom() {
+
+        //TestCase22
         List<String> firstQuestionAnswers = new ArrayList<>();
         List<String> secondQuestionAnswers = new ArrayList<>();
 
-        //TestCase1
         for (int i = 1; i <= 3; i++) {
             MainMenu.startBlankForm("random");
             firstQuestionAnswers.add(getQuestionText());
@@ -301,7 +322,6 @@ public class FillBlankFormTest extends BaseRegressionTest {
 
         firstQuestionAnswers.clear();
 
-        //TestCase2
         for (int i = 1; i <= 3; i++) {
             MainMenu.startBlankForm("random test");
             FormEntry.putText("3");
@@ -318,14 +338,15 @@ public class FillBlankFormTest extends BaseRegressionTest {
 
     @Test
     public void app_ShouldNotCrash() {
-        //TestCase1
+
+        //TestCase32
         MainMenu.startBlankForm("g6Error");
         FormEntry.checkIsStringDisplayed(R.string.error_occured);
         FormEntry.clickOk();
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
         FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
-        //TestCase2
+
         MainMenu.startBlankForm("g6Error2");
         FormEntry.putText("bla");
         FormEntry.swipeToNextQuestion();
@@ -336,11 +357,11 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
         FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
-        //TestCase3
+
         MainMenu.startBlankForm("emptyGroupFieldList");
         FormEntry.clickSaveAndExit();
         FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
-        //TestCase4
+
         MainMenu.startBlankForm("emptyGroupFieldList2");
         FormEntry.putText("nana");
         FormEntry.swipeToNextQuestion();
@@ -350,6 +371,8 @@ public class FillBlankFormTest extends BaseRegressionTest {
 
     @Test
     public void user_ShouldBeAbleToFillTheForm() {
+
+        //TestCase27
         MainMenu.startBlankForm("metadata2");
         FormEntry.clickSaveAndExit();
         FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
@@ -360,5 +383,36 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FrameLayout questionContainer = formEntryActivity.findViewById(R.id.select_container);
         TextView questionView = (TextView) questionContainer.getChildAt(0);
         return questionView.getText().toString();
+    }
+
+    @Test
+    public void question_ShouldBeVisibleOnTheTopOfHierarchy() {
+
+        //TestCase23
+        MainMenu.startBlankForm("manyQ");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickGoToIconInForm();
+        FormEntry.checkIsTextDisplayed("n1");
+        FormEntry.checkIfTextDoesNotExist("t1");
+        FormEntry.checkIfTextDoesNotExist("t2");
+    }
+
+    @Test
+    public void bigForm_ShouldBeFilledSuccessfully() {
+
+        //TestCase18
+        MainMenu.startBlankForm("Nigeria Wards");
+        FormEntry.clickOnString(R.string.select_one);
+        FormEntry.clickOnText("Adamawa");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickOnString(R.string.select_one);
+        FormEntry.clickOnText("Ganye");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickOnString(R.string.select_one);
+        FormEntry.clickOnText("Jaggu");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickSaveAndExit();
     }
 }

@@ -139,4 +139,5 @@ public final class FormEntry {
         onView(withId(R.id.form_forward_button)).check(matches(isDisplayed()));
         onView(withId(R.id.form_back_button)).check(matches(isDisplayed()));
     }
+
 }

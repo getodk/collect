@@ -1,0 +1,186 @@
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+  <h:head>
+    <h:title>manyQ</h:title>
+    <model>
+      <instance>
+        <data id="manyQ" version="1">
+          <meta>
+            <instanceID/>
+          </meta>
+          <t1/>
+          <t2/>
+          <g1>
+            <g2>
+              <n1/>
+              <n2/>
+              <n3/>
+              <n4/>
+            </g2>
+          </g1>
+          <t3/>
+          <t4/>
+          <t5/>
+          <t6/>
+          <t7/>
+          <t8/>
+          <t9/>
+          <t10/>
+          <t11/>
+          <t12/>
+          <t13/>
+          <t14/>
+          <t15/>
+        </data>
+      </instance>
+      <itext>
+        <translation lang="English">
+          <text id="/data/t1:label">
+            <value>t1</value>
+          </text>
+          <text id="/data/t2:label">
+            <value>t2</value>
+          </text>
+          <text id="/data/g1:label">
+            <value>g1</value>
+          </text>
+          <text id="/data/g1/g2:label">
+            <value>g2</value>
+          </text>
+          <text id="/data/g1/g2/n1:label">
+            <value>n1</value>
+          </text>
+          <text id="/data/g1/g2/n2:label">
+            <value>n2</value>
+          </text>
+          <text id="/data/g1/g2/n3:label">
+            <value>n3</value>
+          </text>
+          <text id="/data/g1/g2/n4:label">
+            <value>n4</value>
+          </text>
+          <text id="/data/t3:label">
+            <value>t3</value>
+          </text>
+          <text id="/data/t4:label">
+            <value>t4</value>
+          </text>
+          <text id="/data/t5:label">
+            <value>t5</value>
+          </text>
+          <text id="/data/t6:label">
+            <value>t6</value>
+          </text>
+          <text id="/data/t7:label">
+            <value>t7</value>
+          </text>
+          <text id="/data/t8:label">
+            <value>t8</value>
+          </text>
+          <text id="/data/t9:label">
+            <value>t9</value>
+          </text>
+          <text id="/data/t10:label">
+            <value>t10</value>
+          </text>
+          <text id="/data/t11:label">
+            <value>t11</value>
+          </text>
+          <text id="/data/t12:label">
+            <value>t12</value>
+          </text>
+          <text id="/data/t13:label">
+            <value>t13</value>
+          </text>
+          <text id="/data/t14:label">
+            <value>t14</value>
+          </text>
+          <text id="/data/t15:label">
+            <value>t15</value>
+          </text>
+        </translation>
+      </itext>
+      <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" calculate="concat('uuid:', uuid())"/>
+      <bind nodeset="/data/t1" type="string"/>
+      <bind nodeset="/data/t2" type="string"/>
+      <bind nodeset="/data/g1/g2/n1" type="int"/>
+      <bind nodeset="/data/g1/g2/n2" type="int"/>
+      <bind nodeset="/data/g1/g2/n3" type="int"/>
+      <bind nodeset="/data/g1/g2/n4" type="int"/>
+      <bind nodeset="/data/t3" type="string"/>
+      <bind nodeset="/data/t4" type="string"/>
+      <bind nodeset="/data/t5" type="string"/>
+      <bind nodeset="/data/t6" type="string"/>
+      <bind nodeset="/data/t7" type="string"/>
+      <bind nodeset="/data/t8" type="string"/>
+      <bind nodeset="/data/t9" type="string"/>
+      <bind nodeset="/data/t10" type="string"/>
+      <bind nodeset="/data/t11" type="string"/>
+      <bind nodeset="/data/t12" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/data/t1">
+      <label ref="jr:itext('/data/t1:label')"/>
+    </input>
+    <input ref="/data/t2">
+      <label ref="jr:itext('/data/t2:label')"/>
+    </input>
+    <group appearance="field-list">
+      <label ref="jr:itext('/data/g1:label')"/>
+      <group>
+        <label ref="jr:itext('/data/g1/g2:label')"/>
+        <input ref="/data/g1/g2/n1">
+          <label ref="jr:itext('/data/g1/g2/n1:label')"/>
+        </input>
+        <input ref="/data/g1/g2/n2">
+          <label ref="jr:itext('/data/g1/g2/n2:label')"/>
+        </input>
+        <input ref="/data/g1/g2/n3">
+          <label ref="jr:itext('/data/g1/g2/n3:label')"/>
+        </input>
+        <input ref="/data/g1/g2/n4">
+          <label ref="jr:itext('/data/g1/g2/n4:label')"/>
+        </input>
+      </group>
+    </group>
+    <input ref="/data/t3">
+      <label ref="jr:itext('/data/t3:label')"/>
+    </input>
+    <input ref="/data/t4">
+      <label ref="jr:itext('/data/t4:label')"/>
+    </input>
+    <input ref="/data/t5">
+      <label ref="jr:itext('/data/t5:label')"/>
+    </input>
+    <input ref="/data/t6">
+      <label ref="jr:itext('/data/t6:label')"/>
+    </input>
+    <input ref="/data/t7">
+      <label ref="jr:itext('/data/t7:label')"/>
+    </input>
+    <input ref="/data/t8">
+      <label ref="jr:itext('/data/t8:label')"/>
+    </input>
+    <input ref="/data/t9">
+      <label ref="jr:itext('/data/t9:label')"/>
+    </input>
+    <input ref="/data/t10">
+      <label ref="jr:itext('/data/t10:label')"/>
+    </input>
+    <input ref="/data/t11">
+      <label ref="jr:itext('/data/t11:label')"/>
+    </input>
+    <input ref="/data/t12">
+      <label ref="jr:itext('/data/t12:label')"/>
+    </input>
+    <input ref="/data/t13">
+      <label ref="jr:itext('/data/t13:label')"/>
+    </input>
+    <input ref="/data/t14">
+      <label ref="jr:itext('/data/t14:label')"/>
+    </input>
+    <input ref="/data/t15">
+      <label ref="jr:itext('/data/t15:label')"/>
+    </input>
+  </h:body>
+</h:html>
