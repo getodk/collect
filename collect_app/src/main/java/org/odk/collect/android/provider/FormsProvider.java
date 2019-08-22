@@ -63,7 +63,7 @@ public class FormsProvider extends ContentProvider {
             return null;
         }
 
-        if (dbHelper == null) {
+        if (dbHelper == null || isDatabaseHelperOutOfDate()) {
             dbHelper = new FormsDatabaseHelper();
         }
 
@@ -521,6 +521,12 @@ public class FormsProvider extends ContentProvider {
             System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
         }
         return newWhereArgs;
+    }
+
+    private boolean isDatabaseHelperOutOfDate() {
+        return FormsDatabaseHelper.DATABASE_VERSION != SQLiteDatabase
+                .openDatabase(Collect.METADATA_PATH + File.separator + FormsDatabaseHelper.DATABASE_NAME, null, SQLiteDatabase.OPEN_READONLY)
+                .getVersion();
     }
 
     // Leading slashes are removed from paths to support minSdkVersion < 18:
