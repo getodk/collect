@@ -63,7 +63,7 @@ public class InstanceProvider extends ContentProvider {
             return null;
         }
 
-        if (dbHelper == null) {
+        if (dbHelper == null || isDatabaseHelperOutOfDate()) {
             dbHelper = new InstancesDatabaseHelper();
         }
 
@@ -383,6 +383,12 @@ public class InstanceProvider extends ContentProvider {
         }
 
         return count;
+    }
+
+    private boolean isDatabaseHelperOutOfDate() {
+        return InstancesDatabaseHelper.DATABASE_VERSION != SQLiteDatabase
+                .openDatabase(Collect.METADATA_PATH + File.separator + InstancesDatabaseHelper.DATABASE_NAME, null, SQLiteDatabase.OPEN_READONLY)
+                .getVersion();
     }
 
     static {
