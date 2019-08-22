@@ -173,7 +173,7 @@ public class AudioPlayerViewModelTest {
 
     @Test
     public void stop_stopsMediaPlayer() {
-        viewModel.play("clip1", "file://audio.mp3");
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
         viewModel.stop();
         verify(mediaPlayer).stop();
     }
@@ -188,7 +188,7 @@ public class AudioPlayerViewModelTest {
     public void stop_resetsPosition() {
         final LiveData<Integer> position = liveDataTester.activate(viewModel.getPosition("clip1"));
 
-        viewModel.play("clip1", "file://audio.mp3");
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
 
         when(mediaPlayer.getCurrentPosition()).thenReturn(1000);
         fakeScheduler.runTask();
