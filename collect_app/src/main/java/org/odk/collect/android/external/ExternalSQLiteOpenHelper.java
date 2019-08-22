@@ -57,7 +57,7 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
     private FormLoaderTask formLoaderTask;
 
     public ExternalSQLiteOpenHelper(File dbFile) {
-        super(new DatabaseContext(dbFile.getParentFile().getAbsolutePath()), dbFile.getName(), null, VERSION);
+        super(new DatabaseContext(dbFile.getAbsolutePath()), dbFile.getName(), null, VERSION);
     }
 
     public void importFromCSV(File dataSetFile, ExternalDataReader externalDataReader,

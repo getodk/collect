@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
@@ -24,6 +23,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
+import static org.odk.collect.android.database.helpers.InstancesDatabaseHelper.DATABASE_PATH;
 
 @RunWith(Parameterized.class)
 public class InstancesDatabaseHelperTest {
@@ -44,7 +44,6 @@ public class InstancesDatabaseHelperTest {
         });
     }
 
-    private static final String DATABASE_PATH = Collect.METADATA_PATH + File.separator + InstancesDatabaseHelper.DATABASE_NAME;
     private static final String TEMPORARY_EXTENSION = ".real";
 
     @Before

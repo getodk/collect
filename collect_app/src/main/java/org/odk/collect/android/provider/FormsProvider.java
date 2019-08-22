@@ -525,7 +525,7 @@ public class FormsProvider extends ContentProvider {
 
     private boolean isDatabaseHelperOutOfDate() {
         return FormsDatabaseHelper.DATABASE_VERSION != SQLiteDatabase
-                .openDatabase(Collect.METADATA_PATH + File.separator + FormsDatabaseHelper.DATABASE_NAME, null, SQLiteDatabase.OPEN_READONLY)
+                .openDatabase(FormsDatabaseHelper.DATABASE_PATH, null, SQLiteDatabase.OPEN_READONLY)
                 .getVersion();
     }
 
