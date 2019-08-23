@@ -105,11 +105,15 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
 
     private void upgradeToVersion2(SQLiteDatabase db) {
         if (!SQLiteUtils.doesColumnExist(db, INSTANCES_TABLE_NAME, CAN_EDIT_WHEN_COMPLETE)) {
-            db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
-                    + CAN_EDIT_WHEN_COMPLETE + " text;");
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .alter()
+                    .table(INSTANCES_TABLE_NAME)
+                    .addColumn(CAN_EDIT_WHEN_COMPLETE, "text")
+                    .end();
 
             db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET "
-                    + CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true)
+                    + CAN_EDIT_WHEN_COMPLETE + " = '" + true
                     + "' WHERE " + STATUS + " IS NOT NULL AND "
                     + STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
                     + "'");
@@ -118,15 +122,23 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
 
     private void upgradeToVersion3(SQLiteDatabase db) {
         if (!SQLiteUtils.doesColumnExist(db, INSTANCES_TABLE_NAME, JR_VERSION)) {
-            db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
-                    + JR_VERSION + " text;");
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .alter()
+                    .table(INSTANCES_TABLE_NAME)
+                    .addColumn(JR_VERSION, "text")
+                    .end();
         }
     }
 
     private void upgradeToVersion4(SQLiteDatabase db) {
         if (!SQLiteUtils.doesColumnExist(db, INSTANCES_TABLE_NAME, DELETED_DATE)) {
-            db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
-                    + DELETED_DATE + " date;");
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .alter()
+                    .table(INSTANCES_TABLE_NAME)
+                    .addColumn(DELETED_DATE, "date")
+                    .end();
         }
     }
 
