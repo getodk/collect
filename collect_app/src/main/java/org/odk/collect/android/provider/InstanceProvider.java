@@ -386,9 +386,10 @@ public class InstanceProvider extends ContentProvider {
     }
 
     private boolean isDatabaseHelperOutOfDate() {
-        return InstancesDatabaseHelper.DATABASE_VERSION != SQLiteDatabase
-                .openDatabase(InstancesDatabaseHelper.DATABASE_PATH, null, SQLiteDatabase.OPEN_READONLY)
-                .getVersion();
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(InstancesDatabaseHelper.DATABASE_PATH, null, SQLiteDatabase.OPEN_READONLY);
+        boolean isDatabaseHelperOutOfDate = InstancesDatabaseHelper.DATABASE_VERSION != db.getVersion();
+        db.close();
+        return isDatabaseHelperOutOfDate;
     }
 
     static {

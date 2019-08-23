@@ -524,9 +524,10 @@ public class FormsProvider extends ContentProvider {
     }
 
     private boolean isDatabaseHelperOutOfDate() {
-        return FormsDatabaseHelper.DATABASE_VERSION != SQLiteDatabase
-                .openDatabase(FormsDatabaseHelper.DATABASE_PATH, null, SQLiteDatabase.OPEN_READONLY)
-                .getVersion();
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(FormsDatabaseHelper.DATABASE_PATH, null, SQLiteDatabase.OPEN_READONLY);
+        boolean isDatabaseHelperOutOfDate = FormsDatabaseHelper.DATABASE_VERSION != db.getVersion();
+        db.close();
+        return isDatabaseHelperOutOfDate;
     }
 
     // Leading slashes are removed from paths to support minSdkVersion < 18:
