@@ -24,6 +24,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
+import org.odk.collect.android.utilities.SQLiteUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -103,27 +104,27 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void upgradeToVersion2(SQLiteDatabase db) {
-        db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
-                + CAN_EDIT_WHEN_COMPLETE + " text;");
-        db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET "
-                + CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true)
-                + "' WHERE " + STATUS + " IS NOT NULL AND "
-                + STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
-                + "'");
+        if (!SQLiteUtils.doesColumnExist(db, INSTANCES_TABLE_NAME, CAN_EDIT_WHEN_COMPLETE)) {
+            db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
+                    + CAN_EDIT_WHEN_COMPLETE + " text;");
+
+            db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET "
+                    + CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true)
+                    + "' WHERE " + STATUS + " IS NOT NULL AND "
+                    + STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
+                    + "'");
+        }
     }
 
     private void upgradeToVersion3(SQLiteDatabase db) {
-        db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
+        if (!SQLiteUtils.doesColumnExist(db, INSTANCES_TABLE_NAME, JR_VERSION)) {
+            db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
                     + JR_VERSION + " text;");
+        }
     }
 
     private void upgradeToVersion4(SQLiteDatabase db) {
-        Cursor cursor = db.rawQuery("SELECT * FROM " + INSTANCES_TABLE_NAME + " LIMIT 0", null);
-        int columnIndex = cursor.getColumnIndex(DELETED_DATE);
-        cursor.close();
-
-        // Only add the column if it doesn't already exist
-        if (columnIndex == -1) {
+        if (!SQLiteUtils.doesColumnExist(db, INSTANCES_TABLE_NAME, DELETED_DATE)) {
             db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
                     + DELETED_DATE + " date;");
         }

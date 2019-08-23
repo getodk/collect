@@ -22,6 +22,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
+import org.odk.collect.android.utilities.SQLiteUtils;
 
 import java.io.File;
 
@@ -231,28 +232,34 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void upgradeToVersion5(SQLiteDatabase db) {
-        CustomSQLiteQueryBuilder
-                .begin(db)
-                .alter()
-                .table(FORMS_TABLE_NAME)
-                .addColumn(AUTO_SEND, "text")
-                .end();
+        if (!SQLiteUtils.doesColumnExist(db, FORMS_TABLE_NAME, AUTO_SEND)) {
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .alter()
+                    .table(FORMS_TABLE_NAME)
+                    .addColumn(AUTO_SEND, "text")
+                    .end();
+        }
 
-        CustomSQLiteQueryBuilder
-                .begin(db)
-                .alter()
-                .table(FORMS_TABLE_NAME)
-                .addColumn(AUTO_DELETE, "text")
-                .end();
+        if (!SQLiteUtils.doesColumnExist(db, FORMS_TABLE_NAME, AUTO_DELETE)) {
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .alter()
+                    .table(FORMS_TABLE_NAME)
+                    .addColumn(AUTO_DELETE, "text")
+                    .end();
+        }
     }
 
     private void upgradeToVersion6(SQLiteDatabase db) {
-        CustomSQLiteQueryBuilder
-                .begin(db)
-                .alter()
-                .table(FORMS_TABLE_NAME)
-                .addColumn(LAST_DETECTED_FORM_VERSION_HASH, "text")
-                .end();
+        if (!SQLiteUtils.doesColumnExist(db, FORMS_TABLE_NAME, LAST_DETECTED_FORM_VERSION_HASH)) {
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .alter()
+                    .table(FORMS_TABLE_NAME)
+                    .addColumn(LAST_DETECTED_FORM_VERSION_HASH, "text")
+                    .end();
+        }
     }
 
     private void upgradeToVersion7(SQLiteDatabase db) {
