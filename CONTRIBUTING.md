@@ -80,9 +80,9 @@ Small fixes that target very particular bugs may occasionally be merged without 
 
 ## Work in progress pull requests
 
-Work in progress (WIP) pull requests are useful to illustrate a proposed direction and get early feedback before committing to a solution direction.
+Work in progress (WIP) pull requests are useful to illustrate a proposed direction and get early feedback before committing to a solution direction. These should ideally ideally be created as [Draft Pull Requests](https://help.github.com/en/articles/about-pull-requests#draft-pull-requests). 
 
-Work in progress pull requests:
+If a pull request is already a non-draft (there is currently no way to move it back to a draft) the PR:
 - Should include `[WIP]` in front of the pull request title.
 - Should specifically describe the proposed solution and feedback wanted.
 - Will not be merged until you remove `[WIP]` from the title.
