@@ -35,7 +35,7 @@ public class ExternalSecondaryInstancesTest extends BaseRegressionTest {
     public void external_ShouldFillTheForm() {
 
         //TestCase1
-        MainMenu.startBlankForm("external select 10");
+        new MainMenu(main.getActivity()).startBlankForm("external select 10");
         FormEntry.clickOnText("b");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickOnText("ba");
@@ -47,7 +47,7 @@ public class ExternalSecondaryInstancesTest extends BaseRegressionTest {
     public void internal_ShouldFillTheForm() {
 
         //TestCase2
-        MainMenu.startBlankForm("internal select 10");
+        new MainMenu(main.getActivity()).startBlankForm("internal select 10");
         FormEntry.clickOnText("c");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickOnText("ca");

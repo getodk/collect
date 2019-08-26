@@ -18,8 +18,10 @@ public class UserSettingsTest extends BaseRegressionTest {
     @Test
     public void typeOption_ShouldNotBeVisible() {
         //TestCase1
-        MainMenu.clickOnMenu();
-        MainMenu.clickAdminSettings();
+        new MainMenu(main.getActivity())
+                .clickOnMenu()
+                .clickAdminSettings();
+
         Settings.openUserSettings();
         FormEntry.checkIfTextDoesNotExist("Type");
         FormEntry.checkIfTextDoesNotExist("Submission transport");
@@ -29,22 +31,30 @@ public class UserSettingsTest extends BaseRegressionTest {
     @Test
     public void uncheckedSettings_ShouldNotBeVisibleInGeneralSettings() {
         //TestCase4
-        MainMenu.clickOnMenu();
-        MainMenu.clickAdminSettings();
+        new MainMenu(main.getActivity())
+                .clickOnMenu()
+                .clickAdminSettings();
+
         Settings.openUserSettings();
         Settings.uncheckAllUsetSettings();
         pressBack();
         pressBack();
-        MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings(main.getActivity());
+
+        new MainMenu(main.getActivity())
+                .clickOnMenu()
+                .clickGeneralSettings();
+
         Settings.checkIfStringDoesNotExist(R.string.server);
         Settings.checkIfStringDoesNotExist(R.string.client);
         Settings.checkIfStringDoesNotExist(R.string.maps);
         Settings.checkIfStringDoesNotExist(R.string.form_management_preferences);
         Settings.checkIfStringDoesNotExist(R.string.user_and_device_identity_title);
         pressBack();
-        MainMenu.clickOnMenu();
-        MainMenu.clickAdminSettings();
+
+        new MainMenu(main.getActivity())
+                .clickOnMenu()
+                .clickAdminSettings();
+
         Settings.openGeneralSettingsFromAdminSettings();
         Settings.checkIfAreaWithKeyIsDisplayed("protocol");
         Settings.checkIfAreaWithKeyIsDisplayed("user_interface");
@@ -53,36 +63,47 @@ public class UserSettingsTest extends BaseRegressionTest {
         Settings.checkIfAreaWithKeyIsDisplayed("user_and_device_identity");
         pressBack();
         pressBack();
-        Settings.resetSettings();
+        Settings.resetSettings(main.getActivity());
     }
 
     @Test
     public void showGuidance_shouldBehidden() {
         //TestCase5
-        MainMenu.clickOnMenu();
-        MainMenu.clickAdminSettings();
+        new MainMenu(main.getActivity())
+                .clickOnMenu()
+                .clickAdminSettings();
+
         Settings.openUserSettings();
         Settings.uncheckUserSettings("guidance_hint");
         pressBack();
         pressBack();
-        MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings(main.getActivity());
+
+        new MainMenu(main.getActivity())
+                .clickOnMenu()
+                .clickGeneralSettings();
+
         Settings.openFormManagement();
         Settings.checkIfStringDoesNotExist(R.string.guidance_hint_title);
         pressBack();
         pressBack();
-        MainMenu.clickOnMenu();
-        MainMenu.clickAdminSettings();
+
+        new MainMenu(main.getActivity())
+                .clickOnMenu()
+                .clickAdminSettings();
+
         Settings.openUserSettings();
         Settings.uncheckAllUsetSettings();
         pressBack();
         pressBack();
-        MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings(main.getActivity());
+
+        new MainMenu(main.getActivity())
+                .clickOnMenu()
+                .clickGeneralSettings();
+
         Settings.openFormManagement();
         FormEntry.checkIsStringDisplayed(R.string.guidance_hint_title);
         pressBack();
         pressBack();
-        Settings.resetSettings();
+        Settings.resetSettings(main.getActivity());
     }
 }

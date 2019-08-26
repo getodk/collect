@@ -17,8 +17,10 @@ public class ServerOtherTest extends BaseRegressionTest {
     @Test
     public void formListPath_ShouldBeUpdated() {
         //TestCase1
-        MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings(main.getActivity());
+        new MainMenu(main.getActivity())
+                .clickOnMenu()
+                .clickGeneralSettings();
+
         Settings.openServerSettings();
         Settings.clickOnServerType();
         FormEntry.clickOnAreaWithIndex("CheckedTextView", 2);
@@ -28,24 +30,26 @@ public class ServerOtherTest extends BaseRegressionTest {
         FormEntry.checkIsTextDisplayed("/formList/sialala");
         pressBack();
         pressBack();
-        Settings.resetSettings();
+        Settings.resetSettings(main.getActivity());
     }
 
     @Test
-     public void submissionsPath_ShouldBeUpdated() {
-         //TestCase2
-         MainMenu.clickOnMenu();
-         MainMenu.clickGeneralSettings(main.getActivity());
-         Settings.openServerSettings();
-         Settings.clickOnServerType();
-         FormEntry.clickOnAreaWithIndex("CheckedTextView", 2);
-         FormEntry.clickOnAreaWithKey("submission_url");
-         FormEntry.focusOnTextAndTextInput("/submission", "/blabla");
-         FormEntry.clickOk();
-         FormEntry.checkIsTextDisplayed("/submission/blabla");
-         pressBack();
-         pressBack();
-         Settings.resetSettings();
+    public void submissionsPath_ShouldBeUpdated() {
+        //TestCase2
+        new MainMenu(main.getActivity())
+                .clickOnMenu()
+                .clickGeneralSettings();
+
+        Settings.openServerSettings();
+        Settings.clickOnServerType();
+        FormEntry.clickOnAreaWithIndex("CheckedTextView", 2);
+        FormEntry.clickOnAreaWithKey("submission_url");
+        FormEntry.focusOnTextAndTextInput("/submission", "/blabla");
+        FormEntry.clickOk();
+        FormEntry.checkIsTextDisplayed("/submission/blabla");
+        pressBack();
+        pressBack();
+        Settings.resetSettings(main.getActivity());
 
     }
 

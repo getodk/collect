@@ -29,6 +29,7 @@ import static org.odk.collect.android.test.CustomMatchers.withIndex;
 public final class FormEntry {
 
     private FormEntry() {
+
     }
 
     public static void clickOnText(String text) {
