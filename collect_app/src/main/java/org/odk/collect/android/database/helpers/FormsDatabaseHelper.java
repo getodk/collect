@@ -60,6 +60,8 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
     private static final String MODEL_VERSION = "modelVersion";
 
+    private static boolean isDatabaseBeingMigrated;
+
     public FormsDatabaseHelper() {
         super(new DatabaseContext(DATABASE_PATH), DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -92,6 +94,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         }
 
         Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
+        isDatabaseBeingMigrated = false;
     }
 
     @Override
@@ -104,6 +107,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         createFormsTableV7(db);
 
         Timber.i("Downgrading database from %d to %d completed with success.", oldVersion, newVersion);
+        isDatabaseBeingMigrated = false;
     }
 
     private void upgradeToVersion2(SQLiteDatabase db) {
@@ -331,5 +335,13 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                 + AUTO_SEND + " text, "
                 + AUTO_DELETE + " text, "
                 + LAST_DETECTED_FORM_VERSION_HASH + " text);");
+    }
+
+    public static void databaseMigrationStarted() {
+        isDatabaseBeingMigrated = true;
+    }
+
+    public static boolean isDatabaseBeingMigrated() {
+        return isDatabaseBeingMigrated;
     }
 }

@@ -58,6 +58,8 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
             INSTANCE_FILE_PATH, JR_FORM_ID, JR_VERSION, STATUS, LAST_STATUS_CHANGE_DATE, DELETED_DATE};
     static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V5;
 
+    private static boolean isDatabaseBeingMigrated;
+
     public InstancesDatabaseHelper() {
         super(new DatabaseContext(DATABASE_PATH), DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -93,6 +95,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
         }
 
         Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
+        isDatabaseBeingMigrated = false;
     }
 
     @Override
@@ -101,6 +104,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
         moveInstancesTableToVersion5(db);
 
         Timber.i("Downgrading database from version %d to %d completed with success.", oldVersion, newVersion);
+        isDatabaseBeingMigrated = false;
     }
 
     private void upgradeToVersion2(SQLiteDatabase db) {
@@ -216,5 +220,13 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
 
         // Build a full-featured ArrayList rather than the limited array-backed List from asList
         return new ArrayList<>(Arrays.asList(columnNames));
+    }
+
+    public static void databaseMigrationStarted() {
+        isDatabaseBeingMigrated = true;
+    }
+
+    public static boolean isDatabaseBeingMigrated() {
+        return isDatabaseBeingMigrated;
     }
 }
