@@ -57,7 +57,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
         FormEntry.clickOptionsIcon();
         return this;
     }
-    
+
     public void clickGeneralSettings() {
         onView(withText(getString(R.string.general_preferences))).perform(click());
     }

@@ -5,6 +5,7 @@ import android.app.Activity;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.matcher.PreferenceMatchers;
 import androidx.test.rule.ActivityTestRule;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.ActivityHelpers;
 
@@ -28,6 +29,9 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.odk.collect.android.test.CustomMatchers.withIndex;
 
+/**
+ * @deprecated Prefer page objects {@link FormEntryPage} over static helpers
+ */
 @Deprecated
 public final class FormEntry {
 
