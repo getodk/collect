@@ -1,5 +1,7 @@
 package org.odk.collect.android.espressoutils;
 
+import android.app.Activity;
+
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.matcher.PreferenceMatchers;
 import androidx.test.rule.ActivityTestRule;
@@ -56,9 +58,11 @@ public final class Settings {
         onData(PreferenceMatchers.withKey("username")).perform(click());
     }
 
-    public static void resetSettings() {
-        MainMenu.clickOnMenu();
-        onView(withText(getInstrumentation().getTargetContext().getString(R.string.admin_preferences))).perform(click());
+    public static void resetSettings(Activity activity) {
+        new MainMenu(activity)
+                .clickOnMenu()
+                .clickAdminSettings();
+
         onData(PreferenceMatchers.withKey("reset_settings")).perform(click());
         onView(withText(getInstrumentation().getTargetContext().getString(R.string.reset_settings))).perform(click());
         onView(withText(getInstrumentation().getTargetContext().getString(R.string.reset_settings_button_reset))).perform(click());
@@ -162,7 +166,7 @@ public final class Settings {
         onView(withText(getInstrumentation().getTargetContext().getString(value))).check(doesNotExist());
     }
 
-    public static void  openGeneralSettingsFromAdminSettings() {
+    public static void openGeneralSettingsFromAdminSettings() {
         onData(PreferenceMatchers.withKey("odk_preferences")).perform(click());
     }
 

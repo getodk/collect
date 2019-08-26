@@ -33,14 +33,16 @@ public class TriggerWidgetTest extends BaseRegressionTest {
 
     @Test
     public void guidanceIcons_ShouldBeAlwaysShown() {
-        MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        new MainMenu(main.getActivity())
+                .clickOnMenu()
+                .clickGeneralSettings();
+
         Settings.openFormManagement();
         Settings.openShowGuidanceForQuestions();
         Settings.clickOnString(R.string.guidance_yes);
         pressBack();
         pressBack();
-        MainMenu.startBlankForm("Guidance Form Sample");
+        new MainMenu(main.getActivity()).startBlankForm("Guidance Form Sample");
         FormEntry.checkIsTextDisplayed("Guidance text");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
@@ -49,14 +51,16 @@ public class TriggerWidgetTest extends BaseRegressionTest {
 
     @Test
     public void guidanceIcons_ShouldBeCollapsed() {
-        MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        new MainMenu(main.getActivity())
+                .clickOnMenu()
+                .clickGeneralSettings();
+
         Settings.openFormManagement();
         Settings.openShowGuidanceForQuestions();
         Settings.clickOnString(R.string.guidance_yes_collapsed);
         pressBack();
         pressBack();
-        MainMenu.startBlankForm("Guidance Form Sample");
+        new MainMenu(main.getActivity()).startBlankForm("Guidance Form Sample");
         FormEntry.checkIsIdDisplayed(R.id.help_icon);
         FormEntry.clickOnText("TriggerWidget");
         FormEntry.checkIsTextDisplayed("Guidance text");

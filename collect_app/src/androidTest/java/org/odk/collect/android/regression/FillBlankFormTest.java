@@ -67,8 +67,8 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void subtext_ShouldDisplayAdditionalInformation() {
 
         //TestCase2
-        MainMenu.clickFillBlankForm();
-        MainMenu.checkIsFormSubtextDisplayed();
+        new MainMenu(main.getActivity()).clickFillBlankForm();
+        new MainMenu(main.getActivity()).checkIsFormSubtextDisplayed();
 
     }
 
@@ -76,7 +76,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void exitDialog_ShouldDisplaySaveAndIgnoreOptions() {
 
         //TestCase6 , TestCase9
-        MainMenu.startBlankForm("All widgets");
+        new MainMenu(main.getActivity()).startBlankForm("All widgets");
         pressBack();
         FormEntry.checkIsStringDisplayed(R.string.keep_changes);
         FormEntry.checkIsStringDisplayed(R.string.do_not_save);
@@ -90,9 +90,9 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void searchBar_ShouldSearchForm() {
 
         //TestCase12
-        MainMenu.clickFillBlankForm();
-        MainMenu.clickMenuFilter();
-        MainMenu.searchInBar("Aaa");
+        new MainMenu(main.getActivity()).clickFillBlankForm();
+        new MainMenu(main.getActivity()).clickMenuFilter();
+        new MainMenu(main.getActivity()).searchInBar("Aaa");
         pressBack();
         pressBack();
 
@@ -102,7 +102,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void navigationButtons_ShouldBeVisibleWhenAreSetInTheMiddleOfForm() {
 
         //TestCase16
-        MainMenu.startBlankForm("All widgets");
+        new MainMenu(main.getActivity()).startBlankForm("All widgets");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickOptionsIcon();
         FormEntry.clickGeneralSettings();
@@ -119,18 +119,18 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void formsWithDate_ShouldSaveFormsWithSuccess() {
 
         //TestCase17
-        MainMenu.startBlankForm("1560_DateData");
+        new MainMenu(main.getActivity()).startBlankForm("1560_DateData");
         FormEntry.checkIsTextDisplayed("Jan 01, 1900");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
 
-        MainMenu.startBlankForm("1560_IntegerData");
+        new MainMenu(main.getActivity()).startBlankForm("1560_IntegerData");
         FormEntry.checkIsTextDisplayed("5");
         FormEntry.swipeToNextQuestion();
         FormEntry.checkIsTextDisplayed("5");
         FormEntry.clickSaveAndExit();
 
-        MainMenu.startBlankForm("1560_IntegerData_instanceID");
+        new MainMenu(main.getActivity()).startBlankForm("1560_IntegerData_instanceID");
         FormEntry.checkIsTextDisplayed("5");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
@@ -141,7 +141,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void answers_ShouldBeSuggestedInComplianceWithSelectedLetters() {
 
         //TestCase41
-        MainMenu.startBlankForm("formulaire_adherent");
+        new MainMenu(main.getActivity()).startBlankForm("formulaire_adherent");
         FormEntry.clickOnString(R.string.add_another);
         FormEntry.clickOnText("Plante");
         FormEntry.putText("Abi");
@@ -157,13 +157,15 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void sortByDialog_ShouldBeTranslatedAndDisplayProperIcons() {
 
         //TestCase37
-        MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        new MainMenu(main.getActivity())
+                .clickOnMenu()
+                .clickGeneralSettings();
+
         Settings.clickOnUserInterface();
         Settings.clickOnLanguage();
         Settings.clickOnSelectedLanguage("Deutsch");
-        MainMenu.clickFillBlankForm();
-        MainMenu.clickOnSortByButton();
+        new MainMenu(main.getActivity()).clickFillBlankForm();
+        new MainMenu(main.getActivity()).clickOnSortByButton();
         FormEntry.checkIsTextDisplayed("Sortieren nach");
 
         onView(withRecyclerView(R.id.recyclerView)
@@ -195,8 +197,11 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .check(matches(withImageDrawable(R.drawable.ic_access_time)));
         pressBack();
         pressBack();
-        MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        
+        new MainMenu(main.getActivity())
+                .clickOnMenu()
+                .clickGeneralSettings();
+
         Settings.clickOnUserInterface();
         Settings.clickOnLanguage();
         Settings.clickOnSelectedLanguage("English");
@@ -206,7 +211,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void searchExpression_ShouldDisplayWhenItContainsOtherAppearanceName() {
 
         //TestCase26
-        MainMenu.startBlankForm("CSV error Form");
+        new MainMenu(main.getActivity()).startBlankForm("CSV error Form");
         FormEntry.clickOnText("Greg Pommen");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickOnText("Mountain pine beetle");
@@ -233,7 +238,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void searchAppearance_ShouldDisplayWhenSearchAppearanceIsSpecified() {
 
         //TestCase25
-        MainMenu.startBlankForm("different-search-appearances");
+        new MainMenu(main.getActivity()).startBlankForm("different-search-appearances");
         FormEntry.clickOnText("Mango");
         FormEntry.swipeToNextQuestion();
         FormEntry.checkIsTextDisplayed("The fruit mango pulled from csv");
@@ -304,7 +309,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         List<String> secondQuestionAnswers = new ArrayList<>();
 
         for (int i = 1; i <= 3; i++) {
-            MainMenu.startBlankForm("random");
+            new MainMenu(main.getActivity()).startBlankForm("random");
             firstQuestionAnswers.add(getQuestionText());
             FormEntry.swipeToNextQuestion();
             secondQuestionAnswers.add(getQuestionText());
@@ -323,7 +328,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         firstQuestionAnswers.clear();
 
         for (int i = 1; i <= 3; i++) {
-            MainMenu.startBlankForm("random test");
+            new MainMenu(main.getActivity()).startBlankForm("random test");
             FormEntry.putText("3");
             FormEntry.swipeToNextQuestion();
             firstQuestionAnswers.add(getQuestionText());
@@ -340,14 +345,14 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void app_ShouldNotCrash() {
 
         //TestCase32
-        MainMenu.startBlankForm("g6Error");
+        new MainMenu(main.getActivity()).startBlankForm("g6Error");
         FormEntry.checkIsStringDisplayed(R.string.error_occured);
         FormEntry.clickOk();
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
         FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
 
-        MainMenu.startBlankForm("g6Error2");
+        new MainMenu(main.getActivity()).startBlankForm("g6Error2");
         FormEntry.putText("bla");
         FormEntry.swipeToNextQuestion();
         FormEntry.checkIsStringDisplayed(R.string.error_occured);
@@ -358,11 +363,11 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.clickSaveAndExit();
         FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
 
-        MainMenu.startBlankForm("emptyGroupFieldList");
+        new MainMenu(main.getActivity()).startBlankForm("emptyGroupFieldList");
         FormEntry.clickSaveAndExit();
         FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
 
-        MainMenu.startBlankForm("emptyGroupFieldList2");
+        new MainMenu(main.getActivity()).startBlankForm("emptyGroupFieldList2");
         FormEntry.putText("nana");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
@@ -373,7 +378,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void user_ShouldBeAbleToFillTheForm() {
 
         //TestCase27
-        MainMenu.startBlankForm("metadata2");
+        new MainMenu(main.getActivity()).startBlankForm("metadata2");
         FormEntry.clickSaveAndExit();
         FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
     }
@@ -389,7 +394,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void question_ShouldBeVisibleOnTheTopOfHierarchy() {
 
         //TestCase23
-        MainMenu.startBlankForm("manyQ");
+        new MainMenu(main.getActivity()).startBlankForm("manyQ");
         FormEntry.swipeToNextQuestion();
         FormEntry.swipeToNextQuestion();
         FormEntry.clickGoToIconInForm();
@@ -402,7 +407,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void bigForm_ShouldBeFilledSuccessfully() {
 
         //TestCase18
-        MainMenu.startBlankForm("Nigeria Wards");
+        new MainMenu(main.getActivity()).startBlankForm("Nigeria Wards");
         FormEntry.clickOnString(R.string.select_one);
         FormEntry.clickOnText("Adamawa");
         FormEntry.swipeToNextQuestion();
