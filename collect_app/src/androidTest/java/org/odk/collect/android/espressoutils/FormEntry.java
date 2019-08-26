@@ -1,5 +1,7 @@
 package org.odk.collect.android.espressoutils;
 
+import android.app.Activity;
+
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.matcher.PreferenceMatchers;
 import androidx.test.rule.ActivityTestRule;
@@ -26,6 +28,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.odk.collect.android.test.CustomMatchers.withIndex;
 
+@Deprecated
 public final class FormEntry {
 
     private FormEntry() {
@@ -76,8 +79,8 @@ public final class FormEntry {
         onView(withClassName(endsWith("EditText"))).perform(replaceText(text));
     }
 
-    public static void checkIsToastWithMessageDisplayes(String message, ActivityTestRule main) {
-        onView(withText(message)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+    public static void checkIsToastWithMessageDisplayes(String message, Activity activity) {
+        onView(withText(message)).inRoot(withDecorView(not(is(activity.getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
 
     public static void clickGoToIconInForm() {

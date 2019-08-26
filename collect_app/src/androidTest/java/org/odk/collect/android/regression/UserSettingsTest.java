@@ -18,7 +18,7 @@ public class UserSettingsTest extends BaseRegressionTest {
     @Test
     public void typeOption_ShouldNotBeVisible() {
         //TestCase1
-        new MainMenuPage(main.getActivity())
+        new MainMenuPage(main)
                 .clickOnMenu()
                 .clickAdminSettings();
 
@@ -31,7 +31,7 @@ public class UserSettingsTest extends BaseRegressionTest {
     @Test
     public void uncheckedSettings_ShouldNotBeVisibleInGeneralSettings() {
         //TestCase4
-        new MainMenuPage(main.getActivity())
+        new MainMenuPage(main)
                 .clickOnMenu()
                 .clickAdminSettings();
 
@@ -40,7 +40,7 @@ public class UserSettingsTest extends BaseRegressionTest {
         pressBack();
         pressBack();
 
-        new MainMenuPage(main.getActivity())
+        new MainMenuPage(main)
                 .clickOnMenu()
                 .clickGeneralSettings();
 
@@ -51,7 +51,7 @@ public class UserSettingsTest extends BaseRegressionTest {
         Settings.checkIfStringDoesNotExist(R.string.user_and_device_identity_title);
         pressBack();
 
-        new MainMenuPage(main.getActivity())
+        new MainMenuPage(main)
                 .clickOnMenu()
                 .clickAdminSettings();
 
@@ -63,13 +63,13 @@ public class UserSettingsTest extends BaseRegressionTest {
         Settings.checkIfAreaWithKeyIsDisplayed("user_and_device_identity");
         pressBack();
         pressBack();
-        Settings.resetSettings(main.getActivity());
+        Settings.resetSettings(main);
     }
 
     @Test
     public void showGuidance_shouldBehidden() {
         //TestCase5
-        new MainMenuPage(main.getActivity())
+        new MainMenuPage(main)
                 .clickOnMenu()
                 .clickAdminSettings();
 
@@ -78,7 +78,7 @@ public class UserSettingsTest extends BaseRegressionTest {
         pressBack();
         pressBack();
 
-        new MainMenuPage(main.getActivity())
+        new MainMenuPage(main)
                 .clickOnMenu()
                 .clickGeneralSettings();
 
@@ -87,7 +87,7 @@ public class UserSettingsTest extends BaseRegressionTest {
         pressBack();
         pressBack();
 
-        new MainMenuPage(main.getActivity())
+        new MainMenuPage(main)
                 .clickOnMenu()
                 .clickAdminSettings();
 
@@ -96,7 +96,7 @@ public class UserSettingsTest extends BaseRegressionTest {
         pressBack();
         pressBack();
 
-        new MainMenuPage(main.getActivity())
+        new MainMenuPage(main)
                 .clickOnMenu()
                 .clickGeneralSettings();
 
@@ -104,6 +104,6 @@ public class UserSettingsTest extends BaseRegressionTest {
         FormEntry.checkIsStringDisplayed(R.string.guidance_hint_title);
         pressBack();
         pressBack();
-        Settings.resetSettings(main.getActivity());
+        Settings.resetSettings(main);
     }
 }

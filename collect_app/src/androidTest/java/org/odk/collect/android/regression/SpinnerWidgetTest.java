@@ -32,7 +32,7 @@ public class SpinnerWidgetTest extends BaseRegressionTest {
 
     @Test
     public void spinnerList_ShouldDisplay() {
-        new MainMenuPage(main.getActivity()).startBlankForm("selectOneMinimal");
+        new MainMenuPage(main).startBlankForm("selectOneMinimal");
         FormEntry.clickOnString(R.string.select_one);
         FormEntry.clickOnAreaWithIndex("TextView", 2);
         FormEntry.clickOnText("c");

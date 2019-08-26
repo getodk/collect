@@ -17,7 +17,7 @@ public class ServerOtherTest extends BaseRegressionTest {
     @Test
     public void formListPath_ShouldBeUpdated() {
         //TestCase1
-        new MainMenuPage(main.getActivity())
+        new MainMenuPage(main)
                 .clickOnMenu()
                 .clickGeneralSettings();
 
@@ -30,13 +30,13 @@ public class ServerOtherTest extends BaseRegressionTest {
         FormEntry.checkIsTextDisplayed("/formList/sialala");
         pressBack();
         pressBack();
-        Settings.resetSettings(main.getActivity());
+        Settings.resetSettings(main);
     }
 
     @Test
     public void submissionsPath_ShouldBeUpdated() {
         //TestCase2
-        new MainMenuPage(main.getActivity())
+        new MainMenuPage(main)
                 .clickOnMenu()
                 .clickGeneralSettings();
 
@@ -49,7 +49,7 @@ public class ServerOtherTest extends BaseRegressionTest {
         FormEntry.checkIsTextDisplayed("/submission/blabla");
         pressBack();
         pressBack();
-        Settings.resetSettings(main.getActivity());
+        Settings.resetSettings(main);
 
     }
 

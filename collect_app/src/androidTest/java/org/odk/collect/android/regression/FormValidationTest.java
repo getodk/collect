@@ -34,12 +34,12 @@ public class FormValidationTest extends BaseRegressionTest {
     @Test
     public void invalidAnswer_ShouldDisplayAllQuestionsOnOnePage() {
 
-        new MainMenuPage(main.getActivity()).startBlankForm("OnePageFormShort");
+        new MainMenuPage(main).startBlankForm("OnePageFormShort");
         FormEntry.putTextOnIndex(0, "A");
         FormEntry.clickGoToIconInForm();
         FormEntry.clickJumpEndButton();
         FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithMessageDisplayes("Response length must be between 5 and 15", main);
+        FormEntry.checkIsToastWithMessageDisplayes("Response length must be between 5 and 15", main.getActivity());
         FormEntry.checkIsTextDisplayed("Integer");
         FormEntry.putTextOnIndex(0, "Aaaaa");
         FormEntry.clickGoToIconInForm();
@@ -51,7 +51,7 @@ public class FormValidationTest extends BaseRegressionTest {
     public void openHierarchyView_ShouldSeeShortForms() {
 
         //TestCase3
-        new MainMenuPage(main.getActivity()).startBlankForm("OnePageFormShort");
+        new MainMenuPage(main).startBlankForm("OnePageFormShort");
         FormEntry.clickGoToIconInForm();
         FormEntry.checkIsTextDisplayed("YY MM");
         FormEntry.checkIsTextDisplayed("YY");
