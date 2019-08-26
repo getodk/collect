@@ -528,9 +528,14 @@ public class FormsProvider extends ContentProvider {
     }
 
     private boolean isDatabaseHelperOutOfDate() {
-        SQLiteDatabase db = SQLiteDatabase.openDatabase(FormsDatabaseHelper.DATABASE_PATH, null, SQLiteDatabase.OPEN_READONLY);
-        boolean isDatabaseHelperOutOfDate = FormsDatabaseHelper.DATABASE_VERSION != db.getVersion();
-        db.close();
+        boolean isDatabaseHelperOutOfDate = false;
+        try {
+            SQLiteDatabase db = SQLiteDatabase.openDatabase(FormsDatabaseHelper.DATABASE_PATH, null, SQLiteDatabase.OPEN_READONLY);
+            isDatabaseHelperOutOfDate = FormsDatabaseHelper.DATABASE_VERSION != db.getVersion();
+            db.close();
+        } catch (SQLException e) {
+            Timber.i(e);
+        }
         return isDatabaseHelperOutOfDate;
     }
 
