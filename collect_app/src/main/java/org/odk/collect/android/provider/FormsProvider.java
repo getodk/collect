@@ -63,7 +63,11 @@ public class FormsProvider extends ContentProvider {
             return null;
         }
 
-        if (dbHelper == null || isDatabaseHelperOutOfDate()) {
+        boolean isDatabaseHelperOutOfDate = isDatabaseHelperOutOfDate();
+        if (dbHelper == null || (isDatabaseHelperOutOfDate && !FormsDatabaseHelper.isDatabaseBeingMigrated())) {
+            if (isDatabaseHelperOutOfDate) {
+                FormsDatabaseHelper.databaseMigrationStarted();
+            }
             dbHelper = new FormsDatabaseHelper();
         }
 

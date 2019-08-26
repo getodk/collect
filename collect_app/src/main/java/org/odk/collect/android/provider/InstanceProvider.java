@@ -63,7 +63,11 @@ public class InstanceProvider extends ContentProvider {
             return null;
         }
 
-        if (dbHelper == null || isDatabaseHelperOutOfDate()) {
+        boolean isDatabaseHelperOutOfDate = isDatabaseHelperOutOfDate();
+        if (dbHelper == null || (isDatabaseHelperOutOfDate && !InstancesDatabaseHelper.isDatabaseBeingMigrated())) {
+            if (isDatabaseHelperOutOfDate) {
+                InstancesDatabaseHelper.databaseMigrationStarted();
+            }
             dbHelper = new InstancesDatabaseHelper();
         }
 
