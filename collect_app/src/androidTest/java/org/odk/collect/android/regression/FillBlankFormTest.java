@@ -13,7 +13,7 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.espressoutils.FormEntry;
+import org.odk.collect.android.espressoutils.FormEntryPage;
 import org.odk.collect.android.espressoutils.MainMenuPage;
 import org.odk.collect.android.espressoutils.Settings;
 import org.odk.collect.android.support.ActivityHelpers;
@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -67,8 +66,9 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void subtext_ShouldDisplayAdditionalInformation() {
 
         //TestCase2
-        new MainMenuPage(main.getActivity()).clickFillBlankForm();
-        new MainMenuPage(main.getActivity()).checkIsFormSubtextDisplayed();
+        new MainMenuPage(main)
+                .clickFillBlankForm()
+                .checkIsFormSubtextDisplayed();
 
     }
 
@@ -76,97 +76,101 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void exitDialog_ShouldDisplaySaveAndIgnoreOptions() {
 
         //TestCase6 , TestCase9
-        new MainMenuPage(main.getActivity()).startBlankForm("All widgets");
-        pressBack();
-        FormEntry.checkIsStringDisplayed(R.string.keep_changes);
-        FormEntry.checkIsStringDisplayed(R.string.do_not_save);
-        FormEntry.clickOnString(R.string.do_not_save);
-        FormEntry.checkIsIdDisplayed(R.id.enter_data);
-        FormEntry.checkIsIdDisplayed(R.id.get_forms);
-
+        new MainMenuPage(main)
+                .startBlankForm("All widgets")
+                .pressBack(FormEntryPage.class)
+                .checkIsStringDisplayed(R.string.keep_changes)
+                .checkIsStringDisplayed(R.string.do_not_save)
+                .clickOnString(R.string.do_not_save)
+                .checkIsIdDisplayed(R.id.enter_data)
+                .checkIsIdDisplayed(R.id.get_forms);
     }
 
     @Test
     public void searchBar_ShouldSearchForm() {
 
         //TestCase12
-        new MainMenuPage(main.getActivity()).clickFillBlankForm();
-        new MainMenuPage(main.getActivity()).clickMenuFilter();
-        new MainMenuPage(main.getActivity()).searchInBar("Aaa");
-        pressBack();
-        pressBack();
-
+        new MainMenuPage(main)
+                .clickFillBlankForm()
+                .clickMenuFilter()
+                .searchInBar("Aaa")
+                .pressBack(MainMenuPage.class)
+                .pressBack(MainMenuPage.class);
     }
 
     @Test
     public void navigationButtons_ShouldBeVisibleWhenAreSetInTheMiddleOfForm() {
 
         //TestCase16
-        new MainMenuPage(main.getActivity()).startBlankForm("All widgets");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOptionsIcon();
-        FormEntry.clickGeneralSettings();
+        new MainMenuPage(main)
+                .startBlankForm("All widgets")
+                .swipeToNextQuestion()
+                .clickOptionsIcon()
+                .clickGeneralSettings();
+
         Settings.clickUserInterface();
         Settings.clickNavigation();
         Settings.clickUseSwipesAndButtons();
         pressBack();
         pressBack();
-        FormEntry.checkAreNavigationButtonsDisplayed();
 
+        new FormEntryPage(main).checkAreNavigationButtonsDisplayed();
     }
 
     @Test
     public void formsWithDate_ShouldSaveFormsWithSuccess() {
 
         //TestCase17
-        new MainMenuPage(main.getActivity()).startBlankForm("1560_DateData");
-        FormEntry.checkIsTextDisplayed("Jan 01, 1900");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickSaveAndExit();
+        new MainMenuPage(main)
+                .startBlankForm("1560_DateData")
+                .checkIsTextDisplayed("Jan 01, 1900")
+                .swipeToNextQuestion()
+                .clickSaveAndExit()
 
-        new MainMenuPage(main.getActivity()).startBlankForm("1560_IntegerData");
-        FormEntry.checkIsTextDisplayed("5");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsTextDisplayed("5");
-        FormEntry.clickSaveAndExit();
+                .startBlankForm("1560_IntegerData")
+                .checkIsTextDisplayed("5")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("5")
+                .clickSaveAndExit()
 
-        new MainMenuPage(main.getActivity()).startBlankForm("1560_IntegerData_instanceID");
-        FormEntry.checkIsTextDisplayed("5");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickSaveAndExit();
-
+                .startBlankForm("1560_IntegerData_instanceID")
+                .checkIsTextDisplayed("5")
+                .swipeToNextQuestion()
+                .clickSaveAndExit();
     }
 
     @Test
     public void answers_ShouldBeSuggestedInComplianceWithSelectedLetters() {
 
         //TestCase41
-        new MainMenuPage(main.getActivity()).startBlankForm("formulaire_adherent");
-        FormEntry.clickOnString(R.string.add_another);
-        FormEntry.clickOnText("Plante");
-        FormEntry.putText("Abi");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsTextDisplayed("Abies");
-        FormEntry.swipeToPrevoiusQuestion();
-        FormEntry.putText("Abr");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsTextDisplayed("Abrotanum alpestre");
+        new MainMenuPage(main).startBlankForm("formulaire_adherent")
+                .clickOnString(R.string.add_another)
+                .clickOnText("Plante")
+                .putText("Abi")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("Abies")
+                .swipeToPreviousQuestion()
+                .putText("Abr")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("Abrotanum alpestre");
     }
 
     @Test
     public void sortByDialog_ShouldBeTranslatedAndDisplayProperIcons() {
 
         //TestCase37
-        new MainMenuPage(main.getActivity())
+        new MainMenuPage(main)
                 .clickOnMenu()
                 .clickGeneralSettings();
 
         Settings.clickOnUserInterface();
         Settings.clickOnLanguage();
         Settings.clickOnSelectedLanguage("Deutsch");
-        new MainMenuPage(main.getActivity()).clickFillBlankForm();
-        new MainMenuPage(main.getActivity()).clickOnSortByButton();
-        FormEntry.checkIsTextDisplayed("Sortieren nach");
+
+        new MainMenuPage(main)
+                .clickFillBlankForm()
+                .clickOnSortByButton()
+                .checkIsTextDisplayed("Sortieren nach");
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(0, R.id.title))
@@ -197,8 +201,8 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .check(matches(withImageDrawable(R.drawable.ic_access_time)));
         pressBack();
         pressBack();
-        
-        new MainMenuPage(main.getActivity())
+
+        new MainMenuPage(main)
                 .clickOnMenu()
                 .clickGeneralSettings();
 
@@ -211,110 +215,113 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void searchExpression_ShouldDisplayWhenItContainsOtherAppearanceName() {
 
         //TestCase26
-        new MainMenuPage(main.getActivity()).startBlankForm("CSV error Form");
-        FormEntry.clickOnText("Greg Pommen");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnText("Mountain pine beetle");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsTextDisplayed("2018-COE-MPB-001 @ Wellington");
-        FormEntry.swipeToPrevoiusQuestion();
-        FormEntry.clickOnText("Invasive alien species");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsTextDisplayed("2018-COE-IAS-e-001 @ Coronation");
-        FormEntry.swipeToPrevoiusQuestion();
-        FormEntry.clickOnText("Longhorn beetles");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsTextDisplayed("2018-COE-LGH-M-001 @ Acheson");
-        FormEntry.clickOnText("2018-COE-LGH-L-004 @ Acheson");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnText("No");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
+        new MainMenuPage(main).startBlankForm("CSV error Form")
+                .clickOnText("Greg Pommen")
+                .swipeToNextQuestion()
+                .clickOnText("Mountain pine beetle")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("2018-COE-MPB-001 @ Wellington")
+                .swipeToPreviousQuestion()
+                .clickOnText("Invasive alien species")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("2018-COE-IAS-e-001 @ Coronation")
+                .swipeToPreviousQuestion()
+                .clickOnText("Longhorn beetles")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("2018-COE-LGH-M-001 @ Acheson")
+                .clickOnText("2018-COE-LGH-L-004 @ Acheson")
+                .swipeToNextQuestion()
+                .clickOnText("No")
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickSaveAndExit()
+                .checkIsToastWithMessageDisplayed("Form successfully saved!");
     }
 
     @Test
     public void searchAppearance_ShouldDisplayWhenSearchAppearanceIsSpecified() {
 
         //TestCase25
-        new MainMenuPage(main.getActivity()).startBlankForm("different-search-appearances");
-        FormEntry.clickOnText("Mango");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsTextDisplayed("The fruit mango pulled from csv");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnText("Wolf");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.putText("w");
-        FormEntry.checkIsTextDisplayed("Wolf");
-        FormEntry.checkIsTextDisplayed("Warthog");
-        FormEntry.clickOnText("Wolf");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.putText("r");
-        FormEntry.checkIsTextDisplayed("Warthog");
-        FormEntry.checkIsTextDisplayed("Raccoon");
-        FormEntry.checkIsTextDisplayed("Rabbit");
-        FormEntry.clickOnText("Rabbit");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.putText("r");
-        FormEntry.checkIsTextDisplayed("Oranges");
-        FormEntry.checkIsTextDisplayed("Strawberries");
-        FormEntry.clickOnText("Oranges");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.putText("n");
-        FormEntry.checkIsTextDisplayed("Mango");
-        FormEntry.checkIsTextDisplayed("Oranges");
-        FormEntry.clickOnText("Mango");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnText("Mango");
-        FormEntry.clickOnText("Strawberries");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnText("Raccoon");
-        FormEntry.clickOnText("Rabbit");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.putText("w");
-        FormEntry.checkIsTextDisplayed("Wolf");
-        FormEntry.checkIsTextDisplayed("Warthog");
-        FormEntry.clickOnText("Wolf");
-        FormEntry.clickOnText("Warthog");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.putText("r");
-        closeSoftKeyboard();
-        FormEntry.checkIsTextDisplayed("Warthog");
-        FormEntry.checkIsTextDisplayed("Raccoon");
-        FormEntry.checkIsTextDisplayed("Rabbit");
-        FormEntry.clickOnText("Raccoon");
-        FormEntry.clickOnText("Rabbit");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.putText("m");
-        FormEntry.checkIsTextDisplayed("Mango");
-        FormEntry.clickOnText("Mango");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.putText("n");
-        closeSoftKeyboard();
-        FormEntry.checkIsTextDisplayed("Mango");
-        FormEntry.checkIsTextDisplayed("Oranges");
-        FormEntry.clickOnText("Mango");
-        FormEntry.clickOnText("Oranges");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
+        new MainMenuPage(main)
+                .startBlankForm("different-search-appearances")
+                .clickOnText("Mango")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("The fruit mango pulled from csv")
+                .swipeToNextQuestion()
+                .clickOnText("Wolf")
+                .swipeToNextQuestion()
+                .putText("w")
+                .checkIsTextDisplayed("Wolf")
+                .checkIsTextDisplayed("Warthog")
+                .clickOnText("Wolf")
+                .swipeToNextQuestion()
+                .putText("r")
+                .checkIsTextDisplayed("Warthog")
+                .checkIsTextDisplayed("Raccoon")
+                .checkIsTextDisplayed("Rabbit")
+                .clickOnText("Rabbit")
+                .swipeToNextQuestion()
+                .putText("r")
+                .checkIsTextDisplayed("Oranges")
+                .checkIsTextDisplayed("Strawberries")
+                .clickOnText("Oranges")
+                .swipeToNextQuestion()
+                .putText("n")
+                .checkIsTextDisplayed("Mango")
+                .checkIsTextDisplayed("Oranges")
+                .clickOnText("Mango")
+                .swipeToNextQuestion()
+                .clickOnText("Mango")
+                .clickOnText("Strawberries")
+                .swipeToNextQuestion()
+                .clickOnText("Raccoon")
+                .clickOnText("Rabbit")
+                .swipeToNextQuestion()
+                .putText("w")
+                .checkIsTextDisplayed("Wolf")
+                .checkIsTextDisplayed("Warthog")
+                .clickOnText("Wolf")
+                .clickOnText("Warthog")
+                .swipeToNextQuestion()
+                .putText("r")
+                .closeSoftKeyboard()
+                .checkIsTextDisplayed("Warthog")
+                .checkIsTextDisplayed("Raccoon")
+                .checkIsTextDisplayed("Rabbit")
+                .clickOnText("Raccoon")
+                .clickOnText("Rabbit")
+                .swipeToNextQuestion()
+                .putText("m")
+                .checkIsTextDisplayed("Mango")
+                .clickOnText("Mango")
+                .swipeToNextQuestion()
+                .putText("n")
+                .closeSoftKeyboard()
+                .checkIsTextDisplayed("Mango")
+                .checkIsTextDisplayed("Oranges")
+                .clickOnText("Mango")
+                .clickOnText("Oranges")
+                .swipeToNextQuestion()
+                .clickSaveAndExit()
+                .checkIsToastWithMessageDisplayed("Form successfully saved!");
     }
 
     @Test
     public void values_ShouldBeRandom() {
 
         //TestCase22
+        FormEntryPage formEntryPage = new FormEntryPage(main);
+
         List<String> firstQuestionAnswers = new ArrayList<>();
         List<String> secondQuestionAnswers = new ArrayList<>();
 
         for (int i = 1; i <= 3; i++) {
-            new MainMenuPage(main.getActivity()).startBlankForm("random");
+            new MainMenuPage(main).startBlankForm("random");
             firstQuestionAnswers.add(getQuestionText());
-            FormEntry.swipeToNextQuestion();
+            formEntryPage.swipeToNextQuestion();
             secondQuestionAnswers.add(getQuestionText());
-            FormEntry.swipeToNextQuestion();
-            FormEntry.clickSaveAndExit();
+            formEntryPage.swipeToNextQuestion();
+            formEntryPage.clickSaveAndExit();
         }
 
         assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(1));
@@ -328,12 +335,12 @@ public class FillBlankFormTest extends BaseRegressionTest {
         firstQuestionAnswers.clear();
 
         for (int i = 1; i <= 3; i++) {
-            new MainMenuPage(main.getActivity()).startBlankForm("random test");
-            FormEntry.putText("3");
-            FormEntry.swipeToNextQuestion();
+            new MainMenuPage(main).startBlankForm("random test");
+            formEntryPage.putText("3");
+            formEntryPage.swipeToNextQuestion();
             firstQuestionAnswers.add(getQuestionText());
-            FormEntry.swipeToNextQuestion();
-            FormEntry.clickSaveAndExit();
+            formEntryPage.swipeToNextQuestion();
+            formEntryPage.clickSaveAndExit();
         }
 
         assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(1));
@@ -345,42 +352,74 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void app_ShouldNotCrash() {
 
         //TestCase32
-        new MainMenuPage(main.getActivity()).startBlankForm("g6Error");
-        FormEntry.checkIsStringDisplayed(R.string.error_occured);
-        FormEntry.clickOk();
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
+        new MainMenuPage(main).startBlankForm("g6Error")
+                .checkIsStringDisplayed(R.string.error_occured)
+                .clickOk()
+                .swipeToNextQuestion()
+                .clickSaveAndExit()
+                .checkIsToastWithMessageDisplayed("Form successfully saved!");
 
-        new MainMenuPage(main.getActivity()).startBlankForm("g6Error2");
-        FormEntry.putText("bla");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsStringDisplayed(R.string.error_occured);
-        FormEntry.clickOk();
-        FormEntry.swipeToNextQuestion();
-        FormEntry.putText("ble");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
+        new MainMenuPage(main).startBlankForm("g6Error2")
+                .putText("bla")
+                .swipeToNextQuestion()
+                .checkIsStringDisplayed(R.string.error_occured)
+                .clickOk()
+                .swipeToNextQuestion()
+                .putText("ble")
+                .swipeToNextQuestion()
+                .clickSaveAndExit()
+                .checkIsToastWithMessageDisplayed("Form successfully saved!");
 
-        new MainMenuPage(main.getActivity()).startBlankForm("emptyGroupFieldList");
-        FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
+        new MainMenuPage(main)
+                .startBlankForm("emptyGroupFieldList")
+                .clickSaveAndExit()
+                .checkIsToastWithMessageDisplayed("Form successfully saved!");
 
-        new MainMenuPage(main.getActivity()).startBlankForm("emptyGroupFieldList2");
-        FormEntry.putText("nana");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
+        new MainMenuPage(main).startBlankForm("emptyGroupFieldList2")
+                .putText("nana")
+                .swipeToNextQuestion()
+                .clickSaveAndExit()
+                .checkIsToastWithMessageDisplayed("Form successfully saved!");
     }
 
     @Test
     public void user_ShouldBeAbleToFillTheForm() {
 
         //TestCase27
-        new MainMenuPage(main.getActivity()).startBlankForm("metadata2");
-        FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
+        new MainMenuPage(main).startBlankForm("metadata2")
+                .clickSaveAndExit()
+                .checkIsToastWithMessageDisplayed("Form successfully saved!");
+    }
+
+    @Test
+    public void question_ShouldBeVisibleOnTheTopOfHierarchy() {
+
+        //TestCase23
+        new MainMenuPage(main).startBlankForm("manyQ")
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickGoToIconInForm()
+                .checkIsTextDisplayed("n1")
+                .checkIfTextDoesNotExist("t1")
+                .checkIfTextDoesNotExist("t2");
+    }
+
+    @Test
+    public void bigForm_ShouldBeFilledSuccessfully() {
+
+        //TestCase18
+        new MainMenuPage(main).startBlankForm("Nigeria Wards")
+                .clickOnString(R.string.select_one)
+                .clickOnText("Adamawa")
+                .swipeToNextQuestion()
+                .clickOnString(R.string.select_one)
+                .clickOnText("Ganye")
+                .swipeToNextQuestion()
+                .clickOnString(R.string.select_one)
+                .clickOnText("Jaggu")
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickSaveAndExit();
     }
 
     private String getQuestionText() {
@@ -388,36 +427,5 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FrameLayout questionContainer = formEntryActivity.findViewById(R.id.select_container);
         TextView questionView = (TextView) questionContainer.getChildAt(0);
         return questionView.getText().toString();
-    }
-
-    @Test
-    public void question_ShouldBeVisibleOnTheTopOfHierarchy() {
-
-        //TestCase23
-        new MainMenuPage(main.getActivity()).startBlankForm("manyQ");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickGoToIconInForm();
-        FormEntry.checkIsTextDisplayed("n1");
-        FormEntry.checkIfTextDoesNotExist("t1");
-        FormEntry.checkIfTextDoesNotExist("t2");
-    }
-
-    @Test
-    public void bigForm_ShouldBeFilledSuccessfully() {
-
-        //TestCase18
-        new MainMenuPage(main.getActivity()).startBlankForm("Nigeria Wards");
-        FormEntry.clickOnString(R.string.select_one);
-        FormEntry.clickOnText("Adamawa");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnString(R.string.select_one);
-        FormEntry.clickOnText("Ganye");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnString(R.string.select_one);
-        FormEntry.clickOnText("Jaggu");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickSaveAndExit();
     }
 }

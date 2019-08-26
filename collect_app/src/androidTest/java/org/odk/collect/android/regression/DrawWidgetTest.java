@@ -42,7 +42,7 @@ public class DrawWidgetTest extends BaseRegressionTest {
     public void saveIgnoreDialog_ShouldUseBothOptions() {
 
         //TestCase1
-        new MainMenuPage(main.getActivity()).startBlankForm("All widgets");
+        new MainMenuPage(main).startBlankForm("All widgets");
         FormEntry.clickGoToIconInForm();
         FormEntry.clickOnText("Image widgets");
         FormEntry.clickOnText("Draw widget");
@@ -63,7 +63,7 @@ public class DrawWidgetTest extends BaseRegressionTest {
     public void setColor_ShouldSeeColorPicker() {
 
         //TestCase2
-        new MainMenuPage(main.getActivity()).startBlankForm("All widgets");
+        new MainMenuPage(main).startBlankForm("All widgets");
         FormEntry.clickGoToIconInForm();
         FormEntry.clickOnText("Image widgets");
         FormEntry.clickOnText("Draw widget");
@@ -82,7 +82,7 @@ public class DrawWidgetTest extends BaseRegressionTest {
     public void multiClickOnPlus_ShouldDisplayIcons() {
 
         //TestCase3
-        new MainMenuPage(main.getActivity()).startBlankForm("All widgets");
+        new MainMenuPage(main).startBlankForm("All widgets");
         FormEntry.clickGoToIconInForm();
         FormEntry.clickOnText("Image widgets");
         FormEntry.clickOnText("Draw widget");

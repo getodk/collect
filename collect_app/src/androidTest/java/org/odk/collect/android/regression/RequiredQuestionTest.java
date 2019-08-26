@@ -36,7 +36,7 @@ public class RequiredQuestionTest extends BaseRegressionTest {
     public void requiredQuestions_ShouldDisplayAsterisk() {
 
         //TestCase1
-        new MainMenuPage(main.getActivity()).startBlankForm("required");
+        new MainMenuPage(main).startBlankForm("required");
         FormEntry.checkIsTextDisplayed("* Foo");
         closeSoftKeyboard();
         pressBack();
@@ -47,9 +47,9 @@ public class RequiredQuestionTest extends BaseRegressionTest {
     public void requiredQuestions_ShouldDisplayCustomMessage() {
 
         //TestCase2
-        new MainMenuPage(main.getActivity()).startBlankForm("required");
+        new MainMenuPage(main).startBlankForm("required");
         FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsToastWithMessageDisplayes("Custom required message", main);
+        FormEntry.checkIsToastWithMessageDisplayes("Custom required message", main.getActivity());
         closeSoftKeyboard();
         pressBack();
         FormEntry.clickIgnoreChanges();

@@ -42,7 +42,7 @@ public class SignatureWidgetTest extends BaseRegressionTest {
     public void saveIgnoreDialog_ShouldUseBothOptions() {
 
         //TestCase1
-        new MainMenuPage(main.getActivity()).startBlankForm("All widgets");
+        new MainMenuPage(main).startBlankForm("All widgets");
         FormEntry.clickGoToIconInForm();
         FormEntry.clickOnText("Image widgets");
         FormEntry.clickOnText("Signature widget");
@@ -63,7 +63,7 @@ public class SignatureWidgetTest extends BaseRegressionTest {
     public void multiClickOnPlus_ShouldDisplayIcons() {
 
         //TestCase2
-        new MainMenuPage(main.getActivity()).startBlankForm("All widgets");
+        new MainMenuPage(main).startBlankForm("All widgets");
         FormEntry.clickGoToIconInForm();
         FormEntry.clickOnText("Image widgets");
         FormEntry.clickOnText("Signature widget");

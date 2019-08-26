@@ -1,7 +1,5 @@
 package org.odk.collect.android.espressoutils;
 
-import android.app.Activity;
-
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.matcher.PreferenceMatchers;
 import androidx.test.rule.ActivityTestRule;
@@ -58,8 +56,8 @@ public final class Settings {
         onData(PreferenceMatchers.withKey("username")).perform(click());
     }
 
-    public static void resetSettings(Activity activity) {
-        new MainMenuPage(activity)
+    public static void resetSettings(ActivityTestRule rule) {
+        new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickAdminSettings();
 

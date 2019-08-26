@@ -33,7 +33,7 @@ public class CascadingSelectWithNumberInHeaderTest extends BaseRegressionTest {
     @Test
     public void fillForm_ShouldFillFormWithNumberInCsvHeader() {
 
-        new MainMenuPage(main.getActivity()).startBlankForm("numberInCSV");
+        new MainMenuPage(main).startBlankForm("numberInCSV");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickOnText("Venda de animais");
         FormEntry.checkIsTextDisplayed("1a");
