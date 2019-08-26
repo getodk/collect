@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.espressoutils.FormEntry;
-import org.odk.collect.android.espressoutils.MainMenu;
+import org.odk.collect.android.espressoutils.MainMenuPage;
 import org.odk.collect.android.espressoutils.Settings;
 
 import static androidx.test.espresso.Espresso.pressBack;
@@ -18,7 +18,7 @@ public class UserSettingsTest extends BaseRegressionTest {
     @Test
     public void typeOption_ShouldNotBeVisible() {
         //TestCase1
-        new MainMenu(main.getActivity())
+        new MainMenuPage(main.getActivity())
                 .clickOnMenu()
                 .clickAdminSettings();
 
@@ -31,7 +31,7 @@ public class UserSettingsTest extends BaseRegressionTest {
     @Test
     public void uncheckedSettings_ShouldNotBeVisibleInGeneralSettings() {
         //TestCase4
-        new MainMenu(main.getActivity())
+        new MainMenuPage(main.getActivity())
                 .clickOnMenu()
                 .clickAdminSettings();
 
@@ -40,7 +40,7 @@ public class UserSettingsTest extends BaseRegressionTest {
         pressBack();
         pressBack();
 
-        new MainMenu(main.getActivity())
+        new MainMenuPage(main.getActivity())
                 .clickOnMenu()
                 .clickGeneralSettings();
 
@@ -51,7 +51,7 @@ public class UserSettingsTest extends BaseRegressionTest {
         Settings.checkIfStringDoesNotExist(R.string.user_and_device_identity_title);
         pressBack();
 
-        new MainMenu(main.getActivity())
+        new MainMenuPage(main.getActivity())
                 .clickOnMenu()
                 .clickAdminSettings();
 
@@ -69,7 +69,7 @@ public class UserSettingsTest extends BaseRegressionTest {
     @Test
     public void showGuidance_shouldBehidden() {
         //TestCase5
-        new MainMenu(main.getActivity())
+        new MainMenuPage(main.getActivity())
                 .clickOnMenu()
                 .clickAdminSettings();
 
@@ -78,7 +78,7 @@ public class UserSettingsTest extends BaseRegressionTest {
         pressBack();
         pressBack();
 
-        new MainMenu(main.getActivity())
+        new MainMenuPage(main.getActivity())
                 .clickOnMenu()
                 .clickGeneralSettings();
 
@@ -87,7 +87,7 @@ public class UserSettingsTest extends BaseRegressionTest {
         pressBack();
         pressBack();
 
-        new MainMenu(main.getActivity())
+        new MainMenuPage(main.getActivity())
                 .clickOnMenu()
                 .clickAdminSettings();
 
@@ -96,7 +96,7 @@ public class UserSettingsTest extends BaseRegressionTest {
         pressBack();
         pressBack();
 
-        new MainMenu(main.getActivity())
+        new MainMenuPage(main.getActivity())
                 .clickOnMenu()
                 .clickGeneralSettings();
 

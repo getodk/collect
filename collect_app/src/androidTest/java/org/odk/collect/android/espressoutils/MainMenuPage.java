@@ -19,20 +19,21 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.odk.collect.android.test.CustomMatchers.withIndex;
 
-public final class MainMenu extends Page {
+public final class MainMenuPage extends Page {
 
-    public MainMenu(Activity activity) {
+    public MainMenuPage(Activity activity) {
         super(activity);
     }
 
-    public MainMenu clickOnMenu() {
+    public MainMenuPage clickOnMenu() {
         Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
         return this;
     }
 
-    public void startBlankForm(String text) {
+    public FormEntryPage startBlankForm(String text) {
         onView(withId(R.id.enter_data)).perform(click());
         onData(withRowString(FormsProviderAPI.FormsColumns.DISPLAY_NAME, text)).perform(click());
+        return new FormEntryPage(activity);
     }
 
     public void clickGeneralSettings() {

@@ -11,7 +11,7 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.espressoutils.FormEntry;
-import org.odk.collect.android.espressoutils.MainMenu;
+import org.odk.collect.android.espressoutils.MainMenuPage;
 import org.odk.collect.android.espressoutils.Settings;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -37,12 +37,12 @@ public class FormManagementTest extends BaseRegressionTest {
     @Test
     public void validationUponSwipe_ShouldDisplay() {
         //TestCase7,8
-        new MainMenu(main.getActivity()).startBlankForm("OnePageFormValid");
+        new MainMenuPage(main.getActivity()).startBlankForm("OnePageFormValid");
         FormEntry.putText("Bla");
         FormEntry.swipeToNextQuestion();
         FormEntry.checkIsToastWithMessageDisplayes("Response length must be between 5 and 15", main);
 
-        new MainMenu(main.getActivity())
+        new MainMenuPage(main.getActivity())
                 .clickOnMenu()
                 .clickGeneralSettings();
 
@@ -59,7 +59,7 @@ public class FormManagementTest extends BaseRegressionTest {
     @Test
     public void guidanceForQuestion_ShouldDisplayAlways() {
         //TestCase10
-        new MainMenu(main.getActivity())
+        new MainMenuPage(main.getActivity())
                 .clickOnMenu()
                 .clickGeneralSettings();
 
@@ -68,7 +68,7 @@ public class FormManagementTest extends BaseRegressionTest {
         Settings.clickOnString(R.string.guidance_yes);
         pressBack();
         pressBack();
-        new MainMenu(main.getActivity()).startBlankForm("hints textq");
+        new MainMenuPage(main.getActivity()).startBlankForm("hints textq");
         FormEntry.checkIsTextDisplayed("1 very very very very very very very very very very long text");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
@@ -77,7 +77,7 @@ public class FormManagementTest extends BaseRegressionTest {
     @Test
     public void guidanceForQuestion_ShouldBeCollapsed() {
         //TestCase11
-        new MainMenu(main.getActivity())
+        new MainMenuPage(main.getActivity())
                 .clickOnMenu()
                 .clickGeneralSettings();
         
@@ -86,7 +86,7 @@ public class FormManagementTest extends BaseRegressionTest {
         Settings.clickOnString(R.string.guidance_yes_collapsed);
         pressBack();
         pressBack();
-        new MainMenu(main.getActivity()).startBlankForm("hints textq");
+        new MainMenuPage(main.getActivity()).startBlankForm("hints textq");
         FormEntry.checkIsIdDisplayed(R.id.help_icon);
         FormEntry.clickOnText("Hint 1");
         FormEntry.checkIsTextDisplayed("1 very very very very very very very very very very long text");

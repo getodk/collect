@@ -59,7 +59,7 @@ public final class Settings {
     }
 
     public static void resetSettings(Activity activity) {
-        new MainMenu(activity)
+        new MainMenuPage(activity)
                 .clickOnMenu()
                 .clickAdminSettings();
 

@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.espressoutils.FormEntry;
-import org.odk.collect.android.espressoutils.MainMenu;
+import org.odk.collect.android.espressoutils.MainMenuPage;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 
@@ -34,7 +34,7 @@ public class FormValidationTest extends BaseRegressionTest {
     @Test
     public void invalidAnswer_ShouldDisplayAllQuestionsOnOnePage() {
 
-        new MainMenu(main.getActivity()).startBlankForm("OnePageFormShort");
+        new MainMenuPage(main.getActivity()).startBlankForm("OnePageFormShort");
         FormEntry.putTextOnIndex(0, "A");
         FormEntry.clickGoToIconInForm();
         FormEntry.clickJumpEndButton();
@@ -51,7 +51,7 @@ public class FormValidationTest extends BaseRegressionTest {
     public void openHierarchyView_ShouldSeeShortForms() {
 
         //TestCase3
-        new MainMenu(main.getActivity()).startBlankForm("OnePageFormShort");
+        new MainMenuPage(main.getActivity()).startBlankForm("OnePageFormShort");
         FormEntry.clickGoToIconInForm();
         FormEntry.checkIsTextDisplayed("YY MM");
         FormEntry.checkIsTextDisplayed("YY");

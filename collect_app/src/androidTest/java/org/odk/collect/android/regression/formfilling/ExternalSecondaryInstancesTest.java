@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.espressoutils.FormEntry;
-import org.odk.collect.android.espressoutils.MainMenu;
+import org.odk.collect.android.espressoutils.MainMenuPage;
 import org.odk.collect.android.regression.BaseRegressionTest;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -35,7 +35,7 @@ public class ExternalSecondaryInstancesTest extends BaseRegressionTest {
     public void external_ShouldFillTheForm() {
 
         //TestCase1
-        new MainMenu(main.getActivity()).startBlankForm("external select 10");
+        new MainMenuPage(main.getActivity()).startBlankForm("external select 10");
         FormEntry.clickOnText("b");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickOnText("ba");
@@ -47,7 +47,7 @@ public class ExternalSecondaryInstancesTest extends BaseRegressionTest {
     public void internal_ShouldFillTheForm() {
 
         //TestCase2
-        new MainMenu(main.getActivity()).startBlankForm("internal select 10");
+        new MainMenuPage(main.getActivity()).startBlankForm("internal select 10");
         FormEntry.clickOnText("c");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickOnText("ca");

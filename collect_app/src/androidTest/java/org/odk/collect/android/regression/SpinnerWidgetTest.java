@@ -10,7 +10,7 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.espressoutils.FormEntry;
-import org.odk.collect.android.espressoutils.MainMenu;
+import org.odk.collect.android.espressoutils.MainMenuPage;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 
@@ -32,7 +32,7 @@ public class SpinnerWidgetTest extends BaseRegressionTest {
 
     @Test
     public void spinnerList_ShouldDisplay() {
-        new MainMenu(main.getActivity()).startBlankForm("selectOneMinimal");
+        new MainMenuPage(main.getActivity()).startBlankForm("selectOneMinimal");
         FormEntry.clickOnString(R.string.select_one);
         FormEntry.clickOnAreaWithIndex("TextView", 2);
         FormEntry.clickOnText("c");
