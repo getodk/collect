@@ -42,7 +42,7 @@ public class FormManagementTest extends  BaseRegressionTest {
         FormEntry.swipeToNextQuestion();
         FormEntry.checkIsToastWithMessageDisplayes("Response length must be between 5 and 15", main);
         MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.openFormManagement();
         Settings.openConstraintProcessing();
         FormEntry.clickOnString(R.string.constraint_behavior_on_finalize);
@@ -57,7 +57,7 @@ public class FormManagementTest extends  BaseRegressionTest {
     public void guidanceForQuestion_ShouldDisplayAlways() {
         //TestCase10
         MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.openFormManagement();
         Settings.openShowGuidanceForQuestions();
         Settings.clickOnString(R.string.guidance_yes);
@@ -73,7 +73,7 @@ public class FormManagementTest extends  BaseRegressionTest {
     public void guidanceForQuestion_ShouldBeCollapsed() {
         //TestCase11
         MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.openFormManagement();
         Settings.openShowGuidanceForQuestions();
         Settings.clickOnString(R.string.guidance_yes_collapsed);

@@ -34,7 +34,7 @@ public class TriggerWidgetTest extends BaseRegressionTest {
     @Test
     public void guidanceIcons_ShouldBeAlwaysShown() {
         MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.openFormManagement();
         Settings.openShowGuidanceForQuestions();
         Settings.clickOnString(R.string.guidance_yes);
@@ -50,7 +50,7 @@ public class TriggerWidgetTest extends BaseRegressionTest {
     @Test
     public void guidanceIcons_ShouldBeCollapsed() {
         MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.openFormManagement();
         Settings.openShowGuidanceForQuestions();
         Settings.clickOnString(R.string.guidance_yes_collapsed);

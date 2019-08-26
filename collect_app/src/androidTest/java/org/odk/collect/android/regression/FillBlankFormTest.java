@@ -158,7 +158,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
 
         //TestCase37
         MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.clickOnUserInterface();
         Settings.clickOnLanguage();
         Settings.clickOnSelectedLanguage("Deutsch");
@@ -196,7 +196,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         pressBack();
         pressBack();
         MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.clickOnUserInterface();
         Settings.clickOnLanguage();
         Settings.clickOnSelectedLanguage("English");

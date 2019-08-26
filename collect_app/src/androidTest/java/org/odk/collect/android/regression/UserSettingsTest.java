@@ -36,7 +36,7 @@ public class UserSettingsTest extends BaseRegressionTest {
         pressBack();
         pressBack();
         MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.checkIfStringDoesNotExist(R.string.server);
         Settings.checkIfStringDoesNotExist(R.string.client);
         Settings.checkIfStringDoesNotExist(R.string.maps);
@@ -66,7 +66,7 @@ public class UserSettingsTest extends BaseRegressionTest {
         pressBack();
         pressBack();
         MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.openFormManagement();
         Settings.checkIfStringDoesNotExist(R.string.guidance_hint_title);
         pressBack();
@@ -78,7 +78,7 @@ public class UserSettingsTest extends BaseRegressionTest {
         pressBack();
         pressBack();
         MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.openFormManagement();
         FormEntry.checkIsStringDisplayed(R.string.guidance_hint_title);
         pressBack();
