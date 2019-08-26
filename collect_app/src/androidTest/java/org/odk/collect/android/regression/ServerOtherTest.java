@@ -5,7 +5,7 @@ import androidx.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.espressoutils.FormEntry;
-import org.odk.collect.android.espressoutils.MainMenu;
+import org.odk.collect.android.espressoutils.MainMenuPage;
 import org.odk.collect.android.espressoutils.Settings;
 
 import static androidx.test.espresso.Espresso.pressBack;
@@ -17,7 +17,7 @@ public class ServerOtherTest extends BaseRegressionTest {
     @Test
     public void formListPath_ShouldBeUpdated() {
         //TestCase1
-        new MainMenu(main.getActivity())
+        new MainMenuPage(main.getActivity())
                 .clickOnMenu()
                 .clickGeneralSettings();
 
@@ -36,7 +36,7 @@ public class ServerOtherTest extends BaseRegressionTest {
     @Test
     public void submissionsPath_ShouldBeUpdated() {
         //TestCase2
-        new MainMenu(main.getActivity())
+        new MainMenuPage(main.getActivity())
                 .clickOnMenu()
                 .clickGeneralSettings();
 

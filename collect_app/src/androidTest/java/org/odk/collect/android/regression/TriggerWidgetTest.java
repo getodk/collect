@@ -11,7 +11,7 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.espressoutils.FormEntry;
-import org.odk.collect.android.espressoutils.MainMenu;
+import org.odk.collect.android.espressoutils.MainMenuPage;
 import org.odk.collect.android.espressoutils.Settings;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -33,7 +33,7 @@ public class TriggerWidgetTest extends BaseRegressionTest {
 
     @Test
     public void guidanceIcons_ShouldBeAlwaysShown() {
-        new MainMenu(main.getActivity())
+        new MainMenuPage(main.getActivity())
                 .clickOnMenu()
                 .clickGeneralSettings();
 
@@ -42,7 +42,7 @@ public class TriggerWidgetTest extends BaseRegressionTest {
         Settings.clickOnString(R.string.guidance_yes);
         pressBack();
         pressBack();
-        new MainMenu(main.getActivity()).startBlankForm("Guidance Form Sample");
+        new MainMenuPage(main.getActivity()).startBlankForm("Guidance Form Sample");
         FormEntry.checkIsTextDisplayed("Guidance text");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
@@ -51,7 +51,7 @@ public class TriggerWidgetTest extends BaseRegressionTest {
 
     @Test
     public void guidanceIcons_ShouldBeCollapsed() {
-        new MainMenu(main.getActivity())
+        new MainMenuPage(main.getActivity())
                 .clickOnMenu()
                 .clickGeneralSettings();
 
@@ -60,7 +60,7 @@ public class TriggerWidgetTest extends BaseRegressionTest {
         Settings.clickOnString(R.string.guidance_yes_collapsed);
         pressBack();
         pressBack();
-        new MainMenu(main.getActivity()).startBlankForm("Guidance Form Sample");
+        new MainMenuPage(main.getActivity()).startBlankForm("Guidance Form Sample");
         FormEntry.checkIsIdDisplayed(R.id.help_icon);
         FormEntry.clickOnText("TriggerWidget");
         FormEntry.checkIsTextDisplayed("Guidance text");

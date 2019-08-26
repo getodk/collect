@@ -13,7 +13,7 @@ import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.espressoutils.FormEntry;
-import org.odk.collect.android.espressoutils.MainMenu;
+import org.odk.collect.android.espressoutils.MainMenuPage;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.ScreenshotOnFailureTestRule;
@@ -42,7 +42,7 @@ public class DrawWidgetTest extends BaseRegressionTest {
     public void saveIgnoreDialog_ShouldUseBothOptions() {
 
         //TestCase1
-        new MainMenu(main.getActivity()).startBlankForm("All widgets");
+        new MainMenuPage(main.getActivity()).startBlankForm("All widgets");
         FormEntry.clickGoToIconInForm();
         FormEntry.clickOnText("Image widgets");
         FormEntry.clickOnText("Draw widget");
@@ -63,7 +63,7 @@ public class DrawWidgetTest extends BaseRegressionTest {
     public void setColor_ShouldSeeColorPicker() {
 
         //TestCase2
-        new MainMenu(main.getActivity()).startBlankForm("All widgets");
+        new MainMenuPage(main.getActivity()).startBlankForm("All widgets");
         FormEntry.clickGoToIconInForm();
         FormEntry.clickOnText("Image widgets");
         FormEntry.clickOnText("Draw widget");
@@ -82,7 +82,7 @@ public class DrawWidgetTest extends BaseRegressionTest {
     public void multiClickOnPlus_ShouldDisplayIcons() {
 
         //TestCase3
-        new MainMenu(main.getActivity()).startBlankForm("All widgets");
+        new MainMenuPage(main.getActivity()).startBlankForm("All widgets");
         FormEntry.clickGoToIconInForm();
         FormEntry.clickOnText("Image widgets");
         FormEntry.clickOnText("Draw widget");

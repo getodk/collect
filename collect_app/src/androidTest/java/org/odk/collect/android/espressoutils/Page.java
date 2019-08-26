@@ -9,7 +9,7 @@ import android.app.Activity;
 
 abstract class Page {
 
-    private final Activity activity;
+    final Activity activity;
 
     Page(Activity activity) {
         this.activity = activity;
