@@ -18,13 +18,10 @@ package org.odk.collect.android.test;
 
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.res.AssetManager;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.platform.app.InstrumentationRegistry;
 
-import org.apache.commons.io.IOUtils;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
@@ -33,14 +30,12 @@ import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
 import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
+import static org.odk.collect.android.test.FileUtils.copyFileFromAssets;
 
 public class FormLoadingUtils {
 
@@ -106,30 +101,16 @@ public class FormLoadingUtils {
 
     private static void copyForm(String formFilename) throws IOException {
         String pathname = Collect.FORMS_PATH + "/" + formFilename;
-
-        AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
-        InputStream inputStream = assetManager.open("forms/" + formFilename);
-
-        File outFile = new File(pathname);
-        OutputStream outputStream = new FileOutputStream(outFile);
-
-        IOUtils.copy(inputStream, outputStream);
-
-        saveFormToDatabase(outFile);
+        copyFileFromAssets("forms/" + formFilename, pathname);
+        saveFormToDatabase(new File(pathname));
     }
 
     private static void copyFormMediaFiles(String formFilename, List<String> mediaFilenames) throws IOException {
         String mediaPathName = Collect.FORMS_PATH + "/" + formFilename.replace(".xml", "") + FileUtils.MEDIA_SUFFIX + "/";
         FileUtils.checkMediaPath(new File(mediaPathName));
 
-        AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
-
         for (String mediaFilename : mediaFilenames) {
-            InputStream mediaInputStream = assetManager.open("media/" + mediaFilename);
-            File mediaOutFile = new File(mediaPathName + mediaFilename);
-            OutputStream mediaOutputStream = new FileOutputStream(mediaOutFile);
-
-            IOUtils.copy(mediaInputStream, mediaOutputStream);
+            copyFileFromAssets("media/" + mediaFilename, mediaPathName + mediaFilename);
         }
     }
 }
