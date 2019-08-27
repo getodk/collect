@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.database.helpers;
 
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -25,6 +26,9 @@ import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 import org.odk.collect.android.utilities.SQLiteUtils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -55,6 +59,13 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     public static final String FORMS_TABLE_NAME = "forms";
 
     public static final int DATABASE_VERSION = 7;
+
+    private static final String[] COLUMN_NAMES_V7 = new String[] {_ID, DISPLAY_NAME, DESCRIPTION,
+            JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
+            SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
+            LAST_DETECTED_FORM_VERSION_HASH};
+
+    static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V7;
 
     // These exist in database versions 2 and 3, but not in 4...
     private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
@@ -268,10 +279,6 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
 
     private void upgradeToVersion7(SQLiteDatabase db) {
         String temporaryTable = FORMS_TABLE_NAME + "_tmp";
-        String[] formsTableColumnsInV7 = new String[] {_ID, DISPLAY_NAME, DESCRIPTION,
-                JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
-                SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
-                LAST_DETECTED_FORM_VERSION_HASH};
 
             CustomSQLiteQueryBuilder
                     .begin(db)
@@ -284,9 +291,9 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
             CustomSQLiteQueryBuilder
                     .begin(db)
                     .insertInto(FORMS_TABLE_NAME)
-                    .columnsForInsert(formsTableColumnsInV7)
+                    .columnsForInsert(COLUMN_NAMES_V7)
                     .select()
-                    .columnsForSelect(formsTableColumnsInV7)
+                    .columnsForSelect(COLUMN_NAMES_V7)
                     .from(temporaryTable)
                     .end();
 
@@ -343,5 +350,15 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
 
     public static boolean isDatabaseBeingMigrated() {
         return isDatabaseBeingMigrated;
+    }
+
+    static List<String> getFormsColumnNames(SQLiteDatabase db) {
+        String[] columnNames;
+        try (Cursor c = db.query(FORMS_TABLE_NAME, null, null, null, null, null, null)) {
+            columnNames = c.getColumnNames();
+        }
+
+        // Build a full-featured ArrayList rather than the limited array-backed List from asList
+        return new ArrayList<>(Arrays.asList(columnNames));
     }
 }
