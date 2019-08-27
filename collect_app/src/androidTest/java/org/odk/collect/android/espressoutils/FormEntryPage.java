@@ -28,11 +28,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage clickOnString(int stringID) {
-        FormEntry.clickOnString(stringID);
-        return this;
-    }
-
     public FormEntryPage clickJumpEndButton() {
         FormEntry.clickJumpEndButton();
         return this;
