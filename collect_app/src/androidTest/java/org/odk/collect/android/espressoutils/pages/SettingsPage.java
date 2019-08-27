@@ -1,8 +1,12 @@
 package org.odk.collect.android.espressoutils.pages;
 
+import androidx.test.espresso.matcher.PreferenceMatchers;
 import androidx.test.rule.ActivityTestRule;
 
-import org.odk.collect.android.espressoutils.Settings;
+import org.odk.collect.android.R;
+
+import static androidx.test.espresso.Espresso.onData;
+import static androidx.test.espresso.action.ViewActions.click;
 
 public class SettingsPage extends Page<SettingsPage> {
 
@@ -11,27 +15,23 @@ public class SettingsPage extends Page<SettingsPage> {
     }
 
     public SettingsPage clickOnUserInterface() {
-        Settings.clickOnUserInterface();
+        onData(PreferenceMatchers.withKey("user_interface")).perform(click());
         return this;
     }
 
     public SettingsPage clickOnLanguage() {
-        Settings.clickOnLanguage();
+        onData(PreferenceMatchers.withKey("app_language")).perform(click());
         return this;
     }
 
     public SettingsPage clickOnSelectedLanguage(String language) {
-        Settings.clickOnSelectedLanguage(language);
+        clickOnText(language);
         return this;
     }
 
     public SettingsPage clickNavigation() {
-        Settings.clickNavigation();
+        clickOnString(R.string.navigation);
         return this;
     }
 
-    public SettingsPage clickUseSwipesAndButtons() {
-        Settings.clickUseSwipesAndButtons();
-        return this;
-    }
 }

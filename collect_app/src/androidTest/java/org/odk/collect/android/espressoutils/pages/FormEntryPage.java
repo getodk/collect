@@ -19,16 +19,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage clickOnText(String text) {
-        FormEntry.clickOnText(text);
-        return this;
-    }
-
-    public FormEntryPage clickOnId(int id) {
-        FormEntry.clickOnId(id);
-        return this;
-    }
-
     public FormEntryPage clickJumpEndButton() {
         FormEntry.clickJumpEndButton();
         return this;
@@ -37,11 +27,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public MainMenuPage clickSaveAndExit() {
         FormEntry.clickSaveAndExit();
         return new MainMenuPage(rule);
-    }
-
-    public FormEntryPage checkIsIdDisplayed(int id) {
-        FormEntry.checkIsIdDisplayed(id);
-        return this;
     }
 
     public FormEntryPage swipeToNextQuestion() {
@@ -76,11 +61,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage clickGoToIconInForm() {
         FormEntry.clickGoToIconInForm();
-        return this;
-    }
-
-    public FormEntryPage clickOk() {
-        FormEntry.clickOk();
         return this;
     }
 }

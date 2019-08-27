@@ -13,6 +13,7 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.espressoutils.Settings;
 import org.odk.collect.android.espressoutils.pages.FormEntryPage;
 import org.odk.collect.android.espressoutils.pages.MainMenuPage;
 import org.odk.collect.android.espressoutils.pages.SettingsPage;
@@ -102,6 +103,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void navigationButtons_ShouldBeVisibleWhenAreSetInTheMiddleOfForm() {
 
         //TestCase16
+        Settings.clickUseSwipesAndButtons();
         new MainMenuPage(main)
                 .startBlankForm("All widgets")
                 .swipeToNextQuestion()
@@ -109,7 +111,6 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickGeneralSettings()
                 .clickOnUserInterface()
                 .clickNavigation()
-                .clickUseSwipesAndButtons()
                 .pressBack(SettingsPage.class)
                 .pressBack(FormEntryPage.class)
                 .checkAreNavigationButtonsDisplayed();
