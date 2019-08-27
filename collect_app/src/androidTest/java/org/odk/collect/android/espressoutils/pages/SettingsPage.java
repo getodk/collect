@@ -34,4 +34,8 @@ public class SettingsPage extends Page<SettingsPage> {
         return this;
     }
 
+    public SettingsPage clickUseSwipesAndButtons() {
+        clickOnString(R.string.swipe_buttons_navigation);
+        return this;
+    }
 }

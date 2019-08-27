@@ -13,7 +13,6 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.espressoutils.Settings;
 import org.odk.collect.android.espressoutils.pages.FormEntryPage;
 import org.odk.collect.android.espressoutils.pages.MainMenuPage;
 import org.odk.collect.android.espressoutils.pages.SettingsPage;
@@ -26,13 +25,12 @@ import java.util.Collections;
 import java.util.List;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertNotSame;
 import static org.odk.collect.android.support.matchers.DrawableMatcher.withImageDrawable;
 import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withRecyclerView;
-
-import static androidx.test.espresso.Espresso.pressBack;
 
 //Issue NODK-244
 @RunWith(AndroidJUnit4.class)
@@ -103,7 +101,6 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void navigationButtons_ShouldBeVisibleWhenAreSetInTheMiddleOfForm() {
 
         //TestCase16
-        Settings.clickUseSwipesAndButtons();
         new MainMenuPage(main)
                 .startBlankForm("All widgets")
                 .swipeToNextQuestion()
@@ -111,6 +108,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickGeneralSettings()
                 .clickOnUserInterface()
                 .clickNavigation()
+                .clickUseSwipesAndButtons()
                 .pressBack(SettingsPage.class)
                 .pressBack(FormEntryPage.class)
                 .checkAreNavigationButtonsDisplayed();
