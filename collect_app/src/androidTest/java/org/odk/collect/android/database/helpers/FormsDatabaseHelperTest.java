@@ -17,11 +17,11 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
-import static org.odk.collect.android.database.helpers.InstancesDatabaseHelper.DATABASE_PATH;
+import static org.odk.collect.android.database.helpers.FormsDatabaseHelper.DATABASE_PATH;
 import static org.odk.collect.android.test.FileUtils.copyFileFromAssets;
 
 @RunWith(Parameterized.class)
-public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
+public class FormsDatabaseHelperTest extends SqlLiteHelperTest {
     @Parameterized.Parameter
     public String description;
 
@@ -41,25 +41,25 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
     @Parameterized.Parameters(name = "{0}")
     public static Iterable<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                {"Downgrading from version with extra column drops that column", "instances_v7000_added_fakeColumn.db"},
-                {"Downgrading from version with missing column adds that column", "instances_v7000_removed_jrVersion.db"},
+                {"Downgrading from version with extra column drops that column", "forms_v7000_added_fakeColumn.db"},
+                {"Downgrading from version with missing column adds that column", "forms_v7000_removed_jrVersion.db"},
 
-                {"Upgrading from version with extra column drops that column", "instances_v4_real.db"},
-                {"Upgrading from version with missing column adds that column", "instances_v4_removed_jrVersion.db"}
+                {"Upgrading from version with extra column and missing columns", "forms_v4_real.db"},
+                {"Upgrading from version with the same columns", "forms_v4_with_columns_from_v7.db"}
         });
     }
 
     @Test
     public void testMigration() throws IOException {
         copyFileFromAssets("database" + File.separator + dbFilename, DATABASE_PATH);
-        InstancesDatabaseHelper databaseHelper = new InstancesDatabaseHelper();
+        FormsDatabaseHelper databaseHelper = new FormsDatabaseHelper();
         ensureMigrationAppliesFully(databaseHelper);
 
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
-        assertThat(db.getVersion(), is(InstancesDatabaseHelper.DATABASE_VERSION));
+        assertThat(db.getVersion(), is(FormsDatabaseHelper.DATABASE_VERSION));
 
-        List<String> newColumnNames = InstancesDatabaseHelper.getInstancesColumnNames(db);
+        List<String> newColumnNames = FormsDatabaseHelper.getFormsColumnNames(db);
 
-        assertThat(newColumnNames, contains(InstancesDatabaseHelper.CURRENT_VERSION_COLUMN_NAMES));
+        assertThat(newColumnNames, contains(FormsDatabaseHelper.CURRENT_VERSION_COLUMN_NAMES));
     }
 }
