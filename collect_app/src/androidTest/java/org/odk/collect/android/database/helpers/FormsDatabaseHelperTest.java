@@ -44,7 +44,7 @@ public class FormsDatabaseHelperTest extends SqlLiteHelperTest {
                 {"Downgrading from version with extra column drops that column", "forms_v7000_added_fakeColumn.db"},
                 {"Downgrading from version with missing column adds that column", "forms_v7000_removed_jrVersion.db"},
 
-                {"Upgrading from version with extra column and missing columns", "forms_v4_real.db"},
+                {"Upgrading from version with extra column and missing columns", "forms_v4.db"},
                 {"Upgrading from version with the same columns", "forms_v4_with_columns_from_v7.db"}
         });
     }
