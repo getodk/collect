@@ -21,8 +21,8 @@ public class SQLiteUtilsTest {
 
     @Test
     public void doesColumnExistTest() throws IOException {
-        copyFileFromAssets("database" + File.separator + "formsV7.db", FormsDatabaseHelper.DATABASE_PATH);
-        copyFileFromAssets("database" + File.separator + "instancesV5.db", InstancesDatabaseHelper.DATABASE_PATH);
+        copyFileFromAssets("database" + File.separator + "forms_v7.db", FormsDatabaseHelper.DATABASE_PATH);
+        copyFileFromAssets("database" + File.separator + "instances_v5.db", InstancesDatabaseHelper.DATABASE_PATH);
 
         //forms.db
         SQLiteDatabase formsDb = SQLiteDatabase.openDatabase(FormsDatabaseHelper.DATABASE_PATH, null, SQLiteDatabase.OPEN_READONLY);

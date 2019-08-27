@@ -44,7 +44,7 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
                 {"Downgrading from version with extra column drops that column", "instances_v7000_added_fakeColumn.db"},
                 {"Downgrading from version with missing column adds that column", "instances_v7000_removed_jrVersion.db"},
 
-                {"Upgrading from version with extra column drops that column", "instances_v4_real.db"},
+                {"Upgrading from version with extra column drops that column", "instances_v3.db"},
                 {"Upgrading from version with missing column adds that column", "instances_v4_removed_jrVersion.db"}
         });
     }
