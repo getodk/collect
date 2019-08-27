@@ -30,18 +30,15 @@ abstract class Page<T extends Page<T>> {
         this.rule = rule;
     }
 
-    /**
-     * Presses back and then returns the Page object defined by
-     * `destination`.
-     */
-    public <D extends Page> D pressBack(Class<D> destination) {
-        Espresso.pressBack();
+    public abstract T assertOnPage();
 
-        try {
-            return destination.getDeclaredConstructor(ActivityTestRule.class).newInstance(rule);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    /**
+     * Presses back and then returns the Page object passed in after
+     * asserting we're there
+     */
+    public <D extends Page<D>> D pressBack(D destination) {
+        Espresso.pressBack();
+        return destination.assertOnPage();
     }
 
     public T checkIsTextDisplayed(String text) {
@@ -60,7 +57,7 @@ abstract class Page<T extends Page<T>> {
     }
 
     public T checkIsStringDisplayed(int stringID) {
-        checkIsTextDisplayed(getString(stringID));
+        checkIsTextDisplayed(getTranslatedString(stringID));
         return (T) this;
     }
 
@@ -73,7 +70,7 @@ abstract class Page<T extends Page<T>> {
     }
 
     public T clickOnString(int stringID) {
-        clickOnText(getString(stringID));
+        clickOnText(getTranslatedString(stringID));
         return (T) this;
     }
 
@@ -97,7 +94,7 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    String getString(Integer id) {
+    String getTranslatedString(Integer id) {
         return rule.getActivity().getString(id);
     }
 }

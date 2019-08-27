@@ -18,6 +18,12 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
         super(rule);
     }
 
+    @Override
+    public FillBlankFormPage assertOnPage() {
+        checkIsStringDisplayed(R.string.enter_data);
+        return this;
+    }
+
     public FillBlankFormPage clickOnSortByButton() {
         onView(withId(R.id.menu_sort)).perform(click());
         return this;
@@ -28,9 +34,9 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
         return this;
     }
 
-    public FillBlankFormPage searchInBar(String message) {
-        onView(withId(R.id.search_src_text)).perform(replaceText(message));
-        return this;
+    public BlankFormSearchPage searchInBar(String query) {
+        onView(withId(R.id.search_src_text)).perform(replaceText(query));
+        return new BlankFormSearchPage(rule).assertOnPage();
     }
 
     public FillBlankFormPage checkIsFormSubtextDisplayed() {

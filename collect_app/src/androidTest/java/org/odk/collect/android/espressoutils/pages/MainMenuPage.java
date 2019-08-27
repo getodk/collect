@@ -19,29 +19,45 @@ public class MainMenuPage extends Page<MainMenuPage> {
         super(rule);
     }
 
+    @Override
+    public MainMenuPage assertOnPage() {
+        checkIsStringDisplayed(R.string.main_menu);
+        return this;
+    }
+
     public MainMenuPage clickOnMenu() {
         Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
         return this;
     }
 
     public FormEntryPage startBlankForm(String text) {
+        return startBlankForm(text, false);
+    }
+
+    public FormEntryPage startBlankForm(String text, Boolean assertOnPage) {
         onView(withId(R.id.enter_data)).perform(click());
         onData(withRowString(FormsProviderAPI.FormsColumns.DISPLAY_NAME, text)).perform(click());
-        return new FormEntryPage(rule);
+
+        if (assertOnPage) {
+            return new FormEntryPage(text, rule).assertOnPage();
+        } else {
+            return new FormEntryPage(text, rule);
+        }
     }
 
-    public SettingsPage clickGeneralSettings() {
+    public GeneralSettingsPage clickGeneralSettings() {
         clickOnString(R.string.general_preferences);
-        return new SettingsPage(rule);
+        return new GeneralSettingsPage(rule).assertOnPage();
     }
 
-    public void clickAdminSettings() {
+    public AdminSettingsPage clickAdminSettings() {
         clickOnString(R.string.admin_preferences);
+        return new AdminSettingsPage(rule).assertOnPage();
     }
 
     public FillBlankFormPage clickFillBlankForm() {
         onView(withId(R.id.enter_data)).perform(click());
-        return new FillBlankFormPage(rule);
+        return new FillBlankFormPage(rule).assertOnPage();
     }
 }
 

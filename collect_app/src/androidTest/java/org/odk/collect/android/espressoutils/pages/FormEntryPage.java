@@ -10,8 +10,18 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class FormEntryPage extends Page<FormEntryPage> {
-    public FormEntryPage(ActivityTestRule rule) {
+
+    private final String formName;
+
+    public FormEntryPage(String formName, ActivityTestRule rule) {
         super(rule);
+        this.formName = formName;
+    }
+
+    @Override
+    public FormEntryPage assertOnPage() {
+        checkIsTextDisplayed(formName);
+        return this;
     }
 
     public FormEntryPage clickOnGoToIconInForm() {
@@ -26,7 +36,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public MainMenuPage clickSaveAndExit() {
         FormEntry.clickSaveAndExit();
-        return new MainMenuPage(rule);
+        return new MainMenuPage(rule).assertOnPage();
     }
 
     public FormEntryPage swipeToNextQuestion() {
@@ -39,9 +49,9 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public SettingsPage clickGeneralSettings() {
-        onView(withText(getString(R.string.general_preferences))).perform(click());
-        return new SettingsPage(rule);
+    public GeneralSettingsPage clickGeneralSettings() {
+        onView(withText(getTranslatedString(R.string.general_preferences))).perform(click());
+        return new GeneralSettingsPage(rule).assertOnPage();
     }
 
     public FormEntryPage checkAreNavigationButtonsDisplayed() {

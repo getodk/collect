@@ -13,9 +13,12 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.espressoutils.pages.BlankFormSearchPage;
+import org.odk.collect.android.espressoutils.pages.ExitFormDialog;
+import org.odk.collect.android.espressoutils.pages.FillBlankFormPage;
 import org.odk.collect.android.espressoutils.pages.FormEntryPage;
 import org.odk.collect.android.espressoutils.pages.MainMenuPage;
-import org.odk.collect.android.espressoutils.pages.SettingsPage;
+import org.odk.collect.android.espressoutils.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -77,7 +80,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         //TestCase6 , TestCase9
         new MainMenuPage(main)
                 .startBlankForm("All widgets")
-                .pressBack(FormEntryPage.class)
+                .pressBack(new ExitFormDialog("All widgets", main))
                 .checkIsStringDisplayed(R.string.keep_changes)
                 .checkIsStringDisplayed(R.string.do_not_save)
                 .clickOnString(R.string.do_not_save)
@@ -93,8 +96,8 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickFillBlankForm()
                 .clickMenuFilter()
                 .searchInBar("Aaa")
-                .pressBack(MainMenuPage.class)
-                .pressBack(MainMenuPage.class);
+                .pressBack(new BlankFormSearchPage(main))
+                .pressBack(new FillBlankFormPage(main));
     }
 
     @Test
@@ -109,8 +112,8 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickOnUserInterface()
                 .clickNavigation()
                 .clickUseSwipesAndButtons()
-                .pressBack(SettingsPage.class)
-                .pressBack(FormEntryPage.class)
+                .pressBack(new GeneralSettingsPage(main))
+                .pressBack(new FormEntryPage("All widgets", main))
                 .checkAreNavigationButtonsDisplayed();
     }
 
@@ -171,6 +174,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(0, R.id.title))
                 .check(matches(withText("Name, A-Z")));
+
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(0, R.id.icon))
                 .check(matches(withImageDrawable(R.drawable.ic_sort_by_alpha)));
@@ -185,6 +189,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(2, R.id.title))
                 .check(matches(withText("Datum, neuestes zuerst")));
+
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(2, R.id.icon))
                 .check(matches(withImageDrawable(R.drawable.ic_access_time)));
@@ -192,9 +197,11 @@ public class FillBlankFormTest extends BaseRegressionTest {
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(3, R.id.title))
                 .check(matches(withText("Datum, ältestes zuerst")));
+
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(3, R.id.icon))
                 .check(matches(withImageDrawable(R.drawable.ic_access_time)));
+
         pressBack();
         pressBack();
 
@@ -305,13 +312,11 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void values_ShouldBeRandom() {
 
         //TestCase22
-        FormEntryPage formEntryPage = new FormEntryPage(main);
-
         List<String> firstQuestionAnswers = new ArrayList<>();
         List<String> secondQuestionAnswers = new ArrayList<>();
 
         for (int i = 1; i <= 3; i++) {
-            new MainMenuPage(main).startBlankForm("random");
+            FormEntryPage formEntryPage = new MainMenuPage(main).startBlankForm("random");
             firstQuestionAnswers.add(getQuestionText());
             formEntryPage.swipeToNextQuestion();
             secondQuestionAnswers.add(getQuestionText());
@@ -330,7 +335,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         firstQuestionAnswers.clear();
 
         for (int i = 1; i <= 3; i++) {
-            new MainMenuPage(main).startBlankForm("random test");
+            FormEntryPage formEntryPage = new MainMenuPage(main).startBlankForm("random test");
             formEntryPage.putText("3");
             formEntryPage.swipeToNextQuestion();
             firstQuestionAnswers.add(getQuestionText());

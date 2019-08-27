@@ -8,33 +8,39 @@ import org.odk.collect.android.R;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.action.ViewActions.click;
 
-public class SettingsPage extends Page<SettingsPage> {
+public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
 
-    SettingsPage(ActivityTestRule rule) {
+    public GeneralSettingsPage(ActivityTestRule rule) {
         super(rule);
     }
 
-    public SettingsPage clickOnUserInterface() {
+    @Override
+    public GeneralSettingsPage assertOnPage() {
+        checkIsStringDisplayed(R.string.general_preferences);
+        return this;
+    }
+
+    public GeneralSettingsPage clickOnUserInterface() {
         onData(PreferenceMatchers.withKey("user_interface")).perform(click());
         return this;
     }
 
-    public SettingsPage clickOnLanguage() {
+    public GeneralSettingsPage clickOnLanguage() {
         onData(PreferenceMatchers.withKey("app_language")).perform(click());
         return this;
     }
 
-    public SettingsPage clickOnSelectedLanguage(String language) {
+    public GeneralSettingsPage clickOnSelectedLanguage(String language) {
         clickOnText(language);
         return this;
     }
 
-    public SettingsPage clickNavigation() {
+    public GeneralSettingsPage clickNavigation() {
         clickOnString(R.string.navigation);
         return this;
     }
 
-    public SettingsPage clickUseSwipesAndButtons() {
+    public GeneralSettingsPage clickUseSwipesAndButtons() {
         clickOnString(R.string.swipe_buttons_navigation);
         return this;
     }
