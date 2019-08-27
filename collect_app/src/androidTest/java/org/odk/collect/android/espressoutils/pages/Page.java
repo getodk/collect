@@ -17,6 +17,9 @@ import static org.hamcrest.CoreMatchers.not;
 /**
  * Base class for Page Objects (https://www.martinfowler.com/bliki/PageObject.html)
  * used in Espresso tests. Provides shared helpers/setup.
+ *
+ * This class's generic type is designed to it's extending class so that shared methods
+ * can return the extending class.
  */
 
 abstract class Page<T extends Page<T>> {
@@ -27,6 +30,10 @@ abstract class Page<T extends Page<T>> {
         this.rule = rule;
     }
 
+    /**
+     * Presses back and then returns the Page object defined by
+     * `destination`.
+     */
     public <D extends Page> D pressBack(Class<D> destination) {
         Espresso.pressBack();
 
