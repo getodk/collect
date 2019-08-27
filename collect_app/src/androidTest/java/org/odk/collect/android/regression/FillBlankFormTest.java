@@ -13,9 +13,9 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.espressoutils.FormEntryPage;
-import org.odk.collect.android.espressoutils.MainMenuPage;
-import org.odk.collect.android.espressoutils.Settings;
+import org.odk.collect.android.espressoutils.pages.FormEntryPage;
+import org.odk.collect.android.espressoutils.pages.MainMenuPage;
+import org.odk.collect.android.espressoutils.pages.SettingsPage;
 import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -106,15 +106,13 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .startBlankForm("All widgets")
                 .swipeToNextQuestion()
                 .clickOptionsIcon()
-                .clickGeneralSettings();
-
-        Settings.clickUserInterface();
-        Settings.clickNavigation();
-        Settings.clickUseSwipesAndButtons();
-        pressBack();
-        pressBack();
-
-        new FormEntryPage(main).checkAreNavigationButtonsDisplayed();
+                .clickGeneralSettings()
+                .clickOnUserInterface()
+                .clickNavigation()
+                .clickUseSwipesAndButtons()
+                .pressBack(SettingsPage.class)
+                .pressBack(FormEntryPage.class)
+                .checkAreNavigationButtonsDisplayed();
     }
 
     @Test
@@ -161,11 +159,10 @@ public class FillBlankFormTest extends BaseRegressionTest {
         //TestCase37
         new MainMenuPage(main)
                 .clickOnMenu()
-                .clickGeneralSettings();
-
-        Settings.clickOnUserInterface();
-        Settings.clickOnLanguage();
-        Settings.clickOnSelectedLanguage("Deutsch");
+                .clickGeneralSettings()
+                .clickOnUserInterface()
+                .clickOnLanguage()
+                .clickOnSelectedLanguage("Deutsch");
 
         new MainMenuPage(main)
                 .clickFillBlankForm()
@@ -204,11 +201,10 @@ public class FillBlankFormTest extends BaseRegressionTest {
 
         new MainMenuPage(main)
                 .clickOnMenu()
-                .clickGeneralSettings();
-
-        Settings.clickOnUserInterface();
-        Settings.clickOnLanguage();
-        Settings.clickOnSelectedLanguage("English");
+                .clickGeneralSettings()
+                .clickOnUserInterface()
+                .clickOnLanguage()
+                .clickOnSelectedLanguage("English");
     }
 
     @Test

@@ -1,8 +1,9 @@
-package org.odk.collect.android.espressoutils;
+package org.odk.collect.android.espressoutils.pages;
 
 import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.espressoutils.FormEntry;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -53,8 +54,9 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public void clickGeneralSettings() {
+    public SettingsPage clickGeneralSettings() {
         onView(withText(getString(R.string.general_preferences))).perform(click());
+        return new SettingsPage(rule);
     }
 
     public FormEntryPage checkAreNavigationButtonsDisplayed() {

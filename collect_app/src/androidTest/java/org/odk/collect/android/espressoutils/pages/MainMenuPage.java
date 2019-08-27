@@ -1,4 +1,4 @@
-package org.odk.collect.android.espressoutils;
+package org.odk.collect.android.espressoutils.pages;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.rule.ActivityTestRule;
@@ -35,8 +35,9 @@ public final class MainMenuPage extends Page<MainMenuPage> {
         return new FormEntryPage(rule);
     }
 
-    public void clickGeneralSettings() {
+    public SettingsPage clickGeneralSettings() {
         onView(withText(getString(R.string.general_preferences))).perform(click());
+        return new SettingsPage(rule);
     }
 
     public void clickAdminSettings() {

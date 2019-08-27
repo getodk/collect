@@ -1,7 +1,9 @@
-package org.odk.collect.android.espressoutils;
+package org.odk.collect.android.espressoutils.pages;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.rule.ActivityTestRule;
+
+import org.odk.collect.android.espressoutils.FormEntry;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
