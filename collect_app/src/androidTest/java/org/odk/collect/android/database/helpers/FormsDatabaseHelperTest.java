@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.dto.Form;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
@@ -14,6 +16,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
@@ -61,5 +64,17 @@ public class FormsDatabaseHelperTest extends SqlLiteHelperTest {
         List<String> newColumnNames = FormsDatabaseHelper.getFormsColumnNames(db);
 
         assertThat(newColumnNames, contains(FormsDatabaseHelper.CURRENT_VERSION_COLUMN_NAMES));
+
+        if (description.startsWith("Upgrading")) {
+            assertThatFormsAreKeptAfterUpgrading();
+        }
+    }
+
+    private void assertThatFormsAreKeptAfterUpgrading() {
+        FormsDao formsDao = new FormsDao();
+        List<Form> forms = formsDao.getFormsFromCursor(formsDao.getFormsCursor());
+        assertEquals(1, forms.size());
+        assertEquals("2019051302", forms.get(0).getJrVersion());
+        assertEquals("92ba8106dcb779943c1de163d73e1069", forms.get(0).getMD5Hash());
     }
 }
