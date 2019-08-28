@@ -39,7 +39,7 @@
         android:layout_marginTop="@dimen/margin_small"
         android:text="@string/newer_version_of_a_form_info"
         android:textAppearance="@style/TextAppearance.Collect.Body2"
-        android:textColor="@color/displaySubtextColor"
+        android:textColor="?attr/colorSecondary"
         android:visibility="gone"
         tools:visibility="visible" />
 
