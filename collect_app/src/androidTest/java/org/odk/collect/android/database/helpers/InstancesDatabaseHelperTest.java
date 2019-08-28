@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
@@ -14,6 +16,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
@@ -59,7 +62,17 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
         assertThat(db.getVersion(), is(InstancesDatabaseHelper.DATABASE_VERSION));
 
         List<String> newColumnNames = InstancesDatabaseHelper.getInstancesColumnNames(db);
-
         assertThat(newColumnNames, contains(InstancesDatabaseHelper.CURRENT_VERSION_COLUMN_NAMES));
+        assertThatInstancesAreKeptAfterMigrating();
+    }
+
+    private void assertThatInstancesAreKeptAfterMigrating() {
+        InstancesDao instancesDao = new InstancesDao();
+        List<Instance> instances = instancesDao.getInstancesFromCursor(instancesDao.getInstancesCursor(null, null));
+        assertEquals(2, instances.size());
+        assertEquals("complete", instances.get(0).getStatus());
+        assertEquals(Long.valueOf(1564413556249L), instances.get(0).getLastStatusChangeDate());
+        assertEquals("incomplete", instances.get(1).getStatus());
+        assertEquals(Long.valueOf(1564413579406L), instances.get(1).getLastStatusChangeDate());
     }
 }
