@@ -36,7 +36,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
 
     @Test
     //https://github.com/opendatakit/collect/issues/2871
-    public void test1() {
+    public void allRelevantQuestionsShouldBeVisibleInHierarchyView() {
         MainMenu.startBlankForm("formHierarchy1");
         FormEntry.clickGoToIconInForm();
 
@@ -51,7 +51,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
 
     @Test
     //https://github.com/opendatakit/collect/issues/2944
-    public void test2() {
+    public void notRelevantRepeatGroupsShouldNotBeVisibleInHierarchy() {
         MainMenu.startBlankForm("formHierarchy2");
         FormEntry.putText("2");
         FormEntry.clickGoToIconInForm();
@@ -91,7 +91,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
 
     @Test
     //https://github.com/opendatakit/collect/issues/2936
-    public void test3() {
+    public void repeatGroupsShouldBeVisibleAsAppropriate() {
         MainMenu.startBlankForm("formHierarchy3");
         FormEntry.swipeToNextQuestion();
         FormEntry.swipeToNextQuestion();
@@ -114,7 +114,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
 
     @Test
     //https://github.com/opendatakit/collect/issues/2942
-    public void test4() {
+    public void deletingLastGroupShouldNotBreakHierarchy() {
         MainMenu.startBlankForm("formHierarchy3");
         FormEntry.swipeToNextQuestion();
         FormEntry.swipeToNextQuestion();
