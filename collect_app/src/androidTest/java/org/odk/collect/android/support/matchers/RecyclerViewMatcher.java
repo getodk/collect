@@ -66,11 +66,10 @@ public class RecyclerViewMatcher {
         };
     }
 
-    public static Matcher<View> withListSize(int listId, final int size) {
+    public static Matcher<View> withListSize(final int size) {
         return new TypeSafeMatcher<View>() {
             @Override public boolean matchesSafely(final View view) {
-                RecyclerView recyclerView = view.getRootView().findViewById(listId);
-                return recyclerView.getChildCount() == size;
+                return ((RecyclerView) view).getAdapter().getItemCount() == size;
             }
 
             @Override public void describeTo(final Description description) {
