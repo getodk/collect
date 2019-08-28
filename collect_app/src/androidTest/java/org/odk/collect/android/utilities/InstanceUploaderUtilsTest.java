@@ -23,6 +23,10 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class InstanceUploaderUtilsTest {
+    /**
+     * 1000 instances is a big number that would product a very long sql query that would cause
+     * SQLiteException: Expression tree is too large if we didn't split it into parts.
+     */
     private static final int NUMBER_OF_INSTANCES_TO_SEND = 1000;
 
     private final InstancesDao instancesDao = new InstancesDao();
