@@ -17,8 +17,8 @@ import org.odk.collect.android.espressoutils.pages.BlankFormSearchPage;
 import org.odk.collect.android.espressoutils.pages.ExitFormDialog;
 import org.odk.collect.android.espressoutils.pages.FillBlankFormPage;
 import org.odk.collect.android.espressoutils.pages.FormEntryPage;
-import org.odk.collect.android.espressoutils.pages.MainMenuPage;
 import org.odk.collect.android.espressoutils.pages.GeneralSettingsPage;
+import org.odk.collect.android.espressoutils.pages.MainMenuPage;
 import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -143,8 +143,9 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void answers_ShouldBeSuggestedInComplianceWithSelectedLetters() {
 
         //TestCase41
-        new MainMenuPage(main).startBlankForm("formulaire_adherent")
-                .clickOnString(R.string.add_another)
+        new MainMenuPage(main)
+                .startBlankFormWithRepeatGroup("formulaire_adherent")
+                .clickOnAddGroup(new FormEntryPage("formulaire_adherent", main))
                 .clickOnText("Plante")
                 .putText("Abi")
                 .swipeToNextQuestion()
@@ -352,18 +353,17 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void app_ShouldNotCrash() {
 
         //TestCase32
-        new MainMenuPage(main).startBlankForm("g6Error")
-                .checkIsStringDisplayed(R.string.error_occured)
-                .clickOk()
+        new MainMenuPage(main)
+                .startBlankFormWithError("g6Error")
+                .clickOK(new FormEntryPage("g6Error", main))
                 .swipeToNextQuestion()
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed("Form successfully saved!");
 
         new MainMenuPage(main).startBlankForm("g6Error2")
                 .putText("bla")
-                .swipeToNextQuestion()
-                .checkIsStringDisplayed(R.string.error_occured)
-                .clickOk()
+                .swipeToNextQuestionWithError()
+                .clickOK(new FormEntryPage("g6Error2", main))
                 .swipeToNextQuestion()
                 .putText("ble")
                 .swipeToNextQuestion()

@@ -30,19 +30,20 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return this;
     }
 
-    public FormEntryPage startBlankForm(String text) {
-        return startBlankForm(text, false);
+    public FormEntryPage startBlankForm(String formName) {
+        goToBlankForm(formName);
+        return new FormEntryPage(formName, rule).assertOnPage();
     }
 
-    public FormEntryPage startBlankForm(String text, Boolean assertOnPage) {
-        onView(withId(R.id.enter_data)).perform(click());
-        onData(withRowString(FormsProviderAPI.FormsColumns.DISPLAY_NAME, text)).perform(click());
+    public AddNewGroupDialog startBlankFormWithRepeatGroup(String formName) {
+        goToBlankForm(formName);
 
-        if (assertOnPage) {
-            return new FormEntryPage(text, rule).assertOnPage();
-        } else {
-            return new FormEntryPage(text, rule);
-        }
+        return new AddNewGroupDialog(rule).assertOnPage();
+    }
+
+    public ErrorDialog startBlankFormWithError(String formName) {
+        goToBlankForm(formName);
+        return new ErrorDialog(rule).assertOnPage();
     }
 
     public GeneralSettingsPage clickGeneralSettings() {
@@ -58,6 +59,11 @@ public class MainMenuPage extends Page<MainMenuPage> {
     public FillBlankFormPage clickFillBlankForm() {
         onView(withId(R.id.enter_data)).perform(click());
         return new FillBlankFormPage(rule).assertOnPage();
+    }
+
+    private void goToBlankForm(String formName) {
+        onView(withId(R.id.enter_data)).perform(click());
+        onData(withRowString(FormsProviderAPI.FormsColumns.DISPLAY_NAME, formName)).perform(click());
     }
 }
 
