@@ -87,6 +87,10 @@ public final class FormEntry {
         onView(withId(R.id.menu_delete_child)).perform(click());
     }
 
+    public static void clickGoUpIcon() {
+        onView(withId(R.id.menu_go_up)).perform(click());
+    }
+
     public static void checkIsToastWithStringDisplayes(int value, ActivityTestRule main) {
         onView(withText(getInstrumentation().getTargetContext().getString(value))).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
