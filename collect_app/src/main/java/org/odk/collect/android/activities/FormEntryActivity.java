@@ -1165,6 +1165,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * @return newly created View
      */
     private View createView(int event, boolean advancingPage) {
+        releaseOdkView();
+
         FormController formController = getFormController();
 
         setTitle(formController.getFormTitle());
@@ -1182,7 +1184,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case FormEntryController.EVENT_QUESTION:
             case FormEntryController.EVENT_GROUP:
             case FormEntryController.EVENT_REPEAT:
-                releaseOdkView();
                 // should only be a group here if the event_group is a field-list
                 try {
                     FormEntryPrompt[] prompts = formController.getQuestionPrompts();
