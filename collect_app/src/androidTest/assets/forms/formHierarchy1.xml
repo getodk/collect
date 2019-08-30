@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>formHierarchy1</h:title>
+        <model>
+            <instance>
+                <formHierarchy1 id="formHierarchy1">
+                    <name>
+                        <first/>
+                    </name>
+                    <age/>
+                </formHierarchy1>
+            </instance>
+            <bind nodeset="name/first" type="int"/>
+            <bind nodeset="age" type="int"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="name/first">
+            <label>what is your name?</label>
+        </input>
+        <input ref="age">
+            <label>what is your age?</label>
+        </input>
+    </h:body>
+</h:html>

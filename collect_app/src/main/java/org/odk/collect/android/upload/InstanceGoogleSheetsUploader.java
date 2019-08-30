@@ -15,6 +15,7 @@
 package org.odk.collect.android.upload;
 
 import android.database.Cursor;
+
 import androidx.annotation.NonNull;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -48,7 +49,6 @@ import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.utilities.gdrive.SheetsHelper;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -292,7 +292,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         String lastSavedSrc = FileUtils.getOrCreateLastSavedSrc(formXml);
 
         try {
-            formDef = XFormUtils.getFormFromInputStream(new FileInputStream(formXml), lastSavedSrc);
+            formDef = XFormUtils.getFormFromFormXml(formFilePath, lastSavedSrc);
             FormLoaderTask.importData(instanceFile, new FormEntryController(new FormEntryModel(formDef)));
         } catch (IOException | RuntimeException e) {
             throw new UploadException(e);
@@ -362,7 +362,21 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         } else if (hasRepeatableGroups(element)) {
             answers.put(KEY, key);
         }
-        return answers;
+        return makeAnswersFormattingResistant(answers);
+    }
+
+    public static HashMap<String, String> makeAnswersFormattingResistant(HashMap<String, String> answers) {
+        HashMap<String, String> fixedAnswers = new HashMap<>();
+        for (Map.Entry<String, String> item : answers.entrySet()) {
+            String value = item.getValue();
+            if (!value.startsWith("http") && !value.startsWith("=HYPERLINK")) {
+                // Avoid formatting answers https://stackoverflow.com/a/37827066/5479029
+                value = "'" + value;
+            }
+            fixedAnswers.put(item.getKey(), value);
+        }
+
+        return fixedAnswers;
     }
 
     /**

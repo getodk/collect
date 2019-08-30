@@ -64,9 +64,9 @@ public class ThemeUtilsTests {
     @Test
     public void correctStylesShouldBeAppliedForLightTheme() {
         applyLightTheme();
-        assertEquals(themeUtils.getAppTheme(), R.style.LightAppTheme);
-        assertEquals(themeUtils.getSettingsTheme(), R.style.AppTheme_SettingsTheme_Light);
-        assertEquals(themeUtils.getBottomDialogTheme(), R.style.LightMaterialDialogSheet);
+        assertEquals(themeUtils.getAppTheme(), R.style.Theme_Collect_Light);
+        assertEquals(themeUtils.getSettingsTheme(), R.style.Theme_Collect_Settings_Light);
+        assertEquals(themeUtils.getBottomDialogTheme(), R.style.Theme_Collect_MaterialDialogSheet_Light);
         assertEquals(themeUtils.getMaterialDialogTheme(), android.R.style.Theme_Material_Light_Dialog);
         assertEquals(themeUtils.getHoloDialogTheme(), android.R.style.Theme_Holo_Light_Dialog);
     }
@@ -74,9 +74,9 @@ public class ThemeUtilsTests {
     @Test
     public void correctStylesShouldBeAppliedForDarkTheme() {
         applyDarkTheme();
-        assertEquals(themeUtils.getAppTheme(), R.style.DarkAppTheme);
-        assertEquals(themeUtils.getSettingsTheme(), R.style.AppTheme_SettingsTheme_Dark);
-        assertEquals(themeUtils.getBottomDialogTheme(), R.style.DarkMaterialDialogSheet);
+        assertEquals(themeUtils.getAppTheme(), R.style.Theme_Collect_Dark);
+        assertEquals(themeUtils.getSettingsTheme(), R.style.Theme_Collect_Settings_Dark);
+        assertEquals(themeUtils.getBottomDialogTheme(), R.style.Theme_Collect_MaterialDialogSheet_Dark);
         assertEquals(themeUtils.getMaterialDialogTheme(), android.R.style.Theme_Material_Dialog);
         assertEquals(themeUtils.getHoloDialogTheme(), android.R.style.Theme_Holo_Dialog);
     }
@@ -97,11 +97,11 @@ public class ThemeUtilsTests {
     }
 
     private Resources.Theme getDarkTheme() {
-        return createTheme(R.style.DarkAppTheme);
+        return createTheme(R.style.Theme_Collect_Dark);
     }
 
     private Resources.Theme getLightTheme() {
-        return createTheme(R.style.LightAppTheme);
+        return createTheme(R.style.Theme_Collect_Light);
     }
 
     private Resources.Theme createTheme(int styleResId) {

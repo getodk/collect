@@ -36,7 +36,7 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
     public void setEmail_ShouldRequireAtSign() {
         //TestCase1
         MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.clickUserAndDeviceIdentity();
         Settings.clickFormMetadata();
         Settings.clickMetadataEmail();
@@ -66,7 +66,7 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
 
         //TestCase3
         MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.clickUserAndDeviceIdentity();
         Settings.clickFormMetadata();
         Settings.clickMetadataUsername();
@@ -85,7 +85,7 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
 
         //TestCase4
         MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.clickUserAndDeviceIdentity();
         Settings.clickFormMetadata();
         Settings.clickMetadataUsername();
@@ -95,7 +95,7 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
         pressBack();
         pressBack();
         MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.openServerSettings();
         Settings.clickOnServerType();
         Settings.clickOnString(R.string.server_platform_odk_aggregate);
@@ -114,7 +114,7 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
 
         //TestCase5
         MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.clickUserAndDeviceIdentity();
         Settings.clickFormMetadata();
         Settings.clickMetadataUsername();
@@ -124,7 +124,7 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
         pressBack();
         pressBack();
         MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.openServerSettings();
         Settings.clickOnServerType();
         Settings.clickOnString(R.string.server_platform_odk_aggregate);

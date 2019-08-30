@@ -65,6 +65,10 @@ public final class FormEntry {
         onView(withIndex(withClassName(endsWith("Text")), index)).perform(replaceText(text));
     }
 
+    public static void clickJumpStartButton() {
+        onView(withId(R.id.jumpBeginningButton)).perform(click());
+    }
+
     public static void clickJumpEndButton() {
         onView(withId(R.id.jumpEndButton)).perform(click());
     }
@@ -81,6 +85,10 @@ public final class FormEntry {
         onView(withId(R.id.menu_goto)).perform(click());
     }
 
+    public static void clickDeleteChildIcon() {
+        onView(withId(R.id.menu_delete_child)).perform(click());
+    }
+
     public static void checkIsToastWithStringDisplayes(int value, ActivityTestRule main) {
         onView(withText(getInstrumentation().getTargetContext().getString(value))).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
@@ -91,6 +99,10 @@ public final class FormEntry {
 
     public static void clickSignatureButton() {
         onView(withId(R.id.simple_button)).perform(click());
+    }
+
+    public static void showSpinnerMultipleDialog() {
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.select_answer))).perform(click());
     }
 
     public static void checkIsDisplayedInTextClassAndSwipe(String message) {

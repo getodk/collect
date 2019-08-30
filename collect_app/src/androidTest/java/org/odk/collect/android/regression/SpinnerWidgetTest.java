@@ -34,7 +34,7 @@ public class SpinnerWidgetTest extends BaseRegressionTest {
     public void spinnerList_ShouldDisplay() {
         MainMenu.startBlankForm("selectOneMinimal");
         FormEntry.clickOnString(R.string.select_one);
-        FormEntry.clickOnAreaWithIndex("CheckedTextView", 2);
+        FormEntry.clickOnAreaWithIndex("TextView", 2);
         FormEntry.clickOnText("c");
         FormEntry.checkIsTextDisplayed("c");
         FormEntry.checkIfTextDoesNotExist("a");

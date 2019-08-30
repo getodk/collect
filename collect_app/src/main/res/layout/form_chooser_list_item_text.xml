@@ -12,19 +12,19 @@
             android:id="@+id/form_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/ListItemPrimaryTextStyle"/>
+            android:textAppearance="@style/TextAppearance.Collect.ListItemPrimary"/>
 
     <TextView
             android:id="@+id/form_subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/ListItemSecondaryTextStyle"/>
+            android:textAppearance="@style/TextAppearance.Collect.ListItemSecondary"/>
 
     <TextView
             android:id="@+id/form_subtitle2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/ListItemSecondaryTextStyle"
+            android:textAppearance="@style/TextAppearance.Collect.ListItemSecondary"
             android:visibility="gone"/>
 
     <TextView
@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/newer_version_of_a_form_info"
-            android:textAppearance="@style/ListItemSecondaryTextStyle"
+            android:textAppearance="@style/TextAppearance.Collect.ListItemSecondary"
             android:textColor="@color/displaySubtextColor"
             android:visibility="gone"/>
 

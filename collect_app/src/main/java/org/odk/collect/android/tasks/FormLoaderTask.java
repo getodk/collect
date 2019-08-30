@@ -18,7 +18,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 
-import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.instance.InstanceInitializationFactory;
@@ -51,7 +50,6 @@ import org.odk.collect.android.utilities.ZipUtils;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -239,31 +237,27 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             return formDefFromCache;
         }
 
-        FileInputStream fis = null;
         // no binary, read from xml
-        try {
-            Timber.i("Attempting to load from: %s", formXml.getAbsolutePath());
-            final long start = System.currentTimeMillis();
-            fis = new FileInputStream(formXml);
-            String lastSavedSrc = FileUtils.getOrCreateLastSavedSrc(formXml);
-            FormDef formDefFromXml = XFormUtils.getFormFromInputStream(fis, lastSavedSrc);
-            if (formDefFromXml == null) {
-                errorMsg = "Error reading XForm file";
-            } else {
-                Timber.i("Loaded in %.3f seconds.",
-                        (System.currentTimeMillis() - start) / 1000F);
-                formDef = formDefFromXml;
+        Timber.i("Attempting to load from: %s", formXml.getAbsolutePath());
+        final long start = System.currentTimeMillis();
+        String lastSavedSrc = FileUtils.getOrCreateLastSavedSrc(formXml);
+        FormDef formDefFromXml = XFormUtils.getFormFromFormXml(formPath, lastSavedSrc);
+        if (formDefFromXml == null) {
+            errorMsg = "Error reading XForm file";
+        } else {
+            Timber.i("Loaded in %.3f seconds.",
+                    (System.currentTimeMillis() - start) / 1000F);
+            formDef = formDefFromXml;
 
-                FormDefCache.writeCache(formDef, formPath);
-
-                return formDefFromXml;
+            try {
+                FormDefCache.writeCache(formDef, formXml.getPath());
+            } catch (IOException e) {
+                Timber.e(e);
             }
-        } catch (Exception e) {
-            Timber.e(e);
-            errorMsg = e.getMessage();
-        } finally {
-            IOUtils.closeQuietly(fis);
+
+            return formDefFromXml;
         }
+
         return null;
     }
 
