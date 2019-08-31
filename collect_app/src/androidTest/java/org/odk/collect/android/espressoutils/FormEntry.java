@@ -6,6 +6,8 @@ import androidx.test.rule.ActivityTestRule;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.ActivityHelpers;
 
+import timber.log.Timber;
+
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -148,4 +150,11 @@ public final class FormEntry {
         onView(withId(R.id.form_back_button)).check(matches(isDisplayed()));
     }
 
+    public static void waitForRotationToEnd() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Timber.i(e);
+        }
+    }
 }
