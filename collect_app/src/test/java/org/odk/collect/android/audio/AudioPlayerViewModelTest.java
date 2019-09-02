@@ -318,7 +318,7 @@ public class AudioPlayerViewModelTest {
         doThrow(IOException.class).when(mediaPlayer).setDataSource("file://missing.mp3");
         viewModel.play("clip1", "file://missing.mp3");
 
-        assertThat(error.getValue(), equalTo(new AudioPlayerViewModel.PlaybackFailedException("file://missing.mp3")));
+        assertThat(error.getValue(), equalTo(new PlaybackFailedException("file://missing.mp3")));
     }
 
     private static class RecordingMockMediaPlayerFactory implements MediaPlayerFactory {
