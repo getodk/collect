@@ -15,12 +15,14 @@ import org.odk.collect.android.support.FakeScheduler;
 import org.odk.collect.android.support.LiveDataTester;
 import org.robolectric.RobolectricTestRunner;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -111,6 +113,15 @@ public class AudioPlayerViewModelTest {
         verify(mediaPlayer).setOnCompletionListener(captor.capture());
         captor.getValue().onCompletion(mediaPlayer);
 
+        assertThat(isPlaying.getValue(), equalTo(false));
+    }
+
+    @Test
+    public void isPlaying_whenPlaybackFails_is_false() throws Exception {
+        doThrow(IOException.class).when(mediaPlayer).setDataSource("file://missing.mp3");
+
+        final LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
+        viewModel.play("clip1", "file://missing.mp3");
         assertThat(isPlaying.getValue(), equalTo(false));
     }
 
