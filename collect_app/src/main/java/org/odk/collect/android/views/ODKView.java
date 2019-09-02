@@ -36,6 +36,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -50,9 +51,11 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.audio.PlaybackFailedException;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
@@ -147,7 +150,23 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
         ((NestedScrollView) findViewById(R.id.odk_view_container)).addView(view);
 
+        setupAudioErrors();
         autoplayIfNeeded(advancingPage);
+    }
+
+    private void setupAudioErrors() {
+        AudioHelper audioHelper = getAudioHelper();
+        audioHelper.getError().observe(getScreenContext().getViewLifecycle(), e -> {
+            if (e instanceof PlaybackFailedException) {
+                final PlaybackFailedException playbackFailedException = (PlaybackFailedException) e;
+                Toast.makeText(
+                        getContext(),
+                        getContext().getString(R.string.file_missing, playbackFailedException.getURI()),
+                        Toast.LENGTH_SHORT
+                ).show();
+            }
+
+        });
     }
 
     private void autoplayIfNeeded(boolean advancingPage) {
@@ -166,8 +185,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     }
 
     private Boolean autoplayAudio(FormEntryPrompt firstPrompt) {
-        ScreenContext screenContext = (ScreenContext) getContext();
-        AudioHelper audioHelper = new AudioHelper(screenContext.getActivity(), screenContext.getViewLifecycle());
+        AudioHelper audioHelper = getAudioHelper();
         FormAutoplayHelper formAutoplayHelper = new FormAutoplayHelper(audioHelper, ReferenceManager.instance());
 
         return formAutoplayHelper.autoplayIfNeeded(firstPrompt);
@@ -183,6 +201,16 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 }, 150);
             }
         }
+    }
+
+    @NotNull
+    private AudioHelper getAudioHelper() {
+        ScreenContext screenContext = getScreenContext();
+        return new AudioHelper(screenContext.getActivity(), screenContext.getViewLifecycle());
+    }
+
+    private ScreenContext getScreenContext() {
+        return (ScreenContext) getContext();
     }
 
     /**

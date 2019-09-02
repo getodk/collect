@@ -110,6 +110,10 @@ public class AudioHelper {
         return viewModel;
     }
 
+    public LiveData<Exception> getError() {
+        return getViewModel().getError();
+    }
+
     private static class AudioControllerViewListener implements AudioControllerView.Listener {
 
         private final AudioPlayerViewModel viewModel;

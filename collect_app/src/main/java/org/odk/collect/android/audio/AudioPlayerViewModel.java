@@ -21,6 +21,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     private MediaPlayer mediaPlayer;
 
     private final MutableLiveData<CurrentlyPlaying> currentlyPlaying = new MutableLiveData<>();
+    private final MutableLiveData<Exception> error = new MutableLiveData<>();
     private final Map<String, MutableLiveData<Integer>> positions = new HashMap<>();
 
     private Boolean scheduledDurationUpdates = false;
@@ -37,6 +38,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
             try {
                 loadNewClip(uri);
             } catch (IOException ignored) {
+                error.setValue(new PlaybackFailedException(uri));
                 return;
             }
         }
@@ -132,6 +134,10 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         }
 
         return liveData;
+    }
+
+    public LiveData<Exception> getError() {
+        return error;
     }
 
     private void schedulePositionUpdates() {
