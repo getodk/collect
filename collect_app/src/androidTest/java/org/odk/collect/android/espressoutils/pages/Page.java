@@ -15,11 +15,20 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 
 /**
- * Base class for Page Objects (https://www.martinfowler.com/bliki/PageObject.html)
- * used in Espresso tests. Provides shared helpers/setup.
+ * Base class for Page Objects used in Espresso tests. Provides shared helpers/setup.
+ * <p>
+ * Sub classes of {@code Page} should represent a page or part of a "page" that the user would
+ * interact with. Operations on these objects should return {@code this} (unless
+ * transitioning to a new page) so that they can be used in a fluent style.
+ * <p>
+ * The generic typing is a little strange here but enables shared methods such as
+ * {@link Page#closeSoftKeyboard()} to return the sub class type rather than {@code Page} so
+ * operations can be chained without casting. For example {@code FooPage} would extend
+ * {@code Page<FooPage>} and calling {@code fooPage.closeSoftKeyboard()} would return
+ * a {@code FooPage}.
  *
- * This class's generic type is designed to it's extending class so that shared methods
- * can return the extending class.
+ * @see <a href="https://www.martinfowler.com/bliki/PageObject.html">Page Objects</a>
+ * @see <a href="https://en.wikipedia.org/wiki/Fluent_interface">Fluent Interfaces</a>
  */
 
 abstract class Page<T extends Page<T>> {
