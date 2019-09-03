@@ -50,6 +50,5 @@ ext {
     leakyCanaryVersion = '1.5.4'
     daggerVersion = '2.16'
     rxLifecycleVersion = '2.2.1'
-    workManagerVersion = "1.0.0-alpha10"
     okhttp3Version = '3.12.3'
 }
