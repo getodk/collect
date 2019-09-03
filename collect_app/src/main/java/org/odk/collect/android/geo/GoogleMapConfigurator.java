@@ -57,7 +57,7 @@ class GoogleMapConfigurator implements MapConfigurator {
     }
 
     private boolean isGooglePlayServicesAvailable(Context context) {
-        return PlayServicesUtil.isGooglePlayServicesAvailable(context);
+        return PlayServicesUtil.areGooglePlayServicesAvailable(context);
     }
 
     @Override public MapFragment createMapFragment(Context context) {

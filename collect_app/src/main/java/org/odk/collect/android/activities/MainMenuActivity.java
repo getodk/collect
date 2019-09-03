@@ -186,7 +186,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
                             GeneralKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
                     Intent i = null;
                     if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
-                        if (PlayServicesUtil.isGooglePlayServicesAvailable(MainMenuActivity.this)) {
+                        if (PlayServicesUtil.areGooglePlayServicesAvailable(MainMenuActivity.this)) {
                             i = new Intent(getApplicationContext(),
                                     GoogleDriveActivity.class);
                         } else {

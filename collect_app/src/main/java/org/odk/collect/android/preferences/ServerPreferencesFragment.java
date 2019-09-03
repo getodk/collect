@@ -257,7 +257,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         selectedGoogleAccountPreference.setSummary(accountsManager.getLastSelectedAccountIfValid());
         selectedGoogleAccountPreference.setOnPreferenceClickListener(preference -> {
             if (allowClickSelectedGoogleAccountPreference) {
-                if (PlayServicesUtil.isGooglePlayServicesAvailable(getActivity())) {
+                if (PlayServicesUtil.areGooglePlayServicesAvailable(getActivity())) {
                     allowClickSelectedGoogleAccountPreference = false;
                     requestAccountsPermission();
                 } else {

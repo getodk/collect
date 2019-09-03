@@ -23,10 +23,10 @@ public class PlayServicesUtil {
     /**
      * Check that Google Play services APK is installed and up to date.
      *
-     * @return true if Google Play Services is available and up to
+     * @return true if Google Play Services are available and up to
      * date on this device; false otherwise.
      */
-    public static boolean isGooglePlayServicesAvailable(Context context) {
+    public static boolean areGooglePlayServicesAvailable(Context context) {
         googleApiAvailability = GoogleApiAvailability.getInstance();
         resultCode = googleApiAvailability.isGooglePlayServicesAvailable(context);
         return resultCode == ConnectionResult.SUCCESS;
