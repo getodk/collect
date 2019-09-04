@@ -82,40 +82,50 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     @SuppressWarnings({"checkstyle:FallThrough"})
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
+        try {
+            Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
 
-        switch (oldVersion) {
-            case 1:
-                upgradeToVersion2(db);
-            case 2:
-            case 3:
-                upgradeToVersion4(db, oldVersion);
-            case 4:
-                upgradeToVersion5(db);
-            case 5:
-                upgradeToVersion6(db);
-            case 6:
-                upgradeToVersion7(db);
-                break;
-            default:
-                Timber.i("Unknown version %s", oldVersion);
+            switch (oldVersion) {
+                case 1:
+                    upgradeToVersion2(db);
+                case 2:
+                case 3:
+                    upgradeToVersion4(db, oldVersion);
+                case 4:
+                    upgradeToVersion5(db);
+                case 5:
+                    upgradeToVersion6(db);
+                case 6:
+                    upgradeToVersion7(db);
+                    break;
+                default:
+                    Timber.i("Unknown version %s", oldVersion);
+            }
+
+            Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
+            isDatabaseBeingMigrated = false;
+        } catch (SQLException e) {
+            isDatabaseBeingMigrated = false;
+            throw e;
         }
-
-        Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
-        isDatabaseBeingMigrated = false;
     }
 
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        CustomSQLiteQueryBuilder
-                .begin(db)
-                .dropIfExists(FORMS_TABLE_NAME)
-                .end();
+        try {
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .dropIfExists(FORMS_TABLE_NAME)
+                    .end();
 
-        createFormsTableV7(db);
+            createFormsTableV7(db);
 
-        Timber.i("Downgrading database from %d to %d completed with success.", oldVersion, newVersion);
-        isDatabaseBeingMigrated = false;
+            Timber.i("Downgrading database from %d to %d completed with success.", oldVersion, newVersion);
+            isDatabaseBeingMigrated = false;
+        } catch (SQLException e) {
+            isDatabaseBeingMigrated = false;
+            throw e;
+        }
     }
 
     private void upgradeToVersion2(SQLiteDatabase db) {
