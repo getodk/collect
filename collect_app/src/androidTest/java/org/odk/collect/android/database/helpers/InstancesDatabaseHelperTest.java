@@ -10,6 +10,7 @@ import org.junit.runners.Parameterized;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.SQLiteUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.odk.collect.android.database.helpers.InstancesDatabaseHelper.DATABASE_PATH;
+import static org.odk.collect.android.database.helpers.InstancesDatabaseHelper.INSTANCES_TABLE_NAME;
 import static org.odk.collect.android.test.FileUtils.copyFileFromAssets;
 
 @RunWith(Parameterized.class)
@@ -61,7 +63,7 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
         assertThat(db.getVersion(), is(InstancesDatabaseHelper.DATABASE_VERSION));
 
-        List<String> newColumnNames = InstancesDatabaseHelper.getInstancesColumnNames(db);
+        List<String> newColumnNames = SQLiteUtils.getColumnNames(db, INSTANCES_TABLE_NAME);
         assertThat(newColumnNames, contains(InstancesDatabaseHelper.CURRENT_VERSION_COLUMN_NAMES));
         assertThatInstancesAreKeptAfterMigrating();
     }

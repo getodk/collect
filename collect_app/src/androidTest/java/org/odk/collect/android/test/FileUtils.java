@@ -4,6 +4,8 @@ import android.content.res.AssetManager;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,11 +20,7 @@ public class FileUtils {
         AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
         try (InputStream input = assetManager.open(fileSourcePath);
              OutputStream output = new FileOutputStream(fileDestPath)) {
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = input.read(buffer)) != -1) {
-                output.write(buffer, 0, length);
-            }
+            IOUtils.copy(input, output);
         }
     }
 }

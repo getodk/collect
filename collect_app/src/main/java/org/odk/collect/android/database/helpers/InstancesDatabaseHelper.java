@@ -16,7 +16,7 @@
 
 package org.odk.collect.android.database.helpers;
 
-import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -52,7 +52,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_PATH = Collect.METADATA_PATH + File.separator + DATABASE_NAME;
     public static final String INSTANCES_TABLE_NAME = "instances";
 
-    public static final int DATABASE_VERSION = 5;
+    static final int DATABASE_VERSION = 5;
 
     private static final String[] COLUMN_NAMES_V5 = new String[] {_ID, DISPLAY_NAME, SUBMISSION_URI, CAN_EDIT_WHEN_COMPLETE,
             INSTANCE_FILE_PATH, JR_FORM_ID, JR_VERSION, STATUS, LAST_STATUS_CHANGE_DATE, DELETED_DATE};
@@ -160,7 +160,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
      * removing a column. See https://sqlite.org/lang_altertable.html
      */
     private void moveInstancesTableToVersion5(SQLiteDatabase db) {
-        List<String> columnNamesPrev = getInstancesColumnNames(db);
+        List<String> columnNamesPrev = SQLiteUtils.getColumnNames(db, INSTANCES_TABLE_NAME);
 
         String temporaryTableName = INSTANCES_TABLE_NAME + "_tmp";
 
@@ -212,21 +212,23 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
                 + DELETED_DATE + " date );");
     }
 
-    static List<String> getInstancesColumnNames(SQLiteDatabase db) {
-        String[] columnNames;
-        try (Cursor c = db.query(INSTANCES_TABLE_NAME, null, null, null, null, null, null)) {
-            columnNames = c.getColumnNames();
-        }
-
-        // Build a full-featured ArrayList rather than the limited array-backed List from asList
-        return new ArrayList<>(Arrays.asList(columnNames));
-    }
-
     public static void databaseMigrationStarted() {
         isDatabaseBeingMigrated = true;
     }
 
     public static boolean isDatabaseBeingMigrated() {
         return isDatabaseBeingMigrated;
+    }
+
+    public static boolean databaseNeedsUpgrade() {
+        boolean isDatabaseHelperOutOfDate = false;
+        try {
+            SQLiteDatabase db = SQLiteDatabase.openDatabase(InstancesDatabaseHelper.DATABASE_PATH, null, SQLiteDatabase.OPEN_READONLY);
+            isDatabaseHelperOutOfDate = InstancesDatabaseHelper.DATABASE_VERSION != db.getVersion();
+            db.close();
+        } catch (SQLException e) {
+            Timber.i(e);
+        }
+        return isDatabaseHelperOutOfDate;
     }
 }

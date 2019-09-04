@@ -63,9 +63,9 @@ public class FormsProvider extends ContentProvider {
             return null;
         }
 
-        boolean isDatabaseHelperOutOfDate = isDatabaseHelperOutOfDate();
-        if (dbHelper == null || (isDatabaseHelperOutOfDate && !FormsDatabaseHelper.isDatabaseBeingMigrated())) {
-            if (isDatabaseHelperOutOfDate) {
+        boolean databaseNeedsUpgrade = FormsDatabaseHelper.databaseNeedsUpgrade();
+        if (dbHelper == null || (databaseNeedsUpgrade && !FormsDatabaseHelper.isDatabaseBeingMigrated())) {
+            if (databaseNeedsUpgrade) {
                 FormsDatabaseHelper.databaseMigrationStarted();
             }
             dbHelper = new FormsDatabaseHelper();
@@ -525,18 +525,6 @@ public class FormsProvider extends ContentProvider {
             System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
         }
         return newWhereArgs;
-    }
-
-    private boolean isDatabaseHelperOutOfDate() {
-        boolean isDatabaseHelperOutOfDate = false;
-        try {
-            SQLiteDatabase db = SQLiteDatabase.openDatabase(FormsDatabaseHelper.DATABASE_PATH, null, SQLiteDatabase.OPEN_READONLY);
-            isDatabaseHelperOutOfDate = FormsDatabaseHelper.DATABASE_VERSION != db.getVersion();
-            db.close();
-        } catch (SQLException e) {
-            Timber.i(e);
-        }
-        return isDatabaseHelperOutOfDate;
     }
 
     // Leading slashes are removed from paths to support minSdkVersion < 18:

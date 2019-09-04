@@ -10,6 +10,7 @@ import org.junit.runners.Parameterized;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dto.Form;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.SQLiteUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.odk.collect.android.database.helpers.FormsDatabaseHelper.DATABASE_PATH;
+import static org.odk.collect.android.database.helpers.FormsDatabaseHelper.FORMS_TABLE_NAME;
 import static org.odk.collect.android.test.FileUtils.copyFileFromAssets;
 
 @RunWith(Parameterized.class)
@@ -61,7 +63,7 @@ public class FormsDatabaseHelperTest extends SqlLiteHelperTest {
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
         assertThat(db.getVersion(), is(FormsDatabaseHelper.DATABASE_VERSION));
 
-        List<String> newColumnNames = FormsDatabaseHelper.getFormsColumnNames(db);
+        List<String> newColumnNames = SQLiteUtils.getColumnNames(db, FORMS_TABLE_NAME);
 
         assertThat(newColumnNames, contains(FormsDatabaseHelper.CURRENT_VERSION_COLUMN_NAMES));
 

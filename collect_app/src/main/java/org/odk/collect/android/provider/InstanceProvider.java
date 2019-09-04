@@ -63,9 +63,9 @@ public class InstanceProvider extends ContentProvider {
             return null;
         }
 
-        boolean isDatabaseHelperOutOfDate = isDatabaseHelperOutOfDate();
-        if (dbHelper == null || (isDatabaseHelperOutOfDate && !InstancesDatabaseHelper.isDatabaseBeingMigrated())) {
-            if (isDatabaseHelperOutOfDate) {
+        boolean databaseNeedsUpgrade = InstancesDatabaseHelper.databaseNeedsUpgrade();
+        if (dbHelper == null || (databaseNeedsUpgrade && !InstancesDatabaseHelper.isDatabaseBeingMigrated())) {
+            if (databaseNeedsUpgrade) {
                 InstancesDatabaseHelper.databaseMigrationStarted();
             }
             dbHelper = new InstancesDatabaseHelper();
@@ -387,18 +387,6 @@ public class InstanceProvider extends ContentProvider {
         }
 
         return count;
-    }
-
-    private boolean isDatabaseHelperOutOfDate() {
-        boolean isDatabaseHelperOutOfDate = false;
-        try {
-            SQLiteDatabase db = SQLiteDatabase.openDatabase(InstancesDatabaseHelper.DATABASE_PATH, null, SQLiteDatabase.OPEN_READONLY);
-            isDatabaseHelperOutOfDate = InstancesDatabaseHelper.DATABASE_VERSION != db.getVersion();
-            db.close();
-        } catch (SQLException e) {
-            Timber.i(e);
-        }
-        return isDatabaseHelperOutOfDate;
     }
 
     static {
