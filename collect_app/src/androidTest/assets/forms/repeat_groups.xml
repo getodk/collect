@@ -7,13 +7,29 @@
                     <meta>
                         <instanceID/>
                     </meta>
-                    <repeatGroup jr:template="">
-                        <text1/>
-                        <text2/>
+                    <repeatGroup>
+                        <text1>1</text1>
                     </repeatGroup>
-                    <repeatGroupFieldList jr:template="">
-                        <number1/>
-                        <number2/>
+                    <repeatGroup>
+                        <text1>2</text1>
+                    </repeatGroup>
+                    <repeatGroup>
+                        <text1>3</text1>
+                    </repeatGroup>
+                    <repeatGroup>
+                        <text1>4</text1>
+                    </repeatGroup>
+                    <repeatGroupFieldList>
+                        <number1>1</number1>
+                    </repeatGroupFieldList>
+                    <repeatGroupFieldList>
+                        <number1>2</number1>
+                    </repeatGroupFieldList>
+                    <repeatGroupFieldList>
+                        <number1>3</number1>
+                    </repeatGroupFieldList>
+                    <repeatGroupFieldList>
+                        <number1>4</number1>
                     </repeatGroupFieldList>
                 </data>
             </instance>
@@ -25,25 +41,17 @@
                     <text id="/data/repeatGroup/text1:label">
                         <value>text1</value>
                     </text>
-                    <text id="/data/repeatGroup/text2:label">
-                        <value>text2</value>
-                    </text>
                     <text id="/data/repeatGroupFieldList:label">
                         <value>repeatGroupFieldList</value>
                     </text>
                     <text id="/data/repeatGroupFieldList/number1:label">
                         <value>number1</value>
                     </text>
-                    <text id="/data/repeatGroupFieldList/number2:label">
-                        <value>number2</value>
-                    </text>
                 </translation>
             </itext>
             <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" calculate="concat('uuid:', uuid())"/>
             <bind nodeset="/data/repeatGroup/text1" type="string"/>
-            <bind nodeset="/data/repeatGroup/text2" type="string"/>
             <bind nodeset="/data/repeatGroupFieldList/number1" type="int"/>
-            <bind nodeset="/data/repeatGroupFieldList/number2" type="int"/>
         </model>
     </h:head>
     <h:body>
@@ -53,9 +61,6 @@
                 <input ref="/data/repeatGroup/text1">
                     <label ref="jr:itext('/data/repeatGroup/text1:label')"/>
                 </input>
-                <input ref="/data/repeatGroup/text2">
-                    <label ref="jr:itext('/data/repeatGroup/text2:label')"/>
-                </input>
             </repeat>
         </group>
         <group ref="/data/repeatGroupFieldList">
@@ -63,9 +68,6 @@
             <repeat appearance="field-list" nodeset="/data/repeatGroupFieldList">
                 <input ref="/data/repeatGroupFieldList/number1">
                     <label ref="jr:itext('/data/repeatGroupFieldList/number1:label')"/>
-                </input>
-                <input ref="/data/repeatGroupFieldList/number2">
-                    <label ref="jr:itext('/data/repeatGroupFieldList/number2:label')"/>
                 </input>
             </repeat>
         </group>

@@ -9,6 +9,7 @@ import org.odk.collect.android.support.ActivityHelpers;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
@@ -83,16 +84,8 @@ public final class FormEntry {
         onView(withId(R.id.menu_goto)).perform(click());
     }
 
-    public static void clickDeleteChildIcon() {
-        onView(withId(R.id.menu_delete_child)).perform(click());
-    }
-
     public static void clickGoUpIcon() {
         onView(withId(R.id.menu_go_up)).perform(click());
-    }
-
-    public static void checkIsToastWithStringDisplayes(int value, ActivityTestRule main) {
-        onView(withText(getInstrumentation().getTargetContext().getString(value))).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
 
     public static void clickSaveAndExit() {
@@ -152,4 +145,14 @@ public final class FormEntry {
         onView(withId(R.id.form_back_button)).check(matches(isDisplayed()));
     }
 
+    public static void deleteGroup(String questionText) {
+        onView(withText(questionText)).perform(longClick());
+        onView(withText(R.string.delete_repeat)).perform(click());
+        onView(withText(R.string.discard_group)).perform(click());
+    }
+
+    public static void deleteGroup() {
+        onView(withId(R.id.menu_delete_child)).perform(click());
+        onView(withText(R.string.delete_repeat)).perform(click());
+    }
 }
