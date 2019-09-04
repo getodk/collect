@@ -6,6 +6,8 @@ import androidx.test.rule.ActivityTestRule;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.ActivityHelpers;
 
+import timber.log.Timber;
+
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -154,5 +156,13 @@ public final class FormEntry {
     public static void deleteGroup() {
         onView(withId(R.id.menu_delete_child)).perform(click());
         onView(withText(R.string.delete_repeat)).perform(click());
+    }
+  
+    public static void waitForRotationToEnd() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Timber.i(e);
+        }
     }
 }
