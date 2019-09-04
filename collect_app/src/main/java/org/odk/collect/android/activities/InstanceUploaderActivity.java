@@ -22,11 +22,9 @@ import android.os.Bundle;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ArrayUtils;
@@ -38,7 +36,6 @@ import org.odk.collect.android.utilities.PermissionUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Set;
 
 import timber.log.Timber;
@@ -249,47 +246,9 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             // tried to close a dialog not open. don't care.
         }
 
-        Set<String> keys = result.keySet();
-        Iterator<String> it = keys.iterator();
-
-        String message = "";
-        int count = keys.size();
-        while (count > 0) {
-            String[] selectionArgs;
-
-            if (count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER) {
-                selectionArgs = new String[ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER];
-            } else {
-                selectionArgs = new String[count];
-            }
-
-            StringBuilder selection = new StringBuilder();
-            selection.append(InstanceColumns._ID + " IN (");
-
-            int i = 0;
-            while (it.hasNext() && i < selectionArgs.length) {
-                selectionArgs[i] = it.next();
-                selection.append('?');
-
-                if (i != selectionArgs.length - 1) {
-                    selection.append(',');
-                }
-                i++;
-            }
-
-            selection.append(')');
-            count -= selectionArgs.length;
-
-            message = InstanceUploaderUtils
-                    .getUploadResultMessage(new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs), result);
-        }
-        if (message.length() == 0) {
-            message = getString(R.string.no_forms_uploaded);
-        }
-
         // If the activity is paused or in the process of pausing, don't show the dialog
         if (!isInstanceStateSaved()) {
-            createUploadInstancesResultDialog(message.trim());
+            createUploadInstancesResultDialog(InstanceUploaderUtils.getUploadResultMessage(this, result));
         } else {
             // Clean up
             finish();

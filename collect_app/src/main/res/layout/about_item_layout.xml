@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2018 Shobhit Agarwal
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright 2018 Shobhit Agarwal
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,37 +17,40 @@ limitations under the License.
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
-    android:padding="@dimen/padding_medium">
+    android:padding="@dimen/margin_large">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_medium"
-        android:layout_marginLeft="@dimen/margin_medium"
-        android:layout_marginRight="@dimen/margin_medium"
-        android:layout_marginStart="@dimen/margin_medium"
-        android:layout_marginTop="@dimen/margin_small"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentTop="true"
         tools:src="@drawable/ic_website" />
 
-    <TextView
-        android:id="@+id/title"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@id/imageView"
+        android:layout_marginStart="@dimen/margin_extra_extra_large"
+        android:layout_marginLeft="@dimen/margin_extra_extra_large"
         android:layout_toEndOf="@id/imageView"
         android:layout_toRightOf="@id/imageView"
-        android:textColor="?primaryTextColor"
-        android:textSize="@dimen/text_size_medium"
-        tools:text="@string/odk_website" />
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/summary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/title"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:layout_toEndOf="@id/imageView"
-        android:layout_toRightOf="@id/imageView"
-        android:textSize="@dimen/text_size_small"
-        tools:text="@string/odk_website_summary" />
+        <TextView
+            android:id="@+id/title"
+            style="@style/TextAppearance.Collect.Subtitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/odk_website" />
+
+        <TextView
+            android:id="@+id/summary"
+            style="@style/TextAppearance.Collect.Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:textColor="@color/color_on_surface_medium_emphasis"
+            tools:text="@string/odk_website_summary" />
+
+    </LinearLayout>
 </RelativeLayout>

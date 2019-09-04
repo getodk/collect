@@ -18,7 +18,7 @@ public class ServerOtherTest extends BaseRegressionTest {
     public void formListPath_ShouldBeUpdated() {
         //TestCase1
         MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.openServerSettings();
         Settings.clickOnServerType();
         FormEntry.clickOnAreaWithIndex("CheckedTextView", 2);
@@ -35,7 +35,7 @@ public class ServerOtherTest extends BaseRegressionTest {
      public void submissionsPath_ShouldBeUpdated() {
          //TestCase2
          MainMenu.clickOnMenu();
-         MainMenu.clickGeneralSettings();
+         MainMenu.clickGeneralSettings(main.getActivity());
          Settings.openServerSettings();
          Settings.clickOnServerType();
          FormEntry.clickOnAreaWithIndex("CheckedTextView", 2);

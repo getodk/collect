@@ -6,6 +6,8 @@ import androidx.test.rule.ActivityTestRule;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.ActivityHelpers;
 
+import timber.log.Timber;
+
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -63,6 +65,10 @@ public final class FormEntry {
         onView(withIndex(withClassName(endsWith("Text")), index)).perform(replaceText(text));
     }
 
+    public static void clickJumpStartButton() {
+        onView(withId(R.id.jumpBeginningButton)).perform(click());
+    }
+
     public static void clickJumpEndButton() {
         onView(withId(R.id.jumpEndButton)).perform(click());
     }
@@ -77,6 +83,10 @@ public final class FormEntry {
 
     public static void clickGoToIconInForm() {
         onView(withId(R.id.menu_goto)).perform(click());
+    }
+
+    public static void clickDeleteChildIcon() {
+        onView(withId(R.id.menu_delete_child)).perform(click());
     }
 
     public static void checkIsToastWithStringDisplayes(int value, ActivityTestRule main) {
@@ -138,5 +148,13 @@ public final class FormEntry {
     public static void checkAreNavigationButtonsDisplayed() {
         onView(withId(R.id.form_forward_button)).check(matches(isDisplayed()));
         onView(withId(R.id.form_back_button)).check(matches(isDisplayed()));
+    }
+
+    public static void waitForRotationToEnd() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Timber.i(e);
+        }
     }
 }

@@ -1,5 +1,7 @@
 package org.odk.collect.android.espressoutils;
 
+import android.app.Activity;
+
 import androidx.test.espresso.Espresso;
 import org.odk.collect.android.R;
 import org.odk.collect.android.provider.FormsProviderAPI;
@@ -30,8 +32,8 @@ public final class MainMenu {
         onData(withRowString(FormsProviderAPI.FormsColumns.DISPLAY_NAME, text)).perform(click());
     }
 
-    public static void clickGeneralSettings() {
-        onView(withText(getInstrumentation().getTargetContext().getString(R.string.general_preferences))).perform(click());
+    public static void clickGeneralSettings(Activity activity) {
+        onView(withText(activity.getString(R.string.general_preferences))).perform(click());
     }
 
     public static void clickFillBlankForm() {
@@ -52,6 +54,10 @@ public final class MainMenu {
 
     public static void checkIsFormSubtextDisplayed() {
         onView(withIndex(withId(R.id.form_subtitle2), 0)).check(matches(isDisplayed()));
+    }
+
+    public static void clickAdminSettings() {
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.admin_preferences))).perform(click());
     }
 
 }
