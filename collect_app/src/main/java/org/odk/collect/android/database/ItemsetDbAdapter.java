@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import org.odk.collect.android.application.Collect;
 
-import java.io.File;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -17,13 +16,10 @@ import timber.log.Timber;
 
 public class ItemsetDbAdapter {
 
-    public static final String KEY_ID = "_id";
-
     private DatabaseHelper dbHelper;
     private SQLiteDatabase db;
 
     public static final String DATABASE_NAME = "itemsets.db";
-    private static final String DATABASE_PATH = Collect.METADATA_PATH + File.separator + DATABASE_NAME;
     private static final String DATABASE_TABLE = "itemset_";
     private static final int DATABASE_VERSION = 2;
 
@@ -42,7 +38,7 @@ public class ItemsetDbAdapter {
      */
     private static class DatabaseHelper extends SQLiteOpenHelper {
         DatabaseHelper() {
-            super(new DatabaseContext(DATABASE_PATH), DATABASE_NAME, null, DATABASE_VERSION);
+            super(new DatabaseContext(Collect.METADATA_PATH), DATABASE_NAME, null, DATABASE_VERSION);
         }
 
         @Override
