@@ -115,7 +115,7 @@ public final class FormEntry {
         onView(withId(R.id.questionholder)).perform(swipeLeft());
     }
 
-    public static void swipeToPrevoiusQuestion() {
+    public static void swipeToPreviousQuestion() {
         onView(withId(R.id.questionholder)).perform(swipeRight());
     }
 

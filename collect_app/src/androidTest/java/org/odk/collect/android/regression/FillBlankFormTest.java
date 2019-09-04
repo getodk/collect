@@ -147,7 +147,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.putText("Abi");
         FormEntry.swipeToNextQuestion();
         FormEntry.checkIsTextDisplayed("Abies");
-        FormEntry.swipeToPrevoiusQuestion();
+        FormEntry.swipeToPreviousQuestion();
         FormEntry.putText("Abr");
         FormEntry.swipeToNextQuestion();
         FormEntry.checkIsTextDisplayed("Abrotanum alpestre");
@@ -212,11 +212,11 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.clickOnText("Mountain pine beetle");
         FormEntry.swipeToNextQuestion();
         FormEntry.checkIsTextDisplayed("2018-COE-MPB-001 @ Wellington");
-        FormEntry.swipeToPrevoiusQuestion();
+        FormEntry.swipeToPreviousQuestion();
         FormEntry.clickOnText("Invasive alien species");
         FormEntry.swipeToNextQuestion();
         FormEntry.checkIsTextDisplayed("2018-COE-IAS-e-001 @ Coronation");
-        FormEntry.swipeToPrevoiusQuestion();
+        FormEntry.swipeToPreviousQuestion();
         FormEntry.clickOnText("Longhorn beetles");
         FormEntry.swipeToNextQuestion();
         FormEntry.checkIsTextDisplayed("2018-COE-LGH-M-001 @ Acheson");
