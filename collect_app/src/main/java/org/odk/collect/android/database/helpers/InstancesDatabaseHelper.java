@@ -78,33 +78,43 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     @SuppressWarnings({"checkstyle:FallThrough"})
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
+        try {
+            Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
 
-        switch (oldVersion) {
-            case 1:
-                upgradeToVersion2(db);
-            case 2:
-                upgradeToVersion3(db);
-            case 3:
-                upgradeToVersion4(db);
-            case 4:
-                moveInstancesTableToVersion5(db);
-                break;
-            default:
-                Timber.i("Unknown version %d", oldVersion);
+            switch (oldVersion) {
+                case 1:
+                    upgradeToVersion2(db);
+                case 2:
+                    upgradeToVersion3(db);
+                case 3:
+                    upgradeToVersion4(db);
+                case 4:
+                    moveInstancesTableToVersion5(db);
+                    break;
+                default:
+                    Timber.i("Unknown version %d", oldVersion);
+            }
+
+            Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
+            isDatabaseBeingMigrated = false;
+        } catch (SQLException e) {
+            isDatabaseBeingMigrated = false;
+            throw e;
         }
-
-        Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
-        isDatabaseBeingMigrated = false;
     }
 
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Timber.i("Downgrading database from version %d to %d", oldVersion, newVersion);
-        moveInstancesTableToVersion5(db);
+        try {
+            Timber.i("Downgrading database from version %d to %d", oldVersion, newVersion);
+            moveInstancesTableToVersion5(db);
 
-        Timber.i("Downgrading database from version %d to %d completed with success.", oldVersion, newVersion);
-        isDatabaseBeingMigrated = false;
+            Timber.i("Downgrading database from version %d to %d completed with success.", oldVersion, newVersion);
+            isDatabaseBeingMigrated = false;
+        } catch (SQLException e) {
+            isDatabaseBeingMigrated = false;
+            throw e;
+        }
     }
 
     private void upgradeToVersion2(SQLiteDatabase db) {
