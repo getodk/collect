@@ -16,7 +16,7 @@
 
 package org.odk.collect.android.database.helpers;
 
-import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -26,9 +26,6 @@ import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 import org.odk.collect.android.utilities.SQLiteUtils;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import timber.log.Timber;
 
@@ -58,7 +55,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_PATH = Collect.METADATA_PATH + File.separator + DATABASE_NAME;
     public static final String FORMS_TABLE_NAME = "forms";
 
-    public static final int DATABASE_VERSION = 7;
+    static final int DATABASE_VERSION = 7;
 
     private static final String[] COLUMN_NAMES_V7 = new String[] {_ID, DISPLAY_NAME, DESCRIPTION,
             JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
@@ -352,13 +349,15 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         return isDatabaseBeingMigrated;
     }
 
-    static List<String> getFormsColumnNames(SQLiteDatabase db) {
-        String[] columnNames;
-        try (Cursor c = db.query(FORMS_TABLE_NAME, null, null, null, null, null, null)) {
-            columnNames = c.getColumnNames();
+    public static boolean databaseNeedsUpgrade() {
+        boolean isDatabaseHelperOutOfDate = false;
+        try {
+            SQLiteDatabase db = SQLiteDatabase.openDatabase(FormsDatabaseHelper.DATABASE_PATH, null, SQLiteDatabase.OPEN_READONLY);
+            isDatabaseHelperOutOfDate = FormsDatabaseHelper.DATABASE_VERSION != db.getVersion();
+            db.close();
+        } catch (SQLException e) {
+            Timber.i(e);
         }
-
-        // Build a full-featured ArrayList rather than the limited array-backed List from asList
-        return new ArrayList<>(Arrays.asList(columnNames));
+        return isDatabaseHelperOutOfDate;
     }
 }
