@@ -61,7 +61,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     private static boolean isDatabaseBeingMigrated;
 
     public InstancesDatabaseHelper() {
-        super(new DatabaseContext(DATABASE_PATH), DATABASE_NAME, null, DATABASE_VERSION);
+        super(new DatabaseContext(Collect.METADATA_PATH), DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
