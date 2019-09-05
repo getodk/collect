@@ -23,6 +23,8 @@ collect_app/src/supply/
 collect_app/supply/
 collect_app/seracis/
 collect_app/src/seracis/
+collect_app/meqa/
+collect_app/src/meqa/
 
 # gradle env props
 secrets.properties
