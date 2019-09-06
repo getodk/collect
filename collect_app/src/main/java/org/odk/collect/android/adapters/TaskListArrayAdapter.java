@@ -43,14 +43,16 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
     
     private int mLayout;
     Context mContext;
+    boolean mFormView;
     LayoutInflater mInflater;
     static String TAG = "TaskListArrayAdapter";
 	
-    public TaskListArrayAdapter(Context context) {
+    public TaskListArrayAdapter(Context context, boolean formView) {
 		super(context, R.layout.main_list);
         mContext = context;
 		mLayout = R.layout.task_row;
 		mInflater = LayoutInflater.from(context);
+		mFormView = formView;
 	}
 
     
@@ -136,7 +138,11 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
         clear();
         if (data != null) {
           for (int i = 0; i < data.size(); i++) {
-            add(data.get(i));
+              if(mFormView && data.get(i).type.equals("form")) {
+                  add(data.get(i));
+              } else if(!mFormView && !data.get(i).type.equals("form")) {
+                  add(data.get(i));
+              }
           }
         }
       }

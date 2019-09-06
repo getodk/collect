@@ -35,7 +35,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.FormChooserList;
 import org.odk.collect.android.activities.FormDownloadList;
-import org.odk.collect.android.activities.InstanceChooserList;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.activities.SmapTaskStatusActivity;
 import org.odk.collect.android.adapters.SortDialogAdapter;
@@ -49,7 +48,6 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 
@@ -64,7 +62,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
@@ -73,13 +70,9 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 /**
  * Responsible for displaying tasks on the main fieldTask screen
  */
-public class SmapTaskListFragment extends ListFragment
-        implements LoaderManager.LoaderCallbacks<MapEntry> {
+public class SmapFormListFragment extends ListFragment {
 
     // request codes for returning chosen form to main menu.
-    private static final int FORM_CHOOSER = 0;
-    private static final int TASK_LOADER_ID = 1;
-    private static final int INSTANCE_UPLOADER = 2;
 
     private static final int MENU_ENTERDATA = Menu.FIRST + 2;
     private static final int MENU_GETFORMS = Menu.FIRST + 3;
@@ -95,10 +88,9 @@ public class SmapTaskListFragment extends ListFragment
 
     View rootView;
 
-    private boolean isSearchBoxShown;
+    private MapEntry mData;
+
     private String filterText;
-    private String savedFilterText;
-    private SearchView searchView;
 
     private Integer selectedSortingOrder;
     private BottomSheetDialog bottomSheetDialog;
@@ -109,11 +101,11 @@ public class SmapTaskListFragment extends ListFragment
 
     private TaskListArrayAdapter mAdapter;
 
-    public static SmapTaskListFragment newInstance() {
-        return new SmapTaskListFragment();
+    public static SmapFormListFragment newInstance() {
+        return new SmapFormListFragment();
     }
 
-    public SmapTaskListFragment() {
+    public SmapFormListFragment() {
     }
 
     // this method is only called once for this fragment
@@ -138,9 +130,8 @@ public class SmapTaskListFragment extends ListFragment
     public void onActivityCreated(Bundle b) {
         super.onActivityCreated(b);
 
-        mAdapter = new TaskListArrayAdapter(getActivity(), false);
+        mAdapter = new TaskListArrayAdapter(getActivity(), true);
         setListAdapter(mAdapter);
-        getLoaderManager().initLoader(TASK_LOADER_ID, null, this);
 
         // Handle long item clicks
         ListView lv = getListView();
@@ -219,28 +210,9 @@ public class SmapTaskListFragment extends ListFragment
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-    }
-
-    @Override
-    public Loader<MapEntry> onCreateLoader(int id, Bundle args) {
-        MapDataLoader taskLoader = new MapDataLoader(getContext());
-        ((SmapMain) getActivity()).setTaskLoader(taskLoader);
-        updateAdapter();
-        return taskLoader;
-    }
-
-    /*
-     * Load data in the taskListFragment, then update all fragments that show the data in this activity
-     * Apparently Loader does not work when invoked from an activity only a fragment
-     */
-    @Override
-    public void onLoadFinished(Loader<MapEntry> loader, MapEntry data) {
-        ((SmapMain) getActivity()).updateData(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<MapEntry> loader) {
-        ((SmapMain) getActivity()).updateData(null);
+        if (isVisibleToUser) {
+            setData(mData);
+        }
     }
 
     protected String getSortingOrderKey() {
@@ -248,6 +220,7 @@ public class SmapTaskListFragment extends ListFragment
     }
 
     public void setData(MapEntry data) {
+        mData = data;
         if(mAdapter != null) {
             if (data != null) {
                 mAdapter.setData(data.tasks);
@@ -339,10 +312,6 @@ public class SmapTaskListFragment extends ListFragment
 
         if(filterText == null) {
             filterText = "";
-        }
-        if (isSearchBoxShown) {
-            searchItem.expandActionView();
-            searchView.setQuery(filterText, false);
         }
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

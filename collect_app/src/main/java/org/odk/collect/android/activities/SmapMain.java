@@ -43,12 +43,14 @@ import android.widget.Toast;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.ViewPagerAdapter;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.fragments.SmapFormListFragment;
 import org.odk.collect.android.fragments.SmapTaskListFragment;
 import org.odk.collect.android.fragments.SmapTaskMapFragment;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.NFCListener;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
+import org.odk.collect.android.loaders.MapDataLoader;
 import org.odk.collect.android.loaders.MapEntry;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.logic.FormDetails;
@@ -109,8 +111,11 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     public static final String EXTRA_REFRESH = "refresh";
     public static final String LOGIN_STATUS = "login_status";
 
+    private SmapFormListFragment formManagerList = SmapFormListFragment.newInstance();
     private SmapTaskListFragment taskManagerList = SmapTaskListFragment.newInstance();
     private SmapTaskMapFragment taskManagerMap = SmapTaskMapFragment.newInstance();
+
+    private MapDataLoader mTaskLoader = null;
 
     private NfcAdapter mNfcAdapter;        // NFC
     public PendingIntent mNfcPendingIntent;
@@ -144,11 +149,12 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         setContentView(R.layout.smap_main_layout);
         initToolbar();
 
-        String[] tabNames = {getString(R.string.smap_taskList), getString(R.string.smap_taskMap)};
+        String[] tabNames = {getString(R.string.smap_forms), getString(R.string.smap_tasks), getString(R.string.smap_map)};
         // Get the ViewPager and set its PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
 
         ArrayList<Fragment> fragments = new ArrayList<>();
+        fragments.add(formManagerList);
         fragments.add(taskManagerList);
         fragments.add(taskManagerMap);
 
@@ -912,6 +918,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
      * Update fragments that use data sourced from the loader that called this method
      */
     public void updateData(MapEntry data) {
+        formManagerList.setData(data);
         taskManagerList.setData(data);
         taskManagerMap.setData(data);
         if(data != null) {
@@ -958,6 +965,16 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             SnackbarUtils.showLongSnackbar(findViewById(R.id.pager), Collect.getInstance().getString(R.string.smap_continue_tracking));
         }
 
+    }
+
+    /*
+     * Get / Set task loader
+     */
+    public void setTaskLoader(MapDataLoader taskLoader) {
+       mTaskLoader = taskLoader;
+    }
+    public MapDataLoader getTaskLoader() {
+        return mTaskLoader;
     }
 
 }

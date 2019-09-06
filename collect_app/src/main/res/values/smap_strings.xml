@@ -45,6 +45,9 @@
     <string name="smap_synchronising">Synchronising with Server</string>
     <string name="smap_task_preferences">Tasks</string>
     <string name="smap_tasks_not_enabled">Tasks not enabled - Enable from the settings screen</string>
+    <string name="smap_forms">Forms</string>
+    <string name="smap_tasks">Tasks</string>
+    <string name="smap_map">Map</string>
     <string name="smap_taskList">Task List</string>
     <string name="smap_taskMap">Task Map</string>
     <string name="smap_zoom_data">Zoom to Tasks </string>

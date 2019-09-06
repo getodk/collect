@@ -135,8 +135,6 @@ public class SmapTaskMapFragment extends Fragment
         rootView = inflater.inflate(R.layout.ft_map_layout, container, false);
         Timber.i("######## onCreateView");
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
         setHasOptionsMenu(true);
         return rootView;
     }
@@ -153,6 +151,10 @@ public class SmapTaskMapFragment extends Fragment
     public void onActivityCreated(Bundle b) {
         adminPreferences = getActivity().getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
         super.onActivityCreated(b);
     }
 
@@ -269,18 +271,6 @@ public class SmapTaskMapFragment extends Fragment
 
             }
         });
-
-        /*
-        layers_button = getActivity().findViewById(R.id.layers);
-        layers_button.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                //mHelper.showLayersDialog();
-
-            }
-        });
-        */
 
         /*
          * Add multiline info window
