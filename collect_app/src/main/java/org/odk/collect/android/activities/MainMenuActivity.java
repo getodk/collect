@@ -137,7 +137,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             @Override
             public void onClick(View v) {
                 if (Collect.allowClick(getClass().getName())) {
-                    Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+                    Intent i = new Intent(getApplicationContext(), HistoryActivity.class);
                     i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
                             ApplicationConstants.FormModes.EDIT_SAVED);
                     startActivity(i);
@@ -165,7 +165,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             @Override
             public void onClick(View v) {
                 if (Collect.allowClick(getClass().getName())) {
-                    Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+                    Intent i = new Intent(getApplicationContext(), HistoryActivity.class);
                     i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
                             ApplicationConstants.FormModes.VIEW_SENT);
                     startActivity(i);

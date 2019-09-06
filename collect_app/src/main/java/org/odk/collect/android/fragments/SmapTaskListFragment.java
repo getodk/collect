@@ -35,7 +35,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.FormChooserList;
 import org.odk.collect.android.activities.FormDownloadList;
-import org.odk.collect.android.activities.InstanceChooserList;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.activities.SmapTaskStatusActivity;
 import org.odk.collect.android.adapters.SortDialogAdapter;

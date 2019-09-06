@@ -23,7 +23,7 @@ import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.FormChooserList;
 import org.odk.collect.android.activities.FormDownloadList;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.activities.InstanceChooserList;
+import org.odk.collect.android.activities.HistoryActivity;
 import org.odk.collect.android.activities.InstanceUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderListActivity;
 import org.odk.collect.android.activities.SplashScreenActivity;
@@ -95,7 +95,7 @@ public class PermissionUtils {
 
         List<Class<?>> activities = new ArrayList<>();
         activities.add(FormEntryActivity.class);
-        activities.add(InstanceChooserList.class);
+        activities.add(HistoryActivity.class);
         activities.add(FormChooserList.class);
         activities.add(InstanceUploaderListActivity.class);
         activities.add(SplashScreenActivity.class);

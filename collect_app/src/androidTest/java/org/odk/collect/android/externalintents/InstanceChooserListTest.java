@@ -7,7 +7,7 @@ import androidx.test.runner.AndroidJUnit4;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.activities.InstanceChooserList;
+import org.odk.collect.android.activities.HistoryActivity;
 
 import java.io.IOException;
 
@@ -19,8 +19,8 @@ import static org.odk.collect.android.externalintents.ExportedActivitiesUtils.te
 public class InstanceChooserListTest {
 
     @Rule
-    public ActivityTestRule<InstanceChooserList> instanceChooserListRule =
-            new ExportedActivityTestRule<>(InstanceChooserList.class);
+    public ActivityTestRule<HistoryActivity> instanceChooserListRule =
+            new ExportedActivityTestRule<>(HistoryActivity.class);
 
     @Test
     public void instanceChooserListMakesDirsTest() throws IOException {

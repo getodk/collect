@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 University of Washington
+ * Copyright (C) 2011 Smap Consulting
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,11 +15,8 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
-import android.content.ContentUris;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -29,14 +26,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
-import android.widget.Toast;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -47,18 +42,18 @@ import timber.log.Timber;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 
 /**
- * Responsible for displaying all the valid instances in the instance directory.
+ * Responsible for showing a history of:
+ *  1 - Instances submitted
+ *  2 - Instances deleted
  *
- * @author Yaw Anokwa (yanokwa@gmail.com)
- * @author Carl Hartung (carlhartung@gmail.com)
+ * Renamed from InstanceChooserList created by University of Washington
  */
-public class InstanceChooserList extends InstanceListActivity implements
+public class HistoryActivity extends InstanceListActivity implements
         DiskSyncListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String INSTANCE_LIST_ACTIVITY_SORTING_ORDER = "instanceListActivitySortingOrder";
     private static final String VIEW_SENT_FORM_SORTING_ORDER = "ViewSentFormSortingOrder";
 
     private static final boolean EXIT = true;
-    private static final boolean DO_NOT_EXIT = false;
 
     private InstanceSyncTask instanceSyncTask;
 
@@ -105,7 +100,7 @@ public class InstanceChooserList extends InstanceListActivity implements
             @Override
             public void denied() {
                 // The activity has to finish because ODK Collect cannot function without these permissions.
-                finishAllActivities(InstanceChooserList.this);
+                finishAllActivities(HistoryActivity.this);
             }
         });
     }
@@ -123,51 +118,7 @@ public class InstanceChooserList extends InstanceListActivity implements
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        /* smap
-        if (Collect.allowClick(getClass().getName())) {
-            if (view.isEnabled()) {
-                Cursor c = (Cursor) listView.getAdapter().getItem(position);
-                Uri instanceUri =
-                        ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,
-                                c.getLong(c.getColumnIndex(InstanceColumns._ID)));
 
-                String action = getIntent().getAction();
-                if (Intent.ACTION_PICK.equals(action)) {
-                    // caller is waiting on a picked form
-                    setResult(RESULT_OK, new Intent().setData(instanceUri));
-                } else {
-                    // the form can be edited if it is incomplete or if, when it was
-                    // marked as complete, it was determined that it could be edited
-                    // later.
-                    String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
-                    String strCanEditWhenComplete =
-                            c.getString(c.getColumnIndex(InstanceColumns.CAN_EDIT_WHEN_COMPLETE));
-
-                    boolean canEdit = status.equals(InstanceProviderAPI.STATUS_INCOMPLETE)
-                            || Boolean.parseBoolean(strCanEditWhenComplete);
-                    if (!canEdit) {
-                        createErrorDialog(getString(R.string.cannot_edit_completed_form),
-                                DO_NOT_EXIT);
-                        return;
-                    }
-                    // caller wants to view/edit a form, so launch formentryactivity
-                    Intent parentIntent = this.getIntent();
-                    Intent intent = new Intent(Intent.ACTION_EDIT, instanceUri);
-                    String formMode = parentIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
-                    if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-                        intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
-                    } else {
-                        intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
-                    }
-                    startActivity(intent);
-                }
-                finish();
-            } else {
-                TextView disabledCause = view.findViewById(R.id.form_subtitle2);
-                Toast.makeText(this, disabledCause.getText(), Toast.LENGTH_SHORT).show();
-            }
-        }
-        */
     }
 
     @Override

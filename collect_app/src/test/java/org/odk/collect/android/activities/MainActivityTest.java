@@ -132,7 +132,7 @@ public class MainActivityTest {
         ShadowActivity shadowActivity = shadowOf(mainMenuActivity);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
         ShadowIntent shadowIntent = shadowOf(startedIntent);
-        assertEquals(InstanceChooserList.class.getName(),
+        assertEquals(HistoryActivity.class.getName(),
                 shadowIntent.getIntentClass().getName());
     }
 
@@ -172,7 +172,7 @@ public class MainActivityTest {
         ShadowActivity shadowActivity = shadowOf(mainMenuActivity);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
         ShadowIntent shadowIntent = shadowOf(startedIntent);
-        assertEquals(InstanceChooserList.class.getName(),
+        assertEquals(HistoryActivity.class.getName(),
                 shadowIntent.getIntentClass().getName());
     }
 

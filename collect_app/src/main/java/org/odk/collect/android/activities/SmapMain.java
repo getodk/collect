@@ -323,7 +323,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
     public void processHistory() {
         if (Collect.allowClick(getClass().getName())) {
-            Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+            Intent i = new Intent(getApplicationContext(), HistoryActivity.class);
             i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
                     ApplicationConstants.FormModes.VIEW_SENT);
             startActivity(i);
