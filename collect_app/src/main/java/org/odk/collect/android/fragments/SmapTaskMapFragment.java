@@ -76,6 +76,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -86,7 +87,9 @@ import timber.log.Timber;
  * Responsible for displaying tasks on the main fieldTask screen
  */
 public class SmapTaskMapFragment extends Fragment
-        implements  OnMapReadyCallback {
+        implements  OnMapReadyCallback,
+        GoogleMap.OnMyLocationButtonClickListener,
+        GoogleMap.OnMyLocationClickListener {
 
     private static final int REQUEST_LOCATION = 100;
 
@@ -245,7 +248,10 @@ public class SmapTaskMapFragment extends Fragment
     private void mapReadyPermissionGranted() {
 
         if(mo == null) {
-            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+
+            mMap.setMyLocationEnabled(true);
+            mMap.setOnMyLocationButtonClickListener(this);
+            mMap.setOnMyLocationClickListener(this);
 
             mMap.setMyLocationEnabled(true);
 
@@ -259,6 +265,7 @@ public class SmapTaskMapFragment extends Fragment
 
 
             mo = new MapLocationObserver(getContext(), this);
+            /*
             location_button = getActivity().findViewById(R.id.show_location);
             location_button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -273,6 +280,7 @@ public class SmapTaskMapFragment extends Fragment
 
                 }
             });
+            */
 
             /*
              * Add multiline info window
@@ -567,6 +575,16 @@ public class SmapTaskMapFragment extends Fragment
         }
 
         return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
+    @Override
+    public void onMyLocationClick(@NonNull Location location) {
+
+    }
+
+    @Override
+    public boolean onMyLocationButtonClick() {
+        return false;
     }
 
 }

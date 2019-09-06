@@ -35,6 +35,7 @@
             android:paddingTop="0dip"
             android:paddingBottom="60dip">
 
+            <!--
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/show_location"
                 app:srcCompat="@drawable/ic_my_location"
@@ -42,7 +43,7 @@
                 android:layout_margin="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                />
+                />-->
 
             <!--
             <androidx.appcompat.widget.AppCompatImageButton
