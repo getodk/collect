@@ -126,6 +126,7 @@ public class SmapTaskMapFragment extends Fragment
     }
 
     public SmapTaskMapFragment() {
+
     }
 
     @Nullable
@@ -152,10 +153,10 @@ public class SmapTaskMapFragment extends Fragment
         adminPreferences = getActivity().getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
+        super.onActivityCreated(b);
+
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        super.onActivityCreated(b);
     }
 
     @Override
@@ -243,120 +244,122 @@ public class SmapTaskMapFragment extends Fragment
     @SuppressLint("MissingPermission")
     private void mapReadyPermissionGranted() {
 
-        mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        if(mo == null) {
+            mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
-        mMap.setMyLocationEnabled(true);
+            mMap.setMyLocationEnabled(true);
 
-        complete = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_finalized));
-        accepted = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_saved));
-        repeat = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_repeat));
-        rejected = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_rejected));
-        submitted = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_submitted));
-        triggered = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_triggered));
-        triggered_repeat = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_triggered));
+            complete = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_finalized));
+            accepted = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_saved));
+            repeat = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_repeat));
+            rejected = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_rejected));
+            submitted = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_submitted));
+            triggered = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_triggered));
+            triggered_repeat = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_triggered));
 
 
-        mo = new MapLocationObserver(getContext(), this);
-        location_button = getActivity().findViewById(R.id.show_location);
-        location_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Location location = mMap.getMyLocation();
+            mo = new MapLocationObserver(getContext(), this);
+            location_button = getActivity().findViewById(R.id.show_location);
+            location_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Location location = mMap.getMyLocation();
 
-                if (location != null) {
-                    LatLng myLocation = new LatLng(location.getLatitude(),
-                            location.getLongitude());
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 17));
+                    if (location != null) {
+                        LatLng myLocation = new LatLng(location.getLatitude(),
+                                location.getLongitude());
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 17));
+                    }
+
+                }
+            });
+
+            /*
+             * Add multiline info window
+             * From: Hiren Patel, http://stackoverflow.com/questions/13904651/android-google-maps-v2-how-to-add-marker-with-multiline-snippet
+             */
+            mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+                @Override
+                public View getInfoWindow(Marker arg0) {
+                    return null;
                 }
 
-            }
-        });
+                @Override
+                public View getInfoContents(Marker marker) {
 
-        /*
-         * Add multiline info window
-         * From: Hiren Patel, http://stackoverflow.com/questions/13904651/android-google-maps-v2-how-to-add-marker-with-multiline-snippet
-         */
-        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                    LinearLayout info = new LinearLayout(getContext());
+                    info.setOrientation(LinearLayout.VERTICAL);
 
-            @Override
-            public View getInfoWindow(Marker arg0) {
-                return null;
-            }
+                    TextView title = new TextView(getContext());
+                    title.setTextColor(Color.BLACK);
+                    title.setGravity(Gravity.CENTER);
+                    title.setTypeface(null, Typeface.BOLD);
+                    title.setText(marker.getTitle());
 
-            @Override
-            public View getInfoContents(Marker marker) {
+                    TextView snippet = new TextView(getContext());
+                    snippet.setTextColor(Color.GRAY);
+                    snippet.setText(marker.getSnippet());
 
-                LinearLayout info = new LinearLayout(getContext());
-                info.setOrientation(LinearLayout.VERTICAL);
+                    info.addView(title);
+                    info.addView(snippet);
 
-                TextView title = new TextView(getContext());
-                title.setTextColor(Color.BLACK);
-                title.setGravity(Gravity.CENTER);
-                title.setTypeface(null, Typeface.BOLD);
-                title.setText(marker.getTitle());
+                    return info;
+                }
+            });
 
-                TextView snippet = new TextView(getContext());
-                snippet.setTextColor(Color.GRAY);
-                snippet.setText(marker.getSnippet());
+            /*
+             * Add long click listener
+             */
+            mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
 
-                info.addView(title);
-                info.addView(snippet);
-
-                return info;
-            }
-        });
-
-        /*
-         * Add long click listener
-         */
-        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-
-            @Override
-            public void onMapLongClick(LatLng latLng) {
-                // Get closest marker
-                double minDistance = 1000;
-                Marker selMarker = null;
-                if(markers != null) {
-                    for (Marker marker : markers) {
-                        double roughDistance = Math.sqrt(
-                                Math.pow(marker.getPosition().latitude - latLng.latitude, 2) +
-                                        Math.pow(marker.getPosition().longitude - latLng.longitude, 2));
-                        if (roughDistance < minDistance) {
-                            minDistance = roughDistance;
-                            selMarker = marker;
+                @Override
+                public void onMapLongClick(LatLng latLng) {
+                    // Get closest marker
+                    double minDistance = 1000;
+                    Marker selMarker = null;
+                    if (markers != null) {
+                        for (Marker marker : markers) {
+                            double roughDistance = Math.sqrt(
+                                    Math.pow(marker.getPosition().latitude - latLng.latitude, 2) +
+                                            Math.pow(marker.getPosition().longitude - latLng.longitude, 2));
+                            if (roughDistance < minDistance) {
+                                minDistance = roughDistance;
+                                selMarker = marker;
+                            }
                         }
                     }
-                }
-                if(selMarker != null) {
-                    Toast.makeText(getActivity(), "marker selected: " + selMarker.getTitle(), Toast.LENGTH_LONG).show();
+                    if (selMarker != null) {
+                        Toast.makeText(getActivity(), "marker selected: " + selMarker.getTitle(), Toast.LENGTH_LONG).show();
 
-                    Integer iPos = markerMap.get(selMarker);
-                    if(iPos != null) {
+                        Integer iPos = markerMap.get(selMarker);
+                        if (iPos != null) {
 
-                        int position = iPos;
-                        List<TaskEntry> tasks = ((SmapMain) getActivity()).getTasks();
-                        TaskEntry entry = tasks.get(position);
+                            int position = iPos;
+                            List<TaskEntry> tasks = ((SmapMain) getActivity()).getTasks();
+                            TaskEntry entry = tasks.get(position);
 
-                        if(entry.locationTrigger != null) {
-                            Toast.makeText(
-                                    getActivity(),
-                                    getString(R.string.smap_must_start_from_nfc),
-                                    Toast.LENGTH_LONG).show();
-                        } else {
-                            ((SmapMain) getActivity()).completeTask(entry);
+                            if (entry.locationTrigger != null) {
+                                Toast.makeText(
+                                        getActivity(),
+                                        getString(R.string.smap_must_start_from_nfc),
+                                        Toast.LENGTH_LONG).show();
+                            } else {
+                                ((SmapMain) getActivity()).completeTask(entry);
+                            }
+
+
                         }
-
-
                     }
+
                 }
+            });
 
-            }
-        });
-
-        // Refresh the data
-        Intent intent = new Intent("org.smap.smapTask.refresh");
-        LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
-        Timber.i("######## send org.smap.smapTask.refresh from smapTaskMapFragment");  // smap
+            // Refresh the data
+            Intent intent = new Intent("org.smap.smapTask.refresh");
+            LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
+            Timber.i("######## send org.smap.smapTask.refresh from smapTaskMapFragment");
+        }
     }
 
     public void setData(MapEntry data) {

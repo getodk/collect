@@ -20,22 +20,23 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
+
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.listeners.DiskSyncListener;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.PermissionUtils;
 
 import timber.log.Timber;
 
@@ -48,73 +49,33 @@ import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivit
  *
  * Renamed from InstanceChooserList created by University of Washington
  */
-public class HistoryActivity extends InstanceListActivity implements
-        DiskSyncListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
-    private static final String INSTANCE_LIST_ACTIVITY_SORTING_ORDER = "instanceListActivitySortingOrder";
+public class HistoryActivity extends SmapHistoryListActivity implements
+        AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String VIEW_SENT_FORM_SORTING_ORDER = "ViewSentFormSortingOrder";
 
     private static final boolean EXIT = true;
 
     private InstanceSyncTask instanceSyncTask;
 
-    private boolean editMode;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.form_chooser_list);
 
-        String formMode = getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
-        if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
+        setTitle(getString(R.string.smap_history));       // smap change to history
 
-            setTitle(getString(R.string.review_data));
-            editMode = true;
-            sortingOptions = new int[] {
-                    R.string.sort_by_name_asc, R.string.sort_by_name_desc,
-                    R.string.sort_by_date_asc, R.string.sort_by_date_desc,
-                    R.string.sort_by_status_asc, R.string.sort_by_status_desc
-            };
-        } else {
-            setTitle(getString(R.string.smap_history));       // smap change to history
+        ((TextView) findViewById(android.R.id.empty)).setText(R.string.no_items_display);
 
-            sortingOptions = new int[] {
-                    R.string.sort_by_name_asc, R.string.sort_by_name_desc,
-                    R.string.sort_by_date_asc, R.string.sort_by_date_desc
-            };
-            ((TextView) findViewById(android.R.id.empty)).setText(R.string.no_items_display_sent_forms);
-        }
-
-        new PermissionUtils().requestStoragePermissions(this, new PermissionListener() {
-            @Override
-            public void granted() {
-                // must be at the beginning of any activity that can be called from an external intent
-                try {
-                    Collect.createODKDirs();
-                } catch (RuntimeException e) {
-                    createErrorDialog(e.getMessage(), EXIT);
-                    return;
-                }
-                init();
-            }
-
-            @Override
-            public void denied() {
-                // The activity has to finish because ODK Collect cannot function without these permissions.
-                finishAllActivities(HistoryActivity.this);
-            }
-        });
+        init();
     }
 
     private void init() {
+        hideSort = true;
         setupAdapter();
-        instanceSyncTask = new InstanceSyncTask();
-        instanceSyncTask.setDiskSyncListener(this);
-        instanceSyncTask.execute();
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     /**
-     * Stores the path of selected instance in the parent class and finishes.
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -123,29 +84,14 @@ public class HistoryActivity extends InstanceListActivity implements
 
     @Override
     protected void onResume() {
-        if (instanceSyncTask != null) {
-            instanceSyncTask.setDiskSyncListener(this);
-            if (instanceSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
-                syncComplete(instanceSyncTask.getStatusMessage());
-            }
-        }
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        if (instanceSyncTask != null) {
-            instanceSyncTask.setDiskSyncListener(null);
-        }
         super.onPause();
     }
 
-    @Override
-    public void syncComplete(@NonNull String result) {
-        Timber.i("Disk scan complete");
-        hideProgressBarAndAllow();
-        showSnackbar(result);
-    }
 
     private void setupAdapter() {
         String[] data = new String[]{
@@ -155,7 +101,7 @@ public class HistoryActivity extends InstanceListActivity implements
                 R.id.form_title, R.id.form_subtitle2
         };
 
-        boolean shouldCheckDisabled = !editMode;
+        boolean shouldCheckDisabled = true;
         listAdapter = new InstanceListCursorAdapter(
                 this, R.layout.form_chooser_list_item, null, data, view, shouldCheckDisabled);
         listView.setAdapter(listAdapter);
@@ -163,7 +109,7 @@ public class HistoryActivity extends InstanceListActivity implements
 
     @Override
     protected String getSortingOrderKey() {
-        return editMode ? INSTANCE_LIST_ACTIVITY_SORTING_ORDER : VIEW_SENT_FORM_SORTING_ORDER;
+        return VIEW_SENT_FORM_SORTING_ORDER;
     }
 
     @Override
@@ -175,16 +121,13 @@ public class HistoryActivity extends InstanceListActivity implements
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         showProgressBar();
-        if (editMode) {
-            return new InstancesDao().getUnsentInstancesCursorLoader(getFilterText(), getSortingOrder());
-        } else {
-            return new InstancesDao().getSentInstancesCursorLoader(getFilterText(), getSortingOrder());
-        }
+        return new InstancesDao().getSentInstancesCursorLoader(getFilterText(),
+                getSortingOrder());
     }
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
-        hideProgressBarIfAllowed();
+        hideProgressBarAndAllow();
         listAdapter.swapCursor(cursor);
     }
 
@@ -193,24 +136,5 @@ public class HistoryActivity extends InstanceListActivity implements
         listAdapter.swapCursor(null);
     }
 
-    private void createErrorDialog(String errorMsg, final boolean shouldExit) {
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
-        alertDialog.setMessage(errorMsg);
-        DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        if (shouldExit) {
-                            finish();
-                        }
-                        break;
-                }
-            }
-        };
-        alertDialog.setCancelable(false);
-        alertDialog.setButton(getString(R.string.ok), errorListener);
-        alertDialog.show();
-    }
+
 }

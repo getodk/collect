@@ -69,6 +69,7 @@ abstract class AppListActivity extends CollectAbstractActivity {
     protected ProgressBar progressBar;
     private BottomSheetDialog bottomSheetDialog;
     private boolean isBottomDialogShown;
+    protected boolean hideSort = false;                 // smap
 
     private String filterText;
     private String savedFilterText;
@@ -175,6 +176,9 @@ abstract class AppListActivity extends CollectAbstractActivity {
     public boolean onCreateOptionsMenu(final Menu menu) {
         getMenuInflater().inflate(R.menu.list_menu, menu);
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
+        if(hideSort) {          // smap
+            sortItem.setVisible(false);
+        }
         final MenuItem searchItem = menu.findItem(R.id.menu_filter);
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setQueryHint(getResources().getString(R.string.search));
@@ -205,7 +209,9 @@ abstract class AppListActivity extends CollectAbstractActivity {
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                sortItem.setVisible(true);
+                if(!hideSort) {     // smap
+                    sortItem.setVisible(true);
+                }
                 return true;
             }
         });
