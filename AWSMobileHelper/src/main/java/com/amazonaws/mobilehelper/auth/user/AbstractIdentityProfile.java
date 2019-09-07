@@ -58,7 +58,6 @@ public abstract class AbstractIdentityProfile implements IdentityProfile {
     public void loadUserImage() throws IOException {
         if (userImageUrl == null) {
             userImage = null;
-            Log.d(LOG_TAG, "loadUserImage(): Cannot load user image; user image url is null. ");
             return;
         }
 

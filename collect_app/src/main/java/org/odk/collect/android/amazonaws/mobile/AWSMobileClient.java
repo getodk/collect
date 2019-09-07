@@ -20,6 +20,8 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 
 import org.odk.collect.android.amazonaws.mobile.AWSConfiguration;
 
+import timber.log.Timber;
+
 /**
  * The AWS Mobile Client bootstraps the application to make calls to AWS 
  * services. It creates clients which can be used to call services backing the
@@ -159,7 +161,6 @@ public class AWSMobileClient {
      */
     public static void initializeMobileClientIfNecessary(final Context context) {
         if (AWSMobileClient.defaultMobileClient() == null) {
-            Log.d(LOG_TAG, "Initializing AWS Mobile Client...");
             final ClientConfiguration clientConfiguration = new ClientConfiguration();
             clientConfiguration.setUserAgent(AWSConfiguration.AWS_MOBILEHUB_USER_AGENT);
             final IdentityManager identityManager = new IdentityManager(context, clientConfiguration,
@@ -177,7 +178,7 @@ public class AWSMobileClient {
 
             AWSMobileClient.setDefaultMobileClient(awsClient);
         }
-        Log.d(LOG_TAG, "AWS Mobile Client is OK");
+       Timber.i(LOG_TAG, "AWS Mobile Client is OK");
     }
 
     /**

@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
     }
@@ -30,8 +30,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.amazonaws:aws-android-sdk-core:2.4.2'
-    implementation 'com.amazonaws:aws-android-sdk-cognito:2.4.2'
-    implementation 'com.android.support:appcompat-v7:28.0.2'
+    implementation 'com.amazonaws:aws-android-sdk-core:2.15.+'
+    implementation 'com.amazonaws:aws-android-sdk-cognito:2.13.6'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
+    //implementation 'com.android.support:appcompat-v7:28.0.2'
     //testCompile 'junit:junit:4.12'
 }

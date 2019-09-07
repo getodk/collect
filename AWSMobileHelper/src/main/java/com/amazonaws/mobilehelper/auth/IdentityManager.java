@@ -97,7 +97,6 @@ public class IdentityManager {
      */
     public IdentityManager(final Context context, final ClientConfiguration clientConfiguration,
                            final AWSMobileHelperConfiguration awsMobileHelperConfiguration) {
-        Log.d(LOG_TAG, "IdentityManager init");
         this.appContext = context.getApplicationContext();
         this.awsMobileHelperConfiguration = awsMobileHelperConfiguration;
         this.clientConfiguration = clientConfiguration;
@@ -130,7 +129,6 @@ public class IdentityManager {
             credentialsProviderHolder.getUnderlyingProvider().getSessionCredentitalsExpiration();
 
         if (credentialsExpirationDate == null) {
-            Log.d(LOG_TAG, "Credentials are EXPIRED.");
             return true;
         }
 
@@ -139,8 +137,6 @@ public class IdentityManager {
 
         final boolean credsAreExpired =
                 (credentialsExpirationDate.getTime() - currentTime) < 0;
-
-        Log.d(LOG_TAG, "Credentials are " + (credsAreExpired ? "EXPIRED." : "OK"));
 
         return credsAreExpired;
     }
@@ -186,7 +182,6 @@ public class IdentityManager {
                     Log.e(LOG_TAG, exception.getMessage(), exception);
                 } finally {
                     final String result = identityId;
-                    Log.d(LOG_TAG, "Got user ID: " + identityId);
 
                     // Lint doesn't like early return inside a finally block, so nesting further inside the if here.
                     if (handler != null) {
@@ -263,7 +258,7 @@ public class IdentityManager {
                 try {
                     startupAuthTimeoutLatch.await();
                 } catch (InterruptedException e) {
-                    Log.d(LOG_TAG, "Interrupted while waiting for startup auth minimum delay.");
+
                 }
 
                 callingActivity.runOnUiThread(runnable);
@@ -288,7 +283,6 @@ public class IdentityManager {
 
         executorService.submit(new Runnable() {
             public void run() {
-                Log.d(LOG_TAG, "Starting up authentication...");
                 if (minimumDelay > 0) {
                     // Wait for the splash timeout.
                     try {
