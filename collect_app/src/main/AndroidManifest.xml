@@ -280,6 +280,8 @@ the specific language governing permissions and limitations under the License.
             android:name="com.google.android.maps"
             android:required="false" />
 
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+
         <!--
              ******************External API, DO NOT CHANGE BEFORE DISCUSSING***********************
              * The providers and activities below are available for external applications to      *
