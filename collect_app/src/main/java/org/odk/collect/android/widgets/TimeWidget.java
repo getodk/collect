@@ -219,7 +219,8 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
         @SuppressWarnings("deprecation")
         private void fixSpinner(Context context, int hourOfDay, int minute, boolean is24HourView) {
             // android:timePickerMode spinner and clock began in Lollipop
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // smap disable this fix for versions greater than 24
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
                 try {
                     // Get the theme's android:timePickerMode
                     final int MODE_SPINNER = 2;
