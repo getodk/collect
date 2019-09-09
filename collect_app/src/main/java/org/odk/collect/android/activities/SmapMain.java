@@ -26,8 +26,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
@@ -39,6 +41,8 @@ import android.text.method.PasswordTransformationMethod;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.android.material.tabs.TabLayout;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.ViewPagerAdapter;
@@ -91,6 +95,7 @@ import java.util.Set;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import timber.log.Timber;
 
@@ -162,12 +167,12 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 getSupportFragmentManager(), tabNames, fragments));
 
         // Give the SlidingTabLayout the ViewPager
-        SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         // Attach the view pager to the tab strip
-        slidingTabLayout.setDistributeEvenly(true);
-        slidingTabLayout.setFontColor(android.R.color.white);
-        slidingTabLayout.setBackgroundColor(getResources().getColor(R.color.tabBackground));
-        slidingTabLayout.setViewPager(viewPager);
+        tabLayout.setBackgroundColor(getResources().getColor(R.color.tabBackground));
+
+        tabLayout.setTabTextColors(Color.LTGRAY, Color.WHITE);
+        tabLayout.setupWithViewPager(viewPager);
 
         // get notification registration token
         Intent intent = new Intent(this, NotificationRegistrationService.class);

@@ -30,6 +30,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.tabs.TabLayout;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AboutActivity;
@@ -51,6 +52,7 @@ import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
+import org.odk.collect.android.views.SlidingTabLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -247,13 +249,18 @@ public class SmapTaskListFragment extends ListFragment
     }
 
     public void setData(MapEntry data) {
+        int count = 0;
         if(mAdapter != null) {
             if (data != null) {
-                mAdapter.setData(data.tasks);
+                count = mAdapter.setData(data.tasks);
             } else {
                 mAdapter.setData(null);
             }
         }
+        TabLayout tabLayout = (TabLayout) ((SmapMain) getActivity()).findViewById(R.id.tabs);
+        TabLayout.Tab tab = tabLayout.getTabAt(1);
+        ;
+        tab.setText(getString(R.string.smap_tasks) + " (" + count + ")");
     }
 
 

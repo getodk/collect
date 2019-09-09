@@ -63,4 +63,9 @@
         <item name="android:textColor">?secondaryTextColor</item>
     </style>
 
+    <style name="TabText">
+        <item name="android:textSize">21sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

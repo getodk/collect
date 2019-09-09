@@ -134,17 +134,21 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
     	return view;
     }
     
-    public void setData(List<TaskEntry> data) {
+    public int setData(List<TaskEntry> data) {
         clear();
+        int count = 0;
         if (data != null) {
           for (int i = 0; i < data.size(); i++) {
               if(mFormView && data.get(i).type.equals("form")) {
                   add(data.get(i));
+                  count++;
               } else if(!mFormView && !data.get(i).type.equals("form")) {
                   add(data.get(i));
+                  count++;
               }
           }
         }
+        return count;
       }
     
 
