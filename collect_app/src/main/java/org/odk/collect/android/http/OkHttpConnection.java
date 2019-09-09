@@ -489,11 +489,18 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                       @Nullable HttpCredentialsInterface credentials,
                       HashMap<String, String> headers) throws Exception {
 
+
         setCredentialsIfNeeded(credentials, uri.getScheme());
-        Request request = new Request.Builder()
-                .url(uri.toURL())
-                .get()
-                .build();
+        Request.Builder b = new Request.Builder()
+                .url(uri.toURL());
+
+        // Add headers
+        if(!headers.isEmpty()) {
+            for(String key : headers.keySet()) {
+                b.addHeader(key, headers.get(key));
+            }
+        }
+        Request request = b.get().build();
 
         Response response = httpClient.newCall(request).execute();
         int statusCode = response.code();

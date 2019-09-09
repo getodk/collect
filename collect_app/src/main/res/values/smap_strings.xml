@@ -112,4 +112,6 @@
     <string name="smap_history">History</string>
     <string name="smap_reason_not_specified">A reason longer than 5 characters must be specified</string>
     <string name="smap_continue_tracking">Exit has been disabled.  To stop tracking of the phone it should be turned off.</string>
+    <string name="smap_warning">Warning</string>
+    <string name="smap_time_difference">The server has a time difference of %s minutes compared to this device</string>
 </resources>

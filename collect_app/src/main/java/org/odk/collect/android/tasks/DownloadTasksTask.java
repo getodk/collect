@@ -301,11 +301,9 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 Uri u = Uri.parse(taskURL);
 
                 HashMap<String, String> headers = new HashMap<String, String> ();
-                /*
                 // Send location with request (if available)  TODO check a parameter to see if this is turned on otherwise don't do it
                 String lat = null;
                 String lon = null;
-                HashMap<String, String> headers = new HashMap<String, String> ();
                 try {
                     Location locn = Collect.getInstance().getLocation();
                     if (locn != null) {
@@ -317,7 +315,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 } catch (Exception e) {
 
                 }
-                */
+                // Send device time with request
+                headers.put("devicetime", String.valueOf(System.currentTimeMillis()));
 
                 URI uri = URI.create(taskURL);
                 String resp = httpInterface.getRequest(uri, "application/json", webCredentialsUtils.getCredentials(uri), headers);
@@ -330,6 +329,13 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 tr = gson.fromJson(resp, TaskResponse.class);
                 Timber.i("Message:" + tr.message);
 
+                // Report time difference
+                if(Math.abs(tr.time_difference) > 60000 ) {
+                    String msg = Collect.getInstance().getString(R.string.smap_time_difference);
+                    long minutes = tr.time_difference / 60000;
+                    msg = msg.replace("%s", String.valueOf(minutes));
+                    results.put(Collect.getInstance().getString(R.string.smap_warning) + ":", msg );
+                }
 
                 if(isCancelled()) { throw new CancelException("cancelled"); };		// Return if the user cancels
 

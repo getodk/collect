@@ -28,6 +28,7 @@ public class TaskResponse {
 	public String status;
     public int version;     // Manage progressive enhancement of this service by incrementing version
 	public String deviceId;
+    public long time_difference;                           // Difference in time in milliseconds between the server and the phone
 	@SerializedName("data")
 	public List<TaskAssignment> taskAssignments;
 	public List<FormLocator> forms;
