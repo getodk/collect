@@ -45,12 +45,12 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
     private MultipartBody multipartBody;
 
-    private final OkHttpOpenRosaServerClientFactory clientFactory;
+    private final OkHttpOpenRosaServerClientProvider clientFactory;
 
     @NonNull
     private final FileToContentTypeMapper fileToContentTypeMapper;
 
-    public OkHttpConnection(@NonNull OkHttpOpenRosaServerClientFactory clientFactory, @NonNull FileToContentTypeMapper fileToContentTypeMapper) {
+    public OkHttpConnection(@NonNull OkHttpOpenRosaServerClientProvider clientFactory, @NonNull FileToContentTypeMapper fileToContentTypeMapper) {
         this.clientFactory = clientFactory;
         this.fileToContentTypeMapper = fileToContentTypeMapper;
     }
@@ -231,7 +231,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     }
 
     private void createClient(@Nullable HttpCredentialsInterface credentials, String scheme) {
-        httpClient = clientFactory.create(scheme, Collect.getInstance().getUserAgentString(), credentials);
+        httpClient = clientFactory.get(scheme, Collect.getInstance().getUserAgentString(), credentials);
     }
 
     /**

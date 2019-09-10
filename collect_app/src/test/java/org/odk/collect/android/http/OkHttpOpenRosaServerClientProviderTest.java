@@ -1,22 +1,22 @@
 package org.odk.collect.android.http;
 
-import org.odk.collect.android.http.okhttp.OkHttpOpenRosaServerClientFactory;
-import org.odk.collect.android.http.openrosa.OpenRosaServerClientFactory;
+import org.odk.collect.android.http.okhttp.OkHttpOpenRosaServerClientProvider;
+import org.odk.collect.android.http.openrosa.OpenRosaServerClientProvider;
 
 import okhttp3.OkHttpClient;
 import okhttp3.tls.internal.TlsUtil;
 
-public class OkHttpOpenRosaServerClientFactoryTest extends OpenRosaServerClientFactoryTest {
+public class OkHttpOpenRosaServerClientProviderTest extends OpenRosaServerClientProviderTest {
 
     @Override
-    protected OpenRosaServerClientFactory buildSubject() {
+    protected OpenRosaServerClientProvider buildSubject() {
         OkHttpClient baseClient = new OkHttpClient.Builder()
                 .sslSocketFactory(
                         TlsUtil.localhost().sslSocketFactory(),
                         TlsUtil.localhost().trustManager())
                 .build();
         
-        return new OkHttpOpenRosaServerClientFactory(baseClient);
+        return new OkHttpOpenRosaServerClientProvider(baseClient);
     }
 
     @Override

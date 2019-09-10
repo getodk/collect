@@ -13,7 +13,7 @@ import com.burgstaller.okhttp.digest.DigestAuthenticator;
 
 import org.odk.collect.android.http.HttpCredentialsInterface;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClient;
-import org.odk.collect.android.http.openrosa.OpenRosaServerClientFactory;
+import org.odk.collect.android.http.openrosa.OpenRosaServerClientProvider;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -28,7 +28,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class OkHttpOpenRosaServerClientFactory implements OpenRosaServerClientFactory {
+public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientProvider {
 
     private static final int CONNECTION_TIMEOUT = 30000;
     private static final int WRITE_CONNECTION_TIMEOUT = 60000; // it can take up to 27 seconds to spin up an Aggregate
@@ -43,12 +43,12 @@ public class OkHttpOpenRosaServerClientFactory implements OpenRosaServerClientFa
 
     private HttpCredentialsInterface lastCredentials;
 
-    public OkHttpOpenRosaServerClientFactory(@NonNull OkHttpClient baseClient) {
+    public OkHttpOpenRosaServerClientProvider(@NonNull OkHttpClient baseClient) {
         this.baseClient = baseClient;
     }
 
     @Override
-    public OpenRosaServerClient create(String scheme, String userAgent, @Nullable HttpCredentialsInterface credentials) {
+    public OpenRosaServerClient get(String scheme, String userAgent, @Nullable HttpCredentialsInterface credentials) {
         if (lastCredentials == null || !lastCredentials.equals(credentials)) {
             lastCredentials = credentials;
             authCache.clear();
