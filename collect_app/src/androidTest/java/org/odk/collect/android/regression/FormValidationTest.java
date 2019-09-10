@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.espressoutils.FormEntry;
-import org.odk.collect.android.espressoutils.MainMenu;
+import org.odk.collect.android.espressoutils.pages.MainMenuPage;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 
@@ -34,12 +34,12 @@ public class FormValidationTest extends BaseRegressionTest {
     @Test
     public void invalidAnswer_ShouldDisplayAllQuestionsOnOnePage() {
 
-        MainMenu.startBlankForm("OnePageFormShort");
+        new MainMenuPage(main).startBlankForm("OnePageFormShort");
         FormEntry.putTextOnIndex(0, "A");
         FormEntry.clickGoToIconInForm();
         FormEntry.clickJumpEndButton();
         FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithMessageDisplayes("Response length must be between 5 and 15", main);
+        FormEntry.checkIsToastWithMessageDisplayes("Response length must be between 5 and 15", main.getActivity());
         FormEntry.checkIsTextDisplayed("Integer");
         FormEntry.putTextOnIndex(0, "Aaaaa");
         FormEntry.clickGoToIconInForm();
@@ -51,7 +51,7 @@ public class FormValidationTest extends BaseRegressionTest {
     public void openHierarchyView_ShouldSeeShortForms() {
 
         //TestCase3
-        MainMenu.startBlankForm("OnePageFormShort");
+        new MainMenuPage(main).startBlankForm("OnePageFormShort");
         FormEntry.clickGoToIconInForm();
         FormEntry.checkIsTextDisplayed("YY MM");
         FormEntry.checkIsTextDisplayed("YY");
