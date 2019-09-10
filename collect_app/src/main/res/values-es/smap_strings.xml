@@ -29,6 +29,9 @@
   <string name="smap_synchronising">Sincronizando con el Servidor</string>
   <string name="smap_task_preferences">Tareas</string>
   <string name="smap_tasks_not_enabled">Tareas no habilitadas - Habilite en la pantalla de ajustes</string>
+  <string name="smap_forms">Formularios</string>
+  <string name="smap_tasks">Tareas</string>
+  <string name="smap_map">Mapa</string>
   <string name="smap_taskList">TAREAS</string>
   <string name="smap_taskMap">MAPA</string>
   <string name="smap_zoom_data">Zoom a Tareas</string>
@@ -93,4 +96,6 @@
   <string name="smap_history">Historial</string>
   <string name="smap_reason_not_specified">Debe especificar una razón mayor a 5 caracteres</string>
   <string name="smap_continue_tracking">La opción Salir ha sido deshabilitada. </string>
+  <string name="smap_warning">Advertencia</string>
+  <string name="smap_time_difference">Se ha detectado una diferencia de %s minutos entre el servidor y este dispositivo</string>
 </resources>
