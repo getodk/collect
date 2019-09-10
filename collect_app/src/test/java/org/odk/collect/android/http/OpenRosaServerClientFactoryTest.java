@@ -221,6 +221,29 @@ public abstract class OpenRosaServerClientFactoryTest {
         assertThat(request.getHeader("Authorization"), startsWith("Digest"));
     }
 
+    @Test
+    public void authenticationIsNotCachedBetweenInstances() throws Exception {
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(401)
+                .addHeader("WWW-Authenticate: Digest realm=\"ODK Aggregate\", qop=\"auth\", nonce=\"MTU2NTA4MjEzODI4OTpmMjc4MDM5N2YxZTJiNDRiNjNiYTBiMThiOWQ4ZTlkMg==\"")
+                .setBody("Please authenticate."));
+        mockWebServer.enqueue(new MockResponse());
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(401)
+                .addHeader("WWW-Authenticate: Digest realm=\"ODK Aggregate\", qop=\"auth\", nonce=\"MTU2NTA4MjEzODI4OTpmMjc4MDM5N2YxZTJiNDRiNjNiYTBiMThiOWQ4ZTlkMg==\"")
+                .setBody("Please authenticate."));
+        mockWebServer.enqueue(new MockResponse());
+
+        subject.create("http", "Android", new HttpCredentials("user", "pass")).makeRequest(new Request.Builder().url(mockWebServer.url("")).build(), new Date());
+        subject.create("http", "Android", new HttpCredentials("user", "pass")).makeRequest(new Request.Builder().url(mockWebServer.url("/different")).build(), new Date());
+
+        assertThat(mockWebServer.getRequestCount(), equalTo(4));
+        mockWebServer.takeRequest();
+        mockWebServer.takeRequest();
+        RecordedRequest request = mockWebServer.takeRequest();
+        assertThat(request.getHeader("Authorization"), equalTo(null));
+    }
+
     private void startHttpsMockWebServer() throws IOException {
         httpsMockWebServer = new MockWebServer();
 

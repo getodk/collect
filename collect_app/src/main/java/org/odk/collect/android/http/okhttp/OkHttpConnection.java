@@ -43,18 +43,6 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
      */
     private OpenRosaServerClient httpClient;
 
-    /**
-     * The credentials used for the last request. When a new request is made, this is used to see
-     * whether the {@link #httpClient} credentials need to be changed.
-     */
-    private HttpCredentialsInterface lastRequestCredentials;
-
-    /**
-     * The scheme used for the last request. When a new request is made, this is used to see
-     * whether the {@link #httpClient} credentials need to be changed.
-     */
-    private String lastRequestScheme = "";
-
     private MultipartBody multipartBody;
 
     private final OkHttpOpenRosaServerClientFactory clientFactory;
@@ -242,21 +230,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         return postResult;
     }
 
-    /**
-     * If the provided credentials are non-null, sets the {@link #httpClient} to authenticate using
-     * the provided credential and sets the {@link #lastRequestCredentials}
-     * <p>
-     * If authentication is needed, always configure digest auth. If SSL is enabled, also configure
-     * basic auth.
-     */
     private void createClient(@Nullable HttpCredentialsInterface credentials, String scheme) {
-        if (credentials != null && !(credentials.equals(lastRequestCredentials) && scheme.equals(lastRequestScheme))) {
-            httpClient = clientFactory.create(scheme, Collect.getInstance().getUserAgentString(), credentials);
-            lastRequestCredentials = credentials;
-            lastRequestScheme = scheme;
-        } else if (httpClient == null) {
-            httpClient = clientFactory.create(scheme, Collect.getInstance().getUserAgentString(), credentials);
-        }
+        httpClient = clientFactory.create(scheme, Collect.getInstance().getUserAgentString(), credentials);
     }
 
     /**

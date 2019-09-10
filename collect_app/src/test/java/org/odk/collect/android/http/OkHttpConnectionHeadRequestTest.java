@@ -16,7 +16,7 @@ public class OkHttpConnectionHeadRequestTest extends OpenRosaHeadRequestTest {
     @Override
     protected OpenRosaHttpInterface buildSubject() {
         return new OkHttpConnection(
-                new OkHttpOpenRosaServerClientFactory(new OkHttpClient.Builder()),
+                new OkHttpOpenRosaServerClientFactory(new OkHttpClient()),
                 new CollectThenSystemContentTypeMapper(MimeTypeMap.getSingleton())
         );
     }

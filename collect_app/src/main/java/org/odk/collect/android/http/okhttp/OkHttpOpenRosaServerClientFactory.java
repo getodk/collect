@@ -38,15 +38,15 @@ public class OkHttpOpenRosaServerClientFactory implements OpenRosaServerClientFa
     private static final String OPEN_ROSA_VERSION = "1.0";
     private static final String DATE_HEADER = "Date";
 
-    private final OkHttpClient.Builder baseClient;
+    private final OkHttpClient baseClient;
 
-    public OkHttpOpenRosaServerClientFactory(@NonNull OkHttpClient.Builder baseClient) {
+    public OkHttpOpenRosaServerClientFactory(@NonNull OkHttpClient baseClient) {
         this.baseClient = baseClient;
     }
 
     @Override
     public OpenRosaServerClient create(String scheme, String userAgent, @Nullable HttpCredentialsInterface credentials) {
-        OkHttpClient.Builder builder = baseClient
+        OkHttpClient.Builder builder = baseClient.newBuilder()
                 .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                 .writeTimeout(WRITE_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                 .readTimeout(READ_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)

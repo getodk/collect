@@ -10,10 +10,11 @@ public class OkHttpOpenRosaServerClientFactoryTest extends OpenRosaServerClientF
 
     @Override
     protected OpenRosaServerClientFactory buildSubject() {
-        OkHttpClient.Builder baseClient = new OkHttpClient.Builder()
+        OkHttpClient baseClient = new OkHttpClient.Builder()
                 .sslSocketFactory(
                         TlsUtil.localhost().sslSocketFactory(),
-                        TlsUtil.localhost().trustManager());
+                        TlsUtil.localhost().trustManager())
+                .build();
         
         return new OkHttpOpenRosaServerClientFactory(baseClient);
     }
