@@ -39,6 +39,9 @@ public class OkHttpOpenRosaServerClientFactory implements OpenRosaServerClientFa
     private static final String DATE_HEADER = "Date";
 
     private final OkHttpClient baseClient;
+    private final Map<String, CachingAuthenticator> authCache = new ConcurrentHashMap<>();
+
+    private HttpCredentialsInterface lastCredentials;
 
     public OkHttpOpenRosaServerClientFactory(@NonNull OkHttpClient baseClient) {
         this.baseClient = baseClient;
@@ -46,6 +49,11 @@ public class OkHttpOpenRosaServerClientFactory implements OpenRosaServerClientFa
 
     @Override
     public OpenRosaServerClient create(String scheme, String userAgent, @Nullable HttpCredentialsInterface credentials) {
+        if (lastCredentials == null || !lastCredentials.equals(credentials)) {
+            lastCredentials = credentials;
+            authCache.clear();
+        }
+
         OkHttpClient.Builder builder = baseClient.newBuilder()
                 .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                 .writeTimeout(WRITE_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
@@ -62,8 +70,6 @@ public class OkHttpOpenRosaServerClientFactory implements OpenRosaServerClientFa
             }
 
             DispatchingAuthenticator authenticator = daBuilder.build();
-
-            final Map<String, CachingAuthenticator> authCache = new ConcurrentHashMap<>();
             builder.authenticator(new CachingAuthenticatorDecorator(authenticator, authCache))
                     .addInterceptor(new AuthenticationCacheInterceptor(authCache)).build();
         }

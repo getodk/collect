@@ -19,6 +19,7 @@ import okhttp3.mockwebserver.RecordedRequest;
 import okhttp3.tls.internal.TlsUtil;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
 
@@ -222,7 +223,26 @@ public abstract class OpenRosaServerClientFactoryTest {
     }
 
     @Test
-    public void authenticationIsNotCachedBetweenInstances() throws Exception {
+    public void authenticationIsCachedBetweenInstances() throws Exception {
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(401)
+                .addHeader("WWW-Authenticate: Digest realm=\"ODK Aggregate\", qop=\"auth\", nonce=\"MTU2NTA4MjEzODI4OTpmMjc4MDM5N2YxZTJiNDRiNjNiYTBiMThiOWQ4ZTlkMg==\"")
+                .setBody("Please authenticate."));
+        mockWebServer.enqueue(new MockResponse());
+        mockWebServer.enqueue(new MockResponse());
+
+        subject.create("http", "Android", new HttpCredentials("user", "pass")).makeRequest(new Request.Builder().url(mockWebServer.url("")).build(), new Date());
+        subject.create("http", "Android", new HttpCredentials("user", "pass")).makeRequest(new Request.Builder().url(mockWebServer.url("/different")).build(), new Date());
+
+        assertThat(mockWebServer.getRequestCount(), equalTo(3));
+        mockWebServer.takeRequest();
+        mockWebServer.takeRequest();
+        RecordedRequest request = mockWebServer.takeRequest();
+        assertThat(request.getHeader("Authorization"), startsWith("Digest"));
+    }
+
+    @Test
+    public void whenUsingDifferentCredentials_authenticationIsNotCachedBetweenInstances() throws Exception {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(401)
                 .addHeader("WWW-Authenticate: Digest realm=\"ODK Aggregate\", qop=\"auth\", nonce=\"MTU2NTA4MjEzODI4OTpmMjc4MDM5N2YxZTJiNDRiNjNiYTBiMThiOWQ4ZTlkMg==\"")
@@ -235,13 +255,55 @@ public abstract class OpenRosaServerClientFactoryTest {
         mockWebServer.enqueue(new MockResponse());
 
         subject.create("http", "Android", new HttpCredentials("user", "pass")).makeRequest(new Request.Builder().url(mockWebServer.url("")).build(), new Date());
-        subject.create("http", "Android", new HttpCredentials("user", "pass")).makeRequest(new Request.Builder().url(mockWebServer.url("/different")).build(), new Date());
+        subject.create("http", "Android", new HttpCredentials("new-user", "pass")).makeRequest(new Request.Builder().url(mockWebServer.url("/different")).build(), new Date());
 
         assertThat(mockWebServer.getRequestCount(), equalTo(4));
         mockWebServer.takeRequest();
         mockWebServer.takeRequest();
         RecordedRequest request = mockWebServer.takeRequest();
         assertThat(request.getHeader("Authorization"), equalTo(null));
+    }
+
+    @Test
+    public void whenConnectingToDifferentHosts_authenticationIsNotCachedBetweenInstances() throws Exception {
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(401)
+                .addHeader("WWW-Authenticate: Digest realm=\"ODK Aggregate\", qop=\"auth\", nonce=\"MTU2NTA4MjEzODI4OTpmMjc4MDM5N2YxZTJiNDRiNjNiYTBiMThiOWQ4ZTlkMg==\"")
+                .setBody("Please authenticate."));
+        mockWebServer.enqueue(new MockResponse());
+
+        MockWebServer otherHost = new MockWebServer();
+        otherHost.start();
+
+        otherHost.enqueue(new MockResponse()
+                .setResponseCode(401)
+                .addHeader("WWW-Authenticate: Digest realm=\"ODK Aggregate\", qop=\"auth\", nonce=\"MTU2NTA4MjEzODI4OTpmMjc4MDM5N2YxZTJiNDRiNjNiYTBiMThiOWQ4ZTlkMg==\"")
+                .setBody("Please authenticate."));
+        otherHost.enqueue(new MockResponse());
+
+        subject.create("http", "Android", new HttpCredentials("user", "pass")).makeRequest(new Request.Builder().url(this.mockWebServer.url("")).build(), new Date());
+        subject.create("http", "Android", new HttpCredentials("user", "pass")).makeRequest(new Request.Builder().url(otherHost.url("")).build(), new Date());
+
+        assertThat(otherHost.getRequestCount(), equalTo(2));
+
+        RecordedRequest request = otherHost.takeRequest();
+        assertThat(request.getHeader("Authorization"), equalTo(null));
+
+        otherHost.shutdown();
+    }
+
+    @Test
+    public void whenLastRequestSetCookies_nextRequestDoesNotSendThem() throws Exception {
+        mockWebServer.enqueue(new MockResponse()
+                .addHeader("Set-Cookie", "blah=blah"));
+        mockWebServer.enqueue(new MockResponse());
+
+        subject.create("http", "Android", new HttpCredentials("user", "pass")).makeRequest(new Request.Builder().url(this.mockWebServer.url("")).build(), new Date());
+        subject.create("http", "Android", new HttpCredentials("user", "pass")).makeRequest(new Request.Builder().url(this.mockWebServer.url("")).build(), new Date());
+
+        mockWebServer.takeRequest();
+        RecordedRequest request = mockWebServer.takeRequest();
+        assertThat(request.getHeader("Cookie"), isEmptyOrNullString());
     }
 
     private void startHttpsMockWebServer() throws IOException {

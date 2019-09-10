@@ -21,7 +21,6 @@ import okhttp3.mockwebserver.RecordedRequest;
 import okio.Buffer;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
@@ -68,20 +67,6 @@ public abstract class OpenRosaGetRequestTest {
                 "null %s/%s",
                 BuildConfig.APPLICATION_ID,
                 BuildConfig.VERSION_NAME)));
-    }
-
-    @Test
-    public void whenLastRequestSetCookies_nextRequestDoesNotSendThem() throws Exception {
-        mockWebServer.enqueue(new MockResponse()
-                .addHeader("Set-Cookie", "blah=blah"));
-        mockWebServer.enqueue(new MockResponse());
-
-        subject.executeGetRequest(mockWebServer.url("").uri(), null, null);
-        subject.executeGetRequest(mockWebServer.url("").uri(), null, null);
-
-        mockWebServer.takeRequest();
-        RecordedRequest request = mockWebServer.takeRequest();
-        assertThat(request.getHeader("Cookie"), isEmptyOrNullString());
     }
 
     @Test
