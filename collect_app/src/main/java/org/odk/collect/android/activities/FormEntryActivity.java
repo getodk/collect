@@ -979,7 +979,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .setEnabled(useability);
 
         if (getFormController() != null && getFormController().currentFormCollectsBackgroundLocation()
-                && PlayServicesUtil.areGooglePlayServicesAvailable(this)) {
+                && PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
             MenuItem backgroundLocation = menu.findItem(R.id.track_location);
             backgroundLocation.setVisible(true);
             backgroundLocation.setChecked(GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));
@@ -2079,7 +2079,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         // Register to receive location provider change updates and write them to the audit log
         if (formController != null && formController.currentFormAuditsLocation()
-                && PlayServicesUtil.areGooglePlayServicesAvailable(this)) {
+                && PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
             registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
         }
 
@@ -2440,7 +2440,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // Register to receive location provider change updates and write them to the audit
                 // log. onStart has already run but the formController was null so try again.
                 if (formController.currentFormAuditsLocation()
-                        && PlayServicesUtil.areGooglePlayServicesAvailable(this)) {
+                        && PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
                     registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
                 }
 

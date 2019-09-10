@@ -73,7 +73,7 @@ public class CollectSetGeopointAction extends SetGeopointAction implements Locat
         // Only start acquiring location if the Collect preference allows it and Google Play
         // Services are available. If it's not allowed, leave the target field blank.
         if (GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true)
-            && PlayServicesUtil.areGooglePlayServicesAvailable(Collect.getInstance().getApplicationContext())) {
+            && PlayServicesUtil.isGooglePlayServicesAvailable(Collect.getInstance().getApplicationContext())) {
             maxAccuracyLocationClient.requestLocationUpdates(SECONDS_TO_CONSIDER_UPDATES);
         }
     }

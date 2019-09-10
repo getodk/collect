@@ -361,7 +361,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
                 // if it's Sheets, start the Sheets uploader
                 // first make sure we have a google account selected
 
-                if (PlayServicesUtil.areGooglePlayServicesAvailable(this)) {
+                if (PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
                     Intent i = new Intent(this, GoogleSheetsUploaderActivity.class);
                     i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
                     startActivityForResult(i, INSTANCE_UPLOADER);

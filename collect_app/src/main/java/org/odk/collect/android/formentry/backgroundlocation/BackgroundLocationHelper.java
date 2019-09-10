@@ -31,7 +31,7 @@ public class BackgroundLocationHelper {
     }
 
     boolean arePlayServicesAvailable() {
-        return PlayServicesUtil.areGooglePlayServicesAvailable(Collect.getInstance().getApplicationContext());
+        return PlayServicesUtil.isGooglePlayServicesAvailable(Collect.getInstance().getApplicationContext());
     }
 
     /**
