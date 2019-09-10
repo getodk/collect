@@ -78,7 +78,7 @@ tasks.register("spotbugs", SpotBugsTask) {
 apply plugin: 'pmd'
 
 pmd {
-    toolVersion = '6.4.0'
+    toolVersion = '6.17.0'
 }
 
 tasks.register("pmd", Pmd) {
