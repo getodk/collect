@@ -38,8 +38,6 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
 
-    private MultipartBody multipartBody;
-
     private final OkHttpOpenRosaServerClientProvider clientFactory;
 
     @NonNull
@@ -187,9 +185,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                 }
             }
 
-            multipartBody = multipartBuilder.build();
-            postResult = executePostRequest(uri, credentials);
-            multipartBody = null;
+            MultipartBody multipartBody = multipartBuilder.build();
+            postResult = executePostRequest(uri, credentials, multipartBody);
 
             if (postResult.getResponseCode() != HttpURLConnection.HTTP_CREATED &&
                     postResult.getResponseCode() != HttpURLConnection.HTTP_ACCEPTED) {
@@ -202,7 +199,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     }
 
     @NonNull
-    private HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
+    private HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials, MultipartBody multipartBody) throws Exception {
         OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), Collect.getInstance().getUserAgentString(), credentials);
         HttpPostResult postResult;
         Request request = new Request.Builder()
