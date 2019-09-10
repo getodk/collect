@@ -324,7 +324,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         return TextUtils.join(" > ", segments);
     }
 
-
     /**
      * Adds a button to launch an intent if the group displayed by this view is an intent group.
      * An intent group launches an intent and receives multiple values from the launched app.

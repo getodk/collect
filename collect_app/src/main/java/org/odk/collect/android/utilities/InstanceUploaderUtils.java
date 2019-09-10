@@ -32,7 +32,6 @@ public class InstanceUploaderUtils {
     private InstanceUploaderUtils() {
     }
 
-
     /**
      * Returns a formatted message including submission results for all the filled forms accessible
      * through instancesProcessed in the following structure:
