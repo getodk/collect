@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.utilities;
 
-import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
+import com.google.api.client.util.Base64;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
