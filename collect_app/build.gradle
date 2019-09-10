@@ -198,7 +198,6 @@ dependencies {
 
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
     implementation 'androidx.browser:browser:1.2.0-alpha07'
-    implementation 'com.google.android.material:material:1.1.0-alpha10'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0-alpha10'
     implementation 'androidx.cardview:cardview:1.0.0'
@@ -257,7 +256,6 @@ dependencies {
     implementation("com.google.apis:google-api-services-sheets:v4-rev20190813-1.30.1") {
         exclude group: 'org.apache.httpcomponents'
         exclude group: 'com.google.guava'
-
     }
 
     implementation "com.jakewharton.timber:timber:4.7.1"
@@ -295,14 +293,6 @@ dependencies {
 
     // Better "Subjects" for Rx:
     implementation "com.jakewharton.rxrelay2:rxrelay:2.1.1"
-
-    // Android bindings for Rx:
-    implementation "com.jakewharton.rxbinding2:rxbinding:2.2.0"
-
-    // RxLifecycle (binds subscription cleanup to component lifecycle):
-    implementation "com.trello.rxlifecycle2:rxlifecycle:${rootProject.rxLifecycleVersion}"
-    implementation "com.trello.rxlifecycle2:rxlifecycle-android:${rootProject.rxLifecycleVersion}"
-    implementation "com.trello.rxlifecycle2:rxlifecycle-android-lifecycle:${rootProject.rxLifecycleVersion}"
 
     // WorkManager for specifying deferrable, asynchronous tasks
     implementation("android.arch.work:work-runtime:1.0.1") {
