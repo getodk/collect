@@ -38,11 +38,6 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
 
-    /**
-     * Shared client object used for all HTTP requests. Credentials are set on a per-request basis.
-     */
-    private OpenRosaServerClient httpClient;
-
     private MultipartBody multipartBody;
 
     private final OkHttpOpenRosaServerClientProvider clientFactory;
@@ -58,7 +53,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     @NonNull
     @Override
     public HttpGetResult executeGetRequest(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        createClient(credentials, uri.getScheme());
+        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), Collect.getInstance().getUserAgentString(), credentials);
         Request request = new Request.Builder()
                 .url(uri.toURL())
                 .get()
@@ -121,7 +116,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     @NonNull
     @Override
     public HttpHeadResult executeHeadRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        createClient(credentials, uri.getScheme());
+        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), Collect.getInstance().getUserAgentString(), credentials);
         Request request = new Request.Builder()
                 .url(uri.toURL())
                 .head()
@@ -208,7 +203,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
     @NonNull
     private HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        createClient(credentials, uri.getScheme());
+        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), Collect.getInstance().getUserAgentString(), credentials);
         HttpPostResult postResult;
         Request request = new Request.Builder()
                 .url(uri.toURL())
@@ -228,10 +223,6 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         discardEntityBytes(response);
 
         return postResult;
-    }
-
-    private void createClient(@Nullable HttpCredentialsInterface credentials, String scheme) {
-        httpClient = clientFactory.get(scheme, Collect.getInstance().getUserAgentString(), credentials);
     }
 
     /**

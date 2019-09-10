@@ -11,6 +11,7 @@ import com.burgstaller.okhttp.digest.CachingAuthenticator;
 import com.burgstaller.okhttp.digest.Credentials;
 import com.burgstaller.okhttp.digest.DigestAuthenticator;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.http.HttpCredentialsInterface;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClient;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClientProvider;
@@ -39,9 +40,9 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
     private static final String DATE_HEADER = "Date";
 
     private final OkHttpClient baseClient;
-    private final Map<String, CachingAuthenticator> authCache = new ConcurrentHashMap<>();
 
     private HttpCredentialsInterface lastCredentials;
+    private OkHttpOpenRosaServerClient client;
 
     public OkHttpOpenRosaServerClientProvider(@NonNull OkHttpClient baseClient) {
         this.baseClient = baseClient;
@@ -49,11 +50,20 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
 
     @Override
     public OpenRosaServerClient get(String scheme, String userAgent, @Nullable HttpCredentialsInterface credentials) {
-        if (lastCredentials == null || !lastCredentials.equals(credentials)) {
+        if (client == null || credentialsHaveChanged(credentials)) {
             lastCredentials = credentials;
-            authCache.clear();
+            client = createNewClient(scheme, userAgent, credentials);
         }
 
+        return client;
+    }
+
+    private boolean credentialsHaveChanged(@Nullable HttpCredentialsInterface credentials) {
+        return lastCredentials != null && !lastCredentials.equals(credentials);
+    }
+
+    @NotNull
+    private OkHttpOpenRosaServerClient createNewClient(String scheme, String userAgent, @Nullable HttpCredentialsInterface credentials) {
         OkHttpClient.Builder builder = baseClient.newBuilder()
                 .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                 .writeTimeout(WRITE_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
@@ -70,6 +80,7 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
             }
 
             DispatchingAuthenticator authenticator = daBuilder.build();
+            ConcurrentHashMap<String, CachingAuthenticator> authCache = new ConcurrentHashMap<>();
             builder.authenticator(new CachingAuthenticatorDecorator(authenticator, authCache))
                     .addInterceptor(new AuthenticationCacheInterceptor(authCache)).build();
         }
