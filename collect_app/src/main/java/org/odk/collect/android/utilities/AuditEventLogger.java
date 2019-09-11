@@ -97,7 +97,7 @@ public class AuditEventLogger {
     }
 
     private void addLocationCoordinatesToAuditEvent(AuditEvent auditEvent) {
-        Location location = getMostAccurateLocation();
+        Location location = getMostAccurateLocation(System.currentTimeMillis());
         String latitude = location != null ? Double.toString(location.getLatitude()) : "";
         String longitude = location != null ? Double.toString(location.getLongitude()) : "";
         String accuracy = location != null ? Double.toString(location.getAccuracy()) : "";
@@ -235,8 +235,8 @@ public class AuditEventLogger {
     }
 
     @Nullable
-    Location getMostAccurateLocation() {
-        removeExpiredLocations();
+    Location getMostAccurateLocation(long currentTime) {
+        removeExpiredLocations(currentTime);
 
         Location bestLocation = null;
         if (!locations.isEmpty()) {
@@ -249,11 +249,11 @@ public class AuditEventLogger {
         return bestLocation;
     }
 
-    private void removeExpiredLocations() {
+    private void removeExpiredLocations(long currentTime) {
         if (!locations.isEmpty()) {
             List<Location> unexpiredLocations = new ArrayList<>();
             for (Location location : locations) {
-                if (System.currentTimeMillis() <= location.getTime() + auditConfig.getLocationMaxAge()) {
+                if (currentTime <= location.getTime() + auditConfig.getLocationMaxAge()) {
                     unexpiredLocations.add(location);
                 }
             }

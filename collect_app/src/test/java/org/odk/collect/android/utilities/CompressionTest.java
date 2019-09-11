@@ -63,7 +63,7 @@ public class CompressionTest {
         assertEquals(nullText, decompressedText);
     }
 
-    @Test(expected = DataFormatException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void decompressRaiseException() throws IOException, DataFormatException {
         String input = "Decoding this will raise an error";
         decompressedText = CompressionUtils.decompress(input);
