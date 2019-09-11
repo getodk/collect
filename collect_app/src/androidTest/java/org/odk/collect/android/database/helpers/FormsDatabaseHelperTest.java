@@ -23,14 +23,21 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.odk.collect.android.database.helpers.FormsDatabaseHelper.DATABASE_PATH;
 import static org.odk.collect.android.database.helpers.FormsDatabaseHelper.FORMS_TABLE_NAME;
+import static org.odk.collect.android.database.helpers.FormsDatabaseHelperTest.Action.DOWNGRADE;
+import static org.odk.collect.android.database.helpers.FormsDatabaseHelperTest.Action.UPGRADE;
 import static org.odk.collect.android.test.FileUtils.copyFileFromAssets;
 
 @RunWith(Parameterized.class)
 public class FormsDatabaseHelperTest extends SqlLiteHelperTest {
+    enum Action { UPGRADE, DOWNGRADE }
+
     @Parameterized.Parameter
-    public String description;
+    public Action action;
 
     @Parameterized.Parameter(1)
+    public String description;
+
+    @Parameterized.Parameter(2)
     public String dbFilename;
 
     @Before
@@ -43,14 +50,14 @@ public class FormsDatabaseHelperTest extends SqlLiteHelperTest {
         FileUtils.copyFile(new File(DATABASE_PATH + TEMPORARY_EXTENSION), new File(DATABASE_PATH));
     }
 
-    @Parameterized.Parameters(name = "{0}")
+    @Parameterized.Parameters(name = "{1}")
     public static Iterable<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                {"Downgrading from version with extra column drops that column", "forms_v7000_added_fakeColumn.db"},
-                {"Downgrading from version with missing column adds that column", "forms_v7000_removed_jrVersion.db"},
+                {DOWNGRADE, "Downgrading from version with extra column drops that column", "forms_v7000_added_fakeColumn.db"},
+                {DOWNGRADE, "Downgrading from version with missing column adds that column", "forms_v7000_removed_jrVersion.db"},
 
-                {"Upgrading from version with extra column and missing columns", "forms_v4.db"},
-                {"Upgrading from version with the same columns", "forms_v4_with_columns_from_v7.db"}
+                {UPGRADE, "Upgrading from version with extra column and missing columns", "forms_v4.db"},
+                {UPGRADE, "Upgrading from version with the same columns", "forms_v4_with_columns_from_v7.db"}
         });
     }
 
@@ -67,7 +74,7 @@ public class FormsDatabaseHelperTest extends SqlLiteHelperTest {
 
         assertThat(newColumnNames, contains(FormsDatabaseHelper.CURRENT_VERSION_COLUMN_NAMES));
 
-        if (description.startsWith("Upgrading")) {
+        if (action.equals(UPGRADE)) {
             assertThatFormsAreKeptAfterUpgrading();
         }
     }
