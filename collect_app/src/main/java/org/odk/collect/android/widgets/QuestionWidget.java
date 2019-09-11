@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -23,8 +24,6 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
-import androidx.annotation.IdRes;
-import androidx.annotation.Nullable;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -38,21 +37,28 @@ import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import androidx.annotation.IdRes;
+import androidx.annotation.Nullable;
+
 import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.listeners.AudioPlayListener;
+import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
-import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.AnimateUtils;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -72,7 +78,7 @@ import timber.log.Timber;
 
 public abstract class QuestionWidget
         extends RelativeLayout
-        implements Widget, AudioPlayListener {
+        implements Widget {
 
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
@@ -90,11 +96,17 @@ public abstract class QuestionWidget
     private Bundle state;
     protected ThemeUtils themeUtils;
     private int playColor;
+    private final ReferenceManager referenceManager;
+    private final AudioHelper audioHelper;
 
     private WidgetValueChangedListener valueChangedListener;
 
-    public QuestionWidget(Context context, FormEntryPrompt prompt) {
+    public QuestionWidget(Context context, FormEntryPrompt prompt, AudioHelper audioHelper) {
         super(context);
+        this.audioHelper = audioHelper;
+
+        AppDependencyComponent component = DaggerUtils.getComponent((Activity) getContext());
+        this.referenceManager = component.referenceManager();
 
         themeUtils = new ThemeUtils(context);
         playColor = themeUtils.getAccentColor();
@@ -149,6 +161,13 @@ public abstract class QuestionWidget
         if (context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
             registerToClearAnswerOnLongPress((FormEntryActivity) context);
         }
+    }
+
+    public QuestionWidget(Context context, FormEntryPrompt prompt) {
+        this(context, prompt, new AudioHelper(
+                ((ScreenContext) context).getActivity(),
+                ((ScreenContext) context).getViewLifecycle()
+        ));
     }
 
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
@@ -282,8 +301,10 @@ public abstract class QuestionWidget
         // Create the layout for audio, image, text
         MediaLayout questionMediaLayout = new MediaLayout(getContext());
         questionMediaLayout.setId(ViewIds.generateViewId()); // assign random id
-        questionMediaLayout.setAVT(questionText, audioURI, imageURI, videoURI, bigImageURI, getPlayer());
-        questionMediaLayout.setAudioListener(this);
+
+        String tag = formEntryPrompt.getIndex() != null ? formEntryPrompt.getIndex().toString() : "";
+        questionMediaLayout.setTag(tag);
+        questionMediaLayout.setAVT(questionText, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), audioHelper);
 
         String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
         if (playColorString != null) {
@@ -505,10 +526,6 @@ public abstract class QuestionWidget
         getQuestionMediaLayout().resetTextFormatting();
     }
 
-    public void resetAudioButtonImage() {
-        getQuestionMediaLayout().resetAudioButtonBitmap();
-    }
-
     public void showWarning(String warningBody) {
         warningText.setVisibility(View.VISIBLE);
         warningText.setText(warningBody);
@@ -682,6 +699,14 @@ public abstract class QuestionWidget
 
     public MediaPlayer getPlayer() {
         return player;
+    }
+
+    public AudioHelper getAudioHelper() {
+        return audioHelper;
+    }
+
+    public ReferenceManager getReferenceManager() {
+        return referenceManager;
     }
 
     public int getPlayColor() {

@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -75,7 +76,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                 .get()
                 .build();
 
-        Response response = httpClient.makeRequest(request);
+        Response response = httpClient.makeRequest(request, new Date());
         int statusCode = response.code();
 
         if (statusCode != HttpURLConnection.HTTP_OK) {
@@ -139,7 +140,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                 .build();
 
         Timber.i("Issuing HEAD request to: %s", uri.toString());
-        Response response = httpClient.makeRequest(request);
+        Response response = httpClient.makeRequest(request, new Date());
         int statusCode = response.code();
 
         Map<String, String> responseHeaders = new HashMap<>();
@@ -225,7 +226,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                 .url(uri.toURL())
                 .post(multipartBody)
                 .build();
-        Response response = httpClient.makeRequest(request);
+        Response response = httpClient.makeRequest(request, new Date());
 
         if (response.code() == 204) {
             throw new Exception();

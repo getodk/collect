@@ -14,7 +14,6 @@ import com.burgstaller.okhttp.digest.DigestAuthenticator;
 import org.odk.collect.android.http.HttpCredentialsInterface;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClient;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClientFactory;
-import org.odk.collect.android.utilities.Clock;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -40,11 +39,9 @@ public class OkHttpOpenRosaServerClientFactory implements OpenRosaServerClientFa
     private static final String DATE_HEADER = "Date";
 
     private final OkHttpClient.Builder baseClient;
-    private final Clock clock;
 
-    public OkHttpOpenRosaServerClientFactory(@NonNull OkHttpClient.Builder baseClient, Clock clock) {
+    public OkHttpOpenRosaServerClientFactory(@NonNull OkHttpClient.Builder baseClient) {
         this.baseClient = baseClient;
-        this.clock = clock;
     }
 
     @Override
@@ -71,27 +68,25 @@ public class OkHttpOpenRosaServerClientFactory implements OpenRosaServerClientFa
                     .addInterceptor(new AuthenticationCacheInterceptor(authCache)).build();
         }
 
-        return new OkHttpOpenRosaServerClient(builder.build(), userAgent, clock);
+        return new OkHttpOpenRosaServerClient(builder.build(), userAgent);
     }
 
     private static class OkHttpOpenRosaServerClient implements OpenRosaServerClient {
 
         private final OkHttpClient client;
         private final String userAgent;
-        private final Clock clock;
 
-        OkHttpOpenRosaServerClient(OkHttpClient client, String userAgent, Clock clock) {
+        OkHttpOpenRosaServerClient(OkHttpClient client, String userAgent) {
             this.client = client;
             this.userAgent = userAgent;
-            this.clock = clock;
         }
 
         @Override
-        public Response makeRequest(Request request) throws IOException {
+        public Response makeRequest(Request request, Date currentTime) throws IOException {
             return client.newCall(request.newBuilder()
                     .addHeader(USER_AGENT_HEADER, userAgent)
                     .addHeader(OPEN_ROSA_VERSION_HEADER, OPEN_ROSA_VERSION)
-                    .addHeader(DATE_HEADER, getHeaderDate(clock.getCurrentTime()))
+                    .addHeader(DATE_HEADER, getHeaderDate(currentTime))
                     .build()).execute();
         }
 

@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.espressoutils.FormEntry;
-import org.odk.collect.android.espressoutils.MainMenu;
+import org.odk.collect.android.espressoutils.pages.MainMenuPage;
 import org.odk.collect.android.regression.BaseRegressionTest;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -37,7 +37,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
     @Test
     //https://github.com/opendatakit/collect/issues/2871
     public void allRelevantQuestionsShouldBeVisibleInHierarchyView() {
-        MainMenu.startBlankForm("formHierarchy1");
+        new MainMenuPage(main).startBlankForm("formHierarchy1");
         FormEntry.clickGoToIconInForm();
 
         onView(withRecyclerView(R.id.list)
@@ -52,7 +52,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
     @Test
     //https://github.com/opendatakit/collect/issues/2944
     public void notRelevantRepeatGroupsShouldNotBeVisibleInHierarchy() {
-        MainMenu.startBlankForm("formHierarchy2");
+        new MainMenuPage(main).startBlankForm("formHierarchy2");
         FormEntry.putText("2");
         FormEntry.clickGoToIconInForm();
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
@@ -92,7 +92,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
     @Test
     //https://github.com/opendatakit/collect/issues/2936
     public void repeatGroupsShouldBeVisibleAsAppropriate() {
-        MainMenu.startBlankForm("formHierarchy3");
+        new MainMenuPage(main).startBlankForm("formHierarchy3");
         FormEntry.swipeToNextQuestion();
         FormEntry.swipeToNextQuestion();
         FormEntry.swipeToNextQuestion();
@@ -115,7 +115,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
     @Test
     //https://github.com/opendatakit/collect/issues/2942
     public void deletingLastGroupShouldNotBreakHierarchy() {
-        MainMenu.startBlankForm("formHierarchy3");
+        new MainMenuPage(main).startBlankForm("formHierarchy3");
         FormEntry.swipeToNextQuestion();
         FormEntry.swipeToNextQuestion();
         FormEntry.swipeToNextQuestion();
