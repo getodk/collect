@@ -27,7 +27,13 @@ import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.RadioButton;
 
+import org.javarosa.xform.parse.XFormParser;
+import org.javarosa.xpath.eval.Indexer;
+import org.javarosa.xpath.eval.IndexerCreator;
+import org.odk.collect.android.IndexerCreatorImpl;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
@@ -99,7 +105,7 @@ public class FormChooserList extends FormListActivity implements
             diskSyncTask.setDiskSyncListener(this);
             diskSyncTask.execute((Void[]) null);
         }
-        sortingOptions = new int[] {
+        sortingOptions = new int[]{
                 R.string.sort_by_name_asc, R.string.sort_by_name_desc,
                 R.string.sort_by_date_asc, R.string.sort_by_date_desc,
         };
@@ -119,6 +125,7 @@ public class FormChooserList extends FormListActivity implements
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
         if (Collect.allowClick(getClass().getName())) {
             // get uri to form
             long idFormsTable = listView.getAdapter().getItemId(position);
@@ -134,7 +141,7 @@ public class FormChooserList extends FormListActivity implements
                 intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                 startActivity(intent);
             }
-            
+
             finish();
         }
     }
@@ -239,4 +246,34 @@ public class FormChooserList extends FormListActivity implements
     private boolean hideOldFormVersions() {
         return GeneralSharedPreferences.getInstance().getBoolean(GeneralKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
     }
+
+    public void onRadioButtonClicked(View v) {
+        if (v instanceof RadioButton) {
+            RadioButton modeButton = (RadioButton) v;
+            if (modeButton.getText().equals("Memory")) {
+                IndexerCreatorImpl.indexerMode = IndexerCreatorImpl.MEMORY;
+            } else if (modeButton.getText().equals("Database")) {
+                IndexerCreatorImpl.indexerMode = IndexerCreatorImpl.MIXED;
+            } else if (modeButton.getText().equals("Database Only")) {
+                IndexerCreatorImpl.indexerMode = IndexerCreatorImpl.DATABASE;
+            } else if (modeButton.getText().equals("None")) {
+                IndexerCreatorImpl.indexerMode = IndexerCreatorImpl.NONE;
+            }
+        }
+
+    }
+
+    public void onButtonClicked(View v) {
+        if (v instanceof Button) {
+            Button modeButton = (Button) v;
+            if (modeButton.getText().equals("Clear Index DB")) {
+                if (XFormParser.getIndexerResolver() != null) {
+                    for (Indexer indexer : XFormParser.getIndexerResolver().getIndexers()) {
+                        indexer.deleteIndex();
+                    }
+                }
+            }
+        }
+    }
+
 }

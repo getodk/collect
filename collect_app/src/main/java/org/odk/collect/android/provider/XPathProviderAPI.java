@@ -20,7 +20,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 public final class XPathProviderAPI {
-    static final String AUTHORITY = "org.odk.collect.android.provider.odk.xpath";
+    static final String AUTHORITY = "org.odk.collect.android.provider.odk.xpath_exprs";
 
     private XPathProviderAPI() {
     }
@@ -35,13 +35,13 @@ public final class XPathProviderAPI {
         /**
          * The content:// style URL for accessing XPaths.
          */
-        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/xpath");
+        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/xpath_exprs");
 
-        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.xpath";
-        public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.odk.xpath";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.xpath_exprs";
+        public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.odk.xpath_exprs";
 
         // These are the only things needed for an insert
-        public static final String PRE_EVAL_EXPR = "preEvaluatedExpression";
+        public static final String EVAL_EXPR = "evaluationExpression";
         public static final String TREE_REF = "treeReference";
 
     }

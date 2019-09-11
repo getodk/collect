@@ -17,7 +17,6 @@ package org.odk.collect.android.provider;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -33,7 +32,6 @@ import org.odk.collect.android.utilities.MediaUtils;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.Map;
 
 import timber.log.Timber;
 
@@ -128,8 +126,8 @@ public class XPathExprProvider extends ContentProvider {
                 values = new ContentValues();
             }
 
-            if (!values.containsKey(XPathsColumns.PRE_EVAL_EXPR)) {
-                throw new IllegalArgumentException(XPathsColumns.PRE_EVAL_EXPR
+            if (!values.containsKey(XPathsColumns.EVAL_EXPR)) {
+                throw new IllegalArgumentException(XPathsColumns.EVAL_EXPR
                         + " must be specified.");
             }
 

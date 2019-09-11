@@ -32,8 +32,9 @@ import static android.provider.BaseColumns._ID;
  * This class helps open, create, and upgrade the database file.
  */
 public class XPathDatabaseHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "xpath_exprs.db";
+    public static final String DATABASE_NAME = "xpath_exprs.db";
     public static final String XPATH_TABLE_NAME = "xpath_exprs";
+    public static final String INDEXED_EXPRESIONS = "indexed_expressions";
 
     private static final int DATABASE_VERSION = 7;
 
@@ -70,7 +71,8 @@ public class XPathDatabaseHelper extends SQLiteOpenHelper {
     private void createXPathTableV7(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + XPATH_TABLE_NAME + " ("
                 + _ID + " integer primary key autoincrement, "
-                + XPathProviderAPI.XPathsColumns.PRE_EVAL_EXPR + " text not null, "
+                + XPathProviderAPI.XPathsColumns.EVAL_EXPR + " text not null, "
                 + XPathProviderAPI.XPathsColumns.TREE_REF + " text );");
     }
+
 }
