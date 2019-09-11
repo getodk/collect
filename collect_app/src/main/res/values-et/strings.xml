@@ -137,8 +137,7 @@
   <string name="root_namespace_error">Juurelemendi nimeruum on vale: %s</string>
   <string name="manifest_tag_error">Manifest kirjest %s puudub kas: failnimi, räsi või downloadUrl</string>
   <string name="form_download_progress">%1$s. Laeb faile: %2$s of %3$s</string>
-  <string name="file_fetch_failed">Viga: %2$s (%3$s) juhtus %1$s</string>
-  <string name="fetching_manifest">%s. Laen manifest faili</string>
+    <string name="fetching_manifest">%s. Laen manifest faili</string>
   <string name="success">Õnnestus</string>
   <string name="no_forms_uploaded">Vabandage, ühtegi vormi ei ole üles laetud.</string>
   <string name="upload_results">Tulemuste üles laadimine</string>

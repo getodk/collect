@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.odk.collect.android.http.openrosa.HttpPostResult;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.http.support.MockWebServerRule;
 

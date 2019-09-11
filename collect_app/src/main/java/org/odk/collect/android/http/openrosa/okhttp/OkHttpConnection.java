@@ -1,15 +1,13 @@
-package org.odk.collect.android.http.okhttp;
+package org.odk.collect.android.http.openrosa.okhttp;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.apache.commons.io.IOUtils;
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.http.HttpCredentialsInterface;
-import org.odk.collect.android.http.HttpGetResult;
-import org.odk.collect.android.http.HttpHeadResult;
-import org.odk.collect.android.http.HttpPostResult;
+import org.odk.collect.android.http.openrosa.HttpCredentialsInterface;
+import org.odk.collect.android.http.openrosa.HttpGetResult;
+import org.odk.collect.android.http.openrosa.HttpHeadResult;
+import org.odk.collect.android.http.openrosa.HttpPostResult;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClient;
 import org.odk.collect.android.utilities.FileUtils;
@@ -66,11 +64,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
         if (statusCode != HttpURLConnection.HTTP_OK) {
             discardEntityBytes(response);
-            String errMsg = Collect
-                    .getInstance()
-                    .getString(R.string.file_fetch_failed, uri.toString(), response.message(), String.valueOf(statusCode));
+            Timber.i("Error: %s (%s at %s", response.message(), String.valueOf(statusCode), uri.toString());
 
-            Timber.e(errMsg);
             return new HttpGetResult(null, new HashMap<String, String>(), "", statusCode);
         }
 

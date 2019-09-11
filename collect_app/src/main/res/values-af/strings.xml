@@ -133,8 +133,7 @@
   <string name="root_namespace_error">Root element Namespace is verkeerd: %s</string>
   <string name="manifest_tag_error">Manifest inskrywing %s vermis een of meer tags: filename, hash, of downloadUrl</string>
   <string name="form_download_progress">%1$s. Besig om media leërs te haal: %2$s van %3$s</string>
-  <string name="file_fetch_failed">Fout: %2$s (%3$s) by %1$s</string>
-  <string name="fetching_manifest">%s. Besig om manifest te haal</string>
+    <string name="fetching_manifest">%s. Besig om manifest te haal</string>
   <string name="success">Sukses</string>
   <string name="no_forms_uploaded">Jammer, geen vorm is opgelaai nie.</string>
   <string name="upload_results">Oplaai Resultate</string>

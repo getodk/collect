@@ -3,14 +3,13 @@ package org.odk.collect.android.http;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.odk.collect.android.http.openrosa.HttpCredentials;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClient;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClientProvider;
 import org.odk.collect.android.http.support.MockWebServerRule;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -28,8 +27,6 @@ public abstract class OpenRosaServerClientProviderTest {
 
     protected abstract OpenRosaServerClientProvider buildSubject();
 
-    private final List<MockWebServer> mockWebServers = new ArrayList<>();
-
     private OpenRosaServerClientProvider subject;
 
     @Rule
@@ -37,7 +34,6 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Before
     public void setup() {
-
         subject = buildSubject();
     }
 
@@ -81,7 +77,7 @@ public abstract class OpenRosaServerClientProviderTest {
         RecordedRequest request = mockWebServer.takeRequest();
         assertThat(request.getHeader("Accept-Encoding"), equalTo("gzip"));
     }
-    
+
     @Test
     public void withCredentials_whenBasicChallengeReceived_doesNotRetryWithCredentials() throws Exception {
         MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();

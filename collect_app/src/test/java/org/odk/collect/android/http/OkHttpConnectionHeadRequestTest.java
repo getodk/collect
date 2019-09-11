@@ -2,15 +2,12 @@ package org.odk.collect.android.http;
 
 import android.webkit.MimeTypeMap;
 
-import org.junit.runner.RunWith;
-import org.odk.collect.android.http.okhttp.OkHttpConnection;
-import org.odk.collect.android.http.okhttp.OkHttpOpenRosaServerClientProvider;
+import org.odk.collect.android.http.openrosa.okhttp.OkHttpConnection;
+import org.odk.collect.android.http.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
-import org.robolectric.RobolectricTestRunner;
 
 import okhttp3.OkHttpClient;
 
-@RunWith(RobolectricTestRunner.class)
 public class OkHttpConnectionHeadRequestTest extends OpenRosaHeadRequestTest {
 
     @Override

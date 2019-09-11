@@ -145,8 +145,7 @@
   <string name="access_error">Gabim në aksesimin e %s:</string>
   <string name="manifest_server_error">Përgjigja e manifestit nuk raporton një version OpenRosa - server i gabuar?</string>
   <string name="form_download_progress">%1$s. Duke ngarkuar media: %2$s of %3$s</string>
-  <string name="file_fetch_failed">Gabim: %2$s (2%3$s) në 3%1$s</string>
-  <string name="fetching_manifest">%s Duke ngarkuar manifestin</string>
+    <string name="fetching_manifest">%s Duke ngarkuar manifestin</string>
   <string name="success">Sukses</string>
   <string name="no_forms_uploaded">Nuk është ngarkuar asnjë formular.</string>
   <string name="upload_results">Ngarko rezultatet</string>

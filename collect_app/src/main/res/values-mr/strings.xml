@@ -140,8 +140,7 @@
   <string name="root_namespace_error">रूट घटक नावस्थान चुकीची आहे: %s</string>
   <string name="manifest_tag_error">मॅनिफेस्ट प्रविष्टि  1%s मध्ये एक किंवा अधिक टॅग गहाळ आहेत: फाइलनाव, हैश किंवा डाउनलोड युरएल.</string>
   <string name="form_download_progress">%1$s मीडिया फायली मिळवत आहे: %2$s पैकी %3$s</string>
-  <string name="file_fetch_failed">त्रुटी %2$s (%3$s) %1$sवर </string>
-  <string name="fetching_manifest">%s. मॅनिफेस्ट मिळवत आहे</string>
+    <string name="fetching_manifest">%s. मॅनिफेस्ट मिळवत आहे</string>
   <string name="success">यश</string>
   <string name="no_forms_uploaded">क्षमस्व, कोणताही फॉर्म अपलोड करण्यात आला नाही</string>
   <string name="upload_results">परिणाम अपलोड करा</string>

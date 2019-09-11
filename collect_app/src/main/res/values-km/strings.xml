@@ -151,8 +151,7 @@
   <string name="root_namespace_error">ធាតុ​ឬស Namespace មិនត្រឹមត្រូវ: %s</string>
   <string name="manifest_tag_error">ការចូល Manifest %s គឺបាត់បង់ស្លាក​មួយ​ ឬ​ច្រើន: ឈ្មោះឯកសារ, គន្លឹះ​សញ្ញា ឬ អាសយដ្ឋានទាញយក</string>
   <string name="form_download_progress">%1$s. កំពុងទាញយកឯកសារមេឌៀ: %2$s of %3$s</string>
-  <string name="file_fetch_failed">បញ្ហា: %2$s (%3$s) នៅ %1$s</string>
-  <string name="fetching_manifest">%s. ការទាញបញ្ជី</string>
+    <string name="fetching_manifest">%s. ការទាញបញ្ជី</string>
   <string name="success">ជោគជ័យ</string>
   <string name="failures">បរាជ័យ</string>
   <string name="no_forms_uploaded">សុំទោស, គ្មានសំណុំ​បែប​បទសម្រាប់ផ្ទុកឡើង.</string>

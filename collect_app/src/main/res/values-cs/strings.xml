@@ -154,8 +154,7 @@
   <string name="root_namespace_error">Jmenný prostor kořenového prvku není správný: %s</string>
   <string name="manifest_tag_error">Na vstupu manifestu %s chybí jeden nebo více tagů: filename, hash nebo downloadUrl</string>
   <string name="form_download_progress">%1$s. Stahuji mediální soubory: %2$s z %3$s</string>
-  <string name="file_fetch_failed">Chyba: %2$s (%3$s) na %1$s</string>
-  <string name="fetching_manifest">%s. Stahuji manifest </string>
+    <string name="fetching_manifest">%s. Stahuji manifest </string>
   <string name="success">Úspěch</string>
   <string name="failures">Selhání</string>
   <string name="no_forms_uploaded">Žádný dotazník nebyl nahrán.</string>

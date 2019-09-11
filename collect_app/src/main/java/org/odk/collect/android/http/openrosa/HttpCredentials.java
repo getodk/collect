@@ -1,4 +1,4 @@
-package org.odk.collect.android.http;
+package org.odk.collect.android.http.openrosa;
 
 public class HttpCredentials implements HttpCredentialsInterface {
 

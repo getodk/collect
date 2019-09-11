@@ -3,6 +3,7 @@ package org.odk.collect.android.http;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.odk.collect.android.http.openrosa.HttpHeadResult;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.http.support.MockWebServerRule;
 

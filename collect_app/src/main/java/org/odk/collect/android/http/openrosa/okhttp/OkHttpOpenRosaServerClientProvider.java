@@ -1,4 +1,4 @@
-package org.odk.collect.android.http.okhttp;
+package org.odk.collect.android.http.openrosa.okhttp;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,7 +12,7 @@ import com.burgstaller.okhttp.digest.Credentials;
 import com.burgstaller.okhttp.digest.DigestAuthenticator;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.http.HttpCredentialsInterface;
+import org.odk.collect.android.http.openrosa.HttpCredentialsInterface;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClient;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClientProvider;
 
@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;

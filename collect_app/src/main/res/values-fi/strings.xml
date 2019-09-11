@@ -154,8 +154,7 @@
   <string name="root_namespace_error">Juurielementin nimiavaruus on virheellinen: %s</string>
   <string name="manifest_tag_error">Manifestin kohdasta %s puuttuu yksi tai useampi tägi: tiedostonimi, tiiviste (hash) tai downloadUrl</string>
   <string name="form_download_progress">%1$s. Haetaan mediatiedostoja: %2$s / %3$s</string>
-  <string name="file_fetch_failed">Virhe: %2$s (%3$s) kohdassa %1$s</string>
-  <string name="fetching_manifest">%s. Haetaan manifestia</string>
+    <string name="fetching_manifest">%s. Haetaan manifestia</string>
   <string name="success">Onnistui</string>
   <string name="failures">Epäonnistuneet</string>
   <string name="no_forms_uploaded">Pahoittelut, lomaketta ei siirretty.</string>

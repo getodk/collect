@@ -133,8 +133,7 @@
   <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
   <string name="manifest_tag_error">Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Henter mediafiler: %2$s av %3$s</string>
-  <string name="file_fetch_failed">Feil: %2$s (%3$s) ved %1$s</string>
-  <string name="fetching_manifest">%s. Henter manifestet</string>
+    <string name="fetching_manifest">%s. Henter manifestet</string>
   <string name="success">Suksess</string>
   <string name="no_forms_uploaded">Beklager, opplasting feilet.</string>
   <string name="upload_results">Vis oversikt</string>

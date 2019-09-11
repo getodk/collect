@@ -154,8 +154,7 @@
   <string name="root_namespace_error">Root element Namespace je netačan: %s</string>
   <string name="manifest_tag_error">Unosu %s nedostaje jedan ili više elemenata: ime fajla ili putanja za preuzimanje</string>
   <string name="form_download_progress">%1$s. Preuzimam media fajlove: %2$s od %3$s</string>
-  <string name="file_fetch_failed">Greška: %2$s (%3$s) pri %1$s</string>
-  <string name="fetching_manifest">%s. Pribavljam manifest.</string>
+    <string name="fetching_manifest">%s. Pribavljam manifest.</string>
   <string name="success">Uspjeh</string>
   <string name="failures">Neuspijeh</string>
   <string name="no_forms_uploaded">Nijedan formular nije otpremljen.</string>

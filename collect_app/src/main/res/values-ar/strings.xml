@@ -154,8 +154,7 @@
   <string name="root_namespace_error">اسم العنصرالأساسي غير صحيح:%s</string>
   <string name="manifest_tag_error">ادخال المانيفست %s يفتقد واحد او أكثر من العلامات: اسم الملف، # أو رابط التحميل</string>
   <string name="form_download_progress">%1$s. الحصول على ملفات الوسائط المتعددة:  %2$s  من %3$s</string>
-  <string name="file_fetch_failed">خطأ: %2$s بمعنى %3$s عند %1$s</string>
-  <string name="fetching_manifest">%s. الحصول على القائمة </string>
+    <string name="fetching_manifest">%s. الحصول على القائمة </string>
   <string name="success">نجاح</string>
   <string name="failures">فشل</string>
   <string name="no_forms_uploaded">عذرا، لا يوجد استمارة للتحميل.</string>

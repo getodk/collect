@@ -154,8 +154,7 @@
   <string name="root_namespace_error">El elemento de root Namespace es incorrecto: %s</string>
   <string name="manifest_tag_error">Al manifiesto %s le fatan una o mas etiquetas: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Obteniendo los archivos: %2$s de %3$s</string>
-  <string name="file_fetch_failed">Error: %2$s (%3$s) en %1$s</string>
-  <string name="fetching_manifest">%s. Obteniendo el manifesto
+    <string name="fetching_manifest">%s. Obteniendo el manifesto
 </string>
   <string name="success">Correcto</string>
   <string name="failures">Fallas</string>

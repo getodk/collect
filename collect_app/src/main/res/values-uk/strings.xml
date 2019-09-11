@@ -154,8 +154,7 @@
   <string name="root_namespace_error">Кореневий елемент має некоректну назву: %s</string>
   <string name="manifest_tag_error">В записі маніфесту  %s є один або більше пропущені теги: filename, hash, чи downloadUrl</string>
   <string name="form_download_progress">%1$s. Отримання медіа файлу: %2$s з %3$s</string>
-  <string name="file_fetch_failed">Помилка: %2$s (%3$s) в %1$s</string>
-  <string name="fetching_manifest">%s. Отримання маніфесту</string>
+    <string name="fetching_manifest">%s. Отримання маніфесту</string>
   <string name="success">Успішно!</string>
   <string name="failures">Невдалі</string>
   <string name="no_forms_uploaded">Вибачте, жодна анкета не була вивантажена.</string>

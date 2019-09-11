@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.odk.collect.android.http.openrosa.HttpGetResult;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.http.support.MockWebServerRule;
 import org.odk.collect.android.utilities.FileUtils;

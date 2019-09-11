@@ -126,8 +126,7 @@
   <string name="root_namespace_error">Šakninio elemento vardų erdvė neteisinga: %s</string>
   <string name="manifest_tag_error">Manifesto įvestyje %s trūksta vienos ar keleto žymų: filename, hash, arba downloadUrl</string>
   <string name="form_download_progress">%1$s. Siunčiami medijos failai: %2$s iš %3$s</string>
-  <string name="file_fetch_failed">Klaida: %2$s (%3$s) iš %1$s</string>
-  <string name="fetching_manifest">%s. Siunčiamas manifestas</string>
+    <string name="fetching_manifest">%s. Siunčiamas manifestas</string>
   <string name="success">Sėkmingai</string>
   <string name="no_forms_uploaded">Deja, formos nepavyko išsiųsti.</string>
   <string name="upload_results">Išsiuntimo rezultatai</string>

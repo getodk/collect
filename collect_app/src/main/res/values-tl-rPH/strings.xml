@@ -123,8 +123,7 @@
   <string name="access_error">May mali habang sa pag-access ng %s: </string>
   <string name="manifest_tag_error">Manifest entry %s ay kulang ng isa o higit pang mga tags: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Kinukuha ang talaksang media : %2$s of %3$s</string>
-  <string name="file_fetch_failed">Mali: %2$s (%3$s) sa %1$s</string>
-  <string name="fetching_manifest">%s. Kinukuha ang manifest </string>
+    <string name="fetching_manifest">%s. Kinukuha ang manifest </string>
   <string name="success">Tagumpay</string>
   <string name="choose_sound">Pumili ng Tunog</string>
   <string name="choose_video">Pumili ng Bidyo</string>
