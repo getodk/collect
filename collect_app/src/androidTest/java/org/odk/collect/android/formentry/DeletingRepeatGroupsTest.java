@@ -50,7 +50,7 @@ public class DeletingRepeatGroupsTest {
     }
 
     @Test
-    public void requestingDeletionOfLastRepeat_deletesFirstRepeat() {
+    public void requestingDeletionOfLastRepeat_deletesLastRepeat() {
         FormEntry.swipeToNextQuestion();
         FormEntry.swipeToNextQuestion();
         FormEntry.swipeToNextQuestion();
@@ -85,7 +85,7 @@ public class DeletingRepeatGroupsTest {
     }
 
     @Test
-    public void requestingDeletionOfLastRepeatInHierarchy_deletesFirstRepeat() {
+    public void requestingDeletionOfLastRepeatInHierarchy_deletesLastRepeat() {
         FormEntry.clickGoToIconInForm();
         FormEntry.clickGoUpIcon();
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(4)));
@@ -122,7 +122,7 @@ public class DeletingRepeatGroupsTest {
     }
 
     @Test
-    public void requestingDeletionOfLastRepeatWithFieldList_deletesFirstRepeat() {
+    public void requestingDeletionOfLastRepeatWithFieldList_deletesLastRepeat() {
         FormEntry.clickGoToIconInForm();
         FormEntry.clickGoUpIcon();
         FormEntry.clickGoUpIcon();
@@ -162,7 +162,7 @@ public class DeletingRepeatGroupsTest {
     }
 
     @Test
-    public void requestingDeletionOfLastRepeatWithFieldListInHierarchy_deletesFirstRepeat() {
+    public void requestingDeletionOfLastRepeatWithFieldListInHierarchy_deletesLastRepeat() {
         FormEntry.clickGoToIconInForm();
         FormEntry.clickGoUpIcon();
         FormEntry.clickGoUpIcon();
