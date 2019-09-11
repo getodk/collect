@@ -23,8 +23,6 @@ import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
-import java.util.Date;
-
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -78,7 +76,7 @@ public class AppDependencyModule {
     @Singleton
     OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap) {
         return new OkHttpConnection(
-                new OkHttpOpenRosaServerClientFactory(new OkHttpClient.Builder(), Date::new),
+                new OkHttpOpenRosaServerClientFactory(new OkHttpClient.Builder()),
                 new CollectThenSystemContentTypeMapper(mimeTypeMap)
         );
     }
