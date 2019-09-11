@@ -2,10 +2,11 @@ package org.odk.collect.android.http;
 
 import androidx.annotation.NonNull;
 
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.http.support.MockWebServerRule;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -38,22 +39,19 @@ public abstract class OpenRosaPostRequestTest {
 
     protected abstract OpenRosaHttpInterface buildSubject(OpenRosaHttpInterface.FileToContentTypeMapper mapper);
 
-    private final MockWebServer mockWebServer = new MockWebServer();
+    @Rule
+    public MockWebServerRule mockWebServerTester = new MockWebServerRule();
+
     private OpenRosaHttpInterface subject;
 
     @Before
-    public void setup() throws Exception {
-        mockWebServer.start();
+    public void setup() {
         subject = buildSubject(new XmlOrBlahContentTypeMapper());
-    }
-
-    @After
-    public void teardown() throws Exception {
-        mockWebServer.shutdown();
     }
 
     @Test
     public void makesAPostRequestToUri() throws Exception {
+        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
         mockWebServer.enqueue(new MockResponse().setResponseCode(201));
 
         URI uri = mockWebServer.url("/blah").uri();
@@ -68,6 +66,7 @@ public abstract class OpenRosaPostRequestTest {
 
     @Test
     public void returnsPostResult() throws Exception {
+        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(200)
                 .setBody("I AM BODY"));
@@ -81,6 +80,7 @@ public abstract class OpenRosaPostRequestTest {
 
     @Test
     public void whenResponseIsGzipped_returnsBody() throws Exception {
+        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(200)
                 .addHeader("Content-Encoding", "gzip")
@@ -94,6 +94,7 @@ public abstract class OpenRosaPostRequestTest {
 
     @Test(expected = Exception.class)
     public void whenResponseIs204_throwsException() throws Exception {
+        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(204));
 
@@ -103,6 +104,7 @@ public abstract class OpenRosaPostRequestTest {
 
     @Test
     public void whenThereIsAServerError_returnsPostBody() throws Exception {
+        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(500)
                 .setBody("blah"));
@@ -128,6 +130,7 @@ public abstract class OpenRosaPostRequestTest {
 
     @Test
     public void sendsSubmissionFileAsFirstPartOfBody() throws Exception {
+        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
         mockWebServer.enqueue(new MockResponse().setResponseCode(201));
 
         URI uri = mockWebServer.url("/blah").uri();
@@ -145,6 +148,7 @@ public abstract class OpenRosaPostRequestTest {
 
     @Test
     public void sendsAttachmentsAsPartsOfBody() throws Exception {
+        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
         mockWebServer.enqueue(new MockResponse().setResponseCode(201));
 
         URI uri = mockWebServer.url("/blah").uri();
@@ -168,6 +172,7 @@ public abstract class OpenRosaPostRequestTest {
 
     @Test
     public void sendsAttachmentsAsPartsOfBody_withContentType() throws Exception {
+        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
         mockWebServer.enqueue(new MockResponse().setResponseCode(201));
 
         URI uri = mockWebServer.url("/blah").uri();
@@ -184,6 +189,7 @@ public abstract class OpenRosaPostRequestTest {
 
     @Test
     public void whenMoreThanOneAttachment_andRequestIsLargerThanMaxContentLength_sendsTwoRequests() throws Exception {
+        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
         mockWebServer.enqueue(new MockResponse().setResponseCode(201));
         mockWebServer.enqueue(new MockResponse().setResponseCode(201));
 
@@ -218,6 +224,7 @@ public abstract class OpenRosaPostRequestTest {
 
     @Test
     public void whenMoreThanOneAttachment_andRequestIsLargerThanMaxContentLength__andFirstRequestIs500_returnsErrorResult() throws Exception {
+        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
         mockWebServer.enqueue(new MockResponse().setResponseCode(500));
 
         URI uri = mockWebServer.url("/blah").uri();
@@ -232,6 +239,7 @@ public abstract class OpenRosaPostRequestTest {
 
     @Test
     public void whenMoreThanOneAttachment_andRequestIsLargerThanMaxContentLength_andSecondRequestIs500_returnsErrorResult() throws Exception {
+        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
         mockWebServer.enqueue(new MockResponse().setResponseCode(201));
         mockWebServer.enqueue(new MockResponse().setResponseCode(500));
 
