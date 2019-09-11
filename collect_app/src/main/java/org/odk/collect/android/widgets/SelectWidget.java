@@ -17,15 +17,15 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.form.api.FormEntryCaption;
@@ -33,12 +33,9 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
-import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.external.ExternalSelectChoice;
-import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.views.MediaLayout;
-import org.odk.collect.android.views.helpers.FormMediaHelpers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,14 +57,7 @@ public abstract class SelectWidget extends ItemsWidget {
     private int playcounter;
 
     public SelectWidget(Context context, FormEntryPrompt prompt) {
-        this(context, prompt, new AudioHelper(
-                ((ScreenContext) context).getActivity(),
-                ((ScreenContext) context).getViewLifecycle()
-        ));
-    }
-
-    public SelectWidget(Context context, FormEntryPrompt prompt, AudioHelper audioHelper) {
-        super(context, prompt, audioHelper);
+        super(context, prompt);
         answerLayout = new LinearLayout(context);
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         playList = new ArrayList<>();
@@ -83,6 +73,14 @@ public abstract class SelectWidget extends ItemsWidget {
         super.resetQuestionTextColor();
         for (MediaLayout layout : playList) {
             layout.resetTextFormatting();
+        }
+    }
+
+    @Override
+    public void resetAudioButtonImage() {
+        super.resetAudioButtonImage();
+        for (MediaLayout layout : playList) {
+            layout.resetAudioButtonBitmap();
         }
     }
 
@@ -121,6 +119,7 @@ public abstract class SelectWidget extends ItemsWidget {
     }
 
     public void initMediaLayoutSetUp(MediaLayout mediaLayout) {
+        mediaLayout.setAudioListener(this);
         mediaLayout.setPlayTextColor(getPlayColor());
         playList.add(mediaLayout);
     }
@@ -130,17 +129,7 @@ public abstract class SelectWidget extends ItemsWidget {
      */
     public void addMediaFromChoice(MediaLayout mediaLayout, int index, TextView textView, List<SelectChoice> items) {
         String audioURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_AUDIO);
-        String imageURI = getImageURI(index, items);
-        String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "video");
-        String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
 
-        mediaLayout.setTag(FormMediaHelpers.getClipID(getFormEntryPrompt()) + " " + index);
-        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), getAudioHelper());
-
-        textView.setGravity(Gravity.CENTER_VERTICAL);
-    }
-
-    private String getImageURI(int index, List<SelectChoice> items) {
         String imageURI;
         if (items.get(index) instanceof ExternalSelectChoice) {
             imageURI = ((ExternalSelectChoice) items.get(index)).getImage();
@@ -148,7 +137,13 @@ public abstract class SelectWidget extends ItemsWidget {
             imageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index),
                     FormEntryCaption.TEXT_FORM_IMAGE);
         }
-        return imageURI;
+
+        textView.setGravity(Gravity.CENTER_VERTICAL);
+
+        String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "video");
+        String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
+
+        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI, getPlayer());
     }
 
     protected RecyclerView setUpRecyclerView() {

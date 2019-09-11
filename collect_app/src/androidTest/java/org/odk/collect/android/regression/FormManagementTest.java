@@ -11,7 +11,7 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.espressoutils.FormEntry;
-import org.odk.collect.android.espressoutils.pages.MainMenuPage;
+import org.odk.collect.android.espressoutils.MainMenu;
 import org.odk.collect.android.espressoutils.Settings;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -20,7 +20,7 @@ import static androidx.test.espresso.Espresso.pressBack;
 
 //Issue NODK-237
 @RunWith(AndroidJUnit4.class)
-public class FormManagementTest extends BaseRegressionTest {
+public class FormManagementTest extends  BaseRegressionTest {
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -37,15 +37,12 @@ public class FormManagementTest extends BaseRegressionTest {
     @Test
     public void validationUponSwipe_ShouldDisplay() {
         //TestCase7,8
-        new MainMenuPage(main).startBlankForm("OnePageFormValid");
+        MainMenu.startBlankForm("OnePageFormValid");
         FormEntry.putText("Bla");
         FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsToastWithMessageDisplayes("Response length must be between 5 and 15", main.getActivity());
-
-        new MainMenuPage(main)
-                .clickOnMenu()
-                .clickGeneralSettings();
-
+        FormEntry.checkIsToastWithMessageDisplayes("Response length must be between 5 and 15", main);
+        MainMenu.clickOnMenu();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.openFormManagement();
         Settings.openConstraintProcessing();
         FormEntry.clickOnString(R.string.constraint_behavior_on_finalize);
@@ -53,22 +50,20 @@ public class FormManagementTest extends BaseRegressionTest {
         pressBack();
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithMessageDisplayes("Response length must be between 5 and 15", main.getActivity());
+        FormEntry.checkIsToastWithMessageDisplayes("Response length must be between 5 and 15", main);
     }
 
     @Test
     public void guidanceForQuestion_ShouldDisplayAlways() {
         //TestCase10
-        new MainMenuPage(main)
-                .clickOnMenu()
-                .clickGeneralSettings();
-
+        MainMenu.clickOnMenu();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.openFormManagement();
         Settings.openShowGuidanceForQuestions();
         Settings.clickOnString(R.string.guidance_yes);
         pressBack();
         pressBack();
-        new MainMenuPage(main).startBlankForm("hints textq");
+        MainMenu.startBlankForm("hints textq");
         FormEntry.checkIsTextDisplayed("1 very very very very very very very very very very long text");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
@@ -77,16 +72,14 @@ public class FormManagementTest extends BaseRegressionTest {
     @Test
     public void guidanceForQuestion_ShouldBeCollapsed() {
         //TestCase11
-        new MainMenuPage(main)
-                .clickOnMenu()
-                .clickGeneralSettings();
-
+        MainMenu.clickOnMenu();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.openFormManagement();
         Settings.openShowGuidanceForQuestions();
         Settings.clickOnString(R.string.guidance_yes_collapsed);
         pressBack();
         pressBack();
-        new MainMenuPage(main).startBlankForm("hints textq");
+        MainMenu.startBlankForm("hints textq");
         FormEntry.checkIsIdDisplayed(R.id.help_icon);
         FormEntry.clickOnText("Hint 1");
         FormEntry.checkIsTextDisplayed("1 very very very very very very very very very very long text");

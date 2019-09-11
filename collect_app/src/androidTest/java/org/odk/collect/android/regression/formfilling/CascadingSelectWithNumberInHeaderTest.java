@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.espressoutils.FormEntry;
-import org.odk.collect.android.espressoutils.pages.MainMenuPage;
+import org.odk.collect.android.espressoutils.MainMenu;
 import org.odk.collect.android.regression.BaseRegressionTest;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -33,7 +33,7 @@ public class CascadingSelectWithNumberInHeaderTest extends BaseRegressionTest {
     @Test
     public void fillForm_ShouldFillFormWithNumberInCsvHeader() {
 
-        new MainMenuPage(main).startBlankForm("numberInCSV");
+        MainMenu.startBlankForm("numberInCSV");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickOnText("Venda de animais");
         FormEntry.checkIsTextDisplayed("1a");

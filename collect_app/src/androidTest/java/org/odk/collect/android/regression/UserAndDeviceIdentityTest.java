@@ -11,7 +11,7 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.espressoutils.FormEntry;
-import org.odk.collect.android.espressoutils.pages.MainMenuPage;
+import org.odk.collect.android.espressoutils.MainMenu;
 import org.odk.collect.android.espressoutils.Settings;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -35,10 +35,8 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
     @Test
     public void setEmail_ShouldRequireAtSign() {
         //TestCase1
-        new MainMenuPage(main)
-                .clickOnMenu()
-                .clickGeneralSettings();
-
+        MainMenu.clickOnMenu();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.clickUserAndDeviceIdentity();
         Settings.clickFormMetadata();
         Settings.clickMetadataEmail();
@@ -58,7 +56,7 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
     public void emptyUsername_ShouldNotDisplayUsernameInForm() {
 
         //TestCase2
-        new MainMenuPage(main).startBlankForm("Test");
+        MainMenu.startBlankForm("Test");
         FormEntry.checkIsDisplayedInTextClassAndSwipe("");
         FormEntry.clickSaveAndExit();
     }
@@ -67,10 +65,8 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
     public void setMetadataUsername_ShouldDisplayMetadataUsernameInForm() {
 
         //TestCase3
-        new MainMenuPage(main)
-                .clickOnMenu()
-                .clickGeneralSettings();
-
+        MainMenu.clickOnMenu();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.clickUserAndDeviceIdentity();
         Settings.clickFormMetadata();
         Settings.clickMetadataUsername();
@@ -79,7 +75,7 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
         pressBack();
         pressBack();
         pressBack();
-        new MainMenuPage(main).startBlankForm("Test");
+        MainMenu.startBlankForm("Test");
         FormEntry.checkIsDisplayedInTextClassAndSwipe("AAA");
         FormEntry.clickSaveAndExit();
     }
@@ -88,10 +84,8 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
     public void setAggregateUsername_ShouldDisplayAggregateUsernameInForm() {
 
         //TestCase4
-        new MainMenuPage(main)
-                .clickOnMenu()
-                .clickGeneralSettings();
-
+        MainMenu.clickOnMenu();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.clickUserAndDeviceIdentity();
         Settings.clickFormMetadata();
         Settings.clickMetadataUsername();
@@ -100,11 +94,8 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
         pressBack();
         pressBack();
         pressBack();
-
-        new MainMenuPage(main)
-                .clickOnMenu()
-                .clickGeneralSettings();
-
+        MainMenu.clickOnMenu();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.openServerSettings();
         Settings.clickOnServerType();
         Settings.clickOnString(R.string.server_platform_odk_aggregate);
@@ -113,7 +104,7 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
         Settings.Dialog.clickOK();
         pressBack();
         pressBack();
-        new MainMenuPage(main).startBlankForm("Test");
+        MainMenu.startBlankForm("Test");
         FormEntry.checkIsDisplayedInTextClassAndSwipe("BBB");
         FormEntry.clickSaveAndExit();
     }
@@ -122,10 +113,8 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
     public void setBothUsernames_ShouldDisplayMetadataUsernameInForm() {
 
         //TestCase5
-        new MainMenuPage(main)
-                .clickOnMenu()
-                .clickGeneralSettings();
-
+        MainMenu.clickOnMenu();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.clickUserAndDeviceIdentity();
         Settings.clickFormMetadata();
         Settings.clickMetadataUsername();
@@ -134,11 +123,8 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
         pressBack();
         pressBack();
         pressBack();
-        
-        new MainMenuPage(main)
-                .clickOnMenu()
-                .clickGeneralSettings();
-
+        MainMenu.clickOnMenu();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.openServerSettings();
         Settings.clickOnServerType();
         Settings.clickOnString(R.string.server_platform_odk_aggregate);
@@ -147,7 +133,7 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
         Settings.Dialog.clickOK();
         pressBack();
         pressBack();
-        new MainMenuPage(main).startBlankForm("Test");
+        MainMenu.startBlankForm("Test");
         FormEntry.checkIsDisplayedInTextClassAndSwipe("CCC");
         FormEntry.clickSaveAndExit();
     }

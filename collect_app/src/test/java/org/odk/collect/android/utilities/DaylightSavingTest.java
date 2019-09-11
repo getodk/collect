@@ -28,8 +28,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.support.RobolectricHelpers;
-import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.DateWidget;
 import org.odk.collect.android.widgets.TimeWidget;
@@ -129,7 +127,7 @@ public class DaylightSavingTest {
         when(timeWidget.getHour()).thenReturn(hour);
         when(timeWidget.getMinute()).thenReturn(minute);
 
-        DateTimeWidget dateTimeWidget = new DateTimeWidget(RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get(), formEntryPromptStub);
+        DateTimeWidget dateTimeWidget = new DateTimeWidget(Robolectric.buildActivity(FormEntryActivity.class).create().get(), formEntryPromptStub);
         dateTimeWidget.setDateWidget(dateWidget);
         dateTimeWidget.setTimeWidget(timeWidget);
 

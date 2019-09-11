@@ -5,8 +5,6 @@ import androidx.test.espresso.matcher.PreferenceMatchers;
 import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.espressoutils.pages.MainMenuPage;
-import org.odk.collect.android.espressoutils.pages.GeneralSettingsPage;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -25,10 +23,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 
-/**
- * @deprecated Prefer page objects {@link GeneralSettingsPage} over static helpers
- */
-@Deprecated
 public final class Settings {
 
     private Settings() {
@@ -62,11 +56,9 @@ public final class Settings {
         onData(PreferenceMatchers.withKey("username")).perform(click());
     }
 
-    public static void resetSettings(ActivityTestRule rule) {
-        new MainMenuPage(rule)
-                .clickOnMenu()
-                .clickAdminSettings();
-
+    public static void resetSettings() {
+        MainMenu.clickOnMenu();
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.admin_preferences))).perform(click());
         onData(PreferenceMatchers.withKey("reset_settings")).perform(click());
         onView(withText(getInstrumentation().getTargetContext().getString(R.string.reset_settings))).perform(click());
         onView(withText(getInstrumentation().getTargetContext().getString(R.string.reset_settings_button_reset))).perform(click());
@@ -170,7 +162,7 @@ public final class Settings {
         onView(withText(getInstrumentation().getTargetContext().getString(value))).check(doesNotExist());
     }
 
-    public static void openGeneralSettingsFromAdminSettings() {
+    public static void  openGeneralSettingsFromAdminSettings() {
         onData(PreferenceMatchers.withKey("odk_preferences")).perform(click());
     }
 

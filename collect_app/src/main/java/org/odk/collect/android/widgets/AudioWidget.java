@@ -22,25 +22,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore.Audio;
+import androidx.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.core.view.ViewCompat;
-
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.audio.AudioControllerView;
-import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
-import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
@@ -68,17 +63,17 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     @NonNull
     private MediaUtil mediaUtil;
 
-    private AudioControllerView audioController;
+    private AudioController audioController;
     private Button captureButton;
     private Button chooseButton;
 
     private String binaryName;
 
     public AudioWidget(Context context, FormEntryPrompt prompt) {
-        this(context, prompt, new FileUtil(), new MediaUtil(), new AudioControllerView(context));
+        this(context, prompt, new FileUtil(), new MediaUtil(), new AudioController());
     }
 
-    AudioWidget(Context context, FormEntryPrompt prompt, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioControllerView audioController) {
+    AudioWidget(Context context, FormEntryPrompt prompt, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioController audioController) {
         super(context, prompt);
 
         this.fileUtil = fileUtil;
@@ -89,12 +84,14 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_sound), R.id.choose_sound);
 
+        audioController.init(context, getPlayer());
+
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(captureButton);
         answerLayout.addView(chooseButton);
-        answerLayout.addView(audioController);
+        answerLayout.addView(audioController.getPlayerLayout(answerLayout));
         addAnswerView(answerLayout);
 
         hideButtonsIfNeeded();
@@ -204,9 +201,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
     private void updatePlayerMedia() {
         if (binaryName != null) {
-            ScreenContext screenContext = (ScreenContext) getContext();
-            AudioHelper audioHelper = new AudioHelper(screenContext.getActivity(), screenContext.getViewLifecycle());
-            audioHelper.setAudio(audioController, getAudioFile().getAbsolutePath(), String.valueOf(ViewCompat.generateViewId()));
+            audioController.setMedia(getAudioFile());
             audioController.showPlayer();
         } else {
             audioController.hidePlayer();
