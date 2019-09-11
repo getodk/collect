@@ -17,7 +17,8 @@ public class OkHttpConnectionGetRequestTest extends OpenRosaGetRequestTest {
     protected OpenRosaHttpInterface buildSubject() {
         return new OkHttpConnection(
                 new OkHttpOpenRosaServerClientProvider(new OkHttpClient()),
-                new CollectThenSystemContentTypeMapper(MimeTypeMap.getSingleton())
+                new CollectThenSystemContentTypeMapper(MimeTypeMap.getSingleton()),
+                USER_AGENT
         );
     }
 }

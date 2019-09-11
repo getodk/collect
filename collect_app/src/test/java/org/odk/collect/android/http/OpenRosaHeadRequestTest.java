@@ -3,7 +3,6 @@ package org.odk.collect.android.http;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.http.support.MockWebServerRule;
 
@@ -21,6 +20,8 @@ import static org.junit.Assert.fail;
 
 public abstract class OpenRosaHeadRequestTest {
 
+    static final String USER_AGENT = "Test Agent";
+
     protected abstract OpenRosaHttpInterface buildSubject();
 
     @Rule
@@ -29,7 +30,7 @@ public abstract class OpenRosaHeadRequestTest {
     private OpenRosaHttpInterface subject;
 
     @Before
-    public void setup() throws Exception {
+    public void setup() {
         subject = buildSubject();
     }
 
@@ -56,10 +57,7 @@ public abstract class OpenRosaHeadRequestTest {
         subject.executeHeadRequest(mockWebServer.url("").uri(), null);
 
         RecordedRequest request = mockWebServer.takeRequest();
-        assertThat(request.getHeader("User-Agent"), equalTo(String.format(
-                "null %s/%s",
-                BuildConfig.APPLICATION_ID,
-                BuildConfig.VERSION_NAME)));
+        assertThat(request.getHeader("User-Agent"), equalTo(USER_AGENT));
     }
 
     @Test

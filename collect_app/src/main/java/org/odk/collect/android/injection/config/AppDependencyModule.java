@@ -77,7 +77,8 @@ public class AppDependencyModule {
     OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap) {
         return new OkHttpConnection(
                 new OkHttpOpenRosaServerClientProvider(new OkHttpClient()),
-                new CollectThenSystemContentTypeMapper(mimeTypeMap)
+                new CollectThenSystemContentTypeMapper(mimeTypeMap),
+                Collect.getInstance().getUserAgentString()
         );
     }
 

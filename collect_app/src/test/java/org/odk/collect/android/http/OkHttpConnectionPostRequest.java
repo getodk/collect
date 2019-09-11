@@ -15,7 +15,8 @@ public class OkHttpConnectionPostRequest extends OpenRosaPostRequestTest {
     protected OpenRosaHttpInterface buildSubject(OpenRosaHttpInterface.FileToContentTypeMapper mapper) {
         return new OkHttpConnection(
                 new OkHttpOpenRosaServerClientProvider(new OkHttpClient()),
-                mapper
+                mapper,
+                "Test Agent"
         );
     }
 }

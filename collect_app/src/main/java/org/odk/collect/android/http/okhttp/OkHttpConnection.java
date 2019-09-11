@@ -43,15 +43,19 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     @NonNull
     private final FileToContentTypeMapper fileToContentTypeMapper;
 
-    public OkHttpConnection(@NonNull OkHttpOpenRosaServerClientProvider clientFactory, @NonNull FileToContentTypeMapper fileToContentTypeMapper) {
+    @NonNull
+    private final String userAgent;
+
+    public OkHttpConnection(@NonNull OkHttpOpenRosaServerClientProvider clientFactory, @NonNull FileToContentTypeMapper fileToContentTypeMapper, @NonNull String userAgent) {
         this.clientFactory = clientFactory;
         this.fileToContentTypeMapper = fileToContentTypeMapper;
+        this.userAgent = userAgent;
     }
 
     @NonNull
     @Override
     public HttpGetResult executeGetRequest(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), Collect.getInstance().getUserAgentString(), credentials);
+        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials);
         Request request = new Request.Builder()
                 .url(uri.toURL())
                 .get()
@@ -114,7 +118,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     @NonNull
     @Override
     public HttpHeadResult executeHeadRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), Collect.getInstance().getUserAgentString(), credentials);
+        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials);
         Request request = new Request.Builder()
                 .url(uri.toURL())
                 .head()
@@ -200,7 +204,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
     @NonNull
     private HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials, MultipartBody multipartBody) throws Exception {
-        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), Collect.getInstance().getUserAgentString(), credentials);
+        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials);
         HttpPostResult postResult;
         Request request = new Request.Builder()
                 .url(uri.toURL())
