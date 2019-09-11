@@ -4,9 +4,9 @@ import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.data.BooleanData;
 import org.junit.Test;
-import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.widgets.base.WidgetTest;
-import org.robolectric.Robolectric;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -19,7 +19,7 @@ public class BooleanWidgetTest extends WidgetTest {
 
     @NonNull
     private BooleanWidget getWidget() {
-        return new BooleanWidget(Robolectric.buildActivity(FormEntryActivity.class).create().get(), formEntryPrompt);
+        return new BooleanWidget(RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get(), formEntryPrompt);
     }
 
     // BooleanWidgets always return a non-null answer, so we need to handle these tests manually:
