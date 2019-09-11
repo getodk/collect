@@ -1,13 +1,12 @@
 package org.odk.collect.android.http;
 
-import org.jetbrains.annotations.NotNull;
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClient;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClientProvider;
+import org.odk.collect.android.http.support.MockWebServerRule;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,16 +14,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import okhttp3.Request;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
-import okhttp3.tls.internal.TlsUtil;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
+import static org.odk.collect.android.http.support.MockWebServerHelper.buildRequest;
 
 public abstract class OpenRosaServerClientProviderTest {
 
@@ -34,22 +32,18 @@ public abstract class OpenRosaServerClientProviderTest {
 
     private OpenRosaServerClientProvider subject;
 
+    @Rule
+    public MockWebServerRule mockWebServerTester = new MockWebServerRule();
+
     @Before
     public void setup() {
 
         subject = buildSubject();
     }
 
-    @After
-    public void teardown() throws Exception {
-        for (MockWebServer mockWebServer : mockWebServers) {
-            mockWebServer.shutdown();
-        }
-    }
-
     @Test
     public void sendsOpenRosaHeaders() throws Exception {
-        MockWebServer mockWebServer = startMockWebServer();
+        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
         enqueueSuccess(mockWebServer);
 
         OpenRosaServerClient client = subject.get("http", "Android", null);
@@ -61,7 +55,7 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void sendsDateHeader() throws Exception {
-        MockWebServer mockWebServer = startMockWebServer();
+        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
         enqueueSuccess(mockWebServer);
 
         Date currentTime = new Date();
@@ -78,7 +72,7 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void sendsAcceptsGzipHeader() throws Exception {
-        MockWebServer mockWebServer = startMockWebServer();
+        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
         enqueueSuccess(mockWebServer);
 
         OpenRosaServerClient client = subject.get("http", "Android", null);
@@ -90,7 +84,7 @@ public abstract class OpenRosaServerClientProviderTest {
     
     @Test
     public void withCredentials_whenBasicChallengeReceived_doesNotRetryWithCredentials() throws Exception {
-        MockWebServer mockWebServer = startMockWebServer();
+        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
         enqueueBasicChallenge(mockWebServer);
         enqueueSuccess(mockWebServer);
 
@@ -102,7 +96,7 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void withCredentials_whenBasicChallengeReceived_whenHttps_retriesWithCredentials() throws Exception {
-        MockWebServer httpsMockWebServer = startHttpsMockWebServer();
+        MockWebServer httpsMockWebServer = mockWebServerTester.startMockWebServer();
 
         enqueueBasicChallenge(httpsMockWebServer);
         enqueueSuccess(httpsMockWebServer);
@@ -118,7 +112,7 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void withCredentials_whenDigestChallengeReceived_retriesWithCredentials() throws Exception {
-        MockWebServer mockWebServer = startMockWebServer();
+        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
         enqueueDigestChallenge(mockWebServer);
         enqueueSuccess(mockWebServer);
 
@@ -133,7 +127,7 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void withCredentials_whenDigestChallengeReceived_whenHttps_retriesWithCredentials() throws Exception {
-        MockWebServer httpsMockWebServer = startHttpsMockWebServer();
+        MockWebServer httpsMockWebServer = mockWebServerTester.startHttpsMockWebServer();
 
         enqueueDigestChallenge(httpsMockWebServer);
         enqueueSuccess(httpsMockWebServer);
@@ -149,7 +143,7 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void withCredentials_onceBasicChallenged_whenHttps_proactivelySendsCredentials() throws Exception {
-        MockWebServer httpsMockWebServer = startHttpsMockWebServer();
+        MockWebServer httpsMockWebServer = mockWebServerTester.startHttpsMockWebServer();
 
         enqueueBasicChallenge(httpsMockWebServer);
         enqueueSuccess(httpsMockWebServer);
@@ -168,7 +162,7 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void withCredentials_onceDigestChallenged_proactivelySendsCredentials() throws Exception {
-        MockWebServer mockWebServer = startMockWebServer();
+        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
 
         enqueueDigestChallenge(mockWebServer);
         enqueueSuccess(mockWebServer);
@@ -187,7 +181,7 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void withCredentials_onceDigestChallenged_whenHttps_proactivelySendsCredentials() throws Exception {
-        MockWebServer httpsMockWebServer = startHttpsMockWebServer();
+        MockWebServer httpsMockWebServer = mockWebServerTester.startHttpsMockWebServer();
 
         enqueueDigestChallenge(httpsMockWebServer);
         enqueueSuccess(httpsMockWebServer);
@@ -206,7 +200,7 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void authenticationIsCachedBetweenInstances() throws Exception {
-        MockWebServer mockWebServer = startMockWebServer();
+        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
 
         enqueueDigestChallenge(mockWebServer);
         enqueueSuccess(mockWebServer);
@@ -224,7 +218,7 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void whenUsingDifferentCredentials_authenticationIsNotCachedBetweenInstances() throws Exception {
-        MockWebServer mockWebServer = startMockWebServer();
+        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
 
         enqueueDigestChallenge(mockWebServer);
         enqueueSuccess(mockWebServer);
@@ -243,8 +237,8 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void whenConnectingToDifferentHosts_authenticationIsNotCachedBetweenInstances() throws Exception {
-        MockWebServer host1 = startMockWebServer();
-        MockWebServer host2 = startMockWebServer();
+        MockWebServer host1 = mockWebServerTester.startMockWebServer();
+        MockWebServer host2 = mockWebServerTester.startMockWebServer();
 
         enqueueDigestChallenge(host1);
         enqueueSuccess(host1);
@@ -265,7 +259,7 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void whenLastRequestSetCookies_nextRequestDoesNotSendThem() throws Exception {
-        MockWebServer mockWebServer = startMockWebServer();
+        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
 
         mockWebServer.enqueue(new MockResponse()
                 .addHeader("Set-Cookie", "blah=blah"));
@@ -277,23 +271,6 @@ public abstract class OpenRosaServerClientProviderTest {
         mockWebServer.takeRequest();
         RecordedRequest request = mockWebServer.takeRequest();
         assertThat(request.getHeader("Cookie"), isEmptyOrNullString());
-    }
-
-    private MockWebServer startHttpsMockWebServer() throws IOException {
-        MockWebServer httpsMockWebServer = new MockWebServer();
-        mockWebServers.add(httpsMockWebServer);
-
-        httpsMockWebServer.useHttps(TlsUtil.localhost().sslSocketFactory(), false);
-        httpsMockWebServer.start(8443);
-        return httpsMockWebServer;
-    }
-
-    private MockWebServer startMockWebServer() throws Exception {
-        MockWebServer mockWebServer = new MockWebServer();
-        mockWebServers.add(mockWebServer);
-
-        mockWebServer.start();
-        return mockWebServer;
     }
 
     private void enqueueSuccess(MockWebServer mockWebServer) {
@@ -312,10 +289,5 @@ public abstract class OpenRosaServerClientProviderTest {
                 .setResponseCode(401)
                 .addHeader("WWW-Authenticate: Digest realm=\"ODK Aggregate\", qop=\"auth\", nonce=\"MTU2NTA4MjEzODI4OTpmMjc4MDM5N2YxZTJiNDRiNjNiYTBiMThiOWQ4ZTlkMg==\"")
                 .setBody("Please authenticate."));
-    }
-
-    @NotNull
-    private Request buildRequest(MockWebServer mockWebServer, String path) {
-        return new Request.Builder().url(mockWebServer.url(path)).build();
     }
 }
