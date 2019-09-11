@@ -18,9 +18,4 @@ public class OkHttpOpenRosaServerClientProviderTest extends OpenRosaServerClient
         
         return new OkHttpOpenRosaServerClientProvider(baseClient);
     }
-
-    @Override
-    protected Boolean useRealHttps() {
-        return true;
-    }
 }

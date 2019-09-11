@@ -1,5 +1,6 @@
 package org.odk.collect.android.http;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,7 +9,9 @@ import org.odk.collect.android.http.openrosa.OpenRosaServerClientProvider;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -27,36 +30,30 @@ public abstract class OpenRosaServerClientProviderTest {
 
     protected abstract OpenRosaServerClientProvider buildSubject();
 
-    protected abstract Boolean useRealHttps();
+    private final List<MockWebServer> mockWebServers = new ArrayList<>();
 
-    private final MockWebServer mockWebServer = new MockWebServer();
-
-    private MockWebServer httpsMockWebServer;
     private OpenRosaServerClientProvider subject;
 
     @Before
-    public void setup() throws Exception {
-        mockWebServer.start();
+    public void setup() {
 
         subject = buildSubject();
     }
 
     @After
     public void teardown() throws Exception {
-        mockWebServer.shutdown();
-
-        if (httpsMockWebServer != null) {
-            httpsMockWebServer.shutdown();
-            httpsMockWebServer = null;
+        for (MockWebServer mockWebServer : mockWebServers) {
+            mockWebServer.shutdown();
         }
     }
 
     @Test
     public void sendsOpenRosaHeaders() throws Exception {
-        mockWebServer.enqueue(new MockResponse());
+        MockWebServer mockWebServer = startMockWebServer();
+        enqueueSuccess(mockWebServer);
 
         OpenRosaServerClient client = subject.get("http", "Android", null);
-        client.makeRequest(new Request.Builder().url(mockWebServer.url("")).build(), new Date());
+        client.makeRequest(buildRequest(mockWebServer, ""), new Date());
 
         RecordedRequest request = mockWebServer.takeRequest();
         assertThat(request.getHeader("X-OpenRosa-Version"), equalTo("1.0"));
@@ -64,12 +61,13 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void sendsDateHeader() throws Exception {
-        mockWebServer.enqueue(new MockResponse());
+        MockWebServer mockWebServer = startMockWebServer();
+        enqueueSuccess(mockWebServer);
 
         Date currentTime = new Date();
 
         OpenRosaServerClient client = subject.get("http", "Android", null);
-        client.makeRequest(new Request.Builder().url(mockWebServer.url("")).build(), currentTime);
+        client.makeRequest(buildRequest(mockWebServer, ""), currentTime);
 
         RecordedRequest request = mockWebServer.takeRequest();
 
@@ -80,10 +78,11 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void sendsAcceptsGzipHeader() throws Exception {
-        mockWebServer.enqueue(new MockResponse());
+        MockWebServer mockWebServer = startMockWebServer();
+        enqueueSuccess(mockWebServer);
 
         OpenRosaServerClient client = subject.get("http", "Android", null);
-        client.makeRequest(new Request.Builder().url(mockWebServer.url("")).build(), new Date());
+        client.makeRequest(buildRequest(mockWebServer, ""), new Date());
 
         RecordedRequest request = mockWebServer.takeRequest();
         assertThat(request.getHeader("Accept-Encoding"), equalTo("gzip"));
@@ -91,30 +90,25 @@ public abstract class OpenRosaServerClientProviderTest {
     
     @Test
     public void withCredentials_whenBasicChallengeReceived_doesNotRetryWithCredentials() throws Exception {
-        mockWebServer.enqueue(new MockResponse()
-                .setResponseCode(401)
-                .addHeader("WWW-Authenticate: Basic realm=\"protected area\"")
-                .setBody("Please authenticate."));
-        mockWebServer.enqueue(new MockResponse());
+        MockWebServer mockWebServer = startMockWebServer();
+        enqueueBasicChallenge(mockWebServer);
+        enqueueSuccess(mockWebServer);
 
         OpenRosaServerClient client = subject.get("http", "Android", new HttpCredentials("user", "pass"));
-        client.makeRequest(new Request.Builder().url(mockWebServer.url("")).build(), new Date());
+        client.makeRequest(buildRequest(mockWebServer, ""), new Date());
 
         assertThat(mockWebServer.getRequestCount(), equalTo(1));
     }
 
     @Test
     public void withCredentials_whenBasicChallengeReceived_whenHttps_retriesWithCredentials() throws Exception {
-        startHttpsMockWebServer();
+        MockWebServer httpsMockWebServer = startHttpsMockWebServer();
 
-        httpsMockWebServer.enqueue(new MockResponse()
-                .setResponseCode(401)
-                .addHeader("WWW-Authenticate: Basic realm=\"protected area\"")
-                .setBody("Please authenticate."));
-        httpsMockWebServer.enqueue(new MockResponse());
+        enqueueBasicChallenge(httpsMockWebServer);
+        enqueueSuccess(httpsMockWebServer);
 
         OpenRosaServerClient client = subject.get("https", "Android", new HttpCredentials("user", "pass"));
-        client.makeRequest(new Request.Builder().url(httpsMockWebServer.url("")).build(), new Date());
+        client.makeRequest(buildRequest(httpsMockWebServer, ""), new Date());
 
         assertThat(httpsMockWebServer.getRequestCount(), equalTo(2));
         httpsMockWebServer.takeRequest();
@@ -124,14 +118,12 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void withCredentials_whenDigestChallengeReceived_retriesWithCredentials() throws Exception {
-        mockWebServer.enqueue(new MockResponse()
-                .setResponseCode(401)
-                .addHeader("WWW-Authenticate: Digest realm=\"ODK Aggregate\", qop=\"auth\", nonce=\"MTU2NTA4MjEzODI4OTpmMjc4MDM5N2YxZTJiNDRiNjNiYTBiMThiOWQ4ZTlkMg==\"")
-                .setBody("Please authenticate."));
-        mockWebServer.enqueue(new MockResponse());
+        MockWebServer mockWebServer = startMockWebServer();
+        enqueueDigestChallenge(mockWebServer);
+        enqueueSuccess(mockWebServer);
 
         OpenRosaServerClient client = subject.get("http", "Android", new HttpCredentials("user", "pass"));
-        client.makeRequest(new Request.Builder().url(mockWebServer.url("")).build(), new Date());
+        client.makeRequest(buildRequest(mockWebServer, ""), new Date());
 
         assertThat(mockWebServer.getRequestCount(), equalTo(2));
         mockWebServer.takeRequest();
@@ -141,16 +133,13 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void withCredentials_whenDigestChallengeReceived_whenHttps_retriesWithCredentials() throws Exception {
-        startHttpsMockWebServer();
+        MockWebServer httpsMockWebServer = startHttpsMockWebServer();
 
-        httpsMockWebServer.enqueue(new MockResponse()
-                .setResponseCode(401)
-                .addHeader("WWW-Authenticate: Digest realm=\"ODK Aggregate\", qop=\"auth\", nonce=\"MTU2NTA4MjEzODI4OTpmMjc4MDM5N2YxZTJiNDRiNjNiYTBiMThiOWQ4ZTlkMg==\"")
-                .setBody("Please authenticate."));
-        httpsMockWebServer.enqueue(new MockResponse());
+        enqueueDigestChallenge(httpsMockWebServer);
+        enqueueSuccess(httpsMockWebServer);
 
         OpenRosaServerClient client = subject.get("https", "Android", new HttpCredentials("user", "pass"));
-        client.makeRequest(new Request.Builder().url(httpsMockWebServer.url("")).build(), new Date());
+        client.makeRequest(buildRequest(httpsMockWebServer, ""), new Date());
 
         assertThat(httpsMockWebServer.getRequestCount(), equalTo(2));
         httpsMockWebServer.takeRequest();
@@ -160,18 +149,15 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void withCredentials_onceBasicChallenged_whenHttps_proactivelySendsCredentials() throws Exception {
-        startHttpsMockWebServer();
+        MockWebServer httpsMockWebServer = startHttpsMockWebServer();
 
-        httpsMockWebServer.enqueue(new MockResponse()
-                .setResponseCode(401)
-                .addHeader("WWW-Authenticate: Basic realm=\"protected area\"")
-                .setBody("Please authenticate."));
-        httpsMockWebServer.enqueue(new MockResponse());
-        httpsMockWebServer.enqueue(new MockResponse());
+        enqueueBasicChallenge(httpsMockWebServer);
+        enqueueSuccess(httpsMockWebServer);
+        enqueueSuccess(httpsMockWebServer);
 
         OpenRosaServerClient client = subject.get("https", "Android", new HttpCredentials("user", "pass"));
-        client.makeRequest(new Request.Builder().url(httpsMockWebServer.url("")).build(), new Date());
-        client.makeRequest(new Request.Builder().url(httpsMockWebServer.url("/different")).build(), new Date());
+        client.makeRequest(buildRequest(httpsMockWebServer, ""), new Date());
+        client.makeRequest(buildRequest(httpsMockWebServer, "/different"), new Date());
 
         assertThat(httpsMockWebServer.getRequestCount(), equalTo(3));
         httpsMockWebServer.takeRequest();
@@ -182,16 +168,15 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void withCredentials_onceDigestChallenged_proactivelySendsCredentials() throws Exception {
-        mockWebServer.enqueue(new MockResponse()
-                .setResponseCode(401)
-                .addHeader("WWW-Authenticate: Digest realm=\"ODK Aggregate\", qop=\"auth\", nonce=\"MTU2NTA4MjEzODI4OTpmMjc4MDM5N2YxZTJiNDRiNjNiYTBiMThiOWQ4ZTlkMg==\"")
-                .setBody("Please authenticate."));
-        mockWebServer.enqueue(new MockResponse());
-        mockWebServer.enqueue(new MockResponse());
+        MockWebServer mockWebServer = startMockWebServer();
+
+        enqueueDigestChallenge(mockWebServer);
+        enqueueSuccess(mockWebServer);
+        enqueueSuccess(mockWebServer);
 
         OpenRosaServerClient client = subject.get("http", "Android", new HttpCredentials("user", "pass"));
-        client.makeRequest(new Request.Builder().url(mockWebServer.url("")).build(), new Date());
-        client.makeRequest(new Request.Builder().url(mockWebServer.url("/different")).build(), new Date());
+        client.makeRequest(buildRequest(mockWebServer, ""), new Date());
+        client.makeRequest(buildRequest(mockWebServer, "/different"), new Date());
 
         assertThat(mockWebServer.getRequestCount(), equalTo(3));
         mockWebServer.takeRequest();
@@ -202,18 +187,15 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void withCredentials_onceDigestChallenged_whenHttps_proactivelySendsCredentials() throws Exception {
-        startHttpsMockWebServer();
+        MockWebServer httpsMockWebServer = startHttpsMockWebServer();
 
-        httpsMockWebServer.enqueue(new MockResponse()
-                .setResponseCode(401)
-                .addHeader("WWW-Authenticate: Digest realm=\"ODK Aggregate\", qop=\"auth\", nonce=\"MTU2NTA4MjEzODI4OTpmMjc4MDM5N2YxZTJiNDRiNjNiYTBiMThiOWQ4ZTlkMg==\"")
-                .setBody("Please authenticate."));
-        httpsMockWebServer.enqueue(new MockResponse());
-        httpsMockWebServer.enqueue(new MockResponse());
+        enqueueDigestChallenge(httpsMockWebServer);
+        enqueueSuccess(httpsMockWebServer);
+        enqueueSuccess(httpsMockWebServer);
 
         OpenRosaServerClient client = subject.get("https", "Android", new HttpCredentials("user", "pass"));
-        client.makeRequest(new Request.Builder().url(httpsMockWebServer.url("")).build(), new Date());
-        client.makeRequest(new Request.Builder().url(httpsMockWebServer.url("/different")).build(), new Date());
+        client.makeRequest(buildRequest(httpsMockWebServer, ""), new Date());
+        client.makeRequest(buildRequest(httpsMockWebServer, "/different"), new Date());
 
         assertThat(httpsMockWebServer.getRequestCount(), equalTo(3));
         httpsMockWebServer.takeRequest();
@@ -224,15 +206,14 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void authenticationIsCachedBetweenInstances() throws Exception {
-        mockWebServer.enqueue(new MockResponse()
-                .setResponseCode(401)
-                .addHeader("WWW-Authenticate: Digest realm=\"ODK Aggregate\", qop=\"auth\", nonce=\"MTU2NTA4MjEzODI4OTpmMjc4MDM5N2YxZTJiNDRiNjNiYTBiMThiOWQ4ZTlkMg==\"")
-                .setBody("Please authenticate."));
-        mockWebServer.enqueue(new MockResponse());
-        mockWebServer.enqueue(new MockResponse());
+        MockWebServer mockWebServer = startMockWebServer();
 
-        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(new Request.Builder().url(mockWebServer.url("")).build(), new Date());
-        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(new Request.Builder().url(mockWebServer.url("/different")).build(), new Date());
+        enqueueDigestChallenge(mockWebServer);
+        enqueueSuccess(mockWebServer);
+        enqueueSuccess(mockWebServer);
+
+        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(buildRequest(mockWebServer, ""), new Date());
+        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(buildRequest(mockWebServer, "/different"), new Date());
 
         assertThat(mockWebServer.getRequestCount(), equalTo(3));
         mockWebServer.takeRequest();
@@ -243,19 +224,15 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void whenUsingDifferentCredentials_authenticationIsNotCachedBetweenInstances() throws Exception {
-        mockWebServer.enqueue(new MockResponse()
-                .setResponseCode(401)
-                .addHeader("WWW-Authenticate: Digest realm=\"ODK Aggregate\", qop=\"auth\", nonce=\"MTU2NTA4MjEzODI4OTpmMjc4MDM5N2YxZTJiNDRiNjNiYTBiMThiOWQ4ZTlkMg==\"")
-                .setBody("Please authenticate."));
-        mockWebServer.enqueue(new MockResponse());
-        mockWebServer.enqueue(new MockResponse()
-                .setResponseCode(401)
-                .addHeader("WWW-Authenticate: Digest realm=\"ODK Aggregate\", qop=\"auth\", nonce=\"MTU2NTA4MjEzODI4OTpmMjc4MDM5N2YxZTJiNDRiNjNiYTBiMThiOWQ4ZTlkMg==\"")
-                .setBody("Please authenticate."));
-        mockWebServer.enqueue(new MockResponse());
+        MockWebServer mockWebServer = startMockWebServer();
 
-        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(new Request.Builder().url(mockWebServer.url("")).build(), new Date());
-        subject.get("http", "Android", new HttpCredentials("new-user", "pass")).makeRequest(new Request.Builder().url(mockWebServer.url("/different")).build(), new Date());
+        enqueueDigestChallenge(mockWebServer);
+        enqueueSuccess(mockWebServer);
+        enqueueDigestChallenge(mockWebServer);
+        enqueueSuccess(mockWebServer);
+
+        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(buildRequest(mockWebServer, ""), new Date());
+        subject.get("http", "Android", new HttpCredentials("new-user", "pass")).makeRequest(buildRequest(mockWebServer, "/different"), new Date());
 
         assertThat(mockWebServer.getRequestCount(), equalTo(4));
         mockWebServer.takeRequest();
@@ -266,53 +243,79 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void whenConnectingToDifferentHosts_authenticationIsNotCachedBetweenInstances() throws Exception {
-        mockWebServer.enqueue(new MockResponse()
-                .setResponseCode(401)
-                .addHeader("WWW-Authenticate: Digest realm=\"ODK Aggregate\", qop=\"auth\", nonce=\"MTU2NTA4MjEzODI4OTpmMjc4MDM5N2YxZTJiNDRiNjNiYTBiMThiOWQ4ZTlkMg==\"")
-                .setBody("Please authenticate."));
-        mockWebServer.enqueue(new MockResponse());
+        MockWebServer host1 = startMockWebServer();
+        MockWebServer host2 = startMockWebServer();
 
-        MockWebServer otherHost = new MockWebServer();
-        otherHost.start();
+        enqueueDigestChallenge(host1);
+        enqueueSuccess(host1);
 
-        otherHost.enqueue(new MockResponse()
-                .setResponseCode(401)
-                .addHeader("WWW-Authenticate: Digest realm=\"ODK Aggregate\", qop=\"auth\", nonce=\"MTU2NTA4MjEzODI4OTpmMjc4MDM5N2YxZTJiNDRiNjNiYTBiMThiOWQ4ZTlkMg==\"")
-                .setBody("Please authenticate."));
-        otherHost.enqueue(new MockResponse());
+        enqueueDigestChallenge(host2);
+        enqueueSuccess(host2);
 
-        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(new Request.Builder().url(this.mockWebServer.url("")).build(), new Date());
-        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(new Request.Builder().url(otherHost.url("")).build(), new Date());
+        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(buildRequest(host1, ""), new Date());
+        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(buildRequest(host2, ""), new Date());
 
-        assertThat(otherHost.getRequestCount(), equalTo(2));
+        assertThat(host2.getRequestCount(), equalTo(2));
 
-        RecordedRequest request = otherHost.takeRequest();
+        RecordedRequest request = host2.takeRequest();
         assertThat(request.getHeader("Authorization"), equalTo(null));
 
-        otherHost.shutdown();
+        host2.shutdown();
     }
 
     @Test
     public void whenLastRequestSetCookies_nextRequestDoesNotSendThem() throws Exception {
+        MockWebServer mockWebServer = startMockWebServer();
+
         mockWebServer.enqueue(new MockResponse()
                 .addHeader("Set-Cookie", "blah=blah"));
-        mockWebServer.enqueue(new MockResponse());
+        enqueueSuccess(mockWebServer);
 
-        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(new Request.Builder().url(this.mockWebServer.url("")).build(), new Date());
-        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(new Request.Builder().url(this.mockWebServer.url("")).build(), new Date());
+        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(buildRequest(mockWebServer, ""), new Date());
+        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(buildRequest(mockWebServer, ""), new Date());
 
         mockWebServer.takeRequest();
         RecordedRequest request = mockWebServer.takeRequest();
         assertThat(request.getHeader("Cookie"), isEmptyOrNullString());
     }
 
-    private void startHttpsMockWebServer() throws IOException {
-        httpsMockWebServer = new MockWebServer();
+    private MockWebServer startHttpsMockWebServer() throws IOException {
+        MockWebServer httpsMockWebServer = new MockWebServer();
+        mockWebServers.add(httpsMockWebServer);
 
-        if (useRealHttps()) {
-            httpsMockWebServer.useHttps(TlsUtil.localhost().sslSocketFactory(), false);
-        }
-
+        httpsMockWebServer.useHttps(TlsUtil.localhost().sslSocketFactory(), false);
         httpsMockWebServer.start(8443);
+        return httpsMockWebServer;
+    }
+
+    private MockWebServer startMockWebServer() throws Exception {
+        MockWebServer mockWebServer = new MockWebServer();
+        mockWebServers.add(mockWebServer);
+
+        mockWebServer.start();
+        return mockWebServer;
+    }
+
+    private void enqueueSuccess(MockWebServer mockWebServer) {
+        mockWebServer.enqueue(new MockResponse());
+    }
+
+    private void enqueueBasicChallenge(MockWebServer mockWebServer) {
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(401)
+                .addHeader("WWW-Authenticate: Basic realm=\"protected area\"")
+                .setBody("Please authenticate."));
+    }
+
+    private void enqueueDigestChallenge(MockWebServer mockWebServer) {
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(401)
+                .addHeader("WWW-Authenticate: Digest realm=\"ODK Aggregate\", qop=\"auth\", nonce=\"MTU2NTA4MjEzODI4OTpmMjc4MDM5N2YxZTJiNDRiNjNiYTBiMThiOWQ4ZTlkMg==\"")
+                .setBody("Please authenticate."));
+    }
+
+    @NotNull
+    private Request buildRequest(MockWebServer mockWebServer, String path) {
+        return new Request.Builder().url(mockWebServer.url(path)).build();
     }
 }
