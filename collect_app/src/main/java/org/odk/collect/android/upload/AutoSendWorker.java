@@ -48,10 +48,8 @@ import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import timber.log.Timber;
 
@@ -167,9 +165,7 @@ public class AutoSendWorker extends Worker {
             }
         }
 
-        String message = formatOverallResultMessage(resultMessagesByInstanceId);
-        showUploadStatusNotification(anyFailure, message);
-
+        showUploadStatusNotification(anyFailure, InstanceUploaderUtils.getUploadResultMessage(getApplicationContext(), resultMessagesByInstanceId));
         return Result.success();
     }
 
@@ -260,31 +256,6 @@ public class AutoSendWorker extends Worker {
             }
         }
         return false;
-    }
-
-    private String formatOverallResultMessage(Map<String, String> resultMessagesByInstanceId) {
-        String message = "";
-
-        if (resultMessagesByInstanceId != null) {
-            StringBuilder selection = new StringBuilder();
-            Set<String> keys = resultMessagesByInstanceId.keySet();
-            Iterator<String> it = keys.iterator();
-
-            String[] selectionArgs = new String[keys.size()];
-            int i = 0;
-            while (it.hasNext()) {
-                String id = it.next();
-                selection.append(InstanceColumns._ID + "=?");
-                selectionArgs[i++] = id;
-                if (i != keys.size()) {
-                    selection.append(" or ");
-                }
-            }
-
-            Cursor cursor = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
-            message = InstanceUploaderUtils.getUploadResultMessage(cursor, resultMessagesByInstanceId);
-        }
-        return message;
     }
 
     private void showUploadStatusNotification(boolean anyFailure, String message) {

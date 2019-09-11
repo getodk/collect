@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.espressoutils.FormEntry;
-import org.odk.collect.android.espressoutils.MainMenu;
+import org.odk.collect.android.espressoutils.pages.MainMenuPage;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 
@@ -36,7 +36,7 @@ public class RequiredQuestionTest extends BaseRegressionTest {
     public void requiredQuestions_ShouldDisplayAsterisk() {
 
         //TestCase1
-        MainMenu.startBlankForm("required");
+        new MainMenuPage(main).startBlankForm("required");
         FormEntry.checkIsTextDisplayed("* Foo");
         closeSoftKeyboard();
         pressBack();
@@ -47,9 +47,9 @@ public class RequiredQuestionTest extends BaseRegressionTest {
     public void requiredQuestions_ShouldDisplayCustomMessage() {
 
         //TestCase2
-        MainMenu.startBlankForm("required");
+        new MainMenuPage(main).startBlankForm("required");
         FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsToastWithMessageDisplayes("Custom required message", main);
+        FormEntry.checkIsToastWithMessageDisplayes("Custom required message", main.getActivity());
         closeSoftKeyboard();
         pressBack();
         FormEntry.clickIgnoreChanges();

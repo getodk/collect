@@ -7,6 +7,7 @@ import android.webkit.MimeTypeMap;
 
 import com.google.android.gms.analytics.Tracker;
 
+import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
@@ -115,5 +116,10 @@ public class AppDependencyModule {
     @Provides
     public PermissionUtils providesPermissionUtils() {
         return new PermissionUtils();
+    }
+
+    @Provides
+    public ReferenceManager providesReferenceManager() {
+        return ReferenceManager.instance();
     }
 }
