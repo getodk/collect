@@ -54,9 +54,8 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 
 /**
- * This layout is used anywhere we can have image/audio/video/text
- *
- * @author carlhartung
+ * Represents a label for a prompt/question or a select choice. The label can have media
+ * attached to it as well as text (such as audio, video or an image).
  */
 public class QuestionLabel extends RelativeLayout implements View.OnClickListener {
 
