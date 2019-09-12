@@ -52,7 +52,7 @@ import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivit
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class FormChooserList extends FormListActivity implements
+public class FormChooserListActivity extends FormListActivity implements
         DiskSyncListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String FORM_CHOOSER_LIST_SORTING_ORDER = "formChooserListSortingOrder";
 
@@ -82,7 +82,7 @@ public class FormChooserList extends FormListActivity implements
             @Override
             public void denied() {
                 // The activity has to finish because ODK Collect cannot function without these permissions.
-                finishAllActivities(FormChooserList.this);
+                finishAllActivities(FormChooserListActivity.this);
             }
         });
     }

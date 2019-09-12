@@ -13,6 +13,7 @@
         <item name="textAppearanceBody2">@style/TextAppearance.Collect.Body2</item>
         <item name="textAppearanceSubtitle1">@style/TextAppearance.Collect.Subtitle1</item>
 
+        <item name="colorSecondary">#2196F3</item>
         <item name="colorOnSurface">#DE000000</item>
         <!--/Material theme attributes-->
 

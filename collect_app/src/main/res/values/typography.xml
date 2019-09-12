@@ -11,4 +11,8 @@
     <style name="TextAppearance.Collect.Body2" parent="TextAppearance.MaterialComponents.Body2">
 
     </style>
+
+    <style name="TextAppearance.Collect.Body2.MediumEmphasis" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">@color/color_on_surface_medium_emphasis</item>
+    </style>
 </resources>
