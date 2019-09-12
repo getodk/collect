@@ -56,8 +56,8 @@ public class SelectWidgetTest {
 
     @Test
     public void whenChoicesHaveAudio_audioButtonUsesIndexAsClipID() throws Exception {
-        setupMockReference("file://blah1.mp3", "ref1", referenceManager);
-        setupMockReference("file://blah2.mp3", "ref2", referenceManager);
+        setupMockReference(referenceManager, "ref1", "file://blah1.mp3");
+        setupMockReference(referenceManager, "ref2", "file://blah2.mp3");
 
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
