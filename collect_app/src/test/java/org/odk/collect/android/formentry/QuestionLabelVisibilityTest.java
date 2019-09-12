@@ -32,7 +32,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(ParameterizedRobolectricTestRunner.class)
-public class MediaLayoutVisibilityTest {
+public class QuestionLabelVisibilityTest {
 
     private static final String RANDOM_URI = "randomMediaURI";
 
@@ -43,7 +43,7 @@ public class MediaLayoutVisibilityTest {
     private ReferenceManager referenceManager;
     private FileReference reference;
 
-    private MediaLayout mediaLayout;
+    private QuestionLabel questionLabel;
     private AudioButton audioButton;
     private AppCompatImageButton videoButton;
     private ImageView imageView;
@@ -52,7 +52,7 @@ public class MediaLayoutVisibilityTest {
     private boolean isReferenceManagerStubbed;
     private AudioHelper audioHelper;
 
-    public MediaLayoutVisibilityTest(String audioURI, String imageURI, String videoURI) {
+    public QuestionLabelVisibilityTest(String audioURI, String imageURI, String videoURI) {
         this.audioURI = audioURI;
         this.imageURI = imageURI;
         this.videoURI = videoURI;
@@ -81,12 +81,12 @@ public class MediaLayoutVisibilityTest {
         TestScreenContextActivity activity = Robolectric.buildActivity(TestScreenContextActivity.class).create().get();
         audioHelper = new AudioHelper(activity, activity.getViewLifecycle());
 
-        mediaLayout = new MediaLayout(activity);
+        questionLabel = new QuestionLabel(activity);
 
-        audioButton = mediaLayout.findViewById(R.id.audioButton);
-        videoButton = mediaLayout.findViewById(R.id.videoButton);
-        imageView = mediaLayout.findViewById(R.id.imageView);
-        missingImage = mediaLayout.findViewById(R.id.missingImage);
+        audioButton = questionLabel.findViewById(R.id.audioButton);
+        videoButton = questionLabel.findViewById(R.id.videoButton);
+        imageView = questionLabel.findViewById(R.id.imageView);
+        missingImage = questionLabel.findViewById(R.id.missingImage);
 
         /*
          * Stub reference manager randomly to account for both illegal URI and proper URI while
@@ -101,11 +101,11 @@ public class MediaLayoutVisibilityTest {
 
     @Test
     public void viewShouldBecomeVisibleIfUriPresent() {
-        Assert.assertNotNull(mediaLayout);
-        Assert.assertEquals(VISIBLE, mediaLayout.getVisibility());
+        Assert.assertNotNull(questionLabel);
+        Assert.assertEquals(VISIBLE, questionLabel.getVisibility());
         assertVisibility(GONE, audioButton, videoButton, imageView, missingImage);
 
-        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, null, referenceManager, audioHelper);
+        questionLabel.setAVT(textView, audioURI, imageURI, videoURI, null, referenceManager, audioHelper);
 
         // we do not check for the validity of the URIs for the audio and video while loading MediaLayout
         assertVisibility(audioURI == null ? GONE : VISIBLE, audioButton);

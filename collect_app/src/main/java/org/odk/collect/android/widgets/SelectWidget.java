@@ -35,11 +35,10 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.external.ExternalSelectChoice;
+import org.odk.collect.android.formentry.QuestionLabel;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.formentry.MediaLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
@@ -56,10 +55,8 @@ public abstract class SelectWidget extends ItemsWidget {
      */
     private static final int MAX_ITEMS_WITHOUT_SCREEN_BOUND = 40;
 
-    protected ArrayList<MediaLayout> playList;
     protected LinearLayout answerLayout;
     protected int numColumns = 1;
-    private int playcounter;
 
     public SelectWidget(Context context, FormEntryPrompt prompt) {
         this(context, prompt, new AudioHelper(
@@ -72,7 +69,6 @@ public abstract class SelectWidget extends ItemsWidget {
         super(context, prompt, audioHelper);
         answerLayout = new LinearLayout(context);
         answerLayout.setOrientation(LinearLayout.VERTICAL);
-        playList = new ArrayList<>();
     }
 
     @Override
@@ -80,57 +76,14 @@ public abstract class SelectWidget extends ItemsWidget {
     public void setOnLongClickListener(OnLongClickListener l) {
     }
 
-    @Override
-    public void resetQuestionTextColor() {
-        super.resetQuestionTextColor();
-        for (MediaLayout layout : playList) {
-            layout.resetTextFormatting();
-        }
-    }
-
-    @Override
-    public void playAllPromptText() {
-        // set up to play the items when the
-        // question text is finished
-        getPlayer().setOnCompletionListener(mediaPlayer -> {
-            resetQuestionTextColor();
-            mediaPlayer.reset();
-            playNextSelectItem();
-        });
-        // plays the question text
-        super.playAllPromptText();
-    }
-
-    private void playNextSelectItem() {
-        if (isShown()) {
-            // if there's more, set up to play the next item
-            if (playcounter < playList.size()) {
-                getPlayer().setOnCompletionListener(mediaPlayer -> {
-                    resetQuestionTextColor();
-                    mediaPlayer.reset();
-                    playNextSelectItem();
-                });
-                // play the current item
-                playList.get(playcounter).playAudio();
-                playcounter++;
-
-            } else {
-                playcounter = 0;
-                getPlayer().setOnCompletionListener(null);
-                getPlayer().reset();
-            }
-        }
-    }
-
-    public void initMediaLayoutSetUp(MediaLayout mediaLayout) {
-        mediaLayout.setPlayTextColor(getPlayColor());
-        playList.add(mediaLayout);
+    public void init(QuestionLabel questionLabel) {
+        questionLabel.setPlayTextColor(getPlayColor());
     }
 
     /**
      * Pull media from the current item and add it to the media layout.
      */
-    public void addMediaFromChoice(MediaLayout mediaLayout, int index, TextView textView, List<SelectChoice> items) {
+    public void addMediaFromChoice(QuestionLabel questionLabel, int index, TextView textView, List<SelectChoice> items) {
         SelectChoice item = items.get(index);
 
         String audioURI = getPlayableAudioURI(getFormEntryPrompt(), item, getReferenceManager());
@@ -138,8 +91,8 @@ public abstract class SelectWidget extends ItemsWidget {
         String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "video");
         String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "big-image");
 
-        mediaLayout.setTag(getClipID(getFormEntryPrompt(), item));
-        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), getAudioHelper());
+        questionLabel.setTag(getClipID(getFormEntryPrompt(), item));
+        questionLabel.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), getAudioHelper());
 
         textView.setGravity(Gravity.CENTER_VERTICAL);
     }

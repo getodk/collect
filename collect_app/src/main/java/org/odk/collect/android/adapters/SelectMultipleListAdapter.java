@@ -28,7 +28,7 @@ import android.widget.FrameLayout;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.helper.Selection;
-import org.odk.collect.android.formentry.MediaLayout;
+import org.odk.collect.android.formentry.QuestionLabel;
 import org.odk.collect.android.widgets.SelectWidget;
 import org.odk.collect.android.R;
 
@@ -47,7 +47,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(noButtonsMode
                 ? LayoutInflater.from(parent.getContext()).inflate(R.layout.select_item_layout, null)
-                : new MediaLayout(parent.getContext()));
+                : new QuestionLabel(parent.getContext()));
     }
 
     class ViewHolder extends AbstractSelectListAdapter.ViewHolder {
@@ -56,8 +56,8 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
             if (noButtonsMode) {
                 view = (FrameLayout) v;
             } else {
-                mediaLayout = (MediaLayout) v;
-                widget.initMediaLayoutSetUp(mediaLayout);
+                questionLabel = (QuestionLabel) v;
+                widget.init(questionLabel);
             }
         }
 

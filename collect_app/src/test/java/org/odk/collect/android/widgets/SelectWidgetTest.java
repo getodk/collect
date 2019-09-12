@@ -24,7 +24,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
-import org.odk.collect.android.formentry.MediaLayout;
+import org.odk.collect.android.formentry.QuestionLabel;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
@@ -95,7 +95,7 @@ public class SelectWidgetTest {
 
             for (SelectChoice choice : choices) {
                 addMediaFromChoice(
-                        new MediaLayout(context),
+                        new QuestionLabel(context),
                         choices.indexOf(choice),
                         new TextView(context),
                         choices
