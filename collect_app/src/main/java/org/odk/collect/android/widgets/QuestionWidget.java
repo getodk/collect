@@ -63,7 +63,7 @@ import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ViewIds;
-import org.odk.collect.android.views.MediaLayout;
+import org.odk.collect.android.formentry.MediaLayout;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.Widget;
 
@@ -76,8 +76,8 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.views.helpers.FormMediaHelpers.getClipID;
-import static org.odk.collect.android.views.helpers.FormMediaHelpers.getPlayableAudioURI;
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
 
 public abstract class QuestionWidget
         extends RelativeLayout

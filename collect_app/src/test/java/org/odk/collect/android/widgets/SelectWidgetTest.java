@@ -24,7 +24,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
-import org.odk.collect.android.views.MediaLayout;
+import org.odk.collect.android.formentry.MediaLayout;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;

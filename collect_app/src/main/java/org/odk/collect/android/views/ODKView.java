@@ -65,7 +65,7 @@ import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
-import org.odk.collect.android.views.helpers.PromptAutoplayer;
+import org.odk.collect.android.formentry.media.PromptAutoplayer;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.StringWidget;
 import org.odk.collect.android.widgets.WidgetFactory;

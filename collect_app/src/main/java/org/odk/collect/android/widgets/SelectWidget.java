@@ -37,13 +37,13 @@ import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.views.MediaLayout;
+import org.odk.collect.android.formentry.MediaLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.odk.collect.android.views.helpers.FormMediaHelpers.getClipID;
-import static org.odk.collect.android.views.helpers.FormMediaHelpers.getPlayableAudioURI;
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
 
 public abstract class SelectWidget extends ItemsWidget {
 

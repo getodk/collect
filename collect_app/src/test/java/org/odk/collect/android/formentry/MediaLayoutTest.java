@@ -1,4 +1,4 @@
-package org.odk.collect.android.views;
+package org.odk.collect.android.formentry;
 
 import android.app.Activity;
 import android.widget.TextView;

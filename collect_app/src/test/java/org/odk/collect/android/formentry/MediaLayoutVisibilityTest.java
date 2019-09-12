@@ -1,4 +1,4 @@
-package org.odk.collect.android.views;
+package org.odk.collect.android.formentry;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -13,6 +13,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.logic.FileReference;
@@ -82,10 +83,10 @@ public class MediaLayoutVisibilityTest {
 
         mediaLayout = new MediaLayout(activity);
 
-        audioButton = mediaLayout.audioButton;
-        videoButton = mediaLayout.videoButton;
-        imageView = mediaLayout.imageView;
-        missingImage = mediaLayout.missingImage;
+        audioButton = mediaLayout.findViewById(R.id.audioButton);
+        videoButton = mediaLayout.findViewById(R.id.videoButton);
+        imageView = mediaLayout.findViewById(R.id.imageView);
+        missingImage = mediaLayout.findViewById(R.id.missingImage);
 
         /*
          * Stub reference manager randomly to account for both illegal URI and proper URI while

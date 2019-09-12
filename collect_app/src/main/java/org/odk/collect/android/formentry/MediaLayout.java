@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.views;
+package org.odk.collect.android.formentry;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;

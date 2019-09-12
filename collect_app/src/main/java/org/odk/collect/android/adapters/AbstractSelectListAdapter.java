@@ -45,7 +45,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.views.MediaLayout;
+import org.odk.collect.android.formentry.MediaLayout;
 import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.SelectWidget;
 import org.odk.collect.android.R;

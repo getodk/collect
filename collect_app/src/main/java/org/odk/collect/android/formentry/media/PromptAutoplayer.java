@@ -1,4 +1,4 @@
-package org.odk.collect.android.views.helpers;
+package org.odk.collect.android.formentry.media;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.SelectChoice;
@@ -11,9 +11,9 @@ import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.NO_BUTTONS;
-import static org.odk.collect.android.views.helpers.FormMediaHelpers.getClipID;
-import static org.odk.collect.android.views.helpers.FormMediaHelpers.getPlayableAudioURI;
 
 public class PromptAutoplayer {
 

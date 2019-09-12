@@ -28,7 +28,7 @@ import android.widget.FrameLayout;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.helper.Selection;
-import org.odk.collect.android.views.MediaLayout;
+import org.odk.collect.android.formentry.MediaLayout;
 import org.odk.collect.android.widgets.SelectWidget;
 import org.odk.collect.android.R;
 

@@ -1,4 +1,4 @@
-package org.odk.collect.android.views.helpers;
+package org.odk.collect.android.formentry.media;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.reference.InvalidReferenceException;
