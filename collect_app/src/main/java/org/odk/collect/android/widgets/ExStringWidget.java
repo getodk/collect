@@ -25,12 +25,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -47,7 +45,6 @@ import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.ObjectUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.util.Map;
@@ -114,14 +111,8 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
 
         super(context, prompt);
 
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
-
         // set text formatting
-        answer = new EditText(context);
-        answer.setId(ViewIds.generateViewId());
-        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        answer.setLayoutParams(params);
+        answer = getAnswerEditText(getFormEntryPrompt().isReadOnly() || hasExApp);
         textBackground = answer.getBackground();
         answer.setBackground(null);
         answer.setTextColor(themeUtils.getPrimaryTextColor());
@@ -129,18 +120,9 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         // capitalize nothing
         answer.setKeyListener(new TextKeyListener(Capitalize.NONE, false));
 
-        // needed to make long read only text scroll
-        answer.setHorizontallyScrolling(false);
-        answer.setSingleLine(false);
-
         String s = prompt.getAnswerText();
         if (s != null) {
             answer.setText(s);
-        }
-
-        if (getFormEntryPrompt().isReadOnly() || hasExApp) {
-            answer.setFocusable(false);
-            answer.setEnabled(false);
         }
 
         String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");

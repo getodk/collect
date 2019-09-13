@@ -24,6 +24,8 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -32,6 +34,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
@@ -610,6 +613,46 @@ public abstract class QuestionWidget
         imageView.setAdjustViewBounds(true);
         imageView.setImageBitmap(bitmap);
         return imageView;
+    }
+
+    protected EditText getAnswerEditText(boolean readOnly) {
+        EditText answerEditText = new EditText(getContext());
+        answerEditText.setId(ViewIds.generateViewId());
+        answerEditText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+
+        // needed to make long read only text scroll
+        answerEditText.setHorizontallyScrolling(false);
+        answerEditText.setSingleLine(false);
+
+        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+        params.setMargins(7, 5, 7, 5);
+        answerEditText.setLayoutParams(params);
+
+        if (readOnly) {
+            answerEditText.setBackground(null);
+            answerEditText.setEnabled(false);
+            answerEditText.setTextColor(themeUtils.getPrimaryTextColor());
+            answerEditText.setFocusable(false);
+        }
+
+        answerEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                widgetValueChanged();
+            }
+        });
+
+        return answerEditText;
     }
 
     //region Data waiting

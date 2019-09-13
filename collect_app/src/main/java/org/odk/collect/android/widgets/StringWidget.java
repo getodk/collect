@@ -18,23 +18,18 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.NonNull;
 
-import android.text.Editable;
 import android.text.Selection;
-import android.text.TextWatcher;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.widget.EditText;
-import android.widget.TableLayout;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
-import org.odk.collect.android.utilities.ViewIds;
 
 import timber.log.Timber;
 
@@ -48,18 +43,13 @@ import timber.log.Timber;
 public class StringWidget extends QuestionWidget {
     private static final String ROWS = "rows";
     boolean readOnly;
-    private final EditText answerText;
+    protected final EditText answerText;
 
     protected StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
         super(context, prompt);
 
-        answerText = new EditText(context);
-        answerText.setId(ViewIds.generateViewId());
         readOnly = prompt.isReadOnly() || readOnlyOverride;
-
-        answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+        answerText = getAnswerEditText(readOnly);
 
         /*
          * If a 'rows' attribute is on the input tag, set the minimum number of lines
@@ -84,42 +74,11 @@ public class StringWidget extends QuestionWidget {
             }
         }
 
-        params.setMargins(7, 5, 7, 5);
-        answerText.setLayoutParams(params);
-
         // capitalize the first letter of the sentence
         answerText.setKeyListener(new TextKeyListener(Capitalize.SENTENCES, false));
 
-        // needed to make long read only text scroll
-        answerText.setHorizontallyScrolling(false);
-        answerText.setSingleLine(false);
-
         setDisplayValueFromModel();
-
-        if (readOnly) {
-            answerText.setBackground(null);
-            answerText.setEnabled(false);
-            answerText.setTextColor(themeUtils.getPrimaryTextColor());
-            answerText.setFocusable(false);
-        }
-
         addAnswerView(answerText);
-        answerText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                widgetValueChanged();
-            }
-        });
     }
 
     @Override
