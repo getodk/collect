@@ -21,8 +21,6 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Selection;
 import android.text.method.DigitsKeyListener;
-import android.util.TypedValue;
-import android.widget.EditText;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -45,15 +43,7 @@ public class DecimalWidget extends StringWidget {
     public DecimalWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
         super(context, prompt, readOnlyOverride);
 
-        // formatting
-        EditText answerText = getAnswerTextField();
-
-        answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-
-        // needed to make long readonly text scroll
-        answerText.setHorizontallyScrolling(false);
-        answerText.setSingleLine(false);
 
         // only numbers are allowed
         answerText.setKeyListener(new DigitsKeyListener(true, true));
@@ -86,13 +76,6 @@ public class DecimalWidget extends StringWidget {
 
             Selection.setSelection(answerText.getText(), answerText.getText().length());
         }
-
-        // disable if read only
-        if (prompt.isReadOnly()) {
-            setBackground(null);
-            setFocusable(false);
-            setClickable(false);
-        }
     }
 
     @NonNull
@@ -106,7 +89,7 @@ public class DecimalWidget extends StringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return TextWidgetUtils.getIAnswerDataFromDecimal(getAnswerTextField().getText().toString(), useThousandSeparator);
+        return TextWidgetUtils.getIAnswerDataFromDecimal(answerText.getText().toString(), useThousandSeparator);
     }
 
 }

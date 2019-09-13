@@ -21,8 +21,6 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Selection;
 import android.text.method.DigitsKeyListener;
-import android.util.TypedValue;
-import android.widget.EditText;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -44,13 +42,7 @@ public class IntegerWidget extends StringWidget {
     public IntegerWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
         super(context, prompt, readOnlyOverride);
 
-        EditText answerText = getAnswerTextField();
-        answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
-
-        // needed to make long readonly text scroll
-        answerText.setHorizontallyScrolling(false);
-        answerText.setSingleLine(false);
 
         this.useThousandSeparator = useThousandSeparator;
         if (useThousandSeparator) {
@@ -68,12 +60,6 @@ public class IntegerWidget extends StringWidget {
             fa[0] = new InputFilter.LengthFilter(11);
         }
         answerText.setFilters(fa);
-
-        if (prompt.isReadOnly()) {
-            setBackground(null);
-            setFocusable(false);
-            setClickable(false);
-        }
 
         Integer i = TextWidgetUtils.getIntegerAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue());
 
@@ -94,7 +80,7 @@ public class IntegerWidget extends StringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return TextWidgetUtils.getIAnswerDataFromInteger(getAnswerTextField().getText().toString(), useThousandSeparator);
+        return TextWidgetUtils.getIAnswerDataFromInteger(answerText.getText().toString(), useThousandSeparator);
     }
 
 }
