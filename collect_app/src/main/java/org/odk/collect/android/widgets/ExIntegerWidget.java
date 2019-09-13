@@ -27,6 +27,7 @@ import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalAppsUtils;
+import org.odk.collect.android.utilities.TextWidgetUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.Locale;
@@ -58,32 +59,16 @@ public class ExIntegerWidget extends ExStringWidget {
         fa[0] = new InputFilter.LengthFilter(9);
         answer.setFilters(fa);
 
-        Integer i = getIntegerAnswerValue();
+        Integer i = TextWidgetUtils.getIntegerAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue());
 
         if (i != null) {
             answer.setText(String.format(Locale.US, "%d", i));
         }
     }
 
-    private Integer getIntegerAnswerValue() {
-        IAnswerData dataHolder = getFormEntryPrompt().getAnswerValue();
-        Integer d = null;
-        if (dataHolder != null) {
-            Object dataValue = dataHolder.getValue();
-            if (dataValue != null) {
-                if (dataValue instanceof Double) {
-                    d = ((Double) dataValue).intValue();
-                } else {
-                    d = (Integer) dataValue;
-                }
-            }
-        }
-        return d;
-    }
-
     @Override
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
-        i.putExtra("value", getIntegerAnswerValue());
+        i.putExtra("value", TextWidgetUtils.getIntegerAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue()));
         try {
             ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_INT_CAPTURE);
         } catch (SecurityException e) {
