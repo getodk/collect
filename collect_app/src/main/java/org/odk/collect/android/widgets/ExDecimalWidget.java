@@ -90,16 +90,7 @@ public class ExDecimalWidget extends ExStringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String s = answer.getText().toString();
-        if (s.equals("")) {
-            return null;
-        } else {
-            try {
-                return new DecimalData(Double.valueOf(s));
-            } catch (Exception numberFormatException) {
-                return null;
-            }
-        }
+        return TextWidgetUtils.getIAnswerDataFromDecimal(answer.getText().toString(), false);
     }
 
     /**
