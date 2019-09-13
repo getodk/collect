@@ -79,16 +79,7 @@ public class ExIntegerWidget extends ExStringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String s = answer.getText().toString();
-        if (s.equals("")) {
-            return null;
-        } else {
-            try {
-                return new IntegerData(Integer.parseInt(s));
-            } catch (Exception numberFormatException) {
-                return null;
-            }
-        }
+        return TextWidgetUtils.getIAnswerDataFromInteger(answer.getText().toString(), false);
     }
 
     /**
