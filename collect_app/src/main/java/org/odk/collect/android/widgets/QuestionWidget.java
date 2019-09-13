@@ -587,7 +587,7 @@ public abstract class QuestionWidget
         return imageView;
     }
 
-    protected EditText getAnswerEditText(boolean readOnly) {
+    protected EditText getAnswerEditText(boolean readOnly, FormEntryPrompt prompt) {
         EditText answerEditText = new EditText(getContext());
         answerEditText.setId(ViewIds.generateViewId());
         answerEditText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
@@ -623,6 +623,28 @@ public abstract class QuestionWidget
                 widgetValueChanged();
             }
         });
+
+        /*
+         * If a 'rows' attribute is on the input tag, set the minimum number of lines
+         * to display in the field to that value.
+         *
+         * I.e.,
+         * <input ref="foo" rows="5">
+         *   ...
+         * </input>
+         *
+         * will set the height of the EditText box to 5 rows high.
+         */
+        String height = prompt.getQuestion().getAdditionalAttribute(null, "rows");
+        if (height != null && height.length() != 0) {
+            try {
+                int rows = Integer.parseInt(height);
+                answerEditText.setMinLines(rows);
+                answerEditText.setGravity(Gravity.TOP); // to write test starting at the top of the edit area
+            } catch (Exception e) {
+                Timber.e("Unable to process the rows setting for the answerText field: %s", e.toString());
+            }
+        }
 
         return answerEditText;
     }
