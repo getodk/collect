@@ -59,10 +59,6 @@ public class StringWidget extends QuestionWidget {
         answerText.setText(null);
     }
 
-    public EditText getAnswerTextField() {
-        return answerText;
-    }
-
     @Override
     public IAnswerData getAnswer() {
         String s = getAnswerText();
