@@ -1,9 +1,7 @@
-package org.odk.collect.android.analytics.google;
+package org.odk.collect.android.analytics;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-
-import org.odk.collect.android.analytics.Analytics;
 
 public class GoogleAnalytics implements Analytics {
 

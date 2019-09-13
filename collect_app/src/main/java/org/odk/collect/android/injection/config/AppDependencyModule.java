@@ -5,10 +5,13 @@ import android.content.Context;
 import android.telephony.SmsManager;
 import android.webkit.MimeTypeMap;
 
+import com.google.android.gms.analytics.Tracker;
+
 import org.javarosa.core.reference.ReferenceManager;
+import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
-import org.odk.collect.android.analytics.google.GoogleAnalytics;
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.analytics.FirebaseAnalytics;
+import org.odk.collect.android.analytics.GoogleAnalytics;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
@@ -109,7 +112,26 @@ public class AppDependencyModule {
     @Provides
     @Singleton
     public Analytics providesTracker(Application application) {
-        return new GoogleAnalytics(((Collect) application).getDefaultTracker());
+        com.google.android.gms.analytics.GoogleAnalytics analytics = com.google.android.gms.analytics.GoogleAnalytics.getInstance(application);
+        Tracker tracker = analytics.newTracker(R.xml.global_tracker);
+        GoogleAnalytics googleAnalytics = new GoogleAnalytics(tracker);
+
+        com.google.firebase.analytics.FirebaseAnalytics firebaseAnalyticsInstance = com.google.firebase.analytics.FirebaseAnalytics.getInstance(application);
+        FirebaseAnalytics firebaseAnalytics = new FirebaseAnalytics(firebaseAnalyticsInstance);
+
+        return new Analytics() {
+            @Override
+            public void logEvent(String category, String action) {
+                googleAnalytics.logEvent(category, action);
+                firebaseAnalytics.logEvent(category, action);
+            }
+
+            @Override
+            public void logEvent(String category, String action, String label) {
+                googleAnalytics.logEvent(category, action, label);
+                firebaseAnalytics.logEvent(category, action, label);
+            }
+        };
     }
 
     @Provides
