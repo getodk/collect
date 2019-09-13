@@ -24,7 +24,6 @@ import android.text.method.DigitsKeyListener;
 import android.util.TypedValue;
 import android.widget.EditText;
 
-import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
@@ -107,21 +106,7 @@ public class DecimalWidget extends StringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String s = getAnswerTextField().getText().toString();
-        if (useThousandSeparator) {
-            s = ThousandsSeparatorTextWatcher.getOriginalString(s);
-        }
-
-        if (s.isEmpty()) {
-            return null;
-
-        } else {
-            try {
-                return new DecimalData(Double.parseDouble(s));
-            } catch (Exception numberFormatException) {
-                return null;
-            }
-        }
+        return TextWidgetUtils.getIAnswerDataFromDecimal(getAnswerTextField().getText().toString(), useThousandSeparator);
     }
 
 }
