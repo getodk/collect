@@ -3,6 +3,7 @@ package org.odk.collect.android.utilities;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
+import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
 
 public class TextWidgetUtils {
@@ -64,6 +65,22 @@ public class TextWidgetUtils {
         } else {
             try {
                 return new DecimalData(Double.parseDouble(answer));
+            } catch (Exception numberFormatException) {
+                return null;
+            }
+        }
+    }
+
+    public static IAnswerData getIAnswerDataFromStringNumber(String answer, boolean useThousandSeparator) {
+        if (useThousandSeparator) {
+            answer = ThousandsSeparatorTextWatcher.getOriginalString(answer);
+        }
+
+        if (answer.isEmpty()) {
+            return null;
+        } else {
+            try {
+                return new StringData(answer);
             } catch (Exception numberFormatException) {
                 return null;
             }
