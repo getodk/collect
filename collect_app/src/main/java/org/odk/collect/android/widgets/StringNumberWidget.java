@@ -16,13 +16,9 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.text.InputType;
-import android.text.Selection;
-import android.text.method.DigitsKeyListener;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
 import org.odk.collect.android.utilities.TextWidgetUtils;
 
 /**
@@ -37,32 +33,9 @@ public class StringNumberWidget extends StringWidget {
 
     public StringNumberWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
         super(context, prompt, readOnlyOverride);
-
-        answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
-
         this.useThousandSeparator = useThousandSeparator;
-        if (useThousandSeparator) {
-            answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
-        }
 
-        answerText.setKeyListener(new DigitsKeyListener() {
-            @Override
-            protected char[] getAcceptedChars() {
-                return new char[]{
-                        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-', '+', ' ', ','
-                };
-            }
-        });
-
-        String s = null;
-        if (prompt.getAnswerValue() != null) {
-            s = (String) prompt.getAnswerValue().getValue();
-        }
-
-        if (s != null) {
-            answerText.setText(s);
-            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
-        }
+        TextWidgetUtils.adjustEditTextAnswerToStringNumberWidget(answerText, useThousandSeparator, getFormEntryPrompt().getAnswerValue());
     }
 
     @Override
