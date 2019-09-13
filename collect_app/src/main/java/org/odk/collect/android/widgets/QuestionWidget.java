@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.text.method.TextKeyListener;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -619,6 +620,7 @@ public abstract class QuestionWidget
         EditText answerEditText = new EditText(getContext());
         answerEditText.setId(ViewIds.generateViewId());
         answerEditText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+        answerEditText.setKeyListener(new TextKeyListener(TextKeyListener.Capitalize.SENTENCES, false));
 
         // needed to make long read only text scroll
         answerEditText.setHorizontallyScrolling(false);
