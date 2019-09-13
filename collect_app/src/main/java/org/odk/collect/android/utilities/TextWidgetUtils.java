@@ -18,36 +18,26 @@ import java.util.Locale;
 public class TextWidgetUtils {
 
     public static Integer getIntegerAnswerValueFromIAnswerData(IAnswerData dataHolder) {
-        Integer d = null;
         if (dataHolder != null) {
             Object dataValue = dataHolder.getValue();
             if (dataValue != null) {
-                if (dataValue instanceof Double) {
-                    d = ((Double) dataValue).intValue();
-                } else {
-                    d = (Integer) dataValue;
-                }
+                return dataValue instanceof Double ? ((Double) dataValue).intValue() : (Integer) dataValue;
             }
         }
-        return d;
+        return null;
     }
 
     public static Double getDoubleAnswerValueFromIAnswerData(IAnswerData dataHolder) {
-        Double d = null;
         if (dataHolder != null) {
             Object dataValue = dataHolder.getValue();
             if (dataValue != null) {
-                if (dataValue instanceof Integer) {
-                    d = (double) (Integer) dataValue;
-                } else {
-                    d = (Double) dataValue;
-                }
+                return dataValue instanceof Integer ? (double) (Integer) dataValue : (Double) dataValue;
             }
         }
-        return d;
+        return null;
     }
 
-    public static IAnswerData getIAnswerDataFromInteger(String answer, boolean useThousandSeparator) {
+    public static IntegerData getIAnswerDataFromInteger(String answer, boolean useThousandSeparator) {
         if (useThousandSeparator) {
             answer = ThousandsSeparatorTextWatcher.getOriginalString(answer);
         }
@@ -63,7 +53,7 @@ public class TextWidgetUtils {
         }
     }
 
-    public static IAnswerData getIAnswerDataFromDecimal(String answer, boolean useThousandSeparator) {
+    public static DecimalData getIAnswerDataFromDecimal(String answer, boolean useThousandSeparator) {
         if (useThousandSeparator) {
             answer = ThousandsSeparatorTextWatcher.getOriginalString(answer);
         }
@@ -80,7 +70,7 @@ public class TextWidgetUtils {
         }
     }
 
-    public static IAnswerData getIAnswerDataFromStringNumber(String answer, boolean useThousandSeparator) {
+    public static StringData getIAnswerDataFromStringNumber(String answer, boolean useThousandSeparator) {
         if (useThousandSeparator) {
             answer = ThousandsSeparatorTextWatcher.getOriginalString(answer);
         }
