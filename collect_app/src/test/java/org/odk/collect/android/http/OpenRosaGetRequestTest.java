@@ -34,16 +34,17 @@ public abstract class OpenRosaGetRequestTest {
     @Rule
     public MockWebServerRule mockWebServerRule = new MockWebServerRule();
 
+    private MockWebServer mockWebServer;
     private OpenRosaHttpInterface subject;
 
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         subject = buildSubject();
+        mockWebServer = mockWebServerRule.start();
     }
 
     @Test
     public void makesAGetRequestToUri() throws Exception {
-        MockWebServer mockWebServer = mockWebServerRule.start();
         mockWebServer.enqueue(new MockResponse());
 
         URI uri = mockWebServer.url("/blah").uri();
@@ -58,7 +59,6 @@ public abstract class OpenRosaGetRequestTest {
 
     @Test
     public void sendsCollectHeaders() throws Exception {
-        MockWebServer mockWebServer = mockWebServerRule.start();
         mockWebServer.enqueue(new MockResponse());
 
         subject.executeGetRequest(mockWebServer.url("").uri(), null, null);
@@ -69,7 +69,6 @@ public abstract class OpenRosaGetRequestTest {
 
     @Test
     public void returnsBodyWithEmptyHash() throws Exception {
-        MockWebServer mockWebServer = mockWebServerRule.start();
         mockWebServer.enqueue(new MockResponse()
                 .setBody("I AM BODY"));
 
@@ -80,7 +79,6 @@ public abstract class OpenRosaGetRequestTest {
 
     @Test
     public void whenResponseIsGzipped_returnsBody() throws Exception {
-        MockWebServer mockWebServer = mockWebServerRule.start();
         mockWebServer.enqueue(new MockResponse()
                 .addHeader("Content-Encoding", "gzip")
                 .setBody(new Buffer().write(gzip("I AM BODY"))));
@@ -91,7 +89,6 @@ public abstract class OpenRosaGetRequestTest {
 
     @Test
     public void whenContentTypeIsXML_returnsBodyWithMD5Hash() throws Exception {
-        MockWebServer mockWebServer = mockWebServerRule.start();
         mockWebServer.enqueue(new MockResponse()
                 .addHeader("Content-Type", "text/xml")
                 .setBody("I AM BODY"));
@@ -103,7 +100,6 @@ public abstract class OpenRosaGetRequestTest {
 
     @Test(expected = Exception.class)
     public void withContentType_whenResponseHasDifferentContentType_throwsException() throws Exception {
-        MockWebServer mockWebServer = mockWebServerRule.start();
         mockWebServer.enqueue(new MockResponse()
                 .addHeader("Content-Type", "application/json"));
 
@@ -112,7 +108,6 @@ public abstract class OpenRosaGetRequestTest {
 
     @Test
     public void withContentType_whenResponseContainsContentType_returnsResult() throws Exception {
-        MockWebServer mockWebServer = mockWebServerRule.start();
         mockWebServer.enqueue(new MockResponse()
                 .addHeader("Content-Type", "application/json; charset=utf-8")
                 .setBody("I AM BODY"));
@@ -123,7 +118,6 @@ public abstract class OpenRosaGetRequestTest {
 
     @Test
     public void returnsOpenRosaVersion() throws Exception {
-        MockWebServer mockWebServer = mockWebServerRule.start();
         mockWebServer.enqueue(new MockResponse()
                 .addHeader("X-OpenRosa-Version", "1.0"));
 
@@ -138,7 +132,6 @@ public abstract class OpenRosaGetRequestTest {
 
     @Test
     public void whenStatusCodeIsNot200_returnsNullBodyAndStatusCode() throws Exception {
-        MockWebServer mockWebServer = mockWebServerRule.start();
         mockWebServer.enqueue(new MockResponse().setResponseCode(500));
 
         HttpGetResult result = subject.executeGetRequest(mockWebServer.url("").uri(), null, null);
@@ -148,7 +141,6 @@ public abstract class OpenRosaGetRequestTest {
 
     @Test
     public void whenResponseBodyIsNull_returnsNullBodyAndStatusCode() throws Exception {
-        MockWebServer mockWebServer = mockWebServerRule.start();
         mockWebServer.enqueue(new MockResponse().setResponseCode(204));
 
         HttpGetResult result1 = subject.executeGetRequest(mockWebServer.url("").uri(), null, null);
