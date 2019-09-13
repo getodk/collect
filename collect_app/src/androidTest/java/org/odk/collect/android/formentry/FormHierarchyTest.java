@@ -135,8 +135,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
         FormEntry.clickOnText("Repeat Group 1 > 1");
         FormEntry.clickOnText("Repeat Group 1_1");
         FormEntry.clickOnText("Repeat Group 1_1 > 2");
-        FormEntry.clickDeleteChildIcon();
-        FormEntry.clickOnString(R.string.delete_repeat);
+        FormEntry.deleteGroup();
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(1)));
         FormEntry.checkIsTextDisplayed("Repeat Group 1_1 > 1");
     }

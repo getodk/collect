@@ -1816,10 +1816,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     private void createDeleteRepeatConfirmDialog() {
         DialogUtils.showDeleteRepeatConfirmDialog(this, () -> {
-            showNextView();
-        }, () -> {
-            refreshCurrentView();
-        });
+            FormController formController = getFormController();
+            if (formController != null && !formController.indexIsInFieldList()) {
+                showNextView();
+            } else {
+                refreshCurrentView();
+            }
+        }, this::refreshCurrentView);
     }
 
     /**
