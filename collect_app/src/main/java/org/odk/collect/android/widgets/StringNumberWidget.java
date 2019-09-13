@@ -40,10 +40,6 @@ public class StringNumberWidget extends StringWidget {
 
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
 
-        // needed to make long readonly text scroll
-        answerText.setHorizontallyScrolling(false);
-        answerText.setSingleLine(false);
-
         this.useThousandSeparator = useThousandSeparator;
         if (useThousandSeparator) {
             answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
@@ -73,5 +69,4 @@ public class StringNumberWidget extends StringWidget {
     public IAnswerData getAnswer() {
         return TextWidgetUtils.getStringNumberData(getAnswerText(), useThousandSeparator);
     }
-
 }
