@@ -112,7 +112,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         super(context, prompt);
 
         // set text formatting
-        answer = getAnswerEditText(getFormEntryPrompt().isReadOnly() || hasExApp);
+        answer = getAnswerEditText(getFormEntryPrompt().isReadOnly() || hasExApp, getFormEntryPrompt());
         textBackground = answer.getBackground();
         answer.setBackground(null);
         answer.setTextColor(themeUtils.getPrimaryTextColor());
