@@ -17,8 +17,9 @@ package org.odk.collect.android.utilities;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
-import androidx.annotation.Nullable;
 import android.util.Base64;
+
+import androidx.annotation.Nullable;
 
 import org.apache.commons.io.IOUtils;
 import org.kxml2.io.KXmlSerializer;
@@ -249,9 +250,14 @@ public class EncryptionUtils {
      * Retrieve the encryption information for this uri.
      *
      * @param uri either an instance URI (if previously saved) or a form URI
+     * @throws EncryptionException if the record can't be encrypted
      */
     public static EncryptedFormInformation getEncryptedFormInformation(Uri uri,
             InstanceMetadata instanceMetadata) throws EncryptionException {
+        // submission must have an OpenRosa metadata block with a non-null instanceID
+        if (instanceMetadata.instanceId == null) {
+            throw new EncryptionException("This form does not specify an instanceID. You must specify one to enable encryption.", null);
+        }
 
         ContentResolver cr = Collect.getInstance().getContentResolver();
 
@@ -298,7 +304,7 @@ public class EncryptionUtils {
 
                 if (formCursor.getCount() != 1) {
                     String msg = Collect.getInstance().getString(R.string.not_exactly_one_blank_form_for_this_form_id);
-                    Timber.e(msg);
+                    Timber.d(msg);
                     throw new EncryptionException(msg, null);
                 }
                 formCursor.moveToFirst();
@@ -306,7 +312,7 @@ public class EncryptionUtils {
                 formCursor = cr.query(uri, null, null, null, null);
                 if (formCursor.getCount() != 1) {
                     String msg = Collect.getInstance().getString(R.string.not_exactly_one_blank_form_for_this_form_id);
-                    Timber.e(msg);
+                    Timber.d(msg);
                     throw new EncryptionException(msg, null);
                 }
                 formCursor.moveToFirst();
@@ -315,7 +321,7 @@ public class EncryptionUtils {
             formId = formCursor.getString(formCursor.getColumnIndex(FormsColumns.JR_FORM_ID));
             if (formId == null || formId.length() == 0) {
                 String msg = Collect.getInstance().getString(R.string.no_form_id_specified);
-                Timber.e(msg);
+                Timber.d(msg);
                 throw new EncryptionException(msg, null);
             }
             int idxVersion = formCursor.getColumnIndex(FormsColumns.JR_VERSION);
@@ -336,27 +342,20 @@ public class EncryptionUtils {
                 kf = KeyFactory.getInstance(RSA_ALGORITHM);
             } catch (NoSuchAlgorithmException e) {
                 String msg = Collect.getInstance().getString(R.string.phone_does_not_support_rsa);
-                Timber.e(e, "%s due to %s ", msg, e.getMessage());
+                Timber.d(e, "%s due to %s ", msg, e.getMessage());
                 throw new EncryptionException(msg, e);
             }
             try {
                 pk = kf.generatePublic(publicKeySpec);
             } catch (InvalidKeySpecException e) {
                 String msg = Collect.getInstance().getString(R.string.invalid_rsa_public_key);
-                Timber.e(e, "%s due to %s ", msg, e.getMessage());
+                Timber.d(e, "%s due to %s ", msg, e.getMessage());
                 throw new EncryptionException(msg, e);
             }
         } finally {
             if (formCursor != null) {
                 formCursor.close();
             }
-        }
-
-        // submission must have an OpenRosa metadata block with a non-null
-        // instanceID value.
-        if (instanceMetadata.instanceId == null) {
-            Timber.e("No OpenRosa metadata block or no instanceId defined in that block");
-            return null;
         }
 
         // For now, prevent encryption if the BouncyCastle implementation is not present.
@@ -372,7 +371,7 @@ public class EncryptionUtils {
             } else {
                 msg = "No BouncyCastle provider for padding implementation of symmetric algorithm!";
             }
-            Timber.e(msg);
+            Timber.d(msg);
             return null;
         }
 
