@@ -28,6 +28,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
+import org.odk.collect.android.utilities.TextWidgetUtils;
 
 import java.util.Locale;
 
@@ -75,28 +76,12 @@ public class IntegerWidget extends StringWidget {
             setClickable(false);
         }
 
-        Integer i = getIntegerAnswerValue();
+        Integer i = TextWidgetUtils.getIntegerAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue());
 
         if (i != null) {
             answerText.setText(String.format(Locale.US, "%d", i));
             Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
         }
-    }
-
-    private Integer getIntegerAnswerValue() {
-        IAnswerData dataHolder = getFormEntryPrompt().getAnswerValue();
-        Integer d = null;
-        if (dataHolder != null) {
-            Object dataValue = dataHolder.getValue();
-            if (dataValue != null) {
-                if (dataValue instanceof Double) {
-                    d = ((Double) dataValue).intValue();
-                } else {
-                    d = (Integer) dataValue;
-                }
-            }
-        }
-        return d;
     }
 
     @NonNull
