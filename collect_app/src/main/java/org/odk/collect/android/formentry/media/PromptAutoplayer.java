@@ -12,6 +12,7 @@ import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
 import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.NO_BUTTONS;
@@ -40,16 +41,21 @@ public class PromptAutoplayer {
             List<Clip> clips = new ArrayList<>();
 
             addPromptAudio(prompt, clips);
-            addSelectAudio(prompt, clips);
+            if (!clips.isEmpty()) {
+                analytics.logEvent("Prompt", "AutoplayAudioLabel", formIdentifierHash);
+            }
+
+            List<Clip> selectClips = addSelectAudio(prompt, clips);
+            if (!selectClips.isEmpty()) {
+                analytics.logEvent("Prompt", "AutoplayAudioChoice", formIdentifierHash);
+            }
 
             if (clips.isEmpty()) {
                 return false;
             } else {
                 audioHelper.playInOrder(clips);
-                analytics.logEvent("Prompt", "AutoplayAudio", formIdentifierHash);
                 return true;
             }
-
         } else {
             return false;
         }
@@ -59,10 +65,12 @@ public class PromptAutoplayer {
         return autoplayOption != null && autoplayOption.equalsIgnoreCase(AUDIO_OPTION);
     }
 
-    private void addSelectAudio(FormEntryPrompt prompt, List<Clip> clips) {
+    private List<Clip> addSelectAudio(FormEntryPrompt prompt, List<Clip> clips) {
         if (appearanceDoesNotShowControls(WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt))) {
-            return;
+            return emptyList();
         }
+
+        List<Clip> selectClips = new ArrayList<>();
 
         int controlType = prompt.getControlType();
         if (controlType == Constants.CONTROL_SELECT_ONE || controlType == Constants.CONTROL_SELECT_MULTI) {
@@ -73,10 +81,14 @@ public class PromptAutoplayer {
                 String selectURI = getPlayableAudioURI(prompt, choice, referenceManager);
 
                 if (selectURI != null) {
-                    clips.add(new Clip(getClipID(prompt, choice), selectURI));
+                    Clip clip = new Clip(getClipID(prompt, choice), selectURI);
+                    clips.add(clip);
+                    selectClips.add(clip);
                 }
             }
         }
+
+        return selectClips;
     }
 
     private boolean appearanceDoesNotShowControls(String appearance) {
