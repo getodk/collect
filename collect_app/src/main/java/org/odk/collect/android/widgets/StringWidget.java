@@ -19,8 +19,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import android.text.Selection;
-import android.text.method.TextKeyListener;
-import android.text.method.TextKeyListener.Capitalize;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
@@ -46,9 +44,6 @@ public class StringWidget extends QuestionWidget {
 
         readOnly = prompt.isReadOnly() || readOnlyOverride;
         answerText = getAnswerEditText(readOnly, getFormEntryPrompt());
-
-        // capitalize the first letter of the sentence
-        answerText.setKeyListener(new TextKeyListener(Capitalize.SENTENCES, false));
 
         setDisplayValueFromModel();
         addAnswerView(answerText);
