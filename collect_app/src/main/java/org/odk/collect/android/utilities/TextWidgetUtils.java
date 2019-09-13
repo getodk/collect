@@ -12,6 +12,7 @@ import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
 
+import java.text.NumberFormat;
 import java.util.Locale;
 
 public class TextWidgetUtils {
@@ -116,6 +117,40 @@ public class TextWidgetUtils {
         if (i != null) {
             answerText.setText(String.format(Locale.US, "%d", i));
             Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
+        }
+    }
+
+    public static void adjustEditTextAnswerToDecimalWidget(EditText answerText, boolean useThousandSeparator, IAnswerData answerData) {
+        if (useThousandSeparator) {
+            answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
+        }
+
+        answerText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        // only numbers are allowed
+        answerText.setKeyListener(new DigitsKeyListener(true, true));
+
+        // only 15 characters allowed
+        InputFilter[] fa = new InputFilter[1];
+        fa[0] = new InputFilter.LengthFilter(15);
+        if (useThousandSeparator) {
+            fa[0] = new InputFilter.LengthFilter(19);
+        }
+        answerText.setFilters(fa);
+
+        Double d = TextWidgetUtils.getDoubleAnswerValueFromIAnswerData(answerData);
+
+        if (d != null) {
+            // truncate to 15 digits max in US locale
+            // use US locale because DigitsKeyListener can't be localized before API 26
+            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+            nf.setMaximumFractionDigits(15);
+            nf.setMaximumIntegerDigits(15);
+            nf.setGroupingUsed(false);
+
+            String formattedValue = nf.format(d);
+            answerText.setText(formattedValue);
+
+            Selection.setSelection(answerText.getText(), answerText.getText().length());
         }
     }
 }

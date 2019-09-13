@@ -18,10 +18,6 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.text.InputFilter;
-import android.text.InputType;
-import android.text.Selection;
-import android.text.method.DigitsKeyListener;
 
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
@@ -30,9 +26,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.utilities.TextWidgetUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-
-import java.text.NumberFormat;
-import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -51,30 +44,7 @@ public class ExDecimalWidget extends ExStringWidget {
     public ExDecimalWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        answer.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-
-        // only allows numbers and no periods
-        answer.setKeyListener(new DigitsKeyListener(true, true));
-
-        // only 15 characters allowed
-        InputFilter[] fa = new InputFilter[1];
-        fa[0] = new InputFilter.LengthFilter(15);
-        answer.setFilters(fa);
-
-        Double d = TextWidgetUtils.getDoubleAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue());
-
-        if (d != null) {
-            // truncate to 15 digits max in US locale
-            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
-            nf.setMaximumFractionDigits(15);
-            nf.setMaximumIntegerDigits(15);
-            nf.setGroupingUsed(false);
-
-            String formattedValue = nf.format(d);
-            answer.setText(formattedValue);
-
-            Selection.setSelection(answer.getText(), answer.getText().length());
-        }
+        TextWidgetUtils.adjustEditTextAnswerToDecimalWidget(answer, false, getFormEntryPrompt().getAnswerValue());
     }
 
     @Override
