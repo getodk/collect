@@ -29,7 +29,7 @@ public class MockWebServerRule implements TestRule {
         };
     }
 
-    public MockWebServer startMockWebServer() throws Exception {
+    public MockWebServer start() throws Exception {
         MockWebServer mockWebServer = new MockWebServer();
         mockWebServers.add(mockWebServer);
 
@@ -37,7 +37,7 @@ public class MockWebServerRule implements TestRule {
         return mockWebServer;
     }
 
-    public MockWebServer startHttpsMockWebServer() throws IOException {
+    public MockWebServer startHTTPS() throws IOException {
         MockWebServer httpsMockWebServer = new MockWebServer();
         mockWebServers.add(httpsMockWebServer);
 

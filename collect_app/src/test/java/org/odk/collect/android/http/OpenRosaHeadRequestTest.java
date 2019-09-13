@@ -26,7 +26,7 @@ public abstract class OpenRosaHeadRequestTest {
     protected abstract OpenRosaHttpInterface buildSubject();
 
     @Rule
-    public MockWebServerRule mockWebServerTester = new MockWebServerRule();
+    public MockWebServerRule mockWebServerRule = new MockWebServerRule();
 
     private OpenRosaHttpInterface subject;
 
@@ -37,7 +37,7 @@ public abstract class OpenRosaHeadRequestTest {
 
     @Test
     public void makesAHeadRequestToUri() throws Exception {
-        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
+        MockWebServer mockWebServer = mockWebServerRule.start();
         mockWebServer.enqueue(new MockResponse());
 
         URI uri = mockWebServer.url("/blah").uri();
@@ -52,7 +52,7 @@ public abstract class OpenRosaHeadRequestTest {
 
     @Test
     public void sendsCollectHeaders() throws Exception {
-        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
+        MockWebServer mockWebServer = mockWebServerRule.start();
         mockWebServer.enqueue(new MockResponse());
 
         subject.executeHeadRequest(mockWebServer.url("").uri(), null);
@@ -63,7 +63,7 @@ public abstract class OpenRosaHeadRequestTest {
 
     @Test
     public void when204Response_returnsHeaders() throws Exception {
-        MockWebServer mockWebServer = mockWebServerTester.startMockWebServer();
+        MockWebServer mockWebServer = mockWebServerRule.start();
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(204)
                 .addHeader("X-1", "Blah1")
