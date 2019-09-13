@@ -5,9 +5,9 @@ import android.content.Context;
 import android.telephony.SmsManager;
 import android.webkit.MimeTypeMap;
 
-import com.google.android.gms.analytics.Tracker;
-
 import org.javarosa.core.reference.ReferenceManager;
+import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.analytics.google.GoogleAnalytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
@@ -108,8 +108,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public Tracker providesTracker(Application application) {
-        return ((Collect) application).getDefaultTracker();
+    public Analytics providesTracker(Application application) {
+        return new GoogleAnalytics(((Collect) application).getDefaultTracker());
     }
 
     @Provides
