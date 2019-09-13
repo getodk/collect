@@ -143,4 +143,30 @@ public class TextWidgetUtils {
             Selection.setSelection(answerText.getText(), answerText.getText().length());
         }
     }
+
+    public static void adjustEditTextAnswerToStringNumberWidget(EditText answerText, boolean useThousandSeparator, IAnswerData answerData) {
+        answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
+        if (useThousandSeparator) {
+            answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
+        }
+
+        answerText.setKeyListener(new DigitsKeyListener() {
+            @Override
+            protected char[] getAcceptedChars() {
+                return new char[]{
+                        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-', '+', ' ', ','
+                };
+            }
+        });
+
+        String s = null;
+        if (answerData != null) {
+            s = (String) answerData.getValue();
+        }
+
+        if (s != null) {
+            answerText.setText(s);
+            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
+        }
+    }
 }
