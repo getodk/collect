@@ -11,7 +11,6 @@ import com.burgstaller.okhttp.digest.CachingAuthenticator;
 import com.burgstaller.okhttp.digest.Credentials;
 import com.burgstaller.okhttp.digest.DigestAuthenticator;
 
-import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.http.openrosa.HttpCredentialsInterface;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClient;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClientProvider;
@@ -61,7 +60,7 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
         return lastCredentials != null && !lastCredentials.equals(credentials);
     }
 
-    @NotNull
+    @NonNull
     private OkHttpOpenRosaServerClient createNewClient(String scheme, String userAgent, @Nullable HttpCredentialsInterface credentials) {
         OkHttpClient.Builder builder = baseClient.newBuilder()
                 .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
