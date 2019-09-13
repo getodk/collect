@@ -51,7 +51,7 @@ public class IntegerWidget extends StringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return TextWidgetUtils.getIAnswerDataFromInteger(answerText.getText().toString(), useThousandSeparator);
+        return TextWidgetUtils.getIntegerData(answerText.getText().toString(), useThousandSeparator);
     }
 
 }

@@ -71,7 +71,7 @@ public class StringNumberWidget extends StringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return TextWidgetUtils.getIAnswerDataFromStringNumber(getAnswerText(), useThousandSeparator);
+        return TextWidgetUtils.getStringNumberData(getAnswerText(), useThousandSeparator);
     }
 
 }

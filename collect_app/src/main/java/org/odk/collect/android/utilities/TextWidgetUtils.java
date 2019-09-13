@@ -37,7 +37,7 @@ public class TextWidgetUtils {
         return null;
     }
 
-    public static IntegerData getIAnswerDataFromInteger(String answer, boolean useThousandSeparator) {
+    public static IntegerData getIntegerData(String answer, boolean useThousandSeparator) {
         if (useThousandSeparator) {
             answer = ThousandsSeparatorTextWatcher.getOriginalString(answer);
         }
@@ -53,7 +53,7 @@ public class TextWidgetUtils {
         }
     }
 
-    public static DecimalData getIAnswerDataFromDecimal(String answer, boolean useThousandSeparator) {
+    public static DecimalData getDecimalData(String answer, boolean useThousandSeparator) {
         if (useThousandSeparator) {
             answer = ThousandsSeparatorTextWatcher.getOriginalString(answer);
         }
@@ -70,7 +70,7 @@ public class TextWidgetUtils {
         }
     }
 
-    public static StringData getIAnswerDataFromStringNumber(String answer, boolean useThousandSeparator) {
+    public static StringData getStringNumberData(String answer, boolean useThousandSeparator) {
         if (useThousandSeparator) {
             answer = ThousandsSeparatorTextWatcher.getOriginalString(answer);
         }

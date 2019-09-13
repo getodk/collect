@@ -60,7 +60,7 @@ public class ExDecimalWidget extends ExStringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return TextWidgetUtils.getIAnswerDataFromDecimal(answer.getText().toString(), false);
+        return TextWidgetUtils.getDecimalData(answer.getText().toString(), false);
     }
 
     /**

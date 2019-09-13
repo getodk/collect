@@ -51,7 +51,7 @@ public class DecimalWidget extends StringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return TextWidgetUtils.getIAnswerDataFromDecimal(answerText.getText().toString(), useThousandSeparator);
+        return TextWidgetUtils.getDecimalData(answerText.getText().toString(), useThousandSeparator);
     }
 
 }

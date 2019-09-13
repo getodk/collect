@@ -60,7 +60,7 @@ public class ExIntegerWidget extends ExStringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return TextWidgetUtils.getIAnswerDataFromInteger(answer.getText().toString(), false);
+        return TextWidgetUtils.getIntegerData(answer.getText().toString(), false);
     }
 
     /**
