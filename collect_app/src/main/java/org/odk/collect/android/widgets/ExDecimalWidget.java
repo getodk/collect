@@ -28,6 +28,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalAppsUtils;
+import org.odk.collect.android.utilities.TextWidgetUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.text.NumberFormat;
@@ -60,7 +61,7 @@ public class ExDecimalWidget extends ExStringWidget {
         fa[0] = new InputFilter.LengthFilter(15);
         answer.setFilters(fa);
 
-        Double d = getDoubleAnswerValue();
+        Double d = TextWidgetUtils.getDoubleAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue());
 
         if (d != null) {
             // truncate to 15 digits max in US locale
@@ -76,25 +77,9 @@ public class ExDecimalWidget extends ExStringWidget {
         }
     }
 
-    private Double getDoubleAnswerValue() {
-        IAnswerData dataHolder = getFormEntryPrompt().getAnswerValue();
-        Double d = null;
-        if (dataHolder != null) {
-            Object dataValue = dataHolder.getValue();
-            if (dataValue != null) {
-                if (dataValue instanceof Integer) {
-                    d = (double) (Integer) dataValue;
-                } else {
-                    d = (Double) dataValue;
-                }
-            }
-        }
-        return d;
-    }
-
     @Override
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
-        i.putExtra("value", getDoubleAnswerValue());
+        i.putExtra("value", TextWidgetUtils.getDoubleAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue()));
         try {
             ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_DECIMAL_CAPTURE);
         } catch (SecurityException e) {

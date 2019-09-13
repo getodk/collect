@@ -28,6 +28,7 @@ import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
+import org.odk.collect.android.utilities.TextWidgetUtils;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -71,7 +72,7 @@ public class DecimalWidget extends StringWidget {
         }
         answerText.setFilters(fa);
 
-        Double d = getDoubleAnswerValue();
+        Double d = TextWidgetUtils.getDoubleAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue());
 
         if (d != null) {
             // truncate to 15 digits max in US locale
@@ -93,22 +94,6 @@ public class DecimalWidget extends StringWidget {
             setFocusable(false);
             setClickable(false);
         }
-    }
-
-    private Double getDoubleAnswerValue() {
-        IAnswerData dataHolder = getFormEntryPrompt().getAnswerValue();
-        Double d = null;
-        if (dataHolder != null) {
-            Object dataValue = dataHolder.getValue();
-            if (dataValue != null) {
-                if (dataValue instanceof Integer) {
-                    d = (double) (Integer) dataValue;
-                } else {
-                    d = (Double) dataValue;
-                }
-            }
-        }
-        return d;
     }
 
     @NonNull
