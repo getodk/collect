@@ -10,6 +10,7 @@ import org.odk.collect.android.activities.GoogleDriveActivity;
 import org.odk.collect.android.activities.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderListActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.fragments.DataManagerList;
@@ -118,4 +119,6 @@ public interface AppDependencyComponent {
     DownloadFormListUtils downloadFormListUtils();
 
     ReferenceManager referenceManager();
+
+    Analytics analytics();
 }

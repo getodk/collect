@@ -187,7 +187,12 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
     private Boolean autoplayAudio(FormEntryPrompt firstPrompt) {
         AudioHelper audioHelper = getAudioHelper();
-        PromptAutoplayer promptAutoplayer = new PromptAutoplayer(audioHelper, ReferenceManager.instance());
+        PromptAutoplayer promptAutoplayer = new PromptAutoplayer(
+                audioHelper,
+                ReferenceManager.instance(),
+                Collect.getInstance().getComponent().analytics(),
+                Collect.getCurrentFormIdentifierHash()
+        );
 
         return promptAutoplayer.autoplayIfNeeded(firstPrompt);
     }

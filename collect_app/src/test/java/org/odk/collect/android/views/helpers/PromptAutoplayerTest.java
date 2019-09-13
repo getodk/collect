@@ -9,6 +9,7 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.formentry.media.PromptAutoplayer;
@@ -30,6 +31,7 @@ public class PromptAutoplayerTest {
 
     private ReferenceManager referenceManager;
     private AudioHelper audioHelper;
+    private Analytics analytics;
 
     private PromptAutoplayer autoplayer;
 
@@ -37,8 +39,9 @@ public class PromptAutoplayerTest {
     public void setup() {
         referenceManager = mock(ReferenceManager.class);
         audioHelper = mock(AudioHelper.class);
+        analytics = mock(Analytics.class);
 
-        autoplayer = new PromptAutoplayer(audioHelper, referenceManager);
+        autoplayer = new PromptAutoplayer(audioHelper, referenceManager, analytics, "formIdentifierHash");
     }
 
     @Test
@@ -51,6 +54,18 @@ public class PromptAutoplayerTest {
 
         assertThat(autoplayer.autoplayIfNeeded(prompt), equalTo(true));
         verify(audioHelper).playInOrder(asList(new Clip(prompt.getIndex().toString(), reference)));
+    }
+
+    @Test
+    public void whenPromptHasAutoplayAudio_logsAutoplayAudioEvent() throws Exception {
+        setupMockReference(referenceManager, "file://reference.mp3", "file://audio.mp3");
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withAudioURI("file://audio.mp3")
+                .withAdditionalAttribute("autoplay", "audio")
+                .build();
+
+        autoplayer.autoplayIfNeeded(prompt);
+        verify(analytics).logEvent("Prompt", "AutoplayAudio", "formIdentifierHash");
     }
 
     @Test

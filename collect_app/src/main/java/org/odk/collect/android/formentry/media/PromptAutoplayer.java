@@ -4,6 +4,7 @@ import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
@@ -22,10 +23,14 @@ public class PromptAutoplayer {
 
     private final AudioHelper audioHelper;
     private final ReferenceManager referenceManager;
+    private final Analytics analytics;
+    private final String formIdentifierHash;
 
-    public PromptAutoplayer(AudioHelper audioHelper, ReferenceManager referenceManager) {
+    public PromptAutoplayer(AudioHelper audioHelper, ReferenceManager referenceManager, Analytics analytics, String formIdentifierHash) {
         this.audioHelper = audioHelper;
         this.referenceManager = referenceManager;
+        this.analytics = analytics;
+        this.formIdentifierHash = formIdentifierHash;
     }
 
     public Boolean autoplayIfNeeded(FormEntryPrompt prompt) {
@@ -41,6 +46,7 @@ public class PromptAutoplayer {
                 return false;
             } else {
                 audioHelper.playInOrder(clips);
+                analytics.logEvent("Prompt", "AutoplayAudio", formIdentifierHash);
                 return true;
             }
 
