@@ -23,9 +23,9 @@ import android.util.TypedValue;
 import android.widget.EditText;
 
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
+import org.odk.collect.android.utilities.TextWidgetUtils;
 
 /**
  * Widget that restricts values to integers.
@@ -82,21 +82,7 @@ public class StringNumberWidget extends StringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String s = getAnswerText();
-
-        if (useThousandSeparator) {
-            s = ThousandsSeparatorTextWatcher.getOriginalString(s);
-        }
-
-        if (s.isEmpty()) {
-            return null;
-        } else {
-            try {
-                return new StringData(s);
-            } catch (Exception numberFormatException) {
-                return null;
-            }
-        }
+        return TextWidgetUtils.getIAnswerDataFromStringNumber(getAnswerText(), useThousandSeparator);
     }
 
 }
