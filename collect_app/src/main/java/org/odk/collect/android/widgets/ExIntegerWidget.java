@@ -18,9 +18,6 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.text.InputFilter;
-import android.text.InputType;
-import android.text.method.DigitsKeyListener;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
@@ -29,8 +26,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.utilities.TextWidgetUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-
-import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -49,21 +44,7 @@ public class ExIntegerWidget extends ExStringWidget {
     public ExIntegerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        answer.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
-
-        // only allows numbers and no periods
-        answer.setKeyListener(new DigitsKeyListener(true, false));
-
-        // ints can only hold 2,147,483,648. we allow 999,999,999
-        InputFilter[] fa = new InputFilter[1];
-        fa[0] = new InputFilter.LengthFilter(9);
-        answer.setFilters(fa);
-
-        Integer i = TextWidgetUtils.getIntegerAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue());
-
-        if (i != null) {
-            answer.setText(String.format(Locale.US, "%d", i));
-        }
+        TextWidgetUtils.adjustEditTextAnswerToIntegerWidget(answer, false, getFormEntryPrompt().getAnswerValue());
     }
 
     @Override
