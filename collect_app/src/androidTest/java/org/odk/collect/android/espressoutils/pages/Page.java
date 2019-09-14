@@ -89,8 +89,8 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    public T checkIsToastWithMessageDisplayed(int message) {
-        return checkIsToastWithMessageDisplayed(getTranslatedString(message));
+    public T checkIsToastWithMessageDisplayed(int stringID) {
+        return checkIsToastWithMessageDisplayed(getTranslatedString(stringID));
     }
 
     public T clickOnString(int stringID) {

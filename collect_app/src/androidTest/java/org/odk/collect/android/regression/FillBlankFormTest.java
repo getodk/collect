@@ -218,6 +218,8 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void searchExpression_ShouldDisplayWhenItContainsOtherAppearanceName() {
 
         //TestCase26
+        // This form doesn't define an instanceID and also doesn't request encryption so this case
+        // would catch regressions for https://github.com/opendatakit/collect/issues/3340
         new MainMenuPage(main).startBlankForm("CSV error Form")
                 .clickOnText("Greg Pommen")
                 .swipeToNextQuestion()
