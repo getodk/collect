@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>encrypted-no-instanceID</h:title>
+        <model>
+            <submission base64RsaPublicKey="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsrq8xrFswX/Ht1X4UVeLjupqz8hCMo+GR3hwqZdx7BQjvw9KBcCL+J6CI/2yyTqprVmeWZZu/i9qjuYcyWir3ZonZIDaVvClP8LN7e0+0SgQgEV+v9bjGVTDMQIKY2vq2ZNEbuy4UAHFLJCwGaUE370w76r/Da4YbAgfGVQn1sHarJ8Zp1o/6RE1IckxA8L2spo8oSU23KnttLIaR2qIS7mY+BkZPItyyNjulpJUZlxf4AgO7T8S4grmOC5TW4laB25vjbPw4KzB3L8bm+oK5JjlocazOiyUVDz8UwYMQke4ybEwSJbu3gl7DJzlwwQ1u3AbtjZk2T7LKUotrkVzAQIDAQAB"/>
+            <instance>
+                <encrypted-no-instanceID id="encrypted-no-instanceID">
+                    <question/>
+                </encrypted-no-instanceID>
+            </instance>
+            <bind nodeset="/encrypted-no-instanceID/question" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/encrypted-no-instanceID/question">
+            <label>Question</label>
+        </input>
+    </h:body>
+</h:html>

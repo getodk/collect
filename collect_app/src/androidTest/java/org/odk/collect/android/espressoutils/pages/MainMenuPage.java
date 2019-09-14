@@ -65,5 +65,10 @@ public class MainMenuPage extends Page<MainMenuPage> {
         onView(withId(R.id.enter_data)).perform(click());
         onData(withRowString(FormsProviderAPI.FormsColumns.DISPLAY_NAME, formName)).perform(click());
     }
+
+    public EditSavedFormPage clickEditSavedForm() {
+        onView(withId(R.id.review_data)).perform(click());
+        return new EditSavedFormPage(rule).assertOnPage();
+    }
 }
 
