@@ -30,7 +30,7 @@ public class DatabaseXPathIndexerImpl implements Indexer {
     private PredicateStep[] predicateSteps; //The predicates applied to the expression
     private IndexerType indexerType; // Used to determine how expression would be refIsIndexed
     private List<String> dbColumns;
-    private boolean loaded;
+    private boolean loaded = false;
     private String expressionString;
     private String resultRefString;
     private Map<String, ContentValues> insertValuesMap = new HashMap();

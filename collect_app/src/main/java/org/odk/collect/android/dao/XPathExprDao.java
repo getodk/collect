@@ -132,10 +132,11 @@ public class XPathExprDao {
         Cursor cursor = null;
         try {
 
-            cursor = db.rawQuery("select count(*) from " + XPathDatabaseHelper.XPATH_TABLE_NAME + " where " + XPathProviderAPI.XPathsColumns.EVAL_EXPR
+            cursor = db.rawQuery("select count(*) as row_count from " + XPathDatabaseHelper.XPATH_TABLE_NAME + " where " + XPathProviderAPI.XPathsColumns.EVAL_EXPR
 
                     + " = \"" + expressionRef.toString(false) +"\";", null);
-            return cursor.getCount();
+            int rowC0unt = (cursor.getCount() > 0 && cursor.moveToNext()) ? cursor.getInt(cursor.getColumnIndex("row_count")) : 0;
+            return rowC0unt;
         }
         catch(Exception ex){
             ex.printStackTrace();
