@@ -37,8 +37,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * does not launch, enable the text area for regular data entry.
  * <p>
  * See {@link org.odk.collect.android.widgets.ExStringWidget} for usage.
- *
- * @author mitchellsundt@gmail.com
  */
 public class ExIntegerWidget extends ExStringWidget {
 

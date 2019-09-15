@@ -30,9 +30,6 @@ import org.odk.collect.android.utilities.SoftKeyboardUtils;
 
 /**
  * The most basic widget that allows for entry of any text.
- *
- * @author Carl Hartung (carlhartung@gmail.com)
- * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
 public class StringWidget extends QuestionWidget {

@@ -92,8 +92,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  *      &lt;label ref="jr:itext('textAnswer')"/&gt;
  *    &lt;/input&gt;
  * </pre>
- *
- * @author mitchellsundt@gmail.com
  */
 @SuppressLint("ViewConstructor")
 public class ExStringWidget extends QuestionWidget implements BinaryWidget {
