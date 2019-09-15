@@ -20,6 +20,7 @@ import android.content.Context;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.utilities.TextWidgetUtils;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 /**
  * A widget that restricts values to floating point numbers.
@@ -29,9 +30,9 @@ public class DecimalWidget extends StringWidget {
 
     boolean useThousandSeparator;
 
-    public DecimalWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
+    public DecimalWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
         super(context, prompt, readOnlyOverride);
-        this.useThousandSeparator = useThousandSeparator;
+        this.useThousandSeparator = WidgetAppearanceUtils.useThousandSeparator(prompt);
 
         TextWidgetUtils.adjustEditTextAnswerToDecimalWidget(answerText, useThousandSeparator, getFormEntryPrompt().getAnswerValue());
     }
