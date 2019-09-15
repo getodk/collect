@@ -48,7 +48,7 @@ public class ExIntegerWidget extends ExStringWidget {
 
     @Override
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
-        i.putExtra("value", TextWidgetUtils.getIntegerAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue()));
+        i.putExtra(DATA_NAME, TextWidgetUtils.getIntegerAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue()));
         try {
             ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_INT_CAPTURE);
         } catch (SecurityException e) {

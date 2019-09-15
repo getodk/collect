@@ -95,6 +95,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     // If an extra with this key is specified, it will be parsed as a URI and used as intent data
     private static final String URI_KEY = "uri_data";
+    protected static final String DATA_NAME = "value";
 
     protected EditText answer;
     private boolean hasExApp = true;
@@ -134,7 +135,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     }
 
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
-        i.putExtra("value", getFormEntryPrompt().getAnswerText());
+        i.putExtra(DATA_NAME, getFormEntryPrompt().getAnswerText());
         try {
             ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_STRING_CAPTURE);
         } catch (SecurityException e) {
