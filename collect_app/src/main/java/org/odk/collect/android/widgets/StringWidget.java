@@ -19,7 +19,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import android.text.Selection;
-import android.view.KeyEvent;
 import android.widget.EditText;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -78,11 +77,6 @@ public class StringWidget extends QuestionWidget {
         } else {
             SoftKeyboardUtils.hideSoftKeyboard(answerText);
         }
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return !event.isAltPressed() && super.onKeyDown(keyCode, event);
     }
 
     @Override
