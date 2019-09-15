@@ -27,13 +27,11 @@ import org.odk.collect.android.utilities.WidgetAppearanceUtils;
  */
 @SuppressLint("ViewConstructor")
 public class DecimalWidget extends StringWidget {
-
     boolean useThousandSeparator;
 
     public DecimalWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
         super(context, prompt, readOnlyOverride);
         this.useThousandSeparator = WidgetAppearanceUtils.useThousandSeparator(prompt);
-
         TextWidgetUtils.adjustEditTextAnswerToDecimalWidget(answerText, useThousandSeparator, getFormEntryPrompt().getAnswerValue());
     }
 

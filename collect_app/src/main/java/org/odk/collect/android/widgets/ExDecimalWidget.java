@@ -42,7 +42,6 @@ public class ExDecimalWidget extends ExStringWidget {
 
     public ExDecimalWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-
         TextWidgetUtils.adjustEditTextAnswerToDecimalWidget(answer, false, getFormEntryPrompt().getAnswerValue());
     }
 
@@ -69,7 +68,6 @@ public class ExDecimalWidget extends ExStringWidget {
     public void setBinaryData(Object answer) {
         DecimalData decimalData = ExternalAppsUtils.asDecimalData(answer);
         this.answer.setText(decimalData == null ? null : decimalData.getValue().toString());
-
         widgetValueChanged();
     }
 }

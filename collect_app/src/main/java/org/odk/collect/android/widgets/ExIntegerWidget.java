@@ -42,7 +42,6 @@ public class ExIntegerWidget extends ExStringWidget {
 
     public ExIntegerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-
         TextWidgetUtils.adjustEditTextAnswerToIntegerWidget(answer, false, getFormEntryPrompt().getAnswerValue());
     }
 
@@ -69,7 +68,6 @@ public class ExIntegerWidget extends ExStringWidget {
     public void setBinaryData(Object answer) {
         IntegerData integerData = ExternalAppsUtils.asIntegerData(answer);
         this.answer.setText(integerData == null ? null : integerData.getValue().toString());
-
         widgetValueChanged();
     }
 }

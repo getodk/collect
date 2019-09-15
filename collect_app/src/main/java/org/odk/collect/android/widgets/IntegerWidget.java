@@ -27,13 +27,11 @@ import org.odk.collect.android.utilities.WidgetAppearanceUtils;
  */
 @SuppressLint("ViewConstructor")
 public class IntegerWidget extends StringWidget {
-
     boolean useThousandSeparator;
 
     public IntegerWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
         super(context, prompt, readOnlyOverride);
         this.useThousandSeparator = WidgetAppearanceUtils.useThousandSeparator(prompt);
-
         TextWidgetUtils.adjustEditTextAnswerToIntegerWidget(answerText, useThousandSeparator, getFormEntryPrompt().getAnswerValue());
     }
 

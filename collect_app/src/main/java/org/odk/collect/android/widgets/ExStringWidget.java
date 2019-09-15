@@ -105,7 +105,6 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     private ActivityAvailability activityAvailability;
 
     public ExStringWidget(Context context, FormEntryPrompt prompt) {
-
         super(context, prompt);
 
         // set text formatting
@@ -113,11 +112,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         textBackground = answer.getBackground();
         answer.setBackground(null);
         answer.setTextColor(themeUtils.getPrimaryTextColor());
-
-        String s = prompt.getAnswerText();
-        if (s != null) {
-            answer.setText(s);
-        }
+        answer.setText(prompt.getAnswerText());
 
         String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
         String buttonText = (v != null) ? v : context.getString(R.string.launch_app);
