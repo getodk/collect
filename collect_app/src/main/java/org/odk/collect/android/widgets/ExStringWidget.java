@@ -23,7 +23,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -187,11 +186,6 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return !event.isAltPressed() && super.onKeyDown(keyCode, event);
-    }
-
-    @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         answer.setOnLongClickListener(l);
         launchIntentButton.setOnLongClickListener(l);
@@ -278,12 +272,10 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
             answer.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
                 }
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-
                 }
 
                 @Override
