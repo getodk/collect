@@ -23,8 +23,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.method.TextKeyListener;
-import android.text.method.TextKeyListener.Capitalize;
 import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.EditText;
