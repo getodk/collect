@@ -62,16 +62,14 @@ public class WidgetFactory {
                         } else if (appearance.equals(WidgetAppearanceUtils.BEARING)) {
                             questionWidget = new BearingWidget(context, fep);
                         } else {
-                             questionWidget = new DecimalWidget(context, fep, readOnlyOverride,
-                                    appearance.contains(WidgetAppearanceUtils.THOUSANDS_SEP));
+                             questionWidget = new DecimalWidget(context, fep, readOnlyOverride);
                         }
                         break;
                     case Constants.DATATYPE_INTEGER:
                         if (appearance.startsWith(WidgetAppearanceUtils.EX)) {
                             questionWidget = new ExIntegerWidget(context, fep);
                         } else {
-                            questionWidget = new IntegerWidget(context, fep, readOnlyOverride,
-                                    appearance.contains(WidgetAppearanceUtils.THOUSANDS_SEP));
+                            questionWidget = new IntegerWidget(context, fep, readOnlyOverride);
                         }
                         break;
                     case Constants.DATATYPE_GEOPOINT:
@@ -95,8 +93,7 @@ public class WidgetFactory {
                         } else if (appearance.startsWith(WidgetAppearanceUtils.EX)) {
                             questionWidget = new ExStringWidget(context, fep);
                         } else if (appearance.contains(WidgetAppearanceUtils.NUMBERS)) {
-                            questionWidget = new StringNumberWidget(context, fep, readOnlyOverride,
-                                    appearance.contains(WidgetAppearanceUtils.THOUSANDS_SEP));
+                            questionWidget = new StringNumberWidget(context, fep, readOnlyOverride);
                         } else if (appearance.equals(WidgetAppearanceUtils.URL)) {
                             questionWidget = new UrlWidget(context, fep);
                         } else {
