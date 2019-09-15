@@ -23,8 +23,6 @@ import org.odk.collect.android.utilities.TextWidgetUtils;
 
 /**
  * A widget that restricts values to floating point numbers.
- *
- * @author Carl Hartung (carlhartung@gmail.com)
  */
 @SuppressLint("ViewConstructor")
 public class DecimalWidget extends StringWidget {

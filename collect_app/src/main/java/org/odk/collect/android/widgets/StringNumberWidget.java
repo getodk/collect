@@ -23,8 +23,6 @@ import org.odk.collect.android.utilities.TextWidgetUtils;
 
 /**
  * Widget that restricts values to integers.
- *
- * @author Carl Hartung (carlhartung@gmail.com)
  */
 @SuppressLint("ViewConstructor")
 public class StringNumberWidget extends StringWidget {
