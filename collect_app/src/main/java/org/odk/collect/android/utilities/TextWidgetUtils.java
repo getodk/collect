@@ -17,6 +17,9 @@ import java.util.Locale;
 
 public class TextWidgetUtils {
 
+    private TextWidgetUtils() {
+    }
+
     public static Integer getIntegerAnswerValueFromIAnswerData(IAnswerData dataHolder) {
         if (dataHolder != null) {
             Object dataValue = dataHolder.getValue();
