@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.Editable;
+import android.text.Selection;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
@@ -287,5 +288,6 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
                 .show();
         Timber.d(toastText);
         focusAnswer();
+        Selection.setSelection(answer.getText(), answer.getText().toString().length());
     }
 }
