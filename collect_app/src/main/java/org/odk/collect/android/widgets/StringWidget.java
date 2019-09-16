@@ -40,7 +40,10 @@ public class StringWidget extends QuestionWidget {
 
         readOnly = prompt.isReadOnly() || readOnlyOverride;
         answerText = getAnswerEditText(readOnly, getFormEntryPrompt());
+        setUpLayout();
+    }
 
+    protected void setUpLayout() {
         setDisplayValueFromModel();
         addAnswerView(answerText);
     }

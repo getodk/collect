@@ -28,7 +28,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.parser.XPathSyntaxException;
@@ -91,34 +90,33 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * </pre>
  */
 @SuppressLint("ViewConstructor")
-public class ExStringWidget extends QuestionWidget implements BinaryWidget {
+public class ExStringWidget extends StringWidget implements BinaryWidget {
     // If an extra with this key is specified, it will be parsed as a URI and used as intent data
     private static final String URI_KEY = "uri_data";
     protected static final String DATA_NAME = "value";
 
-    protected EditText answer;
     private boolean hasExApp = true;
-    private final Button launchIntentButton;
+    private Button launchIntentButton;
 
     private ActivityAvailability activityAvailability;
 
     public ExStringWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+        super(context, prompt, true);
+    }
 
-        // set text formatting
-        answer = getAnswerEditText(getFormEntryPrompt().isReadOnly() || hasExApp, getFormEntryPrompt());
-        answer.setText(prompt.getAnswerText());
+    @Override
+    protected void setUpLayout() {
+        answerText.setText(getFormEntryPrompt().getAnswerText());
 
         String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
-        String buttonText = (v != null) ? v : context.getString(R.string.launch_app);
+        String buttonText = (v != null) ? v : getContext().getString(R.string.launch_app);
 
         launchIntentButton = getSimpleButton(buttonText);
 
-        // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(launchIntentButton);
-        answerLayout.addView(answer);
+        answerLayout.addView(answerText);
         addAnswerView(answerLayout);
 
         Collect.getInstance().logRemoteAnalytics("WidgetType", "ExternalApp", Collect.getCurrentFormIdentifierHash());
@@ -134,37 +132,25 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         }
     }
 
-    @Override
-    public void clearAnswer() {
-        answer.setText(null);
-        widgetValueChanged();
-    }
-
-    @Override
-    public IAnswerData getAnswer() {
-        String s = answer.getText().toString();
-        return !s.isEmpty() ? new StringData(s) : null;
-    }
-
     /**
      * Allows answer to be set externally in {@link FormEntryActivity}.
      */
     @Override
     public void setBinaryData(Object answer) {
         StringData stringData = ExternalAppsUtils.asStringData(answer);
-        this.answer.setText(stringData == null ? null : stringData.getValue().toString());
+        answerText.setText(stringData == null ? null : stringData.getValue().toString());
         widgetValueChanged();
     }
 
     @Override
     public void setFocus(Context context) {
         if (hasExApp) {
-            SoftKeyboardUtils.hideSoftKeyboard(answer);
+            SoftKeyboardUtils.hideSoftKeyboard(answerText);
             // focus on launch button
             launchIntentButton.requestFocus();
         } else {
             if (!getFormEntryPrompt().isReadOnly()) {
-                SoftKeyboardUtils.showSoftKeyboard(answer);
+                SoftKeyboardUtils.showSoftKeyboard(answerText);
             /*
              * If you do a multi-question screen after a "add another group" dialog, this won't
              * automatically pop up. It's an Android issue.
@@ -176,21 +162,21 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
              * is focused before the dialog pops up, everything works fine. great.
              */
             } else {
-                SoftKeyboardUtils.hideSoftKeyboard(answer);
+                SoftKeyboardUtils.hideSoftKeyboard(answerText);
             }
         }
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        answer.setOnLongClickListener(l);
+        answerText.setOnLongClickListener(l);
         launchIntentButton.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        answer.cancelLongPress();
+        answerText.cancelLongPress();
         launchIntentButton.cancelLongPress();
     }
 
@@ -254,17 +240,17 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     }
 
     private void focusAnswer() {
-        SoftKeyboardUtils.showSoftKeyboard(answer);
+        SoftKeyboardUtils.showSoftKeyboard(answerText);
     }
 
     private void onException(String toastText) {
         hasExApp = false;
         if (!getFormEntryPrompt().isReadOnly()) {
-            answer.setBackground((new EditText(getContext())).getBackground());
-            answer.setFocusable(true);
-            answer.setFocusableInTouchMode(true);
-            answer.setEnabled(true);
-            answer.addTextChangedListener(new TextWatcher() {
+            answerText.setBackground((new EditText(getContext())).getBackground());
+            answerText.setFocusable(true);
+            answerText.setFocusableInTouchMode(true);
+            answerText.setEnabled(true);
+            answerText.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 }
@@ -288,6 +274,6 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
                 .show();
         Timber.d(toastText);
         focusAnswer();
-        Selection.setSelection(answer.getText(), answer.getText().toString().length());
+        Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
     }
 }
