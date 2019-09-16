@@ -5,8 +5,6 @@ import androidx.annotation.NonNull;
 import org.javarosa.core.model.data.IntegerData;
 import org.odk.collect.android.widgets.base.GeneralStringWidgetTest;
 
-import java.util.Random;
-
 /**
  * @author James Knight
  */
@@ -15,9 +13,7 @@ public class IntegerWidgetTest extends GeneralStringWidgetTest<IntegerWidget, In
     @NonNull
     @Override
     public IntegerWidget createWidget() {
-        Random random = new Random();
-        boolean useThousandSeparator = random.nextBoolean();
-        return new IntegerWidget(activity, formEntryPrompt, false, useThousandSeparator);
+        return new IntegerWidget(activity, formEntryPrompt, false);
     }
 
     @NonNull
