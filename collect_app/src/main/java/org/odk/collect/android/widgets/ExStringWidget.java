@@ -107,11 +107,7 @@ public class ExStringWidget extends StringWidget implements BinaryWidget {
     @Override
     protected void setUpLayout() {
         answerText.setText(getFormEntryPrompt().getAnswerText());
-
-        String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
-        String buttonText = (v != null) ? v : getContext().getString(R.string.launch_app);
-
-        launchIntentButton = getSimpleButton(buttonText);
+        launchIntentButton = getSimpleButton(getButtonText());
 
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
@@ -120,6 +116,11 @@ public class ExStringWidget extends StringWidget implements BinaryWidget {
         addAnswerView(answerLayout);
 
         Collect.getInstance().logRemoteAnalytics("WidgetType", "ExternalApp", Collect.getCurrentFormIdentifierHash());
+    }
+
+    private String getButtonText() {
+        String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
+        return v != null ? v : getContext().getString(R.string.launch_app);
     }
 
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
