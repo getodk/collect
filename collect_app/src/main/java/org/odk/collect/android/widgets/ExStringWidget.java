@@ -19,7 +19,6 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -99,7 +98,6 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     protected EditText answer;
     private boolean hasExApp = true;
     private final Button launchIntentButton;
-    private final Drawable textBackground;
 
     private ActivityAvailability activityAvailability;
 
@@ -108,9 +106,6 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
 
         // set text formatting
         answer = getAnswerEditText(getFormEntryPrompt().isReadOnly() || hasExApp, getFormEntryPrompt());
-        textBackground = answer.getBackground();
-        answer.setBackground(null);
-        answer.setTextColor(themeUtils.getPrimaryTextColor());
         answer.setText(prompt.getAnswerText());
 
         String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
@@ -264,11 +259,10 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     private void onException(String toastText) {
         hasExApp = false;
         if (!getFormEntryPrompt().isReadOnly()) {
-            answer.setBackground(textBackground);
+            answer.setBackground((new EditText(getContext())).getBackground());
             answer.setFocusable(true);
             answer.setFocusableInTouchMode(true);
             answer.setEnabled(true);
-
             answer.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
