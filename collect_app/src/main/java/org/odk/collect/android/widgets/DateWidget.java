@@ -32,10 +32,10 @@ import android.widget.TextView;
 
 import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.fragments.dialogs.BikramSambatDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CopticDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
@@ -73,7 +73,7 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
 
     private DatePickerDetails datePickerDetails;
 
-    public DateWidget(Context context, FormEntryPrompt prompt) {
+    public DateWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
         createWidget();
     }

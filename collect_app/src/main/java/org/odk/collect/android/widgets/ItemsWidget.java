@@ -19,10 +19,10 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 
 import org.javarosa.core.model.SelectChoice;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ScreenContext;
 
 import java.util.List;
@@ -35,14 +35,14 @@ import java.util.List;
 public abstract class ItemsWidget extends QuestionWidget {
     List<SelectChoice> items;
 
-    public ItemsWidget(Context context, FormEntryPrompt prompt) {
+    public ItemsWidget(Context context, QuestionDetails prompt) {
         this(context, prompt, new AudioHelper(
                 ((ScreenContext) context).getActivity(),
                 ((ScreenContext) context).getViewLifecycle()
         ));
     }
 
-    public ItemsWidget(Context context, FormEntryPrompt prompt, AudioHelper audioHelper) {
+    public ItemsWidget(Context context, QuestionDetails prompt, AudioHelper audioHelper) {
         super(context, prompt, audioHelper);
         readItems();
     }

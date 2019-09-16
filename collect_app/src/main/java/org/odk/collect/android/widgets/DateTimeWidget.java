@@ -21,8 +21,8 @@ import android.widget.LinearLayout;
 
 import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.LocalDateTime;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
@@ -40,7 +40,7 @@ public class DateTimeWidget extends QuestionWidget implements BinaryWidget, Widg
     private DateWidget dateWidget;
     private TimeWidget timeWidget;
 
-    public DateTimeWidget(Context context, FormEntryPrompt prompt) {
+    public DateTimeWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
 
         setGravity(Gravity.START);

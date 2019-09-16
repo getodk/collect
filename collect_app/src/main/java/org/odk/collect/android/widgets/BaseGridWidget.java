@@ -35,11 +35,11 @@ import androidx.appcompat.widget.AppCompatRadioButton;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.external.ExternalSelectChoice;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
@@ -73,11 +73,11 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
     List<Integer> selectedItems = new ArrayList<>();
     View[] itemViews;
 
-    public BaseGridWidget(Context context, FormEntryPrompt prompt, boolean quickAdvance, AudioHelper audioHelper) {
-        super(context, prompt, audioHelper);
+    public BaseGridWidget(Context context, QuestionDetails questionDetails, boolean quickAdvance, AudioHelper audioHelper) {
+        super(context, questionDetails, audioHelper);
 
         this.quickAdvance = quickAdvance;
-        noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(prompt) || WidgetAppearanceUtils.isNoButtonsAppearance(prompt);
+        noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(questionDetails.getPrompt()) || WidgetAppearanceUtils.isNoButtonsAppearance(questionDetails.getPrompt());
         itemViews = new View[items.size()];
 
         setUpItems();

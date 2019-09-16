@@ -21,7 +21,7 @@ import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
-import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
@@ -35,13 +35,13 @@ public class GridWidget extends BaseGridWidget {
 
     private final AdvanceToNextListener listener;
 
-    public GridWidget(Context context, FormEntryPrompt prompt, final boolean quickAdvance, AudioHelper audioHelper) {
-        super(context, prompt, quickAdvance, audioHelper);
+    public GridWidget(Context context, QuestionDetails questionDetails, final boolean quickAdvance, AudioHelper audioHelper) {
+        super(context, questionDetails, quickAdvance, audioHelper);
         listener = context instanceof AdvanceToNextListener ? (AdvanceToNextListener) context : null;
     }
 
-    public GridWidget(Context context, FormEntryPrompt prompt, final boolean quickAdvance) {
-        this(context, prompt, quickAdvance, new AudioHelper(
+    public GridWidget(Context context, QuestionDetails questionDetails, final boolean quickAdvance) {
+        this(context, questionDetails, quickAdvance, new AudioHelper(
                 ((ScreenContext) context).getActivity(),
                 ((ScreenContext) context).getViewLifecycle()
         ));

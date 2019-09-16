@@ -11,6 +11,7 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -42,7 +43,7 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
     @NonNull
     @Override
     public GridMultiWidget createWidget() {
-        return new GridMultiWidget(activity, formEntryPrompt, audioHelper);
+        return new GridMultiWidget(activity, new QuestionDetails(formEntryPrompt), audioHelper);
     }
 
     @Rule

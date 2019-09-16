@@ -29,13 +29,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.form.api.FormEntryCaption;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.formentry.AudioVideoImageTextLabel;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
@@ -58,14 +58,14 @@ public abstract class SelectWidget extends ItemsWidget {
     protected LinearLayout answerLayout;
     protected int numColumns = 1;
 
-    public SelectWidget(Context context, FormEntryPrompt prompt) {
+    public SelectWidget(Context context, QuestionDetails prompt) {
         this(context, prompt, new AudioHelper(
                 ((ScreenContext) context).getActivity(),
                 ((ScreenContext) context).getViewLifecycle()
         ));
     }
 
-    public SelectWidget(Context context, FormEntryPrompt prompt, AudioHelper audioHelper) {
+    public SelectWidget(Context context, QuestionDetails prompt, AudioHelper audioHelper) {
         super(context, prompt, audioHelper);
         answerLayout = new LinearLayout(context);
         answerLayout.setOrientation(LinearLayout.VERTICAL);

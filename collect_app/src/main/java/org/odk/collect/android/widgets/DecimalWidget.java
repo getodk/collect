@@ -18,7 +18,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
 
 /**
@@ -27,9 +27,9 @@ import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
 @SuppressLint("ViewConstructor")
 public class DecimalWidget extends StringWidget {
 
-    public DecimalWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
-        super(context, prompt, readOnlyOverride);
-        StringWidgetUtils.adjustEditTextAnswerToDecimalWidget(answerText, prompt);
+    public DecimalWidget(Context context, QuestionDetails questionDetails, boolean readOnlyOverride) {
+        super(context, questionDetails, readOnlyOverride);
+        StringWidgetUtils.adjustEditTextAnswerToDecimalWidget(answerText, questionDetails.getPrompt());
     }
 
     @Override

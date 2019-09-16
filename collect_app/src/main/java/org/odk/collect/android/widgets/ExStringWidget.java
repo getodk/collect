@@ -29,13 +29,13 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.javarosa.core.model.data.StringData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.external.ExternalAppsUtils;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.ObjectUtils;
@@ -100,8 +100,8 @@ public class ExStringWidget extends StringWidget implements BinaryWidget {
 
     private ActivityAvailability activityAvailability;
 
-    public ExStringWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt, true);
+    public ExStringWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails, true);
     }
 
     @Override

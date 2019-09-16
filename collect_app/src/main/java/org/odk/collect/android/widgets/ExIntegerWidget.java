@@ -21,10 +21,10 @@ import android.content.Intent;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.external.ExternalAppsUtils;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -40,9 +40,9 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  */
 public class ExIntegerWidget extends ExStringWidget {
 
-    public ExIntegerWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
-        StringWidgetUtils.adjustEditTextAnswerToIntegerWidget(answerText, prompt);
+    public ExIntegerWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails);
+        StringWidgetUtils.adjustEditTextAnswerToIntegerWidget(answerText, questionDetails.getPrompt());
     }
 
     @Override

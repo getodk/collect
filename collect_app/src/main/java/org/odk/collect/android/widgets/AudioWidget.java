@@ -32,10 +32,10 @@ import androidx.core.view.ViewCompat;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
@@ -74,12 +74,12 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
     private String binaryName;
 
-    public AudioWidget(Context context, FormEntryPrompt prompt) {
+    public AudioWidget(Context context, QuestionDetails prompt) {
         this(context, prompt, new FileUtil(), new MediaUtil(), new AudioControllerView(context));
     }
 
-    AudioWidget(Context context, FormEntryPrompt prompt, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioControllerView audioController) {
-        super(context, prompt);
+    AudioWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioControllerView audioController) {
+        super(context, questionDetails);
 
         this.fileUtil = fileUtil;
         this.mediaUtil = mediaUtil;
@@ -99,7 +99,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
         hideButtonsIfNeeded();
 
-        binaryName = prompt.getAnswerText();
+        binaryName = questionDetails.getPrompt().getAnswerText();
         updatePlayerMedia();
     }
 

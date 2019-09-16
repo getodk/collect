@@ -19,9 +19,9 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.osm.OSMTag;
 import org.javarosa.core.model.osm.OSMTagItem;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtils;
@@ -58,8 +58,8 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
     private final String formFileName;
     private String osmFileName;
 
-    public OSMWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+    public OSMWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails);
 
         FormController formController = Collect.getInstance().getFormController();
 
@@ -74,10 +74,10 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         errorTextView.setText(R.string.invalid_osm_data);
 
         // Determine the tags required
-        osmRequiredTags = prompt.getQuestion().getOsmTags();
+        osmRequiredTags = questionDetails.getPrompt().getQuestion().getOsmTags();
 
         // If an OSM File has already been saved, get the name.
-        osmFileName = prompt.getAnswerText();
+        osmFileName = questionDetails.getPrompt().getAnswerText();
 
         // Setup Launch OpenMapKit Button
         launchOpenMapKitButton = getSimpleButton(R.id.simple_button);

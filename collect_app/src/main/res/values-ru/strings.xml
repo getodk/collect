@@ -249,7 +249,7 @@
   <string name="fs_delete_media_path_if_file_error">Не удалось удалить \'%s\'. Пожалуйста, удалите файл вручную и загрузите опросник заново.</string>
   <string name="fs_create_media_folder_error">Не удалось создать директорию media \'%s\'.</string>
   <string name="fs_file_copy_error">Не удалось скопировать \'%1$s\' в \'%2$s\'. Причина: %3$s</string>
-  <string name="survey_internal_error">Внутренняя ошибка: step to prompt failed.</string>
+  <string name="survey_internal_error">Внутренняя ошибка: step to questionDetails failed.</string>
   <string name="survey_multiple_forms_error">Вы загрузили два разных опросника с одинаковым ID и версией. Возможно, это один и тот же опросник загруженный в разное время или на разные сервера. В любом случае, вам следует удалить один из них.</string>
   <string name="survey_loading_reading_form_message">Чтение описания опросника…</string>
   <string name="survey_loading_reading_data_message">Чтение данных опроса…</string>

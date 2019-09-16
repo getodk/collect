@@ -3,6 +3,7 @@ package org.odk.collect.android.widgets;
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
@@ -105,6 +106,6 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
     @NonNull
     @Override
     public GridWidget createWidget() {
-        return new GridWidget(activity, formEntryPrompt, false, audioHelper);
+        return new GridWidget(activity, new QuestionDetails(formEntryPrompt), false, audioHelper);
     }
 }

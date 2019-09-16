@@ -18,6 +18,7 @@ import android.content.Context;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 /**
@@ -34,19 +35,20 @@ public class WidgetFactory {
     /**
      * Returns the appropriate QuestionWidget for the given FormEntryPrompt.
      *
-     * @param fep              prompt element to be rendered
+     * @param prompt              prompt element to be rendered
      * @param context          Android context
      * @param readOnlyOverride a flag to be ORed with JR readonly attribute.
      */
-    public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context,
+    public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, Context context,
                                                         boolean readOnlyOverride) {
 
-        String appearance = WidgetAppearanceUtils.getSanitizedAppearanceHint(fep);
+        String appearance = WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt);
+        QuestionDetails fep = new QuestionDetails(prompt);
 
         final QuestionWidget questionWidget;
-        switch (fep.getControlType()) {
+        switch (prompt.getControlType()) {
             case Constants.CONTROL_INPUT:
-                switch (fep.getDataType()) {
+                switch (prompt.getDataType()) {
                     case Constants.DATATYPE_DATE_TIME:
                         questionWidget = new DateTimeWidget(context, fep);
                         break;
@@ -85,7 +87,7 @@ public class WidgetFactory {
                         questionWidget = new BarcodeWidget(context, fep);
                         break;
                     case Constants.DATATYPE_TEXT:
-                        String query = fep.getQuestion().getAdditionalAttribute(null, "query");
+                        String query = prompt.getQuestion().getAdditionalAttribute(null, "query");
                         if (query != null) {
                             questionWidget = new ItemsetWidget(context, fep, appearance.startsWith(WidgetAppearanceUtils.QUICK));
                         } else if (appearance.startsWith(WidgetAppearanceUtils.PRINTER)) {
@@ -189,7 +191,7 @@ public class WidgetFactory {
                 if (appearance.startsWith(WidgetAppearanceUtils.RATING)) {
                     questionWidget = new RatingWidget(context, fep);
                 } else {
-                    switch (fep.getDataType()) {
+                    switch (prompt.getDataType()) {
                         case Constants.DATATYPE_INTEGER:
                             questionWidget = new RangeIntegerWidget(context, fep);
                             break;

@@ -163,7 +163,7 @@
   <string name="select_answer">Chagua jibu</string>
   <string name="save_form_as">Andika jina la fomu</string>
   <string name="save_as_error">Jina la Kuhifadhi halipaswi kuwa tupu!</string>
-  <string name="edit_prompt">Hariri prompt</string>
+  <string name="edit_prompt">Hariri questionDetails</string>
   <string name="selected_google_account_text">Akaunti ya Google</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
   <string name="server_platform_other">Nyingine</string>
