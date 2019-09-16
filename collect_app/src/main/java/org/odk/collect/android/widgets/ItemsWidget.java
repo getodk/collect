@@ -20,10 +20,8 @@ import android.content.Context;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.xpath.expr.XPathFuncExpr;
-import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.ScreenContext;
 
 import java.util.List;
 
@@ -33,17 +31,11 @@ import java.util.List;
  * like: SelectOne, SelectMultiple, Ranking.
  */
 public abstract class ItemsWidget extends QuestionWidget {
+
     List<SelectChoice> items;
 
     public ItemsWidget(Context context, QuestionDetails prompt) {
-        this(context, prompt, new AudioHelper(
-                ((ScreenContext) context).getActivity(),
-                ((ScreenContext) context).getViewLifecycle()
-        ));
-    }
-
-    public ItemsWidget(Context context, QuestionDetails prompt, AudioHelper audioHelper) {
-        super(context, prompt, audioHelper);
+        super(context, prompt);
         readItems();
     }
 

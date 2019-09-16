@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -52,9 +51,8 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.AudioVideoImageTextLabel;
+import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -64,7 +62,6 @@ import org.odk.collect.android.utilities.AnimateUtils;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
-import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -78,11 +75,14 @@ import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
 import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
 import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
+
+import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 
 public abstract class QuestionWidget
         extends RelativeLayout
@@ -104,17 +104,20 @@ public abstract class QuestionWidget
     private Bundle state;
     protected ThemeUtils themeUtils;
     private int playColor;
-    private final ReferenceManager referenceManager;
-    private final AudioHelper audioHelper;
+    protected final AudioHelper audioHelper;
 
     private WidgetValueChangedListener valueChangedListener;
 
-    public QuestionWidget(Context context, QuestionDetails questionDetails, AudioHelper audioHelper) {
-        super(context);
-        this.audioHelper = audioHelper;
+    @Inject
+    public ReferenceManager referenceManager;
 
-        AppDependencyComponent component = DaggerUtils.getComponent((Activity) getContext());
-        this.referenceManager = component.referenceManager();
+    @Inject
+    public AudioHelperFactory audioHelperFactory;
+
+    public QuestionWidget(Context context, QuestionDetails questionDetails) {
+        super(context);
+        getComponent(context).inject(this);
+        this.audioHelper = audioHelperFactory.create(context);
 
         themeUtils = new ThemeUtils(context);
         playColor = themeUtils.getAccentColor();
@@ -152,13 +155,6 @@ public abstract class QuestionWidget
         if (context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
             registerToClearAnswerOnLongPress((FormEntryActivity) context);
         }
-    }
-
-    public QuestionWidget(Context context, QuestionDetails questionDetails) {
-        this(context, questionDetails, new AudioHelper(
-                ((ScreenContext) context).getActivity(),
-                ((ScreenContext) context).getViewLifecycle()
-        ));
     }
 
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {

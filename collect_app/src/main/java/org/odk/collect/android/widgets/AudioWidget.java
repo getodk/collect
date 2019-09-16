@@ -34,13 +34,11 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioControllerView;
-import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
-import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
@@ -204,8 +202,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
     private void updatePlayerMedia() {
         if (binaryName != null) {
-            ScreenContext screenContext = (ScreenContext) getContext();
-            AudioHelper audioHelper = new AudioHelper(screenContext.getActivity(), screenContext.getViewLifecycle());
             audioHelper.setAudio(audioController, getAudioFile().getAbsolutePath(), String.valueOf(ViewCompat.generateViewId()));
             audioController.showPlayer();
         } else {

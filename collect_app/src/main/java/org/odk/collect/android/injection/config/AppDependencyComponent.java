@@ -28,6 +28,7 @@ import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.FormDownloader;
+import org.odk.collect.android.widgets.QuestionWidget;
 
 import javax.inject.Singleton;
 
@@ -107,6 +108,8 @@ public interface AppDependencyComponent {
     void inject(GoogleDriveActivity googleDriveActivity);
 
     void inject(GoogleSheetsUploaderActivity googleSheetsUploaderActivity);
+
+    void inject(QuestionWidget questionWidget);
 
     SmsManager smsManager();
 
