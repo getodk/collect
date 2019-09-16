@@ -3,11 +3,11 @@ package org.odk.collect.android.formentry.backgroundlocation;
 import android.location.Location;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.logic.AuditConfig;
 import org.odk.collect.android.logic.AuditEvent;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.utilities.PlayServicesUtil;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 
@@ -31,7 +31,7 @@ public class BackgroundLocationHelper {
     }
 
     boolean arePlayServicesAvailable() {
-        return LocationClients.areGooglePlayServicesAvailable(Collect.getInstance().getApplicationContext());
+        return PlayServicesUtil.isGooglePlayServicesAvailable(Collect.getInstance().getApplicationContext());
     }
 
     /**

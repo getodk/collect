@@ -73,7 +73,6 @@ public final class ContentResolverHelper {
         return formPath;
     }
 
-
     /**
      * Using contentResolver to get a file's extension by the uri
      *

@@ -21,7 +21,6 @@ import android.location.Location;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.BDDMockito;
 import org.mockito.MockitoAnnotations;
 import org.odk.collect.android.logic.AuditConfig;
 import org.powermock.api.mockito.PowerMockito;
@@ -123,9 +122,7 @@ public class AuditEventLoggerTest {
         auditEventLogger.addLocation(location5);
         assertEquals(5, auditEventLogger.getLocations().size());
 
-        BDDMockito.given(System.currentTimeMillis()).willReturn(1548156712000L);
-
-        Location location = auditEventLogger.getMostAccurateLocation();
+        Location location = auditEventLogger.getMostAccurateLocation(1548156712000L);
 
         // The first recorded location has been removed because it's expired
         // It's time: 1548156641000, current time: 1548156712000, location-max-age: 60s
@@ -171,8 +168,6 @@ public class AuditEventLoggerTest {
         when(location.getTime()).thenReturn(1548156710000L);
 
         auditEventLogger.addLocation(location);
-
-        BDDMockito.given(System.currentTimeMillis()).willReturn(1548156712000L);
 
         auditEventLogger.logEvent(END_OF_FORM, false);
 

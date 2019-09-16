@@ -115,7 +115,6 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.location.client.GoogleLocationClient;
-import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.logic.AuditEvent;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
@@ -144,6 +143,7 @@ import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.RegexUtils;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SnackbarUtils;
@@ -990,7 +990,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .setEnabled(useability);
 
         if (getFormController() != null && getFormController().currentFormCollectsBackgroundLocation()
-                && LocationClients.areGooglePlayServicesAvailable(this)) {
+                && PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
             MenuItem backgroundLocation = menu.findItem(R.id.track_location);
             backgroundLocation.setVisible(true);
             backgroundLocation.setChecked(GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));
@@ -2112,7 +2112,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         // Register to receive location provider change updates and write them to the audit log
         if (formController != null && formController.currentFormAuditsLocation()
-                && LocationClients.areGooglePlayServicesAvailable(this)) {
+                && PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
             registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
         }
 
@@ -2473,7 +2473,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // Register to receive location provider change updates and write them to the audit
                 // log. onStart has already run but the formController was null so try again.
                 if (formController.currentFormAuditsLocation()
-                        && LocationClients.areGooglePlayServicesAvailable(this)) {
+                        && PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
                     registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
                 }
 
