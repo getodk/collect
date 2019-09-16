@@ -42,7 +42,7 @@ public class ExDecimalWidget extends ExStringWidget {
 
     public ExDecimalWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        TextWidgetUtils.adjustEditTextAnswerToDecimalWidget(answer, false, getFormEntryPrompt().getAnswerValue());
+        TextWidgetUtils.adjustEditTextAnswerToDecimalWidget(answerText, false, getFormEntryPrompt().getAnswerValue());
     }
 
     @Override
@@ -58,7 +58,7 @@ public class ExDecimalWidget extends ExStringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return TextWidgetUtils.getDecimalData(answer.getText().toString(), false);
+        return TextWidgetUtils.getDecimalData(answerText.getText().toString(), false);
     }
 
     /**
@@ -67,7 +67,7 @@ public class ExDecimalWidget extends ExStringWidget {
     @Override
     public void setBinaryData(Object answer) {
         DecimalData decimalData = ExternalAppsUtils.asDecimalData(answer);
-        this.answer.setText(decimalData == null ? null : decimalData.getValue().toString());
+        answerText.setText(decimalData == null ? null : decimalData.getValue().toString());
         widgetValueChanged();
     }
 }
