@@ -59,7 +59,6 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.utilities.AnimateUtils;
-import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
@@ -125,10 +124,6 @@ public abstract class QuestionWidget
         if (context instanceof FormEntryActivity) {
             state = ((FormEntryActivity) context).getState();
             permissionUtils = new PermissionUtils();
-        }
-
-        if (context instanceof DependencyProvider) {
-            injectDependencies((DependencyProvider) context);
         }
 
         player = new MediaPlayer();
@@ -252,11 +247,6 @@ public abstract class QuestionWidget
         }
         final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
         return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
-    }
-
-    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
-    protected void injectDependencies(DependencyProvider dependencyProvider) {
-        //dependencies for the widget will be wired here.
     }
 
     private AudioVideoImageTextLabel createQuestionLabel(FormEntryPrompt prompt) {

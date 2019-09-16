@@ -25,6 +25,7 @@ import org.odk.collect.android.http.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.http.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
+import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -150,5 +151,10 @@ public class AppDependencyModule {
     @Provides
     public AudioHelperFactory providesAudioHelperFactory() {
         return new ScreenContextAudioHelperFactory();
+    }
+
+    @Provides
+    public ActivityAvailability providesActivityAvailability(Context context) {
+        return new ActivityAvailability(context);
     }
 }

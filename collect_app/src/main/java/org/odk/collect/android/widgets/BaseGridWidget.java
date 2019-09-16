@@ -74,7 +74,7 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
     View[] itemViews;
 
     public BaseGridWidget(Context context, QuestionDetails questionDetails, boolean quickAdvance, AudioHelper audioHelper) {
-        super(context, questionDetails, audioHelper);
+        super(context, questionDetails);
 
         this.quickAdvance = quickAdvance;
         noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(questionDetails.getPrompt()) || WidgetAppearanceUtils.isNoButtonsAppearance(questionDetails.getPrompt());
