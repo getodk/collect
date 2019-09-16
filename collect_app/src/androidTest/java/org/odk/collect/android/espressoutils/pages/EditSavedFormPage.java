@@ -28,7 +28,6 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -57,10 +56,8 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
         return this;
     }
 
-    public EditSavedFormPage clickSavedFormWithDialog(String instanceName, int dialogMessageId) {
+    public OkDialog clickSavedFormWithDialog(String instanceName) {
         onView(withText(instanceName)).perform(click());
-        onView(withText(getTranslatedString(dialogMessageId))).check(matches(isDisplayed()));
-        onView(withText(R.string.ok)).perform(click());
-        return this.assertOnPage();
+        return new OkDialog(rule).assertOnPage();
     }
 }
