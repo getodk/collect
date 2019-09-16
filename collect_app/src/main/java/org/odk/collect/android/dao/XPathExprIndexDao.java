@@ -1,19 +1,3 @@
-/*
- * Copyright 2018 Nafundi
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.odk.collect.android.dao;
 
 import android.content.ContentProviderOperation;
@@ -37,20 +21,20 @@ import org.odk.collect.android.provider.XPathProviderAPI;
 import java.util.ArrayList;
 import java.util.List;
 
-public class XPathExprDao {
+public class XPathExprIndexDao {
 
-    private static XPathExprDao xPathExprDao = null;
+    private static XPathExprIndexDao xPathExprIndexDao = null;
     private XPathDatabaseHelper xPathDatabaseHelper;
 
-    public XPathExprDao(){
+    public XPathExprIndexDao(){
         this.xPathDatabaseHelper = new XPathDatabaseHelper();
     }
 
-    public static XPathExprDao getInstance(){
-        if (xPathExprDao == null) {
-            return new XPathExprDao();
+    public static XPathExprIndexDao getInstance(){
+        if (xPathExprIndexDao == null) {
+            return new XPathExprIndexDao();
         } else {
-            return xPathExprDao;
+            return xPathExprIndexDao;
         }
     }
 
@@ -63,8 +47,7 @@ public class XPathExprDao {
             try {
                 cursor.moveToPosition(-1);
                 while (cursor.moveToNext()) {
-                    //int idColumnIndex = cursor.getColumnIndex(BaseColumns._ID);
-                    int treeReferenceStringIndex = cursor.getColumnIndex(XPathProviderAPI.XPathsColumns.TREE_REF);
+                    int treeReferenceStringIndex = cursor.getColumnIndex(XPathProviderAPI.XPathsColumns.SPECIFIC_TREE_REF_);
 
                     TreeReferenceString treeReferenceString = new TreeReferenceString.Builder()
                             .treeReferenceString(cursor.getString(treeReferenceStringIndex))
@@ -184,7 +167,10 @@ public class XPathExprDao {
 
 
     private TreeReference treeReferenceStringToObject(TreeReferenceString treeReferenceString) {
-        return null;
+
+        //Should be implemented this way but not tested yet
+        //XPathParseTool.parseXPath(treeReferenceString.toString());
+        throw new UnsupportedOperationException("Not yet Supported");
     }
 
     public void flushIndexes(ArrayList<ContentProviderOperation> operations ) throws OperationApplicationException, RemoteException {
@@ -203,10 +189,5 @@ public class XPathExprDao {
     Cursor getXPathEvalCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         return Collect.getInstance().getContentResolver().query(XPathProviderAPI.XPathsColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
     }
-
-    public void clearCache(){
-        Collect.getInstance().getContentResolver().delete(XPathProviderAPI.XPathsColumns.CONTENT_URI, null, null);
-    }
-
 
 }

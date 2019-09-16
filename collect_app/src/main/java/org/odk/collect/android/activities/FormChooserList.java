@@ -105,7 +105,7 @@ public class FormChooserList extends FormListActivity implements
             diskSyncTask.setDiskSyncListener(this);
             diskSyncTask.execute((Void[]) null);
         }
-        sortingOptions = new int[]{
+        sortingOptions = new int[] {
                 R.string.sort_by_name_asc, R.string.sort_by_name_desc,
                 R.string.sort_by_date_asc, R.string.sort_by_date_desc,
         };
@@ -125,7 +125,6 @@ public class FormChooserList extends FormListActivity implements
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
         if (Collect.allowClick(getClass().getName())) {
             // get uri to form
             long idFormsTable = listView.getAdapter().getItemId(position);
@@ -141,7 +140,6 @@ public class FormChooserList extends FormListActivity implements
                 intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                 startActivity(intent);
             }
-
             finish();
         }
     }
@@ -251,7 +249,7 @@ public class FormChooserList extends FormListActivity implements
         if (v instanceof RadioButton) {
             RadioButton modeButton = (RadioButton) v;
             if (modeButton.getText().equals("Memory")) {
-                IndexerCreatorImpl.indexerMode = IndexerCreatorImpl.MEMORY;
+                IndexerCreatorImpl.indexerMode = IndexerCreatorImpl.MEMORY_ONLY;
             } else if (modeButton.getText().equals("Database")) {
                 IndexerCreatorImpl.indexerMode = IndexerCreatorImpl.MIXED;
             } else if (modeButton.getText().equals("Database Only")) {

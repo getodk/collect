@@ -121,7 +121,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     @Override
     protected FECWrapper doInBackground(String... path) {
         //#Indexation
-        if(IndexerCreatorImpl.indexerMode == IndexerCreatorImpl.MEMORY
+        if(IndexerCreatorImpl.indexerMode == IndexerCreatorImpl.MEMORY_ONLY
                 || IndexerCreatorImpl.indexerMode == IndexerCreatorImpl.DATABASE
                 || IndexerCreatorImpl.indexerMode == IndexerCreatorImpl.MIXED)
         XFormParser.initIndexerResolver(new IndexerCreatorImpl());

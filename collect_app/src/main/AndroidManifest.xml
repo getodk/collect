@@ -211,8 +211,8 @@ the specific language governing permissions and limitations under the License.
             android:authorities="org.odk.collect.android.provider.odk.forms"
             android:exported="true" />
         <provider
-            android:name=".provider.XPathExprProvider"
-            android:authorities="org.odk.collect.android.provider.odk.xpath_exprs"
+            android:name=".provider.XPathExprIndexProvider"
+            android:authorities="org.odk.collect.android.provider.odk.xpath_expr_index"
             android:exported="true" />
         <provider
             android:name=".provider.InstanceProvider"

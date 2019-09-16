@@ -11,7 +11,7 @@ import org.javarosa.xpath.eval.IndexerType;
 import org.javarosa.xpath.eval.PredicateStep;
 import org.javarosa.xpath.expr.XPathPathExpr;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.XPathExprDao;
+import org.odk.collect.android.dao.XPathExprIndexDao;
 import org.odk.collect.android.database.helpers.XPathDatabaseHelper;
 
 import java.io.File;
@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class DatabaseXPathIndexerImpl implements Indexer {
 
-    private XPathExprDao xPathExprDao;
+    private XPathExprIndexDao xPathExprIndexDao;
 
     private XPathPathExpr xPathPathExpr;
     private TreeReference expressionRef; //The genericised expression to be refIsIndexed - used as the key
@@ -37,7 +37,7 @@ public class DatabaseXPathIndexerImpl implements Indexer {
 
     public DatabaseXPathIndexerImpl(IndexerType indexType,XPathPathExpr xPathPathExpr, TreeReference expressionRef, TreeReference resultRef, PredicateStep[] predicateSteps) {
 
-        this.xPathExprDao = XPathExprDao.getInstance();
+        this.xPathExprIndexDao = XPathExprIndexDao.getInstance();
 
         this.xPathPathExpr = xPathPathExpr;
         this.expressionRef = expressionRef.removePredicates().genericize();
@@ -53,7 +53,7 @@ public class DatabaseXPathIndexerImpl implements Indexer {
         getColumnsNames();
         //This is not the best way to check if all leafs that correspond to this expression have been indexed
         //Better way is to keep that info in a seperate table
-        loaded = xPathExprDao.fetchIndexCount(expressionRef) > 0;
+        loaded = xPathExprIndexDao.fetchIndexCount(expressionRef) > 0;
     }
 
     @Override
@@ -72,7 +72,8 @@ public class DatabaseXPathIndexerImpl implements Indexer {
                 values = new ContentValues();
                 values.put(fieldName, currentTreeElement.getValue().getDisplayText());
                 values.put(XPathProviderAPI.XPathsColumns.EVAL_EXPR, expressionRef.toString());
-                values.put(XPathProviderAPI.XPathsColumns.TREE_REF, currentTreeReferenceClone.toString(true));
+                values.put(XPathProviderAPI.XPathsColumns.GENERIC_TREE_REF, expressionRef.toString(true));
+                values.put(XPathProviderAPI.XPathsColumns.SPECIFIC_TREE_REF_, currentTreeReferenceClone.toString(true));
                 insertValuesMap.put(currentTreeReferenceClone.toString(true), values);
             }
         }
@@ -93,7 +94,7 @@ public class DatabaseXPathIndexerImpl implements Indexer {
         }
 
         if(!isExists){
-            if(xPathExprDao.createColumn(columnName)){
+            if(xPathExprIndexDao.createColumn(columnName)){
                 dbColumns.add(columnName);
             }else{
                 throw new RuntimeException("Unable to create index column for  node : " + columnName);
@@ -103,7 +104,7 @@ public class DatabaseXPathIndexerImpl implements Indexer {
 
     private List<String> getColumnsNames(){
         if(dbColumns.size() < 1){
-           dbColumns =  xPathExprDao.getColumnsFromDB();
+           dbColumns =  xPathExprIndexDao.getColumnsFromDB();
         }
         return dbColumns;
     }
@@ -119,12 +120,12 @@ public class DatabaseXPathIndexerImpl implements Indexer {
 
     @Override
     public List<TreeReference> resolveFromIndex(TreeReference treeReference) {
-        return xPathExprDao.getTreeReferenceMatches(treeReference.toString());
+        return xPathExprIndexDao.getTreeReferenceMatches(treeReference.toString());
     }
 
     @Override
     public IAnswerData getRawValueFromIndex(TreeReference treeReference) {
-        return xPathExprDao.queryScalerEqXPathExpression(treeReference);
+        return xPathExprIndexDao.queryScalerEqXPathExpression(treeReference);
     }
 
     @Override
@@ -165,7 +166,7 @@ public class DatabaseXPathIndexerImpl implements Indexer {
         }
         try {
             if(!operations.isEmpty())
-           xPathExprDao.flushIndexes(operations);
+           xPathExprIndexDao.flushIndexes(operations);
             if(!insertValuesMap.isEmpty())
            insertValuesMap.clear();
         } catch (Exception e) {

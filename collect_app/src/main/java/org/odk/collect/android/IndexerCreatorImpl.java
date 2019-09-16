@@ -11,10 +11,10 @@ import org.odk.collect.android.provider.DatabaseXPathIndexerImpl;
 
 public class IndexerCreatorImpl implements IndexerCreator {
 
-    public  static int NONE = 0;
-    public  static int MEMORY = 1;
-    public  static int DATABASE = 2;
-    public  static int MIXED = 3;
+    public  static int NONE = 0; // Does not create index any expression
+    public  static int MEMORY_ONLY = 1; // Uses Memory Index for all expressions
+    public  static int DATABASE = 2; // Uses the Database index for all expressions
+    public  static int MIXED = 3; // Uses Memory index for the calculate expression , database indexing not completely implemented
 
     public static int indexerMode = NONE;
 
@@ -25,8 +25,7 @@ public class IndexerCreatorImpl implements IndexerCreator {
 
     @Override
     public Indexer getIndexer(IndexerType indexType, XPathPathExpr xPathPathExpr, TreeReference expressionRef, TreeReference resultRef, PredicateStep[] predicateSteps) {
-        //Database Indexing only implemented for this type
-            if (indexerMode == MEMORY) {
+            if (indexerMode == MEMORY_ONLY) {
                 return new MemoryIndexerImpl(indexType, xPathPathExpr, expressionRef, resultRef, predicateSteps);
             } else if (indexerMode == DATABASE)  {
                 if(indexType.equals(IndexerType.SINGLE_MID_EQUAL_PREDICATE_PATH)){
