@@ -27,6 +27,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.utilities.TextWidgetUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import timber.log.Timber;
 
@@ -39,10 +40,12 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * See {@link org.odk.collect.android.widgets.ExStringWidget} for usage.
  */
 public class ExDecimalWidget extends ExStringWidget {
+    boolean useThousandSeparator;
 
     public ExDecimalWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        TextWidgetUtils.adjustEditTextAnswerToDecimalWidget(answerText, false, getFormEntryPrompt().getAnswerValue());
+        this.useThousandSeparator = WidgetAppearanceUtils.useThousandSeparator(prompt);
+        TextWidgetUtils.adjustEditTextAnswerToDecimalWidget(answerText, useThousandSeparator, getFormEntryPrompt().getAnswerValue());
     }
 
     @Override
@@ -58,7 +61,7 @@ public class ExDecimalWidget extends ExStringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return TextWidgetUtils.getDecimalData(answerText.getText().toString(), false);
+        return TextWidgetUtils.getDecimalData(answerText.getText().toString(), useThousandSeparator);
     }
 
     /**
