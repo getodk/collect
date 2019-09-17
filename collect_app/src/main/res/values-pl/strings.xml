@@ -154,8 +154,7 @@
   <string name="root_namespace_error">Przestrzeń nazw głównego elementu jest niewłaściwa: %s</string>
   <string name="manifest_tag_error">Wpis %s w manifeście ma brakujący jeden lub więcej znaczników: nazwa pliku, hash lub URL pobrania</string>
   <string name="form_download_progress">%1$s. Pobieram pliki medialne: %2$s z %3$s</string>
-  <string name="file_fetch_failed">Błąd: %2$s (%3$s) w %1$s</string>
-  <string name="fetching_manifest">%s. Pobieram manifest </string>
+    <string name="fetching_manifest">%s. Pobieram manifest </string>
   <string name="success">Sukces</string>
   <string name="failures">Niepowodzenia</string>
   <string name="no_forms_uploaded">Przykro mi, nie wysłano żadnego formularza.</string>

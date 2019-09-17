@@ -154,8 +154,7 @@
   <string name="root_namespace_error">Penamaan elemen root tidak sesuai: %s</string>
   <string name="manifest_tag_error">Manifest yang masuk %s kehilangan satu atau lebih tag: nama file atau tautan unduh</string>
   <string name="form_download_progress">%1$s. Sedang mengambil berkas: %2$s dari %3$s</string>
-  <string name="file_fetch_failed">Terjadi kesalahan: %2$s (%3$s) pada %1$s</string>
-  <string name="fetching_manifest">%s. Sedang mengambil manifest </string>
+    <string name="fetching_manifest">%s. Sedang mengambil manifest </string>
   <string name="success">Berhasil</string>
   <string name="failures">Gagal</string>
   <string name="no_forms_uploaded">Maaf, tidak ada formulir yang telah diunggah.</string>

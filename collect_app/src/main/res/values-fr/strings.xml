@@ -154,8 +154,7 @@
   <string name="root_namespace_error"> L\'élément Root de Namespace est incorrect: %s</string>
   <string name="manifest_tag_error">Il manque une ou plusieurs au Manifest %s: nom de fichier, hash, ou URL de téléchargement</string>
   <string name="form_download_progress">%1$s. Obtention de fichiers multimédia : %2$s de %3$s</string>
-  <string name="file_fetch_failed">Erreur: %2$s (%3$s) à %1$s</string>
-  <string name="fetching_manifest">%s. Recherche du Manifest …</string>
+    <string name="fetching_manifest">%s. Recherche du Manifest …</string>
   <string name="success">Succès</string>
   <string name="failures">Échecs</string>
   <string name="no_forms_uploaded">Désolé, pas de formulaires téléchargés.</string>

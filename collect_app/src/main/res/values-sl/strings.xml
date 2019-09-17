@@ -149,8 +149,7 @@
   <string name="root_namespace_error">Namespace korenskega elementa je napačen %s</string>
   <string name="manifest_tag_error">Manifest vnos %s ne vsebuje ene ali več sledečih oznak: filename, hash ali donwloadUrl</string>
   <string name="form_download_progress">%1$s. Pridobivam medijske datoteke: %2$s od %3$s</string>
-  <string name="file_fetch_failed">Napaka: %2$s (%3$s) pri %1$s</string>
-  <string name="fetching_manifest">%s. Pridobivam manifest</string>
+    <string name="fetching_manifest">%s. Pridobivam manifest</string>
   <string name="success">Uspešno</string>
   <string name="failures">Neuspehi</string>
   <string name="no_forms_uploaded">Napaka. Obrazec ni naložen.</string>

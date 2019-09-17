@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.http;
+package org.odk.collect.android.http.openrosa;
 
 import java.util.Map;
 

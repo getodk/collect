@@ -1,15 +1,13 @@
-package org.odk.collect.android.http.okhttp;
+package org.odk.collect.android.http.openrosa.okhttp;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.apache.commons.io.IOUtils;
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.http.HttpCredentialsInterface;
-import org.odk.collect.android.http.HttpGetResult;
-import org.odk.collect.android.http.HttpHeadResult;
-import org.odk.collect.android.http.HttpPostResult;
+import org.odk.collect.android.http.openrosa.HttpCredentialsInterface;
+import org.odk.collect.android.http.openrosa.HttpGetResult;
+import org.odk.collect.android.http.openrosa.HttpHeadResult;
+import org.odk.collect.android.http.openrosa.HttpPostResult;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClient;
 import org.odk.collect.android.utilities.FileUtils;
@@ -38,39 +36,24 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
 
-    /**
-     * Shared client object used for all HTTP requests. Credentials are set on a per-request basis.
-     */
-    private OpenRosaServerClient httpClient;
-
-    /**
-     * The credentials used for the last request. When a new request is made, this is used to see
-     * whether the {@link #httpClient} credentials need to be changed.
-     */
-    private HttpCredentialsInterface lastRequestCredentials;
-
-    /**
-     * The scheme used for the last request. When a new request is made, this is used to see
-     * whether the {@link #httpClient} credentials need to be changed.
-     */
-    private String lastRequestScheme = "";
-
-    private MultipartBody multipartBody;
-
-    private final OkHttpOpenRosaServerClientFactory clientFactory;
+    private final OkHttpOpenRosaServerClientProvider clientFactory;
 
     @NonNull
     private final FileToContentTypeMapper fileToContentTypeMapper;
 
-    public OkHttpConnection(@NonNull OkHttpOpenRosaServerClientFactory clientFactory, @NonNull FileToContentTypeMapper fileToContentTypeMapper) {
+    @NonNull
+    private final String userAgent;
+
+    public OkHttpConnection(@NonNull OkHttpOpenRosaServerClientProvider clientFactory, @NonNull FileToContentTypeMapper fileToContentTypeMapper, @NonNull String userAgent) {
         this.clientFactory = clientFactory;
         this.fileToContentTypeMapper = fileToContentTypeMapper;
+        this.userAgent = userAgent;
     }
 
     @NonNull
     @Override
     public HttpGetResult executeGetRequest(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        createClient(credentials, uri.getScheme());
+        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials);
         Request request = new Request.Builder()
                 .url(uri.toURL())
                 .get()
@@ -81,11 +64,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
         if (statusCode != HttpURLConnection.HTTP_OK) {
             discardEntityBytes(response);
-            String errMsg = Collect
-                    .getInstance()
-                    .getString(R.string.file_fetch_failed, uri.toString(), response.message(), String.valueOf(statusCode));
+            Timber.i("Error: %s (%s at %s", response.message(), String.valueOf(statusCode), uri.toString());
 
-            Timber.e(errMsg);
             return new HttpGetResult(null, new HashMap<String, String>(), "", statusCode);
         }
 
@@ -133,7 +113,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     @NonNull
     @Override
     public HttpHeadResult executeHeadRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        createClient(credentials, uri.getScheme());
+        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials);
         Request request = new Request.Builder()
                 .url(uri.toURL())
                 .head()
@@ -204,9 +184,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                 }
             }
 
-            multipartBody = multipartBuilder.build();
-            postResult = executePostRequest(uri, credentials);
-            multipartBody = null;
+            MultipartBody multipartBody = multipartBuilder.build();
+            postResult = executePostRequest(uri, credentials, multipartBody);
 
             if (postResult.getResponseCode() != HttpURLConnection.HTTP_CREATED &&
                     postResult.getResponseCode() != HttpURLConnection.HTTP_ACCEPTED) {
@@ -219,8 +198,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     }
 
     @NonNull
-    private HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        createClient(credentials, uri.getScheme());
+    private HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials, MultipartBody multipartBody) throws Exception {
+        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials);
         HttpPostResult postResult;
         Request request = new Request.Builder()
                 .url(uri.toURL())
@@ -240,23 +219,6 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         discardEntityBytes(response);
 
         return postResult;
-    }
-
-    /**
-     * If the provided credentials are non-null, sets the {@link #httpClient} to authenticate using
-     * the provided credential and sets the {@link #lastRequestCredentials}
-     * <p>
-     * If authentication is needed, always configure digest auth. If SSL is enabled, also configure
-     * basic auth.
-     */
-    private void createClient(@Nullable HttpCredentialsInterface credentials, String scheme) {
-        if (credentials != null && !(credentials.equals(lastRequestCredentials) && scheme.equals(lastRequestScheme))) {
-            httpClient = clientFactory.create(scheme, Collect.getInstance().getUserAgentString(), credentials);
-            lastRequestCredentials = credentials;
-            lastRequestScheme = scheme;
-        } else if (httpClient == null) {
-            httpClient = clientFactory.create(scheme, Collect.getInstance().getUserAgentString(), credentials);
-        }
     }
 
     /**

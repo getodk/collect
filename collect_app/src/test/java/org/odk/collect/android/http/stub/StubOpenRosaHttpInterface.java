@@ -3,10 +3,10 @@ package org.odk.collect.android.http.stub;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.odk.collect.android.http.HttpCredentialsInterface;
-import org.odk.collect.android.http.HttpGetResult;
-import org.odk.collect.android.http.HttpHeadResult;
-import org.odk.collect.android.http.HttpPostResult;
+import org.odk.collect.android.http.openrosa.HttpCredentialsInterface;
+import org.odk.collect.android.http.openrosa.HttpGetResult;
+import org.odk.collect.android.http.openrosa.HttpHeadResult;
+import org.odk.collect.android.http.openrosa.HttpPostResult;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 
 import java.io.ByteArrayInputStream;

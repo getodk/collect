@@ -154,8 +154,7 @@
   <string name="root_namespace_error">రూట్ ఎలిమెంట్ నేమ్‌స్పేస్ తప్పు:%s</string>
   <string name="manifest_tag_error">మానిఫెస్ట్ ఎంట్రీ%sలో ఒకటి లేదా అంతకంటే ఎక్కువ ట్యాగ్‌లు లేవు: ఫైల్ పేరు, హాష్ లేదా డౌన్‌లోడ్ URL</string>
   <string name="form_download_progress">%1$s. మీడియా ఫైళ్ళను పొందుతున్నాము:  %3$s లో %2$s</string>
-  <string name="file_fetch_failed">పొరపాటు: %2$s (%3$s) at %1$s</string>
-  <string name="fetching_manifest"> %s. మానిఫెస్ట్ పొందడం</string>
+    <string name="fetching_manifest"> %s. మానిఫెస్ట్ పొందడం</string>
   <string name="success">సక్సెస్ </string>
   <string name="failures">వైఫల్యాలు</string>
   <string name="no_forms_uploaded">క్షమించండి, ఏ ఫారం కూడా అప్‌లోడ్ చేయబడలేదు.</string>

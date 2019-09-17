@@ -154,8 +154,7 @@
   <string name="root_namespace_error">Root element Namespace ist falsch: %s</string>
   <string name="manifest_tag_error">Bei Manifest-Eintrag %s fehlt ein oder mehrere Tag(s): filename, hash, oder downloadUrl</string>
   <string name="form_download_progress">%1$s. Media-Dateien werden geladen: %2$s von %3$s</string>
-  <string name="file_fetch_failed">Fehler: %2$s (%3$s) bei %1$s</string>
-  <string name="fetching_manifest">%s. Manifest wird geladen </string>
+    <string name="fetching_manifest">%s. Manifest wird geladen </string>
   <string name="success">Erfolg</string>
   <string name="failures">Fehler</string>
   <string name="no_forms_uploaded">Kein Formular wurde hochgeladen.</string>

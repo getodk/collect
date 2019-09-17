@@ -14,8 +14,8 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.http.CollectThenSystemContentTypeMapper;
-import org.odk.collect.android.http.okhttp.OkHttpConnection;
-import org.odk.collect.android.http.okhttp.OkHttpOpenRosaServerClientFactory;
+import org.odk.collect.android.http.openrosa.okhttp.OkHttpConnection;
+import org.odk.collect.android.http.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
@@ -76,8 +76,9 @@ public class AppDependencyModule {
     @Singleton
     OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap) {
         return new OkHttpConnection(
-                new OkHttpOpenRosaServerClientFactory(new OkHttpClient.Builder()),
-                new CollectThenSystemContentTypeMapper(mimeTypeMap)
+                new OkHttpOpenRosaServerClientProvider(new OkHttpClient()),
+                new CollectThenSystemContentTypeMapper(mimeTypeMap),
+                Collect.getInstance().getUserAgentString()
         );
     }
 

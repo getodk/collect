@@ -118,8 +118,7 @@
   <string name="keep_changes">ለውጦችን አስቀምጥ</string>
   <string name="font_size">የጽሑፍ ቅርጸ ቁምፊ መጠን</string>
   <string name="change_font_size">የጽሑፍ ቅርጸ ቁምፊ መጠን</string>
-  <string name="file_fetch_failed">ስህተት፣ %2$s ( %3$s ) በ %1$s ላይ</string>
-  <string name="success">ስኬት</string>
+    <string name="success">ስኬት</string>
   <string name="no_forms_uploaded">ይቅርታ፣ ምንም ቅጽ አልተጫነም፡፡</string>
   <string name="upload_results">ውጤቶችን ጫን</string>
   <string name="choose_sound">ድምጽ ይምረጡ</string>
