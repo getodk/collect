@@ -10,13 +10,11 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.espressoutils.FormEntry;
+import org.odk.collect.android.espressoutils.pages.GeneralSettingsPage;
 import org.odk.collect.android.espressoutils.pages.MainMenuPage;
-import org.odk.collect.android.espressoutils.Settings;
+import org.odk.collect.android.espressoutils.pages.UserAndDeviceIdentitySettingsPage;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
-
-import static androidx.test.espresso.Espresso.pressBack;
 
 // Issue number NODK-238
 @RunWith(AndroidJUnit4.class)
@@ -33,34 +31,30 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
             .around(new CopyFormRule("Test.xml"));
 
     @Test
-    public void setEmail_ShouldRequireAtSign() {
+    public void setEmail_validatesEmail() {
         //TestCase1
         new MainMenuPage(main)
                 .clickOnMenu()
-                .clickGeneralSettings();
-
-        Settings.clickUserAndDeviceIdentity();
-        Settings.clickFormMetadata();
-        Settings.clickMetadataEmail();
-        Settings.Dialog.putText("aabb");
-        Settings.Dialog.clickOK();
-        Settings.checkIsToastWithStringDisplayes(R.string.invalid_email_address, main);
-        Settings.clickMetadataEmail();
-        Settings.Dialog.putText("aa@bb");
-        Settings.Dialog.clickOK();
-        Settings.checkIsTextDisplayed("aa@bb");
-        pressBack();
-        pressBack();
-        pressBack();
+                .clickGeneralSettings()
+                .clickUserAndDeviceIdentity()
+                .clickFormMetadata()
+                .clickMetadataEmail()
+                .inputText("aabb")
+                .clickOKOnDialog()
+                .checkIsToastWithMessageDisplayed(R.string.invalid_email_address)
+                .clickMetadataEmail().inputText("aa@bb")
+                .clickOKOnDialog()
+                .checkIsTextDisplayed("aa@bb");
     }
 
     @Test
     public void emptyUsername_ShouldNotDisplayUsernameInForm() {
 
         //TestCase2
-        new MainMenuPage(main).startBlankForm("Test");
-        FormEntry.checkIsDisplayedInTextClassAndSwipe("");
-        FormEntry.clickSaveAndExit();
+        new MainMenuPage(main)
+                .startBlankForm("Test")
+                .swipeOnText("")
+                .clickSaveAndExit();
     }
 
     @Test
@@ -69,86 +63,75 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
         //TestCase3
         new MainMenuPage(main)
                 .clickOnMenu()
-                .clickGeneralSettings();
-
-        Settings.clickUserAndDeviceIdentity();
-        Settings.clickFormMetadata();
-        Settings.clickMetadataUsername();
-        Settings.Dialog.putText("AAA");
-        Settings.Dialog.clickOK();
-        pressBack();
-        pressBack();
-        pressBack();
-        new MainMenuPage(main).startBlankForm("Test");
-        FormEntry.checkIsDisplayedInTextClassAndSwipe("AAA");
-        FormEntry.clickSaveAndExit();
+                .clickGeneralSettings()
+                .clickUserAndDeviceIdentity()
+                .clickFormMetadata()
+                .clickMetadataUsername()
+                .inputText("AAA")
+                .clickOKOnDialog()
+                .pressBack(new UserAndDeviceIdentitySettingsPage(main))
+                .pressBack(new GeneralSettingsPage(main))
+                .pressBack(new MainMenuPage(main))
+                .startBlankForm("Test")
+                .swipeOnText("AAA")
+                .clickSaveAndExit();
     }
 
     @Test
     public void setAggregateUsername_ShouldDisplayAggregateUsernameInForm() {
-
         //TestCase4
         new MainMenuPage(main)
                 .clickOnMenu()
-                .clickGeneralSettings();
-
-        Settings.clickUserAndDeviceIdentity();
-        Settings.clickFormMetadata();
-        Settings.clickMetadataUsername();
-        Settings.Dialog.putText("");
-        Settings.Dialog.clickOK();
-        pressBack();
-        pressBack();
-        pressBack();
-
-        new MainMenuPage(main)
+                .clickGeneralSettings()
+                .clickUserAndDeviceIdentity()
+                .clickFormMetadata()
+                .clickMetadataUsername()
+                .inputText("")
+                .clickOKOnDialog()
+                .pressBack(new UserAndDeviceIdentitySettingsPage(main))
+                .pressBack(new GeneralSettingsPage(main))
+                .pressBack(new MainMenuPage(main))
                 .clickOnMenu()
-                .clickGeneralSettings();
-
-        Settings.openServerSettings();
-        Settings.clickOnServerType();
-        Settings.clickOnString(R.string.server_platform_odk_aggregate);
-        Settings.clickAggregateUsername();
-        Settings.Dialog.putText("BBB");
-        Settings.Dialog.clickOK();
-        pressBack();
-        pressBack();
-        new MainMenuPage(main).startBlankForm("Test");
-        FormEntry.checkIsDisplayedInTextClassAndSwipe("BBB");
-        FormEntry.clickSaveAndExit();
+                .clickGeneralSettings()
+                .openServerSettings()
+                .clickOnServerType()
+                .clickOnString(R.string.server_platform_odk_aggregate)
+                .clickAggregateUsername()
+                .inputText("BBB")
+                .clickOKOnDialog()
+                .pressBack(new GeneralSettingsPage(main))
+                .pressBack(new MainMenuPage(main))
+                .startBlankForm("Test")
+                .swipeOnText("BBB")
+                .clickSaveAndExit();
     }
 
     @Test
     public void setBothUsernames_ShouldDisplayMetadataUsernameInForm() {
-
         //TestCase5
         new MainMenuPage(main)
                 .clickOnMenu()
-                .clickGeneralSettings();
-
-        Settings.clickUserAndDeviceIdentity();
-        Settings.clickFormMetadata();
-        Settings.clickMetadataUsername();
-        Settings.Dialog.putText("CCC");
-        Settings.Dialog.clickOK();
-        pressBack();
-        pressBack();
-        pressBack();
-        
-        new MainMenuPage(main)
+                .clickGeneralSettings()
+                .clickUserAndDeviceIdentity()
+                .clickFormMetadata()
+                .clickMetadataUsername()
+                .inputText("CCC")
+                .clickOKOnDialog()
+                .pressBack(new UserAndDeviceIdentitySettingsPage(main))
+                .pressBack(new GeneralSettingsPage(main))
+                .pressBack(new MainMenuPage(main))
                 .clickOnMenu()
-                .clickGeneralSettings();
-
-        Settings.openServerSettings();
-        Settings.clickOnServerType();
-        Settings.clickOnString(R.string.server_platform_odk_aggregate);
-        Settings.clickAggregateUsername();
-        Settings.Dialog.putText("DDD");
-        Settings.Dialog.clickOK();
-        pressBack();
-        pressBack();
-        new MainMenuPage(main).startBlankForm("Test");
-        FormEntry.checkIsDisplayedInTextClassAndSwipe("CCC");
-        FormEntry.clickSaveAndExit();
+                .clickGeneralSettings()
+                .openServerSettings()
+                .clickOnServerType()
+                .clickOnString(R.string.server_platform_odk_aggregate)
+                .clickAggregateUsername()
+                .inputText("DDD")
+                .clickOKOnDialog()
+                .pressBack(new GeneralSettingsPage(main))
+                .pressBack(new MainMenuPage(main))
+                .startBlankForm("Test")
+                .swipeOnText("CCC")
+                .clickSaveAndExit();
     }
 }

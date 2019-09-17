@@ -67,4 +67,9 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
         onData(PreferenceMatchers.withKey("protocol")).perform(click());
         return new ServerSettingsPage(rule).assertOnPage();
     }
+
+    public UserAndDeviceIdentitySettingsPage clickUserAndDeviceIdentity() {
+        onData(PreferenceMatchers.withKey("user_and_device_identity")).perform(click());
+        return new UserAndDeviceIdentitySettingsPage(rule).assertOnPage();
+    }
 }

@@ -13,9 +13,11 @@ import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.core.StringEndsWith.endsWith;
 
 public class FormEntryPage extends Page<FormEntryPage> {
 
@@ -85,6 +87,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage clickGoToIconInForm() {
         onView(withId(R.id.menu_goto)).perform(click());
+        return this;
+    }
+
+    public FormEntryPage swipeOnText(String text) {
+        onView(withClassName(endsWith("EditText"))).check(matches(withText(text))).perform(swipeLeft());
         return this;
     }
 }

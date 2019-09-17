@@ -24,4 +24,9 @@ public class ServerSettingsPage extends Page<ServerSettingsPage> {
         onData(PreferenceMatchers.withKey("protocol")).perform(click());
         return this;
     }
+
+    public ServerSettingsPage clickAggregateUsername() {
+        onData(PreferenceMatchers.withKey("username")).perform(click());
+        return this;
+    }
 }

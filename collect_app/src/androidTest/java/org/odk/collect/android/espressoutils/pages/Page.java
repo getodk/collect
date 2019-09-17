@@ -85,6 +85,10 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
+    public T checkIsToastWithMessageDisplayed(int message) {
+        return checkIsToastWithMessageDisplayed(getTranslatedString(message));
+    }
+
     public T clickOnString(int stringID) {
         clickOnText(getTranslatedString(stringID));
         return (T) this;
@@ -105,7 +109,8 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    public T clickOk() {
+    public T clickOKOnDialog() {
+        closeSoftKeyboard(); // Make sure to avoid issues with keyboard being up
         clickOnId(android.R.id.button1);
         return (T) this;
     }
