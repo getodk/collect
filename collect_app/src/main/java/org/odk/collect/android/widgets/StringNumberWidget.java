@@ -20,23 +20,20 @@ import android.content.Context;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.utilities.TextWidgetUtils;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 /**
  * Widget that restricts values to integers.
  */
 @SuppressLint("ViewConstructor")
 public class StringNumberWidget extends StringWidget {
-    boolean useThousandSeparator;
 
     public StringNumberWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
         super(context, prompt, readOnlyOverride);
-        this.useThousandSeparator = WidgetAppearanceUtils.useThousandSeparator(prompt);
-        TextWidgetUtils.adjustEditTextAnswerToStringNumberWidget(answerText, useThousandSeparator, getFormEntryPrompt().getAnswerValue());
+        TextWidgetUtils.adjustEditTextAnswerToStringNumberWidget(answerText, prompt);
     }
 
     @Override
     public IAnswerData getAnswer() {
-        return TextWidgetUtils.getStringNumberData(getAnswerText(), useThousandSeparator);
+        return TextWidgetUtils.getStringNumberData(getAnswerText(), getFormEntryPrompt());
     }
 }
