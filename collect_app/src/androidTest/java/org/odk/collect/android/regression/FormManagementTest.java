@@ -37,7 +37,7 @@ public class FormManagementTest extends BaseRegressionTest {
         //TestCase7,8
         new MainMenuPage(main)
                 .startBlankForm("OnePageFormValid")
-                .putText("Bla")
+                .inputText("Bla")
                 .swipeToNextQuestion()
                 .checkIsToastWithMessageDisplayed("Response length must be between 5 and 15")
                 .clickOptionsIcon()

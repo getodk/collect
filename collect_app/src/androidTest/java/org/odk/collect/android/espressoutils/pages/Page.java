@@ -1,18 +1,25 @@
 package org.odk.collect.android.espressoutils.pages;
 
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.matcher.PreferenceMatchers;
 import androidx.test.rule.ActivityTestRule;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.core.StringEndsWith.endsWith;
+import static org.odk.collect.android.test.CustomMatchers.withIndex;
 
 /**
  * Base class for Page Objects used in Espresso tests. Provides shared helpers/setup.
@@ -105,5 +112,25 @@ abstract class Page<T extends Page<T>> {
 
     String getTranslatedString(Integer id) {
         return rule.getActivity().getString(id);
+    }
+
+    public T clickOnAreaWithIndex(String clazz, int index) {
+        onView(withIndex(withClassName(endsWith(clazz)), index)).perform(click());
+        return (T) this;
+    }
+
+    public T clickOnAreaWithKey(String key) {
+        onData(PreferenceMatchers.withKey(key)).perform(click());
+        return (T) this;
+    }
+
+    public T addText(String existingText, String text) {
+        onView(withText(existingText)).perform(typeText(text));
+        return (T) this;
+    }
+
+    public T inputText(String text) {
+        onView(withClassName(endsWith("EditText"))).perform(replaceText(text));
+        return (T) this;
     }
 }

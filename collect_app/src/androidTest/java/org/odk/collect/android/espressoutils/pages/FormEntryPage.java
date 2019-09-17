@@ -8,17 +8,14 @@ import org.odk.collect.android.support.ActivityHelpers;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.core.StringEndsWith.endsWith;
 
 public class FormEntryPage extends Page<FormEntryPage> {
 
@@ -78,11 +75,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public FormEntryPage checkAreNavigationButtonsDisplayed() {
         onView(withId(R.id.form_forward_button)).check(matches(isDisplayed()));
         onView(withId(R.id.form_back_button)).check(matches(isDisplayed()));
-        return this;
-    }
-
-    public FormEntryPage putText(String text) {
-        onView(withClassName(endsWith("EditText"))).perform(replaceText(text));
         return this;
     }
 

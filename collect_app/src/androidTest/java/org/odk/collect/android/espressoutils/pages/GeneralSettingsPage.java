@@ -62,4 +62,14 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
         onData(PreferenceMatchers.withKey("guidance_hint")).perform(click());
         return this;
     }
+
+    public GeneralSettingsPage openServerSettings() {
+        onData(PreferenceMatchers.withKey("protocol")).perform(click());
+        return this;
+    }
+
+    public GeneralSettingsPage clickOnServerType() {
+        onData(PreferenceMatchers.withKey("protocol")).perform(click());
+        return this;
+    }
 }
