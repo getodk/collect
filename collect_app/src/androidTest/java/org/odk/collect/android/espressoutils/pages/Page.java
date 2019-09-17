@@ -72,6 +72,10 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
+    public T checkIfTextDoesNotExist(int string) {
+        return checkIfTextDoesNotExist(getTranslatedString(string));
+    }
+
     public T checkIsStringDisplayed(int stringID) {
         checkIsTextDisplayed(getTranslatedString(stringID));
         return (T) this;
@@ -136,6 +140,11 @@ abstract class Page<T extends Page<T>> {
 
     public T inputText(String text) {
         onView(withClassName(endsWith("EditText"))).perform(replaceText(text));
+        return (T) this;
+    }
+
+    public T checkIfAreaWithKeyIsDisplayed(String key) {
+        onData(PreferenceMatchers.withKey(key)).check(matches(isDisplayed()));
         return (T) this;
     }
 }

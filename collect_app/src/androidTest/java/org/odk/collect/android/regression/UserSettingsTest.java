@@ -2,30 +2,34 @@ package org.odk.collect.android.regression;
 
 import androidx.test.runner.AndroidJUnit4;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.espressoutils.FormEntry;
+import org.odk.collect.android.espressoutils.pages.AdminSettingsPage;
+import org.odk.collect.android.espressoutils.pages.GeneralSettingsPage;
 import org.odk.collect.android.espressoutils.pages.MainMenuPage;
-import org.odk.collect.android.espressoutils.Settings;
-
-import static androidx.test.espresso.Espresso.pressBack;
+import org.odk.collect.android.support.ResetStateRule;
 
 //Issue NODK-241
 @RunWith(AndroidJUnit4.class)
 public class UserSettingsTest extends BaseRegressionTest {
+
+    @Rule
+    public RuleChain ruleChain = RuleChain
+            .outerRule(new ResetStateRule());
 
     @Test
     public void typeOption_ShouldNotBeVisible() {
         //TestCase1
         new MainMenuPage(main)
                 .clickOnMenu()
-                .clickAdminSettings();
-
-        Settings.openUserSettings();
-        FormEntry.checkIfTextDoesNotExist("Type");
-        FormEntry.checkIfTextDoesNotExist("Submission transport");
-        FormEntry.checkIsTextDisplayed("Server");
+                .clickAdminSettings()
+                .openUserSettings()
+                .checkIfTextDoesNotExist("Type")
+                .checkIfTextDoesNotExist("Submission transport")
+                .checkIsTextDisplayed("Server");
     }
 
     @Test
@@ -33,37 +37,27 @@ public class UserSettingsTest extends BaseRegressionTest {
         //TestCase4
         new MainMenuPage(main)
                 .clickOnMenu()
-                .clickAdminSettings();
-
-        Settings.openUserSettings();
-        Settings.uncheckAllUsetSettings();
-        pressBack();
-        pressBack();
-
-        new MainMenuPage(main)
+                .clickAdminSettings()
+                .openUserSettings()
+                .uncheckAllUsetSettings()
+                .pressBack(new AdminSettingsPage(main))
+                .pressBack(new MainMenuPage(main))
                 .clickOnMenu()
-                .clickGeneralSettings();
-
-        Settings.checkIfStringDoesNotExist(R.string.server);
-        Settings.checkIfStringDoesNotExist(R.string.client);
-        Settings.checkIfStringDoesNotExist(R.string.maps);
-        Settings.checkIfStringDoesNotExist(R.string.form_management_preferences);
-        Settings.checkIfStringDoesNotExist(R.string.user_and_device_identity_title);
-        pressBack();
-
-        new MainMenuPage(main)
+                .clickGeneralSettings()
+                .checkIfTextDoesNotExist(R.string.server)
+                .checkIfTextDoesNotExist(R.string.client)
+                .checkIfTextDoesNotExist(R.string.maps)
+                .checkIfTextDoesNotExist(R.string.form_management_preferences)
+                .checkIfTextDoesNotExist(R.string.user_and_device_identity_title)
+                .pressBack(new MainMenuPage(main))
                 .clickOnMenu()
-                .clickAdminSettings();
-
-        Settings.openGeneralSettingsFromAdminSettings();
-        Settings.checkIfAreaWithKeyIsDisplayed("protocol");
-        Settings.checkIfAreaWithKeyIsDisplayed("user_interface");
-        Settings.checkIfAreaWithKeyIsDisplayed("maps");
-        Settings.checkIfAreaWithKeyIsDisplayed("form_management");
-        Settings.checkIfAreaWithKeyIsDisplayed("user_and_device_identity");
-        pressBack();
-        pressBack();
-        Settings.resetSettings(main);
+                .clickAdminSettings()
+                .clickGeneralSettings()
+                .checkIfAreaWithKeyIsDisplayed("protocol")
+                .checkIfAreaWithKeyIsDisplayed("user_interface")
+                .checkIfAreaWithKeyIsDisplayed("maps")
+                .checkIfAreaWithKeyIsDisplayed("form_management")
+                .checkIfAreaWithKeyIsDisplayed("user_and_device_identity");
     }
 
     @Test
@@ -71,39 +65,26 @@ public class UserSettingsTest extends BaseRegressionTest {
         //TestCase5
         new MainMenuPage(main)
                 .clickOnMenu()
-                .clickAdminSettings();
-
-        Settings.openUserSettings();
-        Settings.uncheckUserSettings("guidance_hint");
-        pressBack();
-        pressBack();
-
-        new MainMenuPage(main)
+                .clickAdminSettings()
+                .openUserSettings()
+                .uncheckUserSettings("guidance_hint")
+                .pressBack(new AdminSettingsPage(main))
+                .pressBack(new MainMenuPage(main))
                 .clickOnMenu()
-                .clickGeneralSettings();
-
-        Settings.openFormManagement();
-        Settings.checkIfStringDoesNotExist(R.string.guidance_hint_title);
-        pressBack();
-        pressBack();
-
-        new MainMenuPage(main)
+                .clickGeneralSettings()
+                .openFormManagement()
+                .checkIfTextDoesNotExist(R.string.guidance_hint_title)
+                .pressBack(new GeneralSettingsPage(main))
+                .pressBack(new MainMenuPage(main))
                 .clickOnMenu()
-                .clickAdminSettings();
-
-        Settings.openUserSettings();
-        Settings.uncheckAllUsetSettings();
-        pressBack();
-        pressBack();
-
-        new MainMenuPage(main)
+                .clickAdminSettings()
+                .openUserSettings()
+                .uncheckAllUsetSettings()
+                .pressBack(new AdminSettingsPage(main))
+                .pressBack(new MainMenuPage(main))
                 .clickOnMenu()
-                .clickGeneralSettings();
-
-        Settings.openFormManagement();
-        FormEntry.checkIsStringDisplayed(R.string.guidance_hint_title);
-        pressBack();
-        pressBack();
-        Settings.resetSettings(main);
+                .clickGeneralSettings()
+                .openFormManagement()
+                .checkIsStringDisplayed(R.string.guidance_hint_title);
     }
 }
