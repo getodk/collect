@@ -5,8 +5,8 @@ import androidx.test.espresso.matcher.PreferenceMatchers;
 import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.espressoutils.pages.MainMenuPage;
 import org.odk.collect.android.espressoutils.pages.GeneralSettingsPage;
+import org.odk.collect.android.espressoutils.pages.MainMenuPage;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -99,30 +99,6 @@ public final class Settings {
         }
     }
 
-    public static void clickOnUserInterface() {
-        onData(PreferenceMatchers.withKey("user_interface")).perform(click());
-    }
-
-    public static void clickOnLanguage() {
-        onData(PreferenceMatchers.withKey("app_language")).perform(click());
-    }
-
-    public static void clickOnSelectedLanguage(String text) {
-        onView(withText(text)).perform(click());
-    }
-
-    public static void clickUserInterface() {
-        onView(withText(getInstrumentation().getTargetContext().getString(R.string.client))).perform(click());
-    }
-
-    public static void clickNavigation() {
-        onView(withText(getInstrumentation().getTargetContext().getString(R.string.navigation))).perform(click());
-    }
-
-    public static void clickUseSwipesAndButtons() {
-        onView(withText(getInstrumentation().getTargetContext().getString(R.string.swipe_buttons_navigation))).perform(click());
-    }
-
     public static void openFormManagement() {
         onData(PreferenceMatchers.withKey("form_management")).perform(click());
     }
@@ -130,11 +106,6 @@ public final class Settings {
     public static void openShowGuidanceForQuestions() {
         onData(PreferenceMatchers.withKey("guidance_hint")).perform(ViewActions.scrollTo());
         onData(PreferenceMatchers.withKey("guidance_hint")).perform(click());
-    }
-
-    public static void openConstraintProcessing() {
-        onData(PreferenceMatchers.withKey("constraint_behavior")).perform(ViewActions.scrollTo());
-        onData(PreferenceMatchers.withKey("constraint_behavior")).perform(click());
     }
 
     public static void openUserSettings() {

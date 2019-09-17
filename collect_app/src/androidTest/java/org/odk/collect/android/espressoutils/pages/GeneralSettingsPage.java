@@ -1,5 +1,6 @@
 package org.odk.collect.android.espressoutils.pages;
 
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.matcher.PreferenceMatchers;
 import androidx.test.rule.ActivityTestRule;
 
@@ -42,6 +43,23 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
 
     public GeneralSettingsPage clickUseSwipesAndButtons() {
         clickOnString(R.string.swipe_buttons_navigation);
+        return this;
+    }
+
+    public GeneralSettingsPage openFormManagement() {
+        onData(PreferenceMatchers.withKey("form_management")).perform(click());
+        return this;
+    }
+
+    public GeneralSettingsPage openConstraintProcessing() {
+        onData(PreferenceMatchers.withKey("constraint_behavior")).perform(ViewActions.scrollTo());
+        onData(PreferenceMatchers.withKey("constraint_behavior")).perform(click());
+        return this;
+    }
+
+    public GeneralSettingsPage openShowGuidanceForQuestions() {
+        onData(PreferenceMatchers.withKey("guidance_hint")).perform(ViewActions.scrollTo());
+        onData(PreferenceMatchers.withKey("guidance_hint")).perform(click());
         return this;
     }
 }

@@ -50,6 +50,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return new MainMenuPage(rule).assertOnPage();
     }
 
+    public FormEntryPage clickSaveAndExitWithError() {
+        onView(withId(R.id.save_exit_button)).perform(click());
+        return this;
+    }
+
     public FormEntryPage swipeToNextQuestion() {
         onView(withId(R.id.questionholder)).perform(swipeLeft());
         return this;
