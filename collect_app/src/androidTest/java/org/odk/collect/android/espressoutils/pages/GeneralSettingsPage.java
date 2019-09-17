@@ -63,13 +63,8 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
         return this;
     }
 
-    public GeneralSettingsPage openServerSettings() {
+    public ServerSettingsPage openServerSettings() {
         onData(PreferenceMatchers.withKey("protocol")).perform(click());
-        return this;
-    }
-
-    public GeneralSettingsPage clickOnServerType() {
-        onData(PreferenceMatchers.withKey("protocol")).perform(click());
-        return this;
+        return new ServerSettingsPage(rule).assertOnPage();
     }
 }
