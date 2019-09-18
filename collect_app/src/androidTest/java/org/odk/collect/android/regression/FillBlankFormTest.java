@@ -147,11 +147,11 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .startBlankFormWithRepeatGroup("formulaire_adherent")
                 .clickOnAddGroup(new FormEntryPage("formulaire_adherent", main))
                 .clickOnText("Plante")
-                .putText("Abi")
+                .inputText("Abi")
                 .swipeToNextQuestion()
                 .checkIsTextDisplayed("Abies")
                 .swipeToPreviousQuestion()
-                .putText("Abr")
+                .inputText("Abr")
                 .swipeToNextQuestion()
                 .checkIsTextDisplayed("Abrotanum alpestre");
     }
@@ -253,23 +253,23 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .swipeToNextQuestion()
                 .clickOnText("Wolf")
                 .swipeToNextQuestion()
-                .putText("w")
+                .inputText("w")
                 .checkIsTextDisplayed("Wolf")
                 .checkIsTextDisplayed("Warthog")
                 .clickOnText("Wolf")
                 .swipeToNextQuestion()
-                .putText("r")
+                .inputText("r")
                 .checkIsTextDisplayed("Warthog")
                 .checkIsTextDisplayed("Raccoon")
                 .checkIsTextDisplayed("Rabbit")
                 .clickOnText("Rabbit")
                 .swipeToNextQuestion()
-                .putText("r")
+                .inputText("r")
                 .checkIsTextDisplayed("Oranges")
                 .checkIsTextDisplayed("Strawberries")
                 .clickOnText("Oranges")
                 .swipeToNextQuestion()
-                .putText("n")
+                .inputText("n")
                 .checkIsTextDisplayed("Mango")
                 .checkIsTextDisplayed("Oranges")
                 .clickOnText("Mango")
@@ -280,13 +280,13 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickOnText("Raccoon")
                 .clickOnText("Rabbit")
                 .swipeToNextQuestion()
-                .putText("w")
+                .inputText("w")
                 .checkIsTextDisplayed("Wolf")
                 .checkIsTextDisplayed("Warthog")
                 .clickOnText("Wolf")
                 .clickOnText("Warthog")
                 .swipeToNextQuestion()
-                .putText("r")
+                .inputText("r")
                 .closeSoftKeyboard()
                 .checkIsTextDisplayed("Warthog")
                 .checkIsTextDisplayed("Raccoon")
@@ -294,11 +294,11 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickOnText("Raccoon")
                 .clickOnText("Rabbit")
                 .swipeToNextQuestion()
-                .putText("m")
+                .inputText("m")
                 .checkIsTextDisplayed("Mango")
                 .clickOnText("Mango")
                 .swipeToNextQuestion()
-                .putText("n")
+                .inputText("n")
                 .closeSoftKeyboard()
                 .checkIsTextDisplayed("Mango")
                 .checkIsTextDisplayed("Oranges")
@@ -337,7 +337,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
 
         for (int i = 1; i <= 3; i++) {
             FormEntryPage formEntryPage = new MainMenuPage(main).startBlankForm("random test");
-            formEntryPage.putText("3");
+            formEntryPage.inputText("3");
             formEntryPage.swipeToNextQuestion();
             firstQuestionAnswers.add(getQuestionText());
             formEntryPage.swipeToNextQuestion();
@@ -361,11 +361,11 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .checkIsToastWithMessageDisplayed("Form successfully saved!");
 
         new MainMenuPage(main).startBlankForm("g6Error2")
-                .putText("bla")
+                .inputText("bla")
                 .swipeToNextQuestionWithError()
                 .clickOK(new FormEntryPage("g6Error2", main))
                 .swipeToNextQuestion()
-                .putText("ble")
+                .inputText("ble")
                 .swipeToNextQuestion()
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed("Form successfully saved!");
@@ -376,7 +376,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .checkIsToastWithMessageDisplayed("Form successfully saved!");
 
         new MainMenuPage(main).startBlankForm("emptyGroupFieldList2")
-                .putText("nana")
+                .inputText("nana")
                 .swipeToNextQuestion()
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed("Form successfully saved!");

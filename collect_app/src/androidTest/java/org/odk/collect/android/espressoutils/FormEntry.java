@@ -110,10 +110,6 @@ public final class FormEntry {
         onView(withText(getInstrumentation().getTargetContext().getString(R.string.select_answer))).perform(click());
     }
 
-    public static void checkIsDisplayedInTextClassAndSwipe(String message) {
-        onView(withClassName(endsWith("EditText"))).check(matches(withText(message))).perform(swipeLeft());
-    }
-
     public static void swipeToNextQuestion() {
         onView(withId(R.id.questionholder)).perform(swipeLeft());
     }

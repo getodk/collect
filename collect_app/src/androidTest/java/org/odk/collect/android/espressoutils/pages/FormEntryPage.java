@@ -8,7 +8,6 @@ import org.odk.collect.android.support.ActivityHelpers;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -50,6 +49,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return new MainMenuPage(rule).assertOnPage();
     }
 
+    public FormEntryPage clickSaveAndExitWithError() {
+        onView(withId(R.id.save_exit_button)).perform(click());
+        return this;
+    }
+
     public FormEntryPage swipeToNextQuestion() {
         onView(withId(R.id.questionholder)).perform(swipeLeft());
         return this;
@@ -76,11 +80,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage putText(String text) {
-        onView(withClassName(endsWith("EditText"))).perform(replaceText(text));
-        return this;
-    }
-
     public FormEntryPage swipeToPreviousQuestion() {
         onView(withId(R.id.questionholder)).perform(swipeRight());
         return this;
@@ -88,6 +87,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage clickGoToIconInForm() {
         onView(withId(R.id.menu_goto)).perform(click());
+        return this;
+    }
+
+    public FormEntryPage swipeOnText(String text) {
+        onView(withClassName(endsWith("EditText"))).check(matches(withText(text))).perform(swipeLeft());
         return this;
     }
 }
