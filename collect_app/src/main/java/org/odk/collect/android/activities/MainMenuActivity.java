@@ -124,7 +124,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             public void onClick(View v) {
                 if (Collect.allowClick(getClass().getName())) {
                     Intent i = new Intent(getApplicationContext(),
-                            FormChooserList.class);
+                            FormChooserListActivity.class);
                     startActivity(i);
                 }
             }

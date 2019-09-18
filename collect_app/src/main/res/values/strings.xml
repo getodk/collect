@@ -164,7 +164,6 @@
     <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
     <string name="manifest_tag_error">Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl</string>
     <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
-    <string name="file_fetch_failed">Error: %2$s (%3$s) at %1$s</string>
     <string name="fetching_manifest">%s. Getting manifest </string>
     <string name="success">Success</string>
     <string name="failures">Failures</string>
@@ -384,9 +383,9 @@
         <item quantity="other">%d meters</item>
     </plurals>
     <string name="location_status_searching">Searching for GPS location, please wait&#8230;</string>
-    <string name="location_status_accuracy">GPS location accuracy: %.1f m</string>
-    <string name="location_status_acceptable">GPS location accuracy: %.1f m (acceptable)</string>
-    <string name="location_status_unacceptable">GPS location accuracy: %.1f m (unacceptable)</string>
+    <string name="location_status_accuracy">GPS location accuracy: %.2f m</string>
+    <string name="location_status_acceptable">GPS location accuracy: %.2f m (acceptable)</string>
+    <string name="location_status_unacceptable">GPS location accuracy: %.2f m (unacceptable)</string>
     <string name="collection_status_paused">Points entered: %d</string>
     <string name="collection_status_placement">Points entered: %d (tap to place points)</string>
     <string name="collection_status_manual">Points entered: %d (manual recording)</string>

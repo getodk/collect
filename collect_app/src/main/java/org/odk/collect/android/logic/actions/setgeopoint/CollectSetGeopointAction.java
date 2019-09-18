@@ -24,10 +24,10 @@ import org.javarosa.core.model.actions.setgeopoint.SetGeopointAction;
 import org.javarosa.core.model.instance.TreeReference;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.GoogleLocationClient;
-import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.location.client.MaxAccuracyWithinTimeoutLocationClient;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.GeoUtils;
+import org.odk.collect.android.utilities.PlayServicesUtil;
 
 import timber.log.Timber;
 
@@ -73,7 +73,7 @@ public class CollectSetGeopointAction extends SetGeopointAction implements Locat
         // Only start acquiring location if the Collect preference allows it and Google Play
         // Services are available. If it's not allowed, leave the target field blank.
         if (GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true)
-            && LocationClients.areGooglePlayServicesAvailable(Collect.getInstance().getApplicationContext())) {
+            && PlayServicesUtil.isGooglePlayServicesAvailable(Collect.getInstance().getApplicationContext())) {
             maxAccuracyLocationClient.requestLocationUpdates(SECONDS_TO_CONSIDER_UPDATES);
         }
     }

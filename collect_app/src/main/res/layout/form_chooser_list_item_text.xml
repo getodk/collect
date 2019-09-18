@@ -1,46 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <!-- Material Design reference: https://material.io/design/components/lists.html#specs -->
 
     <TextView
-            android:id="@+id/form_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.Collect.ListItemPrimary"/>
+        android:id="@+id/form_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Collect.Subtitle1"
+        tools:text="All widgets" />
 
     <TextView
-            android:id="@+id/form_subtitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.Collect.ListItemSecondary"/>
+        android:id="@+id/form_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:textAppearance="@style/TextAppearance.Collect.Body2.MediumEmphasis"
+        tools:text="Version: 2019051301" />
 
     <TextView
-            android:id="@+id/form_subtitle2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.Collect.ListItemSecondary"
-            android:visibility="gone"/>
+        android:id="@+id/form_subtitle2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:textAppearance="@style/TextAppearance.Collect.Body2.MediumEmphasis"
+        android:visibility="gone"
+        tools:text="Added on Thu, Jul 11, 2019 at 15:35"
+        tools:visibility="visible" />
 
     <TextView
-            android:id="@+id/form_update_alert"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/newer_version_of_a_form_info"
-            android:textAppearance="@style/TextAppearance.Collect.ListItemSecondary"
-            android:textColor="@color/displaySubtextColor"
-            android:visibility="gone"/>
+        android:id="@+id/form_update_alert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:text="@string/newer_version_of_a_form_info"
+        android:textAppearance="@style/TextAppearance.Collect.Body2"
+        android:textColor="?attr/colorSecondary"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <org.odk.collect.android.views.ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:visibility="gone"/>
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
 </LinearLayout>

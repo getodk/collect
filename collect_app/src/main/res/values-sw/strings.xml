@@ -151,8 +151,7 @@
   <string name="root_namespace_error">Root element namespace sio sahihi: %s</string>
   <string name="manifest_tag_error">Ingizo la orodha ya seva  %s inakosa taarifa moja au mbili: jina la kabrasha, alama ya reli, au URL ya kupakua</string>
   <string name="form_download_progress">%1$s. inapata kabrasha za media: %2$s kati ya %3$s</string>
-  <string name="file_fetch_failed">Hitilafu: %2$s (%3$s) katika %1$s</string>
-  <string name="fetching_manifest">%s. Inapata orodha </string>
+    <string name="fetching_manifest">%s. Inapata orodha </string>
   <string name="success">Mafanikio</string>
   <string name="failures">Zimeshindikana</string>
   <string name="no_forms_uploaded">Pole, hakuna fomu Iliyopakiwa.</string>

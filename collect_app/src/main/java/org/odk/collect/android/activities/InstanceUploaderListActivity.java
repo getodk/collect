@@ -63,9 +63,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import androidx.work.State;
+import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
-import androidx.work.WorkStatus;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -270,12 +269,12 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
      * Updates whether an auto-send job is ongoing.
      */
     private void updateAutoSendStatus() {
-        LiveData<List<WorkStatus>> statuses = WorkManager.getInstance().getStatusesForUniqueWorkLiveData(AutoSendWorker.class.getName());
+        LiveData<List<WorkInfo>> statuses = WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(AutoSendWorker.class.getName());
 
         statuses.observe(this, workStatuses -> {
             if (workStatuses != null) {
-                for (WorkStatus status : workStatuses) {
-                    if (status.getState().equals(State.RUNNING)) {
+                for (WorkInfo status : workStatuses) {
+                    if (status.getState().equals(WorkInfo.State.RUNNING)) {
                         autoSendOngoing = true;
                         return;
                     }

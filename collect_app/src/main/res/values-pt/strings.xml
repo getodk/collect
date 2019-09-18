@@ -145,8 +145,7 @@
   <string name="root_namespace_error">Root element Namespace - incorreto: %s</string>
   <string name="manifest_tag_error">Entrada %s está faltando uma ou mais tags: arquivo, hash, ou downloadURL</string>
   <string name="form_download_progress">%1$s. Acessando arquivos de mídia: %2$s de %3$s</string>
-  <string name="file_fetch_failed">Erro: %2$s (%3$s) em %1$s</string>
-  <string name="fetching_manifest">%s. Acessando manifesto</string>
+    <string name="fetching_manifest">%s. Acessando manifesto</string>
   <string name="success">Sucesso</string>
   <string name="failures">Falhas</string>
   <string name="no_forms_uploaded">Desculpe, nenhum formulário foi enviado.</string>

@@ -136,8 +136,7 @@
   <string name="root_namespace_error">အေျခခံလုပ္ေဆာင္ခ်က္ျဖစ္ေသာ အမည္ထည့္သြင္းျခင္း မမွန္ကန္ပါ: %s</string>
   <string name="manifest_tag_error">ရွင္းလင္းစြာထည့္သြင္းျခင္း %s တခု၊ တစ္ခုထက္ပို၍ မွားယြင္းေနပါသည္: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. မီဒီယာဖိုင္ရယူေနပါသည္: %2$s of %3$s</string>
-  <string name="file_fetch_failed">မွားယြင္းမွု: %2$s (%3$s) at %1$s</string>
-  <string name="fetching_manifest">%s. ရွင္းလင္းခ်က္ရယူေနပါသည္</string>
+    <string name="fetching_manifest">%s. ရွင္းလင္းခ်က္ရယူေနပါသည္</string>
   <string name="success">ေအာင္ျမင္ပါၿပီ</string>
   <string name="no_forms_uploaded">ပံုစံမရယူႏိုင္ေသးပါ</string>
   <string name="upload_results">ရယူမွုရလဒ္မ်ား</string>

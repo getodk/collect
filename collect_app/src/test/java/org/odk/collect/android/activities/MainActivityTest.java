@@ -107,7 +107,7 @@ public class MainActivityTest {
         ShadowActivity shadowActivity = shadowOf(mainMenuActivity);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
         ShadowIntent shadowIntent = shadowOf(startedIntent);
-        assertEquals(FormChooserList.class.getName(),
+        assertEquals(FormChooserListActivity.class.getName(),
                 shadowIntent.getIntentClass().getName());
     }
 

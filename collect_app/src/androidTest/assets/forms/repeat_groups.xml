@@ -1,0 +1,75 @@
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+    <h:head>
+        <h:title>repeatGroups</h:title>
+        <model>
+            <instance>
+                <data id="build_repeatGroups_1567117575">
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                    <repeatGroup>
+                        <text1>1</text1>
+                    </repeatGroup>
+                    <repeatGroup>
+                        <text1>2</text1>
+                    </repeatGroup>
+                    <repeatGroup>
+                        <text1>3</text1>
+                    </repeatGroup>
+                    <repeatGroup>
+                        <text1>4</text1>
+                    </repeatGroup>
+                    <repeatGroupFieldList>
+                        <number1>1</number1>
+                    </repeatGroupFieldList>
+                    <repeatGroupFieldList>
+                        <number1>2</number1>
+                    </repeatGroupFieldList>
+                    <repeatGroupFieldList>
+                        <number1>3</number1>
+                    </repeatGroupFieldList>
+                    <repeatGroupFieldList>
+                        <number1>4</number1>
+                    </repeatGroupFieldList>
+                </data>
+            </instance>
+            <itext>
+                <translation lang="English">
+                    <text id="/data/repeatGroup:label">
+                        <value>repeatGroup</value>
+                    </text>
+                    <text id="/data/repeatGroup/text1:label">
+                        <value>text1</value>
+                    </text>
+                    <text id="/data/repeatGroupFieldList:label">
+                        <value>repeatGroupFieldList</value>
+                    </text>
+                    <text id="/data/repeatGroupFieldList/number1:label">
+                        <value>number1</value>
+                    </text>
+                </translation>
+            </itext>
+            <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" calculate="concat('uuid:', uuid())"/>
+            <bind nodeset="/data/repeatGroup/text1" type="string"/>
+            <bind nodeset="/data/repeatGroupFieldList/number1" type="int"/>
+        </model>
+    </h:head>
+    <h:body>
+        <group ref="/data/repeatGroup">
+            <label ref="jr:itext('/data/repeatGroup:label')"/>
+            <repeat nodeset="/data/repeatGroup">
+                <input ref="/data/repeatGroup/text1">
+                    <label ref="jr:itext('/data/repeatGroup/text1:label')"/>
+                </input>
+            </repeat>
+        </group>
+        <group ref="/data/repeatGroupFieldList">
+            <label ref="jr:itext('/data/repeatGroupFieldList:label')"/>
+            <repeat appearance="field-list" nodeset="/data/repeatGroupFieldList">
+                <input ref="/data/repeatGroupFieldList/number1">
+                    <label ref="jr:itext('/data/repeatGroupFieldList/number1:label')"/>
+                </input>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>

@@ -443,7 +443,6 @@ public class Collect extends Application {
         return FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
     }
 
-
     /**
      * Gets a unique, privacy-preserving identifier for a form based on its id and version.
      * @param formId id of a form

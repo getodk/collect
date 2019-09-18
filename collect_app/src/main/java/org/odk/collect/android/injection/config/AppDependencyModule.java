@@ -7,22 +7,21 @@ import android.webkit.MimeTypeMap;
 
 import com.google.android.gms.analytics.Tracker;
 
+import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.http.CollectThenSystemContentTypeMapper;
-import org.odk.collect.android.http.okhttp.OkHttpConnection;
-import org.odk.collect.android.http.okhttp.OkHttpOpenRosaServerClientFactory;
+import org.odk.collect.android.http.openrosa.okhttp.OkHttpConnection;
+import org.odk.collect.android.http.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-
-import java.util.Date;
 
 import javax.inject.Singleton;
 
@@ -77,8 +76,9 @@ public class AppDependencyModule {
     @Singleton
     OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap) {
         return new OkHttpConnection(
-                new OkHttpOpenRosaServerClientFactory(new OkHttpClient.Builder(), Date::new),
-                new CollectThenSystemContentTypeMapper(mimeTypeMap)
+                new OkHttpOpenRosaServerClientProvider(new OkHttpClient()),
+                new CollectThenSystemContentTypeMapper(mimeTypeMap),
+                Collect.getInstance().getUserAgentString()
         );
     }
 
@@ -115,5 +115,10 @@ public class AppDependencyModule {
     @Provides
     public PermissionUtils providesPermissionUtils() {
         return new PermissionUtils();
+    }
+
+    @Provides
+    public ReferenceManager providesReferenceManager() {
+        return ReferenceManager.instance();
     }
 }

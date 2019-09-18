@@ -5,7 +5,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.odk.collect.android.activities.FormChooserList;
+import org.odk.collect.android.activities.FormChooserListActivity;
 
 import java.io.IOException;
 
@@ -16,8 +16,8 @@ import static org.odk.collect.android.externalintents.ExportedActivitiesUtils.te
 public class FormChooserListTest {
 
     @Rule
-    public ActivityTestRule<FormChooserList> formChooserListRule =
-            new ExportedActivityTestRule<>(FormChooserList.class);
+    public ActivityTestRule<FormChooserListActivity> formChooserListRule =
+            new ExportedActivityTestRule<>(FormChooserListActivity.class);
 
     @Test
     public void formChooserListMakesDirsTest() throws IOException {

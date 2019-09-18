@@ -151,8 +151,7 @@
   <string name="root_namespace_error">Неверное пространство имён для корневого элемента: %s</string>
   <string name="manifest_tag_error">В записи манифеста %s отсутствуют один или более тэгов: filename, hash, или downloadUrl</string>
   <string name="form_download_progress">%1$s. Загрузка медиа-файлов: %2$s из %3$s</string>
-  <string name="file_fetch_failed">Ошибка: %2$s (%3$s) в %1$s</string>
-  <string name="fetching_manifest">%s. Загрузка манифеста</string>
+    <string name="fetching_manifest">%s. Загрузка манифеста</string>
   <string name="success">Успешно</string>
   <string name="failures">Неудачи</string>
   <string name="no_forms_uploaded">Опрос НЕ выгружен</string>

@@ -1,11 +1,12 @@
 package org.odk.collect.android.http;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.odk.collect.android.BuildConfig;
+import org.odk.collect.android.http.openrosa.HttpGetResult;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.http.support.MockWebServerRule;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.ByteArrayInputStream;
@@ -21,26 +22,25 @@ import okhttp3.mockwebserver.RecordedRequest;
 import okio.Buffer;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public abstract class OpenRosaGetRequestTest {
 
+    static final String USER_AGENT = "Test Agent";
+
     protected abstract OpenRosaHttpInterface buildSubject();
 
-    private final MockWebServer mockWebServer = new MockWebServer();
+    @Rule
+    public MockWebServerRule mockWebServerRule = new MockWebServerRule();
+
+    private MockWebServer mockWebServer;
     private OpenRosaHttpInterface subject;
 
     @Before
     public void setup() throws Exception {
-        mockWebServer.start();
         subject = buildSubject();
-    }
-
-    @After
-    public void teardown() throws Exception {
-        mockWebServer.shutdown();
+        mockWebServer = mockWebServerRule.start();
     }
 
     @Test
@@ -64,24 +64,7 @@ public abstract class OpenRosaGetRequestTest {
         subject.executeGetRequest(mockWebServer.url("").uri(), null, null);
 
         RecordedRequest request = mockWebServer.takeRequest();
-        assertThat(request.getHeader("User-Agent"), equalTo(String.format(
-                "null %s/%s",
-                BuildConfig.APPLICATION_ID,
-                BuildConfig.VERSION_NAME)));
-    }
-
-    @Test
-    public void whenLastRequestSetCookies_nextRequestDoesNotSendThem() throws Exception {
-        mockWebServer.enqueue(new MockResponse()
-                .addHeader("Set-Cookie", "blah=blah"));
-        mockWebServer.enqueue(new MockResponse());
-
-        subject.executeGetRequest(mockWebServer.url("").uri(), null, null);
-        subject.executeGetRequest(mockWebServer.url("").uri(), null, null);
-
-        mockWebServer.takeRequest();
-        RecordedRequest request = mockWebServer.takeRequest();
-        assertThat(request.getHeader("Cookie"), isEmptyOrNullString());
+        assertThat(request.getHeader("User-Agent"), equalTo(USER_AGENT));
     }
 
     @Test

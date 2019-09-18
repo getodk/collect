@@ -133,8 +133,7 @@
   <string name="root_namespace_error">ძირის ელემენტის სახელთა სივრცე არასწორია: %s</string>
   <string name="manifest_tag_error">მანიფესტის ჩანაწერში %s არ არსებობს ერთი ან მეტი ჭდე: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. მედია-ფაილების მიღება: %2$s of %3$s</string>
-  <string name="file_fetch_failed">შეცდომა: %2$s (%3$s) - %1$s</string>
-  <string name="fetching_manifest">%s. მანიფესტის მიღება </string>
+    <string name="fetching_manifest">%s. მანიფესტის მიღება </string>
   <string name="success">წარმატება</string>
   <string name="no_forms_uploaded">უკაცრავად, ფორმები ვერ აიტვირთა.</string>
   <string name="upload_results">ატვირთვის შედეგი</string>

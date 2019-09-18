@@ -155,8 +155,7 @@
   <string name="root_namespace_error">Il \'Namespace\' dell\'Elemento Root del documento XML non è corretto: %s</string>
   <string name="manifest_tag_error">Il \'Manifest\' %s del documento XML manca di una o più \'tag\': filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Caricamento file multimediali: %2$s di %3$s</string>
-  <string name="file_fetch_failed">Errore: %2$s (%3$s) su %1$s</string>
-  <string name="fetching_manifest">%s. Ottenendo \'Manifest\' da XML</string>
+    <string name="fetching_manifest">%s. Ottenendo \'Manifest\' da XML</string>
   <string name="success">Successo</string>
   <string name="failures">Errori</string>
   <string name="no_forms_uploaded">Spiacenti, nessun modulo è stato caricato.</string>

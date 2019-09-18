@@ -11,7 +11,7 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.espressoutils.FormEntry;
-import org.odk.collect.android.espressoutils.MainMenu;
+import org.odk.collect.android.espressoutils.pages.MainMenuPage;
 import org.odk.collect.android.espressoutils.Settings;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -33,14 +33,16 @@ public class TriggerWidgetTest extends BaseRegressionTest {
 
     @Test
     public void guidanceIcons_ShouldBeAlwaysShown() {
-        MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings(main.getActivity());
+        new MainMenuPage(main)
+                .clickOnMenu()
+                .clickGeneralSettings();
+
         Settings.openFormManagement();
         Settings.openShowGuidanceForQuestions();
         Settings.clickOnString(R.string.guidance_yes);
         pressBack();
         pressBack();
-        MainMenu.startBlankForm("Guidance Form Sample");
+        new MainMenuPage(main).startBlankForm("Guidance Form Sample");
         FormEntry.checkIsTextDisplayed("Guidance text");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
@@ -49,14 +51,16 @@ public class TriggerWidgetTest extends BaseRegressionTest {
 
     @Test
     public void guidanceIcons_ShouldBeCollapsed() {
-        MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings(main.getActivity());
+        new MainMenuPage(main)
+                .clickOnMenu()
+                .clickGeneralSettings();
+
         Settings.openFormManagement();
         Settings.openShowGuidanceForQuestions();
         Settings.clickOnString(R.string.guidance_yes_collapsed);
         pressBack();
         pressBack();
-        MainMenu.startBlankForm("Guidance Form Sample");
+        new MainMenuPage(main).startBlankForm("Guidance Form Sample");
         FormEntry.checkIsIdDisplayed(R.id.help_icon);
         FormEntry.clickOnText("TriggerWidget");
         FormEntry.checkIsTextDisplayed("Guidance text");

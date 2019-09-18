@@ -129,8 +129,7 @@
   <string name="root_namespace_error">Okuwumsuka wegama akuyilona : %s</string>
   <string name="manifest_tag_error">Manifest entry %s entulekayo eyodwa noma ngaphezulu tag: lefayela, hashi, noma downloadUrl</string>
   <string name="form_download_progress">%1$s. Ukuthola amafayela emidya: %2$s of %3$s</string>
-  <string name="file_fetch_failed">Iphutha: %2$s (%3$s) at %1$s</string>
-  <string name="fetching_manifest">%s. Ukuthola izinkomba</string>
+    <string name="fetching_manifest">%s. Ukuthola izinkomba</string>
   <string name="success">Impumelelo</string>
   <string name="no_forms_uploaded">Siyaxolisa, akukho fomu alayishiwe .</string>
   <string name="upload_results">Layisha imiphumela</string>

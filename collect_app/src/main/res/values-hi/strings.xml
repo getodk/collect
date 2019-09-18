@@ -145,8 +145,7 @@
   <string name="root_namespace_error">रूट एलिमेंट नेमस्पेस गलत है: %s</string>
   <string name="manifest_tag_error">मेन्फेस्ट एंट्री %sमें एक या अधिक टैग लापता हैं: फ़ाइल नाम, हैश, या डाउनलोडUrl</string>
   <string name="form_download_progress">%1$s. %3$sकी %2$sमीडिया फाइलें मिल रही हैं: </string>
-  <string name="file_fetch_failed">गलती: %1$sपर %2$s (%3$s)  </string>
-  <string name="fetching_manifest">%s. मेनीफेस्ट मिल रहा है </string>
+    <string name="fetching_manifest">%s. मेनीफेस्ट मिल रहा है </string>
   <string name="success">सफल</string>
   <string name="no_forms_uploaded">क्षमा करें, कोई फॉर्म अपलोड नहीं किया गया.</string>
   <string name="upload_results">परिणाम अपलोड करें</string>
