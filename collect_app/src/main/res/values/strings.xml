@@ -383,9 +383,9 @@
         <item quantity="other">%d meters</item>
     </plurals>
     <string name="location_status_searching">Searching for GPS location, please wait&#8230;</string>
-    <string name="location_status_accuracy">GPS location accuracy: %.1f m</string>
-    <string name="location_status_acceptable">GPS location accuracy: %.1f m (acceptable)</string>
-    <string name="location_status_unacceptable">GPS location accuracy: %.1f m (unacceptable)</string>
+    <string name="location_status_accuracy">GPS location accuracy: %.2f m</string>
+    <string name="location_status_acceptable">GPS location accuracy: %.2f m (acceptable)</string>
+    <string name="location_status_unacceptable">GPS location accuracy: %.2f m (unacceptable)</string>
     <string name="collection_status_paused">Points entered: %d</string>
     <string name="collection_status_placement">Points entered: %d (tap to place points)</string>
     <string name="collection_status_manual">Points entered: %d (manual recording)</string>
