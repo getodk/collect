@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets;
 
+import android.app.Application;
 import android.content.Context;
 import android.widget.TextView;
 
@@ -18,15 +19,16 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.formentry.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
-import org.odk.collect.android.formentry.AudioVideoImageTextLabel;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
@@ -34,6 +36,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.Helpers.createMockReference;
@@ -49,6 +52,9 @@ public class SelectWidgetTest {
 
     @Mock
     public AudioHelper audioHelper;
+
+    @Mock
+    public Analytics analytics;
 
     @Before
     public void setup() {
@@ -80,6 +86,29 @@ public class SelectWidgetTest {
         verify(audioHelper).setAudio(any(AudioButton.class), eq(reference2), eq("i am index 1"));
     }
 
+    @Test
+    public void whenChoicesHaveAudio_logsAudioChoiceEvent() throws Exception {
+        createMockReference(referenceManager, "file://blah1.mp3");
+        createMockReference(referenceManager, "file://blah2.mp3");
+
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withIndex("i am index")
+                .withSelectChoices(asList(
+                        new SelectChoice("1", "1"),
+                        new SelectChoice("2", "2")
+                ))
+                .withSpecialFormSelectChoiceText(asList(
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://blah1.mp3"),
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://blah2.mp3")
+                ))
+                .build();
+
+        TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
+        new TestWidget(activity, new QuestionDetails(prompt, "formAnalyticsID"), prompt.getSelectChoices());
+
+        verify(analytics, times(2)).logEvent("Prompt", "AudioChoice", "formAnalyticsID");
+    }
+
     private void overrideDependencyModule() {
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
@@ -91,6 +120,11 @@ public class SelectWidgetTest {
             @Override
             public AudioHelperFactory providesAudioHelperFactory() {
                 return context -> audioHelper;
+            }
+
+            @Override
+            public Analytics providesAnalytics(Application application) {
+                return analytics;
             }
         });
     }

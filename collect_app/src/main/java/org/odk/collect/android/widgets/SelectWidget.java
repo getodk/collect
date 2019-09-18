@@ -84,7 +84,11 @@ public abstract class SelectWidget extends ItemsWidget {
 
         audioVideoImageTextLabel.setTag(getClipID(getFormEntryPrompt(), item));
         audioVideoImageTextLabel.setAVT(textView, imageURI, videoURI, bigImageURI, getReferenceManager());
-        audioVideoImageTextLabel.setAudio(audioURI, getAudioHelper());
+
+        if (audioURI != null) {
+            audioVideoImageTextLabel.setAudio(audioURI, getAudioHelper());
+            analytics.logEvent("Prompt", "AudioChoice", getQuestionDetails().getFormAnalyticsID());
+        }
 
         textView.setGravity(Gravity.CENTER_VERTICAL);
     }

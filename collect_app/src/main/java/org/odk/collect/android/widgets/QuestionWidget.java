@@ -324,6 +324,10 @@ public abstract class QuestionWidget
         return formEntryPrompt;
     }
 
+    public QuestionDetails getQuestionDetails() {
+        return questionDetails;
+    }
+
     // http://code.google.com/p/android/issues/detail?id=8488
     private void recycleDrawablesRecursive(ViewGroup viewGroup, List<ImageView> images) {
 
