@@ -31,7 +31,7 @@ public class DateTimeWidgetTest extends GeneralDateTimeWidgetTest<DateTimeWidget
     @NonNull
     @Override
     public DateTimeWidget createWidget() {
-        return new DateTimeWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new DateTimeWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @NonNull

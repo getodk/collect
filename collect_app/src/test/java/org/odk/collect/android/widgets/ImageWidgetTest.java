@@ -31,7 +31,7 @@ public class ImageWidgetTest extends FileWidgetTest<ImageWidget> {
     @NonNull
     @Override
     public ImageWidget createWidget() {
-        return new ImageWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new ImageWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @NonNull

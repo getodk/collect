@@ -29,7 +29,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     @NonNull
     @Override
     public AnnotateWidget createWidget() {
-        return new AnnotateWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new AnnotateWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @NonNull

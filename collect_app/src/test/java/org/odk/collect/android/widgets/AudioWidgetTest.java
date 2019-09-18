@@ -47,7 +47,7 @@ public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
     @NonNull
     @Override
     public AudioWidget createWidget() {
-        return new AudioWidget(activity, new QuestionDetails(formEntryPrompt), fileUtil, mediaUtil, audioController);
+        return new AudioWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), fileUtil, mediaUtil, audioController);
     }
 
     @NonNull

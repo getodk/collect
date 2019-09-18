@@ -34,7 +34,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
     @NonNull
     @Override
     public DrawWidget createWidget() {
-        return new DrawWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new DrawWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @NonNull

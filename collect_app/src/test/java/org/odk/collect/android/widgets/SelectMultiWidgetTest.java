@@ -13,6 +13,6 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
     @NonNull
     @Override
     public SelectMultiWidget createWidget() {
-        return new SelectMultiWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new SelectMultiWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 }

@@ -20,7 +20,7 @@ public class BooleanWidgetTest extends WidgetTest {
 
     @NonNull
     private BooleanWidget getWidget() {
-        return new BooleanWidget(RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get(), new QuestionDetails(formEntryPrompt));
+        return new BooleanWidget(RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get(), new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     // BooleanWidgets always return a non-null answer, so we need to handle these tests manually:

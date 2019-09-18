@@ -43,7 +43,7 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
     @NonNull
     @Override
     public VideoWidget createWidget() {
-        return new VideoWidget(activity, new QuestionDetails(formEntryPrompt), fileUtil, mediaUtil);
+        return new VideoWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), fileUtil, mediaUtil);
     }
 
     @NonNull

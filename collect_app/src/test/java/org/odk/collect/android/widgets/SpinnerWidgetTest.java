@@ -13,6 +13,6 @@ public class SpinnerWidgetTest extends GeneralSelectOneWidgetTest<SpinnerWidget>
     @NonNull
     @Override
     public SpinnerWidget createWidget() {
-        return new SpinnerWidget(activity, new QuestionDetails(formEntryPrompt), false);
+        return new SpinnerWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), false);
     }
 }

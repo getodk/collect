@@ -22,7 +22,7 @@ public class TriggerWidgetTest extends QuestionWidgetTest<TriggerWidget, StringD
     @NonNull
     @Override
     public TriggerWidget createWidget() {
-        return new TriggerWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new TriggerWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @NonNull

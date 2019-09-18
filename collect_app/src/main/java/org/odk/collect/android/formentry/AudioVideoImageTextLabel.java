@@ -95,8 +95,12 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         ButterKnife.bind(this);
     }
 
-    public void setAVT(TextView labelTextView, String audioURI, String imageURI, String videoURI,
-                       String bigImageURI, ReferenceManager referenceManager, AudioHelper audioHelper) {
+    public void setAudio(String audioURI, AudioHelper audioHelper) {
+        setupAudioButton(audioURI, audioHelper);
+    }
+
+    public void setAVT(TextView labelTextView, String imageURI, String videoURI,
+                       String bigImageURI, ReferenceManager referenceManager) {
         this.bigImageURI = bigImageURI;
         this.videoURI = videoURI;
         this.referenceManager = referenceManager;
@@ -104,10 +108,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         this.labelTextView = labelTextView;
         originalText = labelTextView.getText();
         this.labelTextView.setId(ViewIds.generateViewId());
-
-        if (audioURI != null) {
-            setupAudioButton(audioURI, audioHelper);
-        }
 
         if (videoURI != null) {
             setupVideoButton();

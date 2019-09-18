@@ -47,12 +47,11 @@ public class AudioVideoImageTextLabelTest {
         AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
         audioVideoImageTextLabel.setAVT(
                 new TextView(activity),
-                "file://audio.mp3",
                 null,
                 null,
                 null,
-                referenceManager,
-                audioHelper);
+                referenceManager);
+        audioVideoImageTextLabel.setAudio("file://audio.mp3", audioHelper);
 
         int originalTextColor = audioVideoImageTextLabel.getLabelTextView().getCurrentTextColor();
 

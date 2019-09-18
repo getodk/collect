@@ -43,7 +43,7 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
     @NonNull
     @Override
     public GridMultiWidget createWidget() {
-        return new GridMultiWidget(activity, new QuestionDetails(formEntryPrompt), audioHelper);
+        return new GridMultiWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), audioHelper);
     }
 
     @Rule

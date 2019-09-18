@@ -19,7 +19,7 @@ public class ExStringWidgetTest extends GeneralExStringWidgetTest<ExStringWidget
     @NonNull
     @Override
     public ExStringWidget createWidget() {
-        return new ExStringWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new ExStringWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @NonNull

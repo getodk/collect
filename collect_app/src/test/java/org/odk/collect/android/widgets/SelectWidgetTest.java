@@ -74,7 +74,7 @@ public class SelectWidgetTest {
                 .build();
 
         TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
-        new TestWidget(activity, new QuestionDetails(prompt), prompt.getSelectChoices());
+        new TestWidget(activity, new QuestionDetails(prompt, "formAnalyticsID"), prompt.getSelectChoices());
 
         verify(audioHelper).setAudio(any(AudioButton.class), eq(reference1), eq("i am index 0"));
         verify(audioHelper).setAudio(any(AudioButton.class), eq(reference2), eq("i am index 1"));

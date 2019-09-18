@@ -31,7 +31,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
     @NonNull
     @Override
     public SignatureWidget createWidget() {
-        return new SignatureWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new SignatureWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @NonNull

@@ -18,7 +18,7 @@ public class SpinnerMultiWidgetTest extends GeneralSelectMultiWidgetTest<Spinner
     @NonNull
     @Override
     public SpinnerMultiWidget createWidget() {
-        return new SpinnerMultiWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new SpinnerMultiWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @Override

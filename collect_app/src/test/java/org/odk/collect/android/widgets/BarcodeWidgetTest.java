@@ -24,7 +24,7 @@ public class BarcodeWidgetTest extends BinaryWidgetTest<BarcodeWidget, StringDat
     @NonNull
     @Override
     public BarcodeWidget createWidget() {
-        return new BarcodeWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new BarcodeWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @Override

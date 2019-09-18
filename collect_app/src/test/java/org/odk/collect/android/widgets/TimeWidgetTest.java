@@ -24,7 +24,7 @@ public class TimeWidgetTest extends GeneralDateTimeWidgetTest<TimeWidget, TimeDa
     @NonNull
     @Override
     public TimeWidget createWidget() {
-        return new TimeWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new TimeWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @NonNull

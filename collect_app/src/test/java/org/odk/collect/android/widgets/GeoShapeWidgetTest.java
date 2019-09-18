@@ -37,7 +37,7 @@ public class GeoShapeWidgetTest extends BinaryWidgetTest<GeoShapeWidget, StringD
     @NonNull
     @Override
     public GeoShapeWidget createWidget() {
-        return new GeoShapeWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new GeoShapeWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @Override

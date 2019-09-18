@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets;
 
+import android.app.Application;
 import android.content.Context;
 
 import androidx.lifecycle.MutableLiveData;
@@ -14,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
@@ -42,6 +44,9 @@ public class QuestionWidgetTest {
     @Mock
     public AudioHelper audioHelper;
 
+    @Mock
+    public Analytics analytics;
+
     @Before
     public void setup() {
         overrideDependencyModule();
@@ -58,9 +63,24 @@ public class QuestionWidgetTest {
                 .build();
 
         TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
-        new TestWidget(activity, new QuestionDetails(prompt));
+        new TestWidget(activity, new QuestionDetails(prompt, "formAnalyticsID"));
 
         verify(audioHelper).setAudio(any(AudioButton.class), eq(reference), eq("i am index"));
+    }
+
+    @Test
+    public void whenQuestionHasAudio_logsAudioLabelEvent() throws Exception {
+        createMockReference(referenceManager, "file://blah.mp3");
+
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withIndex("i am index")
+                .withAudioURI("file://blah.mp3")
+                .build();
+
+        TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
+        new TestWidget(activity, new QuestionDetails(prompt, "formAnalyticsID"));
+
+        verify(analytics).logEvent("Prompt", "AudioLabel", "formAnalyticsID");
     }
 
     private void overrideDependencyModule() {
@@ -74,6 +94,11 @@ public class QuestionWidgetTest {
             @Override
             public AudioHelperFactory providesAudioHelperFactory() {
                 return context -> audioHelper;
+            }
+
+            @Override
+            public Analytics providesAnalytics(Application application) {
+                return analytics;
             }
         });
     }

@@ -115,7 +115,7 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public Analytics providesTracker(Application application) {
+    public Analytics providesAnalytics(Application application) {
         com.google.android.gms.analytics.GoogleAnalytics analytics = com.google.android.gms.analytics.GoogleAnalytics.getInstance(application);
         Tracker tracker = analytics.newTracker(R.xml.global_tracker);
         GoogleAnalytics googleAnalytics = new GoogleAnalytics(tracker);

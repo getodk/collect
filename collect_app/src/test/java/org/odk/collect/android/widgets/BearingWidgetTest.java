@@ -19,7 +19,7 @@ public class BearingWidgetTest extends BinaryWidgetTest<BearingWidget, StringDat
     @NonNull
     @Override
     public BearingWidget createWidget() {
-        return new BearingWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new BearingWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @Override

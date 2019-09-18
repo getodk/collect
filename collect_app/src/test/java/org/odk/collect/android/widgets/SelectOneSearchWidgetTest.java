@@ -13,6 +13,6 @@ public class SelectOneSearchWidgetTest extends GeneralSelectOneWidgetTest<Select
     @NonNull
     @Override
     public SelectOneSearchWidget createWidget() {
-        return new SelectOneSearchWidget(activity, new QuestionDetails(formEntryPrompt), false);
+        return new SelectOneSearchWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), false);
     }
 }

@@ -13,6 +13,6 @@ public class ListWidgetTest extends GeneralSelectOneWidgetTest<ListWidget> {
     @NonNull
     @Override
     public ListWidget createWidget() {
-        return new ListWidget(activity, new QuestionDetails(formEntryPrompt), false, false);
+        return new ListWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), false, false);
     }
 }

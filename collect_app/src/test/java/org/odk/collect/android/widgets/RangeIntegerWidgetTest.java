@@ -15,7 +15,7 @@ public class RangeIntegerWidgetTest extends RangeWidgetTest<RangeIntegerWidget, 
     @NonNull
     @Override
     public RangeIntegerWidget createWidget() {
-        return new RangeIntegerWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new RangeIntegerWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @NonNull

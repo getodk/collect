@@ -106,6 +106,6 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
     @NonNull
     @Override
     public GridWidget createWidget() {
-        return new GridWidget(activity, new QuestionDetails(formEntryPrompt), false, audioHelper);
+        return new GridWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), false, audioHelper);
     }
 }

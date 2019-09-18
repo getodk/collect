@@ -15,7 +15,7 @@ public class RangeDecimalWidgetTest extends RangeWidgetTest<RangeDecimalWidget, 
     @NonNull
     @Override
     public RangeDecimalWidget createWidget() {
-        return new RangeDecimalWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new RangeDecimalWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @NonNull

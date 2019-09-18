@@ -32,7 +32,7 @@ public class ExDecimalWidgetTest extends GeneralExStringWidgetTest<ExDecimalWidg
     @NonNull
     @Override
     public ExDecimalWidget createWidget() {
-        return new ExDecimalWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new ExDecimalWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @NonNull
@@ -65,11 +65,11 @@ public class ExDecimalWidgetTest extends GeneralExStringWidgetTest<ExDecimalWidg
         when(formEntryPrompt.getAnswerValue()).thenReturn(answerData);
         when(answerData.getValue()).thenReturn(eighteenDigitDouble);
 
-        ExDecimalWidget exDecimalWidget = new ExDecimalWidget(activity, new QuestionDetails(formEntryPrompt));
+        ExDecimalWidget exDecimalWidget = new ExDecimalWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
 
         assertThat(exDecimalWidget.getAnswerText(), is(equalTo(fifteenDigitString)));
 
-        exDecimalWidget = new ExDecimalWidget(activity, new QuestionDetails(formEntryPrompt));
+        exDecimalWidget = new ExDecimalWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
 
         assertThat(exDecimalWidget.getAnswerText(), is(equalTo(fifteenDigitString)));
     }

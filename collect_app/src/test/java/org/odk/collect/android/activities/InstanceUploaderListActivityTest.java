@@ -64,7 +64,7 @@ public class InstanceUploaderListActivityTest {
         }
 
         @Override
-        public Analytics providesTracker(Application application) {
+        public Analytics providesAnalytics(Application application) {
             return tracker;
         }
 

@@ -41,7 +41,7 @@ public class OSMWidgetTest extends BinaryWidgetTest<OSMWidget, StringData> {
     @NonNull
     @Override
     public OSMWidget createWidget() {
-        return new OSMWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new OSMWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @NonNull

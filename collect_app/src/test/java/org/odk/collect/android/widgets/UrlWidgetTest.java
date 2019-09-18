@@ -16,7 +16,7 @@ public class UrlWidgetTest extends QuestionWidgetTest<UrlWidget, StringData> {
     @NonNull
     @Override
     public UrlWidget createWidget() {
-        return new UrlWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new UrlWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @NonNull

@@ -48,6 +48,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.AudioVideoImageTextLabel;
@@ -80,7 +81,6 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
 import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
-
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 
 public abstract class QuestionWidget
@@ -90,6 +90,7 @@ public abstract class QuestionWidget
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
     private final AudioVideoImageTextLabel audioVideoImageTextLabel;
+    private final QuestionDetails questionDetails;
     private MediaPlayer player;
     private final TextView helpTextView;
     private final TextView guidanceTextView;
@@ -113,6 +114,9 @@ public abstract class QuestionWidget
     @Inject
     public AudioHelperFactory audioHelperFactory;
 
+    @Inject
+    public Analytics analytics;
+
     public QuestionWidget(Context context, QuestionDetails questionDetails) {
         super(context);
         getComponent(context).inject(this);
@@ -130,6 +134,7 @@ public abstract class QuestionWidget
 
         questionFontSize = Collect.getQuestionFontsize();
 
+        this.questionDetails = questionDetails;
         formEntryPrompt = questionDetails.getPrompt();
 
         setGravity(Gravity.TOP);
@@ -268,6 +273,11 @@ public abstract class QuestionWidget
             questionText.setVisibility(GONE);
         }
 
+        // Create the layout for audio, image, text
+        AudioVideoImageTextLabel label = new AudioVideoImageTextLabel(getContext());
+        label.setId(ViewIds.generateViewId()); // assign random id
+        label.setTag(getClipID(prompt));
+
         String imageURI = this instanceof SelectImageMapWidget ? null : prompt.getImageText();
         String videoURI = prompt.getSpecialFormQuestionText("video");
 
@@ -281,13 +291,17 @@ public abstract class QuestionWidget
         questionAudioVideoImageTextLabel.setTag(getClipID(prompt));
         questionAudioVideoImageTextLabel.setAVT(
                 questionText,
-                getPlayableAudioURI(prompt, referenceManager),
                 imageURI,
                 videoURI,
                 bigImageURI,
-                getReferenceManager(),
-                audioHelper
+                getReferenceManager()
         );
+
+        String playableAudioURI = getPlayableAudioURI(prompt, referenceManager);
+        if (playableAudioURI != null) {
+            label.setAudio(playableAudioURI, audioHelper);
+            analytics.logEvent("Prompt", "AudioLabel", questionDetails.getFormAnalyticsID());
+        }
 
         String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
         if (playColorString != null) {

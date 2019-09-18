@@ -105,7 +105,10 @@ public class AudioVideoImageTextLabelVisibilityTest {
         Assert.assertEquals(VISIBLE, audioVideoImageTextLabel.getVisibility());
         assertVisibility(GONE, audioButton, videoButton, imageView, missingImage);
 
-        audioVideoImageTextLabel.setAVT(textView, audioURI, imageURI, videoURI, null, referenceManager, audioHelper);
+        audioVideoImageTextLabel.setAVT(textView, imageURI, videoURI, null, referenceManager);
+        if (audioURI != null) {
+            audioVideoImageTextLabel.setAudio(audioURI, audioHelper);
+        }
 
         // we do not check for the validity of the URIs for the audio and video while loading MediaLayout
         assertVisibility(audioURI == null ? GONE : VISIBLE, audioButton);

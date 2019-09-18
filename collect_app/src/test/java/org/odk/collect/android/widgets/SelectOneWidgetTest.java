@@ -14,6 +14,6 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<AbstractSele
     @NonNull
     @Override
     public SelectOneWidget createWidget() {
-        return new SelectOneWidget(activity, new QuestionDetails(formEntryPrompt), false);
+        return new SelectOneWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), false);
     }
 }
