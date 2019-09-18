@@ -99,6 +99,10 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         setupAudioButton(audioURI, audioHelper);
     }
 
+    /**
+     * This should move to separate setters like {@link #setAudio(String, AudioHelper)}
+     */
+    @Deprecated
     public void setAVT(TextView labelTextView, String imageURI, String videoURI,
                        String bigImageURI, ReferenceManager referenceManager) {
         this.bigImageURI = bigImageURI;
