@@ -3,6 +3,7 @@ package org.odk.collect.android.widgets;
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 
+import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.reference.ReferenceManager;
@@ -49,6 +50,11 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
             @Override
             public ReferenceManager providesReferenceManager() {
                 return referenceManager;
+            }
+
+            @Override
+            public AudioHelperFactory providesAudioHelperFactory() {
+                return context -> audioHelper;
             }
         });
     }
@@ -106,6 +112,6 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
     @NonNull
     @Override
     public GridWidget createWidget() {
-        return new GridWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), false, audioHelper);
+        return new GridWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), false);
     }
 }

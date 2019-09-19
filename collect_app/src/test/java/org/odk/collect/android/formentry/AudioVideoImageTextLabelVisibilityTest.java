@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.logic.FileReference;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.robolectric.ParameterizedRobolectricTestRunner;

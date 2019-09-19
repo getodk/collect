@@ -21,10 +21,8 @@ import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
-import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.Clip;
-import org.odk.collect.android.utilities.ScreenContext;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
@@ -36,16 +34,9 @@ import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayab
 @SuppressLint("ViewConstructor")
 public class GridMultiWidget extends BaseGridWidget {
 
-    public GridMultiWidget(Context context, QuestionDetails prompt, AudioHelper audioHelper) {
-        super(context, prompt, false, audioHelper);
-        SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
-    }
-
     public GridMultiWidget(Context context, QuestionDetails prompt) {
-        this(context, prompt, new AudioHelper(
-                ((ScreenContext) context).getActivity(),
-                ((ScreenContext) context).getViewLifecycle()
-        ));
+        super(context, prompt, false);
+        SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
     }
 
     @Override

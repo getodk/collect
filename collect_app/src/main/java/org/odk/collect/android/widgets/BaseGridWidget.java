@@ -37,7 +37,6 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.FileUtils;
@@ -73,7 +72,7 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
     List<Integer> selectedItems = new ArrayList<>();
     View[] itemViews;
 
-    public BaseGridWidget(Context context, QuestionDetails questionDetails, boolean quickAdvance, AudioHelper audioHelper) {
+    public BaseGridWidget(Context context, QuestionDetails questionDetails, boolean quickAdvance) {
         super(context, questionDetails);
 
         this.quickAdvance = quickAdvance;

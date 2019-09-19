@@ -11,6 +11,7 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
@@ -43,7 +44,7 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
     @NonNull
     @Override
     public GridMultiWidget createWidget() {
-        return new GridMultiWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), audioHelper);
+        return new GridMultiWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @Rule
@@ -62,6 +63,11 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
             @Override
             public ReferenceManager providesReferenceManager() {
                 return referenceManager;
+            }
+
+            @Override
+            public AudioHelperFactory providesAudioHelperFactory() {
+                return context -> audioHelper;
             }
         });
     }

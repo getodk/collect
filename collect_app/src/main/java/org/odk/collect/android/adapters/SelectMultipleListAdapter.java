@@ -28,7 +28,7 @@ import android.widget.FrameLayout;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.helper.Selection;
-import org.odk.collect.android.formentry.AudioVideoImageTextLabel;
+import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.widgets.SelectWidget;
 import org.odk.collect.android.R;
 
