@@ -17,13 +17,18 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
+import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.ScreenContext;
+
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
 
 @SuppressLint("ViewConstructor")
 public class GridWidget extends BaseGridWidget {
@@ -68,6 +73,13 @@ public class GridWidget extends BaseGridWidget {
 
         if (quickAdvance && listener != null) {
             listener.advance();
+        }
+
+        if (noButtonsMode) {
+            SelectChoice item = items.get(index);
+            String clipID = getClipID(getFormEntryPrompt(), item);
+            String audioURI = getPlayableAudioURI(getFormEntryPrompt(), item, getReferenceManager());
+            getAudioHelper().play(new Clip(clipID, audioURI));
         }
 
         widgetValueChanged();

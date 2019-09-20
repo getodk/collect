@@ -23,11 +23,15 @@ import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
 
 @SuppressLint("ViewConstructor")
 public class GridMultiWidget extends BaseGridWidget {
@@ -83,6 +87,11 @@ public class GridMultiWidget extends BaseGridWidget {
                     audioHandlers[index].playAudio(getContext());
                 }
                 lastClickPosition = index;
+
+                SelectChoice item = items.get(index);
+                String clipID = getClipID(getFormEntryPrompt(), item);
+                String audioURI = getPlayableAudioURI(getFormEntryPrompt(), item, getReferenceManager());
+                getAudioHelper().play(new Clip(clipID, audioURI));
             }
         }
         widgetValueChanged();

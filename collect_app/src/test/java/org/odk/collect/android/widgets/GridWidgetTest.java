@@ -20,6 +20,8 @@ import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
 
 import static java.util.Arrays.asList;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.odk.collect.android.support.Helpers.createMockReference;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.NO_BUTTONS;
@@ -78,5 +80,28 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
         widget.onItemClick(0);
 
         verify(audioHelper).play(new Clip("i am index 0", reference));
+    }
+
+    @Test
+    public void whenChoicesHaveAudio_clickingChoice_doesNotPlayAudio() throws Exception {
+        createMockReference(referenceManager, "file://blah2.mp3");
+        createMockReference(referenceManager, "file://blah1.mp3");
+
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withIndex("i am index")
+                .withSelectChoices(asList(
+                        new SelectChoice("1", "1"),
+                        new SelectChoice("2", "2")
+                ))
+                .withSpecialFormSelectChoiceText(asList(
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://blah1.mp3"),
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://blah2.mp3")
+                ))
+                .build();
+
+        GridWidget widget = getActualWidget();
+        widget.onItemClick(0);
+
+        verify(audioHelper, never()).play(any());
     }
 }
