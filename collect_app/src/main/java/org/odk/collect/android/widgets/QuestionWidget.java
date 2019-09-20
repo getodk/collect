@@ -84,7 +84,7 @@ public abstract class QuestionWidget
 
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
-    private final QuestionLabel questionQuestionLabel;
+    private final QuestionLabel questionLabel;
     private MediaPlayer player;
     private final TextView helpTextView;
     private final TextView guidanceTextView;
@@ -131,7 +131,7 @@ public abstract class QuestionWidget
         setGravity(Gravity.TOP);
         setPadding(0, 7, 0, 0);
 
-        questionQuestionLabel = createQuestionMediaLayout(prompt);
+        questionLabel = createQuestionMediaLayout(prompt);
         helpTextLayout = createHelpTextLayout();
         helpTextLayout.setId(ViewIds.generateViewId());
         guidanceTextLayout = helpTextLayout.findViewById(R.id.guidance_text_layout);
@@ -140,7 +140,7 @@ public abstract class QuestionWidget
         helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), prompt);
         guidanceTextView = setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), prompt);
 
-        addQuestionMediaLayout(getQuestionQuestionLabel());
+        addQuestionMediaLayout(getQuestionLabel());
         addHelpTextLayout(getHelpTextLayout());
 
         if (context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
@@ -423,7 +423,7 @@ public abstract class QuestionWidget
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        params.addRule(RelativeLayout.BELOW, getQuestionQuestionLabel().getId());
+        params.addRule(RelativeLayout.BELOW, getQuestionLabel().getId());
         params.setMargins(10, 0, 10, 0);
         addView(v, params);
     }
@@ -490,8 +490,8 @@ public abstract class QuestionWidget
      */
     public void cancelLongPress() {
         super.cancelLongPress();
-        if (getQuestionQuestionLabel() != null) {
-            getQuestionQuestionLabel().cancelLongPress();
+        if (getQuestionLabel() != null) {
+            getQuestionLabel().cancelLongPress();
         }
         if (getHelpTextView() != null) {
             getHelpTextView().cancelLongPress();
@@ -665,8 +665,8 @@ public abstract class QuestionWidget
         return helpTextLayout;
     }
 
-    public QuestionLabel getQuestionQuestionLabel() {
-        return questionQuestionLabel;
+    public QuestionLabel getQuestionLabel() {
+        return questionLabel;
     }
 
     public MediaPlayer getPlayer() {
