@@ -57,7 +57,7 @@ import timber.log.Timber;
  * Represents a label for a prompt/question or a select choice. The label can have media
  * attached to it as well as text (such as audio, video or an image).
  */
-public class QuestionLabel extends RelativeLayout implements View.OnClickListener {
+public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnClickListener {
 
     @BindView(R.id.audioButton)
     AudioButton audioButton;
@@ -81,14 +81,14 @@ public class QuestionLabel extends RelativeLayout implements View.OnClickListene
     private String bigImageURI;
     private ReferenceManager referenceManager;
 
-    public QuestionLabel(Context context) {
+    public AudioVideoImageTextLabel(Context context) {
         super(context);
 
         View.inflate(context, R.layout.question_label, this);
         ButterKnife.bind(this);
     }
 
-    public QuestionLabel(Context context, AttributeSet attrs) {
+    public AudioVideoImageTextLabel(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         View.inflate(context, R.layout.question_label, this);

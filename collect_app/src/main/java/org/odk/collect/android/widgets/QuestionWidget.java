@@ -46,7 +46,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.formentry.QuestionLabel;
+import org.odk.collect.android.formentry.AudioVideoImageTextLabel;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
@@ -84,7 +84,7 @@ public abstract class QuestionWidget
 
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
-    private final QuestionLabel questionLabel;
+    private final AudioVideoImageTextLabel audioVideoImageTextLabel;
     private MediaPlayer player;
     private final TextView helpTextView;
     private final TextView guidanceTextView;
@@ -131,7 +131,7 @@ public abstract class QuestionWidget
         setGravity(Gravity.TOP);
         setPadding(0, 7, 0, 0);
 
-        questionLabel = createQuestionLabel(prompt);
+        audioVideoImageTextLabel = createQuestionLabel(prompt);
         helpTextLayout = createHelpTextLayout();
         helpTextLayout.setId(ViewIds.generateViewId());
         guidanceTextLayout = helpTextLayout.findViewById(R.id.guidance_text_layout);
@@ -140,7 +140,7 @@ public abstract class QuestionWidget
         helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), prompt);
         guidanceTextView = setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), prompt);
 
-        addQuestionMediaLayout(getQuestionLabel());
+        addQuestionMediaLayout(getAudioVideoImageTextLabel());
         addHelpTextLayout(getHelpTextLayout());
 
         if (context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
@@ -257,7 +257,7 @@ public abstract class QuestionWidget
         //dependencies for the widget will be wired here.
     }
 
-    private QuestionLabel createQuestionLabel(FormEntryPrompt prompt) {
+    private AudioVideoImageTextLabel createQuestionLabel(FormEntryPrompt prompt) {
         String promptText = prompt.getLongText();
         // Add the text view. Textview always exists, regardless of whether there's text.
         TextView questionText = new TextView(getContext());
@@ -283,11 +283,11 @@ public abstract class QuestionWidget
         String bigImageURI = prompt.getSpecialFormQuestionText("big-image");
 
         // Create the layout for audio, image, text
-        QuestionLabel questionQuestionLabel = new QuestionLabel(getContext());
-        questionQuestionLabel.setId(ViewIds.generateViewId()); // assign random id
+        AudioVideoImageTextLabel questionAudioVideoImageTextLabel = new AudioVideoImageTextLabel(getContext());
+        questionAudioVideoImageTextLabel.setId(ViewIds.generateViewId()); // assign random id
 
-        questionQuestionLabel.setTag(getClipID(prompt));
-        questionQuestionLabel.setAVT(
+        questionAudioVideoImageTextLabel.setTag(getClipID(prompt));
+        questionAudioVideoImageTextLabel.setAVT(
                 questionText,
                 getPlayableAudioURI(prompt, referenceManager),
                 imageURI,
@@ -305,9 +305,9 @@ public abstract class QuestionWidget
                 Timber.e(e, "Argument %s is incorrect", playColorString);
             }
         }
-        questionQuestionLabel.setPlayTextColor(getPlayColor());
+        questionAudioVideoImageTextLabel.setPlayTextColor(getPlayColor());
 
-        return questionQuestionLabel;
+        return questionAudioVideoImageTextLabel;
     }
 
     public TextView getHelpTextView() {
@@ -423,7 +423,7 @@ public abstract class QuestionWidget
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        params.addRule(RelativeLayout.BELOW, getQuestionLabel().getId());
+        params.addRule(RelativeLayout.BELOW, getAudioVideoImageTextLabel().getId());
         params.setMargins(10, 0, 10, 0);
         addView(v, params);
     }
@@ -490,8 +490,8 @@ public abstract class QuestionWidget
      */
     public void cancelLongPress() {
         super.cancelLongPress();
-        if (getQuestionLabel() != null) {
-            getQuestionLabel().cancelLongPress();
+        if (getAudioVideoImageTextLabel() != null) {
+            getAudioVideoImageTextLabel().cancelLongPress();
         }
         if (getHelpTextView() != null) {
             getHelpTextView().cancelLongPress();
@@ -665,8 +665,8 @@ public abstract class QuestionWidget
         return helpTextLayout;
     }
 
-    public QuestionLabel getQuestionLabel() {
-        return questionLabel;
+    public AudioVideoImageTextLabel getAudioVideoImageTextLabel() {
+        return audioVideoImageTextLabel;
     }
 
     public MediaPlayer getPlayer() {

@@ -81,8 +81,8 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
             } else {
                 autoAdvanceIcon = v.findViewById(R.id.auto_advance_icon);
                 autoAdvanceIcon.setVisibility(((AbstractSelectOneWidget) widget).isAutoAdvance() ? View.VISIBLE : View.GONE);
-                questionLabel = v.findViewById(R.id.mediaLayout);
-                widget.init(questionLabel);
+                audioVideoImageTextLabel = v.findViewById(R.id.mediaLayout);
+                widget.init(audioVideoImageTextLabel);
             }
         }
 

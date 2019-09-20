@@ -45,7 +45,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.formentry.QuestionLabel;
+import org.odk.collect.android.formentry.AudioVideoImageTextLabel;
 import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.SelectWidget;
 import org.odk.collect.android.R;
@@ -201,7 +201,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
     abstract void onItemClick(Selection selection, View view);
 
     abstract class ViewHolder extends RecyclerView.ViewHolder {
-        QuestionLabel questionLabel;
+        AudioVideoImageTextLabel audioVideoImageTextLabel;
         FrameLayout view;
 
         ViewHolder(View itemView) {
@@ -213,8 +213,8 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                 view.removeAllViews();
                 view.addView(setUpNoButtonsView(index));
             } else {
-                widget.addMediaFromChoice(questionLabel, index, setUpButton(index), filteredItems);
-                questionLabel.setEnabled(!widget.getFormEntryPrompt().isReadOnly());
+                widget.addMediaFromChoice(audioVideoImageTextLabel, index, setUpButton(index), filteredItems);
+                audioVideoImageTextLabel.setEnabled(!widget.getFormEntryPrompt().isReadOnly());
             }
         }
     }

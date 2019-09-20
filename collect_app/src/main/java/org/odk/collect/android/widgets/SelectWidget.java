@@ -35,7 +35,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.external.ExternalSelectChoice;
-import org.odk.collect.android.formentry.QuestionLabel;
+import org.odk.collect.android.formentry.AudioVideoImageTextLabel;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
@@ -76,14 +76,14 @@ public abstract class SelectWidget extends ItemsWidget {
     public void setOnLongClickListener(OnLongClickListener l) {
     }
 
-    public void init(QuestionLabel questionLabel) {
-        questionLabel.setPlayTextColor(getPlayColor());
+    public void init(AudioVideoImageTextLabel audioVideoImageTextLabel) {
+        audioVideoImageTextLabel.setPlayTextColor(getPlayColor());
     }
 
     /**
      * Pull media from the current item and add it to the media layout.
      */
-    public void addMediaFromChoice(QuestionLabel questionLabel, int index, TextView textView, List<SelectChoice> items) {
+    public void addMediaFromChoice(AudioVideoImageTextLabel audioVideoImageTextLabel, int index, TextView textView, List<SelectChoice> items) {
         SelectChoice item = items.get(index);
 
         String audioURI = getPlayableAudioURI(getFormEntryPrompt(), item, getReferenceManager());
@@ -91,8 +91,8 @@ public abstract class SelectWidget extends ItemsWidget {
         String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "video");
         String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "big-image");
 
-        questionLabel.setTag(getClipID(getFormEntryPrompt(), item));
-        questionLabel.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), getAudioHelper());
+        audioVideoImageTextLabel.setTag(getClipID(getFormEntryPrompt(), item));
+        audioVideoImageTextLabel.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), getAudioHelper());
 
         textView.setGravity(Gravity.CENTER_VERTICAL);
     }

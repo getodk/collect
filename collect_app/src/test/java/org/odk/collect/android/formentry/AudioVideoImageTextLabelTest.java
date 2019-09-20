@@ -25,7 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-public class QuestionLabelTest {
+public class AudioVideoImageTextLabelTest {
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
@@ -44,8 +44,8 @@ public class QuestionLabelTest {
 
         Activity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
 
-        QuestionLabel questionLabel = new QuestionLabel(activity);
-        questionLabel.setAVT(
+        AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
+        audioVideoImageTextLabel.setAVT(
                 new TextView(activity),
                 "file://audio.mp3",
                 null,
@@ -54,14 +54,14 @@ public class QuestionLabelTest {
                 referenceManager,
                 audioHelper);
 
-        int originalTextColor = questionLabel.getLabelTextView().getCurrentTextColor();
+        int originalTextColor = audioVideoImageTextLabel.getLabelTextView().getCurrentTextColor();
 
         isPlaying.setValue(true);
-        int textColor = questionLabel.getLabelTextView().getCurrentTextColor();
+        int textColor = audioVideoImageTextLabel.getLabelTextView().getCurrentTextColor();
         assertThat(textColor, not(equalTo(originalTextColor)));
 
         isPlaying.setValue(false);
-        textColor = questionLabel.getLabelTextView().getCurrentTextColor();
+        textColor = audioVideoImageTextLabel.getLabelTextView().getCurrentTextColor();
         assertThat(textColor, equalTo(originalTextColor));
     }
 }

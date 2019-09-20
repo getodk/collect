@@ -197,7 +197,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         if (autoplayOption != null) {
             if (autoplayOption.equalsIgnoreCase("video")) {
                 new Handler().postDelayed(() -> {
-                    widgets.get(0).getQuestionLabel().playVideo();
+                    widgets.get(0).getAudioVideoImageTextLabel().playVideo();
                 }, 150);
             }
         }
