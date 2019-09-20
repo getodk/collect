@@ -97,6 +97,10 @@ public class AudioHelper {
         viewModel.playInOrder(clips);
     }
 
+    public void stop() {
+        viewModel.stop();
+    }
+
     private Integer getDurationOfFile(String uri) {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(uri);

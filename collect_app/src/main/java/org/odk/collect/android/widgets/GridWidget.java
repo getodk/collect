@@ -69,6 +69,8 @@ public class GridWidget extends BaseGridWidget {
                 unselectItem(selectedItems.get(0));
                 selectItem(index);
             }
+        } else {
+            getAudioHelper().stop();
         }
 
         if (quickAdvance && listener != null) {

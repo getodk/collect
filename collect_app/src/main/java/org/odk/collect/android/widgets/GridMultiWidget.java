@@ -72,16 +72,11 @@ public class GridMultiWidget extends BaseGridWidget {
             selectedItems.remove(Integer.valueOf(index));
             if (noButtonsMode) {
                 itemViews[index].setBackgroundColor(0);
-                if (audioHandlers[index] != null) {
-                    stopAudio();
-                }
+                getAudioHelper().stop();
             }
         } else {
             selectedItems.add(index);
             if (noButtonsMode) {
-                if (audioHandlers[lastClickPosition] != null) {
-                    stopAudio();
-                }
                 itemViews[index].setBackgroundColor(bgOrange);
                 lastClickPosition = index;
 

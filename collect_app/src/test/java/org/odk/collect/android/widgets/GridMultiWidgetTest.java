@@ -66,7 +66,7 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
     }
 
     @Test
-    public void whenChoicesHaveAudio_andNoButtonsMode_clickingChoice_playsAudio() throws Exception {
+    public void whenChoicesHaveAudio_andNoButtonsMode_clickingChoice_playsAndStopsAudio() throws Exception {
         createMockReference(referenceManager, "file://blah2.mp3");
         String reference = createMockReference(referenceManager, "file://blah1.mp3");
 
@@ -84,9 +84,12 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
                 .build();
 
         GridMultiWidget widget = getActualWidget();
-        widget.onItemClick(0);
 
+        widget.onItemClick(0);
         verify(audioHelper).play(new Clip("i am index 0", reference));
+
+        widget.onItemClick(0);
+        verify(audioHelper).stop();
     }
 
     @Test
