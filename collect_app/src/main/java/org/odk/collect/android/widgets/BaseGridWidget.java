@@ -32,12 +32,15 @@ import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.AppCompatRadioButton;
 
+import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.AudioHandler;
 import org.odk.collect.android.utilities.FileUtils;
@@ -52,6 +55,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
 
 /**
  * GridWidget handles select-one/multiple fields using a grid options. The number of columns
@@ -74,8 +80,8 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
     View[] itemViews;
     AudioHandler[] audioHandlers;
 
-    public BaseGridWidget(Context context, FormEntryPrompt prompt, boolean quickAdvance) {
-        super(context, prompt);
+    public BaseGridWidget(Context context, FormEntryPrompt prompt, boolean quickAdvance, AudioHelper audioHelper) {
+        super(context, prompt, audioHelper);
 
         this.quickAdvance = quickAdvance;
         noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(prompt) || WidgetAppearanceUtils.isNoButtonsAppearance(prompt);
@@ -204,6 +210,11 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         selectedItems.add(index);
         if (noButtonsMode) {
             itemViews[index].setBackgroundColor(bgOrange);
+
+            SelectChoice item = items.get(index);
+            String clipID = getClipID(getFormEntryPrompt(), item);
+            String audioURI = getPlayableAudioURI(getFormEntryPrompt(), item, getReferenceManager());
+            getAudioHelper().play(new Clip(clipID, audioURI));
         } else {
             ((CompoundButton) itemViews[index]).setChecked(true);
         }

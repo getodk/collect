@@ -21,16 +21,25 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
+import org.odk.collect.android.utilities.ScreenContext;
 
 @SuppressLint("ViewConstructor")
 public class GridWidget extends BaseGridWidget {
 
     private final AdvanceToNextListener listener;
 
-    public GridWidget(Context context, FormEntryPrompt prompt, final boolean quickAdvance) {
-        super(context, prompt, quickAdvance);
+    public GridWidget(Context context, FormEntryPrompt prompt, final boolean quickAdvance, AudioHelper audioHelper) {
+        super(context, prompt, quickAdvance, audioHelper);
         listener = context instanceof AdvanceToNextListener ? (AdvanceToNextListener) context : null;
+    }
+
+    public GridWidget(Context context, FormEntryPrompt prompt, final boolean quickAdvance) {
+        this(context, prompt, quickAdvance, new AudioHelper(
+                ((ScreenContext) context).getActivity(),
+                ((ScreenContext) context).getViewLifecycle()
+        ));
     }
 
     @Override
@@ -48,11 +57,7 @@ public class GridWidget extends BaseGridWidget {
 
     @Override
     protected void onItemClick(int index) {
-        if (selectedItems.contains(index)) {
-            if (audioHandlers[selectedItems.get(0)] != null) {
-                stopAudio();
-            }
-        } else {
+        if (!selectedItems.contains(index)) {
             if (selectedItems.isEmpty()) {
                 selectItem(index);
             } else {
@@ -63,9 +68,8 @@ public class GridWidget extends BaseGridWidget {
 
         if (quickAdvance && listener != null) {
             listener.advance();
-        } else if (noButtonsMode && audioHandlers[index] != null) {
-            audioHandlers[index].playAudio(getContext());
         }
+
         widgetValueChanged();
     }
 
