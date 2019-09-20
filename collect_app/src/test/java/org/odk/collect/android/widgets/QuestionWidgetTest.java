@@ -26,7 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.Helpers.setupMockReference;
+import static org.odk.collect.android.support.Helpers.createMockReference;
 
 @RunWith(RobolectricTestRunner.class)
 public class QuestionWidgetTest {
@@ -48,7 +48,7 @@ public class QuestionWidgetTest {
 
     @Test
     public void whenQuestionHasAudio_audioButtonUsesIndexAsClipID() throws Exception {
-        setupMockReference(referenceManager, "file://ref.mp3", "file://blah.mp3");
+        String reference = createMockReference(referenceManager, "file://blah.mp3");
 
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
@@ -58,7 +58,7 @@ public class QuestionWidgetTest {
         TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
         new TestWidget(activity, prompt, audioHelper);
 
-        verify(audioHelper).setAudio(any(AudioButton.class), eq("file://ref.mp3"), eq("i am index"));
+        verify(audioHelper).setAudio(any(AudioButton.class), eq(reference), eq("i am index"));
     }
 
     private void overrideDependencyModule() {

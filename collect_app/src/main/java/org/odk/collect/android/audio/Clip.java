@@ -34,7 +34,7 @@ public class Clip {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        
+
         Clip clip = (Clip) o;
         return getClipID().equals(clip.getClipID()) &&
                 getURI().equals(clip.getURI());
