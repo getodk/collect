@@ -34,15 +34,15 @@ public class Clip {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
+        
         Clip clip = (Clip) o;
         return getClipID().equals(clip.getClipID()) &&
-                uri.equals(clip.uri);
+                getURI().equals(clip.getURI());
     }
 
     @Override
     public int hashCode() {
-        return ObjectsCompat.hash(getClipID(), uri);
+        return ObjectsCompat.hash(getClipID(), getClipID());
     }
 
     @Override
