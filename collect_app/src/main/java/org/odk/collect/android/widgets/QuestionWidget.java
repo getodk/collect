@@ -131,7 +131,7 @@ public abstract class QuestionWidget
         setGravity(Gravity.TOP);
         setPadding(0, 7, 0, 0);
 
-        questionLabel = createQuestionMediaLayout(prompt);
+        questionLabel = createQuestionLabel(prompt);
         helpTextLayout = createHelpTextLayout();
         helpTextLayout.setId(ViewIds.generateViewId());
         guidanceTextLayout = helpTextLayout.findViewById(R.id.guidance_text_layout);
@@ -257,7 +257,7 @@ public abstract class QuestionWidget
         //dependencies for the widget will be wired here.
     }
 
-    private QuestionLabel createQuestionMediaLayout(FormEntryPrompt prompt) {
+    private QuestionLabel createQuestionLabel(FormEntryPrompt prompt) {
         String promptText = prompt.getLongText();
         // Add the text view. Textview always exists, regardless of whether there's text.
         TextView questionText = new TextView(getContext());
