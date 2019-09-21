@@ -10,9 +10,7 @@
   <string name="add_another_repeat">एक और “%s” समूह जोड़ें</string>
   <string name="add_repeat">एक नया \"%s\" समूह जोड़ें?</string>
   <string name="add_repeat_no">न जोड़ें</string>
-  <string name="audio_file_error">कोई ऑडियो फाइल निर्दिष्ट नहीं की गई थी।</string>
-  <string name="audio_file_invalid">फाइल: %s मान्य ऑडियो फाइल नहीं.</string>
-  <string name="cancel">रद्द करें</string>
+    <string name="cancel">रद्द करें</string>
   <string name="cancel_loading_form">रद्द करें</string>
   <string name="cancel_location">रद्द करें</string>
   <string name="cannot_edit_completed_form">एक बार फाइनल होने के बाद यह फॉर्म संशोधित नहीं किया जा सकता. इसे एन्क्रिप्ट किया जा सकता है.</string>

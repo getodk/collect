@@ -5,9 +5,7 @@
   <string name="add_another_repeat">Başka bir \"%s\" grup eklensin mi?</string>
   <string name="add_repeat">Yeni bir\"%s\" grup eklensin mi?</string>
   <string name="add_repeat_no">Ekleme Yapma</string>
-  <string name="audio_file_error">Ses dosyası belirlenmedi.</string>
-  <string name="audio_file_invalid">%s dosyasi geçerli bir ses dosyasi degildir!</string>
-  <string name="cancel">Vazgeç</string>
+    <string name="cancel">Vazgeç</string>
   <string name="cancel_loading_form">Vazgeç</string>
   <string name="cancel_location">Vazgeç</string>
   <string name="capture_audio">Ses Kaydi</string>

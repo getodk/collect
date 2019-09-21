@@ -12,9 +12,7 @@
   <string name="add_another_repeat">Tambah grup \"%s\" lainnya?</string>
   <string name="add_repeat">Tambah grup \"%s\" baru?</string>
   <string name="add_repeat_no">Tidak usah ditambahkan</string>
-  <string name="audio_file_error">Belum ada berkas audio yang dipilih.</string>
-  <string name="audio_file_invalid">Berkas: %s bukan termasuk berkas audio.</string>
-  <string name="cancel">Batal</string>
+    <string name="cancel">Batal</string>
   <string name="cancel_loading_form">Batal</string>
   <string name="cancel_location">Batal</string>
   <string name="canceling">Membatalkan</string>

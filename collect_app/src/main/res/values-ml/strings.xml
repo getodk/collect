@@ -6,9 +6,7 @@
   <string name="add_another_repeat">മറ്റൊരു \"1 %s\" ഗ്രൂപ്പ് കൂട്ടിച്ചേർക്കണോ?</string>
   <string name="add_repeat">ഒരു പുതിയ \"1 %s\" ഗ്രൂപ്പ് ചേർക്കണോ?</string>
   <string name="add_repeat_no">ചേർക്കരുത്</string>
-  <string name="audio_file_error">\"ഓഡിയോ ഫയൽവ്യക്തമാക്കിയിട്ടില്ല </string>
-  <string name="audio_file_invalid">പ്രമാണം:  %s ഒരു സാധുവായ ഓഡിയോ ഫയൽ അല്ല.</string>
-  <string name="cancel">റദ്ദാക്കുക</string>
+    <string name="cancel">റദ്ദാക്കുക</string>
   <string name="cancel_loading_form">റദ്ദാക്കുക</string>
   <string name="cancel_location">റദ്ദാക്കുക</string>
   <string name="cannot_edit_completed_form">അന്തിമമായി അടയാളപ്പെടുത്തിക്കഴിഞ്ഞാൽ ഈ ഫോർമ് എഡിറ്റ് ചെയ്യാൻ കഴിയില്ല. ഇത് എൻക്രിപ്റ്റ് ചെയ്തതായിരിക്കാം.</string>

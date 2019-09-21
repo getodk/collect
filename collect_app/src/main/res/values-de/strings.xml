@@ -12,9 +12,7 @@
   <string name="add_another_repeat">Weitere \"%s\"-Gruppe hinzufügen?</string>
   <string name="add_repeat">Neue Gruppe \"%s\" hinzufügen?</string>
   <string name="add_repeat_no">Nicht hinzufügen</string>
-  <string name="audio_file_error">Keine Audio-Datei angegeben.</string>
-  <string name="audio_file_invalid">Datei: %s ist keine lesbare Audio-Datei.</string>
-  <string name="cancel">Abbrechen</string>
+    <string name="cancel">Abbrechen</string>
   <string name="cancel_loading_form">Abbrechen</string>
   <string name="cancel_location">Abbrechen</string>
   <string name="canceling">Abbrechen</string>

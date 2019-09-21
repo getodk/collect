@@ -7,9 +7,7 @@
   <string name="add_another_repeat">ایک اور \"‎%s‏\" گروپ شامل کریں</string>
   <string name="add_repeat">نیا \"‎%s‏\" گروپ شامل کریں</string>
   <string name="add_repeat_no">شامل نا کریں</string>
-  <string name="audio_file_error">اّواز کے فائل کی تفصیل نہیں ہے</string>
-  <string name="audio_file_invalid">فائل: ‎%s‏ قابل توثیق اّواز کی فائل نہیں ہے</string>
-  <string name="cancel">منسوخ</string>
+    <string name="cancel">منسوخ</string>
   <string name="cancel_loading_form">منسوخ</string>
   <string name="cancel_location">منسوخ</string>
   <string name="capture_audio">آوازریکارڈ کریں</string>

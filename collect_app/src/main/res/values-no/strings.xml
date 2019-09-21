@@ -5,9 +5,7 @@
   <string name="add_another_repeat">Legg til annen \"%s\" gruppe?</string>
   <string name="add_repeat">Legg til ny \"%s\" gruppe?</string>
   <string name="add_repeat_no">Ikke legg til</string>
-  <string name="audio_file_error">Uspesifisert lydfil</string>
-  <string name="audio_file_invalid">Filen: %s er ikke en gyldig lydfil</string>
-  <string name="cancel">Avbryt</string>
+    <string name="cancel">Avbryt</string>
   <string name="cancel_loading_form">Avbryt</string>
   <string name="cancel_location">Avbryt</string>
   <string name="capture_audio">Ta opp lyd</string>

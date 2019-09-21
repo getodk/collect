@@ -11,8 +11,6 @@
   <string name="add_another_repeat">\"%s\" အုပ်စုနောက်တစ်ခု ထည့်မည်လား?</string>
   <string name="add_repeat">\"%s\" အုပ်စုအသစ် ထည့်မည်လား?</string>
   <string name="add_repeat_no">မထည့်ပါနှင့်</string>
-  <string name="audio_file_error">အသံဖိုင်သတ်မှတ်ထားခြင်းမရှိပါ</string>
-  <string name="audio_file_invalid">ဖိုင်: %s သည် မှန်ကန်သော အသံဖိုင်မဟုတ်ပါ</string>
   <string name="cancel">ပယ်ဖျက်ပါ</string>
   <string name="cancel_loading_form">ပယ်ဖျက်ပါ</string>
   <string name="cancel_location">ပယ်ဖျက်ပါ</string>

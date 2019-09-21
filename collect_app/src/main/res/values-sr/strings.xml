@@ -12,9 +12,7 @@
   <string name="add_another_repeat">Dodaj \"%s\" grupi?</string>
   <string name="add_repeat">Dodaj novi \"%s\" grupi?</string>
   <string name="add_repeat_no">Ne dodaji nove elemente</string>
-  <string name="audio_file_error">Audio fajl nije određen</string>
-  <string name="audio_file_invalid">Fajl: %s nije validan audio fajl.</string>
-  <string name="cancel">Odustani</string>
+    <string name="cancel">Odustani</string>
   <string name="cancel_loading_form">Odustani</string>
   <string name="cancel_location">Odustani</string>
   <string name="canceling">Odustajem</string>

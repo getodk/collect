@@ -35,7 +35,7 @@ import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayab
 
 @SuppressLint("ViewConstructor")
 public class GridMultiWidget extends BaseGridWidget {
-    
+
     public GridMultiWidget(Context context, FormEntryPrompt prompt, AudioHelper audioHelper) {
         super(context, prompt, false, audioHelper);
         SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);

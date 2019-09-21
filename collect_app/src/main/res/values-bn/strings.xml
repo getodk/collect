@@ -5,8 +5,6 @@
   <string name="add_another_repeat">অন্যান্য বিষয় \"%s\" সংযুক্ত করণ</string>
   <string name="add_repeat">নতুন \"%s\" গ্রুপ সংযুক্ত করন</string>
   <string name="add_repeat_no">আর সংযুক্ত করা যাবে না</string>
-  <string name="audio_file_error">কোন অডিও ফাইল নির্দিষ্ট করা হয় নি। </string>
-  <string name="audio_file_invalid">%s নামের ফাইলটি যুক্তিসিদ্ধ অডিও ফাইল নয়।</string>
   <string name="cancel">বাতিল</string>
   <string name="cancel_loading_form">বাতিল</string>
   <string name="cancel_location">বাতিল</string>
