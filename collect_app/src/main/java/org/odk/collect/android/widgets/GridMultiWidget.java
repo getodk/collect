@@ -35,9 +35,7 @@ import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayab
 
 @SuppressLint("ViewConstructor")
 public class GridMultiWidget extends BaseGridWidget {
-
-    int lastClickPosition; // need to remember the last click position for audio treatment
-
+    
     public GridMultiWidget(Context context, FormEntryPrompt prompt, AudioHelper audioHelper) {
         super(context, prompt, false, audioHelper);
         SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
@@ -78,7 +76,6 @@ public class GridMultiWidget extends BaseGridWidget {
             selectedItems.add(index);
             if (noButtonsMode) {
                 itemViews[index].setBackgroundColor(bgOrange);
-                lastClickPosition = index;
 
                 SelectChoice item = items.get(index);
                 String clipID = getClipID(getFormEntryPrompt(), item);
