@@ -32,12 +32,6 @@ import static org.odk.collect.android.utilities.WidgetAppearanceUtils.NO_BUTTONS
 
 public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
 
-    @NonNull
-    @Override
-    public GridWidget createWidget() {
-        return new GridWidget(activity, formEntryPrompt, false, audioHelper);
-    }
-
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
 
@@ -106,5 +100,11 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
         widget.onItemClick(0);
 
         verify(audioHelper, never()).play(any());
+    }
+
+    @NonNull
+    @Override
+    public GridWidget createWidget() {
+        return new GridWidget(activity, formEntryPrompt, false, audioHelper);
     }
 }

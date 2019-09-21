@@ -1,5 +1,7 @@
 package org.odk.collect.android.formentry.media;
 
+import androidx.annotation.Nullable;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
@@ -26,6 +28,7 @@ public final class FormMediaHelpers {
         return deriveReference(prompt.getAudioText(), referenceManager);
     }
 
+    @Nullable
     public static String getPlayableAudioURI(FormEntryPrompt prompt, SelectChoice selectChoice, ReferenceManager referenceManager) {
         String selectAudioURI = prompt.getSpecialFormSelectChoiceText(
                 selectChoice,
@@ -35,6 +38,7 @@ public final class FormMediaHelpers {
         return deriveReference(selectAudioURI, referenceManager);
     }
 
+    @Nullable
     private static String deriveReference(String originalURI, ReferenceManager referenceManager) {
         if (originalURI == null) {
             return null;

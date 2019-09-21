@@ -81,7 +81,10 @@ public class GridWidget extends BaseGridWidget {
             SelectChoice item = items.get(index);
             String clipID = getClipID(getFormEntryPrompt(), item);
             String audioURI = getPlayableAudioURI(getFormEntryPrompt(), item, getReferenceManager());
-            getAudioHelper().play(new Clip(clipID, audioURI));
+
+            if (audioURI != null) {
+                getAudioHelper().play(new Clip(clipID, audioURI));
+            }
         }
 
         widgetValueChanged();
