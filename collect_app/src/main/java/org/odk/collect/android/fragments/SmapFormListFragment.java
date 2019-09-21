@@ -88,8 +88,6 @@ public class SmapFormListFragment extends ListFragment {
 
     View rootView;
 
-    private MapEntry mData;
-
     private String filterText;
 
     private Integer selectedSortingOrder;
@@ -123,6 +121,17 @@ public class SmapFormListFragment extends ListFragment {
         rootView = inflater.inflate(R.layout.smap_task_layout, container, false);
 
         setHasOptionsMenu(true);
+        /*
+        if(getUserVisibleHint()) { // fragment is visible
+            SmapMain main = (SmapMain) getActivity();
+            if (main != null) {
+                MapEntry data = main.getData();
+                if (data != null) {
+                    setData(data);
+                }
+            }
+        }
+        */
         return rootView;
     }
 
@@ -180,6 +189,14 @@ public class SmapFormListFragment extends ListFragment {
                 .getDefaultSharedPreferences(getContext()).getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false)) {
             SnackbarUtils.showLongSnackbar(getActivity().findViewById(R.id.llParent), getString(R.string.smap_location_tracking));
         }
+
+        SmapMain main = (SmapMain) getActivity();
+        if(main != null) {
+            MapEntry data = main.getData();
+            if (data != null) {
+                setData(data);
+            }
+        }
     }
 
     private void setupBottomSheet() {
@@ -210,9 +227,17 @@ public class SmapFormListFragment extends ListFragment {
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
+        /*
         if (isVisibleToUser) {
-            setData(mData);
+            SmapMain main = (SmapMain) getActivity();
+            if(main != null) {
+                MapEntry data = main.getData();
+                if (data != null) {
+                    setData(data);
+                }
+            }
         }
+        */
     }
 
     protected String getSortingOrderKey() {
@@ -220,7 +245,6 @@ public class SmapFormListFragment extends ListFragment {
     }
 
     public void setData(MapEntry data) {
-        mData = data;
         if(mAdapter != null) {
             if (data != null) {
                 mAdapter.setData(data.tasks);

@@ -113,6 +113,8 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     private ProgressDialog mProgressDialog;
     private String mAlertMsg;
 
+    private MapEntry mData;
+
     public static final String EXTRA_REFRESH = "refresh";
     public static final String LOGIN_STATUS = "login_status";
 
@@ -923,12 +925,17 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
      * Update fragments that use data sourced from the loader that called this method
      */
     public void updateData(MapEntry data) {
+        mData = data;
         formManagerList.setData(data);
         taskManagerList.setData(data);
         taskManagerMap.setData(data);
         if(data != null) {
             setLocationTriggers(data.tasks);      // NFC and geofence triggers
         }
+    }
+
+    public MapEntry getData() {
+        return mData;
     }
 
     protected class MainTaskListener extends BroadcastReceiver {
