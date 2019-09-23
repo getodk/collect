@@ -25,7 +25,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.external.ExternalAppsUtils;
-import org.odk.collect.android.utilities.TextWidgetUtils;
+import org.odk.collect.android.widgets.utilities.TextWidgetUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import timber.log.Timber;
