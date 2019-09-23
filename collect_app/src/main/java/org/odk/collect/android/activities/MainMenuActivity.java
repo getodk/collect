@@ -69,6 +69,7 @@ import java.util.Map.Entry;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.preferences.GeneralKeys.GENERAL_KEYS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 
 /**
@@ -575,7 +576,9 @@ public class MainMenuActivity extends CollectAbstractActivity {
             AutoSendPreferenceMigrator.migrate(entries);
 
             for (Entry<String, ?> entry : entries.entrySet()) {
-                GeneralSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
+                if (GENERAL_KEYS.containsKey(entry.getKey())) {
+                    GeneralSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
+                }
             }
 
             AdminSharedPreferences.getInstance().clear();

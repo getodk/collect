@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.listeners.ActionListener;
+import org.odk.collect.android.preferences.utielities.KnownUrlListUtils;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ import static org.odk.collect.android.preferences.AdminKeys.ALL_KEYS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.GeneralKeys.GENERAL_KEYS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_SERVER_URL;
 
 public class PreferenceSaver {
 
@@ -59,6 +61,9 @@ public class PreferenceSaver {
                 if (generalPrefs.containsKey(key)) {
                     Object value = generalPrefs.get(key);
                     generalSharedPreferences.save(key, value);
+                    if (key.equals(KEY_SERVER_URL)) {
+                        KnownUrlListUtils.addUrlToList(String.valueOf(value));
+                    }
                 } else {
                     generalSharedPreferences.reset(key);
                 }
