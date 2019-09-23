@@ -106,8 +106,7 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                                     if (selectChoiceValue.equals(textVal)) {
                                         // this means that the user selected ONLY the static
                                         // answer, so just return that
-                                        List<Selection> customSelections =
-                                                new ArrayList<Selection>();
+                                        List<Selection> customSelections = new ArrayList<>();
                                         customSelections.add(selection);
                                         return new SelectMultiData(customSelections);
                                     } else {
@@ -143,7 +142,7 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                                 // we should create multiple selections and add them to the pile
                                 List<SelectChoice> customSelectChoices = createCustomSelectChoices(
                                         textVal);
-                                List<Selection> customSelections = new ArrayList<Selection>();
+                                List<Selection> customSelections = new ArrayList<>();
                                 for (SelectChoice customSelectChoice : customSelectChoices) {
                                     customSelections.add(customSelectChoice.selection());
                                 }
@@ -178,7 +177,7 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                 XFormAnswerDataSerializer.DELIMITER, true);
 
         int index = 0;
-        List<SelectChoice> customSelectChoices = new ArrayList<SelectChoice>();
+        List<SelectChoice> customSelectChoices = new ArrayList<>();
         for (String textValue : textValues) {
             SelectChoice selectChoice = new SelectChoice(textValue, textValue, false);
             selectChoice.setIndex(index++);

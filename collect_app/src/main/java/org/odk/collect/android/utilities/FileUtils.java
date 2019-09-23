@@ -262,7 +262,7 @@ public class FileUtils {
     }
 
     public static HashMap<String, String> parseXML(File xmlFile) {
-        final HashMap<String, String> fields = new HashMap<String, String>();
+        final HashMap<String, String> fields = new HashMap<>();
         final InputStream is;
         try {
             is = new FileInputStream(xmlFile);

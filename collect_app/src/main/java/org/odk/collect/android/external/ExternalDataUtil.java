@@ -86,7 +86,7 @@ public final class ExternalDataUtil {
 
     public static List<String> findMatchingColumnsAfterSafeningNames(String[] columnNames) {
         // key is the safe, value is the unsafe
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         for (String columnName : columnNames) {
             if (columnName.trim().length() > 0) {
                 String safeColumn = toSafeColumnName(columnName);
@@ -159,7 +159,7 @@ public final class ExternalDataUtil {
             XPathFuncExpr xpathfuncexpr) {
         try {
             List<SelectChoice> selectChoices = formEntryPrompt.getSelectChoices();
-            ArrayList<SelectChoice> returnedChoices = new ArrayList<SelectChoice>();
+            ArrayList<SelectChoice> returnedChoices = new ArrayList<>();
             for (SelectChoice selectChoice : selectChoices) {
                 String value = selectChoice.getValue();
                 if (isAnInteger(value)) {
@@ -224,7 +224,7 @@ public final class ExternalDataUtil {
             String displayColumns) {
         valueColumn = valueColumn.trim();
 
-        LinkedHashMap<String, String> columns = new LinkedHashMap<String, String>();
+        LinkedHashMap<String, String> columns = new LinkedHashMap<>();
 
         columns.put(toSafeColumnName(valueColumn), valueColumn);
 
@@ -243,7 +243,7 @@ public final class ExternalDataUtil {
     }
 
     public static List<String> createListOfColumns(String columnString) {
-        List<String> values = new ArrayList<String>();
+        List<String> values = new ArrayList<>();
 
         List<String> commaSplitParts = splitTrimmed(columnString, COLUMN_SEPARATOR,
                 FALLBACK_COLUMN_SEPARATOR);
@@ -267,7 +267,7 @@ public final class ExternalDataUtil {
     }
 
     protected static List<String> splitTrimmed(String text, String separator) {
-        List<String> parts = new ArrayList<String>();
+        List<String> parts = new ArrayList<>();
         StringTokenizer st = new StringTokenizer(text, separator);
         while (st.hasMoreTokens()) {
             String token = st.nextToken().trim();

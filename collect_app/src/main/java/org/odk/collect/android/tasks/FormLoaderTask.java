@@ -375,7 +375,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             }
         });
 
-        Map<String, File> externalDataMap = new HashMap<String, File>();
+        Map<String, File> externalDataMap = new HashMap<>();
 
         if (csvFiles != null) {
 

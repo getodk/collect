@@ -77,7 +77,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         Timber.i("[%d] doInBackground begins!", instance);
 
         try {
-            List<String> candidateInstances = new LinkedList<String>();
+            List<String> candidateInstances = new LinkedList<>();
             File instancesPath = new File(Collect.INSTANCES_PATH);
             if (instancesPath.exists() && instancesPath.isDirectory()) {
                 File[] instanceFolders = instancesPath.listFiles();

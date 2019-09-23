@@ -60,7 +60,6 @@
         <exclude name="UseUnderscoresInNumericLiterals" />
         <exclude name="LinguisticNaming" />
         <exclude name="UseShortArrayInitializer" />
-        <exclude name="UseDiamondOperator" />
         <exclude name="UselessParentheses" />               <!-- Decided not to use in #1519 -->
     </rule>
 

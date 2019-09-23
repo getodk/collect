@@ -65,7 +65,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
             File formDir = new File(Collect.FORMS_PATH);
             if (formDir.exists() && formDir.isDirectory()) {
                 // Get all the files in the /odk/foms directory
-                List<File> formsToAdd = new LinkedList<File>();
+                List<File> formsToAdd = new LinkedList<>();
 
                 // Step 1: assemble the candidate form files
                 //         discard files beginning with "."
@@ -87,7 +87,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                 // Step 2: quickly run through and figure out what files we need to
                 // parse and update; this is quick, as we only calculate the md5
                 // and see if it has changed.
-                List<UriFile> uriToUpdate = new ArrayList<UriFile>();
+                List<UriFile> uriToUpdate = new ArrayList<>();
                 Cursor cursor = null;
                 // open the cursor within a try-catch block so it can always be closed.
                 try {
