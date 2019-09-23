@@ -608,7 +608,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         private final WeakReference<MainMenuActivity> target;
 
         IncomingHandler(MainMenuActivity target) {
-            this.target = new WeakReference<MainMenuActivity>(target);
+            this.target = new WeakReference<>(target);
         }
 
         @Override

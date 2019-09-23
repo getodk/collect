@@ -528,7 +528,7 @@ public class FormDownloader {
                     String.valueOf(count), String.valueOf(total));
         }
 
-        List<MediaFile> files = new ArrayList<MediaFile>();
+        List<MediaFile> files = new ArrayList<>();
 
         DocumentFetchResult result = collectServerClient.getXmlDocument(fd.getManifestUrl());
 

@@ -391,7 +391,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
      */
     private @NonNull
     Map<String, String> parseGeopoint(@NonNull List<Object> columnTitles, @NonNull String elementTitle, @NonNull String geoData) {
-        Map<String, String> geoFieldsMap = new HashMap<String, String>();
+        Map<String, String> geoFieldsMap = new HashMap<>();
 
         // Accuracy
         int accuracyLocation = geoData.lastIndexOf(' ');

@@ -410,7 +410,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
      * starts the task to download the selected forms, also shows progress dialog
      */
     private void downloadSelectedFiles() {
-        ArrayList<FormDetails> filesToDownload = new ArrayList<FormDetails>();
+        ArrayList<FormDetails> filesToDownload = new ArrayList<>();
 
         SparseBooleanArray sba = listView.getCheckedItemPositions();
         for (int i = 0; i < listView.getCount(); i++) {
@@ -569,13 +569,13 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
             viewModel.clearFormList();
 
-            ArrayList<String> ids = new ArrayList<String>(viewModel.getFormNamesAndURLs().keySet());
+            ArrayList<String> ids = new ArrayList<>(viewModel.getFormNamesAndURLs().keySet());
             for (int i = 0; i < result.size(); i++) {
                 String formDetailsKey = ids.get(i);
                 FormDetails details = viewModel.getFormNamesAndURLs().get(formDetailsKey);
 
                 if (!displayOnlyUpdatedForms || (details.isNewerFormVersionAvailable() || details.areNewerMediaFilesAvailable())) {
-                    HashMap<String, String> item = new HashMap<String, String>();
+                    HashMap<String, String> item = new HashMap<>();
                     item.put(FORMNAME, details.getFormName());
                     item.put(FORMID_DISPLAY,
                             ((details.getFormVersion() == null) ? "" : (getString(R.string.version) + " "

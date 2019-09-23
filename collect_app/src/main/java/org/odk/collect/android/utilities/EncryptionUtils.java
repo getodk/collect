@@ -476,7 +476,7 @@ public class EncryptionUtils {
         // encrypt files that do not end with ".enc", and do not start with ".";
         // ignore directories
         File[] allFiles = instanceDir.listFiles();
-        List<File> filesToProcess = new ArrayList<File>();
+        List<File> filesToProcess = new ArrayList<>();
         for (File f : allFiles) {
             if (f.equals(instanceXml)) {
                 continue; // don't touch restore file
