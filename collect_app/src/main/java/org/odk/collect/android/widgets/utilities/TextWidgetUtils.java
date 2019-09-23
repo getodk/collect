@@ -108,7 +108,7 @@ public class TextWidgetUtils {
         }
         answerText.setFilters(fa);
 
-        Integer i = TextWidgetUtils.getIntegerAnswerValueFromIAnswerData(prompt.getAnswerValue());
+        Integer i = getIntegerAnswerValueFromIAnswerData(prompt.getAnswerValue());
 
         if (i != null) {
             answerText.setText(String.format(Locale.US, "%d", i));
@@ -134,7 +134,7 @@ public class TextWidgetUtils {
         }
         answerText.setFilters(fa);
 
-        Double d = TextWidgetUtils.getDoubleAnswerValueFromIAnswerData(prompt.getAnswerValue());
+        Double d = getDoubleAnswerValueFromIAnswerData(prompt.getAnswerValue());
 
         if (d != null) {
             // truncate to 15 digits max in US locale
