@@ -25,7 +25,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.external.ExternalAppsUtils;
-import org.odk.collect.android.widgets.utilities.TextWidgetUtils;
+import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import timber.log.Timber;
@@ -42,12 +42,12 @@ public class ExDecimalWidget extends ExStringWidget {
 
     public ExDecimalWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        TextWidgetUtils.adjustEditTextAnswerToDecimalWidget(answerText, prompt);
+        StringWidgetUtils.adjustEditTextAnswerToDecimalWidget(answerText, prompt);
     }
 
     @Override
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
-        i.putExtra(DATA_NAME, TextWidgetUtils.getDoubleAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue()));
+        i.putExtra(DATA_NAME, StringWidgetUtils.getDoubleAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue()));
         try {
             ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_DECIMAL_CAPTURE);
         } catch (SecurityException e) {
@@ -58,7 +58,7 @@ public class ExDecimalWidget extends ExStringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return TextWidgetUtils.getDecimalData(answerText.getText().toString(), getFormEntryPrompt());
+        return StringWidgetUtils.getDecimalData(answerText.getText().toString(), getFormEntryPrompt());
     }
 
     /**

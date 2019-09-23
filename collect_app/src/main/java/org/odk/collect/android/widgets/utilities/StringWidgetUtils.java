@@ -17,9 +17,9 @@ import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class TextWidgetUtils {
+public class StringWidgetUtils {
 
-    private TextWidgetUtils() {
+    private StringWidgetUtils() {
     }
 
     public static Integer getIntegerAnswerValueFromIAnswerData(IAnswerData dataHolder) {
