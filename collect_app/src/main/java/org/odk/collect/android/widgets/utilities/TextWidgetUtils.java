@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.widgets.utilities;
 
 import android.text.InputFilter;
 import android.text.InputType;
@@ -12,6 +12,7 @@ import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import java.text.NumberFormat;
 import java.util.Locale;

@@ -19,7 +19,7 @@ import android.content.Context;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.utilities.TextWidgetUtils;
+import org.odk.collect.android.widgets.utilities.TextWidgetUtils;
 
 /**
  * A widget that restricts values to floating point numbers.
