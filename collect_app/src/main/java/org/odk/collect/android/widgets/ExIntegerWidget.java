@@ -25,7 +25,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.external.ExternalAppsUtils;
-import org.odk.collect.android.widgets.utilities.TextWidgetUtils;
+import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import timber.log.Timber;
@@ -42,12 +42,12 @@ public class ExIntegerWidget extends ExStringWidget {
 
     public ExIntegerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        TextWidgetUtils.adjustEditTextAnswerToIntegerWidget(answerText, prompt);
+        StringWidgetUtils.adjustEditTextAnswerToIntegerWidget(answerText, prompt);
     }
 
     @Override
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
-        i.putExtra(DATA_NAME, TextWidgetUtils.getIntegerAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue()));
+        i.putExtra(DATA_NAME, StringWidgetUtils.getIntegerAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue()));
         try {
             ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_INT_CAPTURE);
         } catch (SecurityException e) {
@@ -58,7 +58,7 @@ public class ExIntegerWidget extends ExStringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return TextWidgetUtils.getIntegerData(answerText.getText().toString(), getFormEntryPrompt());
+        return StringWidgetUtils.getIntegerData(answerText.getText().toString(), getFormEntryPrompt());
     }
 
     /**
