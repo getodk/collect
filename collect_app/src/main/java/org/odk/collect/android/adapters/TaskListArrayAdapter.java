@@ -35,6 +35,7 @@ import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.utilities.KeyValueJsonFns;
 import org.odk.collect.android.utilities.Utilities;
 
+import java.util.Date;
 import java.util.List;
 
 import androidx.core.content.ContextCompat;
@@ -84,7 +85,10 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
                 } else if(item.repeat) {
                     Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_repeat);
                     icon.setImageDrawable(d);
-				} else {
+				} else if(item.taskStart < (new Date()).getTime()) {
+                    Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_late);
+                    icon.setImageDrawable(d);
+                } else {
                     Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_saved);
                     icon.setImageDrawable(d);
 				}
