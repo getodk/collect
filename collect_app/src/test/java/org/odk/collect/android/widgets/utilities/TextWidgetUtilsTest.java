@@ -12,14 +12,14 @@ import static org.mockito.Mockito.when;
 
 public class TextWidgetUtilsTest {
 
-    private FormEntryPrompt formEntryPrompt = mock(FormEntryPrompt.class);
+    private final FormEntryPrompt formEntryPrompt = mock(FormEntryPrompt.class);
 
     @Test
     public void getIntegerAnswerValueFromIAnswerDataTest() {
         assertNull(TextWidgetUtils.getIntegerAnswerValueFromIAnswerData(null));
-        assertEquals(new Integer(0), TextWidgetUtils.getIntegerAnswerValueFromIAnswerData(new IntegerData(0)));
-        assertEquals(new Integer(-15), TextWidgetUtils.getIntegerAnswerValueFromIAnswerData(new IntegerData(-15)));
-        assertEquals(new Integer(15), TextWidgetUtils.getIntegerAnswerValueFromIAnswerData(new IntegerData(15)));
+        assertEquals(Integer.valueOf(0), TextWidgetUtils.getIntegerAnswerValueFromIAnswerData(new IntegerData(0)));
+        assertEquals(Integer.valueOf(-15), TextWidgetUtils.getIntegerAnswerValueFromIAnswerData(new IntegerData(-15)));
+        assertEquals(Integer.valueOf(15), TextWidgetUtils.getIntegerAnswerValueFromIAnswerData(new IntegerData(15)));
     }
 
     @Test
