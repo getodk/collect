@@ -67,12 +67,12 @@ def googleMapsApiKey = secrets.getProperty('GOOGLE_MAPS_API_KEY', '')
 def mapboxToken = secrets.getProperty('MAPBOX_ACCESS_TOKEN', '')
 
 android {
-    compileSdkVersion(29)
+    compileSdkVersion(28)
 
     defaultConfig {
         applicationId('org.odk.collect.android')
         minSdkVersion(16)
-        targetSdkVersion(29)
+        targetSdkVersion(28)
         versionCode LEGACY_BUILD_NUMBER_OFFSET + getMasterCommitCount()
         versionName getVersionName()
         testInstrumentationRunner('androidx.test.runner.AndroidJUnitRunner')
