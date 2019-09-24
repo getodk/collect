@@ -42,6 +42,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 
+import org.json.JSONException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
@@ -51,6 +52,7 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.PreferenceSaver;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.Transport;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -65,11 +67,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.GeneralKeys.GENERAL_KEYS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 
 /**
@@ -568,29 +568,20 @@ public class MainMenuActivity extends CollectAbstractActivity {
         ObjectInputStream input = null;
         try {
             input = new ObjectInputStream(new FileInputStream(src));
-            GeneralSharedPreferences.getInstance().clear();
 
             // first object is preferences
-            Map<String, ?> entries = (Map<String, ?>) input.readObject();
+            Map<String, Object> entries = (Map<String, Object>) input.readObject();
 
             AutoSendPreferenceMigrator.migrate(entries);
-
-            for (Entry<String, ?> entry : entries.entrySet()) {
-                if (GENERAL_KEYS.containsKey(entry.getKey())) {
-                    GeneralSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
-                }
-            }
-
-            AdminSharedPreferences.getInstance().clear();
+            PreferenceSaver.saveGeneralPrefs(GeneralSharedPreferences.getInstance(), entries);
 
             // second object is admin options
-            Map<String, ?> adminEntries = (Map<String, ?>) input.readObject();
-            for (Entry<String, ?> entry : adminEntries.entrySet()) {
-                AdminSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
-            }
+            Map<String, Object> adminEntries = (Map<String, Object>) input.readObject();
+            PreferenceSaver.saveAdminPrefs(AdminSharedPreferences.getInstance(), adminEntries);
+
             Collect.getInstance().initializeJavaRosa();
             res = true;
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException | JSONException e) {
             Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());
         } finally {
             try {
