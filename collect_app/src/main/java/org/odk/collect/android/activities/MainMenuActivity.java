@@ -42,7 +42,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 
-import org.json.JSONException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
@@ -581,7 +580,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
             Collect.getInstance().initializeJavaRosa();
             res = true;
-        } catch (IOException | ClassNotFoundException | JSONException e) {
+        } catch (IOException | ClassNotFoundException e) {
             Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());
         } finally {
             try {
