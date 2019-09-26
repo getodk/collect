@@ -229,7 +229,7 @@ dependencies {
     }
 
     implementation "com.squareup.okhttp3:okhttp:${rootProject.okhttp3Version}"
-    implementation 'com.burgstaller:okhttp-digest:2.0'
+    implementation 'com.burgstaller:okhttp-digest:1.18' //newer versions require minSdkVersion >= 21
 
     implementation 'com.github.mohamadian:PersianJodaTime:1.2'
     implementation 'com.github.chanmratekoko:myanmar-calendar:1.0.6.RC3'
