@@ -85,7 +85,7 @@ public class ShowQRCodeFragment extends Fragment {
     private static final int SELECT_PHOTO = 111;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private final boolean[] checkedItems = new boolean[]{true, true};
+    private final boolean[] checkedItems = {true, true};
 
     @BindView(R.id.ivQRcode)
     ImageView ivQRCode;
@@ -194,7 +194,7 @@ public class ShowQRCodeFragment extends Fragment {
     @OnClick(R.id.tvPasswordWarning)
     void passwordWarningClicked() {
         if (dialog == null) {
-            final String[] items = new String[]{
+            final String[] items = {
                     getString(R.string.admin_password),
                     getString(R.string.server_password)};
 

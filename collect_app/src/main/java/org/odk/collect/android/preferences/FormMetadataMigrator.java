@@ -19,7 +19,7 @@ public class FormMetadataMigrator {
     }
 
     /** The migration flow, from source to target */
-    static final String[][] SOURCE_TARGET_VALUE_PAIRS = new String[][]{
+    static final String[][] SOURCE_TARGET_VALUE_PAIRS = {
             {KEY_USERNAME,                  KEY_METADATA_USERNAME},
             {KEY_SELECTED_GOOGLE_ACCOUNT,   KEY_METADATA_EMAIL}
     };
