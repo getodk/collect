@@ -28,8 +28,7 @@ import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
-import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClip;
 
 @SuppressLint("ViewConstructor")
 public class GridMultiWidget extends BaseGridWidget {
@@ -37,16 +36,6 @@ public class GridMultiWidget extends BaseGridWidget {
     public GridMultiWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails, false);
         SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
-
-        for (SelectChoice choice : items) {
-            if (noButtonsMode) {
-                String audioURI = getPlayableAudioURI(getFormEntryPrompt(), choice, getReferenceManager());
-
-                if (audioURI != null) {
-                    analytics.logEvent("Prompt", "AudioChoiceGrid", questionDetails.getFormAnalyticsID());
-                }
-            }
-        }
     }
 
     @Override
@@ -79,11 +68,10 @@ public class GridMultiWidget extends BaseGridWidget {
                 itemViews[index].setBackgroundColor(bgOrange);
 
                 SelectChoice item = items.get(index);
-                String clipID = getClipID(getFormEntryPrompt(), item);
-                String audioURI = getPlayableAudioURI(getFormEntryPrompt(), item, getReferenceManager());
+                Clip clip = getClip(getFormEntryPrompt(), item, getReferenceManager());
 
-                if (audioURI != null) {
-                    getAudioHelper().play(new Clip(clipID, audioURI));
+                if (clip != null) {
+                    getAudioHelper().play(clip);
                 }
             }
         }

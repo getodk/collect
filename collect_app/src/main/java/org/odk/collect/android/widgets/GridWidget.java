@@ -21,12 +21,11 @@ import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
-import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.audio.Clip;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 
-import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
-import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClip;
 
 @SuppressLint("ViewConstructor")
 public class GridWidget extends BaseGridWidget {
@@ -36,17 +35,6 @@ public class GridWidget extends BaseGridWidget {
     public GridWidget(Context context, QuestionDetails questionDetails, final boolean quickAdvance) {
         super(context, questionDetails, quickAdvance);
         listener = context instanceof AdvanceToNextListener ? (AdvanceToNextListener) context : null;
-
-        for (SelectChoice choice : items) {
-            if (noButtonsMode) {
-                String audioURI = getPlayableAudioURI(getFormEntryPrompt(), choice, getReferenceManager());
-
-                if (audioURI != null) {
-                    analytics.logEvent("Prompt", "AudioChoiceGrid", questionDetails.getFormAnalyticsID());
-                }
-            }
-        }
-
     }
 
     @Override
@@ -81,11 +69,10 @@ public class GridWidget extends BaseGridWidget {
 
         if (noButtonsMode) {
             SelectChoice item = items.get(index);
-            String clipID = getClipID(getFormEntryPrompt(), item);
-            String audioURI = getPlayableAudioURI(getFormEntryPrompt(), item, getReferenceManager());
+            Clip clip = getClip(getFormEntryPrompt(), item, getReferenceManager());
 
-            if (audioURI != null) {
-                getAudioHelper().play(new Clip(clipID, audioURI));
+            if (clip != null) {
+                getAudioHelper().play(clip);
             }
         }
 

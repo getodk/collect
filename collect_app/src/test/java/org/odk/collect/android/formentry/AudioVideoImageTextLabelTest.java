@@ -41,7 +41,7 @@ public class AudioVideoImageTextLabelTest {
     public void withTextView_andAudio_playingAudio_highlightsText() throws Exception {
         MutableLiveData<Boolean> isPlaying = new MutableLiveData<>();
         isPlaying.setValue(false);
-        when(audioHelper.setAudio(any(AudioButton.class), any(), any())).thenReturn(isPlaying);
+        when(audioHelper.setAudio(any(AudioButton.class), any())).thenReturn(isPlaying);
 
         Activity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
 

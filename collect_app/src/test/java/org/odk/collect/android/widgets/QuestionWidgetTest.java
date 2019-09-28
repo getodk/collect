@@ -18,6 +18,7 @@ import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.injection.config.AppDependencyModule;
@@ -50,7 +51,7 @@ public class QuestionWidgetTest {
     @Before
     public void setup() {
         overrideDependencyModule();
-        when(audioHelper.setAudio(any(AudioButton.class), any(), any())).thenReturn(new MutableLiveData<>());
+        when(audioHelper.setAudio(any(AudioButton.class), any())).thenReturn(new MutableLiveData<>());
     }
 
     @Test
@@ -65,7 +66,7 @@ public class QuestionWidgetTest {
         TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
         new TestWidget(activity, new QuestionDetails(prompt, "formAnalyticsID"));
 
-        verify(audioHelper).setAudio(any(AudioButton.class), eq(reference), eq("i am index"));
+        verify(audioHelper).setAudio(any(AudioButton.class), eq(new Clip("i am index", reference)));
     }
 
     @Test

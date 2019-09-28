@@ -41,6 +41,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -262,7 +263,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
         ScreenContext activity = getScreenContext();
         String clipID = getTag() != null ? getTag().toString() : "";
-        LiveData<Boolean> isPlayingLiveData = audioHelper.setAudio(audioButton, audioURI, clipID);
+        LiveData<Boolean> isPlayingLiveData = audioHelper.setAudio(audioButton, new Clip(clipID, audioURI));
         isPlayingLiveData.observe(activity.getViewLifecycle(), isPlaying -> {
             if (isPlaying) {
                 labelTextView.setTextColor(playTextColor);

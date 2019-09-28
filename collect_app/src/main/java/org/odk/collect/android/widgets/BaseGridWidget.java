@@ -32,6 +32,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.AppCompatRadioButton;
 
+import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
@@ -51,6 +52,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
 
 /**
  * GridWidget handles select-one/multiple fields using a grid options. The number of columns
@@ -82,6 +85,16 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         setUpItems();
         setUpGridView();
         fillInAnswer();
+
+        for (SelectChoice choice : items) {
+            if (noButtonsMode) {
+                String audioURI = getPlayableAudioURI(getFormEntryPrompt(), choice, getReferenceManager());
+
+                if (audioURI != null) {
+                    analytics.logEvent("Prompt", "AudioChoiceGrid", questionDetails.getFormAnalyticsID());
+                }
+            }
+        }
     }
 
     private void setUpItems() {

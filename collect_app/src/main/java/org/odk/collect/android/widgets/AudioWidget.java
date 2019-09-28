@@ -34,6 +34,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioControllerView;
+import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.FileUtil;
@@ -202,7 +203,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
     private void updatePlayerMedia() {
         if (binaryName != null) {
-            audioHelper.setAudio(audioController, getAudioFile().getAbsolutePath(), String.valueOf(ViewCompat.generateViewId()));
+            audioHelper.setAudio(audioController, new Clip(String.valueOf(ViewCompat.generateViewId()), getAudioFile().getAbsolutePath()));
             audioController.showPlayer();
         } else {
             audioController.hidePlayer();

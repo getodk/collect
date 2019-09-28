@@ -22,6 +22,7 @@ import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -59,7 +60,7 @@ public class SelectWidgetTest {
     @Before
     public void setup() {
         overrideDependencyModule();
-        when(audioHelper.setAudio(any(AudioButton.class), any(), any())).thenReturn(new MutableLiveData<>());
+        when(audioHelper.setAudio(any(AudioButton.class), any())).thenReturn(new MutableLiveData<>());
     }
 
     @Test
@@ -82,8 +83,8 @@ public class SelectWidgetTest {
         TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
         new TestWidget(activity, new QuestionDetails(prompt, "formAnalyticsID"), prompt.getSelectChoices());
 
-        verify(audioHelper).setAudio(any(AudioButton.class), eq(reference1), eq("i am index 0"));
-        verify(audioHelper).setAudio(any(AudioButton.class), eq(reference2), eq("i am index 1"));
+        verify(audioHelper).setAudio(any(AudioButton.class), eq(new Clip("i am index 0", reference1)));
+        verify(audioHelper).setAudio(any(AudioButton.class), eq(new Clip("i am index 1", reference2)));
     }
 
     @Test
