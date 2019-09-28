@@ -34,9 +34,19 @@ import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayab
 @SuppressLint("ViewConstructor")
 public class GridMultiWidget extends BaseGridWidget {
 
-    public GridMultiWidget(Context context, QuestionDetails prompt) {
-        super(context, prompt, false);
+    public GridMultiWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails, false);
         SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
+
+        for (SelectChoice choice : items) {
+            if (noButtonsMode) {
+                String audioURI = getPlayableAudioURI(getFormEntryPrompt(), choice, getReferenceManager());
+
+                if (audioURI != null) {
+                    analytics.logEvent("Prompt", "AudioChoiceGrid", questionDetails.getFormAnalyticsID());
+                }
+            }
+        }
     }
 
     @Override

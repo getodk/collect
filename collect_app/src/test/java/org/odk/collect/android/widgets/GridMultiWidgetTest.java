@@ -1,5 +1,7 @@
 package org.odk.collect.android.widgets;
 
+import android.app.Application;
+
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 
@@ -11,6 +13,7 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.mockito.Mock;
@@ -31,6 +34,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.odk.collect.android.support.Helpers.createMockReference;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.NO_BUTTONS;
@@ -56,6 +60,9 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
     @Mock
     private AudioHelper audioHelper;
 
+    @Mock
+    private Analytics analytics;
+
     @Before
     public void overrideDependencyModule() {
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
@@ -68,6 +75,11 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
             @Override
             public AudioHelperFactory providesAudioHelperFactory() {
                 return context -> audioHelper;
+            }
+
+            @Override
+            public Analytics providesAnalytics(Application application) {
+                return analytics;
             }
         });
     }
@@ -97,6 +109,29 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
 
         widget.onItemClick(0);
         verify(audioHelper).stop();
+    }
+
+    @Test
+    public void whenChoicesHaveAudio_andNoButtonsMode__logsAudioChoiceGridEvent() throws Exception {
+        createMockReference(referenceManager, "file://blah2.mp3");
+        createMockReference(referenceManager, "file://blah1.mp3");
+
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withIndex("i am index")
+                .withAppearance(NO_BUTTONS)
+                .withSelectChoices(asList(
+                        new SelectChoice("1", "1"),
+                        new SelectChoice("2", "2")
+                ))
+                .withSpecialFormSelectChoiceText(asList(
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://blah1.mp3"),
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://blah2.mp3")
+                ))
+                .build();
+
+        getActualWidget();
+
+        verify(analytics, times(2)).logEvent("Prompt", "AudioChoiceGrid", "formAnalyticsID");
     }
 
     @Test
