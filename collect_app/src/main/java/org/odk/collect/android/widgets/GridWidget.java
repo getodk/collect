@@ -36,6 +36,17 @@ public class GridWidget extends BaseGridWidget {
     public GridWidget(Context context, QuestionDetails questionDetails, final boolean quickAdvance) {
         super(context, questionDetails, quickAdvance);
         listener = context instanceof AdvanceToNextListener ? (AdvanceToNextListener) context : null;
+
+        for (SelectChoice choice : items) {
+            if (noButtonsMode) {
+                String audioURI = getPlayableAudioURI(getFormEntryPrompt(), choice, getReferenceManager());
+
+                if (audioURI != null) {
+                    analytics.logEvent("Prompt", "AudioChoiceGrid", questionDetails.getFormAnalyticsID());
+                }
+            }
+        }
+
     }
 
     @Override
