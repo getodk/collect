@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
@@ -28,7 +29,6 @@ import org.odk.collect.android.support.TestScreenContextActivity;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.Helpers.createMockReference;
@@ -64,9 +64,10 @@ public class QuestionWidgetTest {
                 .build();
 
         TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
-        new TestWidget(activity, new QuestionDetails(prompt, "formAnalyticsID"));
+        TestWidget widget = new TestWidget(activity, new QuestionDetails(prompt, "formAnalyticsID"));
 
-        verify(audioHelper).setAudio(any(AudioButton.class), eq(new Clip("i am index", reference)));
+        AudioButton audioButton = widget.getAudioVideoImageTextLabel().findViewById(R.id.audioButton);
+        verify(audioHelper).setAudio(audioButton, new Clip("i am index", reference));
     }
 
     @Test

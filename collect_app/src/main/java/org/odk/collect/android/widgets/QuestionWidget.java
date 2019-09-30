@@ -51,8 +51,8 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
+import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.FormController;
@@ -285,11 +285,10 @@ public abstract class QuestionWidget
         String bigImageURI = prompt.getSpecialFormQuestionText("big-image");
 
         // Create the layout for audio, image, text
-        AudioVideoImageTextLabel questionAudioVideoImageTextLabel = new AudioVideoImageTextLabel(getContext());
-        questionAudioVideoImageTextLabel.setId(ViewIds.generateViewId()); // assign random id
+        label.setId(ViewIds.generateViewId()); // assign random id
 
-        questionAudioVideoImageTextLabel.setTag(getClipID(prompt));
-        questionAudioVideoImageTextLabel.setAVT(
+        label.setTag(getClipID(prompt));
+        label.setAVT(
                 questionText,
                 imageURI,
                 videoURI,
@@ -311,9 +310,9 @@ public abstract class QuestionWidget
                 Timber.e(e, "Argument %s is incorrect", playColorString);
             }
         }
-        questionAudioVideoImageTextLabel.setPlayTextColor(getPlayColor());
+        label.setPlayTextColor(getPlayColor());
 
-        return questionAudioVideoImageTextLabel;
+        return label;
     }
 
     public TextView getHelpTextView() {
