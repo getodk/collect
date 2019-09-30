@@ -27,18 +27,18 @@ public class AudioButtonTest {
     @Test
     public void isPlayingReturnsFalse_andShowsPlayIcon() {
         assertThat(button.isPlaying(), equalTo(false));
-        assertThat(getCreatedFromResId(button), equalTo(R.drawable.ic_volume_up_24dp));
+        assertThat(getCreatedFromResId(button), equalTo(R.drawable.ic_volume_up_black_24dp));
     }
 
     @Test
     public void whenPlayingIsTrue_showsPlayingIcon() {
         button.setPlaying(true);
-        assertThat(getCreatedFromResId(button), equalTo(R.drawable.ic_stop_24dp));
+        assertThat(getCreatedFromResId(button), equalTo(R.drawable.ic_stop_black_24dp));
     }
 
     @Test
     public void whenPlayingIsFalse_showsPlayIcon() {
         button.setPlaying(false);
-        assertThat(getCreatedFromResId(button), equalTo(R.drawable.ic_volume_up_24dp));
+        assertThat(getCreatedFromResId(button), equalTo(R.drawable.ic_volume_up_black_24dp));
     }
 }

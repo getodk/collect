@@ -15,10 +15,12 @@
 package org.odk.collect.android.audio;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.core.widget.ImageViewCompat;
 
 import org.odk.collect.android.R;
 
@@ -31,6 +33,8 @@ public class AudioButton extends AppCompatImageButton implements View.OnClickLis
     private Listener listener;
 
     private Boolean playing = false;
+    private Integer playingColor;
+    private Integer idleColor;
 
     public AudioButton(Context context) {
         super(context);
@@ -51,13 +55,26 @@ public class AudioButton extends AppCompatImageButton implements View.OnClickLis
         return playing;
     }
 
+    public void setColors(Integer idleColor, Integer playingColor) {
+        this.idleColor = idleColor;
+        this.playingColor = playingColor;
+    }
+
     public void setPlaying(Boolean isPlaying) {
         playing = isPlaying;
 
         if (isPlaying) {
-            setImageResource(R.drawable.ic_stop_24dp);
+            setImageResource(R.drawable.ic_stop_black_24dp);
+
+            if (playingColor != null) {
+                ImageViewCompat.setImageTintList(this, ColorStateList.valueOf(playingColor));
+            }
         } else {
-            setImageResource(R.drawable.ic_volume_up_24dp);
+            setImageResource(R.drawable.ic_volume_up_black_24dp);
+
+            if (idleColor != null) {
+                ImageViewCompat.setImageTintList(this, ColorStateList.valueOf(idleColor));
+            }
         }
     }
 
@@ -66,7 +83,7 @@ public class AudioButton extends AppCompatImageButton implements View.OnClickLis
     }
 
     public void reset() {
-        setImageResource(R.drawable.ic_volume_up_24dp);
+        setImageResource(R.drawable.ic_volume_up_black_24dp);
     }
 
     @Override

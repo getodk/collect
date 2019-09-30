@@ -18,9 +18,9 @@ import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.logic.FileReference;
+import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.robolectric.ParameterizedRobolectricTestRunner;
-import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
 
 import java.util.Arrays;
@@ -79,7 +79,7 @@ public class AudioVideoImageTextLabelVisibilityTest {
         referenceManager = mock(ReferenceManager.class);
         textView = new TextView(RuntimeEnvironment.application);
 
-        TestScreenContextActivity activity = Robolectric.buildActivity(TestScreenContextActivity.class).create().get();
+        TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
         audioHelper = new AudioHelper(activity, activity.getViewLifecycle());
 
         audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);

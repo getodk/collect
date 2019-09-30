@@ -103,7 +103,6 @@ public abstract class QuestionWidget
     private AtomicBoolean expanded;
     private Bundle state;
     protected ThemeUtils themeUtils;
-    private int playColor;
     protected final AudioHelper audioHelper;
 
     private WidgetValueChangedListener valueChangedListener;
@@ -123,7 +122,6 @@ public abstract class QuestionWidget
         this.audioHelper = audioHelperFactory.create(context);
 
         themeUtils = new ThemeUtils(context);
-        playColor = themeUtils.getAccentColor();
 
         if (context instanceof FormEntryActivity) {
             state = ((FormEntryActivity) context).getState();
@@ -302,15 +300,7 @@ public abstract class QuestionWidget
             analytics.logEvent("Prompt", "AudioLabel", questionDetails.getFormAnalyticsID());
         }
 
-        String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
-        if (playColorString != null) {
-            try {
-                playColor = Color.parseColor(playColorString);
-            } catch (IllegalArgumentException e) {
-                Timber.e(e, "Argument %s is incorrect", playColorString);
-            }
-        }
-        label.setPlayTextColor(getPlayColor());
+        label.setPlayTextColor(getPlayColor(formEntryPrompt, themeUtils));
 
         return label;
     }
@@ -756,7 +746,18 @@ public abstract class QuestionWidget
         return referenceManager;
     }
 
-    public int getPlayColor() {
+    public static int getPlayColor(FormEntryPrompt prompt, ThemeUtils themeUtils) {
+        int playColor = themeUtils.getAccentColor();
+
+        String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
+        if (playColorString != null) {
+            try {
+                playColor = Color.parseColor(playColorString);
+            } catch (IllegalArgumentException e) {
+                Timber.e(e, "Argument %s is incorrect", playColorString);
+            }
+        }
+
         return playColor;
     }
 

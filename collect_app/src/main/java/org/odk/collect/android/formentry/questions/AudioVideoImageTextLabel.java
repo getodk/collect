@@ -37,6 +37,7 @@ import androidx.lifecycle.LiveData;
 
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioButton;
@@ -128,6 +129,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     public void setPlayTextColor(int textColor) {
         playTextColor = textColor;
+        audioButton.setColors(getThemeUtils().getColorOnSurface(), playTextColor);
     }
 
     public void playVideo() {
@@ -268,16 +270,16 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
             if (isPlaying) {
                 labelTextView.setTextColor(playTextColor);
             } else {
-                resetTextFormatting();
+                labelTextView.setTextColor(getThemeUtils().getColorOnSurface());
+                // then set the text to our original (brings back any html formatting)
+                labelTextView.setText(originalText);
             }
         });
     }
 
-    private void resetTextFormatting() {
-        // first set it to defaults
-        labelTextView.setTextColor(new ThemeUtils(getContext()).getPrimaryTextColor());
-        // then set the text to our original (brings back any html formatting)
-        labelTextView.setText(originalText);
+    @NotNull
+    private ThemeUtils getThemeUtils() {
+        return new ThemeUtils(getContext());
     }
 
     private ScreenContext getScreenContext() {

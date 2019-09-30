@@ -70,7 +70,7 @@ public abstract class SelectWidget extends ItemsWidget {
     }
 
     public void init(AudioVideoImageTextLabel audioVideoImageTextLabel) {
-        audioVideoImageTextLabel.setPlayTextColor(getPlayColor());
+        audioVideoImageTextLabel.setPlayTextColor(getPlayColor(getFormEntryPrompt(), themeUtils));
     }
 
     /**
