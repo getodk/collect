@@ -15,12 +15,12 @@
 package org.odk.collect.android.audio;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.appcompat.widget.AppCompatImageButton;
+
+import org.odk.collect.android.R;
 
 /**
  * @author ctsims
@@ -28,8 +28,6 @@ import androidx.appcompat.widget.AppCompatImageButton;
  */
 public class AudioButton extends AppCompatImageButton implements View.OnClickListener {
 
-    private Bitmap bitmapPlay;
-    private Bitmap bitmapStop;
     private Listener listener;
 
     private Boolean playing = false;
@@ -45,10 +43,7 @@ public class AudioButton extends AppCompatImageButton implements View.OnClickLis
     }
 
     private void initView() {
-        bitmapPlay = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_lock_silent_mode_off);
-        bitmapStop = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_media_pause);
-
-        resetBitmap();
+        reset();
         this.setOnClickListener(this);
     }
 
@@ -60,9 +55,9 @@ public class AudioButton extends AppCompatImageButton implements View.OnClickLis
         playing = isPlaying;
 
         if (isPlaying) {
-            setImageBitmap(bitmapStop);
+            setImageResource(R.drawable.ic_stop_24dp);
         } else {
-            setImageBitmap(bitmapPlay);
+            setImageResource(R.drawable.ic_volume_up_24dp);
         }
     }
 
@@ -70,8 +65,8 @@ public class AudioButton extends AppCompatImageButton implements View.OnClickLis
         this.listener = listener;
     }
 
-    public void resetBitmap() {
-        setImageBitmap(bitmapPlay);
+    public void reset() {
+        setImageResource(R.drawable.ic_volume_up_24dp);
     }
 
     @Override

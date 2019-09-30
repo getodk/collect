@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentActivity;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
@@ -26,18 +27,18 @@ public class AudioButtonTest {
     @Test
     public void isPlayingReturnsFalse_andShowsPlayIcon() {
         assertThat(button.isPlaying(), equalTo(false));
-        assertThat(getCreatedFromResId(button), equalTo(android.R.drawable.ic_lock_silent_mode_off));
+        assertThat(getCreatedFromResId(button), equalTo(R.drawable.ic_volume_up_24dp));
     }
 
     @Test
     public void whenPlayingIsTrue_showsPlayingIcon() {
         button.setPlaying(true);
-        assertThat(getCreatedFromResId(button), equalTo(android.R.drawable.ic_media_pause));
+        assertThat(getCreatedFromResId(button), equalTo(R.drawable.ic_stop_24dp));
     }
 
     @Test
     public void whenPlayingIsFalse_showsPlayIcon() {
         button.setPlaying(false);
-        assertThat(getCreatedFromResId(button), equalTo(android.R.drawable.ic_lock_silent_mode_off));
+        assertThat(getCreatedFromResId(button), equalTo(R.drawable.ic_volume_up_24dp));
     }
 }
