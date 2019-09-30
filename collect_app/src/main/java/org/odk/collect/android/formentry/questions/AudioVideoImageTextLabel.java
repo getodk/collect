@@ -18,7 +18,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.util.AttributeSet;
@@ -86,14 +85,14 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     public AudioVideoImageTextLabel(Context context) {
         super(context);
 
-        View.inflate(context, R.layout.question_label, this);
+        View.inflate(context, R.layout.audio_video_image_text_label, this);
         ButterKnife.bind(this);
     }
 
     public AudioVideoImageTextLabel(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        View.inflate(context, R.layout.question_label, this);
+        View.inflate(context, R.layout.audio_video_image_text_label, this);
         ButterKnife.bind(this);
     }
 
@@ -255,8 +254,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     private void setupVideoButton() {
         videoButton.setVisibility(VISIBLE);
-        Bitmap b = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_media_play);
-        videoButton.setImageBitmap(b);
         videoButton.setOnClickListener(this);
     }
 
