@@ -32,7 +32,7 @@ public class IntegerWidgetTest extends GeneralStringWidgetTest<IntegerWidget, In
     }
 
     @Test
-    public void digitsAboveLimitOfNineShouldBeTruncatedFromLeft() {
+    public void digitsAboveLimitOfNineShouldBeTruncatedFromRight() {
         getActualWidget().answerText.setText("123456789123");
         assertEquals("123456789", getActualWidget().getAnswerText());
     }
