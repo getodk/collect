@@ -218,8 +218,7 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
          */
         @SuppressWarnings("deprecation")
         private void fixSpinner(Context context, int hourOfDay, int minute, boolean is24HourView) {
-            // android:timePickerMode spinner and clock began in Lollipop
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N) {
                 try {
                     // Get the theme's android:timePickerMode
                     final int MODE_SPINNER = 2;
@@ -251,13 +250,7 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
                         Object delegate = delegateField.get(timePicker);
 
                         Class<?> spinnerDelegateClass;
-                        if (Build.VERSION.SDK_INT != Build.VERSION_CODES.LOLLIPOP) {
-                            spinnerDelegateClass = Class.forName("android.widget.TimePickerSpinnerDelegate");
-                        } else {
-                            // TimePickerSpinnerDelegate was initially misnamed in API 21!
-                            spinnerDelegateClass = Class.forName("android.widget.TimePickerClockDelegate");
-                        }
-
+                        spinnerDelegateClass = Class.forName("android.widget.TimePickerSpinnerDelegate");
                         // In 7.0 Nougat for some reason the timePickerMode is ignored and the
                         // delegate is TimePickerClockDelegate
                         if (delegate.getClass() != spinnerDelegateClass) {
