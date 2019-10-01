@@ -105,6 +105,19 @@ public class AudioPlayerViewModelTest {
     }
 
     @Test
+    public void playInOrder_whenThereIsAnErrorContinuesWithNextClip() throws Exception {
+        doThrow(IOException.class).when(mediaPlayer).setDataSource("file://missing.mp3");
+
+        viewModel.playInOrder(asList(
+                new Clip("clip1", "file://missing.mp3"),
+                new Clip("clip2", "file://not-missing.mp3")
+        ));
+
+        verify(mediaPlayer).setDataSource("file://not-missing.mp3");
+        verify(mediaPlayer, times(1)).start();
+    }
+
+    @Test
     public void play_afterAPlayInOrder_doesNotContinuePlayingClips() throws Exception {
         viewModel.playInOrder(asList(
                 new Clip("clip1", "file://audio1.mp3"),

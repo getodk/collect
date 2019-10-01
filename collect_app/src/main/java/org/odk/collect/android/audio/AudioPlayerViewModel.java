@@ -106,6 +106,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
                     loadNewClip(nextClip.getURI());
                 } catch (IOException ignored) {
                     error.setValue(new PlaybackFailedException(nextClip.getURI()));
+                    playNext(playlist);
                     return;
                 }
             }
@@ -164,6 +165,10 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         return error;
     }
 
+    public void dismissError() {
+        error.setValue(null);
+    }
+
     private void schedulePositionUpdates() {
         if (!scheduledDurationUpdates) {
             scheduler.schedule(() -> {
@@ -205,10 +210,6 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         getMediaPlayer().reset();
         getMediaPlayer().setDataSource(uri);
         getMediaPlayer().prepare();
-    }
-
-    public void dismissError() {
-        error.setValue(null);
     }
 
     private static class CurrentlyPlaying {
