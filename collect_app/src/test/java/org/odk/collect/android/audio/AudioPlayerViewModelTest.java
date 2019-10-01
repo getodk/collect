@@ -358,13 +358,24 @@ public class AudioPlayerViewModelTest {
     }
 
     @Test
-    public void error_whenPlaybackFails_is_PlaybackFailed() throws Exception {
+    public void getError_whenPlaybackFails_is_PlaybackFailed() throws Exception {
         final LiveData<Exception> error = liveDataTester.activate(viewModel.getError());
 
         doThrow(IOException.class).when(mediaPlayer).setDataSource("file://missing.mp3");
         viewModel.play(new Clip("clip1", "file://missing.mp3"));
 
         assertThat(error.getValue(), equalTo(new PlaybackFailedException("file://missing.mp3")));
+    }
+
+    @Test
+    public void dismissError_removesErrorValue() throws Exception {
+        final LiveData<Exception> error = liveDataTester.activate(viewModel.getError());
+
+        doThrow(IOException.class).when(mediaPlayer).setDataSource("file://missing.mp3");
+        viewModel.play(new Clip("clip1", "file://missing.mp3"));
+
+        viewModel.dismissError();
+        assertThat(error.getValue(), equalTo(null));
     }
 
     private static class RecordingMockMediaPlayerFactory implements MediaPlayerFactory {

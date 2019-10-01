@@ -164,8 +164,9 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                         getContext().getString(R.string.file_missing, playbackFailedException.getURI()),
                         Toast.LENGTH_SHORT
                 ).show();
-            }
 
+                audioHelper.dismissError();
+            }
         });
     }
 

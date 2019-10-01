@@ -11,7 +11,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModelProviders;
 
-import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.utilities.HandlerScheduler;
 import org.odk.collect.android.utilities.Scheduler;
 
@@ -36,10 +35,8 @@ import java.util.List;
 
 public class AudioHelper {
 
-    private final MediaPlayerFactory mediaPlayerFactory;
-    private final Scheduler scheduler;
-    private final FragmentActivity activity;
     private final LifecycleOwner lifecycleOwner;
+    private final AudioPlayerViewModel viewModel;
 
     /**
      * @param activity       The activity where controls will be displayed
@@ -50,10 +47,15 @@ public class AudioHelper {
     }
 
     AudioHelper(FragmentActivity activity, LifecycleOwner lifecycleOwner, Scheduler scheduler, MediaPlayerFactory mediaPlayerFactory) {
-        this.activity = activity;
         this.lifecycleOwner = lifecycleOwner;
-        this.mediaPlayerFactory = mediaPlayerFactory;
-        this.scheduler = scheduler;
+
+        AudioPlayerViewModelFactory factory = new AudioPlayerViewModelFactory(mediaPlayerFactory, scheduler);
+
+        viewModel = ViewModelProviders
+                .of(activity, factory)
+                .get(AudioPlayerViewModel.class);
+
+        registerLifecycleCallbacks(activity, lifecycleOwner);
     }
 
     /**
@@ -63,7 +65,7 @@ public class AudioHelper {
      * @return A {@link LiveData} value representing whether this clip is playing or not
      */
     public LiveData<Boolean> setAudio(AudioButton button, String uri, String clipID) {
-        AudioPlayerViewModel viewModel = getViewModel();
+        AudioPlayerViewModel viewModel = this.viewModel;
 
         LiveData<Boolean> isPlaying = viewModel.isPlaying(clipID);
 
@@ -79,7 +81,7 @@ public class AudioHelper {
      * @param clipID An identifier for this clip
      */
     public void setAudio(AudioControllerView view, String uri, String clipID) {
-        AudioPlayerViewModel viewModel = getViewModel();
+        AudioPlayerViewModel viewModel = this.viewModel;
 
         viewModel.isPlaying(clipID).observe(lifecycleOwner, view::setPlaying);
         viewModel.getPosition(clipID).observe(lifecycleOwner, view::setPosition);
@@ -88,11 +90,11 @@ public class AudioHelper {
     }
 
     public void play(Clip clip) {
-        getViewModel().play(clip);
+        viewModel.play(clip);
     }
 
     public void playInOrder(List<Clip> clips) {
-        getViewModel().playInOrder(clips);
+        viewModel.playInOrder(clips);
     }
 
     private Integer getDurationOfFile(String uri) {
@@ -102,22 +104,17 @@ public class AudioHelper {
         return durationString != null ? Integer.parseInt(durationString) : 0;
     }
 
-    @NotNull
-    private AudioPlayerViewModel getViewModel() {
-        AudioPlayerViewModelFactory factory = new AudioPlayerViewModelFactory(mediaPlayerFactory, scheduler);
-
-        AudioPlayerViewModel viewModel = ViewModelProviders
-                .of(activity, factory)
-                .get(AudioPlayerViewModel.class);
-
-        activity.getLifecycle().addObserver(new BackgroundObserver(viewModel));
-        lifecycleOwner.getLifecycle().addObserver(new BackgroundObserver(viewModel));
-
-        return viewModel;
+    public LiveData<Exception> getError() {
+        return viewModel.getError();
     }
 
-    public LiveData<Exception> getError() {
-        return getViewModel().getError();
+    public void dismissError() {
+        viewModel.dismissError();
+    }
+
+    private void registerLifecycleCallbacks(FragmentActivity activity, LifecycleOwner lifecycleOwner) {
+        activity.getLifecycle().addObserver(new BackgroundObserver(viewModel));
+        lifecycleOwner.getLifecycle().addObserver(new BackgroundObserver(viewModel));
     }
 
     private static class AudioControllerViewListener implements AudioControllerView.Listener {

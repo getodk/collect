@@ -93,8 +93,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
 
     @Override
     protected void onCleared() {
-        cleanUpAfterClip();
-        releaseMediaPlayer();
+        background();
     }
 
     private void playNext(Queue<Clip> playlist) {
@@ -206,6 +205,10 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         getMediaPlayer().reset();
         getMediaPlayer().setDataSource(uri);
         getMediaPlayer().prepare();
+    }
+
+    public void dismissError() {
+        error.setValue(null);
     }
 
     private static class CurrentlyPlaying {
