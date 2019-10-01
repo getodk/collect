@@ -13,11 +13,13 @@ import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Random;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.utilities.WidgetAppearanceUtils.THOUSANDS_SEP;
 
 public class DecimalWidgetTest extends QuestionWidgetTest<DecimalWidget, DecimalData> {
 
@@ -191,5 +193,12 @@ public class DecimalWidgetTest extends QuestionWidgetTest<DecimalWidget, Decimal
         decimalWidget = new DecimalWidget(activity, formEntryPrompt, false);
 
         assertThat(decimalWidget.getAnswerText(), is(equalTo(fifteenDigitString)));
+    }
+
+    @Test
+    public void separatorsShouldBeAddedWhenEnabled() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn(THOUSANDS_SEP);
+        getActualWidget().answerText.setText("123456789.54");
+        assertEquals("123,456,789.54", getActualWidget().answerText.getText().toString());
     }
 }
