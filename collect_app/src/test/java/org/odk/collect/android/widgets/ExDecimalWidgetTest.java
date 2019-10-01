@@ -56,7 +56,7 @@ public class ExDecimalWidgetTest extends GeneralExStringWidgetTest<ExDecimalWidg
 
     @Test
     // This should never be possible because the EditText has a limit on it
-    public void digitsAboveLimitOfFifteenShouldBeTruncatedFromLeft() {
+    public void digitsAboveLimitOfFifteenShouldBeTruncatedFromRight() {
         Double eighteenDigitDouble = 9999999999999994.;
         String fifteenDigitString = "999999999999994";
         assertSame(15, fifteenDigitString.length());
