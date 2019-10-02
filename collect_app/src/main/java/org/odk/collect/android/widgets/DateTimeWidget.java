@@ -48,10 +48,10 @@ public class DateTimeWidget extends QuestionWidget implements BinaryWidget, Widg
         dateWidget = new DateWidget(context, prompt);
         timeWidget = new TimeWidget(context, prompt);
 
-        dateWidget.getQuestionMediaLayout().getTextView().setVisibility(GONE);
+        dateWidget.getAudioVideoImageTextLabel().getLabelTextView().setVisibility(GONE);
         dateWidget.getHelpTextLayout().setVisibility(GONE);
 
-        timeWidget.getQuestionMediaLayout().getTextView().setVisibility(GONE);
+        timeWidget.getAudioVideoImageTextLabel().getLabelTextView().setVisibility(GONE);
         timeWidget.getHelpTextLayout().setVisibility(GONE);
 
         LinearLayout linearLayout = new LinearLayout(getContext());

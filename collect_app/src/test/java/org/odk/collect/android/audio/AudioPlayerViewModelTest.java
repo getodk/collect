@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -50,7 +51,7 @@ public class AudioPlayerViewModelTest {
 
     @Test
     public void play_resetsAndPreparesAndStartsMediaPlayer() throws Exception {
-        viewModel.play("clip1", "file://audio.mp3");
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
 
         InOrder inOrder = Mockito.inOrder(mediaPlayer);
 
@@ -62,8 +63,8 @@ public class AudioPlayerViewModelTest {
 
     @Test
     public void play_whenAlreadyingPlayingClip_startsMediaPlayer() {
-        viewModel.play("clip1", "file://audio.mp3");
-        viewModel.play("clip1", "file://audio.mp3");
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
 
         verify(mediaPlayer, times(1)).reset();
         verify(mediaPlayer, times(2)).start();
@@ -72,12 +73,70 @@ public class AudioPlayerViewModelTest {
     @Test
     public void play_whenClipHasPositionSet_startsAtPosition() {
         viewModel.setPosition("clip1", 4321);
-        viewModel.play("clip1", "file://audio.mp3");
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
 
         InOrder inOrder = Mockito.inOrder(mediaPlayer);
 
         inOrder.verify(mediaPlayer).seekTo(4321);
         inOrder.verify(mediaPlayer).start();
+    }
+
+    @Test
+    public void playInOrder_playsClipsOneAfterTheOther() throws Exception {
+        viewModel.playInOrder(asList(
+                new Clip("clip1", "file://audio1.mp3"),
+                new Clip("clip2", "file://audio2.mp3")
+        ));
+
+        ArgumentCaptor<MediaPlayer.OnCompletionListener> captor = ArgumentCaptor.forClass(MediaPlayer.OnCompletionListener.class);
+        verify(mediaPlayer).setOnCompletionListener(captor.capture());
+        MediaPlayer.OnCompletionListener onCompletionListener = captor.getValue();
+
+        verify(mediaPlayer).setDataSource("file://audio1.mp3");
+        verify(mediaPlayer, times(1)).start();
+
+        onCompletionListener.onCompletion(mediaPlayer);
+
+        verify(mediaPlayer).setDataSource("file://audio2.mp3");
+        verify(mediaPlayer, times(2)).start();
+
+        onCompletionListener.onCompletion(mediaPlayer);
+        verify(mediaPlayer, times(2)).start();
+    }
+
+    @Test
+    public void playInOrder_whenThereIsAnErrorContinuesWithNextClip() throws Exception {
+        doThrow(IOException.class).when(mediaPlayer).setDataSource("file://missing.mp3");
+
+        viewModel.playInOrder(asList(
+                new Clip("clip1", "file://missing.mp3"),
+                new Clip("clip2", "file://not-missing.mp3")
+        ));
+
+        verify(mediaPlayer).setDataSource("file://not-missing.mp3");
+        verify(mediaPlayer, times(1)).start();
+    }
+
+    @Test
+    public void play_afterAPlayInOrder_doesNotContinuePlayingClips() throws Exception {
+        viewModel.playInOrder(asList(
+                new Clip("clip1", "file://audio1.mp3"),
+                new Clip("clip2", "file://audio2.mp3")
+        ));
+
+        viewModel.play(new Clip("clip3", "file://audio3.mp3"));
+
+        verify(mediaPlayer, times(2)).start();
+        verify(mediaPlayer).setDataSource("file://audio1.mp3");
+        verify(mediaPlayer).setDataSource("file://audio3.mp3");
+
+        ArgumentCaptor<MediaPlayer.OnCompletionListener> captor = ArgumentCaptor.forClass(MediaPlayer.OnCompletionListener.class);
+        verify(mediaPlayer).setOnCompletionListener(captor.capture());
+        MediaPlayer.OnCompletionListener onCompletionListener = captor.getValue();
+        onCompletionListener.onCompletion(mediaPlayer);
+
+        verify(mediaPlayer, never()).setDataSource("file://audio2.mp3");
+        verify(mediaPlayer, times(2)).start();
     }
 
     @Test
@@ -91,7 +150,7 @@ public class AudioPlayerViewModelTest {
     public void isPlaying_whenClipIDPlaying_is_PLAYING() {
         LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
-        viewModel.play("clip1", "file://audio.mp3");
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
         assertThat(isPlaying.getValue(), equalTo(true));
     }
 
@@ -99,7 +158,7 @@ public class AudioPlayerViewModelTest {
     public void isPlaying_whenDifferentClipIDPlaying_is_false() {
         LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip2"));
 
-        viewModel.play("clip1", "file://other.mp3");
+        viewModel.play(new Clip("clip1", "file://other.mp3"));
         assertThat(isPlaying.getValue(), equalTo(false));
     }
 
@@ -107,7 +166,7 @@ public class AudioPlayerViewModelTest {
     public void isPlaying_whenClipIDPlaying_thenCompleted_is_false() {
         final LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
-        viewModel.play("clip1", "file://audio.mp3");
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
 
         ArgumentCaptor<MediaPlayer.OnCompletionListener> captor = ArgumentCaptor.forClass(MediaPlayer.OnCompletionListener.class);
         verify(mediaPlayer).setOnCompletionListener(captor.capture());
@@ -121,13 +180,13 @@ public class AudioPlayerViewModelTest {
         doThrow(IOException.class).when(mediaPlayer).setDataSource("file://missing.mp3");
 
         final LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
-        viewModel.play("clip1", "file://missing.mp3");
+        viewModel.play(new Clip("clip1", "file://missing.mp3"));
         assertThat(isPlaying.getValue(), equalTo(false));
     }
 
     @Test
     public void stop_stopsMediaPlayer() {
-        viewModel.play("clip1", "file://audio.mp3");
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
         viewModel.stop();
         verify(mediaPlayer).stop();
     }
@@ -142,7 +201,7 @@ public class AudioPlayerViewModelTest {
     public void stop_resetsPosition() {
         final LiveData<Integer> position = liveDataTester.activate(viewModel.getPosition("clip1"));
 
-        viewModel.play("clip1", "file://audio.mp3");
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
 
         when(mediaPlayer.getCurrentPosition()).thenReturn(1000);
         fakeScheduler.runTask();
@@ -167,7 +226,7 @@ public class AudioPlayerViewModelTest {
     public void isPlaying_whenPlayingAndThenBackgrounding_is_false() {
         LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
-        viewModel.play("clip1", "file://audio.mp3");
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
         viewModel.background();
 
         assertThat(isPlaying.getValue(), equalTo(false));
@@ -178,12 +237,12 @@ public class AudioPlayerViewModelTest {
         RecordingMockMediaPlayerFactory factory = new RecordingMockMediaPlayerFactory();
         AudioPlayerViewModel viewModel = new AudioPlayerViewModel(factory, new FakeScheduler());
 
-        viewModel.play("clip1", "file://audio.mp3");
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
         assertThat(factory.createdInstances.size(), equalTo(1));
         verify(factory.createdInstances.get(0)).start();
 
         viewModel.background();
-        viewModel.play("clip1", "file://audio.mp3");
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
         assertThat(factory.createdInstances.size(), equalTo(2));
         verify(factory.createdInstances.get(1)).start();
     }
@@ -198,7 +257,7 @@ public class AudioPlayerViewModelTest {
     public void isPlaying_afterPause_is_false() {
         LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
-        viewModel.play("clip1", "file://audio.mp3");
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
         viewModel.pause();
 
         assertThat(isPlaying.getValue(), equalTo(false));
@@ -208,9 +267,9 @@ public class AudioPlayerViewModelTest {
     public void isPlaying_afterPause_andThenPlay_is_true() {
         final LiveData<Boolean> isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"));
 
-        viewModel.play("clip1", "file://audio.mp3");
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
         viewModel.pause();
-        viewModel.play("clip1", "file://audio.mp3");
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
 
         assertThat(isPlaying.getValue(), equalTo(true));
     }
@@ -221,7 +280,7 @@ public class AudioPlayerViewModelTest {
         LiveData<Integer> duration = liveDataTester.activate(viewModel.getPosition("clip1"));
         assertThat(duration.getValue(), equalTo(0));
 
-        viewModel.play("clip1", "file://audio.mp3");
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
 
         when(mediaPlayer.getCurrentPosition()).thenReturn(1000);
         fakeScheduler.runTask();
@@ -238,12 +297,12 @@ public class AudioPlayerViewModelTest {
         final LiveData<Integer> duration1 = liveDataTester.activate(viewModel.getPosition("clip1"));
         final LiveData<Integer> duration2 = liveDataTester.activate(viewModel.getPosition("clip2"));
 
-        viewModel.play("clip1", "file://audio.mp3");
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
         when(mediaPlayer.getCurrentPosition()).thenReturn(1000);
         fakeScheduler.runTask();
         assertThat(duration1.getValue(), equalTo(1000));
 
-        viewModel.play("clip2", "file://audio.mp3");
+        viewModel.play(new Clip("clip2", "file://audio.mp3"));
         when(mediaPlayer.getCurrentPosition()).thenReturn(2500);
         fakeScheduler.runTask();
         assertThat(duration2.getValue(), equalTo(2500));
@@ -252,7 +311,7 @@ public class AudioPlayerViewModelTest {
     @Test
     public void setPosition_whenClipIsPlaying_seeksMediaPlayer() {
         when(mediaPlayer.getDuration()).thenReturn(100000);
-        viewModel.play("clip1", "file://audio.mp3");
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
 
         viewModel.setPosition("clip1", 54321);
         verify(mediaPlayer).seekTo(54321);
@@ -286,7 +345,7 @@ public class AudioPlayerViewModelTest {
 
     @Test
     public void whenPlaybackCompletes_cancelsScheduler() {
-        viewModel.play("clip1", "file://audio.mp3");
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
 
         ArgumentCaptor<MediaPlayer.OnCompletionListener> captor = ArgumentCaptor.forClass(MediaPlayer.OnCompletionListener.class);
         verify(mediaPlayer).setOnCompletionListener(captor.capture());
@@ -299,7 +358,7 @@ public class AudioPlayerViewModelTest {
     public void whenPlaybackCompletes_resetsPosition() {
         final LiveData<Integer> position = liveDataTester.activate(viewModel.getPosition("clip1"));
 
-        viewModel.play("clip1", "file://audio.mp3");
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
 
         when(mediaPlayer.getCurrentPosition()).thenReturn(1000);
         fakeScheduler.runTask();
@@ -312,13 +371,24 @@ public class AudioPlayerViewModelTest {
     }
 
     @Test
-    public void error_whenPlaybackFails_is_PlaybackFailed() throws Exception {
+    public void getError_whenPlaybackFails_is_PlaybackFailed() throws Exception {
         final LiveData<Exception> error = liveDataTester.activate(viewModel.getError());
 
         doThrow(IOException.class).when(mediaPlayer).setDataSource("file://missing.mp3");
-        viewModel.play("clip1", "file://missing.mp3");
+        viewModel.play(new Clip("clip1", "file://missing.mp3"));
 
         assertThat(error.getValue(), equalTo(new PlaybackFailedException("file://missing.mp3")));
+    }
+
+    @Test
+    public void dismissError_removesErrorValue() throws Exception {
+        final LiveData<Exception> error = liveDataTester.activate(viewModel.getError());
+
+        doThrow(IOException.class).when(mediaPlayer).setDataSource("file://missing.mp3");
+        viewModel.play(new Clip("clip1", "file://missing.mp3"));
+
+        viewModel.dismissError();
+        assertThat(error.getValue(), equalTo(null));
     }
 
     private static class RecordingMockMediaPlayerFactory implements MediaPlayerFactory {

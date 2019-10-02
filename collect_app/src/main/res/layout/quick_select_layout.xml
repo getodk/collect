@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <org.odk.collect.android.views.MediaLayout
+    <org.odk.collect.android.formentry.AudioVideoImageTextLabel
         android:id="@+id/mediaLayout"
         android:orientation="horizontal"
         android:layout_width="0dp"

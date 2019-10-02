@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.views;
+package org.odk.collect.android.formentry;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -46,7 +46,6 @@ import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
-import org.odk.collect.android.views.helpers.FormMediaHelpers;
 
 import java.io.File;
 
@@ -55,11 +54,10 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 
 /**
- * This layout is used anywhere we can have image/audio/video/text
- *
- * @author carlhartung
+ * Represents a label for a prompt/question or a select choice. The label can have media
+ * attached to it as well as text (such as audio, video or an image).
  */
-public class MediaLayout extends RelativeLayout implements View.OnClickListener {
+public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnClickListener {
 
     @BindView(R.id.audioButton)
     AudioButton audioButton;
@@ -76,48 +74,55 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     @BindView(R.id.select_container)
     FrameLayout flContainer;
 
-    private TextView viewText;
+    private TextView labelTextView;
     private String videoURI;
     private int playTextColor = Color.BLUE;
     private CharSequence originalText;
     private String bigImageURI;
     private ReferenceManager referenceManager;
 
-    public MediaLayout(Context context) {
+    public AudioVideoImageTextLabel(Context context) {
         super(context);
 
-        View.inflate(context, R.layout.media_layout, this);
+        View.inflate(context, R.layout.question_label, this);
         ButterKnife.bind(this);
     }
 
-    public MediaLayout(Context context, AttributeSet attrs) {
+    public AudioVideoImageTextLabel(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        View.inflate(context, R.layout.media_layout, this);
+        View.inflate(context, R.layout.question_label, this);
         ButterKnife.bind(this);
     }
 
-    public void playAudio() {
+    public void setAVT(TextView labelTextView, String audioURI, String imageURI, String videoURI,
+                       String bigImageURI, ReferenceManager referenceManager, AudioHelper audioHelper) {
+        this.bigImageURI = bigImageURI;
+        this.videoURI = videoURI;
+        this.referenceManager = referenceManager;
 
+        this.labelTextView = labelTextView;
+        originalText = labelTextView.getText();
+        this.labelTextView.setId(ViewIds.generateViewId());
+
+        if (audioURI != null) {
+            setupAudioButton(audioURI, audioHelper);
+        }
+
+        if (videoURI != null) {
+            setupVideoButton();
+        }
+
+        if (imageURI != null) {
+            setupBigImage(imageURI);
+        }
+
+        flContainer.removeAllViews();
+        flContainer.addView(this.labelTextView);
     }
 
     public void setPlayTextColor(int textColor) {
         playTextColor = textColor;
-    }
-
-    /*
-     * Resets text formatting to whatever is defaulted
-     * in the form
-     */
-    public void resetTextFormatting() {
-        // first set it to defaults
-        viewText.setTextColor(new ThemeUtils(getContext()).getPrimaryTextColor());
-        // then set the text to our original (brings back any html formatting)
-        viewText.setText(originalText);
-    }
-
-    public void resetAudioButtonBitmap() {
-        audioButton.resetBitmap();
     }
 
     public void playVideo() {
@@ -149,37 +154,8 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         }
     }
 
-    public void setAVT(TextView text, String audioURI, String imageURI, String videoURI,
-                       String bigImageURI, ReferenceManager referenceManager, AudioHelper audioHelper) {
-        this.bigImageURI = bigImageURI;
-        this.videoURI = videoURI;
-        this.referenceManager = referenceManager;
-
-        viewText = text;
-        originalText = text.getText();
-        viewText.setId(ViewIds.generateViewId());
-
-        // Setup audio button
-        if (audioURI != null) {
-            setupAudioButton(audioURI, audioHelper, referenceManager);
-        }
-
-        // Setup video button
-        if (videoURI != null) {
-            setupVideoButton();
-        }
-
-        // Setup image view
-        if (imageURI != null) {
-            setupBigImage(imageURI);
-        }
-
-        flContainer.removeAllViews();
-        flContainer.addView(viewText);
-    }
-
-    public TextView getTextView() {
-        return viewText;
+    public TextView getLabelTextView() {
+        return labelTextView;
     }
 
     @Override
@@ -196,7 +172,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
 
     @Override
     public void setEnabled(boolean enabled) {
-        viewText.setEnabled(enabled);
+        labelTextView.setEnabled(enabled);
         imageView.setEnabled(enabled);
     }
 
@@ -227,10 +203,10 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     }
 
     private void selectItem() {
-        if (viewText instanceof RadioButton) {
-            ((RadioButton) viewText).setChecked(true);
-        } else if (viewText instanceof CheckBox) {
-            CheckBox checkbox = (CheckBox) viewText;
+        if (labelTextView instanceof RadioButton) {
+            ((RadioButton) labelTextView).setChecked(true);
+        } else if (labelTextView instanceof CheckBox) {
+            CheckBox checkbox = (CheckBox) labelTextView;
             checkbox.setChecked(!checkbox.isChecked());
         }
     }
@@ -277,21 +253,26 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         videoButton.setOnClickListener(this);
     }
 
-    private void setupAudioButton(String audioURI, AudioHelper audioHelper, ReferenceManager referenceManager) {
+    private void setupAudioButton(String audioURI, AudioHelper audioHelper) {
         audioButton.setVisibility(VISIBLE);
-
-        String uri = FormMediaHelpers.getPlayableAudioURI(audioURI, referenceManager);
 
         ScreenContext activity = getScreenContext();
         String clipID = getTag() != null ? getTag().toString() : "";
-        LiveData<Boolean> isPlayingLiveData = audioHelper.setAudio(audioButton, uri, clipID);
+        LiveData<Boolean> isPlayingLiveData = audioHelper.setAudio(audioButton, audioURI, clipID);
         isPlayingLiveData.observe(activity.getViewLifecycle(), isPlaying -> {
             if (isPlaying) {
-                viewText.setTextColor(playTextColor);
+                labelTextView.setTextColor(playTextColor);
             } else {
                 resetTextFormatting();
             }
         });
+    }
+
+    private void resetTextFormatting() {
+        // first set it to defaults
+        labelTextView.setTextColor(new ThemeUtils(getContext()).getPrimaryTextColor());
+        // then set the text to our original (brings back any html formatting)
+        labelTextView.setText(originalText);
     }
 
     private ScreenContext getScreenContext() {

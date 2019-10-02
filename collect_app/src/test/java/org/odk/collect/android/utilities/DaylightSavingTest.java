@@ -27,13 +27,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.DateWidget;
 import org.odk.collect.android.widgets.TimeWidget;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.TimeZone;
@@ -94,8 +93,11 @@ public class DaylightSavingTest {
 
     private DateWidget prepareDateWidget(int year, int month, int day) {
         QuestionDef questionDefStub = mock(QuestionDef.class);
-        IFormElement iformElementStub = mock(IFormElement.class);
-        FormEntryPrompt formEntryPromptStub = mock(FormEntryPrompt.class);
+
+        FormEntryPrompt formEntryPromptStub = new MockFormEntryPromptBuilder()
+                .withIndex("index")
+                .build();
+        IFormElement iformElementStub = formEntryPromptStub.getFormElement();
 
         when(iformElementStub.getAdditionalAttribute(anyString(), anyString())).thenReturn(null);
         when(formEntryPromptStub.getQuestion()).thenReturn(questionDefStub);
@@ -109,13 +111,16 @@ public class DaylightSavingTest {
         when(datePickerDialog.getDatePicker().getMonth()).thenReturn(month);
         when(datePickerDialog.getDatePicker().getDayOfMonth()).thenReturn(day);
 
-        return new DateWidget(Robolectric.buildActivity(FormEntryActivity.class).create().get(), formEntryPromptStub);
+        return new DateWidget(RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get(), formEntryPromptStub);
     }
 
     private DateTimeWidget prepareDateTimeWidget(int year, int month, int day, int hour, int minute) {
         QuestionDef questionDefStub = mock(QuestionDef.class);
-        IFormElement iformElementStub = mock(IFormElement.class);
-        FormEntryPrompt formEntryPromptStub = mock(FormEntryPrompt.class);
+
+        FormEntryPrompt formEntryPromptStub = new MockFormEntryPromptBuilder()
+                .withIndex("index")
+                .build();
+        IFormElement iformElementStub = formEntryPromptStub.getFormElement();
 
         when(iformElementStub.getAdditionalAttribute(anyString(), anyString())).thenReturn(null);
         when(formEntryPromptStub.getQuestion()).thenReturn(questionDefStub);

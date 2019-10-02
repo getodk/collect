@@ -12,7 +12,10 @@ import org.odk.collect.android.utilities.Scheduler;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletionListener {
 
@@ -33,21 +36,15 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         currentlyPlaying.setValue(null);
     }
 
-    public void play(String clipID, String uri) {
-        if (!isCurrentPlayingClip(clipID, currentlyPlaying.getValue())) {
-            try {
-                loadNewClip(uri);
-            } catch (IOException ignored) {
-                error.setValue(new PlaybackFailedException(uri));
-                return;
-            }
-        }
+    public void play(Clip clip) {
+        LinkedList<Clip> playlist = new LinkedList<>();
+        playlist.add(clip);
+        playNext(playlist);
+    }
 
-        getMediaPlayer().seekTo(getPositionForClip(clipID).getValue());
-        getMediaPlayer().start();
-
-        currentlyPlaying.setValue(new CurrentlyPlaying(clipID, false));
-        schedulePositionUpdates();
+    public void playInOrder(List<Clip> clips) {
+        Queue<Clip> playlist = new LinkedList<>(clips);
+        playNext(playlist);
     }
 
     public void stop() {
@@ -55,8 +52,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
             getMediaPlayer().stop();
         }
 
-        resetCurrentlyPlaying();
-        clearCurrentlyPlaying();
+        cleanUpAfterClip();
     }
 
     public void pause() {
@@ -90,35 +86,64 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         getPositionForClip(clipID).setValue(newPosition);
     }
 
-    @Override
-    public void onCompletion(MediaPlayer mediaPlayer) {
-        resetCurrentlyPlaying();
-        clearCurrentlyPlaying();
-    }
-
     public void background() {
-        resetCurrentlyPlaying();
-        clearCurrentlyPlaying();
+        cleanUpAfterClip();
         releaseMediaPlayer();
     }
 
     @Override
     protected void onCleared() {
-        cancelPositionUpdates();
-        releaseMediaPlayer();
+        background();
     }
 
-    private void resetCurrentlyPlaying() {
-        CurrentlyPlaying currentlyPlayingValue = currentlyPlaying.getValue();
+    private void playNext(Queue<Clip> playlist) {
+        Clip nextClip = playlist.poll();
 
-        if (currentlyPlayingValue != null) {
-            getPositionForClip(currentlyPlayingValue.getClipID()).setValue(0);
+        if (nextClip != null) {
+
+            if (!isCurrentPlayingClip(nextClip.getClipID(), currentlyPlaying.getValue())) {
+                try {
+                    loadNewClip(nextClip.getURI());
+                } catch (IOException ignored) {
+                    error.setValue(new PlaybackFailedException(nextClip.getURI()));
+                    playNext(playlist);
+                    return;
+                }
+            }
+
+            getMediaPlayer().seekTo(getPositionForClip(nextClip.getClipID()).getValue());
+            getMediaPlayer().start();
+
+            currentlyPlaying.setValue(new CurrentlyPlaying(
+                    new Clip(nextClip.getClipID(), nextClip.getURI()),
+                    false,
+                    playlist));
+
+            schedulePositionUpdates();
         }
     }
 
-    private void clearCurrentlyPlaying() {
+    @Override
+    public void onCompletion(MediaPlayer mediaPlayer) {
+        CurrentlyPlaying wasPlaying = cleanUpAfterClip();
+
+        if (wasPlaying != null) {
+            if (!wasPlaying.getPlaylist().isEmpty()) {
+                playNext(wasPlaying.getPlaylist());
+            }
+        }
+    }
+
+    private CurrentlyPlaying cleanUpAfterClip() {
+        CurrentlyPlaying wasPlaying = currentlyPlaying.getValue();
         cancelPositionUpdates();
         currentlyPlaying.setValue(null);
+
+        if (wasPlaying != null) {
+            getPositionForClip(wasPlaying.getClipID()).setValue(0);
+        }
+
+        return wasPlaying;
     }
 
     @NonNull
@@ -140,13 +165,17 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         return error;
     }
 
+    public void dismissError() {
+        error.setValue(null);
+    }
+
     private void schedulePositionUpdates() {
         if (!scheduledDurationUpdates) {
             scheduler.schedule(() -> {
                 CurrentlyPlaying currentlyPlaying = this.currentlyPlaying.getValue();
 
                 if (currentlyPlaying != null) {
-                    MutableLiveData<Integer> position = getPositionForClip(currentlyPlaying.clipID);
+                    MutableLiveData<Integer> position = getPositionForClip(currentlyPlaying.clip.getClipID());
                     position.postValue(getMediaPlayer().getCurrentPosition());
                 }
             }, 500);
@@ -174,7 +203,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     }
 
     private boolean isCurrentPlayingClip(String clipID, CurrentlyPlaying currentlyPlayingValue) {
-        return currentlyPlayingValue != null && currentlyPlayingValue.clipID.equals(clipID);
+        return currentlyPlayingValue != null && currentlyPlayingValue.clip.getClipID().equals(clipID);
     }
 
     private void loadNewClip(String uri) throws IOException {
@@ -185,24 +214,34 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
 
     private static class CurrentlyPlaying {
 
-        private final String clipID;
+        private final Clip clip;
         private final boolean paused;
+        private final Queue<Clip> playlist;
 
-        CurrentlyPlaying(String clipID, boolean paused) {
-            this.clipID = clipID;
+        CurrentlyPlaying(Clip clip, boolean paused, Queue<Clip> playlist) {
+            this.clip = clip;
             this.paused = paused;
+            this.playlist = playlist;
         }
 
         boolean isPaused() {
             return paused;
         }
 
-        public String getClipID() {
-            return clipID;
+        String getClipID() {
+            return clip.getClipID();
         }
 
         CurrentlyPlaying paused() {
-            return new CurrentlyPlaying(clipID, true);
+            return new CurrentlyPlaying(clip, true, playlist);
+        }
+
+        Queue<Clip> getPlaylist() {
+            return playlist;
+        }
+
+        Clip getClip() {
+            return clip;
         }
     }
 }

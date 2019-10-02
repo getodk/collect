@@ -22,7 +22,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
@@ -47,6 +46,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.formentry.AudioVideoImageTextLabel;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
@@ -63,7 +63,6 @@ import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ViewIds;
-import org.odk.collect.android.views.MediaLayout;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.Widget;
 
@@ -76,13 +75,16 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
+
 public abstract class QuestionWidget
         extends RelativeLayout
         implements Widget {
 
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
-    private final MediaLayout questionMediaLayout;
+    private final AudioVideoImageTextLabel audioVideoImageTextLabel;
     private MediaPlayer player;
     private final TextView helpTextView;
     private final TextView guidanceTextView;
@@ -121,23 +123,6 @@ public abstract class QuestionWidget
         }
 
         player = new MediaPlayer();
-        getPlayer().setOnCompletionListener(new OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                getQuestionMediaLayout().resetTextFormatting();
-                mediaPlayer.reset();
-            }
-
-        });
-
-        player.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                Timber.e("Error occured in MediaPlayer. what = %d, extra = %d",
-                        what, extra);
-                return false;
-            }
-        });
 
         questionFontSize = Collect.getQuestionFontsize();
 
@@ -146,7 +131,7 @@ public abstract class QuestionWidget
         setGravity(Gravity.TOP);
         setPadding(0, 7, 0, 0);
 
-        questionMediaLayout = createQuestionMediaLayout(prompt);
+        audioVideoImageTextLabel = createQuestionLabel(prompt);
         helpTextLayout = createHelpTextLayout();
         helpTextLayout.setId(ViewIds.generateViewId());
         guidanceTextLayout = helpTextLayout.findViewById(R.id.guidance_text_layout);
@@ -155,7 +140,7 @@ public abstract class QuestionWidget
         helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), prompt);
         guidanceTextView = setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), prompt);
 
-        addQuestionMediaLayout(getQuestionMediaLayout());
+        addQuestionMediaLayout(getAudioVideoImageTextLabel());
         addHelpTextLayout(getHelpTextLayout());
 
         if (context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
@@ -272,7 +257,7 @@ public abstract class QuestionWidget
         //dependencies for the widget will be wired here.
     }
 
-    private MediaLayout createQuestionMediaLayout(FormEntryPrompt prompt) {
+    private AudioVideoImageTextLabel createQuestionLabel(FormEntryPrompt prompt) {
         String promptText = prompt.getLongText();
         // Add the text view. Textview always exists, regardless of whether there's text.
         TextView questionText = new TextView(getContext());
@@ -292,19 +277,25 @@ public abstract class QuestionWidget
         }
 
         String imageURI = this instanceof SelectImageMapWidget ? null : prompt.getImageText();
-        String audioURI = prompt.getAudioText();
         String videoURI = prompt.getSpecialFormQuestionText("video");
 
         // shown when image is clicked
         String bigImageURI = prompt.getSpecialFormQuestionText("big-image");
 
         // Create the layout for audio, image, text
-        MediaLayout questionMediaLayout = new MediaLayout(getContext());
-        questionMediaLayout.setId(ViewIds.generateViewId()); // assign random id
+        AudioVideoImageTextLabel questionAudioVideoImageTextLabel = new AudioVideoImageTextLabel(getContext());
+        questionAudioVideoImageTextLabel.setId(ViewIds.generateViewId()); // assign random id
 
-        String tag = formEntryPrompt.getIndex() != null ? formEntryPrompt.getIndex().toString() : "";
-        questionMediaLayout.setTag(tag);
-        questionMediaLayout.setAVT(questionText, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), audioHelper);
+        questionAudioVideoImageTextLabel.setTag(getClipID(prompt));
+        questionAudioVideoImageTextLabel.setAVT(
+                questionText,
+                getPlayableAudioURI(prompt, referenceManager),
+                imageURI,
+                videoURI,
+                bigImageURI,
+                getReferenceManager(),
+                audioHelper
+        );
 
         String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
         if (playColorString != null) {
@@ -314,21 +305,13 @@ public abstract class QuestionWidget
                 Timber.e(e, "Argument %s is incorrect", playColorString);
             }
         }
-        questionMediaLayout.setPlayTextColor(getPlayColor());
+        questionAudioVideoImageTextLabel.setPlayTextColor(getPlayColor());
 
-        return questionMediaLayout;
+        return questionAudioVideoImageTextLabel;
     }
 
     public TextView getHelpTextView() {
         return helpTextView;
-    }
-
-    public void playAudio() {
-        playAllPromptText();
-    }
-
-    public void playVideo() {
-        getQuestionMediaLayout().playVideo();
     }
 
     public FormEntryPrompt getFormEntryPrompt() {
@@ -440,7 +423,7 @@ public abstract class QuestionWidget
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        params.addRule(RelativeLayout.BELOW, getQuestionMediaLayout().getId());
+        params.addRule(RelativeLayout.BELOW, getAudioVideoImageTextLabel().getId());
         params.setMargins(10, 0, 10, 0);
         addView(v, params);
     }
@@ -507,23 +490,12 @@ public abstract class QuestionWidget
      */
     public void cancelLongPress() {
         super.cancelLongPress();
-        if (getQuestionMediaLayout() != null) {
-            getQuestionMediaLayout().cancelLongPress();
+        if (getAudioVideoImageTextLabel() != null) {
+            getAudioVideoImageTextLabel().cancelLongPress();
         }
         if (getHelpTextView() != null) {
             getHelpTextView().cancelLongPress();
         }
-    }
-
-    /*
-     * Prompts with items must override this
-     */
-    public void playAllPromptText() {
-        getQuestionMediaLayout().playAudio();
-    }
-
-    public void resetQuestionTextColor() {
-        getQuestionMediaLayout().resetTextFormatting();
     }
 
     public void showWarning(String warningBody) {
@@ -693,8 +665,8 @@ public abstract class QuestionWidget
         return helpTextLayout;
     }
 
-    public MediaLayout getQuestionMediaLayout() {
-        return questionMediaLayout;
+    public AudioVideoImageTextLabel getAudioVideoImageTextLabel() {
+        return audioVideoImageTextLabel;
     }
 
     public MediaPlayer getPlayer() {

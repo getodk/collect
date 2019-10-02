@@ -3,6 +3,7 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 import android.widget.TextView;
 
+import androidx.core.util.Pair;
 import androidx.lifecycle.MutableLiveData;
 
 import org.javarosa.core.model.SelectChoice;
@@ -20,9 +21,10 @@ import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
-import org.odk.collect.android.views.MediaLayout;
+import org.odk.collect.android.formentry.AudioVideoImageTextLabel;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
@@ -32,8 +34,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.Helpers.buildMockForm;
-import static org.odk.collect.android.support.Helpers.setupMockReference;
+import static org.odk.collect.android.support.Helpers.createMockReference;
 
 @RunWith(RobolectricTestRunner.class)
 public class SelectWidgetTest {
@@ -54,26 +55,27 @@ public class SelectWidgetTest {
     }
 
     @Test
-    public void whenQuestionHasAudio_audioButtonUsesIndexAsClipID() throws Exception {
-        FormEntryPrompt formEntryPrompt = buildMockForm();
-        when(formEntryPrompt.getIndex().toString()).thenReturn("i am index");
+    public void whenChoicesHaveAudio_audioButtonUsesIndexAsClipID() throws Exception {
+        String reference1 = createMockReference(referenceManager, "file://blah1.mp3");
+        String reference2 = createMockReference(referenceManager, "file://blah2.mp3");
 
-        List<SelectChoice> selectChoices = asList(
-                new SelectChoice("1", "1"),
-                new SelectChoice("2", "2")
-        );
-
-        when(formEntryPrompt.getSpecialFormSelectChoiceText(selectChoices.get(0), FormEntryCaption.TEXT_FORM_AUDIO)).thenReturn("file://blah1.mp3");
-        when(formEntryPrompt.getSpecialFormSelectChoiceText(selectChoices.get(1), FormEntryCaption.TEXT_FORM_AUDIO)).thenReturn("file://blah2.mp3");
-
-        setupMockReference("file://blah1.mp3", referenceManager);
-        setupMockReference("file://blah2.mp3", referenceManager);
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withIndex("i am index")
+                .withSelectChoices(asList(
+                        new SelectChoice("1", "1"),
+                        new SelectChoice("2", "2")
+                ))
+                .withSpecialFormSelectChoiceText(asList(
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://blah1.mp3"),
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://blah2.mp3")
+                ))
+                .build();
 
         TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
-        new TestWidget(activity, formEntryPrompt, audioHelper, selectChoices);
+        new TestWidget(activity, prompt, audioHelper, prompt.getSelectChoices());
 
-        verify(audioHelper).setAudio(any(AudioButton.class), eq("file://blah1.mp3"), eq("i am index 0"));
-        verify(audioHelper).setAudio(any(AudioButton.class), eq("file://blah2.mp3"), eq("i am index 1"));
+        verify(audioHelper).setAudio(any(AudioButton.class), eq(reference1), eq("i am index 0"));
+        verify(audioHelper).setAudio(any(AudioButton.class), eq(reference2), eq("i am index 1"));
     }
 
     private void overrideDependencyModule() {
@@ -87,13 +89,13 @@ public class SelectWidgetTest {
     }
 
     private static class TestWidget extends SelectWidget {
-        
+
         TestWidget(Context context, FormEntryPrompt prompt, AudioHelper audioHelper, List<SelectChoice> choices) {
             super(context, prompt, audioHelper);
 
             for (SelectChoice choice : choices) {
                 addMediaFromChoice(
-                        new MediaLayout(context),
+                        new AudioVideoImageTextLabel(context),
                         choices.indexOf(choice),
                         new TextView(context),
                         choices

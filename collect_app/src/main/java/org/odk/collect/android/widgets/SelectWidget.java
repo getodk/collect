@@ -35,13 +35,14 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.external.ExternalSelectChoice;
+import org.odk.collect.android.formentry.AudioVideoImageTextLabel;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.views.MediaLayout;
-import org.odk.collect.android.views.helpers.FormMediaHelpers;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
 
 public abstract class SelectWidget extends ItemsWidget {
 
@@ -54,10 +55,8 @@ public abstract class SelectWidget extends ItemsWidget {
      */
     private static final int MAX_ITEMS_WITHOUT_SCREEN_BOUND = 40;
 
-    protected ArrayList<MediaLayout> playList;
     protected LinearLayout answerLayout;
     protected int numColumns = 1;
-    private int playcounter;
 
     public SelectWidget(Context context, FormEntryPrompt prompt) {
         this(context, prompt, new AudioHelper(
@@ -70,7 +69,6 @@ public abstract class SelectWidget extends ItemsWidget {
         super(context, prompt, audioHelper);
         answerLayout = new LinearLayout(context);
         answerLayout.setOrientation(LinearLayout.VERTICAL);
-        playList = new ArrayList<>();
     }
 
     @Override
@@ -78,64 +76,23 @@ public abstract class SelectWidget extends ItemsWidget {
     public void setOnLongClickListener(OnLongClickListener l) {
     }
 
-    @Override
-    public void resetQuestionTextColor() {
-        super.resetQuestionTextColor();
-        for (MediaLayout layout : playList) {
-            layout.resetTextFormatting();
-        }
-    }
-
-    @Override
-    public void playAllPromptText() {
-        // set up to play the items when the
-        // question text is finished
-        getPlayer().setOnCompletionListener(mediaPlayer -> {
-            resetQuestionTextColor();
-            mediaPlayer.reset();
-            playNextSelectItem();
-        });
-        // plays the question text
-        super.playAllPromptText();
-    }
-
-    private void playNextSelectItem() {
-        if (isShown()) {
-            // if there's more, set up to play the next item
-            if (playcounter < playList.size()) {
-                getPlayer().setOnCompletionListener(mediaPlayer -> {
-                    resetQuestionTextColor();
-                    mediaPlayer.reset();
-                    playNextSelectItem();
-                });
-                // play the current item
-                playList.get(playcounter).playAudio();
-                playcounter++;
-
-            } else {
-                playcounter = 0;
-                getPlayer().setOnCompletionListener(null);
-                getPlayer().reset();
-            }
-        }
-    }
-
-    public void initMediaLayoutSetUp(MediaLayout mediaLayout) {
-        mediaLayout.setPlayTextColor(getPlayColor());
-        playList.add(mediaLayout);
+    public void init(AudioVideoImageTextLabel audioVideoImageTextLabel) {
+        audioVideoImageTextLabel.setPlayTextColor(getPlayColor());
     }
 
     /**
      * Pull media from the current item and add it to the media layout.
      */
-    public void addMediaFromChoice(MediaLayout mediaLayout, int index, TextView textView, List<SelectChoice> items) {
-        String audioURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_AUDIO);
-        String imageURI = getImageURI(index, items);
-        String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "video");
-        String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
+    public void addMediaFromChoice(AudioVideoImageTextLabel audioVideoImageTextLabel, int index, TextView textView, List<SelectChoice> items) {
+        SelectChoice item = items.get(index);
 
-        mediaLayout.setTag(FormMediaHelpers.getClipID(getFormEntryPrompt()) + " " + index);
-        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), getAudioHelper());
+        String audioURI = getPlayableAudioURI(getFormEntryPrompt(), item, getReferenceManager());
+        String imageURI = getImageURI(index, items);
+        String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "video");
+        String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "big-image");
+
+        audioVideoImageTextLabel.setTag(getClipID(getFormEntryPrompt(), item));
+        audioVideoImageTextLabel.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), getAudioHelper());
 
         textView.setGravity(Gravity.CENTER_VERTICAL);
     }

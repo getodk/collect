@@ -1,4 +1,4 @@
-package org.odk.collect.android.views;
+package org.odk.collect.android.formentry;
 
 import android.app.Activity;
 import android.widget.TextView;
@@ -23,10 +23,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.Helpers.setupMockReference;
 
 @RunWith(RobolectricTestRunner.class)
-public class MediaLayoutTest {
+public class AudioVideoImageTextLabelTest {
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
@@ -39,16 +38,14 @@ public class MediaLayoutTest {
 
     @Test
     public void withTextView_andAudio_playingAudio_highlightsText() throws Exception {
-        setupMockReference("file://audio.mp3", referenceManager);
-
         MutableLiveData<Boolean> isPlaying = new MutableLiveData<>();
         isPlaying.setValue(false);
         when(audioHelper.setAudio(any(AudioButton.class), any(), any())).thenReturn(isPlaying);
 
         Activity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
 
-        MediaLayout mediaLayout = new MediaLayout(activity);
-        mediaLayout.setAVT(
+        AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
+        audioVideoImageTextLabel.setAVT(
                 new TextView(activity),
                 "file://audio.mp3",
                 null,
@@ -57,14 +54,14 @@ public class MediaLayoutTest {
                 referenceManager,
                 audioHelper);
 
-        int originalTextColor = mediaLayout.getTextView().getCurrentTextColor();
+        int originalTextColor = audioVideoImageTextLabel.getLabelTextView().getCurrentTextColor();
 
         isPlaying.setValue(true);
-        int textColor = mediaLayout.getTextView().getCurrentTextColor();
+        int textColor = audioVideoImageTextLabel.getLabelTextView().getCurrentTextColor();
         assertThat(textColor, not(equalTo(originalTextColor)));
 
         isPlaying.setValue(false);
-        textColor = mediaLayout.getTextView().getCurrentTextColor();
+        textColor = audioVideoImageTextLabel.getLabelTextView().getCurrentTextColor();
         assertThat(textColor, equalTo(originalTextColor));
     }
 }
