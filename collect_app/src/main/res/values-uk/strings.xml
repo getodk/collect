@@ -12,9 +12,7 @@
   <string name="add_another_repeat">Додати ще \"%s\" групу?</string>
   <string name="add_repeat">Додати нову \"%s\" групу?</string>
   <string name="add_repeat_no">Не додавати</string>
-  <string name="audio_file_error">Не вказано жодного аудіофайлу</string>
-  <string name="audio_file_invalid">Файл: %s не є аудіофайлом</string>
-  <string name="cancel">Скасувати</string>
+    <string name="cancel">Скасувати</string>
   <string name="cancel_loading_form">Скасувати</string>
   <string name="cancel_location">Скасувати</string>
   <string name="canceling">Скасування</string>

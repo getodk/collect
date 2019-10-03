@@ -5,9 +5,7 @@
   <string name="add_another_repeat">ຕ້ອງການເພີ່ມກຸ່ມໃໝ່ \"%s\" ​ອີກບໍ່?</string>
   <string name="add_repeat">ຕ້ອງການເພີ່ມກຸ່ມ \"%s\" ໃໝ່ບໍ່?</string>
   <string name="add_repeat_no">ບໍ່ເພີ່ມ</string>
-  <string name="audio_file_error">ຍັງບໍ່ໄດ້ເລືອກເອ​ກະ​ສານ​ປະ​ເພດ​ສຽງ</string>
-  <string name="audio_file_invalid">ເອ​ກະ​ສານ: %s ບໍ່ແມ່ນປະ​ເພດສຽງ</string>
-  <string name="cancel">ຍົກເລິກ</string>
+    <string name="cancel">ຍົກເລິກ</string>
   <string name="cancel_loading_form">ຍົກເລີກ</string>
   <string name="cancel_location">ຍົກເລີກ</string>
   <string name="capture_audio">ບັນທຶກສຽງ</string>

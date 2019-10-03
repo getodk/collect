@@ -5,9 +5,7 @@
   <string name="add_another_repeat">Voeg nog \'n \"%s\" groep by?</string>
   <string name="add_repeat">Voeg \'n nuwe \"%s\" groep by?</string>
   <string name="add_repeat_no">Moenie byvoeg nie</string>
-  <string name="audio_file_error">Geen oudio leêr is gespesifiseer nie.</string>
-  <string name="audio_file_invalid">Leêr: %s is nie \'n geldige oudio leêr nie.</string>
-  <string name="cancel">Kanselleer</string>
+    <string name="cancel">Kanselleer</string>
   <string name="cancel_loading_form">Kanselleer</string>
   <string name="cancel_location">Kanselleer</string>
   <string name="capture_audio">Neem klank op</string>

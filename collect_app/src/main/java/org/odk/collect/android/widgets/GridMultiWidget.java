@@ -22,19 +22,30 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.audio.Clip;
+import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
+
 @SuppressLint("ViewConstructor")
 public class GridMultiWidget extends BaseGridWidget {
 
-    int lastClickPosition; // need to remember the last click position for audio treatment
+    public GridMultiWidget(Context context, FormEntryPrompt prompt, AudioHelper audioHelper) {
+        super(context, prompt, false, audioHelper);
+        SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
+    }
 
     public GridMultiWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt, false);
-        SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
+        this(context, prompt, new AudioHelper(
+                ((ScreenContext) context).getActivity(),
+                ((ScreenContext) context).getViewLifecycle()
+        ));
     }
 
     @Override
@@ -59,21 +70,20 @@ public class GridMultiWidget extends BaseGridWidget {
             selectedItems.remove(Integer.valueOf(index));
             if (noButtonsMode) {
                 itemViews[index].setBackgroundColor(0);
-                if (audioHandlers[index] != null) {
-                    stopAudio();
-                }
+                getAudioHelper().stop();
             }
         } else {
             selectedItems.add(index);
             if (noButtonsMode) {
-                if (audioHandlers[lastClickPosition] != null) {
-                    stopAudio();
-                }
                 itemViews[index].setBackgroundColor(bgOrange);
-                if (audioHandlers[index] != null) {
-                    audioHandlers[index].playAudio(getContext());
+
+                SelectChoice item = items.get(index);
+                String clipID = getClipID(getFormEntryPrompt(), item);
+                String audioURI = getPlayableAudioURI(getFormEntryPrompt(), item, getReferenceManager());
+
+                if (audioURI != null) {
+                    getAudioHelper().play(new Clip(clipID, audioURI));
                 }
-                lastClickPosition = index;
             }
         }
         widgetValueChanged();

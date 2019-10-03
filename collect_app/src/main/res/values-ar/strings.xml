@@ -12,9 +12,7 @@
   <string name="add_another_repeat">إضافة \"%s\" مجموعة أخرى؟</string>
   <string name="add_repeat">إضافة \"%s\" مجموعة جديدة؟</string>
   <string name="add_repeat_no">عدم الإضافة</string>
-  <string name="audio_file_error">لم يتم تحديد ملف الصوت</string>
-  <string name="audio_file_invalid">الملف: %s ملف صوتي غير صالح</string>
-  <string name="cancel">إلغاء</string>
+    <string name="cancel">إلغاء</string>
   <string name="cancel_loading_form">إلغاء</string>
   <string name="cancel_location">إلغاء</string>
   <string name="canceling">جاري الإلغاء</string>

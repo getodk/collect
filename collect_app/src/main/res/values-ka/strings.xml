@@ -5,9 +5,7 @@
   <string name="add_another_repeat">დავამატოთ \"%s\"-ის ახალი ჯგუფი?</string>
   <string name="add_repeat">დავამატოთ ახალი \"%s\" ჯგუფი?</string>
   <string name="add_repeat_no">არ დაამატო</string>
-  <string name="audio_file_error">აუდიო-ფაილი არ იყო მითითებული.</string>
-  <string name="audio_file_invalid">ფაილი: %s არ წარმოადგენს ვალიდურ აუდიო-ფაილს.</string>
-  <string name="cancel">გაუქმება</string>
+    <string name="cancel">გაუქმება</string>
   <string name="cancel_loading_form">გაუქმება</string>
   <string name="cancel_location">გაუქმება</string>
   <string name="capture_audio">ხმის ჩაწერა</string>

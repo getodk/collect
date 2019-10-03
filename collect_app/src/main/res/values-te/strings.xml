@@ -12,9 +12,7 @@
   <string name="add_another_repeat">\"%s\" గ్రూపును జోడించాలా?</string>
   <string name="add_repeat">\"%s\" కొత్త గ్రూపుని జోడించాలా?</string>
   <string name="add_repeat_no">జోడించవద్దు</string>
-  <string name="audio_file_error">ఆడియో ఫైల్ పేర్కొనబడలేదు</string>
-  <string name="audio_file_invalid">ఫైల్: \"1%s\" వాలీడ్ అయ్యే ఆడియో ఫైల్ కాదు.</string>
-  <string name="cancel">రద్దు చేయి</string>
+    <string name="cancel">రద్దు చేయి</string>
   <string name="cancel_loading_form">రద్దు చేయి</string>
   <string name="cancel_location">రద్దు చేయి</string>
   <string name="canceling">రద్దు చేయబడుతుంది </string>
