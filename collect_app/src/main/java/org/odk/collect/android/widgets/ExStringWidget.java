@@ -104,6 +104,7 @@ public class ExStringWidget extends StringWidget implements BinaryWidget {
 
     public ExStringWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails, true);
+        getComponent(context).inject(this);
     }
 
     @Override
