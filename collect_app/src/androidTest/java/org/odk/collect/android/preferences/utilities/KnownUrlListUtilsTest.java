@@ -27,7 +27,7 @@ public class KnownUrlListUtilsTest {
     }
 
     @Test
-    public void theLastUrlShouldBeRemovedWhenTheListHasMoreThan5ElementsButNotTheDefaultUrl() {
+    public void theLastUrlShouldBeRemovedWhenTheListHasMoreThan5Elements() {
         KnownUrlListUtils.addUrlToList("Url1");
         KnownUrlListUtils.addUrlToList("Url2");
         KnownUrlListUtils.addUrlToList("Url3");
@@ -39,7 +39,7 @@ public class KnownUrlListUtilsTest {
         List<String> urlList = KnownUrlListUtils.getUrlList();
         assertEquals(5, urlList.size());
 
-        assertEquals(InstrumentationRegistry.getInstrumentation().getTargetContext().getString(R.string.default_server_url), urlList.get(4));
+        assertEquals("Url3", urlList.get(4));
     }
 
     @Test
