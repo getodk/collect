@@ -23,11 +23,7 @@ public class KnownUrlListUtils {
         if (urlList.contains(url)) {
             urlList.remove(url);
         } else if (urlList.size() == 5) {
-            if (urlList.get(4).equals(Collect.getInstance().getString(R.string.default_server_url))) {
-                urlList.remove(3);
-            } else {
-                urlList.remove(4);
-            }
+            urlList.remove(4);
         }
 
         urlList.add(0, url);
