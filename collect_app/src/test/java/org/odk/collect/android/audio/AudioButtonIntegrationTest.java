@@ -42,6 +42,7 @@ public class AudioButtonIntegrationTest {
     public void setup() {
         activityController = Robolectric.buildActivity(FragmentActivity.class);
         activity = activityController.setup().get();
+        activity.setTheme(com.google.android.material.R.style.Theme_MaterialComponents);
 
         fakeLifecycleOwner = new FakeLifecycleOwner();
         fakeScheduler = new FakeScheduler();

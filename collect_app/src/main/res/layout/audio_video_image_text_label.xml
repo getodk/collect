@@ -48,9 +48,9 @@
 
         <org.odk.collect.android.audio.AudioButton
             android:id="@+id/audioButton"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
             android:layout_width="@dimen/touch_target_size"
             android:layout_height="@dimen/touch_target_size"
-            android:background="?android:attr/selectableItemBackground"
             android:visibility="gone" />
 
         <androidx.appcompat.widget.AppCompatImageButton

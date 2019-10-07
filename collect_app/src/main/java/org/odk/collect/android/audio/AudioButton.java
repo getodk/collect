@@ -19,8 +19,7 @@ import android.content.res.ColorStateList;
 import android.util.AttributeSet;
 import android.view.View;
 
-import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.core.widget.ImageViewCompat;
+import com.google.android.material.button.MaterialButton;
 
 import org.odk.collect.android.R;
 
@@ -28,7 +27,7 @@ import org.odk.collect.android.R;
  * @author ctsims
  * @author carlhartung
  */
-public class AudioButton extends AppCompatImageButton implements View.OnClickListener {
+public class AudioButton extends MaterialButton implements View.OnClickListener {
 
     private Listener listener;
 
@@ -37,18 +36,13 @@ public class AudioButton extends AppCompatImageButton implements View.OnClickLis
     private Integer idleColor;
 
     public AudioButton(Context context) {
-        super(context);
+        super(context, null);
         initView();
     }
 
     public AudioButton(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        super(context, attrs, com.google.android.material.R.style.Widget_MaterialComponents_Button_OutlinedButton_Icon);
         initView();
-    }
-
-    private void initView() {
-        reset();
-        this.setOnClickListener(this);
     }
 
     public Boolean isPlaying() {
@@ -58,32 +52,16 @@ public class AudioButton extends AppCompatImageButton implements View.OnClickLis
     public void setColors(Integer idleColor, Integer playingColor) {
         this.idleColor = idleColor;
         this.playingColor = playingColor;
+        render();
     }
 
     public void setPlaying(Boolean isPlaying) {
         playing = isPlaying;
-
-        if (isPlaying) {
-            setImageResource(R.drawable.ic_stop_black_24dp);
-
-            if (playingColor != null) {
-                ImageViewCompat.setImageTintList(this, ColorStateList.valueOf(playingColor));
-            }
-        } else {
-            setImageResource(R.drawable.ic_volume_up_black_24dp);
-
-            if (idleColor != null) {
-                ImageViewCompat.setImageTintList(this, ColorStateList.valueOf(idleColor));
-            }
-        }
+        render();
     }
 
     public void setListener(Listener listener) {
         this.listener = listener;
-    }
-
-    public void reset() {
-        setImageResource(R.drawable.ic_volume_up_black_24dp);
     }
 
     @Override
@@ -92,6 +70,27 @@ public class AudioButton extends AppCompatImageButton implements View.OnClickLis
             listener.onStopClicked();
         } else {
             listener.onPlayClicked();
+        }
+    }
+
+    private void initView() {
+        this.setOnClickListener(this);
+        render();
+    }
+
+    private void render() {
+        if (playing) {
+            setIconResource(R.drawable.ic_stop_black_24dp);
+
+            if (playingColor != null) {
+                setIconTint(ColorStateList.valueOf(playingColor));
+            }
+        } else {
+            setIconResource(R.drawable.ic_volume_up_black_24dp);
+
+            if (idleColor != null) {
+                setIconTint(ColorStateList.valueOf(idleColor));
+            }
         }
     }
 
