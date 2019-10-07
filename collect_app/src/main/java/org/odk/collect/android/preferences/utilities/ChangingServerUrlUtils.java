@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class KnownUrlListUtils {
+public class ChangingServerUrlUtils {
     static final String KNOWN_URL_LIST = "knownUrlList";
 
-    private KnownUrlListUtils() {
+    private ChangingServerUrlUtils() {
     }
 
     // The method adds a new url to the list if it doesn't already exist. The list is intended to

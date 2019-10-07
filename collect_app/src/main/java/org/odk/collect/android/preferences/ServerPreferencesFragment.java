@@ -40,7 +40,7 @@ import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
-import org.odk.collect.android.preferences.utilities.KnownUrlListUtils;
+import org.odk.collect.android.preferences.utilities.ChangingServerUrlUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
@@ -268,13 +268,13 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         listPopupWindow.setAnchorView(serverUrlPreference.getEditText());
         listPopupWindow.setModal(true);
         listPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
-            serverUrlPreference.getEditText().setText(KnownUrlListUtils.getUrlList().get(position));
+            serverUrlPreference.getEditText().setText(ChangingServerUrlUtils.getUrlList().get(position));
             listPopupWindow.dismiss();
         });
     }
 
     private void setupUrlDropdownAdapter() {
-        ArrayAdapter adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, KnownUrlListUtils.getUrlList());
+        ArrayAdapter adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, ChangingServerUrlUtils.getUrlList());
         listPopupWindow.setAdapter(adapter);
     }
 
@@ -308,7 +308,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                         sendAnalyticsEvent(url);
 
                         preference.setSummary(newValue.toString());
-                        KnownUrlListUtils.addUrlToList(url);
+                        ChangingServerUrlUtils.addUrlToList(url);
                         setupUrlDropdownAdapter();
                     } else {
                         ToastUtils.showShortToast(R.string.url_error);

@@ -19,7 +19,7 @@ import androidx.annotation.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.listeners.ActionListener;
-import org.odk.collect.android.preferences.utilities.KnownUrlListUtils;
+import org.odk.collect.android.preferences.utilities.ChangingServerUrlUtils;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -77,7 +77,7 @@ public class PreferenceSaver {
                 Object value = generalPrefs.get(key);
                 generalSharedPreferences.save(key, value);
                 if (key.equals(KEY_SERVER_URL)) {
-                    KnownUrlListUtils.addUrlToList(String.valueOf(value));
+                    ChangingServerUrlUtils.addUrlToList(String.valueOf(value));
                 }
             } else {
                 generalSharedPreferences.reset(key);
