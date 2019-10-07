@@ -1,11 +1,9 @@
 package org.odk.collect.android.preferences.utilities;
 
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 
@@ -14,7 +12,6 @@ import java.util.List;
 import static junit.framework.TestCase.assertEquals;
 import static org.odk.collect.android.preferences.utilities.KnownUrlListUtils.KNOWN_URL_LIST;
 
-@RunWith(AndroidJUnit4.class)
 public class KnownUrlListUtilsTest {
 
     @Before
