@@ -19,7 +19,7 @@ import androidx.annotation.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.listeners.ActionListener;
-import org.odk.collect.android.preferences.utielities.KnownUrlListUtils;
+import org.odk.collect.android.preferences.utilities.KnownUrlListUtils;
 
 import java.util.Collection;
 import java.util.HashMap;
