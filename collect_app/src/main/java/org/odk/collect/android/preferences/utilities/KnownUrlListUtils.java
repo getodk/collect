@@ -17,6 +17,8 @@ public class KnownUrlListUtils {
     private KnownUrlListUtils() {
     }
 
+    // The method adds a new url to the list if it doesn't already exist. The list is intended to
+    // keep up to 5 elements so the oldest one is removed if needed.
     public static void addUrlToList(String url) {
         List<String> urlList = getUrlList();
 
