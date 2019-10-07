@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences.utielities;
+package org.odk.collect.android.preferences.utilities;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
