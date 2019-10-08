@@ -1,10 +1,7 @@
 package org.odk.collect.android.formentry;
 
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.appcompat.widget.AppCompatImageButton;
 
 import junit.framework.Assert;
 
@@ -14,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.logic.FileReference;
@@ -45,11 +41,11 @@ public class AudioVideoImageTextLabelVisibilityTest {
     private FileReference reference;
 
     private AudioVideoImageTextLabel audioVideoImageTextLabel;
-    private AudioButton audioButton;
-    private AppCompatImageButton videoButton;
-    private ImageView imageView;
+    private View audioButton;
+    private View videoButton;
+    private View imageView;
+    private View missingImage;
     private TextView textView;
-    private TextView missingImage;
     private boolean isReferenceManagerStubbed;
     private AudioHelper audioHelper;
 
@@ -62,14 +58,14 @@ public class AudioVideoImageTextLabelVisibilityTest {
     @ParameterizedRobolectricTestRunner.Parameters()
     public static Iterable<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {null,          null,           null},
-                {RANDOM_URI,    null,           null},
-                {null,          RANDOM_URI,     null},
-                {null,          null,           RANDOM_URI},
-                {RANDOM_URI,    RANDOM_URI,     null},
-                {RANDOM_URI,    null,           RANDOM_URI},
-                {null,          RANDOM_URI,     RANDOM_URI},
-                {RANDOM_URI,    RANDOM_URI,     RANDOM_URI}
+                {null, null, null},
+                {RANDOM_URI, null, null},
+                {null, RANDOM_URI, null},
+                {null, null, RANDOM_URI},
+                {RANDOM_URI, RANDOM_URI, null},
+                {RANDOM_URI, null, RANDOM_URI},
+                {null, RANDOM_URI, RANDOM_URI},
+                {RANDOM_URI, RANDOM_URI, RANDOM_URI}
         });
     }
 
