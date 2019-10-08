@@ -109,7 +109,7 @@
   <string name="uploading_data">Sender skjema</string>
   <string name="url_error">Beklager, ugyldig URL!</string>
   <string name="username">Brukernavn</string>
-  <string name="view_hierarchy">Gå til questionDetails</string>
+  <string name="view_hierarchy">Gå til prompt</string>
   <string name="general_preferences">Endre innstillinger</string>
   <string name="show_splash_summary">Vis når programmet starter</string>
   <string name="splash_path">Velg oppstartbilde</string>
@@ -142,7 +142,7 @@
   <string name="select_answer">Velg svar</string>
   <string name="save_form_as">Lagre som:</string>
   <string name="save_as_error">Navnet kan ikke være blank!</string>
-  <string name="edit_prompt">Rediger questionDetails</string>
+  <string name="edit_prompt">Rediger prompt</string>
   <string name="selected_google_account_text">Google-konto</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
   <string name="server_platform_other">Andre</string>
@@ -222,7 +222,7 @@
   <string name="fs_delete_media_path_if_file_error">Kan ikke slette \'%s\'. Slett filen manuelt, og last ned skjemamal på nytt. </string>
   <string name="fs_create_media_folder_error">Kan ikke opprette mediamappe \'%s\'.</string>
   <string name="fs_file_copy_error">Kan ikke kopiere \'%1$s\' over \'%2$s\'. Årsak: %3$s</string>
-  <string name="survey_internal_error">Intern feil: step to questionDetails feilet.</string>
+  <string name="survey_internal_error">Intern feil: step to prompt feilet.</string>
   <string name="survey_multiple_forms_error">Du har lastet ned to ulike skjemamaler med samme skjema-ID og versjon. Kanskje er samme skjemamal lastet opp til ulike tidspunkt eller til ulike servere. Uansett bør du slette en av dem. </string>
   <string name="survey_loading_reading_form_message">Leser inn skjemadefinisjoner…</string>
   <string name="survey_loading_reading_data_message">Leser skjemadata…</string>

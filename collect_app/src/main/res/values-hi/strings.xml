@@ -239,7 +239,7 @@
   <string name="fs_delete_media_path_if_file_error">%sको नहीं मिटाया जा सका. कृपया फाइल को स्वयं हटा दें और फ़ॉर्म को पुनः डाउनलोड करें.</string>
   <string name="fs_create_media_folder_error">\'%s\' मीडिया फ़ोल्डर नहीं बना सका.</string>
   <string name="fs_file_copy_error">\'%2$s\' पर \'%1$s\' की नकल नहीं कर सकता. कारण: %3$s</string>
-  <string name="survey_internal_error">आतंरिक त्रुटि: questionDetails के स्टेप असफल.</string>
+  <string name="survey_internal_error">आतंरिक त्रुटि: prompt के स्टेप असफल.</string>
   <string name="survey_multiple_forms_error">आपने एक ही फॉर्म आईडी और संस्करण के साथ दो अलग-अलग फॉर्म डाउनलोड किए हैं। हो सकता है कि वे अलग-अलग समय या अलग-अलग सर्वरों पर अपलोड किए गए समान फॉर्म थे. किसी भी मामले में, आपको एक को हटाना होगा.</string>
   <string name="survey_loading_reading_form_message">फॉर्म की परिभाषा पढ़ रहा…</string>
   <string name="survey_loading_reading_data_message">सर्वे डेटा पढ़ रहा… </string>
