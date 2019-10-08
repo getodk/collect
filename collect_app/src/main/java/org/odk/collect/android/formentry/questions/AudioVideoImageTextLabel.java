@@ -104,8 +104,8 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
      * This should move to separate setters like {@link #setAudio(String, AudioHelper)}
      */
     @Deprecated
-    public void setAVT(TextView labelTextView, String imageURI, String videoURI,
-                       String bigImageURI, ReferenceManager referenceManager) {
+    public void setTextImageVideo(TextView labelTextView, String imageURI, String videoURI,
+                                  String bigImageURI, ReferenceManager referenceManager) {
         this.bigImageURI = bigImageURI;
         this.videoURI = videoURI;
         this.referenceManager = referenceManager;

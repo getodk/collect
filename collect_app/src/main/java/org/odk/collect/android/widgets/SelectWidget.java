@@ -83,7 +83,7 @@ public abstract class SelectWidget extends ItemsWidget {
         String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "big-image");
 
         audioVideoImageTextLabel.setTag(getClipID(getFormEntryPrompt(), item));
-        audioVideoImageTextLabel.setAVT(textView, imageURI, videoURI, bigImageURI, getReferenceManager());
+        audioVideoImageTextLabel.setTextImageVideo(textView, imageURI, videoURI, bigImageURI, getReferenceManager());
 
         if (audioURI != null) {
             audioVideoImageTextLabel.setAudio(audioURI, getAudioHelper());

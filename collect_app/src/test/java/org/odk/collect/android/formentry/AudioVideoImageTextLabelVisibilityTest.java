@@ -106,7 +106,7 @@ public class AudioVideoImageTextLabelVisibilityTest {
         Assert.assertEquals(VISIBLE, audioVideoImageTextLabel.getVisibility());
         assertVisibility(GONE, audioButton, videoButton, imageView, missingImage);
 
-        audioVideoImageTextLabel.setAVT(textView, imageURI, videoURI, null, referenceManager);
+        audioVideoImageTextLabel.setTextImageVideo(textView, imageURI, videoURI, null, referenceManager);
         if (audioURI != null) {
             audioVideoImageTextLabel.setAudio(audioURI, audioHelper);
         }

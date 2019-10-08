@@ -46,7 +46,7 @@ public class AudioVideoImageTextLabelTest {
         Activity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
 
         AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
-        audioVideoImageTextLabel.setAVT(
+        audioVideoImageTextLabel.setTextImageVideo(
                 new TextView(activity),
                 null,
                 null,

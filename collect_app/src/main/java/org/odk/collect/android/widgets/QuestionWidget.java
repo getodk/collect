@@ -288,7 +288,7 @@ public abstract class QuestionWidget
         label.setId(ViewIds.generateViewId()); // assign random id
 
         label.setTag(getClipID(prompt));
-        label.setAVT(
+        label.setTextImageVideo(
                 questionText,
                 imageURI,
                 videoURI,
