@@ -56,21 +56,12 @@ public abstract class SelectWidget extends ItemsWidget {
     protected LinearLayout answerLayout;
     protected int numColumns = 1;
 
-    public SelectWidget(Context context, QuestionDetails prompt) {
-        super(context, prompt);
+    public SelectWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails);
         answerLayout = new LinearLayout(context);
         answerLayout.setOrientation(LinearLayout.VERTICAL);
 
-        if (items != null) {
-            for (SelectChoice choice : items) {
-                String audioURI = getPlayableAudioURI(getFormEntryPrompt(), choice, getReferenceManager());
-
-                if (audioURI != null) {
-                    analytics.logEvent("Prompt", "AudioChoice", getQuestionDetails().getFormAnalyticsID());
-                    break;
-                }
-            }
-        }
+        logAnalytics(questionDetails);
     }
 
     @Override
@@ -134,6 +125,19 @@ public abstract class SelectWidget extends ItemsWidget {
             recyclerView.getLayoutParams().height = (int) (displayMetrics.heightPixels * 0.9);
         } else {
             recyclerView.setNestedScrollingEnabled(false);
+        }
+    }
+
+    private void logAnalytics(QuestionDetails questionDetails) {
+        if (items != null) {
+            for (SelectChoice choice : items) {
+                String audioURI = getPlayableAudioURI(questionDetails.getPrompt(), choice, getReferenceManager());
+
+                if (audioURI != null) {
+                    analytics.logEvent("Prompt", "AudioChoice", questionDetails.getFormAnalyticsID());
+                    break;
+                }
+            }
         }
     }
 }

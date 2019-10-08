@@ -86,16 +86,7 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         setUpGridView();
         fillInAnswer();
 
-        for (SelectChoice choice : items) {
-            if (noButtonsMode) {
-                String audioURI = getPlayableAudioURI(getFormEntryPrompt(), choice, getReferenceManager());
-
-                if (audioURI != null) {
-                    analytics.logEvent("Prompt", "AudioChoiceGrid", questionDetails.getFormAnalyticsID());
-                    break;
-                }
-            }
-        }
+        logAnalytics(questionDetails);
     }
 
     private void setUpItems() {
@@ -257,6 +248,19 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
     @Override
     public int getChoiceCount() {
         return selectedItems.size();
+    }
+
+    private void logAnalytics(QuestionDetails questionDetails) {
+        for (SelectChoice choice : items) {
+            if (noButtonsMode) {
+                String audioURI = getPlayableAudioURI(questionDetails.getPrompt(), choice, getReferenceManager());
+
+                if (audioURI != null) {
+                    analytics.logEvent("Prompt", "AudioChoiceGrid", questionDetails.getFormAnalyticsID());
+                    break;
+                }
+            }
+        }
     }
 
     class ImageAdapter extends BaseAdapter {
