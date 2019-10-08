@@ -36,7 +36,7 @@ public class CustomSQLiteQueryBuilderTestCase {
     private static final String TEST_TABLE_NAME = "testTable";
     private static final String TEST_TABLE_NAME_2 = "testTable2";
 
-    private final String[] tableColumns = new String[] {"_id", "col1", "col2", "col3"};
+    private final String[] tableColumns = {"_id", "col1", "col2", "col3"};
 
     private SQLiteDatabase sqLiteDatabase;
 

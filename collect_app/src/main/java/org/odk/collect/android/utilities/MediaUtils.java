@@ -488,7 +488,7 @@ public class MediaUtils {
                     return id.replaceFirst("raw:", "");
                 }
 
-                String[] contentUriPrefixesToTry = new String[]{
+                String[] contentUriPrefixesToTry = {
                         "content://downloads/public_downloads",
                         "content://downloads/my_downloads",
                         "content://downloads/all_downloads"
@@ -534,7 +534,7 @@ public class MediaUtils {
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[]{split[1]};
+                final String[] selectionArgs = {split[1]};
 
                 return getDataColumn(context, contentUri, selection,
                         selectionArgs);
