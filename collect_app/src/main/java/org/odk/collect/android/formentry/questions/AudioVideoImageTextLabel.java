@@ -30,9 +30,10 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.LiveData;
+
+import com.google.android.material.button.MaterialButton;
 
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
@@ -64,7 +65,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     AudioButton audioButton;
 
     @BindView(R.id.videoButton)
-    AppCompatImageButton videoButton;
+    MaterialButton videoButton;
 
     @BindView(R.id.imageView)
     ImageView imageView;
