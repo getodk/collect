@@ -23,8 +23,8 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.Clip;
-import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
+import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
@@ -37,7 +37,6 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.Helpers.createMockReference;
@@ -107,7 +106,7 @@ public class SelectWidgetTest {
         TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
         new TestWidget(activity, new QuestionDetails(prompt, "formAnalyticsID"), prompt.getSelectChoices());
 
-        verify(analytics, times(2)).logEvent("Prompt", "AudioChoice", "formAnalyticsID");
+        verify(analytics).logEvent("Prompt", "AudioChoice", "formAnalyticsID");
     }
 
     private void overrideDependencyModule() {

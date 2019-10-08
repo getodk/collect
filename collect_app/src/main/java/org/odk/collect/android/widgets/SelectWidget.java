@@ -60,6 +60,17 @@ public abstract class SelectWidget extends ItemsWidget {
         super(context, prompt);
         answerLayout = new LinearLayout(context);
         answerLayout.setOrientation(LinearLayout.VERTICAL);
+
+        if (items != null) {
+            for (SelectChoice choice : items) {
+                String audioURI = getPlayableAudioURI(getFormEntryPrompt(), choice, getReferenceManager());
+
+                if (audioURI != null) {
+                    analytics.logEvent("Prompt", "AudioChoice", getQuestionDetails().getFormAnalyticsID());
+                    break;
+                }
+            }
+        }
     }
 
     @Override
@@ -87,7 +98,6 @@ public abstract class SelectWidget extends ItemsWidget {
 
         if (audioURI != null) {
             audioVideoImageTextLabel.setAudio(audioURI, getAudioHelper());
-            analytics.logEvent("Prompt", "AudioChoice", getQuestionDetails().getFormAnalyticsID());
         }
 
         textView.setGravity(Gravity.CENTER_VERTICAL);

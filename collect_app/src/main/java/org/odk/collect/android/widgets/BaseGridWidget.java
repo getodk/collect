@@ -92,6 +92,7 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
 
                 if (audioURI != null) {
                     analytics.logEvent("Prompt", "AudioChoiceGrid", questionDetails.getFormAnalyticsID());
+                    break;
                 }
             }
         }

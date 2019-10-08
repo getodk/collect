@@ -5,9 +5,6 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 
-import org.odk.collect.android.analytics.Analytics;
-import org.odk.collect.android.formentry.media.AudioHelperFactory;
-import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
@@ -17,8 +14,11 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.Clip;
+import org.odk.collect.android.formentry.media.AudioHelperFactory;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
@@ -27,7 +27,6 @@ import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.odk.collect.android.support.Helpers.createMockReference;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.NO_BUTTONS;
@@ -117,7 +116,7 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
                 .build();
 
         getActualWidget();
-        verify(analytics, times(2)).logEvent("Prompt", "AudioChoiceGrid", "formAnalyticsID");
+        verify(analytics).logEvent("Prompt", "AudioChoiceGrid", "formAnalyticsID");
     }
 
     @Test
