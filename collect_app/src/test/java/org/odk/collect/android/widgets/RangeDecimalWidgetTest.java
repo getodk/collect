@@ -3,6 +3,7 @@ package org.odk.collect.android.widgets;
 import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.data.DecimalData;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.RangeWidgetTest;
 
 /**
@@ -14,7 +15,7 @@ public class RangeDecimalWidgetTest extends RangeWidgetTest<RangeDecimalWidget, 
     @NonNull
     @Override
     public RangeDecimalWidget createWidget() {
-        return new RangeDecimalWidget(activity, formEntryPrompt);
+        return new RangeDecimalWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @NonNull

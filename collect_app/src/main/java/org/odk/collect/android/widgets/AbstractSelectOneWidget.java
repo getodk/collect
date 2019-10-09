@@ -26,10 +26,10 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.data.helper.Selection;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.adapters.SelectOneListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
@@ -52,14 +52,14 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
     private final boolean autoAdvance;
     SelectOneListAdapter adapter;
 
-    public AbstractSelectOneWidget(Context context, FormEntryPrompt prompt, boolean autoAdvance) {
-        super(context, prompt);
+    public AbstractSelectOneWidget(Context context, QuestionDetails questionDetails, boolean autoAdvance) {
+        super(context, questionDetails);
 
-        if (prompt.getAnswerValue() != null) {
+        if (questionDetails.getPrompt().getAnswerValue() != null) {
             if (this instanceof ItemsetWidget) {
-                selectedValue = prompt.getAnswerValue().getDisplayText();
+                selectedValue = questionDetails.getPrompt().getAnswerValue().getDisplayText();
             } else { // Regular SelectOneWidget
-                selectedValue = ((Selection) prompt.getAnswerValue().getValue()).getValue();
+                selectedValue = ((Selection) questionDetails.getPrompt().getAnswerValue().getValue()).getValue();
             }
         }
 

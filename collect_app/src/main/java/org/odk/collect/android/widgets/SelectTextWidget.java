@@ -24,7 +24,7 @@ import android.util.TypedValue;
 import android.widget.EditText;
 import android.widget.TableLayout;
 
-import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ViewIds;
 
 /**
@@ -36,7 +36,7 @@ public abstract class SelectTextWidget extends SelectWidget {
 
     protected EditText searchStr;
 
-    public SelectTextWidget(Context context, FormEntryPrompt prompt) {
+    public SelectTextWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
     }
 

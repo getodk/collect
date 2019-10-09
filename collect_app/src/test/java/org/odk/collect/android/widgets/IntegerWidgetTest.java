@@ -3,6 +3,7 @@ package org.odk.collect.android.widgets;
 import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.data.IntegerData;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.junit.Test;
 import org.odk.collect.android.widgets.base.GeneralStringWidgetTest;
 
@@ -18,7 +19,7 @@ public class IntegerWidgetTest extends GeneralStringWidgetTest<IntegerWidget, In
     @NonNull
     @Override
     public IntegerWidget createWidget() {
-        return new IntegerWidget(activity, formEntryPrompt, false);
+        return new IntegerWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), false);
     }
 
     @NonNull

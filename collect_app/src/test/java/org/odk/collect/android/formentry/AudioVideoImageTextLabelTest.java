@@ -14,6 +14,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.robolectric.RobolectricTestRunner;
@@ -40,19 +41,18 @@ public class AudioVideoImageTextLabelTest {
     public void withTextView_andAudio_playingAudio_highlightsText() throws Exception {
         MutableLiveData<Boolean> isPlaying = new MutableLiveData<>();
         isPlaying.setValue(false);
-        when(audioHelper.setAudio(any(AudioButton.class), any(), any())).thenReturn(isPlaying);
+        when(audioHelper.setAudio(any(AudioButton.class), any())).thenReturn(isPlaying);
 
         Activity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
 
         AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
-        audioVideoImageTextLabel.setAVT(
+        audioVideoImageTextLabel.setTextImageVideo(
                 new TextView(activity),
-                "file://audio.mp3",
                 null,
                 null,
                 null,
-                referenceManager,
-                audioHelper);
+                referenceManager);
+        audioVideoImageTextLabel.setAudio("file://audio.mp3", audioHelper);
 
         int originalTextColor = audioVideoImageTextLabel.getLabelTextView().getCurrentTextColor();
 

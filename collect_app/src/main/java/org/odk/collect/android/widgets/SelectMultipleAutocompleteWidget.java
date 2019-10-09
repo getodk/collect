@@ -18,11 +18,11 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 
-import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 
 public class SelectMultipleAutocompleteWidget extends SelectMultiWidget {
-    public SelectMultipleAutocompleteWidget(Context context, FormEntryPrompt prompt) {
+    public SelectMultipleAutocompleteWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
         setUpSearchBox();
     }

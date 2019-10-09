@@ -1,5 +1,6 @@
 package org.odk.collect.android.support;
 
+import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.widget.ImageButton;
 
@@ -36,8 +37,12 @@ public class RobolectricHelpers {
     }
 
     public static <T extends FragmentActivity> T createThemedActivity(Class<T> clazz) {
+        return createThemedActivity(clazz, R.style.Theme_Collect_Light);
+    }
+
+    public static <T extends FragmentActivity> T createThemedActivity(Class<T> clazz, int theme) {
         T activity = Robolectric.setupActivity(clazz);
-        activity.setTheme(R.style.Theme_Collect_Light); // Needed so attrs are available
+        activity.setTheme(theme); // Needed so attrs are available
 
         return activity;
     }
@@ -55,6 +60,10 @@ public class RobolectricHelpers {
 
     public static int getCreatedFromResId(ImageButton button) {
         return shadowOf(button.getDrawable()).getCreatedFromResId();
+    }
+
+    public static int getCreatedFromResId(Drawable drawable) {
+        return shadowOf(drawable).getCreatedFromResId();
     }
 
     public static DataSource setupMediaPlayerDataSource(String testFile) {

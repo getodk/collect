@@ -29,14 +29,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.form.api.FormEntryCaption;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
-import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.external.ExternalSelectChoice;
-import org.odk.collect.android.formentry.AudioVideoImageTextLabel;
-import org.odk.collect.android.utilities.ScreenContext;
+import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import java.util.List;
@@ -58,17 +56,12 @@ public abstract class SelectWidget extends ItemsWidget {
     protected LinearLayout answerLayout;
     protected int numColumns = 1;
 
-    public SelectWidget(Context context, FormEntryPrompt prompt) {
-        this(context, prompt, new AudioHelper(
-                ((ScreenContext) context).getActivity(),
-                ((ScreenContext) context).getViewLifecycle()
-        ));
-    }
-
-    public SelectWidget(Context context, FormEntryPrompt prompt, AudioHelper audioHelper) {
-        super(context, prompt, audioHelper);
+    public SelectWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails);
         answerLayout = new LinearLayout(context);
         answerLayout.setOrientation(LinearLayout.VERTICAL);
+
+        logAnalytics(questionDetails);
     }
 
     @Override
@@ -77,7 +70,7 @@ public abstract class SelectWidget extends ItemsWidget {
     }
 
     public void init(AudioVideoImageTextLabel audioVideoImageTextLabel) {
-        audioVideoImageTextLabel.setPlayTextColor(getPlayColor());
+        audioVideoImageTextLabel.setPlayTextColor(getPlayColor(getFormEntryPrompt(), themeUtils));
     }
 
     /**
@@ -92,7 +85,11 @@ public abstract class SelectWidget extends ItemsWidget {
         String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "big-image");
 
         audioVideoImageTextLabel.setTag(getClipID(getFormEntryPrompt(), item));
-        audioVideoImageTextLabel.setAVT(textView, audioURI, imageURI, videoURI, bigImageURI, getReferenceManager(), getAudioHelper());
+        audioVideoImageTextLabel.setTextImageVideo(textView, imageURI, videoURI, bigImageURI, getReferenceManager());
+
+        if (audioURI != null) {
+            audioVideoImageTextLabel.setAudio(audioURI, getAudioHelper());
+        }
 
         textView.setGravity(Gravity.CENTER_VERTICAL);
     }
@@ -128,6 +125,19 @@ public abstract class SelectWidget extends ItemsWidget {
             recyclerView.getLayoutParams().height = (int) (displayMetrics.heightPixels * 0.9);
         } else {
             recyclerView.setNestedScrollingEnabled(false);
+        }
+    }
+
+    private void logAnalytics(QuestionDetails questionDetails) {
+        if (items != null) {
+            for (SelectChoice choice : items) {
+                String audioURI = getPlayableAudioURI(questionDetails.getPrompt(), choice, getReferenceManager());
+
+                if (audioURI != null) {
+                    analytics.logEvent("Prompt", "AudioChoice", questionDetails.getFormAnalyticsID());
+                    break;
+                }
+            }
         }
     }
 }

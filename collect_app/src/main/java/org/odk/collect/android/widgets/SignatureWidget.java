@@ -18,9 +18,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
-import org.javarosa.form.api.FormEntryPrompt;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
@@ -33,7 +34,7 @@ public class SignatureWidget extends BaseImageWidget {
 
     private Button signButton;
 
-    public SignatureWidget(Context context, FormEntryPrompt prompt) {
+    public SignatureWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
         imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_SIGNATURE, RequestCodes.SIGNATURE_CAPTURE, R.string.signature_capture);
         setUpLayout();

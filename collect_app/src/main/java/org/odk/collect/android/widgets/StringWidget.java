@@ -23,8 +23,8 @@ import android.widget.EditText;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 
 /**
@@ -35,10 +35,10 @@ public class StringWidget extends QuestionWidget {
     boolean readOnly;
     protected final EditText answerText;
 
-    protected StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
-        super(context, prompt);
+    protected StringWidget(Context context, QuestionDetails questionDetails, boolean readOnlyOverride) {
+        super(context, questionDetails);
 
-        readOnly = prompt.isReadOnly() || readOnlyOverride;
+        readOnly = questionDetails.getPrompt().isReadOnly() || readOnlyOverride;
         answerText = getAnswerEditText(readOnly, getFormEntryPrompt());
         setUpLayout();
     }
