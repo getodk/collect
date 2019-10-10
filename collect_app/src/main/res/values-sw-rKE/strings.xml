@@ -5,7 +5,7 @@
   <string name="add_another_repeat">Ongeza Kikundi \"%s\" kingine </string>
   <string name="add_repeat">Ongeza kikundi \"%s\" kipya?</string>
   <string name="add_repeat_no">Usiongeze</string>
-    <string name="cancel">Tamatisha</string>
+  <string name="cancel">Tamatisha</string>
   <string name="cancel_loading_form">Tamatisha</string>
   <string name="cancel_location">Tamatisha</string>
   <string name="capture_audio">Rekodi Sauti</string>
@@ -126,7 +126,7 @@
   <string name="root_namespace_error">Msingi wa kipengele Namespace sio sahihi: %s</string>
   <string name="manifest_tag_error">Wasilisho la Manifest %s linakosa vitambulisho moja au zaidi: jina la faili, hash, au downloadUrl</string>
   <string name="form_download_progress">%1$s. Kupata faili za vyombo vya habari: %2$s kati ya %3$s</string>
-    <string name="fetching_manifest">%s. Inachukua manifest</string>
+  <string name="fetching_manifest">%s. Inachukua manifest</string>
   <string name="success">Mafanikio</string>
   <string name="no_forms_uploaded">Samahani, hakuna fomu ilipakiwa.</string>
   <string name="upload_results">Pakia matokeo</string>

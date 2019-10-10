@@ -5,7 +5,7 @@
   <string name="add_another_repeat">Başka bir \"%s\" grup eklensin mi?</string>
   <string name="add_repeat">Yeni bir\"%s\" grup eklensin mi?</string>
   <string name="add_repeat_no">Ekleme Yapma</string>
-    <string name="cancel">Vazgeç</string>
+  <string name="cancel">Vazgeç</string>
   <string name="cancel_loading_form">Vazgeç</string>
   <string name="cancel_location">Vazgeç</string>
   <string name="capture_audio">Ses Kaydi</string>
@@ -104,7 +104,7 @@
   <string name="root_element_error">kök element  &lt;manifest\&gt; — was %s degil</string>
   <string name="root_namespace_error">Kök elementin alanadi doğru değil: %s</string>
   <string name="form_download_progress">%1$s. Alinan medya dosyasi : %2$s of %3$s</string>
-    <string name="success">Başarılı</string>
+  <string name="success">Başarılı</string>
   <string name="no_forms_uploaded">Herhangi bir form gönderilmedi.</string>
   <string name="upload_results">Gönderme Sonucu</string>
   <string name="choose_sound">Seskaydi Seçimi</string>

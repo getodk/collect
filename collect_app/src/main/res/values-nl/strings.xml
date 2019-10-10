@@ -11,7 +11,7 @@
   <string name="add_another_repeat">Nog een \"%s\" groep toevoegen?</string>
   <string name="add_repeat">Een nieuwe \"%s\" groep toevoegen?</string>
   <string name="add_repeat_no">Niet toevoegen</string>
-    <string name="cancel">Terug</string>
+  <string name="cancel">Terug</string>
   <string name="cancel_loading_form">Terug</string>
   <string name="cancel_location">Terug</string>
   <string name="canceling">Wordt geannuleerd</string>
@@ -150,7 +150,7 @@
   <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
   <string name="manifest_tag_error">Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
-    <string name="fetching_manifest">%s. Getting manifest </string>
+  <string name="fetching_manifest">%s. Getting manifest </string>
   <string name="success">Voltooid</string>
   <string name="no_forms_uploaded">Sorry, no form was uploaded.</string>
   <string name="upload_results">Upload Results</string>

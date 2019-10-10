@@ -12,7 +12,7 @@
   <string name="add_another_repeat">Aggiungere un altro \"%s\" gruppo?</string>
   <string name="add_repeat">Aggiungere un nuovo \"%s\" gruppo ?</string>
   <string name="add_repeat_no">Non aggiungere</string>
-    <string name="cancel">Annulla</string>
+  <string name="cancel">Annulla</string>
   <string name="cancel_loading_form">Annulla</string>
   <string name="cancel_location">Annulla</string>
   <string name="canceling">Annullando</string>
@@ -153,7 +153,7 @@
   <string name="root_namespace_error">Il \'Namespace\' dell\'Elemento Root del documento XML non è corretto: %s</string>
   <string name="manifest_tag_error">Il \'Manifest\' %s del documento XML manca di una o più \'tag\': filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Caricamento file multimediali: %2$s di %3$s</string>
-    <string name="fetching_manifest">%s. Ottenendo \'Manifest\' da XML</string>
+  <string name="fetching_manifest">%s. Ottenendo \'Manifest\' da XML</string>
   <string name="success">Successo</string>
   <string name="failures">Errori</string>
   <string name="no_forms_uploaded">Spiacenti, nessun modulo è stato caricato.</string>
@@ -353,9 +353,6 @@
     <item quantity="other">%d metri</item>
   </plurals>
   <string name="location_status_searching">Sto ricercando segnale GPS, prego attendere…</string>
-  <string name="location_status_accuracy">Precisione localizzazione GPS: %.1f m</string>
-  <string name="location_status_acceptable">Precisione localizzazione GPS: %.1f m (accettabile)</string>
-  <string name="location_status_unacceptable">Precisione localizzazione GPS: %.1f m (non accettabile)</string>
   <string name="collection_status_paused">Punti inseriti: %d</string>
   <string name="collection_status_placement">Punti inseriti: %d (tocca per inserire punti)</string>
   <string name="collection_status_manual">Punti inseriti: %d (salvataggio manuale)</string>

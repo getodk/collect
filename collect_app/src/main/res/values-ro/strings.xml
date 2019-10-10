@@ -5,7 +5,7 @@
   <string name="add_another_repeat">Adăugați încă un grup \"%s\"?</string>
   <string name="add_repeat">Adăugați un nou grup \"%s\"?</string>
   <string name="add_repeat_no">Nu adăugați</string>
-    <string name="cancel">Anulează</string>
+  <string name="cancel">Anulează</string>
   <string name="cancel_loading_form">Anulează</string>
   <string name="cancel_location">Anulează</string>
   <string name="capture_audio">Înregistrează sunet</string>
@@ -131,7 +131,7 @@
   <string name="root_namespace_error">Namespace pentru Root este incorect: %s</string>
   <string name="manifest_tag_error">Înregistrării Manifest %s îi lipsește unul sau mai multe tag-uri: filename, hash, sau downloadUrl</string>
   <string name="form_download_progress">%1$s. Preluare fișiere media: %2$s din %3$s</string>
-    <string name="fetching_manifest">%s. Preluare manifest </string>
+  <string name="fetching_manifest">%s. Preluare manifest </string>
   <string name="success">Succes</string>
   <string name="no_forms_uploaded">Ne pare rău, niciun formular nu a fost încărcat.</string>
   <string name="upload_results">Încărcați rezultate</string>

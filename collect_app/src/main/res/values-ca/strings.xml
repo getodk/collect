@@ -6,7 +6,7 @@
   <string name="add_another_repeat">Afegir un altre grup \"%s\"?</string>
   <string name="add_repeat">Afegir un nou grup \"%s\"?</string>
   <string name="add_repeat_no">No afegir</string>
-    <string name="cancel">Cancel·lar</string>
+  <string name="cancel">Cancel·lar</string>
   <string name="cancel_loading_form">Cancel·lar</string>
   <string name="cancel_location">Cancel·lar</string>
   <string name="cannot_edit_completed_form">No es pot editar un formulari un cop finalitzat.  Pot estar encriptat.</string>
@@ -136,7 +136,7 @@
   <string name="root_namespace_error">Element principal \'Namespace\' és incorrecte: %s</string>
   <string name="manifest_tag_error">A l\'entrada de manifest %s hi falten una o mes clausules: nom d\'arxiu, identificador, o Url de descàrrega</string>
   <string name="form_download_progress">%1$s. Obtenint arxius multimèdia: %2$s de %3$s</string>
-    <string name="fetching_manifest">%s. Obtenint manifest</string>
+  <string name="fetching_manifest">%s. Obtenint manifest</string>
   <string name="success">Correcte</string>
   <string name="no_forms_uploaded">No s\'ha carregat cap formulari.</string>
   <string name="upload_results">Resultats de la càrrega</string>

@@ -12,7 +12,7 @@
   <string name="add_another_repeat">Czy dodać kolejną grupę \"%s\"?</string>
   <string name="add_repeat">Czy dodać nową grupę \"%s\"?</string>
   <string name="add_repeat_no">Nie Dodawaj</string>
-    <string name="cancel">Anuluj</string>
+  <string name="cancel">Anuluj</string>
   <string name="cancel_loading_form">Anuluj</string>
   <string name="cancel_location">Anuluj</string>
   <string name="canceling">Anulowanie</string>
@@ -152,7 +152,7 @@
   <string name="root_namespace_error">Przestrzeń nazw głównego elementu jest niewłaściwa: %s</string>
   <string name="manifest_tag_error">Wpis %s w manifeście ma brakujący jeden lub więcej znaczników: nazwa pliku, hash lub URL pobrania</string>
   <string name="form_download_progress">%1$s. Pobieram pliki medialne: %2$s z %3$s</string>
-    <string name="fetching_manifest">%s. Pobieram manifest </string>
+  <string name="fetching_manifest">%s. Pobieram manifest </string>
   <string name="success">Sukces</string>
   <string name="failures">Niepowodzenia</string>
   <string name="no_forms_uploaded">Przykro mi, nie wysłano żadnego formularza.</string>
@@ -358,9 +358,6 @@
     <item quantity="other">%d metry</item>
   </plurals>
   <string name="location_status_searching">Wyszukiwanie lokalizacji GPS, proszę czekać…</string>
-  <string name="location_status_accuracy">Dokładność lokalizacji GPS: %.1f m</string>
-  <string name="location_status_acceptable">Dokładność lokalizacji GPS: %.1f m (dopuszczalna)</string>
-  <string name="location_status_unacceptable">Dokładność lokalizacji GPS: %.1f m (niedopuszczalna)</string>
   <string name="collection_status_paused">Wprowadzone punkty: %d</string>
   <string name="collection_status_placement">Wprowadzone punkty: %d (dotknij, by dodać)</string>
   <string name="collection_status_manual">Wprowadzone punkty: %d (wprowadzanie manualne)</string>
