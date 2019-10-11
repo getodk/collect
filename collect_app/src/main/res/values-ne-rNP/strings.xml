@@ -12,7 +12,7 @@
   <string name="add_another_repeat">के अर्को \"%s\" समूह थप्नु हुन्छ ?</string>
   <string name="add_repeat">नयाँ \"%s\" समूह थप्न चाहनु हुन्छ ?</string>
   <string name="add_repeat_no">नथप्नु होला !</string>
-    <string name="cancel">फिर्ता जानुहोस्</string>
+  <string name="cancel">फिर्ता जानुहोस्</string>
   <string name="cancel_loading_form">फिर्ता जानुहोस्</string>
   <string name="cancel_location">फिर्ता जानुहोस्</string>
   <string name="canceling">फिर्ता हुँदै</string>
@@ -150,7 +150,7 @@
   <string name="root_namespace_error">जड तत्व Namespace गल्ति छ: %s </string>
   <string name="manifest_tag_error">म्यनिफेष्ट दाखिला %s बाट एउटा वा सो भन्दा बढी ट्यागहरु हराइरहेका छन्: filename, hash, वा downloadURL</string>
   <string name="form_download_progress">%1$s. मिडिया फाइलहरु प्राप्त गरिदैछ: %3$s मध्येको %2$s</string>
-    <string name="fetching_manifest">%s म्यनिफेष्ट प्राप्त गरिदै छ </string>
+  <string name="fetching_manifest">%s म्यनिफेष्ट प्राप्त गरिदै छ </string>
   <string name="success">सफल</string>
   <string name="no_forms_uploaded">माफ गर्नुहोस्, कुनै फारम पनि अपलोड गरिएन |</string>
   <string name="upload_results">अपलोडको परिणामहरु </string>

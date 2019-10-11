@@ -12,7 +12,7 @@
   <string name="add_another_repeat">¿Agregar otro grupo de \"%s\"?</string>
   <string name="add_repeat">¿Agregar un nuevo ciclo de \"%s\"?</string>
   <string name="add_repeat_no">No Agregar</string>
-    <string name="cancel">Cancelar</string>
+  <string name="cancel">Cancelar</string>
   <string name="cancel_loading_form">Cancelar</string>
   <string name="cancel_location">Cancelar</string>
   <string name="canceling">Cancelando</string>
@@ -125,7 +125,7 @@
   <string name="server_requires_auth">El servidor requiere autenticacion</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Configuración del Servidor</string>
-  <string name="trigger">OK. Por favor continue.</string>
+  <string name="trigger">OK. Por favor continúe.</string>
   <string name="uploading_data">Enviando el formulario</string>
   <string name="url_error">¡URL invalida!</string>
   <string name="username">Nombre del Usuario</string>
@@ -152,7 +152,7 @@
   <string name="root_namespace_error">El elemento de root Namespace es incorrecto: %s</string>
   <string name="manifest_tag_error">Al manifiesto %s le fatan una o mas etiquetas: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Obteniendo los archivos: %2$s de %3$s</string>
-    <string name="fetching_manifest">%s. Obteniendo el manifesto
+  <string name="fetching_manifest">%s. Obteniendo el manifesto
 </string>
   <string name="success">Correcto</string>
   <string name="failures">Fallas</string>
@@ -194,7 +194,7 @@
   <string name="version">Version:</string>
   <string name="parent_form_not_present">No se pudo editar este formulario guardado por que el formulario en blanco que le corresponde no esta o fue borrado.\n\nID de Formulario: %1$s</string>
   <string name="launch_app">Iniciar</string>
-  <string name="no_app">Esta apliación no esta. Por favor ingrese el dato manualmente.</string>
+  <string name="no_app">Esta aplicación no está. Por favor ingrese el dato manualmente.</string>
   <string name="select_one">Seleccione una respuesta</string>
   <string name="savepoint_used">¡Cambios no guardados recuperados del punto de recuperación!</string>
   <string name="save_and_close">Guardar y Cerrar</string>
@@ -368,15 +368,15 @@
     <item quantity="other">%d metros</item>
   </plurals>
   <string name="location_status_searching">Buscando ubicación GPS, por favor espere …</string>
-  <string name="location_status_accuracy">Precisión GPS: %.1f m</string>
-  <string name="location_status_acceptable">Precisión GPS: %.1f m (aceptable)</string>
-  <string name="location_status_unacceptable">Precisión GPS: %.1f m (inaceptable)</string>
+  <string name="location_status_accuracy">Precisión GPS: %.2f m</string>
+  <string name="location_status_acceptable">Precisión GPS: %.2f m (aceptable)</string>
+  <string name="location_status_unacceptable">Precisión GPS: %.2f m (inaceptable)</string>
   <string name="collection_status_paused">Puntos ingresados: %d</string>
   <string name="collection_status_placement">Puntos ingresados: %d (toque para ublicar puntos)</string>
   <string name="collection_status_manual">Puntos ingresados: %d (registro manual)</string>
   <string name="collection_status_auto_seconds">Puntos ingresados: %1$d (registrando cada %2$d seg)</string>
   <string name="collection_status_auto_minutes">Puntos ingresados: %1$d (registrando cada %2$d min)</string>
-  <string name="collection_status_auto_seconds_accuracy">Puntos ingresados:: %1$d (registrando cada %2$d seg, precisión %3$d m)</string>
+  <string name="collection_status_auto_seconds_accuracy">Puntos ingresados: %1$d (registrando cada %2$d seg, precisión %3$d m)</string>
   <string name="collection_status_auto_minutes_accuracy">Puntos ingresados: %1$d (registrando cada %2$d min, precisión %3$d m)</string>
   <string name="geopoint_instruction">Pulsar prolongadamente para colocar la marca o tocar el botón marcador.</string>
   <string name="geopoint_no_draggable_instruction">Tap botón de agregar marker</string>
@@ -458,8 +458,8 @@
   <string name="instance_sync_summary">Afecta los formularios agregados directamente a la carpeta de instances</string>
   <string name="sort_by_name_asc">Ascendente por Nombre, A-Z</string>
   <string name="sort_by_name_desc">Descendente por Nombre, Z-A</string>
-  <string name="sort_by_date_asc">Por fecha, más reciente de primero</string>
-  <string name="sort_by_date_desc">Por Fecha, más antiguo de primero</string>
+  <string name="sort_by_date_asc">Fecha, más reciente de primero</string>
+  <string name="sort_by_date_desc">Fecha, más antiguo de primero</string>
   <string name="sort_by_status_asc">Por status, primero los finalizados</string>
   <string name="sort_by_status_desc">Por Status, primero los no finalizados</string>
   <string name="sort_the_list">Ordenar la lista</string>

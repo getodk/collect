@@ -5,7 +5,7 @@
   <string name="add_another_repeat">Lisa veel üks \"%s\" grupp?</string>
   <string name="add_repeat">Lisa uus \"%s\" grupp?</string>
   <string name="add_repeat_no">Ei lisa</string>
-    <string name="cancel">Tühista</string>
+  <string name="cancel">Tühista</string>
   <string name="cancel_loading_form">Tühista</string>
   <string name="cancel_location">Tühista</string>
   <string name="capture_audio">Heli salvestamine</string>
@@ -135,7 +135,7 @@
   <string name="root_namespace_error">Juurelemendi nimeruum on vale: %s</string>
   <string name="manifest_tag_error">Manifest kirjest %s puudub kas: failnimi, räsi või downloadUrl</string>
   <string name="form_download_progress">%1$s. Laeb faile: %2$s of %3$s</string>
-    <string name="fetching_manifest">%s. Laen manifest faili</string>
+  <string name="fetching_manifest">%s. Laen manifest faili</string>
   <string name="success">Õnnestus</string>
   <string name="no_forms_uploaded">Vabandage, ühtegi vormi ei ole üles laetud.</string>
   <string name="upload_results">Tulemuste üles laadimine</string>

@@ -5,7 +5,7 @@
   <string name="add_another_repeat">დავამატოთ \"%s\"-ის ახალი ჯგუფი?</string>
   <string name="add_repeat">დავამატოთ ახალი \"%s\" ჯგუფი?</string>
   <string name="add_repeat_no">არ დაამატო</string>
-    <string name="cancel">გაუქმება</string>
+  <string name="cancel">გაუქმება</string>
   <string name="cancel_loading_form">გაუქმება</string>
   <string name="cancel_location">გაუქმება</string>
   <string name="capture_audio">ხმის ჩაწერა</string>
@@ -131,7 +131,7 @@
   <string name="root_namespace_error">ძირის ელემენტის სახელთა სივრცე არასწორია: %s</string>
   <string name="manifest_tag_error">მანიფესტის ჩანაწერში %s არ არსებობს ერთი ან მეტი ჭდე: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. მედია-ფაილების მიღება: %2$s of %3$s</string>
-    <string name="fetching_manifest">%s. მანიფესტის მიღება </string>
+  <string name="fetching_manifest">%s. მანიფესტის მიღება </string>
   <string name="success">წარმატება</string>
   <string name="no_forms_uploaded">უკაცრავად, ფორმები ვერ აიტვირთა.</string>
   <string name="upload_results">ატვირთვის შედეგი</string>
