@@ -389,11 +389,12 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     }
 
     @Override public void onSuccess(LocationEngineResult result) {
-        lastLocationFix = fromLocation(result.getLastLocation());
-        lastLocationProvider = result.getLastLocation().getProvider();
+        Location location = result.getLastLocation();
+        lastLocationFix = fromLocation(location);
+        lastLocationProvider = location != null ? location.getProvider() : null;
         Timber.i("Received LocationEngineResult: %s", lastLocationFix);
         if (locationComponent != null) {
-            locationComponent.forceLocationUpdate(result.getLastLocation());
+            locationComponent.forceLocationUpdate(location);
         }
         for (ReadyListener listener : gpsLocationReadyListeners) {
             listener.onReady(this);
