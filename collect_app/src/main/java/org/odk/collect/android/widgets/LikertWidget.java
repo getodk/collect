@@ -33,74 +33,16 @@ import timber.log.Timber;
 public class LikertWidget extends ItemsWidget {
 
 
-//    private LinearLayout view;
-    private SeekBar seekBar;
-    ArrayList<RadioButton> buttons;
-    View center;
+    private LinearLayout view;
+//    private SeekBar seekBar;
+//    ArrayList<RadioButton> buttons;
+//    View center;
     public LikertWidget(Context context, FormEntryPrompt prompt, boolean displayLabel, boolean autoAdvance) {
         super(context, prompt);
-        LinearLayout buttonLayout = new LinearLayout(context);
-        buttons = new ArrayList<>();
 
-        if (items != null) {
-            for (int i = 0; i < items.size(); i++) {
+        view = (LinearLayout) getLayoutInflater().inflate(R.layout.likert_layout, this, false);
 
-                System.out.println("item " + i);
-                AppCompatRadioButton r = new AppCompatRadioButton(getContext());
-                r.setId(ViewIds.generateViewId());
-                r.setTag(i);
-                r.setEnabled(!prompt.isReadOnly());
-                r.setFocusable(!prompt.isReadOnly());
-
-                buttons.add(r);
-
-                TextView label = new TextView(getContext());
-                label.setText(prompt.getSelectChoiceText(items.get(i)));
-                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-                label.setGravity(Gravity.CENTER_HORIZONTAL);
-                if (!displayLabel) {
-                    label.setVisibility(View.GONE);
-                }
-
-
-                LinearLayout answer = new LinearLayout(getContext());
-                answer.setOrientation(LinearLayout.VERTICAL);
-                LinearLayout.LayoutParams headerParams =
-                        new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                                LayoutParams.WRAP_CONTENT);
-                headerParams.gravity = Gravity.CENTER_HORIZONTAL;
-
-                LinearLayout.LayoutParams buttonParams =
-                        new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                                LayoutParams.WRAP_CONTENT);
-                buttonParams.gravity = Gravity.CENTER_HORIZONTAL;
-                final int labelId = ViewIds.generateViewId();
-                label.setId(labelId);
-                answer.addView(label, headerParams);
-                answer.addView(r, buttonParams);
-                answer.setPadding(4, 0, 4, 0);
-
-                // Each button gets equal weight
-                LinearLayout.LayoutParams answerParams =
-                        new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-                                LayoutParams.MATCH_PARENT);
-                answerParams.weight = 1;
-
-                buttonLayout.addView(answer, answerParams);
-
-
-            }
-
-            buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            params.addRule(RelativeLayout.RIGHT_OF, center.getId());
-            addView(buttonLayout, params);
-
-        }else{
-            System.out.println("no item ");
-        }
+        addView(view);
     }
 
 
@@ -122,19 +64,19 @@ public class LikertWidget extends ItemsWidget {
 //
 ////        view.findViewById(seekBar);
 //    }
-    @Override
-    protected void addQuestionMediaLayout(View v) {
-        center = new View(getContext());
-        RelativeLayout.LayoutParams centerParams = new RelativeLayout.LayoutParams(0, 0);
-        centerParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        center.setId(ViewIds.generateViewId());
-        addView(center, centerParams);
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.LEFT_OF, center.getId());
-        addView(v, params);
-    }
+//    @Override
+//    protected void addQuestionMediaLayout(View v) {
+//        center = new View(getContext());
+//        RelativeLayout.LayoutParams centerParams = new RelativeLayout.LayoutParams(0, 0);
+//        centerParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+//        center.setId(ViewIds.generateViewId());
+//        addView(center, centerParams);
+//
+//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+//                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//        params.addRule(RelativeLayout.LEFT_OF, center.getId());
+//        addView(v, params);
+//    }
 
     private LayoutInflater layoutInflater;
 
