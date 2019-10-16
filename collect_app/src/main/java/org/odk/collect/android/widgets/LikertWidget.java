@@ -7,11 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -25,16 +29,21 @@ public class LikertWidget extends ItemsWidget {
     private RadioGroup radioGroup;
     private RadioButton checkedButton;
 
+    ArrayList<TextView> textViews;
+    ArrayList<ImageView> imageViews;
     ArrayList<RadioButton> buttons;
-    public LikertWidget(Context context, FormEntryPrompt prompt, boolean displayLabel, boolean autoAdvance) {
+    public LikertWidget(Context context, FormEntryPrompt prompt, boolean displayIcons) {
         super(context, prompt);
 
         view = (LinearLayout) getLayoutInflater().inflate(R.layout.likert_layout, this, false);
         radioGroup = (RadioGroup) view.findViewById(R.id.likert_scale);
 
-        setRadioButtons();
+        setStructures();
         setButtonListener();
-
+        if(displayIcons){
+            showImages();
+            hideTextViews();
+        }
         addAnswerView(view);
     }
 
@@ -44,6 +53,7 @@ public class LikertWidget extends ItemsWidget {
      * If you have many elements, use this first
      * and use the standard addView(view, params) to place the rest
      */
+    //TODO: Maybe try to call it from somewhere
     protected void addAnswerView(View v) {
         if (v == null) {
             Timber.e("cannot add a null view as an answerView");
@@ -59,30 +69,30 @@ public class LikertWidget extends ItemsWidget {
         addView(v, params);
     }
 
-    public void setRadioButtons(){
-        buttons = new ArrayList<RadioButton>();
+    public void setStructures(){
+        buttons = new ArrayList<>();
+        imageViews = new ArrayList<>();
+        textViews = new ArrayList<>();
+
         for (int i=0;i < radioGroup.getChildCount(); i++) {
             View v = radioGroup.getChildAt(i);
-            System.out.println("i " + i);
-            // This is always a linear layout
             if (v instanceof LinearLayout) {
                 for(int j = 0; j < ((LinearLayout) v).getChildCount(); j++){
-
                     View v2 = ((LinearLayout) v).getChildAt(j);
                     if(v2 instanceof RadioButton){
                         buttons.add((RadioButton) v2);
-                        System.out.println("inner " + j);
+                    }else if(v2 instanceof TextView){
+                        textViews.add((TextView) v2);
+                    }else if(v2 instanceof ImageView){
+                        imageViews.add((ImageView) v2);
                     }
                 }
-
             }
         }
     }
 
     public void setButtonListener(){
-        System.out.println("Setting listeners ");
         for (RadioButton button: buttons) {
-            System.out.println("button " + button.getId());
             button.setOnClickListener(new OnClickListener() {
 
                 @Override
@@ -95,6 +105,18 @@ public class LikertWidget extends ItemsWidget {
                     checkedButton.setChecked(true);
                 }
             });
+        }
+    }
+
+    public void showImages(){
+        for(ImageView view: imageViews){
+            view.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void hideTextViews(){
+        for(TextView view: textViews){
+            view.setVisibility(View.GONE);
         }
     }
 

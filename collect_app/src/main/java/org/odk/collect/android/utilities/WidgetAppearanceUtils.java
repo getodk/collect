@@ -54,6 +54,7 @@ public class WidgetAppearanceUtils {
     public static final String LIST_NO_LABEL            = "list-nolabel";
     public static final String LIST                     = "list";
     public static final String LIKERT                   = "likert";
+    public static final String LIKERT_ICONS             = "likert_icons";
     public static final String LABEL                    = "label";
     public static final String IMAGE_MAP                = "image-map";
     public static final String NO_BUTTONS               = "no-buttons";
