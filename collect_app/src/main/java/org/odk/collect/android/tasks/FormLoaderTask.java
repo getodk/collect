@@ -28,6 +28,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.core.reference.RootTranslator;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
+import org.javarosa.xform.parse.XFormParseException;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
 import org.javarosa.xpath.XPathTypeMismatchException;
@@ -241,21 +242,25 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         Timber.i("Attempting to load from: %s", formXml.getAbsolutePath());
         final long start = System.currentTimeMillis();
         String lastSavedSrc = FileUtils.getOrCreateLastSavedSrc(formXml);
-        FormDef formDefFromXml = XFormUtils.getFormFromFormXml(formPath, lastSavedSrc);
-        if (formDefFromXml == null) {
-            errorMsg = "Error reading XForm file";
-        } else {
-            Timber.i("Loaded in %.3f seconds.",
-                    (System.currentTimeMillis() - start) / 1000F);
-            formDef = formDefFromXml;
+        try {
+            FormDef formDefFromXml = XFormUtils.getFormFromFormXml(formPath, lastSavedSrc);
+            if (formDefFromXml == null) {
+                errorMsg = "Error reading XForm file";
+            } else {
+                Timber.i("Loaded in %.3f seconds.",
+                        (System.currentTimeMillis() - start) / 1000F);
+                formDef = formDefFromXml;
 
-            try {
-                FormDefCache.writeCache(formDef, formXml.getPath());
-            } catch (IOException e) {
-                Timber.e(e);
+                try {
+                    FormDefCache.writeCache(formDef, formXml.getPath());
+                } catch (IOException e) {
+                    Timber.e(e);
+                }
+
+                return formDefFromXml;
             }
-
-            return formDefFromXml;
+        } catch (XFormParseException e) {
+            errorMsg = e.getMessage();
         }
 
         return null;
