@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.core.content.ContextCompat;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,10 +75,22 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
         }
     }
 
+
     @Override
     CheckBox setUpButton(final int index) {
         AppCompatCheckBox checkBox = new AppCompatCheckBox(widget.getContext());
         adjustButton(checkBox, index);
+
+
+        for (Selection selectedItem : selectedItems) {
+            // match based on value, not key
+            if (filteredItems.get(index).getValue().equals(selectedItem.getValue())) {
+                checkBox.setChecked(true);
+                break;
+            }
+        }
+
+
         checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 addItem(filteredItems.get(index).selection());
@@ -87,13 +100,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
             widget.widgetValueChanged();
         });
 
-        for (Selection selectedItem : selectedItems) {
-            // match based on value, not key
-            if (filteredItems.get(index).getValue().equals(selectedItem.getValue())) {
-                checkBox.setChecked(true);
-                break;
-            }
-        }
+
 
         return checkBox;
     }
