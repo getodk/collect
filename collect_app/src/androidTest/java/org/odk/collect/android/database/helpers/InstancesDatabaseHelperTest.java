@@ -1,51 +1,37 @@
 package org.odk.collect.android.database.helpers;
 
-import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
-
-import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.SQLiteUtils;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
+import static org.odk.collect.android.database.helpers.InstancesDatabaseHelper.DATABASE_PATH;
+import static org.odk.collect.android.database.helpers.InstancesDatabaseHelper.INSTANCES_TABLE_NAME;
+import static org.odk.collect.android.test.FileUtils.copyFileFromAssets;
 
 @RunWith(Parameterized.class)
-public class InstancesDatabaseHelperTest {
+public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
     @Parameterized.Parameter
     public String description;
 
     @Parameterized.Parameter(1)
     public String dbFilename;
-
-    @Parameterized.Parameters(name = "{0}")
-    public static Iterable<Object[]> data() {
-        return Arrays.asList(new Object[][] {
-                {"Downgrading from version with extra column drops that column", "instances_v7000_added_fakeColumn.db"},
-                {"Downgrading from version with missing column adds that column", "instances_v7000_removed_jrVersion.db"},
-
-                {"Upgrading from version with extra column drops that column", "instances_v4_real.db"},
-                {"Upgrading from version with missing column adds that column", "instances_v4_removed_jrVersion.db"}
-        });
-    }
-
-    private static final String DATABASE_PATH = Collect.METADATA_PATH + File.separator + InstancesDatabaseHelper.DATABASE_NAME;
-    private static final String TEMPORARY_EXTENSION = ".real";
 
     @Before
     public void saveRealDb() {
@@ -57,40 +43,38 @@ public class InstancesDatabaseHelperTest {
         FileUtils.copyFile(new File(DATABASE_PATH + TEMPORARY_EXTENSION), new File(DATABASE_PATH));
     }
 
+    @Parameterized.Parameters(name = "{0}")
+    public static Iterable<Object[]> data() {
+        return Arrays.asList(new Object[][] {
+                {"Downgrading from version with extra column drops that column", "instances_v7000_added_fakeColumn.db"},
+                {"Downgrading from version with missing column adds that column", "instances_v7000_removed_jrVersion.db"},
+
+                {"Upgrading from version with extra column drops that column", "instances_v3.db"},
+                {"Upgrading from version with missing column adds that column", "instances_v4_removed_jrVersion.db"}
+        });
+    }
+
     @Test
     public void testMigration() throws IOException {
-        writeDatabaseFile("database" + File.separator + dbFilename);
+        copyFileFromAssets("database" + File.separator + dbFilename, DATABASE_PATH);
         InstancesDatabaseHelper databaseHelper = new InstancesDatabaseHelper();
         ensureMigrationAppliesFully(databaseHelper);
 
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
         assertThat(db.getVersion(), is(InstancesDatabaseHelper.DATABASE_VERSION));
 
-        List<String> newColumnNames = InstancesDatabaseHelper.getInstancesColumnNames(db);
-
+        List<String> newColumnNames = SQLiteUtils.getColumnNames(db, INSTANCES_TABLE_NAME);
         assertThat(newColumnNames, contains(InstancesDatabaseHelper.CURRENT_VERSION_COLUMN_NAMES));
+        assertThatInstancesAreKeptAfterMigrating();
     }
 
-    private void writeDatabaseFile(String dbPath) throws IOException {
-        AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
-        try (InputStream input = assetManager.open(dbPath);
-             OutputStream output = new FileOutputStream(DATABASE_PATH)) {
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = input.read(buffer)) != -1) {
-                output.write(buffer, 0, length);
-            }
-        }
-    }
-
-    /**
-     * Gets a read-only reference to the instances database and then immediately releases it.
-     *
-     * Without this, it appears that the migrations only get partially applied. It's not clear how
-     * this is possible since calls to onDowngrade and onUpgrade are wrapped in transactions. See
-     * discussion at https://github.com/opendatakit/collect/pull/3250#issuecomment-516439704
-     */
-    private void ensureMigrationAppliesFully(InstancesDatabaseHelper databaseHelper) {
-        databaseHelper.getReadableDatabase().close();
+    private void assertThatInstancesAreKeptAfterMigrating() {
+        InstancesDao instancesDao = new InstancesDao();
+        List<Instance> instances = instancesDao.getInstancesFromCursor(instancesDao.getInstancesCursor(null, null));
+        assertEquals(2, instances.size());
+        assertEquals("complete", instances.get(0).getStatus());
+        assertEquals(Long.valueOf(1564413556249L), instances.get(0).getLastStatusChangeDate());
+        assertEquals("incomplete", instances.get(1).getStatus());
+        assertEquals(Long.valueOf(1564413579406L), instances.get(1).getLastStatusChangeDate());
     }
 }

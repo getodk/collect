@@ -30,9 +30,9 @@ import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.views.CustomWebView;
 import org.w3c.dom.Document;
@@ -74,13 +74,13 @@ public abstract class SelectImageMapWidget extends SelectWidget {
     private TextView selectedAreasLabel;
     private String imageMapFilePath;
 
-    public SelectImageMapWidget(Context context, FormEntryPrompt prompt) {
+    public SelectImageMapWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
 
         isSingleSelect = this instanceof SelectOneImageMapWidget;
 
         try {
-            imageMapFilePath = ReferenceManager.instance().DeriveReference(prompt.getImageText()).getLocalURI();
+            imageMapFilePath = ReferenceManager.instance().DeriveReference(prompt.getPrompt().getImageText()).getLocalURI();
         } catch (InvalidReferenceException e) {
             Timber.w(e);
         }

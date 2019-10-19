@@ -35,7 +35,7 @@ import timber.log.Timber;
  */
 public class ExternalDataManagerImpl implements ExternalDataManager {
 
-    private final Map<String, ExternalSQLiteOpenHelper> dbMap = new HashMap<String, ExternalSQLiteOpenHelper>();
+    private final Map<String, ExternalSQLiteOpenHelper> dbMap = new HashMap<>();
 
     private final File mediaFolder;
 

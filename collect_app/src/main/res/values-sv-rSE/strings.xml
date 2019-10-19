@@ -10,8 +10,6 @@
   <string name="add_another_repeat">Lägga till ytterligare en \"%s\" grupp?</string>
   <string name="add_repeat">Lägga till en ny \"%s\" grupp?</string>
   <string name="add_repeat_no">Lägg inte till</string>
-  <string name="audio_file_error">Ingen ljudfil har valts</string>
-  <string name="audio_file_invalid">Filen: %s är inte en giltig ljudfil</string>
   <string name="cancel">Avbryt</string>
   <string name="cancel_loading_form">Avbryt</string>
   <string name="cancel_location">Avbryt</string>
@@ -151,7 +149,6 @@
   <string name="root_namespace_error">Rotelementets Namespace är felaktigt: %s</string>
   <string name="manifest_tag_error">Manifestets post %s saknar en eller flera taggar: filnamn, hash eller nedladdnings-URL</string>
   <string name="form_download_progress">%1$s. Hämtar mediafil: %2$s av %3$s</string>
-  <string name="file_fetch_failed">Fel: %2$s (%3$s) vid %1$s</string>
   <string name="fetching_manifest">%s. Hämtar manifest </string>
   <string name="success">Lyckades</string>
   <string name="failures">Fel</string>

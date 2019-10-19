@@ -22,18 +22,18 @@ import android.util.TypedValue;
 
 import org.javarosa.core.model.data.BooleanData;
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ViewIds;
 
 public class BooleanWidget extends QuestionWidget {
 
     private AppCompatCheckBox booleanButton;
-    private final FormEntryPrompt prompt;
+    private final QuestionDetails questionDetails;
 
-    public BooleanWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
-        this.prompt = prompt;
+    public BooleanWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails);
+        this.questionDetails = questionDetails;
 
         setupBooleanButton();
         readSavedAnswer();
@@ -66,7 +66,7 @@ public class BooleanWidget extends QuestionWidget {
     }
 
     private void readSavedAnswer() {
-        Boolean value = (Boolean) prompt.getAnswerValue().getValue();
+        Boolean value = (Boolean) questionDetails.getPrompt().getAnswerValue().getValue();
         if (value != null) {
             booleanButton.setChecked(value);
         }
@@ -77,7 +77,7 @@ public class BooleanWidget extends QuestionWidget {
         booleanButton.setId(ViewIds.generateViewId());
         booleanButton.setText(getContext().getString(R.string.trigger));
         booleanButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        booleanButton.setEnabled(!prompt.isReadOnly());
+        booleanButton.setEnabled(!questionDetails.getPrompt().isReadOnly());
         addAnswerView(booleanButton);
     }
 

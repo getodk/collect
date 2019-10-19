@@ -1,9 +1,12 @@
 package org.odk.collect.android.espressoutils;
 
+import android.app.Activity;
+
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.matcher.PreferenceMatchers;
-import androidx.test.rule.ActivityTestRule;
+
 import org.odk.collect.android.R;
+import org.odk.collect.android.espressoutils.pages.FormEntryPage;
 import org.odk.collect.android.support.ActivityHelpers;
 
 import timber.log.Timber;
@@ -11,6 +14,7 @@ import timber.log.Timber;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
@@ -28,9 +32,14 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.odk.collect.android.test.CustomMatchers.withIndex;
 
+/**
+ * @deprecated Prefer page objects {@link FormEntryPage} over static helpers
+ */
+@Deprecated
 public final class FormEntry {
 
     private FormEntry() {
+
     }
 
     public static void clickOnText(String text) {
@@ -77,20 +86,16 @@ public final class FormEntry {
         onView(withClassName(endsWith("EditText"))).perform(replaceText(text));
     }
 
-    public static void checkIsToastWithMessageDisplayes(String message, ActivityTestRule main) {
-        onView(withText(message)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+    public static void checkIsToastWithMessageDisplayes(String message, Activity activity) {
+        onView(withText(message)).inRoot(withDecorView(not(is(activity.getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
 
     public static void clickGoToIconInForm() {
         onView(withId(R.id.menu_goto)).perform(click());
     }
 
-    public static void clickDeleteChildIcon() {
-        onView(withId(R.id.menu_delete_child)).perform(click());
-    }
-
-    public static void checkIsToastWithStringDisplayes(int value, ActivityTestRule main) {
-        onView(withText(getInstrumentation().getTargetContext().getString(value))).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+    public static void clickGoUpIcon() {
+        onView(withId(R.id.menu_go_up)).perform(click());
     }
 
     public static void clickSaveAndExit() {
@@ -105,15 +110,11 @@ public final class FormEntry {
         onView(withText(getInstrumentation().getTargetContext().getString(R.string.select_answer))).perform(click());
     }
 
-    public static void checkIsDisplayedInTextClassAndSwipe(String message) {
-        onView(withClassName(endsWith("EditText"))).check(matches(withText(message))).perform(swipeLeft());
-    }
-
     public static void swipeToNextQuestion() {
         onView(withId(R.id.questionholder)).perform(swipeLeft());
     }
 
-    public static void swipeToPrevoiusQuestion() {
+    public static void swipeToPreviousQuestion() {
         onView(withId(R.id.questionholder)).perform(swipeRight());
     }
 
@@ -150,6 +151,17 @@ public final class FormEntry {
         onView(withId(R.id.form_back_button)).check(matches(isDisplayed()));
     }
 
+    public static void deleteGroup(String questionText) {
+        onView(withText(questionText)).perform(longClick());
+        onView(withText(R.string.delete_repeat)).perform(click());
+        onView(withText(R.string.discard_group)).perform(click());
+    }
+
+    public static void deleteGroup() {
+        onView(withId(R.id.menu_delete_child)).perform(click());
+        onView(withText(R.string.delete_repeat)).perform(click());
+    }
+  
     public static void waitForRotationToEnd() {
         try {
             Thread.sleep(2000);

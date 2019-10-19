@@ -28,6 +28,9 @@
         <exclude name="PreserveStackTrace" />
         <exclude name="SwitchStmtsShouldHaveDefault" />
         <exclude name="UseVarargs" />
+        <exclude name="UseTryWithResources" />
+        <exclude name="ForLoopVariableCount" />
+        <exclude name="AvoidReassigningLoopVariables" />
     </rule>
 
     <rule ref="category/java/codestyle.xml">
@@ -52,6 +55,10 @@
         <exclude name="ShortMethodName" />
         <exclude name="ShortVariable" />
         <exclude name="TooManyStaticImports" />
+        <exclude name="FieldNamingConventions" />
+        <exclude name="LocalVariableNamingConventions" />
+        <exclude name="UseUnderscoresInNumericLiterals" />
+        <exclude name="LinguisticNaming" />
         <exclude name="UselessParentheses" />               <!-- Decided not to use in #1519 -->
     </rule>
 
@@ -79,6 +86,7 @@
         <exclude name="TooManyFields" />
         <exclude name="TooManyMethods" />
         <exclude name="UseObjectForClearerAPI" />
+        <exclude name="AvoidUncheckedExceptionsInSignatures" />
     </rule>
 
     <rule ref="category/java/documentation.xml">
@@ -112,6 +120,8 @@
         <exclude name="NullAssignment" />
         <exclude name="TestClassWithoutTestCases" />
         <exclude name="UnnecessaryBooleanAssertion" />
+        <exclude name="DetachedTestCase" />
+        <exclude name="CloseResource" />
     </rule>
 
     <rule ref="category/java/multithreading.xml">

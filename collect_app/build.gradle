@@ -72,7 +72,7 @@ android {
     defaultConfig {
         applicationId('org.odk.collect.android')
         minSdkVersion(16)
-        targetSdkVersion(26)
+        targetSdkVersion(28)
         versionCode LEGACY_BUILD_NUMBER_OFFSET + getMasterCommitCount()
         versionName getVersionName()
         testInstrumentationRunner('androidx.test.runner.AndroidJUnitRunner')
@@ -197,76 +197,74 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
 
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
-    implementation 'androidx.browser:browser:1.0.0'
-    implementation 'com.google.android.material:material:1.1.0-alpha05'
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
-    implementation 'com.google.android.material:material:1.1.0-alpha05'
+    implementation 'androidx.browser:browser:1.2.0-alpha07'
+    implementation 'androidx.appcompat:appcompat:1.1.0-rc01' // Shouldn't be upgraded until https://issuetracker.google.com/issues/141869006 is fixed
+    implementation 'com.google.android.material:material:1.1.0-alpha10'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.exifinterface:exifinterface:1.1.0-alpha01'
+    implementation 'androidx.exifinterface:exifinterface:1.1.0-beta01'
     implementation "androidx.multidex:multidex:2.0.1"
 
-    implementation "com.google.android.gms:play-services-analytics:16.0.1"
-    implementation "com.google.android.gms:play-services-auth:16.0.0"
-    implementation "com.google.android.gms:play-services-maps:15.0.1"
-    implementation "com.google.android.gms:play-services-location:15.0.1"
+    implementation "com.google.android.gms:play-services-analytics:17.0.0"
+    implementation "com.google.android.gms:play-services-auth:17.0.0"
+    implementation "com.google.android.gms:play-services-maps:17.0.0"
+    implementation "com.google.android.gms:play-services-location:17.0.0"
 
-    implementation "com.google.firebase:firebase-core:16.0.1"
-    implementation "com.crashlytics.sdk.android:crashlytics:2.9.2"
+    implementation "com.google.firebase:firebase-core:17.2.0"
+    implementation "com.crashlytics.sdk.android:crashlytics:2.10.1"
 
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:7.3.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:8.3.0'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v7:0.6.0'
 
-    implementation("com.google.guava:guava:27.1-android")
+    implementation("com.google.guava:guava:28.1-android")
 
-    implementation("com.google.code.gson:gson:2.6.2") {
+    implementation("com.google.code.gson:gson:2.8.5") {
         exclude group: 'org.apache.httpcomponents'
     }
 
-    implementation("com.google.http-client:google-http-client:1.22.0") {
+    implementation("com.google.http-client:google-http-client:1.31.0") {
         exclude group: 'org.apache.httpcomponents'
     }
-    implementation("com.google.oauth-client:google-oauth-client:1.22.0") {
+    implementation("com.google.oauth-client:google-oauth-client:1.30.1") {
         exclude group: 'org.apache.httpcomponents'
     }
 
     implementation "com.squareup.okhttp3:okhttp:${rootProject.okhttp3Version}"
-    implementation 'com.burgstaller:okhttp-digest:1.18'
+    implementation 'com.burgstaller:okhttp-digest:1.18' //newer versions require minSdkVersion >= 21
 
     implementation 'com.github.mohamadian:PersianJodaTime:1.2'
     implementation 'com.github.chanmratekoko:myanmar-calendar:1.0.6.RC3'
     implementation 'bikramsambat:bikram-sambat:1.1.0'
-    implementation "com.evernote:android-job:1.2.5"
-    implementation "com.rarepebble:colorpicker:2.3.1"
+    implementation "com.evernote:android-job:1.3.0-rc1"
+    implementation "com.rarepebble:colorpicker:3.0.1"
     implementation "commons-io:commons-io:2.6"
     implementation "net.sf.kxml:kxml2:2.3.0"
-    implementation "net.sf.opencsv:opencsv:2.3"
-    implementation("org.opendatakit:opendatakit-javarosa:2.15.1") {
+    implementation "net.sf.opencsv:opencsv:2.4"
+    implementation("org.opendatakit:opendatakit-javarosa:2.17.0-SNAPSHOT") {
         exclude group: 'joda-time'
         exclude group: 'org.slf4j'
     }
     implementation "com.karumi:dexter:5.0.0"
     implementation "org.osmdroid:osmdroid-android:5.6.4"
-    implementation("com.google.api-client:google-api-client-android:1.22.0") {
+    implementation("com.google.api-client:google-api-client-android:1.30.2") {
         exclude group: 'org.apache.httpcomponents'
         exclude group: 'com.google.guava'
     }
-    implementation("com.google.apis:google-api-services-drive:v3-rev64-1.22.0") {
+    implementation("com.google.apis:google-api-services-drive:v3-rev20190822-1.30.1") {
         exclude group: 'org.apache.httpcomponents'
         exclude group: 'com.google.guava'
     }
-    implementation("com.google.apis:google-api-services-sheets:v4-rev463-1.22.0") {
+    implementation("com.google.apis:google-api-services-sheets:v4-rev20190813-1.30.1") {
         exclude group: 'org.apache.httpcomponents'
         exclude group: 'com.google.guava'
-
     }
 
     implementation "com.jakewharton.timber:timber:4.7.1"
-    implementation "org.slf4j:slf4j-api:1.7.26"
+    implementation "org.slf4j:slf4j-api:2.0.0-alpha0"
     implementation "com.arcao:slf4j-timber:3.1@aar"
 
-    implementation "com.google.zxing:core:3.3.0"
-    implementation "com.journeyapps:zxing-android-embedded:3.5.0"
-    implementation "net.danlew:android.joda:2.9.9"
+    implementation "com.google.zxing:core:3.3.0" //updating to 3.4.0 requires minSdkVersion >=24 https://github.com/zxing/zxing/releases/tag/zxing-3.4.0
+    implementation "com.journeyapps:zxing-android-embedded:3.5.0" //updating would require minSdkVersion >=24
+    implementation "net.danlew:android.joda:2.10.2"
 
     // Real LeakCanary for debug builds only: notifications, analysis, etc
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${rootProject.leakyCanaryVersion}"
@@ -277,7 +275,7 @@ dependencies {
     odkCollectReleaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${rootProject.leakyCanaryVersion}"
 
     // Android Architecture Components:
-    implementation "androidx.lifecycle:lifecycle-extensions:2.1.0-alpha04"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0-beta01"
 
     // Dagger:
     implementation "com.google.dagger:dagger:${rootProject.daggerVersion}"
@@ -290,45 +288,38 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-android-processor:${rootProject.daggerVersion}"
 
     // RxJava 2:
-    implementation "io.reactivex.rxjava2:rxandroid:2.0.2"
-    implementation "io.reactivex.rxjava2:rxjava:2.1.10"
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
+    implementation "io.reactivex.rxjava2:rxjava:2.2.12"
 
     // Better "Subjects" for Rx:
-    implementation "com.jakewharton.rxrelay2:rxrelay:2.0.0"
-
-    // Android bindings for Rx:
-    implementation "com.jakewharton.rxbinding2:rxbinding:2.0.0"
-
-    // RxLifecycle (binds subscription cleanup to component lifecycle):
-    implementation "com.trello.rxlifecycle2:rxlifecycle:${rootProject.rxLifecycleVersion}"
-    implementation "com.trello.rxlifecycle2:rxlifecycle-android:${rootProject.rxLifecycleVersion}"
-    implementation "com.trello.rxlifecycle2:rxlifecycle-android-lifecycle:${rootProject.rxLifecycleVersion}"
+    implementation "com.jakewharton.rxrelay2:rxrelay:2.1.1"
 
     // WorkManager for specifying deferrable, asynchronous tasks
-    implementation("android.arch.work:work-runtime:${rootProject.workManagerVersion}") {
+    implementation("android.arch.work:work-runtime:1.0.1") {
         exclude group: 'com.google.guava', module: 'listenablefuture'
     }
     // Optional JobDispatcher support so devices with Play Services do better than AlarmManager
-    implementation("android.arch.work:work-firebase:${rootProject.workManagerVersion}") {
+    implementation("android.arch.work:work-firebase:1.0.0-alpha11") {
         exclude group: 'com.google.guava', module: 'listenablefuture'
     }
 
     // Makes binding to Views easy:
-    implementation "com.jakewharton:butterknife:10.0.0"
-    annotationProcessor "com.jakewharton:butterknife-compiler:10.0.0"
+    implementation "com.jakewharton:butterknife:10.1.0"
+    annotationProcessor "com.jakewharton:butterknife-compiler:10.1.0"
 
     // Annotations understood by FindBugs
     compileOnly 'com.google.code.findbugs:annotations:3.0.1'
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 
     // Used to generate documentation screenshots.
-    androidTestImplementation "tools.fastlane:screengrab:1.1.0"
+    androidTestImplementation "tools.fastlane:screengrab:1.1.0" //updating would require minSdkVersion >=18
 
     // Testing-only dependencies
-    testImplementation "junit:junit:4.12"
-    testImplementation "org.mockito:mockito-core:2.22.0"
-    testImplementation "org.robolectric:robolectric:4.0.1"
-    testImplementation "org.robolectric:shadows-multidex:4.0-beta-1"
+    testImplementation "junit:junit:4.13-beta-3"
+    testImplementation "org.mockito:mockito-core:3.0.0"
+
+    testImplementation "org.robolectric:robolectric:4.3"
+    testImplementation "org.robolectric:shadows-multidex:4.3"
     testImplementation "com.squareup.okhttp3:mockwebserver:${rootProject.okhttp3Version}"
     testImplementation "com.squareup.okhttp3:okhttp-tls:${rootProject.okhttp3Version}"
 
@@ -336,21 +327,23 @@ dependencies {
     testImplementation "org.powermock:powermock-module-junit4:2.0.2"
     testImplementation "org.powermock:powermock-api-mockito2:2.0.2"
 
-    androidTestImplementation "org.mockito:mockito-android:2.22.0"
-    androidTestImplementation("androidx.test:runner:1.2.0-alpha03") {
+    testImplementation "androidx.arch.core:core-testing:2.0.1"
+
+    androidTestImplementation "org.mockito:mockito-android:3.0.0"
+    androidTestImplementation("androidx.test:runner:1.3.0-alpha02") {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
 
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
-    androidTestImplementation("androidx.test.espresso:espresso-intents:3.2.0-alpha03") {
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0-alpha02'
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.3.0-alpha02") {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
 
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:${rootProject.okhttp3Version}"
 
-    androidTestImplementation "android.arch.work:work-testing:${rootProject.workManagerVersion}"
+    androidTestImplementation "android.arch.work:work-testing:1.0.1"
 }
 
 // Must be at bottom to prevent dependency collisions

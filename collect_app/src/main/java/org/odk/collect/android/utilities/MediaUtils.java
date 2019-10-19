@@ -111,7 +111,7 @@ public class MediaUtils {
                             projection, select, selectArgs, null);
             if (imageCursor.getCount() > 0) {
                 imageCursor.moveToFirst();
-                List<Uri> imagesToDelete = new ArrayList<Uri>();
+                List<Uri> imagesToDelete = new ArrayList<>();
                 do {
                     String id = imageCursor.getString(imageCursor
                             .getColumnIndex(Images.ImageColumns._ID));
@@ -156,7 +156,7 @@ public class MediaUtils {
                             projection, select, selectArgs, null);
             if (imageCursor.getCount() > 0) {
                 imageCursor.moveToFirst();
-                List<Uri> imagesToDelete = new ArrayList<Uri>();
+                List<Uri> imagesToDelete = new ArrayList<>();
                 do {
                     String id = imageCursor.getString(imageCursor
                             .getColumnIndex(Images.ImageColumns._ID));
@@ -226,7 +226,7 @@ public class MediaUtils {
                             projection, select, selectArgs, null);
             if (audioCursor.getCount() > 0) {
                 audioCursor.moveToFirst();
-                List<Uri> audioToDelete = new ArrayList<Uri>();
+                List<Uri> audioToDelete = new ArrayList<>();
                 do {
                     String id = audioCursor.getString(audioCursor
                             .getColumnIndex(Audio.AudioColumns._ID));
@@ -271,7 +271,7 @@ public class MediaUtils {
                             projection, select, selectArgs, null);
             if (audioCursor.getCount() > 0) {
                 audioCursor.moveToFirst();
-                List<Uri> audioToDelete = new ArrayList<Uri>();
+                List<Uri> audioToDelete = new ArrayList<>();
                 do {
                     String id = audioCursor.getString(audioCursor
                             .getColumnIndex(Audio.AudioColumns._ID));
@@ -341,7 +341,7 @@ public class MediaUtils {
                             projection, select, selectArgs, null);
             if (videoCursor.getCount() > 0) {
                 videoCursor.moveToFirst();
-                List<Uri> videoToDelete = new ArrayList<Uri>();
+                List<Uri> videoToDelete = new ArrayList<>();
                 do {
                     String id = videoCursor.getString(videoCursor
                             .getColumnIndex(Video.VideoColumns._ID));
@@ -386,7 +386,7 @@ public class MediaUtils {
                             projection, select, selectArgs, null);
             if (videoCursor.getCount() > 0) {
                 videoCursor.moveToFirst();
-                List<Uri> videoToDelete = new ArrayList<Uri>();
+                List<Uri> videoToDelete = new ArrayList<>();
                 do {
                     String id = videoCursor.getString(videoCursor
                             .getColumnIndex(Video.VideoColumns._ID));
@@ -488,7 +488,7 @@ public class MediaUtils {
                     return id.replaceFirst("raw:", "");
                 }
 
-                String[] contentUriPrefixesToTry = new String[]{
+                String[] contentUriPrefixesToTry = {
                         "content://downloads/public_downloads",
                         "content://downloads/my_downloads",
                         "content://downloads/all_downloads"
@@ -534,7 +534,7 @@ public class MediaUtils {
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[]{split[1]};
+                final String[] selectionArgs = {split[1]};
 
                 return getDataColumn(context, contentUri, selection,
                         selectionArgs);

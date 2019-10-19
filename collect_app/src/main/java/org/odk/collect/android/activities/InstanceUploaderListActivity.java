@@ -15,7 +15,6 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
-import androidx.lifecycle.LiveData;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -26,9 +25,6 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,11 +33,16 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
@@ -63,9 +64,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import androidx.work.State;
-import androidx.work.WorkManager;
-import androidx.work.WorkStatus;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -128,7 +126,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     SmsSubmissionManagerContract smsSubmissionManager;
 
     @Inject
-    Tracker tracker;
+    Analytics analytics;
 
     @Inject
     PermissionUtils permissionUtils;
@@ -270,12 +268,12 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
      * Updates whether an auto-send job is ongoing.
      */
     private void updateAutoSendStatus() {
-        LiveData<List<WorkStatus>> statuses = WorkManager.getInstance().getStatusesForUniqueWorkLiveData(AutoSendWorker.class.getName());
+        LiveData<List<WorkInfo>> statuses = WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(AutoSendWorker.class.getName());
 
         statuses.observe(this, workStatuses -> {
             if (workStatuses != null) {
-                for (WorkStatus status : workStatuses) {
-                    if (status.getState().equals(State.RUNNING)) {
+                for (WorkInfo status : workStatuses) {
+                    if (status.getState().equals(WorkInfo.State.RUNNING)) {
                         autoSendOngoing = true;
                         return;
                     }
@@ -522,10 +520,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
                         case 1: // show all
                             showAllMode = true;
                             updateAdapter();
-                            tracker.send(new HitBuilders.EventBuilder()
-                                            .setCategory("FilterSendForms")
-                                            .setAction("SentAndUnsent")
-                                            .build());
+                            analytics.logEvent("FilterSendForms", "SentAndUnsent");
                             break;
 
                         case 2:// do nothing

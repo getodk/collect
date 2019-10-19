@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets.base;
 
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.IFormElement;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
@@ -13,6 +14,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -30,6 +32,8 @@ public abstract class WidgetTest {
     @Before
     @OverridingMethodsMustInvokeSuper
     public void setUp() throws Exception {
+        when(formEntryPrompt.getIndex()).thenReturn(mock(FormIndex.class));
+        when(formEntryPrompt.getIndex().toString()).thenReturn("0, 0");
         when(formEntryPrompt.getFormElement()).thenReturn(formElement);
     }
 

@@ -45,11 +45,10 @@ limitations under the License.
 
         <TextView
             android:id="@+id/summary"
-            style="@style/TextAppearance.Collect.Body2"
+            style="@style/TextAppearance.Collect.Body2.MediumEmphasis"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
-            android:textColor="@color/color_on_surface_medium_emphasis"
             tools:text="@string/odk_website_summary" />
 
     </LinearLayout>

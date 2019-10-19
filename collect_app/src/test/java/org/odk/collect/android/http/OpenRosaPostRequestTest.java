@@ -2,10 +2,12 @@ package org.odk.collect.android.http;
 
 import androidx.annotation.NonNull;
 
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.odk.collect.android.http.openrosa.HttpPostResult;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.http.support.MockWebServerRule;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -30,7 +32,6 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isA;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -39,18 +40,16 @@ public abstract class OpenRosaPostRequestTest {
 
     protected abstract OpenRosaHttpInterface buildSubject(OpenRosaHttpInterface.FileToContentTypeMapper mapper);
 
-    private final MockWebServer mockWebServer = new MockWebServer();
+    @Rule
+    public MockWebServerRule mockWebServerRule = new MockWebServerRule();
+
+    private MockWebServer mockWebServer;
     private OpenRosaHttpInterface subject;
 
     @Before
     public void setup() throws Exception {
-        mockWebServer.start();
         subject = buildSubject(new XmlOrBlahContentTypeMapper());
-    }
-
-    @After
-    public void teardown() throws Exception {
-        mockWebServer.shutdown();
+        mockWebServer = mockWebServerRule.start();
     }
 
     @Test
@@ -65,21 +64,6 @@ public abstract class OpenRosaPostRequestTest {
         RecordedRequest request = mockWebServer.takeRequest();
         assertThat(request.getMethod(), equalTo("POST"));
         assertThat(request.getRequestUrl().uri(), equalTo(uri));
-    }
-
-    @Test
-    public void whenLastRequestSetCookies_nextRequestDoesNotSendThem() throws Exception {
-        mockWebServer.enqueue(new MockResponse().setResponseCode(201)
-                .addHeader("Set-Cookie", "blah=blah"));
-        mockWebServer.enqueue(new MockResponse());
-
-        URI uri = mockWebServer.url("").uri();
-        subject.uploadSubmissionFile(new ArrayList<>(), File.createTempFile("blah", "blah"), uri, null, 0);
-        subject.uploadSubmissionFile(new ArrayList<>(), File.createTempFile("blah", "blah"), uri, null, 0);
-
-        mockWebServer.takeRequest();
-        RecordedRequest request = mockWebServer.takeRequest();
-        assertThat(request.getHeader("Cookie"), isEmptyOrNullString());
     }
 
     @Test

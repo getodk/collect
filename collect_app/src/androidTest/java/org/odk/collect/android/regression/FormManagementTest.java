@@ -10,17 +10,15 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.espressoutils.FormEntry;
-import org.odk.collect.android.espressoutils.MainMenu;
-import org.odk.collect.android.espressoutils.Settings;
+import org.odk.collect.android.espressoutils.pages.FormEntryPage;
+import org.odk.collect.android.espressoutils.pages.GeneralSettingsPage;
+import org.odk.collect.android.espressoutils.pages.MainMenuPage;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 
-import static androidx.test.espresso.Espresso.pressBack;
-
 //Issue NODK-237
 @RunWith(AndroidJUnit4.class)
-public class FormManagementTest extends  BaseRegressionTest {
+public class FormManagementTest extends BaseRegressionTest {
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -37,54 +35,57 @@ public class FormManagementTest extends  BaseRegressionTest {
     @Test
     public void validationUponSwipe_ShouldDisplay() {
         //TestCase7,8
-        MainMenu.startBlankForm("OnePageFormValid");
-        FormEntry.putText("Bla");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsToastWithMessageDisplayes("Response length must be between 5 and 15", main);
-        MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings(main.getActivity());
-        Settings.openFormManagement();
-        Settings.openConstraintProcessing();
-        FormEntry.clickOnString(R.string.constraint_behavior_on_finalize);
-        pressBack();
-        pressBack();
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithMessageDisplayes("Response length must be between 5 and 15", main);
+        new MainMenuPage(main)
+                .startBlankForm("OnePageFormValid")
+                .inputText("Bla")
+                .swipeToNextQuestion()
+                .checkIsToastWithMessageDisplayed("Response length must be between 5 and 15")
+                .clickOptionsIcon()
+                .clickGeneralSettings()
+                .openFormManagement()
+                .openConstraintProcessing()
+                .clickOnString(R.string.constraint_behavior_on_finalize)
+                .pressBack(new GeneralSettingsPage(main))
+                .pressBack(new FormEntryPage("OnePageFormValid", main))
+                .swipeToNextQuestion()
+                .clickSaveAndExitWithError()
+                .checkIsToastWithMessageDisplayed("Response length must be between 5 and 15");
     }
 
     @Test
     public void guidanceForQuestion_ShouldDisplayAlways() {
         //TestCase10
-        MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings(main.getActivity());
-        Settings.openFormManagement();
-        Settings.openShowGuidanceForQuestions();
-        Settings.clickOnString(R.string.guidance_yes);
-        pressBack();
-        pressBack();
-        MainMenu.startBlankForm("hints textq");
-        FormEntry.checkIsTextDisplayed("1 very very very very very very very very very very long text");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickSaveAndExit();
+        new MainMenuPage(main)
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .openFormManagement()
+                .openShowGuidanceForQuestions()
+                .clickOnString(R.string.guidance_yes)
+                .pressBack(new GeneralSettingsPage(main))
+                .pressBack(new MainMenuPage(main))
+                .startBlankForm("hints textq")
+                .checkIsTextDisplayed("1 very very very very very very very very very very long text")
+                .swipeToNextQuestion()
+                .clickSaveAndExit();
     }
 
     @Test
     public void guidanceForQuestion_ShouldBeCollapsed() {
         //TestCase11
-        MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings(main.getActivity());
-        Settings.openFormManagement();
-        Settings.openShowGuidanceForQuestions();
-        Settings.clickOnString(R.string.guidance_yes_collapsed);
-        pressBack();
-        pressBack();
-        MainMenu.startBlankForm("hints textq");
-        FormEntry.checkIsIdDisplayed(R.id.help_icon);
-        FormEntry.clickOnText("Hint 1");
-        FormEntry.checkIsTextDisplayed("1 very very very very very very very very very very long text");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickSaveAndExit();
+        new MainMenuPage(main)
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .openFormManagement()
+                .openShowGuidanceForQuestions()
+                .clickOnString(R.string.guidance_yes_collapsed)
+                .pressBack(new GeneralSettingsPage(main))
+                .pressBack(new MainMenuPage(main))
+                .startBlankForm("hints textq")
+                .checkIsIdDisplayed(R.id.help_icon)
+                .clickOnText("Hint 1")
+                .checkIsTextDisplayed("1 very very very very very very very very very very long text")
+                .swipeToNextQuestion()
+                .clickSaveAndExit();
     }
 
 }

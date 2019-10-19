@@ -5,9 +5,7 @@
   <string name="add_another_repeat">I-dagdag ang \"%s\" sa pangkat?</string>
   <string name="add_repeat">Magdagdag ng bagong \"%s\" sa pangkat?</string>
   <string name="add_repeat_no">Huwag Mag-dagdag</string>
-  <string name="audio_file_error">Walang talaksang-tunog na tinukoy.</string>
-  <string name="audio_file_invalid">Talaksa: %s ay hindi wastong talaksang-tunog.</string>
-  <string name="cancel">Urong</string>
+    <string name="cancel">Urong</string>
   <string name="cancel_loading_form">Urong</string>
   <string name="cancel_location">Urong</string>
   <string name="capture_audio">Mag-tala ng Tunog</string>
@@ -123,8 +121,7 @@
   <string name="access_error">May mali habang sa pag-access ng %s: </string>
   <string name="manifest_tag_error">Manifest entry %s ay kulang ng isa o higit pang mga tags: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Kinukuha ang talaksang media : %2$s of %3$s</string>
-  <string name="file_fetch_failed">Mali: %2$s (%3$s) sa %1$s</string>
-  <string name="fetching_manifest">%s. Kinukuha ang manifest </string>
+    <string name="fetching_manifest">%s. Kinukuha ang manifest </string>
   <string name="success">Tagumpay</string>
   <string name="choose_sound">Pumili ng Tunog</string>
   <string name="choose_video">Pumili ng Bidyo</string>

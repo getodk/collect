@@ -51,6 +51,7 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.PreferenceSaver;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.Transport;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -65,7 +66,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import timber.log.Timber;
 
@@ -124,7 +124,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             public void onClick(View v) {
                 if (Collect.allowClick(getClass().getName())) {
                     Intent i = new Intent(getApplicationContext(),
-                            FormChooserList.class);
+                            FormChooserListActivity.class);
                     startActivity(i);
                 }
             }
@@ -567,24 +567,17 @@ public class MainMenuActivity extends CollectAbstractActivity {
         ObjectInputStream input = null;
         try {
             input = new ObjectInputStream(new FileInputStream(src));
-            GeneralSharedPreferences.getInstance().clear();
 
             // first object is preferences
-            Map<String, ?> entries = (Map<String, ?>) input.readObject();
+            Map<String, Object> entries = (Map<String, Object>) input.readObject();
 
             AutoSendPreferenceMigrator.migrate(entries);
-
-            for (Entry<String, ?> entry : entries.entrySet()) {
-                GeneralSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
-            }
-
-            AdminSharedPreferences.getInstance().clear();
+            PreferenceSaver.saveGeneralPrefs(GeneralSharedPreferences.getInstance(), entries);
 
             // second object is admin options
-            Map<String, ?> adminEntries = (Map<String, ?>) input.readObject();
-            for (Entry<String, ?> entry : adminEntries.entrySet()) {
-                AdminSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
-            }
+            Map<String, Object> adminEntries = (Map<String, Object>) input.readObject();
+            PreferenceSaver.saveAdminPrefs(AdminSharedPreferences.getInstance(), adminEntries);
+
             Collect.getInstance().initializeJavaRosa();
             res = true;
         } catch (IOException | ClassNotFoundException e) {
@@ -608,7 +601,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         private final WeakReference<MainMenuActivity> target;
 
         IncomingHandler(MainMenuActivity target) {
-            this.target = new WeakReference<MainMenuActivity>(target);
+            this.target = new WeakReference<>(target);
         }
 
         @Override

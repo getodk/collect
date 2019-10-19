@@ -149,19 +149,23 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
     private void setImageFromStatus(ImageView imageView) {
         String formStatus = getCursor().getString(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.STATUS));
 
+        int imageResourceId = getFormStateImageResourceIdForStatus(formStatus);
+        imageView.setImageResource(imageResourceId);
+        imageView.setTag(imageResourceId);
+    }
+
+    public static int getFormStateImageResourceIdForStatus(String formStatus) {
         switch (formStatus) {
             case InstanceProviderAPI.STATUS_INCOMPLETE:
-                imageView.setImageResource(R.drawable.form_state_saved);
-                break;
+                return R.drawable.form_state_saved;
             case InstanceProviderAPI.STATUS_COMPLETE:
-                imageView.setImageResource(R.drawable.form_state_finalized);
-                break;
+                return R.drawable.form_state_finalized;
             case InstanceProviderAPI.STATUS_SUBMITTED:
-                imageView.setImageResource(R.drawable.form_state_submitted);
-                break;
+                return R.drawable.form_state_submitted;
             case InstanceProviderAPI.STATUS_SUBMISSION_FAILED:
-                imageView.setImageResource(R.drawable.form_state_submission_failed);
-                break;
+                return R.drawable.form_state_submission_failed;
         }
+
+        return -1;
     }
 }

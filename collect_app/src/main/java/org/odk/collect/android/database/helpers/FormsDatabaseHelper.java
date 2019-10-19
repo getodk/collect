@@ -16,12 +16,16 @@
 
 package org.odk.collect.android.database.helpers;
 
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
+import org.odk.collect.android.utilities.SQLiteUtils;
+
+import java.io.File;
 
 import timber.log.Timber;
 
@@ -48,13 +52,23 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SUB
  */
 public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "forms.db";
+    public static final String DATABASE_PATH = Collect.METADATA_PATH + File.separator + DATABASE_NAME;
     public static final String FORMS_TABLE_NAME = "forms";
 
-    private static final int DATABASE_VERSION = 7;
+    static final int DATABASE_VERSION = 7;
+
+    private static final String[] COLUMN_NAMES_V7 = {_ID, DISPLAY_NAME, DESCRIPTION,
+            JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
+            SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
+            LAST_DETECTED_FORM_VERSION_HASH};
+
+    static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V7;
 
     // These exist in database versions 2 and 3, but not in 4...
     private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
     private static final String MODEL_VERSION = "modelVersion";
+
+    private static boolean isDatabaseBeingMigrated;
 
     public FormsDatabaseHelper() {
         super(new DatabaseContext(Collect.METADATA_PATH), DATABASE_NAME, null, DATABASE_VERSION);
@@ -68,38 +82,50 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     @SuppressWarnings({"checkstyle:FallThrough"})
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
+        try {
+            Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
 
-        switch (oldVersion) {
-            case 1:
-                upgradeToVersion2(db);
-            case 2:
-            case 3:
-                upgradeToVersion4(db, oldVersion);
-            case 4:
-                upgradeToVersion5(db);
-            case 5:
-                upgradeToVersion6(db);
-            case 6:
-                upgradeToVersion7(db);
-                break;
-            default:
-                Timber.i("Unknown version %s", oldVersion);
+            switch (oldVersion) {
+                case 1:
+                    upgradeToVersion2(db);
+                case 2:
+                case 3:
+                    upgradeToVersion4(db, oldVersion);
+                case 4:
+                    upgradeToVersion5(db);
+                case 5:
+                    upgradeToVersion6(db);
+                case 6:
+                    upgradeToVersion7(db);
+                    break;
+                default:
+                    Timber.i("Unknown version %s", oldVersion);
+            }
+
+            Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
+            isDatabaseBeingMigrated = false;
+        } catch (SQLException e) {
+            isDatabaseBeingMigrated = false;
+            throw e;
         }
-
-        Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
     }
 
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        CustomSQLiteQueryBuilder
-                .begin(db)
-                .dropIfExists(FORMS_TABLE_NAME)
-                .end();
+        try {
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .dropIfExists(FORMS_TABLE_NAME)
+                    .end();
 
-        createFormsTableV7(db);
+            createFormsTableV7(db);
 
-        Timber.i("Downgrading database from %d to %d completed with success.", oldVersion, newVersion);
+            Timber.i("Downgrading database from %d to %d completed with success.", oldVersion, newVersion);
+            isDatabaseBeingMigrated = false;
+        } catch (SQLException e) {
+            isDatabaseBeingMigrated = false;
+            throw e;
+        }
     }
 
     private void upgradeToVersion2(SQLiteDatabase db) {
@@ -228,36 +254,38 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void upgradeToVersion5(SQLiteDatabase db) {
-        CustomSQLiteQueryBuilder
-                .begin(db)
-                .alter()
-                .table(FORMS_TABLE_NAME)
-                .addColumn(AUTO_SEND, "text")
-                .end();
+        if (!SQLiteUtils.doesColumnExist(db, FORMS_TABLE_NAME, AUTO_SEND)) {
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .alter()
+                    .table(FORMS_TABLE_NAME)
+                    .addColumn(AUTO_SEND, "text")
+                    .end();
+        }
 
-        CustomSQLiteQueryBuilder
-                .begin(db)
-                .alter()
-                .table(FORMS_TABLE_NAME)
-                .addColumn(AUTO_DELETE, "text")
-                .end();
+        if (!SQLiteUtils.doesColumnExist(db, FORMS_TABLE_NAME, AUTO_DELETE)) {
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .alter()
+                    .table(FORMS_TABLE_NAME)
+                    .addColumn(AUTO_DELETE, "text")
+                    .end();
+        }
     }
 
     private void upgradeToVersion6(SQLiteDatabase db) {
-        CustomSQLiteQueryBuilder
-                .begin(db)
-                .alter()
-                .table(FORMS_TABLE_NAME)
-                .addColumn(LAST_DETECTED_FORM_VERSION_HASH, "text")
-                .end();
+        if (!SQLiteUtils.doesColumnExist(db, FORMS_TABLE_NAME, LAST_DETECTED_FORM_VERSION_HASH)) {
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .alter()
+                    .table(FORMS_TABLE_NAME)
+                    .addColumn(LAST_DETECTED_FORM_VERSION_HASH, "text")
+                    .end();
+        }
     }
 
     private void upgradeToVersion7(SQLiteDatabase db) {
         String temporaryTable = FORMS_TABLE_NAME + "_tmp";
-        String[] formsTableColumnsInV7 = new String[] {_ID, DISPLAY_NAME, DESCRIPTION,
-                JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
-                SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
-                LAST_DETECTED_FORM_VERSION_HASH};
 
             CustomSQLiteQueryBuilder
                     .begin(db)
@@ -270,9 +298,9 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
             CustomSQLiteQueryBuilder
                     .begin(db)
                     .insertInto(FORMS_TABLE_NAME)
-                    .columnsForInsert(formsTableColumnsInV7)
+                    .columnsForInsert(COLUMN_NAMES_V7)
                     .select()
-                    .columnsForSelect(formsTableColumnsInV7)
+                    .columnsForSelect(COLUMN_NAMES_V7)
                     .from(temporaryTable)
                     .end();
 
@@ -321,5 +349,25 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                 + AUTO_SEND + " text, "
                 + AUTO_DELETE + " text, "
                 + LAST_DETECTED_FORM_VERSION_HASH + " text);");
+    }
+
+    public static void databaseMigrationStarted() {
+        isDatabaseBeingMigrated = true;
+    }
+
+    public static boolean isDatabaseBeingMigrated() {
+        return isDatabaseBeingMigrated;
+    }
+
+    public static boolean databaseNeedsUpgrade() {
+        boolean isDatabaseHelperOutOfDate = false;
+        try {
+            SQLiteDatabase db = SQLiteDatabase.openDatabase(FormsDatabaseHelper.DATABASE_PATH, null, SQLiteDatabase.OPEN_READONLY);
+            isDatabaseHelperOutOfDate = FormsDatabaseHelper.DATABASE_VERSION != db.getVersion();
+            db.close();
+        } catch (SQLException e) {
+            Timber.i(e);
+        }
+        return isDatabaseHelperOutOfDate;
     }
 }
