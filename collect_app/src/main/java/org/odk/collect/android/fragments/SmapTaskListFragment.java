@@ -58,6 +58,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.ListFragment;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
@@ -257,10 +258,16 @@ public class SmapTaskListFragment extends ListFragment
                 mAdapter.setData(null);
             }
         }
-        TabLayout tabLayout = (TabLayout) ((SmapMain) getActivity()).findViewById(R.id.tabs);
-        TabLayout.Tab tab = tabLayout.getTabAt(1);
-        ;
-        tab.setText(getString(R.string.smap_tasks) + " (" + count + ")");
+        FragmentActivity activity = (SmapMain) getActivity();
+        if(activity != null) {
+            TabLayout tabLayout = (TabLayout) (activity).findViewById(R.id.tabs);
+            if(tabLayout != null) {
+                TabLayout.Tab tab = tabLayout.getTabAt(1);
+                if(tab != null) {
+                    tab.setText(getString(R.string.smap_tasks) + "(" + count + ")");
+                }
+            }
+        }
     }
 
 

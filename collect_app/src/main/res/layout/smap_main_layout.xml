@@ -45,6 +45,7 @@ limitations under the License.
             android:layout_height="48dp"
             app:tabTextAppearance="@style/TabText"
             app:tabIndicatorHeight="5dp"
+            app:tabMode="fixed"
             />
 
         <androidx.viewpager.widget.ViewPager

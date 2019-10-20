@@ -64,7 +64,7 @@
     </style>
 
     <style name="TabText">
-        <item name="android:textSize">21sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 

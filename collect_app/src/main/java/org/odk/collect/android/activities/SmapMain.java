@@ -79,7 +79,6 @@ import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Utilities;
-import org.odk.collect.android.views.SlidingTabLayout;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -95,7 +94,6 @@ import java.util.Set;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import timber.log.Timber;
 

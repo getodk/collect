@@ -629,6 +629,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
   	  			ta.assignment.dbId = (int) t.id;
   	  			ta.assignment.assignment_status = t.taskStatus;
                 ta.assignment.task_comment = t.taskComment;
+                ta.assignment.uuid = t.uuid;
 
 	            updateResponse.taskAssignments.add(ta);
   	  		}
@@ -651,6 +652,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                     tci.lon = t.actLon;
                     tci.ident = t.ident;
                     tci.uuid = t.uuid;
+                    tci.assId = t.assId;
 
                     updateResponse.taskCompletionInfo.add(tci);
                 }

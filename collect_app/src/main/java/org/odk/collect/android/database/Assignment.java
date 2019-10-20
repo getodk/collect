@@ -7,4 +7,5 @@ public class Assignment {
 	public String assignment_status;    // task_status
     public String task_comment;    // task_status
 	public int dbId;
+	public String uuid;             // The instance id of the submitted record associated with this task
 }
