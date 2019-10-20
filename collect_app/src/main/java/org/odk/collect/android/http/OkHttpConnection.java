@@ -1,5 +1,7 @@
 package org.odk.collect.android.http;
 
+import android.util.Base64;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -198,15 +200,12 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
     @NonNull
     private HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials,
-                                              String status,         // smap
-                                              String location_trigger,   // smap
-                                              String survey_notes,      // smap
-                                              String assignment_id      // smap
+                                              String status         // smap
                                               ) throws Exception {
         setCredentialsIfNeeded(credentials, uri.getScheme());
         HttpPostResult postResult;
         Request request = buildPostRequest(uri, multipartBody,
-                status, location_trigger, survey_notes, assignment_id);     // smap
+                status);     // smap
 
         Response response = httpClient.newCall(request).execute();
 
@@ -275,8 +274,15 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                 }
             }
 
+
+            if(survey_notes != null) {      // Start Smap
+                multipartBuilder.addPart(MultipartBody.Part.createFormData("survey_notes", survey_notes));
+                multipartBuilder.addPart(MultipartBody.Part.createFormData("location_trigger", location_trigger));
+                multipartBuilder.addPart(MultipartBody.Part.createFormData("assignment_id", assignment_id));
+            }
+
             multipartBody = multipartBuilder.build();
-            postResult = executePostRequest(uri, credentials, status, location_trigger, survey_notes, assignment_id);
+            postResult = executePostRequest(uri, credentials, status);
             multipartBody = null;
 
             if (postResult.getResponseCode() != HttpURLConnection.HTTP_CREATED &&
@@ -343,10 +349,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     }
 
     private Request buildPostRequest(@NonNull URI uri, RequestBody body,
-                                     String status,             // smap
-                                     String location_trigger,   // smap
-                                     String survey_notes,       // smap
-                                     String assignment_id       // smap
+                                     String status             // smap
                                      ) throws MalformedURLException {
         /* smap
         return new Request.Builder()
@@ -369,15 +372,6 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                 .addHeader(DATE_HEADER, getHeaderDate());
         if(status != null) {
             b.addHeader("form_status", status);
-        }
-        if(location_trigger != null) {
-            b.addHeader("location_trigger", location_trigger);
-        }
-        if(location_trigger != null) {
-            b.addHeader("survey_notes", survey_notes);
-        }
-        if(assignment_id != null) {
-            b.addHeader("assignment_id", assignment_id);
         }
         return b.post(body).build();
     }
