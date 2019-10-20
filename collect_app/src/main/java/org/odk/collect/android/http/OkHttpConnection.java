@@ -275,11 +275,17 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
             }
 
 
-            if(survey_notes != null) {      // Start Smap
+            // Start Smap
+            if(survey_notes != null) {
                 multipartBuilder.addPart(MultipartBody.Part.createFormData("survey_notes", survey_notes));
+            }
+            if(location_trigger != null) {
                 multipartBuilder.addPart(MultipartBody.Part.createFormData("location_trigger", location_trigger));
+            }
+            if(assignment_id != null) {
                 multipartBuilder.addPart(MultipartBody.Part.createFormData("assignment_id", assignment_id));
             }
+            // end smap
 
             multipartBody = multipartBuilder.build();
             postResult = executePostRequest(uri, credentials, status);
