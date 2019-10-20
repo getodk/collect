@@ -35,7 +35,6 @@
                     <ImageView
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:src="@drawable/ic_angry_face"
                         android:visibility="gone"
                         />
                     <TextView
@@ -63,7 +62,6 @@
                     <ImageView
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:src="@drawable/ic_sad_face"
                         android:visibility="gone"
                         />
 
@@ -93,7 +91,6 @@
                     <ImageView
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:src="@drawable/ic_neutral_face"
                         android:visibility="gone"
                         />
                     <TextView
@@ -120,7 +117,6 @@
                     <ImageView
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:src="@drawable/ic_smile_face"
                         android:visibility="gone"
                         />
                     <TextView
@@ -148,7 +144,6 @@
                     <ImageView
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:src="@drawable/ic_very_happy"
                         android:visibility="gone" />
                     <TextView
                         android:layout_width="wrap_content"
