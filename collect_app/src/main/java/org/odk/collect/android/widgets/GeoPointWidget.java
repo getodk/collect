@@ -18,6 +18,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -196,13 +197,12 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         stringAnswer = (String) answer;
-
         if (stringAnswer != null && !stringAnswer.isEmpty()) {
             String[] parts = stringAnswer.split(" ");
             answerDisplay.setText(getContext().getString(
                 R.string.gps_result,
-                formatGps(Double.parseDouble(parts[0]), "lat"),
-                formatGps(Double.parseDouble(parts[1]), "lon"),
+                parts[0],
+                parts[1],
                 truncateDouble(parts[2]),
                 truncateDouble(parts[3])
             ));
