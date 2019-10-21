@@ -69,7 +69,7 @@ public class GeoTraceWidget extends BaseGeoWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String s = getStringAnswer();
+        String s = answerDisplay.getText().toString();
         return !s.equals("")
                 ? new StringData(s)
                 : null;

@@ -80,8 +80,4 @@ public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget 
 
         updateButtonLabelsAndVisibility(dataAvailable);
     }
-
-    protected String getStringAnswer() {
-        return answerDisplay.getText().toString();
-    }
 }
