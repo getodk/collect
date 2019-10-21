@@ -67,7 +67,7 @@ public class GeoShapeWidget extends BaseGeoWidget implements BinaryWidget {
         ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOSHAPE_CAPTURE);
     }
 
-    private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
+    protected void updateButtonLabelsAndVisibility(boolean dataAvailable) {
         if (dataAvailable) {
             startGeoButton.setText(
                     getContext().getString(R.string.geoshape_view_change_location));
@@ -91,12 +91,5 @@ public class GeoShapeWidget extends BaseGeoWidget implements BinaryWidget {
         return !s.isEmpty()
                 ? new StringData(s)
                 : null;
-    }
-
-    @Override
-    public void clearAnswer() {
-        answerDisplay.setText(null);
-        updateButtonLabelsAndVisibility(false);
-        widgetValueChanged();
     }
 }

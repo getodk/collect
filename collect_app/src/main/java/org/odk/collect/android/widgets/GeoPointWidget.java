@@ -102,7 +102,7 @@ public class GeoPointWidget extends BaseGeoWidget implements BinaryWidget {
         updateButtonLabelsAndVisibility(dataAvailable);
     }
 
-    private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
+    protected void updateButtonLabelsAndVisibility(boolean dataAvailable) {
         if (useMap) {
             if (readOnly) {
                 startGeoButton.setText(R.string.geopoint_view_read_only);
@@ -121,9 +121,7 @@ public class GeoPointWidget extends BaseGeoWidget implements BinaryWidget {
     @Override
     public void clearAnswer() {
         stringAnswer = null;
-        answerDisplay.setText(null);
-        updateButtonLabelsAndVisibility(false);
-        widgetValueChanged();
+        super.clearAnswer();
     }
 
     @Override

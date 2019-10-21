@@ -19,6 +19,13 @@ public abstract class BaseGeoWidget extends QuestionWidget implements BinaryWidg
     }
 
     @Override
+    public void clearAnswer() {
+        answerDisplay.setText(null);
+        updateButtonLabelsAndVisibility(false);
+        widgetValueChanged();
+    }
+
+    @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         startGeoButton.setOnLongClickListener(l);
         answerDisplay.setOnLongClickListener(l);
@@ -39,4 +46,6 @@ public abstract class BaseGeoWidget extends QuestionWidget implements BinaryWidg
     }
 
     protected abstract void startGeoActivity();
+
+    protected abstract void updateButtonLabelsAndVisibility(boolean dataAvailable);
 }

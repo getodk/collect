@@ -73,7 +73,7 @@ public class GeoTraceWidget extends BaseGeoWidget implements BinaryWidget {
         }
     }
 
-    private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
+    protected void updateButtonLabelsAndVisibility(boolean dataAvailable) {
         if (dataAvailable) {
             startGeoButton.setText(R.string.geotrace_view_change_location);
         } else {
@@ -95,12 +95,5 @@ public class GeoTraceWidget extends BaseGeoWidget implements BinaryWidget {
         return !s.equals("")
                 ? new StringData(s)
                 : null;
-    }
-
-    @Override
-    public void clearAnswer() {
-        answerDisplay.setText(null);
-        updateButtonLabelsAndVisibility(false);
-        widgetValueChanged();
     }
 }
