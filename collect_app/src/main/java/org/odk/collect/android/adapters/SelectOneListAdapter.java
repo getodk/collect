@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatRadioButton;
 import androidx.core.content.ContextCompat;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,9 +50,11 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(noButtonsMode
-                ? LayoutInflater.from(parent.getContext()).inflate(R.layout.select_item_layout, null)
-                : LayoutInflater.from(parent.getContext()).inflate(R.layout.quick_select_layout, null));
+        if (noButtonsMode) {
+            return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.select_item_layout, null));
+        } else {
+            return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.quick_select_layout, null));
+        }
     }
 
     @Override
@@ -101,12 +104,17 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
         adjustButton(radioButton, index);
         radioButton.setOnClickListener(this);
         radioButton.setOnCheckedChangeListener(this);
+        radioButton.setPadding(0, pxFromDp(widget.getContext(), 16), 0, pxFromDp(widget.getContext(), 16));
 
         if (filteredItems.get(index).getValue().equals(selectedValue)) {
             radioButton.setChecked(true);
         }
 
         return radioButton;
+    }
+
+    private static int pxFromDp(final Context context, final int dp) {
+        return (int) (dp * context.getResources().getDisplayMetrics().density);
     }
 
     @Override
