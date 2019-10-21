@@ -18,6 +18,12 @@ public abstract class BaseGeoWidget extends QuestionWidget implements BinaryWidg
         answerDisplay = getCenteredAnswerTextView();
     }
 
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        startGeoButton.setOnLongClickListener(l);
+        answerDisplay.setOnLongClickListener(l);
+    }
+
     public void onButtonClick(int buttonId) {
         getPermissionUtils().requestLocationPermissions((Activity) getContext(), new PermissionListener() {
             @Override

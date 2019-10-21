@@ -103,10 +103,4 @@ public class GeoTraceWidget extends BaseGeoWidget implements BinaryWidget {
         updateButtonLabelsAndVisibility(false);
         widgetValueChanged();
     }
-
-    @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        startGeoButton.setOnLongClickListener(l);
-        answerDisplay.setOnLongClickListener(l);
-    }
 }

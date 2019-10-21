@@ -209,12 +209,6 @@ public class GeoPointWidget extends BaseGeoWidget implements BinaryWidget {
     }
 
     @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        startGeoButton.setOnLongClickListener(l);
-        answerDisplay.setOnLongClickListener(l);
-    }
-
-    @Override
     public void cancelLongPress() {
         super.cancelLongPress();
         startGeoButton.cancelLongPress();
