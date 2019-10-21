@@ -62,8 +62,7 @@ public class GeoShapeWidget extends BaseGeoWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String s = answerDisplay.getText().toString();
-
+        String s = getStringAnswer();
         return !s.isEmpty()
                 ? new StringData(s)
                 : null;

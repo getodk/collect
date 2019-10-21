@@ -95,7 +95,7 @@ public class GeoPointWidget extends BaseGeoWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String s = answerDisplay.getText().toString();
+        String s = getStringAnswer();
         if (s.isEmpty()) {
             return null;
         } else {
@@ -138,7 +138,7 @@ public class GeoPointWidget extends BaseGeoWidget {
         Intent intent = new Intent(
             context, useMap ? GeoPointMapActivity.class : GeoPointActivity.class);
 
-        String stringAnswer = answerDisplay.getText().toString();
+        String stringAnswer = getStringAnswer();
         if (!stringAnswer.isEmpty()) {
             intent.putExtra(LOCATION, GeoWidgetUtilities.getLocationParamsFromStringAnswer(stringAnswer));
         }
