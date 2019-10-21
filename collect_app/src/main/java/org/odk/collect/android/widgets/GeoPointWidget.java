@@ -54,8 +54,6 @@ public class GeoPointWidget extends BaseGeoWidget {
     private final double accuracyThreshold;
     private boolean draggable = true;
 
-    private String stringAnswer;
-
     public GeoPointWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
 
@@ -96,18 +94,13 @@ public class GeoPointWidget extends BaseGeoWidget {
     }
 
     @Override
-    public void clearAnswer() {
-        stringAnswer = null;
-        super.clearAnswer();
-    }
-
-    @Override
     public IAnswerData getAnswer() {
-        if (stringAnswer == null || stringAnswer.isEmpty()) {
+        String s = answerDisplay.getText().toString();
+        if (s.isEmpty()) {
             return null;
         } else {
             try {
-                return new GeoPointData(GeoWidgetUtilities.getLocationParamsFromStringAnswer(stringAnswer));
+                return new GeoPointData(GeoWidgetUtilities.getLocationParamsFromStringAnswer(s));
             } catch (Exception numberFormatException) {
                 return null;
             }
@@ -121,10 +114,10 @@ public class GeoPointWidget extends BaseGeoWidget {
 
     @Override
     public void setBinaryData(Object answer) {
-        stringAnswer = (String) answer;
+        String answerText = answer.toString();
 
-        if (stringAnswer != null && !stringAnswer.isEmpty()) {
-            String[] parts = stringAnswer.split(" ");
+        if (!answerText.isEmpty()) {
+            String[] parts = answerText.split(" ");
             answerDisplay.setText(getContext().getString(
                 R.string.gps_result,
                 GeoWidgetUtilities.formatGps(getContext(), Double.parseDouble(parts[0]), "lat"),
@@ -145,7 +138,8 @@ public class GeoPointWidget extends BaseGeoWidget {
         Intent intent = new Intent(
             context, useMap ? GeoPointMapActivity.class : GeoPointActivity.class);
 
-        if (stringAnswer != null && !stringAnswer.isEmpty()) {
+        String stringAnswer = answerDisplay.getText().toString();
+        if (!stringAnswer.isEmpty()) {
             intent.putExtra(LOCATION, GeoWidgetUtilities.getLocationParamsFromStringAnswer(stringAnswer));
         }
         intent.putExtra(READ_ONLY, readOnly);
