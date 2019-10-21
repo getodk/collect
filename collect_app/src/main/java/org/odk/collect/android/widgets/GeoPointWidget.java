@@ -47,7 +47,7 @@ import static org.odk.collect.android.utilities.WidgetAppearanceUtils.hasAppeara
  * @author Jon Nordling (jonnordling@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
+public class GeoPointWidget extends BaseGeoWidget implements BinaryWidget {
     public static final String LOCATION = "gp";
     public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
     public static final String READ_ONLY = "readOnly";

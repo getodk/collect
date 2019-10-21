@@ -37,7 +37,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * @author Jon Nordling (jonnordling@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
+public class GeoShapeWidget extends BaseGeoWidget implements BinaryWidget {
 
     public static final String SHAPE_LOCATION = "gp";
     private final Button createShapeButton;

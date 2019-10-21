@@ -41,7 +41,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  */
 
 @SuppressLint("ViewConstructor")
-public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
+public class GeoTraceWidget extends BaseGeoWidget implements BinaryWidget {
 
     private final Button createTraceButton;
     private final TextView answerDisplay;
