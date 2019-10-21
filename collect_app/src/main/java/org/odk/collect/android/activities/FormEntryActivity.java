@@ -1058,6 +1058,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             MenuItem backgroundLocation = menu.findItem(R.id.track_location);
             backgroundLocation.setVisible(true);
             backgroundLocation.setChecked(GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));
+
+            // start smap
+            boolean disablePrevent = PreferenceManager        // smap
+                    .getDefaultSharedPreferences(this)
+                    .getBoolean(GeneralKeys.KEY_SMAP_PREVENT_DISABLE_TRACK, false);
+            if(disablePrevent) {
+                backgroundLocation.setEnabled(false);
+            }
+            // end smap
+
         }
 
         return true;

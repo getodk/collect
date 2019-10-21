@@ -114,4 +114,5 @@
     <string name="smap_continue_tracking">Exit has been disabled.  To stop tracking of the phone it should be turned off.</string>
     <string name="smap_warning">Warning</string>
     <string name="smap_time_difference">The server has a time difference of %s minutes compared to this device</string>
+    <string name="smap_disable_prevent_background_location_enabled">This form tracks your location.</string>
 </resources>

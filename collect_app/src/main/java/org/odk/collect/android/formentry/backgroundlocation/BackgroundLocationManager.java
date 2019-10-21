@@ -1,16 +1,19 @@
 package org.odk.collect.android.formentry.backgroundlocation;
 
 import android.location.Location;
+import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.location.LocationListener;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.logic.AuditConfig;
 import org.odk.collect.android.logic.AuditEvent;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointAction;
+import org.odk.collect.android.preferences.GeneralKeys;
 
 /**
  * Manages background location for the location audit logging and odk:setgeopoint action features.
@@ -149,7 +152,15 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
                     return BackgroundLocationMessage.PROVIDERS_DISABLED;
                 }
 
-                return BackgroundLocationMessage.COLLECTING_LOCATION;
+                boolean disablePrevent = PreferenceManager        // smap
+                        .getDefaultSharedPreferences(Collect.getInstance())
+                        .getBoolean(GeneralKeys.KEY_SMAP_PREVENT_DISABLE_TRACK, false);
+                if(disablePrevent) {
+                    return BackgroundLocationMessage.DISABLE_PREVENT_COLLECTING_LOCATION;
+                } else {
+                    return BackgroundLocationMessage.COLLECTING_LOCATION;   // odk
+                }
+                // end smap
             default:
                 return null;
         }
@@ -287,6 +298,7 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
         LOCATION_PREF_DISABLED(R.string.background_location_disabled, true),
         PLAY_SERVICES_UNAVAILABLE(R.string.google_play_services_not_available, false),
         COLLECTING_LOCATION(R.string.background_location_enabled, true),
+        DISABLE_PREVENT_COLLECTING_LOCATION(R.string.smap_disable_prevent_background_location_enabled, true),
         PROVIDERS_DISABLED(-1, false);
 
         private int messageTextResourceId;
