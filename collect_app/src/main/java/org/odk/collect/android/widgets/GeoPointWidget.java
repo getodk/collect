@@ -162,6 +162,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         stringAnswer = (String) answer;
+
         if (stringAnswer != null && !stringAnswer.isEmpty()) {
             String[] parts = stringAnswer.split(" ");
             answerDisplay.setText(getContext().getString(
