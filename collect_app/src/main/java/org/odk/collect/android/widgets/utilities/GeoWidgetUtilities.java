@@ -13,9 +13,7 @@ public class GeoWidgetUtilities {
 
     public static String formatGps(Context context, double coordinates, String type) {
         String location = Double.toString(coordinates);
-        String degreeSign = "°";
-        String degree = location.substring(0, location.indexOf('.'))
-                + degreeSign;
+        String degree = location.substring(0, location.indexOf('.')) + "°";
         location = "0." + location.substring(location.indexOf('.') + 1);
         double temp = Double.valueOf(location) * 60;
         location = Double.toString(temp);
