@@ -107,15 +107,7 @@ public class GeoPointWidget extends BaseGeoWidget {
             return null;
         } else {
             try {
-                // segment lat and lon
-                String[] sa = stringAnswer.split(" ");
-                double[] gp = new double[4];
-                gp[0] = Double.valueOf(sa[0]);
-                gp[1] = Double.valueOf(sa[1]);
-                gp[2] = Double.valueOf(sa[2]);
-                gp[3] = Double.valueOf(sa[3]);
-
-                return new GeoPointData(gp);
+                return new GeoPointData(GeoWidgetUtilities.getLocationParamsFromStringAnswer(stringAnswer));
             } catch (Exception numberFormatException) {
                 return null;
             }
@@ -154,13 +146,7 @@ public class GeoPointWidget extends BaseGeoWidget {
             context, useMap ? GeoPointMapActivity.class : GeoPointActivity.class);
 
         if (stringAnswer != null && !stringAnswer.isEmpty()) {
-            String[] sa = stringAnswer.split(" ");
-            double[] gp = new double[4];
-            gp[0] = Double.valueOf(sa[0]);
-            gp[1] = Double.valueOf(sa[1]);
-            gp[2] = Double.valueOf(sa[2]);
-            gp[3] = Double.valueOf(sa[3]);
-            intent.putExtra(LOCATION, gp);
+            intent.putExtra(LOCATION, GeoWidgetUtilities.getLocationParamsFromStringAnswer(stringAnswer));
         }
         intent.putExtra(READ_ONLY, readOnly);
         intent.putExtra(DRAGGABLE_ONLY, draggable);

@@ -42,4 +42,15 @@ public class GeoWidgetUtilities {
         }
         return degree;
     }
+
+    public static double[] getLocationParamsFromStringAnswer(String answer) {
+        String[] sa = answer.split(" ");
+        double[] gp = new double[4];
+        gp[0] = Double.valueOf(sa[0]);
+        gp[1] = Double.valueOf(sa[1]);
+        gp[2] = Double.valueOf(sa[2]);
+        gp[3] = Double.valueOf(sa[3]);
+
+        return gp;
+    }
 }
