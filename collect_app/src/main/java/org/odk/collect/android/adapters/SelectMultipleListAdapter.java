@@ -78,6 +78,8 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
     CheckBox setUpButton(final int index) {
         AppCompatCheckBox checkBox = new AppCompatCheckBox(widget.getContext());
         adjustButton(checkBox, index);
+        checkCheckBoxIfNeeded(checkBox, index); // perform before setting onCheckedChangeListener to avoid redundant calls of its body
+
         checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 addItem(filteredItems.get(index).selection());
@@ -87,6 +89,10 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
             widget.widgetValueChanged();
         });
 
+        return checkBox;
+    }
+
+    private void checkCheckBoxIfNeeded(CheckBox checkBox, int index) {
         for (Selection selectedItem : selectedItems) {
             // match based on value, not key
             if (filteredItems.get(index).getValue().equals(selectedItem.getValue())) {
@@ -94,8 +100,6 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
                 break;
             }
         }
-
-        return checkBox;
     }
 
     @Override
