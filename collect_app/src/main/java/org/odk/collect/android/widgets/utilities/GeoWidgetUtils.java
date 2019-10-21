@@ -7,6 +7,8 @@ import org.odk.collect.android.R;
 
 import java.text.DecimalFormat;
 
+import timber.log.Timber;
+
 public class GeoWidgetUtils {
 
     private GeoWidgetUtils() {
@@ -30,24 +32,40 @@ public class GeoWidgetUtils {
     }
 
     static String floor(String value) {
+        if (value == null || value.isEmpty()) {
+            return "";
+        }
         return value.contains(".")
                 ? value.substring(0, value.indexOf('.'))
                 : value;
     }
 
     public static double[] getLocationParamsFromStringAnswer(String answer) {
-        String[] sa = answer.split(" ");
         double[] gp = new double[4];
-        gp[0] = Double.valueOf(sa[0]);
-        gp[1] = Double.valueOf(sa[1]);
-        gp[2] = Double.valueOf(sa[2]);
-        gp[3] = Double.valueOf(sa[3]);
+
+        if (answer != null && !answer.isEmpty()) {
+            String[] sa = answer.split(" ");
+
+            try {
+                gp[0] = Double.valueOf(sa[0]);
+                gp[1] = Double.valueOf(sa[1]);
+                gp[2] = Double.valueOf(sa[2]);
+                gp[3] = Double.valueOf(sa[3]);
+            } catch (Exception | Error e) {
+                Timber.w(e);
+            }
+        }
 
         return gp;
     }
 
     public static String truncateDouble(String s) {
         DecimalFormat df = new DecimalFormat("#.##");
-        return df.format(Double.valueOf(s));
+        try {
+            return df.format(Double.valueOf(s));
+        } catch (Exception | Error e) {
+            Timber.w(e);
+        }
+        return "";
     }
 }
