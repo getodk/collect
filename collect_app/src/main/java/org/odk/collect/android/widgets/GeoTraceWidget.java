@@ -39,9 +39,6 @@ public class GeoTraceWidget extends BaseGeoWidget {
 
     public GeoTraceWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
-
-        startGeoButton = getSimpleButton(getContext().getString(R.string.get_trace));
-        setUpLayout(questionDetails.getPrompt().getAnswerText());
     }
 
     public void startGeoActivity() {
@@ -63,6 +60,11 @@ public class GeoTraceWidget extends BaseGeoWidget {
     @Override
     public String getAnswerToDisplay(String answer) {
         return answer;
+    }
+
+    @Override
+    public String getDefaultButtonLabel() {
+        return getContext().getString(R.string.get_trace);
     }
 
     @Override

@@ -18,7 +18,9 @@ public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget 
     public BaseGeoWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
         answerDisplay = getCenteredAnswerTextView();
+        startGeoButton = getSimpleButton(getDefaultButtonLabel());
         readOnly = questionDetails.getPrompt().isReadOnly();
+        setUpLayout(questionDetails.getPrompt().getAnswerText());
     }
 
     @Override

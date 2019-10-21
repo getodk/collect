@@ -7,4 +7,6 @@ public interface GeoWidget extends BinaryWidget {
     void updateButtonLabelsAndVisibility(boolean dataAvailable);
 
     String getAnswerToDisplay(String answer);
+
+    String getDefaultButtonLabel();
 }

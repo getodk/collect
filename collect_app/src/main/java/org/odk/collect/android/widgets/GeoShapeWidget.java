@@ -36,9 +36,6 @@ public class GeoShapeWidget extends BaseGeoWidget {
 
     public GeoShapeWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
-
-        startGeoButton = getSimpleButton(getContext().getString(R.string.get_shape));
-        setUpLayout(questionDetails.getPrompt().getAnswerText());
     }
 
     public void startGeoActivity() {
@@ -55,6 +52,11 @@ public class GeoShapeWidget extends BaseGeoWidget {
     @Override
     public String getAnswerToDisplay(String answer) {
         return answer;
+    }
+
+    @Override
+    public String getDefaultButtonLabel() {
+        return getContext().getString(R.string.get_shape);
     }
 
     @Override

@@ -54,10 +54,6 @@ public class GeoPointWidget extends BaseGeoWidget {
 
     public GeoPointWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
-
-        startGeoButton = getSimpleButton(R.id.get_location);
-        setUpLayout(questionDetails.getPrompt().getAnswerText());
-
         determineMapProperties();
     }
 
@@ -143,6 +139,11 @@ public class GeoPointWidget extends BaseGeoWidget {
         } else {
             return "";
         }
+    }
+
+    @Override
+    public String getDefaultButtonLabel() {
+        return getContext().getString(R.string.get_location);
     }
 
     public void startGeoActivity() {
