@@ -28,8 +28,6 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtilities;
 
-import java.text.DecimalFormat;
-
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.PLACEMENT_MAP;
@@ -107,11 +105,6 @@ public class GeoPointWidget extends BaseGeoWidget {
         }
     }
 
-    private String truncateDouble(String s) {
-        DecimalFormat df = new DecimalFormat("#.##");
-        return df.format(Double.valueOf(s));
-    }
-
     @Override
     public void setBinaryData(Object answer) {
         String answerText = answer.toString();
@@ -122,8 +115,8 @@ public class GeoPointWidget extends BaseGeoWidget {
                 R.string.gps_result,
                 GeoWidgetUtilities.formatGps(getContext(), Double.parseDouble(parts[0]), "lat"),
                 GeoWidgetUtilities.formatGps(getContext(), Double.parseDouble(parts[1]), "lon"),
-                truncateDouble(parts[2]),
-                truncateDouble(parts[3])
+                    GeoWidgetUtilities.truncateDouble(parts[2]),
+                    GeoWidgetUtilities.truncateDouble(parts[3])
             ));
         } else {
             answerDisplay.setText("");

@@ -4,6 +4,8 @@ import android.content.Context;
 
 import org.odk.collect.android.R;
 
+import java.text.DecimalFormat;
+
 public class GeoWidgetUtilities {
 
     private GeoWidgetUtilities() {
@@ -52,5 +54,10 @@ public class GeoWidgetUtilities {
         gp[3] = Double.valueOf(sa[3]);
 
         return gp;
+    }
+
+    public static String truncateDouble(String s) {
+        DecimalFormat df = new DecimalFormat("#.##");
+        return df.format(Double.valueOf(s));
     }
 }
