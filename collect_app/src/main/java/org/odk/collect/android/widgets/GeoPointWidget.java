@@ -18,7 +18,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.LinearLayout;
 
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
@@ -84,22 +83,7 @@ public class GeoPointWidget extends BaseGeoWidget implements BinaryWidget {
         readOnly = questionDetails.getPrompt().isReadOnly();
 
         startGeoButton = getSimpleButton(R.id.get_location);
-
-        // finish complex layout
-        LinearLayout answerLayout = new LinearLayout(getContext());
-        answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(startGeoButton);
-        answerLayout.addView(answerDisplay);
-        addAnswerView(answerLayout);
-
-        // Set vars Label/text for button enable view or collect...
-        boolean dataAvailable = false;
-        String answer = questionDetails.getPrompt().getAnswerText();
-        if (answer != null && !answer.equals("")) {
-            dataAvailable = true;
-            setBinaryData(answer);
-        }
-        updateButtonLabelsAndVisibility(dataAvailable);
+        setUpLayout(questionDetails.getPrompt().getAnswerText());
     }
 
     protected void updateButtonLabelsAndVisibility(boolean dataAvailable) {

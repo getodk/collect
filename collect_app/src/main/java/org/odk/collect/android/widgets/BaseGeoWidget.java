@@ -3,6 +3,7 @@ package org.odk.collect.android.widgets;
 import android.app.Activity;
 import android.content.Context;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -50,6 +51,22 @@ public abstract class BaseGeoWidget extends QuestionWidget implements BinaryWidg
             public void denied() {
             }
         });
+    }
+
+    protected void setUpLayout(String answerText) {
+        LinearLayout answerLayout = new LinearLayout(getContext());
+        answerLayout.setOrientation(LinearLayout.VERTICAL);
+        answerLayout.addView(startGeoButton);
+        answerLayout.addView(answerDisplay);
+        addAnswerView(answerLayout);
+
+        boolean dataAvailable = false;
+        if (answerText != null && !answerText.isEmpty()) {
+            dataAvailable = true;
+            setBinaryData(answerText);
+        }
+
+        updateButtonLabelsAndVisibility(dataAvailable);
     }
 
     protected abstract void startGeoActivity();

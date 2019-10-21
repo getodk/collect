@@ -18,7 +18,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.LinearLayout;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -44,21 +43,7 @@ public class GeoTraceWidget extends BaseGeoWidget implements BinaryWidget {
         super(context, questionDetails);
 
         startGeoButton = getSimpleButton(getContext().getString(R.string.get_trace));
-
-        LinearLayout answerLayout = new LinearLayout(getContext());
-        answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(startGeoButton);
-        answerLayout.addView(answerDisplay);
-        addAnswerView(answerLayout);
-
-        boolean dataAvailable = false;
-        String s = questionDetails.getPrompt().getAnswerText();
-        if (s != null && !s.equals("")) {
-            dataAvailable = true;
-            setBinaryData(s);
-        }
-
-        updateButtonLabelsAndVisibility(dataAvailable);
+        setUpLayout(questionDetails.getPrompt().getAnswerText());
     }
 
     protected void startGeoActivity() {
