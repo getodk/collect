@@ -62,11 +62,7 @@ public class GeoPointWidget extends BaseGeoWidget {
 
         // Determine the accuracy threshold to use.
         String acc = questionDetails.getPrompt().getQuestion().getAdditionalAttribute(null, ACCURACY_THRESHOLD);
-        if (acc != null && acc.length() != 0) {
-            accuracyThreshold = Double.parseDouble(acc);
-        } else {
-            accuracyThreshold = DEFAULT_LOCATION_ACCURACY;
-        }
+        accuracyThreshold = acc != null && !acc.isEmpty() ? Double.parseDouble(acc) : DEFAULT_LOCATION_ACCURACY;
 
         // Determine whether to use the map and whether the point should be draggable.
         useMap = false;
@@ -123,7 +119,6 @@ public class GeoPointWidget extends BaseGeoWidget {
                 gp[3] = Double.valueOf(sa[3]);
 
                 return new GeoPointData(gp);
-
             } catch (Exception numberFormatException) {
                 return null;
             }

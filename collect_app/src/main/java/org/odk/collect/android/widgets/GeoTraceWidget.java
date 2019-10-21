@@ -34,7 +34,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  *
  * @author Jon Nordling (jonnordling@gmail.com)
  */
-
 @SuppressLint("ViewConstructor")
 public class GeoTraceWidget extends BaseGeoWidget {
 
