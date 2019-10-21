@@ -29,7 +29,7 @@ public class GeoWidgetUtils {
                 : coordinate < 0 ? context.getString(R.string.south) : context.getString(R.string.north);
     }
 
-    private static String floor(String value) {
+    static String floor(String value) {
         return value.contains(".")
                 ? value.substring(0, value.indexOf('.'))
                 : value;
