@@ -49,29 +49,33 @@ public class GeoPointWidget extends BaseGeoWidget {
 
     public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
     private boolean useMap;
-    private final double accuracyThreshold;
+    private double accuracyThreshold;
     private boolean draggable = true;
 
     public GeoPointWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
 
+        startGeoButton = getSimpleButton(R.id.get_location);
+        setUpLayout(questionDetails.getPrompt().getAnswerText());
+
+        determineMapProperties();
+    }
+
+    private void determineMapProperties() {
         // Determine the accuracy threshold to use.
-        String acc = questionDetails.getPrompt().getQuestion().getAdditionalAttribute(null, ACCURACY_THRESHOLD);
+        String acc = getFormEntryPrompt().getQuestion().getAdditionalAttribute(null, ACCURACY_THRESHOLD);
         accuracyThreshold = acc != null && !acc.isEmpty() ? Double.parseDouble(acc) : DEFAULT_LOCATION_ACCURACY;
 
         // Determine whether to use the map and whether the point should be draggable.
-        if (MapProvider.getConfigurator().isAvailable(context)) {
-            if (hasAppearance(questionDetails.getPrompt(), PLACEMENT_MAP)) {
+        if (MapProvider.getConfigurator().isAvailable(getContext())) {
+            if (hasAppearance(getFormEntryPrompt(), PLACEMENT_MAP)) {
                 draggable = true;
                 useMap = true;
-            } else if (hasAppearance(questionDetails.getPrompt(), MAPS)) {
+            } else if (hasAppearance(getFormEntryPrompt(), MAPS)) {
                 draggable = false;
                 useMap = true;
             }
         }
-
-        startGeoButton = getSimpleButton(R.id.get_location);
-        setUpLayout(questionDetails.getPrompt().getAnswerText());
     }
 
     public void updateButtonLabelsAndVisibility(boolean dataAvailable) {
