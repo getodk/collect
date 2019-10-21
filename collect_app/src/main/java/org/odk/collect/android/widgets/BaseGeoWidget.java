@@ -31,6 +31,13 @@ public abstract class BaseGeoWidget extends QuestionWidget implements BinaryWidg
         answerDisplay.setOnLongClickListener(l);
     }
 
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        startGeoButton.cancelLongPress();
+        answerDisplay.cancelLongPress();
+    }
+
     public void onButtonClick(int buttonId) {
         getPermissionUtils().requestLocationPermissions((Activity) getContext(), new PermissionListener() {
             @Override

@@ -206,13 +206,6 @@ public class GeoPointWidget extends BaseGeoWidget implements BinaryWidget {
         widgetValueChanged();
     }
 
-    @Override
-    public void cancelLongPress() {
-        super.cancelLongPress();
-        startGeoButton.cancelLongPress();
-        answerDisplay.cancelLongPress();
-    }
-
     protected void startGeoActivity() {
         Context context = getContext();
         Intent intent = new Intent(
