@@ -36,11 +36,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 @SuppressLint("ViewConstructor")
 public class GeoShapeWidget extends BaseGeoWidget implements BinaryWidget {
 
-    public static final String SHAPE_LOCATION = "gp";
-
     public GeoShapeWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
-        // assemble the widget...
 
         startGeoButton = getSimpleButton(getContext().getString(R.string.get_shape));
 
@@ -68,12 +65,7 @@ public class GeoShapeWidget extends BaseGeoWidget implements BinaryWidget {
     }
 
     protected void updateButtonLabelsAndVisibility(boolean dataAvailable) {
-        if (dataAvailable) {
-            startGeoButton.setText(
-                    getContext().getString(R.string.geoshape_view_change_location));
-        } else {
-            startGeoButton.setText(getContext().getString(R.string.get_shape));
-        }
+        startGeoButton.setText(dataAvailable ? R.string.geoshape_view_change_location : R.string.get_shape);
     }
 
     @Override

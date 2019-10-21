@@ -74,11 +74,7 @@ public class GeoTraceWidget extends BaseGeoWidget implements BinaryWidget {
     }
 
     protected void updateButtonLabelsAndVisibility(boolean dataAvailable) {
-        if (dataAvailable) {
-            startGeoButton.setText(R.string.geotrace_view_change_location);
-        } else {
-            startGeoButton.setText(R.string.get_trace);
-        }
+        startGeoButton.setText(dataAvailable ? R.string.geotrace_view_change_location : R.string.get_trace);
     }
 
     @Override
