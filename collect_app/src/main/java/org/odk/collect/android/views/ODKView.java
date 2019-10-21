@@ -174,7 +174,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 final PlaybackFailedException playbackFailedException = (PlaybackFailedException) e;
                 Toast.makeText(
                         getContext(),
-                        getContext().getString(R.string.file_missing, playbackFailedException.getURI()),
+                        getContext().getString(playbackFailedException.getExceptionMsg(), playbackFailedException.getURI()),
                         Toast.LENGTH_SHORT
                 ).show();
 
