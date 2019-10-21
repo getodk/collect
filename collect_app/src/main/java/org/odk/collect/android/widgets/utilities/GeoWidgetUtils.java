@@ -7,9 +7,9 @@ import org.odk.collect.android.R;
 
 import java.text.DecimalFormat;
 
-public class GeoWidgetUtilities {
+public class GeoWidgetUtils {
 
-    private GeoWidgetUtilities() {
+    private GeoWidgetUtils() {
     }
 
     public static String convertCoordinatesIntoDegreeFormat(Context context, double coordinate, String type) {

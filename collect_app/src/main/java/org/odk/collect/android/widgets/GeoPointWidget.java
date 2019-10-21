@@ -26,7 +26,7 @@ import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapProvider;
-import org.odk.collect.android.widgets.utilities.GeoWidgetUtilities;
+import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
@@ -97,7 +97,7 @@ public class GeoPointWidget extends BaseGeoWidget {
             return null;
         } else {
             try {
-                return new GeoPointData(GeoWidgetUtilities.getLocationParamsFromStringAnswer(s));
+                return new GeoPointData(GeoWidgetUtils.getLocationParamsFromStringAnswer(s));
             } catch (Exception numberFormatException) {
                 return null;
             }
@@ -112,10 +112,10 @@ public class GeoPointWidget extends BaseGeoWidget {
             String[] parts = answerText.split(" ");
             answerDisplay.setText(getContext().getString(
                 R.string.gps_result,
-                GeoWidgetUtilities.convertCoordinatesIntoDegreeFormat(getContext(), Double.parseDouble(parts[0]), "lat"),
-                GeoWidgetUtilities.convertCoordinatesIntoDegreeFormat(getContext(), Double.parseDouble(parts[1]), "lon"),
-                    GeoWidgetUtilities.truncateDouble(parts[2]),
-                    GeoWidgetUtilities.truncateDouble(parts[3])
+                GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(getContext(), Double.parseDouble(parts[0]), "lat"),
+                GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(getContext(), Double.parseDouble(parts[1]), "lon"),
+                    GeoWidgetUtils.truncateDouble(parts[2]),
+                    GeoWidgetUtils.truncateDouble(parts[3])
             ));
         } else {
             answerDisplay.setText("");
@@ -131,10 +131,10 @@ public class GeoPointWidget extends BaseGeoWidget {
             String[] parts = answer.split(" ");
             return getContext().getString(
                     R.string.gps_result,
-                    GeoWidgetUtilities.convertCoordinatesIntoDegreeFormat(getContext(), Double.parseDouble(parts[0]), "lat"),
-                    GeoWidgetUtilities.convertCoordinatesIntoDegreeFormat(getContext(), Double.parseDouble(parts[1]), "lon"),
-                    GeoWidgetUtilities.truncateDouble(parts[2]),
-                    GeoWidgetUtilities.truncateDouble(parts[3])
+                    GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(getContext(), Double.parseDouble(parts[0]), "lat"),
+                    GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(getContext(), Double.parseDouble(parts[1]), "lon"),
+                    GeoWidgetUtils.truncateDouble(parts[2]),
+                    GeoWidgetUtils.truncateDouble(parts[3])
             );
         } else {
             return "";
@@ -153,7 +153,7 @@ public class GeoPointWidget extends BaseGeoWidget {
 
         String stringAnswer = getStringAnswer();
         if (!stringAnswer.isEmpty()) {
-            intent.putExtra(LOCATION, GeoWidgetUtilities.getLocationParamsFromStringAnswer(stringAnswer));
+            intent.putExtra(LOCATION, GeoWidgetUtils.getLocationParamsFromStringAnswer(stringAnswer));
         }
         intent.putExtra(READ_ONLY, readOnly);
         intent.putExtra(DRAGGABLE_ONLY, draggable);
