@@ -8,9 +8,9 @@ import android.widget.TextView;
 
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+import org.odk.collect.android.widgets.interfaces.GeoWidget;
 
-public abstract class BaseGeoWidget extends QuestionWidget implements BinaryWidget {
+public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget {
     protected Button startGeoButton;
     protected TextView answerDisplay;
 
@@ -68,8 +68,4 @@ public abstract class BaseGeoWidget extends QuestionWidget implements BinaryWidg
 
         updateButtonLabelsAndVisibility(dataAvailable);
     }
-
-    protected abstract void startGeoActivity();
-
-    protected abstract void updateButtonLabelsAndVisibility(boolean dataAvailable);
 }

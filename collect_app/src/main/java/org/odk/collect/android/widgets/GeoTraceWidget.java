@@ -25,7 +25,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapProvider;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
@@ -37,7 +36,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  */
 
 @SuppressLint("ViewConstructor")
-public class GeoTraceWidget extends BaseGeoWidget implements BinaryWidget {
+public class GeoTraceWidget extends BaseGeoWidget {
 
     public GeoTraceWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
@@ -46,7 +45,7 @@ public class GeoTraceWidget extends BaseGeoWidget implements BinaryWidget {
         setUpLayout(questionDetails.getPrompt().getAnswerText());
     }
 
-    protected void startGeoActivity() {
+    public void startGeoActivity() {
         Context context = getContext();
         if (MapProvider.getConfigurator().isAvailable(context)) {
             Intent intent = new Intent(context, GeoPolyActivity.class)
@@ -58,7 +57,7 @@ public class GeoTraceWidget extends BaseGeoWidget implements BinaryWidget {
         }
     }
 
-    protected void updateButtonLabelsAndVisibility(boolean dataAvailable) {
+    public void updateButtonLabelsAndVisibility(boolean dataAvailable) {
         startGeoButton.setText(dataAvailable ? R.string.geotrace_view_change_location : R.string.get_trace);
     }
 

@@ -26,7 +26,6 @@ import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapProvider;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.text.DecimalFormat;
 
@@ -43,7 +42,7 @@ import static org.odk.collect.android.utilities.WidgetAppearanceUtils.hasAppeara
  * @author Jon Nordling (jonnordling@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class GeoPointWidget extends BaseGeoWidget implements BinaryWidget {
+public class GeoPointWidget extends BaseGeoWidget {
     public static final String LOCATION = "gp";
     public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
     public static final String READ_ONLY = "readOnly";
@@ -86,7 +85,7 @@ public class GeoPointWidget extends BaseGeoWidget implements BinaryWidget {
         setUpLayout(questionDetails.getPrompt().getAnswerText());
     }
 
-    protected void updateButtonLabelsAndVisibility(boolean dataAvailable) {
+    public void updateButtonLabelsAndVisibility(boolean dataAvailable) {
         if (useMap) {
             if (readOnly) {
                 startGeoButton.setText(R.string.geopoint_view_read_only);
@@ -190,7 +189,7 @@ public class GeoPointWidget extends BaseGeoWidget implements BinaryWidget {
         widgetValueChanged();
     }
 
-    protected void startGeoActivity() {
+    public void startGeoActivity() {
         Context context = getContext();
         Intent intent = new Intent(
             context, useMap ? GeoPointMapActivity.class : GeoPointActivity.class);

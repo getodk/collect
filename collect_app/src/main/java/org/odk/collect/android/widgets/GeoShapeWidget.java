@@ -23,7 +23,6 @@ import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
@@ -33,7 +32,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * @author Jon Nordling (jonnordling@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class GeoShapeWidget extends BaseGeoWidget implements BinaryWidget {
+public class GeoShapeWidget extends BaseGeoWidget {
 
     public GeoShapeWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
@@ -42,14 +41,14 @@ public class GeoShapeWidget extends BaseGeoWidget implements BinaryWidget {
         setUpLayout(questionDetails.getPrompt().getAnswerText());
     }
 
-    protected void startGeoActivity() {
+    public void startGeoActivity() {
         Intent intent = new Intent(getContext(), GeoPolyActivity.class)
             .putExtra(GeoPolyActivity.ANSWER_KEY, answerDisplay.getText().toString())
             .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOSHAPE);
         ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOSHAPE_CAPTURE);
     }
 
-    protected void updateButtonLabelsAndVisibility(boolean dataAvailable) {
+    public void updateButtonLabelsAndVisibility(boolean dataAvailable) {
         startGeoButton.setText(dataAvailable ? R.string.geoshape_view_change_location : R.string.get_shape);
     }
 
