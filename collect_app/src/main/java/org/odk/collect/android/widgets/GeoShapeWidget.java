@@ -17,16 +17,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
@@ -40,20 +37,16 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 public class GeoShapeWidget extends BaseGeoWidget implements BinaryWidget {
 
     public static final String SHAPE_LOCATION = "gp";
-    private final Button createShapeButton;
-    private final TextView answerDisplay;
 
     public GeoShapeWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
         // assemble the widget...
 
-        answerDisplay = getCenteredAnswerTextView();
-
-        createShapeButton = getSimpleButton(getContext().getString(R.string.get_shape));
+        startGeoButton = getSimpleButton(getContext().getString(R.string.get_shape));
 
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(createShapeButton);
+        answerLayout.addView(startGeoButton);
         answerLayout.addView(answerDisplay);
         addAnswerView(answerLayout);
 
@@ -67,7 +60,7 @@ public class GeoShapeWidget extends BaseGeoWidget implements BinaryWidget {
         updateButtonLabelsAndVisibility(dataAvailable);
     }
 
-    private void startGeoShapeActivity() {
+    protected void startGeoActivity() {
         Intent intent = new Intent(getContext(), GeoPolyActivity.class)
             .putExtra(GeoPolyActivity.ANSWER_KEY, answerDisplay.getText().toString())
             .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOSHAPE);
@@ -76,10 +69,10 @@ public class GeoShapeWidget extends BaseGeoWidget implements BinaryWidget {
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
         if (dataAvailable) {
-            createShapeButton.setText(
+            startGeoButton.setText(
                     getContext().getString(R.string.geoshape_view_change_location));
         } else {
-            createShapeButton.setText(getContext().getString(R.string.get_shape));
+            startGeoButton.setText(getContext().getString(R.string.get_shape));
         }
     }
 
@@ -109,22 +102,7 @@ public class GeoShapeWidget extends BaseGeoWidget implements BinaryWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        createShapeButton.setOnLongClickListener(l);
+        startGeoButton.setOnLongClickListener(l);
         answerDisplay.setOnLongClickListener(l);
-    }
-
-    @Override
-    public void onButtonClick(int buttonId) {
-        getPermissionUtils().requestLocationPermissions((Activity) getContext(), new PermissionListener() {
-            @Override
-            public void granted() {
-                waitForData();
-                startGeoShapeActivity();
-            }
-
-            @Override
-            public void denied() {
-            }
-        });
     }
 }

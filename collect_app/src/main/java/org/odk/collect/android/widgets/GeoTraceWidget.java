@@ -18,16 +18,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
@@ -43,19 +40,14 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 @SuppressLint("ViewConstructor")
 public class GeoTraceWidget extends BaseGeoWidget implements BinaryWidget {
 
-    private final Button createTraceButton;
-    private final TextView answerDisplay;
-
     public GeoTraceWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
 
-        answerDisplay = getCenteredAnswerTextView();
-
-        createTraceButton = getSimpleButton(getContext().getString(R.string.get_trace));
+        startGeoButton = getSimpleButton(getContext().getString(R.string.get_trace));
 
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(createTraceButton);
+        answerLayout.addView(startGeoButton);
         answerLayout.addView(answerDisplay);
         addAnswerView(answerLayout);
 
@@ -69,7 +61,7 @@ public class GeoTraceWidget extends BaseGeoWidget implements BinaryWidget {
         updateButtonLabelsAndVisibility(dataAvailable);
     }
 
-    private void startGeoTraceActivity() {
+    protected void startGeoActivity() {
         Context context = getContext();
         if (MapProvider.getConfigurator().isAvailable(context)) {
             Intent intent = new Intent(context, GeoPolyActivity.class)
@@ -83,9 +75,9 @@ public class GeoTraceWidget extends BaseGeoWidget implements BinaryWidget {
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
         if (dataAvailable) {
-            createTraceButton.setText(R.string.geotrace_view_change_location);
+            startGeoButton.setText(R.string.geotrace_view_change_location);
         } else {
-            createTraceButton.setText(R.string.get_trace);
+            startGeoButton.setText(R.string.get_trace);
         }
     }
 
@@ -114,22 +106,7 @@ public class GeoTraceWidget extends BaseGeoWidget implements BinaryWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        createTraceButton.setOnLongClickListener(l);
+        startGeoButton.setOnLongClickListener(l);
         answerDisplay.setOnLongClickListener(l);
-    }
-
-    @Override
-    public void onButtonClick(int buttonId) {
-        getPermissionUtils().requestLocationPermissions((Activity) getContext(), new PermissionListener() {
-            @Override
-            public void granted() {
-                waitForData();
-                startGeoTraceActivity();
-            }
-
-            @Override
-            public void denied() {
-            }
-        });
     }
 }

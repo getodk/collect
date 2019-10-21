@@ -18,9 +18,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
@@ -28,7 +26,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
@@ -55,8 +52,6 @@ public class GeoPointWidget extends BaseGeoWidget implements BinaryWidget {
 
     public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
     private final boolean readOnly;
-    private final Button getLocationButton;
-    private final TextView answerDisplay;
     private boolean useMap;
     private final double accuracyThreshold;
     private boolean draggable = true;
@@ -87,14 +82,13 @@ public class GeoPointWidget extends BaseGeoWidget implements BinaryWidget {
         }
 
         readOnly = questionDetails.getPrompt().isReadOnly();
-        answerDisplay = getCenteredAnswerTextView();
 
-        getLocationButton = getSimpleButton(R.id.get_location);
+        startGeoButton = getSimpleButton(R.id.get_location);
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(getLocationButton);
+        answerLayout.addView(startGeoButton);
         answerLayout.addView(answerDisplay);
         addAnswerView(answerLayout);
 
@@ -111,14 +105,14 @@ public class GeoPointWidget extends BaseGeoWidget implements BinaryWidget {
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
         if (useMap) {
             if (readOnly) {
-                getLocationButton.setText(R.string.geopoint_view_read_only);
+                startGeoButton.setText(R.string.geopoint_view_read_only);
             } else {
-                getLocationButton.setText(
+                startGeoButton.setText(
                     dataAvailable ? R.string.view_change_location : R.string.get_point);
             }
         } else {
             if (!readOnly) {
-                getLocationButton.setText(
+                startGeoButton.setText(
                     dataAvailable ? R.string.change_location : R.string.get_point);
             }
         }
@@ -216,32 +210,18 @@ public class GeoPointWidget extends BaseGeoWidget implements BinaryWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        getLocationButton.setOnLongClickListener(l);
+        startGeoButton.setOnLongClickListener(l);
         answerDisplay.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        getLocationButton.cancelLongPress();
+        startGeoButton.cancelLongPress();
         answerDisplay.cancelLongPress();
     }
 
-    @Override
-    public void onButtonClick(int buttonId) {
-        getPermissionUtils().requestLocationPermissions((Activity) getContext(), new PermissionListener() {
-            @Override
-            public void granted() {
-                startGeoPoint();
-            }
-
-            @Override
-            public void denied() {
-            }
-        });
-    }
-
-    private void startGeoPoint() {
+    protected void startGeoActivity() {
         Context context = getContext();
         Intent intent = new Intent(
             context, useMap ? GeoPointMapActivity.class : GeoPointActivity.class);
