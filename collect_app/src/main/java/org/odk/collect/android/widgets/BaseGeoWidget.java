@@ -13,10 +13,12 @@ import org.odk.collect.android.widgets.interfaces.GeoWidget;
 public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget {
     protected Button startGeoButton;
     protected TextView answerDisplay;
+    protected boolean readOnly;
 
     public BaseGeoWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
         answerDisplay = getCenteredAnswerTextView();
+        readOnly = questionDetails.getPrompt().isReadOnly();
     }
 
     @Override

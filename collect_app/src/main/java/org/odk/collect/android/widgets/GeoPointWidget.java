@@ -50,7 +50,6 @@ public class GeoPointWidget extends BaseGeoWidget {
     public static final String DRAGGABLE_ONLY = "draggable";
 
     public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
-    private final boolean readOnly;
     private boolean useMap;
     private final double accuracyThreshold;
     private boolean draggable = true;
@@ -75,8 +74,6 @@ public class GeoPointWidget extends BaseGeoWidget {
                 useMap = true;
             }
         }
-
-        readOnly = questionDetails.getPrompt().isReadOnly();
 
         startGeoButton = getSimpleButton(R.id.get_location);
         setUpLayout(questionDetails.getPrompt().getAnswerText());
