@@ -120,9 +120,9 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         };
     }
 
-    abstract CompoundButton setUpButton(int index);
+    abstract CompoundButton createButton(int index);
 
-    void adjustButton(TextView button, int index) {
+    void setupButton(TextView button, int index) {
         button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize());
         button.setText(FormEntryPromptUtils.getItemText(widget.getFormEntryPrompt(), filteredItems.get(index)));
         button.setTag(items.indexOf(filteredItems.get(index)));
@@ -213,7 +213,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                 view.removeAllViews();
                 view.addView(setUpNoButtonsView(index));
             } else {
-                widget.addMediaFromChoice(audioVideoImageTextLabel, index, setUpButton(index), filteredItems);
+                widget.addMediaFromChoice(audioVideoImageTextLabel, index, createButton(index), filteredItems);
                 audioVideoImageTextLabel.setEnabled(!widget.getFormEntryPrompt().isReadOnly());
             }
         }
