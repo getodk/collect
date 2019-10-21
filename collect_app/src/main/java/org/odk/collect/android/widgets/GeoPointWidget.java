@@ -60,7 +60,6 @@ public class GeoPointWidget extends BaseGeoWidget {
         accuracyThreshold = acc != null && !acc.isEmpty() ? Double.parseDouble(acc) : DEFAULT_LOCATION_ACCURACY;
 
         // Determine whether to use the map and whether the point should be draggable.
-        useMap = false;
         if (MapProvider.getConfigurator().isAvailable(context)) {
             if (hasAppearance(questionDetails.getPrompt(), PLACEMENT_MAP)) {
                 draggable = true;
