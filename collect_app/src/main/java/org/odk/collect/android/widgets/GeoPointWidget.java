@@ -126,6 +126,22 @@ public class GeoPointWidget extends BaseGeoWidget {
         widgetValueChanged();
     }
 
+    @Override
+    public String getAnswerToDisplay(String answer) {
+        if (!answer.isEmpty()) {
+            String[] parts = answer.split(" ");
+            return getContext().getString(
+                    R.string.gps_result,
+                    GeoWidgetUtilities.formatGps(getContext(), Double.parseDouble(parts[0]), "lat"),
+                    GeoWidgetUtilities.formatGps(getContext(), Double.parseDouble(parts[1]), "lon"),
+                    GeoWidgetUtilities.truncateDouble(parts[2]),
+                    GeoWidgetUtilities.truncateDouble(parts[3])
+            );
+        } else {
+            return "";
+        }
+    }
+
     public void startGeoActivity() {
         Context context = getContext();
         Intent intent = new Intent(

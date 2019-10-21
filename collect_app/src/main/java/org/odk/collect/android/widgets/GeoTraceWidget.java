@@ -61,11 +61,8 @@ public class GeoTraceWidget extends BaseGeoWidget {
     }
 
     @Override
-    public void setBinaryData(Object answer) {
-        String answerText = answer.toString();
-        answerDisplay.setText(answerText);
-        updateButtonLabelsAndVisibility(!answerText.isEmpty());
-        widgetValueChanged();
+    public String getAnswerToDisplay(String answer) {
+        return answer;
     }
 
     @Override

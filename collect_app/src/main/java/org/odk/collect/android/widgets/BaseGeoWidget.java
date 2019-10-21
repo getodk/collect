@@ -41,6 +41,14 @@ public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget 
         answerDisplay.cancelLongPress();
     }
 
+    @Override
+    public void setBinaryData(Object answer) {
+        String answerText = answer.toString();
+        answerDisplay.setText(getAnswerToDisplay(answerText));
+        updateButtonLabelsAndVisibility(!answerText.isEmpty());
+        widgetValueChanged();
+    }
+
     public void onButtonClick(int buttonId) {
         getPermissionUtils().requestLocationPermissions((Activity) getContext(), new PermissionListener() {
             @Override
