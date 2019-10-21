@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets.utilities;
 
 import android.content.Context;
+import android.location.Location;
 
 import org.odk.collect.android.R;
 
@@ -11,36 +12,27 @@ public class GeoWidgetUtilities {
     private GeoWidgetUtilities() {
     }
 
-    public static String formatGps(Context context, double coordinates, String type) {
-        String location = Double.toString(coordinates);
-        String degree = location.substring(0, location.indexOf('.')) + "°";
-        location = "0." + location.substring(location.indexOf('.') + 1);
-        double temp = Double.valueOf(location) * 60;
-        location = Double.toString(temp);
-        String mins = location.substring(0, location.indexOf('.')) + "'";
+    public static String convertCoordinatesIntoDegreeFormat(Context context, double coordinate, String type) {
+        String coordinateDegrees = Location.convert(Math.abs(coordinate), Location.FORMAT_SECONDS);
+        String[] coordinateSplit = coordinateDegrees.split(":");
 
-        location = "0." + location.substring(location.indexOf('.') + 1);
-        temp = Double.valueOf(location) * 60;
-        location = Double.toString(temp);
-        String secs = location.substring(0, location.indexOf('.')) + '"';
-        if (type.equalsIgnoreCase("lon")) {
-            if (degree.startsWith("-")) {
-                degree = String.format(context
-                        .getString(R.string.west), degree.replace("-", ""), mins, secs);
-            } else {
-                degree = String.format(context
-                        .getString(R.string.east), degree.replace("-", ""), mins, secs);
-            }
-        } else {
-            if (degree.startsWith("-")) {
-                degree = String.format(context
-                        .getString(R.string.south), degree.replace("-", ""), mins, secs);
-            } else {
-                degree = String.format(context
-                        .getString(R.string.north), degree.replace("-", ""), mins, secs);
-            }
-        }
-        return degree;
+        String degrees = floor(coordinateSplit[0]) + "°";
+        String mins = floor(coordinateSplit[1]) + "'";
+        String secs = floor(coordinateSplit[2]) + '"';
+
+        return String.format(getCardinalDirection(context, coordinate, type), degrees, mins, secs);
+    }
+
+    private static String getCardinalDirection(Context context, double coordinate, String type) {
+        return type.equalsIgnoreCase("lon")
+                ? coordinate < 0 ? context.getString(R.string.west) : context.getString(R.string.east)
+                : coordinate < 0 ? context.getString(R.string.south) : context.getString(R.string.north);
+    }
+
+    private static String floor(String value) {
+        return value.contains(".")
+                ? value.substring(0, value.indexOf('.'))
+                : value;
     }
 
     public static double[] getLocationParamsFromStringAnswer(String answer) {
