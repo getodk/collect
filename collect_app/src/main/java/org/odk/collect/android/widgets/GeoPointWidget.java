@@ -233,7 +233,6 @@ public class GeoPointWidget extends BaseGeoWidget implements BinaryWidget {
         intent.putExtra(DRAGGABLE_ONLY, draggable);
         intent.putExtra(ACCURACY_THRESHOLD, accuracyThreshold);
 
-        waitForData();
         ((Activity) context).startActivityForResult(intent, RequestCodes.LOCATION_CAPTURE);
     }
 }
