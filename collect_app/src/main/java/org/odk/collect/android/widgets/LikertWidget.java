@@ -5,13 +5,13 @@ import java.util.HashMap;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.view.LayoutInflater;
+import android.graphics.Color;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -35,48 +35,48 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class LikertWidget extends ItemsWidget {
 
-    private int iconDimension = 35;
+    private int iconDimension = 85;
     private LinearLayout view;
-    private RadioGroup radioGroup;
     private RadioButton checkedButton;
-    private boolean error = false;
+    private final LinearLayout.LayoutParams LINEARLAYOUT_PARAMS = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT, 1);
+    private final LayoutParams TEXTVIEW_PARAMS = new LayoutParams(LayoutParams.MATCH_PARENT, 50);
+    private final LayoutParams IMAGEVIEW_PARAMS = new LayoutParams(iconDimension, iconDimension);
+    private final LayoutParams RADIOBUTTON_PARAMS = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
     ArrayList<TextView> textViews;
     ArrayList<ImageView> imageViews;
-    HashMap<RadioButton, String> buttonsToWeight;
-    public LikertWidget(Context context, FormEntryPrompt prompt, boolean displayIcons) {
+    HashMap<RadioButton, String> buttonsToName; // the weight is also the index
+
+    public LikertWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        view = (LinearLayout) getLayoutInflater().inflate(R.layout.likert_layout, this, false);
-        radioGroup = view.findViewById(R.id.likert_scale);
-
-        if(items == null || items.size() < 5){
-            if(items == null){
-                Timber.e("ERROR: Type does not exist");
-            }else{
-                Timber.e("ERROR: You need 5 choices." + items.size() + " choices were given.");
-            }
-            return;
-        }
-
+        setMainViewLayoutParameters();
         setStructures();
         setButtonListener();
-        if(displayIcons){
-            showImages();
-            hideTextViews();
-        }
+        setSavedButton();
+        addAnswerView(view);
+    }
 
-        // Inserts the selected button from a saved state
-        if (prompt.getAnswerValue() != null) {
-            String weight = ((Selection) prompt.getAnswerValue().getValue()).getValue();
-            for(RadioButton bu: buttonsToWeight.keySet()){
-                if(buttonsToWeight.get(bu).equals(weight)){
+    public void setMainViewLayoutParameters(){
+        view = new LinearLayout(getContext());
+        view.setOrientation(LinearLayout.HORIZONTAL);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        view.setLayoutParams(params);
+    }
+
+    // Inserts the selected button from a saved state
+    public void setSavedButton(){
+        if (getFormEntryPrompt().getAnswerValue() != null) {
+            String name = ((Selection) getFormEntryPrompt().getAnswerValue()
+                    .getValue()).getValue();
+            for(RadioButton bu: buttonsToName.keySet()){
+                if(buttonsToName.get(bu).equals(name)){
                     checkedButton = bu;
                     checkedButton.setChecked(true);
                 }
             }
         }
-        if(!error){addAnswerView(view);}
     }
 
     @Override
@@ -84,7 +84,16 @@ public class LikertWidget extends ItemsWidget {
         if (checkedButton == null) {
             return null;
         } else {
-            SelectChoice sc = items.get(Integer.parseInt(buttonsToWeight.get(checkedButton)));
+            int selectedIndex = -1;
+            for(int i = 0; i < items.size(); i++){
+                if(items.get(i).getValue().equals(buttonsToName.get(checkedButton))){
+                    selectedIndex = i;
+                }
+            }
+            if(selectedIndex == -1){
+                return null;
+            }
+            SelectChoice sc = items.get(selectedIndex);
             return new SelectOneData(new Selection(sc));
         }
     }
@@ -106,37 +115,69 @@ public class LikertWidget extends ItemsWidget {
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.BELOW, getHelpTextLayout().getId());
-
         params.setMargins(10, 0, 10, 0);
         addView(v, params);
     }
 
-    public void setStructures(){
-        buttonsToWeight = new HashMap<>();
+    public void setStructures() {
+        buttonsToName = new HashMap<>();
         imageViews = new ArrayList<>();
         textViews = new ArrayList<>();
-
-        for (int i=0;i < radioGroup.getChildCount(); i++) {
-            View v = radioGroup.getChildAt(i);
-            if (v instanceof LinearLayout) {
-                for(int j = 0; j < ((LinearLayout) v).getChildCount(); j++){
-                    View v2 = ((LinearLayout) v).getChildAt(j);
-                    if(v2 instanceof RadioButton){
-                        buttonsToWeight.put((RadioButton) v2, "" + i);
-                    }else if(v2 instanceof TextView){
-                        TextView textView = (TextView) v2;
-                        textView.setText(getFormEntryPrompt().getSelectChoiceText(items.get(i)));
-                        textViews.add((TextView) v2);
-                    }else if(v2 instanceof ImageView){
-                        imageViews.add((ImageView) v2);
-                    }
-                }
+        for (int i = 0; i < items.size(); i++) {
+            LinearLayout optionView = getLinearLayout();
+            RadioButton button = getRadioButton();
+            buttonsToName.put(button, items.get(i).getValue());
+            optionView.addView(button);
+            ImageView imgView = getImageAsImageView(i);
+            // checks if image is set
+            if (imgView != null) {
+                optionView.addView(imgView);
+            } else {
+                TextView choice = getTextView();
+                choice.setText(items.get(i).getValue());
+                optionView.addView(choice);
             }
+            view.addView(optionView);
         }
     }
 
+    // Creates image view for choice
+    public ImageView getImageView(){
+        ImageView view = new ImageView(getContext());
+        view.setLayoutParams(IMAGEVIEW_PARAMS);
+        return view;
+    }
+
+    public RadioButton getRadioButton(){
+        RadioButton button = new RadioButton(getContext());
+        button.setLayoutParams(RADIOBUTTON_PARAMS);
+        button.setPadding(2,2,2,2);
+        button.setGravity(Gravity.CENTER);
+        return button;
+    }
+
+    // Creates text view for choice
+    public TextView getTextView(){
+        // TODO: Find way to cap text when too long
+        TextView view = new TextView(getContext());
+        view.setGravity(Gravity.CENTER);
+        view.setPadding(2,2,2,2);
+        view.setLayoutParams(TEXTVIEW_PARAMS);
+        view.setTextColor(Color.parseColor("#000000")); // This means black
+        return view;
+    }
+
+    // Linear Layout for new choice
+    public LinearLayout getLinearLayout(){
+        LinearLayout optionView = new LinearLayout(getContext());
+        optionView.setGravity(Gravity.CENTER);
+        optionView.setLayoutParams(LINEARLAYOUT_PARAMS);
+        optionView.setOrientation(LinearLayout.VERTICAL);
+        return optionView;
+    }
+
     public void setButtonListener(){
-        for (RadioButton button: buttonsToWeight.keySet()) {
+        for (RadioButton button: buttonsToName.keySet()) {
             button.setOnClickListener(new OnClickListener() {
 
                 @Override
@@ -152,32 +193,36 @@ public class LikertWidget extends ItemsWidget {
         }
     }
 
-    public void showImages(){
-        for(int i = 0; i < imageViews.size(); i++){
-            ImageView view = imageViews.get(i);
-            String imageURI;
-            if (items.get(i) instanceof ExternalSelectChoice) {
-                imageURI = ((ExternalSelectChoice) items.get(i)).getImage();
-            } else {
-                imageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(i),
-                        FormEntryCaption.TEXT_FORM_IMAGE);
+    public ImageView getImageAsImageView(int index){
+        ImageView view = getImageView();
+        String imageURI;
+        if (items.get(index) instanceof ExternalSelectChoice) {
+            imageURI = ((ExternalSelectChoice) items.get(index)).getImage();
+        } else {
+            imageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index),
+                    FormEntryCaption.TEXT_FORM_IMAGE);
+        }
+        if(imageURI != null){
+            String error = setImageFromOtherSource(imageURI, view);
+            if(error != null){
+                return null;
             }
-            if(imageURI != null){
-                setImageFromOtherSource(imageURI, view);
-            }
-            view.setVisibility(View.VISIBLE);
+            return view;
+        }else{
+            return null;
         }
     }
 
-    public void setImageFromOtherSource(String imageURI, ImageView imageView){
+    public String setImageFromOtherSource(String imageURI, ImageView imageView){
+        String errorMsg = null;
         try {
-            String errorMsg = null;
             String imageFilename =
                     ReferenceManager.instance().DeriveReference(imageURI).getLocalURI();
             final File imageFile = new File(imageFilename);
             if (imageFile.exists()) {
                 Bitmap b = null;
                 try {
+                    // TODO: Cap the size of the image here
                     int screenWidth = iconDimension;
                     int screenHeight = iconDimension;
                     b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
@@ -199,30 +244,12 @@ public class LikertWidget extends ItemsWidget {
             }
             if (errorMsg != null) {
                 Timber.e(errorMsg);
-                error = true;
             }
 
         } catch (InvalidReferenceException e) {
             Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
         }
-    }
-
-    public void hideTextViews(){
-        for(TextView view: textViews){
-            view.setVisibility(View.GONE);
-        }
-    }
-
-    private LayoutInflater layoutInflater;
-
-    private LayoutInflater getLayoutInflater() {
-
-        // Only for testing purposes, this shouldn't actually be cached:
-        if (this.layoutInflater != null) {
-            return layoutInflater;
-        }
-
-        return LayoutInflater.from(getContext());
+        return errorMsg;
     }
 
     @Override
@@ -237,6 +264,4 @@ public class LikertWidget extends ItemsWidget {
         }
         checkedButton = null;
     }
-
-
 }
