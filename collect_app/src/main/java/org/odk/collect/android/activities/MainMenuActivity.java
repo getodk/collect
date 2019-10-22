@@ -40,8 +40,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
@@ -308,7 +306,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         viewSentCount = viewSentCursor != null ? viewSentCursor.getCount() : 0;
 
         updateButtons();
-        setupGoogleAnalytics();
+        setupRemoteAnalytics();
     }
 
     private void initToolbar() {
@@ -382,10 +380,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
                 manageFilesButton.setVisibility(View.VISIBLE);
             }
         }
-
-        ((Collect) getApplication())
-                .getDefaultTracker()
-                .enableAutoActivityTracking(true);
     }
 
     @Override
@@ -506,12 +500,10 @@ public class MainMenuActivity extends CollectAbstractActivity {
     }
 
     // This flag must be set each time the app starts up
-    private void setupGoogleAnalytics() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
-                .getInstance());
+    private void setupRemoteAnalytics() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
         boolean isAnalyticsEnabled = settings.getBoolean(GeneralKeys.KEY_ANALYTICS, true);
-        GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getApplicationContext());
-        googleAnalytics.setAppOptOut(!isAnalyticsEnabled);
+        Collect.getInstance().setAnalyticsCollectionEnabled(isAnalyticsEnabled);
     }
 
     private void updateButtons() {
