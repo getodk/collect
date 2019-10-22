@@ -31,7 +31,9 @@ ODK Collect renders forms that are compliant with the [ODK XForms standard](http
 * ODK developer Slack archive: [https://opendatakit.slackarchive.io](https://opendatakit.slackarchive.io) 
 
 ## Release cycle
-New versions of ODK Collect are generally released on the last Sunday of a month. We freeze commits to the master branch on the preceding Wednesday (except for bug fixes). Releases can be requested by any community member and generally happen every 2 months. [@yanokwa](https://github.com/yanokwa) pushes the releases to the Play Store.
+Releases can be requested by any community member and generally happen every 2 months.
+
+Before release we perform a "code freeze" (we stop merging pull requests) and then carry out regression testing. If any problems are found, the release is blocked until we can merge fixes. Once the process is complete, [@yanokwa](https://github.com/yanokwa) pushes the releases to the Play Store. The code is "unfrozen" after a short grace period to make hot fixing easier.
 
 At the beginning of each release cycle, [@grzesiek2010](https://github.com/grzesiek2010) updates all dependencies that have compatible upgrades available and ensures that the build targets the latest SDK.
 
