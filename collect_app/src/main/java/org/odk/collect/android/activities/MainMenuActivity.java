@@ -278,9 +278,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
             startManagingCursor(finalizedCursor);
         }
         completedCount = finalizedCursor != null ? finalizedCursor.getCount() : 0;
-        getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true,
-                contentObserver);
-        // finalizedCursor.registerContentObserver(contentObserver);
 
         // count for saved instances
         try {
@@ -322,6 +319,9 @@ public class MainMenuActivity extends CollectAbstractActivity {
         super.onResume();
         SharedPreferences sharedPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
+
+        getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true,
+                contentObserver);
 
         boolean edit = sharedPreferences.getBoolean(
                 AdminKeys.KEY_EDIT_SAVED, true);
@@ -394,6 +394,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         if (alertDialog != null && alertDialog.isShowing()) {
             alertDialog.dismiss();
         }
+        getContentResolver().unregisterContentObserver(contentObserver);
     }
 
     @Override
