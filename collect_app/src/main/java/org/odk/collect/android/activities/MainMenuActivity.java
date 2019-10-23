@@ -264,47 +264,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
         adminPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
-        InstancesDao instancesDao = new InstancesDao();
-
-        // count for finalized instances
-        try {
-            finalizedCursor = instancesDao.getFinalizedInstancesCursor();
-        } catch (Exception e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
-        }
-
-        if (finalizedCursor != null) {
-            startManagingCursor(finalizedCursor);
-        }
-        completedCount = finalizedCursor != null ? finalizedCursor.getCount() : 0;
-
-        // count for saved instances
-        try {
-            savedCursor = instancesDao.getUnsentInstancesCursor();
-        } catch (Exception e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
-        }
-
-        if (savedCursor != null) {
-            startManagingCursor(savedCursor);
-        }
-        savedCount = savedCursor != null ? savedCursor.getCount() : 0;
-
-        //count for view sent form
-        try {
-            viewSentCursor = instancesDao.getSentInstancesCursor();
-        } catch (Exception e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
-        }
-        if (viewSentCursor != null) {
-            startManagingCursor(viewSentCursor);
-        }
-        viewSentCount = viewSentCursor != null ? viewSentCursor.getCount() : 0;
-
-        updateButtons();
         setupGoogleAnalytics();
     }
 
@@ -320,6 +279,8 @@ public class MainMenuActivity extends CollectAbstractActivity {
         SharedPreferences sharedPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
+        countSavedForms();
+        updateButtons();
         getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true,
                 contentObserver);
 
@@ -423,6 +384,48 @@ public class MainMenuActivity extends CollectAbstractActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void countSavedForms() {
+        InstancesDao instancesDao = new InstancesDao();
+
+        // count for finalized instances
+        try {
+            finalizedCursor = instancesDao.getFinalizedInstancesCursor();
+        } catch (Exception e) {
+            createErrorDialog(e.getMessage(), EXIT);
+            return;
+        }
+
+        if (finalizedCursor != null) {
+            startManagingCursor(finalizedCursor);
+        }
+        completedCount = finalizedCursor != null ? finalizedCursor.getCount() : 0;
+
+        // count for saved instances
+        try {
+            savedCursor = instancesDao.getUnsentInstancesCursor();
+        } catch (Exception e) {
+            createErrorDialog(e.getMessage(), EXIT);
+            return;
+        }
+
+        if (savedCursor != null) {
+            startManagingCursor(savedCursor);
+        }
+        savedCount = savedCursor != null ? savedCursor.getCount() : 0;
+
+        //count for view sent form
+        try {
+            viewSentCursor = instancesDao.getSentInstancesCursor();
+        } catch (Exception e) {
+            createErrorDialog(e.getMessage(), EXIT);
+            return;
+        }
+        if (viewSentCursor != null) {
+            startManagingCursor(viewSentCursor);
+        }
+        viewSentCount = viewSentCursor != null ? viewSentCursor.getCount() : 0;
     }
 
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
