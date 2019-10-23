@@ -276,16 +276,24 @@ public class MainMenuActivity extends CollectAbstractActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences sharedPreferences = this.getSharedPreferences(
-                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
         countSavedForms();
         updateButtons();
         getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true,
                 contentObserver);
 
-        boolean edit = sharedPreferences.getBoolean(
-                AdminKeys.KEY_EDIT_SAVED, true);
+        setButtonsVisibility();
+
+        ((Collect) getApplication())
+                .getDefaultTracker()
+                .enableAutoActivityTracking(true);
+    }
+
+    private void setButtonsVisibility() {
+        SharedPreferences sharedPreferences = this.getSharedPreferences(
+                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
+
+        boolean edit = sharedPreferences.getBoolean(AdminKeys.KEY_EDIT_SAVED, true);
         if (!edit) {
             if (reviewDataButton != null) {
                 reviewDataButton.setVisibility(View.GONE);
@@ -296,8 +304,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         }
 
-        boolean send = sharedPreferences.getBoolean(
-                AdminKeys.KEY_SEND_FINALIZED, true);
+        boolean send = sharedPreferences.getBoolean(AdminKeys.KEY_SEND_FINALIZED, true);
         if (!send) {
             if (sendDataButton != null) {
                 sendDataButton.setVisibility(View.GONE);
@@ -308,8 +315,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         }
 
-        boolean viewSent = sharedPreferences.getBoolean(
-                AdminKeys.KEY_VIEW_SENT, true);
+        boolean viewSent = sharedPreferences.getBoolean(AdminKeys.KEY_VIEW_SENT, true);
         if (!viewSent) {
             if (viewSentFormsButton != null) {
                 viewSentFormsButton.setVisibility(View.GONE);
@@ -320,8 +326,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         }
 
-        boolean getBlank = sharedPreferences.getBoolean(
-                AdminKeys.KEY_GET_BLANK, true);
+        boolean getBlank = sharedPreferences.getBoolean(AdminKeys.KEY_GET_BLANK, true);
         if (!getBlank) {
             if (getFormsButton != null) {
                 getFormsButton.setVisibility(View.GONE);
@@ -332,8 +337,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         }
 
-        boolean deleteSaved = sharedPreferences.getBoolean(
-                AdminKeys.KEY_DELETE_SAVED, true);
+        boolean deleteSaved = sharedPreferences.getBoolean(AdminKeys.KEY_DELETE_SAVED, true);
         if (!deleteSaved) {
             if (manageFilesButton != null) {
                 manageFilesButton.setVisibility(View.GONE);
@@ -343,10 +347,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
                 manageFilesButton.setVisibility(View.VISIBLE);
             }
         }
-
-        ((Collect) getApplication())
-                .getDefaultTracker()
-                .enableAutoActivityTracking(true);
     }
 
     @Override
