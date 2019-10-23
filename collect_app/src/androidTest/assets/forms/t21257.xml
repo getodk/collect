@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<h:html
+    xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>t21257</h:title>
+        <model>
+            <instance>
+                <t21257 id="t21257">
+                    <mytext1/>
+                    <mydecimal/>
+                    <mynumbers/>
+                    <mytext2/>
+                    <myselect/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </t21257>
+            </instance>
+            <bind nodeset="/t21257/mytext1" type="string"/>
+            <bind constraint=". &gt;= 18 and . &lt; 110" jr:constraintMsg="mydecimal constraint" nodeset="/t21257/mydecimal" type="decimal"/>
+            <bind constraint=". &gt;= 18 and . &lt; 110" jr:constraintMsg="mynumbers constraint" nodeset="/t21257/mynumbers" type="string"/>
+            <bind nodeset="/t21257/mytext2" type="string"/>
+            <bind constraint="not(selected(., 'do_not_know') and (count-selected(.)&gt;1))" jr:constraintMsg="myselect constraint" nodeset="/t21257/myselect" type="select"/>
+            <bind jr:preload="uid" nodeset="/t21257/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/t21257/mytext1">
+            <label>mytext1</label>
+        </input>
+        <input ref="/t21257/mydecimal">
+            <label>mydecimal</label>
+        </input>
+        <input appearance="numbers" ref="/t21257/mynumbers">
+            <label>mynumbers</label>
+        </input>
+        <input ref="/t21257/mytext2">
+            <label>mytext2</label>
+        </input>
+        <select ref="/t21257/myselect">
+            <label>myselect</label>
+            <item>
+                <label>yes</label>
+                <value>y</value>
+            </item>
+            <item>
+                <label>no</label>
+                <value>n</value>
+            </item>
+            <item>
+                <label>do not know</label>
+                <value>do_not_know</value>
+            </item>
+        </select>
+    </h:body>
+</h:html>
