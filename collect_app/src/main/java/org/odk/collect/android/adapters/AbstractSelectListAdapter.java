@@ -68,18 +68,20 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
     private final ReferenceManager referenceManager;
     private final int numColumns;
     private final Context context;
+    private final int answerFontSize;
     List<SelectChoice> items;
     List<SelectChoice> filteredItems;
     boolean noButtonsMode;
 
     SelectWidget widget;
 
-    AbstractSelectListAdapter(List<SelectChoice> items, SelectWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager) {
+    AbstractSelectListAdapter(List<SelectChoice> items, SelectWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize) {
         context = widget.getContext();
         this.items = items;
         this.widget = widget;
         this.prompt = formEntryPrompt;
         this.referenceManager = referenceManager;
+        this.answerFontSize = answerFontSize;
         filteredItems = items;
         this.numColumns = numColumns;
         noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(getFormEntryPrompt())
@@ -177,7 +179,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
         if (errorMsg != null) {
             TextView missingImage = new TextView(context);
-            missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, widget.getAnswerFontSize());
+            missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
             missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
             missingImage.setPadding(itemPadding, itemPadding, itemPadding, itemPadding);
 
@@ -276,5 +278,9 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
     private FormEntryPrompt getFormEntryPrompt() {
         return prompt;
+    }
+
+    private int getAnswerFontSize() {
+        return answerFontSize;
     }
 }

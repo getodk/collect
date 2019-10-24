@@ -43,8 +43,8 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
     private RadioButton selectedRadioButton;
     private View selectedItem;
 
-    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, AbstractSelectOneWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager) {
-        super(items, widget, numColumns, formEntryPrompt, referenceManager);
+    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, AbstractSelectOneWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize) {
+        super(items, widget, numColumns, formEntryPrompt, referenceManager, answerFontSize);
         this.selectedValue = selectedValue;
     }
 
