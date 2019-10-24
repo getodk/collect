@@ -91,7 +91,7 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
     }
 
     protected void createLayout() {
-        adapter = new SelectOneListAdapter(items, selectedValue, this, numColumns);
+        adapter = new SelectOneListAdapter(items, selectedValue, this, numColumns, this.getFormEntryPrompt(), this.getReferenceManager());
 
         if (items != null) {
             RecyclerView recyclerView = setUpRecyclerView();

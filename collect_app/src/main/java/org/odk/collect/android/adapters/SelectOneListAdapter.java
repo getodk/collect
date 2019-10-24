@@ -29,6 +29,8 @@ import android.widget.RadioButton;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.helper.Selection;
+import org.javarosa.core.reference.ReferenceManager;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.widgets.AbstractSelectOneWidget;
 
@@ -41,8 +43,8 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
     private RadioButton selectedRadioButton;
     private View selectedItem;
 
-    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, AbstractSelectOneWidget widget, int numColumns) {
-        super(items, widget, numColumns, widget.getFormEntryPrompt());
+    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, AbstractSelectOneWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager) {
+        super(items, widget, numColumns, formEntryPrompt, referenceManager);
         this.selectedValue = selectedValue;
     }
 

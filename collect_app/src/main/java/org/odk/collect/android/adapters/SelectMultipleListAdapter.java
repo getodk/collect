@@ -28,6 +28,8 @@ import android.widget.FrameLayout;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.helper.Selection;
+import org.javarosa.core.reference.ReferenceManager;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.widgets.SelectWidget;
 import org.odk.collect.android.R;
@@ -38,8 +40,8 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
 
     private final List<Selection> selectedItems;
 
-    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectWidget widget, int numColumns) {
-        super(items, widget, numColumns, widget.getFormEntryPrompt());
+    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager) {
+        super(items, widget, numColumns, formEntryPrompt, referenceManager);
         this.selectedItems = selectedItems;
     }
 

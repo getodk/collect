@@ -65,18 +65,21 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         implements Filterable {
 
     private final FormEntryPrompt prompt;
-    SelectWidget widget;
+    private final ReferenceManager referenceManager;
+    private final int numColumns;
+    private final Context context;
     List<SelectChoice> items;
     List<SelectChoice> filteredItems;
     boolean noButtonsMode;
-    private final int numColumns;
-    private final Context context;
 
-    AbstractSelectListAdapter(List<SelectChoice> items, SelectWidget widget, int numColumns, FormEntryPrompt formEntryPrompt) {
+    SelectWidget widget;
+
+    AbstractSelectListAdapter(List<SelectChoice> items, SelectWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager) {
         context = widget.getContext();
         this.items = items;
         this.widget = widget;
         this.prompt = formEntryPrompt;
+        this.referenceManager = referenceManager;
         filteredItems = items;
         this.numColumns = numColumns;
         noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(getFormEntryPrompt())
@@ -240,13 +243,13 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         public void addMediaFromChoice(AudioVideoImageTextLabel audioVideoImageTextLabel, int index, TextView textView, List<SelectChoice> items) {
             SelectChoice item = items.get(index);
 
-            String audioURI = getPlayableAudioURI(getFormEntryPrompt(), item, widget.getReferenceManager());
+            String audioURI = getPlayableAudioURI(getFormEntryPrompt(), item, getReferenceManager());
             String imageURI = getImageURI(index, items);
             String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "video");
             String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "big-image");
 
             audioVideoImageTextLabel.setTag(getClipID(getFormEntryPrompt(), item));
-            audioVideoImageTextLabel.setTextImageVideo(textView, imageURI, videoURI, bigImageURI, widget.getReferenceManager());
+            audioVideoImageTextLabel.setTextImageVideo(textView, imageURI, videoURI, bigImageURI, getReferenceManager());
 
             if (audioURI != null) {
                 audioVideoImageTextLabel.setAudio(audioURI, widget.getAudioHelper());
@@ -265,6 +268,10 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             }
             return imageURI;
         }
+    }
+
+    private ReferenceManager getReferenceManager() {
+        return referenceManager;
     }
 
     private FormEntryPrompt getFormEntryPrompt() {
