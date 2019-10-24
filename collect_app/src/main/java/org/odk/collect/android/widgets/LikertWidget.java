@@ -8,6 +8,9 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -26,25 +29,20 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 
 import timber.log.Timber;
 
 @SuppressLint("ViewConstructor")
 public class LikertWidget extends ItemsWidget {
 
-    private int iconDimension = 85;
+    private int iconDimensionLimit = 85;
     private LinearLayout view;
     private RadioButton checkedButton;
     private final LinearLayout.LayoutParams LINEARLAYOUT_PARAMS = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT, 1);
-    private final LayoutParams TEXTVIEW_PARAMS = new LayoutParams(LayoutParams.MATCH_PARENT, 50);
-    private final LayoutParams IMAGEVIEW_PARAMS = new LayoutParams(iconDimension, iconDimension);
+    private final LayoutParams TEXTVIEW_PARAMS = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+    private final LayoutParams IMAGEVIEW_PARAMS = new LayoutParams(iconDimensionLimit, iconDimensionLimit);
     private final LayoutParams RADIOBUTTON_PARAMS = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
-    ArrayList<TextView> textViews;
-    ArrayList<ImageView> imageViews;
     HashMap<RadioButton, String> buttonsToName; // the weight is also the index
 
     public LikertWidget(Context context, FormEntryPrompt prompt) {
@@ -121,20 +119,18 @@ public class LikertWidget extends ItemsWidget {
 
     public void setStructures() {
         buttonsToName = new HashMap<>();
-        imageViews = new ArrayList<>();
-        textViews = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
             LinearLayout optionView = getLinearLayout();
             RadioButton button = getRadioButton();
             buttonsToName.put(button, items.get(i).getValue());
             optionView.addView(button);
             ImageView imgView = getImageAsImageView(i);
-            // checks if image is set
+            // checks if image is set or valid
             if (imgView != null) {
                 optionView.addView(imgView);
             } else {
                 TextView choice = getTextView();
-                choice.setText(items.get(i).getValue());
+                choice.setText(getFormEntryPrompt().getSelectChoiceText(items.get(i)));
                 optionView.addView(choice);
             }
             view.addView(optionView);
@@ -163,7 +159,7 @@ public class LikertWidget extends ItemsWidget {
         view.setGravity(Gravity.CENTER);
         view.setPadding(2,2,2,2);
         view.setLayoutParams(TEXTVIEW_PARAMS);
-        view.setTextColor(Color.parseColor("#000000")); // This means black
+        view.setTextColor(Color.BLACK);
         return view;
     }
 
@@ -223,8 +219,8 @@ public class LikertWidget extends ItemsWidget {
                 Bitmap b = null;
                 try {
                     // TODO: Cap the size of the image here
-                    int screenWidth = iconDimension;
-                    int screenHeight = iconDimension;
+                    int screenWidth = iconDimensionLimit;
+                    int screenHeight = iconDimensionLimit;
                     b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
                 } catch (OutOfMemoryError e) {
                     errorMsg = "ERROR: " + e.getMessage();
@@ -241,6 +237,7 @@ public class LikertWidget extends ItemsWidget {
             } else {
                 // The file does not exist
                 errorMsg = getContext().getString(R.string.file_missing, imageFile);
+                System.out.println(imageFile + " cannot be found ");
             }
             if (errorMsg != null) {
                 Timber.e(errorMsg);
