@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.graphics.Canvas;
@@ -35,7 +36,7 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class LikertWidget extends ItemsWidget {
 
-    private int iconDimensionLimit = 85;
+    private int iconDimensionLimit = 95;
     private LinearLayout view;
     private RadioButton checkedButton;
     private final LinearLayout.LayoutParams LINEARLAYOUT_PARAMS = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT, 1);
@@ -219,8 +220,9 @@ public class LikertWidget extends ItemsWidget {
                 Bitmap b = null;
                 try {
                     // TODO: Cap the size of the image here
-                    int screenWidth = iconDimensionLimit;
-                    int screenHeight = iconDimensionLimit;
+                    DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
+                    int screenWidth = metrics.widthPixels;
+                    int screenHeight = metrics.heightPixels;
                     b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
                 } catch (OutOfMemoryError e) {
                     errorMsg = "ERROR: " + e.getMessage();
