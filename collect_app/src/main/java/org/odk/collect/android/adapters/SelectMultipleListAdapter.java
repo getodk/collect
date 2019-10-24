@@ -39,7 +39,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
     private final List<Selection> selectedItems;
 
     public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectWidget widget, int numColumns) {
-        super(items, widget, numColumns);
+        super(items, widget, numColumns, widget.getFormEntryPrompt());
         this.selectedItems = selectedItems;
     }
 

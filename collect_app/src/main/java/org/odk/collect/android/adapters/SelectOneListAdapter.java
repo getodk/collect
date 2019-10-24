@@ -42,7 +42,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
     private View selectedItem;
 
     public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, AbstractSelectOneWidget widget, int numColumns) {
-        super(items, widget, numColumns);
+        super(items, widget, numColumns, widget.getFormEntryPrompt());
         this.selectedValue = selectedValue;
     }
 

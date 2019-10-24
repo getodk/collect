@@ -64,6 +64,7 @@ import static org.odk.collect.android.widgets.QuestionWidget.isRTL;
 public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<AbstractSelectListAdapter.ViewHolder>
         implements Filterable {
 
+    private final FormEntryPrompt prompt;
     SelectWidget widget;
     List<SelectChoice> items;
     List<SelectChoice> filteredItems;
@@ -71,14 +72,15 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
     private final int numColumns;
     private final Context context;
 
-    AbstractSelectListAdapter(List<SelectChoice> items, SelectWidget widget, int numColumns) {
+    AbstractSelectListAdapter(List<SelectChoice> items, SelectWidget widget, int numColumns, FormEntryPrompt formEntryPrompt) {
         context = widget.getContext();
         this.items = items;
         this.widget = widget;
+        this.prompt = formEntryPrompt;
         filteredItems = items;
         this.numColumns = numColumns;
-        noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(widget.getFormEntryPrompt())
-                || WidgetAppearanceUtils.isNoButtonsAppearance(widget.getFormEntryPrompt());
+        noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(getFormEntryPrompt())
+                || WidgetAppearanceUtils.isNoButtonsAppearance(getFormEntryPrompt());
     }
 
     @Override
@@ -103,7 +105,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                     filterResults.count = items.size();
                 } else {
                     List<SelectChoice> filteredList = new ArrayList<>();
-                    FormEntryPrompt formEntryPrompt = widget.getFormEntryPrompt();
+                    FormEntryPrompt formEntryPrompt = getFormEntryPrompt();
                     for (SelectChoice item : items) {
                         if (formEntryPrompt.getSelectChoiceText(item).toLowerCase(Locale.US).contains(searchStr)) {
                             filteredList.add(item);
@@ -128,7 +130,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
     void setupButton(TextView button, int index) {
         button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize());
-        button.setText(FormEntryPromptUtils.getItemText(widget.getFormEntryPrompt(), filteredItems.get(index)));
+        button.setText(FormEntryPromptUtils.getItemText(getFormEntryPrompt(), filteredItems.get(index)));
         button.setTag(items.indexOf(filteredItems.get(index)));
         button.setGravity(isRTL() ? Gravity.END : Gravity.START);
         button.setOnLongClickListener(getODKViewParent(widget));
@@ -142,7 +144,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
         String imageURI = selectChoice instanceof ExternalSelectChoice
                 ? ((ExternalSelectChoice) selectChoice).getImage()
-                : widget.getFormEntryPrompt().getSpecialFormSelectChoiceText(selectChoice, FormEntryCaption.TEXT_FORM_IMAGE);
+                : getFormEntryPrompt().getSpecialFormSelectChoiceText(selectChoice, FormEntryCaption.TEXT_FORM_IMAGE);
 
         String errorMsg = null;
         if (imageURI != null) {
@@ -176,7 +178,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
             missingImage.setPadding(itemPadding, itemPadding, itemPadding, itemPadding);
 
-            String choiceText = FormEntryPromptUtils.getItemText(widget.getFormEntryPrompt(), selectChoice).toString();
+            String choiceText = FormEntryPromptUtils.getItemText(getFormEntryPrompt(), selectChoice).toString();
 
             if (!choiceText.isEmpty()) {
                 missingImage.setText(choiceText);
@@ -189,7 +191,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         }
 
         view.setOnClickListener(v -> onItemClick(selectChoice.selection(), v));
-        view.setEnabled(!widget.getFormEntryPrompt().isReadOnly());
+        view.setEnabled(!getFormEntryPrompt().isReadOnly());
         return view;
     }
 
@@ -228,7 +230,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                 view.addView(setUpNoButtonsView(index));
             } else {
                 addMediaFromChoice(audioVideoImageTextLabel, index, createButton(index), filteredItems);
-                audioVideoImageTextLabel.setEnabled(!widget.getFormEntryPrompt().isReadOnly());
+                audioVideoImageTextLabel.setEnabled(!getFormEntryPrompt().isReadOnly());
             }
         }
 
@@ -238,12 +240,12 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         public void addMediaFromChoice(AudioVideoImageTextLabel audioVideoImageTextLabel, int index, TextView textView, List<SelectChoice> items) {
             SelectChoice item = items.get(index);
 
-            String audioURI = getPlayableAudioURI(widget.getFormEntryPrompt(), item, widget.getReferenceManager());
+            String audioURI = getPlayableAudioURI(getFormEntryPrompt(), item, widget.getReferenceManager());
             String imageURI = getImageURI(index, items);
-            String videoURI = widget.getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "video");
-            String bigImageURI = widget.getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "big-image");
+            String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "video");
+            String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "big-image");
 
-            audioVideoImageTextLabel.setTag(getClipID(widget.getFormEntryPrompt(), item));
+            audioVideoImageTextLabel.setTag(getClipID(getFormEntryPrompt(), item));
             audioVideoImageTextLabel.setTextImageVideo(textView, imageURI, videoURI, bigImageURI, widget.getReferenceManager());
 
             if (audioURI != null) {
@@ -258,10 +260,14 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             if (items.get(index) instanceof ExternalSelectChoice) {
                 imageURI = ((ExternalSelectChoice) items.get(index)).getImage();
             } else {
-                imageURI = widget.getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index),
+                imageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index),
                         FormEntryCaption.TEXT_FORM_IMAGE);
             }
             return imageURI;
         }
+    }
+
+    private FormEntryPrompt getFormEntryPrompt() {
+        return prompt;
     }
 }
