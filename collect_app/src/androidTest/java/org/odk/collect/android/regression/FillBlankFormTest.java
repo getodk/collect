@@ -62,7 +62,9 @@ public class FillBlankFormTest extends BaseRegressionTest {
             .around(new CopyFormRule("emptyGroupFieldList2.xml"))
             .around(new CopyFormRule("metadata2.xml"))
             .around(new CopyFormRule("manyQ.xml"))
-            .around(new CopyFormRule("nigeria-wards.xml"));
+            .around(new CopyFormRule("nigeria-wards.xml"))
+            .around(new CopyFormRule("t21257.xml"))
+            .around(new CopyFormRule("test_multiselect_cleared.xml"));
 
     @Test
     public void subtext_ShouldDisplayAdditionalInformation() {
@@ -123,7 +125,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         //TestCase17
         new MainMenuPage(main)
                 .startBlankForm("1560_DateData")
-                .checkIsTextDisplayed("Jan 01, 1900")
+                .checkIsTranslationDisplayed("Jan 01, 1900", "01 ene. 1900")
                 .swipeToNextQuestion()
                 .clickSaveAndExit()
 
@@ -240,7 +242,26 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
                 .clickSaveAndExit()
-                .checkIsToastWithMessageDisplayed("Form successfully saved!");
+                .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
+    }
+
+    @Test
+    public void predicateWarning_ShouldBeAbleToFillTheForm() {
+
+        //TestCase24
+        new MainMenuPage(main)
+                .startBlankForm("predicate-warning")
+                .clickOnText("Apple")
+                .swipeToNextQuestion()
+                .clickOnText("Gala")
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickOnText("Gala")
+                .clickOnText("Granny Smith")
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickSaveAndExit();
+
     }
 
     @Test
@@ -308,7 +329,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickOnText("Oranges")
                 .swipeToNextQuestion()
                 .clickSaveAndExit()
-                .checkIsToastWithMessageDisplayed("Form successfully saved!");
+                .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
     }
 
     @Test
@@ -360,7 +381,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickOK(new FormEntryPage("g6Error", main))
                 .swipeToNextQuestion()
                 .clickSaveAndExit()
-                .checkIsToastWithMessageDisplayed("Form successfully saved!");
+                .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
 
         new MainMenuPage(main).startBlankForm("g6Error2")
                 .inputText("bla")
@@ -370,34 +391,36 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .inputText("ble")
                 .swipeToNextQuestion()
                 .clickSaveAndExit()
-                .checkIsToastWithMessageDisplayed("Form successfully saved!");
+                .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
 
         new MainMenuPage(main)
                 .startBlankForm("emptyGroupFieldList")
                 .clickSaveAndExit()
-                .checkIsToastWithMessageDisplayed("Form successfully saved!");
+                .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
 
         new MainMenuPage(main).startBlankForm("emptyGroupFieldList2")
                 .inputText("nana")
                 .swipeToNextQuestion()
                 .clickSaveAndExit()
-                .checkIsToastWithMessageDisplayed("Form successfully saved!");
+                .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
     }
 
     @Test
     public void user_ShouldBeAbleToFillTheForm() {
 
         //TestCase27
-        new MainMenuPage(main).startBlankForm("metadata2")
+        new MainMenuPage(main)
+                .startBlankForm("metadata2")
                 .clickSaveAndExit()
-                .checkIsToastWithMessageDisplayed("Form successfully saved!");
+                .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
     }
 
     @Test
     public void question_ShouldBeVisibleOnTheTopOfHierarchy() {
 
         //TestCase23
-        new MainMenuPage(main).startBlankForm("manyQ")
+        new MainMenuPage(main)
+                .startBlankForm("manyQ")
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
                 .clickGoToIconInForm()
@@ -410,7 +433,8 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void bigForm_ShouldBeFilledSuccessfully() {
 
         //TestCase18
-        new MainMenuPage(main).startBlankForm("Nigeria Wards")
+        new MainMenuPage(main)
+                .startBlankForm("Nigeria Wards")
                 .clickOnString(R.string.select_one)
                 .clickOnText("Adamawa")
                 .swipeToNextQuestion()
@@ -429,5 +453,65 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FrameLayout questionContainer = formEntryActivity.findViewById(R.id.select_container);
         TextView questionView = (TextView) questionContainer.getChildAt(0);
         return questionView.getText().toString();
+    }
+
+    @Test
+    public void questionValidation_ShouldShowToastOnlyWhenConditionsAreNotMet() {
+
+        //TestCase43
+        new MainMenuPage(main)
+                .startBlankForm("t21257")
+                .clickOnText("mytext1")
+                .inputText("test")
+                .swipeToNextQuestion()
+                .inputText("17")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .checkIsToastWithMessageDisplayed("mydecimal constraint")
+                .inputText("117")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .checkIsToastWithMessageDisplayed("mydecimal constraint")
+                .inputText("50")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .inputText("16")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .checkIsToastWithMessageDisplayed("mynumbers constraint")
+                .inputText("116")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .checkIsToastWithMessageDisplayed("mynumbers constraint")
+                .inputText("51")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .inputText("test2")
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickSaveAndExit();
+    }
+
+    @Test
+    public void noDataLost_ShouldRememberAnswersForMultiSelectWidget() {
+
+        //TestCase44
+        new MainMenuPage(main)
+                .startBlankForm("test_multiselect_cleared")
+                .clickOnText("a")
+                .clickOnText("c")
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickOnText("b")
+                .clickOnText("d")
+                .swipeToNextQuestion()
+                .swipeToPreviousQuestion()
+                .swipeToPreviousQuestion()
+                .swipeToPreviousQuestion()
+                .clickGoToIconInForm()
+                .checkIsTextDisplayed("a, c")
+                .checkIsTextDisplayed("b, d")
+                .clickJumpEndButton()
+                .clickGoToIconInForm();
     }
 }
