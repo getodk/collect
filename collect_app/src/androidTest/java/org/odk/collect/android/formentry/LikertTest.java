@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.espressoutils.FormEntry;
 import org.odk.collect.android.support.CopyFormRule;
@@ -20,6 +21,7 @@ import java.util.Collections;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class LikertTest {
@@ -42,6 +44,11 @@ public class LikertTest {
 
     @Test
     public void longLabelsShouldBeDisplayed() {
-        onView(withText("Likert")).perform(click());
+        openWidgetList();
+        onView(withText("Likert Widget")).perform(click());
+    }
+
+    private void openWidgetList() {
+        onView(withId(R.id.menu_goto)).perform(click());
     }
 }
