@@ -7,6 +7,7 @@ import org.javarosa.core.model.data.DateData;
 import org.joda.time.LocalDateTime;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.GeneralDateTimeWidgetTest;
 
 import static org.junit.Assert.assertEquals;
@@ -29,7 +30,7 @@ public class DateWidgetTest extends GeneralDateTimeWidgetTest<DateWidget, DateDa
     @NonNull
     @Override
     public DateWidget createWidget() {
-        return new DateWidget(activity, formEntryPrompt);
+        return new DateWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @NonNull

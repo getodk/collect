@@ -6,6 +6,7 @@ import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
 
 /**
@@ -18,7 +19,7 @@ public class BearingWidgetTest extends BinaryWidgetTest<BearingWidget, StringDat
     @NonNull
     @Override
     public BearingWidget createWidget() {
-        return new BearingWidget(activity, formEntryPrompt);
+        return new BearingWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @Override

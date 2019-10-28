@@ -4,9 +4,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-
 /**
  * A helper class for getting a LocationClient based on whether or not Google Play Services are
  * available on the device.
@@ -43,12 +40,5 @@ public class LocationClients {
      */
     public static void setTestClient(@NonNull LocationClient testClient) {
         LocationClients.testClient = testClient;
-    }
-
-    public static boolean areGooglePlayServicesAvailable(@NonNull Context context) {
-        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
-        int status = googleApiAvailability.isGooglePlayServicesAvailable(context);
-
-        return status == ConnectionResult.SUCCESS;
     }
 }

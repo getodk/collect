@@ -17,10 +17,12 @@ package org.odk.collect.android.utilities;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.StyleRes;
+
 import android.util.TypedValue;
 
 import org.odk.collect.android.R;
@@ -37,22 +39,22 @@ public final class ThemeUtils {
 
     @StyleRes
     public int getAppTheme() {
-        return isDarkTheme() ? R.style.DarkAppTheme : R.style.LightAppTheme;
+        return isDarkTheme() ? R.style.Theme_Collect_Dark : R.style.Theme_Collect_Light;
     }
 
     @StyleRes
     public int getFormEntryActivityTheme() {
-        return isDarkTheme() ? R.style.FormEntryActivityDarkTheme : R.style.FormEntryActivityLightTheme;
+        return isDarkTheme() ? R.style.Theme_Collect_Activity_FormEntryActivity_Dark : R.style.Theme_Collect_Activity_FormEntryActivity_Light;
     }
 
     @StyleRes
     public int getSettingsTheme() {
-        return isDarkTheme() ? R.style.AppTheme_SettingsTheme_Dark : R.style.AppTheme_SettingsTheme_Light;
+        return isDarkTheme() ? R.style.Theme_Collect_Settings_Dark : R.style.Theme_Collect_Settings_Light;
     }
 
     @StyleRes
     public int getBottomDialogTheme() {
-        return isDarkTheme() ? R.style.DarkMaterialDialogSheet : R.style.LightMaterialDialogSheet;
+        return isDarkTheme() ? R.style.Theme_Collect_MaterialDialogSheet_Dark : R.style.Theme_Collect_MaterialDialogSheet_Light;
     }
 
     @DrawableRes
@@ -97,10 +99,21 @@ public final class ThemeUtils {
 
     /**
      * @return Text color for the current {@link android.content.res.Resources.Theme}
+     *
+     * @deprecated use {@link #getColorOnSurface()} instead
      */
     @ColorInt
+    @Deprecated
     public int getPrimaryTextColor() {
         return getAttributeValue(R.attr.primaryTextColor);
+    }
+
+    /**
+     * @return Text color for the current {@link android.content.res.Resources.Theme}
+     */
+    @ColorInt
+    public int getColorOnSurface() {
+        return getAttributeValue(R.attr.colorOnSurface);
     }
 
     /**

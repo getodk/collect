@@ -166,4 +166,8 @@ public class WidgetAppearanceUtils {
     public static boolean isCompactAppearance(FormEntryPrompt prompt) {
         return getSanitizedAppearanceHint(prompt).contains(COMPACT);
     }
+
+    public static boolean useThousandSeparator(FormEntryPrompt prompt) {
+        return getSanitizedAppearanceHint(prompt).contains(WidgetAppearanceUtils.THOUSANDS_SEP);
+    }
 }

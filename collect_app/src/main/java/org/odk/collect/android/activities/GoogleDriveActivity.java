@@ -441,7 +441,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     }
 
     private Stack<String> buildPath(String[] paths) {
-        Stack<String> pathStack = new Stack<String>();
+        Stack<String> pathStack = new Stack<>();
         for (String path : paths) {
             pathStack.push(path);
         }

@@ -64,28 +64,28 @@
 
                     <Button
                         android:id="@+id/enter_data"
-                        style="@style/MainMenuBigButton"
+                        style="@style/Widget.Collect.Button.Big"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small" />
 
                     <Button
                         android:id="@+id/review_data"
-                        style="@style/MainMenuBigButton"
+                        style="@style/Widget.Collect.Button.Big"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small" />
 
                     <Button
                         android:id="@+id/send_data"
-                        style="@style/MainMenuBigButton"
+                        style="@style/Widget.Collect.Button.Big"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small" />
 
                     <Button
                         android:id="@+id/view_sent_forms"
-                        style="@style/MainMenuBigButton"
+                        style="@style/Widget.Collect.Button.Big"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
@@ -101,14 +101,14 @@
 
                     <Button
                         android:id="@+id/get_forms"
-                        style="@style/MainMenuBigButton"
+                        style="@style/Widget.Collect.Button.Big"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small" />
 
                     <Button
                         android:id="@+id/manage_forms"
-                        style="@style/MainMenuBigButton"
+                        style="@style/Widget.Collect.Button.Big"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small" />

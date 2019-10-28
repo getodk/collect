@@ -6,8 +6,6 @@
   <string name="add_another_repeat">เพิ่มกลุ่ม \"%s\" อีกหรือไม่</string>
   <string name="add_repeat">เพิ่มกลุ่ม \"%s\" ใหม่หรือไม่</string>
   <string name="add_repeat_no">ไม่เพิ่ม</string>
-  <string name="audio_file_error">ยังไม่ได้เลือกไฟล์เสียง</string>
-  <string name="audio_file_invalid">ไฟล์ %s ไม่ใช่ไฟล์เสียง</string>
   <string name="cancel">ยกเลิก</string>
   <string name="cancel_loading_form">ยกเลิก</string>
   <string name="cancel_location">ยกเลิก</string>
@@ -136,7 +134,6 @@
   <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
   <string name="manifest_tag_error">Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
-  <string name="file_fetch_failed">Error: %2$s (%3$s) at %1$s</string>
   <string name="fetching_manifest">%s. Getting manifest </string>
   <string name="success">สำเร็จ</string>
   <string name="no_forms_uploaded">ขออภัย ไม่สามารถส่งแบบสำรวจได้</string>

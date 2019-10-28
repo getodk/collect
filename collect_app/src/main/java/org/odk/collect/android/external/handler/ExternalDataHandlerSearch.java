@@ -206,16 +206,16 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
 
     protected ArrayList<SelectChoice> createDynamicSelectChoices(Cursor c,
             LinkedHashMap<String, String> selectColumnMap, String safeImageColumn) {
-        List<String> columnsToExcludeFromLabels = new ArrayList<String>();
+        List<String> columnsToExcludeFromLabels = new ArrayList<>();
         if (safeImageColumn != null) {
             columnsToExcludeFromLabels.add(safeImageColumn);
         }
 
-        ArrayList<SelectChoice> selectChoices = new ArrayList<SelectChoice>();
+        ArrayList<SelectChoice> selectChoices = new ArrayList<>();
         if (c.getCount() > 0) {
             c.moveToPosition(-1);
             int index = 0;
-            Set<String> uniqueValues = new HashSet<String>();
+            Set<String> uniqueValues = new HashSet<>();
             while (c.moveToNext()) {
 
                 // the value is always the first column

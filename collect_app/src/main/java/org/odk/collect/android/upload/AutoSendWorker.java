@@ -23,7 +23,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
-import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
@@ -36,8 +35,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dto.Form;
 import org.odk.collect.android.dto.Instance;
-import org.odk.collect.android.http.CollectThenSystemContentTypeMapper;
-import org.odk.collect.android.http.OkHttpConnection;
+import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -50,10 +48,8 @@ import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import timber.log.Timber;
 
@@ -91,16 +87,16 @@ public class AutoSendWorker extends Worker {
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)
                 || !(networkTypeMatchesAutoSendSetting(currentNetworkInfo) || atLeastOneFormSpecifiesAutoSend())) {
             if (!networkTypeMatchesAutoSendSetting(currentNetworkInfo)) {
-                return Result.RETRY;
+                return Result.retry();
             }
 
-            return Result.FAILURE;
+            return Result.failure();
         }
 
         List<Instance> toUpload = getInstancesToAutoSend(GeneralSharedPreferences.isAutoSendEnabled());
 
         if (toUpload.isEmpty()) {
-            return Result.SUCCESS;
+            return Result.success();
         }
 
         GeneralSharedPreferences settings = GeneralSharedPreferences.getInstance();
@@ -117,16 +113,17 @@ public class AutoSendWorker extends Worker {
                 String googleUsername = accountsManager.getLastSelectedAccountIfValid();
                 if (googleUsername.isEmpty()) {
                     showUploadStatusNotification(true, Collect.getInstance().getString(R.string.google_set_account));
-                    return Result.FAILURE;
+                    return Result.failure();
                 }
                 accountsManager.selectAccount(googleUsername);
                 uploader = new InstanceGoogleSheetsUploader(accountsManager);
             } else {
                 showUploadStatusNotification(true, Collect.getInstance().getString(R.string.odk_permissions_fail));
-                return Result.FAILURE;
+                return Result.failure();
             }
         } else {
-            uploader = new InstanceServerUploader(new OkHttpConnection(null, new CollectThenSystemContentTypeMapper(MimeTypeMap.getSingleton())),
+            OpenRosaHttpInterface httpInterface = Collect.getInstance().getComponent().openRosaHttpInterface();
+            uploader = new InstanceServerUploader(httpInterface,
                     new WebCredentialsUtils(), new HashMap<>());
             deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
                     .getSingularProperty(PropertyManager.withUri(PropertyManager.PROPMGR_DEVICE_ID));
@@ -168,10 +165,8 @@ public class AutoSendWorker extends Worker {
             }
         }
 
-        String message = formatOverallResultMessage(resultMessagesByInstanceId);
-        showUploadStatusNotification(anyFailure, message);
-
-        return Result.SUCCESS;
+        showUploadStatusNotification(anyFailure, InstanceUploaderUtils.getUploadResultMessage(getApplicationContext(), resultMessagesByInstanceId));
+        return Result.success();
     }
 
     /**
@@ -261,31 +256,6 @@ public class AutoSendWorker extends Worker {
             }
         }
         return false;
-    }
-
-    private String formatOverallResultMessage(Map<String, String> resultMessagesByInstanceId) {
-        String message = "";
-
-        if (resultMessagesByInstanceId != null) {
-            StringBuilder selection = new StringBuilder();
-            Set<String> keys = resultMessagesByInstanceId.keySet();
-            Iterator<String> it = keys.iterator();
-
-            String[] selectionArgs = new String[keys.size()];
-            int i = 0;
-            while (it.hasNext()) {
-                String id = it.next();
-                selection.append(InstanceColumns._ID + "=?");
-                selectionArgs[i++] = id;
-                if (i != keys.size()) {
-                    selection.append(" or ");
-                }
-            }
-
-            Cursor cursor = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
-            message = InstanceUploaderUtils.getUploadResultMessage(cursor, resultMessagesByInstanceId);
-        }
-        return message;
     }
 
     private void showUploadStatusNotification(boolean anyFailure, String message) {

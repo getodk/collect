@@ -6,11 +6,11 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.1'
-        classpath 'com.google.gms:google-services:4.0.1'
-        classpath 'org.ow2.asm:asm:6.0' // https://github.com/jacoco/jacoco/issues/639#issuecomment-355424756
-        classpath 'org.jacoco:org.jacoco.core:0.8.0'
-        classpath 'io.fabric.tools:gradle:1.28.1'
+        classpath 'com.android.tools.build:gradle:3.4.2'
+        classpath 'com.google.gms:google-services:4.3.2'
+        classpath 'org.ow2.asm:asm:7.2-beta' // https://github.com/jacoco/jacoco/issues/639#issuecomment-355424756
+        classpath 'org.jacoco:org.jacoco.core:0.8.4'
+        classpath 'io.fabric.tools:gradle:1.31.0'
     }
 }
 
@@ -47,9 +47,7 @@ task checkTests(type: GradleBuild) {
 }
 
 ext {
-    leakyCanaryVersion = '1.5.4'
-    daggerVersion = '2.16'
-    rxLifecycleVersion = '2.2.1'
-    workManagerVersion = "1.0.0-alpha10"
-    okhttp3Version = '3.12.3'
+    leakyCanaryVersion = '1.6.3'
+    daggerVersion = '2.24'
+    okhttp3Version = '3.12.5' //newer versions require minSdkVersion >= 21
 }

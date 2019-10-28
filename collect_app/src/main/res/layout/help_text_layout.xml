@@ -18,8 +18,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
             android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
             android:visibility="gone"
             app:srcCompat="@drawable/information_outline" />
 
@@ -28,8 +28,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/help_icon"
             android:layout_toEndOf="@id/help_icon"
+            android:layout_toRightOf="@id/help_icon"
             tools:text="Testing this out." />
     </RelativeLayout>
 
@@ -47,10 +47,11 @@
             android:layout_height="wrap_content"
             tools:text="This is also a very long guidance that will accompany the longest hint because we are about going the extra mile." />
     </LinearLayout>
+
     <TextView
-            android:id="@+id/warning_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:textColor="?warningColor" />
+        android:id="@+id/warning_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="?attr/warningColor"
+        android:visibility="gone" />
 </LinearLayout>

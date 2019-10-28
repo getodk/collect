@@ -94,7 +94,8 @@ the specific language governing permissions and limitations under the License.
         android:installLocation="auto"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:supportsRtl="true">
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true">
         <provider
             android:name=".provider.FormsProvider"
             android:authorities="org.odk.collect.android.provider.odk.forms.smap"
@@ -155,7 +156,7 @@ the specific language governing permissions and limitations under the License.
             android:windowSoftInputMode="stateHidden" />
         <!-- smap InstanceChooserList renamed as History -->
         <activity android:name=".activities.HistoryActivity" />
-        <activity android:name=".activities.FormChooserList" />
+        <activity android:name=".activities.FormChooserListActivity" />
         <activity android:name=".activities.FormDownloadList" />
         <activity
             android:name=".activities.FileManagerTabs"
@@ -293,55 +294,56 @@ the specific language governing permissions and limitations under the License.
          -->
 
         <!-- smap
-<provider
-    android:name=".provider.FormsProvider"
-    android:authorities="org.odk.collect.android.provider.odk.forms"
-    android:exported="true" />
-<provider
-    android:name=".provider.InstanceProvider"
-    android:authorities="org.odk.collect.android.provider.odk.instances"
-    android:exported="true" />
+        <provider
+            android:name=".provider.FormsProvider"
+            android:authorities="org.odk.collect.android.provider.odk.forms"
+            android:exported="true" />
+        <provider
+            android:name=".provider.InstanceProvider"
+            android:authorities="org.odk.collect.android.provider.odk.instances"
+            android:exported="true" />
 
-<activity-alias
-    android:name=".activities.FormEntryActivity"
-    android:targetActivity=".activities.FormEntryActivity">
-    <intent-filter>
-        <action android:name="android.intent.action.VIEW" />
-        <action android:name="android.intent.action.EDIT" />
+        <activity-alias
+            android:name=".activities.FormEntryActivity"
+            android:targetActivity=".activities.FormEntryActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
 
-        <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT" />
 
-        <data android:mimeType="vnd.android.cursor.item/vnd.odk.form" />
-        <data android:mimeType="vnd.android.cursor.item/vnd.odk.instance" />
-    </intent-filter>
-</activity-alias>
+                <data android:mimeType="vnd.android.cursor.item/vnd.odk.form" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.odk.instance" />
+            </intent-filter>
+        </activity-alias>
 
-<activity-alias
-    android:name=".activities.InstanceChooserList"
-    android:targetActivity=".activities.InstanceChooserList">
-    <intent-filter>
-        <action android:name="android.intent.action.VIEW" />
-        <action android:name="android.intent.action.EDIT" />
+        <activity-alias
+            android:name=".activities.InstanceChooserList"
+            android:targetActivity=".activities.InstanceChooserList">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
 
-        <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT" />
 
-        <data android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
-    </intent-filter>
-</activity-alias>
+                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
+            </intent-filter>
+        </activity-alias>
 
-<activity-alias
-    android:name=".activities.FormChooserList"
-    android:targetActivity=".activities.FormChooserList">
-    <intent-filter>
-        <action android:name="android.intent.action.VIEW" />
-        <action android:name="android.intent.action.EDIT" />
-        <action android:name="android.intent.action.PICK" />
+        <activity-alias
+            android:name=".activities.FormChooserList"
+            android:targetActivity=".activities.FormChooserListActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+                <action android:name="android.intent.action.PICK" />
 
-        <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT" />
 
-        <data android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
-    </intent-filter>
-</activity-alias>
+                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
+            </intent-filter>
+        </activity-alias>
+
 -->
         <activity-alias
             android:name=".activities.FormDownloadList"

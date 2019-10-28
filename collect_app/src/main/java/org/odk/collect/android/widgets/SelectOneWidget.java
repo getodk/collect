@@ -18,11 +18,11 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 
-import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 
 public class SelectOneWidget extends AbstractSelectOneWidget {
-    public SelectOneWidget(Context context, FormEntryPrompt prompt, boolean autoAdvance, boolean readOnlyOverride) { // smap add readOnlyOverride
+    public SelectOneWidget(Context context, QuestionDetails prompt, boolean autoAdvance, boolean readOnlyOverride) {  // smap add readOnlyOverride
         super(context, prompt, autoAdvance, readOnlyOverride);
-        createLayout(readOnlyOverride); // smap
+        createLayout(readOnlyOverride);  // smap
     }
 }

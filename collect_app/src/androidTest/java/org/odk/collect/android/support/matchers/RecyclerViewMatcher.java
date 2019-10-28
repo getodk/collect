@@ -21,10 +21,6 @@ public class RecyclerViewMatcher {
         return new RecyclerViewMatcher(recyclerViewId);
     }
 
-    public Matcher<View> atPosition(final int position) {
-        return atPositionOnView(position, -1);
-    }
-
     public Matcher<View> atPositionOnView(final int position, final int targetViewId) {
 
         return new TypeSafeMatcher<View>() {
@@ -66,6 +62,18 @@ public class RecyclerViewMatcher {
                     View targetView = childView.findViewById(targetViewId);
                     return view == targetView;
                 }
+            }
+        };
+    }
+
+    public static Matcher<View> withListSize(final int size) {
+        return new TypeSafeMatcher<View>() {
+            @Override public boolean matchesSafely(final View view) {
+                return ((RecyclerView) view).getAdapter().getItemCount() == size;
+            }
+
+            @Override public void describeTo(final Description description) {
+                description.appendText("RecyclerView should have " + size + " items");
             }
         };
     }

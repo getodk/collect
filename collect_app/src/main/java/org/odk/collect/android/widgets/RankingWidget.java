@@ -25,10 +25,10 @@ import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
@@ -43,7 +43,7 @@ public class RankingWidget extends ItemsWidget implements BinaryWidget {
     private LinearLayout widgetLayout;
     private Button showRankingDialogButton;
 
-    public RankingWidget(Context context, FormEntryPrompt prompt) {
+    public RankingWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
 
         setUpLayout(getOrderedItems());

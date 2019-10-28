@@ -24,10 +24,10 @@ import android.widget.TextView;
 
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
@@ -63,11 +63,11 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
 
     private String stringAnswer;
 
-    public GeoPointWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+    public GeoPointWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails);
 
         // Determine the accuracy threshold to use.
-        String acc = prompt.getQuestion().getAdditionalAttribute(null, ACCURACY_THRESHOLD);
+        String acc = questionDetails.getPrompt().getQuestion().getAdditionalAttribute(null, ACCURACY_THRESHOLD);
         if (acc != null && acc.length() != 0) {
             accuracyThreshold = Double.parseDouble(acc);
         } else {
@@ -77,16 +77,16 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
         // Determine whether to use the map and whether the point should be draggable.
         useMap = false;
         if (MapProvider.getConfigurator().isAvailable(context)) {
-            if (hasAppearance(prompt, PLACEMENT_MAP)) {
+            if (hasAppearance(questionDetails.getPrompt(), PLACEMENT_MAP)) {
                 draggable = true;
                 useMap = true;
-            } else if (hasAppearance(prompt, MAPS)) {
+            } else if (hasAppearance(questionDetails.getPrompt(), MAPS)) {
                 draggable = false;
                 useMap = true;
             }
         }
 
-        readOnly = prompt.isReadOnly();
+        readOnly = questionDetails.getPrompt().isReadOnly();
         answerDisplay = getCenteredAnswerTextView();
 
         getLocationButton = getSimpleButton(R.id.get_location);
@@ -100,7 +100,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
 
         // Set vars Label/text for button enable view or collect...
         boolean dataAvailable = false;
-        String answer = prompt.getAnswerText();
+        String answer = questionDetails.getPrompt().getAnswerText();
         if (answer != null && !answer.equals("")) {
             dataAvailable = true;
             setBinaryData(answer);

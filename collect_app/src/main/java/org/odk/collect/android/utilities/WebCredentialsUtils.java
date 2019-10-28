@@ -4,10 +4,8 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.http.HttpCredentials;
-import org.odk.collect.android.http.HttpCredentialsInterface;
+import org.odk.collect.android.http.openrosa.HttpCredentials;
+import org.odk.collect.android.http.openrosa.HttpCredentialsInterface;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 

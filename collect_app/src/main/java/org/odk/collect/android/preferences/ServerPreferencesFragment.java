@@ -20,10 +20,8 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
-import android.preference.PreferenceManager;
 import androidx.appcompat.content.res.AppCompatResources;
 import android.telephony.PhoneNumberUtils;
 import android.text.InputFilter;
@@ -33,9 +31,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListPopupWindow;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -47,6 +42,7 @@ import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.services.NotificationRegistrationService;
 import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.preferences.utilities.ChangingServerUrlUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
@@ -56,8 +52,6 @@ import org.odk.collect.android.utilities.Validator;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -82,7 +76,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         View.OnTouchListener, OnBackPressedListener {
 
     private static final int REQUEST_ACCOUNT_PICKER = 1000;
-    private static final String KNOWN_URL_LIST = "knownUrlList";
     protected EditTextPreference serverUrlPreference;
     protected EditTextPreference usernamePreference;
     protected EditTextPreference passwordPreference;
@@ -90,7 +83,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     protected EditTextPreference submissionUrlPreference;
     protected EditTextPreference formListUrlPreference;
     private ListPopupWindow listPopupWindow;
-    private List<String> urlList;
     private Preference selectedGoogleAccountPreference;
     private boolean allowClickSelectedGoogleAccountPreference = true;
 
@@ -122,19 +114,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 GeneralKeys.KEY_SERVER_URL);
         usernamePreference = (EditTextPreference) findPreference(GeneralKeys.KEY_USERNAME);
         passwordPreference = (EditTextPreference) findPreference(GeneralKeys.KEY_PASSWORD);
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String urlListString = prefs.getString(KNOWN_URL_LIST, "");
-        if (urlListString.isEmpty()) {
-            urlList = new ArrayList<>();
-        } else {
-            urlList =
-                    new Gson().fromJson(urlListString, new TypeToken<List<String>>() {
-                    }.getType());
-        }
-        if (urlList.isEmpty()) {
-            addUrlToPreferencesList(getString(R.string.default_server_url), prefs);
-        }
 
         urlDropdownSetup();
 
@@ -294,28 +273,19 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         });
     }
 
-    private void addUrlToPreferencesList(String url, SharedPreferences prefs) {
-        urlList.add(0, url);
-        String urlListString = new Gson().toJson(urlList);
-        prefs
-                .edit()
-                .putString(KNOWN_URL_LIST, urlListString)
-                .apply();
-    }
-
     private void urlDropdownSetup() {
         listPopupWindow = new ListPopupWindow(getActivity());
         setupUrlDropdownAdapter();
         listPopupWindow.setAnchorView(serverUrlPreference.getEditText());
         listPopupWindow.setModal(true);
         listPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
-            serverUrlPreference.getEditText().setText(urlList.get(position));
+            serverUrlPreference.getEditText().setText(ChangingServerUrlUtils.getUrlList().get(position));
             listPopupWindow.dismiss();
         });
     }
 
     private void setupUrlDropdownAdapter() {
-        ArrayAdapter adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, urlList);
+        ArrayAdapter adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, ChangingServerUrlUtils.getUrlList());
         listPopupWindow.setAdapter(adapter);
     }
 
@@ -349,26 +319,11 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                         sendAnalyticsEvent(url);
 
                         preference.setSummary(newValue.toString());
-                        SharedPreferences prefs = PreferenceManager
-                                .getDefaultSharedPreferences(getActivity().getApplicationContext());
-                        String urlListString = prefs.getString(KNOWN_URL_LIST, "");
-
-                        urlList =
-                                new Gson().fromJson(urlListString,
-                                        new TypeToken<List<String>>() {
-                                        }.getType());
-
-                        if (!urlList.contains(url)) {
-                            // We store a list with at most 5 elements
-                            if (urlList.size() == 5) {
-                                urlList.remove(4);
-                            }
-                            addUrlToPreferencesList(url, prefs);
-                            setupUrlDropdownAdapter();
-                        }
                     	// Re-register with the server - smap
                     	Intent intent = new Intent(getActivity(), NotificationRegistrationService.class);   // smap
                     	getActivity().startService(intent);   // smap
+                        ChangingServerUrlUtils.addUrlToList(url);
+                        setupUrlDropdownAdapter();
                     } else {
                         ToastUtils.showShortToast(R.string.url_error);
                         return false;

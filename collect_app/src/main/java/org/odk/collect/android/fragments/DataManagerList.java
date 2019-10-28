@@ -134,8 +134,8 @@ public class DataManagerList extends InstanceListFragment
     }
 
     private void setupAdapter() {
-        String[] data = new String[]{InstanceColumns.DISPLAY_NAME};
-        int[] view = new int[]{R.id.form_title};
+        String[] data = {InstanceColumns.DISPLAY_NAME};
+        int[] view = {R.id.form_title};
 
         listAdapter = new InstanceListCursorAdapter(getActivity(),
                 R.layout.form_chooser_list_item_multiple_choice, null, data, view, false);

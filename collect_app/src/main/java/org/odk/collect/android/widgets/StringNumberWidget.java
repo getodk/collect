@@ -16,87 +16,24 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.text.InputType;
-import android.text.Selection;
-import android.text.method.DigitsKeyListener;
-import android.util.TypedValue;
-import android.widget.EditText;
 
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
-import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
 
 /**
  * Widget that restricts values to integers.
- *
- * @author Carl Hartung (carlhartung@gmail.com)
  */
 @SuppressLint("ViewConstructor")
 public class StringNumberWidget extends StringWidget {
 
-    boolean useThousandSeparator;
-
-    public StringNumberWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
-        super(context, prompt, readOnlyOverride);
-
-        EditText answerTextField = getAnswerTextField();
-
-        answerTextField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        answerTextField.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
-
-        // needed to make long readonly text scroll
-        answerTextField.setHorizontallyScrolling(false);
-        answerTextField.setSingleLine(false);
-
-        this.useThousandSeparator = useThousandSeparator;
-        if (useThousandSeparator) {
-            answerTextField.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerTextField));
-        }
-
-        answerTextField.setKeyListener(new DigitsKeyListener() {
-            @Override
-            protected char[] getAcceptedChars() {
-                return new char[]{
-                        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-', '+', ' ', ','
-                };
-            }
-        });
-
-        if (prompt.isReadOnly()) {
-            setBackground(null);
-            setFocusable(false);
-            setClickable(false);
-        }
-
-        String s = null;
-        if (prompt.getAnswerValue() != null) {
-            s = (String) prompt.getAnswerValue().getValue();
-        }
-
-        if (s != null) {
-            answerTextField.setText(s);
-            Selection.setSelection(answerTextField.getText(), answerTextField.getText().toString().length());
-        }
+    public StringNumberWidget(Context context, QuestionDetails questionDetails, boolean readOnlyOverride) {
+        super(context, questionDetails, readOnlyOverride);
+        StringWidgetUtils.adjustEditTextAnswerToStringNumberWidget(answerText, questionDetails.getPrompt());
     }
 
     @Override
     public IAnswerData getAnswer() {
-        String s = getAnswerText();
-
-        if (useThousandSeparator) {
-            s = ThousandsSeparatorTextWatcher.getOriginalString(s);
-        }
-
-        if (s.isEmpty()) {
-            return null;
-        } else {
-            try {
-                return new StringData(s);
-            } catch (Exception numberFormatException) {
-                return null;
-            }
-        }
+        return StringWidgetUtils.getStringNumberData(getAnswerText(), getFormEntryPrompt());
     }
-
 }

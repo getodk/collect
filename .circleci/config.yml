@@ -179,6 +179,7 @@ jobs:
               --environment-variables coverage=true,coverageFile=/sdcard/coverage.ec \
               --directories-to-pull /sdcard --timeout 20m
             fi
+          no_output_timeout: 60m
       - run:
           name: Copy integration test results
           command: |

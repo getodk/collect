@@ -20,7 +20,7 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
-import org.odk.collect.android.activities.FormChooserList;
+import org.odk.collect.android.activities.FormChooserListActivity;
 import org.odk.collect.android.activities.FormDownloadList;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.HistoryActivity;
@@ -95,8 +95,8 @@ public class PermissionUtils {
 
         List<Class<?>> activities = new ArrayList<>();
         activities.add(FormEntryActivity.class);
-        activities.add(HistoryActivity.class);
-        activities.add(FormChooserList.class);
+        activities.add(InstanceChooserList.class);
+        activities.add(FormChooserListActivity.class);
         activities.add(InstanceUploaderListActivity.class);
         activities.add(SplashScreenActivity.class);
         activities.add(FormDownloadList.class);
@@ -321,7 +321,7 @@ public class PermissionUtils {
     }
 
     protected void showAdditionalExplanation(Activity activity, int title, int message, int drawable, @NonNull PermissionListener action) {
-        AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.PermissionAlertDialogTheme)
+        AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.Theme_Collect_Dialog_PermissionAlert)
                 .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())

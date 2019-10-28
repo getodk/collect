@@ -155,8 +155,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         map.getController().setCenter(toGeoPoint(INITIAL_CENTER));
         map.getController().setZoom((int) INITIAL_ZOOM);
         map.setTilesScaledToDpi(true);
-        map.getOverlays().add(new AttributionOverlay(getContext()));
-        map.getOverlays().add(new MapEventsOverlay(this));
+        addAttributionAndMapEventsOverlays();
         loadReferenceOverlay();
         addMapLayoutChangeListener(map);
         myLocationOverlay = new MyLocationNewOverlay(map);
@@ -302,7 +301,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     @Override public void clearFeatures() {
         map.getOverlays().clear();
-        map.getOverlays().add(new MapEventsOverlay(this));
+        addAttributionAndMapEventsOverlays();
         map.getOverlays().add(myLocationOverlay);
         map.invalidate();
         features.clear();
@@ -532,6 +531,11 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         if (feature != null) {
             feature.update();
         }
+    }
+
+    private void addAttributionAndMapEventsOverlays() {
+        map.getOverlays().add(new AttributionOverlay(getContext()));
+        map.getOverlays().add(new MapEventsOverlay(this));
     }
 
     /**

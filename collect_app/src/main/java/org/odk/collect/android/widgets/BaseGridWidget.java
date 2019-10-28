@@ -32,18 +32,18 @@ import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.AppCompatRadioButton;
 
+import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalSelectChoice;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.views.AudioButton;
 import org.odk.collect.android.views.ExpandedHeightGridView;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
@@ -52,6 +52,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
 
 /**
  * GridWidget handles select-one/multiple fields using a grid options. The number of columns
@@ -72,24 +74,23 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
 
     List<Integer> selectedItems = new ArrayList<>();
     View[] itemViews;
-    AudioButton.AudioHandler[] audioHandlers;
 
-    public BaseGridWidget(Context context, FormEntryPrompt prompt, boolean quickAdvance) {
-        super(context, prompt);
+    public BaseGridWidget(Context context, QuestionDetails questionDetails, boolean quickAdvance) {
+        super(context, questionDetails);
 
         this.quickAdvance = quickAdvance;
-        noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(prompt) || WidgetAppearanceUtils.isNoButtonsAppearance(prompt);
+        noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(questionDetails.getPrompt()) || WidgetAppearanceUtils.isNoButtonsAppearance(questionDetails.getPrompt());
         itemViews = new View[items.size()];
-        audioHandlers = new AudioButton.AudioHandler[items.size()];
 
         setUpItems();
         setUpGridView();
         fillInAnswer();
+
+        logAnalytics(questionDetails);
     }
 
     private void setUpItems() {
         for (int i = 0; i < items.size(); i++) {
-            setUpAudioHandler(i);
             View view = measureItem(noButtonsMode ? setUpNoButtonsItem(i) : setUpButtonsItem(i), i);
             int index = i;
             view.setOnClickListener(v -> onItemClick(index));
@@ -113,12 +114,6 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         }
         item.setMinimumHeight(maxCellHeight);
         return item;
-    }
-
-    private void setUpAudioHandler(int index) {
-        // Create an audioHandler if there is an audio prompt associated with this selection.
-        String audioURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_AUDIO);
-        audioHandlers[index] = audioURI != null ? new AudioButton.AudioHandler(audioURI, getPlayer()) : null;
     }
 
     private View setUpNoButtonsItem(int index) {
@@ -253,6 +248,19 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
     @Override
     public int getChoiceCount() {
         return selectedItems.size();
+    }
+
+    private void logAnalytics(QuestionDetails questionDetails) {
+        for (SelectChoice choice : items) {
+            if (noButtonsMode) {
+                String audioURI = getPlayableAudioURI(questionDetails.getPrompt(), choice, getReferenceManager());
+
+                if (audioURI != null) {
+                    analytics.logEvent("Prompt", "AudioChoiceGrid", questionDetails.getFormAnalyticsID());
+                    break;
+                }
+            }
+        }
     }
 
     class ImageAdapter extends BaseAdapter {

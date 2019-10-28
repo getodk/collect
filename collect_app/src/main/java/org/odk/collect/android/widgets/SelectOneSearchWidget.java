@@ -17,8 +17,7 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.listeners.AudioPlayListener;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 
 /**
@@ -30,9 +29,9 @@ import org.odk.collect.android.utilities.SoftKeyboardUtils;
  * @author Raghu Mittal (raghu.mittal@handsrel.com)
  */
 @SuppressLint("ViewConstructor")
-public class SelectOneSearchWidget extends AbstractSelectOneWidget implements AudioPlayListener {
-    public SelectOneSearchWidget(Context context, FormEntryPrompt prompt, boolean autoAdvance, boolean readOnlyOverride) { // smap add readOnlyOverride
-        super(context, prompt, autoAdvance, readOnlyOverride); // smap add readOnlyOverride
+public class SelectOneSearchWidget extends AbstractSelectOneWidget {
+    public SelectOneSearchWidget(Context context, QuestionDetails questionDetails, boolean autoAdvance, boolean readOnlyOverride) {  // smap readOnlyOverride
+        super(context, questionDetails, autoAdvance, readOnlyOverride);  // smap
         createLayout(readOnlyOverride);
         setUpSearchBox();
     }

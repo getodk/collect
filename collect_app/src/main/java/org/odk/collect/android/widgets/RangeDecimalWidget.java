@@ -21,14 +21,14 @@ import android.content.Context;
 
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 
 import java.math.BigDecimal;
 
 @SuppressLint("ViewConstructor")
 public class RangeDecimalWidget extends RangeWidget {
 
-    public RangeDecimalWidget(Context context, FormEntryPrompt prompt) {
+    public RangeDecimalWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
     }
 

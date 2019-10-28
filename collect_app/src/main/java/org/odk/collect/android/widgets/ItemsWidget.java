@@ -19,9 +19,9 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 
 import org.javarosa.core.model.SelectChoice;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 
 import java.util.List;
 
@@ -31,9 +31,10 @@ import java.util.List;
  * like: SelectOne, SelectMultiple, Ranking.
  */
 public abstract class ItemsWidget extends QuestionWidget {
+
     List<SelectChoice> items;
 
-    public ItemsWidget(Context context, FormEntryPrompt prompt) {
+    public ItemsWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
         readItems();
     }

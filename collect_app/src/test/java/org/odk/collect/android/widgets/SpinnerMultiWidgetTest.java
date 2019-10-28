@@ -3,6 +3,7 @@ package org.odk.collect.android.widgets;
 import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.SelectChoice;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.GeneralSelectMultiWidgetTest;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class SpinnerMultiWidgetTest extends GeneralSelectMultiWidgetTest<Spinner
     @NonNull
     @Override
     public SpinnerMultiWidget createWidget() {
-        return new SpinnerMultiWidget(activity, formEntryPrompt);
+        return new SpinnerMultiWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @Override

@@ -2,9 +2,12 @@ package org.odk.collect.android.http;
 
 import androidx.annotation.NonNull;
 
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.odk.collect.android.http.openrosa.HttpPostResult;
+import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.http.support.MockWebServerRule;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -21,7 +24,6 @@ import java.util.zip.GZIPOutputStream;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
-import okhttp3.tls.internal.TlsUtil;
 import okio.Buffer;
 
 import static java.util.Arrays.asList;
@@ -30,7 +32,6 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isA;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -39,26 +40,16 @@ public abstract class OpenRosaPostRequestTest {
 
     protected abstract OpenRosaHttpInterface buildSubject(OpenRosaHttpInterface.FileToContentTypeMapper mapper);
 
-    protected abstract Boolean useRealHttps();
+    @Rule
+    public MockWebServerRule mockWebServerRule = new MockWebServerRule();
 
-    private final MockWebServer mockWebServer = new MockWebServer();
-    private MockWebServer httpsMockWebServer;
+    private MockWebServer mockWebServer;
     private OpenRosaHttpInterface subject;
 
     @Before
     public void setup() throws Exception {
-        mockWebServer.start();
         subject = buildSubject(new XmlOrBlahContentTypeMapper());
-    }
-
-    @After
-    public void teardown() throws Exception {
-        mockWebServer.shutdown();
-
-        if (httpsMockWebServer != null) {
-            httpsMockWebServer.shutdown();
-            httpsMockWebServer = null;
-        }
+        mockWebServer = mockWebServerRule.start();
     }
 
     @Test
@@ -73,54 +64,6 @@ public abstract class OpenRosaPostRequestTest {
         RecordedRequest request = mockWebServer.takeRequest();
         assertThat(request.getMethod(), equalTo("POST"));
         assertThat(request.getRequestUrl().uri(), equalTo(uri));
-    }
-
-    @Test
-    public void withCredentials_whenHttp_doesNotRetryWithCredentials() throws Exception {
-        mockWebServer.enqueue(new MockResponse()
-                .setResponseCode(401)
-                .addHeader("WWW-Authenticate: Basic realm=\"protected area\"")
-                .setBody("Please authenticate."));
-        mockWebServer.enqueue(new MockResponse());
-
-        URI uri = mockWebServer.url("").uri();
-        subject.uploadSubmissionFile(new ArrayList<>(), File.createTempFile("blah", "blah"), uri, new HttpCredentials("user", "pass"), 0);
-
-        assertThat(mockWebServer.getRequestCount(), equalTo(1));
-    }
-
-    @Test
-    public void withCredentials_whenHttps_retriesWithCredentials() throws Exception {
-        startHttpsMockWebServer();
-
-        httpsMockWebServer.enqueue(new MockResponse()
-                .setResponseCode(401)
-                .addHeader("WWW-Authenticate: Basic realm=\"protected area\"")
-                .setBody("Please authenticate."));
-        httpsMockWebServer.enqueue(new MockResponse());
-
-        URI uri = httpsMockWebServer.url("").uri();
-        subject.uploadSubmissionFile(new ArrayList<>(), File.createTempFile("blah", "blah"), uri, new HttpCredentials("user", "pass"), 0);
-
-        assertThat(httpsMockWebServer.getRequestCount(), equalTo(2));
-        httpsMockWebServer.takeRequest();
-        RecordedRequest request = httpsMockWebServer.takeRequest();
-        assertThat(request.getHeader("Authorization"), equalTo("Basic dXNlcjpwYXNz"));
-    }
-
-    @Test
-    public void whenLastRequestSetCookies_nextRequestDoesNotSendThem() throws Exception {
-        mockWebServer.enqueue(new MockResponse().setResponseCode(201)
-                .addHeader("Set-Cookie", "blah=blah"));
-        mockWebServer.enqueue(new MockResponse());
-
-        URI uri = mockWebServer.url("").uri();
-        subject.uploadSubmissionFile(new ArrayList<>(), File.createTempFile("blah", "blah"), uri, null, 0);
-        subject.uploadSubmissionFile(new ArrayList<>(), File.createTempFile("blah", "blah"), uri, null, 0);
-
-        mockWebServer.takeRequest();
-        RecordedRequest request = mockWebServer.takeRequest();
-        assertThat(request.getHeader("Cookie"), isEmptyOrNullString());
     }
 
     @Test
@@ -300,16 +243,6 @@ public abstract class OpenRosaPostRequestTest {
         assertThat(mockWebServer.getRequestCount(), equalTo(2));
         assertThat(response, notNullValue());
         assertThat(response.getResponseCode(), equalTo(500));
-    }
-
-    private void startHttpsMockWebServer() throws IOException {
-        httpsMockWebServer = new MockWebServer();
-
-        if (useRealHttps()) {
-            httpsMockWebServer.useHttps(TlsUtil.localhost().sslSocketFactory(), false);
-        }
-
-        httpsMockWebServer.start(8443);
     }
 
     private File createTempFile(String content) throws Exception {

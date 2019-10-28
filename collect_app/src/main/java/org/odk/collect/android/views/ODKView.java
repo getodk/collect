@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2011 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -40,6 +40,11 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormIndex;
@@ -47,17 +52,24 @@ import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.instance.TreeReference;
+import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.NFCActivity;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.audio.PlaybackFailedException;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
+import org.odk.collect.android.formentry.media.AudioHelperFactory;
+import org.odk.collect.android.formentry.media.PromptAutoplayer;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
@@ -81,11 +93,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.widget.NestedScrollView;
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
+import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -99,6 +111,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     private final LinearLayout view;
     private final LinearLayout.LayoutParams layout;
     private final ArrayList<QuestionWidget> widgets;
+    private final AudioHelper audioHelper;
 
     public static final String FIELD_LIST = "field-list";
 
@@ -113,18 +126,27 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     private FormEntryPrompt videoPrompt = null;         // smap
     private FormEntryPrompt audioPrompt = null;         // smap
 
+    @Inject
+    public AudioHelperFactory audioHelperFactory;
+
+    @Inject
+    public Analytics analytics;
+
     /**
      * Builds the view for a specified question or field-list of questions.
      *
-     * @param context the activity creating this view
+     * @param context         the activity creating this view
      * @param questionPrompts the questions to be included in this view
-     * @param groups the group hierarchy that this question or field list is in
-     * @param advancingPage whether this view is being created after a forward swipe through the
-     *                      form. Used to determine whether to autoplay media.
+     * @param groups          the group hierarchy that this question or field list is in
+     * @param advancingPage   whether this view is being created after a forward swipe through the
+     *                        form. Used to determine whether to autoplay media.
      */
     public ODKView(Context context, final FormEntryPrompt[] questionPrompts,
                    FormEntryCaption[] groups, boolean advancingPage, boolean canUpdate) {      // smap
         super(context);
+
+        getComponent(context).inject(this);
+        this.audioHelper = audioHelperFactory.create(context);
 
         inflate(getContext(), R.layout.nested_scroll_view, this); // keep in an xml file to enable the vertical scrollbar
 
@@ -170,22 +192,58 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
         ((NestedScrollView) findViewById(R.id.odk_view_container)).addView(view);
 
+        setupAudioErrors();
+        autoplayIfNeeded(advancingPage);
+    }
+
+    private void setupAudioErrors() {
+        audioHelper.getError().observe(getScreenContext().getViewLifecycle(), e -> {
+            if (e instanceof PlaybackFailedException) {
+                final PlaybackFailedException playbackFailedException = (PlaybackFailedException) e;
+                Toast.makeText(
+                        getContext(),
+                        getContext().getString(R.string.file_missing, playbackFailedException.getURI()),
+                        Toast.LENGTH_SHORT
+                ).show();
+
+                audioHelper.dismissError();
+            }
+        });
+    }
+
+    private void autoplayIfNeeded(boolean advancingPage) {
+
         // see if there is an autoplay option.
         // Only execute it during forward swipes through the form
         if (advancingPage && widgets.size() == 1) {
-            final String playOption = widgets.get(
-                    0).getFormEntryPrompt().getFormElement().getAdditionalAttribute(null, "autoplay");
-            if (playOption != null) {
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (playOption.equalsIgnoreCase("audio")) {
-                            widgets.get(0).playAudio();
-                        } else if (playOption.equalsIgnoreCase("video")) {
-                            widgets.get(0).playVideo();
-                        }
-                    }
+            FormEntryPrompt firstPrompt = widgets.get(0).getFormEntryPrompt();
+            Boolean autoplayedAudio = autoplayAudio(firstPrompt);
+
+            if (!autoplayedAudio) {
+                autoplayVideo(firstPrompt);
+            }
+
+        }
+    }
+
+    private Boolean autoplayAudio(FormEntryPrompt firstPrompt) {
+        PromptAutoplayer promptAutoplayer = new PromptAutoplayer(
+                audioHelper,
+                ReferenceManager.instance(),
+                analytics,
+                Collect.getCurrentFormIdentifierHash()
+        );
+
+        return promptAutoplayer.autoplayIfNeeded(firstPrompt);
+    }
+
+    private void autoplayVideo(FormEntryPrompt prompt) {
+        final String autoplayOption = prompt.getFormElement().getAdditionalAttribute(null, "autoplay");
+
+        if (autoplayOption != null) {
+            if (autoplayOption.equalsIgnoreCase("video")) {
+                new Handler().postDelayed(() -> {
+                    widgets.get(0).getAudioVideoImageTextLabel().playVideo();
                 }, 150);
             } else if (nfcPrompt != null) {    // Smap - auto get NFC
                 Intent i = new Intent(getContext(), NFCActivity.class);
@@ -232,6 +290,10 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 }
             }
         }
+    }
+
+    private ScreenContext getScreenContext() {
+        return (ScreenContext) getContext();
     }
 
     /**
@@ -342,7 +404,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
     /**
      * Creates and configures a {@link QuestionWidget} for the given {@link FormEntryPrompt}.
-     *
+     * <p>
      * Note: if the given question is of an unsupported type, a text widget will be created.
      */
     private QuestionWidget configureWidgetForQuestion(FormEntryPrompt question, boolean readOnlyOverride) {
@@ -427,7 +489,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     /**
      * Builds a string representing the 'path' of the list of groups.
      * Each level is separated by `>`.
-     *
+     * <p>
      * Some views (e.g. the repeat picker) may want to hide the multiplicity of the last item,
      * i.e. show `Friends` instead of `Friends > 1`.
      */
@@ -456,7 +518,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
         return TextUtils.join(" > ", segments);
     }
-
 
     /**
      * Adds a button to launch an intent if the group displayed by this view is an intent group.

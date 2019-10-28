@@ -18,13 +18,12 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 
-import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.listeners.AudioPlayListener;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 
-public class SelectMultipleAutocompleteWidget extends SelectMultiWidget implements AudioPlayListener {
-    public SelectMultipleAutocompleteWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {	// smap add readOnlyOverride
-        super(context, prompt, readOnlyOverride);	// smap add readOnlyOverride
+public class SelectMultipleAutocompleteWidget extends SelectMultiWidget {
+    public SelectMultipleAutocompleteWidget(Context context, QuestionDetails prompt, boolean readOnlyOverride) {       // smap add readOnlyOverride
+        super(context, prompt, readOnlyOverride);  // smap
         setUpSearchBox();
     }
 

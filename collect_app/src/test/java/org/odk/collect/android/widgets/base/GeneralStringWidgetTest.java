@@ -51,8 +51,7 @@ public abstract class GeneralStringWidgetTest<W extends StringWidget, A extends 
         W widget = getWidget();
         IAnswerData answer = getNextAnswer();
 
-        widget.getAnswerTextField().setText(answer.getDisplayText());
-
+        when(widget.getAnswerText()).thenReturn(answer.getDisplayText());
         IAnswerData computedAnswer = widget.getAnswer();
 
         assertEquals(answer.getDisplayText(), computedAnswer.getDisplayText());

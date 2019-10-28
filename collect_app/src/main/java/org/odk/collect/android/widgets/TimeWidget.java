@@ -32,9 +32,9 @@ import android.widget.TimePicker;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.TimeData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.odk.collect.android.R;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 
 import java.lang.reflect.Constructor;
@@ -60,7 +60,7 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
 
     private boolean nullAnswer;
 
-    public TimeWidget(Context context, final FormEntryPrompt prompt) {
+    public TimeWidget(Context context, final QuestionDetails prompt) {
         super(context, prompt);
 
         setGravity(Gravity.START);
@@ -218,9 +218,7 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
          */
         @SuppressWarnings("deprecation")
         private void fixSpinner(Context context, int hourOfDay, int minute, boolean is24HourView) {
-            // android:timePickerMode spinner and clock began in Lollipop
-            // smap disable this fix for versions greater than 24
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N) {
                 try {
                     // Get the theme's android:timePickerMode
                     final int MODE_SPINNER = 2;
@@ -252,13 +250,7 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
                         Object delegate = delegateField.get(timePicker);
 
                         Class<?> spinnerDelegateClass;
-                        if (Build.VERSION.SDK_INT != Build.VERSION_CODES.LOLLIPOP) {
-                            spinnerDelegateClass = Class.forName("android.widget.TimePickerSpinnerDelegate");
-                        } else {
-                            // TimePickerSpinnerDelegate was initially misnamed in API 21!
-                            spinnerDelegateClass = Class.forName("android.widget.TimePickerClockDelegate");
-                        }
-
+                        spinnerDelegateClass = Class.forName("android.widget.TimePickerSpinnerDelegate");
                         // In 7.0 Nougat for some reason the timePickerMode is ignored and the
                         // delegate is TimePickerClockDelegate
                         if (delegate.getClass() != spinnerDelegateClass) {
