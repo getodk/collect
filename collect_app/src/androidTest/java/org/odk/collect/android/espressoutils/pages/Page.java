@@ -8,6 +8,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.clearText;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.typeText;
@@ -172,6 +173,18 @@ abstract class Page<T extends Page<T>> {
         onView(withId(id)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
         return (T) this;
     }
+
+    public T clearTheText(String text) {
+        onView(withText(text)).perform(clearText());
+        return (T) this;
+    }
+
+/*    public T checkIsTextDisplayedOnDialog(String text) {
+        onView(withText(text)).inRoot(isDialog()).check(matches(isDisplayed()));
+        return (T) this;
+    }
+*/
+
 
 
 }

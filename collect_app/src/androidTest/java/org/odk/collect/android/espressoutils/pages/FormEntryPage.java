@@ -34,11 +34,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage clickOnGoToIconInForm() {
-        onView(withId(R.id.menu_goto)).perform(click());
-        return this;
-    }
-
     public FormEntryPage clickJumpEndButton() {
         onView(withId(R.id.jumpEndButton)).perform(click());
         return this;
@@ -104,6 +99,16 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage swipeOnText(String text) {
         onView(withClassName(endsWith("EditText"))).check(matches(withText(text))).perform(swipeLeft());
+        return this;
+    }
+
+    public FormEntryPage clickOnAddGroup() {
+        clickOnString(R.string.add_another);
+        return this;
+    }
+
+    public FormEntryPage clickOnDoNotAddGroup() {
+        clickOnString(R.string.add_repeat_no);
         return this;
     }
 }
