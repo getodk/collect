@@ -238,7 +238,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                 view.removeAllViews();
                 view.addView(setUpNoButtonsView(index));
             } else {
-                addMediaFromChoice(audioVideoImageTextLabel, index, createButton(index, view), filteredItems);
+                addMediaFromChoice(audioVideoImageTextLabel, index, createButton(index, audioVideoImageTextLabel), filteredItems);
                 audioVideoImageTextLabel.setEnabled(!getFormEntryPrompt().isReadOnly());
             }
         }

@@ -43,14 +43,16 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
 
     private String selectedValue;
     private final int playColor;
+    private final Boolean autoAdvance;
     private RadioButton selectedRadioButton;
     private View selectedItem;
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
-    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, AbstractSelectOneWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context) {
+    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, AbstractSelectOneWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context, Boolean autoAdvance) {
         super(items, widget, numColumns, formEntryPrompt, referenceManager, answerFontSize, audioHelper, context);
         this.selectedValue = selectedValue;
         this.playColor = playColor;
+        this.autoAdvance = autoAdvance;
     }
 
     @Override
@@ -88,7 +90,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
                 view = (FrameLayout) v;
             } else {
                 autoAdvanceIcon = v.findViewById(R.id.auto_advance_icon);
-                autoAdvanceIcon.setVisibility(((AbstractSelectOneWidget) widget).isAutoAdvance() ? View.VISIBLE : View.GONE);
+                autoAdvanceIcon.setVisibility(autoAdvance ? View.VISIBLE : View.GONE);
                 audioVideoImageTextLabel = v.findViewById(R.id.mediaLayout);
                 audioVideoImageTextLabel.setPlayTextColor(playColor);
             }
