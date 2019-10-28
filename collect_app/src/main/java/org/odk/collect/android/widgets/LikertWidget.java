@@ -9,9 +9,6 @@ import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -36,21 +33,22 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class LikertWidget extends ItemsWidget {
 
-    private int iconDimensionLimit = 95;
+
     private LinearLayout view;
     private RadioButton checkedButton;
-    private final LinearLayout.LayoutParams LINEARLAYOUT_PARAMS = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT, 1);
-    private final LayoutParams TEXTVIEW_PARAMS = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-    private final LayoutParams IMAGEVIEW_PARAMS = new LayoutParams(iconDimensionLimit, iconDimensionLimit);
+    private final LinearLayout.LayoutParams LINEARLAYOUT_PARAMS = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1);
+    private final LayoutParams TEXTVIEW_PARAMS = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+    private LayoutParams IMAGEVIEW_PARAMS = new LayoutParams(LayoutParams.WRAP_CONTENT , LayoutParams.WRAP_CONTENT);
     private final LayoutParams RADIOBUTTON_PARAMS = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
-    HashMap<RadioButton, String> buttonsToName; // the weight is also the index
+    HashMap<RadioButton, String> buttonsToName;
 
     public LikertWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
         setMainViewLayoutParameters();
         setStructures();
+
         setButtonListener();
         setSavedButton();
         addAnswerView(view);
@@ -59,8 +57,8 @@ public class LikertWidget extends ItemsWidget {
     public void setMainViewLayoutParameters(){
         view = new LinearLayout(getContext());
         view.setOrientation(LinearLayout.HORIZONTAL);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(params);
     }
 
@@ -129,11 +127,10 @@ public class LikertWidget extends ItemsWidget {
             // checks if image is set or valid
             if (imgView != null) {
                 optionView.addView(imgView);
-            } else {
-                TextView choice = getTextView();
-                choice.setText(getFormEntryPrompt().getSelectChoiceText(items.get(i)));
-                optionView.addView(choice);
             }
+            TextView choice = getTextView();
+            choice.setText(getFormEntryPrompt().getSelectChoiceText(items.get(i)));
+            optionView.addView(choice);
             view.addView(optionView);
         }
     }
@@ -148,7 +145,6 @@ public class LikertWidget extends ItemsWidget {
     public RadioButton getRadioButton(){
         RadioButton button = new RadioButton(getContext());
         button.setLayoutParams(RADIOBUTTON_PARAMS);
-        button.setPadding(2,2,2,2);
         button.setGravity(Gravity.CENTER);
         return button;
     }
@@ -219,7 +215,6 @@ public class LikertWidget extends ItemsWidget {
             if (imageFile.exists()) {
                 Bitmap b = null;
                 try {
-                    // TODO: Cap the size of the image here
                     DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
                     int screenWidth = metrics.widthPixels;
                     int screenHeight = metrics.heightPixels;
