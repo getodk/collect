@@ -36,7 +36,10 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
             .around(new CopyFormRule("form6.xml"))
             .around(new CopyFormRule("form7.xml"))
             .around(new CopyFormRule("form8.xml"))
-            .around(new CopyFormRule("form9.xml"));
+            .around(new CopyFormRule("form9.xml"))
+            .around(new CopyFormRule("RepeatGroupAndGroup.xml"))
+            .around(new CopyFormRule("basic.xml"))
+            .around(new CopyFormRule("repeat_group_form.xml"));
 
     @Test
     public void repeatGroupsNotAdded_ShouldNotDoubleLastMessage() {
@@ -76,6 +79,7 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
 
         new MainMenuPage(main)
                 .startBlankForm("form3")
+                .closeSoftKeyboard()
                 .swipeToNextQuestion()
                 .clickSaveAndExit();
 
@@ -133,6 +137,61 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
                 .startBlankForm("form9")
                 .closeSoftKeyboard()
                 .swipeToNextQuestion()
+                .clickSaveAndExit();
+    }
+
+    @Test
+    public void repeatGroupNotAdded_ShouldBackButtonBeActive() {
+
+        //TestCase6
+        new MainMenuPage(main)
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .clickOnUserInterface()
+                .clickNavigation()
+                .clickUseSwipesAndButtons()
+                .pressBack(new GeneralSettingsPage(main))
+                .pressBack(new MainMenuPage(main))
+                .startBlankFormWithRepeatGroup("RepeatGroupAndGroup")
+                .clickOnDoNotAddGroup(new FormEntryPage("RepeatGroupAndGroup", main))
+                .closeSoftKeyboard()
+                .clickBackwardButton()
+                .clickOnDoNotAddGroup()
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .clickSaveAndExit();
+    }
+
+    @Test
+    public void firstQuestionWithLongLabel_ShouldDisplayBothAnswersInHierarchyPage() {
+
+        //TestCase11
+        new MainMenuPage(main)
+                .startBlankForm("basic")
+                .inputText("1")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .inputText("2")
+                .closeSoftKeyboard()
+                .clickOnGoToIconInForm()
+                .checkIsTextDisplayed("2")
+                .clickJumpEndButton()
+                .clickSaveAndExit();
+    }
+
+    @Test
+    public void openHierarchyPageFromLastView_ShouldNotDisplayError() {
+
+        //TestCase12
+        new MainMenuPage(main)
+                .startBlankFormWithRepeatGroup("Repeat Group")
+                .clickOnAddGroup(new FormEntryPage("Repeat Group", main))
+                .swipeToNextQuestion()
+                .clickOnDoNotAddGroup()
+                .swipeToNextQuestion()
+                .clickOnDoNotAddGroup()
+                .clickGoToIconInForm()
+                .clickJumpEndButton()
                 .clickSaveAndExit();
     }
 }
