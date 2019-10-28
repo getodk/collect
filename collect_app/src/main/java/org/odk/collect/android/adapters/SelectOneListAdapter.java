@@ -16,9 +16,6 @@
 
 package org.odk.collect.android.adapters;
 
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +23,9 @@ import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.helper.Selection;
@@ -41,12 +41,14 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
         implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private String selectedValue;
+    private final int playColor;
     private RadioButton selectedRadioButton;
     private View selectedItem;
 
-    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, AbstractSelectOneWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper) {
+    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, AbstractSelectOneWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor) {
         super(items, widget, numColumns, formEntryPrompt, referenceManager, answerFontSize, audioHelper);
         this.selectedValue = selectedValue;
+        this.playColor = playColor;
     }
 
     @Override
@@ -86,7 +88,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
                 autoAdvanceIcon = v.findViewById(R.id.auto_advance_icon);
                 autoAdvanceIcon.setVisibility(((AbstractSelectOneWidget) widget).isAutoAdvance() ? View.VISIBLE : View.GONE);
                 audioVideoImageTextLabel = v.findViewById(R.id.mediaLayout);
-                widget.init(audioVideoImageTextLabel);
+                audioVideoImageTextLabel.setPlayTextColor(playColor);
             }
         }
 

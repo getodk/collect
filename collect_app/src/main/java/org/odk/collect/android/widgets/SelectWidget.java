@@ -31,7 +31,6 @@ import org.javarosa.core.model.SelectChoice;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
-import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
@@ -62,10 +61,6 @@ public abstract class SelectWidget extends ItemsWidget {
     @Override
     @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
     public void setOnLongClickListener(OnLongClickListener l) {
-    }
-
-    public void init(AudioVideoImageTextLabel audioVideoImageTextLabel) {
-        audioVideoImageTextLabel.setPlayTextColor(getPlayColor(getFormEntryPrompt(), themeUtils));
     }
 
     protected RecyclerView setUpRecyclerView() {

@@ -16,34 +16,36 @@
 
 package org.odk.collect.android.adapters;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatCheckBox;
-import androidx.core.content.ContextCompat;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.core.content.ContextCompat;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.widgets.SelectWidget;
-import org.odk.collect.android.R;
 
 import java.util.List;
 
 public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
 
     private final List<Selection> selectedItems;
+    private final int playColor;
 
-    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper) {
+    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor) {
         super(items, widget, numColumns, formEntryPrompt, referenceManager, answerFontSize, audioHelper);
         this.selectedItems = selectedItems;
+        this.playColor = playColor;
     }
 
     @Override
@@ -60,7 +62,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
                 view = (FrameLayout) v;
             } else {
                 audioVideoImageTextLabel = (AudioVideoImageTextLabel) v;
-                widget.init(audioVideoImageTextLabel);
+                audioVideoImageTextLabel.setPlayTextColor(playColor);
             }
         }
 
