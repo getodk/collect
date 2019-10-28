@@ -146,4 +146,14 @@ public class FormEntryPage extends Page<FormEntryPage> {
         onView(withId(R.id.save_exit_button)).perform(click());
         return this;
     }
+
+    public FormEntryPage clickForwardButton() {
+        onView(withText(getTranslatedString(R.string.form_forward))).perform(click());
+        return this;
+    }
+
+    public FormEntryPage clickOnDoNotAddGroup() {
+        clickOnString(R.string.add_repeat_no);
+        return this;
+    }
 }
