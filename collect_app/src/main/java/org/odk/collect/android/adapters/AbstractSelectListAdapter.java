@@ -22,6 +22,7 @@ import android.graphics.BitmapFactory;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.CompoundButton;
 import android.widget.Filter;
@@ -77,8 +78,8 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
     SelectWidget widget;
 
-    AbstractSelectListAdapter(List<SelectChoice> items, SelectWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper) {
-        context = widget.getContext();
+    AbstractSelectListAdapter(List<SelectChoice> items, SelectWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, Context context) {
+        this.context = context;
         this.items = items;
         this.widget = widget;
         this.prompt = formEntryPrompt;
@@ -134,7 +135,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         };
     }
 
-    abstract CompoundButton createButton(int index);
+    abstract CompoundButton createButton(int index, ViewGroup parent);
 
     void setupButton(TextView button, int index) {
         button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize());
@@ -237,7 +238,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                 view.removeAllViews();
                 view.addView(setUpNoButtonsView(index));
             } else {
-                addMediaFromChoice(audioVideoImageTextLabel, index, createButton(index), filteredItems);
+                addMediaFromChoice(audioVideoImageTextLabel, index, createButton(index, view), filteredItems);
                 audioVideoImageTextLabel.setEnabled(!getFormEntryPrompt().isReadOnly());
             }
         }

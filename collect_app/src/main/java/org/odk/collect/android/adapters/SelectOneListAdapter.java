@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,8 +46,9 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
     private RadioButton selectedRadioButton;
     private View selectedItem;
 
-    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, AbstractSelectOneWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor) {
-        super(items, widget, numColumns, formEntryPrompt, referenceManager, answerFontSize, audioHelper);
+    @SuppressWarnings("PMD.ExcessiveParameterList")
+    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, AbstractSelectOneWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context) {
+        super(items, widget, numColumns, formEntryPrompt, referenceManager, answerFontSize, audioHelper, context);
         this.selectedValue = selectedValue;
         this.playColor = playColor;
     }
@@ -102,8 +104,8 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
     }
 
     @Override
-    RadioButton createButton(final int index) {
-        RadioButton radioButton = (RadioButton) LayoutInflater.from(widget.getContext()).inflate(R.layout.select_one_item, null);
+    RadioButton createButton(final int index, ViewGroup parent) {
+        RadioButton radioButton = (RadioButton) LayoutInflater.from(parent.getContext()).inflate(R.layout.select_one_item, null);
         setupButton(radioButton, index);
         radioButton.setOnClickListener(this);
         radioButton.setOnCheckedChangeListener(this);

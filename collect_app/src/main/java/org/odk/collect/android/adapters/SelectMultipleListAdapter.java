@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,8 +43,9 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
     private final List<Selection> selectedItems;
     private final int playColor;
 
-    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor) {
-        super(items, widget, numColumns, formEntryPrompt, referenceManager, answerFontSize, audioHelper);
+    @SuppressWarnings("PMD.ExcessiveParameterList")
+    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context) {
+        super(items, widget, numColumns, formEntryPrompt, referenceManager, answerFontSize, audioHelper, context);
         this.selectedItems = selectedItems;
         this.playColor = playColor;
     }
@@ -80,8 +82,8 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
     }
 
     @Override
-    CheckBox createButton(final int index) {
-        AppCompatCheckBox checkBox = (AppCompatCheckBox) LayoutInflater.from(widget.getContext()).inflate(R.layout.select_multi_item, null);
+    CheckBox createButton(final int index, ViewGroup parent) {
+        AppCompatCheckBox checkBox = (AppCompatCheckBox) LayoutInflater.from(parent.getContext()).inflate(R.layout.select_multi_item, null);
         setupButton(checkBox, index);
         checkCheckBoxIfNeeded(checkBox, index); // perform before setting onCheckedChangeListener to avoid redundant calls of its body
 
