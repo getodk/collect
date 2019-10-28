@@ -41,6 +41,7 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.utilities.FileUtils;
@@ -69,19 +70,21 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
     private final int numColumns;
     private final Context context;
     private final int answerFontSize;
+    private final AudioHelper audioHelper;
     List<SelectChoice> items;
     List<SelectChoice> filteredItems;
     boolean noButtonsMode;
 
     SelectWidget widget;
 
-    AbstractSelectListAdapter(List<SelectChoice> items, SelectWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize) {
+    AbstractSelectListAdapter(List<SelectChoice> items, SelectWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper) {
         context = widget.getContext();
         this.items = items;
         this.widget = widget;
         this.prompt = formEntryPrompt;
         this.referenceManager = referenceManager;
         this.answerFontSize = answerFontSize;
+        this.audioHelper = audioHelper;
         filteredItems = items;
         this.numColumns = numColumns;
         noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(getFormEntryPrompt())
@@ -254,7 +257,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             audioVideoImageTextLabel.setTextImageVideo(textView, imageURI, videoURI, bigImageURI, getReferenceManager());
 
             if (audioURI != null) {
-                audioVideoImageTextLabel.setAudio(audioURI, widget.getAudioHelper());
+                audioVideoImageTextLabel.setAudio(audioURI, getAudioHelper());
             }
 
             textView.setGravity(Gravity.CENTER_VERTICAL);
@@ -270,6 +273,10 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             }
             return imageURI;
         }
+    }
+
+    private AudioHelper getAudioHelper() {
+        return audioHelper;
     }
 
     private ReferenceManager getReferenceManager() {
