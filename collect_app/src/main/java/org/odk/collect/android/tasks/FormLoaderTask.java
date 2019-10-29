@@ -16,6 +16,7 @@ package org.odk.collect.android.tasks;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.os.AsyncTask;
 
 import org.javarosa.core.model.FormDef;
@@ -70,6 +71,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     private FormLoaderListener stateListener;
     private String errorMsg;
+    private String warningMsg;
     private String instancePath;
     private final String xpath;
     private final String waitingXPath;
@@ -469,7 +471,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                     if (wrapper == null) {
                         stateListener.loadingError(errorMsg);
                     } else {
-                        stateListener.loadingComplete(this, formDef);
+                        stateListener.loadingComplete(this, formDef, warningMsg);
                     }
                 }
             } catch (Exception e) {
@@ -559,8 +561,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 ida.addRow(pathHash, columnHeaders, nextLine);
 
             }
-        } catch (IOException e) {
-            Timber.e(e, "Exception thrown while reading csv file");
+        } catch (IOException | SQLException e) {
+            warningMsg = e.getMessage();
         } finally {
             if (withinTransaction) {
                 ida.commit();
