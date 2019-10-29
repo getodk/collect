@@ -227,6 +227,7 @@ public class ShowQRCodeFragment extends Fragment {
                     applySettings(CompressionUtils.decompress(result.getContents()));
                 } catch (IOException | DataFormatException | IllegalArgumentException e) {
                     Timber.e(e);
+                    ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
                 }
                 return;
             }
