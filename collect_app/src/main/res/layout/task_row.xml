@@ -26,21 +26,21 @@
             android:id="@+id/toptext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/ListItemPrimaryTextStyle"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:layout_toRightOf="@id/icon"
         />
         <TextView
             android:id="@+id/middletext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/ListItemSecondaryTextStyle"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:layout_toRightOf="@id/icon"
         />
         <TextView
             android:id="@+id/bottomtext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/ListItemSecondaryTextStyle"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:layout_toRightOf="@id/icon"
             android:visibility="gone"
         />

@@ -1,17 +1,21 @@
 package org.odk.collect.android.http.openrosa.okhttp;
 
-import android.util.Base64;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.apache.commons.io.IOUtils;
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.http.openrosa.HttpCredentialsInterface;
 import org.odk.collect.android.http.openrosa.HttpGetResult;
 import org.odk.collect.android.http.openrosa.HttpHeadResult;
 import org.odk.collect.android.http.openrosa.HttpPostResult;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClient;
+import org.odk.collect.android.taskModel.TaskResponse;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.ByteArrayInputStream;
@@ -73,6 +77,12 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         if (statusCode != HttpURLConnection.HTTP_OK) {
             discardEntityBytes(response);
             Timber.i("Error: %s (%s at %s", response.message(), String.valueOf(statusCode), uri.toString());
+
+            String errMsg = response.message() +  " : " + String.valueOf(statusCode) +  " : " + uri.toString();
+            //String errMsg = Collect
+            //        .getInstance()
+            //        .getString(R.string.file_fetch_failed, uri.toString(), response.message(), String.valueOf(statusCode));
+
 
             Timber.e(errMsg);
             throw new Exception(errMsg);    // smap
@@ -285,14 +295,15 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                 .add("assignInput", resp)
                 .build();
 
-        setCredentialsIfNeeded(credentials, uri.getScheme());
+        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials);
+
         HttpPostResult postResult;
         Request request = new Request.Builder()
                 .url(uri.toURL())
                 .post(formBody)
                 .build();
 
-        Response response = httpClient.newCall(request).execute();
+        Response response = httpClient.makeRequest(request, new Date());
 
         if (response.code() == 204) {
             throw new IOException();
@@ -315,7 +326,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                                                  @NonNull URI uri,
                                                  @Nullable HttpCredentialsInterface credentials) throws IOException {
 
-        setCredentialsIfNeeded(credentials, uri.getScheme());
+        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials);
+
         String contentType = fileToContentTypeMapper.map(file.getName());
         RequestBody requestBody = RequestBody.create(MediaType.parse(contentType), file);
 
@@ -329,7 +341,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                 .post(mpBody)
                 .build();
 
-        Response response = httpClient.newCall(request).execute();
+        Response response = httpClient.makeRequest(request, new Date());
 
         int code = response.code();
         String body = response.body().string();
@@ -350,8 +362,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                       @Nullable HttpCredentialsInterface credentials,
                       HashMap<String, String> headers) throws Exception {
 
+        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials);
 
-        setCredentialsIfNeeded(credentials, uri.getScheme());
         Request.Builder b = new Request.Builder()
                 .url(uri.toURL());
 
@@ -363,15 +375,16 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         }
         Request request = b.get().build();
 
-        Response response = httpClient.newCall(request).execute();
+        Response response = httpClient.makeRequest(request, new Date());
         int statusCode = response.code();
         ByteArrayOutputStream os = null;
 
         if (statusCode != HttpURLConnection.HTTP_OK) {
             discardEntityBytes(response);
-            String errMsg = Collect
-                    .getInstance()
-                    .getString(R.string.file_fetch_failed, uri.toString(), response.message(), String.valueOf(statusCode));
+            String errMsg = response.message() +  " : " + String.valueOf(statusCode) +  " : " + uri.toString();
+            //String errMsg = Collect
+            //        .getInstance()
+            //        .getString(R.string.file_fetch_failed, uri.toString(), response.message(), String.valueOf(statusCode));
 
             Timber.e(errMsg);
             throw new Exception(errMsg);    // smap
@@ -405,14 +418,16 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     @Override
     public @NonNull
     String loginRequest(@NonNull URI uri, @Nullable final String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        setCredentialsIfNeeded(credentials, uri.getScheme());
+
+        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials);
+
         Request request = new Request.Builder()
                 .url(uri.toURL())
                 .addHeader(ACCEPT_ENCODING_HEADER, GZIP_CONTENT_ENCODING)
                 .get()
                 .build();
 
-        Response response = httpClient.newCall(request).execute();
+        Response response = httpClient.makeRequest(request, new Date());
         int statusCode = response.code();
         ByteArrayOutputStream os = null;
 

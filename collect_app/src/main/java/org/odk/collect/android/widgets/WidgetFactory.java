@@ -86,7 +86,7 @@ public class WidgetFactory {
                         break;
                     case Constants.DATATYPE_BARCODE:
                         if (appearance.contains("read_nfc")) {   // smap
-                            questionWidget = new NfcWidget(context, fep);
+                            questionWidget = new NfcWidget(context, questionDetails);
                         } else {
                             questionWidget = new BarcodeWidget(context, questionDetails);
                         }
@@ -104,20 +104,20 @@ public class WidgetFactory {
                         } else if (appearance.contains(WidgetAppearanceUtils.URL)) {	// smap change to contains rather than equals
                             questionWidget = new UrlWidget(context, questionDetails);
                         } else if (appearance.contains("chart")) {        // smap chart
-                            String chartType = fep.getQuestion().getAdditionalAttribute(null, "chart_type");
+                            String chartType = questionDetails.getPrompt().getQuestion().getAdditionalAttribute(null, "chart_type");
                             if(chartType == null) {
                                 chartType = "line";
                             }
                             if(chartType.equals("line")) {
-                                questionWidget = new SmapChartLineWidget(context, fep, appearance);
+                                questionWidget = new SmapChartLineWidget(context, questionDetails, appearance);
                             } else if(chartType.equals("horizontal_bar")){
-                                questionWidget = new SmapChartHorizontalBarWidget(context, fep, appearance);
+                                questionWidget = new SmapChartHorizontalBarWidget(context, questionDetails, appearance);
                             } else {
-                                questionWidget = new SmapChartLineWidget(context, fep, appearance);
+                                questionWidget = new SmapChartLineWidget(context, questionDetails, appearance);
                             }
 
-                        } else if (fep.getQuestion().getAdditionalAttribute(null, "form_identifier") != null) {	// smap
-                            questionWidget = new SmapFormWidget(context, fep, appearance, readOnlyOverride);	// smap
+                        } else if (questionDetails.getPrompt().getQuestion().getAdditionalAttribute(null, "form_identifier") != null) {	// smap
+                            questionWidget = new SmapFormWidget(context, questionDetails, appearance, readOnlyOverride);	// smap
                         } else {
                             questionWidget = new StringWidget(context, questionDetails, readOnlyOverride);
                         }

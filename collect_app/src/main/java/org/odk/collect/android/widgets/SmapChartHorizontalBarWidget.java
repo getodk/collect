@@ -30,6 +30,7 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -73,8 +74,8 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
         }
     }
 
-    public SmapChartHorizontalBarWidget(Context context, FormEntryPrompt prompt, String appearance) {
-        super(context, prompt, appearance);
+    public SmapChartHorizontalBarWidget(Context context, QuestionDetails questionDetails, String appearance) {
+        super(context, questionDetails, appearance);
 
         if(dString == null) {
             dString = getFormEntryPrompt().getAnswerText();

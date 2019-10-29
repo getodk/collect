@@ -57,7 +57,7 @@ public class ItemsetWidget extends AbstractSelectOneWidget {
     private final ItemsetDbAdapter adapter;
     private final FileUtil fileUtil;
 
-    protected ItemsetWidget(Context context, QuestionDetails formEntryPrompt, boolean autoAdvanceToNext, boolean readOnlyOvrride) {  // smap
+    protected ItemsetWidget(Context context, QuestionDetails formEntryPrompt, boolean autoAdvanceToNext, boolean readOnlyOverride) {  // smap
         this(context, formEntryPrompt, autoAdvanceToNext, new XPathParseTool(), new ItemsetDbAdapter(), new FileUtil(), readOnlyOverride);
     }
 

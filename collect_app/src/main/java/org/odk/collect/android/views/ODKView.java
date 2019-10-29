@@ -129,8 +129,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     @Inject
     public AudioHelperFactory audioHelperFactory;
 
-    @Inject
-    public Analytics analytics;
+    //@Inject
+    //public Analytics analytics;
 
     /**
      * Builds the view for a specified question or field-list of questions.
@@ -230,7 +230,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         PromptAutoplayer promptAutoplayer = new PromptAutoplayer(
                 audioHelper,
                 ReferenceManager.instance(),
-                analytics,
+                null,   // smap remove analytics
                 Collect.getCurrentFormIdentifierHash()
         );
 

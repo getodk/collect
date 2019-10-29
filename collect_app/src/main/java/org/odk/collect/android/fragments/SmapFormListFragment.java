@@ -33,7 +33,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AboutActivity;
-import org.odk.collect.android.activities.FormChooserList;
+import org.odk.collect.android.activities.FormChooserListActivity;
 import org.odk.collect.android.activities.FormDownloadList;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.activities.SmapTaskStatusActivity;
@@ -491,7 +491,7 @@ public class SmapFormListFragment extends ListFragment {
     private void processEnterData() {
         if (Collect.allowClick(getClass().getName())) {
             Intent i = new Intent(getContext(),
-                    FormChooserList.class);
+                    FormChooserListActivity.class);
             startActivity(i);
         }
     }

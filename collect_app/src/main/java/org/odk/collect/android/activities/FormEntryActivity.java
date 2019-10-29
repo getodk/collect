@@ -202,7 +202,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         CustomDatePickerDialog.CustomDatePickerDialogListener,
         RankingWidgetDialog.RankingListener,
         SaveFormIndexTask.SaveFormIndexListener, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
-        WidgetValueChangedListener, SmapRemoteListener {    // smap add SmapRemoteListener
+        SmapRemoteListener,    // smap add SmapRemoteListener
         WidgetValueChangedListener,
         ScreenContext,
         AudioControllerView.SwipableParent {
@@ -1338,9 +1338,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     @NotNull
-    private ODKView createODKView(boolean advancingPage, FormEntryPrompt[] prompts, FormEntryCaption[] groups) {
+    private ODKView createODKView(boolean advancingPage, FormEntryPrompt[] prompts, FormEntryCaption[] groups,
+                                  boolean canUpdate) {  // smap add canUpdate
         odkViewLifecycle.start();
-        return new ODKView(this, prompts, groups, advancingPage);
+        return new ODKView(this, prompts, groups, advancingPage, canUpdate);
     }
 
     @Override

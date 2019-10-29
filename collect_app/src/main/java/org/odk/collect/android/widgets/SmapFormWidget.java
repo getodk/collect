@@ -31,17 +31,14 @@ import android.widget.Toast;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalAppsUtils;
-import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.taskModel.FormLaunchDetail;
 import org.odk.collect.android.utilities.ActivityAvailability;
-import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.ManageForm;
-import org.odk.collect.android.utilities.ObjectUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
@@ -71,9 +68,9 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
 
     private long formId;
 
-    public SmapFormWidget(Context context, FormEntryPrompt prompt, String appearance, boolean readOnlyOverride) {
+    public SmapFormWidget(Context context, QuestionDetails questionDetails, String appearance, boolean readOnlyOverride) {
 
-        super(context, prompt);
+        super(context, questionDetails);
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
@@ -84,8 +81,8 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
         boolean validForm = true;
         mf = new ManageForm();
 
-        String formIdent = prompt.getQuestion().getAdditionalAttribute(null, "form_identifier");
-        String key_question = prompt.getQuestion().getAdditionalAttribute(null, "key_question");
+        String formIdent = questionDetails.getPrompt().getQuestion().getAdditionalAttribute(null, "form_identifier");
+        String key_question = questionDetails.getPrompt().getQuestion().getAdditionalAttribute(null, "key_question");
 
         if(formIdent == null) {
             validForm = false;
@@ -121,7 +118,7 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
         answer.setHorizontallyScrolling(false);
         answer.setSingleLine(false);
 
-        String s = prompt.getAnswerText();
+        String s = questionDetails.getPrompt().getAnswerText();
         if(s != null && s.startsWith("::")) {
             validForm = false;
             Toast.makeText(getContext(),
@@ -237,19 +234,6 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
         super.cancelLongPress();
         answer.cancelLongPress();
         launchIntentButton.cancelLongPress();
-    }
-
-    @Override
-    protected void injectDependencies(DependencyProvider dependencyProvider) {
-        DependencyProvider<ActivityAvailability> activityUtilProvider =
-                ObjectUtils.uncheckedCast(dependencyProvider);
-
-        if (activityUtilProvider == null) {
-            Timber.e("DependencyProvider doesn't provide ActivityAvailability.");
-            return;
-        }
-
-        this.activityAvailability = activityUtilProvider.provide();
     }
 
     @Override

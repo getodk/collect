@@ -134,7 +134,7 @@ public abstract class SelectWidget extends ItemsWidget {
                 String audioURI = getPlayableAudioURI(questionDetails.getPrompt(), choice, getReferenceManager());
 
                 if (audioURI != null) {
-                    analytics.logEvent("Prompt", "AudioChoice", questionDetails.getFormAnalyticsID());
+                    //analytics.logEvent("Prompt", "AudioChoice", questionDetails.getFormAnalyticsID());
                     break;
                 }
             }

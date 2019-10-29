@@ -67,7 +67,6 @@ import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.views.MediaLayout;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.Widget;
 
@@ -115,8 +114,8 @@ public abstract class QuestionWidget
     @Inject
     public AudioHelperFactory audioHelperFactory;
 
-    @Inject
-    public Analytics analytics;
+    //@Inject
+    //public Analytics analytics;
 
     public QuestionWidget(Context context, QuestionDetails questionDetails) {
         super(context);
@@ -299,7 +298,7 @@ public abstract class QuestionWidget
         String playableAudioURI = getPlayableAudioURI(prompt, referenceManager);
         if (playableAudioURI != null) {
             label.setAudio(playableAudioURI, audioHelper);
-            analytics.logEvent("Prompt", "AudioLabel", questionDetails.getFormAnalyticsID());
+            //analytics.logEvent("Prompt", "AudioLabel", questionDetails.getFormAnalyticsID());
         }
 
         label.setPlayTextColor(getPlayColor(formEntryPrompt, themeUtils));

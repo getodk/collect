@@ -29,6 +29,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +50,8 @@ public class SmapChartLineWidget extends SmapChartWidget {
     List<List<Entry>> datasets = null;
 
 
-    public SmapChartLineWidget(Context context, FormEntryPrompt prompt, String appearance) {
-        super(context, prompt, appearance);
+    public SmapChartLineWidget(Context context, QuestionDetails qustionDetails, String appearance) {
+        super(context, qustionDetails, appearance);
 
         String s = getFormEntryPrompt().getAnswerText();
         datasets = getLineEntries(s);

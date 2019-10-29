@@ -76,10 +76,10 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
                 return context -> audioHelper;
             }
 
-            @Override
-            public Analytics providesAnalytics(Application application) {
-                return analytics;
-            }
+            //@Override
+            //public Analytics providesAnalytics(Application application) {
+                //return analytics;
+            //}
         });
     }
 

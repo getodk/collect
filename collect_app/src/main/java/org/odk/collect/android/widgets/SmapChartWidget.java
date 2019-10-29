@@ -27,6 +27,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.views.SmapChartMarker;
 
 import java.util.ArrayList;
@@ -56,22 +57,22 @@ public abstract class SmapChartWidget extends QuestionWidget {
     IAxisValueFormatter formatter = null;
     SmapChartMarker mv = null;
 
-    public SmapChartWidget(Context context, FormEntryPrompt prompt, String appearance) {
-        super(context, prompt);
+    public SmapChartWidget(Context context, QuestionDetails questionDetails, String appearance) {
+        super(context, questionDetails);
         this.appearance = appearance;
 
-        String stackString = prompt.getQuestion().getAdditionalAttribute(null, "stacked");
+        String stackString = questionDetails.getPrompt().getQuestion().getAdditionalAttribute(null, "stacked");
         if(stackString != null && (stackString.equals("yes") || stackString.equals("true"))) {
             stacked = true;
         }
 
-        String normalisedString = prompt.getQuestion().getAdditionalAttribute(null, "normalised");
+        String normalisedString = questionDetails.getPrompt().getQuestion().getAdditionalAttribute(null, "normalised");
         if(normalisedString != null && (normalisedString.equals("yes") || normalisedString.equals("true"))) {
             normalised = true;
         }
 
         // the labels that should be drawn on the XAxis - These labels are added by the SmapChartWidget
-        getLabels(prompt.getAnswerText());
+        getLabels(questionDetails.getPrompt().getAnswerText());
 
         formatter = new IAxisValueFormatter() {
 

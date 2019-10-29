@@ -39,6 +39,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.NFCActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
@@ -56,15 +57,15 @@ public class NfcWidget extends QuestionWidget implements BinaryWidget {
     public PendingIntent mNfcPendingIntent;
     public IntentFilter[] mNfcFilters;
 
-	public NfcWidget(Context context, FormEntryPrompt prompt) {
-		super(context, prompt);
+	public NfcWidget(Context context, QuestionDetails questionDetails) {
+		super(context, questionDetails);
 
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 		params.setMargins(7, 5, 7, 5);
 
 		// set button formatting
 		mGetNfcButton = getSimpleButton(getContext().getString(R.string.smap_read_nfc));
-        mGetNfcButton.setEnabled(!prompt.isReadOnly());
+        mGetNfcButton.setEnabled(!questionDetails.getPrompt().isReadOnly());
 
 		// launch nfc capture intent on click
 		mGetNfcButton.setOnClickListener(new OnClickListener() {
@@ -83,7 +84,7 @@ public class NfcWidget extends QuestionWidget implements BinaryWidget {
 		// set text formatting
 		mStringAnswer = getCenteredAnswerTextView();
 
-		String s = prompt.getAnswerText();
+		String s = questionDetails.getPrompt().getAnswerText();
 		if (s != null) {
 			mGetNfcButton.setText(getContext().getString(
 					R.string.smap_replace_nfc));
