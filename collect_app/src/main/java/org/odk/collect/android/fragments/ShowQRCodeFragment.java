@@ -225,7 +225,7 @@ public class ShowQRCodeFragment extends Fragment {
             } else {
                 try {
                     applySettings(CompressionUtils.decompress(result.getContents()));
-                } catch (IOException | DataFormatException e) {
+                } catch (IOException | DataFormatException | IllegalArgumentException e) {
                     Timber.e(e);
                 }
                 return;
@@ -256,7 +256,7 @@ public class ShowQRCodeFragment extends Fragment {
                 } catch (FormatException | NotFoundException | ChecksumException e) {
                     Timber.i(e);
                     ToastUtils.showLongToast(R.string.qr_code_not_found);
-                } catch (DataFormatException | IOException | OutOfMemoryError e) {
+                } catch (DataFormatException | IOException | OutOfMemoryError | IllegalArgumentException e) {
                     Timber.e(e);
                     ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
                 }
