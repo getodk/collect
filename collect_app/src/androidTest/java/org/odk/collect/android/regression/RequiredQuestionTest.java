@@ -9,14 +9,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.espressoutils.FormEntry;
+
 import org.odk.collect.android.espressoutils.pages.MainMenuPage;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
-
-import static androidx.test.espresso.Espresso.closeSoftKeyboard;
-import static androidx.test.espresso.Espresso.pressBack;
-
 
 // Issue number NODK-249
 @RunWith(AndroidJUnit4.class)
@@ -36,22 +32,24 @@ public class RequiredQuestionTest extends BaseRegressionTest {
     public void requiredQuestions_ShouldDisplayAsterisk() {
 
         //TestCase1
-        new MainMenuPage(main).startBlankForm("required");
-        FormEntry.checkIsTextDisplayed("* Foo");
-        closeSoftKeyboard();
-        pressBack();
-        FormEntry.clickIgnoreChanges();
+        new MainMenuPage(main)
+                .startBlankForm("required")
+                .checkIsTextDisplayed("* Foo")
+                .closeSoftKeyboard()
+                .simplePressBack()
+                .clickIgnoreChanges();
     }
 
     @Test
     public void requiredQuestions_ShouldDisplayCustomMessage() {
 
         //TestCase2
-        new MainMenuPage(main).startBlankForm("required");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsToastWithMessageDisplayes("Custom required message", main.getActivity());
-        closeSoftKeyboard();
-        pressBack();
-        FormEntry.clickIgnoreChanges();
+        new MainMenuPage(main)
+                .startBlankForm("required")
+                .swipeToNextQuestion()
+                .checkIsToastWithMessageDisplayed("Custom required message")
+                .closeSoftKeyboard()
+                .simplePressBack()
+                .clickIgnoreChanges();
     }
 }
