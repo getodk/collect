@@ -151,7 +151,6 @@ public class LikertWidget extends ItemsWidget {
 
     // Creates text view for choice
     public TextView getTextView(){
-        // TODO: Find way to cap text when too long
         TextView view = new TextView(getContext());
         view.setGravity(Gravity.CENTER);
         view.setPadding(2,2,2,2);
@@ -248,7 +247,17 @@ public class LikertWidget extends ItemsWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        /** TODO */
+        for (RadioButton r : buttonsToName.keySet()) {
+            r.setOnLongClickListener(l);
+        }
+    }
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        for (RadioButton r : buttonsToName.keySet()) {
+            r.cancelLongPress();
+        }
     }
 
     @Override
