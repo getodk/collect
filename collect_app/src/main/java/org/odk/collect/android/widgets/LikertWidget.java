@@ -134,7 +134,9 @@ public class LikertWidget extends ItemsWidget {
             LEFT_LINEVIEW_PARAMS.addRule(CENTER_IN_PARENT, TRUE);
             leftLineView.setLayoutParams(LEFT_LINEVIEW_PARAMS);
             leftLineView.setBackgroundColor(Color.parseColor("#CCCCCC"));
-            buttonView.addView(leftLineView);
+            if (i != 0) {
+                buttonView.addView(leftLineView);
+            }
 
             RadioButton button = getRadioButton();
             buttonsToName.put(button, items.get(i).getValue());
@@ -152,7 +154,10 @@ public class LikertWidget extends ItemsWidget {
             RIGHT_LINEVIEW_PARAMS.addRule(CENTER_IN_PARENT, TRUE);
             rightLineView.setLayoutParams(RIGHT_LINEVIEW_PARAMS);
             rightLineView.setBackgroundColor(Color.parseColor("#CCCCCC"));
-            buttonView.addView(rightLineView);
+
+            if (i != items.size() - 1) {
+                buttonView.addView(rightLineView);
+            }
 
             optionView.addView(buttonView);
             optionView.addView(choice);
