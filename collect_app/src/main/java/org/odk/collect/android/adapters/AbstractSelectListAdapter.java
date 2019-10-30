@@ -76,6 +76,12 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
     List<SelectChoice> filteredItems;
     boolean noButtonsMode;
 
+    /**
+     * This creates a circular dependency between this class and {@link SelectWidget}. Dependencies
+     * for this class should be passed in at the constructor or setter level. Method calls back to
+     * {@link SelectWidget} can be replaced with listeners.
+     */
+    @Deprecated
     SelectWidget widget;
 
     AbstractSelectListAdapter(List<SelectChoice> items, SelectWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, Context context) {
