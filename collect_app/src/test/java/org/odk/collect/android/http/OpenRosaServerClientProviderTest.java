@@ -42,7 +42,7 @@ public abstract class OpenRosaServerClientProviderTest {
         MockWebServer mockWebServer = mockWebServerRule.start();
         enqueueSuccess(mockWebServer);
 
-        OpenRosaServerClient client = subject.get("http", "Android", null);
+        OpenRosaServerClient client = subject.get("http", "Android", null,"localhost");
         client.makeRequest(buildRequest(mockWebServer, ""), new Date());
 
         RecordedRequest request = mockWebServer.takeRequest();
@@ -56,7 +56,7 @@ public abstract class OpenRosaServerClientProviderTest {
 
         Date currentTime = new Date();
 
-        OpenRosaServerClient client = subject.get("http", "Android", null);
+        OpenRosaServerClient client = subject.get("http", "Android", null,"localhost");
         client.makeRequest(buildRequest(mockWebServer, ""), currentTime);
 
         RecordedRequest request = mockWebServer.takeRequest();
@@ -71,7 +71,7 @@ public abstract class OpenRosaServerClientProviderTest {
         MockWebServer mockWebServer = mockWebServerRule.start();
         enqueueSuccess(mockWebServer);
 
-        OpenRosaServerClient client = subject.get("http", "Android", null);
+        OpenRosaServerClient client = subject.get("http", "Android", null,"localhost");
         client.makeRequest(buildRequest(mockWebServer, ""), new Date());
 
         RecordedRequest request = mockWebServer.takeRequest();
@@ -84,7 +84,7 @@ public abstract class OpenRosaServerClientProviderTest {
         enqueueBasicChallenge(mockWebServer);
         enqueueSuccess(mockWebServer);
 
-        OpenRosaServerClient client = subject.get("http", "Android", new HttpCredentials("user", "pass"));
+        OpenRosaServerClient client = subject.get("http", "Android", new HttpCredentials("user", "pass"), "localhost");
         client.makeRequest(buildRequest(mockWebServer, ""), new Date());
 
         assertThat(mockWebServer.getRequestCount(), equalTo(1));
@@ -97,7 +97,7 @@ public abstract class OpenRosaServerClientProviderTest {
         enqueueBasicChallenge(httpsMockWebServer);
         enqueueSuccess(httpsMockWebServer);
 
-        OpenRosaServerClient client = subject.get("https", "Android", new HttpCredentials("user", "pass"));
+        OpenRosaServerClient client = subject.get("https", "Android", new HttpCredentials("user", "pass"), "localhost");
         client.makeRequest(buildRequest(httpsMockWebServer, ""), new Date());
 
         assertThat(httpsMockWebServer.getRequestCount(), equalTo(2));
@@ -112,7 +112,7 @@ public abstract class OpenRosaServerClientProviderTest {
         enqueueDigestChallenge(mockWebServer);
         enqueueSuccess(mockWebServer);
 
-        OpenRosaServerClient client = subject.get("http", "Android", new HttpCredentials("user", "pass"));
+        OpenRosaServerClient client = subject.get("http", "Android", new HttpCredentials("user", "pass"),"localhost");
         client.makeRequest(buildRequest(mockWebServer, ""), new Date());
 
         assertThat(mockWebServer.getRequestCount(), equalTo(2));
@@ -128,7 +128,7 @@ public abstract class OpenRosaServerClientProviderTest {
         enqueueDigestChallenge(httpsMockWebServer);
         enqueueSuccess(httpsMockWebServer);
 
-        OpenRosaServerClient client = subject.get("https", "Android", new HttpCredentials("user", "pass"));
+        OpenRosaServerClient client = subject.get("https", "Android", new HttpCredentials("user", "pass"),"localhost");
         client.makeRequest(buildRequest(httpsMockWebServer, ""), new Date());
 
         assertThat(httpsMockWebServer.getRequestCount(), equalTo(2));
@@ -145,7 +145,7 @@ public abstract class OpenRosaServerClientProviderTest {
         enqueueSuccess(httpsMockWebServer);
         enqueueSuccess(httpsMockWebServer);
 
-        OpenRosaServerClient client = subject.get("https", "Android", new HttpCredentials("user", "pass"));
+        OpenRosaServerClient client = subject.get("https", "Android", new HttpCredentials("user", "pass"),"localhost");
         client.makeRequest(buildRequest(httpsMockWebServer, ""), new Date());
         client.makeRequest(buildRequest(httpsMockWebServer, "/different"), new Date());
 
@@ -164,7 +164,7 @@ public abstract class OpenRosaServerClientProviderTest {
         enqueueSuccess(mockWebServer);
         enqueueSuccess(mockWebServer);
 
-        OpenRosaServerClient client = subject.get("http", "Android", new HttpCredentials("user", "pass"));
+        OpenRosaServerClient client = subject.get("http", "Android", new HttpCredentials("user", "pass"),"localhost");
         client.makeRequest(buildRequest(mockWebServer, ""), new Date());
         client.makeRequest(buildRequest(mockWebServer, "/different"), new Date());
 
@@ -183,7 +183,7 @@ public abstract class OpenRosaServerClientProviderTest {
         enqueueSuccess(httpsMockWebServer);
         enqueueSuccess(httpsMockWebServer);
 
-        OpenRosaServerClient client = subject.get("https", "Android", new HttpCredentials("user", "pass"));
+        OpenRosaServerClient client = subject.get("https", "Android", new HttpCredentials("user", "pass"),"localhost");
         client.makeRequest(buildRequest(httpsMockWebServer, ""), new Date());
         client.makeRequest(buildRequest(httpsMockWebServer, "/different"), new Date());
 
@@ -202,8 +202,8 @@ public abstract class OpenRosaServerClientProviderTest {
         enqueueSuccess(mockWebServer);
         enqueueSuccess(mockWebServer);
 
-        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(buildRequest(mockWebServer, ""), new Date());
-        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(buildRequest(mockWebServer, "/different"), new Date());
+        subject.get("http", "Android", new HttpCredentials("user", "pass"),"localhost").makeRequest(buildRequest(mockWebServer, ""), new Date());
+        subject.get("http", "Android", new HttpCredentials("user", "pass"),"localhost").makeRequest(buildRequest(mockWebServer, "/different"), new Date());
 
         assertThat(mockWebServer.getRequestCount(), equalTo(3));
         mockWebServer.takeRequest();
@@ -221,8 +221,8 @@ public abstract class OpenRosaServerClientProviderTest {
         enqueueDigestChallenge(mockWebServer);
         enqueueSuccess(mockWebServer);
 
-        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(buildRequest(mockWebServer, ""), new Date());
-        subject.get("http", "Android", new HttpCredentials("new-user", "pass")).makeRequest(buildRequest(mockWebServer, "/different"), new Date());
+        subject.get("http", "Android", new HttpCredentials("user", "pass"),"localhost").makeRequest(buildRequest(mockWebServer, ""), new Date());
+        subject.get("http", "Android", new HttpCredentials("new-user", "pass"),"localhost").makeRequest(buildRequest(mockWebServer, "/different"), new Date());
 
         assertThat(mockWebServer.getRequestCount(), equalTo(4));
         mockWebServer.takeRequest();
@@ -242,8 +242,8 @@ public abstract class OpenRosaServerClientProviderTest {
         enqueueDigestChallenge(host2);
         enqueueSuccess(host2);
 
-        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(buildRequest(host1, ""), new Date());
-        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(buildRequest(host2, ""), new Date());
+        subject.get("http", "Android", new HttpCredentials("user", "pass"),"localhost").makeRequest(buildRequest(host1, ""), new Date());
+        subject.get("http", "Android", new HttpCredentials("user", "pass"),"localhost").makeRequest(buildRequest(host2, ""), new Date());
 
         assertThat(host2.getRequestCount(), equalTo(2));
 
@@ -261,8 +261,8 @@ public abstract class OpenRosaServerClientProviderTest {
                 .addHeader("Set-Cookie", "blah=blah"));
         enqueueSuccess(mockWebServer);
 
-        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(buildRequest(mockWebServer, ""), new Date());
-        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(buildRequest(mockWebServer, ""), new Date());
+        subject.get("http", "Android", new HttpCredentials("user", "pass"),"localhost").makeRequest(buildRequest(mockWebServer, ""), new Date());
+        subject.get("http", "Android", new HttpCredentials("user", "pass"),"localhost").makeRequest(buildRequest(mockWebServer, ""), new Date());
 
         mockWebServer.takeRequest();
         RecordedRequest request = mockWebServer.takeRequest();

@@ -40,6 +40,8 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
     private final OkHttpClient baseClient;
 
     private HttpCredentialsInterface lastCredentials;
+    private String lastHost;        // smap
+
     private OkHttpOpenRosaServerClient client;
 
     public OkHttpOpenRosaServerClientProvider(@NonNull OkHttpClient baseClient) {
@@ -47,9 +49,10 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
     }
 
     @Override
-    public OpenRosaServerClient get(String scheme, String userAgent, @Nullable HttpCredentialsInterface credentials) {
-        if (client == null || credentialsHaveChanged(credentials)) {
+    public OpenRosaServerClient get(String scheme, String userAgent, @Nullable HttpCredentialsInterface credentials, String host) { // smap add host
+        if (client == null || credentialsHaveChanged(credentials) || hostHasChanged(host)) {  // smap add hostHasChanged
             lastCredentials = credentials;
+            lastHost = host;                      // smap
             client = createNewClient(scheme, userAgent, credentials);
         }
 
@@ -58,6 +61,11 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
 
     private boolean credentialsHaveChanged(@Nullable HttpCredentialsInterface credentials) {
         return lastCredentials != null && !lastCredentials.equals(credentials);
+    }
+
+    // smap
+    private boolean hostHasChanged(@Nullable String host) {
+        return lastHost != null && !lastHost.equals(host);
     }
 
     @NonNull

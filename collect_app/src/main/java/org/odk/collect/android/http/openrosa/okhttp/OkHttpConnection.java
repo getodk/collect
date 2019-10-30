@@ -65,7 +65,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     @NonNull
     @Override
     public HttpGetResult executeGetRequest(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials);
+        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials, uri.getHost());  // smap add host
         Request request = new Request.Builder()
                 .url(uri.toURL())
                 .get()
@@ -133,7 +133,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     @NonNull
     @Override
     public HttpHeadResult executeHeadRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials);
+        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials, uri.getHost());  // smap add host
         Request request = new Request.Builder()
                 .url(uri.toURL())
                 .head()
@@ -237,7 +237,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
     @NonNull
     private HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials, MultipartBody multipartBody) throws Exception {
-        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials);
+        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials, uri.getHost());    // smap add host
         HttpPostResult postResult;
         Request request = new Request.Builder()
                 .url(uri.toURL())
@@ -295,7 +295,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                 .add("assignInput", resp)
                 .build();
 
-        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials);
+        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials, uri.getHost());
 
         HttpPostResult postResult;
         Request request = new Request.Builder()
@@ -326,7 +326,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                                                  @NonNull URI uri,
                                                  @Nullable HttpCredentialsInterface credentials) throws IOException {
 
-        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials);
+        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials, uri.getHost());  // smap add host
 
         String contentType = fileToContentTypeMapper.map(file.getName());
         RequestBody requestBody = RequestBody.create(MediaType.parse(contentType), file);
@@ -362,7 +362,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                       @Nullable HttpCredentialsInterface credentials,
                       HashMap<String, String> headers) throws Exception {
 
-        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials);
+        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials, uri.getHost()); // smap add host
 
         Request.Builder b = new Request.Builder()
                 .url(uri.toURL());
@@ -419,7 +419,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     public @NonNull
     String loginRequest(@NonNull URI uri, @Nullable final String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
 
-        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials);
+        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials, uri.getHost());  // smap add host
 
         Request request = new Request.Builder()
                 .url(uri.toURL())
