@@ -123,7 +123,7 @@ public class LikertWidget extends ItemsWidget {
         buttonsToName = new HashMap<>();
         for (int i = 0; i < items.size(); i++) {
             LinearLayout optionView = getLinearLayout();
-            RadioButton button = getRadioButton(i);
+            RadioButton button = getRadioButton();
             buttonsToName.put(button, items.get(i).getValue());
             optionView.addView(button);
             ImageView imgView = getImageAsImageView(i);
@@ -145,7 +145,7 @@ public class LikertWidget extends ItemsWidget {
         return view;
     }
 
-    public RadioButton getRadioButton(int index){
+    public RadioButton getRadioButton(){
         AppCompatRadioButton button = new AppCompatRadioButton(getContext());
         button.setId(ViewIds.generateViewId());
         button.setEnabled(!getFormEntryPrompt().isReadOnly());
