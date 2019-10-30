@@ -42,7 +42,10 @@ public class LikertWidget extends ItemsWidget {
     private final LinearLayout.LayoutParams LINEARLAYOUT_PARAMS = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1);
     private final LayoutParams TEXTVIEW_PARAMS = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
     private LayoutParams IMAGEVIEW_PARAMS = new LayoutParams(LayoutParams.WRAP_CONTENT , LayoutParams.WRAP_CONTENT);
-    private final LayoutParams RADIOBUTTON_PARAMS = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    private  LayoutParams RADIOBUTTON_PARAMS = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    private LayoutParams BUTTONVIEW_PARAMS = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+    private LayoutParams LEFT_LINEVIEW_PARAMS = new LayoutParams(80, 2);
+    private LayoutParams RIGHT_LINEVIEW_PARAMS = new LayoutParams(80, 2);
 
     HashMap<RadioButton, String> buttonsToName;
 
@@ -123,9 +126,19 @@ public class LikertWidget extends ItemsWidget {
         buttonsToName = new HashMap<>();
         for (int i = 0; i < items.size(); i++) {
             LinearLayout optionView = getLinearLayout();
+            RelativeLayout buttonView = new RelativeLayout(this.getContext());
+            BUTTONVIEW_PARAMS.addRule(CENTER_IN_PARENT, TRUE);
+            buttonView.setLayoutParams(BUTTONVIEW_PARAMS);
+            View leftLineView = new View(this.getContext());
+            LEFT_LINEVIEW_PARAMS.addRule(ALIGN_PARENT_LEFT, TRUE);
+            LEFT_LINEVIEW_PARAMS.addRule(CENTER_IN_PARENT, TRUE);
+            leftLineView.setLayoutParams(LEFT_LINEVIEW_PARAMS);
+            leftLineView.setBackgroundColor(Color.parseColor("#CCCCCC"));
+            buttonView.addView(leftLineView);
+
             RadioButton button = getRadioButton();
             buttonsToName.put(button, items.get(i).getValue());
-            optionView.addView(button);
+            buttonView.addView(button);
             ImageView imgView = getImageAsImageView(i);
             // checks if image is set or valid
             if (imgView != null) {
@@ -133,6 +146,15 @@ public class LikertWidget extends ItemsWidget {
             }
             TextView choice = getTextView();
             choice.setText(getFormEntryPrompt().getSelectChoiceText(items.get(i)));
+
+            View rightLineView = new View(this.getContext());
+            RIGHT_LINEVIEW_PARAMS.addRule(ALIGN_PARENT_RIGHT, TRUE);
+            RIGHT_LINEVIEW_PARAMS.addRule(CENTER_IN_PARENT, TRUE);
+            rightLineView.setLayoutParams(RIGHT_LINEVIEW_PARAMS);
+            rightLineView.setBackgroundColor(Color.parseColor("#CCCCCC"));
+            buttonView.addView(rightLineView);
+
+            optionView.addView(buttonView);
             optionView.addView(choice);
             view.addView(optionView);
         }
@@ -150,6 +172,7 @@ public class LikertWidget extends ItemsWidget {
         button.setId(ViewIds.generateViewId());
         button.setEnabled(!getFormEntryPrompt().isReadOnly());
         button.setFocusable(!getFormEntryPrompt().isReadOnly());
+        RADIOBUTTON_PARAMS.addRule(CENTER_HORIZONTAL, TRUE);
         button.setLayoutParams(RADIOBUTTON_PARAMS);
         button.setGravity(Gravity.CENTER);
         return button;
