@@ -17,6 +17,8 @@ import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.test.FormLoadingUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -39,13 +41,13 @@ public class LikertTest {
                     Manifest.permission.CAMERA)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule(LIKERT_TEST_FORM, Collections.singletonList("fruits.csv")));
+            .around(new CopyFormRule(LIKERT_TEST_FORM, Collections.singletonList("famous.jpg")));
 
 
     @Test
     public void longLabelsShouldBeDisplayed() {
         openWidgetList();
-        onView(withText("Likert Widget")).perform(click());
+        onView(withText("Likert Image Widget")).perform(click());
     }
 
     private void openWidgetList() {
