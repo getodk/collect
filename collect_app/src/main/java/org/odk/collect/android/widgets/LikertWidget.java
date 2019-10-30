@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatRadioButton;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
@@ -27,6 +29,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ViewIds;
 
 import timber.log.Timber;
 
@@ -120,7 +123,7 @@ public class LikertWidget extends ItemsWidget {
         buttonsToName = new HashMap<>();
         for (int i = 0; i < items.size(); i++) {
             LinearLayout optionView = getLinearLayout();
-            RadioButton button = getRadioButton();
+            RadioButton button = getRadioButton(i);
             buttonsToName.put(button, items.get(i).getValue());
             optionView.addView(button);
             ImageView imgView = getImageAsImageView(i);
@@ -142,8 +145,11 @@ public class LikertWidget extends ItemsWidget {
         return view;
     }
 
-    public RadioButton getRadioButton(){
-        RadioButton button = new RadioButton(getContext());
+    public RadioButton getRadioButton(int index){
+        AppCompatRadioButton button = new AppCompatRadioButton(getContext());
+        button.setId(ViewIds.generateViewId());
+        button.setEnabled(!getFormEntryPrompt().isReadOnly());
+        button.setFocusable(!getFormEntryPrompt().isReadOnly());
         button.setLayoutParams(RADIOBUTTON_PARAMS);
         button.setGravity(Gravity.CENTER);
         return button;
