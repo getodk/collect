@@ -120,6 +120,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     private FormEntryPrompt nfcPrompt = null;           // smap
     private FormEntryPrompt barcodePrompt = null;       // smap
     private FormEntryPrompt exPrompt = null;            // smap
+    private Button exGroupPrompt = null;                // smap
     private FormEntryPrompt formPrompt = null;          // smap
     private FormEntryPrompt geopointPrompt = null;      // smap
     private FormEntryPrompt imagePrompt = null;         // smap
@@ -182,7 +183,15 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             if (intentString != null && intentString.length() != 0) {
                 readOnlyOverride = true;
 
-                addIntentLaunchButton(context, questionPrompts, c, intentString);
+                exGroupPrompt = addIntentLaunchButton(context, questionPrompts, c, intentString);   // smap get the button back
+
+                // Start smap - auto launch
+                String auto = c.getFormElement().getAdditionalAttribute(null, "auto");
+                boolean autoLaunch = (auto != null && (auto.equals("yes") || auto.equals("true"))) ? true : false;
+                if(!autoLaunch) {
+                    exGroupPrompt = null;   // Don't auto launch then
+                }
+                // end smap
             }
         }
 
@@ -215,12 +224,64 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
         // see if there is an autoplay option.
         // Only execute it during forward swipes through the form
-        if (advancingPage && widgets.size() == 1) {
+        if (advancingPage) {    // smap remove check for only one widget should work off first widget
             FormEntryPrompt firstPrompt = widgets.get(0).getFormEntryPrompt();
             Boolean autoplayedAudio = autoplayAudio(firstPrompt);
 
             if (!autoplayedAudio) {
-                autoplayVideo(firstPrompt);
+                boolean autoplayedVideo = autoplayVideo(firstPrompt);       // smap add auto played video
+
+                // begin smap
+                if(!autoplayedVideo) {
+                    if (exGroupPrompt != null) {    // Smap - auto multi question external app
+                        exGroupPrompt.performClick();
+                    } else if (nfcPrompt != null) {    // Smap - auto get NFC
+                        Intent i = new Intent(getContext(), NFCActivity.class);
+                        Collect.getInstance().getFormController()
+                                .setIndexWaitingForData(nfcPrompt.getIndex());
+                        ((Activity) getContext()).startActivityForResult(i,
+                                RequestCodes.NFC_CAPTURE);
+
+                    } else if (barcodePrompt != null) {    // Smap - auto get barcode
+                        BarcodeWidget bcWidget = (BarcodeWidget) widgets.get(0);
+                        if (bcWidget != null) {
+                            bcWidget.getBarcodeButton.performClick();
+                        }
+                    } else if (exPrompt != null) {    // Smap - auto external app
+                        ExStringWidget exWidget = (ExStringWidget) widgets.get(0);
+                        if (exWidget != null) {
+                            exWidget.launchIntentButton.performClick();
+                        }
+                    } else if (formPrompt != null) {    // Smap - launch form
+                        SmapFormWidget formWidget = (SmapFormWidget) widgets.get(0);
+                        if (formWidget != null) {
+                            formWidget.launchIntentButton.performClick();
+                            formWidget.launchIntentButton.setVisibility(GONE);
+                            formWidget.launching.setVisibility(VISIBLE);
+                        }
+                    } else if (geopointPrompt != null) {    // Smap - launch gps collection
+                        GeoPointWidget geopointWidget = (GeoPointWidget) widgets.get(0);
+                        if (geopointWidget != null) {
+                            geopointWidget.getLocationButton.performClick();
+                        }
+                    } else if (imagePrompt != null) {    // Smap - launch image collection
+                        ImageWidget imageWidget = (ImageWidget) widgets.get(0);
+                        if (imageWidget != null) {
+                            imageWidget.captureButton.performClick();
+                        }
+                    } else if (videoPrompt != null) {    // Smap - launch video collection
+                        VideoWidget videoWidget = (VideoWidget) widgets.get(0);
+                        if (videoWidget != null) {
+                            videoWidget.captureButton.performClick();
+                        }
+                    } else if (audioPrompt != null) {    // Smap - launch audio collection
+                        AudioWidget audioWidget = (AudioWidget) widgets.get(0);
+                        if (audioWidget != null) {
+                            audioWidget.captureButton.performClick();
+                        }
+                    }
+                }
+                // end smap
             }
 
         }
@@ -237,59 +298,19 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         return promptAutoplayer.autoplayIfNeeded(firstPrompt);
     }
 
-    private void autoplayVideo(FormEntryPrompt prompt) {
+    private boolean autoplayVideo(FormEntryPrompt prompt) {     // smap add boolean response
         final String autoplayOption = prompt.getFormElement().getAdditionalAttribute(null, "autoplay");
+        boolean played = false;     // smap
 
         if (autoplayOption != null) {
             if (autoplayOption.equalsIgnoreCase("video")) {
                 new Handler().postDelayed(() -> {
                     widgets.get(0).getAudioVideoImageTextLabel().playVideo();
                 }, 150);
-            } else if (nfcPrompt != null) {    // Smap - auto get NFC
-                Intent i = new Intent(getContext(), NFCActivity.class);
-                Collect.getInstance().getFormController()
-                        .setIndexWaitingForData(nfcPrompt.getIndex());
-                ((Activity) getContext()).startActivityForResult(i,
-                        RequestCodes.NFC_CAPTURE);
-            } else if (barcodePrompt != null) {    // Smap - auto get barcode
-                BarcodeWidget bcWidget = (BarcodeWidget) widgets.get(0);
-                if(bcWidget != null) {
-                    bcWidget.getBarcodeButton.performClick();
-                }
-            } else if (exPrompt != null) {    // Smap - auto external app
-                ExStringWidget exWidget = (ExStringWidget) widgets.get(0);
-                if(exWidget != null) {
-                    exWidget.launchIntentButton.performClick();
-                }
-            } else if (formPrompt != null) {    // Smap - launch form
-                SmapFormWidget formWidget = (SmapFormWidget) widgets.get(0);
-                if(formWidget != null) {
-                    formWidget.launchIntentButton.performClick();
-                    formWidget.launchIntentButton.setVisibility(GONE);
-                    formWidget.launching.setVisibility(VISIBLE);
-                }
-            } else if (geopointPrompt != null) {    // Smap - launch gps collection
-                GeoPointWidget geopointWidget = (GeoPointWidget) widgets.get(0);
-                if(geopointWidget != null) {
-                    geopointWidget.getLocationButton.performClick();
-                }
-            } else if (imagePrompt != null) {    // Smap - launch image collection
-                ImageWidget imageWidget = (ImageWidget) widgets.get(0);
-                if(imageWidget != null) {
-                    imageWidget.captureButton.performClick();
-                }
-            } else if (videoPrompt != null) {    // Smap - launch video collection
-                VideoWidget videoWidget = (VideoWidget) widgets.get(0);
-                if(videoWidget != null) {
-                    videoWidget.captureButton.performClick();
-                }
-            } else if (audioPrompt != null) {    // Smap - launch audio collection
-                AudioWidget audioWidget = (AudioWidget) widgets.get(0);
-                if(audioWidget != null) {
-                    audioWidget.captureButton.performClick();
-                }
+                played = true;
             }
         }
+        return played;
     }
 
     private ScreenContext getScreenContext() {
@@ -346,6 +367,11 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             boolean autoLaunch = (auto != null && (auto.equals("yes") || auto.equals("true"))) ? true : false;
             boolean isNew = (appearance.contains("new")) ? true : false;
             String s = question.getAnswerText();    // Make sure a value has not already been retrieved
+
+            // If a response has already ben received then clear the group response button so that it is not automatically activated
+            if(s != null) {
+                exGroupPrompt = null;
+            }
 
             // Auto get External Launch if first question, and not already obtained a value
             if(nfcPrompt == null && autoLaunch && s == null) {
@@ -523,7 +549,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      * Adds a button to launch an intent if the group displayed by this view is an intent group.
      * An intent group launches an intent and receives multiple values from the launched app.
      */
-    private void addIntentLaunchButton(Context context, FormEntryPrompt[] questionPrompts,
+    private Button addIntentLaunchButton(Context context, FormEntryPrompt[] questionPrompts,        // smap return button
                                        FormEntryCaption c, String intentString) {
         final String buttonText;
         final String errorString;
@@ -591,6 +617,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         view.addView(getDividerView());
 
         view.addView(launchIntentButton, layout);
+
+        return launchIntentButton;
     }
 
     public void setFocus(Context context) {
