@@ -14,23 +14,23 @@
                     </text>
                     <text id="/likert_test/likert_image_widget_error2/strongly_disagree:label">
                         <value>Strongly Disagree</value>
-                        <value form="image">jr://images/angry.jpg</value>
+                        <value form="image">jr://images/famous.jpg</value>
                     </text>
                     <text id="/likert_test/likert_image_widget/agree:label">
                         <value>Agree</value>
-                        <value form="image">jr://images/smile.jpg</value>
+                        <value form="image">jr://images/famous.jpg</value>
                     </text>
                     <text id="/likert_test/likert_image_widget_error2/agree:label">
                         <value>Agree</value>
-                        <value form="image">jr://images/smile.jpg</value>
+                        <value form="image">jr://images/famous.jpg</value>
                     </text>
                     <text id="/likert_test/likert_image_widget_error/strongly_disagree:label">
                         <value>Strongly Disagree</value>
-                        <value form="image">jr://images/angry.jpg</value>
+                        <value form="image">jr://images/famous.jpg</value>
                     </text>
                     <text id="/likert_test/likert_image_widget_error/agree:label">
                         <value>Agree</value>
-                        <value form="image">jr://images/smile.jpg</value>
+                        <value form="image">jr://images/famous.jpg</value>
                     </text>
                     <text id="/likert_test/likert_image_widget_error2/strongly_agree:label">
                         <value>Strongly Agree</value>
@@ -38,7 +38,7 @@
                     </text>
                     <text id="/likert_test/likert_image_widget/disagree:label">
                         <value>Disagree</value>
-                        <value form="image">jr://images/sad.jpg</value>
+                        <value form="image">jr://images/famous.jpg</value>
                     </text>
                     <text id="/likert_test/likert_image_widget_error/strongly_agree:label">
                         <value>Strongly Agree</value>
@@ -50,19 +50,19 @@
                     </text>
                     <text id="/likert_test/likert_image_widget_error2/disagree:label">
                         <value>Disagree</value>
-                        <value form="image">jr://images/sad.jpg</value>
+                        <value form="image">jr://images/famous.jpg</value>
                     </text>
                     <text id="/likert_test/likert_image_widget/strongly_disagree:label">
                         <value>Strongly Disagree</value>
-                        <value form="image">jr://images/angry.jpg</value>
+                        <value form="image">jr://images/famous.jpg</value>
                     </text>
                     <text id="/likert_test/likert_image_widget_error/disagree:label">
                         <value>Disagree</value>
-                        <value form="image">jr://images/sad.jpg</value>
+                        <value form="image">jr://images/famous.jpg</value>
                     </text>
                     <text id="/likert_test/likert_image_widget/neutral:label">
                         <value>Neutral</value>
-                        <value form="image">jr://images/neutral.jpg</value>
+                        <value form="image">jr://images/famous.jpg</value>
                     </text>
                 </translation>
             </itext>
