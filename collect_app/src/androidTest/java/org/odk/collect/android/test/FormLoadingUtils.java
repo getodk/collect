@@ -17,9 +17,7 @@
 package org.odk.collect.android.test;
 
 import android.content.ContentValues;
-import android.content.Intent;
 
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 
 import org.odk.collect.android.activities.FormEntryActivity;
@@ -34,7 +32,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
 import static org.odk.collect.android.test.FileUtils.copyFileFromAssets;
 
 public class FormLoadingUtils {
@@ -82,21 +79,7 @@ public class FormLoadingUtils {
     }
 
     public static IntentsTestRule<FormEntryActivity> getFormActivityTestRuleFor(String formFilename) {
-        return new IntentsTestRule<FormEntryActivity>(FormEntryActivity.class) {
-            @Override
-            protected Intent getActivityIntent() {
-                Intent intent = new Intent(ApplicationProvider.getApplicationContext(), FormEntryActivity.class);
-                intent.putExtra(EXTRA_TESTING_PATH, Collect.FORMS_PATH + "/" + formFilename);
-
-                return intent;
-            }
-
-            @Override
-            protected void afterActivityLaunched() {
-                this.getActivity().setShouldOverrideAnimations(true);
-                super.afterActivityLaunched();
-            }
-        };
+        return new FormActivityTestRule(formFilename);
     }
 
     private static void copyForm(String formFilename) throws IOException {

@@ -27,6 +27,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
@@ -111,7 +112,7 @@ public class DaylightSavingTest {
         when(datePickerDialog.getDatePicker().getMonth()).thenReturn(month);
         when(datePickerDialog.getDatePicker().getDayOfMonth()).thenReturn(day);
 
-        return new DateWidget(RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get(), formEntryPromptStub);
+        return new DateWidget(RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get(), new QuestionDetails(formEntryPromptStub, "formAnalyticsID"));
     }
 
     private DateTimeWidget prepareDateTimeWidget(int year, int month, int day, int hour, int minute) {
@@ -134,7 +135,7 @@ public class DaylightSavingTest {
         when(timeWidget.getHour()).thenReturn(hour);
         when(timeWidget.getMinute()).thenReturn(minute);
 
-        DateTimeWidget dateTimeWidget = new DateTimeWidget(RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get(), formEntryPromptStub);
+        DateTimeWidget dateTimeWidget = new DateTimeWidget(RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get(), new QuestionDetails(formEntryPromptStub, "formAnalyticsID"));
         dateTimeWidget.setDateWidget(dateWidget);
         dateTimeWidget.setTimeWidget(timeWidget);
 

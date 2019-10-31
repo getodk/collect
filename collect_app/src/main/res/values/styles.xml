@@ -50,18 +50,6 @@
         <item name="behavior_peekHeight">300dp</item>
     </style>
 
-    <style name="Widget.Collect.ImageButton.Media" parent="Widget.AppCompat.ImageButton">
-        <item name="android:background">#ddd</item>
-        <item name="android:paddingBottom">5dp</item>
-        <item name="android:paddingLeft">9dp</item>
-        <item name="android:paddingRight">9dp</item>
-        <item name="android:paddingTop">5dp</item>
-        <item name="android:layout_marginLeft">2dp</item>
-        <item name="android:layout_marginTop">0dp</item>
-        <item name="android:layout_marginRight">2dp</item>
-        <item name="android:layout_marginBottom">0dp</item>
-    </style>
-
     <style name="Widget.Collect.Toolbar" parent="Widget.AppCompat.Toolbar">
         <item name="titleTextAppearance">@style/TextAppearance.Collect.Headline6</item>
     </style>

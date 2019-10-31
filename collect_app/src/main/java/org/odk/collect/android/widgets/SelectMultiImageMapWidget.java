@@ -22,7 +22,7 @@ import android.webkit.WebView;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
-import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.List;
@@ -32,10 +32,10 @@ import java.util.List;
  * an svg map. You can use maps of the world, countries, human body etc.
  */
 public class SelectMultiImageMapWidget extends SelectImageMapWidget {
-    public SelectMultiImageMapWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+    public SelectMultiImageMapWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails);
 
-        if (prompt.getAnswerValue() != null) {
+        if (questionDetails.getPrompt().getAnswerValue() != null) {
             selections = (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
             refreshSelectedItemsLabel();
         }

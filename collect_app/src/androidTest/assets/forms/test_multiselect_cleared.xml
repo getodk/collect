@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<h:html
+	xmlns="http://www.w3.org/2002/xforms"
+	xmlns:ev="http://www.w3.org/2001/xml-events"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:jr="http://openrosa.org/javarosa"
+	xmlns:odk="http://www.opendatakit.org/xforms"
+	xmlns:orx="http://openrosa.org/xforms"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<h:head>
+		<h:title>test_multiselect_cleared</h:title>
+		<model>
+			<itext>
+				<translation default="true()" lang="default">
+					<text id="static_instance-group_choices-0">
+						<value>a</value>
+					</text>
+					<text id="static_instance-group_choices-1">
+						<value>b</value>
+					</text>
+					<text id="static_instance-group_choices-5">
+						<value>f</value>
+					</text>
+					<text id="static_instance-group_choices-3">
+						<value>d</value>
+					</text>
+					<text id="static_instance-group_choices-2">
+						<value>c</value>
+					</text>
+					<text id="static_instance-group_choices-4">
+						<value>e</value>
+					</text>
+				</translation>
+			</itext>
+			<instance>
+				<test id="test_multiselect_cleared" version="1">
+					<start/>
+					<end/>
+					<today/>
+					<username/>
+					<phonenumber/>
+					<something/>
+					<note/>
+					<something2/>
+					<meta>
+						<instanceID/>
+						<instanceName/>
+					</meta>
+				</test>
+			</instance>
+			<instance id="group_choices">
+				<root>
+					<item>
+						<itextId>static_instance-group_choices-0</itextId>
+						<name>a</name>
+						<a>1</a>
+					</item>
+					<item>
+						<itextId>static_instance-group_choices-1</itextId>
+						<name>b</name>
+						<a>2</a>
+					</item>
+					<item>
+						<itextId>static_instance-group_choices-2</itextId>
+						<name>c</name>
+						<a>1</a>
+					</item>
+					<item>
+						<itextId>static_instance-group_choices-3</itextId>
+						<name>d</name>
+						<a>2</a>
+					</item>
+					<item>
+						<itextId>static_instance-group_choices-4</itextId>
+						<name>e</name>
+						<a>1</a>
+					</item>
+					<item>
+						<itextId>static_instance-group_choices-5</itextId>
+						<name>f</name>
+					</item>
+				</root>
+			</instance>
+			<bind jr:preload="timestamp" jr:preloadParams="start" nodeset="/test/start" type="dateTime"/>
+			<bind jr:preload="timestamp" jr:preloadParams="end" nodeset="/test/end" type="dateTime"/>
+			<bind jr:preload="date" jr:preloadParams="today" nodeset="/test/today" type="date"/>
+			<bind jr:preload="property" jr:preloadParams="username" nodeset="/test/username" type="string"/>
+			<bind jr:preload="property" jr:preloadParams="phonenumber" nodeset="/test/phonenumber" type="string"/>
+			<bind nodeset="/test/something" required="true()" type="select"/>
+			<bind nodeset="/test/note" readonly="true()" type="string"/>
+			<bind nodeset="/test/something2" required="true()" type="select"/>
+			<bind jr:preload="uid" nodeset="/test/meta/instanceID" readonly="true()" type="string"/>
+			<bind calculate="test" nodeset="/test/meta/instanceName" type="string"/>
+		</model>
+	</h:head>
+	<h:body>
+		<select ref="/test/something">
+			<label>choice1</label>
+			<itemset nodeset="instance('group_choices')/root/item[a='1']">
+				<value ref="name"/>
+				<label ref="jr:itext(itextId)"/>
+			</itemset>
+		</select>
+		<input ref="/test/note">
+			<label>If you go back, the answers are deleted if you selected more than 1 option.</label>
+		</input>
+		<select ref="/test/something2">
+			<label>choice2</label>
+			<itemset nodeset="instance('group_choices')/root/item[a='2']">
+				<value ref="name"/>
+				<label ref="jr:itext(itextId)"/>
+			</itemset>
+		</select>
+	</h:body>
+</h:html>

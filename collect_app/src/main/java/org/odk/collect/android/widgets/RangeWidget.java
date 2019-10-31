@@ -30,9 +30,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import org.javarosa.core.model.RangeQuestion;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
@@ -69,13 +69,13 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
     private Button pickerButton;
     private TextView answerTextView;
 
-    public RangeWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+    public RangeWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails);
 
         setUpWidgetParameters();
         setUpAppearance();
 
-        if (prompt.isReadOnly() && !isPickerAppearance) {
+        if (questionDetails.getPrompt().isReadOnly() && !isPickerAppearance) {
             seekBar.setEnabled(false);
         }
 

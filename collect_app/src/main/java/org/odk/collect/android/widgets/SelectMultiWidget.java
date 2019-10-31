@@ -21,8 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.adapters.SelectMultipleListAdapter;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
@@ -40,7 +40,7 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
     private final List<Selection> ve;
     SelectMultipleListAdapter adapter;
 
-    public SelectMultiWidget(Context context, FormEntryPrompt prompt) {
+    public SelectMultiWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
         //noinspection unchecked
         ve = getFormEntryPrompt().getAnswerValue() == null ? new ArrayList<>() :

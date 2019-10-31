@@ -7,6 +7,7 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.audio.Clip;
 
 import timber.log.Timber;
 
@@ -14,6 +15,17 @@ public final class FormMediaHelpers {
 
     private FormMediaHelpers() {
 
+    }
+
+    @Nullable
+    public static Clip getClip(FormEntryPrompt prompt, SelectChoice selectChoice, ReferenceManager referenceManager) {
+        String playableAudioURI = getPlayableAudioURI(prompt, selectChoice, referenceManager);
+
+        if (playableAudioURI != null) {
+            return new Clip(getClipID(prompt, selectChoice), playableAudioURI);
+        } else {
+            return null;
+        }
     }
 
     public static String getClipID(FormEntryPrompt prompt) {
@@ -24,6 +36,7 @@ public final class FormMediaHelpers {
         return prompt.getIndex().toString() + " " + selectChoice.getIndex();
     }
 
+    @Nullable
     public static String getPlayableAudioURI(FormEntryPrompt prompt, ReferenceManager referenceManager) {
         return deriveReference(prompt.getAudioText(), referenceManager);
     }

@@ -12,7 +12,7 @@
   <string name="add_another_repeat">إضافة \"%s\" مجموعة أخرى؟</string>
   <string name="add_repeat">إضافة \"%s\" مجموعة جديدة؟</string>
   <string name="add_repeat_no">عدم الإضافة</string>
-    <string name="cancel">إلغاء</string>
+  <string name="cancel">إلغاء</string>
   <string name="cancel_loading_form">إلغاء</string>
   <string name="cancel_location">إلغاء</string>
   <string name="canceling">جاري الإلغاء</string>
@@ -152,7 +152,7 @@
   <string name="root_namespace_error">اسم العنصرالأساسي غير صحيح:%s</string>
   <string name="manifest_tag_error">ادخال المانيفست %s يفتقد واحد او أكثر من العلامات: اسم الملف، # أو رابط التحميل</string>
   <string name="form_download_progress">%1$s. الحصول على ملفات الوسائط المتعددة:  %2$s  من %3$s</string>
-    <string name="fetching_manifest">%s. الحصول على القائمة </string>
+  <string name="fetching_manifest">%s. الحصول على القائمة </string>
   <string name="success">نجاح</string>
   <string name="failures">فشل</string>
   <string name="no_forms_uploaded">عذرا، لا يوجد استمارة للتحميل.</string>
@@ -364,9 +364,6 @@
     <item quantity="other">%dمتر </item>
   </plurals>
   <string name="location_status_searching">جارٍ البحث عن موقع GPS ، يرجى الانتظار …</string>
-  <string name="location_status_accuracy">دقة موقع m %.1f : GPS</string>
-  <string name="location_status_acceptable">دقة موقع m %.1f : GPS (مقبول)</string>
-  <string name="location_status_unacceptable">دقة موقع m %.1f : GPS (غير مقبول)</string>
   <string name="collection_status_paused">النقاط التي تم إدخالها: %d</string>
   <string name="collection_status_placement">النقاط التي تم إدخالها: %d (انقر لوضع نقاط)</string>
   <string name="collection_status_manual">النقاط التي تم إدخالها: %d (التسجيل اليدوي)</string>

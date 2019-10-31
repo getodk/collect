@@ -51,21 +51,22 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.PlaybackFailedException;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
+import org.odk.collect.android.formentry.media.AudioHelperFactory;
+import org.odk.collect.android.formentry.media.PromptAutoplayer;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
-import org.odk.collect.android.formentry.media.PromptAutoplayer;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.StringWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
@@ -79,8 +80,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
+import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -94,10 +98,17 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     private final LinearLayout view;
     private final LinearLayout.LayoutParams layout;
     private final ArrayList<QuestionWidget> widgets;
+    private final AudioHelper audioHelper;
 
     public static final String FIELD_LIST = "field-list";
 
     private WidgetValueChangedListener widgetValueChangedListener;
+
+    @Inject
+    public AudioHelperFactory audioHelperFactory;
+
+    @Inject
+    public Analytics analytics;
 
     /**
      * Builds the view for a specified question or field-list of questions.
@@ -111,6 +122,9 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     public ODKView(Context context, final FormEntryPrompt[] questionPrompts,
                    FormEntryCaption[] groups, boolean advancingPage) {
         super(context);
+
+        getComponent(context).inject(this);
+        this.audioHelper = audioHelperFactory.create(context);
 
         inflate(getContext(), R.layout.nested_scroll_view, this); // keep in an xml file to enable the vertical scrollbar
 
@@ -155,13 +169,12 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     }
 
     private void setupAudioErrors() {
-        AudioHelper audioHelper = getAudioHelper();
         audioHelper.getError().observe(getScreenContext().getViewLifecycle(), e -> {
             if (e instanceof PlaybackFailedException) {
                 final PlaybackFailedException playbackFailedException = (PlaybackFailedException) e;
                 Toast.makeText(
                         getContext(),
-                        getContext().getString(R.string.file_missing, playbackFailedException.getURI()),
+                        getContext().getString(playbackFailedException.getExceptionMsg(), playbackFailedException.getURI()),
                         Toast.LENGTH_SHORT
                 ).show();
 
@@ -186,8 +199,12 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     }
 
     private Boolean autoplayAudio(FormEntryPrompt firstPrompt) {
-        AudioHelper audioHelper = getAudioHelper();
-        PromptAutoplayer promptAutoplayer = new PromptAutoplayer(audioHelper, ReferenceManager.instance());
+        PromptAutoplayer promptAutoplayer = new PromptAutoplayer(
+                audioHelper,
+                ReferenceManager.instance(),
+                analytics,
+                Collect.getCurrentFormIdentifierHash()
+        );
 
         return promptAutoplayer.autoplayIfNeeded(firstPrompt);
     }
@@ -202,12 +219,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 }, 150);
             }
         }
-    }
-
-    @NotNull
-    private AudioHelper getAudioHelper() {
-        ScreenContext screenContext = getScreenContext();
-        return new AudioHelper(screenContext.getActivity(), screenContext.getViewLifecycle());
     }
 
     private ScreenContext getScreenContext() {
@@ -604,10 +615,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         for (QuestionWidget qw : widgets) {
             qw.cancelLongPress();
         }
-    }
-
-    public void stopAudio() {
-        widgets.get(0).stopAudio();
     }
 
     /**

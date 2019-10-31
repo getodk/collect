@@ -170,12 +170,10 @@ public class FormChooserListActivity extends FormListActivity implements
     }
 
     private void setupAdapter() {
-        String[] data = new String[]{
+        String[] data = {
                 FormsColumns.DISPLAY_NAME, FormsColumns.JR_VERSION, hideOldFormVersions() ? FormsColumns.MAX_DATE : FormsColumns.DATE
         };
-        int[] view = new int[]{
-                R.id.form_title, R.id.form_subtitle, R.id.form_subtitle2
-        };
+        int[] view = {R.id.form_title, R.id.form_subtitle, R.id.form_subtitle2};
 
         listAdapter = new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.form_chooser_list_item, null, data, view);
         listView.setAdapter(listAdapter);

@@ -148,6 +148,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         } catch (StackOverflowError e) {
             Timber.e(e);
             errorMsg = Collect.getInstance().getString(R.string.too_complex_form);
+        } catch (Exception | Error e) {
+            Timber.w(e);
+            errorMsg = e.getMessage();
         }
 
         if (errorMsg != null || formDef == null) {

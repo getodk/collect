@@ -12,7 +12,7 @@
   <string name="add_another_repeat">\"%s\" గ్రూపును జోడించాలా?</string>
   <string name="add_repeat">\"%s\" కొత్త గ్రూపుని జోడించాలా?</string>
   <string name="add_repeat_no">జోడించవద్దు</string>
-    <string name="cancel">రద్దు చేయి</string>
+  <string name="cancel">రద్దు చేయి</string>
   <string name="cancel_loading_form">రద్దు చేయి</string>
   <string name="cancel_location">రద్దు చేయి</string>
   <string name="canceling">రద్దు చేయబడుతుంది </string>
@@ -152,7 +152,7 @@
   <string name="root_namespace_error">రూట్ ఎలిమెంట్ నేమ్‌స్పేస్ తప్పు:%s</string>
   <string name="manifest_tag_error">మానిఫెస్ట్ ఎంట్రీ%sలో ఒకటి లేదా అంతకంటే ఎక్కువ ట్యాగ్‌లు లేవు: ఫైల్ పేరు, హాష్ లేదా డౌన్‌లోడ్ URL</string>
   <string name="form_download_progress">%1$s. మీడియా ఫైళ్ళను పొందుతున్నాము:  %3$s లో %2$s</string>
-    <string name="fetching_manifest"> %s. మానిఫెస్ట్ పొందడం</string>
+  <string name="fetching_manifest"> %s. మానిఫెస్ట్ పొందడం</string>
   <string name="success">సక్సెస్ </string>
   <string name="failures">వైఫల్యాలు</string>
   <string name="no_forms_uploaded">క్షమించండి, ఏ ఫారం కూడా అప్‌లోడ్ చేయబడలేదు.</string>
@@ -366,9 +366,6 @@
     <item quantity="other">%d మీటర్ల</item>
   </plurals>
   <string name="location_status_searching">GPS లొకేషన్ కోసం శోధిస్తోంది, దయచేసి వేచి ఉండండి…</string>
-  <string name="location_status_accuracy">GPS స్థాన ఖచ్చితత్వం:%.1fm</string>
-  <string name="location_status_acceptable">GPS స్థాన ఖచ్చితత్వం: %.1fm (ఆమోదయోగ్యమైనది)</string>
-  <string name="location_status_unacceptable">GPS స్థాన ఖచ్చితత్వం: %.1fm (ఆమోదయోగ్యం కాదు)</string>
   <string name="collection_status_paused">నమోదు చేసిన పాయింట్లు:%d</string>
   <string name="collection_status_placement">నమోదు చేసిన పాయింట్లు:%d (పాయింట్లను ఉంచడానికి నొక్కండి)</string>
   <string name="collection_status_manual">నమోదు చేసిన పాయింట్లు: %d(మాన్యువల్ రికార్డింగ్)</string>

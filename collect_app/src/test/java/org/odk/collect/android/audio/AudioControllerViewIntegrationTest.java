@@ -53,7 +53,7 @@ public class AudioControllerViewIntegrationTest {
         final DataSource dataSource = setupMediaPlayerDataSource(testFile);
 
         AudioControllerView view = new AudioControllerView(activity);
-        audioHelper.setAudio(view, testFile, "clip1");
+        audioHelper.setAudio(view, new Clip("clip1", testFile));
 
         ImageButton playButton = view.findViewById(R.id.playBtn);
         assertThat(getCreatedFromResId(playButton), equalTo(R.drawable.ic_play_arrow_24dp));
@@ -265,7 +265,7 @@ public class AudioControllerViewIntegrationTest {
         setupMediaPlayerDataSource(testFile, fileLength);
 
         AudioControllerView view = new AudioControllerView(activity);
-        audioHelper.setAudio(view, testFile, clipID);
+        audioHelper.setAudio(view, new Clip(clipID, testFile));
         return view;
     }
 }

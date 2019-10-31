@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.robolectric.RobolectricTestRunner;
 
@@ -33,7 +34,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
     @NonNull
     @Override
     public DrawWidget createWidget() {
-        return new DrawWidget(activity, formEntryPrompt);
+        return new DrawWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @NonNull

@@ -9,12 +9,10 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.espressoutils.FormEntry;
 import org.odk.collect.android.espressoutils.pages.MainMenuPage;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 
-import static androidx.test.espresso.Espresso.pressBack;
 
 // Issue number NODK-219
 @RunWith(AndroidJUnit4.class)
@@ -32,15 +30,16 @@ public class SpinnerWidgetTest extends BaseRegressionTest {
 
     @Test
     public void spinnerList_ShouldDisplay() {
-        new MainMenuPage(main).startBlankForm("selectOneMinimal");
-        FormEntry.clickOnString(R.string.select_one);
-        FormEntry.clickOnAreaWithIndex("TextView", 2);
-        FormEntry.clickOnText("c");
-        FormEntry.checkIsTextDisplayed("c");
-        FormEntry.checkIfTextDoesNotExist("a");
-        FormEntry.checkIfTextDoesNotExist("b");
-        pressBack();
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickSaveAndExit();
+        new MainMenuPage(main)
+                .startBlankForm("selectOneMinimal")
+                .clickOnString(R.string.select_one)
+                .clickOnAreaWithIndex("TextView", 2)
+                .clickOnText("c")
+                .checkIsTextDisplayed("c")
+                .checkIfTextDoesNotExist("a")
+                .checkIfTextDoesNotExist("b")
+                .simplePressBack()
+                .swipeToNextQuestion()
+                .clickSaveAndExit();
     }
 }

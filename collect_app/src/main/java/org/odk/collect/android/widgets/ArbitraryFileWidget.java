@@ -31,10 +31,10 @@ import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtil;
@@ -59,15 +59,15 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
     private TextView chosenFileNameTextView;
     private LinearLayout answerLayout;
 
-    public ArbitraryFileWidget(Context context, FormEntryPrompt prompt) {
+    public ArbitraryFileWidget(Context context, QuestionDetails prompt) {
         this(context, prompt, new FileUtil());
     }
 
-    ArbitraryFileWidget(Context context, FormEntryPrompt prompt, @NonNull FileUtil fileUtil) {
-        super(context, prompt);
+    ArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil) {
+        super(context, questionDetails);
 
         this.fileUtil = fileUtil;
-        binaryName = prompt.getAnswerText();
+        binaryName = questionDetails.getPrompt().getAnswerText();
 
         setUpLayout();
     }

@@ -1,4 +1,4 @@
-    package org.odk.collect.android.regression;
+package org.odk.collect.android.regression;
 
 import android.Manifest;
 
@@ -9,13 +9,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.espressoutils.FormEntry;
+
 import org.odk.collect.android.espressoutils.pages.MainMenuPage;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
-
-import static androidx.test.espresso.Espresso.closeSoftKeyboard;
-import static androidx.test.espresso.Espresso.pressBack;
 
 // Issue number NODK-251
 @RunWith(AndroidJUnit4.class)
@@ -34,30 +31,32 @@ public class FormValidationTest extends BaseRegressionTest {
     @Test
     public void invalidAnswer_ShouldDisplayAllQuestionsOnOnePage() {
 
-        new MainMenuPage(main).startBlankForm("OnePageFormShort");
-        FormEntry.putTextOnIndex(0, "A");
-        FormEntry.clickGoToIconInForm();
-        FormEntry.clickJumpEndButton();
-        FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithMessageDisplayes("Response length must be between 5 and 15", main.getActivity());
-        FormEntry.checkIsTextDisplayed("Integer");
-        FormEntry.putTextOnIndex(0, "Aaaaa");
-        FormEntry.clickGoToIconInForm();
-        FormEntry.clickJumpEndButton();
-        FormEntry.clickSaveAndExit();
+        new MainMenuPage(main)
+                .startBlankForm("OnePageFormShort")
+                .putTextOnIndex(0, "A")
+                .clickGoToIconInForm()
+                .clickJumpEndButton()
+                .clickSaveAndExitWhenValidationErrorIsExpected()
+                .checkIsToastWithMessageDisplayed("Response length must be between 5 and 15")
+                .checkIsTextDisplayed("Integer")
+                .putTextOnIndex(0, "Aaaaa")
+                .clickOnGoToIconInForm()
+                .clickJumpEndButton()
+                .clickSaveAndExit();
     }
 
     @Test
     public void openHierarchyView_ShouldSeeShortForms() {
 
         //TestCase3
-        new MainMenuPage(main).startBlankForm("OnePageFormShort");
-        FormEntry.clickGoToIconInForm();
-        FormEntry.checkIsTextDisplayed("YY MM");
-        FormEntry.checkIsTextDisplayed("YY");
-        pressBack();
-        closeSoftKeyboard();
-        pressBack();
-        FormEntry.clickIgnoreChanges();
+        new MainMenuPage(main)
+                .startBlankForm("OnePageFormShort")
+                .clickGoToIconInForm()
+                .checkIsTextDisplayed("YY MM")
+                .checkIsTextDisplayed("YY")
+                .simplePressBack()
+                .closeSoftKeyboard()
+                .simplePressBack()
+                .clickIgnoreChanges();
     }
 }

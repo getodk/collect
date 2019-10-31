@@ -153,7 +153,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                         Cursor formCursor = null;
                         try {
                             String selection = FormsColumns.JR_FORM_ID + " = ? ";
-                            String[] selectionArgs = new String[]{instanceFormId};
+                            String[] selectionArgs = {instanceFormId};
                             // retrieve the form definition
                             formCursor = new FormsDao().getFormsCursor(selection, selectionArgs);
                             // TODO: optimize this by caching the previously found form definition

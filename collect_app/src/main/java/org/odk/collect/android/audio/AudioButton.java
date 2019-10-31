@@ -15,63 +15,53 @@
 package org.odk.collect.android.audio;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.res.ColorStateList;
 import android.util.AttributeSet;
 import android.view.View;
 
-import androidx.appcompat.widget.AppCompatImageButton;
+import com.google.android.material.button.MaterialButton;
+
+import org.odk.collect.android.R;
 
 /**
  * @author ctsims
  * @author carlhartung
  */
-public class AudioButton extends AppCompatImageButton implements View.OnClickListener {
+public class AudioButton extends MaterialButton implements View.OnClickListener {
 
-    private Bitmap bitmapPlay;
-    private Bitmap bitmapStop;
     private Listener listener;
 
     private Boolean playing = false;
+    private Integer playingColor;
+    private Integer idleColor;
 
     public AudioButton(Context context) {
-        super(context);
+        super(context, null);
         initView();
     }
 
     public AudioButton(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        super(context, attrs, com.google.android.material.R.style.Widget_MaterialComponents_Button_OutlinedButton_Icon);
         initView();
-    }
-
-    private void initView() {
-        bitmapPlay = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_lock_silent_mode_off);
-        bitmapStop = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_media_pause);
-
-        resetBitmap();
-        this.setOnClickListener(this);
     }
 
     public Boolean isPlaying() {
         return playing;
     }
 
+    public void setColors(Integer idleColor, Integer playingColor) {
+        this.idleColor = idleColor;
+        this.playingColor = playingColor;
+        render();
+    }
+
     public void setPlaying(Boolean isPlaying) {
         playing = isPlaying;
-
-        if (isPlaying) {
-            setImageBitmap(bitmapStop);
-        } else {
-            setImageBitmap(bitmapPlay);
-        }
+        render();
     }
 
     public void setListener(Listener listener) {
         this.listener = listener;
-    }
-
-    public void resetBitmap() {
-        setImageBitmap(bitmapPlay);
     }
 
     @Override
@@ -80,6 +70,27 @@ public class AudioButton extends AppCompatImageButton implements View.OnClickLis
             listener.onStopClicked();
         } else {
             listener.onPlayClicked();
+        }
+    }
+
+    private void initView() {
+        this.setOnClickListener(this);
+        render();
+    }
+
+    private void render() {
+        if (playing) {
+            setIconResource(R.drawable.ic_stop_black_24dp);
+
+            if (playingColor != null) {
+                setIconTint(ColorStateList.valueOf(playingColor));
+            }
+        } else {
+            setIconResource(R.drawable.ic_volume_up_black_24dp);
+
+            if (idleColor != null) {
+                setIconTint(ColorStateList.valueOf(idleColor));
+            }
         }
     }
 
