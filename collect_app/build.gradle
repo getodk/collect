@@ -221,13 +221,6 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
 
-    implementation("com.google.http-client:google-http-client:1.32.1") {
-        exclude group: 'org.apache.httpcomponents'
-    }
-    implementation("com.google.oauth-client:google-oauth-client:1.30.4") {
-        exclude group: 'org.apache.httpcomponents'
-    }
-
     implementation "com.squareup.okhttp3:okhttp:${rootProject.okhttp3Version}"
     implementation 'com.burgstaller:okhttp-digest:1.18' //newer versions require minSdkVersion >= 21
 
