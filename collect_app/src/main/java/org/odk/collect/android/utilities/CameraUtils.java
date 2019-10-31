@@ -16,6 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera;
@@ -108,6 +109,7 @@ public class CameraUtils {
         }
     }
 
+    @SuppressLint("NewApi")
     public static boolean isFrontCameraAvailable() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             try {
