@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.GeneralStringWidgetTest;
 
 /**
@@ -15,7 +16,7 @@ public class StringWidgetTest extends GeneralStringWidgetTest<StringWidget, Stri
     @NonNull
     @Override
     public StringWidget createWidget() {
-        return new StringWidget(activity, formEntryPrompt, false);
+        return new StringWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), false);
     }
 
     @NonNull

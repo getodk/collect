@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -49,21 +48,20 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.formentry.AudioVideoImageTextLabel;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
+import org.odk.collect.android.formentry.media.AudioHelperFactory;
+import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.utilities.AnimateUtils;
-import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
-import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -77,11 +75,13 @@ import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
 import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
 import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
+import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 
 public abstract class QuestionWidget
         extends RelativeLayout
@@ -90,6 +90,7 @@ public abstract class QuestionWidget
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
     private final AudioVideoImageTextLabel audioVideoImageTextLabel;
+    private final QuestionDetails questionDetails;
     private MediaPlayer player;
     private final TextView helpTextView;
     private final TextView guidanceTextView;
@@ -102,48 +103,49 @@ public abstract class QuestionWidget
     private AtomicBoolean expanded;
     private Bundle state;
     protected ThemeUtils themeUtils;
-    private int playColor;
-    private final ReferenceManager referenceManager;
-    private final AudioHelper audioHelper;
+    protected final AudioHelper audioHelper;
 
     private WidgetValueChangedListener valueChangedListener;
 
-    public QuestionWidget(Context context, FormEntryPrompt prompt, AudioHelper audioHelper) {
-        super(context);
-        this.audioHelper = audioHelper;
+    @Inject
+    public ReferenceManager referenceManager;
 
-        AppDependencyComponent component = DaggerUtils.getComponent((Activity) getContext());
-        this.referenceManager = component.referenceManager();
+    @Inject
+    public AudioHelperFactory audioHelperFactory;
+
+    @Inject
+    public Analytics analytics;
+
+    public QuestionWidget(Context context, QuestionDetails questionDetails) {
+        super(context);
+        getComponent(context).inject(this);
+        this.audioHelper = audioHelperFactory.create(context);
 
         themeUtils = new ThemeUtils(context);
-        playColor = themeUtils.getAccentColor();
 
         if (context instanceof FormEntryActivity) {
             state = ((FormEntryActivity) context).getState();
             permissionUtils = new PermissionUtils();
         }
 
-        if (context instanceof DependencyProvider) {
-            injectDependencies((DependencyProvider) context);
-        }
-
         player = new MediaPlayer();
 
         questionFontSize = Collect.getQuestionFontsize();
 
-        formEntryPrompt = prompt;
+        this.questionDetails = questionDetails;
+        formEntryPrompt = questionDetails.getPrompt();
 
         setGravity(Gravity.TOP);
         setPadding(0, 7, 0, 0);
 
-        audioVideoImageTextLabel = createQuestionLabel(prompt);
+        audioVideoImageTextLabel = createQuestionLabel(formEntryPrompt);
         helpTextLayout = createHelpTextLayout();
         helpTextLayout.setId(ViewIds.generateViewId());
         guidanceTextLayout = helpTextLayout.findViewById(R.id.guidance_text_layout);
         textLayout = helpTextLayout.findViewById(R.id.text_layout);
         warningText = helpTextLayout.findViewById(R.id.warning_text);
-        helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), prompt);
-        guidanceTextView = setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), prompt);
+        helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), formEntryPrompt);
+        guidanceTextView = setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), formEntryPrompt);
 
         addQuestionMediaLayout(getAudioVideoImageTextLabel());
         addHelpTextLayout(getHelpTextLayout());
@@ -151,13 +153,6 @@ public abstract class QuestionWidget
         if (context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
             registerToClearAnswerOnLongPress((FormEntryActivity) context);
         }
-    }
-
-    public QuestionWidget(Context context, FormEntryPrompt prompt) {
-        this(context, prompt, new AudioHelper(
-                ((ScreenContext) context).getActivity(),
-                ((ScreenContext) context).getViewLifecycle()
-        ));
     }
 
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
@@ -257,11 +252,6 @@ public abstract class QuestionWidget
         return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
     }
 
-    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
-    protected void injectDependencies(DependencyProvider dependencyProvider) {
-        //dependencies for the widget will be wired here.
-    }
-
     private AudioVideoImageTextLabel createQuestionLabel(FormEntryPrompt prompt) {
         String promptText = prompt.getLongText();
         // Add the text view. Textview always exists, regardless of whether there's text.
@@ -281,6 +271,11 @@ public abstract class QuestionWidget
             questionText.setVisibility(GONE);
         }
 
+        // Create the layout for audio, image, text
+        AudioVideoImageTextLabel label = new AudioVideoImageTextLabel(getContext());
+        label.setId(ViewIds.generateViewId()); // assign random id
+        label.setTag(getClipID(prompt));
+
         String imageURI = this instanceof SelectImageMapWidget ? null : prompt.getImageText();
         String videoURI = prompt.getSpecialFormQuestionText("video");
 
@@ -288,31 +283,26 @@ public abstract class QuestionWidget
         String bigImageURI = prompt.getSpecialFormQuestionText("big-image");
 
         // Create the layout for audio, image, text
-        AudioVideoImageTextLabel questionAudioVideoImageTextLabel = new AudioVideoImageTextLabel(getContext());
-        questionAudioVideoImageTextLabel.setId(ViewIds.generateViewId()); // assign random id
+        label.setId(ViewIds.generateViewId()); // assign random id
 
-        questionAudioVideoImageTextLabel.setTag(getClipID(prompt));
-        questionAudioVideoImageTextLabel.setAVT(
+        label.setTag(getClipID(prompt));
+        label.setTextImageVideo(
                 questionText,
-                getPlayableAudioURI(prompt, referenceManager),
                 imageURI,
                 videoURI,
                 bigImageURI,
-                getReferenceManager(),
-                audioHelper
+                getReferenceManager()
         );
 
-        String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
-        if (playColorString != null) {
-            try {
-                playColor = Color.parseColor(playColorString);
-            } catch (IllegalArgumentException e) {
-                Timber.e(e, "Argument %s is incorrect", playColorString);
-            }
+        String playableAudioURI = getPlayableAudioURI(prompt, referenceManager);
+        if (playableAudioURI != null) {
+            label.setAudio(playableAudioURI, audioHelper);
+            analytics.logEvent("Prompt", "AudioLabel", questionDetails.getFormAnalyticsID());
         }
-        questionAudioVideoImageTextLabel.setPlayTextColor(getPlayColor());
 
-        return questionAudioVideoImageTextLabel;
+        label.setPlayTextColor(getPlayColor(formEntryPrompt, themeUtils));
+
+        return label;
     }
 
     public TextView getHelpTextView() {
@@ -321,6 +311,10 @@ public abstract class QuestionWidget
 
     public FormEntryPrompt getFormEntryPrompt() {
         return formEntryPrompt;
+    }
+
+    public QuestionDetails getQuestionDetails() {
+        return questionDetails;
     }
 
     // http://code.google.com/p/android/issues/detail?id=8488
@@ -752,7 +746,18 @@ public abstract class QuestionWidget
         return referenceManager;
     }
 
-    public int getPlayColor() {
+    public static int getPlayColor(FormEntryPrompt prompt, ThemeUtils themeUtils) {
+        int playColor = themeUtils.getAccentColor();
+
+        String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
+        if (playColorString != null) {
+            try {
+                playColor = Color.parseColor(playColorString);
+            } catch (IllegalArgumentException e) {
+                Timber.e(e, "Argument %s is incorrect", playColorString);
+            }
+        }
+
         return playColor;
     }
 

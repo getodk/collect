@@ -1,10 +1,7 @@
 package org.odk.collect.android.formentry;
 
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.appcompat.widget.AppCompatImageButton;
 
 import junit.framework.Assert;
 
@@ -14,12 +11,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.logic.FileReference;
+import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.robolectric.ParameterizedRobolectricTestRunner;
-import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
 
 import java.util.Arrays;
@@ -44,11 +41,11 @@ public class AudioVideoImageTextLabelVisibilityTest {
     private FileReference reference;
 
     private AudioVideoImageTextLabel audioVideoImageTextLabel;
-    private AudioButton audioButton;
-    private AppCompatImageButton videoButton;
-    private ImageView imageView;
+    private View audioButton;
+    private View videoButton;
+    private View imageView;
+    private View missingImage;
     private TextView textView;
-    private TextView missingImage;
     private boolean isReferenceManagerStubbed;
     private AudioHelper audioHelper;
 
@@ -61,14 +58,14 @@ public class AudioVideoImageTextLabelVisibilityTest {
     @ParameterizedRobolectricTestRunner.Parameters()
     public static Iterable<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {null,          null,           null},
-                {RANDOM_URI,    null,           null},
-                {null,          RANDOM_URI,     null},
-                {null,          null,           RANDOM_URI},
-                {RANDOM_URI,    RANDOM_URI,     null},
-                {RANDOM_URI,    null,           RANDOM_URI},
-                {null,          RANDOM_URI,     RANDOM_URI},
-                {RANDOM_URI,    RANDOM_URI,     RANDOM_URI}
+                {null, null, null},
+                {RANDOM_URI, null, null},
+                {null, RANDOM_URI, null},
+                {null, null, RANDOM_URI},
+                {RANDOM_URI, RANDOM_URI, null},
+                {RANDOM_URI, null, RANDOM_URI},
+                {null, RANDOM_URI, RANDOM_URI},
+                {RANDOM_URI, RANDOM_URI, RANDOM_URI}
         });
     }
 
@@ -78,7 +75,7 @@ public class AudioVideoImageTextLabelVisibilityTest {
         referenceManager = mock(ReferenceManager.class);
         textView = new TextView(RuntimeEnvironment.application);
 
-        TestScreenContextActivity activity = Robolectric.buildActivity(TestScreenContextActivity.class).create().get();
+        TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
         audioHelper = new AudioHelper(activity, activity.getViewLifecycle());
 
         audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
@@ -105,7 +102,10 @@ public class AudioVideoImageTextLabelVisibilityTest {
         Assert.assertEquals(VISIBLE, audioVideoImageTextLabel.getVisibility());
         assertVisibility(GONE, audioButton, videoButton, imageView, missingImage);
 
-        audioVideoImageTextLabel.setAVT(textView, audioURI, imageURI, videoURI, null, referenceManager, audioHelper);
+        audioVideoImageTextLabel.setTextImageVideo(textView, imageURI, videoURI, null, referenceManager);
+        if (audioURI != null) {
+            audioVideoImageTextLabel.setAudio(audioURI, audioHelper);
+        }
 
         // we do not check for the validity of the URIs for the audio and video while loading MediaLayout
         assertVisibility(audioURI == null ? GONE : VISIBLE, audioButton);

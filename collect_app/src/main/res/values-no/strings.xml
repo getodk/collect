@@ -5,7 +5,7 @@
   <string name="add_another_repeat">Legg til annen \"%s\" gruppe?</string>
   <string name="add_repeat">Legg til ny \"%s\" gruppe?</string>
   <string name="add_repeat_no">Ikke legg til</string>
-    <string name="cancel">Avbryt</string>
+  <string name="cancel">Avbryt</string>
   <string name="cancel_loading_form">Avbryt</string>
   <string name="cancel_location">Avbryt</string>
   <string name="capture_audio">Ta opp lyd</string>
@@ -131,7 +131,7 @@
   <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
   <string name="manifest_tag_error">Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Henter mediafiler: %2$s av %3$s</string>
-    <string name="fetching_manifest">%s. Henter manifestet</string>
+  <string name="fetching_manifest">%s. Henter manifestet</string>
   <string name="success">Suksess</string>
   <string name="no_forms_uploaded">Beklager, opplasting feilet.</string>
   <string name="upload_results">Vis oversikt</string>

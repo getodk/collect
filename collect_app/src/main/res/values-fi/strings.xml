@@ -12,7 +12,7 @@
   <string name="add_another_repeat">Lisätäänkö toinen ryhmä \"%s\"?</string>
   <string name="add_repeat">Lisätäänkö uusi ryhmä \"%s\"?</string>
   <string name="add_repeat_no">Älä lisää</string>
-    <string name="cancel">Peruuta</string>
+  <string name="cancel">Peruuta</string>
   <string name="cancel_loading_form">Peruuta</string>
   <string name="cancel_location">Peruuta</string>
   <string name="canceling">Perutaan</string>
@@ -152,7 +152,7 @@
   <string name="root_namespace_error">Juurielementin nimiavaruus on virheellinen: %s</string>
   <string name="manifest_tag_error">Manifestin kohdasta %s puuttuu yksi tai useampi tägi: tiedostonimi, tiiviste (hash) tai downloadUrl</string>
   <string name="form_download_progress">%1$s. Haetaan mediatiedostoja: %2$s / %3$s</string>
-    <string name="fetching_manifest">%s. Haetaan manifestia</string>
+  <string name="fetching_manifest">%s. Haetaan manifestia</string>
   <string name="success">Onnistui</string>
   <string name="failures">Epäonnistuneet</string>
   <string name="no_forms_uploaded">Pahoittelut, lomaketta ei siirretty.</string>
@@ -315,10 +315,22 @@
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">Peruskartta</string>
+  <string name="basemap_source">Lähde</string>
+  <string name="map_style_label">%s kartan tyyli</string>
   <string name="streets">Kadut</string>
   <string name="terrain">Maasto</string>
   <string name="hybrid">Hybridi</string>
   <string name="satellite">Satelliitti</string>
+  <string name="light">Vaalea</string>
+  <string name="dark">Tumma</string>
+  <string name="outdoors">Ulkoilma</string>
+  <string name="topographic">Topografinen</string>
+  <string name="carto_map_style_positron">Positroni</string>
+  <string name="carto_map_style_dark_matter">Pimeä aine</string>
+  <string name="reference_layer">Viitekerros</string>
+  <string name="layer_data_caption_none">%1$s ei sisällä kerroksia jotka olisivat %2$s pohjakartan tukemia.</string>
+  <string name="layer_data_caption">Yllä kaikki %1$s sisältämät kerrostiedostot pohjakartta %2$s tukee.</string>
+  <string name="layer_data_file">Kerrosdatatiedosto</string>
   <string name="save_point">Tallenna GeoPoint</string>
   <string name="get_point">Käynnistä GeoPoint</string>
   <string name="geopoint_view_read_only">Tarkastele GeoPoint</string>
@@ -329,6 +341,7 @@
   <string name="start">Aloita</string>
   <string name="enable_gps">Ota GPS käyttöön</string>
   <string name="geotrace_title">GeoTrace</string>
+  <string name="gps_enable_message">GPS ei ole päällä laitteessasi. Haluaisitko kytkeä sen päälle?</string>
   <string name="geo_clear_warning">Ominaisuus on jo luotu. Haluatko tyhjentää ominaisuuden?</string>
   <string name="geo_exit_warning">Hylätäänkö muutokset ja palataan ODK:hon?</string>
   <string name="polygon_validator">Monikulmion luomiseen tarvitaan vähintään 3 pistettä</string>
@@ -353,9 +366,9 @@
     <item quantity="other">%d metriä</item>
   </plurals>
   <string name="location_status_searching">Etsitään GPS-sijaintia, ole hyvä ja odota…</string>
-  <string name="location_status_accuracy">GPS-sijaintitarkkuus: %.1f m</string>
-  <string name="location_status_acceptable">GPS-sijaintitarkkuus: %.1f m (hyväksyttävä)</string>
-  <string name="location_status_unacceptable">GPS-sijaintitarkkuus: %.1f m (ei hyväksyttävä)</string>
+  <string name="location_status_accuracy">GPS-sijaintitarkkuus: %.2f m</string>
+  <string name="location_status_acceptable">GPS-sijaintitarkkuus: %.2f m (hyväksyttävä)</string>
+  <string name="location_status_unacceptable">GPS-sijaintitarkkuus: %.2f m (ei hyväksyttävä)</string>
   <string name="collection_status_paused">Syötettyjä pisteitä: %d</string>
   <string name="collection_status_placement">Syötettyjä pisteitä: %d (napsauta sijoittaaksesi pisteitä)</string>
   <string name="collection_status_manual">Syötettyjä pisteitä: %d (manuaalinen tallennus)</string>
@@ -681,4 +694,5 @@
   <string name="copying_media_files_failed">Mediatiedostojen kopiointi epäonnistui</string>
   <string name="qr_code_not_found">Valitusta kuvasta ei löytynyt QR-koodia</string>
   <string name="not_granted_permission">Toiminto, jota yrität käynnistää, vaatii käyttöluvan jota ei ole myönnetty.</string>
+  <string name="basemap_source_unavailable">Pahoittelut, %s pohjakarttoja ei ole käytettävissä tällä laitteella. Ole kyvä ja valitse toinen pohjakartta kohdassa Yleiset asetukset &gt; Kartat.</string>
 </resources>

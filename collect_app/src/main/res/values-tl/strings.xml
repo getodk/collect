@@ -8,7 +8,7 @@
   <string name="add_another_repeat">I-dagdag ang \"%s\" sa pangkat?</string>
   <string name="add_repeat">Magdagdag ng bagong \"%s\" sa pangkat?</string>
   <string name="add_repeat_no">Huwag Mag-dagdag</string>
-    <string name="cancel">Urong</string>
+  <string name="cancel">Urong</string>
   <string name="cancel_loading_form">Urong</string>
   <string name="cancel_location">Urong</string>
   <string name="capture_audio">Mag-tala ng Tunog</string>
@@ -125,7 +125,7 @@
   <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
   <string name="manifest_tag_error">Manifest entry %s ay kulang ng isa o higit pang mga tags: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Kinukuha ang talaksang media : %2$s of %3$s</string>
-    <string name="fetching_manifest">%s. Kinukuha ang manifest </string>
+  <string name="fetching_manifest">%s. Kinukuha ang manifest </string>
   <string name="success">Tagumpay</string>
   <string name="no_forms_uploaded">Sorry, no form was uploaded.</string>
   <string name="upload_results">Upload Results</string>

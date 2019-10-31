@@ -70,7 +70,7 @@ public final class AdminKeys {
      * tuples of admin keys and the keys of general preferences that are removed if the admin
      * preference is false.
      */
-    static AdminAndGeneralKeys[] adminToGeneral = new AdminAndGeneralKeys[] {
+    static AdminAndGeneralKeys[] adminToGeneral = {
 
             ag(KEY_CHANGE_SERVER,              GeneralKeys.KEY_PROTOCOL),
             ag(KEY_CHANGE_SUBMISSION_TRANSPORT, GeneralKeys.KEY_TRANSPORT_PREFERENCE),

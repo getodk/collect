@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 
 import java.io.File;
@@ -30,7 +31,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
     @NonNull
     @Override
     public SignatureWidget createWidget() {
-        return new SignatureWidget(activity, formEntryPrompt);
+        return new SignatureWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @NonNull

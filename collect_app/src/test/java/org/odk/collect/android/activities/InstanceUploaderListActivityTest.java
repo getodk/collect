@@ -5,13 +5,11 @@ import android.app.AlertDialog;
 import android.app.Application;
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.robolectric.Robolectric;
@@ -31,15 +29,15 @@ import static org.robolectric.Shadows.shadowOf;
 @RunWith(RobolectricTestRunner.class)
 public class InstanceUploaderListActivityTest {
 
-    Tracker tracker;
+    Analytics analytics;
 
     @Before
     public void setup() {
         WorkManager.initialize(RuntimeEnvironment.application, new Configuration.Builder().build());
 
-        tracker = mock(Tracker.class);
+        analytics = mock(Analytics.class);
         overrideAppDependencyModule(new AppDependencyModule(
-                tracker,
+                analytics,
                 new AlwaysGrantStoragePermissionsPermissionUtils()
         ));
     }
@@ -52,24 +50,21 @@ public class InstanceUploaderListActivityTest {
         AlertDialog dialog = ShadowAlertDialog.getLatestAlertDialog();
         shadowOf(dialog).clickOnItem(1);
 
-        verify(tracker).send(new HitBuilders.EventBuilder()
-                .setCategory("FilterSendForms")
-                .setAction("SentAndUnsent")
-                .build());
+        verify(analytics).logEvent("FilterSendForms", "SentAndUnsent");
     }
 
     private static class AppDependencyModule extends org.odk.collect.android.injection.config.AppDependencyModule {
 
-        private final Tracker tracker;
+        private final Analytics tracker;
         private final PermissionUtils permissionUtils;
 
-        private AppDependencyModule(Tracker tracker, PermissionUtils permissionUtils) {
+        private AppDependencyModule(Analytics tracker, PermissionUtils permissionUtils) {
             this.tracker = tracker;
             this.permissionUtils = permissionUtils;
         }
 
         @Override
-        public Tracker providesTracker(Application application) {
+        public Analytics providesAnalytics(Application application) {
             return tracker;
         }
 

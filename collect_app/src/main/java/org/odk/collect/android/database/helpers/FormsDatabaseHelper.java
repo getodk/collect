@@ -57,7 +57,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
 
     static final int DATABASE_VERSION = 7;
 
-    private static final String[] COLUMN_NAMES_V7 = new String[] {_ID, DISPLAY_NAME, DESCRIPTION,
+    private static final String[] COLUMN_NAMES_V7 = {_ID, DISPLAY_NAME, DESCRIPTION,
             JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
             SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
             LAST_DETECTED_FORM_VERSION_HASH};

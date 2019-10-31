@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -10,8 +11,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@id/audio_video_container"
-        android:layout_toLeftOf="@id/audio_video_container"
+        android:layout_toStartOf="@id/media_buttons"
+        android:layout_toLeftOf="@id/media_buttons"
         android:orientation="vertical">
 
         <FrameLayout
@@ -36,7 +37,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/audio_video_container"
+        android:id="@+id/media_buttons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -47,16 +48,18 @@
 
         <org.odk.collect.android.audio.AudioButton
             android:id="@+id/audioButton"
-            style="@style/Widget.Collect.ImageButton.Media"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+            android:layout_width="@dimen/touch_target_size"
+            android:layout_height="@dimen/touch_target_size"
             android:visibility="gone" />
 
-        <androidx.appcompat.widget.AppCompatImageButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/videoButton"
-            style="@style/Widget.Collect.ImageButton.Media"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+            android:layout_width="@dimen/touch_target_size"
+            android:layout_height="@dimen/touch_target_size"
+            android:visibility="gone"
+            app:icon="@drawable/ic_ondemand_video_black_24dp"
+            app:iconTint="?colorOnSurface" />
     </LinearLayout>
 </RelativeLayout>

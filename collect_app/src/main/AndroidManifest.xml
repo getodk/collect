@@ -86,7 +86,8 @@ the specific language governing permissions and limitations under the License.
         android:installLocation="auto"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:supportsRtl="true">
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true">
 
         <provider
             android:name="androidx.core.content.FileProvider"

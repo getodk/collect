@@ -51,6 +51,7 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.PreferenceSaver;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.Transport;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -65,7 +66,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import timber.log.Timber;
 
@@ -264,50 +264,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
         adminPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
-        InstancesDao instancesDao = new InstancesDao();
-
-        // count for finalized instances
-        try {
-            finalizedCursor = instancesDao.getFinalizedInstancesCursor();
-        } catch (Exception e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
-        }
-
-        if (finalizedCursor != null) {
-            startManagingCursor(finalizedCursor);
-        }
-        completedCount = finalizedCursor != null ? finalizedCursor.getCount() : 0;
-        getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true,
-                contentObserver);
-        // finalizedCursor.registerContentObserver(contentObserver);
-
-        // count for saved instances
-        try {
-            savedCursor = instancesDao.getUnsentInstancesCursor();
-        } catch (Exception e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
-        }
-
-        if (savedCursor != null) {
-            startManagingCursor(savedCursor);
-        }
-        savedCount = savedCursor != null ? savedCursor.getCount() : 0;
-
-        //count for view sent form
-        try {
-            viewSentCursor = instancesDao.getSentInstancesCursor();
-        } catch (Exception e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
-        }
-        if (viewSentCursor != null) {
-            startManagingCursor(viewSentCursor);
-        }
-        viewSentCount = viewSentCursor != null ? viewSentCursor.getCount() : 0;
-
-        updateButtons();
         setupGoogleAnalytics();
     }
 
@@ -320,11 +276,24 @@ public class MainMenuActivity extends CollectAbstractActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        countSavedForms();
+        updateButtons();
+        getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true,
+                contentObserver);
+
+        setButtonsVisibility();
+
+        ((Collect) getApplication())
+                .getDefaultTracker()
+                .enableAutoActivityTracking(true);
+    }
+
+    private void setButtonsVisibility() {
         SharedPreferences sharedPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
-        boolean edit = sharedPreferences.getBoolean(
-                AdminKeys.KEY_EDIT_SAVED, true);
+        boolean edit = sharedPreferences.getBoolean(AdminKeys.KEY_EDIT_SAVED, true);
         if (!edit) {
             if (reviewDataButton != null) {
                 reviewDataButton.setVisibility(View.GONE);
@@ -335,8 +304,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         }
 
-        boolean send = sharedPreferences.getBoolean(
-                AdminKeys.KEY_SEND_FINALIZED, true);
+        boolean send = sharedPreferences.getBoolean(AdminKeys.KEY_SEND_FINALIZED, true);
         if (!send) {
             if (sendDataButton != null) {
                 sendDataButton.setVisibility(View.GONE);
@@ -347,8 +315,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         }
 
-        boolean viewSent = sharedPreferences.getBoolean(
-                AdminKeys.KEY_VIEW_SENT, true);
+        boolean viewSent = sharedPreferences.getBoolean(AdminKeys.KEY_VIEW_SENT, true);
         if (!viewSent) {
             if (viewSentFormsButton != null) {
                 viewSentFormsButton.setVisibility(View.GONE);
@@ -359,8 +326,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         }
 
-        boolean getBlank = sharedPreferences.getBoolean(
-                AdminKeys.KEY_GET_BLANK, true);
+        boolean getBlank = sharedPreferences.getBoolean(AdminKeys.KEY_GET_BLANK, true);
         if (!getBlank) {
             if (getFormsButton != null) {
                 getFormsButton.setVisibility(View.GONE);
@@ -371,8 +337,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         }
 
-        boolean deleteSaved = sharedPreferences.getBoolean(
-                AdminKeys.KEY_DELETE_SAVED, true);
+        boolean deleteSaved = sharedPreferences.getBoolean(AdminKeys.KEY_DELETE_SAVED, true);
         if (!deleteSaved) {
             if (manageFilesButton != null) {
                 manageFilesButton.setVisibility(View.GONE);
@@ -382,10 +347,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
                 manageFilesButton.setVisibility(View.VISIBLE);
             }
         }
-
-        ((Collect) getApplication())
-                .getDefaultTracker()
-                .enableAutoActivityTracking(true);
     }
 
     @Override
@@ -394,6 +355,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         if (alertDialog != null && alertDialog.isShowing()) {
             alertDialog.dismiss();
         }
+        getContentResolver().unregisterContentObserver(contentObserver);
     }
 
     @Override
@@ -422,6 +384,48 @@ public class MainMenuActivity extends CollectAbstractActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void countSavedForms() {
+        InstancesDao instancesDao = new InstancesDao();
+
+        // count for finalized instances
+        try {
+            finalizedCursor = instancesDao.getFinalizedInstancesCursor();
+        } catch (Exception e) {
+            createErrorDialog(e.getMessage(), EXIT);
+            return;
+        }
+
+        if (finalizedCursor != null) {
+            startManagingCursor(finalizedCursor);
+        }
+        completedCount = finalizedCursor != null ? finalizedCursor.getCount() : 0;
+
+        // count for saved instances
+        try {
+            savedCursor = instancesDao.getUnsentInstancesCursor();
+        } catch (Exception e) {
+            createErrorDialog(e.getMessage(), EXIT);
+            return;
+        }
+
+        if (savedCursor != null) {
+            startManagingCursor(savedCursor);
+        }
+        savedCount = savedCursor != null ? savedCursor.getCount() : 0;
+
+        //count for view sent form
+        try {
+            viewSentCursor = instancesDao.getSentInstancesCursor();
+        } catch (Exception e) {
+            createErrorDialog(e.getMessage(), EXIT);
+            return;
+        }
+        if (viewSentCursor != null) {
+            startManagingCursor(viewSentCursor);
+        }
+        viewSentCount = viewSentCursor != null ? viewSentCursor.getCount() : 0;
     }
 
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
@@ -567,24 +571,17 @@ public class MainMenuActivity extends CollectAbstractActivity {
         ObjectInputStream input = null;
         try {
             input = new ObjectInputStream(new FileInputStream(src));
-            GeneralSharedPreferences.getInstance().clear();
 
             // first object is preferences
-            Map<String, ?> entries = (Map<String, ?>) input.readObject();
+            Map<String, Object> entries = (Map<String, Object>) input.readObject();
 
             AutoSendPreferenceMigrator.migrate(entries);
-
-            for (Entry<String, ?> entry : entries.entrySet()) {
-                GeneralSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
-            }
-
-            AdminSharedPreferences.getInstance().clear();
+            PreferenceSaver.saveGeneralPrefs(GeneralSharedPreferences.getInstance(), entries);
 
             // second object is admin options
-            Map<String, ?> adminEntries = (Map<String, ?>) input.readObject();
-            for (Entry<String, ?> entry : adminEntries.entrySet()) {
-                AdminSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
-            }
+            Map<String, Object> adminEntries = (Map<String, Object>) input.readObject();
+            PreferenceSaver.saveAdminPrefs(AdminSharedPreferences.getInstance(), adminEntries);
+
             Collect.getInstance().initializeJavaRosa();
             res = true;
         } catch (IOException | ClassNotFoundException e) {

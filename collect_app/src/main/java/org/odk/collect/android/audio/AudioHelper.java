@@ -60,33 +60,31 @@ public class AudioHelper {
 
     /**
      * @param button The control being used for playback
-     * @param uri    The location of the clip
-     * @param clipID An identifier for this clip
+     * @param clip   The clip to be played
      * @return A {@link LiveData} value representing whether this clip is playing or not
      */
-    public LiveData<Boolean> setAudio(AudioButton button, String uri, String clipID) {
+    public LiveData<Boolean> setAudio(AudioButton button, Clip clip) {
         AudioPlayerViewModel viewModel = this.viewModel;
 
-        LiveData<Boolean> isPlaying = viewModel.isPlaying(clipID);
+        LiveData<Boolean> isPlaying = viewModel.isPlaying(clip.getClipID());
 
         isPlaying.observe(lifecycleOwner, button::setPlaying);
-        button.setListener(new AudioButtonListener(viewModel, uri, clipID));
+        button.setListener(new AudioButtonListener(viewModel, clip.getURI(), clip.getClipID()));
 
         return isPlaying;
     }
 
     /**
      * @param view   The control being used for playback
-     * @param uri    The location of the clip
-     * @param clipID An identifier for this clip
+     * @param clip   The clip to be played
      */
-    public void setAudio(AudioControllerView view, String uri, String clipID) {
+    public void setAudio(AudioControllerView view, Clip clip) {
         AudioPlayerViewModel viewModel = this.viewModel;
 
-        viewModel.isPlaying(clipID).observe(lifecycleOwner, view::setPlaying);
-        viewModel.getPosition(clipID).observe(lifecycleOwner, view::setPosition);
-        view.setDuration(getDurationOfFile(uri));
-        view.setListener(new AudioControllerViewListener(viewModel, uri, clipID));
+        viewModel.isPlaying(clip.getClipID()).observe(lifecycleOwner, view::setPlaying);
+        viewModel.getPosition(clip.getClipID()).observe(lifecycleOwner, view::setPosition);
+        view.setDuration(getDurationOfFile(clip.getURI()));
+        view.setListener(new AudioControllerViewListener(viewModel, clip.getURI(), clip.getClipID()));
     }
 
     public void play(Clip clip) {

@@ -24,10 +24,10 @@ import com.google.zxing.integration.android.IntentIntegrator;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -43,14 +43,14 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
     private final Button getBarcodeButton;
     private final TextView stringAnswer;
 
-    public BarcodeWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+    public BarcodeWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails);
 
         getBarcodeButton = getSimpleButton(getContext().getString(R.string.get_barcode));
 
         stringAnswer = getCenteredAnswerTextView();
 
-        String s = prompt.getAnswerText();
+        String s = questionDetails.getPrompt().getAnswerText();
         if (s != null) {
             getBarcodeButton.setText(getContext().getString(
                     R.string.replace_barcode));

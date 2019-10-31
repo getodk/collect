@@ -17,10 +17,12 @@ package org.odk.collect.android.utilities;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.StyleRes;
+
 import android.util.TypedValue;
 
 import org.odk.collect.android.R;
@@ -97,10 +99,21 @@ public final class ThemeUtils {
 
     /**
      * @return Text color for the current {@link android.content.res.Resources.Theme}
+     *
+     * @deprecated use {@link #getColorOnSurface()} instead
      */
     @ColorInt
+    @Deprecated
     public int getPrimaryTextColor() {
         return getAttributeValue(R.attr.primaryTextColor);
+    }
+
+    /**
+     * @return Text color for the current {@link android.content.res.Resources.Theme}
+     */
+    @ColorInt
+    public int getColorOnSurface() {
+        return getAttributeValue(R.attr.colorOnSurface);
     }
 
     /**

@@ -54,7 +54,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
 
     static final int DATABASE_VERSION = 5;
 
-    private static final String[] COLUMN_NAMES_V5 = new String[] {_ID, DISPLAY_NAME, SUBMISSION_URI, CAN_EDIT_WHEN_COMPLETE,
+    private static final String[] COLUMN_NAMES_V5 = {_ID, DISPLAY_NAME, SUBMISSION_URI, CAN_EDIT_WHEN_COMPLETE,
             INSTANCE_FILE_PATH, JR_FORM_ID, JR_VERSION, STATUS, LAST_STATUS_CHANGE_DATE, DELETED_DATE};
     static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V5;
 

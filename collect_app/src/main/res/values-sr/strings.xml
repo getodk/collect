@@ -12,7 +12,7 @@
   <string name="add_another_repeat">Dodaj \"%s\" grupi?</string>
   <string name="add_repeat">Dodaj novi \"%s\" grupi?</string>
   <string name="add_repeat_no">Ne dodaji nove elemente</string>
-    <string name="cancel">Odustani</string>
+  <string name="cancel">Odustani</string>
   <string name="cancel_loading_form">Odustani</string>
   <string name="cancel_location">Odustani</string>
   <string name="canceling">Odustajem</string>
@@ -152,7 +152,7 @@
   <string name="root_namespace_error">Root element Namespace je netačan: %s</string>
   <string name="manifest_tag_error">Unosu %s nedostaje jedan ili više elemenata: ime fajla ili putanja za preuzimanje</string>
   <string name="form_download_progress">%1$s. Preuzimam media fajlove: %2$s od %3$s</string>
-    <string name="fetching_manifest">%s. Pribavljam manifest.</string>
+  <string name="fetching_manifest">%s. Pribavljam manifest.</string>
   <string name="success">Uspjeh</string>
   <string name="failures">Neuspijeh</string>
   <string name="no_forms_uploaded">Nijedan formular nije otpremljen.</string>
@@ -355,9 +355,6 @@
     <item quantity="other">%d metara</item>
   </plurals>
   <string name="location_status_searching">Tražim GPS lokaciju, molim sačekajte…</string>
-  <string name="location_status_accuracy">GPS preciznost lociranja: %.1f m</string>
-  <string name="location_status_acceptable">Preciznost GPS lokatora: %.1f m (prihvatljivo)</string>
-  <string name="location_status_unacceptable">Preciznost GPS lokatora: %.1f m (neprihvatljivo)</string>
   <string name="collection_status_paused">Unijeti podaci: %d</string>
   <string name="collection_status_placement">Unijeti podaci: %d (dodirni kako bi unio podatke)</string>
   <string name="collection_status_manual">Unijeti podaci: %d (ručni unos)</string>
