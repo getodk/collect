@@ -217,10 +217,6 @@ dependencies {
 
     implementation("com.google.guava:guava:28.1-android")
 
-    implementation("com.google.code.gson:gson:2.8.6") {
-        exclude group: 'org.apache.httpcomponents'
-    }
-
     implementation "com.squareup.okhttp3:okhttp:${rootProject.okhttp3Version}"
     implementation 'com.burgstaller:okhttp-digest:1.18' //newer versions require minSdkVersion >= 21
 
@@ -230,7 +226,6 @@ dependencies {
     implementation "com.evernote:android-job:1.4.2"
     implementation "com.rarepebble:colorpicker:3.0.1"
     implementation "commons-io:commons-io:2.6"
-    implementation "net.sf.kxml:kxml2:2.3.0"
     implementation "net.sf.opencsv:opencsv:2.4"
     implementation("org.opendatakit:opendatakit-javarosa:2.17.0") {
         exclude group: 'joda-time'
