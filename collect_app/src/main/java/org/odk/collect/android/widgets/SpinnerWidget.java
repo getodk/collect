@@ -27,6 +27,7 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.SpinnerAdapter;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ViewIds;
@@ -51,8 +52,8 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
     @Nullable
     private AdvanceToNextListener listener;
 
-    public SpinnerWidget(Context context, FormEntryPrompt prompt, boolean autoAdvance) {
-        super(context, prompt);
+    public SpinnerWidget(Context context, QuestionDetails questionDetails, boolean autoAdvance) {
+        super(context, questionDetails);
 
         if (context instanceof AdvanceToNextListener) {
             listener = (AdvanceToNextListener) context;
@@ -61,11 +62,11 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
         View view = inflate(context, R.layout.spinner_layout, null);
 
         spinner = view.findViewById(R.id.spinner);
-        spinnerAdapter = new SpinnerAdapter(getContext(), getChoices(prompt));
+        spinnerAdapter = new SpinnerAdapter(getContext(), getChoices(questionDetails.getPrompt()));
         spinner.setAdapter(spinnerAdapter);
-        spinner.setPrompt(prompt.getQuestionText());
-        spinner.setEnabled(!prompt.isReadOnly());
-        spinner.setFocusable(!prompt.isReadOnly());
+        spinner.setPrompt(questionDetails.getPrompt().getQuestionText());
+        spinner.setEnabled(!questionDetails.getPrompt().isReadOnly());
+        spinner.setFocusable(!questionDetails.getPrompt().isReadOnly());
         spinner.setId(ViewIds.generateViewId());
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
@@ -85,7 +86,7 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
             }
         });
 
-        fillInPreviousAnswer(prompt);
+        fillInPreviousAnswer(questionDetails.getPrompt());
         addAnswerView(view);
     }
 

@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.odk.collect.android.R;
 import org.odk.collect.android.ShadowPlayServicesUtil;
 import org.odk.collect.android.activities.GeoPolyActivity;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.preferences.PrefUtils;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
 import org.robolectric.annotation.Config;
@@ -39,7 +40,7 @@ public class GeoTraceWidgetTest extends BinaryWidgetTest<GeoTraceWidget, StringD
     @NonNull
     @Override
     public GeoTraceWidget createWidget() {
-        return new GeoTraceWidget(activity, formEntryPrompt);
+        return new GeoTraceWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @Override

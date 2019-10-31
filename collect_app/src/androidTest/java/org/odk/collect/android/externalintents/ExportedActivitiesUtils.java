@@ -15,7 +15,7 @@ import static org.odk.collect.android.application.Collect.OFFLINE_LAYERS;
 
 class ExportedActivitiesUtils {
 
-    private static final String[] DIRS = new String[]{
+    private static final String[] DIRS = {
             ODK_ROOT, FORMS_PATH, INSTANCES_PATH, CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
     };
 

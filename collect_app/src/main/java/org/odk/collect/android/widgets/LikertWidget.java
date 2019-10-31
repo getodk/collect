@@ -28,6 +28,7 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalSelectChoice;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ViewIds;
 
@@ -49,8 +50,8 @@ public class LikertWidget extends ItemsWidget {
 
     HashMap<RadioButton, String> buttonsToName;
 
-    public LikertWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+    public LikertWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails);
 
         setMainViewLayoutParameters();
         setStructures();

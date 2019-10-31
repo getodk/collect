@@ -23,8 +23,8 @@ import android.webkit.WebView;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 
 /**
@@ -38,8 +38,8 @@ public class SelectOneImageMapWidget extends SelectImageMapWidget {
 
     private final boolean autoAdvance;
 
-    public SelectOneImageMapWidget(Context context, FormEntryPrompt prompt, boolean autoAdvance) {
-        super(context, prompt);
+    public SelectOneImageMapWidget(Context context, QuestionDetails questionDetails, boolean autoAdvance) {
+        super(context, questionDetails);
 
         this.autoAdvance = autoAdvance;
 
@@ -47,8 +47,9 @@ public class SelectOneImageMapWidget extends SelectImageMapWidget {
             listener = (AdvanceToNextListener) context;
         }
 
-        if (prompt.getAnswerValue() != null) {
-            selections.add((Selection) prompt.getAnswerValue().getValue());
+        if (questionDetails.getPrompt().getAnswerValue() != null) {
+
+            selections.add((Selection) questionDetails.getPrompt().getAnswerValue().getValue());
             refreshSelectedItemsLabel();
         }
     }

@@ -2,6 +2,7 @@ package org.odk.collect.android.widgets;
 
 import androidx.annotation.NonNull;
 
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.GeneralSelectMultiWidgetTest;
 
 /**
@@ -12,6 +13,6 @@ public class ListMultiWidgetTest extends GeneralSelectMultiWidgetTest<ListMultiW
     @NonNull
     @Override
     public ListMultiWidget createWidget() {
-        return new ListMultiWidget(activity, formEntryPrompt, true);
+        return new ListMultiWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), true);
     }
 }

@@ -5,7 +5,7 @@
   <string name="add_another_repeat">Thêm 1 \"%s\" khác?</string>
   <string name="add_repeat">Thêm 1 \"%s\" mới?</string>
   <string name="add_repeat_no">Không được thêm</string>
-    <string name="cancel">Huỷ</string>
+  <string name="cancel">Huỷ</string>
   <string name="cancel_loading_form">Huỷ</string>
   <string name="cancel_location">Huỷ</string>
   <string name="capture_audio">Ghi âm</string>
@@ -128,7 +128,7 @@
   <string name="root_namespace_error">Yếu tố gốc Namespace không đúng: %s</string>
   <string name="manifest_tag_error">Mục Manifest %s bị thiếu 1 hoặc nhiều thẻ sau: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Lấy file đa phương tiện: %2$s of %3$s</string>
-    <string name="fetching_manifest">%s. Lấy manifest </string>
+  <string name="fetching_manifest">%s. Lấy manifest </string>
   <string name="success">Thành công</string>
   <string name="no_forms_uploaded">Xin lỗi, biểu mẫu không tải lên được.</string>
   <string name="upload_results">Kết quả tải lên</string>

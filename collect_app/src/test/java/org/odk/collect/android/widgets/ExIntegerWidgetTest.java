@@ -3,6 +3,7 @@ package org.odk.collect.android.widgets;
 import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.data.IntegerData;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.junit.Test;
 import org.odk.collect.android.widgets.base.GeneralExStringWidgetTest;
 
@@ -19,7 +20,7 @@ public class ExIntegerWidgetTest extends GeneralExStringWidgetTest<ExIntegerWidg
     @NonNull
     @Override
     public ExIntegerWidget createWidget() {
-        return new ExIntegerWidget(activity, formEntryPrompt);
+        return new ExIntegerWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @NonNull

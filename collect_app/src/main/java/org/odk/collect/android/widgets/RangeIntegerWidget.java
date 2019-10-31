@@ -21,12 +21,12 @@ import android.content.Context;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
-import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 
 @SuppressLint("ViewConstructor")
 public class RangeIntegerWidget extends RangeWidget {
 
-    public RangeIntegerWidget(Context context, FormEntryPrompt prompt) {
+    public RangeIntegerWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
     }
 

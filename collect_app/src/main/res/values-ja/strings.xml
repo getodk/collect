@@ -12,7 +12,7 @@
   <string name="add_another_repeat">別の \"%s\" グループを追加しますか?</string>
   <string name="add_repeat">新しい \"%s\" グループを追加しますか?</string>
   <string name="add_repeat_no">追加しない</string>
-    <string name="cancel">キャンセル</string>
+  <string name="cancel">キャンセル</string>
   <string name="cancel_loading_form">キャンセル</string>
   <string name="cancel_location">キャンセル</string>
   <string name="canceling">キャンセル中</string>
@@ -152,7 +152,7 @@
   <string name="root_namespace_error">ルートエレメントのネームスペースが正しくありません: %s</string>
   <string name="manifest_tag_error">マニフェストのエントリー %s で1以上のタグがありません: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s。 メディア ファイルの取得中: %2$s / %3$s</string>
-    <string name="fetching_manifest">%s。 マニフェストの取得中 </string>
+  <string name="fetching_manifest">%s。 マニフェストの取得中 </string>
   <string name="success">成功しました</string>
   <string name="failures">失敗</string>
   <string name="no_forms_uploaded">申し訳ありません、アップロードしたフォームはありません。</string>
@@ -363,9 +363,9 @@
     <item quantity="other">%d メートル</item>
   </plurals>
   <string name="location_status_searching">GPS の位置を検索しています、しばらくお待ちください…</string>
-  <string name="location_status_accuracy">GPS 位置精度: %.1f m</string>
-  <string name="location_status_acceptable">GPS位置精度: %.1f m (許容)</string>
-  <string name="location_status_unacceptable">GPS位置精度: %.1f m (許容不可)</string>
+  <string name="location_status_accuracy">GPS 位置精度: %.2f m</string>
+  <string name="location_status_acceptable">GPS位置精度: %.2f m (許容)</string>
+  <string name="location_status_unacceptable">GPS位置精度: %.2f m (許容不可)</string>
   <string name="collection_status_paused">入力された位置: %d</string>
   <string name="collection_status_placement">入力された位置: %d (タップして位置を配置)</string>
   <string name="collection_status_manual">入力された位置: %d (手動記録)</string>

@@ -85,7 +85,7 @@ public class ShowQRCodeFragment extends Fragment {
     private static final int SELECT_PHOTO = 111;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private final boolean[] checkedItems = new boolean[]{true, true};
+    private final boolean[] checkedItems = {true, true};
 
     @BindView(R.id.ivQRcode)
     ImageView ivQRCode;
@@ -194,7 +194,7 @@ public class ShowQRCodeFragment extends Fragment {
     @OnClick(R.id.tvPasswordWarning)
     void passwordWarningClicked() {
         if (dialog == null) {
-            final String[] items = new String[]{
+            final String[] items = {
                     getString(R.string.admin_password),
                     getString(R.string.server_password)};
 
@@ -225,8 +225,9 @@ public class ShowQRCodeFragment extends Fragment {
             } else {
                 try {
                     applySettings(CompressionUtils.decompress(result.getContents()));
-                } catch (IOException | DataFormatException e) {
+                } catch (IOException | DataFormatException | IllegalArgumentException e) {
                     Timber.e(e);
+                    ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
                 }
                 return;
             }
@@ -256,7 +257,7 @@ public class ShowQRCodeFragment extends Fragment {
                 } catch (FormatException | NotFoundException | ChecksumException e) {
                     Timber.i(e);
                     ToastUtils.showLongToast(R.string.qr_code_not_found);
-                } catch (DataFormatException | IOException | OutOfMemoryError e) {
+                } catch (DataFormatException | IOException | OutOfMemoryError | IllegalArgumentException e) {
                     Timber.e(e);
                     ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
                 }

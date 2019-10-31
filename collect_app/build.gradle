@@ -198,7 +198,7 @@ dependencies {
 
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
     implementation 'androidx.browser:browser:1.2.0-alpha07'
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0-rc01' // Shouldn't be upgraded until https://issuetracker.google.com/issues/141869006 is fixed
     implementation 'com.google.android.material:material:1.1.0-alpha10'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.exifinterface:exifinterface:1.1.0-beta01'
@@ -239,7 +239,7 @@ dependencies {
     implementation "commons-io:commons-io:2.6"
     implementation "net.sf.kxml:kxml2:2.3.0"
     implementation "net.sf.opencsv:opencsv:2.4"
-    implementation("org.opendatakit:opendatakit-javarosa:2.15.1") {
+    implementation("org.opendatakit:opendatakit-javarosa:2.17.0") {
         exclude group: 'joda-time'
         exclude group: 'org.slf4j'
     }
@@ -275,7 +275,7 @@ dependencies {
     odkCollectReleaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${rootProject.leakyCanaryVersion}"
 
     // Android Architecture Components:
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0-alpha04"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.1.0"
 
     // Dagger:
     implementation "com.google.dagger:dagger:${rootProject.daggerVersion}"

@@ -6,18 +6,24 @@ import androidx.test.rule.ActivityTestRule;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.ActivityHelpers;
 
+import timber.log.Timber;
+
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.StringEndsWith.endsWith;
+import static org.odk.collect.android.test.CustomMatchers.withIndex;
 
 public class FormEntryPage extends Page<FormEntryPage> {
 
@@ -104,6 +110,40 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage swipeOnText(String text) {
         onView(withClassName(endsWith("EditText"))).check(matches(withText(text))).perform(swipeLeft());
+        return this;
+    }
+
+    public FormEntryPage clickSignatureButton() {
+        onView(withId(R.id.simple_button)).perform(click());
+        return this;
+    }
+
+    public FormEntryPage waitForRotationToEnd() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Timber.i(e);
+        }
+        return this;
+    }
+
+    public FormEntryPage clickIgnoreChanges() {
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.do_not_save))).perform(click());
+        return this;
+    }
+
+    public FormEntryPage simplePressBack() {
+        Espresso.pressBack();
+        return this;
+    }
+
+    public FormEntryPage putTextOnIndex(int index, String text) {
+        onView(withIndex(withClassName(endsWith("Text")), index)).perform(replaceText(text));
+        return this;
+    }
+
+    public FormEntryPage clickSaveAndExitWhenValidationErrorIsExpected() {
+        onView(withId(R.id.save_exit_button)).perform(click());
         return this;
     }
 }

@@ -25,11 +25,11 @@ import androidx.core.content.FileProvider;
 import android.view.View;
 import android.widget.Button;
 
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
@@ -57,7 +57,7 @@ public class AnnotateWidget extends BaseImageWidget {
     private Button chooseButton;
     private Button annotateButton;
 
-    public AnnotateWidget(Context context, FormEntryPrompt prompt) {
+    public AnnotateWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
         imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_ANNOTATE, RequestCodes.ANNOTATE_IMAGE, R.string.annotate_image);
         imageCaptureHandler = new ImageCaptureHandler();

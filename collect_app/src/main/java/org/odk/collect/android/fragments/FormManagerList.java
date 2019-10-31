@@ -101,9 +101,9 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     }
 
     private void setupAdapter() {
-        String[] data = new String[]{FormsColumns.DISPLAY_NAME, FormsColumns.JR_VERSION, FormsColumns.DATE,
-                                        FormsColumns.JR_FORM_ID};
-        int[] view = new int[]{R.id.form_title, R.id.form_subtitle, R.id.form_subtitle2};
+        String[] data = {FormsColumns.DISPLAY_NAME, FormsColumns.JR_VERSION, FormsColumns.DATE,
+                FormsColumns.JR_FORM_ID};
+        int[] view = {R.id.form_title, R.id.form_subtitle, R.id.form_subtitle2};
 
         listAdapter = new VersionHidingCursorAdapter(
                 FormsColumns.JR_VERSION, getActivity(),

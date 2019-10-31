@@ -11,7 +11,7 @@
   <string name="add_another_repeat">بل ټولګی %sزیات کړی</string>
   <string name="add_repeat">نوي ټولګی %sزیات کړی</string>
   <string name="add_repeat_no">مه یی زیاتوي</string>
-    <string name="cancel">فسخ کول</string>
+  <string name="cancel">فسخ کول</string>
   <string name="cancel_loading_form">فسخ کول</string>
   <string name="cancel_location">فسخ کول</string>
   <string name="canceling">فسخ کولو کی قرار لری</string>

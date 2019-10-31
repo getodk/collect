@@ -35,12 +35,12 @@ import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CaptureSelfieVideoActivity;
 import org.odk.collect.android.activities.CaptureSelfieVideoActivityNewApi;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.CameraUtils;
@@ -93,12 +93,12 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
 
     private boolean selfie;
 
-    public VideoWidget(Context context, FormEntryPrompt prompt) {
+    public VideoWidget(Context context, QuestionDetails prompt) {
         this(context, prompt, new FileUtil(), new MediaUtil());
     }
 
-    public VideoWidget(Context context, FormEntryPrompt prompt, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil) {
-        super(context, prompt);
+    public VideoWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil) {
+        super(context, questionDetails);
 
         this.fileUtil = fileUtil;
         this.mediaUtil = mediaUtil;
@@ -113,7 +113,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         playButton = getSimpleButton(getContext().getString(R.string.play_video), R.id.play_video);
 
         // retrieve answer from data model and update ui
-        binaryName = prompt.getAnswerText();
+        binaryName = questionDetails.getPrompt().getAnswerText();
         playButton.setEnabled(binaryName != null);
 
         // finish complex layout
