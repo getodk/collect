@@ -10,6 +10,7 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.ImageView;
@@ -188,7 +189,18 @@ public class LikertWidget extends ItemsWidget {
         button.setEnabled(!getFormEntryPrompt().isReadOnly());
         button.setFocusable(!getFormEntryPrompt().isReadOnly());
         RADIOBUTTON_PARAMS.addRule(CENTER_HORIZONTAL, TRUE);
+
         button.setLayoutParams(RADIOBUTTON_PARAMS);
+        // This the adds the negated margins to reduce the extra padding of the button
+        ViewTreeObserver vto = button.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int width = button.getWidth();
+                RADIOBUTTON_PARAMS.setMargins(-width/5,0,-width/5, 0);
+                button.setLayoutParams(RADIOBUTTON_PARAMS);
+            }
+        });
         button.setGravity(Gravity.CENTER);
         return button;
     }
