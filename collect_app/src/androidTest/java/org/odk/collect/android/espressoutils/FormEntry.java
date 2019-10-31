@@ -62,12 +62,13 @@ public final class FormEntry {
         onView(withId(R.id.save_exit_button)).perform(click());
     }
 
-    public static void showSpinnerMultipleDialog() {
-        onView(withText(getInstrumentation().getTargetContext().getString(R.string.select_answer))).perform(click());
-    }
-
     public static void swipeToNextQuestion() {
         onView(withId(R.id.questionholder)).perform(swipeLeft());
+    }
+
+    public static void deleteGroup() {
+        onView(withId(R.id.menu_delete_child)).perform(click());
+        onView(withText(R.string.delete_repeat)).perform(click());
     }
 
     public static void clickOk() {

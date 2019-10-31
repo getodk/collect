@@ -164,4 +164,9 @@ public class FormEntryPage extends Page<FormEntryPage> {
         onView(withId(R.id.menu_go_up)).perform(click());
         return this;
     }
+
+    public FormEntryPage showSpinnerMultipleDialog() {
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.select_answer))).perform(click());
+        return this;
+    }
 }
