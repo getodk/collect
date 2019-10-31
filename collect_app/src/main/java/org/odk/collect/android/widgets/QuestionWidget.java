@@ -220,7 +220,7 @@ public abstract class QuestionWidget
 
         guidanceTextView.setText(TextUtils.textToHtml(guidance));
 
-        guidanceTextView.setTextColor(themeUtils.getPrimaryTextColor());
+        guidanceTextView.setTextColor(themeUtils.getColorOnSurface());
         guidanceTextView.setMovementMethod(LinkMovementMethod.getInstance());
         return guidanceTextView;
     }
@@ -245,7 +245,7 @@ public abstract class QuestionWidget
         questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize());
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setPadding(0, 0, 0, 7);
-        questionText.setTextColor(themeUtils.getPrimaryTextColor());
+        questionText.setTextColor(themeUtils.getColorOnSurface());
         questionText.setText(TextUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(promptText, prompt.isRequired())));
         questionText.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -430,7 +430,7 @@ public abstract class QuestionWidget
             } else {
                 helpText.setText(TextUtils.textToHtml(s));
             }
-            helpText.setTextColor(themeUtils.getPrimaryTextColor());
+            helpText.setTextColor(themeUtils.getColorOnSurface());
             helpText.setMovementMethod(LinkMovementMethod.getInstance());
             return helpText;
         } else {
@@ -537,7 +537,7 @@ public abstract class QuestionWidget
         TextView textView = new TextView(getContext());
 
         textView.setId(R.id.answer_text);
-        textView.setTextColor(themeUtils.getPrimaryTextColor());
+        textView.setTextColor(themeUtils.getColorOnSurface());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         textView.setPadding(20, 20, 20, 20);
         textView.setText(text);
@@ -571,7 +571,7 @@ public abstract class QuestionWidget
         if (readOnly) {
             answerEditText.setBackground(null);
             answerEditText.setEnabled(false);
-            answerEditText.setTextColor(themeUtils.getPrimaryTextColor());
+            answerEditText.setTextColor(themeUtils.getColorOnSurface());
             answerEditText.setFocusable(false);
         }
 
