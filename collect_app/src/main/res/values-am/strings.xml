@@ -6,7 +6,7 @@
   <string name="add_another_repeat">ተጨማሪ \" 1 %s \" ቡድን ጨምር?</string>
   <string name="add_repeat">አዲስ \" %s \" ቡድን ጨምር?</string>
   <string name="add_repeat_no">አትጨምር</string>
-    <string name="cancel">ሰርዝ</string>
+  <string name="cancel">ሰርዝ</string>
   <string name="cancel_loading_form">ሰርዝ</string>
   <string name="cancel_location">ሰርዝ</string>
   <string name="cannot_edit_completed_form">ይህ ቅጽ እንደተጠናቀቀ ምልክት ከተደረገ በኋላ አርትዕ ሊደረግ አይችልም. ቅፁ ምናልባት የተመሳጠረ ሊሆን ይችላል፡፡</string>
@@ -116,7 +116,7 @@
   <string name="keep_changes">ለውጦችን አስቀምጥ</string>
   <string name="font_size">የጽሑፍ ቅርጸ ቁምፊ መጠን</string>
   <string name="change_font_size">የጽሑፍ ቅርጸ ቁምፊ መጠን</string>
-    <string name="success">ስኬት</string>
+  <string name="success">ስኬት</string>
   <string name="no_forms_uploaded">ይቅርታ፣ ምንም ቅጽ አልተጫነም፡፡</string>
   <string name="upload_results">ውጤቶችን ጫን</string>
   <string name="choose_sound">ድምጽ ይምረጡ</string>

@@ -2,6 +2,7 @@ package org.odk.collect.android.widgets;
 
 import androidx.annotation.NonNull;
 
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
 
 /**
@@ -12,6 +13,6 @@ public class SelectOneSearchWidgetTest extends GeneralSelectOneWidgetTest<Select
     @NonNull
     @Override
     public SelectOneSearchWidget createWidget() {
-        return new SelectOneSearchWidget(activity, formEntryPrompt, false);
+        return new SelectOneSearchWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), false);
     }
 }

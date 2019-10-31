@@ -42,6 +42,7 @@ public class AudioButtonIntegrationTest {
     public void setup() {
         activityController = Robolectric.buildActivity(FragmentActivity.class);
         activity = activityController.setup().get();
+        activity.setTheme(com.google.android.material.R.style.Theme_MaterialComponents);
 
         fakeLifecycleOwner = new FakeLifecycleOwner();
         fakeScheduler = new FakeScheduler();
@@ -59,7 +60,7 @@ public class AudioButtonIntegrationTest {
         final DataSource dataSource = setupMediaPlayerDataSource(testFile);
 
         AudioButton button = new AudioButton(activity);
-        audioHelper.setAudio(button, testFile, "clip1");
+        audioHelper.setAudio(button, new Clip("clip1", testFile));
 
         assertThat(button.isPlaying(), equalTo(false));
 
@@ -83,10 +84,10 @@ public class AudioButtonIntegrationTest {
         final DataSource dataSource2 = setupMediaPlayerDataSource(testFile2);
 
         AudioButton button1 = new AudioButton(activity);
-        audioHelper.setAudio(button1, testFile1, "clip1");
+        audioHelper.setAudio(button1, new Clip("clip1", testFile1));
 
         AudioButton button2 = new AudioButton(activity);
-        audioHelper.setAudio(button2, testFile2, "clip2");
+        audioHelper.setAudio(button2, new Clip("clip2", testFile2));
 
         button1.performClick();
         button2.performClick();
@@ -103,10 +104,10 @@ public class AudioButtonIntegrationTest {
         setupMediaPlayerDataSource(testFile1);
 
         AudioButton button1 = new AudioButton(activity);
-        audioHelper.setAudio(button1, testFile1, "clip1");
+        audioHelper.setAudio(button1, new Clip("clip1", testFile1));
 
         AudioButton button2 = new AudioButton(activity);
-        audioHelper.setAudio(button2, testFile1, "clip2");
+        audioHelper.setAudio(button2, new Clip("clip2", testFile1));
 
         button2.performClick();
 
@@ -120,7 +121,7 @@ public class AudioButtonIntegrationTest {
         setupMediaPlayerDataSource(testFile1);
 
         AudioButton button = new AudioButton(activity);
-        audioHelper.setAudio(button, testFile1, "clip1");
+        audioHelper.setAudio(button, new Clip("clip1", testFile1));
 
         activityController.pause();
 
@@ -133,7 +134,7 @@ public class AudioButtonIntegrationTest {
         setupMediaPlayerDataSource(testFile1);
 
         AudioButton button = new AudioButton(activity);
-        audioHelper.setAudio(button, testFile1, "clip1");
+        audioHelper.setAudio(button, new Clip("clip1", testFile1));
 
         button.performClick();
         shadowOf(mediaPlayer).setCurrentPosition(1000);
@@ -152,7 +153,7 @@ public class AudioButtonIntegrationTest {
         setupMediaPlayerDataSource(testFile1);
 
         AudioButton button = new AudioButton(activity);
-        audioHelper.setAudio(button, testFile1, "clip1");
+        audioHelper.setAudio(button, new Clip("clip1", testFile1));
 
         fakeLifecycleOwner.destroy();
 
@@ -165,7 +166,7 @@ public class AudioButtonIntegrationTest {
         setupMediaPlayerDataSource(testFile1);
 
         AudioButton button1 = new AudioButton(activity);
-        LiveData<Boolean> isPlaying = liveDataTester.activate(audioHelper.setAudio(button1, testFile1, "clip1"));
+        LiveData<Boolean> isPlaying = liveDataTester.activate(audioHelper.setAudio(button1, new Clip("clip1", testFile1)));
 
         assertThat(isPlaying.getValue(), equalTo(false));
 

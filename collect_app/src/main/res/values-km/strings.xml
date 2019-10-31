@@ -11,7 +11,7 @@
   <string name="add_another_repeat">បន្ថែម​ក្រុម \"%s\" មួយ​ទៀត?</string>
   <string name="add_repeat">បន្ថែម​ក្រុម \"%s\" ថ្មី​មួយ?</string>
   <string name="add_repeat_no">កុំ​បន្ថែម</string>
-    <string name="cancel">បោះបង់</string>
+  <string name="cancel">បោះបង់</string>
   <string name="cancel_loading_form">បោះបង់</string>
   <string name="cancel_location">បោះបង់</string>
   <string name="canceling">កំពុង​បោះបង់</string>
@@ -149,7 +149,7 @@
   <string name="root_namespace_error">ធាតុ​ឬស Namespace មិនត្រឹមត្រូវ: %s</string>
   <string name="manifest_tag_error">ការចូល Manifest %s គឺបាត់បង់ស្លាក​មួយ​ ឬ​ច្រើន: ឈ្មោះឯកសារ, គន្លឹះ​សញ្ញា ឬ អាសយដ្ឋានទាញយក</string>
   <string name="form_download_progress">%1$s. កំពុងទាញយកឯកសារមេឌៀ: %2$s of %3$s</string>
-    <string name="fetching_manifest">%s. ការទាញបញ្ជី</string>
+  <string name="fetching_manifest">%s. ការទាញបញ្ជី</string>
   <string name="success">ជោគជ័យ</string>
   <string name="failures">បរាជ័យ</string>
   <string name="no_forms_uploaded">សុំទោស, គ្មានសំណុំ​បែប​បទសម្រាប់ផ្ទុកឡើង.</string>

@@ -23,9 +23,9 @@ import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPolyActivity;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
@@ -43,8 +43,8 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
     private final Button createShapeButton;
     private final TextView answerDisplay;
 
-    public GeoShapeWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+    public GeoShapeWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails);
         // assemble the widget...
 
         answerDisplay = getCenteredAnswerTextView();
@@ -58,7 +58,7 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
         addAnswerView(answerLayout);
 
         boolean dataAvailable = false;
-        String s = prompt.getAnswerText();
+        String s = questionDetails.getPrompt().getAnswerText();
         if (s != null && !s.equals("")) {
             dataAvailable = true;
             setBinaryData(s);

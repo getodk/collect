@@ -10,11 +10,14 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatRadioButton;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
@@ -26,7 +29,9 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalSelectChoice;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ViewIds;
 
 import timber.log.Timber;
 
@@ -39,12 +44,15 @@ public class LikertWidget extends ItemsWidget {
     private final LinearLayout.LayoutParams LINEARLAYOUT_PARAMS = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1);
     private final LayoutParams TEXTVIEW_PARAMS = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
     private LayoutParams IMAGEVIEW_PARAMS = new LayoutParams(LayoutParams.WRAP_CONTENT , LayoutParams.WRAP_CONTENT);
-    private final LayoutParams RADIOBUTTON_PARAMS = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    private  LayoutParams RADIOBUTTON_PARAMS = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    private LayoutParams BUTTONVIEW_PARAMS = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+    private LayoutParams LEFT_LINEVIEW_PARAMS = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
+    private LayoutParams RIGHT_LINEVIEW_PARAMS = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
 
     HashMap<RadioButton, String> buttonsToName;
 
-    public LikertWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+    public LikertWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails);
 
         setMainViewLayoutParameters();
         setStructures();
@@ -120,9 +128,41 @@ public class LikertWidget extends ItemsWidget {
         buttonsToName = new HashMap<>();
         for (int i = 0; i < items.size(); i++) {
             LinearLayout optionView = getLinearLayout();
+            RelativeLayout buttonView = new RelativeLayout(this.getContext());
+            BUTTONVIEW_PARAMS.addRule(CENTER_IN_PARENT, TRUE);
+            buttonView.setLayoutParams(BUTTONVIEW_PARAMS);
+
             RadioButton button = getRadioButton();
+
             buttonsToName.put(button, items.get(i).getValue());
-            optionView.addView(button);
+            buttonView.addView(button);
+
+            // Adds lines to the button's side
+            View leftLineView = new View(this.getContext());
+            LEFT_LINEVIEW_PARAMS.addRule(RelativeLayout.LEFT_OF, button.getId());
+            LEFT_LINEVIEW_PARAMS.addRule(CENTER_IN_PARENT, TRUE);
+            leftLineView.setLayoutParams(LEFT_LINEVIEW_PARAMS);
+            leftLineView.setBackgroundColor(Color.parseColor("#CCCCCC"));
+            if (i == 0) {
+                leftLineView.setBackgroundColor(Color.WHITE);
+            }
+            // left line
+            buttonView.addView(leftLineView);
+
+            View rightLineView = new View(this.getContext());
+            RIGHT_LINEVIEW_PARAMS.addRule(RelativeLayout.RIGHT_OF, button.getId());
+            RIGHT_LINEVIEW_PARAMS.addRule(CENTER_IN_PARENT, TRUE);
+            rightLineView.setLayoutParams(RIGHT_LINEVIEW_PARAMS);
+            rightLineView.setBackgroundColor(Color.parseColor("#CCCCCC"));
+
+            if (i == items.size() - 1) {
+                rightLineView.setBackgroundColor(Color.WHITE);
+            }
+            // right line
+            buttonView.addView(rightLineView);
+
+            optionView.addView(buttonView);
+
             ImageView imgView = getImageAsImageView(i);
             // checks if image is set or valid
             if (imgView != null) {
@@ -130,6 +170,7 @@ public class LikertWidget extends ItemsWidget {
             }
             TextView choice = getTextView();
             choice.setText(getFormEntryPrompt().getSelectChoiceText(items.get(i)));
+
             optionView.addView(choice);
             view.addView(optionView);
         }
@@ -143,15 +184,29 @@ public class LikertWidget extends ItemsWidget {
     }
 
     public RadioButton getRadioButton(){
-        RadioButton button = new RadioButton(getContext());
+        AppCompatRadioButton button = new AppCompatRadioButton(getContext());
+        button.setId(ViewIds.generateViewId());
+        button.setEnabled(!getFormEntryPrompt().isReadOnly());
+        button.setFocusable(!getFormEntryPrompt().isReadOnly());
+        RADIOBUTTON_PARAMS.addRule(CENTER_HORIZONTAL, TRUE);
+
         button.setLayoutParams(RADIOBUTTON_PARAMS);
+        // This the adds the negated margins to reduce the extra padding of the button
+        ViewTreeObserver vto = button.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int width = button.getWidth();
+                RADIOBUTTON_PARAMS.setMargins(-width/5,0,-width/5, 0);
+                button.setLayoutParams(RADIOBUTTON_PARAMS);
+            }
+        });
         button.setGravity(Gravity.CENTER);
         return button;
     }
 
     // Creates text view for choice
     public TextView getTextView(){
-        // TODO: Find way to cap text when too long
         TextView view = new TextView(getContext());
         view.setGravity(Gravity.CENTER);
         view.setPadding(2,2,2,2);
@@ -248,7 +303,17 @@ public class LikertWidget extends ItemsWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        /** TODO */
+        for (RadioButton r : buttonsToName.keySet()) {
+            r.setOnLongClickListener(l);
+        }
+    }
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        for (RadioButton r : buttonsToName.keySet()) {
+            r.cancelLongPress();
+        }
     }
 
     @Override

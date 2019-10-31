@@ -19,9 +19,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
-import org.javarosa.form.api.FormEntryPrompt;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
@@ -35,7 +36,7 @@ public class DrawWidget extends BaseImageWidget {
 
     private Button drawButton;
 
-    public DrawWidget(Context context, FormEntryPrompt prompt) {
+    public DrawWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
         imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_DRAW, RequestCodes.DRAW_IMAGE, R.string.draw_image);
         setUpLayout();

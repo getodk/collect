@@ -17,7 +17,7 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 
 /**
@@ -30,8 +30,8 @@ import org.odk.collect.android.utilities.SoftKeyboardUtils;
  */
 @SuppressLint("ViewConstructor")
 public class SelectOneSearchWidget extends AbstractSelectOneWidget {
-    public SelectOneSearchWidget(Context context, FormEntryPrompt prompt, boolean autoAdvance) {
-        super(context, prompt, autoAdvance);
+    public SelectOneSearchWidget(Context context, QuestionDetails questionDetails, boolean autoAdvance) {
+        super(context, questionDetails, autoAdvance);
         createLayout();
         setUpSearchBox();
     }

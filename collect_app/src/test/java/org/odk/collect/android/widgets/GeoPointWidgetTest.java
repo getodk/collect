@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.odk.collect.android.R;
 import org.odk.collect.android.ShadowPlayServicesUtil;
 import org.odk.collect.android.activities.GeoPointActivity;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
 import org.robolectric.annotation.Config;
 
@@ -38,7 +39,7 @@ public class GeoPointWidgetTest extends BinaryWidgetTest<GeoPointWidget, GeoPoin
     @NonNull
     @Override
     public GeoPointWidget createWidget() {
-        return new GeoPointWidget(activity, formEntryPrompt);
+        return new GeoPointWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @Override

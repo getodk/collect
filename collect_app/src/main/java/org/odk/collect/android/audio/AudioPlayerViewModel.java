@@ -8,8 +8,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.Scheduler;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -105,7 +107,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
                 try {
                     loadNewClip(nextClip.getURI());
                 } catch (IOException ignored) {
-                    error.setValue(new PlaybackFailedException(nextClip.getURI()));
+                    error.setValue(new PlaybackFailedException(nextClip.getURI(), getExceptionMsg(nextClip.getURI())));
                     playNext(playlist);
                     return;
                 }
@@ -121,6 +123,10 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
 
             schedulePositionUpdates();
         }
+    }
+
+    private int getExceptionMsg(String uri) {
+        return new File(uri).exists() ? R.string.file_invalid : R.string.file_missing;
     }
 
     @Override

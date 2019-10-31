@@ -20,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.odk.collect.android.database.ItemsetDbAdapter;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.XPathParseTool;
 import org.odk.collect.android.widgets.base.QuestionWidgetTest;
@@ -90,7 +91,7 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
     @NonNull
     @Override
     public ItemsetWidget createWidget() {
-        return new ItemsetWidget(activity, formEntryPrompt,
+        return new ItemsetWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"),
                 false, parseTool, adapter, fileUtil);
     }
 

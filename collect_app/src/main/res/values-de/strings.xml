@@ -12,7 +12,7 @@
   <string name="add_another_repeat">Weitere \"%s\"-Gruppe hinzufügen?</string>
   <string name="add_repeat">Neue Gruppe \"%s\" hinzufügen?</string>
   <string name="add_repeat_no">Nicht hinzufügen</string>
-    <string name="cancel">Abbrechen</string>
+  <string name="cancel">Abbrechen</string>
   <string name="cancel_loading_form">Abbrechen</string>
   <string name="cancel_location">Abbrechen</string>
   <string name="canceling">Abbrechen</string>
@@ -152,7 +152,7 @@
   <string name="root_namespace_error">Root element Namespace ist falsch: %s</string>
   <string name="manifest_tag_error">Bei Manifest-Eintrag %s fehlt ein oder mehrere Tag(s): filename, hash, oder downloadUrl</string>
   <string name="form_download_progress">%1$s. Media-Dateien werden geladen: %2$s von %3$s</string>
-    <string name="fetching_manifest">%s. Manifest wird geladen </string>
+  <string name="fetching_manifest">%s. Manifest wird geladen </string>
   <string name="success">Erfolg</string>
   <string name="failures">Fehler</string>
   <string name="no_forms_uploaded">Kein Formular wurde hochgeladen.</string>
@@ -366,9 +366,9 @@
     <item quantity="other">%d Meter</item>
   </plurals>
   <string name="location_status_searching">Suche nach GPS-Position, bitte warten…</string>
-  <string name="location_status_accuracy">GPS Ortungsgenauigkeit: %.1f m</string>
-  <string name="location_status_acceptable">GPS Ortungsgenauigkeit: %.1f m (akzeptabel)</string>
-  <string name="location_status_unacceptable">GPS Ortungsgenauigkeit: %.1f m (inakzeptabel)</string>
+  <string name="location_status_accuracy">GPS Ortungsgenauigkeit: %.2f m</string>
+  <string name="location_status_acceptable">GPS Ortungsgenauigkeit: %.2f m (akzeptabel)</string>
+  <string name="location_status_unacceptable">GPS Ortungsgenauigkeit: %.2f m (inakzeptabel)</string>
   <string name="collection_status_paused">erfasste Punkte: %d</string>
   <string name="collection_status_placement">erfasste Punkte: %d (tippen zum Platzieren von Punkten)</string>
   <string name="collection_status_manual">erfasste Punkte: %d (manuelle Standorterfassung)</string>

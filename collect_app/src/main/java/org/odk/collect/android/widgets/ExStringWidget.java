@@ -29,25 +29,26 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.javarosa.core.model.data.StringData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.external.ExternalAppsUtils;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ActivityAvailability;
-import org.odk.collect.android.utilities.DependencyProvider;
-import org.odk.collect.android.utilities.ObjectUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 import static android.content.Intent.ACTION_SENDTO;
+import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -98,10 +99,12 @@ public class ExStringWidget extends StringWidget implements BinaryWidget {
     private boolean hasExApp = true;
     private Button launchIntentButton;
 
-    private ActivityAvailability activityAvailability;
+    @Inject
+    public ActivityAvailability activityAvailability;
 
-    public ExStringWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt, true);
+    public ExStringWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails, true);
+        getComponent(context).inject(this);
     }
 
     @Override
@@ -179,19 +182,6 @@ public class ExStringWidget extends StringWidget implements BinaryWidget {
         super.cancelLongPress();
         answerText.cancelLongPress();
         launchIntentButton.cancelLongPress();
-    }
-
-    @Override
-    protected void injectDependencies(DependencyProvider dependencyProvider) {
-        DependencyProvider<ActivityAvailability> activityUtilProvider =
-                ObjectUtils.uncheckedCast(dependencyProvider);
-
-        if (activityUtilProvider == null) {
-            Timber.e("DependencyProvider doesn't provide ActivityAvailability.");
-            return;
-        }
-
-        this.activityAvailability = activityUtilProvider.provide();
     }
 
     @Override

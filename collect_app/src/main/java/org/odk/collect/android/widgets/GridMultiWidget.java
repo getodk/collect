@@ -21,31 +21,21 @@ import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
-import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.Clip;
-import org.odk.collect.android.utilities.ScreenContext;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
-import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClip;
 
 @SuppressLint("ViewConstructor")
 public class GridMultiWidget extends BaseGridWidget {
 
-    public GridMultiWidget(Context context, FormEntryPrompt prompt, AudioHelper audioHelper) {
-        super(context, prompt, false, audioHelper);
+    public GridMultiWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails, false);
         SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
-    }
-
-    public GridMultiWidget(Context context, FormEntryPrompt prompt) {
-        this(context, prompt, new AudioHelper(
-                ((ScreenContext) context).getActivity(),
-                ((ScreenContext) context).getViewLifecycle()
-        ));
     }
 
     @Override
@@ -78,11 +68,10 @@ public class GridMultiWidget extends BaseGridWidget {
                 itemViews[index].setBackgroundColor(bgOrange);
 
                 SelectChoice item = items.get(index);
-                String clipID = getClipID(getFormEntryPrompt(), item);
-                String audioURI = getPlayableAudioURI(getFormEntryPrompt(), item, getReferenceManager());
+                Clip clip = getClip(getFormEntryPrompt(), item, getReferenceManager());
 
-                if (audioURI != null) {
-                    getAudioHelper().play(new Clip(clipID, audioURI));
+                if (clip != null) {
+                    getAudioHelper().play(clip);
                 }
             }
         }

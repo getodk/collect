@@ -12,13 +12,12 @@
  * the License.
  */
 
-package org.odk.collect.android.formentry;
+package org.odk.collect.android.formentry.questions;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.util.AttributeSet;
@@ -31,16 +30,19 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.LiveData;
 
+import com.google.android.material.button.MaterialButton;
+
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -63,7 +65,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     AudioButton audioButton;
 
     @BindView(R.id.videoButton)
-    AppCompatImageButton videoButton;
+    MaterialButton videoButton;
 
     @BindView(R.id.imageView)
     ImageView imageView;
@@ -84,19 +86,27 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     public AudioVideoImageTextLabel(Context context) {
         super(context);
 
-        View.inflate(context, R.layout.question_label, this);
+        View.inflate(context, R.layout.audio_video_image_text_label, this);
         ButterKnife.bind(this);
     }
 
     public AudioVideoImageTextLabel(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        View.inflate(context, R.layout.question_label, this);
+        View.inflate(context, R.layout.audio_video_image_text_label, this);
         ButterKnife.bind(this);
     }
 
-    public void setAVT(TextView labelTextView, String audioURI, String imageURI, String videoURI,
-                       String bigImageURI, ReferenceManager referenceManager, AudioHelper audioHelper) {
+    public void setAudio(String audioURI, AudioHelper audioHelper) {
+        setupAudioButton(audioURI, audioHelper);
+    }
+
+    /**
+     * This should move to separate setters like {@link #setAudio(String, AudioHelper)}
+     */
+    @Deprecated
+    public void setTextImageVideo(TextView labelTextView, String imageURI, String videoURI,
+                                  String bigImageURI, ReferenceManager referenceManager) {
         this.bigImageURI = bigImageURI;
         this.videoURI = videoURI;
         this.referenceManager = referenceManager;
@@ -104,10 +114,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         this.labelTextView = labelTextView;
         originalText = labelTextView.getText();
         this.labelTextView.setId(ViewIds.generateViewId());
-
-        if (audioURI != null) {
-            setupAudioButton(audioURI, audioHelper);
-        }
 
         if (videoURI != null) {
             setupVideoButton();
@@ -123,6 +129,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     public void setPlayTextColor(int textColor) {
         playTextColor = textColor;
+        audioButton.setColors(getThemeUtils().getColorOnSurface(), playTextColor);
     }
 
     public void playVideo() {
@@ -248,8 +255,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     private void setupVideoButton() {
         videoButton.setVisibility(VISIBLE);
-        Bitmap b = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_media_play);
-        videoButton.setImageBitmap(b);
         videoButton.setOnClickListener(this);
     }
 
@@ -258,21 +263,21 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
         ScreenContext activity = getScreenContext();
         String clipID = getTag() != null ? getTag().toString() : "";
-        LiveData<Boolean> isPlayingLiveData = audioHelper.setAudio(audioButton, audioURI, clipID);
+        LiveData<Boolean> isPlayingLiveData = audioHelper.setAudio(audioButton, new Clip(clipID, audioURI));
         isPlayingLiveData.observe(activity.getViewLifecycle(), isPlaying -> {
             if (isPlaying) {
                 labelTextView.setTextColor(playTextColor);
             } else {
-                resetTextFormatting();
+                labelTextView.setTextColor(getThemeUtils().getColorOnSurface());
+                // then set the text to our original (brings back any html formatting)
+                labelTextView.setText(originalText);
             }
         });
     }
 
-    private void resetTextFormatting() {
-        // first set it to defaults
-        labelTextView.setTextColor(new ThemeUtils(getContext()).getPrimaryTextColor());
-        // then set the text to our original (brings back any html formatting)
-        labelTextView.setText(originalText);
+    @NotNull
+    private ThemeUtils getThemeUtils() {
+        return new ThemeUtils(getContext());
     }
 
     private ScreenContext getScreenContext() {
