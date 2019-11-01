@@ -169,4 +169,9 @@ public class FormEntryPage extends Page<FormEntryPage> {
         onView(withText(getInstrumentation().getTargetContext().getString(R.string.select_answer))).perform(click());
         return this;
     }
+
+    public FormEntryPage clickJumpStartButton() {
+        onView(withId(R.id.jumpBeginningButton)).perform(click());
+        return this;
+    }
 }
