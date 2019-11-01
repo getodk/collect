@@ -183,22 +183,27 @@ public class LikertWidget extends ItemsWidget {
         return view;
     }
 
-    public RadioButton getRadioButton() {
+    public RadioButton getRadioButton(){
         AppCompatRadioButton button = new AppCompatRadioButton(getContext());
         button.setId(ViewIds.generateViewId());
         button.setEnabled(!getFormEntryPrompt().isReadOnly());
         button.setFocusable(!getFormEntryPrompt().isReadOnly());
         radioButtonsParams.addRule(CENTER_HORIZONTAL, TRUE);
-
         button.setLayoutParams(radioButtonsParams);
-        // This the adds the negated margins to reduce the extra padding of the button
+        // This the adds the negated margins to reduce the extra padding of the button.
+        // It is done this way to get the width of the button which has to be done after rendering
         ViewTreeObserver vto = button.getViewTreeObserver();
+        // This variable is to prevent an infinite loop for rendering the button.
+        final Boolean[] paramsSet = {false};
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                int width = button.getWidth();
-                radioButtonsParams.setMargins(-width / 5, 0, -width / 5, 0);
-                button.setLayoutParams(radioButtonsParams);
+                if(!paramsSet[0]){
+                    int width = button.getWidth();
+                    radioButtonsParams.setMargins(-width/5,0,-width/5, 0);
+                    button.setLayoutParams(radioButtonsParams);
+                    paramsSet[0] = true;
+                }
             }
         });
         button.setGravity(Gravity.CENTER);
