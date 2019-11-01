@@ -23,6 +23,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class LikertTest {
     // having trouble getting correct labels, check the xslx and likert_test.xml file
+    /* Test Cases:
+     * (1) Interacting with the different widgets
+     * (2) Loading images
+     * (3) FieldList Update
+     */
     private static final String LIKERT_TEST_FORM = "likert_test.xml";
 
     @Rule
