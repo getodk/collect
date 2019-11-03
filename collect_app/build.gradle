@@ -92,9 +92,6 @@ android {
         }
     }
 
-    //lintOptions {
-       // abortOnError false
-    //}
 
     buildTypes {
         // Release build for all forks
