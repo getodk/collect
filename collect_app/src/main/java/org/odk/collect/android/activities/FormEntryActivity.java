@@ -113,7 +113,6 @@ import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.SavePointListener;
-import org.odk.collect.android.listeners.TextSizeChangeListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.location.client.GoogleLocationClient;
 import org.odk.collect.android.logic.AuditEvent;
@@ -126,7 +125,6 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.preferences.UserInterfacePreferences;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.FormLoaderTask;
@@ -199,7 +197,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         RankingWidgetDialog.RankingListener,
         SaveFormIndexTask.SaveFormIndexListener, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
         WidgetValueChangedListener,
-        TextSizeChangeListener,
         ScreenContext,
         AudioControllerView.SwipableParent {
 
@@ -298,11 +295,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         this.doSwipe = doSwipe;
     }
 
-    @Override
-    public void onTextSizeChange() {
-         loadForm();
-    }
-
     enum AnimationType {
         LEFT, RIGHT, FADE
     }
@@ -332,8 +324,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        UserInterfacePreferences.textSizeChangeListener = (TextSizeChangeListener) this;
 
         viewModel = ViewModelProviders.of(this, new FormEntryViewModelFactory()).get(FormEntryViewModel.class);
 
@@ -916,6 +906,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     getCurrentViewIfODKView().setBinaryData(bearing);
                 }
                 break;
+                case RequestCodes.FONT_SIZE_MATCHER:
+                    loadForm();
+                    break;
         }
     }
 
@@ -1030,7 +1023,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return true;
             case R.id.menu_preferences:
                 Intent pref = new Intent(this, PreferencesActivity.class);
-                startActivity(pref);
+                startActivityForResult(pref, RequestCodes.FONT_SIZE_MATCHER);
                 return true;
             case R.id.track_location:
                 GeneralSharedPreferences.getInstance().save(KEY_BACKGROUND_LOCATION, !GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));

@@ -17,12 +17,14 @@
 package org.odk.collect.android.preferences;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.OnBackPressedListener;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 public class PreferencesActivity extends CollectAbstractActivity {
@@ -62,6 +64,8 @@ public class PreferencesActivity extends CollectAbstractActivity {
         } else {
             super.onBackPressed();
         }
+        Intent intent = new Intent();
+        setResult(ApplicationConstants.RequestCodes.FONT_SIZE_MATCHER, intent);
     }
 
     public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {

@@ -26,7 +26,6 @@ import android.view.View;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
-import org.odk.collect.android.listeners.TextSizeChangeListener;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.MediaUtils;
 
@@ -47,7 +46,6 @@ import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY
 public class UserInterfacePreferences extends BasePreferenceFragment {
 
     protected static final int IMAGE_CHOOSER = 0;
-   public static  TextSizeChangeListener textSizeChangeListener;
 
     public static UserInterfacePreferences newInstance(boolean adminMode) {
         Bundle bundle = new Bundle();
@@ -123,7 +121,6 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
             pref.setSummary(pref.getEntry());
             pref.setOnPreferenceChangeListener((preference, newValue) -> {
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                textSizeChangeListener.onTextSizeChange();
                 CharSequence entry = ((ListPreference) preference).getEntries()[index];
                 preference.setSummary(entry);
                 return true;
@@ -198,6 +195,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
                 setSplashPath(sourceMediaPath);
 
                 break;
+
         }
     }
 
