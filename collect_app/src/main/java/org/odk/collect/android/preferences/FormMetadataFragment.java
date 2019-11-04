@@ -62,12 +62,6 @@ public class FormMetadataFragment extends BasePreferenceFragment {
         initPrefFromProp(pm, prefs, PROPMGR_SIM_SERIAL, null);
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        toolbar.setTitle(R.string.general_preferences);
-    }
-
     /**
      * Initializes an EditTextPreference from a property.
      *

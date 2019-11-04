@@ -79,13 +79,6 @@ public class MapsPreferences extends BasePreferenceFragment {
         }
     }
 
-    @Override public void onDetach() {
-        super.onDetach();
-        if (toolbar != null) {
-            toolbar.setTitle(R.string.general_preferences);
-        }
-    }
-
     /**
      * Creates the Basemap Source preference widget (but doesn't add it to
      * the screen; onBasemapSourceChanged will do that part).

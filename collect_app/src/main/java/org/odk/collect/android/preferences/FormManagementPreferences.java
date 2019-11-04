@@ -56,14 +56,6 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         initGuidancePrefs();
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        if (toolbar != null) {
-            toolbar.setTitle(R.string.general_preferences);
-        }
-    }
-
     private void initListPref(String key) {
         final ListPreference pref = (ListPreference) findPreference(key);
 

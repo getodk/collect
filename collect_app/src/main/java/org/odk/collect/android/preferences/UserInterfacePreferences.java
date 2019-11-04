@@ -67,14 +67,6 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
         initSplashPrefs();
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        if (toolbar != null) {
-            toolbar.setTitle(R.string.general_preferences);
-        }
-    }
-
     private void initThemePrefs() {
         final ListPreference pref = (ListPreference) findPreference(KEY_APP_THEME);
 
