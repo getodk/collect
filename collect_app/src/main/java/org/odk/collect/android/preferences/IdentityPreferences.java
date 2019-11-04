@@ -53,14 +53,6 @@ public class IdentityPreferences extends BasePreferenceFragment {
         initAnalyticsPref();
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        if (toolbar != null) {
-            toolbar.setTitle(R.string.general_preferences);
-        }
-    }
-
     private void initAnalyticsPref() {
         final CheckBoxPreference analyticsPreference = (CheckBoxPreference) findPreference(KEY_ANALYTICS);
 

@@ -161,14 +161,6 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             addPreferencesFromResource(R.xml.main_menu_access_preferences);
             findPreference(KEY_EDIT_SAVED).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
         }
-
-        @Override
-        public void onDetach() {
-            super.onDetach();
-            if (toolbar != null) {
-                toolbar.setTitle(R.string.admin_preferences);
-            }
-        }
     }
 
     public static class UserSettingsAccessPreferences extends BasePreferenceFragment {
@@ -179,14 +171,6 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             getPreferenceManager().setSharedPreferencesName(ADMIN_PREFERENCES);
 
             addPreferencesFromResource(R.xml.user_settings_access_preferences);
-        }
-
-        @Override
-        public void onDetach() {
-            super.onDetach();
-            if (toolbar != null) {
-                toolbar.setTitle(R.string.admin_preferences);
-            }
         }
     }
 
@@ -212,14 +196,6 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             });
             findPreference(KEY_JUMP_TO).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
             findPreference(KEY_SAVE_MID).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
-        }
-
-        @Override
-        public void onDetach() {
-            super.onDetach();
-            if (toolbar != null) {
-                toolbar.setTitle(R.string.admin_preferences);
-            }
         }
 
         private void preventOtherWaysOfEditingForm() {

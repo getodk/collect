@@ -45,14 +45,6 @@ public class ServerPreferences extends ServerPreferencesFragment {
         initProtocolPrefs();
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        if (toolbar != null) {
-            toolbar.setTitle(R.string.general_preferences);
-        }
-    }
-
     private void initProtocolPrefs() {
         ListPreference protocolPref = (ListPreference) findPreference(KEY_PROTOCOL);
 
