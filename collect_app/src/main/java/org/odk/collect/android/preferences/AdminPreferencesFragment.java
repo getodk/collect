@@ -21,7 +21,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
-import androidx.annotation.Nullable;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,12 +63,6 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
         findPreference("main_menu").setOnPreferenceClickListener(this);
         findPreference("user_settings").setOnPreferenceClickListener(this);
         findPreference("form_entry").setOnPreferenceClickListener(this);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        toolbar.setTitle(R.string.admin_preferences);
     }
 
     @Override
@@ -170,12 +163,6 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
         }
 
         @Override
-        public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-            super.onViewCreated(view, savedInstanceState);
-            toolbar.setTitle(R.string.main_menu_settings);
-        }
-
-        @Override
         public void onDetach() {
             super.onDetach();
             if (toolbar != null) {
@@ -192,12 +179,6 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             getPreferenceManager().setSharedPreferencesName(ADMIN_PREFERENCES);
 
             addPreferencesFromResource(R.xml.user_settings_access_preferences);
-        }
-
-        @Override
-        public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-            super.onViewCreated(view, savedInstanceState);
-            toolbar.setTitle(R.string.user_settings);
         }
 
         @Override
@@ -231,12 +212,6 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             });
             findPreference(KEY_JUMP_TO).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
             findPreference(KEY_SAVE_MID).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
-        }
-
-        @Override
-        public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-            super.onViewCreated(view, savedInstanceState);
-            toolbar.setTitle(R.string.form_entry_setting);
         }
 
         @Override

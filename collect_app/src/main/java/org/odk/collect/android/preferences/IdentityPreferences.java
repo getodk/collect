@@ -16,8 +16,6 @@ package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-import androidx.annotation.Nullable;
-import android.view.View;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 
@@ -53,12 +51,6 @@ public class IdentityPreferences extends BasePreferenceFragment {
         });
 
         initAnalyticsPref();
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        toolbar.setTitle(R.string.user_and_device_identity_title);
     }
 
     @Override

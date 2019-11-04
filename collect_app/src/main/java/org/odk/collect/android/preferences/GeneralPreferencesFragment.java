@@ -19,13 +19,10 @@ package org.odk.collect.android.preferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
-import android.view.View;
 
 import org.odk.collect.android.R;
 
 import java.util.Collection;
-
-import androidx.annotation.Nullable;
 
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MAPS;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
@@ -56,12 +53,6 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
         if (!getArguments().getBoolean(INTENT_KEY_ADMIN_MODE)) {
             setPreferencesVisibility();
         }
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        toolbar.setTitle(R.string.general_preferences);
     }
 
     @Override

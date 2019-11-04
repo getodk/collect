@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/main_menu_settings">
+
     <PreferenceCategory android:title="@string/found_in_main">
         <CheckBoxPreference
             android:key="edit_saved"
