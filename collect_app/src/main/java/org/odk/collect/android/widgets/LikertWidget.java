@@ -1,4 +1,5 @@
 package org.odk.collect.android.widgets;
+
 import java.io.File;
 import java.util.HashMap;
 
@@ -26,7 +27,6 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -38,16 +38,15 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class LikertWidget extends ItemsWidget {
 
-
     private LinearLayout view;
     private RadioButton checkedButton;
-    private final LinearLayout.LayoutParams LINEARLAYOUT_PARAMS = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1);
-    private final LayoutParams TEXTVIEW_PARAMS = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-    private LayoutParams IMAGEVIEW_PARAMS = new LayoutParams(LayoutParams.WRAP_CONTENT , LayoutParams.WRAP_CONTENT);
-    private  LayoutParams RADIOBUTTON_PARAMS = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-    private LayoutParams BUTTONVIEW_PARAMS = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-    private LayoutParams LEFT_LINEVIEW_PARAMS = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
-    private LayoutParams RIGHT_LINEVIEW_PARAMS = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
+    private final LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1);
+    private final LayoutParams textViewParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+    private final LayoutParams imageViewParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    private final LayoutParams radioButtonsParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    private final LayoutParams buttonViewParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+    private final LayoutParams leftLineViewParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
+    private final LayoutParams rightLineViewParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
 
     HashMap<RadioButton, String> buttonsToName;
 
@@ -62,7 +61,7 @@ public class LikertWidget extends ItemsWidget {
         addAnswerView(view);
     }
 
-    public void setMainViewLayoutParameters(){
+    public void setMainViewLayoutParameters() {
         view = new LinearLayout(getContext());
         view.setOrientation(LinearLayout.HORIZONTAL);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -71,12 +70,12 @@ public class LikertWidget extends ItemsWidget {
     }
 
     // Inserts the selected button from a saved state
-    public void setSavedButton(){
+    public void setSavedButton() {
         if (getFormEntryPrompt().getAnswerValue() != null) {
             String name = ((Selection) getFormEntryPrompt().getAnswerValue()
                     .getValue()).getValue();
-            for(RadioButton bu: buttonsToName.keySet()){
-                if(buttonsToName.get(bu).equals(name)){
+            for (RadioButton bu: buttonsToName.keySet()) {
+                if (buttonsToName.get(bu).equals(name)) {
                     checkedButton = bu;
                     checkedButton.setChecked(true);
                 }
@@ -90,12 +89,12 @@ public class LikertWidget extends ItemsWidget {
             return null;
         } else {
             int selectedIndex = -1;
-            for(int i = 0; i < items.size(); i++){
-                if(items.get(i).getValue().equals(buttonsToName.get(checkedButton))){
+            for (int i = 0; i < items.size(); i++) {
+                if (items.get(i).getValue().equals(buttonsToName.get(checkedButton))) {
                     selectedIndex = i;
                 }
             }
-            if(selectedIndex == -1){
+            if (selectedIndex == -1) {
                 return null;
             }
             SelectChoice sc = items.get(selectedIndex);
@@ -127,10 +126,9 @@ public class LikertWidget extends ItemsWidget {
     public void setStructures() {
         buttonsToName = new HashMap<>();
         for (int i = 0; i < items.size(); i++) {
-            LinearLayout optionView = getLinearLayout();
             RelativeLayout buttonView = new RelativeLayout(this.getContext());
-            BUTTONVIEW_PARAMS.addRule(CENTER_IN_PARENT, TRUE);
-            buttonView.setLayoutParams(BUTTONVIEW_PARAMS);
+            buttonViewParams.addRule(CENTER_IN_PARENT, TRUE);
+            buttonView.setLayoutParams(buttonViewParams);
 
             RadioButton button = getRadioButton();
 
@@ -139,9 +137,9 @@ public class LikertWidget extends ItemsWidget {
 
             // Adds lines to the button's side
             View leftLineView = new View(this.getContext());
-            LEFT_LINEVIEW_PARAMS.addRule(RelativeLayout.LEFT_OF, button.getId());
-            LEFT_LINEVIEW_PARAMS.addRule(CENTER_IN_PARENT, TRUE);
-            leftLineView.setLayoutParams(LEFT_LINEVIEW_PARAMS);
+            leftLineViewParams.addRule(RelativeLayout.LEFT_OF, button.getId());
+            leftLineViewParams.addRule(CENTER_IN_PARENT, TRUE);
+            leftLineView.setLayoutParams(leftLineViewParams);
             leftLineView.setBackgroundColor(Color.parseColor("#CCCCCC"));
             if (i == 0) {
                 leftLineView.setBackgroundColor(Color.WHITE);
@@ -150,17 +148,19 @@ public class LikertWidget extends ItemsWidget {
             buttonView.addView(leftLineView);
 
             View rightLineView = new View(this.getContext());
-            RIGHT_LINEVIEW_PARAMS.addRule(RelativeLayout.RIGHT_OF, button.getId());
-            RIGHT_LINEVIEW_PARAMS.addRule(CENTER_IN_PARENT, TRUE);
-            rightLineView.setLayoutParams(RIGHT_LINEVIEW_PARAMS);
+            rightLineViewParams.addRule(RelativeLayout.RIGHT_OF, button.getId());
+            rightLineViewParams.addRule(CENTER_IN_PARENT, TRUE);
+            rightLineView.setLayoutParams(rightLineViewParams);
             rightLineView.setBackgroundColor(Color.parseColor("#CCCCCC"));
 
             if (i == items.size() - 1) {
                 rightLineView.setBackgroundColor(Color.WHITE);
             }
+
+            LinearLayout optionView = getLinearLayout();
+
             // right line
             buttonView.addView(rightLineView);
-
             optionView.addView(buttonView);
 
             ImageView imgView = getImageAsImageView(i);
@@ -177,9 +177,9 @@ public class LikertWidget extends ItemsWidget {
     }
 
     // Creates image view for choice
-    public ImageView getImageView(){
+    public ImageView getImageView() {
         ImageView view = new ImageView(getContext());
-        view.setLayoutParams(IMAGEVIEW_PARAMS);
+        view.setLayoutParams(imageViewParams);
         return view;
     }
 
@@ -188,17 +188,22 @@ public class LikertWidget extends ItemsWidget {
         button.setId(ViewIds.generateViewId());
         button.setEnabled(!getFormEntryPrompt().isReadOnly());
         button.setFocusable(!getFormEntryPrompt().isReadOnly());
-        RADIOBUTTON_PARAMS.addRule(CENTER_HORIZONTAL, TRUE);
-
-        button.setLayoutParams(RADIOBUTTON_PARAMS);
-        // This the adds the negated margins to reduce the extra padding of the button
+        radioButtonsParams.addRule(CENTER_HORIZONTAL, TRUE);
+        button.setLayoutParams(radioButtonsParams);
+        // This the adds the negated margins to reduce the extra padding of the button.
+        // It is done this way to get the width of the button which has to be done after rendering
         ViewTreeObserver vto = button.getViewTreeObserver();
+        // This variable is to prevent an infinite loop for rendering the button.
+        final Boolean[] paramsSet = {false};
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                int width = button.getWidth();
-                RADIOBUTTON_PARAMS.setMargins(-width/5,0,-width/5, 0);
-                button.setLayoutParams(RADIOBUTTON_PARAMS);
+                if(!paramsSet[0]){
+                    int width = button.getWidth();
+                    radioButtonsParams.setMargins(-width/5,0,-width/5, 0);
+                    button.setLayoutParams(radioButtonsParams);
+                    paramsSet[0] = true;
+                }
             }
         });
         button.setGravity(Gravity.CENTER);
@@ -206,32 +211,32 @@ public class LikertWidget extends ItemsWidget {
     }
 
     // Creates text view for choice
-    public TextView getTextView(){
+    public TextView getTextView() {
         TextView view = new TextView(getContext());
         view.setGravity(Gravity.CENTER);
-        view.setPadding(2,2,2,2);
-        view.setLayoutParams(TEXTVIEW_PARAMS);
+        view.setPadding(2, 2, 2, 2);
+        view.setLayoutParams(textViewParams);
         view.setTextColor(Color.BLACK);
         return view;
     }
 
     // Linear Layout for new choice
-    public LinearLayout getLinearLayout(){
+    public LinearLayout getLinearLayout() {
         LinearLayout optionView = new LinearLayout(getContext());
         optionView.setGravity(Gravity.CENTER);
-        optionView.setLayoutParams(LINEARLAYOUT_PARAMS);
+        optionView.setLayoutParams(linearLayoutParams);
         optionView.setOrientation(LinearLayout.VERTICAL);
         return optionView;
     }
 
-    public void setButtonListener(){
+    public void setButtonListener() {
         for (RadioButton button: buttonsToName.keySet()) {
             button.setOnClickListener(new OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
                     RadioButton r = (RadioButton) v;
-                    if(checkedButton != null){
+                    if (checkedButton != null) {
                         checkedButton.setChecked(false);
                     }
                     checkedButton = r;
@@ -241,7 +246,7 @@ public class LikertWidget extends ItemsWidget {
         }
     }
 
-    public ImageView getImageAsImageView(int index){
+    public ImageView getImageAsImageView(int index) {
         ImageView view = getImageView();
         String imageURI;
         if (items.get(index) instanceof ExternalSelectChoice) {
@@ -250,18 +255,18 @@ public class LikertWidget extends ItemsWidget {
             imageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index),
                     FormEntryCaption.TEXT_FORM_IMAGE);
         }
-        if(imageURI != null){
+        if (imageURI != null) {
             String error = setImageFromOtherSource(imageURI, view);
-            if(error != null){
+            if (error != null) {
                 return null;
             }
             return view;
-        }else{
+        } else {
             return null;
         }
     }
 
-    public String setImageFromOtherSource(String imageURI, ImageView imageView){
+    public String setImageFromOtherSource(String imageURI, ImageView imageView) {
         String errorMsg = null;
         try {
             String imageFilename =
@@ -287,9 +292,7 @@ public class LikertWidget extends ItemsWidget {
 
                 }
             } else {
-                // The file does not exist
                 errorMsg = getContext().getString(R.string.file_missing, imageFile);
-                System.out.println(imageFile + " cannot be found ");
             }
             if (errorMsg != null) {
                 Timber.e(errorMsg);
@@ -318,7 +321,7 @@ public class LikertWidget extends ItemsWidget {
 
     @Override
     public void clearAnswer() {
-        if(checkedButton != null){
+        if (checkedButton != null) {
             checkedButton.setChecked(false);
         }
         checkedButton = null;
