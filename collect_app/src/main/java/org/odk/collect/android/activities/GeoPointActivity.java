@@ -70,6 +70,8 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
     private String dialogMessage;
 
+    private Timer timer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,7 +123,8 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
         if (locationDialog != null) {
             locationDialog.show();
-            new Timer().schedule(new TimerTask() {
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     updateDialogMessage();
@@ -145,6 +148,14 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     protected void onStop() {
         locationClient.stop();
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (timer != null) {
+            timer.cancel();
+        }
+        super.onDestroy();
     }
 
     @Override
