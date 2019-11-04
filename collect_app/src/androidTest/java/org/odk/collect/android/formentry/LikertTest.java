@@ -1,6 +1,7 @@
 package org.odk.collect.android.formentry;
 
 import android.Manifest;
+import android.widget.RadioButton;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.rule.GrantPermissionRule;
@@ -18,8 +19,13 @@ import java.util.Collections;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
+import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.endsWith;
 
 public class LikertTest {
     // having trouble getting correct labels, check the xslx and likert_test.xml file
@@ -48,6 +54,8 @@ public class LikertTest {
     public void longLabelsShouldBeDisplayed() {
         openWidgetList();
         onView(withText("Likert Image Widget")).perform(click());
+        onView(withId(1)).perform(click());
+        onView(withId(1)).check(matches(isChecked()));
     }
 
     private void openWidgetList() {
