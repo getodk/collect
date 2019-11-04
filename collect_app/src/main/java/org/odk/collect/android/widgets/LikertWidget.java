@@ -130,7 +130,7 @@ public class LikertWidget extends ItemsWidget {
             buttonViewParams.addRule(CENTER_IN_PARENT, TRUE);
             buttonView.setLayoutParams(buttonViewParams);
 
-            RadioButton button = getRadioButton();
+            RadioButton button = getRadioButton(i);
 
             buttonsToName.put(button, items.get(i).getValue());
             buttonView.addView(button);
@@ -183,9 +183,9 @@ public class LikertWidget extends ItemsWidget {
         return view;
     }
 
-    public RadioButton getRadioButton(){
+    public RadioButton getRadioButton(int i){
         AppCompatRadioButton button = new AppCompatRadioButton(getContext());
-        button.setId(ViewIds.generateViewId());
+        button.setId(i);
         button.setEnabled(!getFormEntryPrompt().isReadOnly());
         button.setFocusable(!getFormEntryPrompt().isReadOnly());
         radioButtonsParams.addRule(CENTER_HORIZONTAL, TRUE);
