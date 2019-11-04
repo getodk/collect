@@ -17,9 +17,6 @@ import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY
 
 public class BasePreferenceFragment extends PreferenceFragment {
 
-    private Toolbar toolbar;
-    private LinearLayout root;
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
@@ -46,22 +43,14 @@ public class BasePreferenceFragment extends PreferenceFragment {
 
     // inflates toolbar in the preference fragments
     public void initToolbar(PreferenceScreen preferenceScreen, View view) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            root = (LinearLayout) view.findViewById(android.R.id.list).getParent().getParent();
-            toolbar = (Toolbar) LayoutInflater.from(getActivity()).inflate(R.layout.toolbar_without_progressbar, root, false);
-            inflateToolbar(preferenceScreen.getTitle());
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            root = (LinearLayout) view.findViewById(android.R.id.list).getParent();
-            toolbar = (Toolbar) LayoutInflater.from(getActivity()).inflate(R.layout.toolbar_without_progressbar, root, false);
+        LinearLayout root = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                ? (LinearLayout) view.findViewById(android.R.id.list).getParent().getParent()
+                : (LinearLayout) view.findViewById(android.R.id.list).getParent();
 
-            inflateToolbar(preferenceScreen.getTitle());
-        }
-    }
+        Toolbar toolbar = (Toolbar) LayoutInflater.from(getActivity()).inflate(R.layout.toolbar_without_progressbar, root, false);
+        toolbar.setTitle(preferenceScreen.getTitle());
 
-    private void inflateToolbar(CharSequence title) {
-        toolbar.setTitle(title);
         root.addView(toolbar, 0);
-
         View shadow = LayoutInflater.from(getActivity()).inflate(R.layout.toolbar_action_bar_shadow, root, false);
         root.addView(shadow, 1);
     }
