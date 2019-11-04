@@ -18,14 +18,8 @@ package org.odk.collect.android.utilities;
 
 import android.location.Location;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.MockitoAnnotations;
 import org.odk.collect.android.logic.AuditConfig;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.File;
 
@@ -58,8 +52,6 @@ import static org.odk.collect.android.logic.AuditEvent.AuditEventType.REPEAT;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.SAVE_ERROR;
 import static org.odk.collect.android.logic.AuditEvent.AuditEventType.UNKNOWN_EVENT_TYPE;
 
-@PrepareForTest(AuditEventLogger.class)
-@RunWith(PowerMockRunner.class)
 public class AuditEventLoggerTest {
 
     private final File testInstanceFile = new File("/storage/emulated/0/odk/instances/testForm/testForm.xml");
@@ -67,12 +59,6 @@ public class AuditEventLoggerTest {
     private final AuditConfig testAuditConfig = new AuditConfig("high-priority", "10", "60", false);
     // At least one value is not set so location coordinates shouldn't be collected
     private final AuditConfig testAuditConfigWithNullValues = new AuditConfig("high-priority", "10", null, false);
-
-    @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        PowerMockito.mockStatic(System.class);
-    }
 
     @Test
     public void getMostAccurateLocationTest() {
@@ -144,9 +130,9 @@ public class AuditEventLoggerTest {
     @Test
     public void isDuplicateOfLastAuditEventTest() {
         AuditEventLogger auditEventLogger = new AuditEventLogger(testInstanceFile, testAuditConfig);
-        auditEventLogger.logEvent(LOCATION_PROVIDERS_ENABLED, false);
+        auditEventLogger.logEvent(LOCATION_PROVIDERS_ENABLED, false, 0);
         assertTrue(auditEventLogger.isDuplicateOfLastLocationEvent(LOCATION_PROVIDERS_ENABLED));
-        auditEventLogger.logEvent(LOCATION_PROVIDERS_DISABLED, false);
+        auditEventLogger.logEvent(LOCATION_PROVIDERS_DISABLED, false, 0);
         assertTrue(auditEventLogger.isDuplicateOfLastLocationEvent(LOCATION_PROVIDERS_DISABLED));
         assertFalse(auditEventLogger.isDuplicateOfLastLocationEvent(LOCATION_PROVIDERS_ENABLED));
         assertEquals(2, auditEventLogger.getAuditEvents().size());
@@ -156,7 +142,7 @@ public class AuditEventLoggerTest {
     public void addLocationCoordinatesToAuditEventIfNeededTest() {
         AuditEventLogger auditEventLogger = new AuditEventLogger(testInstanceFile, testAuditConfigWithNullValues);
 
-        auditEventLogger.logEvent(END_OF_FORM, false);
+        auditEventLogger.logEvent(END_OF_FORM, false, 0);
         assertFalse(auditEventLogger.getAuditEvents().get(0).isLocationAlreadySet());
 
         auditEventLogger = new AuditEventLogger(testInstanceFile, testAuditConfig);
@@ -169,7 +155,7 @@ public class AuditEventLoggerTest {
 
         auditEventLogger.addLocation(location);
 
-        auditEventLogger.logEvent(END_OF_FORM, false);
+        auditEventLogger.logEvent(END_OF_FORM, false, 0);
 
         assertTrue(auditEventLogger.getAuditEvents().get(0).isLocationAlreadySet());
     }
@@ -178,33 +164,33 @@ public class AuditEventLoggerTest {
     public void logEventTest() {
         AuditEventLogger auditEventLogger = new AuditEventLogger(testInstanceFile, testAuditConfig);
 
-        auditEventLogger.logEvent(BEGINNING_OF_FORM, false); //shouldn't be logged
-        auditEventLogger.logEvent(QUESTION, false);
+        auditEventLogger.logEvent(BEGINNING_OF_FORM, false, 0); //shouldn't be logged
+        auditEventLogger.logEvent(QUESTION, false, 0);
         auditEventLogger.getAuditEvents().get(auditEventLogger.getAuditEvents().size() - 1).setEnd(1548156710000L);
-        auditEventLogger.logEvent(GROUP, false);
+        auditEventLogger.logEvent(GROUP, false, 0);
         auditEventLogger.getAuditEvents().get(auditEventLogger.getAuditEvents().size() - 1).setEnd(1548156770000L);
-        auditEventLogger.logEvent(PROMPT_NEW_REPEAT, false);
+        auditEventLogger.logEvent(PROMPT_NEW_REPEAT, false, 0);
         auditEventLogger.getAuditEvents().get(auditEventLogger.getAuditEvents().size() - 1).setEnd(1548156830000L);
-        auditEventLogger.logEvent(REPEAT, false); //shouldn't be logged
-        auditEventLogger.logEvent(END_OF_FORM, false);
-        auditEventLogger.logEvent(FORM_START, false);
-        auditEventLogger.logEvent(FORM_RESUME, false);
-        auditEventLogger.logEvent(FORM_SAVE, false);
-        auditEventLogger.logEvent(FORM_FINALIZE, false);
-        auditEventLogger.logEvent(HIERARCHY, false);
+        auditEventLogger.logEvent(REPEAT, false, 0); //shouldn't be logged
+        auditEventLogger.logEvent(END_OF_FORM, false, 0);
+        auditEventLogger.logEvent(FORM_START, false, 0);
+        auditEventLogger.logEvent(FORM_RESUME, false, 0);
+        auditEventLogger.logEvent(FORM_SAVE, false, 0);
+        auditEventLogger.logEvent(FORM_FINALIZE, false, 0);
+        auditEventLogger.logEvent(HIERARCHY, false, 0);
         auditEventLogger.getAuditEvents().get(auditEventLogger.getAuditEvents().size() - 1).setEnd(1548156890000L);
-        auditEventLogger.logEvent(SAVE_ERROR, false);
-        auditEventLogger.logEvent(FINALIZE_ERROR, false);
-        auditEventLogger.logEvent(CONSTRAINT_ERROR, false);
-        auditEventLogger.logEvent(DELETE_REPEAT, false);
-        auditEventLogger.logEvent(GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, false);
-        auditEventLogger.logEvent(LOCATION_PERMISSIONS_GRANTED, false);
-        auditEventLogger.logEvent(LOCATION_PERMISSIONS_NOT_GRANTED, false);
-        auditEventLogger.logEvent(LOCATION_TRACKING_ENABLED, false);
-        auditEventLogger.logEvent(LOCATION_TRACKING_DISABLED, false);
-        auditEventLogger.logEvent(LOCATION_PROVIDERS_ENABLED, false);
-        auditEventLogger.logEvent(LOCATION_PROVIDERS_DISABLED, false);
-        auditEventLogger.logEvent(UNKNOWN_EVENT_TYPE, false);
+        auditEventLogger.logEvent(SAVE_ERROR, false, 0);
+        auditEventLogger.logEvent(FINALIZE_ERROR, false, 0);
+        auditEventLogger.logEvent(CONSTRAINT_ERROR, false, 0);
+        auditEventLogger.logEvent(DELETE_REPEAT, false, 0);
+        auditEventLogger.logEvent(GOOGLE_PLAY_SERVICES_NOT_AVAILABLE, false, 0);
+        auditEventLogger.logEvent(LOCATION_PERMISSIONS_GRANTED, false, 0);
+        auditEventLogger.logEvent(LOCATION_PERMISSIONS_NOT_GRANTED, false, 0);
+        auditEventLogger.logEvent(LOCATION_TRACKING_ENABLED, false, 0);
+        auditEventLogger.logEvent(LOCATION_TRACKING_DISABLED, false, 0);
+        auditEventLogger.logEvent(LOCATION_PROVIDERS_ENABLED, false, 0);
+        auditEventLogger.logEvent(LOCATION_PROVIDERS_DISABLED, false, 0);
+        auditEventLogger.logEvent(UNKNOWN_EVENT_TYPE, false, 0);
 
         assertEquals(21, auditEventLogger.getAuditEvents().size());
     }

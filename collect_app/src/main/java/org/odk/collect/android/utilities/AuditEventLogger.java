@@ -53,15 +53,15 @@ public class AuditEventLogger {
         }
     }
 
-    public void logEvent(AuditEvent.AuditEventType eventType, boolean writeImmediatelyToDisk) {
-        logEvent(eventType, null, writeImmediatelyToDisk, null);
+    public void logEvent(AuditEvent.AuditEventType eventType, boolean writeImmediatelyToDisk, long currentTime) {
+        logEvent(eventType, null, writeImmediatelyToDisk, null, currentTime);
     }
 
     /*
      * Log a new event
      */
     public void logEvent(AuditEvent.AuditEventType eventType, FormIndex formIndex,
-                         boolean writeImmediatelyToDisk, String questionAnswer) {
+                         boolean writeImmediatelyToDisk, String questionAnswer, long currentTime) {
         if (!isAuditEnabled() || shouldBeIgnored(eventType)) {
             return;
         }
@@ -76,7 +76,7 @@ public class AuditEventLogger {
         }
 
         if (auditConfig.isLocationEnabled()) {
-            addLocationCoordinatesToAuditEvent(newAuditEvent);
+            addLocationCoordinatesToAuditEvent(newAuditEvent, currentTime);
         }
 
         /*
@@ -96,8 +96,8 @@ public class AuditEventLogger {
         }
     }
 
-    private void addLocationCoordinatesToAuditEvent(AuditEvent auditEvent) {
-        Location location = getMostAccurateLocation(System.currentTimeMillis());
+    private void addLocationCoordinatesToAuditEvent(AuditEvent auditEvent, long currentTime) {
+        Location location = getMostAccurateLocation(currentTime);
         String latitude = location != null ? Double.toString(location.getLatitude()) : "";
         String longitude = location != null ? Double.toString(location.getLongitude()) : "";
         String accuracy = location != null ? Double.toString(location.getAccuracy()) : "";
@@ -167,7 +167,7 @@ public class AuditEventLogger {
         // We try to add them here again (first attempt takes place when an event is being created),
         // because coordinates might be not available at that time, so now we have another (last) chance.
         if (auditConfig.isLocationEnabled() && !aev.isLocationAlreadySet()) {
-            addLocationCoordinatesToAuditEvent(aev);
+            addLocationCoordinatesToAuditEvent(aev, System.currentTimeMillis());
         }
 
         // Set answers

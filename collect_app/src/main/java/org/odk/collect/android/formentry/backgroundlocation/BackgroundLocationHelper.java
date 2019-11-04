@@ -75,7 +75,7 @@ public class BackgroundLocationHelper {
      * Precondition: the global form controller has been initialized.
      */
     void logAuditEvent(AuditEvent.AuditEventType eventType) {
-        Collect.getInstance().getFormController().getAuditEventLogger().logEvent(eventType, false);
+        Collect.getInstance().getFormController().getAuditEventLogger().logEvent(eventType, false, System.currentTimeMillis());
     }
 
     /**

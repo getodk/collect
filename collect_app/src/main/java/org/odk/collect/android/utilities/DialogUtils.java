@@ -100,7 +100,7 @@ public final class DialogUtils {
         DialogInterface.OnClickListener quitListener = (dialog, i) -> {
             switch (i) {
                 case BUTTON_POSITIVE: // yes
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.DELETE_REPEAT, true);
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.DELETE_REPEAT, true, System.currentTimeMillis());
                     formController.deleteRepeat();
 
                     if (onDeleted != null) {
