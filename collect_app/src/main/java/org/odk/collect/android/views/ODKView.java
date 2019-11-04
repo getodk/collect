@@ -618,15 +618,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     }
 
     /**
-     * Releases widget resources, such as {@link android.media.MediaPlayer}s
-     */
-    public void releaseWidgetResources() {
-        for (QuestionWidget w : widgets) {
-            w.release();
-        }
-    }
-
-    /**
      * Highlights the question at the given {@link FormIndex} in red for 2.5 seconds, scrolls the
      * view to display that question at the top and gives it focus.
      */
@@ -687,7 +678,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             view.removeViewAt(indexAccountingForDividers - 1);
         }
 
-        widgets.get(index).release();
         widgets.remove(index);
     }
 

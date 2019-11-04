@@ -1250,7 +1250,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         odkViewLifecycle.destroy();
 
         if (odkView != null) {
-            odkView.releaseWidgetResources();
             odkView = null;
         }
     }
