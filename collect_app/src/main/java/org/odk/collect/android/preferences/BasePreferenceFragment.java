@@ -17,7 +17,7 @@ import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY
 
 public class BasePreferenceFragment extends PreferenceFragment {
 
-    protected Toolbar toolbar;
+    private Toolbar toolbar;
     private LinearLayout root;
 
     @Override
