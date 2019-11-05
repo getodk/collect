@@ -115,6 +115,7 @@ public class SmapTaskMapFragment extends Fragment
     BitmapDescriptor accepted = null;
     BitmapDescriptor repeat = null;
     BitmapDescriptor rejected = null;
+    BitmapDescriptor newtask = null;
     BitmapDescriptor submitted = null;
     BitmapDescriptor triggered = null;
     BitmapDescriptor triggered_repeat = null;
@@ -259,6 +260,7 @@ public class SmapTaskMapFragment extends Fragment
             accepted = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_saved));
             repeat = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_repeat));
             rejected = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_rejected));
+            newtask = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_new));
             submitted = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_submitted));
             triggered = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_triggered));
             triggered_repeat = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_triggered));
@@ -525,6 +527,8 @@ public class SmapTaskMapFragment extends Fragment
             return complete;
         } else if(status.equals(Utilities.STATUS_T_SUBMITTED)) {
             return submitted;
+        } else if(status.equals(Utilities.STATUS_T_NEW)) {
+            return newtask;
         } else {
             Timber.i("Unknown task status: " + status);
             return accepted;

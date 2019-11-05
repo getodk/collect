@@ -693,7 +693,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 	
 	/*
      * Loop through the entries from the source
-     *   (1) Add entries that have a status of "new", "pending" or "accepted" and are not already on the phone
+     *   (1) Add entries that have a status of "new", "accepted" and are not already on the phone
      *   (2) Update the status of database entries where the source status is set to "cancelled"
      */
 	private void addAndUpdateEntries() throws Exception {
@@ -719,7 +719,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 if(ts == null) {
                     Timber.i("New task: " + assignment.assignment_id);
                     // New task
-                    if(assignment.assignment_status.equals(Utilities.STATUS_T_ACCEPTED)) {
+                    if(assignment.assignment_status.equals(Utilities.STATUS_T_ACCEPTED) ||
+                            assignment.assignment_status.equals(Utilities.STATUS_T_NEW)) {
 
                         // Ensure the instance data is available on the phone
                         // Use update_id in preference to initial_data url

@@ -101,7 +101,10 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
     		} else if(item.taskStatus.equals(Utilities.STATUS_T_SUBMITTED)) {
                 Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_submitted);
                 icon.setImageDrawable(d);
-    		}
+    		} else if(item.taskStatus.equals(Utilities.STATUS_T_NEW)) {
+                Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_new);
+                icon.setImageDrawable(d);
+            }
     	}
     	
     	

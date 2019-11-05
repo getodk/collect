@@ -78,6 +78,7 @@ public class Utilities {
     public static final String STATUS_T_SUBMITTED = "submitted";
     public static final String STATUS_T_CANCELLED = "cancelled";
     public static final String STATUS_T_CLOSED = "closed";
+    public static final String STATUS_T_NEW = "new";
 
     // Valid values for is synced
     public static final String STATUS_SYNC_YES = "synchronized";
@@ -771,6 +772,18 @@ public class Utilities {
 
     /*
      * Return true if the current task status allows it to be accepted
+     */
+    public static boolean canAccept(String currentStatus) {
+        boolean canAccept = false;
+        if (currentStatus != null && currentStatus.equals(STATUS_T_NEW)) {
+            canAccept = true;
+        }
+
+        return canAccept;
+    }
+
+    /*
+     * Return true if the current task is submitted
      */
     public static boolean isSubmitted(String currentStatus) {
         boolean submitted = false;

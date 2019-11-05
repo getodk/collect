@@ -164,6 +164,14 @@ public class SmapTaskStatusActivity extends CollectAbstractActivity implements O
                 buttons.addView(b);
             }
 
+            if(Utilities.canAccept(taskEntry.taskStatus)) {
+                Button b = new Button(this);
+                b.setText(R.string.smap_accept_task);
+                b.setId(R.id.accept_button);
+                b.setOnClickListener(this);
+                buttons.addView(b);
+            }
+
     	} catch (Exception e) {
   			e.printStackTrace();
   	  	}
@@ -179,52 +187,52 @@ public class SmapTaskStatusActivity extends CollectAbstractActivity implements O
       	
         switch (v.getId()) {
 
-        case R.id.complete_button:
-    		try {
+            case R.id.complete_button:
+                try {
 
-    			boolean canComplete = Utilities.canComplete(taskEntry.taskStatus);
-    			String taskForm = taskEntry.taskForm;
-    			String formPath = Collect.FORMS_PATH + taskForm;
-    			String instancePath = taskEntry.instancePath;
-    			
-    			if(canComplete) {
-    				completeTask(instancePath, formPath, taskEntry.id);
-    			} else {
-        			Toast.makeText(getApplicationContext(), getString(R.string.smap_cannot_complete),
-    		                Toast.LENGTH_LONG).show();
-    			}
+                    boolean canComplete = Utilities.canComplete(taskEntry.taskStatus);
+                    String taskForm = taskEntry.taskForm;
+                    String formPath = Collect.FORMS_PATH + taskForm;
+                    String instancePath = taskEntry.instancePath;
 
-    		} catch (Exception e) {
-    			e.printStackTrace();
-    		}
-    		break;
-    		
-        case R.id.reject_button:
-        	try {
-
-	    		if(Utilities.canReject(taskEntry.taskStatus)) {
-
-	    		    String reason = rejectReason.getText().toString();
-	    		    if(reason != null && reason.trim().length() < 5) {
-                        Toast.makeText(getApplicationContext(), getString(R.string.smap_reason_not_specified),
-                                Toast.LENGTH_LONG).show();
+                    if(canComplete) {
+                        completeTask(instancePath, formPath, taskEntry.id);
                     } else {
-
-                        Utilities.setStatusForTask(taskEntry.id, Utilities.STATUS_T_REJECTED, reason);
-                        Intent intent = new Intent("org.smap.smapTask.refresh");      // Notify map and task list of change
-                        LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(intent);
-                        Timber.i("######## send org.smap.smapTask.refresh from taskAddressActivity");
-                        finish();
+                        Toast.makeText(getApplicationContext(), getString(R.string.smap_cannot_complete),
+                                Toast.LENGTH_LONG).show();
                     }
-	    		} else {
-	    			Toast.makeText(getApplicationContext(), getString(R.string.smap_cannot_reject),
-			                Toast.LENGTH_LONG).show();
-	    		}
 
-	    	} catch (Exception e) {
-	    		e.printStackTrace();
-	    	}
-        	break;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            case R.id.reject_button:
+                try {
+
+                    if(Utilities.canReject(taskEntry.taskStatus)) {
+
+                        String reason = rejectReason.getText().toString();
+                        if(reason != null && reason.trim().length() < 5) {
+                            Toast.makeText(getApplicationContext(), getString(R.string.smap_reason_not_specified),
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+
+                            Utilities.setStatusForTask(taskEntry.id, Utilities.STATUS_T_REJECTED, reason);
+                            Intent intent = new Intent("org.smap.smapTask.refresh");      // Notify map and task list of change
+                            LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(intent);
+                            Timber.i("######## send org.smap.smapTask.refresh from taskAddressActivity");
+                            finish();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), getString(R.string.smap_cannot_reject),
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
 
             case R.id.restore_button:
                 try {
@@ -237,6 +245,25 @@ public class SmapTaskStatusActivity extends CollectAbstractActivity implements O
                         finish();
                     } else {
                         Toast.makeText(getApplicationContext(), getString(R.string.smap_cannot_restore),
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            case R.id.accept_button:
+                try {
+
+                    if(Utilities.canAccept(taskEntry.taskStatus)) {
+                        Utilities.setStatusForTask(taskEntry.id, Utilities.STATUS_T_ACCEPTED, "");
+                        Intent intent = new Intent("org.smap.smapTask.refresh");      // Notify map and task list of change
+                        LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(intent);
+                        Timber.i("######## send org.smap.smapTask.refresh from instanceUploaderActivity2");
+                        finish();
+                    } else {
+                        Toast.makeText(getApplicationContext(), getString(R.string.smap_cannot_accept),
                                 Toast.LENGTH_LONG).show();
                     }
 
