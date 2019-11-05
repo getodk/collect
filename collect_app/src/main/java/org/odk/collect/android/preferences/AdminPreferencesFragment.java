@@ -143,7 +143,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
         if (fragment != null) {
             getActivity().getFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, fragment)
+                    .replace(R.id.container, fragment)
                     .addToBackStack(null)
                     .commit();
         }
@@ -220,7 +220,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
     }
 
     public void preventOtherWaysOfEditingForm() {
-        FormEntryAccessPreferences fragment = (FormEntryAccessPreferences) getFragmentManager().findFragmentById(android.R.id.content);
+        FormEntryAccessPreferences fragment = (FormEntryAccessPreferences) getFragmentManager().findFragmentById(R.id.container);
         fragment.preventOtherWaysOfEditingForm();
     }
 }
