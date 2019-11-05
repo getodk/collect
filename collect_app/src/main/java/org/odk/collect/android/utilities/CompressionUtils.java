@@ -65,7 +65,7 @@ public class CompressionUtils {
         return base64String;
     }
 
-    public static String decompress(String compressedString) throws IOException, DataFormatException {
+    public static String decompress(String compressedString) throws IOException, DataFormatException, IllegalArgumentException {
         if (compressedString == null || compressedString.length() == 0) {
             return compressedString;
         }

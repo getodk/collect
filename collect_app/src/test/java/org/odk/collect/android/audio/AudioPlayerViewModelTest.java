@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
+import org.odk.collect.android.R;
 import org.odk.collect.android.support.FakeScheduler;
 import org.odk.collect.android.support.LiveDataTester;
 import org.robolectric.RobolectricTestRunner;
@@ -371,13 +372,27 @@ public class AudioPlayerViewModelTest {
     }
 
     @Test
-    public void getError_whenPlaybackFails_is_PlaybackFailed() throws Exception {
+    public void getError_whenPlaybackFailsBecauseOfMissingFile_is_PlaybackFailed() throws Exception {
         final LiveData<Exception> error = liveDataTester.activate(viewModel.getError());
 
         doThrow(IOException.class).when(mediaPlayer).setDataSource("file://missing.mp3");
         viewModel.play(new Clip("clip1", "file://missing.mp3"));
 
-        assertThat(error.getValue(), equalTo(new PlaybackFailedException("file://missing.mp3")));
+        PlaybackFailedException playbackFailedException = new PlaybackFailedException("file://missing.mp3", R.string.file_missing);
+        assertThat(error.getValue(), equalTo(playbackFailedException));
+        assertThat(R.string.file_missing, equalTo(playbackFailedException.getExceptionMsg()));
+    }
+
+    @Test
+    public void getError_whenPlaybackFailsBecauseOfInvalidFile_is_PlaybackFailed() throws Exception {
+        final LiveData<Exception> error = liveDataTester.activate(viewModel.getError());
+
+        doThrow(IOException.class).when(mediaPlayer).setDataSource("file://invalid.mp3");
+        viewModel.play(new Clip("clip1", "file://invalid.mp3"));
+
+        PlaybackFailedException playbackFailedException = new PlaybackFailedException("file://invalid.mp3", R.string.file_invalid);
+        assertThat(error.getValue(), equalTo(playbackFailedException));
+        assertThat(R.string.file_invalid, equalTo(playbackFailedException.getExceptionMsg()));
     }
 
     @Test

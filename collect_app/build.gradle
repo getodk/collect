@@ -275,7 +275,7 @@ dependencies {
     odkCollectReleaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${rootProject.leakyCanaryVersion}"
 
     // Android Architecture Components:
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0-beta01"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.1.0"
 
     // Dagger:
     implementation "com.google.dagger:dagger:${rootProject.daggerVersion}"

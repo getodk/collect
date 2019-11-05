@@ -5,9 +5,11 @@ import androidx.core.util.ObjectsCompat;
 public class PlaybackFailedException extends Exception {
 
     private final String uri;
+    private final int exceptionMsg;
 
-    public PlaybackFailedException(String uri) {
+    public PlaybackFailedException(String uri, int exceptionMsg) {
         this.uri = uri;
+        this.exceptionMsg = exceptionMsg;
     }
 
     public String getURI() {
@@ -36,5 +38,9 @@ public class PlaybackFailedException extends Exception {
         return "PlaybackFailedException{" +
                 "uri='" + uri + '\'' +
                 '}';
+    }
+
+    public int getExceptionMsg() {
+        return exceptionMsg;
     }
 }
