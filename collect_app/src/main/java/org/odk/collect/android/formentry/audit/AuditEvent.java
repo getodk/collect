@@ -239,6 +239,18 @@ public class AuditEvent {
         return event;
     }
 
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public String getAccuracy() {
+        return accuracy;
+    }
+
     // Get event type based on a Form Controller event
     public static AuditEventType getAuditEventTypeFromFecType(int fcEvent) {
         AuditEventType auditEventType;
