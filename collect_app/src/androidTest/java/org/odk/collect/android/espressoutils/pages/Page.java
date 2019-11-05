@@ -24,6 +24,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.core.StringContains.containsString;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.odk.collect.android.test.CustomMatchers.withIndex;
 
@@ -179,12 +180,9 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-/*    public T checkIsTextDisplayedOnDialog(String text) {
-        onView(withText(text)).inRoot(isDialog()).check(matches(isDisplayed()));
+    public T checkIsTextDisplayedOnDialog(String text) {
+        onView(withId(android.R.id.message)).check(matches(withText(containsString(text))));
         return (T) this;
     }
-*/
-
-
 
 }

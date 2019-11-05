@@ -1,6 +1,5 @@
 package org.odk.collect.android.regression;
 
-
 import android.Manifest;
 
 import androidx.test.rule.GrantPermissionRule;
@@ -32,6 +31,7 @@ public class FormEntrySettingsTest extends BaseRegressionTest {
             .around(new ResetStateRule())
             .around(new CopyFormRule("All_widgets.xml"));
 
+    @SuppressWarnings("PMD.AvoidCallingFinalize")
     @Test
     public void movingBackwards_shouldBeTurnedOn() {
         new MainMenuPage(main)
@@ -62,7 +62,7 @@ public class FormEntrySettingsTest extends BaseRegressionTest {
                 .checkIsStringDisplayed(R.string.constraint_behavior_on_swipe)
                 .pressBack(new GeneralSettingsPage(main))
                 .pressBack(new MainMenuPage(main))
-                .checkIfElementIsGone((R.id.review_data))
+                .checkIfElementIsGone(R.id.review_data)
                 .startBlankForm("All widgets")
                 .swipeToNextQuestion()
                 .swipeToPreviousQuestion()

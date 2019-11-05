@@ -457,7 +457,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clearTheText("2019")
                 .swipeToNextQuestion()
                 .checkIsStringDisplayed(R.string.error_occured)
-                //.checkIsTextDisplayedOnDialog("Error evaluating")
+                .checkIsTextDisplayedOnDialog("The value \"-01-01\" can't be converted to a date.")
                 .clickOKOnDialog()
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
