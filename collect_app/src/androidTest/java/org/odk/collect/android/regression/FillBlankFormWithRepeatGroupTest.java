@@ -42,7 +42,7 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
             .around(new CopyFormRule("repeat_group_form.xml"));
 
     @Test
-    public void repeatGroupsNotAdded_ShouldNotDoubleLastQuestion() {
+    public void whenNoRepeatGroupAdded_ShouldNotDoubleLastQuestion() {
 
         //TestCase1
         new MainMenuPage(main)
@@ -141,7 +141,7 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
     }
 
     @Test
-    public void repeatGroupNotAdded_ShouldBackwardButtonBeClickable() {
+    public void whenNoRepeatGroupAdded_ShouldBackwardButtonBeClickable() {
 
         //TestCase6
         new MainMenuPage(main)
