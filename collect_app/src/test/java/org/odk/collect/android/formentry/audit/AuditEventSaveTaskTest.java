@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.tasks;
-
-import android.os.Environment;
-
-import androidx.test.rule.GrantPermissionRule;
-import androidx.test.runner.AndroidJUnit4;
+package org.odk.collect.android.formentry.audit;
 
 import org.apache.commons.io.FileUtils;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.instance.TreeReference;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.logic.AuditEvent;
+import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,39 +31,35 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.assertEquals;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.END_OF_FORM;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FORM_EXIT;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FORM_FINALIZE;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FORM_RESUME;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FORM_SAVE;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FORM_START;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.HIERARCHY;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_TRACKING_ENABLED;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.PROMPT_NEW_REPEAT;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.QUESTION;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.END_OF_FORM;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.FORM_EXIT;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.FORM_FINALIZE;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.FORM_RESUME;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.FORM_SAVE;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.FORM_START;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.HIERARCHY;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.LOCATION_TRACKING_ENABLED;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.PROMPT_NEW_REPEAT;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.QUESTION;
 
-@RunWith(AndroidJUnit4.class)
+@RunWith(RobolectricTestRunner.class)
 public class AuditEventSaveTaskTest {
 
-    private File testFile;
-
-    @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    private File auditFile;
 
     @Before
-    public void prepareTestFile() {
-        testFile = new File(Environment.getExternalStorageDirectory().getPath() + "/odk/instances/audit.csv");
-        testFile.delete();
+    public void setup() throws Exception {
+        auditFile = File.createTempFile("audit", ".csv");
     }
 
     @Test
     public void updateHeaderTest() throws IOException, ExecutionException, InterruptedException {
         // Use a form with enabled audit but without location
-        AuditEventSaveTask auditEventSaveTask = new AuditEventSaveTask(testFile, false, false);
+        AuditEventSaveTask auditEventSaveTask = new AuditEventSaveTask(auditFile, false, false);
         auditEventSaveTask.execute(getSampleAuditEventsWithoutLocations().toArray(new AuditEvent[0])).get();
-        String expectedAuditContent = FileUtils.readFileToString(testFile);
+        String expectedAuditContent = FileUtils.readFileToString(auditFile);
         String expectedData = "event,node,start,end\n" +
                 "form start,,1548106927319,\n" +
                 "question,/data/q1,1548106927323,1548106930112\n" +
@@ -85,9 +75,9 @@ public class AuditEventSaveTaskTest {
         assertEquals(expectedData, expectedAuditContent);
 
         // Upgrade a form to use location
-        auditEventSaveTask = new AuditEventSaveTask(testFile, true, false);
+        auditEventSaveTask = new AuditEventSaveTask(auditFile, true, false);
         auditEventSaveTask.execute(getMoreSampleAuditEventsWithLocations().toArray(new AuditEvent[0])).get();
-        expectedAuditContent = FileUtils.readFileToString(testFile);
+        expectedAuditContent = FileUtils.readFileToString(auditFile);
         String expectedData2 = "event,node,start,end,latitude,longitude,accuracy\n" +
                 "form start,,1548106927319,\n" +
                 "question,/data/q1,1548106927323,1548106930112\n" +
@@ -112,9 +102,9 @@ public class AuditEventSaveTaskTest {
         assertEquals(expectedData2, expectedAuditContent);
 
         // Upgrade a form to use location and tracking changes
-        auditEventSaveTask = new AuditEventSaveTask(testFile, true, true);
+        auditEventSaveTask = new AuditEventSaveTask(auditFile, true, true);
         auditEventSaveTask.execute(getMoreSampleAuditEventsWithLocationsAndTrackingChanges().toArray(new AuditEvent[0])).get();
-        expectedAuditContent = FileUtils.readFileToString(testFile);
+        expectedAuditContent = FileUtils.readFileToString(auditFile);
         String expectedData3 = "event,node,start,end,latitude,longitude,accuracy,old-value,new-value\n" +
                 "form start,,1548106927319,\n" +
                 "question,/data/q1,1548106927323,1548106930112\n" +
@@ -149,9 +139,9 @@ public class AuditEventSaveTaskTest {
 
     @Test
     public void saveAuditWithLocation() throws ExecutionException, InterruptedException, IOException {
-        AuditEventSaveTask auditEventSaveTask = new AuditEventSaveTask(testFile, true, false);
+        AuditEventSaveTask auditEventSaveTask = new AuditEventSaveTask(auditFile, true, false);
         auditEventSaveTask.execute(getSampleAuditEventsWithLocations().toArray(new AuditEvent[0])).get();
-        String expectedAuditContent = FileUtils.readFileToString(testFile);
+        String expectedAuditContent = FileUtils.readFileToString(auditFile);
         String expectedData = "event,node,start,end,latitude,longitude,accuracy\n" +
                 "form start,,1548106927319,,,,\n" +
                 "location tracking enabled,,548108908250,,,,\n" +
@@ -172,9 +162,9 @@ public class AuditEventSaveTaskTest {
 
     @Test
     public void saveAuditWithLocationAndTrackingChanges() throws ExecutionException, InterruptedException, IOException {
-        AuditEventSaveTask auditEventSaveTask = new AuditEventSaveTask(testFile, true, true);
+        AuditEventSaveTask auditEventSaveTask = new AuditEventSaveTask(auditFile, true, true);
         auditEventSaveTask.execute(getSampleAuditEventsWithLocationsAndTrackingChanges().toArray(new AuditEvent[0])).get();
-        String expectedAuditContent = FileUtils.readFileToString(testFile);
+        String expectedAuditContent = FileUtils.readFileToString(auditFile);
         String expectedData = "event,node,start,end,latitude,longitude,accuracy,old-value,new-value\n" +
                 "form start,,1548106927319,,,,,,\n" +
                 "location tracking enabled,,548108908250,,,,,,\n" +

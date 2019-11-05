@@ -1,5 +1,5 @@
 
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.formentry.audit;
 
 import android.location.Location;
 import android.os.AsyncTask;
@@ -8,10 +8,7 @@ import android.os.SystemClock;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.logic.AuditConfig;
-import org.odk.collect.android.logic.AuditEvent;
 import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.tasks.AuditEventSaveTask;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -20,8 +17,8 @@ import java.util.List;
 import io.reactivex.annotations.Nullable;
 import timber.log.Timber;
 
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED;
 import static org.odk.collect.android.logic.FormController.AUDIT_FILE_NAME;
 
 /**

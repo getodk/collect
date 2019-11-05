@@ -1,10 +1,9 @@
 
-package org.odk.collect.android.tasks;
+package org.odk.collect.android.formentry.audit;
 
 import android.os.AsyncTask;
-import androidx.annotation.NonNull;
 
-import org.odk.collect.android.logic.AuditEvent;
+import androidx.annotation.NonNull;
 
 import java.io.BufferedReader;
 import java.io.File;

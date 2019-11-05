@@ -12,8 +12,8 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.location.LocationTestUtils;
 import org.odk.collect.android.location.client.FakeLocationClient;
-import org.odk.collect.android.logic.AuditConfig;
-import org.odk.collect.android.logic.AuditEvent;
+import org.odk.collect.android.formentry.audit.AuditConfig;
+import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;

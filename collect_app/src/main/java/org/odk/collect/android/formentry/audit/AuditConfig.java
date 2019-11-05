@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.logic;
+package org.odk.collect.android.formentry.audit;
 
 import org.odk.collect.android.location.client.LocationClient;
 

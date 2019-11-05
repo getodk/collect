@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.logic;
+package org.odk.collect.android.formentry.audit;
 
 import androidx.annotation.NonNull;
 
@@ -142,7 +142,7 @@ public class AuditEvent {
         this(start, auditEventType, false, false, null, null);
     }
 
-    public AuditEvent(long start, AuditEventType auditEventType,  boolean isTrackingLocationsEnabled, boolean isTrackingChangesEnabled) {
+    public AuditEvent(long start, AuditEventType auditEventType, boolean isTrackingLocationsEnabled, boolean isTrackingChangesEnabled) {
         this(start, auditEventType, isTrackingLocationsEnabled, isTrackingChangesEnabled, null, null);
     }
 
@@ -277,14 +277,14 @@ public class AuditEvent {
 
     /**
      * Get the XPath path of the node at a particular {@link FormIndex}.
-     *
+     * <p>
      * Differs from {@link TreeReference#toString()} in that position predicates are only
      * included for repeats. For example, given a group named {@code my-group} that contains a
      * repeat named {@code my-repeat} which in turn contains a question named {@code my-question},
      * {@link TreeReference#toString()} would return paths that look like
      * {@code /my-group[1]/my-repeat[3]/my-question[1]}. In contrast, this method would return
      * {@code /my-group/my-repeat[3]/my-question}.
-     *
+     * <p>
      * TODO: consider moving to {@link FormIndex}
      */
     private static String getXPathPath(FormIndex formIndex) {

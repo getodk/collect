@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.formentry.audit;
 
 import android.location.Location;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.odk.collect.android.logic.AuditConfig;
 
 import java.io.File;
 
@@ -28,37 +28,42 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.BEGINNING_OF_FORM;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.CONSTRAINT_ERROR;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.DELETE_REPEAT;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.END_OF_FORM;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FINALIZE_ERROR;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FORM_FINALIZE;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FORM_RESUME;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FORM_SAVE;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.FORM_START;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.GROUP;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.HIERARCHY;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_PERMISSIONS_NOT_GRANTED;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_TRACKING_DISABLED;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_TRACKING_ENABLED;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.PROMPT_NEW_REPEAT;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.QUESTION;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.REPEAT;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.SAVE_ERROR;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.UNKNOWN_EVENT_TYPE;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.BEGINNING_OF_FORM;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.CONSTRAINT_ERROR;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.DELETE_REPEAT;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.END_OF_FORM;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.FINALIZE_ERROR;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.FORM_FINALIZE;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.FORM_RESUME;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.FORM_SAVE;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.FORM_START;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.GROUP;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.HIERARCHY;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.LOCATION_PERMISSIONS_GRANTED;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.LOCATION_PERMISSIONS_NOT_GRANTED;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.LOCATION_TRACKING_DISABLED;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.LOCATION_TRACKING_ENABLED;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.PROMPT_NEW_REPEAT;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.QUESTION;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.REPEAT;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.SAVE_ERROR;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.UNKNOWN_EVENT_TYPE;
 
 public class AuditEventLoggerTest {
 
-    private final File testInstanceFile = new File("/storage/emulated/0/odk/instances/testForm/testForm.xml");
+    private File testInstanceFile;
     // All values are set so location coordinates should be collected
     private final AuditConfig testAuditConfig = new AuditConfig("high-priority", "10", "60", false);
     // At least one value is not set so location coordinates shouldn't be collected
     private final AuditConfig testAuditConfigWithNullValues = new AuditConfig("high-priority", "10", null, false);
+
+    @Before
+    public void setup() throws Exception {
+        testInstanceFile = File.createTempFile("testForm", ".xml");
+    }
 
     @Test
     public void getMostAccurateLocationTest() {
