@@ -79,7 +79,7 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
         if (basePreferenceFragment != null) {
             getActivity().getFragmentManager()
                     .beginTransaction()
-                    .replace(android.R.id.content, basePreferenceFragment)
+                    .replace(R.id.container, basePreferenceFragment)
                     .addToBackStack(null)
                     .commit();
         }

@@ -44,7 +44,7 @@ public class IdentityPreferences extends BasePreferenceFragment {
 
         findPreference("form_metadata").setOnPreferenceClickListener(preference -> {
             getActivity().getFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, new FormMetadataFragment())
+                    .replace(R.id.container, new FormMetadataFragment())
                     .addToBackStack(null)
                     .commit();
             return true;
