@@ -1,10 +1,13 @@
 package org.odk.collect.android.espressoutils.pages;
 
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.matcher.PreferenceMatchers;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
+
+import timber.log.Timber;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -66,6 +69,17 @@ abstract class Page<T extends Page<T>> {
 
     public T checkIsTextDisplayed(String text) {
         onView(withText(text)).check(matches(isDisplayed()));
+        return (T) this;
+    }
+
+    public T checkIsTranslationDisplayed(String...  text) {
+        for (String s : text) {
+            try {
+                onView(withText(s)).check(matches(isDisplayed()));
+            } catch (NoMatchingViewException e) {
+                Timber.i(e);
+            }
+        }
         return (T) this;
     }
 

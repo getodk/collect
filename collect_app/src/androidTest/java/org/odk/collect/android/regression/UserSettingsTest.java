@@ -29,7 +29,7 @@ public class UserSettingsTest extends BaseRegressionTest {
                 .openUserSettings()
                 .checkIfTextDoesNotExist("Type")
                 .checkIfTextDoesNotExist("Submission transport")
-                .checkIsTextDisplayed("Server");
+                .checkIsStringDisplayed(R.string.server);
     }
 
     @Test

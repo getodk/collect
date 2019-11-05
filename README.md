@@ -147,7 +147,7 @@ Any and all contributions to the project are welcome. ODK Collect is used across
 
 Issues tagged as [good first issue](https://github.com/opendatakit/collect/labels/good%20first%20issue) should be a good place to start. There are also currently many issues tagged as [needs reproduction](https://github.com/opendatakit/collect/labels/needs%20reproduction) which need someone to try to reproduce them with the current version of ODK Collect and comment on the issue with their findings.
 
-If you're ready to contribute code, see [the contribution guide](CONTRIBUTING.md).
+If you're ready to contribute code, see [the contribution guide](docs/CONTRIBUTING.md).
 
 ## Contributing translations
 If you know a language other than English, consider contributing translations through [Transifex](https://www.transifex.com/opendatakit/collect/). 
