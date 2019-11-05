@@ -108,7 +108,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
     @Override
     RadioButton createButton(final int index, ViewGroup parent) {
         RadioButton radioButton = (RadioButton) LayoutInflater.from(parent.getContext()).inflate(R.layout.select_one_item, null);
-        setupButton(radioButton, index);
+        setUpButton(radioButton, index);
         radioButton.setOnClickListener(this);
         radioButton.setOnCheckedChangeListener(this);
 

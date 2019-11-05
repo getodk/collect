@@ -84,7 +84,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
     @Override
     CheckBox createButton(final int index, ViewGroup parent) {
         AppCompatCheckBox checkBox = (AppCompatCheckBox) LayoutInflater.from(parent.getContext()).inflate(R.layout.select_multi_item, null);
-        setupButton(checkBox, index);
+        setUpButton(checkBox, index);
         checkCheckBoxIfNeeded(checkBox, index); // perform before setting onCheckedChangeListener to avoid redundant calls of its body
 
         checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
