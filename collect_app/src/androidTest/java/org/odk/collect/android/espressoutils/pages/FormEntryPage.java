@@ -170,13 +170,23 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage clickOnAddGroup() {
-        clickOnString(R.string.add_another);
+    public FormEntryPage clickForwardButton() {
+        onView(withText(getTranslatedString(R.string.form_forward))).perform(click());
+        return this;
+    }
+
+    public FormEntryPage clickBackwardButton() {
+        onView(withText(getTranslatedString(R.string.form_backward))).perform(click());
         return this;
     }
 
     public FormEntryPage clickOnDoNotAddGroup() {
         clickOnString(R.string.add_repeat_no);
+        return this;
+    }
+
+    public FormEntryPage clickOnAddGroup() {
+        clickOnString(R.string.add_another);
         return this;
     }
 
