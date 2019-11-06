@@ -261,8 +261,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
         adminPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
-
-        setupRemoteAnalytics();
     }
 
     private void initToolbar() {
@@ -281,10 +279,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
                 contentObserver);
 
         setButtonsVisibility();
-
-        ((Collect) getApplication())
-                .getDefaultTracker()
-                .enableAutoActivityTracking(true);
     }
 
     private void setButtonsVisibility() {
@@ -505,13 +499,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
         }
         return null;
-    }
-
-    // This flag must be set each time the app starts up
-    private void setupRemoteAnalytics() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-        boolean isAnalyticsEnabled = settings.getBoolean(GeneralKeys.KEY_ANALYTICS, true);
-        Collect.getInstance().setAnalyticsCollectionEnabled(isAnalyticsEnabled);
     }
 
     private void updateButtons() {

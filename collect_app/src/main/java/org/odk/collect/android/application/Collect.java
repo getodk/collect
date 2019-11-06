@@ -56,6 +56,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PrefMigrator;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
@@ -279,8 +280,15 @@ public class Collect extends Application {
             Timber.plant(new Timber.DebugTree());
         }
 
+        setupRemoteAnalytics();
         setupLeakCanary();
         setupOSMDroid();
+    }
+
+    private void setupRemoteAnalytics() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isAnalyticsEnabled = settings.getBoolean(GeneralKeys.KEY_ANALYTICS, true);
+        setAnalyticsCollectionEnabled(isAnalyticsEnabled);
     }
 
     protected void setupOSMDroid() {
