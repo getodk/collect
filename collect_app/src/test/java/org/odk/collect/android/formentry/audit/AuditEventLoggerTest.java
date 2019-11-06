@@ -64,9 +64,9 @@ public class AuditEventLoggerTest {
 
     private File testInstanceFile;
     // All values are set so location coordinates should be collected
-    private final AuditConfig testAuditConfig = new AuditConfig("high-priority", "10", "60", false);
+    private final AuditConfig testAuditConfig = new AuditConfig("high-priority", "10", "60", false, false);
     // At least one value is not set so location coordinates shouldn't be collected
-    private final AuditConfig testAuditConfigWithNullValues = new AuditConfig("high-priority", "10", null, false);
+    private final AuditConfig testAuditConfigWithNullValues = new AuditConfig("high-priority", "10", null, false, false);
 
     private final TestWriter testWriter = new TestWriter();
     private final FormController formController = mock(FormController.class);

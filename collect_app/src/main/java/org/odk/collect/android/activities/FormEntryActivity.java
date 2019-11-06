@@ -61,6 +61,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -99,6 +100,8 @@ import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.formentry.FormEntryViewModel;
+import org.odk.collect.android.formentry.audit.AuditEvent;
+import org.odk.collect.android.formentry.audit.IdentifyUserPromptDialogFragment;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationHelper;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationManager;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
@@ -115,7 +118,6 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.location.client.GoogleLocationClient;
-import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
 import org.odk.collect.android.logic.FormInfo;
@@ -947,6 +949,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         showView(current, AnimationType.FADE);
     }
 
+    private void showIdentifyUserDialog() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        IdentifyUserPromptDialogFragment dialog = IdentifyUserPromptDialogFragment.create(getFormController().getFormTitle());
+        dialog.show(fragmentManager.beginTransaction(), IdentifyUserPromptDialogFragment.TAG);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.form_menu, menu);
@@ -1163,7 +1171,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         FormController formController = getFormController();
 
-        setTitle(formController.getFormTitle());
+        String formTitle = formController.getFormTitle();
+        setTitle(formTitle);
 
         if (event != FormEntryController.EVENT_QUESTION) {
             formController.getAuditEventLogger().logEvent(AuditEvent.getAuditEventTypeFromFecType(event),
@@ -1172,6 +1181,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
+
+                if (getFormController().getAuditEventLogger().isIdentityRequired()) {
+                    showIdentifyUserDialog();
+                }
+
                 return createViewForFormBeginning(formController);
             case FormEntryController.EVENT_END_OF_FORM:
                 return createViewForFormEnd(formController);

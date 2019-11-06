@@ -10,6 +10,7 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.odk.collect.android.test.CustomMatchers.withIndex;
 
 public class FillBlankFormPage extends Page<FillBlankFormPage> {
@@ -22,6 +23,11 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     public FillBlankFormPage assertOnPage() {
         checkIsStringDisplayed(R.string.enter_data);
         return this;
+    }
+
+    public IdentifyUserPromptPage clickOnFormWithIdentityPrompt(String formName) {
+        onView(withText(formName)).perform(click());
+        return new IdentifyUserPromptPage(formName, rule);
     }
 
     public FillBlankFormPage clickOnSortByButton() {

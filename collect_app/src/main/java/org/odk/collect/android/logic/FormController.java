@@ -1279,8 +1279,9 @@ public class FormController {
                 String locationMinInterval = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-min-interval");
                 String locationMaxAge = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-max-age");
                 boolean isTrackingChangesEnabled = Boolean.parseBoolean(auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "track-changes"));
+                boolean isIdentifyUserEnabled = Boolean.parseBoolean(auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "identify-user"));
 
-                auditConfig = new AuditConfig(locationPriority, locationMinInterval, locationMaxAge, isTrackingChangesEnabled);
+                auditConfig = new AuditConfig(locationPriority, locationMinInterval, locationMaxAge, isTrackingChangesEnabled, isIdentifyUserEnabled);
 
                 IAnswerData answerData = new StringData();
                 answerData.setValue(AUDIT_FILE_NAME);

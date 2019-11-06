@@ -272,6 +272,10 @@ public class AuditEventLogger {
         return locations;
     }
 
+    public Boolean isIdentityRequired() {
+        return auditConfig != null && auditConfig.isIdentifyUserEnabled();
+    }
+
     public interface AuditEventWriter {
         void writeEvents(List<AuditEvent> auditEvents, @NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled);
 
