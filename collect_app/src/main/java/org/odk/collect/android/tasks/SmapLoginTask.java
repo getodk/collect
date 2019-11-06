@@ -50,7 +50,7 @@ public class SmapLoginTask extends AsyncTask<String, Void, String> {
                     new HttpCredentials(username, password));
 
         } catch (Exception e) {
-            status = "error";
+            status = "error: " + e.getLocalizedMessage();
         }
 
         return status;
