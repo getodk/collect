@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>TestRepeat</h:title>
+    <model>
+      <itext>
+        <translation default="true()" lang="language">
+          <text id="/TestRepeat/q2:label">
+            <value>Repeat # 2</value>
+          </text>
+          <text id="/TestRepeat/q0:label">
+            <value>This form behaves different if navigation is set as horizontal wipes (OK) vs. buttons (infinite cycle). Please choose DO NOT ADD both &quot;Repeat # 1&quot; group and &quot;Repeat # 1&quot;</value>
+          </text>
+          <text id="/TestRepeat/q2/q2.1:label">
+            <value>Question of Repeat # 2</value>
+          </text>
+          <text id="/TestRepeat/q1:label">
+            <value>Repeat # 1</value>
+          </text>
+          <text id="/TestRepeat/q1/q1.1:label">
+            <value>Question of Repeat # 1</value>
+          </text>
+          <text id="/TestRepeat/q3:label">
+            <value>If it was set horizontal wipes should be displayed once, if not, it would be displayed indefinitely</value>
+          </text>
+        </translation>
+      </itext>
+      <instance>
+        <TestRepeat id="TestRepeat">
+          <q0/>
+          <q1 jr:template="">
+            <q1.1/>
+          </q1>
+          <q2 jr:template="">
+            <q2.1/>
+          </q2>
+          <q3/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </TestRepeat>
+      </instance>
+      <bind nodeset="/TestRepeat/q0" readonly="true()" required="false()" type="string"/>
+      <bind nodeset="/TestRepeat/q1" readonly="false()" required="false()"/>
+      <bind nodeset="/TestRepeat/q1/q1.1" readonly="false()" required="false()" type="string"/>
+      <bind nodeset="/TestRepeat/q2" readonly="false()" required="false()"/>
+      <bind nodeset="/TestRepeat/q2/q2.1" readonly="false()" required="false()" type="string"/>
+      <bind nodeset="/TestRepeat/q3" readonly="true()" required="false()" type="string"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/TestRepeat/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/TestRepeat/q0">
+      <label ref="jr:itext('/TestRepeat/q0:label')"/>
+    </input>
+    <group ref="/TestRepeat/q1">
+      <label ref="jr:itext('/TestRepeat/q1:label')"/>
+      <repeat nodeset="/TestRepeat/q1">
+        <input ref="/TestRepeat/q1/q1.1">
+          <label ref="jr:itext('/TestRepeat/q1/q1.1:label')"/>
+        </input>
+      </repeat>
+    </group>
+    <group ref="/TestRepeat/q2">
+      <label ref="jr:itext('/TestRepeat/q2:label')"/>
+      <repeat nodeset="/TestRepeat/q2">
+        <input ref="/TestRepeat/q2/q2.1">
+          <label ref="jr:itext('/TestRepeat/q2/q2.1:label')"/>
+        </input>
+      </repeat>
+    </group>
+    <input ref="/TestRepeat/q3">
+      <label ref="jr:itext('/TestRepeat/q3:label')"/>
+    </input>
+  </h:body>
+</h:html>

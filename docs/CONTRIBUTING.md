@@ -8,13 +8,13 @@ This is a living document. If you see something that could be improved, edit thi
 * [The review process](#the-review-process)
 * [Work in progress pull requests](#work-in-progress-pull-requests)
 * [Triage issues](#triage-issues-)
-* [Code style guidelines](#code-style-guidelines)
-* [UI Components Style guidelines](#ui-components-style-guidelines)
-* [Strings](#strings)
-* [Code from external sources](#code-from-external-sources)
 
 ## Submitting a pull request
 To contribute code to ODK Collect, you will need to open a [pull request](https://help.github.com/articles/about-pull-requests/) which will be reviewed by the community and then merged into the core project. Generally, a pull request is submitted when a unit of work is considered complete but it can sometimes be helpful to share ideas through a work in progress (WIP) pull request ([learn more](#work-in-progress-pull-requests)).
+
+1. Read our ["state of the union"](STATE.md) to get a quick understanding of the codebase and its history.
+
+1. Read our [code style guidelines](CODE-GUIDELINES.md). 
 
 1. [Set up your development environment](https://github.com/opendatakit/collect#setting-up-your-development-environment).
 
@@ -90,114 +90,3 @@ If a pull request is already a non-draft (there is currently no way to move it b
 ## Triage issues [![Open Source Helpers](https://www.codetriage.com/opendatakit/collect/badges/users.svg)](https://www.codetriage.com/opendatakit/collect)
 
 In addition to contributing code, you can help to triage issues. This can include reproducing bug reports, or asking for vital information such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to [subscribe to opendatakit/collect on CodeTriage](https://www.codetriage.com/opendatakit/collect).
-
-## Code style guidelines
-Follow the [Android style rules](http://source.android.com/source/code-style.html) and the [Google Java style guide](https://google.github.io/styleguide/javaguide.html).
-
-## XML style guidelines
-
-Follow these naming conventions in Android XML files:
-
-* Attributes (`attr`): `shouldBeCamelCased`
-* String, dimension and color names: `should_be_snake_cased`
-* Themes and Styles: `ShouldBePascalCased` and should also be qualified in a similar manner to Java package names like `<Type>.<Package>.<Name>...`. For instance:
-
-  ```xml
-  Theme.Collect.Light
-  TextAppearance.Collect.H1.Purple
-  Widget.Collect.Button
-  Widget.Collect.Button.BigRed
-  ```
-
-## UI Components Style guidelines
-Ensure that the added UI components are compatible with both light and dark themes.
-Follow the below points to get the color for coloring the UI components like text and icons instead of directly using color values (eg. #000000 or R.color.color_name).
-
-UI Component | Java | Xml _(layouts, drawables, vectors)_:
---- | --- | ---
-text color | themeUtils.getPrimaryTextColor() | ?primaryTextColor
-accent color | themeUtils.getAccentColor() | ?colorAccent
-icon color | themeUtils.getIconColor() | ?iconColor
-
-## Strings
-Always use [string resources](https://developer.android.com/guide/topics/resources/string-resource.html) instead of literal strings. This ensures wording consistency across the project and also enables full translation of the app. Only make changes to the base `res/values/strings.xml` English file and not to the other language files. The translated files are generated from [Transifex](https://www.transifex.com/opendatakit/collect/) where translations can be submitted by the community. Names of software packages or other untranslatable strings should be placed in `res/values/untranslated.xml`.
-
-Strings that represent very rare failure cases or that are meant more for ODK developers to use for troubleshooting rather than directly for users may be written as literal strings. This reduces the burden on translators and makes it easier for developers to troubleshoot edge cases without having to look up translations.
-
-## Dependency injection
-
-As much as possible to facilitate simpler, more modular and more testable components you should follow the Dependency Inversion principle in Collect Code. An example tutorial on this concept can be found [here](https://www.seadowg.com/dip-lesson/).
-
-Because many Android components (Activity and Fragment for instance) don't allow us control over their constructors Collect uses [Dagger](https://google.github.io/dagger/) to 'inject' dependencies. The configuration for Dagger can be found in [AppDepdendencyComponent](collect_app/src/main/java/org/odk/collect/android/injection/config/AppDependencyComponent.java). For any normal objects it is probably best to avoid Dagger and use normal Java constructors.
-
-While it's important to read the Dagger [documentation](https://google.github.io/dagger/users-guide) we've provided some basic instructions on how to use Dagger within Collect below.
-
-### Providing dependencies
-
-To declare a new dependency that objects can inject add a `@Provider` method to the `AppDepedencyModule`:
-
-```java
-@Provider
-public MyDependency providesMyDependency() {
-    return MyDependency();
-}
-```
-
-You can also have Dagger return the same instance every time (i.e. a Singleton) by annotating the method with `@Singleton` as well.
-
-### Injecting dependencies into Activity/Fragment objects
-
-To inject a dependency into the Activity you first need to make Dagger aware it's injecting into that Activity by adding an `inject` to the `AppDependencyComponent` (if it's not already there):
-
-```java
-void inject(MyActivity activity);
-```
-
-Then define a field with the `@Inject` annotation in your Activity:
-
-```java
-@Inject
-MyDependency dependency;
-```
-
-To have Dagger inject the dependency you need to hook the injection into the Activity's `onCreate` (as this is the first part of the lifecycle we have access to):
-
-```java
-@Override
-public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    DaggerUtils.getComponent(this).inject(this);
-}
-```
-
-For Fragment objects you should hook into the `onAttach` lifecycle method instead:
-
-```java
-@Override
-public void onAttach(Activity activity) {
-    super.onAttach(activity);
-    DaggerUtils.getComponent(activity).inject(this);
-}
-```
-
-### Swapping out dependencies in tests
-
-To swap out depdendencies in a Robolectric test you can override the module the Application object uses to inject objects using provided helpers:
-
-```java
-@Before
-public void setup() {
-    MyDependency mocked = mock(MyDependency.class);
-    RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
-      @Override
-      public MyDependency providesMyDependency() {
-        return mocked;
-      }
-    });
-}
-```
-
-## Code from external sources
-ODK Collect is released under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0). Please make sure that any code you include is an OSI-approved [permissive license](https://opensource.org/faq#permissive). **Please note that if no license is specified for a piece of code or if it has an incompatible license such as GPL, using it puts the project at legal risk**.
-
-Sites with compatible licenses (including [StackOverflow](http://stackoverflow.com/)) will sometimes provide exactly the code snippet needed to solve a problem. You are encouraged to use such snippets in ODK Collect as long as you attribute them by including a direct link to the source. In addition to complying with the content license, this provides useful context for anyone reading the code.
