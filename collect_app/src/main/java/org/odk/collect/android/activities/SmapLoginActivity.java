@@ -105,14 +105,14 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
         progressBar.setVisibility(View.GONE);
         loginButton.setEnabled(true);
 
-        if(status == null || status.equals("error")) {
-            loginFailed();
+        if(status == null || status.startsWith("error")) {
+            loginFailed(status);
         } else if(status.equals("success")) {
             loginSuccess();
         } else if (status.equals("unauthorized")) {
-            loginNotAuthorized();
+            loginNotAuthorized(null);
         } else {
-            loginFailed();
+            loginFailed(null);
         }
     }
 
@@ -135,7 +135,7 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
         finish();
     }
 
-    public void loginFailed() {
+    public void loginFailed(String status) {
 
         // Attempt to login by comparing values agains stored preferences
         String url = urlText.getText().toString();
@@ -154,13 +154,17 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
             startActivity(i);  //smap
             finish();
         } else {
-            loginNotAuthorized();   // Credentials do not match
+            loginNotAuthorized(status);   // Credentials do not match
         }
 
     }
 
-    public void loginNotAuthorized() {
-        SnackbarUtils.showShortSnackbar(findViewById(R.id.loginMain), Collect.getInstance().getString(R.string.smap_login_unauthorized));
+    public void loginNotAuthorized(String status) {
+        String msg = Collect.getInstance().getString(R.string.smap_login_unauthorized);
+        if(status != null && status.startsWith("error:")) {
+            msg += "; " + status.substring(5);
+        }
+        SnackbarUtils.showShortSnackbar(findViewById(R.id.loginMain), msg);
     }
 
     public boolean validate(String url, String username, String pw) {
