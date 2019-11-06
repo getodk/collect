@@ -81,50 +81,14 @@ public class SmapTaskStatusActivity extends CollectAbstractActivity implements O
 			TableRow.LayoutParams trLayout = 
 					new TableRow.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 			trLayout.setMargins(1, 1, 1, 1);
-        	
-            TableLayout tableLayout = (TableLayout)findViewById(R.id.task_address_values);
             
         	// Add Title
         	TextView title = (TextView)findViewById(R.id.task_title);
         	title.setText(taskEntry.name);
         	
         	// Add Status
-   			TableRow r = new TableRow(this);
-			r.setLayoutParams(trLayout);
-			r.setBackgroundColor(0xff0000); 
-	        TextView text1 = new TextView(this);
-	        text1.setText(R.string.smap_status);
-	        text1.setBackgroundColor(0xff0000);
-	        TextView text2 = new TextView(this);
-	        text2.setText(taskEntry.taskStatus);
-	        text2.setBackgroundColor(0xff0000);
-   	        r.addView(text1);
-	        r.addView(text2);
-	        tableLayout.addView(r);
-	        
-        	// Put the Address items in the table
-    		Type type = new TypeToken<ArrayList<Address>>(){}.getType();		
-    		ArrayList<Address> aArray = new Gson().fromJson(taskEntry.taskAddress, type);
-    		if(aArray != null) {
-	    		for(int i = 0; i < aArray.size(); i++) {
-	    	        
-	    			r = new TableRow(this);
-	    			r.setLayoutParams(trLayout);
-	    			r.setBackgroundColor(0xff0000);
-	    	        
-	    	        text1 = new TextView(this);
-	    	        text1.setText(aArray.get(i).name);
-	    	        text1.setBackgroundColor(0xff0000);
-	    	        
-	    	        text2 = new TextView(this);
-	    	        text2.setText(aArray.get(i).value);
-	    	        text2.setBackgroundColor(0xff0000);
-	    	        
-	    	        r.addView(text1);
-	    	        r.addView(text2);
-	    	        tableLayout.addView(r);
-	    		}
-    		}
+            TextView status = (TextView)findViewById(R.id.task_status);
+            status.setText(getString(R.string.smap_current_status) + "; " + taskEntry.taskStatus);
     		
             // Create the buttons
             LinearLayout buttons = (LinearLayout)findViewById(R.id.task_address_buttons);

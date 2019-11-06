@@ -23,20 +23,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                 android:paddingBottom="20dip"
-                android:textSize="18sp"
-                >
-            </TextView>
+                />
 
-            <TableLayout
-                android:id="@+id/task_address_values"
+            <ImageView
+                    android:id="@+id/task_status_logo"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="24dp"
+                    android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:id="@+id/task_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="#cccccc"
-                android:stretchColumns="*"
-                >
-            </TableLayout>
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                android:paddingBottom="20dip"
+                />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
