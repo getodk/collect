@@ -31,7 +31,7 @@ android {
         applicationId "org.smap.smapTask.android"
         minSdkVersion(16)
         targetSdkVersion(28)
-        versionCode(6050)
+        versionCode(6051)
         versionName getVersionName()
         testInstrumentationRunner('androidx.test.runner.AndroidJUnitRunner')
         multiDexEnabled true
