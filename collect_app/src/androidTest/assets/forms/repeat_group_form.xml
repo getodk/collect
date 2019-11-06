@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>Repeat Group</h:title>
+    <model>
+      <instance>
+        <data id="328b5fbf-dfe6-4c1d-9561-d82e1d65b77e" version="mrc">
+          <grp09d86f73-7b3c-44e5-9f49-bdae8ab50132 jr:template="">
+            <header/>
+            <qingacd1f34e-8f48-49cd-aaa0-24575878ead0/>
+            <qing1507542f-3919-4e6f-b305-32ed0fa29565/>
+            <qing204bedfc-ec15-4247-8457-e307db11f040/>
+          </grp09d86f73-7b3c-44e5-9f49-bdae8ab50132>
+          <grp2ea471c2-9316-4166-9749-566f2ab4b45a>
+            <header/>
+            <qinga12441e2-79c0-4584-90ce-349923583726/>
+            <qing281f13e2-94d3-4be7-992e-1d02f4259b34/>
+          </grp2ea471c2-9316-4166-9749-566f2ab4b45a>
+          <grpa337aa68-0152-44b6-aae3-1fe91b55890e jr:template="">
+            <header/>
+            <qing7bd3d9e8-4fbb-4b7f-9a35-e117a34c8ccc/>
+            <qingc26f3f0f-eb3e-4375-aafa-e2ea0cd683a4/>
+          </grpa337aa68-0152-44b6-aae3-1fe91b55890e>
+        </data>
+      </instance>
+      <itext>
+        <translation lang="English">
+          <text id="grp09d86f73-7b3c-44e5-9f49-bdae8ab50132:label">
+            <value>Grp1</value>
+          </text>
+          <text id="grp09d86f73-7b3c-44e5-9f49-bdae8ab50132:hint">
+            <value>Grp1</value>
+          </text>
+          <text id="grp09d86f73-7b3c-44e5-9f49-bdae8ab50132:itemname">
+            <value>Hi’ "<output value="/data/grp09d86f73-7b3c-44e5-9f49-bdae8ab50132/qingacd1f34e-8f48-49cd-aaa0-24575878ead0"/>"</value>
+          </text>
+          <text id="grp2ea471c2-9316-4166-9749-566f2ab4b45a:label">
+            <value>Group Name</value>
+          </text>
+          <text id="grp2ea471c2-9316-4166-9749-566f2ab4b45a:hint">
+            <value>Group Hint</value>
+          </text>
+          <text id="grpa337aa68-0152-44b6-aae3-1fe91b55890e:label">
+            <value>Grp2</value>
+          </text>
+          <text id="grpa337aa68-0152-44b6-aae3-1fe91b55890e:hint">
+            <value>Grp2</value>
+          </text>
+          <text id="grpa337aa68-0152-44b6-aae3-1fe91b55890e:itemname">
+            <value>
+              <output value="if((/data/grpa337aa68-0152-44b6-aae3-1fe91b55890e/qing7bd3d9e8-4fbb-4b7f-9a35-e117a34c8ccc) &gt; 18, 'A’&quot;yeah&quot;', 'C')"/>
+            </value>
+          </text>
+          <text id="qingacd1f34e-8f48-49cd-aaa0-24575878ead0:label">
+            <value>Text Question Title 1</value>
+          </text>
+          <text id="qingacd1f34e-8f48-49cd-aaa0-24575878ead0:hint">
+            <value>Question Hint 1</value>
+          </text>
+          <text id="qing1507542f-3919-4e6f-b305-32ed0fa29565:label">
+            <value>Text Question Title 2</value>
+          </text>
+          <text id="qing1507542f-3919-4e6f-b305-32ed0fa29565:hint">
+            <value>Question Hint 2</value>
+          </text>
+          <text id="qing204bedfc-ec15-4247-8457-e307db11f040:label">
+            <value>Text Question Title 3</value>
+          </text>
+          <text id="qing204bedfc-ec15-4247-8457-e307db11f040:hint">
+            <value>Question Hint 3</value>
+          </text>
+          <text id="qinga12441e2-79c0-4584-90ce-349923583726:label">
+            <value>Text Question Title 4</value>
+          </text>
+          <text id="qinga12441e2-79c0-4584-90ce-349923583726:hint">
+            <value>Question Hint 4</value>
+          </text>
+          <text id="qing281f13e2-94d3-4be7-992e-1d02f4259b34:label">
+            <value>Text Question Title 5</value>
+          </text>
+          <text id="qing281f13e2-94d3-4be7-992e-1d02f4259b34:hint">
+            <value>Question Hint 5</value>
+          </text>
+          <text id="qing7bd3d9e8-4fbb-4b7f-9a35-e117a34c8ccc:label">
+            <value>Integer Question Title 6</value>
+          </text>
+          <text id="qing7bd3d9e8-4fbb-4b7f-9a35-e117a34c8ccc:hint">
+            <value>Question Hint 6</value>
+          </text>
+          <text id="qingc26f3f0f-eb3e-4375-aafa-e2ea0cd683a4:label">
+            <value>Text Question Title 7</value>
+          </text>
+          <text id="qingc26f3f0f-eb3e-4375-aafa-e2ea0cd683a4:hint">
+            <value>Question Hint 7</value>
+          </text>
+          <text id="BLANK">
+            <value/>
+          </text>
+        </translation>
+      </itext>
+      <bind nodeset="/data/grp09d86f73-7b3c-44e5-9f49-bdae8ab50132"/>
+      <bind nodeset="/data/grp09d86f73-7b3c-44e5-9f49-bdae8ab50132/header" readonly="true()" type="string"/>
+      <bind nodeset="/data/grp09d86f73-7b3c-44e5-9f49-bdae8ab50132/qingacd1f34e-8f48-49cd-aaa0-24575878ead0" type="string"/>
+      <bind nodeset="/data/grp09d86f73-7b3c-44e5-9f49-bdae8ab50132/qing1507542f-3919-4e6f-b305-32ed0fa29565" type="string"/>
+      <bind nodeset="/data/grp09d86f73-7b3c-44e5-9f49-bdae8ab50132/qing204bedfc-ec15-4247-8457-e307db11f040" type="string"/>
+      <bind nodeset="/data/grp2ea471c2-9316-4166-9749-566f2ab4b45a"/>
+      <bind nodeset="/data/grp2ea471c2-9316-4166-9749-566f2ab4b45a/header" readonly="true()" type="string"/>
+      <bind nodeset="/data/grp2ea471c2-9316-4166-9749-566f2ab4b45a/qinga12441e2-79c0-4584-90ce-349923583726" type="string"/>
+      <bind nodeset="/data/grp2ea471c2-9316-4166-9749-566f2ab4b45a/qing281f13e2-94d3-4be7-992e-1d02f4259b34" type="string"/>
+      <bind nodeset="/data/grpa337aa68-0152-44b6-aae3-1fe91b55890e"/>
+      <bind nodeset="/data/grpa337aa68-0152-44b6-aae3-1fe91b55890e/header" readonly="true()" type="string"/>
+      <bind nodeset="/data/grpa337aa68-0152-44b6-aae3-1fe91b55890e/qing7bd3d9e8-4fbb-4b7f-9a35-e117a34c8ccc" type="int"/>
+      <bind nodeset="/data/grpa337aa68-0152-44b6-aae3-1fe91b55890e/qingc26f3f0f-eb3e-4375-aafa-e2ea0cd683a4" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <group ref="/data/grp09d86f73-7b3c-44e5-9f49-bdae8ab50132">
+      <label ref="jr:itext('grp09d86f73-7b3c-44e5-9f49-bdae8ab50132:label')"/>
+      <repeat nodeset="/data/grp09d86f73-7b3c-44e5-9f49-bdae8ab50132">
+        <group appearance="field-list">
+          <label ref="jr:itext('grp09d86f73-7b3c-44e5-9f49-bdae8ab50132:itemname')"/>
+          <input ref="/data/grp09d86f73-7b3c-44e5-9f49-bdae8ab50132/header">
+            <hint ref="jr:itext('grp09d86f73-7b3c-44e5-9f49-bdae8ab50132:hint')"/>
+          </input>
+          <input ref="/data/grp09d86f73-7b3c-44e5-9f49-bdae8ab50132/qingacd1f34e-8f48-49cd-aaa0-24575878ead0">
+            <label ref="jr:itext('qingacd1f34e-8f48-49cd-aaa0-24575878ead0:label')"/>
+            <hint ref="jr:itext('qingacd1f34e-8f48-49cd-aaa0-24575878ead0:hint')"/>
+          </input>
+          <input ref="/data/grp09d86f73-7b3c-44e5-9f49-bdae8ab50132/qing1507542f-3919-4e6f-b305-32ed0fa29565">
+            <label ref="jr:itext('qing1507542f-3919-4e6f-b305-32ed0fa29565:label')"/>
+            <hint ref="jr:itext('qing1507542f-3919-4e6f-b305-32ed0fa29565:hint')"/>
+          </input>
+          <input ref="/data/grp09d86f73-7b3c-44e5-9f49-bdae8ab50132/qing204bedfc-ec15-4247-8457-e307db11f040">
+            <label ref="jr:itext('qing204bedfc-ec15-4247-8457-e307db11f040:label')"/>
+            <hint ref="jr:itext('qing204bedfc-ec15-4247-8457-e307db11f040:hint')"/>
+          </input>
+        </group>
+      </repeat>
+    </group>
+    <group ref="/data/grp2ea471c2-9316-4166-9749-566f2ab4b45a">
+      <label ref="jr:itext('grp2ea471c2-9316-4166-9749-566f2ab4b45a:label')"/>
+      <group appearance="field-list">
+        <input ref="/data/grp2ea471c2-9316-4166-9749-566f2ab4b45a/header">
+          <hint ref="jr:itext('grp2ea471c2-9316-4166-9749-566f2ab4b45a:hint')"/>
+        </input>
+        <input ref="/data/grp2ea471c2-9316-4166-9749-566f2ab4b45a/qinga12441e2-79c0-4584-90ce-349923583726">
+          <label ref="jr:itext('qinga12441e2-79c0-4584-90ce-349923583726:label')"/>
+          <hint ref="jr:itext('qinga12441e2-79c0-4584-90ce-349923583726:hint')"/>
+        </input>
+        <input ref="/data/grp2ea471c2-9316-4166-9749-566f2ab4b45a/qing281f13e2-94d3-4be7-992e-1d02f4259b34">
+          <label ref="jr:itext('qing281f13e2-94d3-4be7-992e-1d02f4259b34:label')"/>
+          <hint ref="jr:itext('qing281f13e2-94d3-4be7-992e-1d02f4259b34:hint')"/>
+        </input>
+      </group>
+    </group>
+    <group ref="grpa337aa68-0152-44b6-aae3-1fe91b55890e">
+      <label ref="jr:itext('grpa337aa68-0152-44b6-aae3-1fe91b55890e:label')"/>
+      <repeat nodeset="/data/grpa337aa68-0152-44b6-aae3-1fe91b55890e">
+        <group>
+          <label ref="jr:itext('grpa337aa68-0152-44b6-aae3-1fe91b55890e:itemname')"/>
+          <input ref="/data/grpa337aa68-0152-44b6-aae3-1fe91b55890e/header">
+            <hint ref="jr:itext('grpa337aa68-0152-44b6-aae3-1fe91b55890e:hint')"/>
+          </input>
+          <input ref="/data/grpa337aa68-0152-44b6-aae3-1fe91b55890e/qing7bd3d9e8-4fbb-4b7f-9a35-e117a34c8ccc">
+            <label ref="jr:itext('qing7bd3d9e8-4fbb-4b7f-9a35-e117a34c8ccc:label')"/>
+            <hint ref="jr:itext('qing7bd3d9e8-4fbb-4b7f-9a35-e117a34c8ccc:hint')"/>
+          </input>
+          <input ref="/data/grpa337aa68-0152-44b6-aae3-1fe91b55890e/qingc26f3f0f-eb3e-4375-aafa-e2ea0cd683a4">
+            <label ref="jr:itext('qingc26f3f0f-eb3e-4375-aafa-e2ea0cd683a4:label')"/>
+            <hint ref="jr:itext('qingc26f3f0f-eb3e-4375-aafa-e2ea0cd683a4:hint')"/>
+          </input>
+        </group>
+      </repeat>
+    </group>
+  </h:body>
+</h:html>

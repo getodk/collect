@@ -20,4 +20,10 @@ public class AddNewGroupDialog extends Page<AddNewGroupDialog> {
         clickOnString(R.string.add_another);
         return destination;
     }
+
+    public FormEntryPage clickOnDoNotAddGroup(FormEntryPage destination) {
+        clickOnString(R.string.add_repeat_no);
+        return destination;
+    }
+
 }
