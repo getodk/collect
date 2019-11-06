@@ -82,17 +82,15 @@ public class SmapTaskStatusActivity extends CollectAbstractActivity implements O
 					new TableRow.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 			trLayout.setMargins(1, 1, 1, 1);
             
-        	// Add Title
-        	TextView title = (TextView)findViewById(R.id.task_title);
+
+        	TextView title = (TextView)findViewById(R.id.task_title);       // Add Title
         	title.setText(taskEntry.name);
-        	
-        	// Add Status
-            TextView status = (TextView)findViewById(R.id.task_status);
+
+            TextView status = (TextView)findViewById(R.id.task_status);     // Add Status
             status.setText(getString(R.string.smap_current_status) + "; " + taskEntry.taskStatus);
-    		
+
             // Create the buttons
             LinearLayout buttons = (LinearLayout)findViewById(R.id.task_address_buttons);
-    		//menu.setHeaderTitle(taskTitle);
             rejectReason.setVisibility(View.GONE);
             boolean triggeredTask = false;
             if (taskEntry.type.equals("task") &&

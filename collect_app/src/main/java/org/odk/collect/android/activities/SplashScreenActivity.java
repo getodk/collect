@@ -124,7 +124,9 @@ public class SplashScreenActivity extends Activity {
         int pwPolicy = Integer.parseInt((String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_PASSWORD_POLICY));
         long lastLogin = Long.parseLong((String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_LAST_LOGIN));
         // Show the login screen if required by password policy 0 - always login, > 0 is number of days befoe login is required
-        if(pwPolicy == 0 || (pwPolicy > 0 &&  (System.currentTimeMillis() - lastLogin) > pwPolicy * 24 * 3600 * 1000)) {
+        // Alternatively show the login screen if any of the login details are empty
+        if(pwPolicy == 0 || (pwPolicy > 0 &&  (System.currentTimeMillis() - lastLogin) > pwPolicy * 24 * 3600 * 1000) ||
+                password == null || user == null || url == null || password.trim().isEmpty() || user.trim().isEmpty() || url.trim().isEmpty()) {
             startActivity(new Intent(SplashScreenActivity.this, SmapLoginActivity.class));  //smap
             finish();
         } else {
