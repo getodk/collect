@@ -1,6 +1,9 @@
 package org.odk.collect.android.location.client;
 
 import android.content.Context;
+
+import org.odk.collect.android.utilities.PlayServicesUtil;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -9,35 +12,20 @@ import androidx.annotation.Nullable;
  * available on the device.
  */
 public class LocationClients {
+    @Nullable private static LocationClient testClient = null;
 
-    private LocationClients() {
-
-    }
-
-    @Nullable
-    private static LocationClient testClient;
-
-    /**
-     * Checks and returns a {@link LocationClient} based on whether or not Google Play Services
-     * are available.
-     *
-     * 3/14/2018 - GoogleLocationClient removed because of user reports that accuracy does not get
-     * better than 10m.
-     *
-     * @param context The Context the LocationClient will be used within.
-     * @return An implementation of LocationClient.
-     */
+    /** Returns a {@link LocationClient} appropriate for a given context. */
+    // NOTE(ping): As of 2018-11-01, the GoogleLocationClient never returns an
+    // accuracy radius below 3m: https://issuetracker.google.com/issues/118789585
     public static LocationClient clientForContext(@NonNull Context context) {
-
         return testClient != null
-                ? testClient
+            ? testClient
+            : PlayServicesUtil.isGooglePlayServicesAvailable(context)
+                ? new GoogleLocationClient(context)
                 : new AndroidLocationClient(context);
     }
 
-    /**
-     * For testing purposes only. A poorman's Dependency Injection.
-     * @param testClient The test or mock LocationClient to use.
-     */
+    /** Sets the LocationClient.  For use in tests only. */
     public static void setTestClient(@NonNull LocationClient testClient) {
         LocationClients.testClient = testClient;
     }
