@@ -955,7 +955,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         IdentifyUserPromptDialogFragment dialog = IdentifyUserPromptDialogFragment.create(getFormController().getFormTitle());
         dialog.show(fragmentManager.beginTransaction(), IdentifyUserPromptDialogFragment.TAG);
 
-        IdentityPromptViewModel identityPromptViewModel = ViewModelProviders.of(this).get(IdentityPromptViewModel.class);
+        IdentityPromptViewModel.Factory  factory = new IdentityPromptViewModel.Factory(getFormController().getAuditEventLogger());
+        IdentityPromptViewModel identityPromptViewModel = ViewModelProviders.of(this, factory).get(IdentityPromptViewModel.class);
         identityPromptViewModel.isFormEntryCancelled().observe(this, isFormEntryCancelled -> {
             if (isFormEntryCancelled) {
                 onBackPressed();
@@ -1190,7 +1191,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
 
-                if (getFormController().getAuditEventLogger().isIdentityRequired()) {
+                if (getFormController().getAuditEventLogger().isUserRequired()) {
                     showIdentifyUserDialog();
                 }
 

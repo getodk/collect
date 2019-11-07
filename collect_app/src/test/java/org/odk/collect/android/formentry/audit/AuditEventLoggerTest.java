@@ -189,6 +189,18 @@ public class AuditEventLoggerTest {
     }
 
     @Test
+    public void withUserSet_addsUserToEvents() {
+        AuditEventLogger auditEventLogger = new AuditEventLogger(testInstanceFile, new AuditConfig(null, null, null, false, true), testWriter, formController);
+        auditEventLogger.setUser("Riker");
+
+        auditEventLogger.logEvent(END_OF_FORM, false, 0);
+        auditEventLogger.exitView(); // Triggers event writing
+
+        assertTrue(testWriter.userIdentified);
+        assertEquals("Riker", testWriter.auditEvents.get(0).getUser());
+    }
+
+    @Test
     public void testEventTypes() {
         AuditEventLogger auditEventLogger = new AuditEventLogger(testInstanceFile, testAuditConfig, testWriter, formController);
 
@@ -222,10 +234,12 @@ public class AuditEventLoggerTest {
 
     private static class TestWriter implements AuditEventLogger.AuditEventWriter {
 
+        boolean userIdentified;
         List<AuditEvent> auditEvents = new ArrayList<>();
 
         @Override
-        public void writeEvents(List<AuditEvent> auditEvents, @NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled) {
+        public void writeEvents(List<AuditEvent> auditEvents, @NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled, boolean userIdentified) {
+            this.userIdentified = userIdentified;
             this.auditEvents.addAll(auditEvents);
         }
 

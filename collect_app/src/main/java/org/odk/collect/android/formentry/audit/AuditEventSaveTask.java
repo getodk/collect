@@ -25,7 +25,8 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
     private static final String LOCATION_COORDINATES_COLUMNS = ",latitude,longitude,accuracy";
     private static final String ANSWER_VALUES_COLUMNS = ",old-value,new-value";
 
-    public AuditEventSaveTask(@NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled) {
+    @SuppressWarnings("PMD.UnusedFormalParameter")
+    public AuditEventSaveTask(@NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled, boolean userIdentified) {
         this.file = file;
         this.isLocationEnabled = isLocationEnabled;
         this.isTrackingChangesEnabled = isTrackingChangesEnabled;

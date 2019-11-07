@@ -43,6 +43,7 @@ public class AuditEventLogger {
 
     private final AuditConfig auditConfig;
     private final FormController formController;
+    private String user;
 
     public AuditEventLogger(File instanceFile, AuditConfig auditConfig, AuditEventWriter writer, FormController formController) {
         this.auditConfig = auditConfig;
@@ -69,8 +70,15 @@ public class AuditEventLogger {
 
         Timber.i("AuditEvent recorded: %s", eventType);
 
-        AuditEvent newAuditEvent = new AuditEvent(getEventTime(), eventType, auditConfig.isLocationEnabled(),
-                auditConfig.isTrackingChangesEnabled(), formIndex, questionAnswer);
+        AuditEvent newAuditEvent = new AuditEvent(
+                getEventTime(),
+                eventType,
+                auditConfig.isLocationEnabled(),
+                auditConfig.isTrackingChangesEnabled(),
+                formIndex,
+                questionAnswer,
+                user
+        );
 
         if (isDuplicatedIntervalEvent(newAuditEvent)) {
             return;
@@ -207,7 +215,7 @@ public class AuditEventLogger {
     private void writeEvents() {
         if (!writer.isWriting()) {
             if (auditFile != null) {
-                writer.writeEvents(auditEvents, auditFile, auditConfig.isLocationEnabled(), auditConfig.isTrackingChangesEnabled());
+                writer.writeEvents(auditEvents, auditFile, auditConfig.isLocationEnabled(), auditConfig.isTrackingChangesEnabled(), auditConfig.isIdentifyUserEnabled());
             } else {
                 Timber.e("auditFile null when attempting to write auditEvents.");
             }
@@ -272,12 +280,16 @@ public class AuditEventLogger {
         return locations;
     }
 
-    public Boolean isIdentityRequired() {
+    public Boolean isUserRequired() {
         return auditConfig != null && auditConfig.isIdentifyUserEnabled();
     }
 
+    public void setUser(String user) {
+        this.user = user;
+    }
+
     public interface AuditEventWriter {
-        void writeEvents(List<AuditEvent> auditEvents, @NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled);
+        void writeEvents(List<AuditEvent> auditEvents, @NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled, boolean userIdentified);
 
         Boolean isWriting();
     }

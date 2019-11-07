@@ -127,8 +127,11 @@ public class AuditEvent {
     private String latitude;
     private String longitude;
     private String accuracy;
-    @NonNull private String oldValue;
-    @NonNull private String newValue = "";
+    @NonNull
+    private String oldValue;
+    private String user;
+    @NonNull
+    private String newValue = "";
     private long end;
     private boolean endTimeSet;
     private boolean isTrackingLocationsEnabled;
@@ -139,21 +142,22 @@ public class AuditEvent {
      * Create a new event
      */
     public AuditEvent(long start, AuditEventType auditEventType) {
-        this(start, auditEventType, false, false, null, null);
+        this(start, auditEventType, false, false, null, null, null);
     }
 
     public AuditEvent(long start, AuditEventType auditEventType, boolean isTrackingLocationsEnabled, boolean isTrackingChangesEnabled) {
-        this(start, auditEventType, isTrackingLocationsEnabled, isTrackingChangesEnabled, null, null);
+        this(start, auditEventType, isTrackingLocationsEnabled, isTrackingChangesEnabled, null, null, null);
     }
 
     public AuditEvent(long start, AuditEventType auditEventType, boolean isTrackingLocationsEnabled,
-                      boolean isTrackingChangesEnabled, FormIndex formIndex, String oldValue) {
+                      boolean isTrackingChangesEnabled, FormIndex formIndex, String oldValue, String user) {
         this.start = start;
         this.auditEventType = auditEventType;
         this.isTrackingLocationsEnabled = isTrackingLocationsEnabled;
         this.isTrackingChangesEnabled = isTrackingChangesEnabled;
         this.formIndex = formIndex;
         this.oldValue = oldValue == null ? "" : oldValue;
+        this.user = user;
     }
 
     /**
@@ -199,6 +203,10 @@ public class AuditEvent {
         this.accuracy = accuracy;
     }
 
+    public void setUser(String user) {
+        this.user = user;
+    }
+
     public void recordValueChange(String newValue) {
         this.newValue = newValue != null ? newValue : "";
 
@@ -225,18 +233,17 @@ public class AuditEvent {
     public String toString() {
         String node = formIndex == null || formIndex.getReference() == null ? "" : getXPathPath(formIndex);
 
-        String event;
-        if (isTrackingLocationsEnabled && isTrackingChangesEnabled) {
-            event = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", latitude, longitude, accuracy, oldValue, newValue);
-        } else if (isTrackingLocationsEnabled) {
-            event = String.format("%s,%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", latitude, longitude, accuracy);
-        } else if (isTrackingChangesEnabled) {
-            event = String.format("%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", oldValue, newValue);
-        } else {
-            event = String.format("%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "");
+        String string = String.format("%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "");
+
+        if (isTrackingLocationsEnabled) {
+            string += String.format(",%s,%s,%s", latitude, longitude, accuracy);
         }
 
-        return event;
+        if (isTrackingChangesEnabled) {
+            string += String.format(",%s,%s", oldValue, newValue);
+        }
+
+        return string;
     }
 
     public String getLatitude() {
@@ -249,6 +256,10 @@ public class AuditEvent {
 
     public String getAccuracy() {
         return accuracy;
+    }
+
+    public String getUser() {
+        return user;
     }
 
     // Get event type based on a Form Controller event
