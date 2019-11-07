@@ -117,6 +117,7 @@ import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.location.client.GoogleFusedLocationClient;
 import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.network.NetworkStateProvider;

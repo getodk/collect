@@ -15,13 +15,13 @@ public class LocationClients {
     @Nullable private static LocationClient testClient = null;
 
     /** Returns a {@link LocationClient} appropriate for a given context. */
-    // NOTE(ping): As of 2018-11-01, the GoogleLocationClient never returns an
+    // NOTE(ping): As of 2018-11-01, the GoogleFusedLocationClient never returns an
     // accuracy radius below 3m: https://issuetracker.google.com/issues/118789585
     public static LocationClient clientForContext(@NonNull Context context) {
         return testClient != null
             ? testClient
             : PlayServicesUtil.isGooglePlayServicesAvailable(context)
-                ? new GoogleLocationClient(context)
+                ? new GoogleFusedLocationClient(context)
                 : new AndroidLocationClient(context);
     }
 

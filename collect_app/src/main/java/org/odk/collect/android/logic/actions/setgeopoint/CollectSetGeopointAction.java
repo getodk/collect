@@ -23,7 +23,7 @@ import com.google.android.gms.location.LocationListener;
 import org.javarosa.core.model.actions.setgeopoint.SetGeopointAction;
 import org.javarosa.core.model.instance.TreeReference;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.location.client.GoogleLocationClient;
+import org.odk.collect.android.location.client.GoogleFusedLocationClient;
 import org.odk.collect.android.location.client.MaxAccuracyWithinTimeoutLocationClient;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.GeoUtils;
@@ -67,7 +67,7 @@ public class CollectSetGeopointAction extends SetGeopointAction implements Locat
     public void requestLocationUpdates() {
         // Do initialization on first location request so the client doesn't need to be serialized
         if (maxAccuracyLocationClient == null) {
-            maxAccuracyLocationClient = new MaxAccuracyWithinTimeoutLocationClient(new GoogleLocationClient(Collect.getInstance().getApplicationContext()), this);
+            maxAccuracyLocationClient = new MaxAccuracyWithinTimeoutLocationClient(new GoogleFusedLocationClient(Collect.getInstance().getApplicationContext()), this);
         }
 
         // Only start acquiring location if the Collect preference allows it and Google Play
