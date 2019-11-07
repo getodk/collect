@@ -4,10 +4,10 @@
     xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns="http://www.w3.org/2002/xforms">
     <h:head>
-        <h:title>Identify User</h:title>
+        <h:title>Identify User False</h:title>
         <model>
             <instance>
-                <data id="identify-user">
+                <data id="identify-user-false">
                     <what_up />
                     <meta>
                         <audit />
@@ -16,7 +16,7 @@
                 </data>
             </instance>
             <bind nodeset="/data/what_up" type="string" />
-            <bind nodeset="/data/meta/audit" type="binary" odk:identify-user="true" />
+            <bind nodeset="/data/meta/audit" type="binary" odk:identify-user="false" />
             <bind nodeset="/data/meta/instanceID" readonly="true()" type="string"
                 jr:preload="uid" />
         </model>

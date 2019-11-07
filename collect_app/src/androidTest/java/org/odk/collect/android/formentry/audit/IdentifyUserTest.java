@@ -19,6 +19,7 @@ import org.odk.collect.android.support.ResetStateRule;
 public class IdentifyUserTest {
 
     private static final String IDENTIFY_USER_AUDIT_FORM = "identify-user-audit.xml";
+    private static final String IDENTIFY_USER_AUDIT_FALSE_FORM = "identify-user-audit-false.xml";
 
     @Rule
     public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
@@ -30,7 +31,8 @@ public class IdentifyUserTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             ))
             .around(new ResetStateRule())
-            .around(new CopyFormRule(IDENTIFY_USER_AUDIT_FORM));
+            .around(new CopyFormRule(IDENTIFY_USER_AUDIT_FORM))
+            .around(new CopyFormRule(IDENTIFY_USER_AUDIT_FALSE_FORM));
 
     @Test
     public void openingForm_andThenEnteringIdentity_proceedsToForm() {
@@ -39,6 +41,15 @@ public class IdentifyUserTest {
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .enterIdentity("Lucius")
                 .clickKeyboardEnter()
+                .swipeToNextQuestion()
+                .clickSaveAndExit();
+    }
+
+    @Test
+    public void openFormWithIdentifyUserFalse_proceedsToForm() {
+        new MainMenuPage(rule)
+                .clickFillBlankForm()
+                .clickOnForm("Identify User False")
                 .swipeToNextQuestion()
                 .clickSaveAndExit();
     }

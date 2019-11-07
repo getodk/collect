@@ -49,4 +49,9 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
         onView(withIndex(withId(R.id.form_subtitle2), 0)).check(matches(isDisplayed()));
         return this;
     }
+
+    public FormEntryPage clickOnForm(String formName) {
+        onView(withText(formName)).perform(click());
+        return new FormEntryPage(formName, rule);
+    }
 }
