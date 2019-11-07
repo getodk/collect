@@ -742,6 +742,8 @@ public class Utilities {
         boolean valid = false;
         if (currentStatus != null && currentStatus.equals(Utilities.STATUS_T_ACCEPTED)) {
             valid = true;
+        } else  if (currentStatus != null && currentStatus.equals(Utilities.STATUS_T_NEW)) {
+            valid = true;
         }
         return valid;
     }
