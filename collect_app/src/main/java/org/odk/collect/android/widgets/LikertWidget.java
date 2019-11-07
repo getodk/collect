@@ -165,9 +165,9 @@ public class LikertWidget extends ItemsWidget {
         leftLineViewParams.addRule(RelativeLayout.LEFT_OF, button.getId());
         leftLineViewParams.addRule(CENTER_IN_PARENT, TRUE);
         leftLineView.setLayoutParams(leftLineViewParams);
-        leftLineView.setBackgroundColor(Color.GRAY);
+        leftLineView.setBackgroundColor(getResources().getColor(R.color.gray600));
         if (left) {
-            leftLineView.setBackgroundColor(Color.WHITE);
+            leftLineView.setBackgroundColor(getResources().getColor(R.color.white));
         }
         buttonView.addView(leftLineView);
 
@@ -176,10 +176,10 @@ public class LikertWidget extends ItemsWidget {
         rightLineViewParams.addRule(RelativeLayout.RIGHT_OF, button.getId());
         rightLineViewParams.addRule(CENTER_IN_PARENT, TRUE);
         rightLineView.setLayoutParams(rightLineViewParams);
-        rightLineView.setBackgroundColor(Color.GRAY);
+        rightLineView.setBackgroundColor(getResources().getColor(R.color.gray600));
 
         if (right) {
-            rightLineView.setBackgroundColor(Color.WHITE);
+            rightLineView.setBackgroundColor(getResources().getColor(R.color.white));
         }
         buttonView.addView(rightLineView);
     }
