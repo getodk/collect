@@ -108,7 +108,6 @@ public class LikertWidget extends ItemsWidget {
      * If you have many elements, use this first
      * and use the standard addView(view, params) to place the rest
      */
-    //TODO: Maybe try to call it from somewhere
     protected void addAnswerView(View v) {
         if (v == null) {
             Timber.e("cannot add a null view as an answerView");
@@ -135,32 +134,15 @@ public class LikertWidget extends ItemsWidget {
             buttonsToName.put(button, items.get(i).getValue());
             buttonView.addView(button);
 
-            // Adds lines to the button's side
-            View leftLineView = new View(this.getContext());
-            leftLineViewParams.addRule(RelativeLayout.LEFT_OF, button.getId());
-            leftLineViewParams.addRule(CENTER_IN_PARENT, TRUE);
-            leftLineView.setLayoutParams(leftLineViewParams);
-            leftLineView.setBackgroundColor(Color.parseColor("#CCCCCC"));
             if (i == 0) {
-                leftLineView.setBackgroundColor(Color.WHITE);
-            }
-            // left line
-            buttonView.addView(leftLineView);
-
-            View rightLineView = new View(this.getContext());
-            rightLineViewParams.addRule(RelativeLayout.RIGHT_OF, button.getId());
-            rightLineViewParams.addRule(CENTER_IN_PARENT, TRUE);
-            rightLineView.setLayoutParams(rightLineViewParams);
-            rightLineView.setBackgroundColor(Color.parseColor("#CCCCCC"));
-
-            if (i == items.size() - 1) {
-                rightLineView.setBackgroundColor(Color.WHITE);
+                addLine(true, false, button, buttonView);
+            } else if (i == items.size() - 1) {
+                addLine(false, true, button, buttonView);
+            } else {
+                addLine(false, false, button, buttonView);
             }
 
             LinearLayout optionView = getLinearLayout();
-
-            // right line
-            buttonView.addView(rightLineView);
             optionView.addView(buttonView);
 
             ImageView imgView = getImageAsImageView(i);
@@ -176,6 +158,32 @@ public class LikertWidget extends ItemsWidget {
         }
     }
 
+    // Adds lines to the button's side
+    public void addLine(boolean left, boolean right, RadioButton button, RelativeLayout buttonView) {
+        // left line
+        View leftLineView = new View(this.getContext());
+        leftLineViewParams.addRule(RelativeLayout.LEFT_OF, button.getId());
+        leftLineViewParams.addRule(CENTER_IN_PARENT, TRUE);
+        leftLineView.setLayoutParams(leftLineViewParams);
+        leftLineView.setBackgroundColor(Color.GRAY);
+        if (left) {
+            leftLineView.setBackgroundColor(Color.WHITE);
+        }
+        buttonView.addView(leftLineView);
+
+        // right line
+        View rightLineView = new View(this.getContext());
+        rightLineViewParams.addRule(RelativeLayout.RIGHT_OF, button.getId());
+        rightLineViewParams.addRule(CENTER_IN_PARENT, TRUE);
+        rightLineView.setLayoutParams(rightLineViewParams);
+        rightLineView.setBackgroundColor(Color.GRAY);
+
+        if (right) {
+            rightLineView.setBackgroundColor(Color.WHITE);
+        }
+        buttonView.addView(rightLineView);
+    }
+
     // Creates image view for choice
     public ImageView getImageView() {
         ImageView view = new ImageView(getContext());
@@ -183,7 +191,7 @@ public class LikertWidget extends ItemsWidget {
         return view;
     }
 
-    public RadioButton getRadioButton(int i){
+    public RadioButton getRadioButton(int i) {
         AppCompatRadioButton button = new AppCompatRadioButton(getContext());
         button.setId(ViewIds.generateViewId());
         button.setTag(i);
@@ -199,9 +207,9 @@ public class LikertWidget extends ItemsWidget {
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                if(!paramsSet[0]){
+                if (!paramsSet[0]) {
                     int width = button.getWidth();
-                    radioButtonsParams.setMargins(-width/5,0,-width/5, 0);
+                    radioButtonsParams.setMargins(-width / 5, 0, -width / 5, 0);
                     button.setLayoutParams(radioButtonsParams);
                     paramsSet[0] = true;
                 }
@@ -249,6 +257,7 @@ public class LikertWidget extends ItemsWidget {
 
     public ImageView getImageAsImageView(int index) {
         ImageView view = getImageView();
+        view.setTag(index);
         String imageURI;
         if (items.get(index) instanceof ExternalSelectChoice) {
             imageURI = ((ExternalSelectChoice) items.get(index)).getImage();

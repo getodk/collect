@@ -8,7 +8,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.espressoutils.FormEntry;
+import org.odk.collect.android.espressoutils.pages.FormEntryPage;
 import org.odk.collect.android.espressoutils.pages.MainMenuPage;
 import org.odk.collect.android.regression.BaseRegressionTest;
 import org.odk.collect.android.support.CopyFormRule;
@@ -37,8 +37,9 @@ public class FormHierarchyTest extends BaseRegressionTest {
     @Test
     //https://github.com/opendatakit/collect/issues/2871
     public void allRelevantQuestionsShouldBeVisibleInHierarchyView() {
-        new MainMenuPage(main).startBlankForm("formHierarchy1");
-        FormEntry.clickGoToIconInForm();
+        new MainMenuPage(main)
+                .startBlankForm("formHierarchy1")
+                .clickGoToIconInForm();
 
         onView(withRecyclerView(R.id.list)
                 .atPositionOnView(0, R.id.primary_text))
@@ -52,9 +53,11 @@ public class FormHierarchyTest extends BaseRegressionTest {
     @Test
     //https://github.com/opendatakit/collect/issues/2944
     public void notRelevantRepeatGroupsShouldNotBeVisibleInHierarchy() {
-        new MainMenuPage(main).startBlankForm("formHierarchy2");
-        FormEntry.putText("2");
-        FormEntry.clickGoToIconInForm();
+        final FormEntryPage page = new MainMenuPage(main)
+                .startBlankForm("formHierarchy2")
+                .inputText("2")
+                .clickGoToIconInForm();
+
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
         onView(withRecyclerView(R.id.list)
                 .atPositionOnView(0, R.id.primary_text))
@@ -71,7 +74,9 @@ public class FormHierarchyTest extends BaseRegressionTest {
         onView(withRecyclerView(R.id.list)
                 .atPositionOnView(2, R.id.secondary_text))
                 .check(matches(withText("Repeatable Group")));
-        FormEntry.clickOnText("Guest details");
+
+        page.clickOnText("Guest details");
+
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(2)));
         onView(withRecyclerView(R.id.list)
                 .atPositionOnView(0, R.id.primary_text))
@@ -79,10 +84,12 @@ public class FormHierarchyTest extends BaseRegressionTest {
         onView(withRecyclerView(R.id.list)
                 .atPositionOnView(1, R.id.primary_text))
                 .check(matches(withText("Guest details > 2")));
-        FormEntry.clickJumpStartButton();
-        FormEntry.putText("1");
-        FormEntry.clickGoToIconInForm();
-        FormEntry.clickOnText("Guest details");
+
+        page.clickJumpStartButton()
+                .inputText("1")
+                .clickGoToIconInForm()
+                .clickOnText("Guest details");
+
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(1)));
         onView(withRecyclerView(R.id.list)
                 .atPositionOnView(0, R.id.primary_text))
@@ -92,51 +99,59 @@ public class FormHierarchyTest extends BaseRegressionTest {
     @Test
     //https://github.com/opendatakit/collect/issues/2936
     public void repeatGroupsShouldBeVisibleAsAppropriate() {
-        new MainMenuPage(main).startBlankForm("formHierarchy3");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.swipeToNextQuestion();
-        FormEntry.swipeToNextQuestion();
-        FormEntry.swipeToNextQuestion();
-        FormEntry.swipeToNextQuestion();
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnString(R.string.add_another);
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnString(R.string.add_another);
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnString(R.string.add_repeat_no);
-        FormEntry.clickOnString(R.string.add_repeat_no);
-        FormEntry.clickGoToIconInForm();
+        FormEntryPage page = new MainMenuPage(main)
+                .startBlankForm("formHierarchy3")
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickOnString(R.string.add_another)
+                .swipeToNextQuestion()
+                .clickOnString(R.string.add_another)
+                .swipeToNextQuestion()
+                .clickOnString(R.string.add_repeat_no)
+                .clickOnString(R.string.add_repeat_no)
+                .clickGoToIconInForm();
+
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
-        FormEntry.clickOnText("Group 1");
+
+        page.clickOnText("Group 1");
+
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
-        FormEntry.checkIfTextDoesNotExist("Repeat Group 1");
+
+        page.checkIfTextDoesNotExist("Repeat Group 1");
     }
 
     @Test
     //https://github.com/opendatakit/collect/issues/2942
     public void deletingLastGroupShouldNotBreakHierarchy() {
-        new MainMenuPage(main).startBlankForm("formHierarchy3");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.swipeToNextQuestion();
-        FormEntry.swipeToNextQuestion();
-        FormEntry.swipeToNextQuestion();
-        FormEntry.swipeToNextQuestion();
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnString(R.string.add_another);
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnString(R.string.add_another);
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnString(R.string.add_another);
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnString(R.string.add_repeat_no);
-        FormEntry.clickOnString(R.string.add_repeat_no);
-        FormEntry.clickGoToIconInForm();
-        FormEntry.clickOnText("Repeat Group 1");
-        FormEntry.clickOnText("Repeat Group 1 > 1");
-        FormEntry.clickOnText("Repeat Group 1_1");
-        FormEntry.clickOnText("Repeat Group 1_1 > 2");
-        FormEntry.deleteGroup();
+        FormEntryPage page = new MainMenuPage(main)
+                .startBlankForm("formHierarchy3")
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickOnString(R.string.add_another)
+                .swipeToNextQuestion()
+                .clickOnString(R.string.add_another)
+                .swipeToNextQuestion()
+                .clickOnString(R.string.add_another)
+                .swipeToNextQuestion()
+                .clickOnString(R.string.add_repeat_no)
+                .clickOnString(R.string.add_repeat_no)
+                .clickGoToIconInForm()
+                .clickOnText("Repeat Group 1")
+                .clickOnText("Repeat Group 1 > 1")
+                .clickOnText("Repeat Group 1_1")
+                .clickOnText("Repeat Group 1_1 > 2")
+                .deleteGroup();
+
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(1)));
-        FormEntry.checkIsTextDisplayed("Repeat Group 1_1 > 1");
+
+        page.checkIsTextDisplayed("Repeat Group 1_1 > 1");
     }
 }

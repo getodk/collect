@@ -10,11 +10,11 @@ import timber.log.Timber;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
@@ -144,6 +144,49 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage clickSaveAndExitWhenValidationErrorIsExpected() {
         onView(withId(R.id.save_exit_button)).perform(click());
+        return this;
+    }
+
+    public FormEntryPage deleteGroup(String questionText) {
+        onView(withText(questionText)).perform(longClick());
+        onView(withText(R.string.delete_repeat)).perform(click());
+        onView(withText(R.string.discard_group)).perform(click());
+        return this;
+    }
+
+    public FormEntryPage deleteGroup() {
+        onView(withId(R.id.menu_delete_child)).perform(click());
+        onView(withText(R.string.delete_repeat)).perform(click());
+        return this;
+    }
+
+    public FormEntryPage clickGoUpIcon() {
+        onView(withId(R.id.menu_go_up)).perform(click());
+        return this;
+    }
+
+    public FormEntryPage showSpinnerMultipleDialog() {
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.select_answer))).perform(click());
+        return this;
+    }
+
+    public FormEntryPage clickJumpStartButton() {
+        onView(withId(R.id.jumpBeginningButton)).perform(click());
+        return this;
+    }
+
+    public FormEntryPage clickForwardButton() {
+        onView(withText(getTranslatedString(R.string.form_forward))).perform(click());
+        return this;
+    }
+
+    public FormEntryPage clickBackwardButton() {
+        onView(withText(getTranslatedString(R.string.form_backward))).perform(click());
+        return this;
+    }
+
+    public FormEntryPage clickOnDoNotAddGroup() {
+        clickOnString(R.string.add_repeat_no);
         return this;
     }
 }

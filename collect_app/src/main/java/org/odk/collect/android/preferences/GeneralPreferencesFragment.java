@@ -19,13 +19,10 @@ package org.odk.collect.android.preferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
-import android.view.View;
 
 import org.odk.collect.android.R;
 
 import java.util.Collection;
-
-import androidx.annotation.Nullable;
 
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MAPS;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
@@ -59,12 +56,6 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        toolbar.setTitle(R.string.general_preferences);
-    }
-
-    @Override
     public boolean onPreferenceClick(Preference preference) {
         BasePreferenceFragment basePreferenceFragment = null;
         boolean adminMode = getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false);
@@ -88,7 +79,7 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
         if (basePreferenceFragment != null) {
             getActivity().getFragmentManager()
                     .beginTransaction()
-                    .replace(android.R.id.content, basePreferenceFragment)
+                    .replace(R.id.container, basePreferenceFragment)
                     .addToBackStack(null)
                     .commit();
         }

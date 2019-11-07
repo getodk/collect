@@ -49,7 +49,7 @@ public class SpinnerAdapter extends ArrayAdapter<CharSequence> {
         if (position == (items.length - 1) && selectedPosition == position) {
             tv.setEnabled(false);
         } else {
-            tv.setTextColor(selectedPosition == position ? themeUtils.getAccentColor() : themeUtils.getPrimaryTextColor());
+            tv.setTextColor(selectedPosition == position ? themeUtils.getAccentColor() : themeUtils.getColorOnSurface());
         }
 
         return convertView;
