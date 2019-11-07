@@ -12,7 +12,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.location.client.LocationClient;
-import org.odk.collect.android.location.client.LocationClients;
+import org.odk.collect.android.location.client.LocationClientProvider;
 import org.odk.collect.android.widgets.GeoPointWidget;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
@@ -53,7 +53,7 @@ public class GeoPointActivityTest extends BaseGeoActivityTest {
         activityController = Robolectric.buildActivity(GeoPointActivity.class);
         activity = activityController.get();
         shadowActivity = shadowOf(activity);
-        LocationClients.setTestClient(locationClient);
+        LocationClientProvider.setTestClient(locationClient);
     }
 
     @Test

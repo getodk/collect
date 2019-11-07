@@ -31,7 +31,7 @@ import com.google.android.gms.location.LocationListener;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.location.client.LocationClient;
-import org.odk.collect.android.location.client.LocationClients;
+import org.odk.collect.android.location.client.LocationClientProvider;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
@@ -102,7 +102,7 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
         setTitle(getString(R.string.get_location));
 
-        locationClient = LocationClients.clientForContext(this);
+        locationClient = LocationClientProvider.getClient(this);
         if (locationClient.canSetUpdateIntervals()) {
             locationClient.setUpdateIntervals(LOCATION_UPDATE_INTERVAL, LOCATION_FASTEST_UPDATE_INTERVAL);
         }

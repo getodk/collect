@@ -19,7 +19,7 @@ import timber.log.Timber;
  * <p>
  * Should be used whenever there Google Play Services is not present.
  * <p>
- * Package-private, use {@link LocationClients} to retrieve the correct
+ * Package-private, use {@link LocationClientProvider} to retrieve the correct
  * {@link LocationClient}.
  */
 class AndroidLocationClient
