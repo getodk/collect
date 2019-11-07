@@ -28,7 +28,7 @@ import timber.log.Timber;
  * Package-private, use {@link LocationClients} to retrieve the correct
  * {@link LocationClient}.
  */
-public class GoogleLocationClient
+public class GoogleFusedLocationClient
         extends BaseLocationClient
         implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 
@@ -56,13 +56,13 @@ public class GoogleLocationClient
     private long fastestUpdateInterval = DEFAULT_FASTEST_UPDATE_INTERVAL;
 
     /**
-     * Constructs a new GoogleLocationClient with the provided Context.
+     * Constructs a new GoogleFusedLocationClient with the provided Context.
      * <p>
      * This Constructor should be used normally.
      *
-     * @param context The Context where the GoogleLocationClient will be running.
+     * @param context The Context where the GoogleFusedLocationClient will be running.
      */
-    public GoogleLocationClient(@NonNull Context context) {
+    public GoogleFusedLocationClient(@NonNull Context context) {
         this(locationServicesClientForContext(context), LocationServices.FusedLocationApi,
                 (LocationManager) context.getSystemService(Context.LOCATION_SERVICE));
     }
@@ -78,9 +78,9 @@ public class GoogleLocationClient
      * @param fusedLocationProviderApi The FusedLocationProviderApi for fetching the User's
      *                                 location.
      */
-    GoogleLocationClient(@NonNull GoogleApiClient googleApiClient,
-                         @NonNull FusedLocationProviderApi fusedLocationProviderApi,
-                         @NonNull LocationManager locationManager) {
+    GoogleFusedLocationClient(@NonNull GoogleApiClient googleApiClient,
+                              @NonNull FusedLocationProviderApi fusedLocationProviderApi,
+                              @NonNull LocationManager locationManager) {
         super(locationManager);
 
         this.googleApiClient = googleApiClient;
@@ -151,7 +151,7 @@ public class GoogleLocationClient
 
     @Override
     public void setUpdateIntervals(long updateInterval, long fastestUpdateInterval) {
-        Timber.i("GoogleLocationClient setting update intervals: %d, %d", updateInterval, fastestUpdateInterval);
+        Timber.i("GoogleFusedLocationClient setting update intervals: %d, %d", updateInterval, fastestUpdateInterval);
 
         this.updateInterval = updateInterval;
         this.fastestUpdateInterval = fastestUpdateInterval;
@@ -159,13 +159,13 @@ public class GoogleLocationClient
 
     @Override
     public void resetUpdateIntervals() {
-        Timber.i("GoogleLocationClient resetting update intervals.");
+        Timber.i("GoogleFusedLocationClient resetting update intervals.");
 
         this.updateInterval = DEFAULT_UPDATE_INTERVAL;
         this.fastestUpdateInterval = DEFAULT_FASTEST_UPDATE_INTERVAL;
     }
 
-    // GoogleLocationClient:
+    // GoogleFusedLocationClient:
 
     private LocationRequest createLocationRequest() {
         LocationRequest locationRequest = new LocationRequest();

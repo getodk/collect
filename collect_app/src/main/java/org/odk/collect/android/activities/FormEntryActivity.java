@@ -116,7 +116,7 @@ import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.location.client.GoogleLocationClient;
+import org.odk.collect.android.location.client.GoogleFusedLocationClient;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
 import org.odk.collect.android.logic.FormInfo;
@@ -2895,7 +2895,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             if (modelClass.equals(BackgroundLocationViewModel.class)) {
-                GoogleLocationClient googleLocationClient = new GoogleLocationClient(Collect.getInstance().getApplicationContext());
+                GoogleFusedLocationClient googleLocationClient = new GoogleFusedLocationClient(Collect.getInstance().getApplicationContext());
 
                 BackgroundLocationManager locationManager =
                         new BackgroundLocationManager(googleLocationClient, new BackgroundLocationHelper());

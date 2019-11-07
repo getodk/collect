@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 /**
  * An interface for classes that allow monitoring and retrieving the User's Location.
  * Currently there are only two implementations:
- * - {@link GoogleLocationClient}: A LocationClient using Google Play Services.
+ * - {@link GoogleFusedLocationClient}: A LocationClient using Google Play Services.
  * - {@link AndroidLocationClient}: A LocationClient using Android's existing Location Services.
  */
 public interface LocationClient {
@@ -90,7 +90,7 @@ public interface LocationClient {
 
     /**
      * Provides a way to tell if the underlying LocationClient allows the updateInterval to be set.
-     * Currently only the GoogleLocationClient can handle updateInterval changes.
+     * Currently only the GoogleFusedLocationClient can handle updateInterval changes.
      *
      * @return Whether or the LocationClient's updateInterval can be set.
      */
