@@ -27,7 +27,7 @@ public class IdentifyUserPromptPage extends Page<IdentifyUserPromptPage> {
     @Override
     public IdentifyUserPromptPage assertOnPage() {
         onView(allOf(withText(formName), isDescendantOfA(withId(R.id.toolbar)))).check(matches(isDisplayed()));
-        onView(allOf(withText(getTranslatedString(R.string.enter_identity)), isDescendantOfA(withId(R.id.toolbar)))).check(matches(isDisplayed()));
+        onView(withText(getTranslatedString(R.string.enter_identity))).check(matches(isDisplayed()));
         return this;
     }
 
@@ -39,5 +39,10 @@ public class IdentifyUserPromptPage extends Page<IdentifyUserPromptPage> {
     public FormEntryPage clickKeyboardEnter() {
         onView(withHint(getTranslatedString(R.string.identity))).perform(pressImeActionButton());
         return new FormEntryPage(formName, rule).assertOnPage();
+    }
+
+    public IdentifyUserPromptPage clickKeyboardEnterWithValidationError() {
+        onView(withHint(getTranslatedString(R.string.identity))).perform(pressImeActionButton());
+        return this.assertOnPage();
     }
 }

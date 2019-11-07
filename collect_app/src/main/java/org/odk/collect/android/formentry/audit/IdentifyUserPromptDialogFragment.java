@@ -42,8 +42,12 @@ public class IdentifyUserPromptDialogFragment extends DialogFragment {
 
         EditText identityField = view.findViewById(R.id.identity);
         identityField.setOnEditorActionListener((textView, i, keyEvent) -> {
-            dismiss();
-            return true;
+            if (identityField.getText().toString().isEmpty()) {
+                return false;
+            } else {
+                dismiss();
+                return true;
+            }
         });
     }
 

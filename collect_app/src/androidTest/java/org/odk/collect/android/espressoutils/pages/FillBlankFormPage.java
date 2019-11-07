@@ -27,7 +27,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
 
     public IdentifyUserPromptPage clickOnFormWithIdentityPrompt(String formName) {
         onView(withText(formName)).perform(click());
-        return new IdentifyUserPromptPage(formName, rule);
+        return new IdentifyUserPromptPage(formName, rule).assertOnPage();
     }
 
     public FillBlankFormPage clickOnSortByButton() {

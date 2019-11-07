@@ -46,6 +46,15 @@ public class IdentifyUserTest {
     }
 
     @Test
+    public void openingForm_andEnteringBlankIdentity_remainsOnIdentityPrompt() {
+        new MainMenuPage(rule)
+                .clickFillBlankForm()
+                .clickOnFormWithIdentityPrompt("Identify User")
+                .enterIdentity("")
+                .clickKeyboardEnterWithValidationError();
+    }
+
+    @Test
     public void openFormWithIdentifyUserFalse_proceedsToForm() {
         new MainMenuPage(rule)
                 .clickFillBlankForm()
