@@ -17,8 +17,6 @@ package org.odk.collect.android.preferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import androidx.annotation.Nullable;
-import android.view.View;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -56,20 +54,6 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         initListPref(KEY_AUTOSEND);
         initListPref(KEY_IMAGE_SIZE);
         initGuidancePrefs();
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        toolbar.setTitle(R.string.form_management_preferences);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        if (toolbar != null) {
-            toolbar.setTitle(R.string.general_preferences);
-        }
     }
 
     private void initListPref(String key) {
