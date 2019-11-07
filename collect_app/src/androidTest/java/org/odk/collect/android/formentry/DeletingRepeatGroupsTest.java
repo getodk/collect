@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.espressoutils.FormEntry;
+import org.odk.collect.android.espressoutils.pages.FormEntryPage;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
@@ -38,140 +38,174 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfFirstRepeat_deletesFirstRepeat() {
-        FormEntry.deleteGroup("text1");
-        FormEntry.checkIsTextDisplayed("2");
+        new FormEntryPage("repeatGroups", activityTestRule)
+                .deleteGroup("text1")
+                .checkIsTextDisplayed("2");
     }
 
     @Test
     public void requestingDeletionOfMiddleRepeat_deletesMiddleRepeat() {
-        FormEntry.swipeToNextQuestion();
-        FormEntry.deleteGroup("text1");
-        FormEntry.checkIsTextDisplayed("3");
+        new FormEntryPage("repeatGroups", activityTestRule)
+                .swipeToNextQuestion()
+                .deleteGroup("text1")
+                .checkIsTextDisplayed("3");
     }
 
     @Test
     public void requestingDeletionOfLastRepeat_deletesLastRepeat() {
-        FormEntry.swipeToNextQuestion();
-        FormEntry.swipeToNextQuestion();
-        FormEntry.swipeToNextQuestion();
-        FormEntry.deleteGroup("text1");
-        FormEntry.checkIsTextDisplayed("number1");
+        new FormEntryPage("repeatGroups", activityTestRule)
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .deleteGroup("text1")
+                .checkIsTextDisplayed("number1");
     }
 
     @Test
     public void requestingDeletionOfFirstRepeatInHierarchy_deletesFirstRepeat() {
-        FormEntry.clickGoToIconInForm();
-        FormEntry.clickGoUpIcon();
+        FormEntryPage page = new FormEntryPage("repeatGroups", activityTestRule)
+                .clickOnGoToIconInForm()
+                .clickGoUpIcon();
+
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(4)));
-        FormEntry.clickOnText("repeatGroup > 1");
-        FormEntry.checkIsTextDisplayed("1");
-        FormEntry.deleteGroup();
+
+        page.clickOnText("repeatGroup > 1")
+                .checkIsTextDisplayed("1")
+                .deleteGroup();
+
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
-        FormEntry.clickOnText("repeatGroup > 1");
-        FormEntry.checkIsTextDisplayed("2");
+
+        page.clickOnText("repeatGroup > 1")
+                .checkIsTextDisplayed("2");
     }
 
     @Test
     public void requestingDeletionOfMiddleRepeatInHierarchy_deletesMiddleRepeat() {
-        FormEntry.clickGoToIconInForm();
-        FormEntry.clickGoUpIcon();
+        FormEntryPage page = new FormEntryPage("repeatGroups", activityTestRule)
+                .clickOnGoToIconInForm()
+                .clickGoUpIcon();
+
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(4)));
-        FormEntry.clickOnText("repeatGroup > 2");
-        FormEntry.checkIsTextDisplayed("2");
-        FormEntry.deleteGroup();
+
+        page.clickOnText("repeatGroup > 2")
+                .checkIsTextDisplayed("2")
+                .deleteGroup();
+
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
-        FormEntry.clickOnText("repeatGroup > 2");
-        FormEntry.checkIsTextDisplayed("3");
+
+        page.clickOnText("repeatGroup > 2")
+                .checkIsTextDisplayed("3");
     }
 
     @Test
     public void requestingDeletionOfLastRepeatInHierarchy_deletesLastRepeat() {
-        FormEntry.clickGoToIconInForm();
-        FormEntry.clickGoUpIcon();
+        FormEntryPage page = new FormEntryPage("repeatGroups", activityTestRule)
+                .clickOnGoToIconInForm()
+                .clickGoUpIcon();
+
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(4)));
-        FormEntry.clickOnText("repeatGroup > 4");
-        FormEntry.checkIsTextDisplayed("4");
-        FormEntry.deleteGroup();
+
+        page.clickOnText("repeatGroup > 4")
+                .checkIsTextDisplayed("4")
+                .deleteGroup();
+
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
-        FormEntry.clickOnText("repeatGroup > 3");
-        FormEntry.checkIsTextDisplayed("3");
+
+        page.clickOnText("repeatGroup > 3")
+                .checkIsTextDisplayed("3");
     }
 
     @Test
     public void requestingDeletionOfFirstRepeatWithFieldList_deletesFirstRepeat() {
-        FormEntry.clickGoToIconInForm();
-        FormEntry.clickGoUpIcon();
-        FormEntry.clickGoUpIcon();
-        FormEntry.clickOnText("repeatGroupFieldList");
-        FormEntry.clickOnText("repeatGroupFieldList > 1");
-        FormEntry.clickOnText("number1");
-        FormEntry.deleteGroup("number1");
-        FormEntry.checkIsTextDisplayed("2");
+        new FormEntryPage("repeatGroups", activityTestRule)
+                .clickGoToIconInForm()
+                .clickGoUpIcon()
+                .clickGoUpIcon()
+                .clickOnText("repeatGroupFieldList")
+                .clickOnText("repeatGroupFieldList > 1")
+                .clickOnText("number1")
+                .deleteGroup("number1")
+                .checkIsTextDisplayed("2");
     }
 
     @Test
     public void requestingDeletionOfMiddleRepeatWithFieldList_deletesMiddleRepeat() {
-        FormEntry.clickGoToIconInForm();
-        FormEntry.clickGoUpIcon();
-        FormEntry.clickGoUpIcon();
-        FormEntry.clickOnText("repeatGroupFieldList");
-        FormEntry.clickOnText("repeatGroupFieldList > 2");
-        FormEntry.clickOnText("number1");
-        FormEntry.deleteGroup("number1");
-        FormEntry.checkIsTextDisplayed("3");
+        new FormEntryPage("repeatGroups", activityTestRule)
+                .clickGoToIconInForm()
+                .clickGoUpIcon()
+                .clickGoUpIcon()
+                .clickOnText("repeatGroupFieldList")
+                .clickOnText("repeatGroupFieldList > 2")
+                .clickOnText("number1")
+                .deleteGroup("number1")
+                .checkIsTextDisplayed("3");
     }
 
     @Test
     public void requestingDeletionOfLastRepeatWithFieldList_deletesLastRepeat() {
-        FormEntry.clickGoToIconInForm();
-        FormEntry.clickGoUpIcon();
-        FormEntry.clickGoUpIcon();
-        FormEntry.clickOnText("repeatGroupFieldList");
-        FormEntry.clickOnText("repeatGroupFieldList > 4");
-        FormEntry.clickOnText("number1");
-        FormEntry.deleteGroup("number1");
-        FormEntry.checkIsStringDisplayed(R.string.quit_entry);
+        new FormEntryPage("repeatGroups", activityTestRule)
+                .clickGoToIconInForm()
+                .clickGoUpIcon()
+                .clickGoUpIcon()
+                .clickOnText("repeatGroupFieldList")
+                .clickOnText("repeatGroupFieldList > 4")
+                .clickOnText("number1")
+                .deleteGroup("number1")
+                .checkIsStringDisplayed(R.string.quit_entry);
     }
 
     @Test
     public void requestingDeletionOfFirstRepeatWithFieldListInHierarchy_deletesFirstRepeat() {
-        FormEntry.clickGoToIconInForm();
-        FormEntry.clickGoUpIcon();
-        FormEntry.clickGoUpIcon();
-        FormEntry.clickOnText("repeatGroupFieldList");
+        FormEntryPage page = new FormEntryPage("repeatGroups", activityTestRule)
+                .clickGoToIconInForm()
+                .clickGoUpIcon()
+                .clickGoUpIcon()
+                .clickOnText("repeatGroupFieldList");
+
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(4)));
-        FormEntry.clickOnText("repeatGroupFieldList > 1");
-        FormEntry.deleteGroup();
+
+        page.clickOnText("repeatGroupFieldList > 1")
+                .deleteGroup();
+
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
-        FormEntry.clickOnText("repeatGroupFieldList > 1");
-        FormEntry.checkIsTextDisplayed("2");
+
+        page.clickOnText("repeatGroupFieldList > 1")
+                .checkIsTextDisplayed("2");
     }
 
     @Test
     public void requestingDeletionOfMiddleRepeatWithFieldListInHierarchy_deletesMiddleRepeat() {
-        FormEntry.clickGoToIconInForm();
-        FormEntry.clickGoUpIcon();
-        FormEntry.clickGoUpIcon();
-        FormEntry.clickOnText("repeatGroupFieldList");
+        FormEntryPage page = new FormEntryPage("repeatGroups", activityTestRule)
+                .clickGoToIconInForm()
+                .clickGoUpIcon()
+                .clickGoUpIcon()
+                .clickOnText("repeatGroupFieldList");
+
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(4)));
-        FormEntry.clickOnText("repeatGroupFieldList > 2");
-        FormEntry.deleteGroup();
+
+        page.clickOnText("repeatGroupFieldList > 2")
+                .deleteGroup();
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
-        FormEntry.clickOnText("repeatGroupFieldList > 2");
-        FormEntry.checkIsTextDisplayed("3");
+
+        page.clickOnText("repeatGroupFieldList > 2")
+                .checkIsTextDisplayed("3");
     }
 
     @Test
     public void requestingDeletionOfLastRepeatWithFieldListInHierarchy_deletesLastRepeat() {
-        FormEntry.clickGoToIconInForm();
-        FormEntry.clickGoUpIcon();
-        FormEntry.clickGoUpIcon();
-        FormEntry.clickOnText("repeatGroupFieldList");
+        FormEntryPage page = new FormEntryPage("repeatGroups", activityTestRule)
+                .clickGoToIconInForm()
+                .clickGoUpIcon()
+                .clickGoUpIcon()
+                .clickOnText("repeatGroupFieldList");
+
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(4)));
-        FormEntry.clickOnText("repeatGroupFieldList > 4");
-        FormEntry.deleteGroup();
+
+        page.clickOnText("repeatGroupFieldList > 4")
+                .deleteGroup();
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
-        FormEntry.clickOnText("repeatGroupFieldList > 3");
-        FormEntry.checkIsTextDisplayed("3");
+
+        page.clickOnText("repeatGroupFieldList > 3")
+                .checkIsTextDisplayed("3");
     }
 }

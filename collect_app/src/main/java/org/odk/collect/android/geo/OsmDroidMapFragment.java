@@ -662,7 +662,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
             paint = new Paint();
             paint.setAntiAlias(true);
-            paint.setColor(new ThemeUtils(context).getPrimaryTextColor());
+            paint.setColor(new ThemeUtils(context).getColorOnSurface());
             paint.setTextSize(FONT_SIZE_DP *
                 context.getResources().getDisplayMetrics().density);
             paint.setTextAlign(Paint.Align.RIGHT);
