@@ -249,6 +249,7 @@ public class LikertWidget extends ItemsWidget {
 
     public ImageView getImageAsImageView(int index) {
         ImageView view = getImageView();
+        view.setTag(index);
         String imageURI;
         if (items.get(index) instanceof ExternalSelectChoice) {
             imageURI = ((ExternalSelectChoice) items.get(index)).getImage();
