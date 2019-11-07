@@ -55,6 +55,15 @@ public class IdentifyUserTest {
     }
 
     @Test
+    public void openingForm_andPressingBack_returnsToMainMenu() {
+        new MainMenuPage(rule)
+                .clickFillBlankForm()
+                .clickOnFormWithIdentityPrompt("Identify User")
+                .closeSoftKeyboard()
+                .pressBack(new MainMenuPage(rule));
+    }
+
+    @Test
     public void openFormWithIdentifyUserFalse_proceedsToForm() {
         new MainMenuPage(rule)
                 .clickFillBlankForm()

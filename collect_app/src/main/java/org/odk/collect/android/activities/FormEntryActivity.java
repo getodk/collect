@@ -102,6 +102,7 @@ import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.IdentifyUserPromptDialogFragment;
+import org.odk.collect.android.formentry.audit.IdentityPromptViewModel;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationHelper;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationManager;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
@@ -953,6 +954,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         FragmentManager fragmentManager = getSupportFragmentManager();
         IdentifyUserPromptDialogFragment dialog = IdentifyUserPromptDialogFragment.create(getFormController().getFormTitle());
         dialog.show(fragmentManager.beginTransaction(), IdentifyUserPromptDialogFragment.TAG);
+
+        IdentityPromptViewModel identityPromptViewModel = ViewModelProviders.of(this).get(IdentityPromptViewModel.class);
+        identityPromptViewModel.isFormEntryCancelled().observe(this, isFormEntryCancelled -> {
+            if (isFormEntryCancelled) {
+                onBackPressed();
+            }
+        });
     }
 
     @Override
