@@ -1,0 +1,55 @@
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+  <h:head>
+    <h:title>RepeatGroupAndGroup</h:title>
+    <model>
+      <instance>
+        <data id="build_OneGroup-One_1518698685">
+          <meta>
+            <instanceID/>
+          </meta>
+          <G1 jr:template="">
+            <Text1/>
+          </G1>
+          <G3>
+            <Text3/>
+          </G3>
+        </data>
+      </instance>
+      <itext>
+        <translation lang="English">
+          <text id="/data/G1:label">
+            <value>G1</value>
+          </text>
+          <text id="/data/G1/Text1:label">
+            <value>Text1</value>
+          </text>
+          <text id="/data/G3:label">
+            <value>G3</value>
+          </text>
+          <text id="/data/G3/Text3:label">
+            <value>Text3</value>
+          </text>
+        </translation>
+      </itext>
+      <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" calculate="concat('uuid:', uuid())"/>
+      <bind nodeset="/data/G1/Text1" type="string"/>
+      <bind nodeset="/data/G3/Text3" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <group>
+      <label ref="jr:itext('/data/G1:label')"/>
+      <repeat nodeset="/data/G1">
+        <input ref="/data/G1/Text1">
+          <label ref="jr:itext('/data/G1/Text1:label')"/>
+        </input>
+      </repeat>
+    </group>
+    <group>
+      <label ref="jr:itext('/data/G3:label')"/>
+      <input ref="/data/G3/Text3">
+        <label ref="jr:itext('/data/G3/Text3:label')"/>
+      </input>
+    </group>
+  </h:body>
+</h:html>
