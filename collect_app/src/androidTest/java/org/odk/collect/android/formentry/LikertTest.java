@@ -1,6 +1,7 @@
 package org.odk.collect.android.formentry;
 
 import android.Manifest;
+import android.widget.RadioButton;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.rule.GrantPermissionRule;
@@ -16,18 +17,25 @@ import org.odk.collect.android.test.FormLoadingUtils;
 
 import java.util.Collections;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withTagKey;
+import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.equalTo;
 
 public class LikertTest {
     // having trouble getting correct labels, check the xslx and likert_test.xml file
     /* Test Cases:
-     * (1) Interacting with the different widgets
      * (2) Loading images
      * (3) FieldList Update
      */
@@ -50,60 +58,67 @@ public class LikertTest {
     public void allText_canClick() {
         openWidgetList();
         onView(withText("Likert Widget")).perform(click());
-        onView(withId(1)).perform(click());
-        onView(withId(1)).check(matches(isChecked()));
+        onView(allOf(withClassName(endsWith("RadioButton")), withTagValue(equalTo(1)))).perform(click());
+        onView(allOf(withClassName(endsWith("RadioButton")), withTagValue(equalTo(1)))).check(matches(isChecked()));
     }
 
     @Test
     public void allImages_canClick() {
         openWidgetList();
         onView(withText("Likert Image Widget")).perform(click());
-        onView(withId(1)).perform(click());
-        onView(withId(1)).check(matches(isChecked()));
+        onView(allOf(withClassName(endsWith("RadioButton")), withTagValue(equalTo(1)))).perform(click());
+        onView(allOf(withClassName(endsWith("RadioButton")), withTagValue(equalTo(1)))).check(matches(isChecked()));
     }
 
     @Test
     public void insufficientText_canClick() {
         openWidgetList();
         onView(withText("Likert Widget Error")).perform(click());
-        onView(withId(1)).perform(click());
-        onView(withId(1)).check(matches(isChecked()));
+        onView(allOf(withClassName(endsWith("RadioButton")), withTagValue(equalTo(1)))).perform(click());
+        onView(allOf(withClassName(endsWith("RadioButton")), withTagValue(equalTo(1)))).check(matches(isChecked()));
     }
 
     @Test
     public void insufficientImages_canClick() {
         openWidgetList();
         onView(withText("Likert Image Widget Error")).perform(click());
-        onView(withId(1)).perform(click());
-        onView(withId(1)).check(matches(isChecked()));
+        onView(allOf(withClassName(endsWith("RadioButton")), withTagValue(equalTo(1)))).perform(click());
+        onView(allOf(withClassName(endsWith("RadioButton")), withTagValue(equalTo(1)))).check(matches(isChecked()));
     }
 
     @Test
     public void missingImage_canClick() {
         openWidgetList();
         onView(withText("Likert Image Widget Error2")).perform(click());
-        onView(withId(1)).perform(click());
-        onView(withId(1)).check(matches(isChecked()));
+        onView(allOf(withClassName(endsWith("RadioButton")), withTagValue(equalTo(1)))).perform(click());
+        onView(allOf(withClassName(endsWith("RadioButton")), withTagValue(equalTo(1)))).check(matches(isChecked()));
     }
 
     @Test
     public void missingText_canClick() {
         openWidgetList();
         onView(withText("Likert Missing text Error")).perform(click());
-        onView(withId(1)).perform(click());
-        onView(withId(1)).check(matches(isChecked()));
+        onView(allOf(withClassName(endsWith("RadioButton")), withTagValue(equalTo(1)))).perform(click());
+        onView(allOf(withClassName(endsWith("RadioButton")), withTagValue(equalTo(1)))).check(matches(isChecked()));
     }
 
     @Test
     public void onlyOneRemainsClicked() {
         openWidgetList();
         onView(withText("Likert Image Widget")).perform(click());
-        onView(withId(1)).perform(click());
-        onView(withId(1)).check(matches(isChecked()));
-        onView(withId(3)).perform(click());
-        onView(withId(3)).check(matches(isChecked()));
-        onView(withId(1)).check(matches(isNotChecked()));
+        onView(allOf(withClassName(endsWith("RadioButton")), withTagValue(equalTo(1)))).perform(click());
+        onView(allOf(withClassName(endsWith("RadioButton")), withTagValue(equalTo(1)))).check(matches(isChecked()));
+        onView(allOf(withClassName(endsWith("RadioButton")), withTagValue(equalTo(3)))).perform(click());
+        onView(allOf(withClassName(endsWith("RadioButton")), withTagValue(equalTo(3)))).check(matches(isChecked()));
+        onView(allOf(withClassName(endsWith("RadioButton")), withTagValue(equalTo(1)))).check(matches(isNotChecked()));
     }
+
+//    @Test
+//    public void testImageLoad() {
+//        openWidgetList();
+//        onView(withText("Likert Image Widget")).perform(click());
+//
+//    }
 
     private void openWidgetList() {
         onView(withId(R.id.menu_goto)).perform(click());
