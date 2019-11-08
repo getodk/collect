@@ -99,9 +99,12 @@ public class SmapTaskStatusActivity extends CollectAbstractActivity implements O
                 triggeredTask = true;
             }
 
+            // Require a reason if the task can be rejected and it is not a self allocate task
     		if(Utilities.canReject(taskEntry.taskStatus)) {
 
-                rejectReason.setVisibility(View.VISIBLE);
+    		    if(!taskEntry.taskStatus.equals("new")) {
+                    rejectReason.setVisibility(View.VISIBLE);
+                }
 
     	        Button b = new Button(this);
     	        b.setText(getString(R.string.smap_reject_task));
@@ -175,7 +178,7 @@ public class SmapTaskStatusActivity extends CollectAbstractActivity implements O
                     if(Utilities.canReject(taskEntry.taskStatus)) {
 
                         String reason = rejectReason.getText().toString();
-                        if(reason != null && reason.trim().length() < 5) {
+                        if(!taskEntry.taskStatus.equals("new") && reason != null && reason.trim().length() < 5) {
                             Toast.makeText(getApplicationContext(), getString(R.string.smap_reason_not_specified),
                                     Toast.LENGTH_LONG).show();
                         } else {
