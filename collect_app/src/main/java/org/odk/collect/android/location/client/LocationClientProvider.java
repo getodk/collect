@@ -9,7 +9,9 @@ import androidx.annotation.Nullable;
 
 /** A static helper class for obtaining the appropriate LocationClient to use. */
 public class LocationClientProvider {
-    @Nullable private static LocationClient testClient = null;
+    @Nullable private static LocationClient testClient;
+
+    private LocationClientProvider() { }  // prevent instantiation of this utility class
 
     /** Returns a {@link LocationClient} appropriate for a given context. */
     // NOTE(ping): As of 2018-11-01, the GoogleFusedLocationClient never returns an
