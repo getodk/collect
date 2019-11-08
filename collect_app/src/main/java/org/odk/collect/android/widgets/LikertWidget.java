@@ -194,7 +194,6 @@ public class LikertWidget extends ItemsWidget {
     public RadioButton getRadioButton(int i) {
         AppCompatRadioButton button = new AppCompatRadioButton(getContext());
         button.setId(ViewIds.generateViewId());
-        button.setTag(i);
         button.setEnabled(!getFormEntryPrompt().isReadOnly());
         button.setFocusable(!getFormEntryPrompt().isReadOnly());
         radioButtonsParams.addRule(CENTER_HORIZONTAL, TRUE);
@@ -257,7 +256,6 @@ public class LikertWidget extends ItemsWidget {
 
     public ImageView getImageAsImageView(int index) {
         ImageView view = getImageView();
-        view.setTag(index);
         String imageURI;
         if (items.get(index) instanceof ExternalSelectChoice) {
             imageURI = ((ExternalSelectChoice) items.get(index)).getImage();
