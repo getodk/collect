@@ -12,6 +12,8 @@ public class PlayServicesUtil {
     private static final int PLAY_SERVICE_ERROR_REQUEST_CODE = 1000;
     private static int lastResultCode = ConnectionResult.SUCCESS;
 
+    private PlayServicesUtil() { }  // prevent instantiation of this utility class
+
     /** Returns true if Google Play Services is installed and up to date. */
     public static boolean isGooglePlayServicesAvailable(Context context) {
         lastResultCode = GoogleApiAvailability.getInstance()
