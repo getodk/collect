@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,7 +129,7 @@ public class LikertWidget extends ItemsWidget {
             RelativeLayout buttonView = new RelativeLayout(this.getContext());
             buttonViewParams.addRule(CENTER_IN_PARENT, TRUE);
             buttonView.setLayoutParams(buttonViewParams);
-
+            System.out.println(" Button "  + i);
             RadioButton button = getRadioButton(i);
 
             buttonsToName.put(button, items.get(i).getValue());
@@ -154,6 +155,21 @@ public class LikertWidget extends ItemsWidget {
             choice.setText(getFormEntryPrompt().getSelectChoiceText(items.get(i)));
 
             optionView.addView(choice);
+
+
+            optionView.setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    RadioButton r = button;
+                    if (checkedButton != null) {
+                        checkedButton.setChecked(false);
+                    }
+                    checkedButton = r;
+                    checkedButton.setChecked(true);
+                    widgetValueChanged();
+                }
+            });
             view.addView(optionView);
         }
     }
@@ -167,7 +183,7 @@ public class LikertWidget extends ItemsWidget {
         leftLineView.setLayoutParams(leftLineViewParams);
         leftLineView.setBackgroundColor(getResources().getColor(R.color.gray600));
         if (left) {
-            leftLineView.setBackgroundColor(getResources().getColor(R.color.white));
+            leftLineView.setVisibility(View.INVISIBLE);
         }
         buttonView.addView(leftLineView);
 
@@ -179,7 +195,7 @@ public class LikertWidget extends ItemsWidget {
         rightLineView.setBackgroundColor(getResources().getColor(R.color.gray600));
 
         if (right) {
-            rightLineView.setBackgroundColor(getResources().getColor(R.color.white));
+            rightLineView.setVisibility(View.INVISIBLE);
         }
         buttonView.addView(rightLineView);
     }
@@ -224,7 +240,6 @@ public class LikertWidget extends ItemsWidget {
         view.setGravity(Gravity.CENTER);
         view.setPadding(2, 2, 2, 2);
         view.setLayoutParams(textViewParams);
-        view.setTextColor(Color.BLACK);
         return view;
     }
 
@@ -233,6 +248,7 @@ public class LikertWidget extends ItemsWidget {
         LinearLayout optionView = new LinearLayout(getContext());
         optionView.setGravity(Gravity.CENTER);
         optionView.setLayoutParams(linearLayoutParams);
+        linearLayoutParams.setMargins(-1, 0, -1, 0);
         optionView.setOrientation(LinearLayout.VERTICAL);
         return optionView;
     }
@@ -249,6 +265,7 @@ public class LikertWidget extends ItemsWidget {
                     }
                     checkedButton = r;
                     checkedButton.setChecked(true);
+                    widgetValueChanged();
                 }
             });
         }
@@ -333,5 +350,6 @@ public class LikertWidget extends ItemsWidget {
             checkedButton.setChecked(false);
         }
         checkedButton = null;
+        widgetValueChanged();
     }
 }
