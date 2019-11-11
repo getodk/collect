@@ -13,7 +13,7 @@ public class LocationClientProvider {
 
     private LocationClientProvider() { }  // prevent instantiation of this utility class
 
-    /** Returns a {@link LocationClient} appropriate for a given context. */
+    /** Returns a LocationClient appropriate for a given context. */
     // NOTE(ping): As of 2018-11-01, the GoogleFusedLocationClient never returns an
     // accuracy radius below 3m: https://issuetracker.google.com/issues/118789585
     public static LocationClient getClient(@NonNull Context context) {
