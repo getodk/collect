@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -35,6 +36,12 @@ public class IdentifyUserPromptDialogFragment extends DialogFragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.Theme_Collect_Dialog_FullScreen);
+    }
+
+    @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
@@ -57,6 +64,7 @@ public class IdentifyUserPromptDialogFragment extends DialogFragment {
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle(getArguments().getString(ARG_FORM_NAME));
+        toolbar.setNavigationOnClickListener(v -> dismiss());
         toolbar.inflateMenu(R.menu.menu_ak);
 
         identityField = view.findViewById(R.id.identity);

@@ -64,6 +64,14 @@ public class IdentifyUserTest {
     }
 
     @Test
+    public void openingForm_andPressingCloseCross_returnsToMainMenu() {
+        new MainMenuPage(rule)
+                .clickFillBlankForm()
+                .clickOnFormWithIdentityPrompt("Identify User")
+                .pressClose();
+    }
+
+    @Test
     public void openFormWithIdentifyUserFalse_proceedsToForm() {
         new MainMenuPage(rule)
                 .clickFillBlankForm()

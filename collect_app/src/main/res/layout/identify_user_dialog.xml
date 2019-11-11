@@ -13,7 +13,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary" />
+            android:background="?attr/colorPrimary"
+            app:navigationIcon="@drawable/ic_close_black_24dp"
+            app:navigationContentDescription="@string/close"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
