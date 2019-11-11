@@ -18,11 +18,13 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +34,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
@@ -71,6 +74,11 @@ public abstract class SelectWidget extends ItemsWidget {
         if (numColumns == 1) {
             DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
             Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.inset_divider_48dp);
+
+            if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                DrawableCompat.setTint(drawable, new ThemeUtils(getContext()).getColorOnSurface());
+            }
+            
             divider.setDrawable(drawable);
             recyclerView.addItemDecoration(divider);
         }
