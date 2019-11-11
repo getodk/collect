@@ -180,6 +180,35 @@ public class AuditEventSaveTaskTest {
         assertEquals(expectedData, expectedAuditContent);
     }
 
+    @Test
+    public void saveAuditWithUser() throws Exception {
+        AuditEventSaveTask auditEventSaveTask = new AuditEventSaveTask(auditFile, false, false, true);
+        auditEventSaveTask.execute(getSampleAuditEventsWithUser().toArray(new AuditEvent[0])).get();
+        String expectedAuditContent = FileUtils.readFileToString(auditFile);
+        String expectedData = "event,node,start,end,user\n" +
+                "form start,,1548106927319,,User1\n" +
+                "question,/data/q1,1548106927323,1548106930112,User1\n" +
+                "add repeat,/data/g1[1],1548106930118,1548106931611,User1\n" +
+                "question,/data/g1[1]/q2,1548106931612,1548106937122,User1\n" +
+                "add repeat,/data/g1[2],1548106937123,1548106938276,User1\n" +
+                "question,/data/g1[2]/q2,1548106938277,1548106948127,User1\n" +
+                "add repeat,/data/g1[3],1548106948128,1548106949446,User1\n" +
+                "end screen,,1548106949448,1548106953601,User1\n" +
+                "form save,,1548106953600,,User1\n" +
+                "form exit,,1548106953601,,User1\n" +
+                "form finalize,,1548106953601,,User1\n";
+        assertEquals(expectedData, expectedAuditContent);
+    }
+
+    private List<AuditEvent> getSampleAuditEventsWithUser() {
+        List<AuditEvent> auditEvents = getSampleAuditEventsWithoutLocations();
+        for (AuditEvent event : auditEvents) {
+            event.setUser("User1");
+        }
+
+        return auditEvents;
+    }
+
     private List<AuditEvent> getSampleAuditEventsWithoutLocations() {
         AuditEvent event;
         ArrayList<AuditEvent> auditEvents = new ArrayList<>();
@@ -295,7 +324,7 @@ public class AuditEventSaveTaskTest {
         event = new AuditEvent(548108908259L, LOCATION_PROVIDERS_ENABLED, true, false);
         event.setLocationCoordinates("", "", "");
         auditEvents.add(event);
-        event = new AuditEvent(1548106927323L, QUESTION, true,  false, getTestFormIndex("/data/q1"), "", null);
+        event = new AuditEvent(1548106927323L, QUESTION, true, false, getTestFormIndex("/data/q1"), "", null);
         event.setLocationCoordinates("54.4112062", "18.5896652", "30.716999053955078");
         event.setEnd(1548106930112L);
         auditEvents.add(event);
@@ -380,7 +409,7 @@ public class AuditEventSaveTaskTest {
      * {@link FormIndex} that doesn't correspond to any real form definition. The only thing we care
      * about for the {@link FormIndex} are the instance indexes at every level. Everything else can
      * be faked.
-     *
+     * <p>
      * TODO: once {@link AuditEvent}'s getXPathPath moves to FormIndex, just use a mock
      */
     private FormIndex getTestFormIndex(String xpathPath) {

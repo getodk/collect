@@ -17,19 +17,22 @@ import timber.log.Timber;
  * Background task for appending events to the event log
  */
 public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
-    private final @NonNull File file;
+    private final @NonNull
+    File file;
     private final boolean isLocationEnabled;
     private final boolean isTrackingChangesEnabled;
+    private final boolean isUserRequired;
 
     private static final String DEFAULT_COLUMNS = "event,node,start,end";
     private static final String LOCATION_COORDINATES_COLUMNS = ",latitude,longitude,accuracy";
     private static final String ANSWER_VALUES_COLUMNS = ",old-value,new-value";
+    private static final String USER_COLUMNS = ",user";
 
-    @SuppressWarnings("PMD.UnusedFormalParameter")
-    public AuditEventSaveTask(@NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled, boolean userIdentified) {
+    public AuditEventSaveTask(@NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled, boolean isUserRequired) {
         this.file = file;
         this.isLocationEnabled = isLocationEnabled;
         this.isTrackingChangesEnabled = isTrackingChangesEnabled;
+        this.isUserRequired = isUserRequired;
     }
 
     @Override
@@ -117,6 +120,9 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
         }
         if (isTrackingChangesEnabled) {
             header += ANSWER_VALUES_COLUMNS;
+        }
+        if (isUserRequired) {
+            header += USER_COLUMNS;
         }
         return header;
     }

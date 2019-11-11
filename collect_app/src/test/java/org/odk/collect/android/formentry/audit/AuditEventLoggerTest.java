@@ -196,7 +196,7 @@ public class AuditEventLoggerTest {
         auditEventLogger.logEvent(END_OF_FORM, false, 0);
         auditEventLogger.exitView(); // Triggers event writing
 
-        assertTrue(testWriter.userIdentified);
+        assertTrue(testWriter.isUserRequired);
         assertEquals("Riker", testWriter.auditEvents.get(0).getUser());
     }
 
@@ -234,12 +234,12 @@ public class AuditEventLoggerTest {
 
     private static class TestWriter implements AuditEventLogger.AuditEventWriter {
 
-        boolean userIdentified;
+        boolean isUserRequired;
         List<AuditEvent> auditEvents = new ArrayList<>();
 
         @Override
-        public void writeEvents(List<AuditEvent> auditEvents, @NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled, boolean userIdentified) {
-            this.userIdentified = userIdentified;
+        public void writeEvents(List<AuditEvent> auditEvents, @NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled, boolean isUserRequired) {
+            this.isUserRequired = isUserRequired;
             this.auditEvents.addAll(auditEvents);
         }
 

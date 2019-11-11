@@ -12,9 +12,9 @@ public class AsyncTaskAuditEventWriter implements AuditEventLogger.AuditEventWri
     private static AsyncTask saveTask;
 
     @Override
-    public void writeEvents(List<AuditEvent> auditEvents, @NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled, boolean userIdentified) {
+    public void writeEvents(List<AuditEvent> auditEvents, @NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled, boolean isUserRequired) {
         AuditEvent[] auditEventArray = auditEvents.toArray(new AuditEvent[0]);
-        saveTask = new AuditEventSaveTask(file, isLocationEnabled, isTrackingChangesEnabled, false).execute(auditEventArray);
+        saveTask = new AuditEventSaveTask(file, isLocationEnabled, isTrackingChangesEnabled, isUserRequired).execute(auditEventArray);
     }
 
     @Override

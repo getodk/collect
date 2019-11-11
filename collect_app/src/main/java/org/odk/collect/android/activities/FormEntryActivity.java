@@ -336,12 +336,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         compositeDisposable
                 .add(eventBus
-                .register(ReadPhoneStatePermissionRxEvent.class)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(event -> {
-                    readPhoneStatePermissionRequestNeeded = true;
-                }));
+                        .register(ReadPhoneStatePermissionRxEvent.class)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(event -> {
+                            readPhoneStatePermissionRequestNeeded = true;
+                        }));
 
         errorMessage = null;
 
@@ -950,20 +950,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         showView(current, AnimationType.FADE);
     }
 
-    private void showIdentifyUserDialog() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        IdentifyUserPromptDialogFragment dialog = IdentifyUserPromptDialogFragment.create(getFormController().getFormTitle());
-        dialog.show(fragmentManager.beginTransaction(), IdentifyUserPromptDialogFragment.TAG);
-
-        IdentityPromptViewModel.Factory  factory = new IdentityPromptViewModel.Factory(getFormController().getAuditEventLogger());
-        IdentityPromptViewModel identityPromptViewModel = ViewModelProviders.of(this, factory).get(IdentityPromptViewModel.class);
-        identityPromptViewModel.isFormEntryCancelled().observe(this, isFormEntryCancelled -> {
-            if (isFormEntryCancelled) {
-                onBackPressed();
-            }
-        });
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.form_menu, menu);
@@ -1190,11 +1176,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
-
-                if (getFormController().getAuditEventLogger().isUserRequired()) {
-                    showIdentifyUserDialog();
-                }
-
                 return createViewForFormBeginning(formController);
             case FormEntryController.EVENT_END_OF_FORM:
                 return createViewForFormEnd(formController);
@@ -2108,7 +2089,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * - we are at the first question in the form so the back button is hidden
      * - we are at the end screen so the next button is hidden
      * - settings prevent backwards navigation of the form so the back button is hidden
-     *
+     * <p>
      * The visibility of the container for these buttons is determined once {@link #onResume()}.
      */
     private void updateNavigationButtonVisibility() {
@@ -2351,7 +2332,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * existing instance, shows that instance to the user. Either launches {@link FormHierarchyActivity}
      * if an existing instance is being edited or builds the view for the current question(s) if a
      * new instance is being created.
-     *
+     * <p>
      * May do some or all of these depending on current state:
      * - Ensures phone state permissions are given if this form needs them
      * - Cleans up {@link #formLoaderTask}
@@ -2388,11 +2369,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 formLoaderTask = null;
                 t.cancel(true);
                 t.destroy();
+
                 Collect.getInstance().setFormController(formController);
                 supportInvalidateOptionsMenu();
-
                 viewModel.formFinishedLoading();
-
                 Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
 
                 // Set the language if one has already been set in the past
@@ -2434,22 +2414,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     runOnUiThread(() -> ToastUtils.showLongToast(R.string.savepoint_used));
                 }
 
-                // Set saved answer path
                 if (formController.getInstanceFile() == null) {
+                    createInstanceDirectory(formController);
 
-                    // Create new answer folder.
-                    String time = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss",
-                            Locale.ENGLISH).format(Calendar.getInstance().getTime());
-                    String file = formPath.substring(formPath.lastIndexOf('/') + 1,
-                            formPath.lastIndexOf('.'));
-                    String path = Collect.INSTANCES_PATH + File.separator + file + "_"
-                            + time;
-                    if (FileUtils.createFolder(path)) {
-                        File instanceFile = new File(path + File.separator + file + "_" + time + ".xml");
-                        formController.setInstanceFile(instanceFile);
+                    if (getFormController().getAuditEventLogger().isUserRequired()) {
+                        showIdentityPromptDialog(formController, true, warningMsg);
+                    } else {
+                        startFormEntry(formController, warningMsg);
                     }
-
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_START, true, System.currentTimeMillis());
                 } else {
                     Intent reqIntent = getIntent();
                     boolean showFirst = reqIntent.getBooleanExtra("start", false);
@@ -2478,34 +2450,105 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             finish();
                         }
                     } else {
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
+                        if (getFormController().getAuditEventLogger().isUserRequired()) {
+                            showIdentityPromptDialog(formController, false, warningMsg);
+                        } else {
+                            resumeFormEntry(formController, warningMsg);
+                        }
                     }
                 }
-
-                // Register to receive location provider change updates and write them to the audit
-                // log. onStart has already run but the formController was null so try again.
-                if (formController.currentFormAuditsLocation()
-                        && PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
-                    registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
-                }
-
-                // onStart ran before the form was loaded. Let the viewModel know that the activity
-                // is about to be displayed and configured. Do this before the refresh actually
-                // happens because if audit logging is enabled, the refresh logs a question event
-                // and we want that to show up after initialization events.
-                activityDisplayed();
-
-                refreshCurrentView();
-
-                if (warningMsg != null) {
-                    ToastUtils.showLongToast(warningMsg);
-                    Timber.w(warningMsg);
-                }
             }
+
         } else {
             Timber.e("FormController is null");
             ToastUtils.showLongToast(R.string.loading_form_failed);
             finish();
+        }
+    }
+
+    private void showIdentityPromptDialog(FormController formController, boolean startingNewForm, String warningMsg) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        IdentifyUserPromptDialogFragment dialog = IdentifyUserPromptDialogFragment.create(getFormController().getFormTitle());
+        dialog.show(fragmentManager.beginTransaction(), IdentifyUserPromptDialogFragment.TAG);
+
+        IdentityPromptViewModel.Factory factory = new IdentityPromptViewModel.Factory(getFormController().getAuditEventLogger());
+        IdentityPromptViewModel identityPromptViewModel = ViewModelProviders.of(this, factory).get(IdentityPromptViewModel.class);
+
+        identityPromptViewModel.isIdentitySet().observe(this, isIdentitySet -> {
+            if (isIdentitySet) {
+                if (startingNewForm) {
+                    startFormEntry(formController, warningMsg);
+                } else {
+                    resumeFormEntry(formController, warningMsg);
+                }
+            }
+        });
+
+        identityPromptViewModel.isFormEntryCancelled().observe(this, isFormEntryCancelled -> {
+            if (isFormEntryCancelled) {
+                onBackPressed();
+            }
+        });
+    }
+
+    private void startFormEntry(FormController formController, String warningMsg) {
+        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_START, true, System.currentTimeMillis());
+
+        // Register to receive location provider change updates and write them to the audit
+        // log. onStart has already run but the formController was null so try again.
+        if (formController.currentFormAuditsLocation()
+                && PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
+            registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+        }
+
+        // onStart ran before the form was loaded. Let the viewModel know that the activity
+        // is about to be displayed and configured. Do this before the refresh actually
+        // happens because if audit logging is enabled, the refresh logs a question event
+        // and we want that to show up after initialization events.
+        activityDisplayed();
+
+        refreshCurrentView();
+
+        if (warningMsg != null) {
+            ToastUtils.showLongToast(warningMsg);
+            Timber.w(warningMsg);
+        }
+    }
+
+    private void resumeFormEntry(FormController formController, String warningMsg) {
+        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
+
+        // Register to receive location provider change updates and write them to the audit
+        // log. onStart has already run but the formController was null so try again.
+        if (formController.currentFormAuditsLocation()
+                && PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
+            registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+        }
+
+        // onStart ran before the form was loaded. Let the viewModel know that the activity
+        // is about to be displayed and configured. Do this before the refresh actually
+        // happens because if audit logging is enabled, the refresh logs a question event
+        // and we want that to show up after initialization events.
+        activityDisplayed();
+
+        refreshCurrentView();
+
+        if (warningMsg != null) {
+            ToastUtils.showLongToast(warningMsg);
+            Timber.w(warningMsg);
+        }
+    }
+
+    private void createInstanceDirectory(FormController formController) {
+        String time = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss",
+                Locale.ENGLISH).format(Calendar.getInstance().getTime());
+        String file = formPath.substring(formPath.lastIndexOf('/') + 1,
+                formPath.lastIndexOf('.'));
+        String path = Collect.INSTANCES_PATH + File.separator + file + "_"
+                + time;
+        if (FileUtils.createFolder(path)) {
+            File instanceFile = new File(path + File.separator + file + "_" + time + ".xml");
+            formController.setInstanceFile(instanceFile);
         }
     }
 
@@ -2621,7 +2664,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     /**
      * Requests that unsent finalized forms be auto-sent. If no network connection is available,
      * the work will be performed when a connection becomes available.
-     *
+     * <p>
      * TODO: if the user changes auto-send settings, should an auto-send job immediately be enqueued?
      */
     private void requestAutoSend() {
@@ -2937,7 +2980,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * - adds widgets corresponding to questions that are newly-relevant
      * - removes and rebuilds widgets corresponding to questions that have changed in some way. For
      * example, the question text or hint may have updated due to a value they refer to changing.
-     *
+     * <p>
      * The widget corresponding to the {@param lastChangedIndex} is never changed.
      */
     private void updateFieldListQuestions(FormIndex lastChangedIndex) {

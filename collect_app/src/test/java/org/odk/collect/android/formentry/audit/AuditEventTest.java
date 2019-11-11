@@ -95,7 +95,7 @@ public class AuditEventTest {
 
     @Test
     public void toString_withLocationCoordinates_andTrackingChanges() {
-        AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, true, true, getTestFormIndex(), "First answer", "Ralph");
+        AuditEvent auditEvent = new AuditEvent(START_TIME, QUESTION, true, true, getTestFormIndex(), "First answer", null);
         assertNotNull(auditEvent);
         auditEvent.setLocationCoordinates("54.35202520000001", "18.64663840000003", "10");
         assertTrue(auditEvent.isIntervalAuditEventType());

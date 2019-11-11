@@ -243,6 +243,10 @@ public class AuditEvent {
             string += String.format(",%s,%s", oldValue, newValue);
         }
 
+        if (user != null) {
+            string += String.format(",%s", user);
+        }
+
         return string;
     }
 
