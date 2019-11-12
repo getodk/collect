@@ -90,6 +90,9 @@ public class FileUtils {
     /** The result of checking whether /sdcard points to getExternalStorageDirectory(). */
     private static boolean isSdcardSymlinkSameAsExternalStorageDirectory;
 
+    private static final String HTML_NS = "http://www.w3.org/1999/xhtml";
+    private static final String XFORMS_NS = "http://www.w3.org/2002/xforms";
+
     static int bufSize = 16 * 1024; // May be set by unit test
 
     private FileUtils() {
@@ -293,11 +296,8 @@ public class FileUtils {
             }
         }
 
-        final String xforms = "http://www.w3.org/2002/xforms";
-        final String html = doc.getRootElement().getNamespace();
-
-        final Element head = doc.getRootElement().getElement(html, "head");
-        final Element title = head.getElement(html, "title");
+        final Element head = doc.getRootElement().getElement(HTML_NS, "head");
+        final Element title = head.getElement(HTML_NS, "title");
         if (title != null) {
             fields.put(TITLE, XFormParser.getXMLText(title, true));
         }
@@ -334,7 +334,7 @@ public class FileUtils {
             throw new IllegalStateException(xmlFile.getAbsolutePath() + " could not be parsed");
         }
         try {
-            final Element submission = model.getElement(xforms, "submission");
+            final Element submission = model.getElement(XFORMS_NS, "submission");
             final String base64RsaPublicKey = submission.getAttributeValue(null, "base64RsaPublicKey");
             final String autoDelete = submission.getAttributeValue(null, "auto-delete");
             final String autoSend = submission.getAttributeValue(null, "auto-send");
