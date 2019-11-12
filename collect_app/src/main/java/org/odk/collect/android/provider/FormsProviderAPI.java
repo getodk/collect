@@ -66,6 +66,7 @@ public final class FormsProviderAPI {
         public static final String LAST_DETECTED_FORM_VERSION_HASH = "lastDetectedFormVersionHash"; // can be null
         // Column is called autoSubmit for legacy support but the attribute is auto-send
         public static final String AUTO_SEND = "autoSubmit"; // can be null
+        public static final String GEOMETRY_XPATH = "geometryXpath"; // can be null
 
         // these are generated for you (but you can insert something else if you want)
         public static final String DISPLAY_SUBTEXT = "displaySubtext"; // not used in the newest database version
