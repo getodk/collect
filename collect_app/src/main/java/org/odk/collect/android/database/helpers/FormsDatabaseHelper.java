@@ -22,7 +22,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseContext;
-import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 import org.odk.collect.android.utilities.SQLiteUtils;
 
 import java.io.File;
@@ -113,11 +112,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         try {
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .dropIfExists(FORMS_TABLE_NAME)
-                    .end();
-
+            SQLiteUtils.dropTable(db, FORMS_TABLE_NAME);
             createFormsTableV7(db);
 
             Timber.i("Downgrading database from %d to %d completed with success.", oldVersion, newVersion);
@@ -129,14 +124,14 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void upgradeToVersion2(SQLiteDatabase db) {
-        db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
+        SQLiteUtils.dropTable(db, FORMS_TABLE_NAME);
         onCreate(db);
     }
 
     private void upgradeToVersion4(SQLiteDatabase db, int oldVersion) {
         // adding BASE64_RSA_PUBLIC_KEY and changing type and name of
         // integer MODEL_VERSION to text VERSION
-        db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
+        SQLiteUtils.dropTable(db, TEMP_FORMS_TABLE_NAME);
         createFormsTableV4(db, TEMP_FORMS_TABLE_NAME);
         db.execSQL("INSERT INTO "
                 + TEMP_FORMS_TABLE_NAME
@@ -203,7 +198,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                 + FORMS_TABLE_NAME);
 
         // risky failures here...
-        db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
+        SQLiteUtils.dropTable(db, FORMS_TABLE_NAME);
         createFormsTableV4(db, FORMS_TABLE_NAME);
         db.execSQL("INSERT INTO "
                 + FORMS_TABLE_NAME
@@ -250,64 +245,24 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                 + BASE64_RSA_PUBLIC_KEY + ", "
                 + JRCACHE_FILE_PATH + " FROM "
                 + TEMP_FORMS_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
+        SQLiteUtils.dropTable(db, TEMP_FORMS_TABLE_NAME);
     }
 
     private void upgradeToVersion5(SQLiteDatabase db) {
-        if (!SQLiteUtils.doesColumnExist(db, FORMS_TABLE_NAME, AUTO_SEND)) {
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .alter()
-                    .table(FORMS_TABLE_NAME)
-                    .addColumn(AUTO_SEND, "text")
-                    .end();
-        }
-
-        if (!SQLiteUtils.doesColumnExist(db, FORMS_TABLE_NAME, AUTO_DELETE)) {
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .alter()
-                    .table(FORMS_TABLE_NAME)
-                    .addColumn(AUTO_DELETE, "text")
-                    .end();
-        }
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, AUTO_SEND, "text");
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, AUTO_DELETE, "text");
     }
 
     private void upgradeToVersion6(SQLiteDatabase db) {
-        if (!SQLiteUtils.doesColumnExist(db, FORMS_TABLE_NAME, LAST_DETECTED_FORM_VERSION_HASH)) {
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .alter()
-                    .table(FORMS_TABLE_NAME)
-                    .addColumn(LAST_DETECTED_FORM_VERSION_HASH, "text")
-                    .end();
-        }
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, LAST_DETECTED_FORM_VERSION_HASH, "text");
     }
 
     private void upgradeToVersion7(SQLiteDatabase db) {
         String temporaryTable = FORMS_TABLE_NAME + "_tmp";
-
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .renameTable(FORMS_TABLE_NAME)
-                    .to(temporaryTable)
-                    .end();
-
-            createFormsTableV7(db);
-
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .insertInto(FORMS_TABLE_NAME)
-                    .columnsForInsert(COLUMN_NAMES_V7)
-                    .select()
-                    .columnsForSelect(COLUMN_NAMES_V7)
-                    .from(temporaryTable)
-                    .end();
-
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .dropIfExists(temporaryTable)
-                    .end();
+        SQLiteUtils.renameTable(db, FORMS_TABLE_NAME, temporaryTable);
+        createFormsTableV7(db);
+        SQLiteUtils.copyRows(db, temporaryTable, COLUMN_NAMES_V7, FORMS_TABLE_NAME);
+        SQLiteUtils.dropTable(db, temporaryTable);
     }
 
     private void createFormsTableV4(SQLiteDatabase db, String tableName) {
