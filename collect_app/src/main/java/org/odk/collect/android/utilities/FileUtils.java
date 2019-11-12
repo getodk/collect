@@ -22,7 +22,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.xform.parse.XFormParser;
@@ -621,10 +620,9 @@ public class FileUtils {
         if (isSdcardSymlinkSameAsExternalStorageDirectory) {
             // They point to the same place, so it's safe to replace the longer
             // storage path with the short symlink.
-            String storagePath = Environment.getExternalStorageDirectory().getAbsolutePath();
             String path = file.getAbsolutePath();
-            if (path.startsWith(storagePath + "/")) {
-                return new File("/sdcard" + path.substring(storagePath.length()));
+            if (path.startsWith(Collect.STORAGE + "/")) {
+                return new File("/sdcard" + path.substring(Collect.STORAGE.length()));
             }
         }
         return file;
@@ -642,7 +640,7 @@ public class FileUtils {
             File shortPathFile = File.createTempFile("odk", null, new File("/sdcard"));
             try {
                 String name = shortPathFile.getName();
-                File longPathFile = new File(Environment.getExternalStorageDirectory(), name);
+                File longPathFile = new File(Collect.STORAGE, name);
 
                 // If we delete the file via one path and the file disappears at the
                 // other path, then we know that both paths point to the same place.

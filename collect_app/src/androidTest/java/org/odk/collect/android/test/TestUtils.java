@@ -1,6 +1,5 @@
 package org.odk.collect.android.test;
 
-import android.os.Environment;
 import androidx.test.espresso.PerformException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
@@ -75,7 +74,7 @@ public final class TestUtils {
     }
 
     private static File tempFileDirectory() {
-        return new File(Environment.getExternalStorageDirectory(), "test-tmp");
+        return new File(Collect.STORAGE, "test-tmp");
     }
 
     public static void closeSafely(Closeable c) {

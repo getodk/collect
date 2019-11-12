@@ -16,8 +16,6 @@
 
 package org.odk.collect.android.tasks;
 
-import android.os.Environment;
-
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
@@ -28,6 +26,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.AuditEvent;
 
 import java.io.File;
@@ -60,7 +59,7 @@ public class AuditEventSaveTaskTest {
 
     @Before
     public void prepareTestFile() {
-        testFile = new File(Environment.getExternalStorageDirectory().getPath() + "/odk/instances/audit.csv");
+        testFile = new File(Collect.INSTANCES_PATH +  "/audit.csv");
         testFile.delete();
     }
 

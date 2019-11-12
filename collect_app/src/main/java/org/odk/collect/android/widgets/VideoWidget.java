@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Video;
 import androidx.annotation.NonNull;
@@ -152,8 +151,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
 
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(),
-                DIRECTORY_PICTURES);
+        File mediaStorageDir = new File(Collect.STORAGE, DIRECTORY_PICTURES);
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
 
