@@ -24,7 +24,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.StringContains.containsString;
@@ -169,17 +168,12 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    public T checkIfStringIsEnabled(int stringID) {
-        onView(withText(getInstrumentation().getTargetContext().getString(stringID))).check(matches(not(isEnabled())));
-        return (T) this;
-    }
-
     public T scrollToElementWithKey(String key) {
         onData(PreferenceMatchers.withKey(key)).perform(ViewActions.scrollTo());
         return (T) this;
     }
 
-    public T checkIfElementWithKeyIsEnabled(String key) {
+    public T checkIfElementWithKeyIsDisabled(String key) {
         onData(PreferenceMatchers.withKey(key)).check(matches(not(isEnabled())));
         return (T) this;
     }
