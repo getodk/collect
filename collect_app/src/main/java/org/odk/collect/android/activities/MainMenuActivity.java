@@ -40,8 +40,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
@@ -263,8 +261,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
         adminPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
-
-        setupGoogleAnalytics();
     }
 
     private void initToolbar() {
@@ -283,10 +279,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
                 contentObserver);
 
         setButtonsVisibility();
-
-        ((Collect) getApplication())
-                .getDefaultTracker()
-                .enableAutoActivityTracking(true);
     }
 
     private void setButtonsVisibility() {
@@ -507,15 +499,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
         }
         return null;
-    }
-
-    // This flag must be set each time the app starts up
-    private void setupGoogleAnalytics() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
-                .getInstance());
-        boolean isAnalyticsEnabled = settings.getBoolean(GeneralKeys.KEY_ANALYTICS, true);
-        GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getApplicationContext());
-        googleAnalytics.setAppOptOut(!isAnalyticsEnabled);
     }
 
     private void updateButtons() {
