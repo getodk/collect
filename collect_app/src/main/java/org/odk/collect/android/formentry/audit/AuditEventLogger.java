@@ -288,6 +288,10 @@ public class AuditEventLogger {
         this.user = user;
     }
 
+    public String getUser() {
+        return user;
+    }
+
     public interface AuditEventWriter {
         void writeEvents(List<AuditEvent> auditEvents, @NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled, boolean userIdentified);
 

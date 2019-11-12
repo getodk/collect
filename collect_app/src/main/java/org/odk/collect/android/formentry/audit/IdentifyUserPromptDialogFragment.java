@@ -46,8 +46,8 @@ public class IdentifyUserPromptDialogFragment extends DialogFragment {
         super.onAttach(context);
 
         viewModel = ViewModelProviders.of(requireActivity()).get(IdentityPromptViewModel.class);
-        viewModel.isIdentitySet().observe(this, isIdentitySet -> {
-            if (isIdentitySet) {
+        viewModel.requiresIdentity().observe(this, requiresIdentity -> {
+            if (!requiresIdentity) {
                 dismiss();
             }
         });

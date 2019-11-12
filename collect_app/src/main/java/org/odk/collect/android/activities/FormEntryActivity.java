@@ -63,6 +63,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -2416,12 +2417,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 if (formController.getInstanceFile() == null) {
                     createInstanceDirectory(formController);
-
-                    if (getFormController().getAuditEventLogger().isUserRequired()) {
-                        showIdentityPromptDialog(formController, true, warningMsg);
-                    } else {
-                        startFormEntry(formController, warningMsg);
-                    }
+                    promptForIdentityIfRequired(requiresIdentity -> {
+                        if (!requiresIdentity) {
+                            startFormEntry(formController, warningMsg);
+                        }
+                    });
                 } else {
                     Intent reqIntent = getIntent();
                     boolean showFirst = reqIntent.getBooleanExtra("start", false);
@@ -2450,11 +2450,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             finish();
                         }
                     } else {
-                        if (getFormController().getAuditEventLogger().isUserRequired()) {
-                            showIdentityPromptDialog(formController, false, warningMsg);
-                        } else {
-                            resumeFormEntry(formController, warningMsg);
-                        }
+                        promptForIdentityIfRequired(requiresIdentity -> {
+                            if (!requiresIdentity) {
+                                resumeFormEntry(formController, warningMsg);
+                            }
+                        });
                     }
                 }
             }
@@ -2466,7 +2466,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    private void showIdentityPromptDialog(FormController formController, boolean startingNewForm, String warningMsg) {
+    private void promptForIdentityIfRequired(Observer<Boolean> requiresIdentityHandler) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         IdentifyUserPromptDialogFragment dialog = IdentifyUserPromptDialogFragment.create(getFormController().getFormTitle());
         dialog.show(fragmentManager.beginTransaction(), IdentifyUserPromptDialogFragment.TAG);
@@ -2474,16 +2474,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         IdentityPromptViewModel.Factory factory = new IdentityPromptViewModel.Factory(getFormController().getAuditEventLogger());
         IdentityPromptViewModel identityPromptViewModel = ViewModelProviders.of(this, factory).get(IdentityPromptViewModel.class);
 
-        identityPromptViewModel.isIdentitySet().observe(this, isIdentitySet -> {
-            if (isIdentitySet) {
-                if (startingNewForm) {
-                    startFormEntry(formController, warningMsg);
-                } else {
-                    resumeFormEntry(formController, warningMsg);
-                }
-            }
-        });
-
+        identityPromptViewModel.requiresIdentity().observe(this, requiresIdentityHandler);
         identityPromptViewModel.isFormEntryCancelled().observe(this, isFormEntryCancelled -> {
             if (isFormEntryCancelled) {
                 onBackPressed();

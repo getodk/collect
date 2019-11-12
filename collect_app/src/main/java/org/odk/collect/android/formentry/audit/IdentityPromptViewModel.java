@@ -9,34 +9,38 @@ import androidx.lifecycle.ViewModelProvider;
 public class IdentityPromptViewModel extends ViewModel {
 
     private final MutableLiveData<Boolean> formEntryCancelled = new MutableLiveData<>(false);
-    private final MutableLiveData<Boolean> identitySet = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> requiresIdentity = new MutableLiveData<>(false);
     private final AuditEventLogger auditEventLogger;
-
-    private String identity = "";
 
     public IdentityPromptViewModel(AuditEventLogger auditEventLogger) {
         this.auditEventLogger = auditEventLogger;
+        updateRequiresIdentity();
     }
 
-    public void setIdentity(String identity) {
-        this.identity = identity;
-
-        auditEventLogger.setUser(identity);
-        identitySet.setValue(!this.identity.isEmpty());
-    }
-
-    public void promptClosing() {
-        if (identity.isEmpty()) {
-            formEntryCancelled.setValue(true);
-        }
-    }
-
-    public LiveData<Boolean> isIdentitySet() {
-        return identitySet;
+    public LiveData<Boolean> requiresIdentity() {
+        return requiresIdentity;
     }
 
     public LiveData<Boolean> isFormEntryCancelled() {
         return formEntryCancelled;
+    }
+
+    public void setIdentity(String identity) {
+
+        auditEventLogger.setUser(identity);
+        updateRequiresIdentity();
+    }
+
+    public void promptClosing() {
+        if (requiresIdentity.getValue()) {
+            formEntryCancelled.setValue(true);
+        }
+    }
+
+    private void updateRequiresIdentity() {
+        this.requiresIdentity.setValue(
+                auditEventLogger.isUserRequired() &&
+                        (auditEventLogger.getUser() == null || auditEventLogger.getUser().isEmpty()));
     }
 
     public static class Factory implements ViewModelProvider.Factory {
