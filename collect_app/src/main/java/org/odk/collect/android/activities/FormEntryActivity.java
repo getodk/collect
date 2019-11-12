@@ -63,7 +63,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -320,7 +319,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     private boolean locationPermissionsPreviouslyGranted;
 
-    FormEntryViewModel viewModel;
+    private FormEntryViewModel formEntryViewModel;
+    private IdentityPromptViewModel identityPromptViewModel;
 
     /**
      * Called when the activity is first created.
@@ -328,8 +328,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        viewModel = ViewModelProviders.of(this, new FormEntryViewModelFactory()).get(FormEntryViewModel.class);
+        setupViewModels();
 
         setContentView(R.layout.form_entry);
 
@@ -400,6 +399,24 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             public void denied() {
                 // The activity has to finish because ODK Collect cannot function without these permissions.
                 finishAllActivities(FormEntryActivity.this);
+            }
+        });
+    }
+
+    private void setupViewModels() {
+        formEntryViewModel = ViewModelProviders.of(this, new FormEntryViewModelFactory()).get(FormEntryViewModel.class);
+
+        identityPromptViewModel = ViewModelProviders.of(this).get(IdentityPromptViewModel.class);
+        identityPromptViewModel.requiresIdentity().observe(this, requiresIdentity -> {
+            if (requiresIdentity) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                IdentifyUserPromptDialogFragment dialog = IdentifyUserPromptDialogFragment.create(getFormController().getFormTitle());
+                dialog.show(fragmentManager.beginTransaction(), IdentifyUserPromptDialogFragment.TAG);
+            }
+        });
+        identityPromptViewModel.isFormEntryCancelled().observe(this, isFormEntryCancelled -> {
+            if (isFormEntryCancelled) {
+                onBackPressed();
             }
         });
     }
@@ -1029,7 +1046,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case R.id.track_location:
                 GeneralSharedPreferences.getInstance().save(KEY_BACKGROUND_LOCATION, !GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));
 
-                viewModel.backgroundLocationPreferenceToggled();
+                formEntryViewModel.backgroundLocationPreferenceToggled();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -2116,7 +2133,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         // User may have changed location permissions in Android settings
         if (PermissionUtils.areLocationPermissionsGranted(this) != locationPermissionsPreviouslyGranted) {
-            viewModel.locationPermissionChanged();
+            formEntryViewModel.locationPermissionChanged();
             locationPermissionsPreviouslyGranted = !locationPermissionsPreviouslyGranted;
         }
         activityDisplayed();
@@ -2124,7 +2141,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     protected void onStop() {
-        viewModel.activityHidden();
+        formEntryViewModel.activityHidden();
 
         super.onStop();
     }
@@ -2373,7 +2390,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 Collect.getInstance().setFormController(formController);
                 supportInvalidateOptionsMenu();
-                viewModel.formFinishedLoading();
+                formEntryViewModel.formFinishedLoading();
                 Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
 
                 // Set the language if one has already been set in the past
@@ -2417,7 +2434,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 if (formController.getInstanceFile() == null) {
                     createInstanceDirectory(formController);
-                    promptForIdentityIfRequired(requiresIdentity -> {
+                    identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
+                    identityPromptViewModel.requiresIdentity().observe(this, requiresIdentity -> {
                         if (!requiresIdentity) {
                             startFormEntry(formController, warningMsg);
                         }
@@ -2450,7 +2468,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             finish();
                         }
                     } else {
-                        promptForIdentityIfRequired(requiresIdentity -> {
+                        identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
+                        identityPromptViewModel.requiresIdentity().observe(this, requiresIdentity -> {
                             if (!requiresIdentity) {
                                 resumeFormEntry(formController, warningMsg);
                             }
@@ -2464,22 +2483,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             ToastUtils.showLongToast(R.string.loading_form_failed);
             finish();
         }
-    }
-
-    private void promptForIdentityIfRequired(Observer<Boolean> requiresIdentityHandler) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        IdentifyUserPromptDialogFragment dialog = IdentifyUserPromptDialogFragment.create(getFormController().getFormTitle());
-        dialog.show(fragmentManager.beginTransaction(), IdentifyUserPromptDialogFragment.TAG);
-
-        IdentityPromptViewModel.Factory factory = new IdentityPromptViewModel.Factory(getFormController().getAuditEventLogger());
-        IdentityPromptViewModel identityPromptViewModel = ViewModelProviders.of(this, factory).get(IdentityPromptViewModel.class);
-
-        identityPromptViewModel.requiresIdentity().observe(this, requiresIdentityHandler);
-        identityPromptViewModel.isFormEntryCancelled().observe(this, isFormEntryCancelled -> {
-            if (isFormEntryCancelled) {
-                onBackPressed();
-            }
-        });
     }
 
     private void startFormEntry(FormController formController, String warningMsg) {
@@ -2887,24 +2890,24 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction() != null
                     && intent.getAction().matches(LocationManager.PROVIDERS_CHANGED_ACTION)) {
-                viewModel.locationProvidersChanged();
+                formEntryViewModel.locationProvidersChanged();
             }
         }
     }
 
     private void activityDisplayed() {
-        displayUIFor(viewModel.activityDisplayed());
+        displayUIFor(formEntryViewModel.activityDisplayed());
 
-        if (viewModel.isBackgroundLocationPermissionsCheckNeeded()) {
+        if (formEntryViewModel.isBackgroundLocationPermissionsCheckNeeded()) {
             new PermissionUtils().requestLocationPermissions(this, new PermissionListener() {
                 @Override
                 public void granted() {
-                    displayUIFor(viewModel.locationPermissionsGranted());
+                    displayUIFor(formEntryViewModel.locationPermissionsGranted());
                 }
 
                 @Override
                 public void denied() {
-                    viewModel.locationPermissionsDenied();
+                    formEntryViewModel.locationPermissionsDenied();
                 }
             });
         }
