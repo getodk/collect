@@ -74,6 +74,7 @@ public class FileUtils {
     public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
     public static final String AUTO_DELETE = "autoDelete";
     public static final String AUTO_SEND = "autoSend";
+    public static final String GEOMETRY_XPATH = "geometryXpath";
 
     /** Suffix for the form media directory. */
     public static final String MEDIA_SUFFIX = "-media";
@@ -350,7 +351,43 @@ public class FileUtils {
             // and that's totally fine.
         }
 
+        fields.put(GEOMETRY_XPATH, findGeometryXpath(doc));
         return fields;
+    }
+
+    /** Returns the XPath to use for extracting geo nodes to show in the map view. */
+    private static String findGeometryXpath(Document doc) {
+        Element bind = findGeoBindElement(doc);
+        if (bind != null) {
+            // TODO(ping): Only GeoPoint nodes are supported in the map view for now.
+            if (bind.getAttributeValue(null, "type").equals("geopoint")) {
+                return bind.getAttributeValue(null, "nodeset");
+            }
+        }
+        return null;
+    }
+
+    /** Finds the bind element for the first geo question in the form. */
+    // TODO(ping): This returns the first bind element in the model, but
+    // it should return the first question in the body of the form.
+    private static Element findGeoBindElement(Document doc) {
+        Element head = doc.getRootElement().getElement(HTML_NS, "head");
+        Element model = getChildElement(head, "model");
+        int n = model.getChildCount();
+        for (int i = 0; i < n; i++) {
+            Element child = model.getElement(i);
+            if (child != null && child.getName().equals("bind")) {
+                String type = child.getAttributeValue(null, "type");
+                if (type != null && (
+                        type.equals("geopoint") ||
+                        type.equals("geotrace") ||
+                        type.equals("geoshape")
+                )) {
+                    return child;
+                }
+            }
+        }
+        return null;
     }
 
     // needed because element.getelement fails when there are attributes
