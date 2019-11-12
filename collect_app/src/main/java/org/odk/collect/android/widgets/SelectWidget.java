@@ -76,7 +76,7 @@ public abstract class SelectWidget extends ItemsWidget {
             Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.inset_divider_48dp);
 
             if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                DrawableCompat.setTint(drawable, new ThemeUtils(getContext()).getColorOnSurface());
+                DrawableCompat.setTint(DrawableCompat.wrap(drawable), new ThemeUtils(getContext()).getColorOnSurface());
             }
             
             divider.setDrawable(drawable);
