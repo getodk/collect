@@ -17,11 +17,13 @@ package org.odk.collect.android.adapters;
 import android.content.Context;
 import android.database.Cursor;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,17 +38,22 @@ import timber.log.Timber;
  */
 public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
 
-    private final Context ctxt;
+    private final Context context;
+    private final ListView listView;
     private final ViewBinder originalBinder;
+    private final AdapterView.OnItemClickListener mapButtonListener;
 
-    public VersionHidingCursorAdapter(String versionColumnName, Context context, int layout,
-            Cursor c, String[] from, int[] to) {
-        super(context, layout, c, from, to);
-        ctxt = context;
+    public VersionHidingCursorAdapter(ListView listView, String versionColumnName, Context context, int layout,
+                                      AdapterView.OnItemClickListener mapButtonListener,
+                                      String[] from, int[] to) {
+        super(context, layout, null, from, to);
+        this.context = context;
+        this.listView = listView;
+        this.mapButtonListener = mapButtonListener;
         originalBinder = getViewBinder();
         setViewBinder((view, cursor, columnIndex) -> {
             String columnName = cursor.getColumnName(columnIndex);
-            if (columnName.equals(FormsProviderAPI.FormsColumns.DATE) || columnName.equals(FormsProviderAPI.FormsColumns.MAX_DATE)) {
+            if (columnName.equals(FormsColumns.DATE) || columnName.equals(FormsColumns.MAX_DATE)) {
                 String subtext = getDisplaySubtext(context, new Date(cursor.getLong(columnIndex)));
                 if (!subtext.isEmpty()) {
                     TextView v = (TextView) view;
@@ -59,7 +66,7 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
                 v.setText("");
                 v.setVisibility(View.GONE);
                 if (version != null) {
-                    v.append(String.format(ctxt.getString(R.string.version_number), version));
+                    v.append(String.format(this.context.getString(R.string.version_number), version));
                     v.append(" ");
                     v.setVisibility(View.VISIBLE);
                 }
@@ -67,11 +74,11 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
                     int idColumnIndex = cursor.getColumnIndex(from[3]);
                     String id = cursor.getString(idColumnIndex);
                     if (id != null) {
-                        v.append(String.format(ctxt.getString(R.string.id_number), id));
+                        v.append(String.format(this.context.getString(R.string.id_number), id));
                         v.setVisibility(View.VISIBLE);
                     }
                 }
-            } else if (columnName.equals(FormsProviderAPI.FormsColumns.GEOMETRY_XPATH)) {
+            } else if (columnName.equals(FormsColumns.GEOMETRY_XPATH)) {
                 String xpath = cursor.getString(columnIndex);
                 view.setVisibility(xpath != null ? View.VISIBLE : View.GONE);
             } else {
@@ -80,6 +87,16 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
             }
             return true;
         });
+    }
+
+    @Override public void bindView(View view, Context context, Cursor cursor) {
+        super.bindView(view, context, cursor);
+        View mapButton = view.findViewById(R.id.map_button);
+        if (mapButton != null) {
+            long id = cursor.getLong(cursor.getColumnIndex("_id"));
+            mapButton.setOnClickListener(v -> mapButtonListener.onItemClick(
+                listView, view, cursor.getPosition(), id));
+        }
     }
 
     private String getDisplaySubtext(Context context, Date date) {

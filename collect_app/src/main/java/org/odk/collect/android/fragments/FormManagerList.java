@@ -18,12 +18,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.loader.content.CursorLoader;
 import android.view.View;
 import android.widget.ListView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.VersionHidingCursorAdapter;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
@@ -31,8 +30,9 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.adapters.VersionHidingCursorAdapter;
 
+import androidx.annotation.NonNull;
+import androidx.loader.content.CursorLoader;
 import timber.log.Timber;
 
 /**
@@ -106,7 +106,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
         int[] view = {R.id.form_title, R.id.form_subtitle, R.id.form_subtitle2};
 
         listAdapter = new VersionHidingCursorAdapter(
-                FormsColumns.JR_VERSION, getActivity(),
+                getListView(), FormsColumns.JR_VERSION, getActivity(),
                 R.layout.form_chooser_list_item_multiple_choice, null, data, view);
         setListAdapter(listAdapter);
         checkPreviouslyCheckedItems();

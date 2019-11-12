@@ -139,6 +139,11 @@ public class FormChooserListActivity extends FormListActivity implements
         }
     }
 
+    public void onMapButtonClick(AdapterView<?> parent, View view, int position, long id) {
+        final Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, id);
+        startActivity(new Intent(Intent.ACTION_EDIT, formUri, this, MapActivity.class));
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -183,7 +188,9 @@ public class FormChooserListActivity extends FormListActivity implements
             R.id.map_view
         };
 
-        listAdapter = new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.form_chooser_list_item, null, columnNames, viewIds);
+        listAdapter = new VersionHidingCursorAdapter(
+            listView, FormsColumns.JR_VERSION, this, R.layout.form_chooser_list_item,
+            this::onMapButtonClick, columnNames, viewIds);
         listView.setAdapter(listAdapter);
     }
 
