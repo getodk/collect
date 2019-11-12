@@ -13,8 +13,9 @@ public class IdentityPromptViewModelTest {
     @Test
     public void setIdentity_setsUserOnAuditEventLogger() {
         AuditEventLogger auditEventLogger = mock(AuditEventLogger.class);
-        IdentityPromptViewModel viewModel = new IdentityPromptViewModel(auditEventLogger);
+        IdentityPromptViewModel viewModel = new IdentityPromptViewModel();
 
+        viewModel.setAuditEventLogger(auditEventLogger);
         viewModel.setIdentity("Picard");
         verify(auditEventLogger).setUser("Picard");
     }

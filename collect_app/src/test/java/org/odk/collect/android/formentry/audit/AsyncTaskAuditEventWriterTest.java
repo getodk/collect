@@ -25,11 +25,9 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.assertEquals;
 import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.END_OF_FORM;
@@ -46,7 +44,7 @@ import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.
 import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.QUESTION;
 
 @RunWith(RobolectricTestRunner.class)
-public class AuditEventSaveTaskTest {
+public class AsyncTaskAuditEventWriterTest {
 
     private File auditFile;
 
@@ -56,10 +54,11 @@ public class AuditEventSaveTaskTest {
     }
 
     @Test // This drives out updates between instance edits
-    public void updateHeaderTest() throws IOException, ExecutionException, InterruptedException {
+    public void updateHeaderTest() throws Exception {
         // Use a form with enabled audit but without location
-        AuditEventSaveTask auditEventSaveTask = new AuditEventSaveTask(auditFile, false, false, false);
-        auditEventSaveTask.execute(getSampleAuditEventsWithoutLocations().toArray(new AuditEvent[0])).get();
+        AsyncTaskAuditEventWriter writer = new AsyncTaskAuditEventWriter(auditFile, false, false, false);
+        writer.writeEvents(getSampleAuditEventsWithoutLocations());
+
         String expectedAuditContent = FileUtils.readFileToString(auditFile);
         String expectedData = "event,node,start,end\n" +
                 "form start,,1548106927319,\n" +
@@ -76,8 +75,9 @@ public class AuditEventSaveTaskTest {
         assertEquals(expectedData, expectedAuditContent);
 
         // Upgrade a form to use location
-        auditEventSaveTask = new AuditEventSaveTask(auditFile, true, false, false);
-        auditEventSaveTask.execute(getMoreSampleAuditEventsWithLocations().toArray(new AuditEvent[0])).get();
+        writer = new AsyncTaskAuditEventWriter(auditFile, true, false, false);
+        writer.writeEvents(getMoreSampleAuditEventsWithLocations());
+
         expectedAuditContent = FileUtils.readFileToString(auditFile);
         String expectedData2 = "event,node,start,end,latitude,longitude,accuracy\n" +
                 "form start,,1548106927319,\n" +
@@ -103,8 +103,9 @@ public class AuditEventSaveTaskTest {
         assertEquals(expectedData2, expectedAuditContent);
 
         // Upgrade a form to use location and tracking changes
-        auditEventSaveTask = new AuditEventSaveTask(auditFile, true, true, false);
-        auditEventSaveTask.execute(getMoreSampleAuditEventsWithLocationsAndTrackingChanges().toArray(new AuditEvent[0])).get();
+        writer = new AsyncTaskAuditEventWriter(auditFile, true, true, false);
+        writer.writeEvents(getMoreSampleAuditEventsWithLocationsAndTrackingChanges());
+
         expectedAuditContent = FileUtils.readFileToString(auditFile);
         String expectedData3 = "event,node,start,end,latitude,longitude,accuracy,old-value,new-value\n" +
                 "form start,,1548106927319,\n" +
@@ -139,9 +140,10 @@ public class AuditEventSaveTaskTest {
     }
 
     @Test
-    public void saveAuditWithLocation() throws ExecutionException, InterruptedException, IOException {
-        AuditEventSaveTask auditEventSaveTask = new AuditEventSaveTask(auditFile, true, false, false);
-        auditEventSaveTask.execute(getSampleAuditEventsWithLocations().toArray(new AuditEvent[0])).get();
+    public void saveAuditWithLocation() throws Exception {
+        AsyncTaskAuditEventWriter writer = new AsyncTaskAuditEventWriter(auditFile, true, false, false);
+        writer.writeEvents(getSampleAuditEventsWithLocations());
+
         String expectedAuditContent = FileUtils.readFileToString(auditFile);
         String expectedData = "event,node,start,end,latitude,longitude,accuracy\n" +
                 "form start,,1548106927319,,,,\n" +
@@ -162,9 +164,10 @@ public class AuditEventSaveTaskTest {
     }
 
     @Test
-    public void saveAuditWithLocationAndTrackingChanges() throws ExecutionException, InterruptedException, IOException {
-        AuditEventSaveTask auditEventSaveTask = new AuditEventSaveTask(auditFile, true, true, false);
-        auditEventSaveTask.execute(getSampleAuditEventsWithLocationsAndTrackingChanges().toArray(new AuditEvent[0])).get();
+    public void saveAuditWithLocationAndTrackingChanges() throws Exception {
+        AsyncTaskAuditEventWriter writer = new AsyncTaskAuditEventWriter(auditFile, true, true, false);
+        writer.writeEvents(getSampleAuditEventsWithLocationsAndTrackingChanges());
+
         String expectedAuditContent = FileUtils.readFileToString(auditFile);
         String expectedData = "event,node,start,end,latitude,longitude,accuracy,old-value,new-value\n" +
                 "form start,,1548106927319,,,,,,\n" +
@@ -182,8 +185,9 @@ public class AuditEventSaveTaskTest {
 
     @Test
     public void saveAuditWithUser() throws Exception {
-        AuditEventSaveTask auditEventSaveTask = new AuditEventSaveTask(auditFile, false, false, true);
-        auditEventSaveTask.execute(getSampleAuditEventsWithUser().toArray(new AuditEvent[0])).get();
+        AsyncTaskAuditEventWriter writer = new AsyncTaskAuditEventWriter(auditFile, false, false, true);
+        writer.writeEvents(getSampleAuditEventsWithUser());
+
         String expectedAuditContent = FileUtils.readFileToString(auditFile);
         String expectedData = "event,node,start,end,user\n" +
                 "form start,,1548106927319,,User1\n" +

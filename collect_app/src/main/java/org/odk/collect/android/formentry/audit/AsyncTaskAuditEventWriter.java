@@ -10,9 +10,20 @@ import java.util.List;
 public class AsyncTaskAuditEventWriter implements AuditEventLogger.AuditEventWriter {
 
     private static AsyncTask saveTask;
+    private final File file;
+    private final boolean isLocationEnabled;
+    private final boolean isTrackingChangesEnabled;
+    private final boolean isUserRequired;
+
+    public AsyncTaskAuditEventWriter(@NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled, boolean isUserRequired) {
+        this.file = file;
+        this.isLocationEnabled = isLocationEnabled;
+        this.isTrackingChangesEnabled = isTrackingChangesEnabled;
+        this.isUserRequired = isUserRequired;
+    }
 
     @Override
-    public void writeEvents(List<AuditEvent> auditEvents, @NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled, boolean isUserRequired) {
+    public void writeEvents(List<AuditEvent> auditEvents) {
         AuditEvent[] auditEventArray = auditEvents.toArray(new AuditEvent[0]);
         saveTask = new AuditEventSaveTask(file, isLocationEnabled, isTrackingChangesEnabled, isUserRequired).execute(auditEventArray);
     }

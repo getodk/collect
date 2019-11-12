@@ -4,13 +4,10 @@ package org.odk.collect.android.formentry.audit;
 import android.location.Location;
 import android.os.SystemClock;
 
-import androidx.annotation.NonNull;
-
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.odk.collect.android.logic.FormController;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +16,6 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED;
 import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED;
-import static org.odk.collect.android.logic.FormController.AUDIT_FILE_NAME;
 
 /**
  * Handle logging of auditEvents (which contain time and might contain location coordinates),
@@ -37,7 +33,6 @@ public class AuditEventLogger {
     private List<Location> locations = new ArrayList<>();
 
     private ArrayList<AuditEvent> auditEvents = new ArrayList<>();
-    private File auditFile;
     private long surveyOpenTime;
     private long surveyOpenElapsedTime;
 
@@ -45,14 +40,10 @@ public class AuditEventLogger {
     private final FormController formController;
     private String user;
 
-    public AuditEventLogger(File instanceFile, AuditConfig auditConfig, AuditEventWriter writer, FormController formController) {
+    public AuditEventLogger(AuditConfig auditConfig, AuditEventWriter writer, FormController formController) {
         this.auditConfig = auditConfig;
         this.writer = writer;
         this.formController = formController;
-
-        if (isAuditEnabled() && instanceFile != null) {
-            auditFile = new File(instanceFile.getParentFile().getPath() + File.separator + AUDIT_FILE_NAME);
-        }
     }
 
     public void logEvent(AuditEvent.AuditEventType eventType, boolean writeImmediatelyToDisk, long currentTime) {
@@ -214,12 +205,7 @@ public class AuditEventLogger {
 
     private void writeEvents() {
         if (!writer.isWriting()) {
-            if (auditFile != null) {
-                writer.writeEvents(auditEvents, auditFile, auditConfig.isLocationEnabled(), auditConfig.isTrackingChangesEnabled(), auditConfig.isIdentifyUserEnabled());
-            } else {
-                Timber.e("auditFile null when attempting to write auditEvents.");
-            }
-
+            writer.writeEvents(auditEvents);
             auditEvents = new ArrayList<>();
         } else {
             Timber.i("Queueing AuditEvent");
@@ -293,7 +279,8 @@ public class AuditEventLogger {
     }
 
     public interface AuditEventWriter {
-        void writeEvents(List<AuditEvent> auditEvents, @NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled, boolean userIdentified);
+
+        void writeEvents(List<AuditEvent> auditEvents);
 
         Boolean isWriting();
     }

@@ -18,15 +18,12 @@ package org.odk.collect.android.formentry.audit;
 
 import android.location.Location;
 
-import androidx.annotation.NonNull;
-
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +59,6 @@ import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.
 
 public class AuditEventLoggerTest {
 
-    private File testInstanceFile;
     // All values are set so location coordinates should be collected
     private final AuditConfig testAuditConfig = new AuditConfig("high-priority", "10", "60", false, false);
     // At least one value is not set so location coordinates shouldn't be collected
@@ -72,9 +68,7 @@ public class AuditEventLoggerTest {
     private final FormController formController = mock(FormController.class);
 
     @Before
-    public void setup() throws Exception {
-        testInstanceFile = File.createTempFile("testForm", ".xml");
-
+    public void setup() {
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withAnswerDisplayText("The answer")
                 .build();
@@ -83,7 +77,7 @@ public class AuditEventLoggerTest {
 
     @Test
     public void whenAuditConfigIsNull_doesntWriteEvents() {
-        AuditEventLogger auditEventLogger = new AuditEventLogger(testInstanceFile, null, testWriter, formController);
+        AuditEventLogger auditEventLogger = new AuditEventLogger(null, testWriter, formController);
 
         auditEventLogger.logEvent(END_OF_FORM, false, 0);
         auditEventLogger.exitView(); // Triggers event writing
@@ -92,7 +86,7 @@ public class AuditEventLoggerTest {
 
     @Test
     public void usesMostAccurateLocationForEvents() {
-        final AuditEventLogger auditEventLogger = new AuditEventLogger(testInstanceFile, testAuditConfig, testWriter, formController);
+        final AuditEventLogger auditEventLogger = new AuditEventLogger(testAuditConfig, testWriter, formController);
 
         Location location1 = mock(Location.class);
         when(location1.getLatitude()).thenReturn(54.380746599999995);
@@ -140,7 +134,7 @@ public class AuditEventLoggerTest {
 
     @Test
     public void expiresLocationsOlderThan60Seconds() {
-        final AuditEventLogger auditEventLogger = new AuditEventLogger(testInstanceFile, testAuditConfig, testWriter, formController);
+        final AuditEventLogger auditEventLogger = new AuditEventLogger(testAuditConfig, testWriter, formController);
 
         Location location1 = mock(Location.class);
         when(location1.getLatitude()).thenReturn(54.380746599999995);
@@ -167,7 +161,7 @@ public class AuditEventLoggerTest {
 
     @Test
     public void whenNoLocationSet_doesntAddedLocationToEvents() {
-        AuditEventLogger auditEventLogger = new AuditEventLogger(testInstanceFile, testAuditConfigWithNullValues, testWriter, formController);
+        AuditEventLogger auditEventLogger = new AuditEventLogger(testAuditConfigWithNullValues, testWriter, formController);
 
         auditEventLogger.logEvent(END_OF_FORM, false, 0);
         auditEventLogger.exitView(); // Triggers event writing
@@ -177,7 +171,7 @@ public class AuditEventLoggerTest {
 
     @Test
     public void isDuplicateOfLastAuditEventTest() {
-        AuditEventLogger auditEventLogger = new AuditEventLogger(testInstanceFile, testAuditConfig, testWriter, formController);
+        AuditEventLogger auditEventLogger = new AuditEventLogger(testAuditConfig, testWriter, formController);
         auditEventLogger.logEvent(LOCATION_PROVIDERS_ENABLED, false, 0);
         assertTrue(auditEventLogger.isDuplicateOfLastLocationEvent(LOCATION_PROVIDERS_ENABLED));
         auditEventLogger.logEvent(LOCATION_PROVIDERS_DISABLED, false, 0);
@@ -190,19 +184,18 @@ public class AuditEventLoggerTest {
 
     @Test
     public void withUserSet_addsUserToEvents() {
-        AuditEventLogger auditEventLogger = new AuditEventLogger(testInstanceFile, new AuditConfig(null, null, null, false, true), testWriter, formController);
+        AuditEventLogger auditEventLogger = new AuditEventLogger(new AuditConfig(null, null, null, false, true), testWriter, formController);
         auditEventLogger.setUser("Riker");
 
         auditEventLogger.logEvent(END_OF_FORM, false, 0);
         auditEventLogger.exitView(); // Triggers event writing
 
-        assertTrue(testWriter.isUserRequired);
         assertEquals("Riker", testWriter.auditEvents.get(0).getUser());
     }
 
     @Test
     public void testEventTypes() {
-        AuditEventLogger auditEventLogger = new AuditEventLogger(testInstanceFile, testAuditConfig, testWriter, formController);
+        AuditEventLogger auditEventLogger = new AuditEventLogger(testAuditConfig, testWriter, formController);
 
         auditEventLogger.logEvent(BEGINNING_OF_FORM, false, 0); //shouldn't be logged
         auditEventLogger.logEvent(QUESTION, false, 0);
@@ -234,12 +227,10 @@ public class AuditEventLoggerTest {
 
     private static class TestWriter implements AuditEventLogger.AuditEventWriter {
 
-        boolean isUserRequired;
         List<AuditEvent> auditEvents = new ArrayList<>();
 
         @Override
-        public void writeEvents(List<AuditEvent> auditEvents, @NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled, boolean isUserRequired) {
-            this.isUserRequired = isUserRequired;
+        public void writeEvents(List<AuditEvent> auditEvents) {
             this.auditEvents.addAll(auditEvents);
         }
 
