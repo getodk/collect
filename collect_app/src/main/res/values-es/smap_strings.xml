@@ -58,6 +58,7 @@
   <string name="smap_submitting">Enviando al servidor %1$d formularios finalizados</string>
   <string name="smap_update_task_status">Actualizando estatus de tareas en el servidor</string>
   <string name="smap_status">Estatus</string>
+  <string name="smap_current_status">Estado actual</string>
   <string name="smap_deleted">Borrada</string>
   <string name="smap_cancelled">Tareas Canceladas</string>
   <string name="smap_rejected">Tareas Rechazadas</string>
@@ -92,10 +93,11 @@
   <string name="smap_login_failed">No se pudo conectar al servidor</string>
   <string name="smap_login_unauthorized">Error de Inicio de sesión</string>
   <string name="smap_geofence_tasks">Nuevas tareas locales</string>
-  <string name="smap_reason">Razón</string>
+  <string name="smap_reason">Razón para rechazar la tarea</string>
   <string name="smap_history">Historial</string>
   <string name="smap_reason_not_specified">Debe especificar una razón mayor a 5 caracteres</string>
   <string name="smap_continue_tracking">La opción Salir ha sido deshabilitada. </string>
   <string name="smap_warning">Advertencia</string>
-  <string name="smap_time_difference">Se ha detectado una diferencia de %s minutos entre el servidor y este dispositivo</string>
+  <string name="smap_time_difference">Verifique la hora establecida en este dispositivo. Hay una diferencia de %s minutos con la hora del servidor. </string>
+  <string name="smap_disable_prevent_background_location_enabled">Este formulario registra la ubicación GPS</string>
 </resources>
