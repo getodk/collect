@@ -53,8 +53,78 @@ public class AsyncTaskAuditEventWriterTest {
         auditFile = File.createTempFile("audit", ".csv");
     }
 
-    @Test // This drives out updates between instance edits
-    public void updateHeaderTest() throws Exception {
+    @Test
+    public void saveAuditWithLocation() throws Exception {
+        AsyncTaskAuditEventWriter writer = new AsyncTaskAuditEventWriter(auditFile, true, false, false);
+        writer.writeEvents(getSampleAuditEventsWithLocations());
+
+        String expectedAuditContent = FileUtils.readFileToString(auditFile);
+        String expectedData = "event,node,start,end,latitude,longitude,accuracy\n" +
+                "form start,,1548106927319,,,,\n" +
+                "location tracking enabled,,548108908250,,,,\n" +
+                "location permissions granted,,548108908255,,,,\n" +
+                "location providers enabled,,548108908259,,,,\n" +
+                "question,/data/q1,1548106927323,1548106930112,54.4112062,18.5896652,30.716999053955078\n" +
+                "add repeat,/data/g1[1],1548106930118,1548106931611,54.4112062,18.5896652,30.716999053955078\n" +
+                "question,/data/g1[1]/q2,1548106931612,1548106937122,54.4112062,18.5896652,30.716999053955078\n" +
+                "add repeat,/data/g1[2],1548106937123,1548106938276,54.4112062,18.5896652,30.716999053955078\n" +
+                "question,/data/g1[2]/q2,1548106938277,1548106948127,54.4112062,18.5896652,30.716999053955078\n" +
+                "add repeat,/data/g1[3],1548106948128,1548106949446,54.4112062,18.5896652,30.716999053955078\n" +
+                "end screen,,1548106949448,1548106953601,54.4112062,18.5896652,30.716999053955078\n" +
+                "form save,,1548106953600,,54.4112062,18.5896652,30.716999053955078\n" +
+                "form exit,,1548106953601,,54.4112062,18.5896652,30.716999053955078\n" +
+                "form finalize,,1548106953601,,54.4112062,18.5896652,30.716999053955078\n";
+        assertEquals(expectedData, expectedAuditContent);
+    }
+
+    @Test
+    public void saveAuditWithLocationAndTrackingChanges() throws Exception {
+        AsyncTaskAuditEventWriter writer = new AsyncTaskAuditEventWriter(auditFile, true, true, false);
+        writer.writeEvents(getSampleAuditEventsWithLocationsAndTrackingChanges());
+
+        String expectedAuditContent = FileUtils.readFileToString(auditFile);
+        String expectedData = "event,node,start,end,latitude,longitude,accuracy,old-value,new-value\n" +
+                "form start,,1548106927319,,,,,,\n" +
+                "location tracking enabled,,548108908250,,,,,,\n" +
+                "location permissions granted,,548108908255,,,,,,\n" +
+                "location providers enabled,,548108908259,,,,,,\n" +
+                "question,/data/q1,1548106927323,1548106930112,54.4112062,18.5896652,30.716999053955078,Old value,New Value\n" +
+                "add repeat,/data/g1[1],1548106930118,1548106931611,54.4112062,18.5896652,30.716999053955078,,\n" +
+                "end screen,,1548106949448,1548106953601,54.4112062,18.5896652,30.716999053955078,,\n" +
+                "form save,,1548106953600,,54.4112062,18.5896652,30.716999053955078,,\n" +
+                "form exit,,1548106953601,,54.4112062,18.5896652,30.716999053955078,,\n" +
+                "form finalize,,1548106953601,,54.4112062,18.5896652,30.716999053955078,,\n";
+        assertEquals(expectedData, expectedAuditContent);
+    }
+
+    @Test
+    public void saveAuditWithUser() throws Exception {
+        AsyncTaskAuditEventWriter writer = new AsyncTaskAuditEventWriter(auditFile, false, false, true);
+        writer.writeEvents(getSampleAuditEventsWithUser());
+
+        String expectedAuditContent = FileUtils.readFileToString(auditFile);
+        String expectedData = "event,node,start,end,user\n" +
+                "form start,,1548106927319,,User1\n" +
+                "question,/data/q1,1548106927323,1548106930112,User1\n" +
+                "add repeat,/data/g1[1],1548106930118,1548106931611,User1\n" +
+                "question,/data/g1[1]/q2,1548106931612,1548106937122,User1\n" +
+                "add repeat,/data/g1[2],1548106937123,1548106938276,User1\n" +
+                "question,/data/g1[2]/q2,1548106938277,1548106948127,User1\n" +
+                "add repeat,/data/g1[3],1548106948128,1548106949446,User1\n" +
+                "end screen,,1548106949448,1548106953601,User1\n" +
+                "form save,,1548106953600,,User1\n" +
+                "form exit,,1548106953601,,User1\n" +
+                "form finalize,,1548106953601,,User1\n";
+        assertEquals(expectedData, expectedAuditContent);
+    }
+
+    /**
+     * A user could update the app and then resume form entry. In this case it would be possible
+     * for the form to have an audit config that wasn't supported by the old app. In this case
+     * the writer should update the header to account for the new data.
+     */
+    @Test
+    public void whenAppUpdatedBetweenInstances_updatesHeader() throws Exception {
         // Use a form with enabled audit but without location
         AsyncTaskAuditEventWriter writer = new AsyncTaskAuditEventWriter(auditFile, false, false, false);
         writer.writeEvents(getSampleAuditEventsWithoutLocations());
@@ -137,75 +207,63 @@ public class AsyncTaskAuditEventWriterTest {
                 "form exit,,1548108909730,,54.4112062,18.5896652,30.716999053955078,,\n" +
                 "form finalize,,1548108909731,,54.4112062,18.5896652,30.716999053955078,,\n";
         assertEquals(expectedData3, expectedAuditContent);
-    }
 
-    @Test
-    public void saveAuditWithLocation() throws Exception {
-        AsyncTaskAuditEventWriter writer = new AsyncTaskAuditEventWriter(auditFile, true, false, false);
-        writer.writeEvents(getSampleAuditEventsWithLocations());
+        // Upgrade a form to use location and tracking changes and user
+        writer = new AsyncTaskAuditEventWriter(auditFile, true, true, true);
+        writer.writeEvents(getMoreSampleAuditEventsWithLocationsAndTrackingChangesAndUser());
 
-        String expectedAuditContent = FileUtils.readFileToString(auditFile);
-        String expectedData = "event,node,start,end,latitude,longitude,accuracy\n" +
-                "form start,,1548106927319,,,,\n" +
+        expectedAuditContent = FileUtils.readFileToString(auditFile);
+        String expectedData4 = "event,node,start,end,latitude,longitude,accuracy,old-value,new-value,user\n" +
+                "form start,,1548106927319,\n" +
+                "question,/data/q1,1548106927323,1548106930112\n" +
+                "add repeat,/data/g1[1],1548106930118,1548106931611\n" +
+                "question,/data/g1[1]/q2,1548106931612,1548106937122\n" +
+                "add repeat,/data/g1[2],1548106937123,1548106938276\n" +
+                "question,/data/g1[2]/q2,1548106938277,1548106948127\n" +
+                "add repeat,/data/g1[3],1548106948128,1548106949446\n" +
+                "end screen,,1548106949448,1548106953601\n" +
+                "form save,,1548106953600,\n" +
+                "form exit,,1548106953601,\n" +
+                "form finalize,,1548106953601,\n" +
+                "form resume,,1548108900606,,54.4112062,18.5896652,30.716999053955078\n" +
+                "jump,,1548108906276,1548108908206,54.4112062,18.5896652,30.716999053955078\n" +
                 "location tracking enabled,,548108908250,,,,\n" +
                 "location permissions granted,,548108908255,,,,\n" +
                 "location providers enabled,,548108908259,,,,\n" +
-                "question,/data/q1,1548106927323,1548106930112,54.4112062,18.5896652,30.716999053955078\n" +
-                "add repeat,/data/g1[1],1548106930118,1548106931611,54.4112062,18.5896652,30.716999053955078\n" +
-                "question,/data/g1[1]/q2,1548106931612,1548106937122,54.4112062,18.5896652,30.716999053955078\n" +
-                "add repeat,/data/g1[2],1548106937123,1548106938276,54.4112062,18.5896652,30.716999053955078\n" +
-                "question,/data/g1[2]/q2,1548106938277,1548106948127,54.4112062,18.5896652,30.716999053955078\n" +
-                "add repeat,/data/g1[3],1548106948128,1548106949446,54.4112062,18.5896652,30.716999053955078\n" +
-                "end screen,,1548106949448,1548106953601,54.4112062,18.5896652,30.716999053955078\n" +
-                "form save,,1548106953600,,54.4112062,18.5896652,30.716999053955078\n" +
-                "form exit,,1548106953601,,54.4112062,18.5896652,30.716999053955078\n" +
-                "form finalize,,1548106953601,,54.4112062,18.5896652,30.716999053955078\n";
-        assertEquals(expectedData, expectedAuditContent);
-    }
-
-    @Test
-    public void saveAuditWithLocationAndTrackingChanges() throws Exception {
-        AsyncTaskAuditEventWriter writer = new AsyncTaskAuditEventWriter(auditFile, true, true, false);
-        writer.writeEvents(getSampleAuditEventsWithLocationsAndTrackingChanges());
-
-        String expectedAuditContent = FileUtils.readFileToString(auditFile);
-        String expectedData = "event,node,start,end,latitude,longitude,accuracy,old-value,new-value\n" +
-                "form start,,1548106927319,,,,,,\n" +
-                "location tracking enabled,,548108908250,,,,,,\n" +
-                "location permissions granted,,548108908255,,,,,,\n" +
-                "location providers enabled,,548108908259,,,,,,\n" +
-                "question,/data/q1,1548106927323,1548106930112,54.4112062,18.5896652,30.716999053955078,Old value,New Value\n" +
-                "add repeat,/data/g1[1],1548106930118,1548106931611,54.4112062,18.5896652,30.716999053955078,,\n" +
-                "end screen,,1548106949448,1548106953601,54.4112062,18.5896652,30.716999053955078,,\n" +
-                "form save,,1548106953600,,54.4112062,18.5896652,30.716999053955078,,\n" +
-                "form exit,,1548106953601,,54.4112062,18.5896652,30.716999053955078,,\n" +
-                "form finalize,,1548106953601,,54.4112062,18.5896652,30.716999053955078,,\n";
-        assertEquals(expectedData, expectedAuditContent);
-    }
-
-    @Test
-    public void saveAuditWithUser() throws Exception {
-        AsyncTaskAuditEventWriter writer = new AsyncTaskAuditEventWriter(auditFile, false, false, true);
-        writer.writeEvents(getSampleAuditEventsWithUser());
-
-        String expectedAuditContent = FileUtils.readFileToString(auditFile);
-        String expectedData = "event,node,start,end,user\n" +
-                "form start,,1548106927319,,User1\n" +
-                "question,/data/q1,1548106927323,1548106930112,User1\n" +
-                "add repeat,/data/g1[1],1548106930118,1548106931611,User1\n" +
-                "question,/data/g1[1]/q2,1548106931612,1548106937122,User1\n" +
-                "add repeat,/data/g1[2],1548106937123,1548106938276,User1\n" +
-                "question,/data/g1[2]/q2,1548106938277,1548106948127,User1\n" +
-                "add repeat,/data/g1[3],1548106948128,1548106949446,User1\n" +
-                "end screen,,1548106949448,1548106953601,User1\n" +
-                "form save,,1548106953600,,User1\n" +
-                "form exit,,1548106953601,,User1\n" +
-                "form finalize,,1548106953601,,User1\n";
-        assertEquals(expectedData, expectedAuditContent);
+                "end screen,,1548108908285,1548108909730,54.4112062,18.5896652,30.716999053955078\n" +
+                "form save,,1548108909730,,54.4112062,18.5896652,30.716999053955078\n" +
+                "form exit,,1548108909730,,54.4112062,18.5896652,30.716999053955078\n" +
+                "form finalize,,1548108909731,,54.4112062,18.5896652,30.716999053955078\n" +
+                "form resume,,1548108900606,,54.4112062,18.5896652,30.716999053955078,,\n" +
+                "question,,1548108900700,,54.4112062,18.5896652,30.716999053955078,Old value,New value\n" +
+                "question,,1548108903100,,54.4112062,18.5896652,30.716999053955078,\"Old value, with comma\",New value\n" +
+                "question,,1548108903101,,54.4112062,18.5896652,30.716999053955078,\"Old value \n with linebreak\",\"New value \n with linebreak and \"\"quotes\"\"\"\n" +
+                "question,,1548108904200,,54.4112062,18.5896652,30.716999053955078,Old value,\"New value, with comma\"\n" +
+                "form save,,1548108909730,,54.4112062,18.5896652,30.716999053955078,,\n" +
+                "form exit,,1548108909730,,54.4112062,18.5896652,30.716999053955078,,\n" +
+                "form finalize,,1548108909731,,54.4112062,18.5896652,30.716999053955078,,\n" +
+                "form resume,,1548108900606,,54.4112062,18.5896652,30.716999053955078,,,User1\n" +
+                "question,,1548108900700,,54.4112062,18.5896652,30.716999053955078,Old value,New value,User1\n" +
+                "question,,1548108903100,,54.4112062,18.5896652,30.716999053955078,\"Old value, with comma\",New value,User1\n" +
+                "question,,1548108903101,,54.4112062,18.5896652,30.716999053955078,\"Old value \n with linebreak\",\"New value \n with linebreak and \"\"quotes\"\"\",User1\n" +
+                "question,,1548108904200,,54.4112062,18.5896652,30.716999053955078,Old value,\"New value, with comma\",User1\n" +
+                "form save,,1548108909730,,54.4112062,18.5896652,30.716999053955078,,,User1\n" +
+                "form exit,,1548108909730,,54.4112062,18.5896652,30.716999053955078,,,User1\n" +
+                "form finalize,,1548108909731,,54.4112062,18.5896652,30.716999053955078,,,User1\n";
+        assertEquals(expectedData4, expectedAuditContent);
     }
 
     private List<AuditEvent> getSampleAuditEventsWithUser() {
         List<AuditEvent> auditEvents = getSampleAuditEventsWithoutLocations();
+        for (AuditEvent event : auditEvents) {
+            event.setUser("User1");
+        }
+
+        return auditEvents;
+    }
+
+    private List<AuditEvent> getMoreSampleAuditEventsWithLocationsAndTrackingChangesAndUser() {
+        List<AuditEvent> auditEvents = getMoreSampleAuditEventsWithLocationsAndTrackingChanges();
         for (AuditEvent event : auditEvents) {
             event.setUser("User1");
         }

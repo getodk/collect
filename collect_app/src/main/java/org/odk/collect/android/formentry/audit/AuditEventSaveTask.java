@@ -110,7 +110,8 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
     private boolean shouldHeaderBeUpdated(String header) {
         return header == null
                 || (isLocationEnabled && !header.contains(LOCATION_COORDINATES_COLUMNS))
-                || (isTrackingChangesEnabled && !header.contains(ANSWER_VALUES_COLUMNS));
+                || (isTrackingChangesEnabled && !header.contains(ANSWER_VALUES_COLUMNS))
+                || (isUserRequired && !header.contains(USER_COLUMNS));
     }
 
     private String getHeader() {
