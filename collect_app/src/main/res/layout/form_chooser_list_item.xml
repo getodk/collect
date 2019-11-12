@@ -13,21 +13,35 @@
         android:layout_alignParentTop="true">
 
         <include layout="@layout/form_chooser_list_item_icon" />
-
     </FrameLayout>
-
 
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/imageView"
+        android:layout_alignParentTop="true"
         android:layout_marginStart="@dimen/margin_standard"
         android:layout_marginLeft="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginRight="@dimen/margin_standard"
+        android:layout_toStartOf="@id/map_view"
+        android:layout_toLeftOf="@id/map_view"
         android:layout_toEndOf="@id/imageView"
         android:layout_toRightOf="@id/imageView">
 
         <include layout="@layout/form_chooser_list_item_text" />
+    </FrameLayout>
 
+    <FrameLayout
+        android:id="@+id/map_view"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true">
+
+        <include layout="@layout/form_chooser_list_item_map_button" />
     </FrameLayout>
 
 
