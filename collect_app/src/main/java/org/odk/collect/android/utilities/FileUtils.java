@@ -697,6 +697,9 @@ public class FileUtils {
         if (filePath == null) {
             return null;
         }
+        if (filePath.startsWith("/storage/emulated/0/odk")) {
+            return Collect.ODK_ROOT + filePath.substring("/storage/emulated/0/odk".length());
+        }
         return filePath.startsWith(Collect.ODK_ROOT) ? filePath : Collect.ODK_ROOT + filePath;
     }
 
@@ -704,6 +707,12 @@ public class FileUtils {
         if (filePath == null) {
             return null;
         }
-        return filePath.startsWith(Collect.ODK_ROOT) ? filePath.substring(Collect.ODK_ROOT.length()) : filePath;
+        if (filePath.startsWith("/storage/emulated/0/odk")) {
+            return filePath.substring("/storage/emulated/0/odk".length());
+        }
+        if (filePath.startsWith("/storage/emulated/0/Android/data/org.odk.collect.android/files")) {
+            return filePath.substring("/storage/emulated/0/Android/data/org.odk.collect.android/files".length());
+        }
+        return filePath;
     }
 }

@@ -33,5 +33,8 @@ public class FileUtilsTest {
 
         assertEquals("/forms/selectext-media/itemsets.csv", FileUtils.getRelativeFilePath("/storage/emulated/0/odk/forms/selectext-media/itemsets.csv"));
         assertEquals("/forms/selectext-media/itemsets.csv", FileUtils.getRelativeFilePath("/forms/selectext-media/itemsets.csv"));
+
+        assertEquals("/forms/selectext.xml", FileUtils.getRelativeFilePath("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/selectext.xml"));
+        assertEquals("/forms/selectext.xml", FileUtils.getRelativeFilePath("/forms/selectext.xml"));
     }
 }
