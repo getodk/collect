@@ -33,6 +33,8 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.dao.helpers.FormsDaoHelper;
+import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.dto.Form;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
@@ -41,7 +43,6 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
-import org.odk.collect.android.utilities.DatabaseUtils;
 import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -201,7 +202,7 @@ public class AutoSendWorker extends Worker {
     @NonNull
     private List<Instance> getInstancesToAutoSend(boolean isAutoSendAppSettingEnabled) {
         Cursor c = new InstancesDao().getFinalizedInstancesCursor();
-        List<Instance> allFinalized = DatabaseUtils.getInstancesFromCursor(c);
+        List<Instance> allFinalized = InstancesDaoHelper.getInstancesFromCursor(c);
 
         List<Instance> toUpload = new ArrayList<>();
         for (Instance instance : allFinalized) {
@@ -246,7 +247,7 @@ public class AutoSendWorker extends Worker {
      */
     private boolean atLeastOneFormSpecifiesAutoSend() {
         try (Cursor cursor = new FormsDao().getFormsCursor()) {
-            List<Form> forms = DatabaseUtils.getFormsFromCursor(cursor);
+            List<Form> forms = FormsDaoHelper.getFormsFromCursor(cursor);
             for (Form form : forms) {
                 if (Boolean.valueOf(form.getAutoSend())) {
                     return true;

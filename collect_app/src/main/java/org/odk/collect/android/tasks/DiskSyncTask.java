@@ -25,7 +25,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
-import org.odk.collect.android.utilities.DatabaseUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.Validator;
 
@@ -103,7 +102,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
 
                     while (cursor.moveToNext()) {
                         // For each element in the provider, see if the file already exists
-                        String formFilePath = DatabaseUtils.getAbsoluteFilePath(cursor.getString(
+                        String formFilePath = FileUtils.getAbsoluteFilePath(cursor.getString(
                                         cursor.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
                         String md5 = cursor.getString(
                                 cursor.getColumnIndex(FormsColumns.MD5_HASH));
@@ -302,7 +301,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
         updateValues.put(FormsColumns.AUTO_SEND, fields.get(FileUtils.AUTO_SEND));
         // Note, the path doesn't change here, but it needs to be included so the
         // update will automatically update the .md5 and the cache path.
-        updateValues.put(FormsColumns.FORM_FILE_PATH, DatabaseUtils.getRelativeFilePath(formDefFile.getAbsolutePath()));
+        updateValues.put(FormsColumns.FORM_FILE_PATH, FileUtils.getRelativeFilePath(formDefFile.getAbsolutePath()));
 
         return updateValues;
     }

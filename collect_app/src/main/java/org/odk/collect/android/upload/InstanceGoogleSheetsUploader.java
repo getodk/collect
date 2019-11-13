@@ -34,6 +34,7 @@ import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.dao.helpers.FormsDaoHelper;
 import org.odk.collect.android.dto.Form;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.exception.BadUrlException;
@@ -41,7 +42,6 @@ import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.tasks.FormLoaderTask;
-import org.odk.collect.android.utilities.DatabaseUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.UrlUtils;
@@ -97,7 +97,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         // Get corresponding blank form and verify there is exactly 1
         Cursor formCursor = new FormsDao().getFormsCursor(instance.getJrFormId(), instance.getJrVersion());
-        List<Form> forms = DatabaseUtils.getFormsFromCursor(formCursor);
+        List<Form> forms = FormsDaoHelper.getFormsFromCursor(formCursor);
 
         try {
             if (forms.size() != 1) {

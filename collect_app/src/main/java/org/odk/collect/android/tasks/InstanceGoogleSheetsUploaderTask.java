@@ -19,11 +19,11 @@ import android.database.Cursor;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.dao.helpers.FormsDaoHelper;
 import org.odk.collect.android.dto.Form;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.upload.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.upload.UploadException;
-import org.odk.collect.android.utilities.DatabaseUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
@@ -61,7 +61,7 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
 
             // Get corresponding blank form and verify there is exactly 1
             Cursor formCursor = new FormsDao().getFormsCursor(instance.getJrFormId(), instance.getJrVersion());
-            List<Form> forms = DatabaseUtils.getFormsFromCursor(formCursor);
+            List<Form> forms = FormsDaoHelper.getFormsFromCursor(formCursor);
 
             if (forms.size() != 1) {
                 outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),

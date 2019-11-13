@@ -23,7 +23,7 @@ import androidx.loader.content.CursorLoader;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.FormsProviderAPI;
-import org.odk.collect.android.utilities.DatabaseUtils;
+import org.odk.collect.android.utilities.FileUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -165,7 +165,7 @@ public class FormsDao {
 
     public Cursor getFormsCursorForFormFilePath(String formFilePath) {
         String selection = FormsProviderAPI.FormsColumns.FORM_FILE_PATH + " LIKE ?";
-        String[] selectionArgs = {"%" + DatabaseUtils.getRelativeFilePath(formFilePath)};
+        String[] selectionArgs = {"%" + FileUtils.getRelativeFilePath(formFilePath)};
 
         return getFormsCursor(null, selection, selectionArgs, null);
     }

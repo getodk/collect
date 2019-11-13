@@ -134,7 +134,6 @@ import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.DatabaseUtils;
 import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
@@ -2016,7 +2015,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                 ContentValues values = new ContentValues();
                                 values.put(FormsColumns.LANGUAGE, languages[whichButton]);
                                 String selection = FormsColumns.FORM_FILE_PATH + " LIKE ?";
-                                String[] selectArgs = {"%" + DatabaseUtils.getRelativeFilePath(formPath)};
+                                String[] selectArgs = {"%" + FileUtils.getRelativeFilePath(formPath)};
                                 int updated = new FormsDao().updateForm(values, selection, selectArgs);
                                 Timber.i("Updated language to: %s in %d rows",
                                         languages[whichButton],

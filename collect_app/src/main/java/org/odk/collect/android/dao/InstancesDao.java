@@ -24,7 +24,7 @@ import androidx.loader.content.CursorLoader;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.DatabaseUtils;
+import org.odk.collect.android.utilities.FileUtils;
 
 import java.util.List;
 
@@ -164,7 +164,7 @@ public class InstancesDao {
 
     public Cursor getInstancesCursorForFilePath(String path) {
         String selection = InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + " LIKE ?";
-        String[] selectionArgs = {"%" + DatabaseUtils.getRelativeFilePath(path)};
+        String[] selectionArgs = {"%" + FileUtils.getRelativeFilePath(path)};
 
         return getInstancesCursor(null, selection, selectionArgs, null);
     }
@@ -276,7 +276,7 @@ public class InstancesDao {
             selection.append(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH);
             int j = 0;
             while (j < selectionArgs.length) {
-                selectionArgs[j] = "%" + DatabaseUtils.getRelativeFilePath(absoluteInstanceFilePaths.get(
+                selectionArgs[j] = "%" + FileUtils.getRelativeFilePath(absoluteInstanceFilePaths.get(
                         counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER + j));
                 selection.append(" LIKE ?");
 

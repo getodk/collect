@@ -32,7 +32,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.helpers.InstancesDatabaseHelper;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.utilities.DatabaseUtils;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 
 import java.io.File;
@@ -260,7 +260,7 @@ public class InstanceProvider extends ContentProvider {
                         if (del != null && del.getCount() > 0) {
                             del.moveToFirst();
                             do {
-                                String instanceFile = DatabaseUtils.getAbsoluteFilePath(del.getString(
+                                String instanceFile = FileUtils.getAbsoluteFilePath(del.getString(
                                         del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
                                 File instanceDir = (new File(instanceFile)).getParentFile();
                                 deleteAllFilesInDirectory(instanceDir);
@@ -285,7 +285,7 @@ public class InstanceProvider extends ContentProvider {
                             c.moveToFirst();
                             status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
                             do {
-                                String instanceFile = DatabaseUtils.getAbsoluteFilePath(c.getString(
+                                String instanceFile = FileUtils.getAbsoluteFilePath(c.getString(
                                         c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
                                 File instanceDir = (new File(instanceFile)).getParentFile();
                                 deleteAllFilesInDirectory(instanceDir);

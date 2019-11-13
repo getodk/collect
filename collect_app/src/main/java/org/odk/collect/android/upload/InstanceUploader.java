@@ -23,10 +23,10 @@ import androidx.annotation.Nullable;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.DatabaseUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +77,7 @@ public abstract class InstanceUploader {
             String selection = selectionBuf.toString();
 
             Cursor c = new InstancesDao().getInstancesCursor(selection, selectionArgs);
-            instancesToUpload.addAll(DatabaseUtils.getInstancesFromCursor(c));
+            instancesToUpload.addAll(InstancesDaoHelper.getInstancesFromCursor(c));
 
             counter++;
         }

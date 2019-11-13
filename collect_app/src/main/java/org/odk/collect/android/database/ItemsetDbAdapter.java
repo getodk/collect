@@ -7,13 +7,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.DatabaseUtils;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.FileUtils.getAbsoluteFilePath;
+import static org.odk.collect.android.utilities.FileUtils.getRelativeFilePath;
 
 public class ItemsetDbAdapter {
 
@@ -116,7 +118,7 @@ public class ItemsetDbAdapter {
 
         ContentValues cv = new ContentValues();
         cv.put(KEY_ITEMSET_HASH, formHash);
-        cv.put(KEY_PATH, DatabaseUtils.getRelativeFilePath(path));
+        cv.put(KEY_PATH, getRelativeFilePath(path));
         db.insert(ITEMSET_TABLE, null, cv);
 
         return true;
@@ -155,13 +157,13 @@ public class ItemsetDbAdapter {
 
         // and remove the entry from the itemsets table
         String where = KEY_PATH + " LIKE ?";
-        String[] whereArgs = {"%" + DatabaseUtils.getRelativeFilePath(path)};
+        String[] whereArgs = {"%" + getRelativeFilePath(path)};
         db.delete(ITEMSET_TABLE, where, whereArgs);
     }
 
     public Cursor getItemsets(String path) {
         String selection = KEY_PATH + " LIKE ?";
-        String[] selectionArgs = {"%" + DatabaseUtils.getRelativeFilePath(path)};
+        String[] selectionArgs = {"%" + getRelativeFilePath(path)};
         return db.query(ITEMSET_TABLE, null, selection, selectionArgs, null, null, null);
     }
 
@@ -170,14 +172,14 @@ public class ItemsetDbAdapter {
         if (c != null) {
             if (c.getCount() == 1) {
                 c.moveToFirst();
-                String table = getMd5FromString(DatabaseUtils.getAbsoluteFilePath(c.getString(c.getColumnIndex(KEY_PATH))));
+                String table = getMd5FromString(getAbsoluteFilePath(c.getString(c.getColumnIndex(KEY_PATH))));
                 db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + table);
             }
             c.close();
         }
 
         String where = KEY_PATH + " LIKE ?";
-        String[] whereArgs = {"%" + DatabaseUtils.getRelativeFilePath(path)};
+        String[] whereArgs = {"%" + getRelativeFilePath(path)};
         db.delete(ITEMSET_TABLE, where, whereArgs);
     }
 

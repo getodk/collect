@@ -443,7 +443,7 @@ public class DownloadFormListUtils {
     }
 
     private boolean areNewerMediaFilesAvailable(String formId, String formVersion, List<MediaFile> newMediaFiles) {
-        String mediaDirPath = DatabaseUtils.getAbsoluteFilePath(formsDao.getFormMediaPath(formId, formVersion));
+        String mediaDirPath = FileUtils.getAbsoluteFilePath(formsDao.getFormMediaPath(formId, formVersion));
         if (mediaDirPath != null) {
             File[] localMediaFiles = new File(mediaDirPath).listFiles();
             if (localMediaFiles != null) {

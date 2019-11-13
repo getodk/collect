@@ -31,7 +31,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.database.helpers.FormsDatabaseHelper;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
-import org.odk.collect.android.utilities.DatabaseUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 
@@ -177,10 +176,10 @@ public class FormsProvider extends ContentProvider {
 
             // Normalize the file path.
             // (don't trust the requester).
-            String filePath = DatabaseUtils.getAbsoluteFilePath(values.getAsString(FormsColumns.FORM_FILE_PATH));
+            String filePath = FileUtils.getAbsoluteFilePath(values.getAsString(FormsColumns.FORM_FILE_PATH));
             File form = new File(filePath);
             filePath = form.getAbsolutePath(); // normalized
-            values.put(FormsColumns.FORM_FILE_PATH, DatabaseUtils.getRelativeFilePath(filePath));
+            values.put(FormsColumns.FORM_FILE_PATH, FileUtils.getRelativeFilePath(filePath));
 
             Long now = System.currentTimeMillis();
 
@@ -202,17 +201,17 @@ public class FormsProvider extends ContentProvider {
 
             if (!values.containsKey(FormsColumns.JRCACHE_FILE_PATH)) {
                 String cachePath = Collect.CACHE_PATH + File.separator + md5 + ".formdef";
-                values.put(FormsColumns.JRCACHE_FILE_PATH, DatabaseUtils.getRelativeFilePath(cachePath));
+                values.put(FormsColumns.JRCACHE_FILE_PATH, FileUtils.getRelativeFilePath(cachePath));
             }
             if (!values.containsKey(FormsColumns.FORM_MEDIA_PATH)) {
-                values.put(FormsColumns.FORM_MEDIA_PATH, DatabaseUtils.getRelativeFilePath(FileUtils.constructMediaPath(filePath)));
+                values.put(FormsColumns.FORM_MEDIA_PATH, FileUtils.getRelativeFilePath(FileUtils.constructMediaPath(filePath)));
             }
 
             SQLiteDatabase db = formsDatabaseHelper.getWritableDatabase();
 
             // first try to see if a record with this filename already exists...
             String[] projection = {FormsColumns._ID, FormsColumns.FORM_FILE_PATH};
-            String[] selectionArgs = {"%" + DatabaseUtils.getRelativeFilePath(filePath)};
+            String[] selectionArgs = {"%" + FileUtils.getRelativeFilePath(filePath)};
             String selection = FormsColumns.FORM_FILE_PATH + " LIKE ?";
             Cursor c = null;
             try {
@@ -244,7 +243,7 @@ public class FormsProvider extends ContentProvider {
     }
 
     private void deleteFileOrDir(String fileName) {
-        File file = new File(DatabaseUtils.getAbsoluteFilePath(fileName));
+        File file = new File(FileUtils.getAbsoluteFilePath(fileName));
         if (file.exists()) {
             if (file.isDirectory()) {
                 // delete any media entries for files in this directory...
@@ -395,7 +394,7 @@ public class FormsProvider extends ContentProvider {
                     // updated
                     // this probably isn't a great thing to do.
                     if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
-                        String formFile = DatabaseUtils.getAbsoluteFilePath(values
+                        String formFile = FileUtils.getAbsoluteFilePath(values
                                 .getAsString(FormsColumns.FORM_FILE_PATH));
                         values.put(FormsColumns.MD5_HASH,
                                 FileUtils.getMd5Hash(new File(formFile)));
@@ -410,9 +409,9 @@ public class FormsProvider extends ContentProvider {
                             while (c.moveToNext()) {
                                 // before updating the paths, delete all the files
                                 if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
-                                    String newFile = DatabaseUtils.getAbsoluteFilePath(values
+                                    String newFile = FileUtils.getAbsoluteFilePath(values
                                             .getAsString(FormsColumns.FORM_FILE_PATH));
-                                    String delFile = DatabaseUtils.getAbsoluteFilePath(c
+                                    String delFile = FileUtils.getAbsoluteFilePath(c
                                             .getString(c
                                                     .getColumnIndex(FormsColumns.FORM_FILE_PATH)));
                                     if (!newFile.equalsIgnoreCase(delFile)) {
@@ -464,9 +463,9 @@ public class FormsProvider extends ContentProvider {
                             }
 
                             if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
-                                String formFile = DatabaseUtils.getAbsoluteFilePath(values
+                                String formFile = FileUtils.getAbsoluteFilePath(values
                                         .getAsString(FormsColumns.FORM_FILE_PATH));
-                                String oldFile = DatabaseUtils.getAbsoluteFilePath(update.getString(update
+                                String oldFile = FileUtils.getAbsoluteFilePath(update.getString(update
                                         .getColumnIndex(FormsColumns.FORM_FILE_PATH)));
 
                                 if (formFile == null || !formFile.equalsIgnoreCase(oldFile)) {
@@ -481,7 +480,7 @@ public class FormsProvider extends ContentProvider {
                                 String newMd5 = FileUtils.getMd5Hash(new File(formFile));
                                 values.put(FormsColumns.MD5_HASH, newMd5);
                                 values.put(FormsColumns.JRCACHE_FILE_PATH,
-                                        DatabaseUtils.getRelativeFilePath(Collect.CACHE_PATH + File.separator + newMd5 + ".formdef"));
+                                        FileUtils.getRelativeFilePath(Collect.CACHE_PATH + File.separator + newMd5 + ".formdef"));
                             }
 
                             count = db.update(

@@ -692,4 +692,18 @@ public class FileUtils {
             return next;
         }
     }
+
+    public static String getAbsoluteFilePath(String filePath) {
+        if (filePath == null) {
+            return null;
+        }
+        return filePath.startsWith(Collect.ODK_ROOT) ? filePath : Collect.ODK_ROOT + filePath;
+    }
+
+    public static String getRelativeFilePath(String filePath) {
+        if (filePath == null) {
+            return null;
+        }
+        return filePath.startsWith(Collect.ODK_ROOT) ? filePath.substring(Collect.ODK_ROOT.length()) : filePath;
+    }
 }
