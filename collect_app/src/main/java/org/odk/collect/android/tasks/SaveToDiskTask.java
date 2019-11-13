@@ -19,8 +19,20 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import org.javarosa.core.model.condition.EvaluationContext;
+import org.javarosa.core.model.data.GeoPointData;
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.instance.FormInstance;
+import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryController;
+import org.javarosa.xpath.XPathException;
+import org.javarosa.xpath.XPathNodeset;
+import org.javarosa.xpath.XPathParseTool;
+import org.javarosa.xpath.expr.XPathExpression;
+import org.javarosa.xpath.parser.XPathSyntaxException;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
@@ -146,6 +158,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     private void updateInstanceDatabase(boolean incomplete, boolean canEditAfterCompleted) {
 
         FormController formController = Collect.getInstance().getFormController();
+        FormInstance formInstance = formController.getFormDef().getInstance();
 
         // Update the instance database...
         ContentValues values = new ContentValues();
@@ -159,6 +172,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         }
         // update this whether or not the status is complete...
         values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(canEditAfterCompleted));
+
+        extractGeometryValues(formInstance, values);
 
         // If FormEntryActivity was started with an Instance, just update that instance
         if (Collect.getInstance().getContentResolver().getType(uri).equals(
@@ -196,8 +211,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 Cursor c = null;
                 try {
                     // retrieve the form definition...
-                    c = Collect.getInstance().getContentResolver().query(uri, null, null, null,
-                            null);
+                    c = Collect.getInstance().getContentResolver().query(uri, null, null, null, null);
                     c.moveToFirst();
                     String formname = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
                     String submissionUri = null;
@@ -225,6 +239,49 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 uri = new InstancesDao().saveInstance(values);
             }
         }
+    }
+
+    /** Extracts geometry information from the submitted instance, if present. */
+    protected void extractGeometryValues(FormInstance instance, ContentValues values) {
+        String geometryXpath;
+        try (Cursor c = Collect.getInstance().getContentResolver().query(
+            uri, new String[] {FormsColumns.GEOMETRY_XPATH}, null, null, null
+        )) {
+            if (c.moveToFirst()) {
+                geometryXpath = c.getString(0);
+            } else {
+                return;
+            }
+        }
+
+        try {
+            XPathExpression xpath = XPathParseTool.parseXPath(geometryXpath);
+            EvaluationContext context = new EvaluationContext(instance);
+            Object result = xpath.eval(instance, context);
+            Timber.w("XPath %s -> %s", geometryXpath, result);
+            if (result instanceof XPathNodeset) {
+                XPathNodeset nodes = (XPathNodeset) result;
+                // For now, only use the first node found.
+                TreeElement element = instance.resolveReference(nodes.getRefAt(0));
+                IAnswerData value = element.getValue();
+                Timber.w("value = %s", value);
+                if (value instanceof GeoPointData) {
+                    JSONObject json = toGeoJson((GeoPointData) value);
+                    try {
+                        String type = json.getString("type");
+                        values.put("geometry", json.toString());
+                        values.put("geometryType", type);
+                    } catch (JSONException e) { }
+                    return;
+                }
+            }
+        } catch (XPathException | XPathSyntaxException e) {
+            Timber.w(e, "Could not evaluate geometry XPath %s in instance", geometryXpath);
+        }
+    }
+
+    protected JSONObject toGeoJson(GeoPointData data) {
+        return new JSONObject();
     }
 
     /**
