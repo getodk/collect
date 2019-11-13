@@ -60,7 +60,7 @@ public class InstanceUploaderUtilsTest {
                     .status(InstanceProviderAPI.STATUS_COMPLETE)
                     .lastStatusChangeDate(time)
                     .build();
-            instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(instance));
+            instancesDao.saveInstance(InstanceUtils.getValuesFromInstanceObject(instance));
         }
     }
 

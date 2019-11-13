@@ -29,6 +29,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.utilities.InstanceUtils;
 
 import java.util.List;
 
@@ -66,7 +67,7 @@ public class InstancesDaoTest {
     @Test
     public void getUnsentInstancesCursorTest() {
         Cursor cursor = instancesDao.getUnsentInstancesCursor();
-        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
+        List<Instance> instances = InstanceUtils.getInstancesFromCursor(cursor);
 
         assertEquals(4, instances.size());
         assertEquals(cascadingSelectInstance, instances.get(0));
@@ -78,7 +79,7 @@ public class InstancesDaoTest {
     @Test
     public void getSentInstancesCursorTest() {
         Cursor cursor = instancesDao.getSentInstancesCursor();
-        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
+        List<Instance> instances = InstanceUtils.getInstancesFromCursor(cursor);
 
         assertEquals(2, instances.size());
         assertEquals(biggestNOfSetInstance, instances.get(0));
@@ -88,7 +89,7 @@ public class InstancesDaoTest {
     @Test
     public void getSavedInstancesCursorTest() {
         Cursor cursor = instancesDao.getSavedInstancesCursor(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC");
-        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
+        List<Instance> instances = InstanceUtils.getInstancesFromCursor(cursor);
 
         assertEquals(5, instances.size());
         assertEquals(biggestNOfSetInstance, instances.get(0));
@@ -101,7 +102,7 @@ public class InstancesDaoTest {
     @Test
     public void getFinalizedInstancesCursorTest() {
         Cursor cursor = instancesDao.getFinalizedInstancesCursor();
-        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
+        List<Instance> instances = InstanceUtils.getInstancesFromCursor(cursor);
 
         assertEquals(1, instances.size());
         assertEquals(biggestNOfSet2Instance, instances.get(0));
@@ -110,7 +111,7 @@ public class InstancesDaoTest {
     @Test
     public void getInstancesCursorForFilePathTest() {
         Cursor cursor = instancesDao.getInstancesCursorForFilePath(Collect.INSTANCES_PATH + "/Hypertension Screening_2017-02-20_14-03-53/Hypertension Screening_2017-02-20_14-03-53.xml");
-        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
+        List<Instance> instances = InstanceUtils.getInstancesFromCursor(cursor);
 
         assertEquals(1, instances.size());
         assertEquals(hypertensionScreeningInstance, instances.get(0));
@@ -119,7 +120,7 @@ public class InstancesDaoTest {
     @Test
     public void getAllCompletedUndeletedInstancesCursorTest() {
         Cursor cursor = instancesDao.getAllCompletedUndeletedInstancesCursor();
-        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
+        List<Instance> instances = InstanceUtils.getInstancesFromCursor(cursor);
 
         assertEquals(2, instances.size());
         assertEquals(biggestNOfSetInstance, instances.get(0));
@@ -129,7 +130,7 @@ public class InstancesDaoTest {
     @Test
     public void getInstancesCursorForIdTest() {
         Cursor cursor = instancesDao.getInstancesCursorForId("2");
-        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
+        List<Instance> instances = InstanceUtils.getInstancesFromCursor(cursor);
 
         assertEquals(1, instances.size());
         assertEquals(cascadingSelectInstance, instances.get(0));
@@ -138,7 +139,7 @@ public class InstancesDaoTest {
     @Test
     public void updateInstanceTest() {
         Cursor cursor = instancesDao.getInstancesCursorForFilePath(Collect.INSTANCES_PATH + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml");
-        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
+        List<Instance> instances = InstanceUtils.getInstancesFromCursor(cursor);
 
         assertEquals(1, instances.size());
         assertEquals(biggestNOfSet2Instance, instances.get(0));
@@ -154,11 +155,11 @@ public class InstancesDaoTest {
         String where = InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + "=?";
         String[] whereArgs = {Collect.INSTANCES_PATH + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml"};
 
-        assertEquals(instancesDao.updateInstance(instancesDao.getValuesFromInstanceObject(biggestNOfSet2Instance), where, whereArgs), 1);
+        assertEquals(instancesDao.updateInstance(InstanceUtils.getValuesFromInstanceObject(biggestNOfSet2Instance), where, whereArgs), 1);
 
         cursor = instancesDao.getInstancesCursorForFilePath(Collect.INSTANCES_PATH + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml");
 
-        instances = instancesDao.getInstancesFromCursor(cursor);
+        instances = InstanceUtils.getInstancesFromCursor(cursor);
 
         assertEquals(1, instances.size());
         assertEquals(biggestNOfSet2Instance, instances.get(0));
@@ -172,7 +173,7 @@ public class InstancesDaoTest {
                 .status(InstanceProviderAPI.STATUS_INCOMPLETE)
                 .lastStatusChangeDate(1487595836793L)
                 .build();
-        instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(hypertensionScreeningInstance));
+        instancesDao.saveInstance(InstanceUtils.getValuesFromInstanceObject(hypertensionScreeningInstance));
 
         cascadingSelectInstance = new Instance.Builder()
                 .displayName("Cascading Select Form")
@@ -181,7 +182,7 @@ public class InstancesDaoTest {
                 .status(InstanceProviderAPI.STATUS_INCOMPLETE)
                 .lastStatusChangeDate(1487596015000L)
                 .build();
-        instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(cascadingSelectInstance));
+        instancesDao.saveInstance(InstanceUtils.getValuesFromInstanceObject(cascadingSelectInstance));
 
         biggestNOfSetInstance = new Instance.Builder()
                 .displayName("Biggest N of Set")
@@ -190,7 +191,7 @@ public class InstancesDaoTest {
                 .status(InstanceProviderAPI.STATUS_SUBMITTED)
                 .lastStatusChangeDate(1487596015100L)
                 .build();
-        instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(biggestNOfSetInstance));
+        instancesDao.saveInstance(InstanceUtils.getValuesFromInstanceObject(biggestNOfSetInstance));
 
         widgetsInstance = new Instance.Builder()
                 .displayName("Widgets")
@@ -200,7 +201,7 @@ public class InstancesDaoTest {
                 .lastStatusChangeDate(1487596020803L)
                 .deletedDate(1487596020803L)
                 .build();
-        instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(widgetsInstance));
+        instancesDao.saveInstance(InstanceUtils.getValuesFromInstanceObject(widgetsInstance));
 
         sampleInstance = new Instance.Builder()
                 .displayName("sample")
@@ -209,7 +210,7 @@ public class InstancesDaoTest {
                 .status(InstanceProviderAPI.STATUS_INCOMPLETE)
                 .lastStatusChangeDate(1487596026373L)
                 .build();
-        instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(sampleInstance));
+        instancesDao.saveInstance(InstanceUtils.getValuesFromInstanceObject(sampleInstance));
 
         biggestNOfSet2Instance = new Instance.Builder()
                 .displayName("Biggest N of Set")
@@ -218,7 +219,7 @@ public class InstancesDaoTest {
                 .status(InstanceProviderAPI.STATUS_COMPLETE)
                 .lastStatusChangeDate(1487597090653L)
                 .build();
-        instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(biggestNOfSet2Instance));
+        instancesDao.saveInstance(InstanceUtils.getValuesFromInstanceObject(biggestNOfSet2Instance));
     }
 
     @After

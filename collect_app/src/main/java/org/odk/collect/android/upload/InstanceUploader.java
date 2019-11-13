@@ -26,6 +26,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.InstanceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +53,6 @@ public abstract class InstanceUploader {
      */
     public List<Instance> getInstancesFromIds(Long... instanceDatabaseIds) {
         List<Instance> instancesToUpload = new ArrayList<>();
-        InstancesDao dao = new InstancesDao();
 
         // Split the queries to avoid exceeding SQLITE_MAX_VARIABLE_NUMBER
         int counter = 0;
@@ -76,8 +76,8 @@ public abstract class InstanceUploader {
             selectionBuf.append(')');
             String selection = selectionBuf.toString();
 
-            Cursor c = dao.getInstancesCursor(selection, selectionArgs);
-            instancesToUpload.addAll(dao.getInstancesFromCursor(c));
+            Cursor c = new InstancesDao().getInstancesCursor(selection, selectionArgs);
+            instancesToUpload.addAll(InstanceUtils.getInstancesFromCursor(c));
 
             counter++;
         }
