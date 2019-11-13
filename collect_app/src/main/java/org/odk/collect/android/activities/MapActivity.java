@@ -16,6 +16,7 @@ package org.odk.collect.android.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -90,8 +91,9 @@ public class MapActivity extends BaseGeoMapActivity {
             MapsPreferences.showReferenceLayerDialog(this);
         });
 
-        findViewById(R.id.new_instance).setOnClickListener(v ->
-            map.zoomToPoint(map.getGpsLocation(), true));
+        findViewById(R.id.new_instance).setOnClickListener(v -> {
+            startActivity(new Intent(Intent.ACTION_EDIT, getIntent().getData()));
+        });
 
         map.setGpsLocationEnabled(true);
 
