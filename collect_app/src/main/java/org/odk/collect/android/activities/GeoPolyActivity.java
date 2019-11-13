@@ -29,9 +29,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
+import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -44,8 +44,6 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.VisibleForTesting;
-
-import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
 
 public class GeoPolyActivity extends BaseGeoMapActivity {
     public static final String ANSWER_KEY = "answer";
@@ -119,11 +117,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
             intervalIndex = savedInstanceState.getInt(INTERVAL_INDEX_KEY, DEFAULT_INTERVAL_INDEX);
             accuracyThresholdIndex = savedInstanceState.getInt(
                 ACCURACY_THRESHOLD_INDEX_KEY, DEFAULT_ACCURACY_THRESHOLD_INDEX);
-        }
-
-        if (!areLocationPermissionsGranted(this)) {
-            finish();
-            return;
         }
 
         outputMode = (OutputMode) getIntent().getSerializableExtra(OUTPUT_MODE_KEY);

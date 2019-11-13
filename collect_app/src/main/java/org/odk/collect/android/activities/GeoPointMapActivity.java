@@ -24,9 +24,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
+import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -36,8 +36,6 @@ import java.text.DecimalFormat;
 
 import androidx.annotation.VisibleForTesting;
 import timber.log.Timber;
-
-import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
 
 /**
  * Allow the user to indicate a location by placing a marker on a map, either
@@ -103,13 +101,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!areLocationPermissionsGranted(this)) {
-            finish();
-            return;
-        }
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         try {
             setContentView(R.layout.geopoint_layout);
         } catch (NoClassDefFoundError e) {

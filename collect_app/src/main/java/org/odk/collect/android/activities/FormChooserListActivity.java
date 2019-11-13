@@ -141,7 +141,14 @@ public class FormChooserListActivity extends FormListActivity implements
 
     public void onMapButtonClick(AdapterView<?> parent, View view, int position, long id) {
         final Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, id);
-        startActivity(new Intent(Intent.ACTION_EDIT, formUri, this, MapActivity.class));
+        final Intent intent = new Intent(Intent.ACTION_EDIT, formUri, this, MapActivity.class);
+        new PermissionUtils().requestLocationPermissions(this, new PermissionListener() {
+            @Override public void granted() {
+                startActivity(intent);
+            }
+
+            @Override public void denied() { }
+        });
     }
 
     @Override

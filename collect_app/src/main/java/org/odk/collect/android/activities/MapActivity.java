@@ -37,8 +37,6 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
-
 /** Show a map with points representing saved instances of the selected form. */
 public class MapActivity extends BaseGeoMapActivity {
     public static final String MAP_CENTER_KEY = "map_center";
@@ -48,11 +46,6 @@ public class MapActivity extends BaseGeoMapActivity {
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (!areLocationPermissionsGranted(this)) {
-            finish();
-            return;
-        }
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.instance_map_layout);
