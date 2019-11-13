@@ -31,9 +31,11 @@ import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.InstanceUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 @RunWith(AndroidJUnit4.class)
 /**
@@ -163,6 +165,25 @@ public class InstancesDaoTest {
 
         assertEquals(1, instances.size());
         assertEquals(biggestNOfSet2Instance, instances.get(0));
+    }
+
+    @Test
+    public void deleteInstancesTest() {
+        List<Instance> instances = InstanceUtils.getInstancesFromCursor(instancesDao.getInstancesCursor());
+        assertEquals(6, instances.size());
+
+        List<String> absoluteInstanceFilePaths = new ArrayList<>();
+        absoluteInstanceFilePaths.add(Collect.INSTANCES_PATH + "/Hypertension Screening_2017-02-20_14-03-53/Hypertension Screening_2017-02-20_14-03-53.xml");
+        absoluteInstanceFilePaths.add("/Biggest N of Set_2017-02-20_14-06-51/Biggest N of Set_2017-02-20_14-06-51.xml");
+        instancesDao.deleteInstances(absoluteInstanceFilePaths);
+
+        instances = InstanceUtils.getInstancesFromCursor(instancesDao.getInstancesCursor());
+        assertEquals(4, instances.size());
+
+        for (Instance instance : instances) {
+            assertFalse(instance.getInstanceFilePath().endsWith("Hypertension Screening_2017-02-20_14-03-53.xml"));
+            assertFalse(instance.getInstanceFilePath().endsWith("Biggest N of Set_2017-02-20_14-06-51.xml"));
+        }
     }
 
     private void fillDatabase() {

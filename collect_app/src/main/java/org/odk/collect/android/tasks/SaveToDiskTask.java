@@ -33,6 +33,7 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.EncryptionUtils;
 import org.odk.collect.android.utilities.EncryptionUtils.EncryptedFormInformation;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.InstanceUtils;
 import org.odk.collect.android.utilities.MediaManager;
 
 import java.io.File;
@@ -179,16 +180,14 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             // However, it could be a not-first time saving if the user has been using the manual
             // 'save data' option from the menu. So try to update first, then make a new one if that
             // fails.
-            String instancePath = formController.getInstanceFile().getAbsolutePath();
-            String where = InstanceColumns.INSTANCE_FILE_PATH + "=?";
-            String[] whereArgs = {
-                    instancePath
-            };
+            String relativeInstancePath = InstanceUtils.getRelativeInstanceFilePath(formController.getAbsoluteInstancePath());
+            String where = InstanceColumns.INSTANCE_FILE_PATH + " LIKE ?";
+            String[] whereArgs = {"%" + relativeInstancePath};
             int updated = new InstancesDao().updateInstance(values, where, whereArgs);
             if (updated > 1) {
-                Timber.w("Updated more than one entry, that's not good: %s", instancePath);
+                Timber.w("Updated more than one entry, that's not good: %s", relativeInstancePath);
             } else if (updated == 1) {
-                Timber.i("Instance found and successfully updated: %s", instancePath);
+                Timber.i("Instance found and successfully updated: %s", relativeInstancePath);
                 // already existed and updated just fine
             } else {
                 Timber.i("No instance found, creating");
@@ -206,7 +205,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                     }
 
                     // add missing fields into values
-                    values.put(InstanceColumns.INSTANCE_FILE_PATH, instancePath);
+                    values.put(InstanceColumns.INSTANCE_FILE_PATH, relativeInstancePath);
                     values.put(InstanceColumns.SUBMISSION_URI, submissionUri);
                     if (instanceName != null) {
                         values.put(InstanceColumns.DISPLAY_NAME, instanceName);

@@ -3,6 +3,7 @@ package org.odk.collect.android.utilities;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
@@ -12,6 +13,14 @@ import java.util.List;
 public class InstanceUtils {
 
     private InstanceUtils() { }
+
+    public static String getAbsoluteInstanceFilePath(String instancePath) {
+        return instancePath.startsWith(Collect.ODK_ROOT) ? instancePath : Collect.ODK_ROOT + instancePath;
+    }
+
+    public static String getRelativeInstanceFilePath(String instancePath) {
+        return instancePath.substring(Collect.ODK_ROOT.length());
+    }
 
     /**
      * Returns all instances available through the cursor and closes the cursor.

@@ -32,6 +32,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.helpers.InstancesDatabaseHelper;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.InstanceUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 
 import java.io.File;
@@ -259,8 +260,8 @@ public class InstanceProvider extends ContentProvider {
                         if (del != null && del.getCount() > 0) {
                             del.moveToFirst();
                             do {
-                                String instanceFile = del.getString(
-                                        del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+                                String instanceFile = InstanceUtils.getAbsoluteInstanceFilePath(del.getString(
+                                        del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
                                 File instanceDir = (new File(instanceFile)).getParentFile();
                                 deleteAllFilesInDirectory(instanceDir);
                             } while (del.moveToNext());
@@ -284,8 +285,8 @@ public class InstanceProvider extends ContentProvider {
                             c.moveToFirst();
                             status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
                             do {
-                                String instanceFile = c.getString(
-                                        c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+                                String instanceFile = InstanceUtils.getAbsoluteInstanceFilePath(c.getString(
+                                        c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
                                 File instanceDir = (new File(instanceFile)).getParentFile();
                                 deleteAllFilesInDirectory(instanceDir);
                             } while (c.moveToNext());

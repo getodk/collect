@@ -24,6 +24,7 @@ import androidx.loader.content.CursorLoader;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.InstanceUtils;
 
 import java.util.List;
 
@@ -162,8 +163,8 @@ public class InstancesDao {
     }
 
     public Cursor getInstancesCursorForFilePath(String path) {
-        String selection = InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + "=?";
-        String[] selectionArgs = {path};
+        String selection = InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + " LIKE ?";
+        String[] selectionArgs = {"%" + InstanceUtils.getRelativeInstanceFilePath(path)};
 
         return getInstancesCursor(null, selection, selectionArgs, null);
     }
@@ -224,6 +225,10 @@ public class InstancesDao {
         return getInstancesCursor(null, selection, selectionArgs, null);
     }
 
+    public Cursor getInstancesCursor() {
+        return getInstancesCursor(null, null, null, null);
+    }
+
     public Cursor getInstancesCursor(String selection, String[] selectionArgs) {
         return getInstancesCursor(null, selection, selectionArgs, null);
     }
@@ -255,8 +260,8 @@ public class InstancesDao {
         Collect.getInstance().getContentResolver().delete(InstanceProviderAPI.InstanceColumns.CONTENT_URI, null, null);
     }
 
-    public void deleteInstancesFromIDs(List<String> ids) {
-        int count = ids.size();
+    public void deleteInstances(List<String> absoluteInstanceFilePaths) {
+        int count = absoluteInstanceFilePaths.size();
         int counter = 0;
         while (count > 0) {
             String[] selectionArgs = null;
@@ -268,21 +273,20 @@ public class InstancesDao {
             }
 
             StringBuilder selection = new StringBuilder();
-            selection.append(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + " IN (");
+            selection.append(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH);
             int j = 0;
             while (j < selectionArgs.length) {
-                selectionArgs[j] = ids.get(
+                selectionArgs[j] = "%" + absoluteInstanceFilePaths.get(
                         counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER + j);
-                selection.append('?');
+                selection.append(" LIKE ?");
 
                 if (j != selectionArgs.length - 1) {
-                    selection.append(',');
+                    selection.append(" OR " + InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH);
                 }
                 j++;
             }
             counter++;
             count -= selectionArgs.length;
-            selection.append(')');
             Collect.getInstance().getContentResolver()
                     .delete(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
                             selection.toString(), selectionArgs);
