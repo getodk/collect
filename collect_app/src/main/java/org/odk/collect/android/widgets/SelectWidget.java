@@ -17,29 +17,26 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.javarosa.core.model.SelectChoice;
-import org.javarosa.form.api.FormEntryCaption;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
-import org.odk.collect.android.external.ExternalSelectChoice;
-import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
-import java.util.List;
-
-import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
 import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
 
 public abstract class SelectWidget extends ItemsWidget {
@@ -69,49 +66,23 @@ public abstract class SelectWidget extends ItemsWidget {
     public void setOnLongClickListener(OnLongClickListener l) {
     }
 
-    public void init(AudioVideoImageTextLabel audioVideoImageTextLabel) {
-        audioVideoImageTextLabel.setPlayTextColor(getPlayColor(getFormEntryPrompt(), themeUtils));
-    }
-
-    /**
-     * Pull media from the current item and add it to the media layout.
-     */
-    public void addMediaFromChoice(AudioVideoImageTextLabel audioVideoImageTextLabel, int index, TextView textView, List<SelectChoice> items) {
-        SelectChoice item = items.get(index);
-
-        String audioURI = getPlayableAudioURI(getFormEntryPrompt(), item, getReferenceManager());
-        String imageURI = getImageURI(index, items);
-        String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "video");
-        String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "big-image");
-
-        audioVideoImageTextLabel.setTag(getClipID(getFormEntryPrompt(), item));
-        audioVideoImageTextLabel.setTextImageVideo(textView, imageURI, videoURI, bigImageURI, getReferenceManager());
-
-        if (audioURI != null) {
-            audioVideoImageTextLabel.setAudio(audioURI, getAudioHelper());
-        }
-
-        textView.setGravity(Gravity.CENTER_VERTICAL);
-    }
-
-    private String getImageURI(int index, List<SelectChoice> items) {
-        String imageURI;
-        if (items.get(index) instanceof ExternalSelectChoice) {
-            imageURI = ((ExternalSelectChoice) items.get(index)).getImage();
-        } else {
-            imageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index),
-                    FormEntryCaption.TEXT_FORM_IMAGE);
-        }
-        return imageURI;
-    }
-
     protected RecyclerView setUpRecyclerView() {
         numColumns = WidgetAppearanceUtils.getNumberOfColumns(getFormEntryPrompt(), getContext());
 
         RecyclerView recyclerView = (RecyclerView) LayoutInflater.from(getContext()).inflate(R.layout.recycler_view, null); // keep in an xml file to enable the vertical scrollbar
+
         if (numColumns == 1) {
-            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+            DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+            Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.inset_divider_48dp);
+
+            if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                DrawableCompat.setTint(DrawableCompat.wrap(drawable), new ThemeUtils(getContext()).getColorOnSurface());
+            }
+            
+            divider.setDrawable(drawable);
+            recyclerView.addItemDecoration(divider);
         }
+
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), numColumns));
 
         return recyclerView;
