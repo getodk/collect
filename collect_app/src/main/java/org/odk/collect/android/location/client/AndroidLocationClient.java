@@ -5,11 +5,11 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.android.gms.location.LocationListener;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import timber.log.Timber;
 
 /**
@@ -25,9 +25,6 @@ import timber.log.Timber;
 class AndroidLocationClient
         extends BaseLocationClient
         implements android.location.LocationListener {
-
-    @Nullable
-    private LocationClientListener locationClientListener;
 
     @Nullable
     private LocationListener locationListener;
@@ -59,16 +56,16 @@ class AndroidLocationClient
     @Override
     public void start() {
         if (getProvider() == null) {
-            if (locationClientListener != null) {
-                locationClientListener.onClientStartFailure();
+            if (getListener() != null) {
+                getListener().onClientStartFailure();
             }
 
             return;
         }
 
         isConnected = true;
-        if (locationClientListener != null) {
-            locationClientListener.onClientStart();
+        if (getListener() != null) {
+            getListener().onClientStart();
         }
     }
 
@@ -78,8 +75,8 @@ class AndroidLocationClient
         stopLocationUpdates();
         isConnected = false;
 
-        if (locationClientListener != null) {
-            locationClientListener.onClientStop();
+        if (getListener() != null) {
+            getListener().onClientStop();
         }
     }
 
@@ -106,11 +103,6 @@ class AndroidLocationClient
 
         getLocationManager().removeUpdates(this);
         this.locationListener = null;
-    }
-
-    @Override
-    public void setListener(@Nullable LocationClientListener locationClientListener) {
-        this.locationClientListener = locationClientListener;
     }
 
     @Override
