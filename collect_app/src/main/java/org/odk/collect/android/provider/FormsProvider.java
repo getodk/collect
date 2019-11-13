@@ -31,6 +31,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.database.helpers.FormsDatabaseHelper;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.utilities.DatabaseUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 
@@ -200,9 +201,8 @@ public class FormsProvider extends ContentProvider {
             values.put(FormsColumns.MD5_HASH, md5);
 
             if (!values.containsKey(FormsColumns.JRCACHE_FILE_PATH)) {
-                String cachePath = Collect.CACHE_PATH + File.separator + md5
-                        + ".formdef";
-                values.put(FormsColumns.JRCACHE_FILE_PATH, cachePath);
+                String cachePath = Collect.CACHE_PATH + File.separator + md5 + ".formdef";
+                values.put(FormsColumns.JRCACHE_FILE_PATH, DatabaseUtils.getRelativeFilePath(cachePath));
             }
             if (!values.containsKey(FormsColumns.FORM_MEDIA_PATH)) {
                 values.put(FormsColumns.FORM_MEDIA_PATH, FileUtils.constructMediaPath(filePath));
@@ -244,7 +244,7 @@ public class FormsProvider extends ContentProvider {
     }
 
     private void deleteFileOrDir(String fileName) {
-        File file = new File(fileName);
+        File file = new File(DatabaseUtils.getAbsoluteFilePath(fileName));
         if (file.exists()) {
             if (file.isDirectory()) {
                 // delete any media entries for files in this directory...
@@ -482,8 +482,7 @@ public class FormsProvider extends ContentProvider {
                                         .getMd5Hash(new File(formFile));
                                 values.put(FormsColumns.MD5_HASH, newMd5);
                                 values.put(FormsColumns.JRCACHE_FILE_PATH,
-                                        Collect.CACHE_PATH + File.separator + newMd5
-                                                + ".formdef");
+                                        DatabaseUtils.getRelativeFilePath(Collect.CACHE_PATH + File.separator + newMd5 + ".formdef"));
                             }
 
                             count = db.update(
