@@ -23,6 +23,7 @@ import org.odk.collect.android.dto.Form;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.upload.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.upload.UploadException;
+import org.odk.collect.android.utilities.DatabaseUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
@@ -59,9 +60,8 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
             publishProgress(i + 1, instancesToUpload.size());
 
             // Get corresponding blank form and verify there is exactly 1
-            FormsDao dao = new FormsDao();
-            Cursor formCursor = dao.getFormsCursor(instance.getJrFormId(), instance.getJrVersion());
-            List<Form> forms = dao.getFormsFromCursor(formCursor);
+            Cursor formCursor = new FormsDao().getFormsCursor(instance.getJrFormId(), instance.getJrVersion());
+            List<Form> forms = DatabaseUtils.getFormsFromCursor(formCursor);
 
             if (forms.size() != 1) {
                 outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),

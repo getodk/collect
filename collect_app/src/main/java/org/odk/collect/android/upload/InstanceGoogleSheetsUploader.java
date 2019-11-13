@@ -41,6 +41,7 @@ import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.utilities.DatabaseUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.UrlUtils;
@@ -95,9 +96,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
 
         // Get corresponding blank form and verify there is exactly 1
-        FormsDao dao = new FormsDao();
-        Cursor formCursor = dao.getFormsCursor(instance.getJrFormId(), instance.getJrVersion());
-        List<Form> forms = dao.getFormsFromCursor(formCursor);
+        Cursor formCursor = new FormsDao().getFormsCursor(instance.getJrFormId(), instance.getJrVersion());
+        List<Form> forms = DatabaseUtils.getFormsFromCursor(formCursor);
 
         try {
             if (forms.size() != 1) {

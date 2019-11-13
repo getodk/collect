@@ -245,10 +245,8 @@ public class AutoSendWorker extends Worker {
      * TODO: figure out where this should live
      */
     private boolean atLeastOneFormSpecifiesAutoSend() {
-        FormsDao dao = new FormsDao();
-
-        try (Cursor cursor = dao.getFormsCursor()) {
-            List<Form> forms = dao.getFormsFromCursor(cursor);
+        try (Cursor cursor = new FormsDao().getFormsCursor()) {
+            List<Form> forms = DatabaseUtils.getFormsFromCursor(cursor);
             for (Form form : forms) {
                 if (Boolean.valueOf(form.getAutoSend())) {
                     return true;

@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dto.Form;
+import org.odk.collect.android.utilities.DatabaseUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.SQLiteUtils;
 
@@ -80,8 +81,7 @@ public class FormsDatabaseHelperTest extends SqlLiteHelperTest {
     }
 
     private void assertThatFormsAreKeptAfterUpgrading() {
-        FormsDao formsDao = new FormsDao();
-        List<Form> forms = formsDao.getFormsFromCursor(formsDao.getFormsCursor());
+        List<Form> forms = DatabaseUtils.getFormsFromCursor(new FormsDao().getFormsCursor());
         assertEquals(1, forms.size());
         assertEquals("2019051302", forms.get(0).getJrVersion());
         assertEquals("92ba8106dcb779943c1de163d73e1069", forms.get(0).getMD5Hash());

@@ -27,6 +27,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dto.Form;
 import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.utilities.DatabaseUtils;
 import org.odk.collect.android.utilities.ResetUtility;
 
 import java.io.File;
@@ -64,7 +65,7 @@ public class FormsDaoTest {
     @Test
     public void getAllFormsCursorTest() {
         Cursor cursor = formsDao.getFormsCursor();
-        List<Form> forms = formsDao.getFormsFromCursor(cursor);
+        List<Form> forms = DatabaseUtils.getFormsFromCursor(cursor);
         assertEquals(7, forms.size());
 
         assertEquals(biggestNOfSetForm, forms.get(0));
@@ -79,7 +80,7 @@ public class FormsDaoTest {
     @Test
     public void getFormsCursorForFormIdTest() {
         Cursor cursor = formsDao.getFormsCursorForFormId("Birds");
-        List<Form> forms = formsDao.getFormsFromCursor(cursor);
+        List<Form> forms = DatabaseUtils.getFormsFromCursor(cursor);
         assertEquals(2, forms.size());
 
         assertEquals(birdsForm, forms.get(0));
@@ -88,7 +89,7 @@ public class FormsDaoTest {
     @Test
     public void getFormsCursorTest() {
         Cursor cursor = formsDao.getFormsCursor(null, null, null, null);
-        List<Form> forms = formsDao.getFormsFromCursor(cursor);
+        List<Form> forms = DatabaseUtils.getFormsFromCursor(cursor);
         assertEquals(7, forms.size());
 
         assertEquals(biggestNOfSetForm, forms.get(0));
@@ -102,7 +103,7 @@ public class FormsDaoTest {
         String sortOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " COLLATE NOCASE DESC";
 
         cursor = formsDao.getFormsCursor(null, null, null, sortOrder);
-        forms = formsDao.getFormsFromCursor(cursor);
+        forms = DatabaseUtils.getFormsFromCursor(cursor);
         assertEquals(7, forms.size());
 
         assertEquals(biggestNOfSetForm, forms.get(6));
@@ -117,7 +118,7 @@ public class FormsDaoTest {
         String[] selectionArgs = {"Miramare"};
 
         cursor = formsDao.getFormsCursor(null, selection, selectionArgs, null);
-        forms = formsDao.getFormsFromCursor(cursor);
+        forms = DatabaseUtils.getFormsFromCursor(cursor);
         assertEquals(1, forms.size());
 
         assertEquals(miramareForm, forms.get(0));
@@ -126,7 +127,7 @@ public class FormsDaoTest {
     @Test
     public void getFormsCursorForFormFilePathTest() {
         Cursor cursor = formsDao.getFormsCursorForFormFilePath(Collect.FORMS_PATH + "/Miramare.xml");
-        List<Form> forms = formsDao.getFormsFromCursor(cursor);
+        List<Form> forms = DatabaseUtils.getFormsFromCursor(cursor);
         assertEquals(1, forms.size());
 
         assertEquals(miramareForm, forms.get(0));
@@ -135,7 +136,7 @@ public class FormsDaoTest {
     @Test
     public void updateInstanceTest() {
         Cursor cursor = formsDao.getFormsCursorForFormFilePath(Collect.FORMS_PATH + "/Widgets.xml");
-        List<Form> forms = formsDao.getFormsFromCursor(cursor);
+        List<Form> forms = DatabaseUtils.getFormsFromCursor(cursor);
 
         assertEquals(1, forms.size());
         assertEquals(widgetsForm, forms.get(0));
@@ -152,10 +153,10 @@ public class FormsDaoTest {
 
         String where = FormsProviderAPI.FormsColumns.DISPLAY_NAME + "=?";
         String[] whereArgs = {"Widgets"};
-        assertEquals(formsDao.updateForm(formsDao.getValuesFromFormObject(widgetsForm), where, whereArgs), 1);
+        assertEquals(formsDao.updateForm(DatabaseUtils.getValuesFromFormObject(widgetsForm), where, whereArgs), 1);
 
         cursor = formsDao.getFormsCursorForFormFilePath(Collect.FORMS_PATH + "/Widgets.xml");
-        forms = formsDao.getFormsFromCursor(cursor);
+        forms = DatabaseUtils.getFormsFromCursor(cursor);
 
         assertEquals(1, forms.size());
         assertEquals(widgetsForm, forms.get(0));
@@ -179,7 +180,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(Collect.ODK_ROOT + "/.cache/ccce6015dd1b8f935f5f3058e81eeb43.formdef")
                 .build();
 
-        formsDao.saveForm(formsDao.getValuesFromFormObject(biggestNOfSetForm));
+        formsDao.saveForm(DatabaseUtils.getValuesFromFormObject(biggestNOfSetForm));
 
         assertTrue(new File(Collect.FORMS_PATH + "/Birds.xml").createNewFile());
         birdsForm = new Form.Builder()
@@ -193,7 +194,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(Collect.ODK_ROOT + "/.cache/4cd980d50f884362afba842cbff3a798.formdef")
                 .build();
 
-        formsDao.saveForm(formsDao.getValuesFromFormObject(birdsForm));
+        formsDao.saveForm(DatabaseUtils.getValuesFromFormObject(birdsForm));
 
         assertTrue(new File(Collect.FORMS_PATH + "/Miramare.xml").createNewFile());
         miramareForm = new Form.Builder()
@@ -206,7 +207,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(Collect.ODK_ROOT + "/.cache/e733627cdbf220929bf9c4899cb983ea.formdef")
                 .build();
 
-        formsDao.saveForm(formsDao.getValuesFromFormObject(miramareForm));
+        formsDao.saveForm(DatabaseUtils.getValuesFromFormObject(miramareForm));
 
         assertTrue(new File(Collect.FORMS_PATH + "/Geo Tagger v2.xml").createNewFile());
         geoTaggerV2Form = new Form.Builder()
@@ -219,7 +220,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(Collect.ODK_ROOT + "/.cache/1d5e9109298c8ef02bc523b17d7c0451.formdef")
                 .build();
 
-        formsDao.saveForm(formsDao.getValuesFromFormObject(geoTaggerV2Form));
+        formsDao.saveForm(DatabaseUtils.getValuesFromFormObject(geoTaggerV2Form));
 
         assertTrue(new File(Collect.FORMS_PATH + "/Widgets.xml").createNewFile());
         widgetsForm = new Form.Builder()
@@ -232,7 +233,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(Collect.ODK_ROOT + "/.cache/0eacc6333449e66826326eb5fcc75749.formdef")
                 .build();
 
-        formsDao.saveForm(formsDao.getValuesFromFormObject(widgetsForm));
+        formsDao.saveForm(DatabaseUtils.getValuesFromFormObject(widgetsForm));
 
         assertTrue(new File(Collect.FORMS_PATH + "/sample.xml").createNewFile());
         sampleForm = new Form.Builder()
@@ -245,7 +246,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(Collect.ODK_ROOT + "/.cache/4f495fddd1f2544f65444ea83d25f425.formdef")
                 .build();
 
-        formsDao.saveForm(formsDao.getValuesFromFormObject(sampleForm));
+        formsDao.saveForm(DatabaseUtils.getValuesFromFormObject(sampleForm));
 
         assertTrue(new File(Collect.FORMS_PATH + "/Birds_4.xml").createNewFile());
         birds2Form = new Form.Builder()
@@ -259,7 +260,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(Collect.ODK_ROOT + "/.cache/4cd980d50f884362afba842cbff3a775.formdef")
                 .build();
 
-        formsDao.saveForm(formsDao.getValuesFromFormObject(birds2Form));
+        formsDao.saveForm(DatabaseUtils.getValuesFromFormObject(birds2Form));
     }
 
     @After
