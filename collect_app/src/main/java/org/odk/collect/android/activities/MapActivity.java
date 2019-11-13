@@ -22,6 +22,9 @@ import android.os.Bundle;
 import android.view.Window;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.geo.MapFragment;
@@ -111,12 +114,26 @@ public class MapActivity extends BaseGeoMapActivity {
 
         try (Cursor c = Collect.getInstance().getContentResolver().query(
             InstanceColumns.CONTENT_URI,
-            new String[] {InstanceColumns.INSTANCE_FILE_PATH},
-            InstanceColumns.JR_FORM_ID + " = ?",
+            new String[] {InstanceColumns.GEOMETRY_TYPE, InstanceColumns.GEOMETRY},
+            InstanceColumns.JR_FORM_ID + " = ? AND " +
+                InstanceColumns.GEOMETRY + " IS NOT NULL",
             new String[] {jrFormId},
             null)) {
             while (c.moveToNext()) {
-                Timber.i("instance path = %s", c.getString(0));
+                String json = c.getString(1);
+                try {
+                    JSONObject geometry = new JSONObject(json);
+                    switch (c.getString(0)) {
+                        case "Point":
+                            JSONArray coordinates = geometry.getJSONArray("coordinates");
+                            // In GeoJSON, longitude comes before latitude.
+                            double lon = coordinates.getDouble(0);
+                            double lat = coordinates.getDouble(1);
+                            map.addMarker(new MapPoint(lat, lon), false);
+                    }
+                } catch (JSONException e) {
+                    Timber.w("Invalid JSON in instances table: %s", json);
+                }
             }
         }
     }

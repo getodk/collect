@@ -31,6 +31,7 @@ import org.javarosa.xpath.XPathNodeset;
 import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.javarosa.xpath.parser.XPathSyntaxException;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.R;
@@ -258,21 +259,22 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             XPathExpression xpath = XPathParseTool.parseXPath(geometryXpath);
             EvaluationContext context = new EvaluationContext(instance);
             Object result = xpath.eval(instance, context);
-            Timber.w("XPath %s -> %s", geometryXpath, result);
             if (result instanceof XPathNodeset) {
                 XPathNodeset nodes = (XPathNodeset) result;
                 // For now, only use the first node found.
                 TreeElement element = instance.resolveReference(nodes.getRefAt(0));
                 IAnswerData value = element.getValue();
-                Timber.w("value = %s", value);
                 if (value instanceof GeoPointData) {
-                    JSONObject json = toGeoJson((GeoPointData) value);
                     try {
+                        JSONObject json = toGeoJson((GeoPointData) value);
                         String type = json.getString("type");
-                        values.put("geometry", json.toString());
-                        values.put("geometryType", type);
-                    } catch (JSONException e) { }
-                    return;
+                        values.put(InstanceColumns.GEOMETRY, json.toString());
+                        values.put(InstanceColumns.GEOMETRY_TYPE, type);
+                        Timber.i("Geometry for \"%s\" instance found at %s: %s",
+                            instance.getName(), geometryXpath, json);
+                    } catch (JSONException e) {
+                        Timber.w("Could not convert GeoPointData %s to GeoJSON", value);
+                    }
                 }
             }
         } catch (XPathException | XPathSyntaxException e) {
@@ -280,8 +282,21 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         }
     }
 
-    protected JSONObject toGeoJson(GeoPointData data) {
-        return new JSONObject();
+    protected JSONObject toGeoJson(GeoPointData data) throws JSONException {
+        // The four (nameless, undocumented) fields of a GeoPointData record are
+        // latitude, longitude, altitude, and accuracy radius, in that order.
+        double lat = data.getPart(0);
+        double lon = data.getPart(1);
+
+        // In GeoJSON, longitude comes before latitude.
+        JSONArray coordinates = new JSONArray();
+        coordinates.put(lon);
+        coordinates.put(lat);
+
+        JSONObject geometry = new JSONObject();
+        geometry.put("type", "Point");
+        geometry.put("coordinates", coordinates);
+        return geometry;
     }
 
     /**
