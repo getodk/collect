@@ -26,6 +26,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
@@ -45,11 +46,12 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
 
     public VersionHidingCursorAdapter(ListView listView, String versionColumnName, Context context, int layout,
                                       AdapterView.OnItemClickListener mapButtonListener,
-                                      String[] from, int[] to) {
-        super(context, layout, null, from, to);
+                                      String[] columnNames, int[] viewIds) {
+        super(context, layout, null, columnNames, viewIds);
         this.context = context;
         this.listView = listView;
         this.mapButtonListener = mapButtonListener;
+
         originalBinder = getViewBinder();
         setViewBinder((view, cursor, columnIndex) -> {
             String columnName = cursor.getColumnName(columnIndex);
@@ -67,12 +69,13 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
                 v.setVisibility(View.GONE);
                 if (version != null) {
                     v.append(String.format(this.context.getString(R.string.version_number), version));
-                    v.append(" ");
                     v.setVisibility(View.VISIBLE);
                 }
-                if (from.length > 3) {
-                    int idColumnIndex = cursor.getColumnIndex(from[3]);
-                    String id = cursor.getString(idColumnIndex);
+                if (Arrays.asList(columnNames).contains(FormsColumns.JR_FORM_ID)) {
+                    String id = cursor.getString(cursor.getColumnIndex(FormsColumns.JR_FORM_ID));
+                    if (version != null && id != null) {
+                        v.append("\n");
+                    }
                     if (id != null) {
                         v.append(String.format(this.context.getString(R.string.id_number), id));
                         v.setVisibility(View.VISIBLE);
