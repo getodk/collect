@@ -303,7 +303,7 @@ public class FormDownloader {
     private Uri saveNewForm(Map<String, String> formInfo, File formFile, String mediaPath) {
         final ContentValues v = new ContentValues();
         v.put(FormsProviderAPI.FormsColumns.FORM_FILE_PATH,          formFile.getAbsolutePath());
-        v.put(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH,         mediaPath);
+        v.put(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH,         DatabaseUtils.getRelativeFilePath(mediaPath));
         v.put(FormsProviderAPI.FormsColumns.DISPLAY_NAME,            formInfo.get(FileUtils.TITLE));
         v.put(FormsProviderAPI.FormsColumns.JR_VERSION,              formInfo.get(FileUtils.VERSION));
         v.put(FormsProviderAPI.FormsColumns.JR_FORM_ID,              formInfo.get(FileUtils.FORMID));
@@ -480,7 +480,7 @@ public class FormDownloader {
 
         private UriResult(Uri uri, String mediaPath, boolean isNew) {
             this.uri = uri;
-            this.mediaPath = mediaPath;
+            this.mediaPath = DatabaseUtils.getAbsoluteFilePath(mediaPath);
             this.isNew = isNew;
         }
 

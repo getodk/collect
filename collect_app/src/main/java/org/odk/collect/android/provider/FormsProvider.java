@@ -205,7 +205,7 @@ public class FormsProvider extends ContentProvider {
                 values.put(FormsColumns.JRCACHE_FILE_PATH, DatabaseUtils.getRelativeFilePath(cachePath));
             }
             if (!values.containsKey(FormsColumns.FORM_MEDIA_PATH)) {
-                values.put(FormsColumns.FORM_MEDIA_PATH, FileUtils.constructMediaPath(filePath));
+                values.put(FormsColumns.FORM_MEDIA_PATH, DatabaseUtils.getRelativeFilePath(FileUtils.constructMediaPath(filePath)));
             }
 
             SQLiteDatabase db = formsDatabaseHelper.getWritableDatabase();
