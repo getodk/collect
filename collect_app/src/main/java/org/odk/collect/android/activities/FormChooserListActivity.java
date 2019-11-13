@@ -26,7 +26,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.adapters.VersionHidingCursorAdapter;
+import org.odk.collect.android.adapters.FormListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
@@ -195,7 +195,7 @@ public class FormChooserListActivity extends FormListActivity implements
             R.id.map_view
         };
 
-        listAdapter = new VersionHidingCursorAdapter(
+        listAdapter = new FormListAdapter(
             listView, FormsColumns.JR_VERSION, this, R.layout.form_chooser_list_item,
             this::onMapButtonClick, columnNames, viewIds);
         listView.setAdapter(listAdapter);

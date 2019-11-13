@@ -22,7 +22,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.adapters.VersionHidingCursorAdapter;
+import org.odk.collect.android.adapters.FormListAdapter;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
@@ -106,7 +106,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
             FormsColumns.DATE, FormsColumns.JR_FORM_ID};
         int[] view = {R.id.form_title, R.id.form_subtitle, R.id.form_subtitle2};
 
-        listAdapter = new VersionHidingCursorAdapter(
+        listAdapter = new FormListAdapter(
                 getListView(), FormsColumns.JR_VERSION, getActivity(),
                 R.layout.form_chooser_list_item_multiple_choice, null, data, view);
         setListAdapter(listAdapter);

@@ -17,7 +17,7 @@ package org.odk.collect.android.adapters;
 import android.content.Context;
 import android.database.Cursor;
 import android.view.View;
-import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -32,22 +32,17 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-/**
- * Implementation of cursor adapter that displays the version of a form if a form has a version.
- *
- * @author mitchellsundt@gmail.com
- */
-public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
-
+/** An adapter for displaying form definitions in a list. */
+public class FormListAdapter extends SimpleCursorAdapter {
     private final Context context;
     private final ListView listView;
     private final ViewBinder originalBinder;
-    private final AdapterView.OnItemClickListener mapButtonListener;
+    private final OnItemClickListener mapButtonListener;
 
-    public VersionHidingCursorAdapter(ListView listView, String versionColumnName, Context context, int layout,
-                                      AdapterView.OnItemClickListener mapButtonListener,
-                                      String[] columnNames, int[] viewIds) {
-        super(context, layout, null, columnNames, viewIds);
+    public FormListAdapter(
+        ListView listView, String versionColumnName, Context context, int layoutId,
+        OnItemClickListener mapButtonListener, String[] columnNames, int[] viewIds) {
+        super(context, layoutId, null, columnNames, viewIds);
         this.context = context;
         this.listView = listView;
         this.mapButtonListener = mapButtonListener;
@@ -56,16 +51,15 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
         setViewBinder((view, cursor, columnIndex) -> {
             String columnName = cursor.getColumnName(columnIndex);
             if (columnName.equals(FormsColumns.DATE) || columnName.equals(FormsColumns.MAX_DATE)) {
-                String subtext = getDisplaySubtext(context, new Date(cursor.getLong(columnIndex)));
-                if (!subtext.isEmpty()) {
+                String timestampText = getTimestampText(context, new Date(cursor.getLong(columnIndex)));
+                if (!timestampText.isEmpty()) {
                     TextView v = (TextView) view;
-                    ((TextView) view).setText(subtext);
+                    v.setText(timestampText);
                     v.setVisibility(View.VISIBLE);
                 }
             } else if (columnName.equals(versionColumnName)) {
                 String version = cursor.getString(columnIndex);
                 TextView v = (TextView) view;
-                v.setText("");
                 v.setVisibility(View.GONE);
                 if (version != null) {
                     v.append(String.format(this.context.getString(R.string.version_number), version));
@@ -102,17 +96,16 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
         }
     }
 
-    private String getDisplaySubtext(Context context, Date date) {
-        String displaySubtext = "";
+    private String getTimestampText(Context context, Date date) {
         try {
             if (context != null) {
-                displaySubtext = new SimpleDateFormat(context.getString(R.string.added_on_date_at_time),
-                        Locale.getDefault()).format(date);
+                return new SimpleDateFormat(
+                    context.getString(R.string.added_on_date_at_time), Locale.getDefault()
+                ).format(date);
             }
         } catch (IllegalArgumentException e) {
             Timber.e(e);
         }
-        return displaySubtext;
+        return "";
     }
-
 }
