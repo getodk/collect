@@ -33,7 +33,7 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.EncryptionUtils;
-import org.odk.collect.android.utilities.InstanceUtils;
+import org.odk.collect.android.utilities.DatabaseUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -122,7 +122,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                     instanceCursor.moveToPosition(-1);
 
                     while (instanceCursor.moveToNext()) {
-                        String instanceFilename = InstanceUtils.getAbsoluteInstanceFilePath(instanceCursor.getString(
+                        String instanceFilename = DatabaseUtils.getAbsoluteFilePath(instanceCursor.getString(
                                 instanceCursor.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
                         String instanceStatus = instanceCursor.getString(
                                 instanceCursor.getColumnIndex(InstanceColumns.STATUS));
@@ -170,7 +170,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
                                 // add missing fields into content values
                                 ContentValues values = new ContentValues();
-                                values.put(InstanceColumns.INSTANCE_FILE_PATH, InstanceUtils.getRelativeInstanceFilePath(candidateInstance));
+                                values.put(InstanceColumns.INSTANCE_FILE_PATH, DatabaseUtils.getRelativeFilePath(candidateInstance));
                                 values.put(InstanceColumns.SUBMISSION_URI, submissionUri);
                                 values.put(InstanceColumns.DISPLAY_NAME, formName);
                                 values.put(InstanceColumns.JR_FORM_ID, jrFormId);
@@ -263,7 +263,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
 
                 values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(false));
-                instancesDao.updateInstance(values, InstanceColumns.INSTANCE_FILE_PATH + " LIKE ?", new String[]{"%" + InstanceUtils.getRelativeInstanceFilePath(candidateInstance)});
+                instancesDao.updateInstance(values, InstanceColumns.INSTANCE_FILE_PATH + " LIKE ?", new String[]{"%" + DatabaseUtils.getRelativeFilePath(candidateInstance)});
 
                 SaveToDiskTask.manageFilesAfterSavingEncryptedForm(instanceXml, submissionXml);
                 if (!EncryptionUtils.deletePlaintextFiles(instanceXml, null)) {

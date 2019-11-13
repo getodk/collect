@@ -10,7 +10,7 @@ import org.junit.runners.Parameterized;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.InstanceUtils;
+import org.odk.collect.android.utilities.DatabaseUtils;
 import org.odk.collect.android.utilities.SQLiteUtils;
 
 import java.io.File;
@@ -70,7 +70,7 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
     }
 
     private void assertThatInstancesAreKeptAfterMigrating() {
-        List<Instance> instances = InstanceUtils.getInstancesFromCursor(new InstancesDao().getInstancesCursor(null, null));
+        List<Instance> instances = DatabaseUtils.getInstancesFromCursor(new InstancesDao().getInstancesCursor(null, null));
         assertEquals(2, instances.size());
         assertEquals("complete", instances.get(0).getStatus());
         assertEquals(Long.valueOf(1564413556249L), instances.get(0).getLastStatusChangeDate());

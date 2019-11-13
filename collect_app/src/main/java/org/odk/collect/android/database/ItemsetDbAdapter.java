@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.DatabaseUtils;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -45,7 +46,6 @@ public class ItemsetDbAdapter {
         public void onCreate(SQLiteDatabase db) {
             // create table to keep track of the itemsets
             db.execSQL(CREATE_ITEMSET_TABLE);
-
         }
 
         @Override
@@ -116,7 +116,7 @@ public class ItemsetDbAdapter {
 
         ContentValues cv = new ContentValues();
         cv.put(KEY_ITEMSET_HASH, formHash);
-        cv.put(KEY_PATH, path);
+        cv.put(KEY_PATH, DatabaseUtils.getRelativeFilePath(path));
         db.insert(ITEMSET_TABLE, null, cv);
 
         return true;
@@ -134,23 +134,6 @@ public class ItemsetDbAdapter {
         }
         db.insert(DATABASE_TABLE + tableName, null, cv);
         return true;
-    }
-
-    public boolean tableExists(String tableName) {
-        // select name from sqlite_master where type = 'table'
-        String selection = "type=? and name=?";
-        String[] selectionArgs = {
-                "table", DATABASE_TABLE + tableName
-        };
-        Cursor c = db.query("sqlite_master", null, selection, selectionArgs,
-                null, null, null);
-        boolean exists = false;
-        if (c.getCount() == 1) {
-            exists = true;
-        }
-        c.close();
-        return exists;
-
     }
 
     public void beginTransaction() {
@@ -171,18 +154,14 @@ public class ItemsetDbAdapter {
         db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + pathHash);
 
         // and remove the entry from the itemsets table
-        String where = KEY_PATH + "=?";
-        String[] whereArgs = {
-                path
-        };
+        String where = KEY_PATH + " LIKE ?";
+        String[] whereArgs = {"%" + DatabaseUtils.getRelativeFilePath(path)};
         db.delete(ITEMSET_TABLE, where, whereArgs);
     }
 
     public Cursor getItemsets(String path) {
-        String selection = KEY_PATH + "=?";
-        String[] selectionArgs = {
-                path
-        };
+        String selection = KEY_PATH + " LIKE ?";
+        String[] selectionArgs = {"%" + DatabaseUtils.getRelativeFilePath(path)};
         return db.query(ITEMSET_TABLE, null, selection, selectionArgs, null, null, null);
     }
 
@@ -191,20 +170,18 @@ public class ItemsetDbAdapter {
         if (c != null) {
             if (c.getCount() == 1) {
                 c.moveToFirst();
-                String table = getMd5FromString(c.getString(c.getColumnIndex(KEY_PATH)));
+                String table = getMd5FromString(DatabaseUtils.getAbsoluteFilePath(c.getString(c.getColumnIndex(KEY_PATH))));
                 db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + table);
             }
             c.close();
         }
 
-        String where = KEY_PATH + "=?";
-        String[] whereArgs = {
-                path
-        };
+        String where = KEY_PATH + " LIKE ?";
+        String[] whereArgs = {"%" + DatabaseUtils.getRelativeFilePath(path)};
         db.delete(ITEMSET_TABLE, where, whereArgs);
     }
 
-    public static String getMd5FromString(String toEncode) {
+    public static String getMd5FromString(String absoluteCsvPath) {
         MessageDigest md;
         try {
             md = MessageDigest.getInstance("MD5");
@@ -213,7 +190,7 @@ public class ItemsetDbAdapter {
             return null;
         }
 
-        md.update(toEncode.getBytes());
+        md.update(absoluteCsvPath.getBytes());
         byte[] digest = md.digest();
         BigInteger bigInt = new BigInteger(1, digest);
         return bigInt.toString(16);

@@ -10,16 +10,16 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InstanceUtils {
+public class DatabaseUtils {
 
-    private InstanceUtils() { }
+    private DatabaseUtils() { }
 
-    public static String getAbsoluteInstanceFilePath(String instancePath) {
-        return instancePath.startsWith(Collect.ODK_ROOT) ? instancePath : Collect.ODK_ROOT + instancePath;
+    public static String getAbsoluteFilePath(String filePath) {
+        return filePath.startsWith(Collect.ODK_ROOT) ? filePath : Collect.ODK_ROOT + filePath;
     }
 
-    public static String getRelativeInstanceFilePath(String instancePath) {
-        return instancePath.substring(Collect.ODK_ROOT.length());
+    public static String getRelativeFilePath(String filePath) {
+        return filePath.substring(Collect.ODK_ROOT.length());
     }
 
     /**

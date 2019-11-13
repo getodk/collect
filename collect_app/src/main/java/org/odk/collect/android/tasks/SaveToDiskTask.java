@@ -33,7 +33,7 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.EncryptionUtils;
 import org.odk.collect.android.utilities.EncryptionUtils.EncryptedFormInformation;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.InstanceUtils;
+import org.odk.collect.android.utilities.DatabaseUtils;
 import org.odk.collect.android.utilities.MediaManager;
 
 import java.io.File;
@@ -180,7 +180,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             // However, it could be a not-first time saving if the user has been using the manual
             // 'save data' option from the menu. So try to update first, then make a new one if that
             // fails.
-            String relativeInstancePath = InstanceUtils.getRelativeInstanceFilePath(formController.getAbsoluteInstancePath());
+            String relativeInstancePath = DatabaseUtils.getRelativeFilePath(formController.getAbsoluteInstancePath());
             String where = InstanceColumns.INSTANCE_FILE_PATH + " LIKE ?";
             String[] whereArgs = {"%" + relativeInstancePath};
             int updated = new InstancesDao().updateInstance(values, where, whereArgs);

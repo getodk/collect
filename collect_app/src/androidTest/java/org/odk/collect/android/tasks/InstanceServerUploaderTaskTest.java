@@ -12,7 +12,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.test.MockedServerTest;
-import org.odk.collect.android.utilities.InstanceUtils;
+import org.odk.collect.android.utilities.DatabaseUtils;
 
 import java.io.File;
 
@@ -93,7 +93,7 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
                 .lastStatusChangeDate(123L)
                 .build();
 
-        Uri contentUri = dao.saveInstance(InstanceUtils.getValuesFromInstanceObject(i));
+        Uri contentUri = dao.saveInstance(DatabaseUtils.getValuesFromInstanceObject(i));
         return Long.parseLong(contentUri.toString().substring(InstanceProviderAPI.InstanceColumns.CONTENT_URI.toString().length() + 1));
     }
 

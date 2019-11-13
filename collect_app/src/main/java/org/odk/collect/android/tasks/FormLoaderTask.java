@@ -46,7 +46,7 @@ import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormDefCache;
-import org.odk.collect.android.utilities.InstanceUtils;
+import org.odk.collect.android.utilities.DatabaseUtils;
 import org.odk.collect.android.utilities.ZipUtils;
 
 import java.io.File;
@@ -106,7 +106,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     FECWrapper data;
 
     public FormLoaderTask(String instancePath, String xpath, String waitingXPath) {
-        this.instancePath = InstanceUtils.getAbsoluteInstanceFilePath(instancePath);
+        this.instancePath = DatabaseUtils.getAbsoluteFilePath(instancePath);
         this.xpath = xpath;
         this.waitingXPath = waitingXPath;
     }

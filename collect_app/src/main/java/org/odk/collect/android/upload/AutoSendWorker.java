@@ -41,7 +41,7 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
-import org.odk.collect.android.utilities.InstanceUtils;
+import org.odk.collect.android.utilities.DatabaseUtils;
 import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -201,7 +201,7 @@ public class AutoSendWorker extends Worker {
     @NonNull
     private List<Instance> getInstancesToAutoSend(boolean isAutoSendAppSettingEnabled) {
         Cursor c = new InstancesDao().getFinalizedInstancesCursor();
-        List<Instance> allFinalized = InstanceUtils.getInstancesFromCursor(c);
+        List<Instance> allFinalized = DatabaseUtils.getInstancesFromCursor(c);
 
         List<Instance> toUpload = new ArrayList<>();
         for (Instance instance : allFinalized) {
