@@ -18,6 +18,7 @@ import android.database.Cursor;
 
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.utilities.DatabaseUtils;
 
 public final class FormsDaoHelper {
 
@@ -35,13 +36,13 @@ public final class FormsDaoHelper {
         throw new RuntimeException("Unable to get the forms count");
     }
 
-    public static String getFormPath(String selection, String[] selectionArgs) {
+    public static String getAbsoluteFormPath(String selection, String[] selectionArgs) {
         FormsDao formsDao = new FormsDao();
         String formPath = null;
         try (Cursor c = formsDao.getFormsCursor(selection, selectionArgs)) {
             if (c != null && c.getCount() > 0) {
                 c.moveToFirst();
-                formPath = c.getString(c.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_FILE_PATH));
+                formPath = DatabaseUtils.getAbsoluteFilePath(c.getString(c.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_FILE_PATH)));
             }
         }
         return formPath;
