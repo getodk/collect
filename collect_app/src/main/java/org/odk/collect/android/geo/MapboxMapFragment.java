@@ -29,6 +29,8 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.annotation.Line;
 import com.mapbox.mapboxsdk.plugins.annotation.LineManager;
 import com.mapbox.mapboxsdk.plugins.annotation.LineOptions;
+import com.mapbox.mapboxsdk.plugins.annotation.OnLineClickListener;
+import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolClickListener;
 import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolDragListener;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
@@ -91,6 +93,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private PointListener gpsLocationListener;
     private PointListener clickListener;
     private PointListener longPressListener;
+    private FeatureListener featureClickListener;
     private FeatureListener dragEndListener;
 
     private LocationComponent locationComponent;
@@ -291,6 +294,10 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         return new ArrayList<>();
     }
 
+    @Override public void setFeatureClickListener(@Nullable FeatureListener listener) {
+        featureClickListener = listener;
+    }
+
     @Override public void setDragEndListener(@Nullable FeatureListener listener) {
         dragEndListener = listener;
     }
@@ -307,7 +314,12 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         if (clickListener != null && !isDragging) {
             clickListener.onPoint(fromLatLng(point));
         }
-        return true;
+
+        // MAPBOX ISSUE: Unfortunately, onMapClick is called before onAnnotationClick,
+        // which means that every click on a marker will also cause a click event on
+        // the map.  Returning true will consume the event and prevent the marker's
+        // onAnnotationClick from ever being called, so we have to return false.
+        return false;
     }
 
     @Override public boolean onMapLongClick(@NonNull LatLng latLng) {
@@ -585,9 +597,10 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             style.removeLayer(layer);
         }
         overlayLayers.clear();
-        // NOTE(ping): It would make sense to remove the overlaySources from
-        // the map here, but that can lead to a SEGV in libmapbox-gl.so.  See
-        // https://github.com/mapbox/mapbox-gl-native/issues/15182 for details.
+        // MAPBOX ISSUE: https://github.com/mapbox/mapbox-gl-native/issues/15182
+        // Having removed the overlay layers, this would be the appropriate time
+        // to remove their sources from the map as well.  However, removing the
+        // overlay sources from the map can lead to a SEGV in libmapbox-gl.so.
         /*
         for (Source source : overlaySources) {
             style.removeSource(source);
@@ -706,6 +719,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private class MarkerFeature implements MapFeature {
         private final int featureId;
         private final SymbolManager symbolManager;
+        private final ClickListener clickListener = new ClickListener();
         private final DragListener dragListener = new DragListener();
         private MapPoint point;
         private Symbol symbol;
@@ -715,6 +729,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             this.symbolManager = symbolManager;
             this.point = point;
             this.symbol = createSymbol(symbolManager, point, draggable);
+            symbolManager.addClickListener(clickListener);
             symbolManager.addDragListener(dragListener);
         }
 
@@ -723,9 +738,18 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         }
 
         public void dispose() {
+            symbolManager.removeClickListener(clickListener);
             symbolManager.removeDragListener(dragListener);
             symbolManager.delete(symbol);
             symbol = null;
+        }
+
+        class ClickListener implements OnSymbolClickListener {
+            @Override public void onAnnotationClick(Symbol clickedSymbol) {
+                if (clickedSymbol.getId() == symbol.getId() && featureClickListener != null) {
+                    featureClickListener.onFeature(featureId);
+                }
+            }
         }
 
         class DragListener implements OnSymbolDragListener {
@@ -760,7 +784,9 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         private final int featureId;
         private final LineManager lineManager;
         private final SymbolManager symbolManager;
-        private final DragListener dragListener = new DragListener();
+        private final SymbolClickListener symbolClickListener = new SymbolClickListener();
+        private final LineClickListener lineClickListener = new LineClickListener();
+        private final SymbolDragListener symbolDragListener = new SymbolDragListener();
         private final List<MapPoint> points = new ArrayList<>();
         private final List<Symbol> symbols = new ArrayList<>();
         private final boolean closedPolygon;
@@ -782,7 +808,9 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 .withLatLngs(new ArrayList<>())
             );
             updateLine();
-            symbolManager.addDragListener(dragListener);
+            symbolManager.addClickListener(symbolClickListener);
+            symbolManager.addDragListener(symbolDragListener);
+            lineManager.addClickListener(lineClickListener);
         }
 
         public List<MapPoint> getPoints() {
@@ -790,11 +818,13 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         }
 
         public void dispose() {
+            symbolManager.removeClickListener(symbolClickListener);
+            symbolManager.removeDragListener(symbolDragListener);
+            lineManager.removeClickListener(lineClickListener);
             if (line != null) {
                 lineManager.delete(line);
                 line = null;
             }
-            symbolManager.removeDragListener(dragListener);
             for (Symbol symbol : symbols) {
                 symbolManager.delete(symbol);
             }
@@ -832,7 +862,26 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             lineManager.update(line);
         }
 
-        class DragListener implements OnSymbolDragListener {
+        class SymbolClickListener implements OnSymbolClickListener {
+            @Override public void onAnnotationClick(Symbol clickedSymbol) {
+                for (Symbol symbol : symbols) {
+                    if (clickedSymbol.getId() == symbol.getId()) {
+                        featureClickListener.onFeature(featureId);
+                        break;
+                    }
+                }
+            }
+        }
+
+        class LineClickListener implements OnLineClickListener {
+            @Override public void onAnnotationClick(Line clickedLine) {
+                if (clickedLine.getId() == line.getId()) {
+                    featureClickListener.onFeature(featureId);
+                }
+            }
+        }
+
+        class SymbolDragListener implements OnSymbolDragListener {
             @Override public void onAnnotationDragStarted(Symbol draggedSymbol) {
                 isDragging = true;
             }

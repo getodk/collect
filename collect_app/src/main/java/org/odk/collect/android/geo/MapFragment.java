@@ -149,6 +149,9 @@ public interface MapFragment {
     /** Sets or clears the callback for a long press on the map. */
     void setLongPressListener(@Nullable PointListener listener);
 
+    /** Sets or clears the callback for a click on a feature. */
+    void setFeatureClickListener(@Nullable FeatureListener listener);
+
     /** Sets or clears the callback for when a drag is completed. */
     void setDragEndListener(@Nullable FeatureListener listener);
 
