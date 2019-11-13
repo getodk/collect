@@ -23,11 +23,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 import org.odk.collect.android.utilities.SQLiteUtils;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -119,12 +117,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
 
     private void upgradeToVersion2(SQLiteDatabase db) {
         if (!SQLiteUtils.doesColumnExist(db, INSTANCES_TABLE_NAME, CAN_EDIT_WHEN_COMPLETE)) {
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .alter()
-                    .table(INSTANCES_TABLE_NAME)
-                    .addColumn(CAN_EDIT_WHEN_COMPLETE, "text")
-                    .end();
+            SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, CAN_EDIT_WHEN_COMPLETE, "text");
 
             db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET "
                     + CAN_EDIT_WHEN_COMPLETE + " = '" + true
@@ -135,25 +128,11 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void upgradeToVersion3(SQLiteDatabase db) {
-        if (!SQLiteUtils.doesColumnExist(db, INSTANCES_TABLE_NAME, JR_VERSION)) {
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .alter()
-                    .table(INSTANCES_TABLE_NAME)
-                    .addColumn(JR_VERSION, "text")
-                    .end();
-        }
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, JR_VERSION, "text");
     }
 
     private void upgradeToVersion4(SQLiteDatabase db) {
-        if (!SQLiteUtils.doesColumnExist(db, INSTANCES_TABLE_NAME, DELETED_DATE)) {
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .alter()
-                    .table(INSTANCES_TABLE_NAME)
-                    .addColumn(DELETED_DATE, "date")
-                    .end();
-        }
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, DELETED_DATE, "date");
     }
 
     /**
@@ -177,35 +156,18 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
         // onDowngrade in Collect v1.22 always failed to clean up the temporary table so remove it now.
         // Going from v1.23 to v1.22 and back to v1.23 will result in instance status information
         // being lost.
-        CustomSQLiteQueryBuilder
-                .begin(db)
-                .dropIfExists(temporaryTableName)
-                .end();
+        SQLiteUtils.dropTable(db, temporaryTableName);
 
         createInstancesTableV5(db, temporaryTableName);
 
         // Only select columns from the existing table that are also relevant to v5
-        columnNamesPrev.retainAll(new ArrayList<>(Arrays.asList(COLUMN_NAMES_V5)));
+        List<String> columns = SQLiteUtils.getColumnNames(db, INSTANCES_TABLE_NAME);
+        columns.retainAll(Arrays.asList(COLUMN_NAMES_V5));
+        String[] columnsToKeep = columns.toArray(new String[0]);
 
-        CustomSQLiteQueryBuilder
-                .begin(db)
-                .insertInto(temporaryTableName)
-                .columnsForInsert(columnNamesPrev.toArray(new String[0]))
-                .select()
-                .columnsForSelect(columnNamesPrev.toArray(new String[0]))
-                .from(INSTANCES_TABLE_NAME)
-                .end();
-
-        CustomSQLiteQueryBuilder
-                .begin(db)
-                .dropIfExists(INSTANCES_TABLE_NAME)
-                .end();
-
-        CustomSQLiteQueryBuilder
-                .begin(db)
-                .renameTable(temporaryTableName)
-                .to(INSTANCES_TABLE_NAME)
-                .end();
+        SQLiteUtils.copyRows(db, INSTANCES_TABLE_NAME, columnsToKeep, temporaryTableName);
+        SQLiteUtils.dropTable(db, INSTANCES_TABLE_NAME);
+        SQLiteUtils.renameTable(db, temporaryTableName, INSTANCES_TABLE_NAME);
     }
 
     private void createInstancesTableV5(SQLiteDatabase db, String name) {
