@@ -16,15 +16,22 @@ package org.odk.collect.android.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Window;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.preferences.MapsPreferences;
+import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+
+import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
 
@@ -87,6 +94,30 @@ public class MapActivity extends BaseGeoMapActivity {
 
         if (previousState != null) {
             restoreFromInstanceState(previousState);
+        }
+
+        addInstanceGeometry(getIntent().getData());
+    }
+
+    protected void addInstanceGeometry(Uri contentUri) {
+        String jrFormId = null;
+        try (Cursor c = Collect.getInstance().getContentResolver().query(
+            contentUri, new String[] {FormsColumns.JR_FORM_ID}, null, null, null)) {
+            if (c.moveToFirst()) {
+                jrFormId = c.getString(0);
+                Timber.i("jrFormId = %s", jrFormId);
+            }
+        }
+
+        try (Cursor c = Collect.getInstance().getContentResolver().query(
+            InstanceColumns.CONTENT_URI,
+            new String[] {InstanceColumns.INSTANCE_FILE_PATH},
+            InstanceColumns.JR_FORM_ID + " = ?",
+            new String[] {jrFormId},
+            null)) {
+            while (c.moveToNext()) {
+                Timber.i("instance path = %s", c.getString(0));
+            }
         }
     }
 
