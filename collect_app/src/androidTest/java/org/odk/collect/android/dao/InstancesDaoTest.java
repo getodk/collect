@@ -174,7 +174,7 @@ public class InstancesDaoTest {
 
         List<String> absoluteInstanceFilePaths = new ArrayList<>();
         absoluteInstanceFilePaths.add(Collect.INSTANCES_PATH + "/Hypertension Screening_2017-02-20_14-03-53/Hypertension Screening_2017-02-20_14-03-53.xml");
-        absoluteInstanceFilePaths.add("/Biggest N of Set_2017-02-20_14-06-51/Biggest N of Set_2017-02-20_14-06-51.xml");
+        absoluteInstanceFilePaths.add("/instances/Biggest N of Set_2017-02-20_14-06-51/Biggest N of Set_2017-02-20_14-06-51.xml");
         instancesDao.deleteInstances(absoluteInstanceFilePaths);
 
         instances = DatabaseUtils.getInstancesFromCursor(instancesDao.getInstancesCursor());

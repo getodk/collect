@@ -276,8 +276,8 @@ public class InstancesDao {
             selection.append(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH);
             int j = 0;
             while (j < selectionArgs.length) {
-                selectionArgs[j] = "%" + absoluteInstanceFilePaths.get(
-                        counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER + j);
+                selectionArgs[j] = "%" + DatabaseUtils.getRelativeFilePath(absoluteInstanceFilePaths.get(
+                        counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER + j));
                 selection.append(" LIKE ?");
 
                 if (j != selectionArgs.length - 1) {
