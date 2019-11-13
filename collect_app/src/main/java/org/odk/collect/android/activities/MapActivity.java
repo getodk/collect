@@ -43,6 +43,8 @@ public class MapActivity extends BaseGeoMapActivity {
     public static final String MAP_ZOOM_KEY = "map_zoom";
 
     private MapFragment map;
+    private String jrFormId;
+    private String formTitle;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,8 +52,19 @@ public class MapActivity extends BaseGeoMapActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.instance_map_layout);
 
+        Uri contentUri = getIntent().getData();
+        try (Cursor c = Collect.getInstance().getContentResolver().query(
+            contentUri, new String[] {FormsColumns.JR_FORM_ID, FormsColumns.DISPLAY_NAME},
+            null, null, null)) {
+            if (c.moveToFirst()) {
+                jrFormId = c.getString(0);
+                formTitle = c.getString(1);
+                Timber.i("Starting MapActivity for form \"%s\" (jrFormId = \"%s\")", formTitle, jrFormId);
+            }
+        }
+
         TextView titleView = findViewById(R.id.form_title);
-        titleView.setText(getIntent().getDataString());
+        titleView.setText(formTitle);
 
         Context context = getApplicationContext();
         MapProvider.createMapFragment(context)
@@ -94,42 +107,43 @@ public class MapActivity extends BaseGeoMapActivity {
             restoreFromInstanceState(previousState);
         }
 
-        addInstanceGeometry(getIntent().getData());
+        addInstanceGeometry();
     }
 
-    protected void addInstanceGeometry(Uri contentUri) {
-        String jrFormId = null;
-        try (Cursor c = Collect.getInstance().getContentResolver().query(
-            contentUri, new String[] {FormsColumns.JR_FORM_ID}, null, null, null)) {
-            if (c.moveToFirst()) {
-                jrFormId = c.getString(0);
-                Timber.i("jrFormId = %s", jrFormId);
-            }
-        }
-
+    protected void addInstanceGeometry() {
         try (Cursor c = Collect.getInstance().getContentResolver().query(
             InstanceColumns.CONTENT_URI,
             new String[] {InstanceColumns.GEOMETRY_TYPE, InstanceColumns.GEOMETRY},
-            InstanceColumns.JR_FORM_ID + " = ? AND " +
-                InstanceColumns.GEOMETRY + " IS NOT NULL",
+            InstanceColumns.JR_FORM_ID + " = ?",
             new String[] {jrFormId},
             null)) {
+            int instanceCount = c.getCount();
+            int geometryCount = 0;
+
             while (c.moveToNext()) {
                 String json = c.getString(1);
-                try {
-                    JSONObject geometry = new JSONObject(json);
-                    switch (c.getString(0)) {
-                        case "Point":
-                            JSONArray coordinates = geometry.getJSONArray("coordinates");
-                            // In GeoJSON, longitude comes before latitude.
-                            double lon = coordinates.getDouble(0);
-                            double lat = coordinates.getDouble(1);
-                            map.addMarker(new MapPoint(lat, lon), false);
+                if (json != null) {
+                    try {
+                        JSONObject geometry = new JSONObject(json);
+                        switch (c.getString(0)) {
+                            case "Point":
+                                JSONArray coordinates = geometry.getJSONArray("coordinates");
+                                // In GeoJSON, longitude comes before latitude.
+                                double lon = coordinates.getDouble(0);
+                                double lat = coordinates.getDouble(1);
+                                map.addMarker(new MapPoint(lat, lon), false);
+                                geometryCount++;
+                        }
+                    } catch (JSONException e) {
+                        Timber.w("Invalid JSON in instances table: %s", json);
                     }
-                } catch (JSONException e) {
-                    Timber.w("Invalid JSON in instances table: %s", json);
                 }
             }
+
+            TextView statusView = findViewById(R.id.geometry_status);
+            statusView.setText(getString(
+                R.string.geometry_status, instanceCount, geometryCount
+            ));
         }
     }
 

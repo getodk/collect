@@ -8,10 +8,18 @@
         android:id="@+id/form_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:paddingTop="5dip"
-        android:paddingBottom="3dip"
-        android:text="A map view test"
+        android:gravity="start"
+        android:padding="4dp"
+        android:background="#BF000000"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/geometry_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="start"
+        android:padding="4dp"
         android:background="#BF000000"
         android:textColor="#FFFFFF" />
 
@@ -19,14 +27,26 @@
         android:id="@+id/map_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/form_title" />
+        android:layout_below="@id/form_title"
+        android:layout_above="@id/geometry_status" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/new_instance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@id/geometry_status"
+        app:srcCompat="@drawable/ic_note_add"
+        android:padding="15dp" />
 
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/form_title">
+        android:layout_below="@+id/form_title"
         android:layout_above="@+id/new_instance">
 
         <LinearLayout
@@ -53,16 +73,5 @@
                 android:padding="15dp" />
         </LinearLayout>
     </ScrollView>
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/new_instance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        app:srcCompat="@drawable/ic_note_add"
-        android:padding="15dp" />
 
 </RelativeLayout>
