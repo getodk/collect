@@ -75,6 +75,11 @@ public class MapActivity extends BaseGeoMapActivity {
             .addTo(this, R.id.map_container, this::initMap, this::finish);
     }
 
+    @Override public void onResume() {
+        super.onResume();
+        updateInstanceGeometry();
+    }
+
     @Override protected void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
         if (map == null) {
@@ -112,10 +117,14 @@ public class MapActivity extends BaseGeoMapActivity {
             restoreFromInstanceState(previousState);
         }
 
-        addInstanceGeometry();
+        updateInstanceGeometry();
     }
 
-    protected void addInstanceGeometry() {
+    protected void updateInstanceGeometry() {
+        if (map == null) {
+            return;
+        }
+
         List<MapPoint> points = new ArrayList<>();
 
         try (Cursor c = Collect.getInstance().getContentResolver().query(
@@ -144,6 +153,7 @@ public class MapActivity extends BaseGeoMapActivity {
                 }
             }
 
+            map.clearFeatures();
             for (MapPoint point : points) {
                 map.addMarker(point, false);
             }
@@ -153,8 +163,8 @@ public class MapActivity extends BaseGeoMapActivity {
             ));
         }
 
-        if (points.size() > 0) {
-            map.zoomToBoundingBox(points, 0.8, true);
+        if (!viewportInitialized && points.size() > 0) {
+            map.zoomToBoundingBox(points, 0.8, false);
             viewportInitialized = true;
         }
     }
