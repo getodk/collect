@@ -18,11 +18,17 @@ public class DatabaseUtils {
     private DatabaseUtils() { }
 
     public static String getAbsoluteFilePath(String filePath) {
+        if (filePath == null) {
+            return "";
+        }
         return filePath.startsWith(Collect.ODK_ROOT) ? filePath : Collect.ODK_ROOT + filePath;
     }
 
     public static String getRelativeFilePath(String filePath) {
-        return filePath.substring(Collect.ODK_ROOT.length());
+        if (filePath == null) {
+            return "";
+        }
+        return filePath.startsWith(Collect.ODK_ROOT) ? filePath.substring(Collect.ODK_ROOT.length()) : filePath;
     }
 
     /**
