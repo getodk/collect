@@ -35,6 +35,9 @@ import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import timber.log.Timber;
 
 /** Show a map with points representing saved instances of the selected form. */
@@ -43,6 +46,7 @@ public class MapActivity extends BaseGeoMapActivity {
     public static final String MAP_ZOOM_KEY = "map_zoom";
 
     private MapFragment map;
+    private boolean viewportInitialized;
     private String jrFormId;
     private String formTitle;
 
@@ -102,6 +106,7 @@ public class MapActivity extends BaseGeoMapActivity {
         });
 
         map.setGpsLocationEnabled(true);
+        map.setGpsLocationListener(this::onLocationChanged);
 
         if (previousState != null) {
             restoreFromInstanceState(previousState);
@@ -111,14 +116,14 @@ public class MapActivity extends BaseGeoMapActivity {
     }
 
     protected void addInstanceGeometry() {
+        List<MapPoint> points = new ArrayList<>();
+
         try (Cursor c = Collect.getInstance().getContentResolver().query(
             InstanceColumns.CONTENT_URI,
             new String[] {InstanceColumns.GEOMETRY_TYPE, InstanceColumns.GEOMETRY},
             InstanceColumns.JR_FORM_ID + " = ?",
             new String[] {jrFormId},
             null)) {
-            int instanceCount = c.getCount();
-            int geometryCount = 0;
 
             while (c.moveToNext()) {
                 String json = c.getString(1);
@@ -131,8 +136,7 @@ public class MapActivity extends BaseGeoMapActivity {
                                 // In GeoJSON, longitude comes before latitude.
                                 double lon = coordinates.getDouble(0);
                                 double lat = coordinates.getDouble(1);
-                                map.addMarker(new MapPoint(lat, lon), false);
-                                geometryCount++;
+                                points.add(new MapPoint(lat, lon));
                         }
                     } catch (JSONException e) {
                         Timber.w("Invalid JSON in instances table: %s", json);
@@ -140,10 +144,25 @@ public class MapActivity extends BaseGeoMapActivity {
                 }
             }
 
+            for (MapPoint point : points) {
+                map.addMarker(point, false);
+            }
             TextView statusView = findViewById(R.id.geometry_status);
             statusView.setText(getString(
-                R.string.geometry_status, instanceCount, geometryCount
+                R.string.geometry_status, c.getCount(), points.size()
             ));
+        }
+
+        if (points.size() > 0) {
+            map.zoomToBoundingBox(points, 0.8, true);
+            viewportInitialized = true;
+        }
+    }
+
+    public void onLocationChanged(MapPoint point) {
+        if (!viewportInitialized) {
+            map.zoomToPoint(point, true);
+            viewportInitialized = true;
         }
     }
 
