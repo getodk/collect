@@ -64,7 +64,7 @@ public class DeletingRepeatGroupsTest {
     @Test
     public void requestingDeletionOfFirstRepeatInHierarchy_deletesFirstRepeat() {
         FormEntryPage page = new FormEntryPage("repeatGroups", activityTestRule)
-                .clickOnGoToIconInForm()
+                .clickGoToIconInForm()
                 .clickGoUpIcon();
 
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(4)));
@@ -82,7 +82,7 @@ public class DeletingRepeatGroupsTest {
     @Test
     public void requestingDeletionOfMiddleRepeatInHierarchy_deletesMiddleRepeat() {
         FormEntryPage page = new FormEntryPage("repeatGroups", activityTestRule)
-                .clickOnGoToIconInForm()
+                .clickGoToIconInForm()
                 .clickGoUpIcon();
 
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(4)));
@@ -100,7 +100,7 @@ public class DeletingRepeatGroupsTest {
     @Test
     public void requestingDeletionOfLastRepeatInHierarchy_deletesLastRepeat() {
         FormEntryPage page = new FormEntryPage("repeatGroups", activityTestRule)
-                .clickOnGoToIconInForm()
+                .clickGoToIconInForm()
                 .clickGoUpIcon();
 
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(4)));

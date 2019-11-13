@@ -26,7 +26,7 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
         return this;
     }
 
-    public AdminSettingsPage uncheckAllUsetSettings() {
+    public AdminSettingsPage uncheckAllUserSettings() {
         onData(PreferenceMatchers.withKey("change_server")).perform(click());
         onData(PreferenceMatchers.withKey("change_app_theme")).perform(click());
         onData(PreferenceMatchers.withKey("change_app_language")).perform(click());
@@ -60,6 +60,16 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
     public AdminSettingsPage uncheckUserSettings(String setting) {
         onData(PreferenceMatchers.withKey(setting)).perform(ViewActions.scrollTo());
         onData(PreferenceMatchers.withKey(setting)).perform(click());
+        return this;
+    }
+
+    public AdminSettingsPage clickFormEntrySettings() {
+        clickOnString(R.string.form_entry_setting);
+        return this;
+    }
+
+    public AdminSettingsPage clickMovingBackwards() {
+        clickOnString(R.string.moving_backwards_title);
         return this;
     }
 }

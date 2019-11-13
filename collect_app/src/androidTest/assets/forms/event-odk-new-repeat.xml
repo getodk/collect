@@ -1,0 +1,85 @@
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa">
+    <h:head>
+        <h:title>Event: odk-new-repeat</h:title>
+        <model>
+            <instance>
+                <data id="event-odk-new-repeat">
+                    <meta>
+                        <instanceID/>
+                    </meta>
+
+                    <!-- used to test relative references that parent out of a repeat -->
+                    <my-toplevel-value/>
+
+                    <!-- no repeat instance in model so odk-new-repeat event should fire for each new instance -->
+                    <my-repeat jr:template="">
+                        <defaults-to-position/>
+                        <defaults-to-toplevel/>
+                    </my-repeat>
+
+                    <repeat-count/>
+                    <my-jr-count-repeat jr:template="">
+                        <defaults-to-position-again/>
+                    </my-jr-count-repeat>
+
+                    <!-- repeat instances in model should not fire odk-new-repeat event -->
+                    <my-repeat-without-template>
+                        <my-value/>
+                    </my-repeat-without-template>
+                    <my-repeat-without-template>
+                        <my-value/>
+                    </my-repeat-without-template>
+                </data>
+            </instance>
+
+            <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" calculate="concat('uuid:', uuid())"/>
+            <bind nodeset="/data/my-toplevel-value" type="integer"/>
+            <bind nodeset="/data/my-repeat/defaults-to-position" type="string"/>
+            <bind nodeset="/data/my-repeat/defaults-to-toplevel" type="integer"/>
+
+            <bind nodeset="/data/repeat-count" type="integer"/>
+            <bind nodeset="/data/my-jr-count-repeat/defaults-to-position-again" type="string"/>
+
+            <bind nodeset="/data/my-repeat-without-template/my-value" type="integer"/>
+        </model>
+    </h:head>
+
+    <h:body>
+        <input ref="/data/my-toplevel-value">
+            <label>A top-level value</label>
+        </input>
+
+        <repeat nodeset="/data/my-repeat">
+            <!-- setvalue event nested in repeat rather than in model -->
+            <setvalue event="odk-new-repeat" ref="/data/my-repeat/defaults-to-position" value="position(..)" />
+            <input ref="/data/my-repeat/defaults-to-position">
+                <label>A value</label>
+            </input>
+
+            <!-- setvalue with relative reference. Context should be the contextualized ref (https://www.w3.org/TR/xforms11/#action-setvalue) -->
+            <setvalue event="odk-new-repeat" ref="/data/my-repeat/defaults-to-toplevel" value="../../my-toplevel-value + 2" />
+            <input ref="/data/my-repeat/defaults-to-toplevel">
+                <label>A value</label>
+            </input>
+        </repeat>
+
+        <!-- odk-new-repeat event in repeat with jr:count. Event should be fired for each repeat added as count changes -->
+        <input ref="/data/repeat-count">
+            <label>Repeat count</label>
+        </input>
+        <repeat nodeset="/data/my-jr-count-repeat"  jr:count="/data/repeat-count">
+            <setvalue event="odk-new-repeat" ref="/data/my-jr-count-repeat/defaults-to-position-again" value="position(..)" />
+            <input ref="/data/my-jr-count-repeat/defaults-to-position-again">
+                <label>A value</label>
+            </input>
+        </repeat>
+
+        <!-- odk-new-repeat event without template. Event should not be fired for the repeats in the instance -->
+        <repeat nodeset="/data/my-repeat-without-template">
+            <setvalue event="odk-new-repeat" ref="/data/my-repeat-without-template/my-value">2</setvalue>
+            <input ref="/data/my-repeat-without-template/my-value">
+                <label>A value</label>
+            </input>
+        </repeat>
+    </h:body>
+</h:html>
