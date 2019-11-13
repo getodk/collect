@@ -51,29 +51,32 @@ public class FormListAdapter extends SimpleCursorAdapter {
         setViewBinder((view, cursor, columnIndex) -> {
             String columnName = cursor.getColumnName(columnIndex);
             if (columnName.equals(FormsColumns.DATE) || columnName.equals(FormsColumns.MAX_DATE)) {
-                String timestampText = getTimestampText(context, new Date(cursor.getLong(columnIndex)));
+                String timestampText = getTimestampText(new Date(cursor.getLong(columnIndex)));
                 if (!timestampText.isEmpty()) {
                     TextView v = (TextView) view;
                     v.setText(timestampText);
                     v.setVisibility(View.VISIBLE);
                 }
             } else if (columnName.equals(versionColumnName)) {
+                String versionIdText = "";
                 String version = cursor.getString(columnIndex);
-                TextView v = (TextView) view;
-                v.setVisibility(View.GONE);
                 if (version != null) {
-                    v.append(String.format(this.context.getString(R.string.version_number), version));
-                    v.setVisibility(View.VISIBLE);
+                    versionIdText += getString(R.string.version_number, version);
                 }
                 if (Arrays.asList(columnNames).contains(FormsColumns.JR_FORM_ID)) {
                     String id = cursor.getString(cursor.getColumnIndex(FormsColumns.JR_FORM_ID));
                     if (version != null && id != null) {
-                        v.append("\n");
+                        versionIdText += "\n";
                     }
                     if (id != null) {
-                        v.append(String.format(this.context.getString(R.string.id_number), id));
-                        v.setVisibility(View.VISIBLE);
+                        versionIdText += getString(R.string.id_number, id);
                     }
+                }
+                TextView v = (TextView) view;
+                v.setVisibility(View.GONE);
+                if (!versionIdText.isEmpty()) {
+                    v.setText(versionIdText);
+                    v.setVisibility(View.VISIBLE);
                 }
             } else if (columnName.equals(FormsColumns.GEOMETRY_XPATH)) {
                 String xpath = cursor.getString(columnIndex);
@@ -96,7 +99,7 @@ public class FormListAdapter extends SimpleCursorAdapter {
         }
     }
 
-    private String getTimestampText(Context context, Date date) {
+    private String getTimestampText(Date date) {
         try {
             if (context != null) {
                 return new SimpleDateFormat(
@@ -107,5 +110,9 @@ public class FormListAdapter extends SimpleCursorAdapter {
             Timber.e(e);
         }
         return "";
+    }
+
+    private String getString(int id, Object... args) {
+        return context != null ? context.getString(id, args) : "";
     }
 }
