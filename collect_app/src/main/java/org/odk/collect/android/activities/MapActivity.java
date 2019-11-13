@@ -163,7 +163,7 @@ public class MapActivity extends BaseGeoMapActivity {
             ));
         }
 
-        if (!viewportInitialized && points.size() > 0) {
+        if (!viewportInitialized && !points.isEmpty()) {
             map.zoomToBoundingBox(points, 0.8, false);
             viewportInitialized = true;
         }

@@ -158,8 +158,6 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
      * removing a column. See https://sqlite.org/lang_altertable.html
      */
     private void upgradeToVersion5(SQLiteDatabase db) {
-        List<String> columnNamesPrev = SQLiteUtils.getColumnNames(db, INSTANCES_TABLE_NAME);
-
         String temporaryTableName = INSTANCES_TABLE_NAME + "_tmp";
 
         // onDowngrade in Collect v1.22 always failed to clean up the temporary table so remove it now.

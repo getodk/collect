@@ -157,10 +157,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     }
 
     private void updateInstanceDatabase(boolean incomplete, boolean canEditAfterCompleted) {
-
-        FormController formController = Collect.getInstance().getFormController();
-        FormInstance formInstance = formController.getFormDef().getInstance();
-
         // Update the instance database...
         ContentValues values = new ContentValues();
         if (instanceName != null) {
@@ -174,6 +170,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         // update this whether or not the status is complete...
         values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(canEditAfterCompleted));
 
+        FormController formController = Collect.getInstance().getFormController();
+        FormInstance formInstance = formController.getFormDef().getInstance();
         extractGeometryValues(formInstance, values);
 
         // If FormEntryActivity was started with an Instance, just update that instance
