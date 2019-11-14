@@ -40,11 +40,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage clickOnGoToIconInForm() {
-        onView(withId(R.id.menu_goto)).perform(click());
-        return this;
-    }
-
     public FormEntryPage clickJumpEndButton() {
         onView(withId(R.id.jumpEndButton)).perform(click());
         return this;
@@ -189,4 +184,10 @@ public class FormEntryPage extends Page<FormEntryPage> {
         clickOnString(R.string.add_repeat_no);
         return this;
     }
+
+    public FormEntryPage clickOnAddGroup() {
+        clickOnString(R.string.add_another);
+        return this;
+    }
+
 }

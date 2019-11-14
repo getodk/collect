@@ -16,16 +16,14 @@
 
 package org.odk.collect.android.adapters;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-import timber.log.Timber;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -33,13 +31,18 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.utilities.FileUtils;
@@ -48,33 +51,51 @@ import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.SelectWidget;
-import org.odk.collect.android.R;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import timber.log.Timber;
+
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
 import static org.odk.collect.android.widgets.QuestionWidget.isRTL;
 
 public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<AbstractSelectListAdapter.ViewHolder>
         implements Filterable {
 
-    SelectWidget widget;
+    private final FormEntryPrompt prompt;
+    private final ReferenceManager referenceManager;
+    private final int numColumns;
+    private final Context context;
+    private final int answerFontSize;
+    private final AudioHelper audioHelper;
     List<SelectChoice> items;
     List<SelectChoice> filteredItems;
     boolean noButtonsMode;
-    private final int numColumns;
-    private final Context context;
 
-    AbstractSelectListAdapter(List<SelectChoice> items, SelectWidget widget, int numColumns) {
-        context = widget.getContext();
+    /**
+     * This creates a circular dependency between this class and {@link SelectWidget}. Dependencies
+     * for this class should be passed in at the constructor or setter level. Method calls back to
+     * {@link SelectWidget} can be replaced with listeners.
+     */
+    @Deprecated
+    SelectWidget widget;
+
+    AbstractSelectListAdapter(List<SelectChoice> items, SelectWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, Context context) {
+        this.context = context;
         this.items = items;
         this.widget = widget;
+        this.prompt = formEntryPrompt;
+        this.referenceManager = referenceManager;
+        this.answerFontSize = answerFontSize;
+        this.audioHelper = audioHelper;
         filteredItems = items;
         this.numColumns = numColumns;
-        noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(widget.getFormEntryPrompt())
-                || WidgetAppearanceUtils.isNoButtonsAppearance(widget.getFormEntryPrompt());
+        noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(getFormEntryPrompt())
+                || WidgetAppearanceUtils.isNoButtonsAppearance(getFormEntryPrompt());
     }
 
     @Override
@@ -99,7 +120,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                     filterResults.count = items.size();
                 } else {
                     List<SelectChoice> filteredList = new ArrayList<>();
-                    FormEntryPrompt formEntryPrompt = widget.getFormEntryPrompt();
+                    FormEntryPrompt formEntryPrompt = getFormEntryPrompt();
                     for (SelectChoice item : items) {
                         if (formEntryPrompt.getSelectChoiceText(item).toLowerCase(Locale.US).contains(searchStr)) {
                             filteredList.add(item);
@@ -120,14 +141,14 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         };
     }
 
-    abstract CompoundButton setUpButton(int index);
+    abstract CompoundButton createButton(int index, ViewGroup parent);
 
-    void adjustButton(TextView button, int index) {
+    void setUpButton(TextView button, int index) {
         button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize());
-        button.setText(FormEntryPromptUtils.getItemText(widget.getFormEntryPrompt(), filteredItems.get(index)));
+        button.setText(FormEntryPromptUtils.getItemText(getFormEntryPrompt(), filteredItems.get(index)));
         button.setTag(items.indexOf(filteredItems.get(index)));
         button.setGravity(isRTL() ? Gravity.END : Gravity.START);
-        button.setOnLongClickListener((ODKView) widget.getParent().getParent().getParent());
+        button.setOnLongClickListener(getODKViewParent(widget));
     }
 
     View setUpNoButtonsView(int index) {
@@ -138,7 +159,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
         String imageURI = selectChoice instanceof ExternalSelectChoice
                 ? ((ExternalSelectChoice) selectChoice).getImage()
-                : widget.getFormEntryPrompt().getSpecialFormSelectChoiceText(selectChoice, FormEntryCaption.TEXT_FORM_IMAGE);
+                : getFormEntryPrompt().getSpecialFormSelectChoiceText(selectChoice, FormEntryCaption.TEXT_FORM_IMAGE);
 
         String errorMsg = null;
         if (imageURI != null) {
@@ -168,11 +189,11 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
         if (errorMsg != null) {
             TextView missingImage = new TextView(context);
-            missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, widget.getAnswerFontSize());
+            missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
             missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
             missingImage.setPadding(itemPadding, itemPadding, itemPadding, itemPadding);
 
-            String choiceText = FormEntryPromptUtils.getItemText(widget.getFormEntryPrompt(), selectChoice).toString();
+            String choiceText = FormEntryPromptUtils.getItemText(getFormEntryPrompt(), selectChoice).toString();
 
             if (!choiceText.isEmpty()) {
                 missingImage.setText(choiceText);
@@ -185,7 +206,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         }
 
         view.setOnClickListener(v -> onItemClick(selectChoice.selection(), v));
-        view.setEnabled(!widget.getFormEntryPrompt().isReadOnly());
+        view.setEnabled(!getFormEntryPrompt().isReadOnly());
         return view;
     }
 
@@ -196,6 +217,16 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             }
         }
         return false;
+    }
+
+    private ODKView getODKViewParent(ViewParent view) {
+        ViewParent parent = view.getParent();
+
+        if (parent != null) {
+            return getODKViewParent(parent);
+        } else {
+            return null;
+        }
     }
 
     abstract void onItemClick(Selection selection, View view);
@@ -213,9 +244,57 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                 view.removeAllViews();
                 view.addView(setUpNoButtonsView(index));
             } else {
-                widget.addMediaFromChoice(audioVideoImageTextLabel, index, setUpButton(index), filteredItems);
-                audioVideoImageTextLabel.setEnabled(!widget.getFormEntryPrompt().isReadOnly());
+                addMediaFromChoice(audioVideoImageTextLabel, index, createButton(index, audioVideoImageTextLabel), filteredItems);
+                audioVideoImageTextLabel.setEnabled(!getFormEntryPrompt().isReadOnly());
             }
         }
+
+        /**
+         * Pull media from the current item and add it to the media layout.
+         */
+        public void addMediaFromChoice(AudioVideoImageTextLabel audioVideoImageTextLabel, int index, TextView textView, List<SelectChoice> items) {
+            SelectChoice item = items.get(index);
+
+            String audioURI = getPlayableAudioURI(getFormEntryPrompt(), item, getReferenceManager());
+            String imageURI = getImageURI(index, items);
+            String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "video");
+            String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "big-image");
+
+            audioVideoImageTextLabel.setTag(getClipID(getFormEntryPrompt(), item));
+            audioVideoImageTextLabel.setTextImageVideo(textView, imageURI, videoURI, bigImageURI, getReferenceManager());
+
+            if (audioURI != null) {
+                audioVideoImageTextLabel.setAudio(audioURI, getAudioHelper());
+            }
+
+            textView.setGravity(Gravity.CENTER_VERTICAL);
+        }
+
+        private String getImageURI(int index, List<SelectChoice> items) {
+            String imageURI;
+            if (items.get(index) instanceof ExternalSelectChoice) {
+                imageURI = ((ExternalSelectChoice) items.get(index)).getImage();
+            } else {
+                imageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index),
+                        FormEntryCaption.TEXT_FORM_IMAGE);
+            }
+            return imageURI;
+        }
+    }
+
+    private AudioHelper getAudioHelper() {
+        return audioHelper;
+    }
+
+    private ReferenceManager getReferenceManager() {
+        return referenceManager;
+    }
+
+    private FormEntryPrompt getFormEntryPrompt() {
+        return prompt;
+    }
+
+    private int getAnswerFontSize() {
+        return answerFontSize;
     }
 }

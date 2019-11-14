@@ -100,7 +100,7 @@ android {
             }
             minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-            resValue("bool", "FIREBASE_ENABLED", "false")
+            resValue("bool", "CRASHLYTICS_ENABLED", "false")
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
         }
@@ -111,14 +111,14 @@ android {
             }
             minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-            resValue("bool", "FIREBASE_ENABLED", "true")
+            resValue("bool", "CRASHLYTICS_ENABLED", "true")
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
         }
         debug {
             debuggable(true)
             testCoverageEnabled(true)
-            resValue("bool", "FIREBASE_ENABLED", "false")
+            resValue("bool", "CRASHLYTICS_ENABLED", "false")
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
         }
@@ -204,12 +204,11 @@ dependencies {
     implementation 'androidx.exifinterface:exifinterface:1.1.0-beta01'
     implementation "androidx.multidex:multidex:2.0.1"
 
-    implementation "com.google.android.gms:play-services-analytics:17.0.0"
     implementation "com.google.android.gms:play-services-auth:17.0.0"
     implementation "com.google.android.gms:play-services-maps:17.0.0"
     implementation "com.google.android.gms:play-services-location:17.0.0"
 
-    implementation "com.google.firebase:firebase-core:17.2.1"
+    implementation 'com.google.firebase:firebase-analytics:17.2.1'
     implementation "com.crashlytics.sdk.android:crashlytics:2.10.1"
 
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:8.4.0'

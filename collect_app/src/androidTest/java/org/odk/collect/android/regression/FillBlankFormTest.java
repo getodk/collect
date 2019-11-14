@@ -19,6 +19,7 @@ import org.odk.collect.android.espressoutils.pages.FillBlankFormPage;
 import org.odk.collect.android.espressoutils.pages.FormEntryPage;
 import org.odk.collect.android.espressoutils.pages.GeneralSettingsPage;
 import org.odk.collect.android.espressoutils.pages.MainMenuPage;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -64,7 +65,11 @@ public class FillBlankFormTest extends BaseRegressionTest {
             .around(new CopyFormRule("manyQ.xml"))
             .around(new CopyFormRule("nigeria-wards.xml"))
             .around(new CopyFormRule("t21257.xml"))
-            .around(new CopyFormRule("test_multiselect_cleared.xml"));
+            .around(new CopyFormRule("test_multiselect_cleared.xml"))
+            .around(new CopyFormRule("Birds-encrypted.xml"))
+            .around(new CopyFormRule("validate.xml"))
+            .around(new CopyFormRule("event-odk-new-repeat.xml"))
+            .around(new CopyFormRule("multiple-events.xml"));
 
     @Test
     public void subtext_ShouldDisplayAdditionalInformation() {
@@ -455,7 +460,6 @@ public class FillBlankFormTest extends BaseRegressionTest {
         return questionView.getText().toString();
     }
 
-    @Test
     public void questionValidation_ShouldShowToastOnlyWhenConditionsAreNotMet() {
 
         //TestCase43
@@ -488,11 +492,9 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .swipeToNextQuestion()
                 .inputText("test2")
                 .swipeToNextQuestion()
-                .swipeToNextQuestion()
-                .clickSaveAndExit();
+                .swipeToNextQuestion();
     }
 
-    @Test
     public void noDataLost_ShouldRememberAnswersForMultiSelectWidget() {
 
         //TestCase44
@@ -514,4 +516,91 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickJumpEndButton()
                 .clickGoToIconInForm();
     }
+
+    @Test
+    public void encryptedFormWithNoInstanceId_shouldNotBeFinalized() {
+
+        //TestCase47
+        new MainMenuPage(main)
+                .startBlankForm("Birds")
+                .clickGoToIconInForm()
+                .clickJumpEndButton()
+                .clickSaveAndExit()
+                .checkIsToastWithMessageDisplayed("This form does not specify an instanceID. You must specify one to enable encryption. Form has not been saved as finalized.")
+                .clickEditSavedForm()
+                .checkInstanceState("Birds", InstanceProviderAPI.STATUS_INCOMPLETE);
+    }
+
+    @Test
+    public void typeMismatchErrorMessage_shouldBeDisplayed() {
+
+        //TestCase48
+        new MainMenuPage(main)
+                .startBlankForm("validate")
+                .clearTheText("2019")
+                .swipeToNextQuestion()
+                .checkIsStringDisplayed(R.string.error_occured)
+                .checkIsTextDisplayedOnDialog("The value \"-01-01\" can't be converted to a date.")
+                .clickOKOnDialog()
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickSaveAndExit();
+    }
+
+    @Test
+    public void answers_shouldBeAutoFilled() {
+
+        //TestCase50
+        new MainMenuPage(main)
+                .startBlankForm("Event: odk-new-repeat")
+                .inputText("3")
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .checkIsTextDisplayed("1")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("5")
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .checkIsTextDisplayed("2")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("5")
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .checkIsTextDisplayed("3")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("5")
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .checkIsTextDisplayed("4")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("5")
+                .swipeToNextQuestion()
+                .clickOnDoNotAddGroup()
+                .inputText("2")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("1")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("2")
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickOnDoNotAddGroup()
+                .clickSaveAndExit();
+    }
+
+    @Test
+    public void questions_shouldHavePrefilledValue() {
+
+        //TestCase51
+        new MainMenuPage(main)
+                .startBlankForm("Space-separated event list")
+                .checkIsTextDisplayed("cheese")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("more cheese")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("5")
+                .swipeToNextQuestion()
+                .clickSaveAndExit();
+    }
+
 }

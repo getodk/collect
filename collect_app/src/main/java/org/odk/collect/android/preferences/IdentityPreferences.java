@@ -17,8 +17,6 @@ package org.odk.collect.android.preferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
@@ -58,9 +56,6 @@ public class IdentityPreferences extends BasePreferenceFragment {
 
         if (analyticsPreference != null) {
             analyticsPreference.setOnPreferenceClickListener(preference -> {
-                GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getActivity().getApplicationContext());
-                googleAnalytics.setAppOptOut(!analyticsPreference.isChecked());
-
                 Collect.getInstance().setAnalyticsCollectionEnabled(analyticsPreference.isChecked());
                 return true;
             });

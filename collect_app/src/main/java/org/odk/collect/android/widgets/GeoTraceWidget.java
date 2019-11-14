@@ -18,18 +18,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.geo.MapProvider;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
@@ -39,37 +34,14 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  *
  * @author Jon Nordling (jonnordling@gmail.com)
  */
-
 @SuppressLint("ViewConstructor")
-public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
-
-    private final Button createTraceButton;
-    private final TextView answerDisplay;
+public class GeoTraceWidget extends BaseGeoWidget {
 
     public GeoTraceWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
-
-        answerDisplay = getCenteredAnswerTextView();
-
-        createTraceButton = getSimpleButton(getContext().getString(R.string.get_trace));
-
-        LinearLayout answerLayout = new LinearLayout(getContext());
-        answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(createTraceButton);
-        answerLayout.addView(answerDisplay);
-        addAnswerView(answerLayout);
-
-        boolean dataAvailable = false;
-        String s = questionDetails.getPrompt().getAnswerText();
-        if (s != null && !s.equals("")) {
-            dataAvailable = true;
-            setBinaryData(s);
-        }
-
-        updateButtonLabelsAndVisibility(dataAvailable);
     }
 
-    private void startGeoTraceActivity() {
+    public void startGeoActivity() {
         Context context = getContext();
         if (MapProvider.getConfigurator().isAvailable(context)) {
             Intent intent = new Intent(context, GeoPolyActivity.class)
@@ -81,20 +53,18 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
         }
     }
 
-    private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
-        if (dataAvailable) {
-            createTraceButton.setText(R.string.geotrace_view_change_location);
-        } else {
-            createTraceButton.setText(R.string.get_trace);
-        }
+    public void updateButtonLabelsAndVisibility(boolean dataAvailable) {
+        startGeoButton.setText(dataAvailable ? R.string.geotrace_view_change_location : R.string.get_trace);
     }
 
     @Override
-    public void setBinaryData(Object answer) {
-        String answerText = answer.toString();
-        answerDisplay.setText(answerText);
-        updateButtonLabelsAndVisibility(!answerText.isEmpty());
-        widgetValueChanged();
+    public String getAnswerToDisplay(String answer) {
+        return answer;
+    }
+
+    @Override
+    public String getDefaultButtonLabel() {
+        return getContext().getString(R.string.get_trace);
     }
 
     @Override
@@ -103,33 +73,5 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
         return !s.equals("")
                 ? new StringData(s)
                 : null;
-    }
-
-    @Override
-    public void clearAnswer() {
-        answerDisplay.setText(null);
-        updateButtonLabelsAndVisibility(false);
-        widgetValueChanged();
-    }
-
-    @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        createTraceButton.setOnLongClickListener(l);
-        answerDisplay.setOnLongClickListener(l);
-    }
-
-    @Override
-    public void onButtonClick(int buttonId) {
-        getPermissionUtils().requestLocationPermissions((Activity) getContext(), new PermissionListener() {
-            @Override
-            public void granted() {
-                waitForData();
-                startGeoTraceActivity();
-            }
-
-            @Override
-            public void denied() {
-            }
-        });
     }
 }

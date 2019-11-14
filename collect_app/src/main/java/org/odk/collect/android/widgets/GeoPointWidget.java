@@ -18,9 +18,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
@@ -28,11 +25,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.geo.MapProvider;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
-
-import java.text.DecimalFormat;
+import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
@@ -47,89 +41,54 @@ import static org.odk.collect.android.utilities.WidgetAppearanceUtils.hasAppeara
  * @author Jon Nordling (jonnordling@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
+public class GeoPointWidget extends BaseGeoWidget {
     public static final String LOCATION = "gp";
     public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
     public static final String READ_ONLY = "readOnly";
     public static final String DRAGGABLE_ONLY = "draggable";
 
     public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
-    private final boolean readOnly;
-    private final Button getLocationButton;
-    private final TextView answerDisplay;
     private boolean useMap;
-    private final double accuracyThreshold;
+    private double accuracyThreshold;
     private boolean draggable = true;
-
     private String stringAnswer;
 
     public GeoPointWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
+        determineMapProperties();
+    }
 
+    private void determineMapProperties() {
         // Determine the accuracy threshold to use.
-        String acc = questionDetails.getPrompt().getQuestion().getAdditionalAttribute(null, ACCURACY_THRESHOLD);
-        if (acc != null && acc.length() != 0) {
-            accuracyThreshold = Double.parseDouble(acc);
-        } else {
-            accuracyThreshold = DEFAULT_LOCATION_ACCURACY;
-        }
+        String acc = getFormEntryPrompt().getQuestion().getAdditionalAttribute(null, ACCURACY_THRESHOLD);
+        accuracyThreshold = acc != null && !acc.isEmpty() ? Double.parseDouble(acc) : DEFAULT_LOCATION_ACCURACY;
 
         // Determine whether to use the map and whether the point should be draggable.
-        useMap = false;
-        if (MapProvider.getConfigurator().isAvailable(context)) {
-            if (hasAppearance(questionDetails.getPrompt(), PLACEMENT_MAP)) {
+        if (MapProvider.getConfigurator().isAvailable(getContext())) {
+            if (hasAppearance(getFormEntryPrompt(), PLACEMENT_MAP)) {
                 draggable = true;
                 useMap = true;
-            } else if (hasAppearance(questionDetails.getPrompt(), MAPS)) {
+            } else if (hasAppearance(getFormEntryPrompt(), MAPS)) {
                 draggable = false;
                 useMap = true;
             }
         }
-
-        readOnly = questionDetails.getPrompt().isReadOnly();
-        answerDisplay = getCenteredAnswerTextView();
-
-        getLocationButton = getSimpleButton(R.id.get_location);
-
-        // finish complex layout
-        LinearLayout answerLayout = new LinearLayout(getContext());
-        answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(getLocationButton);
-        answerLayout.addView(answerDisplay);
-        addAnswerView(answerLayout);
-
-        // Set vars Label/text for button enable view or collect...
-        boolean dataAvailable = false;
-        String answer = questionDetails.getPrompt().getAnswerText();
-        if (answer != null && !answer.equals("")) {
-            dataAvailable = true;
-            setBinaryData(answer);
-        }
-        updateButtonLabelsAndVisibility(dataAvailable);
     }
 
-    private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
+    public void updateButtonLabelsAndVisibility(boolean dataAvailable) {
         if (useMap) {
             if (readOnly) {
-                getLocationButton.setText(R.string.geopoint_view_read_only);
+                startGeoButton.setText(R.string.geopoint_view_read_only);
             } else {
-                getLocationButton.setText(
+                startGeoButton.setText(
                     dataAvailable ? R.string.view_change_location : R.string.get_point);
             }
         } else {
             if (!readOnly) {
-                getLocationButton.setText(
+                startGeoButton.setText(
                     dataAvailable ? R.string.change_location : R.string.get_point);
             }
         }
-    }
-
-    @Override
-    public void clearAnswer() {
-        stringAnswer = null;
-        answerDisplay.setText(null);
-        updateButtonLabelsAndVisibility(false);
-        widgetValueChanged();
     }
 
     @Override
@@ -138,59 +97,17 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
             return null;
         } else {
             try {
-                // segment lat and lon
-                String[] sa = stringAnswer.split(" ");
-                double[] gp = new double[4];
-                gp[0] = Double.valueOf(sa[0]);
-                gp[1] = Double.valueOf(sa[1]);
-                gp[2] = Double.valueOf(sa[2]);
-                gp[3] = Double.valueOf(sa[3]);
-
-                return new GeoPointData(gp);
-
+                return new GeoPointData(GeoWidgetUtils.getLocationParamsFromStringAnswer(stringAnswer));
             } catch (Exception numberFormatException) {
                 return null;
             }
         }
     }
 
-    private String truncateDouble(String s) {
-        DecimalFormat df = new DecimalFormat("#.##");
-        return df.format(Double.valueOf(s));
-    }
-
-    private String formatGps(double coordinates, String type) {
-        String location = Double.toString(coordinates);
-        String degreeSign = "°";
-        String degree = location.substring(0, location.indexOf('.'))
-                + degreeSign;
-        location = "0." + location.substring(location.indexOf('.') + 1);
-        double temp = Double.valueOf(location) * 60;
-        location = Double.toString(temp);
-        String mins = location.substring(0, location.indexOf('.')) + "'";
-
-        location = "0." + location.substring(location.indexOf('.') + 1);
-        temp = Double.valueOf(location) * 60;
-        location = Double.toString(temp);
-        String secs = location.substring(0, location.indexOf('.')) + '"';
-        if (type.equalsIgnoreCase("lon")) {
-            if (degree.startsWith("-")) {
-                degree = String.format(getContext()
-                        .getString(R.string.west), degree.replace("-", ""), mins, secs);
-            } else {
-                degree = String.format(getContext()
-                        .getString(R.string.east), degree.replace("-", ""), mins, secs);
-            }
-        } else {
-            if (degree.startsWith("-")) {
-                degree = String.format(getContext()
-                        .getString(R.string.south), degree.replace("-", ""), mins, secs);
-            } else {
-                degree = String.format(getContext()
-                        .getString(R.string.north), degree.replace("-", ""), mins, secs);
-            }
-        }
-        return degree;
+    @Override
+    public void clearAnswer() {
+        stringAnswer = null;
+        super.clearAnswer();
     }
 
     @Override
@@ -201,10 +118,10 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
             String[] parts = stringAnswer.split(" ");
             answerDisplay.setText(getContext().getString(
                 R.string.gps_result,
-                formatGps(Double.parseDouble(parts[0]), "lat"),
-                formatGps(Double.parseDouble(parts[1]), "lon"),
-                truncateDouble(parts[2]),
-                truncateDouble(parts[3])
+                GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(getContext(), Double.parseDouble(parts[0]), "lat"),
+                GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(getContext(), Double.parseDouble(parts[1]), "lon"),
+                    GeoWidgetUtils.truncateDouble(parts[2]),
+                    GeoWidgetUtils.truncateDouble(parts[3])
             ));
         } else {
             answerDisplay.setText("");
@@ -215,51 +132,38 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
     }
 
     @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        getLocationButton.setOnLongClickListener(l);
-        answerDisplay.setOnLongClickListener(l);
+    public String getAnswerToDisplay(String answer) {
+        if (!answer.isEmpty()) {
+            String[] parts = answer.split(" ");
+            return getContext().getString(
+                    R.string.gps_result,
+                    GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(getContext(), Double.parseDouble(parts[0]), "lat"),
+                    GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(getContext(), Double.parseDouble(parts[1]), "lon"),
+                    GeoWidgetUtils.truncateDouble(parts[2]),
+                    GeoWidgetUtils.truncateDouble(parts[3])
+            );
+        } else {
+            return "";
+        }
     }
 
     @Override
-    public void cancelLongPress() {
-        super.cancelLongPress();
-        getLocationButton.cancelLongPress();
-        answerDisplay.cancelLongPress();
+    public String getDefaultButtonLabel() {
+        return getContext().getString(R.string.get_location);
     }
 
-    @Override
-    public void onButtonClick(int buttonId) {
-        getPermissionUtils().requestLocationPermissions((Activity) getContext(), new PermissionListener() {
-            @Override
-            public void granted() {
-                startGeoPoint();
-            }
-
-            @Override
-            public void denied() {
-            }
-        });
-    }
-
-    private void startGeoPoint() {
+    public void startGeoActivity() {
         Context context = getContext();
         Intent intent = new Intent(
             context, useMap ? GeoPointMapActivity.class : GeoPointActivity.class);
 
         if (stringAnswer != null && !stringAnswer.isEmpty()) {
-            String[] sa = stringAnswer.split(" ");
-            double[] gp = new double[4];
-            gp[0] = Double.valueOf(sa[0]);
-            gp[1] = Double.valueOf(sa[1]);
-            gp[2] = Double.valueOf(sa[2]);
-            gp[3] = Double.valueOf(sa[3]);
-            intent.putExtra(LOCATION, gp);
+            intent.putExtra(LOCATION, GeoWidgetUtils.getLocationParamsFromStringAnswer(stringAnswer));
         }
         intent.putExtra(READ_ONLY, readOnly);
         intent.putExtra(DRAGGABLE_ONLY, draggable);
         intent.putExtra(ACCURACY_THRESHOLD, accuracyThreshold);
 
-        waitForData();
         ((Activity) context).startActivityForResult(intent, RequestCodes.LOCATION_CAPTURE);
     }
 }
