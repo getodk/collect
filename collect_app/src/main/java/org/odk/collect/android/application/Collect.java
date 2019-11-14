@@ -36,9 +36,6 @@ import androidx.multidex.MultiDex;
 import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobManagerCreateException;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.security.ProviderInstaller;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -59,6 +56,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PrefMigrator;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
@@ -113,7 +111,6 @@ public class Collect extends Application {
     @Nullable
     private FormController formController;
     private ExternalDataManager externalDataManager;
-    private Tracker tracker;
     private FirebaseAnalytics firebaseAnalytics;
     private AppDependencyComponent applicationComponent;
 
@@ -283,8 +280,15 @@ public class Collect extends Application {
             Timber.plant(new Timber.DebugTree());
         }
 
+        setupRemoteAnalytics();
         setupLeakCanary();
         setupOSMDroid();
+    }
+
+    private void setupRemoteAnalytics() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isAnalyticsEnabled = settings.getBoolean(GeneralKeys.KEY_ANALYTICS, true);
+        setAnalyticsCollectionEnabled(isAnalyticsEnabled);
     }
 
     protected void setupOSMDroid() {
@@ -335,30 +339,7 @@ public class Collect extends Application {
         }
     }
 
-    /**
-     * Gets the default {@link Tracker} for this {@link Application}.
-     *
-     * @return tracker
-     */
-    public synchronized Tracker getDefaultTracker() {
-        if (tracker == null) {
-            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            tracker = analytics.newTracker(R.xml.global_tracker);
-        }
-        return tracker;
-    }
-
     public void logRemoteAnalytics(String event, String action, String label) {
-        // Google Analytics
-        Collect.getInstance()
-                .getDefaultTracker()
-                .send(new HitBuilders.EventBuilder()
-                        .setCategory(event)
-                        .setAction(action)
-                        .setLabel(label)
-                        .build());
-
-        // Firebase Analytics
         Bundle bundle = new Bundle();
         bundle.putString("action", action);
         bundle.putString("label", label);

@@ -2,9 +2,12 @@ package org.odk.collect.android.support;
 
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -75,5 +78,21 @@ public class RobolectricHelpers {
         ShadowMediaMetadataRetriever.addMetadata(dataSource, MediaMetadataRetriever.METADATA_KEY_DURATION, duration.toString());
         ShadowMediaPlayer.addMediaInfo(dataSource, new ShadowMediaPlayer.MediaInfo(duration, 0));
         return dataSource;
+    }
+
+    public static <T extends ViewGroup> T populateRecyclerView(T view) {
+        for (int i = 0; i < view.getChildCount(); i++) {
+            View child = view.getChildAt(i);
+
+            if (child instanceof RecyclerView) {
+                child.measure(0, 0);
+                child.layout(0, 0, 100, 10000);
+                break;
+            } else if (child instanceof ViewGroup) {
+                populateRecyclerView((ViewGroup) child);
+            }
+        }
+
+        return view;
     }
 }

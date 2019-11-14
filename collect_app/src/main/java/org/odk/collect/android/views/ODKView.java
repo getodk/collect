@@ -138,8 +138,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         layout =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
-        layout.setMargins(10, 0, 10, 0);
-
         // display which group you are in as well as the question
         addGroupText(groups);
 

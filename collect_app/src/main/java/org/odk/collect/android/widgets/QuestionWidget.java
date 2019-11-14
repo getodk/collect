@@ -372,7 +372,6 @@ public abstract class QuestionWidget
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-        params.setMargins(10, 0, 10, 0);
         addView(v, params);
     }
 
@@ -409,7 +408,6 @@ public abstract class QuestionWidget
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.BELOW, getAudioVideoImageTextLabel().getId());
-        params.setMargins(10, 0, 10, 0);
         addView(v, params);
     }
 
@@ -456,7 +454,6 @@ public abstract class QuestionWidget
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.BELOW, getHelpTextLayout().getId());
 
-        params.setMargins(10, 0, 10, 0);
         addView(v, params);
     }
 

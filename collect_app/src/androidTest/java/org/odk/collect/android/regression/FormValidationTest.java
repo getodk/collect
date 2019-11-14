@@ -40,7 +40,7 @@ public class FormValidationTest extends BaseRegressionTest {
                 .checkIsToastWithMessageDisplayed("Response length must be between 5 and 15")
                 .checkIsTextDisplayed("Integer")
                 .putTextOnIndex(0, "Aaaaa")
-                .clickOnGoToIconInForm()
+                .clickGoToIconInForm()
                 .clickJumpEndButton()
                 .clickSaveAndExit();
     }

@@ -173,7 +173,7 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
                 .swipeToNextQuestion()
                 .inputText("2")
                 .closeSoftKeyboard()
-                .clickOnGoToIconInForm()
+                .clickGoToIconInForm()
                 .checkIsTextDisplayed("2")
                 .clickJumpEndButton()
                 .clickSaveAndExit();
