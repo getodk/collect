@@ -2,14 +2,12 @@ package org.odk.collect.android.espressoutils.pages;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
-import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.matcher.PreferenceMatchers;
+
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 
 import timber.log.Timber;
 
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.clearText;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -19,7 +17,6 @@ import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -148,11 +145,6 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    public T clickOnAreaWithKey(String key) {
-        onData(PreferenceMatchers.withKey(key)).perform(click());
-        return (T) this;
-    }
-
     public T addText(String existingText, String text) {
         onView(withText(existingText)).perform(typeText(text));
         return (T) this;
@@ -160,21 +152,6 @@ abstract class Page<T extends Page<T>> {
 
     public T inputText(String text) {
         onView(withClassName(endsWith("EditText"))).perform(replaceText(text));
-        return (T) this;
-    }
-
-    public T checkIfAreaWithKeyIsDisplayed(String key) {
-        onData(PreferenceMatchers.withKey(key)).check(matches(isDisplayed()));
-        return (T) this;
-    }
-
-    public T scrollToElementWithKey(String key) {
-        onData(PreferenceMatchers.withKey(key)).perform(ViewActions.scrollTo());
-        return (T) this;
-    }
-
-    public T checkIfElementWithKeyIsDisabled(String key) {
-        onData(PreferenceMatchers.withKey(key)).check(matches(not(isEnabled())));
         return (T) this;
     }
 
