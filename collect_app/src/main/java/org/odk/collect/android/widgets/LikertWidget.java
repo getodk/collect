@@ -6,9 +6,7 @@ import java.util.HashMap;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -129,7 +127,6 @@ public class LikertWidget extends ItemsWidget {
             RelativeLayout buttonView = new RelativeLayout(this.getContext());
             buttonViewParams.addRule(CENTER_IN_PARENT, TRUE);
             buttonView.setLayoutParams(buttonViewParams);
-            System.out.println(" Button "  + i);
             RadioButton button = getRadioButton(i);
 
             buttonsToName.put(button, items.get(i).getValue());
@@ -155,7 +152,6 @@ public class LikertWidget extends ItemsWidget {
             choice.setText(getFormEntryPrompt().getSelectChoiceText(items.get(i)));
 
             optionView.addView(choice);
-
 
             optionView.setOnClickListener(new OnClickListener() {
 
