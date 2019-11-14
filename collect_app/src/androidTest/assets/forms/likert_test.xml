@@ -383,7 +383,7 @@
                 <value>choice_3</value>
             </item>
         </select1>
-        <group appearance="likert" ref="/likert_test/cascading_select">
+        <group appearance="field-list" ref="/likert_test/cascading_select">
             <label>Cascading likert</label>
             <select1 appearance="likert" ref="/likert_test/cascading_select/source1">
                 <label>Level1</label>

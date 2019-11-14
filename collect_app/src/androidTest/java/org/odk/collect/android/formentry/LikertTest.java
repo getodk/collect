@@ -18,8 +18,6 @@ import java.util.Collections;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.swipeLeft;
-import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
@@ -127,37 +125,31 @@ public class LikertTest {
         onView(withText("Cascading likert")).perform(click());
 
         // No choices should be shown for levels 2 and 3 when no selection is made for level 1
-        onView(withText(startsWith("Level2"))).perform(click());
+        onView(withText(startsWith("Level1"))).perform(click());
         onView(withText("A1")).check(doesNotExist());
         onView(withText("B1")).check(doesNotExist());
         onView(withText("C1")).check(doesNotExist());
-        onView(withText(startsWith("Level2"))).perform(swipeLeft());
         onView(withText("A1A")).check(doesNotExist());
 
         // Selecting C for level 1 should only reveal options for C at level 2
-        onView(withText(startsWith("Level3"))).perform(swipeRight());
-        onView(withText(startsWith("Level2"))).perform(swipeRight());
+        // and selecting C3 for level 2 shouldn't reveal options in level 3
         onView(withIndex(withClassName(endsWith("RadioButton")), 2)).perform(click());
-        onView(withText(startsWith("Level1"))).perform(swipeLeft());
+        onView(withText("C1")).check(matches(isDisplayed()));
+        onView(withText("C4")).check(matches(isDisplayed()));
         onView(withText("A1")).check(doesNotExist());
         onView(withText("B1")).check(doesNotExist());
-        onView(withIndex(withClassName(endsWith("RadioButton")), 2)).perform(click());
-        onView(withText(startsWith("Level2"))).perform(swipeLeft());
+        onView(withIndex(withClassName(endsWith("RadioButton")), 5)).perform(click());
         onView(withText("A1A")).check(doesNotExist());
 
         // Selecting A for level 1 should reveal options for A at level 2
-        onView(withText(startsWith("Level3"))).perform(swipeRight());
-        onView(withText(startsWith("Level2"))).perform(swipeRight());
         onView(withIndex(withClassName(endsWith("RadioButton")), 0)).perform(click());
-        onView(withText(startsWith("Level1"))).perform(swipeLeft());
         onView(withText("A1")).check(matches(isDisplayed()));
         onView(withText("A1A")).check(doesNotExist());
         onView(withText("B1")).check(doesNotExist());
         onView(withText("C1")).check(doesNotExist());
 
         // Selecting A1 for level 2 should reveal options for A1 at level 3
-        onView(withIndex(withClassName(endsWith("RadioButton")), 0)).perform(click());
-        onView(withText(startsWith("Level2"))).perform(swipeLeft());
+        onView(withIndex(withClassName(endsWith("RadioButton")), 3)).perform(click());
         onView(withText("A1A")).check(matches(isDisplayed()));
         onView(withText("B1A")).check(doesNotExist());
         onView(withText("B1")).check(doesNotExist());
