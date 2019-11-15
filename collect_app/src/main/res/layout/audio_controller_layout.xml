@@ -22,7 +22,7 @@ limitations under the License.
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/padding_large">
+        android:padding="@dimen/margin_large">
 
         <ImageButton
             android:id="@+id/fastRewindBtn"
@@ -35,7 +35,7 @@ limitations under the License.
             android:background="?android:attr/selectableItemBackground"
             android:minHeight="@dimen/touch_target_size"
             android:minWidth="@dimen/touch_target_size"
-            android:padding="@dimen/padding_medium"
+            android:padding="@dimen/margin_medium"
             app:srcCompat="@drawable/ic_replay_5_black_24dp" />
 
         <ImageButton
@@ -48,7 +48,7 @@ limitations under the License.
             android:background="?android:attr/selectableItemBackground"
             android:minHeight="@dimen/touch_target_size"
             android:minWidth="@dimen/touch_target_size"
-            android:padding="@dimen/padding_medium"
+            android:padding="@dimen/margin_medium"
             app:srcCompat="@drawable/ic_play_arrow_24dp" />
 
         <ImageButton
@@ -62,7 +62,7 @@ limitations under the License.
             android:background="?android:attr/selectableItemBackground"
             android:minHeight="@dimen/touch_target_size"
             android:minWidth="@dimen/touch_target_size"
-            android:padding="@dimen/padding_medium"
+            android:padding="@dimen/margin_medium"
             app:srcCompat="@drawable/ic_forward_5_black_24dp" />
 
         <TextView
