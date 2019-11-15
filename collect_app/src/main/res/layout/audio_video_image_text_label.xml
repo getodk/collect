@@ -45,7 +45,7 @@
         android:layout_centerVertical="true"
         android:gravity="end"
         android:orientation="vertical"
-        android:padding="@dimen/margin_large">
+        android:padding="@dimen/margin_standard">
 
         <org.odk.collect.android.audio.AudioButton
             android:id="@+id/audioButton"
