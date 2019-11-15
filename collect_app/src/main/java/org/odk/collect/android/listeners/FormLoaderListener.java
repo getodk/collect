@@ -22,7 +22,7 @@ import org.odk.collect.android.tasks.ProgressNotifier;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface FormLoaderListener extends ProgressNotifier {
-    void loadingComplete(FormLoaderTask task, FormDef fd);
+    void loadingComplete(FormLoaderTask task, FormDef fd, String warningMsg);
 
     void loadingError(String errorMsg);
 }
