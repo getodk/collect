@@ -81,6 +81,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
 import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
+import static org.odk.collect.android.utilities.ViewUtils.pxFromDp;
 
 public abstract class QuestionWidget
         extends RelativeLayout
@@ -143,7 +144,7 @@ public abstract class QuestionWidget
         helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), formEntryPrompt);
         guidanceTextView = setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), formEntryPrompt);
 
-        addQuestionMediaLayout(getAudioVideoImageTextLabel());
+        addQuestionLabel(getAudioVideoImageTextLabel());
         addHelpTextLayout(getHelpTextLayout());
 
         if (context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
@@ -361,7 +362,7 @@ public abstract class QuestionWidget
      * Defaults to adding questionlayout to the top of the screen.
      * Overwrite to reposition.
      */
-    protected void addQuestionMediaLayout(View v) {
+    protected void addQuestionLabel(View v) {
         if (v == null) {
             Timber.e("cannot add a null view as questionMediaLayout");
             return;
@@ -452,7 +453,7 @@ public abstract class QuestionWidget
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.BELOW, getHelpTextLayout().getId());
-
+        params.setMargins(pxFromDp(getContext(), 16), pxFromDp(getContext(), 16), pxFromDp(getContext(), 16), 0);
         addView(v, params);
     }
 
