@@ -31,10 +31,6 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.odk.collect.android.test.CustomMatchers.withIndex;
 
 public class LikertTest {
-    // having trouble getting correct labels, check the xslx and likert_test.xml file
-    /* Test Cases:
-     * (3) FieldList Update
-     */
     private static final String LIKERT_TEST_FORM = "likert_test.xml";
 
     @Rule

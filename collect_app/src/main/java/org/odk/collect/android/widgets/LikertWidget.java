@@ -101,12 +101,7 @@ public class LikertWidget extends ItemsWidget {
         }
     }
 
-    /**
-     * Default place to put the answer
-     * (below the help text or question text if there is no help text)
-     * If you have many elements, use this first
-     * and use the standard addView(view, params) to place the rest
-     */
+    @Override
     protected void addAnswerView(View v) {
         if (v == null) {
             Timber.e("cannot add a null view as an answerView");
