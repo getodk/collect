@@ -80,4 +80,15 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
         onData(PreferenceMatchers.withKey("save_mid")).check(matches(not(isEnabled())));
         return this;
     }
+
+    public AdminSettingsPage clickOnResetApplication() {
+        onData(PreferenceMatchers.withKey("reset_settings")).perform(click());
+        return this;
+    }
+
+    public AdminSettingsPage uncheckServerOption() {
+        clickOnString(R.string.server);
+        return this;
+    }
+
 }
