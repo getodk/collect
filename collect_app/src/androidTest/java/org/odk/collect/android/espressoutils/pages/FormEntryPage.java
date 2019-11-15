@@ -15,8 +15,10 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -187,6 +189,16 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage clickOnAddGroup() {
         clickOnString(R.string.add_another);
+        return this;
+    }
+
+    public FormEntryPage checkIfMarkFinishedIsSelected() {
+        onView(withId(R.id.mark_finished)).check(matches(isChecked()));
+        return this;
+    }
+
+    public FormEntryPage checkIfMarkFinishedIsNotSelected() {
+        onView(withId(R.id.mark_finished)).check(matches(isNotChecked()));
         return this;
     }
 

@@ -17,6 +17,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -167,6 +168,11 @@ abstract class Page<T extends Page<T>> {
 
     public T checkIsTextDisplayedOnDialog(String text) {
         onView(withId(android.R.id.message)).check(matches(withText(containsString(text))));
+        return (T) this;
+    }
+
+    public T checkIfOptionIsDisabled(int string) {
+        onView(withText(string)).check(matches(not(isEnabled())));
         return (T) this;
     }
 
