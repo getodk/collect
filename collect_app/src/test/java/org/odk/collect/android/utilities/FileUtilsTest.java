@@ -41,7 +41,7 @@ public class FileUtilsTest {
     }
 
     @Test public void identifiesFormMetadata_formSimpleForm() throws IOException {
-        String simple_form = "<?xml version=\"1.0\"?>\n" +
+        String simpleForm = "<?xml version=\"1.0\"?>\n" +
                 "<h:html xmlns=\"http://www.w3.org/2002/xforms\"\n" +
                 "        xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
                 "        xmlns:orx=\"http://openrosa.org/xforms\">\n" +
@@ -62,10 +62,10 @@ public class FileUtilsTest {
         temp.deleteOnExit();
 
         BufferedWriter out = new BufferedWriter(new FileWriter(temp));
-        out.write(simple_form);
+        out.write(simpleForm);
         out.close();
 
-        HashMap<String, String> metadataFromFormDefinition = FileUtils.parseXML(temp);
+        HashMap<String, String> metadataFromFormDefinition = FileUtils.getMetadataFromFormDefinition(temp);
 
         assertThat(metadataFromFormDefinition.get(FileUtils.TITLE), is("My Survey"));
         assertThat(metadataFromFormDefinition.get(FileUtils.FORMID), is("mysurvey"));
@@ -74,7 +74,7 @@ public class FileUtilsTest {
     }
 
     @Test public void identifiesFormMetadata_forFormWithSubmission() throws IOException {
-        String submission_form = "<?xml version=\"1.0\"?>\n" +
+        String submissionForm = "<?xml version=\"1.0\"?>\n" +
                 "<h:html xmlns=\"http://www.w3.org/2002/xforms\"\n" +
                 "        xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
                 "        xmlns:orx=\"http://openrosa.org/xforms\">\n" +
@@ -101,17 +101,17 @@ public class FileUtilsTest {
         temp.deleteOnExit();
 
         BufferedWriter out = new BufferedWriter(new FileWriter(temp));
-        out.write(submission_form);
+        out.write(submissionForm);
         out.close();
 
-        HashMap<String, String> metadataFromFormDefinition = FileUtils.parseXML(temp);
+        HashMap<String, String> metadataFromFormDefinition = FileUtils.getMetadataFromFormDefinition(temp);
 
         assertThat(metadataFromFormDefinition.get(FileUtils.TITLE), is("My Survey"));
         assertThat(metadataFromFormDefinition.get(FileUtils.FORMID), is("mysurvey"));
         assertThat(metadataFromFormDefinition.get(FileUtils.VERSION), is("2014083101"));
-        assertThat(metadataFromFormDefinition.get(FileUtils.SUBMISSIONURI), is ("foo"));
-        assertThat(metadataFromFormDefinition.get(FileUtils.AUTO_SEND), is ("bar"));
-        assertThat(metadataFromFormDefinition.get(FileUtils.AUTO_DELETE), is ("baz"));
+        assertThat(metadataFromFormDefinition.get(FileUtils.SUBMISSIONURI), is("foo"));
+        assertThat(metadataFromFormDefinition.get(FileUtils.AUTO_SEND), is("bar"));
+        assertThat(metadataFromFormDefinition.get(FileUtils.AUTO_DELETE), is("baz"));
         assertThat(metadataFromFormDefinition.get(FileUtils.BASE64_RSA_PUBLIC_KEY), is("quux"));
     }
 }

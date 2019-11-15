@@ -25,10 +25,8 @@ import android.os.Build;
 import android.os.Environment;
 
 import org.apache.commons.io.IOUtils;
-import org.javarosa.xform.parse.XFormParser;
-import org.kxml2.kdom.Document;
-import org.kxml2.kdom.Element;
-import org.kxml2.kdom.Node;
+import org.javarosa.core.model.FormDef;
+import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
@@ -38,8 +36,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.FileNameMap;
 import java.net.URLConnection;
@@ -261,111 +257,35 @@ public class FileUtils {
         }
     }
 
-    public static HashMap<String, String> parseXML(File xmlFile) {
+    /**
+     * Given a form definition file, return a map containing form metadata. The form ID is required
+     * by the specification and will always be included. Title and version are optionally included.
+     * If the form definition contains a submission block, any or all of submission URI, base 64 RSA
+     * public key, auto-delete and auto-send may be included.
+     */
+    public static HashMap<String, String> getMetadataFromFormDefinition(File formDefinitionXml) {
+        String lastSavedSrc = FileUtils.getOrCreateLastSavedSrc(formDefinitionXml);
+        FormDef formDef = XFormUtils.getFormFromFormXml(formDefinitionXml.getAbsolutePath(), lastSavedSrc);
+
         final HashMap<String, String> fields = new HashMap<>();
-        final InputStream is;
-        try {
-            is = new FileInputStream(xmlFile);
-        } catch (FileNotFoundException e1) {
-            Timber.d(e1);
-            throw new IllegalStateException(e1);
-        }
 
-        InputStreamReader isr;
-        try {
-            isr = new InputStreamReader(is, "UTF-8");
-        } catch (UnsupportedEncodingException uee) {
-            Timber.w(uee, "Trying default encoding as UTF 8 encoding unavailable");
-            isr = new InputStreamReader(is);
-        }
+        fields.put(TITLE, formDef.getTitle());
+        fields.put(FORMID, formDef.getMainInstance().getRoot().getAttributeValue(null, "id"));
+        fields.put(VERSION, formDef.getMainInstance().getRoot().getAttributeValue(null, "version"));
 
-        final Document doc;
-        try {
-            doc = XFormParser.getXMLDocument(isr);
-        } catch (IOException e) {
-            Timber.e(e, "Unable to parse XML document %s", xmlFile.getAbsolutePath());
-            throw new IllegalStateException("Unable to parse XML document", e);
-        } finally {
-            try {
-                isr.close();
-            } catch (IOException e) {
-                Timber.w("%s error closing from reader", xmlFile.getAbsolutePath());
-            }
-        }
+        if (formDef.getSubmissionProfile() != null) {
+            fields.put(SUBMISSIONURI, formDef.getSubmissionProfile().getAction());
 
-        final String xforms = "http://www.w3.org/2002/xforms";
-        final String html = doc.getRootElement().getNamespace();
-
-        final Element head = doc.getRootElement().getElement(html, "head");
-        final Element title = head.getElement(html, "title");
-        if (title != null) {
-            fields.put(TITLE, XFormParser.getXMLText(title, true));
-        }
-
-        final Element model = getChildElement(head, "model");
-        Element cur = getChildElement(model, "instance");
-
-        final int idx = cur.getChildCount();
-        int i;
-        for (i = 0; i < idx; ++i) {
-            if (cur.isText(i)) {
-                continue;
-            }
-            if (cur.getType(i) == Node.ELEMENT) {
-                break;
-            }
-        }
-
-        if (i < idx) {
-            cur = cur.getElement(i); // this is the first data element
-            final String id = cur.getAttributeValue(null, "id");
-
-            final String version = cur.getAttributeValue(null, "version");
-            final String uiVersion = cur.getAttributeValue(null, "uiVersion");
-            if (uiVersion != null) {
-                // pre-OpenRosa 1.0 variant of spec
-                Timber.e("Obsolete use of uiVersion -- IGNORED -- only using version: %s",
-                        version);
+            final String key = formDef.getSubmissionProfile().getAttribute("base64RsaPublicKey");
+            if (key != null && key.trim().length() > 0) {
+                fields.put(BASE64_RSA_PUBLIC_KEY, key.trim());
             }
 
-            fields.put(FORMID, (id == null) ? cur.getNamespace() : id);
-            fields.put(VERSION, (version == null) ? null : version);
-        } else {
-            throw new IllegalStateException(xmlFile.getAbsolutePath() + " could not be parsed");
-        }
-        try {
-            final Element submission = model.getElement(xforms, "submission");
-            final String base64RsaPublicKey = submission.getAttributeValue(null, "base64RsaPublicKey");
-            final String autoDelete = submission.getAttributeValue(null, "auto-delete");
-            final String autoSend = submission.getAttributeValue(null, "auto-send");
-
-            fields.put(SUBMISSIONURI, submission.getAttributeValue(null, "action"));
-            fields.put(BASE64_RSA_PUBLIC_KEY,
-                    (base64RsaPublicKey == null || base64RsaPublicKey.trim().length() == 0)
-                            ? null : base64RsaPublicKey.trim());
-            fields.put(AUTO_DELETE, autoDelete);
-            fields.put(AUTO_SEND, autoSend);
-        } catch (Exception e) {
-            Timber.i("XML file %s does not have a submission element", xmlFile.getAbsolutePath());
-            // and that's totally fine.
+            fields.put(AUTO_DELETE, formDef.getSubmissionProfile().getAttribute("auto-delete"));
+            fields.put(AUTO_SEND, formDef.getSubmissionProfile().getAttribute("auto-send"));
         }
 
         return fields;
-    }
-
-    // needed because element.getelement fails when there are attributes
-    private static Element getChildElement(Element parent, String childName) {
-        Element e = null;
-        int c = parent.getChildCount();
-        int i = 0;
-        for (i = 0; i < c; i++) {
-            if (parent.getType(i) == Node.ELEMENT) {
-                if (parent.getElement(i).getName().equalsIgnoreCase(childName)) {
-                    return parent.getElement(i);
-                }
-            }
-        }
-        return e;
     }
 
     public static void deleteAndReport(File file) {
