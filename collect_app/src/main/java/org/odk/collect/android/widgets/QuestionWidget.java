@@ -81,7 +81,6 @@ import timber.log.Timber;
 import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
 import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
-import static org.odk.collect.android.utilities.ViewUtils.pxFromDp;
 
 public abstract class QuestionWidget
         extends RelativeLayout
@@ -453,7 +452,6 @@ public abstract class QuestionWidget
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.BELOW, getHelpTextLayout().getId());
-        params.setMargins(pxFromDp(getContext(), 16), pxFromDp(getContext(), 16), pxFromDp(getContext(), 16), 0);
         addView(v, params);
     }
 
