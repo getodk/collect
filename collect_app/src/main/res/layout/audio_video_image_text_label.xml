@@ -16,7 +16,7 @@
         android:orientation="vertical">
 
         <FrameLayout
-            android:id="@+id/select_container"
+            android:id="@+id/text_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -40,18 +40,20 @@
         android:id="@+id/media_buttons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:gravity="end"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/margin_large">
 
         <org.odk.collect.android.audio.AudioButton
             android:id="@+id/audioButton"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
             android:layout_width="@dimen/touch_target_size"
             android:layout_height="@dimen/touch_target_size"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/videoButton"
@@ -60,6 +62,7 @@
             android:layout_height="@dimen/touch_target_size"
             android:visibility="gone"
             app:icon="@drawable/ic_ondemand_video_black_24dp"
-            app:iconTint="?colorOnSurface" />
+            app:iconTint="?colorOnSurface"
+            tools:visibility="visible" />
     </LinearLayout>
 </RelativeLayout>

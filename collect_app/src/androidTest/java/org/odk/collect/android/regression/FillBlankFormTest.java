@@ -455,7 +455,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
 
     private String getQuestionText() {
         FormEntryActivity formEntryActivity = (FormEntryActivity) ActivityHelpers.getActivity();
-        FrameLayout questionContainer = formEntryActivity.findViewById(R.id.select_container);
+        FrameLayout questionContainer = formEntryActivity.findViewById(R.id.text_container);
         TextView questionView = (TextView) questionContainer.getChildAt(0);
         return questionView.getText().toString();
     }

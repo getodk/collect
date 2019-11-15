@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/margin_large"
+    android:button="@drawable/inset_radio_button"
     tools:text="Option A">
 
 </androidx.appcompat.widget.AppCompatRadioButton>
