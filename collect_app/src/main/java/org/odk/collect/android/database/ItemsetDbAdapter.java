@@ -10,6 +10,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.ItemsetDao;
 import org.odk.collect.android.dto.Itemset;
 
+import java.io.File;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -25,10 +26,12 @@ public class ItemsetDbAdapter {
     private SQLiteDatabase db;
 
     public static final String DATABASE_NAME = "itemsets.db";
-    private static final String DATABASE_TABLE = "itemset_";
-    private static final int DATABASE_VERSION = 2;
+    public static final String DATABASE_PATH = Collect.METADATA_PATH + File.separator + DATABASE_NAME;
 
-    private static final String ITEMSET_TABLE = "itemsets";
+    private static final String DATABASE_TABLE = "itemset_";
+    public static final int DATABASE_VERSION = 2;
+
+    public static final String ITEMSET_TABLE = "itemsets";
     public static final String KEY_ITEMSET_HASH = "hash";
     public static final String KEY_PATH = "path";
 
@@ -41,8 +44,8 @@ public class ItemsetDbAdapter {
     /**
      * This class helps open, create, and upgrade the database file.
      */
-    private static class DatabaseHelper extends SQLiteOpenHelper {
-        DatabaseHelper() {
+    public static class DatabaseHelper extends SQLiteOpenHelper {
+        public DatabaseHelper() {
             super(new DatabaseContext(Collect.METADATA_PATH), DATABASE_NAME, null, DATABASE_VERSION);
         }
 
