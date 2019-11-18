@@ -7,12 +7,17 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.ItemsetDao;
+import org.odk.collect.android.dto.Itemset;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import timber.log.Timber;
+
+import static android.provider.BaseColumns._ID;
 
 public class ItemsetDbAdapter {
 
@@ -24,8 +29,8 @@ public class ItemsetDbAdapter {
     private static final int DATABASE_VERSION = 2;
 
     private static final String ITEMSET_TABLE = "itemsets";
-    private static final String KEY_ITEMSET_HASH = "hash";
-    private static final String KEY_PATH = "path";
+    public static final String KEY_ITEMSET_HASH = "hash";
+    public static final String KEY_PATH = "path";
 
     private static final String CREATE_ITEMSET_TABLE =
             "CREATE TABLE IF NOT EXISTS " + ITEMSET_TABLE + " (_id integer primary key autoincrement, "
@@ -65,6 +70,34 @@ public class ItemsetDbAdapter {
             // then drop the table tracking itemsets itself
             db.execSQL("DROP TABLE IF EXISTS " + ITEMSET_TABLE);
             onCreate(db);
+        }
+
+        @Override
+        public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            Timber.i("Downgrading database from version %d to %d", oldVersion, newVersion);
+            downgradeToVersion2(db);
+            Timber.i("Downgrading database from version %d to %d completed with success.", oldVersion, newVersion);
+        }
+
+        private void downgradeToVersion2(SQLiteDatabase db) {
+            Cursor cursor = db.query(ITEMSET_TABLE, null, null, null, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                List<Itemset> itemsets = new ItemsetDao().getItemsetsFromCursor(cursor);
+                for (Itemset itemset : itemsets) {
+                    if (itemset.getPath().startsWith("../")) {
+                        String where = _ID + "=?";
+                        String[] whereArgs = {String.valueOf(itemset.getId())};
+
+                        ContentValues values = new ContentValues();
+                        values.put(KEY_PATH, Collect.ODK_ROOT + itemset.getPath().substring(2));
+
+                        db.update(ITEMSET_TABLE, values, where, whereArgs);
+                    }
+                }
+            }
+            if (cursor != null) {
+                cursor.close();
+            }
         }
     }
 

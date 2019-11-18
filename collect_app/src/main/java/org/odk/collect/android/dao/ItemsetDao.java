@@ -20,11 +20,18 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 
 import org.odk.collect.android.database.ItemsetDbAdapter;
+import org.odk.collect.android.dto.Itemset;
 import org.odk.collect.android.utilities.FileUtil;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import timber.log.Timber;
+
+import static android.provider.BaseColumns._ID;
+import static org.odk.collect.android.database.ItemsetDbAdapter.KEY_ITEMSET_HASH;
+import static org.odk.collect.android.database.ItemsetDbAdapter.KEY_PATH;
 
 public class ItemsetDao {
 
@@ -67,5 +74,33 @@ public class ItemsetDao {
         }
 
         return itemLabel;
+    }
+
+    /**
+     * Returns all itemsets available through the cursor and closes the cursor.
+     */
+    public List<Itemset> getItemsetsFromCursor(Cursor cursor) {
+        List<Itemset> instances = new ArrayList<>();
+        if (cursor != null) {
+            try {
+                cursor.moveToPosition(-1);
+                while (cursor.moveToNext()) {
+                    int idColumnIndex = cursor.getColumnIndex(_ID);
+                    int hashColumnIndex = cursor.getColumnIndex(KEY_ITEMSET_HASH);
+                    int pathColumnIndex = cursor.getColumnIndex(KEY_PATH);
+
+                    Itemset instance = new Itemset.Builder()
+                            .id(cursor.getInt(idColumnIndex))
+                            .hash(cursor.getString(hashColumnIndex))
+                            .path(cursor.getString(pathColumnIndex))
+                            .build();
+
+                    instances.add(instance);
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        return instances;
     }
 }
