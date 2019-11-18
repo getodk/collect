@@ -15,6 +15,7 @@
 package org.odk.collect.android.activities;
 
 import android.annotation.SuppressLint;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -36,7 +37,9 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -49,6 +52,7 @@ public class MapActivity extends BaseGeoMapActivity {
     private boolean viewportInitialized;
     private String jrFormId;
     private String formTitle;
+    private final Map<Integer, Long> instanceIdsByFeatureId = new HashMap<>();
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +121,7 @@ public class MapActivity extends BaseGeoMapActivity {
             restoreFromInstanceState(previousState);
         }
 
+        map.setFeatureClickListener(this::onFeatureClicked);
         updateInstanceGeometry();
     }
 
@@ -126,26 +131,31 @@ public class MapActivity extends BaseGeoMapActivity {
         }
 
         List<MapPoint> points = new ArrayList<>();
+        map.clearFeatures();
 
         try (Cursor c = Collect.getInstance().getContentResolver().query(
             InstanceColumns.CONTENT_URI,
-            new String[] {InstanceColumns.GEOMETRY_TYPE, InstanceColumns.GEOMETRY},
+            new String[] {InstanceColumns._ID, InstanceColumns.GEOMETRY_TYPE, InstanceColumns.GEOMETRY},
             InstanceColumns.JR_FORM_ID + " = ?",
             new String[] {jrFormId},
             null)) {
 
             while (c.moveToNext()) {
-                String json = c.getString(1);
+                long id = c.getLong(0);
+                String type = c.getString(1);
+                String json = c.getString(2);
                 if (json != null) {
                     try {
                         JSONObject geometry = new JSONObject(json);
-                        switch (c.getString(0)) {
+                        switch (type) {
                             case "Point":
                                 JSONArray coordinates = geometry.getJSONArray("coordinates");
                                 // In GeoJSON, longitude comes before latitude.
                                 double lon = coordinates.getDouble(0);
                                 double lat = coordinates.getDouble(1);
-                                points.add(new MapPoint(lat, lon));
+                                MapPoint point = new MapPoint(lat, lon);
+                                instanceIdsByFeatureId.put(map.addMarker(point, false), id);
+                                points.add(point);
                         }
                     } catch (JSONException e) {
                         Timber.w("Invalid JSON in instances table: %s", json);
@@ -153,10 +163,6 @@ public class MapActivity extends BaseGeoMapActivity {
                 }
             }
 
-            map.clearFeatures();
-            for (MapPoint point : points) {
-                map.addMarker(point, false);
-            }
             TextView statusView = findViewById(R.id.geometry_status);
             statusView.setText(getString(
                 R.string.geometry_status, c.getCount(), points.size()
@@ -173,6 +179,14 @@ public class MapActivity extends BaseGeoMapActivity {
         if (!viewportInitialized) {
             map.zoomToPoint(point, true);
             viewportInitialized = true;
+        }
+    }
+
+    public void onFeatureClicked(int featureId) {
+        Long instanceId = instanceIdsByFeatureId.get(featureId);
+        if (instanceId != null) {
+            Uri uri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, instanceId);
+            startActivity(new Intent(Intent.ACTION_EDIT, uri));
         }
     }
 
