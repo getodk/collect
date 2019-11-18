@@ -22,13 +22,14 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 
 import java.util.ArrayList;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Allows the user to create desktop shortcuts to any form currently avaiable to Collect
@@ -71,12 +72,8 @@ public class AndroidShortcuts extends AppCompatActivity {
             if (c.getCount() > 0) {
                 c.moveToPosition(-1);
                 while (c.moveToNext()) {
-                    String formName = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
-                    names.add(formName);
-                    Uri uri =
-                            Uri.withAppendedPath(FormsColumns.CONTENT_URI,
-                                    c.getString(c.getColumnIndex(FormsColumns._ID)));
-                    commands.add(uri);
+                    names.add(c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME)));
+                    commands.add(FormsColumns.getItemUri(c));
                 }
             }
         } finally {

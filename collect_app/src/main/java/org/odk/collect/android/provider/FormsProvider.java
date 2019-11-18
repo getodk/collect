@@ -15,7 +15,6 @@
 package org.odk.collect.android.provider;
 
 import android.content.ContentProvider;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -24,8 +23,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
-
-import androidx.annotation.NonNull;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
@@ -38,6 +35,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
 import timber.log.Timber;
 
 import static org.odk.collect.android.database.helpers.FormsDatabaseHelper.FORMS_TABLE_NAME;
@@ -232,8 +230,7 @@ public class FormsProvider extends ContentProvider {
 
             long rowId = db.insert(FORMS_TABLE_NAME, null, values);
             if (rowId > 0) {
-                Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI,
-                        rowId);
+                Uri formUri = FormsColumns.getItemUri(rowId);
                 getContext().getContentResolver().notifyChange(formUri, null);
                 getContext().getContentResolver().notifyChange(FormsProviderAPI.FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
                 return formUri;

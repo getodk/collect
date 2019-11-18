@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.provider;
 
+import android.content.ContentUris;
+import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -51,5 +53,13 @@ public final class InstanceProviderAPI {
         public static final String CAN_EDIT_WHEN_COMPLETE = "canEditWhenComplete";
         public static final String LAST_STATUS_CHANGE_DATE = "date";
         public static final String DELETED_DATE = "deletedDate";
+
+        public static Uri getItemUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static Uri getItemUri(Cursor c) {
+            return getItemUri(c.getLong(c.getColumnIndex(_ID)));
+        }
     }
 }

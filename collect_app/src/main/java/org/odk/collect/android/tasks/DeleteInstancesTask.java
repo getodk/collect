@@ -53,15 +53,11 @@ public class DeleteInstancesTask extends AsyncTask<Long, Integer, Integer> {
                 break;
             }
             try {
-                Uri deleteForm =
-                        Uri.withAppendedPath(InstanceColumns.CONTENT_URI, param.toString());
-
+                Uri deleteForm = InstanceColumns.getItemUri(param);
                 int wasDeleted = contentResolver.delete(deleteForm, null, null);
                 deleted += wasDeleted;
-
                 successCount++;
                 publishProgress(successCount, toDeleteCount);
-
             } catch (Exception ex) {
                 Timber.e("Exception during delete of: %s exception: %s", param.toString(), ex.toString());
             }

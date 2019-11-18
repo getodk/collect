@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.provider;
 
+import android.content.ContentUris;
+import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -77,5 +79,13 @@ public final class FormsProviderAPI {
 
         // this is null on create, and can only be set on an update.
         public static final String LANGUAGE = "language";
+
+        public static Uri getItemUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static Uri getItemUri(Cursor c) {
+            return getItemUri(c.getLong(c.getColumnIndex(_ID)));
+        }
     }
 }

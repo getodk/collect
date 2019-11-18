@@ -116,9 +116,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                             if (md5Computed == null || md5 == null || !md5Computed.equals(md5)) {
                                 // Probably someone overwrite the file on the sdcard
                                 // So re-parse it and update it's information
-                                String id = cursor.getString(
-                                        cursor.getColumnIndex(FormsColumns._ID));
-                                Uri updateUri = Uri.withAppendedPath(FormsColumns.CONTENT_URI, id);
+                                Uri updateUri = FormsColumns.getItemUri(cursor);
                                 uriToUpdate.add(new UriFile(updateUri, sqlFile));
                             }
                         } else {

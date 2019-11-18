@@ -15,21 +15,17 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
-import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
-
 import android.widget.Toast;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 import org.odk.collect.android.application.Collect;
@@ -42,6 +38,9 @@ import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.PermissionUtils;
 
+import androidx.annotation.NonNull;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
@@ -126,10 +125,7 @@ public class InstanceChooserList extends InstanceListActivity implements
         if (Collect.allowClick(getClass().getName())) {
             if (view.isEnabled()) {
                 Cursor c = (Cursor) listView.getAdapter().getItem(position);
-                Uri instanceUri =
-                        ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,
-                                c.getLong(c.getColumnIndex(InstanceColumns._ID)));
-
+                Uri instanceUri = InstanceColumns.getItemUri(c);
                 String action = getIntent().getAction();
                 if (Intent.ACTION_PICK.equals(action)) {
                     // caller is waiting on a picked form

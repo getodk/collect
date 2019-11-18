@@ -24,10 +24,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
 
-import androidx.annotation.NonNull;
-import androidx.work.Worker;
-import androidx.work.WorkerParameters;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
@@ -51,6 +47,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
 import timber.log.Timber;
 
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
@@ -149,7 +148,7 @@ public class AutoSendWorker extends Worker {
                 // communicated to the user. Maybe successful delete should also be communicated?
                 if (InstanceUploader.formShouldBeAutoDeleted(instance.getJrFormId(),
                         (boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_DELETE_AFTER_SEND))) {
-                    Uri deleteForm = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, instance.getDatabaseId().toString());
+                    Uri deleteForm = InstanceColumns.getItemUri(instance.getDatabaseId());
                     Collect.getInstance().getContentResolver().delete(deleteForm, null, null);
                 }
 
