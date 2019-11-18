@@ -233,6 +233,13 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return featureId;
     }
 
+    @Override public void setMarkerIcon(int featureId, int drawableId) {
+        MapFeature feature = features.get(featureId);
+        if (feature instanceof MarkerFeature) {
+            ((MarkerFeature) feature).setIcon(drawableId);
+        }
+    }
+
     @Override public @Nullable MapPoint getMarkerPoint(int featureId) {
         MapFeature feature = features.get(featureId);
         return feature instanceof MarkerFeature ? ((MarkerFeature) feature).getPoint() : null;
@@ -612,7 +619,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
         private Marker marker;
 
         MarkerFeature(GoogleMap map, MapPoint point, boolean draggable) {
-            this.marker = createMarker(map, point, draggable);
+            marker = createMarker(map, point, draggable);
+        }
+
+        public void setIcon(int drawableId) {
+            marker.setIcon(getBitmapDescriptor(drawableId));
         }
 
         public MapPoint getPoint() {

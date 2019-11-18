@@ -148,7 +148,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         getMapAsync(map -> {
             this.map = map;  // signature of getMapAsync() ensures map is never null
 
-            map.setStyle(getDesiredStyleBuilder(), style -> {
+            map.setStyle(getStyleBuilder(), style -> {
                 map.getUiSettings().setCompassGravity(Gravity.TOP | Gravity.START);
                 map.getUiSettings().setCompassMargins(36, 36, 36, 36);
 
@@ -207,7 +207,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         String path = config.getString(KEY_REFERENCE_LAYER);
         referenceLayerFile = path != null ? new File(path) : null;
         if (map != null) {
-            map.setStyle(getDesiredStyleBuilder(), style -> {
+            map.setStyle(getStyleBuilder(), style -> {
                 loadReferenceOverlay();
             });
         }
@@ -278,6 +278,13 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         int featureId = nextFeatureId++;
         features.put(featureId, new MarkerFeature(featureId, symbolManager, point, draggable));
         return featureId;
+    }
+
+    @Override public void setMarkerIcon(int featureId, int drawableId) {
+        MapFeature feature = features.get(featureId);
+        if (feature instanceof MarkerFeature) {
+            ((MarkerFeature) feature).setIcon(drawableId);
+        }
     }
 
     @Override public @Nullable MapPoint getMarkerPoint(int featureId) {
@@ -443,7 +450,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private Symbol createSymbol(SymbolManager symbolManager, MapPoint point, boolean draggable) {
         return symbolManager.create(new SymbolOptions()
             .withLatLng(toLatLng(point))
-            .withIconImage(POINT_ICON_ID)
+            .withIconImage(addIconImage(R.drawable.ic_map_point))
             .withIconSize(1f)
             .withZIndex(10)
             .withDraggable(draggable)
@@ -483,11 +490,8 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             .build();
     }
 
-    private Style.Builder getDesiredStyleBuilder() {
-        Drawable pointIcon = ContextCompat.getDrawable(getContext(), R.drawable.ic_map_point);
-        return getBasemapStyleBuilder()
-            .withImage(POINT_ICON_ID, pointIcon)
-            .withTransition(new TransitionOptions(0, 0, false));
+    private Style.Builder getStyleBuilder() {
+        return getBasemapStyleBuilder().withTransition(new TransitionOptions(0, 0, false));
     }
 
     private Style.Builder getBasemapStyleBuilder() {
@@ -646,6 +650,18 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         overlaySources.add(source);
     }
 
+    /** Adds an image to the style unless it's already present, and returns its ID. */
+    private String addIconImage(int drawableId) {
+        String imageId = "icon-" + drawableId;
+        map.getStyle(style -> {
+            if (style.getImage(imageId) == null) {
+                Drawable icon = ContextCompat.getDrawable(getContext(), drawableId);
+                style.addImage(imageId, icon);
+            }
+        });
+        return imageId;
+    }
+
     private SymbolManager createSymbolManager() {
         SymbolManager symbolManager = new SymbolManager(getMapView(), map, map.getStyle());
         // Turning on allowOverlap and ignorePlacement causes the symbols to
@@ -731,6 +747,10 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             this.symbol = createSymbol(symbolManager, point, draggable);
             symbolManager.addClickListener(clickListener);
             symbolManager.addDragListener(dragListener);
+        }
+
+        public void setIcon(int drawableId) {
+            symbol.setIconImage(addIconImage(drawableId));
         }
 
         public MapPoint getPoint() {

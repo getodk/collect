@@ -260,6 +260,13 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         return featureId;
     }
 
+    @Override public void setMarkerIcon(int featureId, int drawableId) {
+        MapFeature feature = features.get(featureId);
+        if (feature instanceof MarkerFeature) {
+            ((MarkerFeature) feature).setIcon(drawableId);
+        }
+    }
+
     @Override public @Nullable MapPoint getMarkerPoint(int featureId) {
         MapFeature feature = features.get(featureId);
         return feature instanceof MarkerFeature ? ((MarkerFeature) feature).getPoint() : null;
@@ -585,6 +592,10 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         MarkerFeature(MapView map, MapPoint point, boolean draggable) {
             this.map = map;
             this.marker = createMarker(map, point, draggable ? this : null);
+        }
+
+        public void setIcon(int drawableId) {
+            marker.setIcon(ContextCompat.getDrawable(map.getContext(), drawableId));
         }
 
         public MapPoint getPoint() {
