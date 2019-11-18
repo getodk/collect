@@ -24,6 +24,9 @@
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="@dimen/margin_standard"
+            android:paddingLeft="@dimen/margin_standard"
+            android:paddingBottom="@dimen/margin_standard"
             android:scaleType="fitStart"
             android:visibility="gone" />
 
@@ -31,18 +34,21 @@
             android:id="@+id/missingImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="4dp"
+            android:paddingStart="@dimen/margin_standard"
+            android:paddingLeft="@dimen/margin_standard"
+            android:paddingBottom="@dimen/margin_standard"
             android:visibility="gone"
-            tools:text="media missing" />
+            tools:text="media missing"
+            tools:visibility="visible" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/media_buttons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
         android:gravity="end"
         android:orientation="vertical"
         android:padding="@dimen/margin_standard">

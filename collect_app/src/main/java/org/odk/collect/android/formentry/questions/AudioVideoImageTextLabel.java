@@ -247,6 +247,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
             if (errorMsg != null) {
                 // errorMsg is only set when an error has occurred
                 Timber.e(errorMsg);
+                imageView.setVisibility(View.GONE);
                 missingImage.setVisibility(VISIBLE);
                 missingImage.setText(errorMsg);
             }
