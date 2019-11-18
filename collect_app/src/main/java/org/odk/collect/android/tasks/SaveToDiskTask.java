@@ -36,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.listeners.FormSavedListener;
@@ -172,13 +173,14 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
         FormController formController = Collect.getInstance().getFormController();
         FormInstance formInstance = formController.getFormDef().getInstance();
-        extractGeometryValues(formInstance, values);
 
         // If FormEntryActivity was started with an Instance, just update that instance
         if (Collect.getInstance().getContentResolver().getType(uri).equals(
                 InstanceColumns.CONTENT_ITEM_TYPE)) {
-            int updated = Collect.getInstance().getContentResolver().update(uri, values, null,
-                    null);
+            extractGeometryValues(formInstance, getGeometryXpathForInstance(uri), values);
+
+            int updated = Collect.getInstance().getContentResolver().update(
+                uri, values, null, null);
             if (updated > 1) {
                 Timber.w("Updated more than one entry, that's not good: %s", uri.toString());
             } else if (updated == 1) {
@@ -230,6 +232,9 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                     String jrversion = c.getString(c.getColumnIndex(FormsColumns.JR_VERSION));
                     values.put(InstanceColumns.JR_FORM_ID, jrformid);
                     values.put(InstanceColumns.JR_VERSION, jrversion);
+
+                    String geometryXpath = c.getString(c.getColumnIndex(FormsColumns.GEOMETRY_XPATH));
+                    extractGeometryValues(formInstance, geometryXpath, values);
                 } finally {
                     if (c != null) {
                         c.close();
@@ -241,22 +246,15 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     }
 
     /** Extracts geometry information from the submitted instance, if present. */
-    protected void extractGeometryValues(FormInstance instance, ContentValues values) {
-        String geometryXpath;
-        try (Cursor c = Collect.getInstance().getContentResolver().query(
-            uri, new String[] {FormsColumns.GEOMETRY_XPATH}, null, null, null
-        )) {
-            if (c.moveToFirst()) {
-                geometryXpath = c.getString(0);
-            } else {
-                return;
-            }
+    protected void extractGeometryValues(FormInstance instance, String xpath, ContentValues values) {
+        if (xpath == null) {
+            Timber.w("Geometry XPath is missing for instance %s!", instance);
+            return;
         }
-
         try {
-            XPathExpression xpath = XPathParseTool.parseXPath(geometryXpath);
+            XPathExpression expr = XPathParseTool.parseXPath(xpath);
             EvaluationContext context = new EvaluationContext(instance);
-            Object result = xpath.eval(instance, context);
+            Object result = expr.eval(instance, context);
             if (result instanceof XPathNodeset) {
                 XPathNodeset nodes = (XPathNodeset) result;
                 // For now, only use the first node found.
@@ -269,14 +267,14 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                         values.put(InstanceColumns.GEOMETRY, json.toString());
                         values.put(InstanceColumns.GEOMETRY_TYPE, type);
                         Timber.i("Geometry for \"%s\" instance found at %s: %s",
-                            instance.getName(), geometryXpath, json);
+                            instance.getName(), xpath, json);
                     } catch (JSONException e) {
                         Timber.w("Could not convert GeoPointData %s to GeoJSON", value);
                     }
                 }
             }
         } catch (XPathException | XPathSyntaxException e) {
-            Timber.w(e, "Could not evaluate geometry XPath %s in instance", geometryXpath);
+            Timber.w(e, "Could not evaluate geometry XPath %s in instance", xpath);
         }
     }
 
@@ -425,6 +423,21 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 }
             }
         }
+    }
+
+    private String getGeometryXpathForInstance(Uri uri) {
+        try (Cursor instanceCursor = Collect.getInstance().getContentResolver().query(
+            uri, new String[] {InstanceColumns.JR_FORM_ID}, null, null, null)) {
+            if (instanceCursor.moveToFirst()) {
+                String jrFormId = instanceCursor.getString(0);
+                try (Cursor formCursor = new FormsDao().getFormsCursorForFormId(jrFormId)) {
+                    if (formCursor.moveToFirst()) {
+                        return formCursor.getString(formCursor.getColumnIndex(FormsColumns.GEOMETRY_XPATH));
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     static void manageFilesAfterSavingEncryptedForm(File instanceXml, File submissionXml) throws IOException {
