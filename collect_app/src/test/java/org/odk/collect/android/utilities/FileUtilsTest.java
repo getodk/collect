@@ -40,7 +40,7 @@ public class FileUtilsTest {
         assertEquals(expected, FileUtils.constructMediaPath("sample-file.docx"));
     }
 
-    @Test public void identifiesFormMetadata_formSimpleForm() throws IOException {
+    @Test public void getMetadataFromFormDefinition_withoutSubmission_returnsMetaDataFields() throws IOException {
         String simpleForm = "<?xml version=\"1.0\"?>\n" +
                 "<h:html xmlns=\"http://www.w3.org/2002/xforms\"\n" +
                 "        xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
@@ -73,7 +73,7 @@ public class FileUtilsTest {
         assertThat(metadataFromFormDefinition.get(FileUtils.BASE64_RSA_PUBLIC_KEY), is(nullValue()));
     }
 
-    @Test public void identifiesFormMetadata_forFormWithSubmission() throws IOException {
+    @Test public void getMetadataFromFormDefinition_withSubmission_returnsMetaDataFields() throws IOException {
         String submissionForm = "<?xml version=\"1.0\"?>\n" +
                 "<h:html xmlns=\"http://www.w3.org/2002/xforms\"\n" +
                 "        xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
