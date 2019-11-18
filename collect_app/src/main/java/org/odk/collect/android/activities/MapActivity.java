@@ -34,6 +34,7 @@ import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import java.util.ArrayList;
@@ -135,15 +136,17 @@ public class MapActivity extends BaseGeoMapActivity {
 
         try (Cursor c = Collect.getInstance().getContentResolver().query(
             InstanceColumns.CONTENT_URI,
-            new String[] {InstanceColumns._ID, InstanceColumns.GEOMETRY_TYPE, InstanceColumns.GEOMETRY},
+            new String[] {InstanceColumns._ID, InstanceColumns.STATUS,
+                InstanceColumns.GEOMETRY_TYPE, InstanceColumns.GEOMETRY},
             InstanceColumns.JR_FORM_ID + " = ?",
             new String[] {jrFormId},
             null)) {
 
             while (c.moveToNext()) {
                 long id = c.getLong(0);
-                String type = c.getString(1);
-                String json = c.getString(2);
+                String status = c.getString(1);
+                String type = c.getString(2);
+                String json = c.getString(3);
                 if (json != null) {
                     try {
                         JSONObject geometry = new JSONObject(json);
@@ -154,7 +157,10 @@ public class MapActivity extends BaseGeoMapActivity {
                                 double lon = coordinates.getDouble(0);
                                 double lat = coordinates.getDouble(1);
                                 MapPoint point = new MapPoint(lat, lon);
-                                instanceIdsByFeatureId.put(map.addMarker(point, false), id);
+                                int featureId = map.addMarker(point, false);
+                                int drawableId = getDrawableIdForStatus(status);
+                                map.setMarkerIcon(featureId, drawableId);
+                                instanceIdsByFeatureId.put(featureId, id);
                                 points.add(point);
                         }
                     } catch (JSONException e) {
@@ -196,5 +202,19 @@ public class MapActivity extends BaseGeoMapActivity {
         if (mapCenter != null) {
             map.zoomToPoint(mapCenter, mapZoom, false);
         }
+    }
+
+    private int getDrawableIdForStatus(String status) {
+        switch (status) {
+            case InstanceProviderAPI.STATUS_INCOMPLETE:
+                return R.drawable.ic_instance_marker_saved;
+            case InstanceProviderAPI.STATUS_COMPLETE:
+                return R.drawable.ic_instance_marker_finalized;
+            case InstanceProviderAPI.STATUS_SUBMITTED:
+                return R.drawable.ic_instance_marker_submitted;
+            case InstanceProviderAPI.STATUS_SUBMISSION_FAILED:
+                return R.drawable.ic_instance_marker_submission_failed;
+        }
+        return R.drawable.ic_map_point;
     }
 }

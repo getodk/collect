@@ -75,7 +75,6 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     MapboxMap.OnMapClickListener, MapboxMap.OnMapLongClickListener,
     LocationEngineCallback<LocationEngineResult> {
 
-    private static final String POINT_ICON_ID = "point-icon-id";
     private static final long LOCATION_INTERVAL_MILLIS = 1000;
     private static final long LOCATION_MAX_WAIT_MILLIS = 5000;
     private static final LocationEngineRequest LOCATION_REQUEST =
