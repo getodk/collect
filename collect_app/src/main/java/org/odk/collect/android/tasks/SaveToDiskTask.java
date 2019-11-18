@@ -279,7 +279,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     }
 
     protected JSONObject toGeoJson(GeoPointData data) throws JSONException {
-        // The four (nameless, undocumented) fields of a GeoPointData record are
+        // For a GeoPointData object, the four fields exposed by getPart() are
         // latitude, longitude, altitude, and accuracy radius, in that order.
         double lat = data.getPart(0);
         double lon = data.getPart(1);
