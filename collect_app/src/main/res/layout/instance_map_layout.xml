@@ -55,12 +55,21 @@
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/zoom"
+                android:id="@+id/zoom_to_location"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/ic_my_location"
+                android:padding="15dp" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/zoom_to_bounds"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_crop_frame"
                 android:padding="15dp" />
 
             <androidx.appcompat.widget.AppCompatImageButton

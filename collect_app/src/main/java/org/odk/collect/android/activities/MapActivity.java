@@ -54,6 +54,7 @@ public class MapActivity extends BaseGeoMapActivity {
     private String jrFormId;
     private String formTitle;
     private final Map<Integer, Long> instanceIdsByFeatureId = new HashMap<>();
+    private final List<MapPoint> points = new ArrayList<>();
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,8 +105,11 @@ public class MapActivity extends BaseGeoMapActivity {
     public void initMap(MapFragment newMapFragment) {
         map = newMapFragment;
 
-        findViewById(R.id.zoom).setOnClickListener(v ->
+        findViewById(R.id.zoom_to_location).setOnClickListener(v ->
             map.zoomToPoint(map.getGpsLocation(), true));
+
+        findViewById(R.id.zoom_to_bounds).setOnClickListener(v ->
+            map.zoomToBoundingBox(points, 0.8, true));
 
         findViewById(R.id.layer_menu).setOnClickListener(v -> {
             MapsPreferences.showReferenceLayerDialog(this);
@@ -131,7 +135,7 @@ public class MapActivity extends BaseGeoMapActivity {
             return;
         }
 
-        List<MapPoint> points = new ArrayList<>();
+        points.clear();
         map.clearFeatures();
 
         try (Cursor c = Collect.getInstance().getContentResolver().query(
