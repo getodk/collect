@@ -16,12 +16,16 @@
 
 package org.odk.collect.android.database.helpers;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.DatabaseContext;
+import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 import org.odk.collect.android.utilities.SQLiteUtils;
@@ -107,7 +111,8 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         try {
             Timber.i("Downgrading database from version %d to %d", oldVersion, newVersion);
-            moveInstancesTableToVersion5(db);
+
+            downgradeToVersion5(db);
 
             Timber.i("Downgrading database from version %d to %d completed with success.", oldVersion, newVersion);
             isDatabaseBeingMigrated = false;
@@ -153,6 +158,27 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
                     .table(INSTANCES_TABLE_NAME)
                     .addColumn(DELETED_DATE, "date")
                     .end();
+        }
+    }
+
+    private void downgradeToVersion5(SQLiteDatabase db) {
+        Cursor cursor = db.query(INSTANCES_TABLE_NAME, null, null, null, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            List<Instance> instances = new InstancesDao().getInstancesFromCursor(cursor);
+            for (Instance instance : instances) {
+                if (instance.getInstanceFilePath().startsWith("../")) {
+                    String where = INSTANCE_FILE_PATH + "=?";
+                    String[] whereArgs = {instance.getInstanceFilePath()};
+
+                    ContentValues values = new ContentValues();
+                    values.put(INSTANCE_FILE_PATH, Collect.ODK_ROOT + instance.getInstanceFilePath().substring(2));
+
+                    db.update(INSTANCES_TABLE_NAME, values, where, whereArgs);
+                }
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
         }
     }
 
