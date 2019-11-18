@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.espressoutils.pages.IdentifyUserPromptPage;
 import org.odk.collect.android.espressoutils.pages.MainMenuPage;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -61,6 +62,14 @@ public class IdentifyUserTest {
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .closeSoftKeyboard()
                 .pressBack(new MainMenuPage(rule));
+    }
+
+    @Test
+    public void openingForm_andRotating_remainsOnIdentityPrompt() {
+        new MainMenuPage(rule)
+                .clickFillBlankForm()
+                .clickOnFormWithIdentityPrompt("Identify User")
+                .rotateToLandscape(new IdentifyUserPromptPage("Identify User", rule));
     }
 
     @Test

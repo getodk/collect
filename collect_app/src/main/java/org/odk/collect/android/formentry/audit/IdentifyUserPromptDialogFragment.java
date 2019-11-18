@@ -2,8 +2,8 @@ package org.odk.collect.android.formentry.audit;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +64,11 @@ public class IdentifyUserPromptDialogFragment extends DialogFragment {
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle(getArguments().getString(ARG_FORM_NAME));
-        toolbar.setNavigationOnClickListener(v -> dismiss());
+        toolbar.setNavigationOnClickListener(v -> {
+            dismiss();
+            viewModel.promptClosing();
+        });
+
         toolbar.inflateMenu(R.menu.menu_ak);
 
         identityField = view.findViewById(R.id.identity);
@@ -83,11 +87,17 @@ public class IdentifyUserPromptDialogFragment extends DialogFragment {
             int width = ViewGroup.LayoutParams.MATCH_PARENT;
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
             dialog.getWindow().setLayout(width, height);
-        }
-    }
 
-    @Override
-    public void onDismiss(@NonNull DialogInterface dialog) {
-        viewModel.promptClosing();
+            setCancelable(false);
+            dialog.setOnKeyListener((dialogInterface, keyCode, event) -> {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    dialogInterface.dismiss();
+                    viewModel.promptClosing();
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        }
     }
 }

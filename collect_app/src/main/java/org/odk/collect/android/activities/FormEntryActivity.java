@@ -416,7 +416,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
         identityPromptViewModel.isFormEntryCancelled().observe(this, isFormEntryCancelled -> {
             if (isFormEntryCancelled) {
-                onBackPressed();
+                finish();
             }
         });
     }

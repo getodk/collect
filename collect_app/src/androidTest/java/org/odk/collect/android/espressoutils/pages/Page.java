@@ -1,10 +1,19 @@
 package org.odk.collect.android.espressoutils.pages;
 
+import android.app.Activity;
+import android.content.pm.ActivityInfo;
+import android.view.ContextThemeWrapper;
+import android.view.View;
+
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
 
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
+
+import org.hamcrest.Matcher;
 
 import timber.log.Timber;
 
@@ -18,6 +27,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -176,4 +186,42 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
+    public  <D extends Page<D>> D rotateToLandscape(D destination) {
+        onView(isRoot()).perform(rotateToLandscape());
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return destination.assertOnPage();
+    }
+
+    private static ViewAction rotateToLandscape() {
+        return new RotateAction();
+    }
+
+    private static class RotateAction implements ViewAction {
+
+        @Override
+        public Matcher<View> getConstraints() {
+            return isRoot();
+        }
+
+        @Override
+        public String getDescription() {
+            return "";
+        }
+
+        @Override
+        public void perform(UiController uiController, View view) {
+            uiController.loopMainThreadUntilIdle();
+
+            ContextThemeWrapper context = (ContextThemeWrapper) view.getContext();
+            Activity activity = (Activity) context.getBaseContext();
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+    }
 }
+
+
