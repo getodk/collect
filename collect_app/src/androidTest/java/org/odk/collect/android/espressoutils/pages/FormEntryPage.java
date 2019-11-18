@@ -124,9 +124,9 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage clickIgnoreChanges() {
+    public MainMenuPage clickIgnoreChanges() {
         onView(withText(getInstrumentation().getTargetContext().getString(R.string.do_not_save))).perform(click());
-        return this;
+        return new MainMenuPage(rule).assertOnPage();
     }
 
     public FormEntryPage simplePressBack() {
