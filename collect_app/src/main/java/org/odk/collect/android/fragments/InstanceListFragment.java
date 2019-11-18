@@ -13,7 +13,7 @@ limitations under the License.
 
 package org.odk.collect.android.fragments;
 
-import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
@@ -24,25 +24,25 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 
 public abstract class InstanceListFragment extends FileManagerFragment {
     protected String getSortingOrder() {
-        String sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC, " + InstanceProviderAPI.InstanceColumns.STATUS + " DESC";
+        String sortOrder = InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC, " + InstanceColumns.STATUS + " DESC";
         switch (getSelectedSortingOrder()) {
             case BY_NAME_ASC:
-                sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC, " + InstanceProviderAPI.InstanceColumns.STATUS + " DESC";
+                sortOrder = InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC, " + InstanceColumns.STATUS + " DESC";
                 break;
             case BY_NAME_DESC:
-                sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE DESC, " + InstanceProviderAPI.InstanceColumns.STATUS + " DESC";
+                sortOrder = InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE DESC, " + InstanceColumns.STATUS + " DESC";
                 break;
             case BY_DATE_ASC:
-                sortOrder = InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE + " ASC";
+                sortOrder = InstanceColumns.LAST_STATUS_CHANGE_DATE + " ASC";
                 break;
             case BY_DATE_DESC:
-                sortOrder = InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE + " DESC";
+                sortOrder = InstanceColumns.LAST_STATUS_CHANGE_DATE + " DESC";
                 break;
             case BY_STATUS_ASC:
-                sortOrder = InstanceProviderAPI.InstanceColumns.STATUS + " ASC, " + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
+                sortOrder = InstanceColumns.STATUS + " ASC, " + InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
                 break;
             case BY_STATUS_DESC:
-                sortOrder = InstanceProviderAPI.InstanceColumns.STATUS + " DESC, " + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
+                sortOrder = InstanceColumns.STATUS + " DESC, " + InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
                 break;
         }
         return sortOrder;

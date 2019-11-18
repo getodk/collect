@@ -21,9 +21,10 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import timber.log.Timber;
 
@@ -64,7 +65,7 @@ public final class InstancesDaoHelper {
             try (Cursor c = new InstancesDao().getInstancesCursorForFilePath(path)) {
                 if (c != null && c.getCount() > 0) {
                     c.moveToFirst();
-                    int columnIndex = c.getColumnIndex(InstanceProviderAPI.InstanceColumns.STATUS);
+                    int columnIndex = c.getColumnIndex(InstanceColumns.STATUS);
                     String status = c.getString(columnIndex);
                     if (InstanceProviderAPI.STATUS_COMPLETE.equals(status)) {
                         complete = true;
@@ -85,8 +86,8 @@ public final class InstancesDaoHelper {
                 if (c != null && c.getCount() > 0) {
                     // should only be one...
                     c.moveToFirst();
-                    String id = c.getString(c.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
-                    return Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, id);
+                    String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
+                    return Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
                 }
             }
         }

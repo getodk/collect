@@ -6,7 +6,7 @@ import androidx.test.espresso.matcher.CursorMatchers;
 import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -61,21 +61,21 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     }
 
     public FillBlankFormPage checkMapIconDisplayedForForm(String formName) {
-        onData(allOf(is(instanceOf(Cursor.class)), CursorMatchers.withRowString(FormsProviderAPI.FormsColumns.DISPLAY_NAME, is(formName))))
+        onData(allOf(is(instanceOf(Cursor.class)), CursorMatchers.withRowString(FormsColumns.DISPLAY_NAME, is(formName))))
                 .onChildView(withId(R.id.map_button))
                 .check(matches(isDisplayed()));
         return this;
     }
 
     public FillBlankFormPage checkMapIconNotDisplayedForForm(String formName) {
-        onData(allOf(is(instanceOf(Cursor.class)), CursorMatchers.withRowString(FormsProviderAPI.FormsColumns.DISPLAY_NAME, is(formName))))
+        onData(allOf(is(instanceOf(Cursor.class)), CursorMatchers.withRowString(FormsColumns.DISPLAY_NAME, is(formName))))
                 .onChildView(withId(R.id.map_button))
                 .check(matches(not(isDisplayed())));
         return this;
     }
 
     public FormMapPage clickOnMapIconForForm(String formName) {
-        onData(allOf(is(instanceOf(Cursor.class)), CursorMatchers.withRowString(FormsProviderAPI.FormsColumns.DISPLAY_NAME, is(formName))))
+        onData(allOf(is(instanceOf(Cursor.class)), CursorMatchers.withRowString(FormsColumns.DISPLAY_NAME, is(formName))))
                 .onChildView(withId(R.id.map_button))
                 .perform(click());
         return new FormMapPage(rule).assertOnPage();

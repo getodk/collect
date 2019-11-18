@@ -23,6 +23,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+
 import org.odk.collect.android.utilities.SQLiteUtils;
 
 import java.io.File;
@@ -154,7 +155,6 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
      * column which was redundant with the {@link InstanceProviderAPI.InstanceColumns#STATUS} and
      * {@link InstanceProviderAPI.InstanceColumns#LAST_STATUS_CHANGE_DATE} columns and included
      * unlocalized text. Version 5 removes this column.
-
      */
     private void upgradeToVersion5(SQLiteDatabase db) {
         String temporaryTableName = INSTANCES_TABLE_NAME + "_tmp";

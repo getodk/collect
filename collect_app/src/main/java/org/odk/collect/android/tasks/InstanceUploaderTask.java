@@ -27,6 +27,7 @@ import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.utilities.ApplicationConstants;
 
@@ -69,7 +70,7 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
 
                         StringBuilder selection = new StringBuilder();
 
-                        selection.append(InstanceProviderAPI.InstanceColumns._ID + " IN (");
+                        selection.append(InstanceColumns._ID + " IN (");
                         int i = 0;
 
                         while (it.hasNext() && i < selectionArgs.length - 1) {
@@ -102,9 +103,9 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
 
                                 String formId;
                                 while (results.moveToNext()) {
-                                    formId = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
+                                    formId = results.getString(results.getColumnIndex(InstanceColumns.JR_FORM_ID));
                                     if (InstanceServerUploader.formShouldBeAutoDeleted(formId, isFormAutoDeleteOptionEnabled)) {
-                                        toDelete.add(results.getLong(results.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID)));
+                                        toDelete.add(results.getLong(results.getColumnIndex(InstanceColumns._ID)));
                                     }
                                 }
 
