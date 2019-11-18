@@ -5,6 +5,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import org.junit.runners.Parameterized;
 
 public abstract class SqlLiteHelperTest {
+    enum Action { UPGRADE, DOWNGRADE }
+
+    @Parameterized.Parameter
+    public Action action;
+
     @Parameterized.Parameter
     public String description;
 

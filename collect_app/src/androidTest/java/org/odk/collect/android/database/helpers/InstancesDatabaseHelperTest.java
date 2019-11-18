@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.utilities.FileUtils;
@@ -18,19 +19,22 @@ import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.odk.collect.android.database.helpers.InstancesDatabaseHelper.DATABASE_PATH;
 import static org.odk.collect.android.database.helpers.InstancesDatabaseHelper.INSTANCES_TABLE_NAME;
+import static org.odk.collect.android.database.helpers.SqlLiteHelperTest.Action.DOWNGRADE;
+import static org.odk.collect.android.database.helpers.SqlLiteHelperTest.Action.UPGRADE;
 import static org.odk.collect.android.test.FileUtils.copyFileFromAssets;
 
 @RunWith(Parameterized.class)
 public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
-    @Parameterized.Parameter
+    @Parameterized.Parameter(1)
     public String description;
 
-    @Parameterized.Parameter(1)
+    @Parameterized.Parameter(2)
     public String dbFilename;
 
     @Before
@@ -43,14 +47,13 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
         FileUtils.copyFile(new File(DATABASE_PATH + TEMPORARY_EXTENSION), new File(DATABASE_PATH));
     }
 
-    @Parameterized.Parameters(name = "{0}")
+    @Parameterized.Parameters(name = "{1}")
     public static Iterable<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                {"Downgrading from version with extra column drops that column", "instances_v7000_added_fakeColumn.db"},
-                {"Downgrading from version with missing column adds that column", "instances_v7000_removed_jrVersion.db"},
+                {DOWNGRADE, "Downgrading from 5+ to version 5 should updated database paths", "instances_v6.db"},
 
-                {"Upgrading from version with extra column drops that column", "instances_v3.db"},
-                {"Upgrading from version with missing column adds that column", "instances_v4_removed_jrVersion.db"}
+                {UPGRADE, "Upgrading from version with extra column drops that column", "instances_v3.db"},
+                {UPGRADE, "Upgrading from version with missing column adds that column", "instances_v4_removed_jrVersion.db"}
         });
     }
 
@@ -65,7 +68,20 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
 
         List<String> newColumnNames = SQLiteUtils.getColumnNames(db, INSTANCES_TABLE_NAME);
         assertThat(newColumnNames, contains(InstancesDatabaseHelper.CURRENT_VERSION_COLUMN_NAMES));
-        assertThatInstancesAreKeptAfterMigrating();
+
+        if (action.equals(UPGRADE)) {
+            assertThatInstancesAreKeptAfterMigrating();
+        } else {
+            assertThatInstanceFilePathsAreUpdated(db);
+        }
+    }
+
+    private void assertThatInstanceFilePathsAreUpdated(SQLiteDatabase db) {
+        List<Instance> instances = new InstancesDao().getInstancesFromCursor(db.query(INSTANCES_TABLE_NAME, null, null, null, null, null, null));
+        assertEquals(instances.size(), 4);
+        for (Instance instance : instances) {
+            assertTrue(instance.getInstanceFilePath().startsWith(Collect.INSTANCES_PATH));
+        }
     }
 
     private void assertThatInstancesAreKeptAfterMigrating() {
