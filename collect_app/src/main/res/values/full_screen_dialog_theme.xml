@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Theme.Collect.Dialog.FullScreen" parent="">
+        <item name="android:background">?attr/colorSurface</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowBackground">?attr/colorSurface</item>
     </style>
