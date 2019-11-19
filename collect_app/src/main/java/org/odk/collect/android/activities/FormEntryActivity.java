@@ -2446,6 +2446,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                     if (!showFirst) {
                         if (!allowMovingBackwards) {
+                            // How does this happen?
                             FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile();
                             if (formIndex != null) {
                                 formController.jumpToIndex(formIndex);
