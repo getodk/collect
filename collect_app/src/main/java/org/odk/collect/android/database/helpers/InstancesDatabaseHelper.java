@@ -28,6 +28,7 @@ import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.SQLiteUtils;
 
 import java.io.File;
@@ -166,12 +167,13 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
         if (cursor != null && cursor.moveToFirst()) {
             List<Instance> instances = new InstancesDao().getInstancesFromCursor(cursor);
             for (Instance instance : instances) {
-                if (instance.getInstanceFilePath().startsWith("../")) {
-                    String where = INSTANCE_FILE_PATH + "=?";
-                    String[] whereArgs = {instance.getInstanceFilePath()};
+                File instanceFile = new File(instance.getInstanceFilePath());
+                if (!instanceFile.isAbsolute()) {
+                    String where = _ID + "=?";
+                    String[] whereArgs = {String.valueOf(instance.getDatabaseId())};
 
                     ContentValues values = new ContentValues();
-                    values.put(INSTANCE_FILE_PATH, Collect.ODK_ROOT + instance.getInstanceFilePath().substring(2));
+                    values.put(INSTANCE_FILE_PATH, Collect.ODK_ROOT + FileUtils.getCanonicalPath(instanceFile));
 
                     db.update(INSTANCES_TABLE_NAME, values, where, whereArgs);
                 }

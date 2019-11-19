@@ -100,6 +100,16 @@ public class FileUtils {
         return fileNameMap.getContentTypeFor(fileUrl);
     }
 
+    public static String getCanonicalPath(File file) {
+        String canonicalPath = file.getPath();
+        try {
+            canonicalPath = file.getCanonicalPath();
+        } catch (IOException e) {
+            Timber.i(e);
+        }
+        return canonicalPath;
+    }
+
     public static boolean createFolder(String path) {
         File dir = new File(path);
         return dir.exists() || dir.mkdirs();

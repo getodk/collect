@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.ItemsetDao;
 import org.odk.collect.android.dto.Itemset;
+import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
 import java.math.BigInteger;
@@ -87,12 +88,13 @@ public class ItemsetDbAdapter {
             if (cursor != null && cursor.moveToFirst()) {
                 List<Itemset> itemsets = new ItemsetDao().getItemsetsFromCursor(cursor);
                 for (Itemset itemset : itemsets) {
-                    if (itemset.getPath().startsWith("../")) {
+                    File itemsetFile = new File(itemset.getPath());
+                    if (!itemsetFile.isAbsolute()) {
                         String where = _ID + "=?";
                         String[] whereArgs = {String.valueOf(itemset.getId())};
 
                         ContentValues values = new ContentValues();
-                        values.put(KEY_PATH, Collect.ODK_ROOT + itemset.getPath().substring(2));
+                        values.put(KEY_PATH, Collect.ODK_ROOT + FileUtils.getCanonicalPath(itemsetFile));
 
                         db.update(ITEMSET_TABLE, values, where, whereArgs);
                     }
