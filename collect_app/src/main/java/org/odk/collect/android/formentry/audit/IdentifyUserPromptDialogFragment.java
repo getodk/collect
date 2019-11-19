@@ -7,6 +7,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -58,6 +59,8 @@ public class IdentifyUserPromptDialogFragment extends DialogFragment {
             viewModel.setIdentity(identityField.getText().toString());
             return true;
         });
+
+        identityField.requestFocus();
     }
 
     @Override
@@ -87,6 +90,9 @@ public class IdentifyUserPromptDialogFragment extends DialogFragment {
             int width = ViewGroup.LayoutParams.MATCH_PARENT;
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
             dialog.getWindow().setLayout(width, height);
+
+            // Make sure soft keyboard shows for focused field - annoyingly needed
+            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
             setCancelable(false);
             dialog.setOnKeyListener((dialogInterface, keyCode, event) -> {
