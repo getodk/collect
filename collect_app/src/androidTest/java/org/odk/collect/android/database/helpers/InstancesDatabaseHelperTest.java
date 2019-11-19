@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.odk.collect.android.application.Collect;
@@ -29,68 +30,92 @@ import static org.odk.collect.android.database.helpers.SqlLiteHelperTest.Action.
 import static org.odk.collect.android.database.helpers.SqlLiteHelperTest.Action.UPGRADE;
 import static org.odk.collect.android.test.FileUtils.copyFileFromAssets;
 
-@RunWith(Parameterized.class)
-public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
-    @Parameterized.Parameter(1)
-    public String description;
+@RunWith(Enclosed.class)
+public class InstancesDatabaseHelperTest {
 
-    @Parameterized.Parameter(2)
-    public String dbFilename;
+    @RunWith(Parameterized.class)
+    public static class ParameterizedPart extends SqlLiteHelperTest {
+        @Parameterized.Parameter(1)
+        public String description;
 
-    @Before
-    public void saveRealDb() {
-        FileUtils.copyFile(new File(DATABASE_PATH), new File(DATABASE_PATH + TEMPORARY_EXTENSION));
-    }
+        @Parameterized.Parameter(2)
+        public String dbFilename;
 
-    @After
-    public void restoreRealDb() {
-        FileUtils.copyFile(new File(DATABASE_PATH + TEMPORARY_EXTENSION), new File(DATABASE_PATH));
-    }
+        @Parameterized.Parameters(name = "{1}")
+        public static Iterable<Object[]> data() {
+            return Arrays.asList(new Object[][] {
+                    {DOWNGRADE, "Downgrading from version with extra column drops that column", "instances_v7000_added_fakeColumn.db"},
+                    {DOWNGRADE, "Downgrading from version with missing column adds that column", "instances_v7000_removed_jrVersion.db"},
 
-    @Parameterized.Parameters(name = "{1}")
-    public static Iterable<Object[]> data() {
-        return Arrays.asList(new Object[][] {
-                {DOWNGRADE, "Downgrading from 5+ to version 5 should updated database paths", "instances_v6.db"},
+                    {UPGRADE, "Upgrading from version with extra column drops that column", "instances_v3.db"},
+                    {UPGRADE, "Upgrading from version with missing column adds that column", "instances_v4_removed_jrVersion.db"}
+            });
+        }
 
-                {UPGRADE, "Upgrading from version with extra column drops that column", "instances_v3.db"},
-                {UPGRADE, "Upgrading from version with missing column adds that column", "instances_v4_removed_jrVersion.db"}
-        });
-    }
+        @Before
+        public void saveRealDb() {
+            FileUtils.copyFile(new File(DATABASE_PATH), new File(DATABASE_PATH + TEMPORARY_EXTENSION));
+        }
 
-    @Test
-    public void testMigration() throws IOException {
-        copyFileFromAssets("database" + File.separator + dbFilename, DATABASE_PATH);
-        InstancesDatabaseHelper databaseHelper = new InstancesDatabaseHelper();
-        ensureMigrationAppliesFully(databaseHelper);
+        @After
+        public void restoreRealDb() {
+            FileUtils.copyFile(new File(DATABASE_PATH + TEMPORARY_EXTENSION), new File(DATABASE_PATH));
+        }
 
-        SQLiteDatabase db = databaseHelper.getReadableDatabase();
-        assertThat(db.getVersion(), is(InstancesDatabaseHelper.DATABASE_VERSION));
+        @Test
+        public void testMigration() throws IOException {
+            copyFileFromAssets("database" + File.separator + dbFilename, DATABASE_PATH);
+            InstancesDatabaseHelper databaseHelper = new InstancesDatabaseHelper();
+            ensureMigrationAppliesFully(databaseHelper);
 
-        List<String> newColumnNames = SQLiteUtils.getColumnNames(db, INSTANCES_TABLE_NAME);
-        assertThat(newColumnNames, contains(InstancesDatabaseHelper.CURRENT_VERSION_COLUMN_NAMES));
+            SQLiteDatabase db = databaseHelper.getReadableDatabase();
+            assertThat(db.getVersion(), is(InstancesDatabaseHelper.DATABASE_VERSION));
 
-        if (action.equals(UPGRADE)) {
+            List<String> newColumnNames = SQLiteUtils.getColumnNames(db, INSTANCES_TABLE_NAME);
+            assertThat(newColumnNames, contains(InstancesDatabaseHelper.CURRENT_VERSION_COLUMN_NAMES));
+
             assertThatInstancesAreKeptAfterMigrating();
-        } else {
-            assertThatInstanceFilePathsAreUpdated(db);
+        }
+
+        private static void assertThatInstancesAreKeptAfterMigrating() {
+            InstancesDao instancesDao = new InstancesDao();
+            List<Instance> instances = instancesDao.getInstancesFromCursor(instancesDao.getInstancesCursor(null, null));
+            assertEquals(2, instances.size());
+            assertEquals("complete", instances.get(0).getStatus());
+            assertEquals(Long.valueOf(1564413556249L), instances.get(0).getLastStatusChangeDate());
+            assertEquals("incomplete", instances.get(1).getStatus());
+            assertEquals(Long.valueOf(1564413579406L), instances.get(1).getLastStatusChangeDate());
         }
     }
 
-    private void assertThatInstanceFilePathsAreUpdated(SQLiteDatabase db) {
-        List<Instance> instances = new InstancesDao().getInstancesFromCursor(db.query(INSTANCES_TABLE_NAME, null, null, null, null, null, null));
-        assertEquals(instances.size(), 4);
-        for (Instance instance : instances) {
-            assertTrue(instance.getInstanceFilePath().startsWith(Collect.INSTANCES_PATH));
+    public static class NotParameterizedPart extends SqlLiteHelperTest {
+        @Before
+        public void saveRealDb() {
+            FileUtils.copyFile(new File(DATABASE_PATH), new File(DATABASE_PATH + TEMPORARY_EXTENSION));
         }
-    }
 
-    private void assertThatInstancesAreKeptAfterMigrating() {
-        InstancesDao instancesDao = new InstancesDao();
-        List<Instance> instances = instancesDao.getInstancesFromCursor(instancesDao.getInstancesCursor(null, null));
-        assertEquals(2, instances.size());
-        assertEquals("complete", instances.get(0).getStatus());
-        assertEquals(Long.valueOf(1564413556249L), instances.get(0).getLastStatusChangeDate());
-        assertEquals("incomplete", instances.get(1).getStatus());
-        assertEquals(Long.valueOf(1564413579406L), instances.get(1).getLastStatusChangeDate());
+        @After
+        public void restoreRealDb() {
+            FileUtils.copyFile(new File(DATABASE_PATH + TEMPORARY_EXTENSION), new File(DATABASE_PATH));
+        }
+
+        @Test
+        public void testDowngradeToVersion5() throws IOException {
+            copyFileFromAssets("database" + File.separator + "instances_v6.db", DATABASE_PATH);
+            InstancesDatabaseHelper databaseHelper = new InstancesDatabaseHelper();
+            ensureMigrationAppliesFully(databaseHelper);
+
+            SQLiteDatabase db = databaseHelper.getReadableDatabase();
+            assertThat(db.getVersion(), is(InstancesDatabaseHelper.DATABASE_VERSION));
+
+            List<String> newColumnNames = SQLiteUtils.getColumnNames(db, INSTANCES_TABLE_NAME);
+            assertThat(newColumnNames, contains(InstancesDatabaseHelper.CURRENT_VERSION_COLUMN_NAMES));
+
+            List<Instance> instances = new InstancesDao().getInstancesFromCursor(db.query(INSTANCES_TABLE_NAME, null, null, null, null, null, null));
+            assertEquals(instances.size(), 4);
+            for (Instance instance : instances) {
+                assertTrue(instance.getInstanceFilePath().startsWith(Collect.INSTANCES_PATH));
+            }
+        }
     }
 }

@@ -10,12 +10,6 @@ public abstract class SqlLiteHelperTest {
     @Parameterized.Parameter
     public Action action;
 
-    @Parameterized.Parameter
-    public String description;
-
-    @Parameterized.Parameter(1)
-    public String dbFilename;
-
     static final String TEMPORARY_EXTENSION = ".real";
 
     /**
@@ -25,7 +19,7 @@ public abstract class SqlLiteHelperTest {
      * this is possible since calls to onDowngrade and onUpgrade are wrapped in transactions. See
      * discussion at https://github.com/opendatakit/collect/pull/3250#issuecomment-516439704
      */
-    void ensureMigrationAppliesFully(SQLiteOpenHelper databaseHelper) {
+    static void ensureMigrationAppliesFully(SQLiteOpenHelper databaseHelper) {
         databaseHelper.getReadableDatabase().close();
     }
 }

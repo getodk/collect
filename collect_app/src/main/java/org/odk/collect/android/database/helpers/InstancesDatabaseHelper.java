@@ -113,6 +113,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
         try {
             Timber.i("Downgrading database from version %d to %d", oldVersion, newVersion);
 
+            moveInstancesTableToVersion5(db);
             downgradeToVersion5(db);
 
             Timber.i("Downgrading database from version %d to %d completed with success.", oldVersion, newVersion);
