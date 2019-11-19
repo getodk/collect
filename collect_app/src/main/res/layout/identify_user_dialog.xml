@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -9,19 +10,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
             app:navigationContentDescription="@string/close"
-            app:navigationIcon="@drawable/ic_close_black_24dp" />
+            app:navigationIcon="@drawable/ic_close_black_24dp"
+            tools:title="Form Name" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="?attr/colorPrimary"
         android:fillViewport="true">
 
         <LinearLayout
@@ -41,6 +43,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:tint="?colorOnPrimary"
                     app:srcCompat="@drawable/ic_person_black_24dp" />
 
                 <TextView
@@ -48,14 +51,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="@string/enter_identity" />
+                    android:text="@string/enter_identity"
+                    android:textColor="?attr/colorOnPrimary" />
 
                 <TextView
                     style="@style/TextAppearance.Collect.Body2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:text="@string/enter_identity_description" />
+                    android:text="@string/enter_identity_description"
+                    android:textColor="?attr/colorOnPrimary" />
 
             </LinearLayout>
 
@@ -64,6 +69,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_extra_extra_large"
                 android:theme="@style/Theme.Collect.MaterialComponents.Polyfill">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -73,7 +79,8 @@
                     android:hint="@string/identity"
                     android:imeOptions="actionDone"
                     android:inputType="text"
-                    android:lines="1" />
+                    android:lines="1"
+                    android:textColor="?attr/colorOnPrimary" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
