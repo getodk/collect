@@ -61,6 +61,10 @@ import java.util.regex.Pattern;
 
 import timber.log.Timber;
 
+import static org.javarosa.core.model.Constants.DATATYPE_BARCODE;
+import static org.javarosa.core.model.Constants.DATATYPE_CHOICE_LIST;
+import static org.javarosa.core.model.Constants.DATATYPE_MULTIPLE_ITEMS;
+import static org.javarosa.core.model.Constants.DATATYPE_TEXT;
 import static org.odk.collect.android.logic.FormController.INSTANCE_ID;
 
 public class InstanceGoogleSheetsUploader extends InstanceUploader {
@@ -343,7 +347,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             if (childElement.isRepeatable()) {
                 answers.put(elementTitle, getHyperlink(getSheetUrl(getSheetId(TextUtils.ellipsizeBeginning(elementTitle))), elementTitle));
             } else {
-                String answer = childElement.getValue() != null ? childElement.getValue().getDisplayText() : "";
+                String answer = getFormattingResistantAnswer(childElement);
+
                 if (new File(instanceFile.getParentFile() + "/" + answer).isFile()) {
                     String mediaUrl = uploadMediaFile(instance, answer);
                     answers.put(elementTitle, mediaUrl);
@@ -362,21 +367,19 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         } else if (hasRepeatableGroups(element)) {
             answers.put(KEY, key);
         }
-        return makeAnswersFormattingResistant(answers);
+        return answers;
     }
 
-    public static HashMap<String, String> makeAnswersFormattingResistant(HashMap<String, String> answers) {
-        HashMap<String, String> fixedAnswers = new HashMap<>();
-        for (Map.Entry<String, String> item : answers.entrySet()) {
-            String value = item.getValue();
-            if (!value.startsWith("http") && !value.startsWith("=HYPERLINK")) {
-                // Avoid formatting answers https://stackoverflow.com/a/37827066/5479029
-                value = "'" + value;
-            }
-            fixedAnswers.put(item.getKey(), value);
+    public static String getFormattingResistantAnswer(TreeElement childElement) {
+        String answer = childElement.getValue() != null ? childElement.getValue().getDisplayText() : "";
+
+        if (!answer.isEmpty() && (childElement.getDataType() == DATATYPE_TEXT
+                || childElement.getDataType() == DATATYPE_MULTIPLE_ITEMS
+                || childElement.getDataType() == DATATYPE_BARCODE)) {
+            answer = "'" + answer;
         }
 
-        return fixedAnswers;
+        return answer;
     }
 
     /**
