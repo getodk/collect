@@ -244,7 +244,12 @@ public class AuditEvent {
         }
 
         if (user != null) {
-            string += String.format(",%s", user);
+            String escapedUser = user.replace("\"", "\"\"");
+            if (escapedUser.contains(",")) {
+                escapedUser = "\"" + escapedUser + "\"";
+            }
+
+            string += String.format(",%s", escapedUser);
         }
 
         return string;

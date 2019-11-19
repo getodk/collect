@@ -118,6 +118,20 @@ public class AsyncTaskAuditEventWriterTest {
         assertEquals(expectedData, expectedAuditContent);
     }
 
+    @Test
+    public void whenUserHasCommaOrQuotes_escapesThem() throws Exception {
+        AsyncTaskAuditEventWriter writer = new AsyncTaskAuditEventWriter(auditFile, false, false, true);
+
+        List<AuditEvent> auditEvents = getSampleAuditEventsWithUser().subList(0, 1);
+        auditEvents.get(0).setUser("User,\"1\"");
+        writer.writeEvents(auditEvents);
+
+        String expectedAuditContent = FileUtils.readFileToString(auditFile);
+        String expectedData = "event,node,start,end,user\n" +
+                "form start,,1548106927319,,\"User,\"\"1\"\"\"\n";
+        assertEquals(expectedData, expectedAuditContent);
+    }
+
     /**
      * A user could update the app and then resume form entry. In this case it would be possible
      * for the form to have an audit config that wasn't supported by the old app. In this case
