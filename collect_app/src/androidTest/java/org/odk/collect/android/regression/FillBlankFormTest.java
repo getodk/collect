@@ -282,22 +282,27 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickOnText("Wolf")
                 .swipeToNextQuestion()
                 .inputText("w")
+                .closeSoftKeyboard()
                 .checkIsTextDisplayed("Wolf")
                 .checkIsTextDisplayed("Warthog")
                 .clickOnText("Wolf")
                 .swipeToNextQuestion()
                 .inputText("r")
+                .closeSoftKeyboard()
                 .checkIsTextDisplayed("Warthog")
                 .checkIsTextDisplayed("Raccoon")
                 .checkIsTextDisplayed("Rabbit")
+                .closeSoftKeyboard()
                 .clickOnText("Rabbit")
                 .swipeToNextQuestion()
                 .inputText("r")
+                .closeSoftKeyboard()
                 .checkIsTextDisplayed("Oranges")
                 .checkIsTextDisplayed("Strawberries")
                 .clickOnText("Oranges")
                 .swipeToNextQuestion()
                 .inputText("n")
+                .closeSoftKeyboard()
                 .checkIsTextDisplayed("Mango")
                 .checkIsTextDisplayed("Oranges")
                 .clickOnText("Mango")
@@ -309,6 +314,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickOnText("Rabbit")
                 .swipeToNextQuestion()
                 .inputText("w")
+                .closeSoftKeyboard()
                 .checkIsTextDisplayed("Wolf")
                 .checkIsTextDisplayed("Warthog")
                 .clickOnText("Wolf")
@@ -323,10 +329,12 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickOnText("Rabbit")
                 .swipeToNextQuestion()
                 .inputText("m")
+                .closeSoftKeyboard()
                 .checkIsTextDisplayed("Mango")
                 .clickOnText("Mango")
                 .swipeToNextQuestion()
                 .inputText("n")
+                .closeSoftKeyboard()
                 .closeSoftKeyboard()
                 .checkIsTextDisplayed("Mango")
                 .checkIsTextDisplayed("Oranges")
@@ -455,7 +463,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
 
     private String getQuestionText() {
         FormEntryActivity formEntryActivity = (FormEntryActivity) ActivityHelpers.getActivity();
-        FrameLayout questionContainer = formEntryActivity.findViewById(R.id.select_container);
+        FrameLayout questionContainer = formEntryActivity.findViewById(R.id.text_container);
         TextView questionView = (TextView) questionContainer.getChildAt(0);
         return questionView.getText().toString();
     }

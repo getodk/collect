@@ -143,7 +143,7 @@ public abstract class QuestionWidget
         helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), formEntryPrompt);
         guidanceTextView = setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), formEntryPrompt);
 
-        addQuestionMediaLayout(getAudioVideoImageTextLabel());
+        addQuestionLabel(getAudioVideoImageTextLabel());
         addHelpTextLayout(getHelpTextLayout());
 
         if (context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
@@ -239,13 +239,17 @@ public abstract class QuestionWidget
     }
 
     private AudioVideoImageTextLabel createQuestionLabel(FormEntryPrompt prompt) {
-        String promptText = prompt.getLongText();
-        // Add the text view. Textview always exists, regardless of whether there's text.
-        TextView questionText = new TextView(getContext());
+        // Create the layout for audio, image, text
+        AudioVideoImageTextLabel label = new AudioVideoImageTextLabel(getContext());
+        label.setId(ViewIds.generateViewId()); // assign random id
+        label.setTag(getClipID(prompt));
+
+        TextView questionText = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.question_long_text, label, false);
         questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize());
         questionText.setTypeface(null, Typeface.BOLD);
-        questionText.setPadding(0, 0, 0, 7);
         questionText.setTextColor(themeUtils.getColorOnSurface());
+
+        String promptText = prompt.getLongText();
         questionText.setText(TextUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(promptText, prompt.isRequired())));
         questionText.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -257,11 +261,6 @@ public abstract class QuestionWidget
             questionText.setVisibility(GONE);
         }
 
-        // Create the layout for audio, image, text
-        AudioVideoImageTextLabel label = new AudioVideoImageTextLabel(getContext());
-        label.setId(ViewIds.generateViewId()); // assign random id
-        label.setTag(getClipID(prompt));
-
         String imageURI = this instanceof SelectImageMapWidget ? null : prompt.getImageText();
         String videoURI = prompt.getSpecialFormQuestionText("video");
 
@@ -272,8 +271,8 @@ public abstract class QuestionWidget
         label.setId(ViewIds.generateViewId()); // assign random id
 
         label.setTag(getClipID(prompt));
-        label.setTextImageVideo(
-                questionText,
+        label.setText(questionText);
+        label.setImageVideo(
                 imageURI,
                 videoURI,
                 bigImageURI,
@@ -362,7 +361,7 @@ public abstract class QuestionWidget
      * Defaults to adding questionlayout to the top of the screen.
      * Overwrite to reposition.
      */
-    protected void addQuestionMediaLayout(View v) {
+    protected void addQuestionLabel(View v) {
         if (v == null) {
             Timber.e("cannot add a null view as questionMediaLayout");
             return;
@@ -453,7 +452,6 @@ public abstract class QuestionWidget
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.BELOW, getHelpTextLayout().getId());
-
         addView(v, params);
     }
 
