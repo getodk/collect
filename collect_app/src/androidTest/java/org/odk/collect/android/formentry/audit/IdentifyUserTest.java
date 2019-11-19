@@ -47,16 +47,15 @@ public class IdentifyUserTest {
     }
 
     @Test
-    public void openingForm_andThenEnteringIdentity_andThenExitingAndResuming_promptsForIdentity() {
+    public void openingSavedForm_promptsForIdentity() {
         new MainMenuPage(rule)
                 .clickFillBlankForm()
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .enterIdentity("Lucius")
                 .clickKeyboardEnter()
-                .closeSoftKeyboard()
-                .simplePressBack()
-                .clickIgnoreChanges()
-                .clickFillBlankForm()
+                .swipeToNextQuestion()
+                .clickSaveAndExit()
+                .clickEditSavedForm()
                 .clickOnFormWithIdentityPrompt("Identify User");
     }
 
