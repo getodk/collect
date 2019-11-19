@@ -244,12 +244,11 @@ public class AuditEvent {
         }
 
         if (user != null) {
-            String escapedUser = user.replace("\"", "\"\"");
-            if (escapedUser.contains(",")) {
-                escapedUser = "\"" + escapedUser + "\"";
+            if (user.contains(",") || user.contains("\n")) {
+                string += String.format(",%s", getEscapedValueForCsv(user));
+            } else {
+                string += String.format(",%s", user);
             }
-
-            string += String.format(",%s", escapedUser);
         }
 
         return string;
