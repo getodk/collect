@@ -15,5 +15,5 @@
         android:insetBottom="0sp"
         android:padding="8sp"
         app:icon="@drawable/ic_map"
-        app:iconTint="@color/blue_500" />
+        app:iconTint="?attr/colorOnSurface" />
 </merge>
