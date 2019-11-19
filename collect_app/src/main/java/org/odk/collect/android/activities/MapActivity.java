@@ -29,6 +29,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
@@ -36,10 +38,14 @@ import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.ToastUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import timber.log.Timber;
@@ -53,7 +59,7 @@ public class MapActivity extends BaseGeoMapActivity {
     private boolean viewportInitialized;
     private String jrFormId;
     private String formTitle;
-    private final Map<Integer, Long> instanceIdsByFeatureId = new HashMap<>();
+    private final Map<Integer, Instance> instancesByFeatureId = new HashMap<>();
     private final List<MapPoint> points = new ArrayList<>();
 
     @Override public void onCreate(Bundle savedInstanceState) {
@@ -138,46 +144,36 @@ public class MapActivity extends BaseGeoMapActivity {
         points.clear();
         map.clearFeatures();
 
-        try (Cursor c = Collect.getInstance().getContentResolver().query(
-            InstanceColumns.CONTENT_URI,
-            new String[] {InstanceColumns._ID, InstanceColumns.STATUS,
-                InstanceColumns.GEOMETRY_TYPE, InstanceColumns.GEOMETRY},
-            InstanceColumns.JR_FORM_ID + " = ?",
-            new String[] {jrFormId},
-            null)) {
+        InstancesDao dao = new InstancesDao();
+        Cursor c = dao.getInstancesCursor(InstanceColumns.JR_FORM_ID + " = ?",
+                new String[] {jrFormId});
+        List<Instance> instances = dao.getInstancesFromCursor(c);
 
-            while (c.moveToNext()) {
-                long id = c.getLong(0);
-                String status = c.getString(1);
-                String type = c.getString(2);
-                String json = c.getString(3);
-                if (json != null) {
-                    try {
-                        JSONObject geometry = new JSONObject(json);
-                        switch (type) {
-                            case "Point":
-                                JSONArray coordinates = geometry.getJSONArray("coordinates");
-                                // In GeoJSON, longitude comes before latitude.
-                                double lon = coordinates.getDouble(0);
-                                double lat = coordinates.getDouble(1);
-                                MapPoint point = new MapPoint(lat, lon);
-                                int featureId = map.addMarker(point, false);
-                                int drawableId = getDrawableIdForStatus(status);
-                                map.setMarkerIcon(featureId, drawableId);
-                                instanceIdsByFeatureId.put(featureId, id);
-                                points.add(point);
-                        }
-                    } catch (JSONException e) {
-                        Timber.w("Invalid JSON in instances table: %s", json);
+        for (Instance instance : instances) {
+            if (instance.getGeometry() != null) {
+                try {
+                    JSONObject geometry = new JSONObject(instance.getGeometry());
+                    switch (instance.getGeometryType()) {
+                        case "Point":
+                            JSONArray coordinates = geometry.getJSONArray("coordinates");
+                            // In GeoJSON, longitude comes before latitude.
+                            double lon = coordinates.getDouble(0);
+                            double lat = coordinates.getDouble(1);
+                            MapPoint point = new MapPoint(lat, lon);
+                            int featureId = map.addMarker(point, false);
+                            int drawableId = getDrawableIdForStatus(instance.getStatus());
+                            map.setMarkerIcon(featureId, drawableId);
+                            instancesByFeatureId.put(featureId, instance);
+                            points.add(point);
                     }
+                } catch (JSONException e) {
+                    Timber.w("Invalid JSON in instances table: %s", instance.getGeometry());
                 }
             }
-
-            TextView statusView = findViewById(R.id.geometry_status);
-            statusView.setText(getString(
-                R.string.geometry_status, c.getCount(), points.size()
-            ));
         }
+
+        TextView statusView = findViewById(R.id.geometry_status);
+        statusView.setText(getString(R.string.geometry_status, c.getCount(), points.size()));
 
         if (!viewportInitialized && !points.isEmpty()) {
             map.zoomToBoundingBox(points, 0.8, false);
@@ -193,9 +189,16 @@ public class MapActivity extends BaseGeoMapActivity {
     }
 
     public void onFeatureClicked(int featureId) {
-        Long instanceId = instanceIdsByFeatureId.get(featureId);
-        if (instanceId != null) {
-            Uri uri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, instanceId);
+        Instance instance = instancesByFeatureId.get(featureId);
+
+        if (instance != null && instance.getDeletedDate() != null) {
+            String deletedTime = getString(R.string.deleted_on_date_at_time);
+            String disabledMessage = new SimpleDateFormat(deletedTime,
+                    Locale.getDefault()).format(new Date(instance.getDeletedDate()));
+
+            ToastUtils.showLongToast(disabledMessage);
+        } else if (instance.getDatabaseId() != null) {
+            Uri uri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, instance.getDatabaseId());
             startActivity(new Intent(Intent.ACTION_EDIT, uri));
         }
     }
