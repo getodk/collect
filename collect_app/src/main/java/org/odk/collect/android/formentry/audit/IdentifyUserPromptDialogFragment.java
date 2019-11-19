@@ -52,8 +52,6 @@ public class IdentifyUserPromptDialogFragment extends DialogFragment {
             viewModel.promptClosing();
         });
 
-        toolbar.inflateMenu(R.menu.menu_ak);
-
         identityField = view.findViewById(R.id.identity);
         identityField.setOnEditorActionListener((textView, i, keyEvent) -> {
             viewModel.setIdentity(identityField.getText().toString());
