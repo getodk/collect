@@ -36,24 +36,6 @@ public class IdentifyUserPromptDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.Theme_Collect_Dialog_FullScreen);
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        viewModel = ViewModelProviders.of(requireActivity()).get(IdentityPromptViewModel.class);
-        viewModel.requiresIdentity().observe(this, requiresIdentity -> {
-            if (!requiresIdentity) {
-                dismiss();
-            }
-        });
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.identify_user_dialog, container, false);
     }
@@ -76,6 +58,24 @@ public class IdentifyUserPromptDialogFragment extends DialogFragment {
             viewModel.setIdentity(identityField.getText().toString());
             return true;
         });
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        viewModel = ViewModelProviders.of(requireActivity()).get(IdentityPromptViewModel.class);
+        viewModel.requiresIdentity().observe(this, requiresIdentity -> {
+            if (!requiresIdentity) {
+                dismiss();
+            }
+        });
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.Theme_Collect_Dialog_FullScreen);
     }
 
     @Override

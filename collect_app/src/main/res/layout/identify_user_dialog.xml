@@ -14,8 +14,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:navigationIcon="@drawable/ic_close_black_24dp"
-            app:navigationContentDescription="@string/close"/>
+            app:navigationContentDescription="@string/close"
+            app:navigationIcon="@drawable/ic_close_black_24dp" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -61,7 +61,8 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true">
+            android:layout_centerInParent="true"
+            android:theme="@style/Theme.Collect.MaterialComponents.Polyfill">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/identity"
