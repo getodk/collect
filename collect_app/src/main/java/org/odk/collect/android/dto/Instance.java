@@ -32,6 +32,8 @@ public final class Instance {
     private final String status;
     private final Long lastStatusChangeDate;
     private final Long deletedDate;
+    private final String geometryType;
+    private final String geometry;
 
     private final Long databaseId;
 
@@ -45,6 +47,8 @@ public final class Instance {
         status = builder.status;
         lastStatusChangeDate = builder.lastStatusChangeDate;
         deletedDate = builder.deletedDate;
+        geometryType = builder.geometryType;
+        geometry = builder.geometry;
 
         databaseId = builder.databaseId;
     }
@@ -59,6 +63,8 @@ public final class Instance {
         private String status;
         private Long lastStatusChangeDate;
         private Long deletedDate;
+        private String geometryType;
+        private String geometry;
 
         private Long databaseId;
 
@@ -107,6 +113,16 @@ public final class Instance {
             return this;
         }
 
+        public Builder geometryType(String geometryType) {
+            this.geometryType = geometryType;
+            return this;
+        }
+
+        public Builder geometry(String geometry) {
+            this.geometry = geometry;
+            return this;
+        }
+
         public Builder databaseId(Long databaseId) {
             this.databaseId = databaseId;
             return this;
@@ -151,6 +167,14 @@ public final class Instance {
 
     public Long getDeletedDate() {
         return deletedDate;
+    }
+
+    public String getGeometryType() {
+        return geometryType;
+    }
+
+    public String getGeometry() {
+        return geometry;
     }
 
     public Long getDatabaseId() {

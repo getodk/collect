@@ -310,6 +310,8 @@ public class InstancesDao {
                     int statusColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.STATUS);
                     int lastStatusChangeDateColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE);
                     int deletedDateColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE);
+                    int geometryTypeColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.GEOMETRY_TYPE);
+                    int geometryColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.GEOMETRY);
 
                     int databaseIdIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID);
 
@@ -322,7 +324,9 @@ public class InstancesDao {
                             .jrVersion(cursor.getString(jrVersionColumnIndex))
                             .status(cursor.getString(statusColumnIndex))
                             .lastStatusChangeDate(cursor.getLong(lastStatusChangeDateColumnIndex))
-                            .deletedDate(cursor.getLong(deletedDateColumnIndex))
+                            .deletedDate(cursor.isNull(deletedDateColumnIndex) ? null : cursor.getLong(deletedDateColumnIndex))
+                            .geometryType(cursor.getString(geometryTypeColumnIndex))
+                            .geometry(cursor.getString(geometryColumnIndex))
                             .databaseId(cursor.getLong(databaseIdIndex))
                             .build();
 
@@ -352,6 +356,8 @@ public class InstancesDao {
         values.put(InstanceProviderAPI.InstanceColumns.STATUS, instance.getStatus());
         values.put(InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE, instance.getLastStatusChangeDate());
         values.put(InstanceProviderAPI.InstanceColumns.DELETED_DATE, instance.getDeletedDate());
+        values.put(InstanceProviderAPI.InstanceColumns.GEOMETRY_TYPE, instance.getGeometryType());
+        values.put(InstanceProviderAPI.InstanceColumns.GEOMETRY_TYPE, instance.getGeometry());
 
         return values;
     }
