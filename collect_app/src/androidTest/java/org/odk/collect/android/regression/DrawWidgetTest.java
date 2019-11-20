@@ -11,7 +11,9 @@ import org.junit.rules.RuleChain;
 import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.espressoutils.pages.FormEntryPage;
 import org.odk.collect.android.espressoutils.pages.MainMenuPage;
+import org.odk.collect.android.espressoutils.pages.SaveOrIgnoreDialog;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.ScreenshotOnFailureTestRule;
@@ -37,21 +39,20 @@ public class DrawWidgetTest extends BaseRegressionTest {
     public void saveIgnoreDialog_ShouldUseBothOptions() {
 
         //TestCase1
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("All widgets")
                 .clickGoToIconInForm()
                 .clickOnText("Image widgets")
                 .clickOnText("Draw widget")
                 .clickOnId(R.id.simple_button)
                 .waitForRotationToEnd()
-                .simplePressBack()
-                .checkIsStringDisplayed(R.string.keep_changes)
-                .clickOnString(R.string.do_not_save)
+                .pressBack(new SaveOrIgnoreDialog<>("Sketch Image", new FormEntryPage("All widgets", rule), rule))
+                .clickIgnoreChanges()
                 .waitForRotationToEnd()
                 .clickOnId(R.id.simple_button)
                 .waitForRotationToEnd()
-                .simplePressBack()
-                .clickOnString(R.string.keep_changes)
+                .pressBack(new SaveOrIgnoreDialog<>("Sketch Image", new FormEntryPage("All widgets", rule), rule))
+                .clickSaveChanges()
                 .waitForRotationToEnd()
                 .clickGoToIconInForm()
                 .clickJumpEndButton()
@@ -62,7 +63,7 @@ public class DrawWidgetTest extends BaseRegressionTest {
     public void setColor_ShouldSeeColorPicker() {
 
         //TestCase2
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("All widgets")
                 .clickGoToIconInForm()
                 .clickOnText("Image widgets")
@@ -72,8 +73,8 @@ public class DrawWidgetTest extends BaseRegressionTest {
                 .clickOnId(R.id.fab_actions)
                 .clickOnId(R.id.fab_set_color)
                 .clickOnString(R.string.ok)
-                .simplePressBack()
-                .clickOnString(R.string.keep_changes)
+                .pressBack(new SaveOrIgnoreDialog<>("Sketch Image", new FormEntryPage("All widgets", rule), rule))
+                .clickSaveChanges()
                 .waitForRotationToEnd()
                 .clickGoToIconInForm()
                 .clickJumpEndButton()
@@ -84,7 +85,7 @@ public class DrawWidgetTest extends BaseRegressionTest {
     public void multiClickOnPlus_ShouldDisplayIcons() {
 
         //TestCase3
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("All widgets")
                 .clickGoToIconInForm()
                 .clickOnText("Image widgets")
@@ -100,8 +101,8 @@ public class DrawWidgetTest extends BaseRegressionTest {
                 .clickOnId(R.id.fab_actions)
                 .checkIsStringDisplayed(R.string.set_color)
                 .checkIsStringDisplayed(R.string.set_color)
-                .simplePressBack()
-                .clickOnString(R.string.keep_changes)
+                .pressBack(new SaveOrIgnoreDialog<>("Sketch Image", new FormEntryPage("All widgets", rule), rule))
+                .clickSaveChanges()
                 .waitForRotationToEnd()
                 .clickGoToIconInForm()
                 .clickJumpEndButton()

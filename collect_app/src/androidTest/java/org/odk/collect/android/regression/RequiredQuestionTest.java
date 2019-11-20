@@ -32,7 +32,7 @@ public class RequiredQuestionTest extends BaseRegressionTest {
     public void requiredQuestions_ShouldDisplayAsterisk() {
 
         //TestCase1
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("required")
                 .checkIsTextDisplayed("* Foo")
                 .closeSoftKeyboard()
@@ -44,7 +44,7 @@ public class RequiredQuestionTest extends BaseRegressionTest {
     public void requiredQuestions_ShouldDisplayCustomMessage() {
 
         //TestCase2
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("required")
                 .swipeToNextQuestion()
                 .checkIsToastWithMessageDisplayed("Custom required message")

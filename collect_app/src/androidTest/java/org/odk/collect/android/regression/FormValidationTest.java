@@ -31,7 +31,7 @@ public class FormValidationTest extends BaseRegressionTest {
     @Test
     public void invalidAnswer_ShouldDisplayAllQuestionsOnOnePage() {
 
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("OnePageFormShort")
                 .putTextOnIndex(0, "A")
                 .clickGoToIconInForm()
@@ -49,7 +49,7 @@ public class FormValidationTest extends BaseRegressionTest {
     public void openHierarchyView_ShouldSeeShortForms() {
 
         //TestCase3
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("OnePageFormShort")
                 .clickGoToIconInForm()
                 .checkIsTextDisplayed("YY MM")
