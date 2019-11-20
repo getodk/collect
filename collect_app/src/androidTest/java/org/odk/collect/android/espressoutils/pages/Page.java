@@ -1,19 +1,12 @@
 package org.odk.collect.android.espressoutils.pages;
 
-import android.app.Activity;
-import android.content.pm.ActivityInfo;
-import android.view.ContextThemeWrapper;
-import android.view.View;
-
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
-import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
-
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 
-import org.hamcrest.Matcher;
+import org.odk.collect.android.support.actions.RotateAction;
 
 import timber.log.Timber;
 
@@ -188,12 +181,8 @@ abstract class Page<T extends Page<T>> {
 
     public  <D extends Page<D>> D rotateToLandscape(D destination) {
         onView(isRoot()).perform(rotateToLandscape());
+        waitForRotationToEnd();
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         return destination.assertOnPage();
     }
 
@@ -201,26 +190,14 @@ abstract class Page<T extends Page<T>> {
         return new RotateAction();
     }
 
-    private static class RotateAction implements ViewAction {
-
-        @Override
-        public Matcher<View> getConstraints() {
-            return isRoot();
+    public T waitForRotationToEnd() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Timber.i(e);
         }
 
-        @Override
-        public String getDescription() {
-            return "";
-        }
-
-        @Override
-        public void perform(UiController uiController, View view) {
-            uiController.loopMainThreadUntilIdle();
-
-            ContextThemeWrapper context = (ContextThemeWrapper) view.getContext();
-            Activity activity = (Activity) context.getBaseContext();
-            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
+        return (T) this;
     }
 }
 

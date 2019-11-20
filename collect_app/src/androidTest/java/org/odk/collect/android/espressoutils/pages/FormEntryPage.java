@@ -6,8 +6,6 @@ import androidx.test.rule.ActivityTestRule;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.ActivityHelpers;
 
-import timber.log.Timber;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
@@ -112,15 +110,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage clickSignatureButton() {
         onView(withId(R.id.simple_button)).perform(click());
-        return this;
-    }
-
-    public FormEntryPage waitForRotationToEnd() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            Timber.i(e);
-        }
         return this;
     }
 
