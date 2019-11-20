@@ -18,7 +18,7 @@
         android:id="@+id/form_subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_extra_small"
         android:textAppearance="@style/TextAppearance.Collect.Body2.MediumEmphasis"
         tools:text="Version: 2019051301" />
 
@@ -26,7 +26,7 @@
         android:id="@+id/form_subtitle2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_extra_small"
         android:textAppearance="@style/TextAppearance.Collect.Body2.MediumEmphasis"
         android:visibility="gone"
         tools:text="Added on Thu, Jul 11, 2019 at 15:35"
@@ -36,7 +36,7 @@
         android:id="@+id/form_update_alert"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_extra_small"
         android:text="@string/newer_version_of_a_form_info"
         android:textAppearance="@style/TextAppearance.Collect.Body2"
         android:textColor="?attr/colorSecondary"

@@ -17,7 +17,7 @@ limitations under the License.
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
-    android:padding="@dimen/margin_large">
+    android:padding="@dimen/margin_standard">
 
     <ImageView
         android:id="@+id/imageView"
@@ -30,8 +30,8 @@ limitations under the License.
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/imageView"
-        android:layout_marginStart="@dimen/margin_extra_extra_large"
-        android:layout_marginLeft="@dimen/margin_extra_extra_large"
+        android:layout_marginStart="@dimen/margin_extra_large"
+        android:layout_marginLeft="@dimen/margin_extra_large"
         android:layout_toEndOf="@id/imageView"
         android:layout_toRightOf="@id/imageView"
         android:orientation="vertical">
@@ -48,7 +48,7 @@ limitations under the License.
             style="@style/TextAppearance.Collect.Body2.MediumEmphasis"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_extra_small"
             tools:text="@string/odk_website_summary" />
 
     </LinearLayout>

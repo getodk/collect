@@ -26,7 +26,7 @@ public class ServerOtherTest extends BaseRegressionTest {
                 .openServerSettings()
                 .clickOnServerType()
                 .clickOnAreaWithIndex("CheckedTextView", 2)
-                .clickOnAreaWithKey("formlist_url")
+                .clickFormListPath()
                 .addText("/formList", "/sialala")
                 .clickOKOnDialog()
                 .checkIsTextDisplayed("/formList/sialala");
@@ -41,7 +41,7 @@ public class ServerOtherTest extends BaseRegressionTest {
                 .openServerSettings()
                 .clickOnServerType()
                 .clickOnAreaWithIndex("CheckedTextView", 2)
-                .clickOnAreaWithKey("submission_url")
+                .clickSubmissionPath()
                 .addText("/submission", "/blabla")
                 .clickOKOnDialog()
                 .checkIsTextDisplayed("/submission/blabla");
