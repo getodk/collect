@@ -182,17 +182,17 @@ public class LikertWidget extends ItemsWidget {
         rightLineView.setBackgroundColor(getResources().getColor(R.color.gray600));
 
         if (left) {
-            if(isRTL()){
+            if (isRTL()) {
                 rightLineView.setVisibility(View.INVISIBLE);
-            }else{
+            } else {
                 leftLineView.setVisibility(View.INVISIBLE);
             }
         }
         buttonView.addView(leftLineView);
         if (right) {
-            if(isRTL()){
+            if (isRTL()) {
                 leftLineView.setVisibility(View.INVISIBLE);
-            }else{
+            } else {
                 rightLineView.setVisibility(View.INVISIBLE);
             }
         }
