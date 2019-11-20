@@ -26,6 +26,8 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.helpers.InstancesDatabaseHelper;
@@ -38,7 +40,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
-import androidx.annotation.NonNull;
 import timber.log.Timber;
 
 import static org.odk.collect.android.database.helpers.InstancesDatabaseHelper.INSTANCES_TABLE_NAME;
@@ -295,11 +296,16 @@ public class InstanceProvider extends ContentProvider {
                         }
                     }
 
-                    //We are going to update the status, if the form is submitted
-                    //We will not delete the record in table but we will delete the file
+                    // Keep sent instance database rows but delete corresponding files
                     if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
                         ContentValues cv = new ContentValues();
                         cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
+
+                        // Geometry fields represent data inside the form which can be very
+                        // sensitive so they are removed on delete.
+                        cv.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
+                        cv.put(InstanceColumns.GEOMETRY, (String) null);
+
                         count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
                     } else {
                         String[] newWhereArgs;
