@@ -83,7 +83,7 @@ public class AuditEventLogger {
          * Close any existing interval events if the view is being exited
          */
         if (eventType == AuditEvent.AuditEventType.FORM_EXIT) {
-            manageSavedEvents(formController);
+            manageSavedEvents();
         }
 
         auditEvents.add(newAuditEvent);
@@ -139,13 +139,13 @@ public class AuditEventLogger {
      */
     public void exitView() {
         if (isAuditEnabled()) {
-            manageSavedEvents(formController);
+            manageSavedEvents();
             writeEvents();
         }
     }
 
     // Filter all events and set final parameters of interval events
-    private void manageSavedEvents(FormController formController) {
+    private void manageSavedEvents() {
         // Calculate the time and add the event to the auditEvents array
         long end = getEventTime();
         ArrayList<AuditEvent> filteredAuditEvents = new ArrayList<>();
