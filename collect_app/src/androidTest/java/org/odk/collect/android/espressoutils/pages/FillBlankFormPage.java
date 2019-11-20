@@ -7,6 +7,7 @@ import org.odk.collect.android.R;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -26,7 +27,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     }
 
     public IdentifyUserPromptPage clickOnFormWithIdentityPrompt(String formName) {
-        onView(withText(formName)).perform(click());
+        clickOnFormButton(formName);
         return new IdentifyUserPromptPage(formName, rule).assertOnPage();
     }
 
@@ -51,7 +52,11 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     }
 
     public FormEntryPage clickOnForm(String formName) {
-        onView(withText(formName)).perform(click());
+        clickOnFormButton(formName);
         return new FormEntryPage(formName, rule);
+    }
+
+    private void clickOnFormButton(String formName) {
+        onView(withText(formName)).perform(scrollTo(), click());
     }
 }
