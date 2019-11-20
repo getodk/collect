@@ -39,7 +39,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
     public void allRelevantQuestionsShouldBeVisibleInHierarchyView() {
         new MainMenuPage(rule)
                 .startBlankForm("formHierarchy1")
-                .clickGoToIconInForm();
+                .clickGoToArrow();
 
         onView(withRecyclerView(R.id.list)
                 .atPositionOnView(0, R.id.primary_text))
@@ -56,7 +56,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
         final FormEntryPage page = new MainMenuPage(rule)
                 .startBlankForm("formHierarchy2")
                 .inputText("2")
-                .clickGoToIconInForm();
+                .clickGoToArrow();
 
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
         onView(withRecyclerView(R.id.list)
@@ -87,7 +87,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
 
         page.clickJumpStartButton()
                 .inputText("1")
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .clickOnText("Guest details");
 
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(1)));
@@ -113,7 +113,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
                 .swipeToNextQuestion()
                 .clickOnString(R.string.add_repeat_no)
                 .clickOnString(R.string.add_repeat_no)
-                .clickGoToIconInForm();
+                .clickGoToArrow();
 
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
 
@@ -143,7 +143,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
                 .swipeToNextQuestion()
                 .clickOnString(R.string.add_repeat_no)
                 .clickOnString(R.string.add_repeat_no)
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .clickOnText("Repeat Group 1")
                 .clickOnText("Repeat Group 1 > 1")
                 .clickOnText("Repeat Group 1_1")

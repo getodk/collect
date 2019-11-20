@@ -35,7 +35,7 @@ public class ResetApplicationTest extends BaseRegressionTest {
         //TestCase1,4
         new MainMenuPage(rule)
                 .startBlankForm("All widgets")
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .clickJumpEndButton()
                 .clickSaveAndExit()
                 .clickEditSavedForm()
@@ -111,7 +111,7 @@ public class ResetApplicationTest extends BaseRegressionTest {
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
                 .startBlankForm("All widgets")
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .clickJumpEndButton()
                 .checkIfMarkFinishedIsNotSelected()
                 .clickSaveAndExit()
@@ -129,7 +129,7 @@ public class ResetApplicationTest extends BaseRegressionTest {
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
                 .startBlankForm("All widgets")
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .clickJumpEndButton()
                 .checkIfMarkFinishedIsSelected()
                 .clickSaveAndExit();

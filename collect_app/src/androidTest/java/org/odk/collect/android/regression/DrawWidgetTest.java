@@ -41,7 +41,7 @@ public class DrawWidgetTest extends BaseRegressionTest {
         //TestCase1
         new MainMenuPage(rule)
                 .startBlankForm("All widgets")
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .clickOnText("Image widgets")
                 .clickOnText("Draw widget")
                 .clickOnId(R.id.simple_button)
@@ -54,7 +54,7 @@ public class DrawWidgetTest extends BaseRegressionTest {
                 .pressBack(new SaveOrIgnoreDialog<>("Sketch Image", new FormEntryPage("All widgets", rule), rule))
                 .clickSaveChanges()
                 .waitForRotationToEnd()
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .clickJumpEndButton()
                 .clickSaveAndExit();
     }
@@ -65,7 +65,7 @@ public class DrawWidgetTest extends BaseRegressionTest {
         //TestCase2
         new MainMenuPage(rule)
                 .startBlankForm("All widgets")
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .clickOnText("Image widgets")
                 .clickOnText("Draw widget")
                 .clickOnId(R.id.simple_button)
@@ -76,7 +76,7 @@ public class DrawWidgetTest extends BaseRegressionTest {
                 .pressBack(new SaveOrIgnoreDialog<>("Sketch Image", new FormEntryPage("All widgets", rule), rule))
                 .clickSaveChanges()
                 .waitForRotationToEnd()
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .clickJumpEndButton()
                 .clickSaveAndExit();
     }
@@ -87,7 +87,7 @@ public class DrawWidgetTest extends BaseRegressionTest {
         //TestCase3
         new MainMenuPage(rule)
                 .startBlankForm("All widgets")
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .clickOnText("Image widgets")
                 .clickOnText("Draw widget")
                 .clickOnId(R.id.simple_button)
@@ -104,7 +104,7 @@ public class DrawWidgetTest extends BaseRegressionTest {
                 .pressBack(new SaveOrIgnoreDialog<>("Sketch Image", new FormEntryPage("All widgets", rule), rule))
                 .clickSaveChanges()
                 .waitForRotationToEnd()
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .clickJumpEndButton()
                 .clickSaveAndExit();
     }

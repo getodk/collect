@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.espressoutils.pages.FormEntryPage;
 import org.odk.collect.android.espressoutils.pages.MainMenuPage;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -38,7 +39,7 @@ public class SpinnerWidgetTest extends BaseRegressionTest {
                 .checkIsTextDisplayed("c")
                 .checkIfTextDoesNotExist("a")
                 .checkIfTextDoesNotExist("b")
-                .simplePressBack()
+                .pressBack(new FormEntryPage("selectOneMinimal", rule))
                 .swipeToNextQuestion()
                 .clickSaveAndExit();
     }

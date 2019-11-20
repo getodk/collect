@@ -11,7 +11,9 @@ import org.junit.rules.RuleChain;
 import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.espressoutils.pages.FormEntryPage;
 import org.odk.collect.android.espressoutils.pages.MainMenuPage;
+import org.odk.collect.android.espressoutils.pages.SaveOrIgnoreDialog;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.ScreenshotOnFailureTestRule;
@@ -39,22 +41,22 @@ public class SignatureWidgetTest extends BaseRegressionTest {
         //TestCase1
         new MainMenuPage(rule)
                 .startBlankForm("All widgets")
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .clickOnText("Image widgets")
                 .clickOnText("Signature widget")
                 .clickSignatureButton()
                 .waitForRotationToEnd()
-                .simplePressBack()
+                .pressBack(new SaveOrIgnoreDialog<>("Gather Signature", new FormEntryPage("All widgets", rule), rule))
                 .checkIsTranslationDisplayed("Exit Gather Signature", "Salir Adjuntar firma")
                 .checkIsStringDisplayed(R.string.keep_changes)
-                .clickOnString(R.string.do_not_save)
+                .clickIgnoreChanges()
                 .waitForRotationToEnd()
                 .clickSignatureButton()
                 .waitForRotationToEnd()
-                .simplePressBack()
-                .clickOnString(R.string.keep_changes)
+                .pressBack(new SaveOrIgnoreDialog<>("Gather Signature", new FormEntryPage("All widgets", rule), rule))
+                .clickSaveChanges()
                 .waitForRotationToEnd()
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .clickJumpEndButton()
                 .clickSaveAndExit();
     }
@@ -65,7 +67,7 @@ public class SignatureWidgetTest extends BaseRegressionTest {
         //TestCase2
         new MainMenuPage(rule)
                 .startBlankForm("All widgets")
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .clickOnText("Image widgets")
                 .clickOnText("Signature widget")
                 .clickSignatureButton()
@@ -76,10 +78,10 @@ public class SignatureWidgetTest extends BaseRegressionTest {
                 .clickOnString(R.string.ok)
                 .clickOnId(R.id.fab_actions)
                 .checkIsIdDisplayed(R.id.fab_set_color)
-                .simplePressBack()
-                .clickOnString(R.string.keep_changes)
+                .pressBack(new SaveOrIgnoreDialog<>("Gather Signature", new FormEntryPage("All widgets", rule), rule))
+                .clickSaveChanges()
                 .waitForRotationToEnd()
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .clickJumpEndButton()
                 .clickSaveAndExit();
     }

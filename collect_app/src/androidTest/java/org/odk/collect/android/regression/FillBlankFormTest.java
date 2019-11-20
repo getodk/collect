@@ -436,7 +436,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .startBlankForm("manyQ")
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .checkIsTextDisplayed("n1")
                 .checkIfTextDoesNotExist("t1")
                 .checkIfTextDoesNotExist("t2");
@@ -518,11 +518,11 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .swipeToPreviousQuestion()
                 .swipeToPreviousQuestion()
                 .swipeToPreviousQuestion()
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .checkIsTextDisplayed("a, c")
                 .checkIsTextDisplayed("b, d")
                 .clickJumpEndButton()
-                .clickGoToIconInForm();
+                .clickGoToArrow();
     }
 
     @Test
@@ -531,7 +531,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         //TestCase47
         new MainMenuPage(rule)
                 .startBlankForm("Birds")
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .clickJumpEndButton()
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed("This form does not specify an instanceID. You must specify one to enable encryption. Form has not been saved as finalized.")

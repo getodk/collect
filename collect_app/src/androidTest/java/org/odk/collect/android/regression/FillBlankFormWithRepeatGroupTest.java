@@ -173,7 +173,7 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
                 .swipeToNextQuestion()
                 .inputText("2")
                 .closeSoftKeyboard()
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .checkIsTextDisplayed("2")
                 .clickJumpEndButton()
                 .clickSaveAndExit();
@@ -190,7 +190,7 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
                 .clickOnDoNotAddGroup()
                 .swipeToNextQuestion()
                 .clickOnDoNotAddGroup()
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .clickJumpEndButton()
                 .clickSaveAndExit();
     }

@@ -100,7 +100,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage clickGoToIconInForm() {
+    public FormEntryPage clickGoToArrow() {
         onView(withId(R.id.menu_goto)).perform(click());
         return this;
     }
@@ -121,16 +121,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
         } catch (InterruptedException e) {
             Timber.i(e);
         }
-        return this;
-    }
-
-    public MainMenuPage clickIgnoreChanges() {
-        onView(withText(getInstrumentation().getTargetContext().getString(R.string.do_not_save))).perform(click());
-        return new MainMenuPage(rule).assertOnPage();
-    }
-
-    public FormEntryPage simplePressBack() {
-        Espresso.pressBack();
         return this;
     }
 
