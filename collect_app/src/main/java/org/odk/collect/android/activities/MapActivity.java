@@ -38,6 +38,7 @@ import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.text.SimpleDateFormat;
@@ -197,9 +198,14 @@ public class MapActivity extends BaseGeoMapActivity {
                     Locale.getDefault()).format(new Date(instance.getDeletedDate()));
 
             ToastUtils.showLongToast(disabledMessage);
-        } else if (instance.getDatabaseId() != null) {
+        } else if (instance != null && instance.getDatabaseId() != null) {
             Uri uri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, instance.getDatabaseId());
-            startActivity(new Intent(Intent.ACTION_EDIT, uri));
+            Intent intent = new Intent(Intent.ACTION_EDIT, uri);
+
+            if (instance.getStatus().equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
+                intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
+            }
+            startActivity(intent);
         }
     }
 
