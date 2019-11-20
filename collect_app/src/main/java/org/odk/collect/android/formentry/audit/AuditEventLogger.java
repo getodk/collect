@@ -266,7 +266,7 @@ public class AuditEventLogger {
         return locations;
     }
 
-    public Boolean isUserRequired() {
+    public boolean isUserRequired() {
         return auditConfig != null && auditConfig.isIdentifyUserEnabled();
     }
 
@@ -282,6 +282,6 @@ public class AuditEventLogger {
 
         void writeEvents(List<AuditEvent> auditEvents);
 
-        Boolean isWriting();
+        boolean isWriting();
     }
 }
