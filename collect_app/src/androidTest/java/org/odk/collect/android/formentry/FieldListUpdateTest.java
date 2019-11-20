@@ -231,6 +231,7 @@ public class FieldListUpdateTest {
 
         // Selecting A1 for level 2 should reveal options for A1 at level 3
         onView(withText("A1")).perform(click());
+        onView(withId(R.id.odk_view_container)).perform(swipeUp());
         onView(withText("A1A")).check(matches(isDisplayed()));
         onView(withText("B1")).check(doesNotExist());
         onView(withText("C1")).check(doesNotExist());
