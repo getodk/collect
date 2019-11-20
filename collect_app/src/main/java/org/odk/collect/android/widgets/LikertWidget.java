@@ -173,10 +173,6 @@ public class LikertWidget extends ItemsWidget {
         leftLineViewParams.addRule(CENTER_IN_PARENT, TRUE);
         leftLineView.setLayoutParams(leftLineViewParams);
         leftLineView.setBackgroundColor(getResources().getColor(R.color.gray600));
-        if (left) {
-            leftLineView.setVisibility(View.INVISIBLE);
-        }
-        buttonView.addView(leftLineView);
 
         // right line
         View rightLineView = new View(this.getContext());
@@ -185,9 +181,22 @@ public class LikertWidget extends ItemsWidget {
         rightLineView.setLayoutParams(rightLineViewParams);
         rightLineView.setBackgroundColor(getResources().getColor(R.color.gray600));
 
-        if (right) {
-            rightLineView.setVisibility(View.INVISIBLE);
+        if (left) {
+            if(isRTL()){
+                rightLineView.setVisibility(View.INVISIBLE);
+            }else{
+                leftLineView.setVisibility(View.INVISIBLE);
+            }
         }
+        buttonView.addView(leftLineView);
+        if (right) {
+            if(isRTL()){
+                leftLineView.setVisibility(View.INVISIBLE);
+            }else{
+                rightLineView.setVisibility(View.INVISIBLE);
+            }
+        }
+
         buttonView.addView(rightLineView);
     }
 
