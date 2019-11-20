@@ -214,13 +214,13 @@ public class MapActivity extends BaseGeoMapActivity {
     private int getDrawableIdForStatus(String status) {
         switch (status) {
             case InstanceProviderAPI.STATUS_INCOMPLETE:
-                return R.drawable.ic_instance_marker_saved;
+                return R.drawable.ic_room_blue_24dp;
             case InstanceProviderAPI.STATUS_COMPLETE:
-                return R.drawable.ic_instance_marker_finalized;
+                return R.drawable.ic_room_deep_purple_24dp;
             case InstanceProviderAPI.STATUS_SUBMITTED:
-                return R.drawable.ic_instance_marker_submitted;
+                return R.drawable.ic_room_green_24dp;
             case InstanceProviderAPI.STATUS_SUBMISSION_FAILED:
-                return R.drawable.ic_instance_marker_submission_failed;
+                return R.drawable.ic_room_red_24dp;
         }
         return R.drawable.ic_map_point;
     }
