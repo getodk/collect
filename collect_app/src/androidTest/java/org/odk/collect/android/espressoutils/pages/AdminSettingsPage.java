@@ -8,6 +8,9 @@ import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
+import static org.hamcrest.CoreMatchers.not;
 
 public class AdminSettingsPage extends Page<AdminSettingsPage> {
 
@@ -72,4 +75,20 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
         clickOnString(R.string.moving_backwards_title);
         return this;
     }
+
+    public AdminSettingsPage checkIfSaveFormOptionIsDisabled() {
+        onData(PreferenceMatchers.withKey("save_mid")).check(matches(not(isEnabled())));
+        return this;
+    }
+
+    public AdminSettingsPage clickOnResetApplication() {
+        onData(PreferenceMatchers.withKey("reset_settings")).perform(click());
+        return this;
+    }
+
+    public AdminSettingsPage uncheckServerOption() {
+        clickOnString(R.string.server);
+        return this;
+    }
+
 }

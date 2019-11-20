@@ -52,6 +52,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.swipeDown;
 import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyAbove;
 import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyBelow;
@@ -250,6 +251,7 @@ public class FieldListUpdateTest {
         onView(withId(R.id.odk_view_container)).perform(swipeUp());
         onView(withText("A1B")).perform(click());
 
+        onView(withId(R.id.odk_view_container)).perform(swipeDown());
         onView(withText("A")).perform(longClick());
         onView(withText(R.string.clear_answer)).perform(click());
         onView(withText(R.string.discard_answer)).perform(click());

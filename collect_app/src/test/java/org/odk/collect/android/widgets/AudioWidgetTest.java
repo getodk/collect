@@ -78,7 +78,7 @@ public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
 
         File firstFile = mock(File.class);
 
-        when(fileUtil.getFileAtPath(String.format("/%s.mp3", destinationName)))
+        when(fileUtil.getFileAtPath(File.separator + destinationName + ".mp3"))
                 .thenReturn(firstFile);
 
         when(firstFile.exists()).thenReturn(true);

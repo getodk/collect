@@ -255,14 +255,15 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         public void addMediaFromChoice(AudioVideoImageTextLabel audioVideoImageTextLabel, int index, TextView textView, List<SelectChoice> items) {
             SelectChoice item = items.get(index);
 
-            String audioURI = getPlayableAudioURI(getFormEntryPrompt(), item, getReferenceManager());
+            audioVideoImageTextLabel.setTag(getClipID(getFormEntryPrompt(), item));
+            audioVideoImageTextLabel.setText(textView);
+
             String imageURI = getImageURI(index, items);
             String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "video");
             String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "big-image");
+            audioVideoImageTextLabel.setImageVideo(imageURI, videoURI, bigImageURI, getReferenceManager());
 
-            audioVideoImageTextLabel.setTag(getClipID(getFormEntryPrompt(), item));
-            audioVideoImageTextLabel.setTextImageVideo(textView, imageURI, videoURI, bigImageURI, getReferenceManager());
-
+            String audioURI = getPlayableAudioURI(getFormEntryPrompt(), item, getReferenceManager());
             if (audioURI != null) {
                 audioVideoImageTextLabel.setAudio(audioURI, getAudioHelper());
             }
