@@ -99,7 +99,7 @@ import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
-import org.odk.collect.android.formentry.FormEntryViewModel;
+import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.IdentifyUserPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.IdentityPromptViewModel;
@@ -319,7 +319,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     private boolean locationPermissionsPreviouslyGranted;
 
-    private FormEntryViewModel formEntryViewModel;
+    private BackgroundLocationViewModel backgroundLocationViewModel;
     private IdentityPromptViewModel identityPromptViewModel;
 
     /**
@@ -404,7 +404,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void setupViewModels() {
-        formEntryViewModel = ViewModelProviders.of(this, new FormEntryViewModelFactory()).get(FormEntryViewModel.class);
+        backgroundLocationViewModel = ViewModelProviders.of(this, new FormEntryViewModelFactory()).get(BackgroundLocationViewModel.class);
 
         identityPromptViewModel = ViewModelProviders.of(this).get(IdentityPromptViewModel.class);
         identityPromptViewModel.requiresIdentity().observe(this, requiresIdentity -> {
@@ -1046,7 +1046,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case R.id.track_location:
                 GeneralSharedPreferences.getInstance().save(KEY_BACKGROUND_LOCATION, !GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));
 
-                formEntryViewModel.backgroundLocationPreferenceToggled();
+                backgroundLocationViewModel.backgroundLocationPreferenceToggled();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -2133,7 +2133,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         // User may have changed location permissions in Android settings
         if (PermissionUtils.areLocationPermissionsGranted(this) != locationPermissionsPreviouslyGranted) {
-            formEntryViewModel.locationPermissionChanged();
+            backgroundLocationViewModel.locationPermissionChanged();
             locationPermissionsPreviouslyGranted = !locationPermissionsPreviouslyGranted;
         }
         activityDisplayed();
@@ -2141,7 +2141,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     protected void onStop() {
-        formEntryViewModel.activityHidden();
+        backgroundLocationViewModel.activityHidden();
 
         super.onStop();
     }
@@ -2390,7 +2390,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 Collect.getInstance().setFormController(formController);
                 supportInvalidateOptionsMenu();
-                formEntryViewModel.formFinishedLoading();
+                backgroundLocationViewModel.formFinishedLoading();
                 Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
 
                 // Set the language if one has already been set in the past
@@ -2895,24 +2895,24 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction() != null
                     && intent.getAction().matches(LocationManager.PROVIDERS_CHANGED_ACTION)) {
-                formEntryViewModel.locationProvidersChanged();
+                backgroundLocationViewModel.locationProvidersChanged();
             }
         }
     }
 
     private void activityDisplayed() {
-        displayUIFor(formEntryViewModel.activityDisplayed());
+        displayUIFor(backgroundLocationViewModel.activityDisplayed());
 
-        if (formEntryViewModel.isBackgroundLocationPermissionsCheckNeeded()) {
+        if (backgroundLocationViewModel.isBackgroundLocationPermissionsCheckNeeded()) {
             new PermissionUtils().requestLocationPermissions(this, new PermissionListener() {
                 @Override
                 public void granted() {
-                    displayUIFor(formEntryViewModel.locationPermissionsGranted());
+                    displayUIFor(backgroundLocationViewModel.locationPermissionsGranted());
                 }
 
                 @Override
                 public void denied() {
-                    formEntryViewModel.locationPermissionsDenied();
+                    backgroundLocationViewModel.locationPermissionsDenied();
                 }
             });
         }
@@ -3045,17 +3045,17 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     /**
-     * Build {@link FormEntryViewModel} and its dependencies.
+     * Build {@link BackgroundLocationViewModel} and its dependencies.
      */
     private class FormEntryViewModelFactory implements ViewModelProvider.Factory {
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            if (modelClass.equals(FormEntryViewModel.class)) {
+            if (modelClass.equals(BackgroundLocationViewModel.class)) {
                 GoogleLocationClient googleLocationClient = new GoogleLocationClient(Collect.getInstance().getApplicationContext());
 
                 BackgroundLocationManager locationManager =
                         new BackgroundLocationManager(googleLocationClient, new BackgroundLocationHelper());
-                return (T) new FormEntryViewModel(locationManager);
+                return (T) new BackgroundLocationViewModel(locationManager);
             }
             return null;
         }
