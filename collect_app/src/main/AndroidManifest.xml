@@ -150,7 +150,7 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.GeoPolyActivity"
             android:configChanges="orientation" />
         <activity
-            android:name=".activities.MapActivity"
+            android:name=".activities.FormMapActivity"
             android:configChanges="orientation" />
         <activity android:name=".activities.BearingActivity" />
         <activity

@@ -52,7 +52,7 @@ import java.util.Map;
 import timber.log.Timber;
 
 /** Show a map with points representing saved instances of the selected form. */
-public class MapActivity extends BaseGeoMapActivity {
+public class FormMapActivity extends BaseGeoMapActivity {
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
 
@@ -76,7 +76,7 @@ public class MapActivity extends BaseGeoMapActivity {
             if (c.moveToFirst()) {
                 jrFormId = c.getString(0);
                 formTitle = c.getString(1);
-                Timber.i("Starting MapActivity for form \"%s\" (jrFormId = \"%s\")", formTitle, jrFormId);
+                Timber.i("Starting FormMapActivity for form \"%s\" (jrFormId = \"%s\")", formTitle, jrFormId);
             }
         }
 
