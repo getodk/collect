@@ -2437,6 +2437,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
                     identityPromptViewModel.requiresIdentity().observe(this, requiresIdentity -> {
                         if (!requiresIdentity) {
+                            formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_START, true, System.currentTimeMillis());
                             startFormEntry(formController, warningMsg);
                         }
                     });
@@ -2446,37 +2447,41 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                     if (!showFirst) {
                         if (!allowMovingBackwards) {
-                            // How does this happen?
-                            FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile();
-                            if (formIndex != null) {
-                                formController.jumpToIndex(formIndex);
-                                refreshCurrentView();
-                                return;
-                            }
-                        }
-
-                        // we've just loaded a saved form, so start in the hierarchy view
-                        String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
-                        if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
                             identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
                             identityPromptViewModel.requiresIdentity().observe(this, requiresIdentity -> {
                                 if (!requiresIdentity) {
-                                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
-                                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
-                                    startActivityForResult(new Intent(this, FormHierarchyActivity.class), RequestCodes.HIERARCHY_ACTIVITY);
+                                    FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile();
+                                    if (formIndex != null) {
+                                        formController.jumpToIndex(formIndex);
+                                        refreshCurrentView();
+                                    }
                                 }
                             });
                         } else {
-                            if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
-                                startActivity(new Intent(this, ViewOnlyFormHierarchyActivity.class));
+                            // we've just loaded a saved form, so start in the hierarchy view
+                            String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
+                            if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
+                                identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
+                                identityPromptViewModel.requiresIdentity().observe(this, requiresIdentity -> {
+                                    if (!requiresIdentity) {
+                                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
+                                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
+                                        startActivityForResult(new Intent(this, FormHierarchyActivity.class), RequestCodes.HIERARCHY_ACTIVITY);
+                                    }
+                                });
+                            } else {
+                                if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
+                                    startActivity(new Intent(this, ViewOnlyFormHierarchyActivity.class));
+                                }
+                                finish();
                             }
-                            finish();
                         }
                     } else {
                         identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
                         identityPromptViewModel.requiresIdentity().observe(this, requiresIdentity -> {
                             if (!requiresIdentity) {
-                                resumeFormEntry(formController, warningMsg);
+                                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
+                                startFormEntry(formController, warningMsg);
                             }
                         });
                     }
@@ -2491,32 +2496,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void startFormEntry(FormController formController, String warningMsg) {
-        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_START, true, System.currentTimeMillis());
-
-        // Register to receive location provider change updates and write them to the audit
-        // log. onStart has already run but the formController was null so try again.
-        if (formController.currentFormAuditsLocation()
-                && PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
-            registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
-        }
-
-        // onStart ran before the form was loaded. Let the viewModel know that the activity
-        // is about to be displayed and configured. Do this before the refresh actually
-        // happens because if audit logging is enabled, the refresh logs a question event
-        // and we want that to show up after initialization events.
-        activityDisplayed();
-
-        refreshCurrentView();
-
-        if (warningMsg != null) {
-            ToastUtils.showLongToast(warningMsg);
-            Timber.w(warningMsg);
-        }
-    }
-
-    private void resumeFormEntry(FormController formController, String warningMsg) {
-        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
-
         // Register to receive location provider change updates and write them to the audit
         // log. onStart has already run but the formController was null so try again.
         if (formController.currentFormAuditsLocation()

@@ -235,7 +235,7 @@ public class AuditEventLoggerTest {
         }
 
         @Override
-        public Boolean isWriting() {
+        public boolean isWriting() {
             return false;
         }
     }

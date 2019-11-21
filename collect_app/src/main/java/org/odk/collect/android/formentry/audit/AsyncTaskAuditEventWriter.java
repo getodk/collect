@@ -29,7 +29,7 @@ public class AsyncTaskAuditEventWriter implements AuditEventLogger.AuditEventWri
     }
 
     @Override
-    public Boolean isWriting() {
+    public boolean isWriting() {
         return saveTask != null && saveTask.getStatus() != AsyncTask.Status.FINISHED;
     }
 }
