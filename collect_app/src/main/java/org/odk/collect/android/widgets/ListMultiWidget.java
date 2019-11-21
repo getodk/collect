@@ -70,6 +70,7 @@ public class ListMultiWidget extends ItemsWidget implements MultiChoiceWidget {
     @SuppressWarnings("unchecked")
     public ListMultiWidget(Context context, QuestionDetails questionDetails, boolean displayLabel) {
         super(context, questionDetails);
+        legacyConstructor(context, questionDetails);
 
         checkBoxes = new ArrayList<>();
 

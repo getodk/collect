@@ -257,7 +257,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             SelectChoice item = items.get(index);
 
             audioVideoImageTextLabel.setTag(getClipID(getFormEntryPrompt(), item));
-            audioVideoImageTextLabel.setText(textView);
+            audioVideoImageTextLabel.setTextView(textView);
 
             String imageURI = getImageURI(index, items);
             String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "video");

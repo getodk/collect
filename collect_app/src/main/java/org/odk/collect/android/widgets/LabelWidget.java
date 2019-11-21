@@ -58,6 +58,7 @@ public class LabelWidget extends ItemsWidget {
 
     public LabelWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
+        legacyConstructor(context, questionDetails);
 
         // Layout holds the horizontal list of buttons
         LinearLayout buttonLayout = new LinearLayout(context);

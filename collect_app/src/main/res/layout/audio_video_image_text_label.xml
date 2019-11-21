@@ -18,7 +18,19 @@
         <FrameLayout
             android:id="@+id/text_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/text_label"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/margin_standard"
+                android:orientation="vertical"
+                android:textColor="?attr/colorOnSurface"
+                android:textStyle="bold"
+                tools:text="This is a question?" />
+
+        </FrameLayout>
 
         <ImageView
             android:id="@+id/imageView"
@@ -68,6 +80,7 @@
             android:layout_width="@dimen/touch_target_size"
             android:layout_height="@dimen/touch_target_size"
             android:visibility="gone"
+            app:iconTint="?colorOnSurface"
             tools:visibility="visible" />
 
         <com.google.android.material.button.MaterialButton

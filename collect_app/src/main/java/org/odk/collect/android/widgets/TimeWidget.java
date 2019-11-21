@@ -63,7 +63,7 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
     public TimeWidget(Context context, final QuestionDetails prompt) {
         super(context, prompt);
 
-        setGravity(Gravity.START);
+        containerView.setGravity(Gravity.START);
 
         createTimeButton();
         timeTextView = getAnswerTextView();

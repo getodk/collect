@@ -3,11 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/margin_standard"
+    android:padding="@dimen/margin_standard"
     android:paddingStart="@dimen/margin_standard"
-    android:paddingRight="@dimen/margin_standard"
-    android:paddingEnd="@dimen/margin_standard"
+    android:paddingLeft="@dimen/margin_standard"
     android:paddingTop="@dimen/margin_extra_small"
-    android:paddingBottom="@dimen/margin_extra_small">
+    android:paddingEnd="@dimen/margin_standard"
+    android:paddingRight="@dimen/margin_standard"
+    android:paddingBottom="@dimen/margin_extra_small"
+    android:textColor="?attr/colorOnSurface">
 
 </TextView>

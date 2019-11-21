@@ -43,7 +43,7 @@ public class DateTimeWidget extends QuestionWidget implements BinaryWidget, Widg
     public DateTimeWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
 
-        setGravity(Gravity.START);
+        containerView.setGravity(Gravity.START);
 
         dateWidget = new DateWidget(context, prompt);
         timeWidget = new TimeWidget(context, prompt);

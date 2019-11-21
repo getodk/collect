@@ -1,7 +1,7 @@
 package org.odk.collect.android.formentry;
 
 import android.app.Activity;
-import android.widget.TextView;
+import android.view.View;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -38,7 +38,27 @@ public class AudioVideoImageTextLabelTest {
     public AudioHelper audioHelper;
 
     @Test
-    public void withTextView_andAudio_playingAudio_highlightsText() throws Exception {
+    public void withNullText_hidesTextLabel() {
+        Activity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
+
+        AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
+        audioVideoImageTextLabel.setText(null, false, 16);
+
+        assertThat(audioVideoImageTextLabel.getLabelTextView().getVisibility(), equalTo(View.GONE));
+    }
+
+    @Test
+    public void withBlankText_hidesTextLabel() {
+        Activity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
+
+        AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
+        audioVideoImageTextLabel.setText("", false, 16);
+
+        assertThat(audioVideoImageTextLabel.getLabelTextView().getVisibility(), equalTo(View.GONE));
+    }
+
+    @Test
+    public void withText_andAudio_playingAudio_highlightsText() {
         MutableLiveData<Boolean> isPlaying = new MutableLiveData<>();
         isPlaying.setValue(false);
         when(audioHelper.setAudio(any(AudioButton.class), any())).thenReturn(isPlaying);
@@ -46,7 +66,7 @@ public class AudioVideoImageTextLabelTest {
         Activity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
 
         AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
-        audioVideoImageTextLabel.setText(new TextView(activity));
+        audioVideoImageTextLabel.setText("blah", false, 16);
         audioVideoImageTextLabel.setImageVideo(
                 null,
                 null,

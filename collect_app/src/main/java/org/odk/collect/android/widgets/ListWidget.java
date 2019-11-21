@@ -76,6 +76,7 @@ public class ListWidget extends ItemsWidget implements MultiChoiceWidget, OnChec
 
     public ListWidget(Context context, QuestionDetails questionDetails, boolean displayLabel, boolean autoAdvance) {
         super(context, questionDetails);
+        legacyConstructor(context, questionDetails);
 
         this.autoAdvance = autoAdvance;
         if (context instanceof AdvanceToNextListener) {
