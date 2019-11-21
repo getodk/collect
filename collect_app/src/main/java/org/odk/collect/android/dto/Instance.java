@@ -25,7 +25,7 @@ package org.odk.collect.android.dto;
 public final class Instance {
     private final String displayName;
     private final String submissionUri;
-    private final String canEditWhenComplete;
+    private final boolean canEditWhenComplete;
     private final String instanceFilePath;
     private final String jrFormId;
     private final String jrVersion;
@@ -56,7 +56,7 @@ public final class Instance {
     public static class Builder {
         private String displayName;
         private String submissionUri;
-        private String canEditWhenComplete;
+        private boolean canEditWhenComplete;
         private String instanceFilePath;
         private String jrFormId;
         private String jrVersion;
@@ -78,7 +78,7 @@ public final class Instance {
             return this;
         }
 
-        public Builder canEditWhenComplete(String canEditWhenComplete) {
+        public Builder canEditWhenComplete(boolean canEditWhenComplete) {
             this.canEditWhenComplete = canEditWhenComplete;
             return this;
         }
@@ -141,7 +141,7 @@ public final class Instance {
         return submissionUri;
     }
 
-    public String getCanEditWhenComplete() {
+    public boolean canEditWhenComplete() {
         return canEditWhenComplete;
     }
 

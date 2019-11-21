@@ -192,20 +192,27 @@ public class MapActivity extends BaseGeoMapActivity {
     public void onFeatureClicked(int featureId) {
         Instance instance = instancesByFeatureId.get(featureId);
 
-        if (instance != null && instance.getDeletedDate() != null) {
-            String deletedTime = getString(R.string.deleted_on_date_at_time);
-            String disabledMessage = new SimpleDateFormat(deletedTime,
-                    Locale.getDefault()).format(new Date(instance.getDeletedDate()));
+        if (instance != null) {
+            if (instance.getDeletedDate() != null) {
+                String deletedTime = getString(R.string.deleted_on_date_at_time);
+                String disabledMessage = new SimpleDateFormat(deletedTime,
+                        Locale.getDefault()).format(new Date(instance.getDeletedDate()));
 
-            ToastUtils.showLongToast(disabledMessage);
-        } else if (instance != null && instance.getDatabaseId() != null) {
-            Uri uri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, instance.getDatabaseId());
-            Intent intent = new Intent(Intent.ACTION_EDIT, uri);
-
-            if (instance.getStatus().equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
-                intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
+                ToastUtils.showLongToast(disabledMessage);
+                return;
             }
-            startActivity(intent);
+
+            if (instance.getStatus().equals(InstanceProviderAPI.STATUS_COMPLETE) && !instance.canEditWhenComplete()) {
+                ToastUtils.showLongToast(R.string.cannot_edit_completed_form);
+            } else if (instance.getDatabaseId() != null) {
+                Uri uri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, instance.getDatabaseId());
+                Intent intent = new Intent(Intent.ACTION_EDIT, uri);
+
+                if (instance.getStatus().equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
+                    intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
+                }
+                startActivity(intent);
+            }
         }
     }
 

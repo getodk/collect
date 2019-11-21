@@ -318,7 +318,7 @@ public class InstancesDao {
                     Instance instance = new Instance.Builder()
                             .displayName(cursor.getString(displayNameColumnIndex))
                             .submissionUri(cursor.getString(submissionUriColumnIndex))
-                            .canEditWhenComplete(cursor.getString(canEditWhenCompleteIndex))
+                            .canEditWhenComplete(Boolean.valueOf(cursor.getString(canEditWhenCompleteIndex)))
                             .instanceFilePath(cursor.getString(instanceFilePathIndex))
                             .jrFormId(cursor.getString(jrFormIdColumnIndex))
                             .jrVersion(cursor.getString(jrVersionColumnIndex))
@@ -349,7 +349,7 @@ public class InstancesDao {
         ContentValues values = new ContentValues();
         values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME, instance.getDisplayName());
         values.put(InstanceProviderAPI.InstanceColumns.SUBMISSION_URI, instance.getSubmissionUri());
-        values.put(InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE, instance.getCanEditWhenComplete());
+        values.put(InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(instance.canEditWhenComplete()));
         values.put(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH, instance.getInstanceFilePath());
         values.put(InstanceProviderAPI.InstanceColumns.JR_FORM_ID, instance.getJrFormId());
         values.put(InstanceProviderAPI.InstanceColumns.JR_VERSION, instance.getJrVersion());
