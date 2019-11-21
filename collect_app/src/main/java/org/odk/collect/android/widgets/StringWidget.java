@@ -16,16 +16,26 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.annotation.NonNull;
-
+import android.text.Editable;
 import android.text.Selection;
+import android.text.TextWatcher;
+import android.text.method.TextKeyListener;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+
+import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
+import org.odk.collect.android.utilities.ViewIds;
+
+import timber.log.Timber;
 
 /**
  * The most basic widget that allows for entry of any text.
@@ -45,7 +55,7 @@ public class StringWidget extends QuestionWidget {
 
     protected void setUpLayout() {
         setDisplayValueFromModel();
-        addAnswerView(answerText);
+        addAnswerView(answerText, 12);
     }
 
     @Override
@@ -113,5 +123,67 @@ public class StringWidget extends QuestionWidget {
             answerText.setText(currentAnswer);
             Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
         }
+    }
+
+    private EditText getAnswerEditText(boolean readOnly, FormEntryPrompt prompt) {
+        EditText answerEditText = new EditText(getContext());
+        answerEditText.setId(ViewIds.generateViewId());
+        answerEditText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+        answerEditText.setKeyListener(new TextKeyListener(TextKeyListener.Capitalize.SENTENCES, false));
+
+        // needed to make long read only text scroll
+        answerEditText.setHorizontallyScrolling(false);
+        answerEditText.setSingleLine(false);
+
+        if (readOnly) {
+            answerEditText.setBackground(null);
+            answerEditText.setEnabled(false);
+            answerEditText.setTextColor(themeUtils.getColorOnSurface());
+            answerEditText.setFocusable(false);
+        }
+
+        answerEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                widgetValueChanged();
+            }
+        });
+
+        QuestionDef questionDef = prompt.getQuestion();
+        if (questionDef != null) {
+            /*
+             * If a 'rows' attribute is on the input tag, set the minimum number of lines
+             * to display in the field to that value.
+             *
+             * I.e.,
+             * <input ref="foo" rows="5">
+             *   ...
+             * </input>
+             *
+             * will set the height of the EditText box to 5 rows high.
+             */
+            String height = questionDef.getAdditionalAttribute(null, "rows");
+            if (height != null && height.length() != 0) {
+                try {
+                    int rows = Integer.parseInt(height);
+                    answerEditText.setMinLines(rows);
+                    answerEditText.setGravity(Gravity.TOP); // to write test starting at the top of the edit area
+                } catch (Exception e) {
+                    Timber.e("Unable to process the rows setting for the answerText field: %s", e.toString());
+                }
+            }
+        }
+
+        return answerEditText;
     }
 }
