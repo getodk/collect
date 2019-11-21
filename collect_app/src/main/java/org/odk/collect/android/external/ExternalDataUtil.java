@@ -208,7 +208,10 @@ public final class ExternalDataUtil {
             }
             return returnedChoices;
         } catch (Exception e) {
-            String fileName = xpathfuncexpr.args[0].eval(null, null) + ".csv";
+            String fileName = String.valueOf(xpathfuncexpr.args[0].eval(null, null));
+            if (!fileName.endsWith(".csv")) {
+                fileName = fileName + ".csv";
+            }
             FormController formController = Collect.getInstance().getFormController();
             String filePath = fileName;
             if (formController != null) {
