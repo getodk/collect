@@ -130,21 +130,18 @@ public abstract class QuestionWidget
         this.questionDetails = questionDetails;
         formEntryPrompt = questionDetails.getPrompt();
 
-        helpTextLayout = createHelpTextLayout();
-        helpTextLayout.setId(ViewIds.generateViewId());
-        guidanceTextLayout = helpTextLayout.findViewById(R.id.guidance_text_layout);
-        textLayout = helpTextLayout.findViewById(R.id.text_layout);
-        warningText = helpTextLayout.findViewById(R.id.warning_text);
-        helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), formEntryPrompt);
-        guidanceTextView = setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), formEntryPrompt);
-
         inflate(context, R.layout.question_widget, this);
         containerView = findViewById(R.id.container);
 
         audioVideoImageTextLabel = containerView.findViewById(R.id.question_label);
         setupQuestionLabel(audioVideoImageTextLabel, formEntryPrompt);
 
-        addHelpTextLayout(getHelpTextLayout());
+        helpTextLayout = findViewById(R.id.help_text);
+        guidanceTextLayout = helpTextLayout.findViewById(R.id.guidance_text_layout);
+        textLayout = helpTextLayout.findViewById(R.id.text_layout);
+        warningText = helpTextLayout.findViewById(R.id.warning_text);
+        helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), formEntryPrompt);
+        guidanceTextView = setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), formEntryPrompt);
 
         if (context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
             registerToClearAnswerOnLongPress((FormEntryActivity) context);
@@ -152,8 +149,6 @@ public abstract class QuestionWidget
     }
 
     private void setupQuestionLabel(AudioVideoImageTextLabel label, FormEntryPrompt prompt) {
-        // Create the layout for audio, image, text
-        label.setId(ViewIds.generateViewId()); // assign random id
         label.setTag(getClipID(prompt));
 
         label.setText(prompt.getLongText(), prompt.isRequired(), getQuestionFontSize());
@@ -450,10 +445,7 @@ public abstract class QuestionWidget
         }
     }
 
-    /**
-     * Add a TextView containing the help text to the default location.
-     * Override to reposition.
-     */
+    @Deprecated
     protected void addHelpTextLayout(View v) {
         if (v == null) {
             Timber.e("cannot add a null view as helpTextView");
@@ -500,26 +492,34 @@ public abstract class QuestionWidget
      * If you have many elements, use this first
      * and use the standard addView(view, params) to place the rest
      */
-    protected void addAnswerView(View v) {
+    protected final void addAnswerView(View v) {
         addAnswerView(v, null);
     }
 
-    protected void addAnswerView(View v, Integer margin) {
-        if (v == null) {
-            Timber.e("cannot add a null view as an answerView");
-            return;
-        }
-        // default place to add answer
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        params.addRule(RelativeLayout.BELOW, getHelpTextLayout().getId());
+    protected final void addAnswerView(View v, Integer margin) {
+        ViewGroup answerContainer = findViewById(R.id.answer_container);
 
-        if (margin != null) {
-            params.setMargins(ViewUtils.pxFromDp(getContext(), margin), 0, ViewUtils.pxFromDp(getContext(), margin), 0);
-        }
+        if (answerContainer != null) {
+            if (margin != null) {
+                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                params.setMargins(ViewUtils.pxFromDp(getContext(), margin), 0, ViewUtils.pxFromDp(getContext(), margin), 0);
+                answerContainer.addView(v, params);
+            } else {
+                answerContainer.addView(v);
+            }
+        } else {
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+            params.addRule(RelativeLayout.BELOW, getHelpTextLayout().getId());
 
-        containerView.addView(v, params);
+            if (margin != null) {
+                params.setMargins(ViewUtils.pxFromDp(getContext(), margin), 0, ViewUtils.pxFromDp(getContext(), margin), 0);
+            }
+
+            containerView.addView(v, params);
+        }
     }
 
     /**
