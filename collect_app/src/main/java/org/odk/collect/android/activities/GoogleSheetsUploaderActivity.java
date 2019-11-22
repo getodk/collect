@@ -85,9 +85,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         // 1) Google Sheets is selected in preferences
         // 2) A google user is selected
 
-        // default initializers
         alertMsg = getString(R.string.please_wait);
-        alertShowing = false;
 
         setTitle(getString(R.string.send_data));
 
@@ -186,8 +184,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
      *                    activity result.
      */
     @Override
-    protected void onActivityResult(
-            int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_CANCELED) {
@@ -195,13 +192,11 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
             finish();
         }
 
-        switch (requestCode) {
-            case REQUEST_AUTHORIZATION:
-                dismissProgressDialog();
-                if (resultCode == RESULT_OK) {
-                    getResultsFromApi();
-                }
-                break;
+        if (requestCode == REQUEST_AUTHORIZATION) {
+            dismissProgressDialog();
+            if (resultCode == RESULT_OK) {
+                getResultsFromApi();
+            }
         }
     }
 
@@ -260,7 +255,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         try {
             dismissProgressDialog();
         } catch (Exception e) {
-            // tried to close a dialog not open. don't care.
+            Timber.w(e);
         }
 
         if (result == null) {
@@ -284,20 +279,19 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
 
     @Override
     protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case GOOGLE_USER_DIALOG:
-                AlertDialog.Builder gudBuilder = new AlertDialog.Builder(this);
+        if (id == GOOGLE_USER_DIALOG) {
+            AlertDialog.Builder gudBuilder = new AlertDialog.Builder(this);
 
-                gudBuilder.setTitle(getString(R.string.no_google_account));
-                gudBuilder.setMessage(getString(R.string.google_set_account));
-                gudBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                });
-                gudBuilder.setCancelable(false);
-                return gudBuilder.create();
+            gudBuilder.setTitle(getString(R.string.no_google_account));
+            gudBuilder.setMessage(getString(R.string.google_set_account));
+            gudBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+            gudBuilder.setCancelable(false);
+            return gudBuilder.create();
         }
         return null;
     }
@@ -307,12 +301,10 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         alertDialog.setTitle(getString(R.string.upload_results));
         alertDialog.setMessage(message);
         DialogInterface.OnClickListener quitListener = (dialog, i) -> {
-            switch (i) {
-                case DialogInterface.BUTTON1: // ok
-                    // always exit this activity since it has no interface
-                    alertShowing = false;
-                    finish();
-                    break;
+            if (i == DialogInterface.BUTTON1) { // ok
+                // always exit this activity since it has no interface
+                alertShowing = false;
+                finish();
             }
         };
         alertDialog.setCancelable(false);
