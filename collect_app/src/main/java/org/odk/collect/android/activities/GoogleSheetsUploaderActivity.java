@@ -122,22 +122,16 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     }
 
     private void runTask() {
-        instanceGoogleSheetsUploaderTask = (InstanceGoogleSheetsUploaderTask) getLastCustomNonConfigurationInstance();
-        if (instanceGoogleSheetsUploaderTask == null) {
-            instanceGoogleSheetsUploaderTask = new InstanceGoogleSheetsUploaderTask(accountsManager);
+        instanceGoogleSheetsUploaderTask = new InstanceGoogleSheetsUploaderTask(accountsManager);
 
-            // ensure we have a google account selected
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            String googleUsername = prefs.getString(
-                    GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
-            if (googleUsername == null || googleUsername.equals("")) {
-                showDialog(GOOGLE_USER_DIALOG);
-            } else {
-                new AuthorizationChecker().execute();
-            }
+        // ensure we have a google account selected
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String googleUsername = prefs.getString(
+                GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
+        if (googleUsername == null || googleUsername.equals("")) {
+            showDialog(GOOGLE_USER_DIALOG);
         } else {
-            // it's not null, so we have a task running
-            // progress dialog is handled by the system
+            new AuthorizationChecker().execute();
         }
     }
 
@@ -239,11 +233,6 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         super.onSaveInstanceState(outState);
         outState.putString(ALERT_MSG, alertMsg);
         outState.putBoolean(ALERT_SHOWING, alertShowing);
-    }
-
-    @Override
-    public Object onRetainCustomNonConfigurationInstance() {
-        return instanceGoogleSheetsUploaderTask;
     }
 
     @Override
