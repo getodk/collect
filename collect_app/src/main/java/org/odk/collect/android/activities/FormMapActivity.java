@@ -18,36 +18,28 @@ import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Window;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.dto.Instance;
+import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.preferences.MapsPreferences;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import timber.log.Timber;
 
@@ -56,32 +48,25 @@ public class FormMapActivity extends BaseGeoMapActivity {
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
 
+    private FormMapViewModel viewModel;
+
     private MapFragment map;
-    private boolean viewportInitialized;
-    private String jrFormId;
-    private String formTitle;
-    private final Map<Integer, Instance> instancesByFeatureId = new HashMap<>();
-    private final List<MapPoint> points = new ArrayList<>();
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Uri contentUri = getIntent().getData();
+        viewModel = ViewModelProviders.of(this,
+                new FormMapActivity.FormMapViewModelFactory(contentUri)).get(FormMapViewModel.class);
+        Timber.i("Starting FormMapActivity for form \"%s\" (jrFormId = \"%s\")",
+                viewModel.getFormTitle(),
+                viewModel.getFormId());
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.instance_map_layout);
 
-        Uri contentUri = getIntent().getData();
-        try (Cursor c = Collect.getInstance().getContentResolver().query(
-            contentUri, new String[] {FormsColumns.JR_FORM_ID, FormsColumns.DISPLAY_NAME},
-            null, null, null)) {
-            if (c.moveToFirst()) {
-                jrFormId = c.getString(0);
-                formTitle = c.getString(1);
-                Timber.i("Starting FormMapActivity for form \"%s\" (jrFormId = \"%s\")", formTitle, jrFormId);
-            }
-        }
-
         TextView titleView = findViewById(R.id.form_title);
-        titleView.setText(formTitle);
+        titleView.setText(viewModel.getFormTitle());
 
         Context context = getApplicationContext();
         MapProvider.createMapFragment(context)
@@ -116,7 +101,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
             map.zoomToPoint(map.getGpsLocation(), true));
 
         findViewById(R.id.zoom_to_bounds).setOnClickListener(v ->
-            map.zoomToBoundingBox(points, 0.8, true));
+            viewModel.mapZoomToBoundingBoxRequested(map));
 
         findViewById(R.id.layer_menu).setOnClickListener(v -> {
             MapsPreferences.showReferenceLayerDialog(this);
@@ -142,78 +127,44 @@ public class FormMapActivity extends BaseGeoMapActivity {
             return;
         }
 
-        points.clear();
-        map.clearFeatures();
-
-        InstancesDao dao = new InstancesDao();
-        Cursor c = dao.getInstancesCursor(InstanceColumns.JR_FORM_ID + " = ?",
-                new String[] {jrFormId});
-        List<Instance> instances = dao.getInstancesFromCursor(c);
-
-        for (Instance instance : instances) {
-            if (instance.getGeometry() != null) {
-                try {
-                    JSONObject geometry = new JSONObject(instance.getGeometry());
-                    switch (instance.getGeometryType()) {
-                        case "Point":
-                            JSONArray coordinates = geometry.getJSONArray("coordinates");
-                            // In GeoJSON, longitude comes before latitude.
-                            double lon = coordinates.getDouble(0);
-                            double lat = coordinates.getDouble(1);
-                            MapPoint point = new MapPoint(lat, lon);
-                            int featureId = map.addMarker(point, false);
-                            int drawableId = getDrawableIdForStatus(instance.getStatus());
-                            map.setMarkerIcon(featureId, drawableId);
-                            instancesByFeatureId.put(featureId, instance);
-                            points.add(point);
-                    }
-                } catch (JSONException e) {
-                    Timber.w("Invalid JSON in instances table: %s", instance.getGeometry());
-                }
-            }
-        }
+        viewModel.mapUpdateRequested(map);
 
         TextView statusView = findViewById(R.id.geometry_status);
-        statusView.setText(getString(R.string.geometry_status, c.getCount(), points.size()));
-
-        if (!viewportInitialized && !points.isEmpty()) {
-            map.zoomToBoundingBox(points, 0.8, false);
-            viewportInitialized = true;
-        }
+        statusView.setText(getString(R.string.geometry_status, viewModel.getInstanceCount(), viewModel.getMappedPointCount()));
     }
 
     public void onLocationChanged(MapPoint point) {
-        if (!viewportInitialized) {
-            map.zoomToPoint(point, true);
-            viewportInitialized = true;
-        }
+        viewModel.locationChanged(point, map);
     }
 
     public void onFeatureClicked(int featureId) {
-        Instance instance = instancesByFeatureId.get(featureId);
+        FormMapViewModel.FeatureStatus status = viewModel.getStatusOfClickedFeature(featureId);
 
-        if (instance != null) {
-            if (instance.getDeletedDate() != null) {
+        switch (status) {
+            case DELETED:
                 String deletedTime = getString(R.string.deleted_on_date_at_time);
                 String disabledMessage = new SimpleDateFormat(deletedTime,
-                        Locale.getDefault()).format(new Date(instance.getDeletedDate()));
+                        Locale.getDefault()).format(viewModel.getDeletedDateOf(featureId));
 
                 ToastUtils.showLongToast(disabledMessage);
-                return;
-            }
-
-            if (instance.getStatus().equals(InstanceProviderAPI.STATUS_COMPLETE) && !instance.canEditWhenComplete()) {
+                break;
+            case NOT_VIEWABLE:
                 ToastUtils.showLongToast(R.string.cannot_edit_completed_form);
-            } else if (instance.getDatabaseId() != null) {
-                Uri uri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, instance.getDatabaseId());
-                Intent intent = new Intent(Intent.ACTION_EDIT, uri);
-
-                if (instance.getStatus().equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
-                    intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
-                }
+                break;
+            case VIEW_ONLY:
+                Intent intent = getFormInstanceIntentFor(featureId);
+                intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
                 startActivity(intent);
-            }
+                break;
+            case EDITABLE:
+                startActivity(getFormInstanceIntentFor(featureId));
+                break;
         }
+    }
+
+    private Intent getFormInstanceIntentFor(int featureId) {
+        Uri uri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, viewModel.getDatabaseIdOf(featureId));
+        return new Intent(Intent.ACTION_EDIT, uri);
     }
 
     protected void restoreFromInstanceState(Bundle state) {
@@ -224,17 +175,20 @@ public class FormMapActivity extends BaseGeoMapActivity {
         }
     }
 
-    private int getDrawableIdForStatus(String status) {
-        switch (status) {
-            case InstanceProviderAPI.STATUS_INCOMPLETE:
-                return R.drawable.ic_room_blue_24dp;
-            case InstanceProviderAPI.STATUS_COMPLETE:
-                return R.drawable.ic_room_deep_purple_24dp;
-            case InstanceProviderAPI.STATUS_SUBMITTED:
-                return R.drawable.ic_room_green_24dp;
-            case InstanceProviderAPI.STATUS_SUBMISSION_FAILED:
-                return R.drawable.ic_room_red_24dp;
+    /**
+     * Build {@link FormMapViewModel} and its dependencies.
+     */
+    private class FormMapViewModelFactory implements ViewModelProvider.Factory {
+        private final Uri uri;
+
+        FormMapViewModelFactory(Uri uri) {
+            this.uri = uri;
         }
-        return R.drawable.ic_map_point;
+
+        @Override
+        @NonNull
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            return (T) new FormMapViewModel(uri);
+        }
     }
 }

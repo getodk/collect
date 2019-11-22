@@ -47,6 +47,10 @@ public class FormsDao {
         return Collect.getInstance().getContentResolver().query(FormsProviderAPI.FormsColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
     }
 
+    public Cursor getFormsCursor(Uri uri) {
+        return Collect.getInstance().getContentResolver().query(uri, null, null, null, null);
+    }
+
     public Cursor getFormsCursor(String formId, String formVersion) {
         String[] selectionArgs;
         String selection;
