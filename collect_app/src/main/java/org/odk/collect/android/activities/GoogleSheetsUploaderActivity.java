@@ -328,11 +328,13 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     }
 
     private void authorized() {
-        GoogleSheetsUploaderProgressDialog.newInstance(alertMsg)
-                .show(getSupportFragmentManager(), GOOGLE_SHEETS_UPLOADER_PROGRESS_DIALOG_TAG);
+        if (instanceGoogleSheetsUploaderTask.getStatus() == AsyncTask.Status.PENDING) {
+            GoogleSheetsUploaderProgressDialog.newInstance(alertMsg)
+                    .show(getSupportFragmentManager(), GOOGLE_SHEETS_UPLOADER_PROGRESS_DIALOG_TAG);
 
-        instanceGoogleSheetsUploaderTask.setUploaderListener(this);
-        instanceGoogleSheetsUploaderTask.execute(instancesToSend);
+            instanceGoogleSheetsUploaderTask.setUploaderListener(this);
+            instanceGoogleSheetsUploaderTask.execute(instancesToSend);
+        }
     }
 
     private void dismissProgressDialog() {
