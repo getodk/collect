@@ -21,7 +21,7 @@ import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dto.Instance;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.http.openrosa.HttpHeadResult;
 import org.odk.collect.android.http.openrosa.HttpPostResult;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;

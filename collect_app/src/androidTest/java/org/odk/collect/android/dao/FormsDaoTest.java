@@ -25,7 +25,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dto.Form;
+import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.utilities.ResetUtility;
 

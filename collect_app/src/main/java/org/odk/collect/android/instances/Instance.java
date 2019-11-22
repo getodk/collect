@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.dto;
+package org.odk.collect.android.instances;
 
 /**
- * This class represents a single row from the instances table which is located in
- * {@link org.odk.collect.android.provider.InstanceProvider#DATABASE_NAME}
- * For more information about this pattern go to https://en.wikipedia.org/wiki/Data_transfer_object
- * Objects of this class are created using builder pattern: https://en.wikipedia.org/wiki/Builder_pattern
+ * A filled form stored on the device.
+ *
+ * Objects of this class are created using the builder pattern: https://en.wikipedia.org/wiki/Builder_pattern
  */
 public final class Instance {
     private final String displayName;
