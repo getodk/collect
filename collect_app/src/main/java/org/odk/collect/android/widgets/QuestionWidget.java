@@ -24,7 +24,6 @@ import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,22 +82,22 @@ public abstract class QuestionWidget
         extends FrameLayout
         implements Widget {
 
-    private int questionFontSize;
-    private FormEntryPrompt formEntryPrompt;
-    private AudioVideoImageTextLabel audioVideoImageTextLabel;
-    private QuestionDetails questionDetails;
-    private TextView helpTextView;
-    private TextView guidanceTextView;
-    private View helpTextLayout;
-    private View guidanceTextLayout;
-    private View textLayout;
-    private TextView warningText;
+    private final int questionFontSize;
+    private final FormEntryPrompt formEntryPrompt;
+    private final AudioVideoImageTextLabel audioVideoImageTextLabel;
+    private final QuestionDetails questionDetails;
+    private final TextView helpTextView;
+    private final TextView guidanceTextView;
+    private final View helpTextLayout;
+    private final View guidanceTextLayout;
+    private final View textLayout;
+    private final TextView warningText;
     private PermissionUtils permissionUtils;
     private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
     private AtomicBoolean expanded;
     private Bundle state;
-    protected ThemeUtils themeUtils;
-    protected AudioHelper audioHelper;
+    protected final ThemeUtils themeUtils;
+    protected final AudioHelper audioHelper;
 
     private WidgetValueChangedListener valueChangedListener;
 
@@ -130,8 +129,7 @@ public abstract class QuestionWidget
         this.questionDetails = questionDetails;
         formEntryPrompt = questionDetails.getPrompt();
 
-        inflate(context, R.layout.question_widget, this);
-        containerView = findViewById(R.id.container);
+        containerView = inflate(context, getLayout(), this).findViewById(R.id.container);
 
         audioVideoImageTextLabel = containerView.findViewById(R.id.question_label);
         setupQuestionLabel(audioVideoImageTextLabel, formEntryPrompt);
@@ -146,6 +144,10 @@ public abstract class QuestionWidget
         if (context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
             registerToClearAnswerOnLongPress((FormEntryActivity) context);
         }
+    }
+
+    protected int getLayout() {
+        return R.layout.question_widget;
     }
 
     private void setupQuestionLabel(AudioVideoImageTextLabel label, FormEntryPrompt prompt) {
@@ -321,99 +323,6 @@ public abstract class QuestionWidget
     }
 
     @Deprecated
-    protected void legacyConstructor(Context context, QuestionDetails questionDetails) {
-        containerView.removeAllViews();
-
-        getComponent(context).inject(this);
-        this.audioHelper = audioHelperFactory.create(context);
-
-        themeUtils = new ThemeUtils(context);
-
-        if (context instanceof FormEntryActivity) {
-            state = ((FormEntryActivity) context).getState();
-            permissionUtils = new PermissionUtils();
-        }
-
-        questionFontSize = Collect.getQuestionFontsize();
-
-        this.questionDetails = questionDetails;
-        formEntryPrompt = questionDetails.getPrompt();
-
-        containerView.setGravity(Gravity.TOP);
-        setPadding(0, 7, 0, 0);
-
-        audioVideoImageTextLabel = createQuestionLabel(formEntryPrompt);
-        helpTextLayout = createHelpTextLayout();
-        helpTextLayout.setId(ViewIds.generateViewId());
-        guidanceTextLayout = helpTextLayout.findViewById(R.id.guidance_text_layout);
-        textLayout = helpTextLayout.findViewById(R.id.text_layout);
-        warningText = helpTextLayout.findViewById(R.id.warning_text);
-        helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), formEntryPrompt);
-        guidanceTextView = setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), formEntryPrompt);
-
-        addQuestionLabel(getAudioVideoImageTextLabel());
-        addHelpTextLayout(getHelpTextLayout());
-
-        if (context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
-            registerToClearAnswerOnLongPress((FormEntryActivity) context);
-        }
-    }
-
-    @Deprecated
-    private AudioVideoImageTextLabel createQuestionLabel(FormEntryPrompt prompt) {
-        // Create the layout for audio, image, text
-        AudioVideoImageTextLabel label = new AudioVideoImageTextLabel(getContext());
-        label.setId(ViewIds.generateViewId()); // assign random id
-        label.setTag(getClipID(prompt));
-
-        TextView questionText = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.question_long_text, label, false);
-        questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize());
-        questionText.setTypeface(null, Typeface.BOLD);
-        questionText.setTextColor(themeUtils.getColorOnSurface());
-
-        String promptText = prompt.getLongText();
-        questionText.setText(StringUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(promptText, prompt.isRequired())));
-        questionText.setMovementMethod(LinkMovementMethod.getInstance());
-
-        // Wrap to the size of the parent view
-        questionText.setHorizontallyScrolling(false);
-
-        if ((promptText != null && !promptText.isEmpty()) || prompt.isRequired() && (prompt.getHelpText() == null || prompt.getHelpText().isEmpty())) {
-            questionText.setVisibility(VISIBLE);
-        } else {
-            questionText.setVisibility(GONE);
-        }
-
-        String imageURI = this instanceof SelectImageMapWidget ? null : prompt.getImageText();
-        String videoURI = prompt.getSpecialFormQuestionText("video");
-
-        // shown when image is clicked
-        String bigImageURI = prompt.getSpecialFormQuestionText("big-image");
-
-        // Create the layout for audio, image, text
-        label.setId(ViewIds.generateViewId()); // assign random id
-
-        label.setTag(getClipID(prompt));
-        label.setTextView(questionText);
-        label.setImageVideo(
-                imageURI,
-                videoURI,
-                bigImageURI,
-                getReferenceManager()
-        );
-
-        String playableAudioURI = getPlayableAudioURI(prompt, referenceManager);
-        if (playableAudioURI != null) {
-            label.setAudio(playableAudioURI, audioHelper);
-            analytics.logEvent("Prompt", "AudioLabel", questionDetails.getFormAnalyticsID());
-        }
-
-        label.setPlayTextColor(getPlayColor(formEntryPrompt, themeUtils));
-
-        return label;
-    }
-
-    @Deprecated
     protected void addQuestionLabel(View v) {
         if (v == null) {
             Timber.e("cannot add a null view as questionMediaLayout");
@@ -443,25 +352,6 @@ public abstract class QuestionWidget
         if (expanded != null) {
             state.putBoolean(GUIDANCE_EXPANDED_STATE + getFormEntryPrompt().getIndex(), expanded.get());
         }
-    }
-
-    @Deprecated
-    protected void addHelpTextLayout(View v) {
-        if (v == null) {
-            Timber.e("cannot add a null view as helpTextView");
-            return;
-        }
-
-        // default for helptext
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        params.addRule(RelativeLayout.BELOW, getAudioVideoImageTextLabel().getId());
-        containerView.addView(v, params);
-    }
-
-    private View createHelpTextLayout() {
-        return LayoutInflater.from(getContext()).inflate(R.layout.help_text_layout, null);
     }
 
     private TextView setupHelpText(TextView helpText, FormEntryPrompt prompt) {
