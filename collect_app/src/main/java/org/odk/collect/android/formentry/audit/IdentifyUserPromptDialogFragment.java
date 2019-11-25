@@ -2,6 +2,7 @@ package org.odk.collect.android.formentry.audit;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -51,6 +52,10 @@ public class IdentifyUserPromptDialogFragment extends DialogFragment {
             dismiss();
             viewModel.promptClosing();
         });
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+            view.findViewById(R.id.action_bar_shadow).setVisibility(View.VISIBLE);
+        }
 
         identityField = view.findViewById(R.id.identity);
         identityField.setOnEditorActionListener((textView, i, keyEvent) -> {
