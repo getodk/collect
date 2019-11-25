@@ -42,7 +42,7 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.TextUtils;
+import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.UrlUtils;
 import org.odk.collect.android.utilities.gdrive.DriveHelper;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
@@ -157,7 +157,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private void insertRows(Instance instance, TreeElement element, String parentKey, String key, File instanceFile, String sheetTitle)
             throws UploadException {
-        insertRow(instance, element, parentKey, key, instanceFile, TextUtils.ellipsizeBeginning(sheetTitle));
+        insertRow(instance, element, parentKey, key, instanceFile, StringUtils.ellipsizeBeginning(sheetTitle));
 
         int repeatIndex = 0;
         for (TreeElement child : getChildElements(element, true)) {
@@ -328,7 +328,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         Set<String> sheetTitles = new HashSet<>();
         for (TreeElement childElement : getChildElements(element, false)) {
             if (childElement.isRepeatable()) {
-                sheetTitles.add(TextUtils.ellipsizeBeginning(getElementTitle(childElement)));
+                sheetTitles.add(StringUtils.ellipsizeBeginning(getElementTitle(childElement)));
                 sheetTitles.addAll(getSheetTitles(childElement));
             }
         }
@@ -341,7 +341,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         for (TreeElement childElement : getChildElements(element, false)) {
             String elementTitle = getElementTitle(childElement);
             if (childElement.isRepeatable()) {
-                answers.put(elementTitle, getHyperlink(getSheetUrl(getSheetId(TextUtils.ellipsizeBeginning(elementTitle))), elementTitle));
+                answers.put(elementTitle, getHyperlink(getSheetUrl(getSheetId(StringUtils.ellipsizeBeginning(elementTitle))), elementTitle));
             } else {
                 String answer = childElement.getValue() != null ? childElement.getValue().getDisplayText() : "";
                 if (new File(instanceFile.getParentFile() + "/" + answer).isFile()) {

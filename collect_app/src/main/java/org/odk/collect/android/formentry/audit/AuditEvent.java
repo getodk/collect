@@ -21,7 +21,7 @@ import androidx.annotation.NonNull;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
-import org.odk.collect.android.utilities.TextUtils;
+import org.odk.collect.android.utilities.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -338,6 +338,6 @@ public class AuditEvent {
             walker = walker.getNextLevel();
             i++;
         }
-        return "/" + TextUtils.join("/", nodeNames);
+        return "/" + StringUtils.join("/", nodeNames);
     }
 }
