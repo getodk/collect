@@ -131,7 +131,7 @@ public class SmsService {
     public boolean submitForm(String instanceId, FormInfo info, String displayName) {
         String text;
 
-        if (formsDao.isFormEncrypted(info.getFormID(), info.getFormVersion())) {
+        if (formsDao.isFormEncrypted(info.getFormId(), info.getFormVersion())) {
             SmsRxEvent event = new SmsRxEvent(instanceId, RESULT_ENCRYPTED);
             updateInstanceStatusFailedText(instanceId, event);
             rxEventBus.post(event);

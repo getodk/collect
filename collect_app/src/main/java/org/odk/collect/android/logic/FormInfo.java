@@ -14,6 +14,12 @@
 
 package org.odk.collect.android.logic;
 
+/**
+ * Represents a subset of information about a form.
+ *
+ * @deprecated Use the full {@link org.odk.collect.android.forms.Form} instead.
+ */
+@Deprecated
 public class FormInfo {
 
     private final String formVersion;
@@ -30,7 +36,7 @@ public class FormInfo {
         return formVersion;
     }
 
-    public String getFormID() {
+    public String getFormId() {
         return formID;
     }
 

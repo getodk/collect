@@ -499,7 +499,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             instancePath = formInfo.getInstancePath();
 
-            String jrFormId = formInfo.getFormID();
+            String jrFormId = formInfo.getFormId();
             String jrVersion = formInfo.getFormVersion();
 
             String[] selectionArgs;
