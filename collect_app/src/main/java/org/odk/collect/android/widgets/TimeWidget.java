@@ -23,7 +23,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -62,8 +61,6 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
 
     public TimeWidget(Context context, final QuestionDetails prompt) {
         super(context, prompt);
-
-        containerView.setGravity(Gravity.START);
 
         createTimeButton();
         timeTextView = getAnswerTextView();

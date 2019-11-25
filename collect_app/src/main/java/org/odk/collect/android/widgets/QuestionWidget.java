@@ -98,10 +98,9 @@ public abstract class QuestionWidget
     private Bundle state;
     protected final ThemeUtils themeUtils;
     protected final AudioHelper audioHelper;
+    private final RelativeLayout containerView;
 
     private WidgetValueChangedListener valueChangedListener;
-
-    protected final RelativeLayout containerView;
 
     @Inject
     public ReferenceManager referenceManager;
