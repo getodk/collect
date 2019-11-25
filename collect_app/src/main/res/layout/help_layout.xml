@@ -20,6 +20,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/margin_small"
             android:layout_marginEnd="@dimen/margin_standard"
             android:layout_marginRight="@dimen/margin_standard"
             android:visibility="gone"
@@ -31,11 +32,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:paddingLeft="@dimen/margin_standard"
-            android:paddingRight="@dimen/margin_standard"
+
             android:layout_toEndOf="@id/help_icon"
-            android:textStyle="italic"
             android:layout_toRightOf="@id/help_icon"
+            android:textStyle="italic"
             tools:text="Help text" />
     </RelativeLayout>
 
@@ -43,6 +43,7 @@
         android:id="@+id/guidance_text_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
         android:orientation="vertical"
         android:visibility="gone"
         tools:visibility="visible">
@@ -59,6 +60,7 @@
         android:id="@+id/warning_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
         android:textColor="?attr/warningColor"
         android:visibility="gone"
         tools:text="A warning"

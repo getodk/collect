@@ -46,7 +46,7 @@ public class CaptureSelfieActivityNewApi extends CollectAbstractActivity {
         setContentView(R.layout.activity_capture_selfie_new_api);
         if (null == savedInstanceState) {
             getFragmentManager().beginTransaction()
-                    .replace(R.id.container, Camera2Fragment.newInstance())
+                    .replace(R.id.question_widget_container, Camera2Fragment.newInstance())
                     .commit();
         }
         ToastUtils.showLongToast(R.string.take_picture_instruction);

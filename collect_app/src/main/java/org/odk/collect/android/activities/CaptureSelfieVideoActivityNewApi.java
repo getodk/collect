@@ -43,7 +43,7 @@ public class CaptureSelfieVideoActivityNewApi extends Activity {
         setContentView(R.layout.activity_capture_selfie_video_new_api);
         if (null == savedInstanceState) {
             getFragmentManager().beginTransaction()
-                    .replace(R.id.container, Camera2VideoFragment.newInstance())
+                    .replace(R.id.question_widget_container, Camera2VideoFragment.newInstance())
                     .commit();
         }
         ToastUtils.showLongToast(getString(R.string.start_video_capture_instruction));

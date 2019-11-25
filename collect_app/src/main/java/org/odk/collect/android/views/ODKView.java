@@ -27,7 +27,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
@@ -40,7 +39,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.widget.NestedScrollView;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormIndex;
@@ -126,20 +124,16 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         getComponent(context).inject(this);
         this.audioHelper = audioHelperFactory.create(context);
 
-        inflate(getContext(), R.layout.nested_scroll_view, this); // keep in an xml file to enable the vertical scrollbar
+        inflate(getContext(), R.layout.odk_view, this); // keep in an xml file to enable the vertical scrollbar
 
         widgets = new ArrayList<>();
-
-        view = new LinearLayout(getContext());
-        view.setOrientation(LinearLayout.VERTICAL);
-        view.setGravity(Gravity.TOP);
-        view.setPadding(0, 7, 0, 0);
+        view = findViewById(R.id.widgets);
 
         layout =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
         // display which group you are in as well as the question
-        addGroupText(groups);
+        setGroupText(groups);
 
         // when the grouped fields are populated by an external app, this will get true.
         boolean readOnlyOverride = false;
@@ -159,8 +153,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         for (FormEntryPrompt question : questionPrompts) {
             addWidgetForQuestion(question, readOnlyOverride);
         }
-
-        ((NestedScrollView) findViewById(R.id.odk_view_container)).addView(view);
 
         setupAudioErrors();
         autoplayIfNeeded(advancingPage);
@@ -330,17 +322,16 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     /**
      * Add a TextView containing the hierarchy of groups to which the question belongs.
      */
-    private void addGroupText(FormEntryCaption[] groups) {
+    private void setGroupText(FormEntryCaption[] groups) {
         String path = getGroupsPath(groups);
 
-        // build view
         if (!path.isEmpty()) {
-            TextView tv = new TextView(getContext());
+            TextView tv = findViewById(R.id.group_text);
             tv.setText(path);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize() - 4);
             tv.setPadding(getResources().getDimensionPixelSize(R.dimen.margin_standard),
                     getResources().getDimensionPixelSize(R.dimen.margin_small), 0, 0);
-            view.addView(tv, layout);
+            tv.setVisibility(VISIBLE);
         }
     }
 

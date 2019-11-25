@@ -44,7 +44,7 @@ public class PreferencesActivity extends CollectAbstractActivity {
             Fragment fragment = GeneralPreferencesFragment.newInstance(adminMode);
             getFragmentManager()
                     .beginTransaction()
-                    .add(R.id.container, fragment, TAG)
+                    .add(R.id.question_widget_container, fragment, TAG)
                     .commit();
         }
     }

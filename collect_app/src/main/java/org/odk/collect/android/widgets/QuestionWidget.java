@@ -127,7 +127,7 @@ public abstract class QuestionWidget
         this.questionDetails = questionDetails;
         formEntryPrompt = questionDetails.getPrompt();
 
-        containerView = inflate(context, getLayout(), this).findViewById(R.id.container);
+        containerView = inflate(context, getLayout(), this).findViewById(R.id.question_widget_container);
 
         audioVideoImageTextLabel = containerView.findViewById(R.id.question_label);
         setupQuestionLabel(audioVideoImageTextLabel, formEntryPrompt);
