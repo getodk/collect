@@ -192,7 +192,7 @@ abstract class Page<T extends Page<T>> {
 
     public T waitForRotationToEnd() {
         try {
-            Thread.sleep(2000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             Timber.i(e);
         }

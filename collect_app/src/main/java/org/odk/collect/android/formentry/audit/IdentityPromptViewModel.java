@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import static org.odk.collect.android.utilities.StringUtils.isBlank;
+
 public class IdentityPromptViewModel extends ViewModel {
 
     private final MutableLiveData<Boolean> formEntryCancelled = new MutableLiveData<>(false);
@@ -43,9 +45,11 @@ public class IdentityPromptViewModel extends ViewModel {
 
     private void updateRequiresIdentity() {
         this.requiresIdentity.setValue(
-                auditEventLogger != null &&
-                        auditEventLogger.isUserRequired() &&
-                        (auditEventLogger.getUser() == null || auditEventLogger.getUser().isEmpty())
+                auditEventLogger != null && auditEventLogger.isUserRequired() && !userIsValid(auditEventLogger.getUser())
         );
+    }
+
+    private static boolean userIsValid(String user) {
+        return user != null && !user.isEmpty() && !isBlank(user);
     }
 }

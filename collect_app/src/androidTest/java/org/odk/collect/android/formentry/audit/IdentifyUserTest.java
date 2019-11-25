@@ -64,7 +64,7 @@ public class IdentifyUserTest {
         new MainMenuPage(rule)
                 .clickFillBlankForm()
                 .clickOnFormWithIdentityPrompt("Identify User")
-                .enterIdentity("")
+                .enterIdentity("  ")
                 .clickKeyboardEnterWithValidationError();
     }
 
