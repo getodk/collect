@@ -5,7 +5,6 @@
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowBackground">?attr/colorSurface</item>
         <item name="toolbarNavigationButtonStyle">@style/Widget.Toolbar.Navigation.Tinted</item>
-        <item name="android:background">?attr/colorSurface</item>
     </style>
 
     <style name="Widget.Toolbar.Navigation.Tinted" parent="Widget.AppCompat.Toolbar.Button.Navigation">
