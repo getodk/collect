@@ -167,7 +167,11 @@ public class FormMapViewModel extends ViewModel {
 
     public Long getDatabaseIdOf(int featureId) {
         Instance instance = instancesByFeatureId.get(featureId);
-        return instance.getDatabaseId();
+        if (instance != null) {
+            return instance.getDatabaseId();
+        } else {
+            return null;
+        }
     }
 
     private static int getDrawableIdForStatus(String status) {

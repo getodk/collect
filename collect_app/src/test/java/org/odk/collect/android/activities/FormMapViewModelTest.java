@@ -35,7 +35,7 @@ public class FormMapViewModelTest {
 
     @Mock private MapFragment map;
 
-    @Before public void SetUp() {
+    @Before public void setUp() {
         testInstancesRepository = new TestInstancesRepository(Arrays.asList(testInstances));
 
         when(map.addMarker(new MapPoint(10.0, 125.6), false)).thenReturn(0);
@@ -44,6 +44,7 @@ public class FormMapViewModelTest {
         when(map.addMarker(new MapPoint(10.3, 125.6), false)).thenReturn(4);
         when(map.addMarker(new MapPoint(10.3, 125.7), false)).thenReturn(5);
         when(map.addMarker(new MapPoint(10.4, 125.6), false)).thenReturn(6);
+        when(map.addMarker(new MapPoint(11.1, 127.6), false)).thenReturn(8);
     }
 
     @Test public void getFormTitle_returnsFormTitle() {
@@ -123,6 +124,7 @@ public class FormMapViewModelTest {
         verify(map, times(1)).setMarkerIcon(6, R.drawable.ic_room_red_24dp);
     }
 
+    // Should not actually be possible from UI because geometry is deleted on sent instance delete
     @Test public void tappingMapMarker_forDeletedInstance_returnsDeletedStatus() {
         FormMapViewModel viewModel = new FormMapViewModel(testForm1, testInstancesRepository);
         viewModel.mapUpdateRequested(map);
@@ -164,6 +166,45 @@ public class FormMapViewModelTest {
         viewModel.mapUpdateRequested(map);
 
         assertThat(viewModel.getStatusOfClickedFeature(6), is(FormMapViewModel.FeatureStatus.NOT_VIEWABLE));
+    }
+
+    @Test public void addingAnInstance_shouldBeReflectedInInstanceCountsAndMap() {
+        FormMapViewModel viewModel = new FormMapViewModel(testForm1, testInstancesRepository);
+        viewModel.mapUpdateRequested(map);
+
+        assertThat(viewModel.getInstanceCount(), is(7));
+        assertThat(viewModel.getMappedPointCount(), is(6));
+        assertThat(viewModel.getStatusOfClickedFeature(8), is(FormMapViewModel.FeatureStatus.UNKNOWN));
+
+        Instance newInstance = new Instance.Builder().databaseId(8L)
+                .jrFormId("formId1")
+                .jrVersion("2019103101")
+                .geometryType("Point")
+                .geometry("{\"type\":\"Point\",\"coordinates\":[127.6, 11.1]}")
+                .canEditWhenComplete(true)
+                .status(InstanceProviderAPI.STATUS_COMPLETE).build();
+
+        ((TestInstancesRepository) testInstancesRepository).addInstance(newInstance);
+
+        viewModel.mapUpdateRequested(map);
+        assertThat(viewModel.getInstanceCount(), is(8));
+        assertThat(viewModel.getMappedPointCount(), is(7));
+        assertThat(viewModel.getStatusOfClickedFeature(8), is(FormMapViewModel.FeatureStatus.EDITABLE));
+    }
+
+    @Test public void deletingAnInstance_shouldBeReflectedInInstanceCountsAndMap() {
+        FormMapViewModel viewModel = new FormMapViewModel(testForm1, testInstancesRepository);
+        viewModel.mapUpdateRequested(map);
+
+        assertThat(viewModel.getInstanceCount(), is(7));
+        assertThat(viewModel.getMappedPointCount(), is(6));
+        assertThat(viewModel.getStatusOfClickedFeature(6), is(FormMapViewModel.FeatureStatus.NOT_VIEWABLE));
+
+        ((TestInstancesRepository) testInstancesRepository).removeInstanceById(6);
+
+        viewModel.mapUpdateRequested(map);
+        assertThat(viewModel.getInstanceCount(), is(6));
+        assertThat(viewModel.getMappedPointCount(), is(5));
     }
 
     private final Form testForm1 = new Form.Builder().id(0L)

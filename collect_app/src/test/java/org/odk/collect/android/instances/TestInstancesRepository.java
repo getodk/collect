@@ -7,7 +7,7 @@ public final class TestInstancesRepository implements InstancesRepository {
     List<Instance> instances;
 
     public TestInstancesRepository(List<Instance> instances) {
-        this.instances = instances;
+        this.instances = new ArrayList<>(instances);
     }
 
     @Override
@@ -28,9 +28,9 @@ public final class TestInstancesRepository implements InstancesRepository {
     }
 
     public void removeInstanceById(int databaseId) {
-        for (Instance instance : instances) {
-            if (instance.getDatabaseId() == databaseId) {
-                instances.remove(instance);
+        for (int i = 0; i < instances.size(); i++) {
+            if (instances.get(i).getDatabaseId() == databaseId) {
+                instances.remove(i);
                 return;
             }
         }
