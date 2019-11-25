@@ -139,7 +139,10 @@ public class FormMapViewModel extends ViewModel {
                 return FeatureStatus.DELETED;
             }
 
-            if (instance.getStatus().equals(InstanceProviderAPI.STATUS_COMPLETE) && !instance.canEditWhenComplete()) {
+            if ((instance.getStatus().equals(InstanceProviderAPI.STATUS_COMPLETE)
+                    || instance.getStatus().equals(InstanceProviderAPI.STATUS_SUBMITTED)
+                    || instance.getStatus().equals(InstanceProviderAPI.STATUS_SUBMISSION_FAILED))
+                    && !instance.canEditWhenComplete()) {
                 return FeatureStatus.NOT_VIEWABLE;
             } else if (instance.getDatabaseId() != null) {
                 if (instance.getStatus().equals(InstanceProviderAPI.STATUS_SUBMITTED)) {

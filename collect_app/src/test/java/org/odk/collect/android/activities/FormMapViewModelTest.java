@@ -123,6 +123,49 @@ public class FormMapViewModelTest {
         verify(map, times(1)).setMarkerIcon(6, R.drawable.ic_room_red_24dp);
     }
 
+    @Test public void tappingMapMarker_forDeletedInstance_returnsDeletedStatus() {
+        FormMapViewModel viewModel = new FormMapViewModel(testForm1, testInstancesRepository);
+        viewModel.mapUpdateRequested(map);
+
+        assertThat(viewModel.getStatusOfClickedFeature(0), is(FormMapViewModel.FeatureStatus.DELETED));
+    }
+
+    @Test public void tappingMapMarker_forFinalizedInstance_thatCanBeEdited_returnsEditableStatus() {
+        FormMapViewModel viewModel = new FormMapViewModel(testForm1, testInstancesRepository);
+        viewModel.mapUpdateRequested(map);
+
+        assertThat(viewModel.getStatusOfClickedFeature(1), is(FormMapViewModel.FeatureStatus.EDITABLE));
+    }
+
+    @Test public void tappingMapMarker_forUnfinalizedInstance_returnsEditableStatus() {
+        FormMapViewModel viewModel = new FormMapViewModel(testForm1, testInstancesRepository);
+        viewModel.mapUpdateRequested(map);
+
+        assertThat(viewModel.getStatusOfClickedFeature(2), is(FormMapViewModel.FeatureStatus.EDITABLE));
+    }
+
+    @Test public void tappingMapMarker_forInstanceThatFailedToSend_thatCanBeEdited_returnsEditableStatus() {
+        FormMapViewModel viewModel = new FormMapViewModel(testForm1, testInstancesRepository);
+        viewModel.mapUpdateRequested(map);
+
+        assertThat(viewModel.getStatusOfClickedFeature(4), is(FormMapViewModel.FeatureStatus.EDITABLE));
+    }
+
+    // Sent instances should never be editable.
+    @Test public void tappingMapMarker_forSubmittedInstance_thatCanBeEdited_returnsViewableStatus() {
+        FormMapViewModel viewModel = new FormMapViewModel(testForm1, testInstancesRepository);
+        viewModel.mapUpdateRequested(map);
+
+        assertThat(viewModel.getStatusOfClickedFeature(5), is(FormMapViewModel.FeatureStatus.VIEW_ONLY));
+    }
+
+    @Test public void tappingMapMarker_forInstanceThatFailedToSend_thatCantBeEdited_returnsNotViewableStatus() {
+        FormMapViewModel viewModel = new FormMapViewModel(testForm1, testInstancesRepository);
+        viewModel.mapUpdateRequested(map);
+
+        assertThat(viewModel.getStatusOfClickedFeature(6), is(FormMapViewModel.FeatureStatus.NOT_VIEWABLE));
+    }
+
     private final Form testForm1 = new Form.Builder().id(0L)
             .jrFormId("formId1")
             .jrVersion("2019103104")
@@ -151,6 +194,7 @@ public class FormMapViewModelTest {
                     .jrVersion("2019103101")
                     .geometryType("Point")
                     .geometry("{\"type\":\"Point\",\"coordinates\":[125.6, 10.1]}")
+                    .canEditWhenComplete(true)
                     .status(InstanceProviderAPI.STATUS_COMPLETE).build(),
 
             new Instance.Builder().databaseId(2L)
@@ -170,6 +214,7 @@ public class FormMapViewModelTest {
                     .jrVersion("2019103106")
                     .geometryType("Point")
                     .geometry("{\"type\":\"Point\",\"coordinates\":[125.6, 10.3]}")
+                    .canEditWhenComplete(true)
                     .status(InstanceProviderAPI.STATUS_SUBMISSION_FAILED).build(),
 
             new Instance.Builder().databaseId(5L)
@@ -177,6 +222,7 @@ public class FormMapViewModelTest {
                     .jrVersion("2019103101")
                     .geometryType("Point")
                     .geometry("{\"type\":\"Point\",\"coordinates\":[125.7, 10.3]}")
+                    .canEditWhenComplete(true)
                     .status(InstanceProviderAPI.STATUS_SUBMITTED).build(),
 
             new Instance.Builder().databaseId(6L)
