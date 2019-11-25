@@ -233,9 +233,6 @@ public abstract class QuestionWidget
 
     private TextView configureGuidanceTextView(TextView guidanceTextView, String guidance) {
         guidanceTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize() - 3);
-        //noinspection ResourceType
-        guidanceTextView.setPadding(0, -5, 0, 7);
-        // wrap to the widget of view
         guidanceTextView.setHorizontallyScrolling(false);
         guidanceTextView.setTypeface(null, Typeface.ITALIC);
 
