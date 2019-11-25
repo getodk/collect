@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -151,7 +150,6 @@ public abstract class QuestionWidget
 
     private void setupQuestionLabel(AudioVideoImageTextLabel label, FormEntryPrompt prompt) {
         label.setTag(getClipID(prompt));
-
         label.setText(prompt.getLongText(), prompt.isRequired(), getQuestionFontSize());
 
         String imageURI = this instanceof SelectImageMapWidget ? null : prompt.getImageText();
@@ -174,7 +172,7 @@ public abstract class QuestionWidget
     }
 
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
-        TextView guidance = null;
+        TextView guidance;
         GuidanceHint setting = GuidanceHint.get((String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_GUIDANCE_HINT));
 
         if (setting.equals(GuidanceHint.No)) {
@@ -234,7 +232,6 @@ public abstract class QuestionWidget
     private TextView configureGuidanceTextView(TextView guidanceTextView, String guidance) {
         guidanceTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize() - 3);
         guidanceTextView.setHorizontallyScrolling(false);
-        guidanceTextView.setTypeface(null, Typeface.ITALIC);
 
         guidanceTextView.setText(StringUtils.textToHtml(guidance));
 
@@ -357,7 +354,6 @@ public abstract class QuestionWidget
             helpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize() - 3);
             // wrap to the widget of view
             helpText.setHorizontallyScrolling(false);
-            helpText.setTypeface(null, Typeface.ITALIC);
             if (prompt.getLongText() == null || prompt.getLongText().isEmpty()) {
                 helpText.setText(StringUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(s, prompt.isRequired())));
             } else {
