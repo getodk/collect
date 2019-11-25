@@ -258,7 +258,7 @@ public class FormsDao {
                     int geometryXpathColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.GEOMETRY_XPATH);
 
                     Form form = new Form.Builder()
-                            .id(cursor.getInt(idColumnIndex))
+                            .id(cursor.getLong(idColumnIndex))
                             .displayName(cursor.getString(displayNameColumnIndex))
                             .description(cursor.getString(descriptionColumnIndex))
                             .jrFormId(cursor.getString(jrFormIdColumnIndex))

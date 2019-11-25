@@ -30,9 +30,13 @@ import androidx.lifecycle.ViewModelProviders;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
+import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.instances.DatabaseInstancesRepository;
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -55,9 +59,10 @@ public class FormMapActivity extends BaseGeoMapActivity {
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Uri contentUri = getIntent().getData();
+        FormsDao dao = new FormsDao();
+        Form form = dao.getFormsFromCursor(dao.getFormsCursor(getIntent().getData())).get(0);
         viewModel = ViewModelProviders.of(this,
-                new FormMapActivity.FormMapViewModelFactory(contentUri)).get(FormMapViewModel.class);
+                new FormMapActivity.FormMapViewModelFactory(form, new DatabaseInstancesRepository())).get(FormMapViewModel.class);
         Timber.i("Starting FormMapActivity for form \"%s\" (jrFormId = \"%s\")",
                 viewModel.getFormTitle(),
                 viewModel.getFormId());
@@ -179,16 +184,18 @@ public class FormMapActivity extends BaseGeoMapActivity {
      * Build {@link FormMapViewModel} and its dependencies.
      */
     private class FormMapViewModelFactory implements ViewModelProvider.Factory {
-        private final Uri uri;
+        private final Form form;
+        private final InstancesRepository instancesRepository;
 
-        FormMapViewModelFactory(Uri uri) {
-            this.uri = uri;
+        FormMapViewModelFactory(Form form, InstancesRepository instancesRepository) {
+            this.form = form;
+            this.instancesRepository = instancesRepository;
         }
 
         @Override
         @NonNull
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormMapViewModel(uri);
+            return (T) new FormMapViewModel(form, instancesRepository);
         }
     }
 }

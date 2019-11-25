@@ -1,20 +1,16 @@
 package org.odk.collect.android.activities.viewmodels;
 
-import android.database.Cursor;
-import android.net.Uri;
-
 import androidx.lifecycle.ViewModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.R;
-import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
+import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import java.util.ArrayList;
@@ -22,6 +18,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Nullable;
 
 import timber.log.Timber;
 
@@ -53,9 +51,11 @@ public class FormMapViewModel extends ViewModel {
      */
     private boolean viewportInitialized;
 
-    public FormMapViewModel(Uri uri) {
-        FormsDao dao = new FormsDao();
-        form = dao.getFormsFromCursor(dao.getFormsCursor(uri)).get(0);
+    private final InstancesRepository instancesRepository;
+
+    public FormMapViewModel(Form form, InstancesRepository instancesRepository) {
+        this.instancesRepository = instancesRepository;
+        this.form = form;
     }
 
     public String getFormTitle() {
@@ -83,7 +83,7 @@ public class FormMapViewModel extends ViewModel {
         points.clear();
         map.clearFeatures();
 
-        List<Instance> instances = getInstances();
+        List<Instance> instances = instancesRepository.getAllBy(form.getJrFormId());
         totalInstanceCount = instances.size();
         for (Instance instance : instances) {
             if (instance.getGeometry() != null) {
@@ -152,25 +152,19 @@ public class FormMapViewModel extends ViewModel {
         return FeatureStatus.UNKNOWN;
     }
 
+    @Nullable
     public Date getDeletedDateOf(int featureId) {
         Instance instance = instancesByFeatureId.get(featureId);
-        return new Date(instance.getDeletedDate());
+        if (instance != null) {
+            return new Date(instance.getDeletedDate());
+        } else {
+            return null;
+        }
     }
 
     public Long getDatabaseIdOf(int featureId) {
         Instance instance = instancesByFeatureId.get(featureId);
         return instance.getDatabaseId();
-    }
-
-    /**
-     * Returns all of the instances matching the current form's form_id, regardless of form version.
-     */
-    // TODO: move to a repository layer
-    private List<Instance> getInstances() {
-        InstancesDao dao = new InstancesDao();
-        Cursor c = dao.getInstancesCursor(InstanceProviderAPI.InstanceColumns.JR_FORM_ID + " = ?",
-                new String[] {form.getJrFormId()});
-        return dao.getInstancesFromCursor(c);
     }
 
     private static int getDrawableIdForStatus(String status) {

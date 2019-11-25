@@ -22,7 +22,7 @@ package org.odk.collect.android.forms;
  * Objects of this class are created using the builder pattern: https://en.wikipedia.org/wiki/Builder_pattern
  */
 public final class Form {
-    private final int id;
+    private final Long id;
     private final String displayName;
     private final String description;
     private final String jrFormId;
@@ -61,7 +61,7 @@ public final class Form {
     }
 
     public static class Builder {
-        private int id;
+        private Long id;
         private String displayName;
         private String description;
         private String jrFormId;
@@ -79,7 +79,7 @@ public final class Form {
         private String lastDetectedFormVersionHash;
         private String geometryXpath;
 
-        public Builder id(int id) {
+        public Builder id(Long id) {
             this.id = id;
             return this;
         }
@@ -169,7 +169,7 @@ public final class Form {
         }
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
