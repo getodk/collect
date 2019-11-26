@@ -60,9 +60,9 @@ import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.
 public class AuditEventLoggerTest {
 
     // All values are set so location coordinates should be collected
-    private final AuditConfig testAuditConfig = new AuditConfig("high-priority", "10", "60", false, false);
+    private final AuditConfig testAuditConfig = new AuditConfig("high-priority", "10", "60", false, false, false);
     // At least one value is not set so location coordinates shouldn't be collected
-    private final AuditConfig testAuditConfigWithNullValues = new AuditConfig("high-priority", "10", null, false, false);
+    private final AuditConfig testAuditConfigWithNullValues = new AuditConfig("high-priority", "10", null, false, false, false);
 
     private final TestWriter testWriter = new TestWriter();
     private final FormController formController = mock(FormController.class);
@@ -184,7 +184,7 @@ public class AuditEventLoggerTest {
 
     @Test
     public void withUserSet_addsUserToEvents() {
-        AuditEventLogger auditEventLogger = new AuditEventLogger(new AuditConfig(null, null, null, false, true), testWriter, formController);
+        AuditEventLogger auditEventLogger = new AuditEventLogger(new AuditConfig(null, null, null, false, true, false), testWriter, formController);
         auditEventLogger.setUser("Riker");
 
         auditEventLogger.logEvent(END_OF_FORM, false, 0);

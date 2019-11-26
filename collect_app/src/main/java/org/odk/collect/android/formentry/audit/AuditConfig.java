@@ -52,13 +52,15 @@ public class AuditConfig {
     private final boolean isTrackingChangesEnabled;
 
     private final boolean isIdentifyUserEnabled;
+    private final boolean isTrackChangesReasonEnabled;
 
-    public AuditConfig(String mode, String locationMinInterval, String locationMaxAge, boolean isTrackingChangesEnabled, boolean isIdentifyUserEnabled) {
+    public AuditConfig(String mode, String locationMinInterval, String locationMaxAge, boolean isTrackingChangesEnabled, boolean isIdentifyUserEnabled, boolean isTrackChangesReasonEnabled) {
         this.locationPriority = mode != null ? getMode(mode) : null;
         this.locationMinInterval = locationMinInterval != null ? Long.parseLong(locationMinInterval) * 1000 : null;
         this.locationMaxAge = locationMaxAge != null ? Long.parseLong(locationMaxAge) * 1000 : null;
         this.isTrackingChangesEnabled = isTrackingChangesEnabled;
         this.isIdentifyUserEnabled = isIdentifyUserEnabled;
+        this.isTrackChangesReasonEnabled = isTrackChangesReasonEnabled;
     }
 
     private LocationClient.Priority getMode(@NonNull String mode) {
@@ -105,5 +107,9 @@ public class AuditConfig {
 
     public boolean isIdentifyUserEnabled() {
         return isIdentifyUserEnabled;
+    }
+
+    public boolean isTrackChangesReasonEnabled() {
+        return isTrackChangesReasonEnabled;
     }
 }

@@ -151,7 +151,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage clickJumpStartButton() {
+    public FormEntryPage clickGoToStart() {
         onView(withId(R.id.jumpBeginningButton)).perform(click());
         return this;
     }
@@ -186,4 +186,8 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    public ChangesReasonPromptPage clickSaveAndExitWithChangesReasonPrompt() {
+        onView(withId(R.id.save_exit_button)).perform(click());
+        return new ChangesReasonPromptPage(formName, rule).assertOnPage();
+    }
 }

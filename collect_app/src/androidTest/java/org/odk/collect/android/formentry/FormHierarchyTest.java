@@ -85,7 +85,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
                 .atPositionOnView(1, R.id.primary_text))
                 .check(matches(withText("Guest details > 2")));
 
-        page.clickJumpStartButton()
+        page.clickGoToStart()
                 .inputText("1")
                 .clickGoToArrow()
                 .clickOnText("Guest details");

@@ -278,6 +278,10 @@ public class AuditEventLogger {
         return user;
     }
 
+    public boolean isChangeReasonRequired() {
+        return auditConfig != null && auditConfig.isTrackChangesReasonEnabled();
+    }
+
     public interface AuditEventWriter {
 
         void writeEvents(List<AuditEvent> auditEvents);

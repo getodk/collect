@@ -99,12 +99,14 @@ import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
-import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
 import org.odk.collect.android.formentry.audit.AuditEvent;
+import org.odk.collect.android.formentry.audit.ChangesReasonPromptDialogFragment;
+import org.odk.collect.android.formentry.audit.ChangesReasonPromptViewModel;
 import org.odk.collect.android.formentry.audit.IdentifyUserPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.IdentityPromptViewModel;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationHelper;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationManager;
+import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.FormLoadingDialogFragment;
@@ -193,6 +195,7 @@ import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivit
  * option)
  */
 
+@SuppressWarnings("PMD.CouplingBetweenObjects")
 public class FormEntryActivity extends CollectAbstractActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
         OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener,
@@ -321,6 +324,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private BackgroundLocationViewModel backgroundLocationViewModel;
     private IdentityPromptViewModel identityPromptViewModel;
+    private ChangesReasonPromptViewModel changesReasonPromptViewModel;
 
     /**
      * Called when the activity is first created.
@@ -407,7 +411,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         backgroundLocationViewModel = ViewModelProviders.of(this, new FormEntryViewModelFactory()).get(BackgroundLocationViewModel.class);
 
         identityPromptViewModel = ViewModelProviders.of(this).get(IdentityPromptViewModel.class);
-        identityPromptViewModel.requiresIdentity().observe(this, requiresIdentity -> {
+        identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
             if (requiresIdentity) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 IdentifyUserPromptDialogFragment dialog = IdentifyUserPromptDialogFragment.create(getFormController().getFormTitle());
@@ -417,6 +421,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         identityPromptViewModel.isFormEntryCancelled().observe(this, isFormEntryCancelled -> {
             if (isFormEntryCancelled) {
                 finish();
+            }
+        });
+
+        changesReasonPromptViewModel = ViewModelProviders.of(this).get(ChangesReasonPromptViewModel.class);
+        changesReasonPromptViewModel.requiresReasonToContinue().observe(this, requiresReason -> {
+            if (requiresReason) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                ChangesReasonPromptDialogFragment dialog = ChangesReasonPromptDialogFragment.create(getFormController().getFormTitle());
+                dialog.show(fragmentManager.beginTransaction(), ChangesReasonPromptDialogFragment.TAG);
             }
         });
     }
@@ -1404,9 +1417,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         if (saveAs.getText().length() < 1) {
                             ToastUtils.showShortToast(R.string.save_as_error);
                         } else {
-                            saveDataToDisk(EXIT, instanceComplete
-                                    .isChecked(), saveAs.getText()
-                                    .toString());
+                            changesReasonPromptViewModel.savingForm();
+                            changesReasonPromptViewModel.requiresReasonToContinue().observe(FormEntryActivity.this, requiresReason -> {
+                                if (!requiresReason) {
+                                    saveDataToDisk(EXIT, instanceComplete
+                                            .isChecked(), saveAs.getText()
+                                            .toString());
+                                }
+                            });
                         }
                     }
                 });
@@ -2432,10 +2450,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     runOnUiThread(() -> ToastUtils.showLongToast(R.string.savepoint_used));
                 }
 
+                identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
+                changesReasonPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
+
                 if (formController.getInstanceFile() == null) {
                     createInstanceDirectory(formController);
-                    identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
-                    identityPromptViewModel.requiresIdentity().observe(this, requiresIdentity -> {
+                    identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                         if (!requiresIdentity) {
                             formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_START, true, System.currentTimeMillis());
                             startFormEntry(formController, warningMsg);
@@ -2446,41 +2466,40 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
                     if (!showFirst) {
-                        // we've just loaded a saved form, so start in the hierarchy view
-                        String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
-
-                        if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-                            identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
-                            identityPromptViewModel.requiresIdentity().observe(this, requiresIdentity -> {
-                                if (!requiresIdentity) {
-                                    if (!allowMovingBackwards) {
-                                        // we aren't allowed to jump around the form so attempt to
-                                        // go directly to the question we were on last time the
-                                        // form was saved.
-                                        // TODO: revisit the fallback. If for some reason the index
-                                        // wasn't saved, we can now jump around which doesn't seem right.
-                                        FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile();
-                                        if (formIndex != null) {
-                                            formController.jumpToIndex(formIndex);
-                                            refreshCurrentView();
-                                            return;
+                            // we've just loaded a saved form, so start in the hierarchy view
+                            String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
+                            if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
+                                identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
+                                    if (!requiresIdentity) {
+                                        if (!allowMovingBackwards) {
+                                            // we aren't allowed to jump around the form so attempt to
+                                            // go directly to the question we were on last time the
+                                            // form was saved.
+                                            // TODO: revisit the fallback. If for some reason the index
+                                            // wasn't saved, we can now jump around which doesn't seem right.
+                                            FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile();
+                                            if (formIndex != null) {
+                                                formController.jumpToIndex(formIndex);
+                                                refreshCurrentView();
+                                                return;
+                                            }
                                         }
-                                    }
 
-                                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
-                                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
-                                    startActivityForResult(new Intent(this, FormHierarchyActivity.class), RequestCodes.HIERARCHY_ACTIVITY);
+                                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
+                                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
+                                        startActivityForResult(new Intent(this, FormHierarchyActivity.class), RequestCodes.HIERARCHY_ACTIVITY);
+                                    }
+                                });
+
+                                changesReasonPromptViewModel.editingForm();
+                            } else {
+                                if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
+                                    startActivity(new Intent(this, ViewOnlyFormHierarchyActivity.class));
                                 }
-                            });
-                        } else {
-                            if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
-                                startActivity(new Intent(this, ViewOnlyFormHierarchyActivity.class));
+                                finish();
                             }
-                            finish();
-                        }
                     } else {
-                        identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
-                        identityPromptViewModel.requiresIdentity().observe(this, requiresIdentity -> {
+                        identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                             if (!requiresIdentity) {
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
                                 startFormEntry(formController, warningMsg);
