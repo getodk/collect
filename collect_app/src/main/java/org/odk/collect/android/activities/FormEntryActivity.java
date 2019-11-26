@@ -1924,7 +1924,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 IconMenuItem item = (IconMenuItem) adapter.getItem(position);
                 if (item.getTextResId() == R.string.keep_changes) {
-                    saveDataToDisk(EXIT, InstancesDaoHelper.isInstanceComplete(false), null);
+                    changesReasonPromptViewModel.savingForm();
+                    changesReasonPromptViewModel.requiresReasonToContinue().observe(FormEntryActivity.this, requiresReason -> {
+                        if (!requiresReason) {
+                            saveDataToDisk(EXIT, InstancesDaoHelper.isInstanceComplete(false), null);
+                        }
+                    });
                 } else {
                     // close all open databases of external data.
                     ExternalDataManager manager = Collect.getInstance().getExternalDataManager();
@@ -2450,11 +2455,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     runOnUiThread(() -> ToastUtils.showLongToast(R.string.savepoint_used));
                 }
 
-                identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
                 changesReasonPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
 
                 if (formController.getInstanceFile() == null) {
                     createInstanceDirectory(formController);
+                    identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
                     identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                         if (!requiresIdentity) {
                             formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_START, true, System.currentTimeMillis());
@@ -2469,6 +2474,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             // we've just loaded a saved form, so start in the hierarchy view
                             String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                             if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
+                                identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
                                 identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                                     if (!requiresIdentity) {
                                         if (!allowMovingBackwards) {
@@ -2499,6 +2505,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                 finish();
                             }
                     } else {
+                        identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
                         identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                             if (!requiresIdentity) {
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());

@@ -24,11 +24,11 @@ public class SaveOrIgnoreDialog<D extends Page<D>> extends Page<SaveOrIgnoreDial
 
     public D clickSaveChanges() {
         clickOnString(R.string.keep_changes);
-        return destination;
+        return destination.assertOnPage();
     }
 
     public D clickIgnoreChanges() {
         clickOnString(R.string.do_not_save);
-        return destination;
+        return destination.assertOnPage();
     }
 }

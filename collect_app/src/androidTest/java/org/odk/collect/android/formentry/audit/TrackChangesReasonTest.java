@@ -11,7 +11,9 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.espressoutils.pages.ChangesReasonPromptPage;
 import org.odk.collect.android.espressoutils.pages.MainMenuPage;
+import org.odk.collect.android.espressoutils.pages.SaveOrIgnoreDialog;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 
@@ -47,6 +49,22 @@ public class TrackChangesReasonTest {
                 .inputText("Nothing much!")
                 .swipeToNextQuestion()
                 .clickSaveAndExitWithChangesReasonPrompt();
+    }
+
+    @Test
+    public void openingAFormToEdit_andChangingAValue_andPressingBack_andClickingSaveChanges_promptsForReason() {
+        new MainMenuPage(rule)
+                .startBlankForm("Track Changes Reason")
+                .inputText("Nothing much...")
+                .swipeToNextQuestion()
+                .clickSaveAndExit()
+                .clickEditSavedForm()
+                .clickOnForm("Track Changes Reason")
+                .clickGoToStart()
+                .inputText("Nothing much!")
+                .closeSoftKeyboard()
+                .pressBack(new SaveOrIgnoreDialog<>("Track Changes Reason", new ChangesReasonPromptPage("Track Changes Reason", rule), rule))
+                .clickSaveChanges();
     }
 
     @Test

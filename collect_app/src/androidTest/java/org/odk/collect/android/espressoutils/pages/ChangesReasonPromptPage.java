@@ -12,11 +12,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
-class ChangesReasonPromptPage extends Page<ChangesReasonPromptPage> {
+public class ChangesReasonPromptPage extends Page<ChangesReasonPromptPage> {
 
     private final String formName;
 
-    ChangesReasonPromptPage(String formName, ActivityTestRule rule) {
+    public ChangesReasonPromptPage(String formName, ActivityTestRule rule) {
         super(rule);
         this.formName = formName;
     }
