@@ -64,6 +64,8 @@ public class AuditEvent {
         // Delete a repeat group
         DELETE_REPEAT("delete repeat"),
 
+        CHANGE_REASON("change reason"),
+
         // Google Play Services are not available
         GOOGLE_PLAY_SERVICES_NOT_AVAILABLE("google play services not available", true, false, true),
         // Location permissions are granted
@@ -130,6 +132,8 @@ public class AuditEvent {
     @NonNull
     private String oldValue;
     private String user;
+    private final String changeReason;
+    private final boolean isTrackingChangesReasonEnabled;
     @NonNull
     private String newValue = "";
     private long end;
@@ -142,15 +146,15 @@ public class AuditEvent {
      * Create a new event
      */
     public AuditEvent(long start, AuditEventType auditEventType) {
-        this(start, auditEventType, false, false, null, null, null);
+        this(start, auditEventType, false, false, null, null, null, null, false);
     }
 
     public AuditEvent(long start, AuditEventType auditEventType, boolean isTrackingLocationsEnabled, boolean isTrackingChangesEnabled) {
-        this(start, auditEventType, isTrackingLocationsEnabled, isTrackingChangesEnabled, null, null, null);
+        this(start, auditEventType, isTrackingLocationsEnabled, isTrackingChangesEnabled, null, null, null, null, false);
     }
 
     public AuditEvent(long start, AuditEventType auditEventType, boolean isTrackingLocationsEnabled,
-                      boolean isTrackingChangesEnabled, FormIndex formIndex, String oldValue, String user) {
+                      boolean isTrackingChangesEnabled, FormIndex formIndex, String oldValue, String user, String changeReason, boolean isTrackingChangesReasonEnabled) {
         this.start = start;
         this.auditEventType = auditEventType;
         this.isTrackingLocationsEnabled = isTrackingLocationsEnabled;
@@ -158,6 +162,8 @@ public class AuditEvent {
         this.formIndex = formIndex;
         this.oldValue = oldValue == null ? "" : oldValue;
         this.user = user;
+        this.changeReason = changeReason;
+        this.isTrackingChangesReasonEnabled = isTrackingChangesReasonEnabled;
     }
 
     /**
@@ -226,6 +232,10 @@ public class AuditEvent {
         }
     }
 
+    public String getChangeReason() {
+        return changeReason;
+    }
+
     /*
      * convert the event into a record to write to the CSV file
      */
@@ -249,6 +259,10 @@ public class AuditEvent {
             } else {
                 string += String.format(",%s", user);
             }
+        }
+
+        if (isTrackingChangesReasonEnabled) {
+            string += String.format(",%s", changeReason != null ? changeReason : "");
         }
 
         return string;

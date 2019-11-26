@@ -34,6 +34,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.BEGINNING_OF_FORM;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.CHANGE_REASON;
 import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.CONSTRAINT_ERROR;
 import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.DELETE_REPEAT;
 import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.END_OF_FORM;
@@ -191,6 +192,16 @@ public class AuditEventLoggerTest {
         auditEventLogger.exitView(); // Triggers event writing
 
         assertEquals("Riker", testWriter.auditEvents.get(0).getUser());
+    }
+
+    @Test
+    public void logEvent_WithChangeReason_addsChangeReasonToEvent() {
+        AuditEventLogger auditEventLogger = new AuditEventLogger(new AuditConfig(null, null, null, false, false, false), testWriter, formController);
+
+        auditEventLogger.logEvent(CHANGE_REASON, null, false, null, 123L, "Blah");
+        auditEventLogger.exitView(); // Triggers event writing
+
+        assertEquals("Blah", testWriter.auditEvents.get(0).getChangeReason());
     }
 
     @Test

@@ -57,14 +57,12 @@
                 android:theme="@style/Theme.Collect.MaterialComponents.Polyfill">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/identity"
+                    android:id="@+id/reason"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/identity"
+                    android:hint="@string/reason"
                     android:imeOptions="actionDone"
-                    android:inputType="text"
-                    android:saveEnabled="false"
-                    android:lines="1" />
+                    android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

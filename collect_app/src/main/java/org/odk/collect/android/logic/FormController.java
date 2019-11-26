@@ -196,7 +196,7 @@ public class FormController {
             AuditConfig auditConfig = getSubmissionMetadata().auditConfig;
 
             if (auditConfig != null) {
-                setAuditEventLogger(new AuditEventLogger(auditConfig, new AsyncTaskAuditEventWriter(new File(instanceFile.getParentFile().getPath() + File.separator + AUDIT_FILE_NAME), auditConfig.isLocationEnabled(), auditConfig.isTrackingChangesEnabled(), auditConfig.isIdentifyUserEnabled()), this));
+                setAuditEventLogger(new AuditEventLogger(auditConfig, new AsyncTaskAuditEventWriter(new File(instanceFile.getParentFile().getPath() + File.separator + AUDIT_FILE_NAME), auditConfig.isLocationEnabled(), auditConfig.isTrackingChangesEnabled(), auditConfig.isIdentifyUserEnabled(), false), this));
             } else {
                 setAuditEventLogger(new AuditEventLogger(null, null, this));
             }

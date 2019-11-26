@@ -721,4 +721,6 @@
     <string name="enter_identity_description">This form requires you to identify yourself</string>
     <string name="close">Close</string>
     <string name="reason_for_changes">Reason for changes</string>
+    <string name="reason">Reason</string>
+    <string name="save">Save</string>
 </resources>

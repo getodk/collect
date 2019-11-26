@@ -37,7 +37,7 @@ public class TrackChangesReasonTest {
             .around(new CopyFormRule(NO_TRACK_CHANGES_REASON_FORM));
 
     @Test
-    public void openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_promptsForReason() {
+    public void openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_andEnteringReason_andClickingSave_returnsToMainMenu() {
         new MainMenuPage(rule)
                 .startBlankForm("Track Changes Reason")
                 .inputText("Nothing much...")
@@ -48,7 +48,26 @@ public class TrackChangesReasonTest {
                 .clickGoToStart()
                 .inputText("Nothing much!")
                 .swipeToNextQuestion()
-                .clickSaveAndExitWithChangesReasonPrompt();
+                .clickSaveAndExitWithChangesReasonPrompt()
+                .enterReason("Needed to be more exciting and less mysterious")
+                .clickSave();
+    }
+
+    @Test
+    public void openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_andEnteringBlankReason_andClickingSave_remainsOnPrompt() {
+        new MainMenuPage(rule)
+                .startBlankForm("Track Changes Reason")
+                .inputText("Nothing much...")
+                .swipeToNextQuestion()
+                .clickSaveAndExit()
+                .clickEditSavedForm()
+                .clickOnForm("Track Changes Reason")
+                .clickGoToStart()
+                .inputText("Nothing much!")
+                .swipeToNextQuestion()
+                .clickSaveAndExitWithChangesReasonPrompt()
+                .enterReason(" ")
+                .clickSaveWithValidationError();
     }
 
     @Test

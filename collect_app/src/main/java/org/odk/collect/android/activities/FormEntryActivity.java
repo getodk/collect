@@ -1202,7 +1202,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         if (event != FormEntryController.EVENT_QUESTION) {
             formController.getAuditEventLogger().logEvent(AuditEvent.getAuditEventTypeFromFecType(event),
-                    formController.getFormIndex(), true, null, System.currentTimeMillis());
+                    formController.getFormIndex(), true, null, System.currentTimeMillis(), null);
         }
 
         switch (event) {
@@ -1218,7 +1218,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     FormEntryPrompt[] prompts = formController.getQuestionPrompts();
                     for (FormEntryPrompt question : prompts) {
                         String answer = question.getAnswerValue() != null ? question.getAnswerValue().getDisplayText() : null;
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.QUESTION, question.getIndex(), true, answer, System.currentTimeMillis());
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.QUESTION, question.getIndex(), true, answer, System.currentTimeMillis(), null);
                     }
                     FormEntryCaption[] groups = formController
                             .getGroupsForCurrentIndex();

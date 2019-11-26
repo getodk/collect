@@ -47,14 +47,14 @@ public class AuditEventLogger {
     }
 
     public void logEvent(AuditEvent.AuditEventType eventType, boolean writeImmediatelyToDisk, long currentTime) {
-        logEvent(eventType, null, writeImmediatelyToDisk, null, currentTime);
+        logEvent(eventType, null, writeImmediatelyToDisk, null, currentTime, null);
     }
 
     /*
      * Log a new event
      */
     public void logEvent(AuditEvent.AuditEventType eventType, FormIndex formIndex,
-                         boolean writeImmediatelyToDisk, String questionAnswer, long currentTime) {
+                         boolean writeImmediatelyToDisk, String questionAnswer, long currentTime, String changeReason) {
         if (!isAuditEnabled() || shouldBeIgnored(eventType)) {
             return;
         }
@@ -68,8 +68,9 @@ public class AuditEventLogger {
                 auditConfig.isTrackingChangesEnabled(),
                 formIndex,
                 questionAnswer,
-                user
-        );
+                user,
+                changeReason,
+                false);
 
         if (isDuplicatedIntervalEvent(newAuditEvent)) {
             return;
