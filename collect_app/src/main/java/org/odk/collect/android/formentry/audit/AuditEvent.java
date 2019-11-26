@@ -262,7 +262,13 @@ public class AuditEvent {
         }
 
         if (isTrackingChangesReasonEnabled) {
-            string += String.format(",%s", changeReason != null ? changeReason : "");
+            if (changeReason != null && (changeReason.contains(",") || changeReason.contains("\n"))) {
+                string += String.format(",%s", getEscapedValueForCsv(changeReason));
+            } else if (changeReason != null) {
+                string += String.format(",%s", changeReason);
+            } else {
+                string += ",";
+            }
         }
 
         return string;

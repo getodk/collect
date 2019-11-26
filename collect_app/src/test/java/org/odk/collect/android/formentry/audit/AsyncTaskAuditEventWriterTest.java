@@ -137,6 +137,21 @@ public class AsyncTaskAuditEventWriterTest {
     }
 
     @Test
+    public void whenChangeReasonHasCommaOrQuotes_escapesThem() throws Exception {
+        AsyncTaskAuditEventWriter writer = new AsyncTaskAuditEventWriter(auditFile, false, false, false, true);
+        writer.writeEvents(asList(
+                new AuditEvent(1548108900606L, FORM_RESUME, false, false, null, null, null, null, true),
+                new AuditEvent(1548108900606L, CHANGE_REASON, false, false, null, null, null, "A \"good\", reason", true)
+        ));
+
+        String auditContent = FileUtils.readFileToString(auditFile);
+        String expectedData =  "event,node,start,end,change-reason\n" +
+                "form resume,,1548108900606,,\n" +
+                "change reason,,1548108900606,,\"A \"\"good\"\", reason\"\n";
+        assertEquals(expectedData, auditContent);
+    }
+
+    @Test
     public void whenUserHasCommaOrQuotes_escapesThem() throws Exception {
         AsyncTaskAuditEventWriter writer = new AsyncTaskAuditEventWriter(auditFile, false, false, true, false);
 
