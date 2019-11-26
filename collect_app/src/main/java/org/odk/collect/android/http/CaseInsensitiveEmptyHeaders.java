@@ -1,6 +1,4 @@
-package org.odk.collect.android.http.openrosa.okhttp;
-
-import org.odk.collect.android.http.CaseInsensitiveHeaders;
+package org.odk.collect.android.http;
 
 import java.util.List;
 import java.util.Set;
@@ -8,7 +6,7 @@ import java.util.TreeSet;
 
 import javax.annotation.Nullable;
 
-public class OkHttpEmptyHeaders implements CaseInsensitiveHeaders {
+public class CaseInsensitiveEmptyHeaders implements CaseInsensitiveHeaders {
     @Nullable
     @Override
     public Set<String> getHeaders() {

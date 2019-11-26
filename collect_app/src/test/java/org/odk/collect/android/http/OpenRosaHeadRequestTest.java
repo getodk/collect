@@ -79,11 +79,11 @@ public abstract class OpenRosaHeadRequestTest {
     @Test
     public void when204Response_returnsLowerCaseHeaders() throws Exception {
         String headerLowerCase = "header-case-test";
-        String headerMixedCase = "Header-Case-Test";
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(204)
                 .addHeader(headerLowerCase, "value"));
 
+        String headerMixedCase = "Header-Case-Test";
         HttpHeadResult result = subject.executeHeadRequest(mockWebServer.url("").uri(), null);
         assertTrue(result.getHeaders().containsHeader(headerMixedCase));
         assertThat(result.getHeaders().getAnyValue(headerMixedCase), equalTo("value"));

@@ -9,7 +9,7 @@ import org.odk.collect.android.http.openrosa.HttpHeadResult;
 import org.odk.collect.android.http.openrosa.HttpPostResult;
 import org.odk.collect.android.http.openrosa.OpenRosaConstants;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.http.openrosa.okhttp.OkHttpEmptyHeaders;
+import org.odk.collect.android.http.CaseInsensitiveEmptyHeaders;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -47,7 +47,7 @@ public class StubOpenRosaHttpInterface implements OpenRosaHttpInterface {
     @NonNull
     @Override
     public HttpHeadResult executeHeadRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        return new HttpHeadResult(0, new OkHttpEmptyHeaders());
+        return new HttpHeadResult(0, new CaseInsensitiveEmptyHeaders());
     }
 
     @NonNull

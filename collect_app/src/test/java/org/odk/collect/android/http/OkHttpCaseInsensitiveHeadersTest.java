@@ -46,8 +46,8 @@ public class OkHttpCaseInsensitiveHeadersTest {
 
     @Test
     public void testGetAnyForSingleValue() {
-        Assert.assertTrue(headers.getValues("Mixed-Case").size() > 0);
-        Assert.assertEquals(headers.getAnyValue("Mixed-Case"), "value");
+        Assert.assertEquals(1, headers.getValues("Mixed-Case").size());
+        Assert.assertEquals("value", headers.getAnyValue("Mixed-Case"));
     }
 
     @Test

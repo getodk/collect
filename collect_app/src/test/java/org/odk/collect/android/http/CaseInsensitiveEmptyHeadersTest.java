@@ -2,10 +2,9 @@ package org.odk.collect.android.http;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.odk.collect.android.http.openrosa.okhttp.OkHttpEmptyHeaders;
 
-public class OkHttpEmptyHeadersTest {
-    private final CaseInsensitiveHeaders headers = new OkHttpEmptyHeaders();
+public class CaseInsensitiveEmptyHeadersTest {
+    private final CaseInsensitiveHeaders headers = new CaseInsensitiveEmptyHeaders();
 
     @Test
     public void testGetHeaders() {
@@ -15,6 +14,11 @@ public class OkHttpEmptyHeadersTest {
     @Test
     public void testContainsHeader() {
         Assert.assertFalse(headers.containsHeader(""));
+    }
+
+    @Test
+    public void testNullHeaderLookup() {
+        Assert.assertFalse(headers.containsHeader(null));
     }
 
     @Test
