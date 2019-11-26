@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dto.Instance;
+import org.odk.collect.android.http.CaseInsensitiveHeaders;
 import org.odk.collect.android.http.openrosa.HttpHeadResult;
 import org.odk.collect.android.http.openrosa.HttpPostResult;
 import org.odk.collect.android.http.openrosa.OpenRosaConstants;
@@ -93,13 +94,13 @@ public class InstanceServerUploader extends InstanceUploader {
             }
 
             HttpHeadResult headResult;
-            Map<String, String> responseHeaders;
+            CaseInsensitiveHeaders responseHeaders;
             try {
                 headResult = httpInterface.executeHeadRequest(uri, webCredentialsUtils.getCredentials(uri));
                 responseHeaders = headResult.getHeaders();
 
-                if (responseHeaders.containsKey(OpenRosaConstants.ACCEPT_CONTENT_LENGTH_HEADER)) {
-                    String contentLengthString = responseHeaders.get(OpenRosaConstants.ACCEPT_CONTENT_LENGTH_HEADER);
+                if (responseHeaders.containsHeader(OpenRosaConstants.ACCEPT_CONTENT_LENGTH_HEADER)) {
+                    String contentLengthString = responseHeaders.getAnyValue(OpenRosaConstants.ACCEPT_CONTENT_LENGTH_HEADER);
                     try {
                         contentLength = Long.parseLong(contentLengthString);
                     } catch (Exception e) {
@@ -119,9 +120,9 @@ public class InstanceServerUploader extends InstanceUploader {
                         submissionUri);
             } else if (headResult.getStatusCode() == HttpsURLConnection.HTTP_NO_CONTENT) {
                 // Redirect header received
-                if (responseHeaders.containsKey("Location")) {
+                if (responseHeaders.containsHeader("Location")) {
                     try {
-                        Uri newURI = Uri.parse(URLDecoder.decode(responseHeaders.get("Location"), "utf-8"));
+                        Uri newURI = Uri.parse(URLDecoder.decode(responseHeaders.getAnyValue("Location"), "utf-8"));
                         // Allow redirects within same host. This could be redirecting to HTTPS.
                         if (submissionUri.getHost().equalsIgnoreCase(newURI.getHost())) {
                             // Re-add params if server didn't respond with params
