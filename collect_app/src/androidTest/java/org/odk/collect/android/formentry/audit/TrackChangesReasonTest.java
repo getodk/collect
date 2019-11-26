@@ -68,6 +68,22 @@ public class TrackChangesReasonTest {
     }
 
     @Test
+    public void openingAFormToEdit_andChangingAValue_andPressingBack_andIgnoringChanges_returnsToMainMenu() {
+        new MainMenuPage(rule)
+                .startBlankForm("Track Changes Reason")
+                .inputText("Nothing much...")
+                .swipeToNextQuestion()
+                .clickSaveAndExit()
+                .clickEditSavedForm()
+                .clickOnForm("Track Changes Reason")
+                .clickGoToStart()
+                .inputText("Nothing much!")
+                .closeSoftKeyboard()
+                .pressBack(new SaveOrIgnoreDialog<>("Track Changes Reason", new MainMenuPage(rule), rule))
+                .clickIgnoreChanges();
+    }
+
+    @Test
     public void whenFormDoesNotHaveTrackChangesReason_openingToEdit_andChangingAValue_andClickingSaveAndExit_returnsToMainMenu() {
         new MainMenuPage(rule)
                 .startBlankForm("Normal Form")
