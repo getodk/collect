@@ -69,8 +69,8 @@ public abstract class OpenRosaHeadRequestTest {
                 .addHeader("X-2", "Blah2"));
 
         HttpHeadResult result = subject.executeHeadRequest(mockWebServer.url("").uri(), null);
-        assertThat(result.getHeaders().get("X-1"), equalTo("Blah1"));
-        assertThat(result.getHeaders().get("X-2"), equalTo("Blah2"));
+        assertThat(result.getHeaders().getAnyValue("X-1"), equalTo("Blah1"));
+        assertThat(result.getHeaders().getAnyValue("X-2"), equalTo("Blah2"));
     }
 
     @Test
