@@ -168,7 +168,7 @@ public class FormDownloader {
             try {
                 final long start = System.currentTimeMillis();
                 Timber.w("Parsing document %s", fileResult.file.getAbsolutePath());
-                parsedFields = FileUtils.parseXML(fileResult.file);
+                parsedFields = FileUtils.getMetadataFromFormDefinition(fileResult.file);
                 Timber.i("Parse finished in %.3f seconds.",
                         (System.currentTimeMillis() - start) / 1000F);
             } catch (RuntimeException e) {

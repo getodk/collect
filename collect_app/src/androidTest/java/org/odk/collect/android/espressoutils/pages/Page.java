@@ -2,9 +2,11 @@ package org.odk.collect.android.espressoutils.pages;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
-
+import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
+
+import org.odk.collect.android.support.actions.RotateAction;
 
 import timber.log.Timber;
 
@@ -18,6 +20,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -176,4 +179,26 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
+    public  <D extends Page<D>> D rotateToLandscape(D destination) {
+        onView(isRoot()).perform(rotateToLandscape());
+        waitForRotationToEnd();
+
+        return destination.assertOnPage();
+    }
+
+    private static ViewAction rotateToLandscape() {
+        return new RotateAction();
+    }
+
+    public T waitForRotationToEnd() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            Timber.i(e);
+        }
+
+        return (T) this;
+    }
 }
+
+

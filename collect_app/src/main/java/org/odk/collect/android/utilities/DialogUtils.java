@@ -29,7 +29,7 @@ import android.widget.ListView;
 import org.odk.collect.android.R;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.logic.AuditEvent;
+import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.logic.FormController;
 import timber.log.Timber;
 
@@ -100,7 +100,7 @@ public final class DialogUtils {
         DialogInterface.OnClickListener quitListener = (dialog, i) -> {
             switch (i) {
                 case BUTTON_POSITIVE: // yes
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.DELETE_REPEAT, true);
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.DELETE_REPEAT, true, System.currentTimeMillis());
                     formController.deleteRepeat();
 
                     if (onDeleted != null) {

@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 import org.odk.collect.android.activities.MainActivityTest;
 import org.odk.collect.android.utilities.CompressionTest;
 import org.odk.collect.android.utilities.PermissionsTest;
-import org.odk.collect.android.utilities.TextUtilsTest;
+import org.odk.collect.android.utilities.StringUtilsTest;
 
 /**
  * Suite for running all unit tests from one place
@@ -15,7 +15,7 @@ import org.odk.collect.android.utilities.TextUtilsTest;
         //Name of tests which are going to be run by suite
         MainActivityTest.class,
         PermissionsTest.class,
-        TextUtilsTest.class,
+        StringUtilsTest.class,
         CompressionTest.class
 })
 

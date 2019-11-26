@@ -12,9 +12,11 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -31,6 +33,11 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     public FillBlankFormPage assertOnPage() {
         checkIsStringDisplayed(R.string.enter_data);
         return this;
+    }
+
+    public IdentifyUserPromptPage clickOnFormWithIdentityPrompt(String formName) {
+        clickOnFormButton(formName);
+        return new IdentifyUserPromptPage(formName, rule).assertOnPage();
     }
 
     public FillBlankFormPage clickOnSortByButton() {
@@ -72,5 +79,14 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
                 .onChildView(withId(R.id.map_button))
                 .perform(click());
         return new FormMapPage(rule).assertOnPage();
+    }
+
+    public FormEntryPage clickOnForm(String formName) {
+        clickOnFormButton(formName);
+        return new FormEntryPage(formName, rule);
+    }
+
+    private void clickOnFormButton(String formName) {
+        onView(withText(formName)).perform(scrollTo(), click());
     }
 }

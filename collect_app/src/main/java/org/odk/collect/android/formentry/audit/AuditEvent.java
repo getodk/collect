@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.logic;
+package org.odk.collect.android.formentry.audit;
 
 import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
-import org.odk.collect.android.utilities.TextUtils;
+import org.odk.collect.android.utilities.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,8 +127,11 @@ public class AuditEvent {
     private String latitude;
     private String longitude;
     private String accuracy;
-    @NonNull private String oldValue;
-    @NonNull private String newValue = "";
+    @NonNull
+    private String oldValue;
+    private String user;
+    @NonNull
+    private String newValue = "";
     private long end;
     private boolean endTimeSet;
     private boolean isTrackingLocationsEnabled;
@@ -139,21 +142,22 @@ public class AuditEvent {
      * Create a new event
      */
     public AuditEvent(long start, AuditEventType auditEventType) {
-        this(start, auditEventType, false, false, null, null);
+        this(start, auditEventType, false, false, null, null, null);
     }
 
-    public AuditEvent(long start, AuditEventType auditEventType,  boolean isTrackingLocationsEnabled, boolean isTrackingChangesEnabled) {
-        this(start, auditEventType, isTrackingLocationsEnabled, isTrackingChangesEnabled, null, null);
+    public AuditEvent(long start, AuditEventType auditEventType, boolean isTrackingLocationsEnabled, boolean isTrackingChangesEnabled) {
+        this(start, auditEventType, isTrackingLocationsEnabled, isTrackingChangesEnabled, null, null, null);
     }
 
     public AuditEvent(long start, AuditEventType auditEventType, boolean isTrackingLocationsEnabled,
-                      boolean isTrackingChangesEnabled, FormIndex formIndex, String oldValue) {
+                      boolean isTrackingChangesEnabled, FormIndex formIndex, String oldValue, String user) {
         this.start = start;
         this.auditEventType = auditEventType;
         this.isTrackingLocationsEnabled = isTrackingLocationsEnabled;
         this.isTrackingChangesEnabled = isTrackingChangesEnabled;
         this.formIndex = formIndex;
         this.oldValue = oldValue == null ? "" : oldValue;
+        this.user = user;
     }
 
     /**
@@ -199,6 +203,10 @@ public class AuditEvent {
         this.accuracy = accuracy;
     }
 
+    public void setUser(String user) {
+        this.user = user;
+    }
+
     public void recordValueChange(String newValue) {
         this.newValue = newValue != null ? newValue : "";
 
@@ -225,18 +233,41 @@ public class AuditEvent {
     public String toString() {
         String node = formIndex == null || formIndex.getReference() == null ? "" : getXPathPath(formIndex);
 
-        String event;
-        if (isTrackingLocationsEnabled && isTrackingChangesEnabled) {
-            event = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", latitude, longitude, accuracy, oldValue, newValue);
-        } else if (isTrackingLocationsEnabled) {
-            event = String.format("%s,%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", latitude, longitude, accuracy);
-        } else if (isTrackingChangesEnabled) {
-            event = String.format("%s,%s,%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "", oldValue, newValue);
-        } else {
-            event = String.format("%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "");
+        String string = String.format("%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "");
+
+        if (isTrackingLocationsEnabled) {
+            string += String.format(",%s,%s,%s", latitude, longitude, accuracy);
         }
 
-        return event;
+        if (isTrackingChangesEnabled) {
+            string += String.format(",%s,%s", oldValue, newValue);
+        }
+
+        if (user != null) {
+            if (user.contains(",") || user.contains("\n")) {
+                string += String.format(",%s", getEscapedValueForCsv(user));
+            } else {
+                string += String.format(",%s", user);
+            }
+        }
+
+        return string;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public String getAccuracy() {
+        return accuracy;
+    }
+
+    public String getUser() {
+        return user;
     }
 
     // Get event type based on a Form Controller event
@@ -277,14 +308,14 @@ public class AuditEvent {
 
     /**
      * Get the XPath path of the node at a particular {@link FormIndex}.
-     *
+     * <p>
      * Differs from {@link TreeReference#toString()} in that position predicates are only
      * included for repeats. For example, given a group named {@code my-group} that contains a
      * repeat named {@code my-repeat} which in turn contains a question named {@code my-question},
      * {@link TreeReference#toString()} would return paths that look like
      * {@code /my-group[1]/my-repeat[3]/my-question[1]}. In contrast, this method would return
      * {@code /my-group/my-repeat[3]/my-question}.
-     *
+     * <p>
      * TODO: consider moving to {@link FormIndex}
      */
     private static String getXPathPath(FormIndex formIndex) {
@@ -307,6 +338,6 @@ public class AuditEvent {
             walker = walker.getNextLevel();
             i++;
         }
-        return "/" + TextUtils.join("/", nodeNames);
+        return "/" + StringUtils.join("/", nodeNames);
     }
 }

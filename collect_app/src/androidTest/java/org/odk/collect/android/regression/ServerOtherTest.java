@@ -20,7 +20,7 @@ public class ServerOtherTest extends BaseRegressionTest {
     @Test
     public void formListPath_ShouldBeUpdated() {
         //TestCase1
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .openServerSettings()
@@ -35,7 +35,7 @@ public class ServerOtherTest extends BaseRegressionTest {
     @Test
     public void submissionsPath_ShouldBeUpdated() {
         //TestCase2
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .openServerSettings()

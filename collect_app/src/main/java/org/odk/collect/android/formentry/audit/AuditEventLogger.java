@@ -1,28 +1,21 @@
 
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.formentry.audit;
 
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.SystemClock;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.logic.AuditConfig;
-import org.odk.collect.android.logic.AuditEvent;
 import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.tasks.AuditEventSaveTask;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.annotations.Nullable;
 import timber.log.Timber;
 
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED;
-import static org.odk.collect.android.logic.AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED;
-import static org.odk.collect.android.logic.FormController.AUDIT_FILE_NAME;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED;
 
 /**
  * Handle logging of auditEvents (which contain time and might contain location coordinates),
@@ -36,47 +29,54 @@ import static org.odk.collect.android.logic.FormController.AUDIT_FILE_NAME;
  */
 public class AuditEventLogger {
 
+    private final AuditEventWriter writer;
     private List<Location> locations = new ArrayList<>();
 
-    private static AsyncTask saveTask;
     private ArrayList<AuditEvent> auditEvents = new ArrayList<>();
-    private File auditFile;
     private long surveyOpenTime;
     private long surveyOpenElapsedTime;
+
     private final AuditConfig auditConfig;
+    private final FormController formController;
+    private String user;
 
-    public AuditEventLogger(File instanceFile, AuditConfig auditConfig) {
+    public AuditEventLogger(AuditConfig auditConfig, AuditEventWriter writer, FormController formController) {
         this.auditConfig = auditConfig;
-
-        if (isAuditEnabled() && instanceFile != null) {
-            auditFile = new File(instanceFile.getParentFile().getPath() + File.separator + AUDIT_FILE_NAME);
-        }
+        this.writer = writer;
+        this.formController = formController;
     }
 
-    public void logEvent(AuditEvent.AuditEventType eventType, boolean writeImmediatelyToDisk) {
-        logEvent(eventType, null, writeImmediatelyToDisk, null);
+    public void logEvent(AuditEvent.AuditEventType eventType, boolean writeImmediatelyToDisk, long currentTime) {
+        logEvent(eventType, null, writeImmediatelyToDisk, null, currentTime);
     }
 
     /*
      * Log a new event
      */
     public void logEvent(AuditEvent.AuditEventType eventType, FormIndex formIndex,
-                         boolean writeImmediatelyToDisk, String questionAnswer) {
+                         boolean writeImmediatelyToDisk, String questionAnswer, long currentTime) {
         if (!isAuditEnabled() || shouldBeIgnored(eventType)) {
             return;
         }
 
         Timber.i("AuditEvent recorded: %s", eventType);
 
-        AuditEvent newAuditEvent = new AuditEvent(getEventTime(), eventType, auditConfig.isLocationEnabled(),
-                auditConfig.isTrackingChangesEnabled(), formIndex, questionAnswer);
+        AuditEvent newAuditEvent = new AuditEvent(
+                getEventTime(),
+                eventType,
+                auditConfig.isLocationEnabled(),
+                auditConfig.isTrackingChangesEnabled(),
+                formIndex,
+                questionAnswer,
+                user
+        );
 
         if (isDuplicatedIntervalEvent(newAuditEvent)) {
             return;
         }
 
         if (auditConfig.isLocationEnabled()) {
-            addLocationCoordinatesToAuditEvent(newAuditEvent);
+            addLocationCoordinatesToAuditEvent(newAuditEvent, currentTime);
         }
 
         /*
@@ -96,8 +96,8 @@ public class AuditEventLogger {
         }
     }
 
-    private void addLocationCoordinatesToAuditEvent(AuditEvent auditEvent) {
-        Location location = getMostAccurateLocation(System.currentTimeMillis());
+    private void addLocationCoordinatesToAuditEvent(AuditEvent auditEvent, long currentTime) {
+        Location location = getMostAccurateLocation(currentTime);
         String latitude = location != null ? Double.toString(location.getLatitude()) : "";
         String longitude = location != null ? Double.toString(location.getLongitude()) : "";
         String accuracy = location != null ? Double.toString(location.getAccuracy()) : "";
@@ -151,7 +151,7 @@ public class AuditEventLogger {
         ArrayList<AuditEvent> filteredAuditEvents = new ArrayList<>();
         for (AuditEvent aev : auditEvents) {
             if (aev.isIntervalAuditEventType()) {
-                setIntervalEventFinalParameters(aev, end);
+                setIntervalEventFinalParameters(aev, end, formController);
             }
             if (shouldEventBeLogged(aev)) {
                 filteredAuditEvents.add(aev);
@@ -162,16 +162,15 @@ public class AuditEventLogger {
         auditEvents.addAll(filteredAuditEvents);
     }
 
-    private void setIntervalEventFinalParameters(AuditEvent aev, long end) {
+    private void setIntervalEventFinalParameters(AuditEvent aev, long end, FormController formController) {
         // Set location parameters.
         // We try to add them here again (first attempt takes place when an event is being created),
         // because coordinates might be not available at that time, so now we have another (last) chance.
         if (auditConfig.isLocationEnabled() && !aev.isLocationAlreadySet()) {
-            addLocationCoordinatesToAuditEvent(aev);
+            addLocationCoordinatesToAuditEvent(aev, System.currentTimeMillis());
         }
 
         // Set answers
-        FormController formController = Collect.getInstance().getFormController();
         if (aev.getAuditEventType().equals(AuditEvent.AuditEventType.QUESTION) && formController != null) {
             addNewValueToQuestionAuditEvent(aev, formController);
         }
@@ -197,7 +196,6 @@ public class AuditEventLogger {
     enabled and its answer has changed
     */
     private boolean shouldEventBeLogged(AuditEvent aev) {
-        FormController formController = Collect.getInstance().getFormController();
         if (aev.getAuditEventType().equals(AuditEvent.AuditEventType.QUESTION) && formController != null) {
             return !formController.indexIsInFieldList(aev.getFormIndex())
                     || (aev.hasNewAnswer() && auditConfig.isTrackingChangesEnabled());
@@ -206,13 +204,8 @@ public class AuditEventLogger {
     }
 
     private void writeEvents() {
-        if (saveTask == null || saveTask.getStatus() == AsyncTask.Status.FINISHED) {
-            AuditEvent[] auditEventArray = auditEvents.toArray(new AuditEvent[0]);
-            if (auditFile != null) {
-                saveTask = new AuditEventSaveTask(auditFile, auditConfig.isLocationEnabled(), auditConfig.isTrackingChangesEnabled()).execute(auditEventArray);
-            } else {
-                Timber.e("auditFile null when attempting to write auditEvents.");
-            }
+        if (!writer.isWriting()) {
+            writer.writeEvents(auditEvents);
             auditEvents = new ArrayList<>();
         } else {
             Timber.i("Queueing AuditEvent");
@@ -235,7 +228,7 @@ public class AuditEventLogger {
     }
 
     @Nullable
-    Location getMostAccurateLocation(long currentTime) {
+    private Location getMostAccurateLocation(long currentTime) {
         removeExpiredLocations(currentTime);
 
         Location bestLocation = null;
@@ -269,11 +262,26 @@ public class AuditEventLogger {
         return auditConfig != null;
     }
 
-    ArrayList<AuditEvent> getAuditEvents() {
-        return auditEvents;
-    }
-
     List<Location> getLocations() {
         return locations;
+    }
+
+    public boolean isUserRequired() {
+        return auditConfig != null && auditConfig.isIdentifyUserEnabled();
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public interface AuditEventWriter {
+
+        void writeEvents(List<AuditEvent> auditEvents);
+
+        boolean isWriting();
     }
 }

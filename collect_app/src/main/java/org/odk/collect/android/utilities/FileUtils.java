@@ -25,7 +25,9 @@ import android.os.Build;
 import android.os.Environment;
 
 import org.apache.commons.io.IOUtils;
+import org.javarosa.core.model.FormDef;
 import org.javarosa.xform.parse.XFormParser;
+import org.javarosa.xform.util.XFormUtils;
 import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
 import org.kxml2.kdom.Node;
@@ -265,11 +267,37 @@ public class FileUtils {
         }
     }
 
-    public static HashMap<String, String> parseXML(File xmlFile) {
+    /**
+     * Given a form definition file, return a map containing form metadata. The form ID is required
+     * by the specification and will always be included. Title and version are optionally included.
+     * If the form definition contains a submission block, any or all of submission URI, base 64 RSA
+     * public key, auto-delete and auto-send may be included.
+     */
+    public static HashMap<String, String> getMetadataFromFormDefinition(File formDefinitionXml) {
+        String lastSavedSrc = FileUtils.getOrCreateLastSavedSrc(formDefinitionXml);
+        FormDef formDef = XFormUtils.getFormFromFormXml(formDefinitionXml.getAbsolutePath(), lastSavedSrc);
+
         final HashMap<String, String> fields = new HashMap<>();
+
+        fields.put(TITLE, formDef.getTitle());
+        fields.put(FORMID, formDef.getMainInstance().getRoot().getAttributeValue(null, "id"));
+        fields.put(VERSION, formDef.getMainInstance().getRoot().getAttributeValue(null, "version"));
+
+        if (formDef.getSubmissionProfile() != null) {
+            fields.put(SUBMISSIONURI, formDef.getSubmissionProfile().getAction());
+
+            final String key = formDef.getSubmissionProfile().getAttribute("base64RsaPublicKey");
+            if (key != null && key.trim().length() > 0) {
+                fields.put(BASE64_RSA_PUBLIC_KEY, key.trim());
+            }
+
+            fields.put(AUTO_DELETE, formDef.getSubmissionProfile().getAttribute("auto-delete"));
+            fields.put(AUTO_SEND, formDef.getSubmissionProfile().getAttribute("auto-send"));
+        }
+
         final InputStream is;
         try {
-            is = new FileInputStream(xmlFile);
+            is = new FileInputStream(formDefinitionXml);
         } catch (FileNotFoundException e1) {
             Timber.d(e1);
             throw new IllegalStateException(e1);
@@ -287,68 +315,14 @@ public class FileUtils {
         try {
             doc = XFormParser.getXMLDocument(isr);
         } catch (IOException e) {
-            Timber.e(e, "Unable to parse XML document %s", xmlFile.getAbsolutePath());
+            Timber.e(e, "Unable to parse XML document %s", formDefinitionXml.getAbsolutePath());
             throw new IllegalStateException("Unable to parse XML document", e);
         } finally {
             try {
                 isr.close();
             } catch (IOException e) {
-                Timber.w("%s error closing from reader", xmlFile.getAbsolutePath());
+                Timber.w("%s error closing from reader", formDefinitionXml.getAbsolutePath());
             }
-        }
-
-        final Element head = doc.getRootElement().getElement(HTML_NS, "head");
-        final Element title = head.getElement(HTML_NS, "title");
-        if (title != null) {
-            fields.put(TITLE, XFormParser.getXMLText(title, true));
-        }
-
-        final Element model = getChildElement(head, "model");
-        Element cur = getChildElement(model, "instance");
-
-        final int idx = cur.getChildCount();
-        int i;
-        for (i = 0; i < idx; ++i) {
-            if (cur.isText(i)) {
-                continue;
-            }
-            if (cur.getType(i) == Node.ELEMENT) {
-                break;
-            }
-        }
-
-        if (i < idx) {
-            cur = cur.getElement(i); // this is the first data element
-            final String id = cur.getAttributeValue(null, "id");
-
-            final String version = cur.getAttributeValue(null, "version");
-            final String uiVersion = cur.getAttributeValue(null, "uiVersion");
-            if (uiVersion != null) {
-                // pre-OpenRosa 1.0 variant of spec
-                Timber.e("Obsolete use of uiVersion -- IGNORED -- only using version: %s",
-                        version);
-            }
-
-            fields.put(FORMID, (id == null) ? cur.getNamespace() : id);
-            fields.put(VERSION, (version == null) ? null : version);
-        } else {
-            throw new IllegalStateException(xmlFile.getAbsolutePath() + " could not be parsed");
-        }
-        try {
-            final Element submission = model.getElement(XFORMS_NS, "submission");
-            final String base64RsaPublicKey = submission.getAttributeValue(null, "base64RsaPublicKey");
-            final String autoDelete = submission.getAttributeValue(null, "auto-delete");
-            final String autoSend = submission.getAttributeValue(null, "auto-send");
-
-            fields.put(SUBMISSIONURI, submission.getAttributeValue(null, "action"));
-            fields.put(BASE64_RSA_PUBLIC_KEY,
-                    (base64RsaPublicKey == null || base64RsaPublicKey.trim().length() == 0)
-                            ? null : base64RsaPublicKey.trim());
-            fields.put(AUTO_DELETE, autoDelete);
-            fields.put(AUTO_SEND, autoSend);
-        } catch (Exception e) {
-            Timber.i("XML file %s does not have a submission element", xmlFile.getAbsolutePath());
-            // and that's totally fine.
         }
 
         fields.put(GEOMETRY_XPATH, findGeometryXpath(doc));

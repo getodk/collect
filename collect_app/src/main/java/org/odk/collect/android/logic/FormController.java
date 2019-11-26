@@ -50,8 +50,10 @@ import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.formentry.audit.AsyncTaskAuditEventWriter;
+import org.odk.collect.android.formentry.audit.AuditConfig;
+import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
-import org.odk.collect.android.utilities.AuditEventLogger;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.RegexUtils;
 import org.odk.collect.android.views.ODKView;
@@ -190,9 +192,16 @@ public class FormController {
     }
 
     public AuditEventLogger getAuditEventLogger() {
-        if (auditEventLogger == null) {
-            setAuditEventLogger(new AuditEventLogger(getInstanceFile(), getSubmissionMetadata().auditConfig));
+        if (auditEventLogger == null && instanceFile != null) {
+            AuditConfig auditConfig = getSubmissionMetadata().auditConfig;
+
+            if (auditConfig != null) {
+                setAuditEventLogger(new AuditEventLogger(auditConfig, new AsyncTaskAuditEventWriter(new File(instanceFile.getParentFile().getPath() + File.separator + AUDIT_FILE_NAME), auditConfig.isLocationEnabled(), auditConfig.isTrackingChangesEnabled(), auditConfig.isIdentifyUserEnabled()), this));
+            } else {
+                setAuditEventLogger(new AuditEventLogger(null, null, this));
+            }
         }
+
         return auditEventLogger;
     }
 
@@ -1277,8 +1286,9 @@ public class FormController {
                 String locationMinInterval = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-min-interval");
                 String locationMaxAge = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-max-age");
                 boolean isTrackingChangesEnabled = Boolean.parseBoolean(auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "track-changes"));
+                boolean isIdentifyUserEnabled = Boolean.parseBoolean(auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "identify-user"));
 
-                auditConfig = new AuditConfig(locationPriority, locationMinInterval, locationMaxAge, isTrackingChangesEnabled);
+                auditConfig = new AuditConfig(locationPriority, locationMinInterval, locationMaxAge, isTrackingChangesEnabled, isIdentifyUserEnabled);
 
                 IAnswerData answerData = new StringData();
                 answerData.setValue(AUDIT_FILE_NAME);
