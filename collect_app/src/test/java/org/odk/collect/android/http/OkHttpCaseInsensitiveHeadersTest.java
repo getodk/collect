@@ -40,6 +40,11 @@ public class OkHttpCaseInsensitiveHeadersTest {
     }
 
     @Test
+    public void testNullHeaderLookup() {
+        Assert.assertFalse(headers.containsHeader(null));
+    }
+
+    @Test
     public void testGetAnyForSingleValue() {
         Assert.assertTrue(headers.getValues("Mixed-Case").size() > 0);
         Assert.assertEquals(headers.getAnyValue("Mixed-Case"), "value");

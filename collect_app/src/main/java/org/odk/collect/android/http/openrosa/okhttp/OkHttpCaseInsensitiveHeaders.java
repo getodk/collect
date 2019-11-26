@@ -23,7 +23,7 @@ public class OkHttpCaseInsensitiveHeaders implements CaseInsensitiveHeaders {
 
     @Override
     public boolean containsHeader(String header) {
-        return headers.get(header) != null;
+        return header != null && headers.get(header) != null;
     }
 
     @Nullable
