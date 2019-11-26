@@ -64,7 +64,7 @@ public class FormLoadingUtils {
     }
 
     private static void saveFormToDatabase(File outFile) {
-        Map<String, String> formInfo = FileUtils.parseXML(outFile);
+        Map<String, String> formInfo = FileUtils.getMetadataFromFormDefinition(outFile);
         final ContentValues v = new ContentValues();
         v.put(FormsProviderAPI.FormsColumns.FORM_FILE_PATH,          outFile.getAbsolutePath());
         v.put(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH,         FileUtils.constructMediaPath(outFile.getAbsolutePath()));
