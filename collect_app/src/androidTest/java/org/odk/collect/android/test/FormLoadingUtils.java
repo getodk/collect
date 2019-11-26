@@ -75,6 +75,8 @@ public class FormLoadingUtils {
         v.put(FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY,   formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
         v.put(FormsProviderAPI.FormsColumns.AUTO_DELETE,             formInfo.get(FileUtils.AUTO_DELETE));
         v.put(FormsProviderAPI.FormsColumns.AUTO_SEND,               formInfo.get(FileUtils.AUTO_SEND));
+        v.put(FormsProviderAPI.FormsColumns.GEOMETRY_XPATH,          formInfo.get(FileUtils.GEOMETRY_XPATH));
+
         new FormsDao().saveForm(v);
     }
 
