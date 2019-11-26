@@ -7,6 +7,7 @@ import org.odk.collect.android.http.openrosa.HttpCredentialsInterface;
 import org.odk.collect.android.http.openrosa.HttpGetResult;
 import org.odk.collect.android.http.openrosa.HttpHeadResult;
 import org.odk.collect.android.http.openrosa.HttpPostResult;
+import org.odk.collect.android.http.openrosa.OpenRosaConstants;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 
 import java.io.ByteArrayInputStream;
@@ -36,7 +37,7 @@ public class StubOpenRosaHttpInterface implements OpenRosaHttpInterface {
         InputStream is = new ByteArrayInputStream(xml.getBytes());
 
         Map<String, String> headers = new HashMap<>();
-        headers.put("X-OpenRosa-Version", "1.0");
+        headers.put(OpenRosaConstants.VERSION_HEADER, "1.0");
         headers.put("Content-Type", "text/xml;charset=utf-8");
 
         return new HttpGetResult(is, headers, "test-hash", HttpURLConnection.HTTP_OK);

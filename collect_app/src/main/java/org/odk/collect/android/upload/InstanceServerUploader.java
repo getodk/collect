@@ -24,6 +24,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.http.openrosa.HttpHeadResult;
 import org.odk.collect.android.http.openrosa.HttpPostResult;
+import org.odk.collect.android.http.openrosa.OpenRosaConstants;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.ResponseMessageParser;
@@ -97,8 +98,8 @@ public class InstanceServerUploader extends InstanceUploader {
                 headResult = httpInterface.executeHeadRequest(uri, webCredentialsUtils.getCredentials(uri));
                 responseHeaders = headResult.getHeaders();
 
-                if (responseHeaders.containsKey("X-OpenRosa-Accept-Content-Length")) {
-                    String contentLengthString = responseHeaders.get("X-OpenRosa-Accept-Content-Length");
+                if (responseHeaders.containsKey(OpenRosaConstants.ACCEPT_CONTENT_LENGTH_HEADER)) {
+                    String contentLengthString = responseHeaders.get(OpenRosaConstants.ACCEPT_CONTENT_LENGTH_HEADER);
                     try {
                         contentLength = Long.parseLong(contentLengthString);
                     } catch (Exception e) {

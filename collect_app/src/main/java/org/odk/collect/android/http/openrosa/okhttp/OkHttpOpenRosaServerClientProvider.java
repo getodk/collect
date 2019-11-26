@@ -12,6 +12,7 @@ import com.burgstaller.okhttp.digest.Credentials;
 import com.burgstaller.okhttp.digest.DigestAuthenticator;
 
 import org.odk.collect.android.http.openrosa.HttpCredentialsInterface;
+import org.odk.collect.android.http.openrosa.OpenRosaConstants;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClient;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClientProvider;
 
@@ -33,7 +34,7 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
     private static final int WRITE_CONNECTION_TIMEOUT = 60000; // it can take up to 27 seconds to spin up an Aggregate
     private static final int READ_CONNECTION_TIMEOUT = 60000; // it can take up to 27 seconds to spin up an Aggregate
     private static final String USER_AGENT_HEADER = "User-Agent";
-    private static final String OPEN_ROSA_VERSION_HEADER = "X-OpenRosa-Version";
+    private static final String OPEN_ROSA_VERSION_HEADER = OpenRosaConstants.VERSION_HEADER;
     private static final String OPEN_ROSA_VERSION = "1.0";
     private static final String DATE_HEADER = "Date";
 
