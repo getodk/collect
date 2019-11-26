@@ -109,6 +109,24 @@ public class TrackChangesReasonTest {
     }
 
     @Test
+    public void openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_andRotating_remainsOnPrompt() {
+        new MainMenuPage(rule)
+                .startBlankForm("Track Changes Reason")
+                .inputText("Nothing much...")
+                .swipeToNextQuestion()
+                .clickSaveAndExit()
+                .clickEditSavedForm()
+                .clickOnForm("Track Changes Reason")
+                .clickGoToStart()
+                .inputText("Nothing much!")
+                .swipeToNextQuestion()
+                .clickSaveAndExitWithChangesReasonPrompt()
+                .enterReason("Something")
+                .rotateToLandscape(new ChangesReasonPromptPage("Track Changes Reason", rule))
+                .checkIsTextDisplayed("Something");
+    }
+
+    @Test
     public void openingAFormToEdit_andChangingAValue_andPressingBack_andClickingSaveChanges_promptsForReason() {
         new MainMenuPage(rule)
                 .startBlankForm("Track Changes Reason")

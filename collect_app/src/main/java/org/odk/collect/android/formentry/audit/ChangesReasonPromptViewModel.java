@@ -30,6 +30,10 @@ public class ChangesReasonPromptViewModel extends ViewModel {
         this.reason = reason;
     }
 
+    public String getReason() {
+        return reason;
+    }
+
     public void save(Long currentTime) {
         if (reason != null && !isBlank(reason)) {
             this.auditEventLogger.logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, currentTime, reason);

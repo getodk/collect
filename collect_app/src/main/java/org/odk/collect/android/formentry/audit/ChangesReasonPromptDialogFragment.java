@@ -2,6 +2,8 @@ package org.odk.collect.android.formentry.audit;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,9 +47,26 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
         toolbar.setTitle(getArguments().getString(ARG_FORM_NAME));
         toolbar.inflateMenu(R.menu.changes_reason_dialog);
 
+        EditText reasonField = view.findViewById(R.id.reason);
+        reasonField.setText(viewModel.getReason());
+        reasonField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                viewModel.setReason(editable.toString());
+            }
+        });
+
         toolbar.setOnMenuItemClickListener(item -> {
-            String reason = view.<EditText>findViewById(R.id.reason).getText().toString();
-            viewModel.setReason(reason);
             viewModel.save(System.currentTimeMillis());
             return true;
         });
