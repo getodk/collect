@@ -82,7 +82,9 @@ public class IdentifyUserTest {
         new MainMenuPage(rule)
                 .clickFillBlankForm()
                 .clickOnFormWithIdentityPrompt("Identify User")
-                .rotateToLandscape(new IdentifyUserPromptPage("Identify User", rule));
+                .enterIdentity("Blah")
+                .rotateToLandscape(new IdentifyUserPromptPage("Identify User", rule))
+                .checkIsTextDisplayed("Blah");
     }
 
     @Test

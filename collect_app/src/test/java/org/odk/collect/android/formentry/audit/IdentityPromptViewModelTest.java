@@ -11,12 +11,13 @@ import static org.mockito.Mockito.verify;
 public class IdentityPromptViewModelTest {
 
     @Test
-    public void setIdentity_setsUserOnAuditEventLogger() {
+    public void done_setsUserOnAuditEventLogger() {
         AuditEventLogger auditEventLogger = mock(AuditEventLogger.class);
         IdentityPromptViewModel viewModel = new IdentityPromptViewModel();
 
         viewModel.setAuditEventLogger(auditEventLogger);
         viewModel.setIdentity("Picard");
+        viewModel.done();
         verify(auditEventLogger).setUser("Picard");
     }
 }

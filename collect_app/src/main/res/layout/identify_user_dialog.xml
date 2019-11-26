@@ -82,6 +82,7 @@
                     android:hint="@string/identity"
                     android:imeOptions="actionDone"
                     android:inputType="text"
+                    android:saveEnabled="false"
                     android:lines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>

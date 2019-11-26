@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +26,6 @@ public class IdentifyUserPromptDialogFragment extends DialogFragment {
     public static final String TAG = "IdentifyUserPromptDialogFragment";
     private static final String ARG_FORM_NAME = "ArgFormName";
 
-    private EditText identityField;
     private IdentityPromptViewModel viewModel;
 
     public static IdentifyUserPromptDialogFragment create(String formName) {
@@ -50,16 +51,35 @@ public class IdentifyUserPromptDialogFragment extends DialogFragment {
         toolbar.setTitle(getArguments().getString(ARG_FORM_NAME));
         toolbar.setNavigationOnClickListener(v -> {
             dismiss();
-            viewModel.promptClosing();
+            viewModel.promptDismissed();
         });
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
             view.findViewById(R.id.action_bar_shadow).setVisibility(View.VISIBLE);
         }
 
-        identityField = view.findViewById(R.id.identity);
+        EditText identityField = view.findViewById(R.id.identity);
+        identityField.setText(viewModel.getUser());
+
+        identityField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                viewModel.setIdentity(editable.toString());
+            }
+        });
+
         identityField.setOnEditorActionListener((textView, i, keyEvent) -> {
-            viewModel.setIdentity(identityField.getText().toString());
+            viewModel.done();
             return true;
         });
 
@@ -101,7 +121,7 @@ public class IdentifyUserPromptDialogFragment extends DialogFragment {
             dialog.setOnKeyListener((dialogInterface, keyCode, event) -> {
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
                     dialogInterface.dismiss();
-                    viewModel.promptClosing();
+                    viewModel.promptDismissed();
                     return true;
                 } else {
                     return false;

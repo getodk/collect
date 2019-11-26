@@ -14,6 +14,7 @@ public class IdentityPromptViewModel extends ViewModel {
 
     @Nullable
     private AuditEventLogger auditEventLogger;
+    private String identity = "";
 
     public IdentityPromptViewModel() {
         updateRequiresIdentity();
@@ -27,20 +28,26 @@ public class IdentityPromptViewModel extends ViewModel {
         return formEntryCancelled;
     }
 
+    public String getUser() {
+        return identity;
+    }
+
     public void setAuditEventLogger(AuditEventLogger auditEventLogger) {
         this.auditEventLogger = auditEventLogger;
         updateRequiresIdentity();
     }
 
     public void setIdentity(String identity) {
+        this.identity = identity;
+    }
+
+    public void done() {
         auditEventLogger.setUser(identity);
         updateRequiresIdentity();
     }
 
-    public void promptClosing() {
-        if (requiresIdentity.getValue()) {
-            formEntryCancelled.setValue(true);
-        }
+    public void promptDismissed() {
+        formEntryCancelled.setValue(true);
     }
 
     private void updateRequiresIdentity() {
