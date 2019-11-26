@@ -18,8 +18,6 @@ package org.odk.collect.android.http.openrosa;
 
 import org.odk.collect.android.http.CaseInsensitiveHeaders;
 
-import java.util.Map;
-
 public class HttpHeadResult {
 
     private final int statusCode;

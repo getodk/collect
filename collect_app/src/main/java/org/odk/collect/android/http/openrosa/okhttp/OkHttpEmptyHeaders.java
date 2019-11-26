@@ -1,7 +1,5 @@
 package org.odk.collect.android.http.openrosa.okhttp;
 
-import android.util.ArraySet;
-
 import org.odk.collect.android.http.CaseInsensitiveHeaders;
 
 import java.util.List;
