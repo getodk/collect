@@ -37,6 +37,8 @@ import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.instances.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.android.preferences.AdminKeys;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -145,6 +147,8 @@ public class FormMapActivity extends BaseGeoMapActivity {
     public void onFeatureClicked(int featureId) {
         FormMapViewModel.FeatureStatus status = viewModel.getStatusOfClickedFeature(featureId);
 
+        boolean canEditSaved = (Boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_EDIT_SAVED);
+
         switch (status) {
             case DELETED:
                 String deletedTime = getString(R.string.deleted_on_date_at_time);
@@ -157,19 +161,27 @@ public class FormMapActivity extends BaseGeoMapActivity {
                 ToastUtils.showLongToast(R.string.cannot_edit_completed_form);
                 break;
             case VIEW_ONLY:
-                Intent intent = getFormInstanceIntentFor(featureId);
-                intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
-                startActivity(intent);
+                startActivity(getViewOnlyFormInstanceIntentFor(featureId));
                 break;
             case EDITABLE:
-                startActivity(getFormInstanceIntentFor(featureId));
+                if (canEditSaved) {
+                    startActivity(getEditFormInstanceIntentFor(featureId));
+                } else {
+                    startActivity(getViewOnlyFormInstanceIntentFor(featureId));
+                }
                 break;
         }
     }
 
-    private Intent getFormInstanceIntentFor(int featureId) {
+    private Intent getEditFormInstanceIntentFor(int featureId) {
         Uri uri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, viewModel.getDatabaseIdOf(featureId));
         return new Intent(Intent.ACTION_EDIT, uri);
+    }
+
+    private Intent getViewOnlyFormInstanceIntentFor(int featureId) {
+        Intent intent = getEditFormInstanceIntentFor(featureId);
+        intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
+        return intent;
     }
 
     protected void restoreFromInstanceState(Bundle state) {
