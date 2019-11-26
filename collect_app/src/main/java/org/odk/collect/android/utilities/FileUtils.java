@@ -25,12 +25,14 @@ import android.os.Build;
 import android.os.Environment;
 
 import org.apache.commons.io.IOUtils;
+import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormDef;
-import org.javarosa.xform.parse.XFormParser;
+import org.javarosa.core.model.GroupDef;
+import org.javarosa.core.model.IFormElement;
+import org.javarosa.core.model.QuestionDef;
+import org.javarosa.core.model.instance.FormInstance;
+import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.xform.util.XFormUtils;
-import org.kxml2.kdom.Document;
-import org.kxml2.kdom.Element;
-import org.kxml2.kdom.Node;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
@@ -40,8 +42,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.FileNameMap;
 import java.net.URLConnection;
@@ -92,9 +92,6 @@ public class FileUtils {
 
     /** The result of checking whether /sdcard points to getExternalStorageDirectory(). */
     private static boolean isSdcardSymlinkSameAsExternalStorageDirectory;
-
-    private static final String HTML_NS = "http://www.w3.org/1999/xhtml";
-    private static final String XFORMS_NS = "http://www.w3.org/2002/xforms";
 
     static int bufSize = 16 * 1024; // May be set by unit test
 
@@ -295,88 +292,48 @@ public class FileUtils {
             fields.put(AUTO_SEND, formDef.getSubmissionProfile().getAttribute("auto-send"));
         }
 
-        final InputStream is;
-        try {
-            is = new FileInputStream(formDefinitionXml);
-        } catch (FileNotFoundException e1) {
-            Timber.d(e1);
-            throw new IllegalStateException(e1);
-        }
-
-        InputStreamReader isr;
-        try {
-            isr = new InputStreamReader(is, "UTF-8");
-        } catch (UnsupportedEncodingException uee) {
-            Timber.w(uee, "Trying default encoding as UTF 8 encoding unavailable");
-            isr = new InputStreamReader(is);
-        }
-
-        final Document doc;
-        try {
-            doc = XFormParser.getXMLDocument(isr);
-        } catch (IOException e) {
-            Timber.e(e, "Unable to parse XML document %s", formDefinitionXml.getAbsolutePath());
-            throw new IllegalStateException("Unable to parse XML document", e);
-        } finally {
-            try {
-                isr.close();
-            } catch (IOException e) {
-                Timber.w("%s error closing from reader", formDefinitionXml.getAbsolutePath());
-            }
-        }
-
-        fields.put(GEOMETRY_XPATH, findGeometryXpath(doc));
+        fields.put(GEOMETRY_XPATH, getFirstToplevelGeoPoint(formDef));
         return fields;
     }
 
-    /** Returns the XPath to use for extracting geo nodes to show in the map view. */
-    private static String findGeometryXpath(Document doc) {
-        Element bind = findGeoBindElement(doc);
-        if (bind != null) {
-            // TODO(ping): Only GeoPoint nodes are supported in the map view for now.
-            if (bind.getAttributeValue(null, "type").equals("geopoint")) {
-                return bind.getAttributeValue(null, "nodeset");
-            }
+    /**
+     * Returns the XPath path for the first geo element that is not in a repeat.
+     */
+    private static String getFirstToplevelGeoPoint(FormDef formDef) {
+        if (formDef.getChildren().size() == 0) {
+            return null;
+        } else {
+            return getFirstTopLevelGeoPoint(formDef, formDef.getMainInstance());
         }
-        return null;
     }
 
-    /** Finds the bind element for the first geo question in the form. */
-    // TODO(ping): This returns the first bind element in the model, but
-    // it should return the first question in the body of the form.
-    private static Element findGeoBindElement(Document doc) {
-        Element head = doc.getRootElement().getElement(HTML_NS, "head");
-        Element model = getChildElement(head, "model");
-        int n = model.getChildCount();
-        for (int i = 0; i < n; i++) {
-            Element child = model.getElement(i);
-            if (child != null && child.getName().equals("bind")) {
-                String type = child.getAttributeValue(null, "type");
-                if (type != null && (
-                        type.equals("geopoint") ||
-                        type.equals("geotrace") ||
-                        type.equals("geoshape")
-                )) {
-                    return child;
+    /**
+     * Returns the XPath path for the first child of the given element that is of type geopoint and
+     * is not contained in a repeat.
+     */
+    private static String getFirstTopLevelGeoPoint(IFormElement element, FormInstance primaryInstance) {
+        if (element instanceof QuestionDef) {
+            QuestionDef question = (QuestionDef) element;
+            int dataType = primaryInstance.resolveReference((TreeReference) element.getBind().getReference()).getDataType();
+
+            if (dataType == Constants.DATATYPE_GEOPOINT) {
+                return question.getBind().getReference().toString();
+            }
+        } else if (element instanceof FormDef || element instanceof GroupDef) {
+            if (element instanceof GroupDef && ((GroupDef) element).getRepeat()) {
+                return null;
+            } else {
+                for (IFormElement child : element.getChildren()) {
+                    // perform recursive depth-first search
+                    String geoPath = getFirstTopLevelGeoPoint(child, primaryInstance);
+                    if (geoPath != null) {
+                        return geoPath;
+                    }
                 }
             }
         }
-        return null;
-    }
 
-    // needed because element.getelement fails when there are attributes
-    private static Element getChildElement(Element parent, String childName) {
-        Element e = null;
-        int c = parent.getChildCount();
-        int i = 0;
-        for (i = 0; i < c; i++) {
-            if (parent.getType(i) == Node.ELEMENT) {
-                if (parent.getElement(i).getName().equalsIgnoreCase(childName)) {
-                    return parent.getElement(i);
-                }
-            }
-        }
-        return e;
+        return null;
     }
 
     public static void deleteAndReport(File file) {
