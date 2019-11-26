@@ -21,7 +21,9 @@ import androidx.annotation.NonNull;
 import java.util.Iterator;
 import java.util.regex.MatchResult;
 
-public class TextUtils {
+import static java.lang.Character.isWhitespace;
+
+public class StringUtils {
 
     private static ReplaceCallback.Callback createHeader = new ReplaceCallback.Callback() {
         public String matchFound(MatchResult match) {
@@ -68,7 +70,7 @@ public class TextUtils {
         }
     };
 
-    private TextUtils() {
+    private StringUtils() {
 
     }
 
@@ -152,6 +154,18 @@ public class TextUtils {
             sb.append(it.next());
         }
         return sb.toString();
+    }
+
+    public static boolean isBlank(String string) {
+        char[] chars = string.toCharArray();
+
+        for (char character : chars) {
+            if (!isWhitespace(character)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
 

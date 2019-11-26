@@ -26,7 +26,7 @@ import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.HierarchyElement;
-import org.odk.collect.android.utilities.TextUtils;
+import org.odk.collect.android.utilities.StringUtils;
 
 import java.util.List;
 
@@ -55,10 +55,10 @@ public class HierarchyListAdapter extends RecyclerView.Adapter<HierarchyListAdap
         } else {
             holder.icon.setVisibility(View.GONE);
         }
-        holder.primaryText.setText(TextUtils.textToHtml(hierarchyElements.get(position).getPrimaryText()));
+        holder.primaryText.setText(StringUtils.textToHtml(hierarchyElements.get(position).getPrimaryText()));
         if (hierarchyElements.get(position).getSecondaryText() != null && !hierarchyElements.get(position).getSecondaryText().isEmpty()) {
             holder.secondaryText.setVisibility(View.VISIBLE);
-            holder.secondaryText.setText(TextUtils.textToHtml(hierarchyElements.get(position).getSecondaryText()));
+            holder.secondaryText.setText(StringUtils.textToHtml(hierarchyElements.get(position).getSecondaryText()));
         } else {
             holder.secondaryText.setVisibility(View.GONE);
         }

@@ -34,7 +34,7 @@ public class ExternalSecondaryInstancesTest extends BaseRegressionTest {
     public void external_ShouldFillTheForm() {
 
         //TestCase1
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("external select 10")
                 .clickOnText("b")
                 .swipeToNextQuestion()
@@ -47,7 +47,7 @@ public class ExternalSecondaryInstancesTest extends BaseRegressionTest {
     public void internal_ShouldFillTheForm() {
 
         //TestCase2
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("internal select 10")
                 .clickOnText("c")
                 .swipeToNextQuestion()

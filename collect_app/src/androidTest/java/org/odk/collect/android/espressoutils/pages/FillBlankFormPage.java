@@ -7,9 +7,11 @@ import org.odk.collect.android.R;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.odk.collect.android.test.CustomMatchers.withIndex;
 
 public class FillBlankFormPage extends Page<FillBlankFormPage> {
@@ -22,6 +24,11 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     public FillBlankFormPage assertOnPage() {
         checkIsStringDisplayed(R.string.enter_data);
         return this;
+    }
+
+    public IdentifyUserPromptPage clickOnFormWithIdentityPrompt(String formName) {
+        clickOnFormButton(formName);
+        return new IdentifyUserPromptPage(formName, rule).assertOnPage();
     }
 
     public FillBlankFormPage clickOnSortByButton() {
@@ -42,5 +49,14 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     public FillBlankFormPage checkIsFormSubtextDisplayed() {
         onView(withIndex(withId(R.id.form_subtitle2), 0)).check(matches(isDisplayed()));
         return this;
+    }
+
+    public FormEntryPage clickOnForm(String formName) {
+        clickOnFormButton(formName);
+        return new FormEntryPage(formName, rule);
+    }
+
+    private void clickOnFormButton(String formName) {
+        onView(withText(formName)).perform(scrollTo(), click());
     }
 }

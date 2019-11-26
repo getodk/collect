@@ -1,10 +1,9 @@
-package org.odk.collect.android.formentry;
+package org.odk.collect.android.formentry.backgroundlocation;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationManager;
 
 /**
  * Ensures that background location tracking continues throughout the activity lifecycle. Builds
@@ -14,11 +13,11 @@ import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationMa
  * The current goal is to keep this component very thin but this may evolve as it is involved in
  * managing more model objects.
  */
-public class FormEntryViewModel extends ViewModel {
+public class BackgroundLocationViewModel extends ViewModel {
     @NonNull
     private final BackgroundLocationManager locationManager;
 
-    public FormEntryViewModel(BackgroundLocationManager locationManager) {
+    public BackgroundLocationViewModel(BackgroundLocationManager locationManager) {
         this.locationManager = locationManager;
     }
 

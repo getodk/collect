@@ -45,15 +45,15 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
     public void whenNoRepeatGroupAdded_ShouldNotDoubleLastQuestion() {
 
         //TestCase1
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("TestRepeat")
                 .clickOptionsIcon()
                 .clickGeneralSettings()
                 .clickOnUserInterface()
                 .clickNavigation()
                 .clickUseSwipesAndButtons()
-                .pressBack(new GeneralSettingsPage(main))
-                .pressBack(new FormEntryPage("TestRepeat", main))
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new FormEntryPage("TestRepeat", rule))
                 .clickForwardButton()
                 .clickOnDoNotAddGroup()
                 .clickOnDoNotAddGroup()
@@ -65,25 +65,25 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
     public void nestedGroupsWithFieldListAppearance_ShouldBeAbleToFillTheForm() {
 
         //TestCase5
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("form1")
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
                 .clickSaveAndExit();
 
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("form2")
                 .closeSoftKeyboard()
                 .swipeToNextQuestion()
                 .clickSaveAndExit();
 
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("form3")
                 .closeSoftKeyboard()
                 .swipeToNextQuestion()
                 .clickSaveAndExit();
 
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("form4")
                 .inputText("T1")
                 .closeSoftKeyboard()
@@ -96,7 +96,7 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
                 .swipeToNextQuestion()
                 .clickSaveAndExit();
 
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("form5")
                 .inputText("T1")
                 .closeSoftKeyboard()
@@ -109,7 +109,7 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
                 .swipeToNextQuestion()
                 .clickSaveAndExit();
 
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("form6")
                 .inputText("T1")
                 .closeSoftKeyboard()
@@ -122,18 +122,18 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
                 .swipeToNextQuestion()
                 .clickSaveAndExit();
 
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("form7")
                 .swipeToNextQuestion()
                 .clickSaveAndExit();
 
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("form8")
                 .closeSoftKeyboard()
                 .swipeToNextQuestion()
                 .clickSaveAndExit();
 
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("form9")
                 .closeSoftKeyboard()
                 .swipeToNextQuestion()
@@ -144,16 +144,16 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
     public void whenNoRepeatGroupAdded_ShouldBackwardButtonBeClickable() {
 
         //TestCase6
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .clickOnUserInterface()
                 .clickNavigation()
                 .clickUseSwipesAndButtons()
-                .pressBack(new GeneralSettingsPage(main))
-                .pressBack(new MainMenuPage(main))
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
                 .startBlankFormWithRepeatGroup("RepeatGroupAndGroup")
-                .clickOnDoNotAddGroup(new FormEntryPage("RepeatGroupAndGroup", main))
+                .clickOnDoNotAddGroup(new FormEntryPage("RepeatGroupAndGroup", rule))
                 .closeSoftKeyboard()
                 .clickBackwardButton()
                 .clickOnDoNotAddGroup()
@@ -166,14 +166,14 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
     public void firstQuestionWithLongLabel_ShouldDisplayBothAnswersInHierarchyPage() {
 
         //TestCase11
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("basic")
                 .inputText("1")
                 .closeSoftKeyboard()
                 .swipeToNextQuestion()
                 .inputText("2")
                 .closeSoftKeyboard()
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .checkIsTextDisplayed("2")
                 .clickJumpEndButton()
                 .clickSaveAndExit();
@@ -183,14 +183,14 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
     public void openHierarchyPageFromLastView_ShouldNotDisplayError() {
 
         //TestCase12
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankFormWithRepeatGroup("Repeat Group")
-                .clickOnAddGroup(new FormEntryPage("Repeat Group", main))
+                .clickOnAddGroup(new FormEntryPage("Repeat Group", rule))
                 .swipeToNextQuestion()
                 .clickOnDoNotAddGroup()
                 .swipeToNextQuestion()
                 .clickOnDoNotAddGroup()
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .clickJumpEndButton()
                 .clickSaveAndExit();
     }

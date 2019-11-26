@@ -60,4 +60,9 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
         onView(withText(instanceName)).perform(click());
         return new OkDialog(rule).assertOnPage();
     }
+
+    public IdentifyUserPromptPage clickOnFormWithIdentityPrompt(String formName) {
+        onView(withText(formName)).perform(click());
+        return new IdentifyUserPromptPage(formName, rule).assertOnPage();
+    }
 }

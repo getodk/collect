@@ -5,6 +5,7 @@ import androidx.core.util.Pair;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.SelectChoice;
+import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import java.util.List;
@@ -65,6 +66,14 @@ public class MockFormEntryPromptBuilder {
 
     public MockFormEntryPromptBuilder withAppearance(String appearance) {
         when(prompt.getAppearanceHint()).thenReturn(appearance);
+        return this;
+    }
+
+    public MockFormEntryPromptBuilder withAnswerDisplayText(String text) {
+        IAnswerData answer = mock(IAnswerData.class);
+        when(answer.getDisplayText()).thenReturn(text);
+        when(prompt.getAnswerValue()).thenReturn(answer);
+
         return this;
     }
 }

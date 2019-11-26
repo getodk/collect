@@ -6,9 +6,11 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
-public class TextUtilsTest {
+public class StringUtilsTest {
 
     /**
      * Should return null if provided with null and not throw a NPE.
@@ -20,7 +22,7 @@ public class TextUtilsTest {
     @Test
     public void textToHtml_BouncesNullInput() {
         String input = null;
-        CharSequence observed = TextUtils.textToHtml(input);
+        CharSequence observed = StringUtils.textToHtml(input);
         Assert.assertNull(observed);
     }
 
@@ -49,7 +51,7 @@ public class TextUtilsTest {
                 {"\\\\\\", "\\\\"}};
 
         for (String[] testCase : tests) {
-            assertEquals(testCase[1], TextUtils.markdownToHtml(testCase[0]));
+            assertEquals(testCase[1], StringUtils.markdownToHtml(testCase[0]));
         }
     }
 
@@ -65,7 +67,7 @@ public class TextUtilsTest {
                 {"test < 1/>", "test &lt; 1/>"}
         };
         for (String[] testCase: tests) {
-            assertEquals(testCase[1], TextUtils.markdownToHtml(testCase[0]));
+            assertEquals(testCase[1], StringUtils.markdownToHtml(testCase[0]));
         }
     }
 
@@ -79,7 +81,7 @@ public class TextUtilsTest {
                 "</closetag>"
         };
         for (String testCase: tests) {
-            assertEquals(testCase, TextUtils.markdownToHtml(testCase));
+            assertEquals(testCase, StringUtils.markdownToHtml(testCase));
         }
     }
 
@@ -90,7 +92,7 @@ public class TextUtilsTest {
         };
 
         for (String testCase: tests) {
-            assertEquals(testCase, TextUtils.textToHtml(testCase).toString());
+            assertEquals(testCase, StringUtils.textToHtml(testCase).toString());
         }
     }
 
@@ -98,15 +100,25 @@ public class TextUtilsTest {
     public void ellipsizeBeginningTest() {
         //50 chars
         assertEquals("Lorem ipsum dolor sit amet, consectetur massa nunc",
-                TextUtils.ellipsizeBeginning("Lorem ipsum dolor sit amet, consectetur massa nunc"));
+                StringUtils.ellipsizeBeginning("Lorem ipsum dolor sit amet, consectetur massa nunc"));
         //100 chars
         assertEquals("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer tempus, risus ac cursus turpis duis",
-                TextUtils.ellipsizeBeginning("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer tempus, risus ac cursus turpis duis"));
+                StringUtils.ellipsizeBeginning("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer tempus, risus ac cursus turpis duis"));
         //101 chars
         assertEquals("...m ipsum dolor sit amet, consectetur adipiscing elit. Cras finibus, augue a imperdiet orci aliquam",
-                TextUtils.ellipsizeBeginning("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras finibus, augue a imperdiet orci aliquam"));
+                StringUtils.ellipsizeBeginning("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras finibus, augue a imperdiet orci aliquam"));
         //150 chars
         assertEquals("...it. Donec cursus condimentum sagittis. Ut condimentum efficitur libero, vitae volutpat dui nullam",
-                TextUtils.ellipsizeBeginning("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec cursus condimentum sagittis. Ut condimentum efficitur libero, vitae volutpat dui nullam"));
+                StringUtils.ellipsizeBeginning("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec cursus condimentum sagittis. Ut condimentum efficitur libero, vitae volutpat dui nullam"));
+    }
+
+    @Test
+    public void whenStringIsJustWhitespace_returnsTrue() {
+        assertTrue(StringUtils.isBlank(" "));
+    }
+
+    @Test
+    public void whenStringContainsWhitespace_returnsFalse() {
+        assertFalse(StringUtils.isBlank(" hello "));
     }
 }

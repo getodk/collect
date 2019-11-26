@@ -23,7 +23,7 @@ public class UserSettingsTest extends BaseRegressionTest {
     @Test
     public void typeOption_ShouldNotBeVisible() {
         //TestCase1
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickAdminSettings()
                 .openUserSettings()
@@ -35,13 +35,13 @@ public class UserSettingsTest extends BaseRegressionTest {
     @Test
     public void uncheckedSettings_ShouldNotBeVisibleInGeneralSettings() {
         //TestCase4
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickAdminSettings()
                 .openUserSettings()
                 .uncheckAllUserSettings()
-                .pressBack(new AdminSettingsPage(main))
-                .pressBack(new MainMenuPage(main))
+                .pressBack(new AdminSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .checkIfTextDoesNotExist(R.string.server)
@@ -49,7 +49,7 @@ public class UserSettingsTest extends BaseRegressionTest {
                 .checkIfTextDoesNotExist(R.string.maps)
                 .checkIfTextDoesNotExist(R.string.form_management_preferences)
                 .checkIfTextDoesNotExist(R.string.user_and_device_identity_title)
-                .pressBack(new MainMenuPage(main))
+                .pressBack(new MainMenuPage(rule))
                 .clickOnMenu()
                 .clickAdminSettings()
                 .clickGeneralSettings()
@@ -63,25 +63,25 @@ public class UserSettingsTest extends BaseRegressionTest {
     @Test
     public void showGuidance_shouldBehidden() {
         //TestCase5
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickAdminSettings()
                 .openUserSettings()
                 .uncheckUserSettings("guidance_hint")
-                .pressBack(new AdminSettingsPage(main))
-                .pressBack(new MainMenuPage(main))
+                .pressBack(new AdminSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .openFormManagement()
                 .checkIfTextDoesNotExist(R.string.guidance_hint_title)
-                .pressBack(new GeneralSettingsPage(main))
-                .pressBack(new MainMenuPage(main))
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
                 .clickOnMenu()
                 .clickAdminSettings()
                 .openUserSettings()
                 .uncheckAllUserSettings()
-                .pressBack(new AdminSettingsPage(main))
-                .pressBack(new MainMenuPage(main))
+                .pressBack(new AdminSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .openFormManagement()

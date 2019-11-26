@@ -29,6 +29,7 @@ and update this document as the code evolves.
 * Http is handled using OkHttp3 and https client abstractions are generally wrapped in Android's AsyncTask (and some Rx)
 * Geo activities use three engines (Mapbox, osmdroid, Google Maps) depending on the selected basemap even though Mapbox could do everything osmdroid does
 * Code goes through static analysis using CheckStyle, PMD, SpotBugs and Android Lint
+* Code is mostly organized into packages based around what kind of object they are which has become unwieldy
 * The `@Deprecated` annotation (with a comment) is being used to track technical debt in the code
 
 ## Where we're going
@@ -39,3 +40,4 @@ and update this document as the code evolves.
 * Talk of moving to Kotlin but not real plans as of yet ([“Using Kotlin for ODK Android apps” discussion](https://forum.opendatakit.org/t/using-kotlin-for-odk-android-apps/18367))
 * General effort to increase test coverage and quality while working on anything and pushing more for tests in PR review
 * Trying to remove technical debt flagged with `@Deprecated`
+* Moving code to packages based on domain slices (`audio` or `formentry` for instance) to make it easier to work on isolated features and navigate code

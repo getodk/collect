@@ -1,10 +1,9 @@
 
-package org.odk.collect.android.tasks;
+package org.odk.collect.android.formentry.audit;
 
 import android.os.AsyncTask;
-import androidx.annotation.NonNull;
 
-import org.odk.collect.android.logic.AuditEvent;
+import androidx.annotation.NonNull;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,18 +17,22 @@ import timber.log.Timber;
  * Background task for appending events to the event log
  */
 public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
-    private final @NonNull File file;
+    private final @NonNull
+    File file;
     private final boolean isLocationEnabled;
     private final boolean isTrackingChangesEnabled;
+    private final boolean isUserRequired;
 
     private static final String DEFAULT_COLUMNS = "event,node,start,end";
     private static final String LOCATION_COORDINATES_COLUMNS = ",latitude,longitude,accuracy";
     private static final String ANSWER_VALUES_COLUMNS = ",old-value,new-value";
+    private static final String USER_COLUMNS = ",user";
 
-    public AuditEventSaveTask(@NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled) {
+    public AuditEventSaveTask(@NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled, boolean isUserRequired) {
         this.file = file;
         this.isLocationEnabled = isLocationEnabled;
         this.isTrackingChangesEnabled = isTrackingChangesEnabled;
+        this.isUserRequired = isUserRequired;
     }
 
     @Override
@@ -107,7 +110,8 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
     private boolean shouldHeaderBeUpdated(String header) {
         return header == null
                 || (isLocationEnabled && !header.contains(LOCATION_COORDINATES_COLUMNS))
-                || (isTrackingChangesEnabled && !header.contains(ANSWER_VALUES_COLUMNS));
+                || (isTrackingChangesEnabled && !header.contains(ANSWER_VALUES_COLUMNS))
+                || (isUserRequired && !header.contains(USER_COLUMNS));
     }
 
     private String getHeader() {
@@ -117,6 +121,9 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
         }
         if (isTrackingChangesEnabled) {
             header += ANSWER_VALUES_COLUMNS;
+        }
+        if (isUserRequired) {
+            header += USER_COLUMNS;
         }
         return header;
     }

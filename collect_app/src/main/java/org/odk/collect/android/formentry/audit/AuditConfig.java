@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.logic;
+package org.odk.collect.android.formentry.audit;
 
 import org.odk.collect.android.location.client.LocationClient;
 
@@ -51,11 +51,14 @@ public class AuditConfig {
      */
     private final boolean isTrackingChangesEnabled;
 
-    public AuditConfig(String mode, String locationMinInterval, String locationMaxAge, boolean isTrackingChangesEnabled) {
+    private final boolean isIdentifyUserEnabled;
+
+    public AuditConfig(String mode, String locationMinInterval, String locationMaxAge, boolean isTrackingChangesEnabled, boolean isIdentifyUserEnabled) {
         this.locationPriority = mode != null ? getMode(mode) : null;
         this.locationMinInterval = locationMinInterval != null ? Long.parseLong(locationMinInterval) * 1000 : null;
         this.locationMaxAge = locationMaxAge != null ? Long.parseLong(locationMaxAge) * 1000 : null;
         this.isTrackingChangesEnabled = isTrackingChangesEnabled;
+        this.isIdentifyUserEnabled = isIdentifyUserEnabled;
     }
 
     private LocationClient.Priority getMode(@NonNull String mode) {
@@ -98,5 +101,9 @@ public class AuditConfig {
 
     public boolean isTrackingChangesEnabled() {
         return isTrackingChangesEnabled;
+    }
+
+    public boolean isIdentifyUserEnabled() {
+        return isIdentifyUserEnabled;
     }
 }

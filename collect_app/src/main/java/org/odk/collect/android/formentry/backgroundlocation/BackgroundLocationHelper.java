@@ -3,8 +3,8 @@ package org.odk.collect.android.formentry.backgroundlocation;
 import android.location.Location;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.logic.AuditConfig;
-import org.odk.collect.android.logic.AuditEvent;
+import org.odk.collect.android.formentry.audit.AuditConfig;
+import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
@@ -75,7 +75,7 @@ public class BackgroundLocationHelper {
      * Precondition: the global form controller has been initialized.
      */
     void logAuditEvent(AuditEvent.AuditEventType eventType) {
-        Collect.getInstance().getFormController().getAuditEventLogger().logEvent(eventType, false);
+        Collect.getInstance().getFormController().getAuditEventLogger().logEvent(eventType, false, System.currentTimeMillis());
     }
 
     /**

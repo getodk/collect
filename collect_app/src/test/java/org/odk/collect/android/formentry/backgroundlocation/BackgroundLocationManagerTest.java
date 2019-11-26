@@ -12,8 +12,8 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.location.LocationTestUtils;
 import org.odk.collect.android.location.client.FakeLocationClient;
-import org.odk.collect.android.logic.AuditConfig;
-import org.odk.collect.android.logic.AuditEvent;
+import org.odk.collect.android.formentry.audit.AuditConfig;
+import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -132,7 +132,7 @@ public class BackgroundLocationManagerTest {
         when(locationHelper.arePlayServicesAvailable()).thenReturn(true);
         when(locationHelper.isBackgroundLocationPreferenceEnabled()).thenReturn(true);
         when(locationHelper.isAndroidLocationPermissionGranted()).thenReturn(true);
-        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo",  "2", "3", true));
+        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo",  "2", "3", true, false));
 
         backgroundLocationManager.formFinishedLoading();
         backgroundLocationManager.activityDisplayed();
@@ -198,7 +198,7 @@ public class BackgroundLocationManagerTest {
         when(locationHelper.arePlayServicesAvailable()).thenReturn(true);
         when(locationHelper.isBackgroundLocationPreferenceEnabled()).thenReturn(true);
         when(locationHelper.isAndroidLocationPermissionGranted()).thenReturn(true);
-        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo",  "2", "3", true));
+        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo",  "2", "3", true, false));
 
         fakeLocationClient.setLocationAvailable(false);
 
@@ -228,7 +228,7 @@ public class BackgroundLocationManagerTest {
         when(locationHelper.arePlayServicesAvailable()).thenReturn(true);
         when(locationHelper.isBackgroundLocationPreferenceEnabled()).thenReturn(true);
         when(locationHelper.isAndroidLocationPermissionGranted()).thenReturn(true);
-        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo", "2", "3", true));
+        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo", "2", "3", true, false));
 
         backgroundLocationManager.formFinishedLoading();
         backgroundLocationManager.activityDisplayed();
@@ -266,7 +266,7 @@ public class BackgroundLocationManagerTest {
         when(locationHelper.arePlayServicesAvailable()).thenReturn(true);
         when(locationHelper.isBackgroundLocationPreferenceEnabled()).thenReturn(true);
         when(locationHelper.isAndroidLocationPermissionGranted()).thenReturn(true);
-        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo", "2", "3", true));
+        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo", "2", "3", true, false));
 
         backgroundLocationManager.formFinishedLoading();
         backgroundLocationManager.activityDisplayed();
@@ -299,7 +299,7 @@ public class BackgroundLocationManagerTest {
         when(locationHelper.arePlayServicesAvailable()).thenReturn(true);
         when(locationHelper.isBackgroundLocationPreferenceEnabled()).thenReturn(true);
         when(locationHelper.isAndroidLocationPermissionGranted()).thenReturn(false);
-        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo", "2", "3", true));
+        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo", "2", "3", true, false));
 
         backgroundLocationManager.formFinishedLoading();
         backgroundLocationManager.activityDisplayed();
@@ -327,7 +327,7 @@ public class BackgroundLocationManagerTest {
         when(locationHelper.arePlayServicesAvailable()).thenReturn(true);
         when(locationHelper.isBackgroundLocationPreferenceEnabled()).thenReturn(true);
         when(locationHelper.isAndroidLocationPermissionGranted()).thenReturn(true);
-        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo", "2", "3", true));
+        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo", "2", "3", true, false));
 
         backgroundLocationManager.formFinishedLoading();
         backgroundLocationManager.activityDisplayed();
@@ -363,7 +363,7 @@ public class BackgroundLocationManagerTest {
         when(locationHelper.arePlayServicesAvailable()).thenReturn(true);
         when(locationHelper.isBackgroundLocationPreferenceEnabled()).thenReturn(true);
         when(locationHelper.isAndroidLocationPermissionGranted()).thenReturn(true);
-        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo", "2", "3", true));
+        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo", "2", "3", true, false));
 
         backgroundLocationManager.formFinishedLoading();
 
@@ -424,7 +424,7 @@ public class BackgroundLocationManagerTest {
         when(locationHelper.arePlayServicesAvailable()).thenReturn(true);
         when(locationHelper.isBackgroundLocationPreferenceEnabled()).thenReturn(true);
         when(locationHelper.isAndroidLocationPermissionGranted()).thenReturn(true);
-        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo", "2", "3", true));
+        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo", "2", "3", true, false));
 
         backgroundLocationManager.activityDisplayed();
 

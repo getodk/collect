@@ -715,4 +715,8 @@
     <string name="qr_code_not_found">QR Code not found in the selected image</string>
     <string name="not_granted_permission">The activity you are trying to start requires a permission which is not granted.</string>
     <string name="basemap_source_unavailable">Sorry, %s basemaps are not available on this device.  Please choose another basemap in General Settings &gt; Maps.</string>
+    <string name="enter_identity">Enter identity</string>
+    <string name="identity">Identity</string>
+    <string name="enter_identity_description">This form requires you to identify yourself</string>
+    <string name="close">Close</string>
 </resources>
