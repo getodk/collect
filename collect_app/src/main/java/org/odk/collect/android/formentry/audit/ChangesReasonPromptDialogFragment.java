@@ -64,4 +64,14 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
             }
         });
     }
+
+    @Override
+    protected void onBackPressed() {
+        dismiss();
+    }
+
+    @Override
+    protected void onCloseClicked() {
+        dismiss();
+    }
 }

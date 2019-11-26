@@ -10,8 +10,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.espressoutils.pages.ChangesReasonPromptPage;
+import org.odk.collect.android.espressoutils.pages.FormEntryPage;
 import org.odk.collect.android.espressoutils.pages.MainMenuPage;
 import org.odk.collect.android.espressoutils.pages.SaveOrIgnoreDialog;
 import org.odk.collect.android.support.CopyFormRule;
@@ -68,6 +70,42 @@ public class TrackChangesReasonTest {
                 .clickSaveAndExitWithChangesReasonPrompt()
                 .enterReason(" ")
                 .clickSaveWithValidationError();
+    }
+
+    @Test
+    public void openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_andPressingBack_returnsToForm() {
+        new MainMenuPage(rule)
+                .startBlankForm("Track Changes Reason")
+                .inputText("Nothing much...")
+                .swipeToNextQuestion()
+                .clickSaveAndExit()
+                .clickEditSavedForm()
+                .clickOnForm("Track Changes Reason")
+                .clickGoToStart()
+                .inputText("Nothing much!")
+                .swipeToNextQuestion()
+                .clickSaveAndExitWithChangesReasonPrompt()
+                .closeSoftKeyboard()
+                .pressBack(new FormEntryPage("Track Changes Reason", rule))
+                .checkIsStringDisplayed(R.string.save_form_as);
+    }
+
+    @Test
+    public void openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_andCross_returnsToForm() {
+        new MainMenuPage(rule)
+                .startBlankForm("Track Changes Reason")
+                .inputText("Nothing much...")
+                .swipeToNextQuestion()
+                .clickSaveAndExit()
+                .clickEditSavedForm()
+                .clickOnForm("Track Changes Reason")
+                .clickGoToStart()
+                .inputText("Nothing much!")
+                .swipeToNextQuestion()
+                .clickSaveAndExitWithChangesReasonPrompt()
+                .closeSoftKeyboard()
+                .pressClose(new FormEntryPage("Track Changes Reason", rule))
+                .checkIsStringDisplayed(R.string.save_form_as);
     }
 
     @Test
