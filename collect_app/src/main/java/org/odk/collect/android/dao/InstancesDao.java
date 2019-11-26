@@ -257,8 +257,8 @@ public class InstancesDao {
         Collect.getInstance().getContentResolver().delete(InstanceProviderAPI.InstanceColumns.CONTENT_URI, null, null);
     }
 
-    public void deleteInstancesFromIDs(List<String> ids) {
-        int count = ids.size();
+    public void deleteInstancesFromInstanceFilePaths(List<String> instanceFilePaths) {
+        int count = instanceFilePaths.size();
         int counter = 0;
         while (count > 0) {
             String[] selectionArgs = null;
@@ -273,7 +273,7 @@ public class InstancesDao {
             selection.append(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + " IN (");
             int j = 0;
             while (j < selectionArgs.length) {
-                selectionArgs[j] = ids.get(
+                selectionArgs[j] = instanceFilePaths.get(
                         counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER + j);
                 selection.append('?');
 

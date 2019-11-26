@@ -336,7 +336,7 @@ public class SmsService {
                     List<String> instancesToDelete = new ArrayList<>();
                     instancesToDelete.add(instanceId);
 
-                    instancesDao.deleteInstancesFromIDs(instancesToDelete);
+                    instancesDao.deleteInstancesFromInstanceFilePaths(instancesToDelete);
                 } else {
                     instancesDao.updateInstance(contentValues, where, whereArgs);
                 }

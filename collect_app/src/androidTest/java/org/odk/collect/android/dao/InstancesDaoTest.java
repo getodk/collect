@@ -18,6 +18,8 @@ package org.odk.collect.android.dao;
 
 import android.Manifest;
 import android.database.Cursor;
+import android.net.Uri;
+
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
@@ -32,6 +34,9 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
@@ -162,6 +167,27 @@ public class InstancesDaoTest {
 
         assertEquals(1, instances.size());
         assertEquals(biggestNOfSet2Instance, instances.get(0));
+    }
+
+    @Test public void deletingSentInstance_keepsItsDatabaseRow_butClearsItsGeometryFields() {
+        Instance formWithGeopointInstance = new Instance.Builder()
+                .jrFormId("fake")
+                .displayName("Form with geopoint")
+                .instanceFilePath("/my/fake/path")
+                .status(InstanceProviderAPI.STATUS_SUBMITTED)
+                .lastStatusChangeDate(1487595836793L)
+                .geometryType("Point")
+                .geometry("{\"type\":\"Point\",\"coordinates\":[127.6, 11.1]}")
+                .build();
+        Uri result = instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(formWithGeopointInstance));
+
+        Collect.getInstance().getContentResolver().delete(result, null, null);
+
+        Cursor cursor = instancesDao.getInstancesCursorForFilePath("/my/fake/path");
+        formWithGeopointInstance = instancesDao.getInstancesFromCursor(cursor).get(0);
+
+        assertThat(formWithGeopointInstance.getGeometryType(), is(nullValue()));
+        assertThat(formWithGeopointInstance.getGeometry(), is(nullValue()));
     }
 
     private void fillDatabase() {
