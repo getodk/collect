@@ -47,12 +47,13 @@ public class OkHttpCaseInsensitiveHeadersTest {
 
     @Test
     public void testGetAnyForMultipleValue() {
-        Assert.assertTrue(headers.getValues("Collision").size() > 1);
-        String anyValue = headers.getAnyValue("Collision");
         Set<String> values = new TreeSet<>();
         values.add("v1");
         values.add("v2");
         values.add("v3");
+
+        Assert.assertTrue(headers.getValues("Collision").size() > 1);
+        String anyValue = headers.getAnyValue("Collision");
         Assert.assertTrue(values.contains(anyValue));
     }
 

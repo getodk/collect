@@ -10,5 +10,6 @@ public interface CaseInsensitiveHeaders {
     boolean containsHeader(String header);
 
     @Nullable String getAnyValue(String header);
+
     @Nullable List<String> getValues(String header);
 }
