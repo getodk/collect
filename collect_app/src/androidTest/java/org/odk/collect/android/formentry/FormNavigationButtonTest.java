@@ -102,7 +102,7 @@ public class FormNavigationButtonTest {
     }
 
     @Test
-    public void onlyNextButton_ShouldShowOnFirstScreen() {
+    public void onFirstScreen_onlyShowsNextButton() {
         GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_NAVIGATION, GeneralKeys.NAVIGATION_BUTTONS);
         AdminSharedPreferences.getInstance().save(AdminKeys.KEY_MOVING_BACKWARDS, true);
         activityTestRule.getActivity().runOnUiThread(() -> activityTestRule.getActivity().recreate());

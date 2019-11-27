@@ -67,7 +67,7 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
         });
 
         toolbar.setOnMenuItemClickListener(item -> {
-            viewModel.save(System.currentTimeMillis());
+            viewModel.saveReason(System.currentTimeMillis());
             return true;
         });
     }

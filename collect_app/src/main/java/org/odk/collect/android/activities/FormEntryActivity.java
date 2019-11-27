@@ -46,11 +46,9 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -72,7 +70,6 @@ import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
-import com.google.common.collect.ImmutableList;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -87,8 +84,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
-import org.odk.collect.android.adapters.IconMenuListAdapter;
-import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.dao.FormsDao;
@@ -99,6 +94,7 @@ import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.formentry.QuitFormDialog;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.ChangesReasonPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.ChangesReasonPromptViewModel;
@@ -272,9 +268,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     // used to limit forward/backward swipes to one per question
     private boolean beenSwiped;
-
-    private final Object saveDialogLock = new Object();
-
     private FormLoaderTask formLoaderTask;
     private SaveToDiskTask saveToDiskTask;
 
@@ -1417,14 +1410,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         if (saveAs.getText().length() < 1) {
                             ToastUtils.showShortToast(R.string.save_as_error);
                         } else {
-                            changesReasonPromptViewModel.savingForm();
-                            changesReasonPromptViewModel.requiresReasonToContinue().observe(FormEntryActivity.this, requiresReason -> {
-                                if (!requiresReason) {
-                                    saveDataToDisk(EXIT, instanceComplete
-                                            .isChecked(), saveAs.getText()
-                                            .toString());
-                                }
-                            });
+                            saveDataToDisk(EXIT, instanceComplete
+                                    .isChecked(), saveAs.getText()
+                                    .toString());
                         }
                     }
                 });
@@ -1880,8 +1868,22 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        synchronized (saveDialogLock) {
-            saveToDiskTask = new SaveToDiskTask(getIntent().getData(), exit, complete,
+        if (exit) {
+            getFormController().getAuditEventLogger().exitView();
+            changesReasonPromptViewModel.savingForm();
+            changesReasonPromptViewModel.requiresReasonToContinue().observe(this, requiresReason -> {
+                if (!requiresReason) {
+                    saveToDiskTask = new SaveToDiskTask(getIntent().getData(), true, complete,
+                            updatedSaveName);
+                    saveToDiskTask.setFormSavedListener(this);
+                    autoSaved = true;
+                    showDialog(SAVING_DIALOG);
+                    // show dialog before we execute...
+                    saveToDiskTask.execute();
+                }
+            });
+        } else {
+            saveToDiskTask = new SaveToDiskTask(getIntent().getData(), false, complete,
                     updatedSaveName);
             saveToDiskTask.setFormSavedListener(this);
             autoSaved = true;
@@ -1898,68 +1900,32 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * saving
      */
     private void createQuitDialog() {
-        String title;
-        {
-            FormController formController = getFormController();
-            title = (formController == null) ? null : formController.getFormTitle();
-            if (title == null) {
-                title = getString(R.string.no_form_loaded);
-            }
-        }
-
-        List<IconMenuItem> items;
-        if ((boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_MID)) {
-            items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save, R.string.keep_changes),
-                    new IconMenuItem(R.drawable.ic_delete, R.string.do_not_save));
-        } else {
-            items = ImmutableList.of(new IconMenuItem(R.drawable.ic_delete, R.string.do_not_save));
-        }
-
-        ListView listView = DialogUtils.createActionListView(this);
-
-        final IconMenuListAdapter adapter = new IconMenuListAdapter(this, items);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        alertDialog = QuitFormDialog.show(this, getFormController(), new QuitFormDialog.Listener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                IconMenuItem item = (IconMenuItem) adapter.getItem(position);
-                if (item.getTextResId() == R.string.keep_changes) {
-                    changesReasonPromptViewModel.savingForm();
-                    changesReasonPromptViewModel.requiresReasonToContinue().observe(FormEntryActivity.this, requiresReason -> {
-                        if (!requiresReason) {
-                            saveDataToDisk(EXIT, InstancesDaoHelper.isInstanceComplete(false), null);
-                        }
-                    });
-                } else {
-                    // close all open databases of external data.
-                    ExternalDataManager manager = Collect.getInstance().getExternalDataManager();
-                    if (manager != null) {
-                        manager.close();
-                    }
+            public void onSaveChangedClicked() {
+                saveDataToDisk(EXIT, InstancesDaoHelper.isInstanceComplete(false), null);
+                alertDialog.dismiss();
+            }
 
-                    FormController formController = getFormController();
-                    if (formController != null) {
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, System.currentTimeMillis());
-                    }
-                    removeTempInstance();
-                    MediaManager.INSTANCE.revertChanges();
-                    finishReturnInstance();
+            @Override
+            public void onIgnoreChangesClicked() {
+                // close all open databases of external data.
+                ExternalDataManager manager = Collect.getInstance().getExternalDataManager();
+                if (manager != null) {
+                    manager.close();
                 }
+
+                FormController formController = getFormController();
+                if (formController != null) {
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, System.currentTimeMillis());
+                }
+                removeTempInstance();
+                MediaManager.INSTANCE.revertChanges();
+                finishReturnInstance();
+
                 alertDialog.dismiss();
             }
         });
-        alertDialog = new AlertDialog.Builder(this)
-                .setTitle(
-                        getString(R.string.quit_application, title))
-                .setPositiveButton(getString(R.string.do_not_exit),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        })
-                .setView(listView).create();
-        alertDialog.show();
     }
 
     // Cleanup when user exits a form without saving
@@ -2106,13 +2072,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void cancelSaveToDiskTask() {
-        synchronized (saveDialogLock) {
-            if (saveToDiskTask != null) {
-                saveToDiskTask.setFormSavedListener(null);
-                boolean cancelled = saveToDiskTask.cancel(true);
-                Timber.w("Cancelled SaveToDiskTask! (%s)", cancelled);
-                saveToDiskTask = null;
-            }
+        if (saveToDiskTask != null) {
+            saveToDiskTask.setFormSavedListener(null);
+            boolean cancelled = saveToDiskTask.cancel(true);
+            Timber.w("Cancelled SaveToDiskTask! (%s)", cancelled);
+            saveToDiskTask = null;
         }
     }
 
@@ -2455,12 +2419,68 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     runOnUiThread(() -> ToastUtils.showLongToast(R.string.savepoint_used));
                 }
 
-                changesReasonPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
-
                 if (formController.getInstanceFile() == null) {
-                    setupNewForm(warningMsg, formController);
+                    createInstanceDirectory(formController);
+                    identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
+                    changesReasonPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
+
+                    identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
+                        if (!requiresIdentity) {
+                            formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_START, true, System.currentTimeMillis());
+                            startFormEntry(formController, warningMsg);
+                        }
+                    });
                 } else {
-                    setupResumingForm(warningMsg, formController);
+                    Intent reqIntent = getIntent();
+                    boolean showFirst = reqIntent.getBooleanExtra("start", false);
+
+                    if (!showFirst) {
+                        // we've just loaded a saved form, so start in the hierarchy view
+                        String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
+                        if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
+                            identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
+                            changesReasonPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
+
+                            identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
+                                if (!requiresIdentity) {
+                                    if (!allowMovingBackwards) {
+                                        // we aren't allowed to jump around the form so attempt to
+                                        // go directly to the question we were on last time the
+                                        // form was saved.
+                                        // TODO: revisit the fallback. If for some reason the index
+                                        // wasn't saved, we can now jump around which doesn't seem right.
+                                        FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile();
+                                        if (formIndex != null) {
+                                            formController.jumpToIndex(formIndex);
+                                            refreshCurrentView();
+                                            return;
+                                        }
+                                    }
+
+                                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
+                                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
+                                    startActivityForResult(new Intent(this, FormHierarchyActivity.class), RequestCodes.HIERARCHY_ACTIVITY);
+                                }
+                            });
+
+                            changesReasonPromptViewModel.editingForm();
+                        } else {
+                            if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
+                                startActivity(new Intent(this, ViewOnlyFormHierarchyActivity.class));
+                            }
+                            finish();
+                        }
+                    } else {
+                        identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
+                        changesReasonPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
+
+                        identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
+                            if (!requiresIdentity) {
+                                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
+                                startFormEntry(formController, warningMsg);
+                            }
+                        });
+                    }
                 }
             }
 
@@ -2469,65 +2489,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             ToastUtils.showLongToast(R.string.loading_form_failed);
             finish();
         }
-    }
-
-    private void setupResumingForm(String warningMsg, FormController formController) {
-        Intent reqIntent = getIntent();
-        boolean showFirst = reqIntent.getBooleanExtra("start", false);
-
-        if (!showFirst) {
-            identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
-            identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
-                if (!requiresIdentity) {
-                    if (!allowMovingBackwards) {
-                        // we aren't allowed to jump around the form so attempt to
-                        // go directly to the question we were on last time the
-                        // form was saved.
-                        // TODO: revisit the fallback. If for some reason the index
-                        // wasn't saved, we can now jump around which doesn't seem right.
-                        FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile();
-                        if (formIndex != null) {
-                            formController.jumpToIndex(formIndex);
-                            refreshCurrentView();
-                            return;
-                        }
-                    }
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
-                    startFormEntry(formController, warningMsg);
-                }
-            });
-        }
-    }
-
-    private void setupFormView(String formMode) {
-        if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
-            startActivity(new Intent(this, ViewOnlyFormHierarchyActivity.class));
-        }
-        finish();
-    }
-
-    private void setupFormEdit(FormController formController) {
-        changesReasonPromptViewModel.editingForm();
-
-        identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
-        identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
-            if (!requiresIdentity) {
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
-                startActivityForResult(new Intent(this, FormHierarchyActivity.class), RequestCodes.HIERARCHY_ACTIVITY);
-            }
-        });
-    }
-
-    private void setupNewForm(String warningMsg, FormController formController) {
-        createInstanceDirectory(formController);
-        identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
-        identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
-            if (!requiresIdentity) {
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_START, true, System.currentTimeMillis());
-                startFormEntry(formController, warningMsg);
-            }
-        });
     }
 
     private void startFormEntry(FormController formController, String warningMsg) {

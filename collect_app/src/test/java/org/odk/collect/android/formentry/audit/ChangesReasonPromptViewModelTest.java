@@ -20,7 +20,7 @@ public class ChangesReasonPromptViewModelTest {
         viewModel.setAuditEventLogger(logger);
 
         viewModel.setReason("Blah");
-        viewModel.save(123L);
+        viewModel.saveReason(123L);
 
         verify(logger).logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, 123L, "Blah");
     }

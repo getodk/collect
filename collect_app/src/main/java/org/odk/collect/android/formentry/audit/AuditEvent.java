@@ -213,14 +213,14 @@ public class AuditEvent {
         this.user = user;
     }
 
-    public void recordValueChange(String newValue) {
+    public boolean recordValueChange(String newValue) {
         this.newValue = newValue != null ? newValue : "";
 
         // Clear values if they are equal
         if (this.oldValue.equals(this.newValue)) {
             this.oldValue = "";
             this.newValue = "";
-            return;
+            return false;
         }
 
         if (oldValue.contains(",") || oldValue.contains("\n")) {
@@ -230,6 +230,8 @@ public class AuditEvent {
         if (this.newValue.contains(",") || this.newValue.contains("\n")) {
             this.newValue = getEscapedValueForCsv(this.newValue);
         }
+
+        return true;
     }
 
     public String getChangeReason() {

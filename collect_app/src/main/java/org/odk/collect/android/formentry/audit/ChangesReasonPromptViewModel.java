@@ -34,7 +34,7 @@ public class ChangesReasonPromptViewModel extends ViewModel {
         return reason;
     }
 
-    public void save(Long currentTime) {
+    public void saveReason(Long currentTime) {
         if (reason != null && !isBlank(reason)) {
             this.auditEventLogger.logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, currentTime, reason);
             requiresReasonToContinue.setValue(false);
@@ -43,9 +43,10 @@ public class ChangesReasonPromptViewModel extends ViewModel {
 
     private void updateRequiresReasonToContinue() {
         requiresReasonToContinue.setValue(
-                auditEventLogger != null
+                editingForm
+                        && auditEventLogger != null
                         && auditEventLogger.isChangeReasonRequired()
-                        && editingForm
+                        && auditEventLogger.isChangesMade()
         );
     }
 

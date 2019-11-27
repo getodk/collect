@@ -16,6 +16,7 @@
                 </data>
             </instance>
             <bind nodeset="/data/what_up" type="string" />
+            <bind nodeset="/data/meta/audit" type="binary" odk:track-changes="true" />
             <bind nodeset="/data/meta/audit" type="binary" odk:track-changes-reason="on-form-edit" />
             <bind nodeset="/data/meta/instanceID" readonly="true()" type="string"
                 jr:preload="uid" />

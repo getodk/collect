@@ -39,6 +39,7 @@ public class AuditEventLogger {
     private final AuditConfig auditConfig;
     private final FormController formController;
     private String user;
+    private boolean changesMade;
 
     public AuditEventLogger(AuditConfig auditConfig, AuditEventWriter writer, FormController formController) {
         this.auditConfig = auditConfig;
@@ -84,7 +85,7 @@ public class AuditEventLogger {
          * Close any existing interval events if the view is being exited
          */
         if (eventType == AuditEvent.AuditEventType.FORM_EXIT) {
-            manageSavedEvents();
+            finalizeEvents();
         }
 
         auditEvents.add(newAuditEvent);
@@ -107,7 +108,11 @@ public class AuditEventLogger {
 
     private void addNewValueToQuestionAuditEvent(AuditEvent aev, FormController formController) {
         IAnswerData answerData = formController.getQuestionPrompt(aev.getFormIndex()).getAnswerValue();
-        aev.recordValueChange(answerData != null ? answerData.getDisplayText() : null);
+        boolean valueChanged = aev.recordValueChange(answerData != null ? answerData.getDisplayText() : null);
+
+        if (valueChanged) {
+            this.changesMade = true;
+        }
     }
 
     // If location provider are enabled/disabled it sometimes fires the BroadcastReceiver multiple
@@ -140,13 +145,13 @@ public class AuditEventLogger {
      */
     public void exitView() {
         if (isAuditEnabled()) {
-            manageSavedEvents();
+            finalizeEvents();
             writeEvents();
         }
     }
 
     // Filter all events and set final parameters of interval events
-    private void manageSavedEvents() {
+    private void finalizeEvents() {
         // Calculate the time and add the event to the auditEvents array
         long end = getEventTime();
         ArrayList<AuditEvent> filteredAuditEvents = new ArrayList<>();
@@ -281,6 +286,10 @@ public class AuditEventLogger {
 
     public boolean isChangeReasonRequired() {
         return auditConfig != null && auditConfig.isTrackChangesReasonEnabled();
+    }
+
+    public boolean isChangesMade() {
+        return changesMade;
     }
 
     public interface AuditEventWriter {
