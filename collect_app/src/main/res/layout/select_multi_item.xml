@@ -6,6 +6,7 @@
     android:orientation="vertical"
     android:padding="@dimen/margin_standard"
     android:drawableStart="?android:attr/listChoiceIndicatorMultiple"
+    android:drawableLeft="?android:attr/listChoiceIndicatorMultiple"
     android:button="@null"
     android:drawablePadding="@dimen/margin_standard"
     android:background="?selectableItemBackground"

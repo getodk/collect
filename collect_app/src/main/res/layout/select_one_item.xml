@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/margin_standard"
     android:drawableStart="?android:attr/listChoiceIndicatorSingle"
+    android:drawableLeft="?android:attr/listChoiceIndicatorSingle"
     android:button="@null"
     android:drawablePadding="@dimen/margin_standard"
     android:background="?selectableItemBackground"
