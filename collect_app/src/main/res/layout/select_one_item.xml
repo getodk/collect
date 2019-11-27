@@ -4,6 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/margin_standard"
+    android:drawableStart="?android:attr/listChoiceIndicatorSingle"
+    android:button="@null"
+    android:drawablePadding="@dimen/margin_standard"
+    android:background="?selectableItemBackground"
     tools:text="Option A">
 
 </androidx.appcompat.widget.AppCompatRadioButton>
