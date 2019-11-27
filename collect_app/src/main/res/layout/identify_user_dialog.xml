@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="@dimen/margin_extra_large">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -37,14 +37,14 @@
                     style="@style/TextAppearance.Collect.Headline6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/margin_standard"
                     android:text="@string/enter_identity" />
 
                 <TextView
-                    style="@style/TextAppearance.Collect.Body2"
+                    style="@style/TextAppearance.Collect.Body1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="@dimen/margin_small"
                     android:text="@string/enter_identity_description" />
 
             </LinearLayout>
@@ -63,8 +63,8 @@
                     android:hint="@string/identity"
                     android:imeOptions="actionDone"
                     android:inputType="text"
-                    android:saveEnabled="false"
-                    android:lines="1" />
+                    android:lines="1"
+                    android:saveEnabled="false" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

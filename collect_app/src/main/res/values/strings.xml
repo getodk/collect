@@ -723,4 +723,5 @@
     <string name="reason_for_changes">Reason for changes</string>
     <string name="reason">Reason</string>
     <string name="save">Save</string>
+    <string name="reason_for_changes_description">You need to explain the reason for changes to this form</string>
 </resources>
