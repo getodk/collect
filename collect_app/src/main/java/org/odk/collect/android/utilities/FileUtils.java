@@ -313,7 +313,7 @@ public class FileUtils {
         TreeReference firstTopLevelBodyGeoPoint = getFirstToplevelBodyGeoPoint(formDef);
 
         if (!formDef.hasAction(SetGeopointActionHandler.ELEMENT_NAME)) {
-            return firstTopLevelBodyGeoPoint == null ? null : firstTopLevelBodyGeoPoint.toString();
+            return firstTopLevelBodyGeoPoint == null ? null : firstTopLevelBodyGeoPoint.toString(false);
         } else {
             return getInstanceGeoPointBefore(firstTopLevelBodyGeoPoint, formDef.getMainInstance().getRoot());
         }
@@ -367,7 +367,7 @@ public class FileUtils {
         if (element.getRef().equals(firstBodyGeoPoint)) {
             return null;
         } else if (element.getDataType() == Constants.DATATYPE_GEOPOINT) {
-            return element.getRef().toString();
+            return element.getRef().toString(false);
         } else if (element.hasChildren()) {
             Set<TreeElement> childrenToAvoid = new HashSet<>();
 

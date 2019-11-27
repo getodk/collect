@@ -274,6 +274,6 @@ public class FileUtilsTest {
 
         assertThat(metadataFromFormDefinition.get(FileUtils.TITLE), is("Setgeopoint before"));
         assertThat(metadataFromFormDefinition.get(FileUtils.FORMID), is("set-geopoint-before"));
-        assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is("/data/location1[1]"));
+        assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is("/data/location1"));
     }
 }
