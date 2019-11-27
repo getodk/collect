@@ -238,4 +238,42 @@ public class FileUtilsTest {
         assertThat(metadataFromFormDefinition.get(FileUtils.FORMID), is("two-geopoints-repeat"));
         assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is("/data/location2"));
     }
+
+    @Test public void getMetadataFromFormDefinition_withSetGeopointBeforeBodyGeopoint_returnsFirstGeopointInInstance() throws IOException {
+        String submissionForm = "<?xml version=\"1.0\"?>\n" +
+                "<h:html xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
+                "    xmlns:odk=\"http://www.opendatakit.org/xforms\"\n" +
+                "    xmlns=\"http://www.w3.org/2002/xforms\">\n" +
+                "    <h:head>\n" +
+                "        <h:title>Setgeopoint before</h:title>\n" +
+                "        <model>\n" +
+                "            <instance>\n" +
+                "                <data id=\"set-geopoint-before\">\n" +
+                "                    <location1 />\n" +
+                "                    <location2 />\n" +
+                "                </data>\n" +
+                "            </instance>\n" +
+                "            <bind nodeset=\"/data/location2\" type=\"geopoint\" />\n" +
+                "            <bind nodeset=\"/data/location1\" type=\"geopoint\" />\n" +
+                "            <odk:setgeopoint ref=\"/data/location1\" event=\"odk-instance-first-load\"/>\n" +
+                "        </model>\n" +
+                "    </h:head>\n" +
+                "    <h:body>\n" +
+                "        <input ref=\"/data/location2\"> <label>Location</label> </input>\n" +
+                "    </h:body>\n" +
+                "</h:html>";
+
+        File temp = File.createTempFile("geopoints_repeat_form", ".xml");
+        temp.deleteOnExit();
+
+        BufferedWriter out = new BufferedWriter(new FileWriter(temp));
+        out.write(submissionForm);
+        out.close();
+
+        HashMap<String, String> metadataFromFormDefinition = FileUtils.getMetadataFromFormDefinition(temp);
+
+        assertThat(metadataFromFormDefinition.get(FileUtils.TITLE), is("Setgeopoint before"));
+        assertThat(metadataFromFormDefinition.get(FileUtils.FORMID), is("set-geopoint-before"));
+        assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is("/data/location1[1]"));
+    }
 }

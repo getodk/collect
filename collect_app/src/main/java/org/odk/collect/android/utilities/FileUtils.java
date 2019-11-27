@@ -30,7 +30,9 @@ import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.QuestionDef;
+import org.javarosa.core.model.actions.setgeopoint.SetGeopointActionHandler;
 import org.javarosa.core.model.instance.FormInstance;
+import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.R;
@@ -52,10 +54,12 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import timber.log.Timber;
@@ -292,32 +296,51 @@ public class FileUtils {
             fields.put(AUTO_SEND, formDef.getSubmissionProfile().getAttribute("auto-send"));
         }
 
-        fields.put(GEOMETRY_XPATH, getFirstToplevelGeoPoint(formDef));
+        fields.put(GEOMETRY_XPATH, getOverallFirstGeoPoint(formDef));
         return fields;
     }
 
     /**
-     * Returns the XPath path for the first geo element that is not in a repeat.
+     * Returns an XPath path representing the first geopoint of this form definition or null if the
+     * definition does not contain any field of type geopoint.
+     *
+     * The first geopoint is either of:
+     *      (1) the first geopoint in the body that is not in a repeat
+     *      (2) if the form has a setgeopoint action, the first geopoint in the instance that occurs
+     *          before (1) or (1) if there is no geopoint defined before it in the instance.
      */
-    private static String getFirstToplevelGeoPoint(FormDef formDef) {
-        if (formDef.getChildren().size() == 0) {
-            return null;
+    private static String getOverallFirstGeoPoint(FormDef formDef) {
+        TreeReference firstTopLevelBodyGeoPoint = getFirstToplevelBodyGeoPoint(formDef);
+
+        if (!formDef.hasAction(SetGeopointActionHandler.ELEMENT_NAME)) {
+            return firstTopLevelBodyGeoPoint == null ? null : firstTopLevelBodyGeoPoint.toString();
         } else {
-            return getFirstTopLevelGeoPoint(formDef, formDef.getMainInstance());
+            return getInstanceGeoPointBefore(firstTopLevelBodyGeoPoint, formDef.getMainInstance().getRoot());
         }
     }
 
     /**
-     * Returns the XPath path for the first child of the given element that is of type geopoint and
+     * Returns the reference of the first geopoint in the body that is not in a repeat.
+     */
+    private static TreeReference getFirstToplevelBodyGeoPoint(FormDef formDef) {
+        if (formDef.getChildren().size() == 0) {
+            return null;
+        } else {
+            return getFirstTopLevelBodyGeoPoint(formDef, formDef.getMainInstance());
+        }
+    }
+
+    /**
+     * Returns the reference of the first child of the given element that is of type geopoint and
      * is not contained in a repeat.
      */
-    private static String getFirstTopLevelGeoPoint(IFormElement element, FormInstance primaryInstance) {
+    private static TreeReference getFirstTopLevelBodyGeoPoint(IFormElement element, FormInstance primaryInstance) {
         if (element instanceof QuestionDef) {
             QuestionDef question = (QuestionDef) element;
             int dataType = primaryInstance.resolveReference((TreeReference) element.getBind().getReference()).getDataType();
 
             if (dataType == Constants.DATATYPE_GEOPOINT) {
-                return question.getBind().getReference().toString();
+                return (TreeReference) question.getBind().getReference();
             }
         } else if (element instanceof FormDef || element instanceof GroupDef) {
             if (element instanceof GroupDef && ((GroupDef) element).getRepeat()) {
@@ -325,7 +348,34 @@ public class FileUtils {
             } else {
                 for (IFormElement child : element.getChildren()) {
                     // perform recursive depth-first search
-                    String geoPath = getFirstTopLevelGeoPoint(child, primaryInstance);
+                    TreeReference geoRef = getFirstTopLevelBodyGeoPoint(child, primaryInstance);
+                    if (geoRef != null) {
+                        return geoRef;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the XPath path for the first geopoint in the primary instance that is before the given
+     * reference and not in a repeat.
+     */
+    private static String getInstanceGeoPointBefore(TreeReference firstBodyGeoPoint, TreeElement element) {
+        if (element.getRef().equals(firstBodyGeoPoint)) {
+            return null;
+        } else if (element.getDataType() == Constants.DATATYPE_GEOPOINT) {
+            return element.getRef().toString();
+        } else if (element.hasChildren()) {
+            Set<TreeElement> childrenToAvoid = new HashSet<>();
+
+            for (int i = 0; i < element.getNumChildren(); i++) {
+                if (element.getChildAt(i).getMultiplicity() == TreeReference.INDEX_TEMPLATE) {
+                    childrenToAvoid.addAll(element.getChildrenWithName(element.getChildAt(i).getName()));
+                } else if (!childrenToAvoid.contains(element.getChildAt(i))) {
+                    String geoPath = getInstanceGeoPointBefore(firstBodyGeoPoint, element.getChildAt(i));
                     if (geoPath != null) {
                         return geoPath;
                     }
