@@ -30,6 +30,8 @@ import androidx.lifecycle.ViewModelProviders;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
+import org.odk.collect.android.activities.viewmodels.FormMapViewModel.ClickAction;
+import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFormInstance;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.geo.MapFragment;
@@ -40,12 +42,17 @@ import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.MapsPreferences;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -57,6 +64,22 @@ public class FormMapActivity extends BaseGeoMapActivity {
     private FormMapViewModel viewModel;
 
     private MapFragment map;
+
+    /**
+     * Quick lookup of instance objects from map feature IDs.
+     */
+    private final Map<Integer, FormMapViewModel.MappableFormInstance> instancesByFeatureId = new HashMap<>();
+
+    /**
+     * Points to be mapped. Note: kept separately from {@link #instancesByFeatureId} so we can
+     * quickly zoom to bounding box.
+     */
+    private final List<MapPoint> points = new ArrayList<>();
+
+    /**
+     * True if the map viewport has been initialized, false otherwise.
+     */
+    private boolean viewportInitialized;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,7 +131,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
             map.zoomToPoint(map.getGpsLocation(), true));
 
         findViewById(R.id.zoom_to_bounds).setOnClickListener(v ->
-            viewModel.mapZoomToBoundingBoxRequested(map));
+            map.zoomToBoundingBox(points, 0.8, false));
 
         findViewById(R.id.layer_menu).setOnClickListener(v -> {
             MapsPreferences.showReferenceLayerDialog(this);
@@ -129,41 +152,76 @@ public class FormMapActivity extends BaseGeoMapActivity {
         updateInstanceGeometry();
     }
 
-    protected void updateInstanceGeometry() {
+    private void updateInstanceGeometry() {
         if (map == null) {
             return;
         }
 
-        viewModel.mapUpdateRequested(map);
+        updateMapFeatures();
+
+        if (!viewportInitialized && !points.isEmpty()) {
+            map.zoomToBoundingBox(points, 0.8, false);
+            viewportInitialized = true;
+        }
 
         TextView statusView = findViewById(R.id.geometry_status);
-        statusView.setText(getString(R.string.geometry_status, viewModel.getInstanceCount(), viewModel.getMappedPointCount()));
+        statusView.setText(getString(R.string.geometry_status, viewModel.getTotalInstanceCount(), points.size()));
     }
 
+    /**
+     * Clears the existing features on the map and places features for the current form's instances.
+     */
+    private void updateMapFeatures() {
+        points.clear();
+        map.clearFeatures();
+
+        List<MappableFormInstance> instances = viewModel.getMappableFormInstances();
+        for (MappableFormInstance instance : instances) {
+            MapPoint point = new MapPoint(instance.getLatitude(), instance.getLongitude());
+            int featureId = map.addMarker(point, false);
+
+            int drawableId = getDrawableIdForStatus(instance.getStatus());
+            map.setMarkerIcon(featureId, drawableId);
+
+            instancesByFeatureId.put(featureId, instance);
+            points.add(point);
+        }
+    }
+
+    /**
+     * Zooms the map to the new location if the map viewport hasn't been initialized yet.
+     */
     public void onLocationChanged(MapPoint point) {
-        viewModel.locationChanged(point, map);
+        if (!viewportInitialized) {
+            map.zoomToPoint(point, true);
+            viewportInitialized = true;
+        }
     }
 
+    /**
+     * Reacts to a tap on a feature by showing a toast or switching activities to view or edit a form.
+     */
     public void onFeatureClicked(int featureId) {
-        FormMapViewModel.FeatureStatus status = viewModel.getStatusOfClickedFeature(featureId);
+        MappableFormInstance instance = instancesByFeatureId.get(featureId);
+        ClickAction clickAction = instance == null ? FormMapViewModel.ClickAction.NONE : instance.getClickAction();
 
         boolean canEditSaved = (Boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_EDIT_SAVED);
 
-        switch (status) {
-            case DELETED:
+        switch (clickAction) {
+            case DELETED_TOAST:
                 String deletedTime = getString(R.string.deleted_on_date_at_time);
                 String disabledMessage = new SimpleDateFormat(deletedTime,
-                        Locale.getDefault()).format(viewModel.getDeletedDateOf(featureId));
+                        Locale.getDefault()).format(viewModel.getDeletedDateOf(instance.getDatabaseId()));
 
                 ToastUtils.showLongToast(disabledMessage);
                 break;
-            case NOT_VIEWABLE:
+            case NOT_VIEWABLE_TOAST:
                 ToastUtils.showLongToast(R.string.cannot_edit_completed_form);
                 break;
-            case VIEW_ONLY:
+            case OPEN_READ_ONLY:
                 startActivity(getViewOnlyFormInstanceIntentFor(featureId));
                 break;
-            case EDITABLE:
+            case OPEN_EDIT:
                 if (canEditSaved) {
                     startActivity(getEditFormInstanceIntentFor(featureId));
                 } else {
@@ -174,7 +232,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
     }
 
     private Intent getEditFormInstanceIntentFor(int featureId) {
-        Uri uri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, viewModel.getDatabaseIdOf(featureId));
+        Uri uri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, instancesByFeatureId.get(featureId).getDatabaseId());
         return new Intent(Intent.ACTION_EDIT, uri);
     }
 
@@ -189,6 +247,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
         double mapZoom = state.getDouble(MAP_ZOOM_KEY);
         if (mapCenter != null) {
             map.zoomToPoint(mapCenter, mapZoom, false);
+            viewportInitialized = true; // avoid recentering as soon as location is received
         }
     }
 
@@ -209,5 +268,19 @@ public class FormMapActivity extends BaseGeoMapActivity {
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             return (T) new FormMapViewModel(form, instancesRepository);
         }
+    }
+
+    private static int getDrawableIdForStatus(String status) {
+        switch (status) {
+            case InstanceProviderAPI.STATUS_INCOMPLETE:
+                return R.drawable.ic_room_blue_24dp;
+            case InstanceProviderAPI.STATUS_COMPLETE:
+                return R.drawable.ic_room_deep_purple_24dp;
+            case InstanceProviderAPI.STATUS_SUBMITTED:
+                return R.drawable.ic_room_green_24dp;
+            case InstanceProviderAPI.STATUS_SUBMISSION_FAILED:
+                return R.drawable.ic_room_red_24dp;
+        }
+        return R.drawable.ic_map_point;
     }
 }
