@@ -13,6 +13,8 @@ import java.io.IOException;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.formentry.audit.AuditEventCSVLine.toCSVLine;
+
 /**
  * Background task for appending events to the event log
  */
@@ -52,8 +54,9 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
             }
             if (params.length > 0) {
                 for (AuditEvent aev : params) {
-                    fw.write(aev.toString() + "\n");
-                    Timber.i("Log audit event: %s", aev.toString());
+                    String csvLine = toCSVLine(aev, isLocationEnabled, isTrackingChangesEnabled, isTrackChangesReasonEnabled);
+                    fw.write(csvLine + "\n");
+                    Timber.i("Log audit event: %s", csvLine);
                 }
             }
         } catch (IOException e) {

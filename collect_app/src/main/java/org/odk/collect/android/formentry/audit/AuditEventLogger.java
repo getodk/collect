@@ -65,13 +65,11 @@ public class AuditEventLogger {
         AuditEvent newAuditEvent = new AuditEvent(
                 getEventTime(),
                 eventType,
-                auditConfig.isLocationEnabled(),
-                auditConfig.isTrackingChangesEnabled(),
                 formIndex,
                 questionAnswer,
                 user,
-                changeReason,
-                true);
+                changeReason
+        );
 
         if (isDuplicatedIntervalEvent(newAuditEvent)) {
             return;
