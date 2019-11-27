@@ -196,7 +196,7 @@ public class AuditEventLoggerTest {
 
     @Test
     public void logEvent_WithChangeReason_addsChangeReasonToEvent() {
-        AuditEventLogger auditEventLogger = new AuditEventLogger(new AuditConfig(null, null, null, false, false, false), testWriter, formController);
+        AuditEventLogger auditEventLogger = new AuditEventLogger(new AuditConfig(null, null, null, false, false, true), testWriter, formController);
 
         auditEventLogger.logEvent(CHANGE_REASON, null, false, null, 123L, "Blah");
         auditEventLogger.exitView(); // Triggers event writing

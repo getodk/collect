@@ -26,12 +26,12 @@ public class ChangesReasonPromptViewModel extends ViewModel {
         updateRequiresReasonToContinue();
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void editingForm() {
+        editingForm = true;
     }
 
-    public String getReason() {
-        return reason;
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
     public void saveReason(Long currentTime) {
@@ -41,6 +41,10 @@ public class ChangesReasonPromptViewModel extends ViewModel {
         }
     }
 
+    public String getReason() {
+        return reason;
+    }
+
     private void updateRequiresReasonToContinue() {
         requiresReasonToContinue.setValue(
                 editingForm
@@ -48,9 +52,5 @@ public class ChangesReasonPromptViewModel extends ViewModel {
                         && auditEventLogger.isChangeReasonRequired()
                         && auditEventLogger.isChangesMade()
         );
-    }
-
-    public void editingForm() {
-        editingForm = true;
     }
 }

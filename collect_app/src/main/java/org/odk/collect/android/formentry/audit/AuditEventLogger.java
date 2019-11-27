@@ -71,7 +71,7 @@ public class AuditEventLogger {
                 questionAnswer,
                 user,
                 changeReason,
-                false);
+                true);
 
         if (isDuplicatedIntervalEvent(newAuditEvent)) {
             return;
