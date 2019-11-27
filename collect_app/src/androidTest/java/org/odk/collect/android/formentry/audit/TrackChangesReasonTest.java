@@ -91,7 +91,7 @@ public class TrackChangesReasonTest {
     }
 
     @Test
-    public void openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_andCross_returnsToForm() {
+    public void openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_andClickingCross_returnsToForm() {
         new MainMenuPage(rule)
                 .startBlankForm("Track Changes Reason")
                 .inputText("Nothing much...")
