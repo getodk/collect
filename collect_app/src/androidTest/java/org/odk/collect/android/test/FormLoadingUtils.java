@@ -20,6 +20,7 @@ import android.content.ContentValues;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 
+import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
@@ -32,6 +33,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import static org.odk.collect.android.forms.FormUtils.setupReferenceManagerForForm;
 import static org.odk.collect.android.test.FileUtils.copyFileFromAssets;
 
 public class FormLoadingUtils {
@@ -54,7 +56,7 @@ public class FormLoadingUtils {
             copyFormMediaFiles(formFilename, mediaFilenames);
         }
 
-        FormLoaderTask.prepareReferenceManager(FileUtils.getFormMediaDir(new File(pathname)));
+        setupReferenceManagerForForm(ReferenceManager.instance(), FileUtils.getFormMediaDir(new File(pathname)));
         saveFormToDatabase(new File(pathname));
     }
 
