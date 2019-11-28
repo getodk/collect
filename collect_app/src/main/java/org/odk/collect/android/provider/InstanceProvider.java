@@ -74,6 +74,7 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColum
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_LOCATION_TRIGGER;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_REPEAT;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_SCHED_START;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_SCHED_FINISH;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_SHOW_DIST;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_SURVEY_NOTES;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_TASK_COMMENT;
@@ -88,7 +89,7 @@ public class InstanceProvider extends ContentProvider {
 
 
     private static final String DATABASE_NAME = "instances.db";
-    private static final int DATABASE_VERSION = 15;		// smap
+    private static final int DATABASE_VERSION = 16;		// smap
     private static final String INSTANCES_TABLE_NAME = "instances";
 
     private static HashMap<String, String> sInstancesProjectionMap;
@@ -98,7 +99,7 @@ public class InstanceProvider extends ContentProvider {
 
     private static final UriMatcher URI_MATCHER;
 
-    private static final String[] COLUMN_NAMES_V15 = new String[] {
+    private static final String[] COLUMN_NAMES_V16 = new String[] {
             _ID,
             DISPLAY_NAME,
             SUBMISSION_URI,
@@ -117,6 +118,7 @@ public class InstanceProvider extends ContentProvider {
             SCHED_LAT,          // smap
             T_TITLE,            // smap
             T_SCHED_START,      // smap
+            T_SCHED_FINISH,      // smap
             T_ACT_START,        // smap
             T_ACT_FINISH,       // smap
             T_ADDRESS,          // smap
@@ -149,7 +151,7 @@ public class InstanceProvider extends ContentProvider {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            createInstancesTableV15(db, INSTANCES_TABLE_NAME);
+            createInstancesTableV16(db, INSTANCES_TABLE_NAME);
         }
 
 
@@ -157,9 +159,9 @@ public class InstanceProvider extends ContentProvider {
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         	int initialVersion = oldVersion;
 
-            if (oldVersion < 15) {
+            if (oldVersion < 16) {
                 try {
-                    moveInstancesTableToVersion15(db);
+                    moveInstancesTableToVersion16(db);
                 } catch(Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
                     Timber.w("Error in upgrading to database version 13");
@@ -529,6 +531,7 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(SCHED_LAT, SCHED_LAT);          // smap
         sInstancesProjectionMap.put(T_TITLE, T_TITLE);              // smap
         sInstancesProjectionMap.put(T_SCHED_START, T_SCHED_START);  // smap
+        sInstancesProjectionMap.put(T_SCHED_FINISH, T_SCHED_FINISH);  // smap
         sInstancesProjectionMap.put(T_ACT_FINISH, T_ACT_FINISH);    // smap
         sInstancesProjectionMap.put(T_ADDRESS, T_ADDRESS);          // smap
         sInstancesProjectionMap.put(T_GEOM, T_GEOM);                // smap
@@ -544,7 +547,7 @@ public class InstanceProvider extends ContentProvider {
     }
 
 
-    private static void moveInstancesTableToVersion15(SQLiteDatabase db) {
+    private static void moveInstancesTableToVersion16(SQLiteDatabase db) {
         List<String> columnNamesPrev = getInstancesColumnNames(db);
 
         String temporaryTableName = INSTANCES_TABLE_NAME + "_tmp";
@@ -557,10 +560,10 @@ public class InstanceProvider extends ContentProvider {
                 .dropIfExists(temporaryTableName)
                 .end();
 
-        createInstancesTableV15(db, temporaryTableName);
+        createInstancesTableV16(db, temporaryTableName);
 
         // Only select columns from the existing table that are also relevant to v13
-        columnNamesPrev.retainAll(new ArrayList<>(Arrays.asList(COLUMN_NAMES_V15)));
+        columnNamesPrev.retainAll(new ArrayList<>(Arrays.asList(COLUMN_NAMES_V16)));
 
         CustomSQLiteQueryBuilder
                 .begin(db)
@@ -583,7 +586,7 @@ public class InstanceProvider extends ContentProvider {
                 .end();
     }
 
-    private static void createInstancesTableV15(SQLiteDatabase db, String name) {
+    private static void createInstancesTableV16(SQLiteDatabase db, String name) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + name + " ("
                 + _ID + " integer primary key, "
                 + DISPLAY_NAME + " text not null, "
@@ -603,6 +606,7 @@ public class InstanceProvider extends ContentProvider {
                 + SCHED_LAT + " double, "		// smap
                 + T_TITLE + " text, "		    // smap
                 + T_SCHED_START + " long, "		// smap
+                + T_SCHED_FINISH + " long, "	// smap
                 + T_ACT_START + " long, "		// smap
                 + T_ACT_FINISH + " long, "		// smap
                 + T_ADDRESS + " text, "		    // smap

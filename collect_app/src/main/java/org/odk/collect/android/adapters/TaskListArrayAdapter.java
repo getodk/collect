@@ -85,7 +85,7 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
                 } else if(item.repeat) {
                     Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_repeat);
                     icon.setImageDrawable(d);
-				} else if(item.taskEnd < (new Date()).getTime()) {
+				} else if(item.taskFinish != 0 && item.taskFinish < (new Date()).getTime()) {
                     Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_late);
                     icon.setImageDrawable(d);
                 } else {
@@ -119,6 +119,10 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
                 taskStartText.setText(getContext().getString(R.string.smap_project) + ": " + item.project);
 	    	} else {
                 String line2 = Utilities.getTaskTime(item.taskStatus, item.actFinish, item.taskStart);
+                if(item.taskFinish > 0 && !item.taskStatus.equals(Utilities.STATUS_T_COMPLETE) &&
+                        !item.taskStatus.equals(Utilities.STATUS_T_SUBMITTED)) {
+                    line2 += " - " + Utilities.getTime(item.taskFinish);
+                }
                 taskStartText.setText(line2);
 	    	}
     	}

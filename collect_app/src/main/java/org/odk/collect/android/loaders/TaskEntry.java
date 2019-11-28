@@ -16,6 +16,7 @@ public class TaskEntry {
     public String project;
     public String ident;
     public long taskStart;          // Scheduled time of task
+    public long taskFinish;         // Scheduled finish time of task
     public String taskAddress;
     public String taskForm;
     public String jrFormId;

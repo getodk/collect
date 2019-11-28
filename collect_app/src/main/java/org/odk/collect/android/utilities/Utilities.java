@@ -114,6 +114,7 @@ public class Utilities {
                 InstanceColumns.T_TASK_STATUS,
                 InstanceColumns.T_REPEAT,
                 InstanceColumns.T_SCHED_START,
+                InstanceColumns.T_SCHED_FINISH,
                 InstanceColumns.T_ADDRESS,
                 InstanceColumns.FORM_PATH,
                 InstanceColumns.JR_FORM_ID,
@@ -151,6 +152,7 @@ public class Utilities {
             entry.taskStatus = c.getString(c.getColumnIndex(InstanceColumns.T_TASK_STATUS));
             entry.repeat = (c.getInt(c.getColumnIndex(InstanceColumns.T_REPEAT)) > 0);
             entry.taskStart = c.getLong(c.getColumnIndex(InstanceColumns.T_SCHED_START));
+            entry.taskFinish = c.getLong(c.getColumnIndex(InstanceColumns.T_SCHED_FINISH));
             entry.taskAddress = c.getString(c.getColumnIndex(InstanceColumns.T_ADDRESS));
             entry.taskForm = c.getString(c.getColumnIndex(InstanceColumns.FORM_PATH));
             entry.jrFormId = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
@@ -192,6 +194,7 @@ public class Utilities {
             values.put(InstanceColumns.STATUS, entry.taskStatus);
             values.put(InstanceColumns.T_REPEAT, true);     // Duplicated task should also be a repeat
             values.put(InstanceColumns.T_SCHED_START, entry.taskStart);
+            values.put(InstanceColumns.T_SCHED_FINISH, entry.taskFinish);
             values.put(InstanceColumns.T_ADDRESS, entry.taskAddress);
             values.put(InstanceColumns.FORM_PATH, entry.taskForm);
             values.put(InstanceColumns.JR_FORM_ID, entry.jrFormId);
@@ -365,6 +368,7 @@ public class Utilities {
                 InstanceColumns.T_TASK_COMMENT,
                 InstanceColumns.T_REPEAT,
                 InstanceColumns.T_SCHED_START,
+                InstanceColumns.T_SCHED_FINISH,
                 InstanceColumns.T_ADDRESS,
                 InstanceColumns.FORM_PATH,
                 InstanceColumns.JR_FORM_ID,
@@ -444,6 +448,7 @@ public class Utilities {
                 entry.taskComment = c.getString(c.getColumnIndex(InstanceColumns.T_TASK_COMMENT));
                 entry.repeat = (c.getInt(c.getColumnIndex(InstanceColumns.T_REPEAT)) > 0);
                 entry.taskStart = c.getLong(c.getColumnIndex(InstanceColumns.T_SCHED_START));
+                entry.taskFinish = c.getLong(c.getColumnIndex(InstanceColumns.T_SCHED_FINISH));
                 entry.taskAddress = c.getString(c.getColumnIndex(InstanceColumns.T_ADDRESS));
                 entry.taskForm = c.getString(c.getColumnIndex(InstanceColumns.FORM_PATH));
                 entry.jrFormId = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
@@ -696,6 +701,9 @@ public class Utilities {
         if (ta.task.scheduled_at != null) {
             values.put(InstanceColumns.T_SCHED_START, ta.task.scheduled_at.getTime());
         }
+        if (ta.task.scheduled_finish != null) {
+            values.put(InstanceColumns.T_SCHED_FINISH, ta.task.scheduled_finish.getTime());
+        }
         values.put(InstanceColumns.T_LOCATION_TRIGGER, ta.task.location_trigger);
         values.put(InstanceColumns.T_SHOW_DIST, ta.task.show_dist);
         values.put(InstanceColumns.T_HIDE, (ta.task.show_dist > 0) ? 1 : 0);
@@ -724,11 +732,6 @@ public class Utilities {
             }
             values.put(InstanceColumns.T_GEOM, builder.toString());
             values.put(InstanceColumns.T_GEOM_TYPE, ta.location.geometry.type);
-        }
-
-        // update scheduled_a
-        if(ta.task.scheduled_at != null) {
-            values.put(InstanceColumns.T_SCHED_START, ta.task.scheduled_at.getTime());
         }
 
         Collect.getInstance().getContentResolver().update(dbUri, values, selectClause, selectArgs);
@@ -847,6 +850,23 @@ public class Utilities {
 
         df.setTimeZone(TimeZone.getDefault());
         s = df.format(theTime);
+
+        return s;
+    }
+
+    /*
+     * Convert a time long format to a string
+     */
+    public static String getTime(long t) {
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+        String s = "";
+        if(t > 0) {
+
+            df.setTimeZone(TimeZone.getDefault());
+            s = df.format(t);
+        }
 
         return s;
     }

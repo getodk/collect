@@ -67,6 +67,7 @@ public final class InstanceProviderAPI {
         public static final String SCHED_LAT = "schedLat";          // Scheduled latitude for task
         public static final String T_TITLE = "tTitle";              // Task title
         public static final String T_SCHED_START = "tSchedStart";   // Scheduled Start
+        public static final String T_SCHED_FINISH = "tSchedFinish";   // Scheduled Start
         public static final String T_ACT_START = "tActStart";       // Actual Start
         public static final String T_ACT_FINISH = "tActFinish";     // Actual Finish
         public static final String T_ADDRESS = "tAddress";          // Address of task

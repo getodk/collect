@@ -359,6 +359,9 @@ public class ManageForm {
         if(ta.task.scheduled_at != null) {
             values.put(InstanceColumns.T_SCHED_START, ta.task.scheduled_at.getTime());
         }
+        if(ta.task.scheduled_finish != null) {
+            values.put(InstanceColumns.T_SCHED_FINISH, ta.task.scheduled_finish.getTime());
+        }
         values.put(InstanceColumns.FORM_PATH, formPath);
         values.put(InstanceColumns.T_ADDRESS, ta.task.address);
         values.put(InstanceColumns.T_IS_SYNC, InstanceProviderAPI.STATUS_SYNC_YES);

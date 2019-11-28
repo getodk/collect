@@ -13,6 +13,7 @@ public class Task {
     public String initial_data_source;   // task || survey || none
 	public String assignment_mode;
 	public Date scheduled_at;
+    public Date scheduled_finish;
 	public String location_trigger;
 	public boolean repeat;			// Task can be completed multiple times
 	public String address;			// Key value pairs representing an unstructured address
