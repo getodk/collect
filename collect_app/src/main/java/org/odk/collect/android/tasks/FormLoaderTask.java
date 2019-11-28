@@ -130,19 +130,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         final File formXml = new File(formPath);
         final File formMediaDir = FileUtils.getFormMediaDir(formXml);
 
-        final ReferenceManager referenceManager = ReferenceManager.instance();
-
-        // Remove previous forms
-        referenceManager.clearSession();
-
-        // This should get moved to the Application Class
-        if (referenceManager.getFactories().length == 0) {
-            // this is /sdcard/odk
-            referenceManager.addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
-        }
-
-        addSessionRootTranslators(formMediaDir.getName(), referenceManager,
-                "images", "image", "audio", "video", "file");
+        prepareReferenceManager(formMediaDir);
 
         FormDef formDef = null;
         try {
@@ -225,7 +213,23 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         return data;
     }
 
-    private void addSessionRootTranslators(String formMediaDir, ReferenceManager referenceManager, String... hostStrings) {
+    public static void prepareReferenceManager(File formMediaDir) {
+        final ReferenceManager referenceManager = ReferenceManager.instance();
+
+        // Remove previous forms
+        referenceManager.clearSession();
+
+        // This should get moved to the Application Class
+        if (referenceManager.getFactories().length == 0) {
+            // this is /sdcard/odk
+            referenceManager.addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
+        }
+
+        addSessionRootTranslators(formMediaDir.getName(), referenceManager,
+                "images", "image", "audio", "video", "file");
+    }
+
+    private static void addSessionRootTranslators(String formMediaDir, ReferenceManager referenceManager, String... hostStrings) {
         // Set jr://... to point to /sdcard/odk/forms/formBasename-media/
         final String translatedPrefix = String.format("jr://file/forms/" + formMediaDir + "/");
         for (String t : hostStrings) {

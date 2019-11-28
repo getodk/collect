@@ -48,11 +48,14 @@ public class FormLoadingUtils {
      */
     public static void copyFormToSdCard(String formFilename, List<String> mediaFilenames) throws IOException {
         Collect.createODKDirs();
-        copyForm(formFilename);
 
+        String pathname = copyForm(formFilename);
         if (mediaFilenames != null) {
             copyFormMediaFiles(formFilename, mediaFilenames);
         }
+
+        FormLoaderTask.prepareReferenceManager(FileUtils.getFormMediaDir(new File(pathname)));
+        saveFormToDatabase(new File(pathname));
     }
 
     /**
@@ -82,10 +85,10 @@ public class FormLoadingUtils {
         return new FormActivityTestRule(formFilename);
     }
 
-    private static void copyForm(String formFilename) throws IOException {
+    private static String copyForm(String formFilename) throws IOException {
         String pathname = Collect.FORMS_PATH + "/" + formFilename;
         copyFileFromAssets("forms/" + formFilename, pathname);
-        saveFormToDatabase(new File(pathname));
+        return pathname;
     }
 
     private static void copyFormMediaFiles(String formFilename, List<String> mediaFilenames) throws IOException {
