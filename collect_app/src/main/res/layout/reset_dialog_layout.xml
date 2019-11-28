@@ -13,8 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="5dp"
@@ -42,6 +42,7 @@ limitations under the License.
             android:text="@string/reset_settings"
             android:padding="5dp"
             android:button="@null"
+            app:buttonCompat="@null"
             android:background="?android:attr/selectableItemBackground"
             android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
@@ -53,6 +54,7 @@ limitations under the License.
             android:text="@string/reset_saved_forms"
             android:padding="5dp"
             android:button="@null"
+            app:buttonCompat="@null"
             android:background="?android:attr/selectableItemBackground"
             android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
@@ -64,6 +66,7 @@ limitations under the License.
             android:text="@string/reset_blank_forms"
             android:padding="5dp"
             android:button="@null"
+            app:buttonCompat="@null"
             android:background="?android:attr/selectableItemBackground"
             android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
@@ -75,6 +78,7 @@ limitations under the License.
             android:text="@string/reset_cache"
             android:padding="5dp"
             android:button="@null"
+            app:buttonCompat="@null"
             android:background="?android:attr/selectableItemBackground"
             android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
@@ -86,6 +90,7 @@ limitations under the License.
             android:text="@string/reset_layers"
             android:padding="5dp"
             android:button="@null"
+            app:buttonCompat="@null"
             android:background="?android:attr/selectableItemBackground"
             android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
@@ -97,6 +102,7 @@ limitations under the License.
             android:text="@string/reset_osm_tiles"
             android:padding="5dp"
             android:button="@null"
+            app:buttonCompat="@null"
             android:background="?android:attr/selectableItemBackground"
             android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
