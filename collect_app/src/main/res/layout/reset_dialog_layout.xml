@@ -35,7 +35,7 @@ limitations under the License.
             android:padding="5dp"
             android:text="@string/reset_app_state_warning" />
 
-        <CheckBox
+        <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/preferences"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,7 +47,7 @@ limitations under the License.
             android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
 
-        <CheckBox
+        <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/instances"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,7 +59,7 @@ limitations under the License.
             android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
 
-        <CheckBox
+        <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/forms"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,7 +71,7 @@ limitations under the License.
             android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
 
-        <CheckBox
+        <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/cache"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -83,7 +83,7 @@ limitations under the License.
             android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
 
-        <CheckBox
+        <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/layers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -95,7 +95,7 @@ limitations under the License.
             android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
 
-        <CheckBox
+        <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/osmdroid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
