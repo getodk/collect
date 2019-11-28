@@ -85,7 +85,7 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
                 } else if(item.repeat) {
                     Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_repeat);
                     icon.setImageDrawable(d);
-				} else if(item.taskStart < (new Date()).getTime()) {
+				} else if(item.taskEnd < (new Date()).getTime()) {
                     Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_late);
                     icon.setImageDrawable(d);
                 } else {
