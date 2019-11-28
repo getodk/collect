@@ -104,29 +104,31 @@ public class SmapChartLineWidget extends SmapChartWidget {
             }
 
             // Get the data sets
-            String [] dsArray = sData.split("::");
-            for(int i = 0; i < dsArray.length; i++) {
-                List<Entry> entries = new ArrayList<Entry>();
+            if(sData != null && sData.trim().length() > 0) {
+                String[] dsArray = sData.split("::");
+                for (int i = 0; i < dsArray.length; i++) {
+                    List<Entry> entries = new ArrayList<Entry>();
 
-                String [] vArray = dsArray[i].split(":");
-                for(int j = 0; j < vArray.length; j++) {
-                    String [] point = vArray[j].split("#");
-                    try {
-                        int x = j;
-                        float y;
-                        if(point.length > 1) {
-                            x = Integer.parseInt(point[0]);
-                            y = Float.parseFloat(point[1]);
-                        } else {
-                            y = Float.parseFloat(point[0]);
+                    String[] vArray = dsArray[i].split(":");
+                    for (int j = 0; j < vArray.length; j++) {
+                        String[] point = vArray[j].split("#");
+                        try {
+                            int x = j;
+                            float y;
+                            if (point.length > 1) {
+                                x = Integer.parseInt(point[0]);
+                                y = Float.parseFloat(point[1]);
+                            } else {
+                                y = Float.parseFloat(point[0]);
+                            }
+
+                            entries.add(new Entry(x, y));
+                        } catch (Exception e) {
+
                         }
-
-                        entries.add(new Entry(x, y));
-                    } catch (Exception e) {
-
                     }
+                    dataSets.add(entries);
                 }
-                dataSets.add(entries);
             }
 
 
