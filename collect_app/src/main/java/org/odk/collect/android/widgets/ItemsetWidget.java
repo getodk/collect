@@ -272,7 +272,7 @@ public class ItemsetWidget extends AbstractSelectOneWidget {
                 adapter.close();
             }
         } else {
-            addMissingFileMsg(itemsetFile.getAbsolutePath());
+            showWarning(getContext().getString(R.string.file_missing, itemsetFile.getAbsolutePath()));
         }
         return items;
     }

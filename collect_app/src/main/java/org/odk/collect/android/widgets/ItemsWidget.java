@@ -17,7 +17,6 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
-import android.widget.TextView;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.xpath.expr.XPathFuncExpr;
@@ -26,6 +25,7 @@ import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,7 +35,7 @@ import java.util.List;
  */
 public abstract class ItemsWidget extends QuestionWidget {
 
-    List<SelectChoice> items;
+    List<SelectChoice> items = new ArrayList<>();
 
     public ItemsWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
@@ -49,16 +49,10 @@ public abstract class ItemsWidget extends QuestionWidget {
             try {
                 items = ExternalDataUtil.populateExternalChoices(getFormEntryPrompt(), xpathFuncExpr);
             } catch (FileNotFoundException e) {
-                addMissingFileMsg(e.getMessage());
+                showWarning(getContext().getString(R.string.file_missing, e.getMessage()));
             }
         } else {
             items = getFormEntryPrompt().getSelectChoices();
         }
-    }
-
-    protected void addMissingFileMsg(String filePath) {
-        TextView error = new TextView(getContext());
-        error.setText(getContext().getString(R.string.file_missing, filePath));
-        addAnswerView(error);
     }
 }
