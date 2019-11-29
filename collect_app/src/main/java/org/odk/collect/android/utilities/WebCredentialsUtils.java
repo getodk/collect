@@ -55,6 +55,10 @@ public class WebCredentialsUtils {
         }
     }
 
+    static void clearAllCredentials() {
+        HOST_CREDENTIALS.clear();
+    }
+
     public String getServerUrlFromPreferences() {
         if (GeneralSharedPreferences.getInstance() == null) {
             return "";
