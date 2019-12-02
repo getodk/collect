@@ -76,6 +76,7 @@ import com.google.zxing.integration.android.IntentResult;
 import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryCaption;
@@ -2821,11 +2822,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     @Override
-    public void onRankingChanged(List<String> values) {
+    public void onRankingChanged(List<SelectChoice> items) {
         ODKView odkView = getCurrentViewIfODKView();
         if (odkView != null) {
             QuestionWidget widgetGettingNewValue = getWidgetWaitingForBinaryData();
-            odkView.setBinaryData(values);
+            odkView.setBinaryData(items);
             widgetValueChanged(widgetGettingNewValue);
         }
     }
