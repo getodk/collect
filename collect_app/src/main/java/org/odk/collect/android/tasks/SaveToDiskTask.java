@@ -246,13 +246,22 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     }
 
     /**
-     * Extracts geometry information from the instance, if present.
+     * Extracts geometry information from the given xpath path in the given instance.
+     *
+     * Returns a ContentValues object with values set for {@link InstanceColumns.GEOMETRY} and
+     * {@link InstanceColumns.GEOMETRY_TYPE}. Those value are null if anything goes wrong with
+     * parsing the geometry and converting it to GeoJSON.
+     *
+     * Returns null if the given XPath path is null.
      */
     private ContentValues extractGeometryContentValues(FormInstance instance, String xpath) {
+        ContentValues values = new ContentValues();
+
         if (xpath == null) {
             Timber.w("Geometry XPath is missing for instance %s!", instance);
             return null;
         }
+
         try {
             XPathExpression expr = XPathParseTool.parseXPath(xpath);
             EvaluationContext context = new EvaluationContext(instance);
@@ -262,13 +271,13 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 // For now, only use the first node found.
                 TreeElement element = instance.resolveReference(nodes.getRefAt(0));
                 IAnswerData value = element.getValue();
+
                 if (value instanceof GeoPointData) {
                     try {
                         JSONObject json = toGeoJson((GeoPointData) value);
                         Timber.i("Geometry for \"%s\" instance found at %s: %s",
                             instance.getName(), xpath, json);
 
-                        ContentValues values = new ContentValues();
                         values.put(InstanceColumns.GEOMETRY, json.toString());
                         values.put(InstanceColumns.GEOMETRY_TYPE, json.getString("type"));
                         return values;
@@ -281,7 +290,9 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             Timber.w(e, "Could not evaluate geometry XPath %s in instance", xpath);
         }
 
-        return null;
+        values.put(InstanceColumns.GEOMETRY, (String) null);
+        values.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
+        return values;
     }
 
     @NonNull
