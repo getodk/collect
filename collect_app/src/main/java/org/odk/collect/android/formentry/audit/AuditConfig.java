@@ -112,4 +112,47 @@ public class AuditConfig {
     public boolean isTrackChangesReasonEnabled() {
         return isTrackChangesReasonEnabled;
     }
+
+    public static class Builder {
+        private String mode;
+        private String locationMinInterval;
+        private String locationMaxAge;
+        private boolean isTrackingChangesEnabled;
+        private boolean isIdentifyUserEnabled;
+        private boolean isTrackChangesReasonEnabled;
+
+        public Builder setMode(String mode) {
+            this.mode = mode;
+            return this;
+        }
+
+        public Builder setLocationMinInterval(String locationMinInterval) {
+            this.locationMinInterval = locationMinInterval;
+            return this;
+        }
+
+        public Builder setLocationMaxAge(String locationMaxAge) {
+            this.locationMaxAge = locationMaxAge;
+            return this;
+        }
+
+        public Builder setIsTrackingChangesEnabled(boolean isTrackingChangesEnabled) {
+            this.isTrackingChangesEnabled = isTrackingChangesEnabled;
+            return this;
+        }
+
+        public Builder setIsIdentifyUserEnabled(boolean isIdentifyUserEnabled) {
+            this.isIdentifyUserEnabled = isIdentifyUserEnabled;
+            return this;
+        }
+
+        public Builder setIsTrackChangesReasonEnabled(boolean isTrackChangesReasonEnabled) {
+            this.isTrackChangesReasonEnabled = isTrackChangesReasonEnabled;
+            return this;
+        }
+
+        public AuditConfig createAuditConfig() {
+            return new AuditConfig(mode, locationMinInterval, locationMaxAge, isTrackingChangesEnabled, isIdentifyUserEnabled, isTrackChangesReasonEnabled);
+        }
+    }
 }
