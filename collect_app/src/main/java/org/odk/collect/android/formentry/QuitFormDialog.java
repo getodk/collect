@@ -23,12 +23,9 @@ public class QuitFormDialog {
     }
 
     public static AlertDialog show(Context context, FormController formController, Listener listener) {
-        String title;
-        {
-            title = (formController == null) ? null : formController.getFormTitle();
-            if (title == null) {
-                title = context.getString(R.string.no_form_loaded);
-            }
+        String title = (formController == null) ? null : formController.getFormTitle();
+        if (title == null) {
+            title = context.getString(R.string.no_form_loaded);
         }
 
         List<IconMenuItem> items;
