@@ -19,7 +19,7 @@ import org.odk.collect.android.R;
  * (https://material.io/components/dialogs/#full-screen-dialog) as no implementation currently
  * exists in the Material Components framework
  */
-public class MaterialFullScreenDialogFragment extends DialogFragment {
+public abstract class MaterialFullScreenDialogFragment extends DialogFragment {
 
     private Toolbar toolbar;
 
@@ -68,13 +68,9 @@ public class MaterialFullScreenDialogFragment extends DialogFragment {
         }
     }
 
-    protected void onCloseClicked() {
+    protected abstract void onCloseClicked();
 
-    }
-
-    protected void onBackPressed() {
-
-    }
+    protected abstract void onBackPressed();
 
     protected Toolbar getToolbar() {
         return toolbar;
