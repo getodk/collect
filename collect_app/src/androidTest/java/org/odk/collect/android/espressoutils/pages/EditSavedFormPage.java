@@ -63,16 +63,16 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
     }
 
     public IdentifyUserPromptPage clickOnFormWithIdentityPrompt(String formName) {
-        clickOnFormButton(formName);
+        scrollToAndClickOnForm(formName);
         return new IdentifyUserPromptPage(formName, rule).assertOnPage();
     }
 
     public FormEntryPage clickOnForm(String formName) {
-        clickOnFormButton(formName);
+        scrollToAndClickOnForm(formName);
         return new FormEntryPage(formName, rule);
     }
 
-    private void clickOnFormButton(String formName) {
+    private void scrollToAndClickOnForm(String formName) {
         onView(withText(formName)).perform(scrollTo(), click());
     }
 }
