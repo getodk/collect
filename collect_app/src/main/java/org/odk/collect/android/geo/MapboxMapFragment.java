@@ -106,7 +106,6 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private boolean isDragging;
     private String styleUrl = Style.MAPBOX_STREETS;
     private File referenceLayerFile;
-    private final List<Layer> overlayLayers = new ArrayList<>();
     private final List<Source> overlaySources = new ArrayList<>();
     private static String lastLocationProvider;
 
@@ -514,7 +513,6 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
      * is fully loaded, in setStyle()'s OnStyleLoaded callback.
      */
     private void loadReferenceOverlay() {
-        clearOverlays();
         if (referenceLayerFile != null) {
             addMbtiles(referenceLayerFile.getName(), referenceLayerFile);
         }
@@ -593,28 +591,8 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
         return tileSet;
     }
-
-    private void clearOverlays() {
-        Style style = map.getStyle();
-        for (Layer layer : overlayLayers) {
-            style.removeLayer(layer);
-        }
-        overlayLayers.clear();
-        // MAPBOX ISSUE: https://github.com/mapbox/mapbox-gl-native/issues/15182
-        // Having removed the overlay layers, this would be the appropriate time
-        // to remove their sources from the map as well.  However, removing the
-        // overlay sources from the map can lead to a SEGV in libmapbox-gl.so.
-        /*
-        for (Source source : overlaySources) {
-            style.removeSource(source);
-        }
-        overlaySources.clear();
-        */
-    }
-
+    
     private void addOverlayLayer(Layer layer) {
-        overlayLayers.add(layer);
-
         // If there is a LocationComponent, it will have added some layers to the
         // style.  The SymbolManager and LineManager also add their own layers
         // where they place their symbols and lines.  We need to insert the new

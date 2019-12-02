@@ -20,6 +20,7 @@ import android.content.ContentValues;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 
+import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
@@ -32,6 +33,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import static org.odk.collect.android.forms.FormUtils.setupReferenceManagerForForm;
 import static org.odk.collect.android.test.FileUtils.copyFileFromAssets;
 
 public class FormLoadingUtils {
@@ -48,11 +50,14 @@ public class FormLoadingUtils {
      */
     public static void copyFormToSdCard(String formFilename, List<String> mediaFilenames) throws IOException {
         Collect.createODKDirs();
-        copyForm(formFilename);
 
+        String pathname = copyForm(formFilename);
         if (mediaFilenames != null) {
             copyFormMediaFiles(formFilename, mediaFilenames);
         }
+
+        setupReferenceManagerForForm(ReferenceManager.instance(), FileUtils.getFormMediaDir(new File(pathname)));
+        saveFormToDatabase(new File(pathname));
     }
 
     /**
@@ -84,10 +89,10 @@ public class FormLoadingUtils {
         return new FormActivityTestRule(formFilename);
     }
 
-    private static void copyForm(String formFilename) throws IOException {
+    private static String copyForm(String formFilename) throws IOException {
         String pathname = Collect.FORMS_PATH + "/" + formFilename;
         copyFileFromAssets("forms/" + formFilename, pathname);
-        saveFormToDatabase(new File(pathname));
+        return pathname;
     }
 
     private static void copyFormMediaFiles(String formFilename, List<String> mediaFilenames) throws IOException {

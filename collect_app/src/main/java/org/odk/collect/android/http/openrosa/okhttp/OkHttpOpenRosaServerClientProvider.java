@@ -56,8 +56,9 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
         return client;
     }
 
-    private boolean credentialsHaveChanged(@Nullable HttpCredentialsInterface credentials) {
-        return lastCredentials != null && !lastCredentials.equals(credentials);
+    public boolean credentialsHaveChanged(@Nullable HttpCredentialsInterface credentials) {
+        return lastCredentials != null && !lastCredentials.equals(credentials)
+                || lastCredentials == null && credentials != null;
     }
 
     @NonNull

@@ -272,9 +272,7 @@ public class ItemsetWidget extends AbstractSelectOneWidget {
                 adapter.close();
             }
         } else {
-            TextView error = new TextView(getContext());
-            error.setText(getContext().getString(R.string.file_missing, itemsetFile.getAbsolutePath()));
-            addAnswerView(error);
+            showWarning(getContext().getString(R.string.file_missing, itemsetFile.getAbsolutePath()));
         }
         return items;
     }
