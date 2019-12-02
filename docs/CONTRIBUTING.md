@@ -45,6 +45,8 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
 1. Verify the functionality. Ideally, include automated tests with each pull request. If that's not possible, describe in the pull request comment which cases you tried manually to confirm that your code works as expected. Attach a test form when appropriate. This form should only include questions which are useful for verifying your change.
 
+1. Make sure your changes don't cause any memory leaks (we use [LeakCanary](https://github.com/square/leakcanary) for this purpose)
+
 1. Make sure that there is an issue that corresponds to the pull request and that it has been discussed by the community as necessary.
 
 1. Keep your pull request focused on one narrow goal. This could mean addressing an issue with multiple, smaller pull requests. Small pull requests are easier to review and less likely to introduce bugs. If you would like to make stylistic changes to the code, create a separate pull request.
