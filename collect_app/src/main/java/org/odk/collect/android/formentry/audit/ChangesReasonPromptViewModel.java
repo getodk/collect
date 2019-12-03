@@ -1,8 +1,10 @@
 package org.odk.collect.android.formentry.audit;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import static org.odk.collect.android.utilities.StringUtils.isBlank;
 
@@ -52,4 +54,14 @@ public class ChangesReasonPromptViewModel extends ViewModel {
                         && auditEventLogger.isChangesMade()
         );
     }
+
+    public static class Factory implements ViewModelProvider.Factory {
+
+        @NonNull
+        @Override
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            return (T) new ChangesReasonPromptViewModel();
+        }
+    }
+
 }

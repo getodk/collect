@@ -12,6 +12,7 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 
 import org.odk.collect.android.R;
@@ -23,8 +24,18 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
     private static final String ARG_FORM_NAME = "ArgFormName";
     private ChangesReasonPromptViewModel viewModel;
 
-    public static ChangesReasonPromptDialogFragment create(String formName) {
+    private ChangesReasonPromptViewModel.Factory viewModelFactory = new ChangesReasonPromptViewModel.Factory();
+
+    public static void show(String formName, FragmentManager fragmentManager, ChangesReasonPromptViewModel.Factory viewModelFactory) {
+        if (fragmentManager.findFragmentByTag(TAG) == null) {
+            ChangesReasonPromptDialogFragment dialog = create(formName, viewModelFactory);
+            dialog.show(fragmentManager.beginTransaction(), TAG);
+        }
+    }
+
+    private static ChangesReasonPromptDialogFragment create(String formName, ChangesReasonPromptViewModel.Factory viewModelFactory) {
         ChangesReasonPromptDialogFragment dialog = new ChangesReasonPromptDialogFragment();
+        dialog.viewModelFactory = viewModelFactory;
 
         Bundle bundle = new Bundle();
         bundle.putString(ChangesReasonPromptDialogFragment.ARG_FORM_NAME, formName);
@@ -78,7 +89,7 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        viewModel = ViewModelProviders.of(requireActivity()).get(ChangesReasonPromptViewModel.class);
+        viewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(ChangesReasonPromptViewModel.class);
         viewModel.requiresReasonToContinue().observe(this, requiresIdentity -> {
             if (!requiresIdentity) {
                 dismiss();

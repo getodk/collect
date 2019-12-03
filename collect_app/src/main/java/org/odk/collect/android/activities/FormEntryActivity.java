@@ -417,13 +417,18 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        changesReasonPromptViewModel = ViewModelProviders.of(this).get(ChangesReasonPromptViewModel.class);
+        ChangesReasonPromptViewModel.Factory changesReasonViewModelFactory = new ChangesReasonPromptViewModel.Factory();
+        changesReasonPromptViewModel = ViewModelProviders
+                .of(this, changesReasonViewModelFactory)
+                .get(ChangesReasonPromptViewModel.class);
 
         changesReasonPromptViewModel.requiresReasonToContinue().observe(this, requiresReason -> {
             if (requiresReason) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                ChangesReasonPromptDialogFragment dialog = ChangesReasonPromptDialogFragment.create(getFormController().getFormTitle());
-                dialog.show(fragmentManager.beginTransaction(), ChangesReasonPromptDialogFragment.TAG);
+                ChangesReasonPromptDialogFragment.show(
+                        getFormController().getFormTitle(),
+                        getSupportFragmentManager(),
+                        changesReasonViewModelFactory
+                );
             }
         });
     }
