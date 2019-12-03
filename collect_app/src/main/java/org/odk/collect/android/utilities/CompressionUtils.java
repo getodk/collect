@@ -66,13 +66,11 @@ public class CompressionUtils {
     }
 
     public static String decompress(String compressedString) throws IOException, DataFormatException {
-        if (compressedString == null || compressedString.length() == 0) {
-            return compressedString;
+        if (compressedString == null || compressedString.length() == 0 || !compressedString.matches("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$")) {
+            return null;
         }
 
-        // Decode from base64
-        try {
-
+            // Decode from base64
             byte[] output = Base64.decodeBase64(compressedString);
             Inflater inflater = new Inflater();
             inflater.setInput(output);
@@ -92,10 +90,6 @@ public class CompressionUtils {
             Timber.i("Compressed : %d", output.length);
             Timber.i("Decompressed : %d", result.length);
             return outputString;
-
-        } catch (Exception e) {
-            return null;
-        }
 
     }
 }

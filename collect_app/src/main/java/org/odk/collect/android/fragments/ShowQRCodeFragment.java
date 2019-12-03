@@ -268,7 +268,7 @@ public class ShowQRCodeFragment extends Fragment {
 
     private void applySettings(String content) {
 
-        if (content != null) {
+        if (content != null && content.length() != 0) {
 
             new PreferenceSaver(GeneralSharedPreferences.getInstance(), AdminSharedPreferences.getInstance()).fromJSON(content, new ActionListener() {
                 @Override
