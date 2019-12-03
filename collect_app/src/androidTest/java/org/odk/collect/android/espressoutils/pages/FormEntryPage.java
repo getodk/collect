@@ -118,6 +118,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    public FormEntryPage clickRankingButton() {
+        onView(withId(R.id.simple_button)).perform(click());
+        return this;
+    }
+
     public FormEntryPage putTextOnIndex(int index, String text) {
         onView(withIndex(withClassName(endsWith("Text")), index)).perform(replaceText(text));
         return this;
