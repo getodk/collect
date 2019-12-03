@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
-import android.view.View;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -33,8 +32,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import androidx.annotation.Nullable;
 
 import static org.odk.collect.android.preferences.GeneralKeys.CATEGORY_BASEMAP;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE;
@@ -79,18 +76,6 @@ public class MapsPreferences extends BasePreferenceFragment {
         if (autoShowReferenceLayerDialog) {
             populateReferenceLayerPref();
             referenceLayerPref.showDialog();
-        }
-    }
-
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        toolbar.setTitle(R.string.maps);
-    }
-
-    @Override public void onDetach() {
-        super.onDetach();
-        if (toolbar != null) {
-            toolbar.setTitle(R.string.general_preferences);
         }
     }
 

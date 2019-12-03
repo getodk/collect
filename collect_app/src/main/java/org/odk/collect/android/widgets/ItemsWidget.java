@@ -20,9 +20,12 @@ import android.content.Context;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.xpath.expr.XPathFuncExpr;
+import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +35,7 @@ import java.util.List;
  */
 public abstract class ItemsWidget extends QuestionWidget {
 
-    List<SelectChoice> items;
+    List<SelectChoice> items = new ArrayList<>();
 
     public ItemsWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
@@ -43,7 +46,11 @@ public abstract class ItemsWidget extends QuestionWidget {
         // SurveyCTO-added support for dynamic select content (from .csv files)
         XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(getFormEntryPrompt().getAppearanceHint());
         if (xpathFuncExpr != null) {
-            items = ExternalDataUtil.populateExternalChoices(getFormEntryPrompt(), xpathFuncExpr);
+            try {
+                items = ExternalDataUtil.populateExternalChoices(getFormEntryPrompt(), xpathFuncExpr);
+            } catch (FileNotFoundException e) {
+                showWarning(getContext().getString(R.string.file_missing, e.getMessage()));
+            }
         } else {
             items = getFormEntryPrompt().getSelectChoices();
         }

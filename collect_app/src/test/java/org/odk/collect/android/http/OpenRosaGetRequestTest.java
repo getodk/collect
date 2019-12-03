@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.http.openrosa.HttpGetResult;
+import org.odk.collect.android.http.openrosa.OpenRosaConstants;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.http.support.MockWebServerRule;
 import org.odk.collect.android.utilities.FileUtils;
@@ -119,7 +120,7 @@ public abstract class OpenRosaGetRequestTest {
     @Test
     public void returnsOpenRosaVersion() throws Exception {
         mockWebServer.enqueue(new MockResponse()
-                .addHeader("X-OpenRosa-Version", "1.0"));
+                .addHeader(OpenRosaConstants.VERSION_HEADER, "1.0"));
 
         HttpGetResult result1 = subject.executeGetRequest(mockWebServer.url("").uri(), null, null);
         assertThat(result1.isOpenRosaResponse(), equalTo(true));

@@ -8,6 +8,9 @@ import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
+import static org.hamcrest.CoreMatchers.not;
 
 public class AdminSettingsPage extends Page<AdminSettingsPage> {
 
@@ -26,7 +29,7 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
         return this;
     }
 
-    public AdminSettingsPage uncheckAllUsetSettings() {
+    public AdminSettingsPage uncheckAllUserSettings() {
         onData(PreferenceMatchers.withKey("change_server")).perform(click());
         onData(PreferenceMatchers.withKey("change_app_theme")).perform(click());
         onData(PreferenceMatchers.withKey("change_app_language")).perform(click());
@@ -62,4 +65,30 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
         onData(PreferenceMatchers.withKey(setting)).perform(click());
         return this;
     }
+
+    public AdminSettingsPage clickFormEntrySettings() {
+        clickOnString(R.string.form_entry_setting);
+        return this;
+    }
+
+    public AdminSettingsPage clickMovingBackwards() {
+        clickOnString(R.string.moving_backwards_title);
+        return this;
+    }
+
+    public AdminSettingsPage checkIfSaveFormOptionIsDisabled() {
+        onData(PreferenceMatchers.withKey("save_mid")).check(matches(not(isEnabled())));
+        return this;
+    }
+
+    public AdminSettingsPage clickOnResetApplication() {
+        onData(PreferenceMatchers.withKey("reset_settings")).perform(click());
+        return this;
+    }
+
+    public AdminSettingsPage uncheckServerOption() {
+        clickOnString(R.string.server);
+        return this;
+    }
+
 }

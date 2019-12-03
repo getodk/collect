@@ -92,7 +92,7 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
         ).thenReturn(String.format("%s.mp4", RandomString.make()));
 
         when(fileUtil.getRandomFilename()).thenReturn(destinationName);
-        when(fileUtil.getFileAtPath(String.format("/%s.mp4", destinationName)))
+        when(fileUtil.getFileAtPath(File.separator + destinationName + ".mp4"))
                 .thenReturn(file);
 
         when(file.getName()).thenReturn(destinationName);

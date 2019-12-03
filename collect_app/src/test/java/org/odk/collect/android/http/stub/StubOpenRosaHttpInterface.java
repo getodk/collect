@@ -7,7 +7,9 @@ import org.odk.collect.android.http.openrosa.HttpCredentialsInterface;
 import org.odk.collect.android.http.openrosa.HttpGetResult;
 import org.odk.collect.android.http.openrosa.HttpHeadResult;
 import org.odk.collect.android.http.openrosa.HttpPostResult;
+import org.odk.collect.android.http.openrosa.OpenRosaConstants;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.http.CaseInsensitiveEmptyHeaders;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -36,7 +38,7 @@ public class StubOpenRosaHttpInterface implements OpenRosaHttpInterface {
         InputStream is = new ByteArrayInputStream(xml.getBytes());
 
         Map<String, String> headers = new HashMap<>();
-        headers.put("X-OpenRosa-Version", "1.0");
+        headers.put(OpenRosaConstants.VERSION_HEADER, "1.0");
         headers.put("Content-Type", "text/xml;charset=utf-8");
 
         return new HttpGetResult(is, headers, "test-hash", HttpURLConnection.HTTP_OK);
@@ -45,7 +47,7 @@ public class StubOpenRosaHttpInterface implements OpenRosaHttpInterface {
     @NonNull
     @Override
     public HttpHeadResult executeHeadRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        return new HttpHeadResult(0, new HashMap<String, String>());
+        return new HttpHeadResult(0, new CaseInsensitiveEmptyHeaders());
     }
 
     @NonNull

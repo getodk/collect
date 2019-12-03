@@ -33,7 +33,7 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
     @Test
     public void setEmail_validatesEmail() {
         //TestCase1
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .clickUserAndDeviceIdentity()
@@ -51,7 +51,7 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
     public void emptyUsername_ShouldNotDisplayUsernameInForm() {
 
         //TestCase2
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("Test")
                 .swipeOnText("")
                 .clickSaveAndExit();
@@ -61,7 +61,7 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
     public void setMetadataUsername_ShouldDisplayMetadataUsernameInForm() {
 
         //TestCase3
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .clickUserAndDeviceIdentity()
@@ -69,9 +69,9 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
                 .clickMetadataUsername()
                 .inputText("AAA")
                 .clickOKOnDialog()
-                .pressBack(new UserAndDeviceIdentitySettingsPage(main))
-                .pressBack(new GeneralSettingsPage(main))
-                .pressBack(new MainMenuPage(main))
+                .pressBack(new UserAndDeviceIdentitySettingsPage(rule))
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
                 .startBlankForm("Test")
                 .swipeOnText("AAA")
                 .clickSaveAndExit();
@@ -80,7 +80,7 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
     @Test
     public void setAggregateUsername_ShouldDisplayAggregateUsernameInForm() {
         //TestCase4
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .clickUserAndDeviceIdentity()
@@ -88,9 +88,9 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
                 .clickMetadataUsername()
                 .inputText("")
                 .clickOKOnDialog()
-                .pressBack(new UserAndDeviceIdentitySettingsPage(main))
-                .pressBack(new GeneralSettingsPage(main))
-                .pressBack(new MainMenuPage(main))
+                .pressBack(new UserAndDeviceIdentitySettingsPage(rule))
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .openServerSettings()
@@ -99,8 +99,8 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
                 .clickAggregateUsername()
                 .inputText("BBB")
                 .clickOKOnDialog()
-                .pressBack(new GeneralSettingsPage(main))
-                .pressBack(new MainMenuPage(main))
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
                 .startBlankForm("Test")
                 .swipeOnText("BBB")
                 .clickSaveAndExit();
@@ -109,7 +109,7 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
     @Test
     public void setBothUsernames_ShouldDisplayMetadataUsernameInForm() {
         //TestCase5
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .clickUserAndDeviceIdentity()
@@ -117,9 +117,9 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
                 .clickMetadataUsername()
                 .inputText("CCC")
                 .clickOKOnDialog()
-                .pressBack(new UserAndDeviceIdentitySettingsPage(main))
-                .pressBack(new GeneralSettingsPage(main))
-                .pressBack(new MainMenuPage(main))
+                .pressBack(new UserAndDeviceIdentitySettingsPage(rule))
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .openServerSettings()
@@ -128,8 +128,8 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
                 .clickAggregateUsername()
                 .inputText("DDD")
                 .clickOKOnDialog()
-                .pressBack(new GeneralSettingsPage(main))
-                .pressBack(new MainMenuPage(main))
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
                 .startBlankForm("Test")
                 .swipeOnText("CCC")
                 .clickSaveAndExit();

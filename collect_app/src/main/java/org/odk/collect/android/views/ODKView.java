@@ -86,6 +86,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.android.utilities.ViewUtils.pxFromDp;
 
 /**
  * Contains either one {@link QuestionWidget} if the current form element is a question or
@@ -138,8 +139,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         layout =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
-        layout.setMargins(10, 0, 10, 0);
-
         // display which group you are in as well as the question
         addGroupText(groups);
 
@@ -174,7 +173,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 final PlaybackFailedException playbackFailedException = (PlaybackFailedException) e;
                 Toast.makeText(
                         getContext(),
-                        getContext().getString(R.string.file_missing, playbackFailedException.getURI()),
+                        getContext().getString(playbackFailedException.getExceptionMsg(), playbackFailedException.getURI()),
                         Toast.LENGTH_SHORT
                 ).show();
 
@@ -340,7 +339,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             TextView tv = new TextView(getContext());
             tv.setText(path);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize() - 4);
-            tv.setPadding(0, 0, 0, 5);
+            tv.setPadding(pxFromDp(getContext(), 16f), pxFromDp(getContext(), 16f), pxFromDp(getContext(), 16f), 0);
             view.addView(tv, layout);
         }
     }
@@ -617,19 +616,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         }
     }
 
-    public void stopAudio() {
-        widgets.get(0).stopAudio();
-    }
-
-    /**
-     * Releases widget resources, such as {@link android.media.MediaPlayer}s
-     */
-    public void releaseWidgetResources() {
-        for (QuestionWidget w : widgets) {
-            w.release();
-        }
-    }
-
     /**
      * Highlights the question at the given {@link FormIndex} in red for 2.5 seconds, scrolls the
      * view to display that question at the top and gives it focus.
@@ -691,7 +677,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             view.removeViewAt(indexAccountingForDividers - 1);
         }
 
-        widgets.get(index).release();
         widgets.remove(index);
     }
 

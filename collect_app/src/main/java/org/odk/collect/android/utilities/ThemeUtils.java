@@ -99,17 +99,6 @@ public final class ThemeUtils {
 
     /**
      * @return Text color for the current {@link android.content.res.Resources.Theme}
-     *
-     * @deprecated use {@link #getColorOnSurface()} instead
-     */
-    @ColorInt
-    @Deprecated
-    public int getPrimaryTextColor() {
-        return getAttributeValue(R.attr.primaryTextColor);
-    }
-
-    /**
-     * @return Text color for the current {@link android.content.res.Resources.Theme}
      */
     @ColorInt
     public int getColorOnSurface() {

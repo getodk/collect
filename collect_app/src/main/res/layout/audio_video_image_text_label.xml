@@ -16,7 +16,7 @@
         android:orientation="vertical">
 
         <FrameLayout
-            android:id="@+id/select_container"
+            android:id="@+id/text_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -24,6 +24,9 @@
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="@dimen/margin_standard"
+            android:paddingLeft="@dimen/margin_standard"
+            android:paddingBottom="@dimen/margin_standard"
             android:scaleType="fitStart"
             android:visibility="gone" />
 
@@ -31,9 +34,12 @@
             android:id="@+id/missingImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="4dp"
+            android:paddingStart="@dimen/margin_standard"
+            android:paddingLeft="@dimen/margin_standard"
+            android:paddingBottom="@dimen/margin_standard"
             android:visibility="gone"
-            tools:text="media missing" />
+            tools:text="media missing"
+            tools:visibility="visible" />
     </LinearLayout>
 
     <LinearLayout
@@ -44,14 +50,16 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:gravity="end"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/margin_standard">
 
         <org.odk.collect.android.audio.AudioButton
             android:id="@+id/audioButton"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
             android:layout_width="@dimen/touch_target_size"
             android:layout_height="@dimen/touch_target_size"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/videoButton"
@@ -60,6 +68,7 @@
             android:layout_height="@dimen/touch_target_size"
             android:visibility="gone"
             app:icon="@drawable/ic_ondemand_video_black_24dp"
-            app:iconTint="?colorOnSurface" />
+            app:iconTint="?colorOnSurface"
+            tools:visibility="visible" />
     </LinearLayout>
 </RelativeLayout>

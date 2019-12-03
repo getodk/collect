@@ -22,7 +22,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.view.View;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
@@ -32,7 +31,6 @@ import org.odk.collect.android.utilities.MediaUtils;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import androidx.annotation.Nullable;
 import timber.log.Timber;
 
 import static android.app.Activity.RESULT_CANCELED;
@@ -67,20 +65,6 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
         initFontSizePref();
         initLanguagePrefs();
         initSplashPrefs();
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        toolbar.setTitle(R.string.client);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        if (toolbar != null) {
-            toolbar.setTitle(R.string.general_preferences);
-        }
     }
 
     private void initThemePrefs() {

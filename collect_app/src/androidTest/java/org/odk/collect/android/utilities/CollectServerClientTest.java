@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.http.openrosa.OpenRosaConstants;
 import org.odk.collect.android.test.MockedServerTest;
 
 import okhttp3.mockwebserver.MockResponse;
@@ -54,7 +55,7 @@ public class CollectServerClientTest extends MockedServerTest {
 
         // then
         assertEquals("1.0",
-                nextRequest().getHeader("X-OpenRosa-Version"));
+                nextRequest().getHeader(OpenRosaConstants.VERSION_HEADER));
     }
 
     @Test
