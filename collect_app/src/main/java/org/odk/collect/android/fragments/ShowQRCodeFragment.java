@@ -267,26 +267,32 @@ public class ShowQRCodeFragment extends Fragment {
     }
 
     private void applySettings(String content) {
-        new PreferenceSaver(GeneralSharedPreferences.getInstance(), AdminSharedPreferences.getInstance()).fromJSON(content, new ActionListener() {
-            @Override
-            public void onSuccess() {
-                Collect.getInstance().initializeJavaRosa();
-                ToastUtils.showLongToast(Collect.getInstance().getString(R.string.successfully_imported_settings));
-                getActivity().finish();
-                final LocaleHelper localeHelper = new LocaleHelper();
-                localeHelper.updateLocale(getActivity());
-                MainMenuActivity.startActivityAndCloseAllOthers(getActivity());
-            }
 
-            @Override
-            public void onFailure(Exception exception) {
-                if (exception instanceof GeneralSharedPreferences.ValidationException) {
-                    ToastUtils.showLongToast(Collect.getInstance().getString(R.string.invalid_qrcode));
-                } else {
-                    Timber.e(exception);
+        if (content != null) {
+
+            new PreferenceSaver(GeneralSharedPreferences.getInstance(), AdminSharedPreferences.getInstance()).fromJSON(content, new ActionListener() {
+                @Override
+                public void onSuccess() {
+                    Collect.getInstance().initializeJavaRosa();
+                    ToastUtils.showLongToast(Collect.getInstance().getString(R.string.successfully_imported_settings));
+                    getActivity().finish();
+                    final LocaleHelper localeHelper = new LocaleHelper();
+                    localeHelper.updateLocale(getActivity());
+                    MainMenuActivity.startActivityAndCloseAllOthers(getActivity());
                 }
-            }
-        });
+
+                @Override
+                public void onFailure(Exception exception) {
+                    if (exception instanceof GeneralSharedPreferences.ValidationException) {
+                        ToastUtils.showLongToast(Collect.getInstance().getString(R.string.invalid_qrcode));
+                    } else {
+                        Timber.e(exception);
+                    }
+                }
+            });
+        } else {
+            ToastUtils.showLongToast(R.string.invalid_qrcode_settings);
+        }
     }
 
     @Override

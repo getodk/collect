@@ -71,26 +71,31 @@ public class CompressionUtils {
         }
 
         // Decode from base64
-        byte[] output = Base64.decodeBase64(compressedString);
+        try {
 
-        Inflater inflater = new Inflater();
-        inflater.setInput(output);
+            byte[] output = Base64.decodeBase64(compressedString);
+            Inflater inflater = new Inflater();
+            inflater.setInput(output);
 
-        // Decompresses the bytes
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(output.length);
-        byte[] buffer = new byte[1024];
-        while (!inflater.finished()) {
-            int count = inflater.inflate(buffer);
-            outputStream.write(buffer, 0, count);
+            // Decompresses the bytes
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream(output.length);
+            byte[] buffer = new byte[1024];
+            while (!inflater.finished()) {
+                int count = inflater.inflate(buffer);
+                outputStream.write(buffer, 0, count);
+            }
+            outputStream.close();
+            byte[] result = outputStream.toByteArray();
+
+            // Decode the bytes into a String
+            String outputString = new String(result, "UTF-8");
+            Timber.i("Compressed : %d", output.length);
+            Timber.i("Decompressed : %d", result.length);
+            return outputString;
+
+        } catch (Exception e) {
+            return null;
         }
-        outputStream.close();
-        byte[] result = outputStream.toByteArray();
-
-        // Decode the bytes into a String
-        String outputString = new String(result, "UTF-8");
-        Timber.i("Compressed : %d", output.length);
-        Timber.i("Decompressed : %d", result.length);
-        return outputString;
 
     }
 }
