@@ -906,7 +906,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     getCurrentViewIfODKView().setBinaryData(bearing);
                 }
                 break;
-                case RequestCodes.FONT_SIZE_MATCHER:
+                case RequestCodes.PREFERENCES:
                     loadForm();
                     break;
         }
@@ -1023,7 +1023,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return true;
             case R.id.menu_preferences:
                 Intent pref = new Intent(this, PreferencesActivity.class);
-                startActivityForResult(pref, RequestCodes.FONT_SIZE_MATCHER);
+                startActivityForResult(pref, RequestCodes.PREFERENCES);
                 return true;
             case R.id.track_location:
                 GeneralSharedPreferences.getInstance().save(KEY_BACKGROUND_LOCATION, !GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));

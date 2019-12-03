@@ -65,7 +65,7 @@ public class PreferencesActivity extends CollectAbstractActivity {
             super.onBackPressed();
         }
         Intent intent = new Intent();
-        setResult(ApplicationConstants.RequestCodes.FONT_SIZE_MATCHER, intent);
+        setResult(ApplicationConstants.RequestCodes.PREFERENCES, intent);
     }
 
     public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
