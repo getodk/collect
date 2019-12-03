@@ -63,5 +63,4 @@ public class ChangesReasonPromptViewModel extends ViewModel {
             return (T) new ChangesReasonPromptViewModel();
         }
     }
-
 }

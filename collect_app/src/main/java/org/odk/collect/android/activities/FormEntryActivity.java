@@ -424,10 +424,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         changesReasonPromptViewModel.requiresReasonToContinue().observe(this, requiresReason -> {
             if (requiresReason) {
-                ChangesReasonPromptDialogFragment.show(
+                new ChangesReasonPromptDialogFragment().show(
                         getFormController().getFormTitle(),
-                        getSupportFragmentManager(),
-                        changesReasonViewModelFactory
+                        getSupportFragmentManager()
                 );
             }
         });

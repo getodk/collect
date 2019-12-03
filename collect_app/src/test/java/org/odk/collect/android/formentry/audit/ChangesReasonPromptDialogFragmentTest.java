@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,20 +22,25 @@ public class ChangesReasonPromptDialogFragmentTest {
 
     @Test
     public void show_onlyEverOpensOneDialog() {
-        ChangesReasonPromptViewModel viewModel = mock(ChangesReasonPromptViewModel.class);
-        when(viewModel.requiresReasonToContinue()).thenReturn(new MutableLiveData<>(true));
-        ChangesReasonPromptViewModel.Factory factory = new TestFactory(viewModel);
-
         FragmentActivity activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class);
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
 
-        ChangesReasonPromptDialogFragment.show("Best Form", fragmentManager, factory);
-        ChangesReasonPromptDialogFragment.show("Best Form", fragmentManager, factory);
+        ChangesReasonPromptViewModel viewModel = mock(ChangesReasonPromptViewModel.class);
+        when(viewModel.requiresReasonToContinue()).thenReturn(new MutableLiveData<>(true));
+        ViewModelProvider.Factory factory = new TestFactory(viewModel);
+
+        ChangesReasonPromptDialogFragment dialog1 = new ChangesReasonPromptDialogFragment();
+        dialog1.viewModelFactory = factory;
+        dialog1.show("Best Form", fragmentManager);
+
+        ChangesReasonPromptDialogFragment dialog2 = new ChangesReasonPromptDialogFragment();
+        dialog2.viewModelFactory = factory;
+        dialog2.show("Best Form", fragmentManager);
 
         assertThat(fragmentManager.getFragments().size(), equalTo(1));
     }
 
-    private static class TestFactory extends ChangesReasonPromptViewModel.Factory {
+    private static class TestFactory implements ViewModelProvider.Factory {
 
         private final ChangesReasonPromptViewModel viewModel;
 
