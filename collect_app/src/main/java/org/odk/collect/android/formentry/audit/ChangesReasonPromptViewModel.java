@@ -9,7 +9,6 @@ import static org.odk.collect.android.utilities.StringUtils.isBlank;
 public class ChangesReasonPromptViewModel extends ViewModel {
 
     private final MutableLiveData<Boolean> requiresReasonToContinue = new MutableLiveData<>(false);
-    private boolean editingForm;
     private AuditEventLogger auditEventLogger;
     private String reason;
 
@@ -27,7 +26,7 @@ public class ChangesReasonPromptViewModel extends ViewModel {
     }
 
     public void editingForm() {
-        editingForm = true;
+        auditEventLogger.setEditing(true);
     }
 
     public void setReason(String reason) {
@@ -47,8 +46,8 @@ public class ChangesReasonPromptViewModel extends ViewModel {
 
     private void updateRequiresReasonToContinue() {
         requiresReasonToContinue.setValue(
-                editingForm
-                        && auditEventLogger != null
+                auditEventLogger != null
+                        && auditEventLogger.isEditing()
                         && auditEventLogger.isChangeReasonRequired()
                         && auditEventLogger.isChangesMade()
         );

@@ -40,6 +40,7 @@ public class AuditEventLogger {
     private final FormController formController;
     private String user;
     private boolean changesMade;
+    private boolean editing;
 
     public AuditEventLogger(AuditConfig auditConfig, AuditEventWriter writer, FormController formController) {
         this.auditConfig = auditConfig;
@@ -288,6 +289,14 @@ public class AuditEventLogger {
 
     public boolean isChangesMade() {
         return changesMade;
+    }
+
+    public void setEditing(boolean editing) {
+        this.editing = editing;
+    }
+
+    public boolean isEditing() {
+        return editing;
     }
 
     public interface AuditEventWriter {

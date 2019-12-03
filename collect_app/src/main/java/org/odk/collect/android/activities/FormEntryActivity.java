@@ -418,6 +418,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         changesReasonPromptViewModel = ViewModelProviders.of(this).get(ChangesReasonPromptViewModel.class);
+
         changesReasonPromptViewModel.requiresReasonToContinue().observe(this, requiresReason -> {
             if (requiresReason) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
@@ -483,6 +484,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         } else if (data == null) {
             if (!newForm) {
                 if (getFormController(true) != null) {
+                    FormController formController = getFormController();
+                    identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
+                    changesReasonPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
                     refreshCurrentView();
                 } else {
                     Timber.w("Reloading form and restoring state.");
