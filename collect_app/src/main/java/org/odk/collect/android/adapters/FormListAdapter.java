@@ -91,10 +91,10 @@ public class FormListAdapter extends SimpleCursorAdapter {
 
     @Override public void bindView(View view, Context context, Cursor cursor) {
         super.bindView(view, context, cursor);
-        View mapButton = view.findViewById(R.id.map_button);
-        if (mapButton != null) {
+        View mapView = view.findViewById(R.id.map_view);
+        if (mapView != null) {
             long id = cursor.getLong(cursor.getColumnIndex("_id"));
-            mapButton.setOnClickListener(v -> mapButtonListener.onItemClick(
+            mapView.setOnClickListener(v -> mapButtonListener.onItemClick(
                 listView, view, cursor.getPosition(), id));
         }
     }

@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:padding="@dimen/margin_standard">
 
     <!-- Material Design reference: https://material.io/design/components/lists.html#specs -->
@@ -16,6 +17,7 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/imageView"
@@ -35,11 +37,23 @@
     <FrameLayout
         android:id="@+id/map_view"
         android:visibility="gone"
+          tools:visibility="visible"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+
         android:layout_alignParentTop="true"
+        android:layout_alignBottom="@id/text_view"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentRight="true"
+
+        android:layout_marginRight="-16dp"
+        android:layout_marginStart="-16dp"
+        android:layout_marginLeft="-16dp"
+        android:layout_marginEnd="-16dp"
+        android:layout_marginTop="-16dp"
+        android:layout_marginBottom="-16dp"
+
+        android:padding="@dimen/margin_standard">
 
         <include layout="@layout/form_chooser_list_item_map_button" />
     </FrameLayout>
