@@ -17,6 +17,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public abstract class OpenRosaHeadRequestTest {
@@ -69,8 +70,23 @@ public abstract class OpenRosaHeadRequestTest {
                 .addHeader("X-2", "Blah2"));
 
         HttpHeadResult result = subject.executeHeadRequest(mockWebServer.url("").uri(), null);
-        assertThat(result.getHeaders().get("X-1"), equalTo("Blah1"));
-        assertThat(result.getHeaders().get("X-2"), equalTo("Blah2"));
+        assertThat(result.getHeaders().getAnyValue("X-1"), equalTo("Blah1"));
+        assertThat(result.getHeaders().getAnyValue("X-2"), equalTo("Blah2"));
+    }
+
+    // Ensure we can look up lower-case headers using mixed-case header names.
+    // https://github.com/opendatakit/collect/issues/3068
+    @Test
+    public void when204Response_returnsLowerCaseHeaders() throws Exception {
+        String headerLowerCase = "header-case-test";
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(204)
+                .addHeader(headerLowerCase, "value"));
+
+        String headerMixedCase = "Header-Case-Test";
+        HttpHeadResult result = subject.executeHeadRequest(mockWebServer.url("").uri(), null);
+        assertTrue(result.getHeaders().containsHeader(headerMixedCase));
+        assertThat(result.getHeaders().getAnyValue(headerMixedCase), equalTo("value"));
     }
 
     @Test

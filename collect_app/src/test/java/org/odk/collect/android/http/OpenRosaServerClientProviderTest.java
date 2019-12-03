@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.http.openrosa.HttpCredentials;
+import org.odk.collect.android.http.openrosa.OpenRosaConstants;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClient;
 import org.odk.collect.android.http.openrosa.OpenRosaServerClientProvider;
 import org.odk.collect.android.http.support.MockWebServerRule;
@@ -46,7 +47,7 @@ public abstract class OpenRosaServerClientProviderTest {
         client.makeRequest(buildRequest(mockWebServer, ""), new Date());
 
         RecordedRequest request = mockWebServer.takeRequest();
-        assertThat(request.getHeader("X-OpenRosa-Version"), equalTo("1.0"));
+        assertThat(request.getHeader(OpenRosaConstants.VERSION_HEADER), equalTo("1.0"));
     }
 
     @Test

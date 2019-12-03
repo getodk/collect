@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dto.Instance;
+import org.odk.collect.android.http.openrosa.OpenRosaConstants;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.test.MockedServerTest;
 
@@ -64,7 +65,7 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
             assertEquals("HEAD", r.getMethod());
             assertMatches("/submission\\?deviceID=\\w+%3A\\w+", r.getPath());
             assertMatches("Dalvik/.* org.odk.collect.android/.*", r.getHeader("User-Agent"));
-            assertEquals("1.0", r.getHeader("X-OpenRosa-Version"));
+            assertEquals("1.0", r.getHeader(OpenRosaConstants.VERSION_HEADER));
             assertTrue(r.getHeader("Accept-Encoding").contains("gzip"));
         }
 
@@ -74,7 +75,7 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
             assertEquals("POST", r.getMethod());
             assertMatches("/submission\\?deviceID=\\w+%3A\\w+", r.getPath());
             assertMatches("Dalvik/.* org.odk.collect.android/.*", r.getHeader("User-Agent"));
-            assertEquals("1.0", r.getHeader("X-OpenRosa-Version"));
+            assertEquals("1.0", r.getHeader(OpenRosaConstants.VERSION_HEADER));
             assertTrue(r.getHeader("Accept-Encoding").contains("gzip"));
             assertMatches("multipart/form-data; boundary=.*", r.getHeader("Content-Type"));
             assertTrue(r.getBody().readUtf8().contains("<form-content-here/>"));

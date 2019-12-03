@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.apache.commons.io.IOUtils;
+import org.odk.collect.android.http.CaseInsensitiveEmptyHeaders;
+import org.odk.collect.android.http.CaseInsensitiveHeaders;
 import org.odk.collect.android.http.openrosa.HttpCredentialsInterface;
 import org.odk.collect.android.http.openrosa.HttpGetResult;
 import org.odk.collect.android.http.openrosa.HttpHeadResult;
@@ -123,14 +125,10 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         Response response = httpClient.makeRequest(request, new Date());
         int statusCode = response.code();
 
-        Map<String, String> responseHeaders = new HashMap<>();
+        CaseInsensitiveHeaders responseHeaders = new CaseInsensitiveEmptyHeaders();
 
         if (statusCode == HttpURLConnection.HTTP_NO_CONTENT) {
-            Headers headers = response.headers();
-
-            for (String headerName : headers.names()) {
-                responseHeaders.put(headerName, headers.get(headerName));
-            }
+            responseHeaders = new OkHttpCaseInsensitiveHeaders(response.headers());
         }
 
         discardEntityBytes(response);
