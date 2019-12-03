@@ -36,10 +36,12 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ResetUtility;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.osmdroid.config.Configuration;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -77,6 +79,9 @@ public class ResetAppStateTest {
 
     @Test
     public void resetSettingsTest() throws IOException {
+        WebCredentialsUtils webCredentialsUtils = new WebCredentialsUtils();
+        webCredentialsUtils.saveCredentials("https://opendatakit.appspot.com/", "admin", "admin");
+
         setupTestSettings();
         resetAppState(Collections.singletonList(ResetUtility.ResetAction.RESET_PREFERENCES));
 
@@ -87,6 +92,8 @@ public class ResetAppStateTest {
 
         assertEquals(0, getFormsCount());
         assertEquals(0, getInstancesCount());
+        assertEquals("", webCredentialsUtils.getCredentials(URI.create("https://opendatakit.appspot.com/")).getUsername());
+        assertEquals("", webCredentialsUtils.getCredentials(URI.create("https://opendatakit.appspot.com/")).getPassword());
     }
 
     @Test
