@@ -21,10 +21,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
-import android.text.method.TextKeyListener;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -32,7 +29,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
@@ -42,7 +38,6 @@ import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
 
 import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
@@ -65,6 +60,7 @@ import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.utilities.ViewUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.Widget;
 
@@ -443,6 +439,10 @@ public abstract class QuestionWidget
      * and use the standard addView(view, params) to place the rest
      */
     protected void addAnswerView(View v) {
+        addAnswerView(v, null);
+    }
+
+    protected void addAnswerView(View v, Integer margin) {
         if (v == null) {
             Timber.e("cannot add a null view as an answerView");
             return;
@@ -452,6 +452,11 @@ public abstract class QuestionWidget
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.BELOW, getHelpTextLayout().getId());
+
+        if (margin != null) {
+            params.setMargins(ViewUtils.pxFromDp(getContext(), margin), 0, ViewUtils.pxFromDp(getContext(), margin), 0);
+        }
+
         addView(v, params);
     }
 
@@ -547,72 +552,6 @@ public abstract class QuestionWidget
         imageView.setAdjustViewBounds(true);
         imageView.setImageBitmap(bitmap);
         return imageView;
-    }
-
-    protected EditText getAnswerEditText(boolean readOnly, FormEntryPrompt prompt) {
-        EditText answerEditText = new EditText(getContext());
-        answerEditText.setId(ViewIds.generateViewId());
-        answerEditText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        answerEditText.setKeyListener(new TextKeyListener(TextKeyListener.Capitalize.SENTENCES, false));
-
-        // needed to make long read only text scroll
-        answerEditText.setHorizontallyScrolling(false);
-        answerEditText.setSingleLine(false);
-
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
-        answerEditText.setLayoutParams(params);
-
-        if (readOnly) {
-            answerEditText.setBackground(null);
-            answerEditText.setEnabled(false);
-            answerEditText.setTextColor(themeUtils.getColorOnSurface());
-            answerEditText.setFocusable(false);
-        }
-
-        answerEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                widgetValueChanged();
-            }
-        });
-
-        QuestionDef questionDef = prompt.getQuestion();
-        if (questionDef != null) {
-            /*
-             * If a 'rows' attribute is on the input tag, set the minimum number of lines
-             * to display in the field to that value.
-             *
-             * I.e.,
-             * <input ref="foo" rows="5">
-             *   ...
-             * </input>
-             *
-             * will set the height of the EditText box to 5 rows high.
-             */
-            String height = questionDef.getAdditionalAttribute(null, "rows");
-            if (height != null && height.length() != 0) {
-                try {
-                    int rows = Integer.parseInt(height);
-                    answerEditText.setMinLines(rows);
-                    answerEditText.setGravity(Gravity.TOP); // to write test starting at the top of the edit area
-                } catch (Exception e) {
-                    Timber.e("Unable to process the rows setting for the answerText field: %s", e.toString());
-                }
-            }
-        }
-
-        return answerEditText;
     }
 
     //region Data waiting

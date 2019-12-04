@@ -17,6 +17,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
@@ -24,8 +25,13 @@ import android.util.TypedValue;
 import android.widget.EditText;
 import android.widget.TableLayout;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ViewIds;
+
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.utilities.ViewUtils.pxFromDp;
+import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
 
 /**
  * A base widget class which is responsible for sharing the code used by simple select widgets like
@@ -48,13 +54,17 @@ public abstract class SelectTextWidget extends SelectWidget {
         }
     }
 
-    protected void setUpSearchBox() {
+    protected void setUpSearchBox(Context context) {
         searchStr = new EditText(getContext());
         searchStr.setId(ViewIds.generateViewId());
         searchStr.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
 
+        Resources resources = context.getResources();
+        int marginStandard = dpFromPx(context, resources.getDimension(R.dimen.margin_standard));
+        int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
+
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
+        params.setMargins(pxFromDp(context, margin), 5, pxFromDp(context, margin), 5);
         searchStr.setLayoutParams(params);
         setupChangeListener();
         answerLayout.addView(searchStr, 0);

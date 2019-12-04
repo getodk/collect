@@ -25,7 +25,7 @@ import timber.log.Timber;
 
 public class HttpGetResult {
 
-    private static final String OPEN_ROSA_VERSION_HEADER = "X-OpenRosa-Version";
+    private static final String OPEN_ROSA_VERSION_HEADER = OpenRosaConstants.VERSION_HEADER;
     private static final String OPEN_ROSA_VERSION = "1.0";
 
     private final InputStream inputStream;

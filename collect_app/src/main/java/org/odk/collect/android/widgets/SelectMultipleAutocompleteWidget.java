@@ -24,7 +24,7 @@ import org.odk.collect.android.utilities.SoftKeyboardUtils;
 public class SelectMultipleAutocompleteWidget extends SelectMultiWidget {
     public SelectMultipleAutocompleteWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
-        setUpSearchBox();
+        setUpSearchBox(context);
     }
 
     @Override

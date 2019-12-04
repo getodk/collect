@@ -23,6 +23,7 @@ import com.google.api.services.sheets.v4.model.Sheet;
 import com.google.api.services.sheets.v4.model.Spreadsheet;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
+import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.instance.AbstractTreeElement;
 import org.javarosa.core.model.instance.TreeElement;
@@ -343,7 +344,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             if (childElement.isRepeatable()) {
                 answers.put(elementTitle, getHyperlink(getSheetUrl(getSheetId(StringUtils.ellipsizeBeginning(elementTitle))), elementTitle));
             } else {
-                String answer = childElement.getValue() != null ? childElement.getValue().getDisplayText() : "";
+                String answer = getFormattingResistantAnswer(childElement);
+
                 if (new File(instanceFile.getParentFile() + "/" + answer).isFile()) {
                     String mediaUrl = uploadMediaFile(instance, answer);
                     answers.put(elementTitle, mediaUrl);
@@ -362,21 +364,19 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         } else if (hasRepeatableGroups(element)) {
             answers.put(KEY, key);
         }
-        return makeAnswersFormattingResistant(answers);
+        return answers;
     }
 
-    public static HashMap<String, String> makeAnswersFormattingResistant(HashMap<String, String> answers) {
-        HashMap<String, String> fixedAnswers = new HashMap<>();
-        for (Map.Entry<String, String> item : answers.entrySet()) {
-            String value = item.getValue();
-            if (!value.startsWith("http") && !value.startsWith("=HYPERLINK")) {
-                // Avoid formatting answers https://stackoverflow.com/a/37827066/5479029
-                value = "'" + value;
-            }
-            fixedAnswers.put(item.getKey(), value);
+    public static String getFormattingResistantAnswer(TreeElement childElement) {
+        String answer = childElement.getValue() != null ? childElement.getValue().getDisplayText() : "";
+
+        if (!answer.isEmpty() && (childElement.getDataType() == Constants.DATATYPE_TEXT
+                || childElement.getDataType() == Constants.DATATYPE_MULTIPLE_ITEMS
+                || childElement.getDataType() == Constants.DATATYPE_BARCODE)) {
+            answer = "'" + answer;
         }
 
-        return fixedAnswers;
+        return answer;
     }
 
     /**
@@ -424,7 +424,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         for (TreeElement child : getChildElements(element, false)) {
             final String elementTitle = getElementTitle(child);
             columnTitles.add(elementTitle);
-            if (newSheet && child.getDataType() == org.javarosa.core.model.Constants.DATATYPE_GEOPOINT) {
+            if (newSheet && child.getDataType() == Constants.DATATYPE_GEOPOINT) {
                 columnTitles.add(elementTitle + ALTITUDE_TITLE_POSTFIX);
                 columnTitles.add(elementTitle + ACCURACY_TITLE_POSTFIX);
             }
@@ -483,25 +483,25 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             TreeElement current = element.getChildAt(i);
             if (includeAllRepeats || !nextInstanceOfTheSameRepeatableGroup(prior, current)) {
                 switch (current.getDataType()) {
-                    case org.javarosa.core.model.Constants.DATATYPE_TEXT:
-                    case org.javarosa.core.model.Constants.DATATYPE_INTEGER:
-                    case org.javarosa.core.model.Constants.DATATYPE_DECIMAL:
-                    case org.javarosa.core.model.Constants.DATATYPE_DATE:
-                    case org.javarosa.core.model.Constants.DATATYPE_TIME:
-                    case org.javarosa.core.model.Constants.DATATYPE_DATE_TIME:
-                    case org.javarosa.core.model.Constants.DATATYPE_CHOICE:
-                    case org.javarosa.core.model.Constants.DATATYPE_CHOICE_LIST:
-                    case org.javarosa.core.model.Constants.DATATYPE_BOOLEAN:
-                    case org.javarosa.core.model.Constants.DATATYPE_GEOPOINT:
-                    case org.javarosa.core.model.Constants.DATATYPE_BARCODE:
-                    case org.javarosa.core.model.Constants.DATATYPE_BINARY:
-                    case org.javarosa.core.model.Constants.DATATYPE_LONG:
-                    case org.javarosa.core.model.Constants.DATATYPE_GEOSHAPE:
-                    case org.javarosa.core.model.Constants.DATATYPE_GEOTRACE:
-                    case org.javarosa.core.model.Constants.DATATYPE_UNSUPPORTED:
+                    case Constants.DATATYPE_TEXT:
+                    case Constants.DATATYPE_INTEGER:
+                    case Constants.DATATYPE_DECIMAL:
+                    case Constants.DATATYPE_DATE:
+                    case Constants.DATATYPE_TIME:
+                    case Constants.DATATYPE_DATE_TIME:
+                    case Constants.DATATYPE_CHOICE:
+                    case Constants.DATATYPE_CHOICE_LIST:
+                    case Constants.DATATYPE_BOOLEAN:
+                    case Constants.DATATYPE_GEOPOINT:
+                    case Constants.DATATYPE_BARCODE:
+                    case Constants.DATATYPE_BINARY:
+                    case Constants.DATATYPE_LONG:
+                    case Constants.DATATYPE_GEOSHAPE:
+                    case Constants.DATATYPE_GEOTRACE:
+                    case Constants.DATATYPE_UNSUPPORTED:
                         elements.add(current);
                         break;
-                    case org.javarosa.core.model.Constants.DATATYPE_NULL:
+                    case Constants.DATATYPE_NULL:
                         if (current.isRepeatable()) { // repeat group
                             elements.add(current);
                         } else if (current.getNumChildren() == 0) { // assume fields that don't have children are string fields
