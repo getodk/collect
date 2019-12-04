@@ -145,7 +145,7 @@ public class WidgetFactory {
                 } else if (appearance.contains(WidgetAppearanceUtils.MINIMAL)) {
                     questionWidget = new SpinnerWidget(context, questionDetails, appearance.contains(WidgetAppearanceUtils.QUICK));
                 } else if (appearance.contains(WidgetAppearanceUtils.SEARCH) || appearance.contains(WidgetAppearanceUtils.AUTOCOMPLETE)) {
-                    questionWidget = new SelectOneSearchWidget(context, questionDetails, appearance.contains(WidgetAppearanceUtils.QUICK));
+                    questionWidget = new SelectOneAutocompleteWidget(context, questionDetails, appearance.contains(WidgetAppearanceUtils.QUICK));
                 } else if (appearance.contains(WidgetAppearanceUtils.LIKERT)) {
                     questionWidget = new LikertWidget(context, questionDetails);
                 } else if (appearance.contains(WidgetAppearanceUtils.LIST_NO_LABEL)) {

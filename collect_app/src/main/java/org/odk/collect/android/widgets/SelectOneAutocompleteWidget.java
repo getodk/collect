@@ -21,7 +21,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 
 /**
- * SelectOneSearchWidget allows the user to enter a value in an editable text box and based on
+ * SelectOneAutocompleteWidget allows the user to enter a value in an editable text box and based on
  * input, the searched
  * options only appear which can then be chosen. This is used to narrow down the Select One options
  * For now, audio/video/image etc will be ignored
@@ -29,11 +29,11 @@ import org.odk.collect.android.utilities.SoftKeyboardUtils;
  * @author Raghu Mittal (raghu.mittal@handsrel.com)
  */
 @SuppressLint("ViewConstructor")
-public class SelectOneSearchWidget extends AbstractSelectOneWidget {
-    public SelectOneSearchWidget(Context context, QuestionDetails questionDetails, boolean autoAdvance) {
+public class SelectOneAutocompleteWidget extends AbstractSelectOneWidget {
+    public SelectOneAutocompleteWidget(Context context, QuestionDetails questionDetails, boolean autoAdvance) {
         super(context, questionDetails, autoAdvance);
         createLayout();
-        setUpSearchBox();
+        setUpSearchBox(context);
     }
 
     @Override
