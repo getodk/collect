@@ -86,7 +86,6 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.utilities.ViewUtils.pxFromDp;
 
 /**
  * Contains either one {@link QuestionWidget} if the current form element is a question or
@@ -339,7 +338,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             TextView tv = new TextView(getContext());
             tv.setText(path);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize() - 4);
-            tv.setPadding(pxFromDp(getContext(), 16f), pxFromDp(getContext(), 16f), pxFromDp(getContext(), 16f), 0);
+            tv.setPadding(getResources().getDimensionPixelSize(R.dimen.margin_standard),
+                    getResources().getDimensionPixelSize(R.dimen.margin_small), 0, 0);
             view.addView(tv, layout);
         }
     }
