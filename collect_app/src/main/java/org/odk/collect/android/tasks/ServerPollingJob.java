@@ -107,7 +107,7 @@ public class ServerPollingJob extends Job {
                         String manifestFileHash = formDetails.getManifestFileHash() != null ? formDetails.getManifestFileHash() : "";
                         String formVersionHash = FormDownloader.getMd5Hash(formDetails.getHash()) + manifestFileHash;
                         if (!wasThisNewerFormVersionAlreadyDetected(formVersionHash)) {
-                            updateLastDetectedFormVersionHash(formDetails.getFormID(), formVersionHash);
+                            updateLastDetectedFormVersionHash(formDetails.getFormId(), formVersionHash);
                         } else {
                             newDetectedForms.remove(formDetails);
                         }

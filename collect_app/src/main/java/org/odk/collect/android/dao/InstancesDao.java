@@ -22,7 +22,7 @@ import android.net.Uri;
 import androidx.loader.content.CursorLoader;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dto.Instance;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
 
@@ -257,8 +257,8 @@ public class InstancesDao {
         Collect.getInstance().getContentResolver().delete(InstanceProviderAPI.InstanceColumns.CONTENT_URI, null, null);
     }
 
-    public void deleteInstancesFromIDs(List<String> ids) {
-        int count = ids.size();
+    public void deleteInstancesFromInstanceFilePaths(List<String> instanceFilePaths) {
+        int count = instanceFilePaths.size();
         int counter = 0;
         while (count > 0) {
             String[] selectionArgs = null;
@@ -273,7 +273,7 @@ public class InstancesDao {
             selection.append(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + " IN (");
             int j = 0;
             while (j < selectionArgs.length) {
-                selectionArgs[j] = ids.get(
+                selectionArgs[j] = instanceFilePaths.get(
                         counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER + j);
                 selection.append('?');
 
@@ -310,19 +310,23 @@ public class InstancesDao {
                     int statusColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.STATUS);
                     int lastStatusChangeDateColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE);
                     int deletedDateColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE);
+                    int geometryTypeColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.GEOMETRY_TYPE);
+                    int geometryColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.GEOMETRY);
 
                     int databaseIdIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID);
 
                     Instance instance = new Instance.Builder()
                             .displayName(cursor.getString(displayNameColumnIndex))
                             .submissionUri(cursor.getString(submissionUriColumnIndex))
-                            .canEditWhenComplete(cursor.getString(canEditWhenCompleteIndex))
+                            .canEditWhenComplete(Boolean.valueOf(cursor.getString(canEditWhenCompleteIndex)))
                             .instanceFilePath(cursor.getString(instanceFilePathIndex))
                             .jrFormId(cursor.getString(jrFormIdColumnIndex))
                             .jrVersion(cursor.getString(jrVersionColumnIndex))
                             .status(cursor.getString(statusColumnIndex))
                             .lastStatusChangeDate(cursor.getLong(lastStatusChangeDateColumnIndex))
-                            .deletedDate(cursor.getLong(deletedDateColumnIndex))
+                            .deletedDate(cursor.isNull(deletedDateColumnIndex) ? null : cursor.getLong(deletedDateColumnIndex))
+                            .geometryType(cursor.getString(geometryTypeColumnIndex))
+                            .geometry(cursor.getString(geometryColumnIndex))
                             .databaseId(cursor.getLong(databaseIdIndex))
                             .build();
 
@@ -345,13 +349,15 @@ public class InstancesDao {
         ContentValues values = new ContentValues();
         values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME, instance.getDisplayName());
         values.put(InstanceProviderAPI.InstanceColumns.SUBMISSION_URI, instance.getSubmissionUri());
-        values.put(InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE, instance.getCanEditWhenComplete());
+        values.put(InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(instance.canEditWhenComplete()));
         values.put(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH, instance.getInstanceFilePath());
         values.put(InstanceProviderAPI.InstanceColumns.JR_FORM_ID, instance.getJrFormId());
         values.put(InstanceProviderAPI.InstanceColumns.JR_VERSION, instance.getJrVersion());
         values.put(InstanceProviderAPI.InstanceColumns.STATUS, instance.getStatus());
         values.put(InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE, instance.getLastStatusChangeDate());
         values.put(InstanceProviderAPI.InstanceColumns.DELETED_DATE, instance.getDeletedDate());
+        values.put(InstanceProviderAPI.InstanceColumns.GEOMETRY_TYPE, instance.getGeometryType());
+        values.put(InstanceProviderAPI.InstanceColumns.GEOMETRY_TYPE, instance.getGeometry());
 
         return values;
     }

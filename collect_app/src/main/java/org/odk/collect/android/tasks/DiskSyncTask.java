@@ -303,6 +303,8 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
         }
         updateValues.put(FormsColumns.AUTO_DELETE, fields.get(FileUtils.AUTO_DELETE));
         updateValues.put(FormsColumns.AUTO_SEND, fields.get(FileUtils.AUTO_SEND));
+        updateValues.put(FormsColumns.GEOMETRY_XPATH, fields.get(FileUtils.GEOMETRY_XPATH));
+
         // Note, the path doesn't change here, but it needs to be included so the
         // update will automatically update the .md5 and the cache path.
         updateValues.put(FormsColumns.FORM_FILE_PATH, formDefFile.getAbsolutePath());

@@ -579,9 +579,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                     item.put(FORMNAME, details.getFormName());
                     item.put(FORMID_DISPLAY,
                             ((details.getFormVersion() == null) ? "" : (getString(R.string.version) + " "
-                                    + details.getFormVersion() + " ")) + "ID: " + details.getFormID());
+                                    + details.getFormVersion() + " ")) + "ID: " + details.getFormId());
                     item.put(FORMDETAIL_KEY, formDetailsKey);
-                    item.put(FORM_ID_KEY, details.getFormID());
+                    item.put(FORM_ID_KEY, details.getFormId());
                     item.put(FORM_VERSION_KEY, details.getFormVersion());
 
                     // Insert the new form in alphabetical order.
@@ -617,7 +617,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 ArrayList<FormDetails> filesToDownload  = new ArrayList<>();
 
                 for (FormDetails formDetails: viewModel.getFormNamesAndURLs().values()) {
-                    String formId = formDetails.getFormID();
+                    String formId = formDetails.getFormId();
 
                     if (viewModel.getFormResults().containsKey(formId)) {
                         filesToDownload.add(formDetails);
@@ -761,8 +761,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             for (FormDetails formDetails: result.keySet()) {
                 String successKey = result.get(formDetails);
                 if (Collect.getInstance().getString(R.string.success).equals(successKey)) {
-                    if (viewModel.getFormResults().containsKey(formDetails.getFormID())) {
-                        viewModel.putFormResult(formDetails.getFormID(), true);
+                    if (viewModel.getFormResults().containsKey(formDetails.getFormId())) {
+                        viewModel.putFormResult(formDetails.getFormId(), true);
                     }
                 }
             }
@@ -778,7 +778,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             b.append(k.getFormName() + " ("
                     + ((k.getFormVersion() != null)
                     ? (Collect.getInstance().getString(R.string.version) + ": " + k.getFormVersion() + " ")
-                    : "") + "ID: " + k.getFormID() + ") - " + result.get(k));
+                    : "") + "ID: " + k.getFormId() + ") - " + result.get(k));
             b.append("\n\n");
         }
 

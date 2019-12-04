@@ -23,7 +23,7 @@ import android.provider.BaseColumns;
 import androidx.loader.content.CursorLoader;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dto.Form;
+import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.provider.FormsProviderAPI;
 
 import java.util.ArrayList;
@@ -45,6 +45,10 @@ public class FormsDao {
 
     Cursor getFormsCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         return Collect.getInstance().getContentResolver().query(FormsProviderAPI.FormsColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
+    }
+
+    public Cursor getFormsCursor(Uri uri) {
+        return Collect.getInstance().getContentResolver().query(uri, null, null, null, null);
     }
 
     public Cursor getFormsCursor(String formId, String formVersion) {
@@ -251,9 +255,10 @@ public class FormsDao {
                     int autoSendColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.AUTO_SEND);
                     int autoDeleteColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.AUTO_DELETE);
                     int lastDetectedFormVersionHashColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.LAST_DETECTED_FORM_VERSION_HASH);
+                    int geometryXpathColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.GEOMETRY_XPATH);
 
                     Form form = new Form.Builder()
-                            .id(cursor.getInt(idColumnIndex))
+                            .id(cursor.getLong(idColumnIndex))
                             .displayName(cursor.getString(displayNameColumnIndex))
                             .description(cursor.getString(descriptionColumnIndex))
                             .jrFormId(cursor.getString(jrFormIdColumnIndex))
@@ -269,6 +274,7 @@ public class FormsDao {
                             .autoSend(cursor.getString(autoSendColumnIndex))
                             .autoDelete(cursor.getString(autoDeleteColumnIndex))
                             .lastDetectedFormVersionHash(cursor.getString(lastDetectedFormVersionHashColumnIndex))
+                            .geometryXpath(cursor.getString(geometryXpathColumnIndex))
                             .build();
 
                     forms.add(form);
@@ -294,6 +300,9 @@ public class FormsDao {
         values.put(FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH, form.getJrCacheFilePath());
         values.put(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH, form.getFormMediaPath());
         values.put(FormsProviderAPI.FormsColumns.LANGUAGE, form.getLanguage());
+        values.put(FormsProviderAPI.FormsColumns.AUTO_SEND, form.getAutoSend());
+        values.put(FormsProviderAPI.FormsColumns.AUTO_DELETE, form.getAutoDelete());
+        values.put(FormsProviderAPI.FormsColumns.GEOMETRY_XPATH, form.getGeometryXpath());
         return values;
     }
 }

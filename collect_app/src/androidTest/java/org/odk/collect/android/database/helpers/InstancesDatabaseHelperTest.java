@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.dto.Instance;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.SQLiteUtils;
 
@@ -30,6 +30,11 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
     @Parameterized.Parameter
     public String description;
 
+    /**
+     * SQLite file that should contain exactly two instances:
+     * - one complete instance with date field set to 1564413556249
+     * - one incomplete instance with date field set to 1564413579406
+     */
     @Parameterized.Parameter(1)
     public String dbFilename;
 
@@ -41,6 +46,7 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
     @After
     public void restoreRealDb() {
         FileUtils.copyFile(new File(DATABASE_PATH + TEMPORARY_EXTENSION), new File(DATABASE_PATH));
+        FileUtils.deleteAndReport(new File(DATABASE_PATH + TEMPORARY_EXTENSION));
     }
 
     @Parameterized.Parameters(name = "{0}")
@@ -50,7 +56,9 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
                 {"Downgrading from version with missing column adds that column", "instances_v7000_removed_jrVersion.db"},
 
                 {"Upgrading from version with extra column drops that column", "instances_v3.db"},
-                {"Upgrading from version with missing column adds that column", "instances_v4_removed_jrVersion.db"}
+                {"Upgrading from version with missing column adds that column", "instances_v4_removed_jrVersion.db"},
+
+                {"Upgrading from v5 results in current version columns", "instances_v5.db"}
         });
     }
 

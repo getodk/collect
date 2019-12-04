@@ -14,24 +14,25 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.dto;
+package org.odk.collect.android.instances;
 
 /**
- * This class represents a single row from the instances table which is located in
- * {@link org.odk.collect.android.provider.InstanceProvider#DATABASE_NAME}
- * For more information about this pattern go to https://en.wikipedia.org/wiki/Data_transfer_object
- * Objects of this class are created using builder pattern: https://en.wikipedia.org/wiki/Builder_pattern
+ * A filled form stored on the device.
+ *
+ * Objects of this class are created using the builder pattern: https://en.wikipedia.org/wiki/Builder_pattern
  */
 public final class Instance {
     private final String displayName;
     private final String submissionUri;
-    private final String canEditWhenComplete;
+    private final boolean canEditWhenComplete;
     private final String instanceFilePath;
     private final String jrFormId;
     private final String jrVersion;
     private final String status;
     private final Long lastStatusChangeDate;
     private final Long deletedDate;
+    private final String geometryType;
+    private final String geometry;
 
     private final Long databaseId;
 
@@ -45,6 +46,8 @@ public final class Instance {
         status = builder.status;
         lastStatusChangeDate = builder.lastStatusChangeDate;
         deletedDate = builder.deletedDate;
+        geometryType = builder.geometryType;
+        geometry = builder.geometry;
 
         databaseId = builder.databaseId;
     }
@@ -52,13 +55,15 @@ public final class Instance {
     public static class Builder {
         private String displayName;
         private String submissionUri;
-        private String canEditWhenComplete;
+        private boolean canEditWhenComplete;
         private String instanceFilePath;
         private String jrFormId;
         private String jrVersion;
         private String status;
         private Long lastStatusChangeDate;
         private Long deletedDate;
+        private String geometryType;
+        private String geometry;
 
         private Long databaseId;
 
@@ -72,7 +77,7 @@ public final class Instance {
             return this;
         }
 
-        public Builder canEditWhenComplete(String canEditWhenComplete) {
+        public Builder canEditWhenComplete(boolean canEditWhenComplete) {
             this.canEditWhenComplete = canEditWhenComplete;
             return this;
         }
@@ -107,6 +112,16 @@ public final class Instance {
             return this;
         }
 
+        public Builder geometryType(String geometryType) {
+            this.geometryType = geometryType;
+            return this;
+        }
+
+        public Builder geometry(String geometry) {
+            this.geometry = geometry;
+            return this;
+        }
+
         public Builder databaseId(Long databaseId) {
             this.databaseId = databaseId;
             return this;
@@ -125,7 +140,7 @@ public final class Instance {
         return submissionUri;
     }
 
-    public String getCanEditWhenComplete() {
+    public boolean canEditWhenComplete() {
         return canEditWhenComplete;
     }
 
@@ -151,6 +166,14 @@ public final class Instance {
 
     public Long getDeletedDate() {
         return deletedDate;
+    }
+
+    public String getGeometryType() {
+        return geometryType;
+    }
+
+    public String getGeometry() {
+        return geometry;
     }
 
     public Long getDatabaseId() {

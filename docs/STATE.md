@@ -18,11 +18,13 @@ and update this document as the code evolves.
 * App has mixture of unit tests (JUnit), Robolectric tests (Junit + Robolectric) and Espresso tests but coverage is far from complete
 * Test style, reasoning and layering is inconsistent
 * App still written in Java with min API at 16 so basically targeting Java 7 source
-* UI has is "iconic" (old) but with a lot of inconsistencies and quirks and is best adapted to small screens
+* UI is "iconic" (old) but with a lot of inconsistencies and quirks and is best adapted to small screens
 * A lot of code lives in between one "god" Activity (FormEntryActivity) and a process singleton (FormController)
 * Core form entry flow uses custom side-to-side swipe view (in FormEntryActivity made up of ODKView)
 * Async/reactivity handled with a mixture of callbacks, LiveData and Rx
 * App stores data in flat files indexed in SQLite
+* Access to data in SQLite is done inconsistently through a mix of provider, helper and DAO objects
+* Raw access to database rows is favored over the use of domain objects
 * Preferences for the app use Android's Preferences abstraction (for UI also)
 * Material Components styles are used in some places but app still uses AppCompat theme
 * Dagger is used to inject "black box" objects such as Activity and in some other places but isn't set up in a particularly advanced way
@@ -40,4 +42,5 @@ and update this document as the code evolves.
 * Talk of moving to Kotlin but not real plans as of yet ([“Using Kotlin for ODK Android apps” discussion](https://forum.opendatakit.org/t/using-kotlin-for-odk-android-apps/18367))
 * General effort to increase test coverage and quality while working on anything and pushing more for tests in PR review
 * Trying to remove technical debt flagged with `@Deprecated`
+* Favoring domain objects (instance, form) with related logic where possible to more explicitly link data and logic
 * Moving code to packages based on domain slices (`audio` or `formentry` for instance) to make it easier to work on isolated features and navigate code

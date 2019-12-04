@@ -82,6 +82,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private PointListener clickListener;
     private PointListener longPressListener;
     private PointListener gpsLocationListener;
+    private FeatureListener featureClickListener;
     private FeatureListener dragEndListener;
     private MyLocationNewOverlay myLocationOverlay;
     private LocationClient locationClient;
@@ -259,6 +260,13 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         return featureId;
     }
 
+    @Override public void setMarkerIcon(int featureId, int drawableId) {
+        MapFeature feature = features.get(featureId);
+        if (feature instanceof MarkerFeature) {
+            ((MarkerFeature) feature).setIcon(drawableId);
+        }
+    }
+
     @Override public @Nullable MapPoint getMarkerPoint(int featureId) {
         MapFeature feature = features.get(featureId);
         return feature instanceof MarkerFeature ? ((MarkerFeature) feature).getPoint() : null;
@@ -313,6 +321,10 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     @Override public void setLongPressListener(@Nullable PointListener listener) {
         longPressListener = listener;
+    }
+
+    @Override public void setFeatureClickListener(@Nullable FeatureListener listener) {
+        featureClickListener = listener;
     }
 
     @Override public void setDragEndListener(@Nullable FeatureListener listener) {
@@ -488,7 +500,14 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         marker.setDraggable(feature != null);
         marker.setIcon(ContextCompat.getDrawable(map.getContext(), R.drawable.ic_map_point));
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
-
+        marker.setOnMarkerClickListener((clickedMarker, mapView) -> {
+            int featureId = findFeature(clickedMarker);
+            if (featureClickListener != null && featureId != -1) {
+                featureClickListener.onFeature(featureId);
+                return true;  // consume the event
+            }
+            return false;
+        });
         marker.setOnMarkerDragListener(new Marker.OnMarkerDragListener() {
             @Override public void onMarkerDragStart(Marker marker) { }
 
@@ -509,9 +528,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             }
         });
 
-        // Prevent the text bubble from appearing when a marker is clicked.
-        marker.setOnMarkerClickListener((unusedMarker, unusedMap) -> false);
-
         map.getOverlays().add(marker);
         return marker;
     }
@@ -520,6 +536,16 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private int findFeature(Marker marker) {
         for (int featureId : features.keySet()) {
             if (features.get(featureId).ownsMarker(marker)) {
+                return featureId;
+            }
+        }
+        return -1;  // not found
+    }
+
+    /** Finds the feature to which the given polyline belongs. */
+    private int findFeature(Polyline polyline) {
+        for (int featureId : features.keySet()) {
+            if (features.get(featureId).ownsPolyline(polyline)) {
                 return featureId;
             }
         }
@@ -548,6 +574,9 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         /** Returns true if the given marker belongs to this feature. */
         boolean ownsMarker(Marker marker);
 
+        /** Returns true if the given polyline belongs to this feature. */
+        boolean ownsPolyline(Polyline polyline);
+
         /** Updates the feature's geometry after any UI handles have moved. */
         void update();
 
@@ -565,12 +594,20 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             this.marker = createMarker(map, point, draggable ? this : null);
         }
 
+        public void setIcon(int drawableId) {
+            marker.setIcon(ContextCompat.getDrawable(map.getContext(), drawableId));
+        }
+
         public MapPoint getPoint() {
             return fromMarker(marker);
         }
 
         public boolean ownsMarker(Marker givenMarker) {
             return marker.equals(givenMarker);
+        }
+
+        public boolean ownsPolyline(Polyline polyline) {
+            return false;
         }
 
         public void update() { }
@@ -594,6 +631,14 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             this.closedPolygon = closedPolygon;
             polyline = new Polyline();
             polyline.setColor(getResources().getColor(R.color.mapLine));
+            polyline.setOnClickListener((clickedPolyline, mapView, eventPos) -> {
+                int featureId = findFeature(clickedPolyline);
+                if (featureClickListener != null && featureId != -1) {
+                    featureClickListener.onFeature(featureId);
+                    return true;  // consume the event
+                }
+                return false;
+            });
             Paint paint = polyline.getPaint();
             paint.setStrokeWidth(STROKE_WIDTH);
             map.getOverlays().add(polyline);
@@ -605,6 +650,10 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
         public boolean ownsMarker(Marker givenMarker) {
             return markers.contains(givenMarker);
+        }
+
+        public boolean ownsPolyline(Polyline givenPolyline) {
+            return polyline.equals(givenPolyline);
         }
 
         public void update() {

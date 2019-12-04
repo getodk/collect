@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.dto;
+package org.odk.collect.android.forms;
 
 /**
- * This class represents a single row from the forms table which is located in
- * {@link org.odk.collect.android.database.helpers.FormsDatabaseHelper#DATABASE_NAME}
- * For more information about this pattern go to https://en.wikipedia.org/wiki/Data_transfer_object
- * Objects of this class are created using builder pattern: https://en.wikipedia.org/wiki/Builder_pattern
+ * A form definition stored on the device.
+ *
+ * Objects of this class are created using the builder pattern: https://en.wikipedia.org/wiki/Builder_pattern
  */
 public final class Form {
-    private final int id;
+    private final Long id;
     private final String displayName;
     private final String description;
     private final String jrFormId;
@@ -39,6 +38,7 @@ public final class Form {
     private final String autoSend;
     private final String autoDelete;
     private final String lastDetectedFormVersionHash;
+    private final String geometryXPath;
 
     private Form(Form.Builder builder) {
         id = builder.id;
@@ -57,10 +57,11 @@ public final class Form {
         autoSend = builder.autoSend;
         autoDelete = builder.autoDelete;
         lastDetectedFormVersionHash = builder.lastDetectedFormVersionHash;
+        geometryXPath = builder.geometryXpath;
     }
 
     public static class Builder {
-        private int id;
+        private Long id;
         private String displayName;
         private String description;
         private String jrFormId;
@@ -76,8 +77,9 @@ public final class Form {
         private String autoSend;
         private String autoDelete;
         private String lastDetectedFormVersionHash;
+        private String geometryXpath;
 
-        public Builder id(int id) {
+        public Builder id(Long id) {
             this.id = id;
             return this;
         }
@@ -157,12 +159,17 @@ public final class Form {
             return this;
         }
 
+        public Builder geometryXpath(String geometryXpath) {
+            this.geometryXpath = geometryXpath;
+            return this;
+        }
+
         public Form build() {
             return new Form(this);
         }
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -224,6 +231,10 @@ public final class Form {
 
     public String getLastDetectedFormVersionHash() {
         return lastDetectedFormVersionHash;
+    }
+
+    public String getGeometryXpath() {
+        return geometryXPath;
     }
 
     @Override

@@ -113,5 +113,167 @@ public class FileUtilsTest {
         assertThat(metadataFromFormDefinition.get(FileUtils.AUTO_SEND), is("bar"));
         assertThat(metadataFromFormDefinition.get(FileUtils.AUTO_DELETE), is("baz"));
         assertThat(metadataFromFormDefinition.get(FileUtils.BASE64_RSA_PUBLIC_KEY), is("quux"));
+        assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is(nullValue()));
+    }
+
+    @Test public void getMetadataFromFormDefinition_withGeopointsAtTopLevel_returnsFirstGeopointBasedOnBodyOrder() throws IOException {
+        String submissionForm = "<?xml version=\"1.0\"?>\n" +
+                "<h:html xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
+                "    xmlns=\"http://www.w3.org/2002/xforms\">\n" +
+                "    <h:head>\n" +
+                "        <h:title>Two geopoints</h:title>\n" +
+                "        <model>\n" +
+                "            <instance>\n" +
+                "                <data id=\"two-geopoints\">\n" +
+                "                    <location2 />\n" +
+                "                    <name />\n" +
+                "                    <location1 />\n" +
+                "                </data>\n" +
+                "            </instance>\n" +
+                "            <bind nodeset=\"/data/name\" type=\"string\" />\n" +
+                "            <bind nodeset=\"/data/location2\" type=\"geopoint\" />\n" +
+                "            <bind nodeset=\"/data/location1\" type=\"geopoint\" />\n" +
+                "        </model>\n" +
+                "    </h:head>\n" +
+                "    <h:body>\n" +
+                "        <input ref=\"/data/location1\"> <label>Location</label> </input>\n" +
+                "        <input ref=\"/data/name\"> <label>Name</label> </input>\n" +
+                "        <input ref=\"/data/location2\"> <label>Location</label> </input>\n" +
+                "    </h:body>\n" +
+                "</h:html>";
+
+        File temp = File.createTempFile("geopoints_form", ".xml");
+        temp.deleteOnExit();
+
+        BufferedWriter out = new BufferedWriter(new FileWriter(temp));
+        out.write(submissionForm);
+        out.close();
+
+        HashMap<String, String> metadataFromFormDefinition = FileUtils.getMetadataFromFormDefinition(temp);
+
+        assertThat(metadataFromFormDefinition.get(FileUtils.TITLE), is("Two geopoints"));
+        assertThat(metadataFromFormDefinition.get(FileUtils.FORMID), is("two-geopoints"));
+        assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is("/data/location1"));
+    }
+
+    @Test public void getMetadataFromFormDefinition_withGeopointInGroup_returnsFirstGeopointBasedOnBodyOrder() throws IOException {
+        String submissionForm = "<?xml version=\"1.0\"?>\n" +
+                "<h:html xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
+                "    xmlns=\"http://www.w3.org/2002/xforms\">\n" +
+                "    <h:head>\n" +
+                "        <h:title>Two geopoints in group</h:title>\n" +
+                "        <model>\n" +
+                "            <instance>\n" +
+                "                <data id=\"two-geopoints-group\">\n" +
+                "                    <my-group>\n" +
+                "                        <location1 />\n" +
+                "                    </my-group>\n" +
+                "                    <location2 />\n" +
+                "                </data>\n" +
+                "            </instance>\n" +
+                "            <bind nodeset=\"/data/location2\" type=\"geopoint\" />\n" +
+                "            <bind nodeset=\"/data/my-group/location1\" type=\"geopoint\" />\n" +
+                "        </model>\n" +
+                "    </h:head>\n" +
+                "    <h:body>\n" +
+                "        <group ref=\"/data/my-group\">\n" +
+                "            <input ref=\"/data/my-group/location1\"> <label>Location</label> </input>\n" +
+                "        </group>\n" +
+                "\n" +
+                "        <input ref=\"/data/location2\"> <label>Location</label> </input>\n" +
+                "    </h:body>\n" +
+                "</h:html>";
+
+        File temp = File.createTempFile("geopoints_group_form", ".xml");
+        temp.deleteOnExit();
+
+        BufferedWriter out = new BufferedWriter(new FileWriter(temp));
+        out.write(submissionForm);
+        out.close();
+
+        HashMap<String, String> metadataFromFormDefinition = FileUtils.getMetadataFromFormDefinition(temp);
+
+        assertThat(metadataFromFormDefinition.get(FileUtils.TITLE), is("Two geopoints in group"));
+        assertThat(metadataFromFormDefinition.get(FileUtils.FORMID), is("two-geopoints-group"));
+        assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is("/data/my-group/location1"));
+    }
+
+    @Test public void getMetadataFromFormDefinition_withGeopointInRepeat_returnsFirstGeopointBasedOnBodyOrder() throws IOException {
+        String submissionForm = "<?xml version=\"1.0\"?>\n" +
+                "<h:html xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
+                "    xmlns=\"http://www.w3.org/2002/xforms\">\n" +
+                "    <h:head>\n" +
+                "        <h:title>Two geopoints repeat</h:title>\n" +
+                "        <model>\n" +
+                "            <instance>\n" +
+                "                <data id=\"two-geopoints-repeat\">\n" +
+                "                    <my-repeat>\n" +
+                "                        <location1 />\n" +
+                "                    </my-repeat>\n" +
+                "                    <location2 />\n" +
+                "                </data>\n" +
+                "            </instance>\n" +
+                "            <bind nodeset=\"/data/location2\" type=\"geopoint\" />\n" +
+                "            <bind nodeset=\"/data/my-repeat/location1\" type=\"geopoint\" />\n" +
+                "        </model>\n" +
+                "    </h:head>\n" +
+                "    <h:body>\n" +
+                "        <repeat nodeset=\"/data/my-repeat\">\n" +
+                "            <input ref=\"/data/my-repeat/location1\"> <label>Location</label> </input>\n" +
+                "        </repeat>\n" +
+                "        <input ref=\"/data/location2\"> <label>Location</label> </input>\n" +
+                "    </h:body>\n" +
+                "</h:html>";
+
+        File temp = File.createTempFile("geopoints_repeat_form", ".xml");
+        temp.deleteOnExit();
+
+        BufferedWriter out = new BufferedWriter(new FileWriter(temp));
+        out.write(submissionForm);
+        out.close();
+
+        HashMap<String, String> metadataFromFormDefinition = FileUtils.getMetadataFromFormDefinition(temp);
+
+        assertThat(metadataFromFormDefinition.get(FileUtils.TITLE), is("Two geopoints repeat"));
+        assertThat(metadataFromFormDefinition.get(FileUtils.FORMID), is("two-geopoints-repeat"));
+        assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is("/data/location2"));
+    }
+
+    @Test public void getMetadataFromFormDefinition_withSetGeopointBeforeBodyGeopoint_returnsFirstGeopointInInstance() throws IOException {
+        String submissionForm = "<?xml version=\"1.0\"?>\n" +
+                "<h:html xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
+                "    xmlns:odk=\"http://www.opendatakit.org/xforms\"\n" +
+                "    xmlns=\"http://www.w3.org/2002/xforms\">\n" +
+                "    <h:head>\n" +
+                "        <h:title>Setgeopoint before</h:title>\n" +
+                "        <model>\n" +
+                "            <instance>\n" +
+                "                <data id=\"set-geopoint-before\">\n" +
+                "                    <location1 />\n" +
+                "                    <location2 />\n" +
+                "                </data>\n" +
+                "            </instance>\n" +
+                "            <bind nodeset=\"/data/location2\" type=\"geopoint\" />\n" +
+                "            <bind nodeset=\"/data/location1\" type=\"geopoint\" />\n" +
+                "            <odk:setgeopoint ref=\"/data/location1\" event=\"odk-instance-first-load\"/>\n" +
+                "        </model>\n" +
+                "    </h:head>\n" +
+                "    <h:body>\n" +
+                "        <input ref=\"/data/location2\"> <label>Location</label> </input>\n" +
+                "    </h:body>\n" +
+                "</h:html>";
+
+        File temp = File.createTempFile("geopoints_repeat_form", ".xml");
+        temp.deleteOnExit();
+
+        BufferedWriter out = new BufferedWriter(new FileWriter(temp));
+        out.write(submissionForm);
+        out.close();
+
+        HashMap<String, String> metadataFromFormDefinition = FileUtils.getMetadataFromFormDefinition(temp);
+
+        assertThat(metadataFromFormDefinition.get(FileUtils.TITLE), is("Setgeopoint before"));
+        assertThat(metadataFromFormDefinition.get(FileUtils.FORMID), is("set-geopoint-before"));
+        assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is("/data/location1"));
     }
 }

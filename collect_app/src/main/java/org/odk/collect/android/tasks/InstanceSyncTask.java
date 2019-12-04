@@ -136,7 +136,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                     }
                 }
 
-                instancesDao.deleteInstancesFromIDs(filesToRemove);
+                instancesDao.deleteInstancesFromInstanceFilePaths(filesToRemove);
 
                 final boolean instanceSyncFlag = PreferenceManager.getDefaultSharedPreferences(
                         Collect.getInstance().getApplicationContext()).getBoolean(
