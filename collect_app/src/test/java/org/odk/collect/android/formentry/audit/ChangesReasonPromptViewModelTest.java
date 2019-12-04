@@ -36,7 +36,7 @@ public class ChangesReasonPromptViewModelTest {
 
         ChangesReasonPromptViewModel viewModel = new ChangesReasonPromptViewModel();
         viewModel.setAuditEventLogger(logger);
-        viewModel.savingForm();
+        viewModel.saveForm(true, "");
         assertThat(viewModel.requiresReasonToContinue().getValue(), equalTo(true));
 
         viewModel.promptDismissed();

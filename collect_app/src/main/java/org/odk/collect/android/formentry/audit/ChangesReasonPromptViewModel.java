@@ -1,6 +1,7 @@
 package org.odk.collect.android.formentry.audit;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -11,26 +12,29 @@ import static org.odk.collect.android.utilities.StringUtils.isBlank;
 public class ChangesReasonPromptViewModel extends ViewModel {
 
     private final MutableLiveData<Boolean> requiresReasonToContinue = new MutableLiveData<>(false);
-    private final MutableLiveData<Boolean> readyToSave = new MutableLiveData<>(false);
+    private final MutableLiveData<Pair<Boolean, String>> saveRequests = new MutableLiveData<>(null);
 
     private AuditEventLogger auditEventLogger;
     private String reason;
+    private Pair<Boolean, String> saveDetails;
 
     public LiveData<Boolean> requiresReasonToContinue() {
         return requiresReasonToContinue;
     }
 
-    public LiveData<Boolean> readyToSave() {
-        return readyToSave;
+    public LiveData<Pair<Boolean, String>> saveRequests() {
+        return saveRequests;
     }
 
     public void setAuditEventLogger(AuditEventLogger auditEventLogger) {
         this.auditEventLogger = auditEventLogger;
     }
 
-    public void savingForm() {
+    public void saveForm(boolean complete, String updatedSaveName) {
+        saveDetails = new Pair<>(complete, updatedSaveName);
+
         if (!requiresReasonToSave()) {
-            readyToSave.setValue(true);
+            saveRequests.setValue(saveDetails);
         } else {
             requiresReasonToContinue.setValue(true);
         }
@@ -52,7 +56,7 @@ public class ChangesReasonPromptViewModel extends ViewModel {
         if (reason != null && !isBlank(reason)) {
             this.auditEventLogger.logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, currentTime, reason);
             requiresReasonToContinue.setValue(false);
-            readyToSave.setValue(true);
+            saveRequests.setValue(saveDetails);
         }
     }
 

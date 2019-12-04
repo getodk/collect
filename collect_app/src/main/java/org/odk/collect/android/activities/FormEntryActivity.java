@@ -430,6 +430,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 );
             }
         });
+        changesReasonPromptViewModel.saveRequests().observe(this, saveDetails -> {
+            if (saveDetails != null) {
+                save(saveDetails.first, saveDetails.second);
+            }
+        });
     }
 
     private void setupFields(Bundle savedInstanceState) {
@@ -1878,18 +1883,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         if (exit) {
             getFormController().getAuditEventLogger().exitView();
-            changesReasonPromptViewModel.savingForm();
-            changesReasonPromptViewModel.readyToSave().observe(this, readyToSave -> {
-                if (readyToSave) {
-                    saveToDiskTask = new SaveToDiskTask(getIntent().getData(), true, complete,
-                            updatedSaveName);
-                    saveToDiskTask.setFormSavedListener(this);
-                    autoSaved = true;
-                    showDialog(SAVING_DIALOG);
-                    // show dialog before we execute...
-                    saveToDiskTask.execute();
-                }
-            });
+            changesReasonPromptViewModel.saveForm(complete, updatedSaveName);
         } else {
             saveToDiskTask = new SaveToDiskTask(getIntent().getData(), false, complete,
                     updatedSaveName);
@@ -1901,6 +1895,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         return true;
+    }
+
+    private void save(boolean complete, String updatedSaveName) {
+        saveToDiskTask = new SaveToDiskTask(getIntent().getData(), true, complete,
+                updatedSaveName);
+        saveToDiskTask.setFormSavedListener(this);
+        autoSaved = true;
+        showDialog(SAVING_DIALOG);
+        // show dialog before we execute...
+        saveToDiskTask.execute();
     }
 
     /**
