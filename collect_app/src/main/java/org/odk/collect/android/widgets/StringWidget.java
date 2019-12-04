@@ -66,7 +66,7 @@ public class StringWidget extends QuestionWidget {
         setDisplayValueFromModel();
 
         Resources resources = context.getResources();
-        int marginStandard = dpFromPx(context, resources.getDimension(R.dimen.margin_standard));
+        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
         int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
         addAnswerView(answerText, margin);
     }
