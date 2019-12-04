@@ -228,7 +228,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     }
 
     protected static String[] enumerateHostStrings() {
-        return new String[] {"images", "image", "audio", "video", "file"};
+        return new String[] {"images", "image", "audio", "video", "file-csv", "file"};
     }
 
     protected List<RootTranslator> buildSessionRootTranslators(String formMediaDir, String[] hostStrings) {
