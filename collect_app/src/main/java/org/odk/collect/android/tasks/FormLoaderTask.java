@@ -53,7 +53,9 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -141,8 +143,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             referenceManager.addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
         }
 
-        addSessionRootTranslators(formMediaDir.getName(), referenceManager,
-                "images", "image", "audio", "video", "file");
+        addSessionRootTranslators(referenceManager,
+                buildSessionRootTranslators(formMediaDir.getName(), enumerateHostStrings()));
 
         FormDef formDef = null;
         try {
@@ -225,11 +227,23 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         return data;
     }
 
-    private void addSessionRootTranslators(String formMediaDir, ReferenceManager referenceManager, String... hostStrings) {
+    protected static String[] enumerateHostStrings() {
+        return new String[] {"images", "image", "audio", "video", "file"};
+    }
+
+    protected List<RootTranslator> buildSessionRootTranslators(String formMediaDir, String[] hostStrings) {
+        List<RootTranslator> rootTranslators = new ArrayList<>();
         // Set jr://... to point to /sdcard/odk/forms/formBasename-media/
         final String translatedPrefix = String.format("jr://file/forms/" + formMediaDir + "/");
         for (String t : hostStrings) {
-            referenceManager.addSessionRootTranslator(new RootTranslator(String.format("jr://%s/", t), translatedPrefix));
+            rootTranslators.add(new RootTranslator(String.format("jr://%s/", t), translatedPrefix));
+        }
+        return rootTranslators;
+    }
+
+    private void addSessionRootTranslators(ReferenceManager referenceManager, List<RootTranslator> rootTranslators) {
+        for (RootTranslator rootTranslator : rootTranslators) {
+            referenceManager.addSessionRootTranslator(rootTranslator);
         }
     }
 
