@@ -430,9 +430,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 );
             }
         });
-        changesReasonPromptViewModel.saveRequests().observe(this, saveDetails -> {
-            if (saveDetails != null) {
-                save(saveDetails.first, saveDetails.second);
+        changesReasonPromptViewModel.saveRequests().observe(this, saveRequest -> {
+            if (saveRequest != null) {
+                save(saveRequest.isComplete(), saveRequest.getUpdatedSaveName(), saveRequest.isExitAfter());
             }
         });
     }
@@ -1881,24 +1881,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        if (exit) {
-            getFormController().getAuditEventLogger().exitView();
-            changesReasonPromptViewModel.saveForm(complete, updatedSaveName);
-        } else {
-            saveToDiskTask = new SaveToDiskTask(getIntent().getData(), false, complete,
-                    updatedSaveName);
-            saveToDiskTask.setFormSavedListener(this);
-            autoSaved = true;
-            showDialog(SAVING_DIALOG);
-            // show dialog before we execute...
-            saveToDiskTask.execute();
-        }
+        getFormController().getAuditEventLogger().exitView();
+        changesReasonPromptViewModel.saveForm(complete, updatedSaveName, exit);
 
         return true;
     }
 
-    private void save(boolean complete, String updatedSaveName) {
-        saveToDiskTask = new SaveToDiskTask(getIntent().getData(), true, complete,
+    private void save(boolean complete, String updatedSaveName, boolean exitAfter) {
+        saveToDiskTask = new SaveToDiskTask(getIntent().getData(), exitAfter, complete,
                 updatedSaveName);
         saveToDiskTask.setFormSavedListener(this);
         autoSaved = true;

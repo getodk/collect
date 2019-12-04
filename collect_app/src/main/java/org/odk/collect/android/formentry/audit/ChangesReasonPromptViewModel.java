@@ -1,7 +1,6 @@
 package org.odk.collect.android.formentry.audit;
 
 import androidx.annotation.NonNull;
-import androidx.core.util.Pair;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -12,17 +11,17 @@ import static org.odk.collect.android.utilities.StringUtils.isBlank;
 public class ChangesReasonPromptViewModel extends ViewModel {
 
     private final MutableLiveData<Boolean> requiresReasonToContinue = new MutableLiveData<>(false);
-    private final MutableLiveData<Pair<Boolean, String>> saveRequests = new MutableLiveData<>(null);
+    private final MutableLiveData<SaveRequest> saveRequests = new MutableLiveData<>(null);
 
     private AuditEventLogger auditEventLogger;
     private String reason;
-    private Pair<Boolean, String> saveDetails;
+    private SaveRequest lastSaveRequest;
 
     public LiveData<Boolean> requiresReasonToContinue() {
         return requiresReasonToContinue;
     }
 
-    public LiveData<Pair<Boolean, String>> saveRequests() {
+    public LiveData<SaveRequest> saveRequests() {
         return saveRequests;
     }
 
@@ -30,11 +29,11 @@ public class ChangesReasonPromptViewModel extends ViewModel {
         this.auditEventLogger = auditEventLogger;
     }
 
-    public void saveForm(boolean complete, String updatedSaveName) {
-        saveDetails = new Pair<>(complete, updatedSaveName);
+    public void saveForm(boolean complete, String updatedSaveName, boolean exitAfter) {
+        lastSaveRequest = new SaveRequest(complete, updatedSaveName, exitAfter);
 
         if (!requiresReasonToSave()) {
-            saveRequests.setValue(saveDetails);
+            saveRequests.setValue(lastSaveRequest);
         } else {
             requiresReasonToContinue.setValue(true);
         }
@@ -56,7 +55,7 @@ public class ChangesReasonPromptViewModel extends ViewModel {
         if (reason != null && !isBlank(reason)) {
             this.auditEventLogger.logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, currentTime, reason);
             requiresReasonToContinue.setValue(false);
-            saveRequests.setValue(saveDetails);
+            saveRequests.setValue(lastSaveRequest);
         }
     }
 
@@ -69,6 +68,32 @@ public class ChangesReasonPromptViewModel extends ViewModel {
                 && auditEventLogger.isEditing()
                 && auditEventLogger.isChangeReasonRequired()
                 && auditEventLogger.isChangesMade();
+    }
+
+    public static class SaveRequest {
+
+        private final boolean complete;
+        private final String updatedSaveName;
+        private final boolean exitAfter;
+
+        public SaveRequest(boolean complete, String updatedSaveName, boolean exitAfter) {
+
+            this.complete = complete;
+            this.updatedSaveName = updatedSaveName;
+            this.exitAfter = exitAfter;
+        }
+
+        public boolean isComplete() {
+            return complete;
+        }
+
+        public String getUpdatedSaveName() {
+            return updatedSaveName;
+        }
+
+        public boolean isExitAfter() {
+            return exitAfter;
+        }
     }
 
     public static class Factory implements ViewModelProvider.Factory {
