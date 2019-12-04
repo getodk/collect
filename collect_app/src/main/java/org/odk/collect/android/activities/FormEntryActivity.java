@@ -1879,8 +1879,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (exit) {
             getFormController().getAuditEventLogger().exitView();
             changesReasonPromptViewModel.savingForm();
-            changesReasonPromptViewModel.requiresReasonToContinue().observe(this, requiresReason -> {
-                if (!requiresReason) {
+            changesReasonPromptViewModel.readyToSave().observe(this, readyToSave -> {
+                if (readyToSave) {
                     saveToDiskTask = new SaveToDiskTask(getIntent().getData(), true, complete,
                             updatedSaveName);
                     saveToDiskTask.setFormSavedListener(this);

@@ -11,6 +11,8 @@ import static org.odk.collect.android.utilities.StringUtils.isBlank;
 public class ChangesReasonPromptViewModel extends ViewModel {
 
     private final MutableLiveData<Boolean> requiresReasonToContinue = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> readyToSave = new MutableLiveData<>(false);
+
     private AuditEventLogger auditEventLogger;
     private String reason;
 
@@ -18,17 +20,28 @@ public class ChangesReasonPromptViewModel extends ViewModel {
         return requiresReasonToContinue;
     }
 
+    public LiveData<Boolean> readyToSave() {
+        return readyToSave;
+    }
+
     public void setAuditEventLogger(AuditEventLogger auditEventLogger) {
         this.auditEventLogger = auditEventLogger;
-        updateRequiresReasonToContinue();
     }
 
     public void savingForm() {
-        updateRequiresReasonToContinue();
+        if (!requiresReasonToSave()) {
+            readyToSave.setValue(true);
+        } else {
+            requiresReasonToContinue.setValue(true);
+        }
     }
 
     public void editingForm() {
         auditEventLogger.setEditing(true);
+    }
+
+    public void promptDismissed() {
+        requiresReasonToContinue.setValue(false);
     }
 
     public void setReason(String reason) {
@@ -39,6 +52,7 @@ public class ChangesReasonPromptViewModel extends ViewModel {
         if (reason != null && !isBlank(reason)) {
             this.auditEventLogger.logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, currentTime, reason);
             requiresReasonToContinue.setValue(false);
+            readyToSave.setValue(true);
         }
     }
 
@@ -46,13 +60,11 @@ public class ChangesReasonPromptViewModel extends ViewModel {
         return reason;
     }
 
-    private void updateRequiresReasonToContinue() {
-        requiresReasonToContinue.setValue(
-                auditEventLogger != null
-                        && auditEventLogger.isEditing()
-                        && auditEventLogger.isChangeReasonRequired()
-                        && auditEventLogger.isChangesMade()
-        );
+    private boolean requiresReasonToSave() {
+        return auditEventLogger != null
+                && auditEventLogger.isEditing()
+                && auditEventLogger.isChangeReasonRequired()
+                && auditEventLogger.isChangesMade();
     }
 
     public static class Factory implements ViewModelProvider.Factory {

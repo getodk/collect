@@ -82,8 +82,8 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
         super.onAttach(context);
 
         viewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(ChangesReasonPromptViewModel.class);
-        viewModel.requiresReasonToContinue().observe(this, requiresIdentity -> {
-            if (!requiresIdentity) {
+        viewModel.requiresReasonToContinue().observe(this, requiresReason -> {
+            if (!requiresReason) {
                 dismiss();
             }
         });
@@ -91,11 +91,11 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
 
     @Override
     protected void onBackPressed() {
-        dismiss();
+        viewModel.promptDismissed();
     }
 
     @Override
     protected void onCloseClicked() {
-        dismiss();
+        viewModel.promptDismissed();
     }
 }
