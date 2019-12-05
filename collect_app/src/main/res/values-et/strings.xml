@@ -354,6 +354,8 @@
   <string name="encrypted_form">Krüptitud vorm</string>
   <string name="deleted_form">Kustutatud vorm</string>
   <string name="exit">Välju</string>
+  <string name="select_date">Vali kuupäev</string>
+  <string name="no_date_selected">Kuupäev valimata</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <!--Sms submission-->

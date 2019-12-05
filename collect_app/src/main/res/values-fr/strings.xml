@@ -315,10 +315,16 @@
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">Fonds de carte</string>
+  <string name="basemap_source">Source</string>
+  <string name="map_style_label">style de carte %s</string>
   <string name="streets">Streets</string>
   <string name="terrain">Terrain</string>
   <string name="hybrid">Hybride</string>
   <string name="satellite">Satellite</string>
+  <string name="light">Clair</string>
+  <string name="dark">Foncé</string>
+  <string name="outdoors">En exterieur</string>
+  <string name="topographic">Topographique</string>
   <string name="reference_layer">Couche de référence</string>
   <string name="save_point">Enregistrer le PointGéo</string>
   <string name="get_point">Démarrer le PointGéo</string>
@@ -575,7 +581,18 @@
   <string name="islamic_month_10">Shawwal</string>
   <string name="islamic_month_11">Dhu al-Qidah</string>
   <string name="islamic_month_12">Dhu al-Hijjah</string>
+  <string name="persian_month_1">Farvardin</string>
+  <string name="persian_month_2">Ordibehesht</string>
+  <string name="persian_month_3">Khordad</string>
   <string name="persian_month_4">Ter</string>
+  <string name="persian_month_5">Mordad</string>
+  <string name="persian_month_6">Shahrivar</string>
+  <string name="persian_month_7">Mehr</string>
+  <string name="persian_month_8">Aban</string>
+  <string name="persian_month_9">Azar</string>
+  <string name="persian_month_10">Dey</string>
+  <string name="persian_month_11">Bahman</string>
+  <string name="persian_month_12">Esfand</string>
   <string name="moving_backwards_title">mouvement en recul</string>
   <string name="moving_backwards_disabled_title">mouvement en recul désactivé</string>
   <string name="moving_backwards_disabled_message">Paramétrer le terminal à empêcher les utilisateurs de contourner ce paramètre ? \n\nLes modifications sont:\n\u2022 Désactiver Modifier formulaire sauvegardé\n\u2022 Désactiver sauvegarder le formulaire\n\u2022 Désactiver Aller à la ligne de saisie\n\u2022 Définir le traitement de contrainte au moment de balayage vers l\'avant</string>
@@ -667,4 +684,6 @@
   <string name="reading_files">lecture des fichiers</string>
   <string name="copying_media_files_failed">Echec de la copie des fichiers media</string>
   <string name="qr_code_not_found">Le code QR n\'a pas été trouvé dans l\'image sélectionnée. </string>
+  <string name="not_granted_permission">Vous n\'avez pas les permissions requises pour démarrer l\'activité demandée</string>
+  <string name="close">Fermer</string>
 </resources>

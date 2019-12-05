@@ -1,13 +1,22 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="show_password">მაჩვენე პაროლი</string>
   <string name="activity_not_found">არ არსებობს განსახილველი ფუნქცია: %s</string>
+  <string name="view_image">სურათის ნახვა</string>
+  <string name="annotate_image">სურათის ანოტირება</string>
+  <string name="signature_capture">ხელმოწერა</string>
+  <string name="view_video">ვიდეოს ნახვა</string>
+  <string name="choose_audio">აუდიოჩანაწერის არჩევა</string>
   <string name="add_another">ჯგუფის დამატება</string>
+  <string name="add_another_menu">დამატება</string>
   <string name="add_another_repeat">დავამატოთ \"%s\"-ის ახალი ჯგუფი?</string>
   <string name="add_repeat">დავამატოთ ახალი \"%s\" ჯგუფი?</string>
   <string name="add_repeat_no">არ დაამატო</string>
   <string name="cancel">გაუქმება</string>
   <string name="cancel_loading_form">გაუქმება</string>
   <string name="cancel_location">გაუქმება</string>
+  <string name="canceling">მიმდინარეობს გაუქმება</string>
+  <string name="cannot_edit_completed_form">ფორმის რედაქტირება შეუძლებელია მისი დასრულებულად მონიშვნის შემდეგ. შესაძლოა, ეს ფორმა უკვე დაშიფრული იყოს</string>
   <string name="capture_audio">ხმის ჩაწერა</string>
   <string name="capture_image">ფოტოს გადაღება</string>
   <string name="capture_osm">OpenMapKit-ის ჩართვა</string>
@@ -24,8 +33,8 @@
   <string name="data_saved_error">უკაცრავად, ფორმა ვერ შეინახა!</string>
   <string name="data_saved_ok">ფორმა წარმატებით შეინახა!</string>
   <string name="save_point_error">შეცდომა აღდგენის წერტილის შენახვისას: %s</string>
-  <string name="default_completed">დეფოლტად დასასრულებლად!</string>
-  <string name="default_completed_summary">დეფოლტად აღინიშნოს ფორმა დასრულებოლად</string>
+  <string name="default_completed">ნაგულისხმებია დასრულებულად მონიშვნა</string>
+  <string name="default_completed_summary">ნაგულისხმებია დასრულებულად მონიშვნა</string>
   <string name="delete_confirm">წავშალოთ %s ფორმა?</string>
   <string name="delete_file">არჩეულის წაშლა</string>
   <string name="delete_no">არ წაშალოთ</string>
@@ -37,6 +46,7 @@
   <string name="discard_answer">გამოპასუხების წაშლა</string>
   <string name="discard_group">ჯგუფის მოცილება</string>
   <string name="download">არჩეულის ჩამოტვირთვა</string>
+  <string name="download_forms_result">ჩამოტვირთვის შედეგები</string>
   <string name="downloading_data">სერვერთან დაკავშირება</string>
   <string name="do_not_change">გაუქმება</string>
   <string name="do_not_exit">გაუქმება</string>
@@ -61,6 +71,7 @@
   <string name="get_location">ადგილმდებარეობის ჩანიშვნა</string>
   <string name="provider_disabled_error">უკაცრავად, მდებარეობის მიმღები არ არის გააქტიურებული!</string>
   <string name="invalid_answer_error">უკაცრავად, აღნიშნული პასუხი არ არის დაშვებული!</string>
+  <string name="invalid_space_in_answer_singular">გაფრთხილება: მნიშვნელობა %s შეიცავს გამოტოვებულ ადგილებს </string>
   <string name="jump_to_beginning">დასაწყისში გადასვლა</string>
   <string name="jump_to_end">ბოლოში გადასვლა</string>
   <string name="jump_to_previous">ზევით ასვლა</string>
