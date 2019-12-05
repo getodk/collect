@@ -26,6 +26,7 @@ import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
@@ -56,13 +57,22 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
         return this;
     }
 
-    public OkDialog clickSavedFormWithDialog(String instanceName) {
-        onView(withText(instanceName)).perform(click());
+    public OkDialog clickOnFormWithDialog(String instanceName) {
+        clickOnForm(instanceName);
         return new OkDialog(rule).assertOnPage();
     }
 
     public IdentifyUserPromptPage clickOnFormWithIdentityPrompt(String formName) {
-        onView(withText(formName)).perform(click());
+        scrollToAndClickOnForm(formName);
         return new IdentifyUserPromptPage(formName, rule).assertOnPage();
+    }
+
+    public FormEntryPage clickOnForm(String formName) {
+        scrollToAndClickOnForm(formName);
+        return new FormEntryPage(formName, rule);
+    }
+
+    private void scrollToAndClickOnForm(String formName) {
+        onView(withText(formName)).perform(scrollTo(), click());
     }
 }

@@ -20,7 +20,7 @@ public class IdentityPromptViewModel extends ViewModel {
         updateRequiresIdentity();
     }
 
-    public LiveData<Boolean> requiresIdentity() {
+    public LiveData<Boolean> requiresIdentityToContinue() {
         return requiresIdentity;
     }
 

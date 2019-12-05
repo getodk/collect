@@ -1,10 +1,15 @@
 package org.odk.collect.android.espressoutils.pages;
 
+import android.app.Activity;
+
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.core.internal.deps.guava.collect.Iterables;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
+import androidx.test.runner.lifecycle.Stage;
 
 import org.odk.collect.android.support.actions.RotateAction;
 
@@ -25,6 +30,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.StringContains.containsString;
@@ -72,7 +78,7 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    public T checkIsTranslationDisplayed(String...  text) {
+    public T checkIsTranslationDisplayed(String... text) {
         for (String s : text) {
             try {
                 onView(withText(s)).check(matches(isDisplayed()));
@@ -104,7 +110,7 @@ abstract class Page<T extends Page<T>> {
 
     public T checkIsToastWithMessageDisplayed(String message) {
         onView(withText(message))
-                .inRoot(withDecorView(not(is(rule.getActivity().getWindow().getDecorView()))))
+                .inRoot(withDecorView(not(is(getCurrentActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
 
         return (T) this;
@@ -141,7 +147,7 @@ abstract class Page<T extends Page<T>> {
     }
 
     String getTranslatedString(Integer id) {
-        return rule.getActivity().getString(id);
+        return getCurrentActivity().getString(id);
     }
 
     public T clickOnAreaWithIndex(String clazz, int index) {
@@ -179,7 +185,7 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    public  <D extends Page<D>> D rotateToLandscape(D destination) {
+    public <D extends Page<D>> D rotateToLandscape(D destination) {
         onView(isRoot()).perform(rotateToLandscape());
         waitForRotationToEnd();
 
@@ -198,6 +204,18 @@ abstract class Page<T extends Page<T>> {
         }
 
         return (T) this;
+    }
+
+    private static Activity getCurrentActivity() {
+        getInstrumentation().waitForIdleSync();
+
+        final Activity[] activity = new Activity[1];
+        getInstrumentation().runOnMainSync(() -> {
+            java.util.Collection<Activity> activities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED);
+            activity[0] = Iterables.getOnlyElement(activities);
+        });
+
+        return activity[0];
     }
 }
 

@@ -31,7 +31,7 @@ public class AuditConfigTest {
 
     @Test
     public void testParameters() {
-        AuditConfig auditConfig = new AuditConfig("high-accuracy", "10", "60", true, false);
+        AuditConfig auditConfig = new AuditConfig.Builder().setMode("high-accuracy").setLocationMinInterval("10").setLocationMaxAge("60").setIsTrackingChangesEnabled(true).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
 
         assertTrue(auditConfig.isTrackingChangesEnabled());
         assertTrue(auditConfig.isLocationEnabled());
@@ -39,7 +39,7 @@ public class AuditConfigTest {
         assertEquals(10000, auditConfig.getLocationMinInterval().intValue());
         assertEquals(60000, auditConfig.getLocationMaxAge().intValue());
 
-        auditConfig = new AuditConfig("high-accuracy", "0", "60", false, false);
+        auditConfig = new AuditConfig.Builder().setMode("high-accuracy").setLocationMinInterval("0").setLocationMaxAge("60").setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
 
         assertFalse(auditConfig.isTrackingChangesEnabled());
         assertTrue(auditConfig.isLocationEnabled());
@@ -50,53 +50,53 @@ public class AuditConfigTest {
 
     @Test
     public void logLocationCoordinatesOnlyIfAllParametersAreSet() {
-        AuditConfig auditConfig = new AuditConfig("high-accuracy", "10", "60", false, false);
+        AuditConfig auditConfig = new AuditConfig.Builder().setMode("high-accuracy").setLocationMinInterval("10").setLocationMaxAge("60").setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertTrue(auditConfig.isLocationEnabled());
-        auditConfig = new AuditConfig(null, "10", "60", false, false);
+        auditConfig = new AuditConfig.Builder().setMode(null).setLocationMinInterval("10").setLocationMaxAge("60").setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertFalse(auditConfig.isLocationEnabled());
-        auditConfig = new AuditConfig(null, null, "60", false, false);
+        auditConfig = new AuditConfig.Builder().setMode(null).setLocationMinInterval(null).setLocationMaxAge("60").setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertFalse(auditConfig.isLocationEnabled());
-        auditConfig = new AuditConfig(null, null, null, false, false);
+        auditConfig = new AuditConfig.Builder().setMode(null).setLocationMinInterval(null).setLocationMaxAge(null).setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertFalse(auditConfig.isLocationEnabled());
-        auditConfig = new AuditConfig("balanced", null, null, false, false);
+        auditConfig = new AuditConfig.Builder().setMode("balanced").setLocationMinInterval(null).setLocationMaxAge(null).setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertFalse(auditConfig.isLocationEnabled());
-        auditConfig = new AuditConfig("balanced", "10", null, false, false);
+        auditConfig = new AuditConfig.Builder().setMode("balanced").setLocationMinInterval("10").setLocationMaxAge(null).setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertFalse(auditConfig.isLocationEnabled());
-        auditConfig = new AuditConfig("balanced", null, "60", false, false);
+        auditConfig = new AuditConfig.Builder().setMode("balanced").setLocationMinInterval(null).setLocationMaxAge("60").setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertFalse(auditConfig.isLocationEnabled());
-        auditConfig = new AuditConfig(null, null, "60", false, false);
+        auditConfig = new AuditConfig.Builder().setMode(null).setLocationMinInterval(null).setLocationMaxAge("60").setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertFalse(auditConfig.isLocationEnabled());
     }
 
     @Test
     public void testPriorities() {
-        AuditConfig auditConfig = new AuditConfig("high_accuracy", null, null, false, false);
+        AuditConfig auditConfig = new AuditConfig.Builder().setMode("high_accuracy").setLocationMinInterval(null).setLocationMaxAge(null).setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertEquals(PRIORITY_HIGH_ACCURACY, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("high-accuracy", null, null, false, false);
+        auditConfig = new AuditConfig.Builder().setMode("high-accuracy").setLocationMinInterval(null).setLocationMaxAge(null).setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertEquals(PRIORITY_HIGH_ACCURACY, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("HIGH_ACCURACY", null, null, false, false);
+        auditConfig = new AuditConfig.Builder().setMode("HIGH_ACCURACY").setLocationMinInterval(null).setLocationMaxAge(null).setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertEquals(PRIORITY_HIGH_ACCURACY, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("balanced", null, null, false, false);
+        auditConfig = new AuditConfig.Builder().setMode("balanced").setLocationMinInterval(null).setLocationMaxAge(null).setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertEquals(PRIORITY_BALANCED_POWER_ACCURACY, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("BALANCED", null, null, false, false);
+        auditConfig = new AuditConfig.Builder().setMode("BALANCED").setLocationMinInterval(null).setLocationMaxAge(null).setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertEquals(PRIORITY_BALANCED_POWER_ACCURACY, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("low_power", null, null, false, false);
+        auditConfig = new AuditConfig.Builder().setMode("low_power").setLocationMinInterval(null).setLocationMaxAge(null).setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertEquals(PRIORITY_LOW_POWER, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("low-power", null, null, false, false);
+        auditConfig = new AuditConfig.Builder().setMode("low-power").setLocationMinInterval(null).setLocationMaxAge(null).setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertEquals(PRIORITY_LOW_POWER, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("low_POWER", null, null, false, false);
+        auditConfig = new AuditConfig.Builder().setMode("low_POWER").setLocationMinInterval(null).setLocationMaxAge(null).setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertEquals(PRIORITY_LOW_POWER, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("no_power", null, null, false, false);
+        auditConfig = new AuditConfig.Builder().setMode("no_power").setLocationMinInterval(null).setLocationMaxAge(null).setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertEquals(PRIORITY_NO_POWER, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("no-power", null, null, false, false);
+        auditConfig = new AuditConfig.Builder().setMode("no-power").setLocationMinInterval(null).setLocationMaxAge(null).setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertEquals(PRIORITY_NO_POWER, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("NO_power", null, null, false, false);
+        auditConfig = new AuditConfig.Builder().setMode("NO_power").setLocationMinInterval(null).setLocationMaxAge(null).setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertEquals(PRIORITY_NO_POWER, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("qwerty", null, null, false, false);
+        auditConfig = new AuditConfig.Builder().setMode("qwerty").setLocationMinInterval(null).setLocationMaxAge(null).setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertEquals(PRIORITY_HIGH_ACCURACY, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig("", null, null, false, false);
+        auditConfig = new AuditConfig.Builder().setMode("").setLocationMinInterval(null).setLocationMaxAge(null).setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertEquals(PRIORITY_HIGH_ACCURACY, auditConfig.getLocationPriority());
-        auditConfig = new AuditConfig(null, null, null, false, false);
+        auditConfig = new AuditConfig.Builder().setMode(null).setLocationMinInterval(null).setLocationMaxAge(null).setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
         assertNull(auditConfig.getLocationPriority());
     }
 }

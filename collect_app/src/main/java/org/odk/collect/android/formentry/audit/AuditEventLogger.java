@@ -39,6 +39,8 @@ public class AuditEventLogger {
     private final AuditConfig auditConfig;
     private final FormController formController;
     private String user;
+    private boolean changesMade;
+    private boolean editing;
 
     public AuditEventLogger(AuditConfig auditConfig, AuditEventWriter writer, FormController formController) {
         this.auditConfig = auditConfig;
@@ -47,14 +49,14 @@ public class AuditEventLogger {
     }
 
     public void logEvent(AuditEvent.AuditEventType eventType, boolean writeImmediatelyToDisk, long currentTime) {
-        logEvent(eventType, null, writeImmediatelyToDisk, null, currentTime);
+        logEvent(eventType, null, writeImmediatelyToDisk, null, currentTime, null);
     }
 
     /*
      * Log a new event
      */
     public void logEvent(AuditEvent.AuditEventType eventType, FormIndex formIndex,
-                         boolean writeImmediatelyToDisk, String questionAnswer, long currentTime) {
+                         boolean writeImmediatelyToDisk, String questionAnswer, long currentTime, String changeReason) {
         if (!isAuditEnabled() || shouldBeIgnored(eventType)) {
             return;
         }
@@ -64,11 +66,10 @@ public class AuditEventLogger {
         AuditEvent newAuditEvent = new AuditEvent(
                 getEventTime(),
                 eventType,
-                auditConfig.isLocationEnabled(),
-                auditConfig.isTrackingChangesEnabled(),
                 formIndex,
                 questionAnswer,
-                user
+                user,
+                changeReason
         );
 
         if (isDuplicatedIntervalEvent(newAuditEvent)) {
@@ -83,7 +84,7 @@ public class AuditEventLogger {
          * Close any existing interval events if the view is being exited
          */
         if (eventType == AuditEvent.AuditEventType.FORM_EXIT) {
-            manageSavedEvents();
+            finalizeEvents();
         }
 
         auditEvents.add(newAuditEvent);
@@ -106,7 +107,11 @@ public class AuditEventLogger {
 
     private void addNewValueToQuestionAuditEvent(AuditEvent aev, FormController formController) {
         IAnswerData answerData = formController.getQuestionPrompt(aev.getFormIndex()).getAnswerValue();
-        aev.recordValueChange(answerData != null ? answerData.getDisplayText() : null);
+        boolean valueChanged = aev.recordValueChange(answerData != null ? answerData.getDisplayText() : null);
+
+        if (valueChanged) {
+            this.changesMade = true;
+        }
     }
 
     // If location provider are enabled/disabled it sometimes fires the BroadcastReceiver multiple
@@ -139,13 +144,13 @@ public class AuditEventLogger {
      */
     public void exitView() {
         if (isAuditEnabled()) {
-            manageSavedEvents();
+            finalizeEvents();
             writeEvents();
         }
     }
 
     // Filter all events and set final parameters of interval events
-    private void manageSavedEvents() {
+    private void finalizeEvents() {
         // Calculate the time and add the event to the auditEvents array
         long end = getEventTime();
         ArrayList<AuditEvent> filteredAuditEvents = new ArrayList<>();
@@ -276,6 +281,22 @@ public class AuditEventLogger {
 
     public String getUser() {
         return user;
+    }
+
+    public boolean isChangeReasonRequired() {
+        return auditConfig != null && auditConfig.isTrackChangesReasonEnabled();
+    }
+
+    public boolean isChangesMade() {
+        return changesMade;
+    }
+
+    public void setEditing(boolean editing) {
+        this.editing = editing;
+    }
+
+    public boolean isEditing() {
+        return editing;
     }
 
     public interface AuditEventWriter {

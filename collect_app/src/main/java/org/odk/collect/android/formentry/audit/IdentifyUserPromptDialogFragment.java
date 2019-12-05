@@ -1,27 +1,21 @@
 package org.odk.collect.android.formentry.audit;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
 
-public class IdentifyUserPromptDialogFragment extends DialogFragment {
+public class IdentifyUserPromptDialogFragment extends MaterialFullScreenDialogFragment {
 
     public static final String TAG = "IdentifyUserPromptDialogFragment";
     private static final String ARG_FORM_NAME = "ArgFormName";
@@ -47,16 +41,7 @@ public class IdentifyUserPromptDialogFragment extends DialogFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle(getArguments().getString(ARG_FORM_NAME));
-        toolbar.setNavigationOnClickListener(v -> {
-            dismiss();
-            viewModel.promptDismissed();
-        });
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
-            view.findViewById(R.id.action_bar_shadow).setVisibility(View.VISIBLE);
-        }
+        getToolbar().setTitle(getArguments().getString(ARG_FORM_NAME));
 
         EditText identityField = view.findViewById(R.id.identity);
         identityField.setText(viewModel.getUser());
@@ -91,7 +76,7 @@ public class IdentifyUserPromptDialogFragment extends DialogFragment {
         super.onAttach(context);
 
         viewModel = ViewModelProviders.of(requireActivity()).get(IdentityPromptViewModel.class);
-        viewModel.requiresIdentity().observe(this, requiresIdentity -> {
+        viewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
             if (!requiresIdentity) {
                 dismiss();
             }
@@ -99,34 +84,14 @@ public class IdentifyUserPromptDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.Theme_Collect_Dialog_FullScreen);
+    protected void onCloseClicked() {
+        dismiss();
+        viewModel.promptDismissed();
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-        Dialog dialog = getDialog();
-        if (dialog != null) {
-            int width = ViewGroup.LayoutParams.MATCH_PARENT;
-            int height = ViewGroup.LayoutParams.MATCH_PARENT;
-            dialog.getWindow().setLayout(width, height);
-
-            // Make sure soft keyboard shows for focused field - annoyingly needed
-            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-
-            setCancelable(false);
-            dialog.setOnKeyListener((dialogInterface, keyCode, event) -> {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    dialogInterface.dismiss();
-                    viewModel.promptDismissed();
-                    return true;
-                } else {
-                    return false;
-                }
-            });
-        }
+    protected void onBackPressed() {
+        dismiss();
+        viewModel.promptDismissed();
     }
 }

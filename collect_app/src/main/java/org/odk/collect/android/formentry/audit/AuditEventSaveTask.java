@@ -13,6 +13,8 @@ import java.io.IOException;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.formentry.audit.AuditEventCSVLine.toCSVLine;
+
 /**
  * Background task for appending events to the event log
  */
@@ -22,17 +24,20 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
     private final boolean isLocationEnabled;
     private final boolean isTrackingChangesEnabled;
     private final boolean isUserRequired;
+    private final boolean isTrackChangesReasonEnabled;
 
     private static final String DEFAULT_COLUMNS = "event,node,start,end";
     private static final String LOCATION_COORDINATES_COLUMNS = ",latitude,longitude,accuracy";
     private static final String ANSWER_VALUES_COLUMNS = ",old-value,new-value";
     private static final String USER_COLUMNS = ",user";
+    private static final String CHANGE_REASON_COLUMNS = ",change-reason";
 
-    public AuditEventSaveTask(@NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled, boolean isUserRequired) {
+    public AuditEventSaveTask(@NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled, boolean isUserRequired, boolean isTrackChangesReasonEnabled) {
         this.file = file;
         this.isLocationEnabled = isLocationEnabled;
         this.isTrackingChangesEnabled = isTrackingChangesEnabled;
         this.isUserRequired = isUserRequired;
+        this.isTrackChangesReasonEnabled = isTrackChangesReasonEnabled;
     }
 
     @Override
@@ -49,8 +54,9 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
             }
             if (params.length > 0) {
                 for (AuditEvent aev : params) {
-                    fw.write(aev.toString() + "\n");
-                    Timber.i("Log audit event: %s", aev.toString());
+                    String csvLine = toCSVLine(aev, isLocationEnabled, isTrackingChangesEnabled, isTrackChangesReasonEnabled);
+                    fw.write(csvLine + "\n");
+                    Timber.i("Log audit event: %s", csvLine);
                 }
             }
         } catch (IOException e) {
@@ -124,6 +130,9 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
         }
         if (isUserRequired) {
             header += USER_COLUMNS;
+        }
+        if (isTrackChangesReasonEnabled) {
+            header += CHANGE_REASON_COLUMNS;
         }
         return header;
     }

@@ -14,18 +14,20 @@ public class AsyncTaskAuditEventWriter implements AuditEventLogger.AuditEventWri
     private final boolean isLocationEnabled;
     private final boolean isTrackingChangesEnabled;
     private final boolean isUserRequired;
+    private final boolean isTrackChangesReasonEnabled;
 
-    public AsyncTaskAuditEventWriter(@NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled, boolean isUserRequired) {
+    public AsyncTaskAuditEventWriter(@NonNull File file, boolean isLocationEnabled, boolean isTrackingChangesEnabled, boolean isUserRequired, boolean isTrackChangesReasonEnabled) {
         this.file = file;
         this.isLocationEnabled = isLocationEnabled;
         this.isTrackingChangesEnabled = isTrackingChangesEnabled;
         this.isUserRequired = isUserRequired;
+        this.isTrackChangesReasonEnabled = isTrackChangesReasonEnabled;
     }
 
     @Override
     public void writeEvents(List<AuditEvent> auditEvents) {
         AuditEvent[] auditEventArray = auditEvents.toArray(new AuditEvent[0]);
-        saveTask = new AuditEventSaveTask(file, isLocationEnabled, isTrackingChangesEnabled, isUserRequired).execute(auditEventArray);
+        saveTask = new AuditEventSaveTask(file, isLocationEnabled, isTrackingChangesEnabled, isUserRequired, isTrackChangesReasonEnabled).execute(auditEventArray);
     }
 
     @Override

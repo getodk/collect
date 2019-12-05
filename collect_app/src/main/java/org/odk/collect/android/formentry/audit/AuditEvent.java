@@ -19,14 +19,9 @@ package org.odk.collect.android.formentry.audit;
 import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
-import org.odk.collect.android.utilities.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import timber.log.Timber;
+import static org.odk.collect.android.utilities.CSVUtils.getEscapedValueForCsv;
 
 public class AuditEvent {
 
@@ -63,6 +58,8 @@ public class AuditEvent {
         CONSTRAINT_ERROR("constraint error"),
         // Delete a repeat group
         DELETE_REPEAT("delete repeat"),
+
+        CHANGE_REASON("change reason"),
 
         // Google Play Services are not available
         GOOGLE_PLAY_SERVICES_NOT_AVAILABLE("google play services not available", true, false, true),
@@ -130,34 +127,28 @@ public class AuditEvent {
     @NonNull
     private String oldValue;
     private String user;
+    private final String changeReason;
     @NonNull
     private String newValue = "";
     private long end;
     private boolean endTimeSet;
-    private boolean isTrackingLocationsEnabled;
-    private boolean isTrackingChangesEnabled;
     private FormIndex formIndex;
 
     /*
      * Create a new event
      */
     public AuditEvent(long start, AuditEventType auditEventType) {
-        this(start, auditEventType, false, false, null, null, null);
+        this(start, auditEventType, null, null, null, null);
     }
 
-    public AuditEvent(long start, AuditEventType auditEventType, boolean isTrackingLocationsEnabled, boolean isTrackingChangesEnabled) {
-        this(start, auditEventType, isTrackingLocationsEnabled, isTrackingChangesEnabled, null, null, null);
-    }
-
-    public AuditEvent(long start, AuditEventType auditEventType, boolean isTrackingLocationsEnabled,
-                      boolean isTrackingChangesEnabled, FormIndex formIndex, String oldValue, String user) {
+    public AuditEvent(long start, AuditEventType auditEventType,
+                      FormIndex formIndex, String oldValue, String user, String changeReason) {
         this.start = start;
         this.auditEventType = auditEventType;
-        this.isTrackingLocationsEnabled = isTrackingLocationsEnabled;
-        this.isTrackingChangesEnabled = isTrackingChangesEnabled;
         this.formIndex = formIndex;
         this.oldValue = oldValue == null ? "" : oldValue;
         this.user = user;
+        this.changeReason = changeReason;
     }
 
     /**
@@ -207,14 +198,14 @@ public class AuditEvent {
         this.user = user;
     }
 
-    public void recordValueChange(String newValue) {
+    public boolean recordValueChange(String newValue) {
         this.newValue = newValue != null ? newValue : "";
 
         // Clear values if they are equal
         if (this.oldValue.equals(this.newValue)) {
             this.oldValue = "";
             this.newValue = "";
-            return;
+            return false;
         }
 
         if (oldValue.contains(",") || oldValue.contains("\n")) {
@@ -224,34 +215,12 @@ public class AuditEvent {
         if (this.newValue.contains(",") || this.newValue.contains("\n")) {
             this.newValue = getEscapedValueForCsv(this.newValue);
         }
+
+        return true;
     }
 
-    /*
-     * convert the event into a record to write to the CSV file
-     */
-    @NonNull
-    public String toString() {
-        String node = formIndex == null || formIndex.getReference() == null ? "" : getXPathPath(formIndex);
-
-        String string = String.format("%s,%s,%s,%s", auditEventType.getValue(), node, start, end != 0 ? end : "");
-
-        if (isTrackingLocationsEnabled) {
-            string += String.format(",%s,%s,%s", latitude, longitude, accuracy);
-        }
-
-        if (isTrackingChangesEnabled) {
-            string += String.format(",%s,%s", oldValue, newValue);
-        }
-
-        if (user != null) {
-            if (user.contains(",") || user.contains("\n")) {
-                string += String.format(",%s", getEscapedValueForCsv(user));
-            } else {
-                string += String.format(",%s", user);
-            }
-        }
-
-        return string;
+    public String getChangeReason() {
+        return changeReason;
     }
 
     public String getLatitude() {
@@ -268,6 +237,24 @@ public class AuditEvent {
 
     public String getUser() {
         return user;
+    }
+
+    public long getStart() {
+        return start;
+    }
+
+    @NonNull
+    public String getOldValue() {
+        return oldValue;
+    }
+
+    @NonNull
+    public String getNewValue() {
+        return newValue;
+    }
+
+    public long getEnd() {
+        return end;
     }
 
     // Get event type based on a Form Controller event
@@ -293,51 +280,5 @@ public class AuditEvent {
                 auditEventType = AuditEventType.UNKNOWN_EVENT_TYPE;
         }
         return auditEventType;
-    }
-
-    /**
-     * Escapes quotes and then wraps in quotes for output to CSV.
-     */
-    private String getEscapedValueForCsv(String value) {
-        if (value.contains("\"")) {
-            value = value.replaceAll("\"", "\"\"");
-        }
-
-        return "\"" + value + "\"";
-    }
-
-    /**
-     * Get the XPath path of the node at a particular {@link FormIndex}.
-     * <p>
-     * Differs from {@link TreeReference#toString()} in that position predicates are only
-     * included for repeats. For example, given a group named {@code my-group} that contains a
-     * repeat named {@code my-repeat} which in turn contains a question named {@code my-question},
-     * {@link TreeReference#toString()} would return paths that look like
-     * {@code /my-group[1]/my-repeat[3]/my-question[1]}. In contrast, this method would return
-     * {@code /my-group/my-repeat[3]/my-question}.
-     * <p>
-     * TODO: consider moving to {@link FormIndex}
-     */
-    private static String getXPathPath(FormIndex formIndex) {
-        List<String> nodeNames = new ArrayList<>();
-        nodeNames.add(formIndex.getReference().getName(0));
-
-        FormIndex walker = formIndex;
-        int i = 1;
-        while (walker != null) {
-            try {
-                String currentNodeName = formIndex.getReference().getName(i);
-                if (walker.getInstanceIndex() != -1) {
-                    currentNodeName = currentNodeName + "[" + (walker.getInstanceIndex() + 1) + "]";
-                }
-                nodeNames.add(currentNodeName);
-            } catch (IndexOutOfBoundsException e) {
-                Timber.i(e);
-            }
-
-            walker = walker.getNextLevel();
-            i++;
-        }
-        return "/" + StringUtils.join("/", nodeNames);
     }
 }

@@ -31,21 +31,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:tint="?colorOnSurface"
-                    app:srcCompat="@drawable/ic_person_black_24dp" />
+                    app:srcCompat="@drawable/ic_chat_bubble_black_24dp" />
 
                 <TextView
                     style="@style/TextAppearance.Collect.Headline6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_standard"
-                    android:text="@string/enter_identity" />
+                    android:text="@string/reason_for_changes" />
 
                 <TextView
                     style="@style/TextAppearance.Collect.Body1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
-                    android:text="@string/enter_identity_description" />
+                    android:text="@string/reason_for_changes_description"
+                    android:textAlignment="center" />
 
             </LinearLayout>
 
@@ -57,14 +58,11 @@
                 android:theme="@style/Theme.Collect.MaterialComponents.Polyfill">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/identity"
+                    android:id="@+id/reason"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/identity"
-                    android:imeOptions="actionDone"
-                    android:inputType="text"
-                    android:lines="1"
-                    android:saveEnabled="false" />
+                    android:hint="@string/reason"
+                    android:inputType="textMultiLine" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

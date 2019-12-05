@@ -52,13 +52,15 @@ public class AuditConfig {
     private final boolean isTrackingChangesEnabled;
 
     private final boolean isIdentifyUserEnabled;
+    private final boolean isTrackChangesReasonEnabled;
 
-    public AuditConfig(String mode, String locationMinInterval, String locationMaxAge, boolean isTrackingChangesEnabled, boolean isIdentifyUserEnabled) {
+    public AuditConfig(String mode, String locationMinInterval, String locationMaxAge, boolean isTrackingChangesEnabled, boolean isIdentifyUserEnabled, boolean isTrackChangesReasonEnabled) {
         this.locationPriority = mode != null ? getMode(mode) : null;
         this.locationMinInterval = locationMinInterval != null ? Long.parseLong(locationMinInterval) * 1000 : null;
         this.locationMaxAge = locationMaxAge != null ? Long.parseLong(locationMaxAge) * 1000 : null;
         this.isTrackingChangesEnabled = isTrackingChangesEnabled;
         this.isIdentifyUserEnabled = isIdentifyUserEnabled;
+        this.isTrackChangesReasonEnabled = isTrackChangesReasonEnabled;
     }
 
     private LocationClient.Priority getMode(@NonNull String mode) {
@@ -105,5 +107,52 @@ public class AuditConfig {
 
     public boolean isIdentifyUserEnabled() {
         return isIdentifyUserEnabled;
+    }
+
+    public boolean isTrackChangesReasonEnabled() {
+        return isTrackChangesReasonEnabled;
+    }
+
+    public static class Builder {
+        private String mode;
+        private String locationMinInterval;
+        private String locationMaxAge;
+        private boolean isTrackingChangesEnabled;
+        private boolean isIdentifyUserEnabled;
+        private boolean isTrackChangesReasonEnabled;
+
+        public Builder setMode(String mode) {
+            this.mode = mode;
+            return this;
+        }
+
+        public Builder setLocationMinInterval(String locationMinInterval) {
+            this.locationMinInterval = locationMinInterval;
+            return this;
+        }
+
+        public Builder setLocationMaxAge(String locationMaxAge) {
+            this.locationMaxAge = locationMaxAge;
+            return this;
+        }
+
+        public Builder setIsTrackingChangesEnabled(boolean isTrackingChangesEnabled) {
+            this.isTrackingChangesEnabled = isTrackingChangesEnabled;
+            return this;
+        }
+
+        public Builder setIsIdentifyUserEnabled(boolean isIdentifyUserEnabled) {
+            this.isIdentifyUserEnabled = isIdentifyUserEnabled;
+            return this;
+        }
+
+        public Builder setIsTrackChangesReasonEnabled(boolean isTrackChangesReasonEnabled) {
+            this.isTrackChangesReasonEnabled = isTrackChangesReasonEnabled;
+            return this;
+        }
+
+        public AuditConfig createAuditConfig() {
+            return new AuditConfig(mode, locationMinInterval, locationMaxAge, isTrackingChangesEnabled, isIdentifyUserEnabled, isTrackChangesReasonEnabled);
+        }
     }
 }

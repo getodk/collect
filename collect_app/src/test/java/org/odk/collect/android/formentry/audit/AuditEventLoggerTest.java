@@ -34,6 +34,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.BEGINNING_OF_FORM;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.CHANGE_REASON;
 import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.CONSTRAINT_ERROR;
 import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.DELETE_REPEAT;
 import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.END_OF_FORM;
@@ -60,9 +61,9 @@ import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.
 public class AuditEventLoggerTest {
 
     // All values are set so location coordinates should be collected
-    private final AuditConfig testAuditConfig = new AuditConfig("high-priority", "10", "60", false, false);
+    private final AuditConfig testAuditConfig = new AuditConfig.Builder().setMode("high-priority").setLocationMinInterval("10").setLocationMaxAge("60").setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
     // At least one value is not set so location coordinates shouldn't be collected
-    private final AuditConfig testAuditConfigWithNullValues = new AuditConfig("high-priority", "10", null, false, false);
+    private final AuditConfig testAuditConfigWithNullValues = new AuditConfig.Builder().setMode("high-priority").setLocationMinInterval("10").setLocationMaxAge(null).setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(false).createAuditConfig();
 
     private final TestWriter testWriter = new TestWriter();
     private final FormController formController = mock(FormController.class);
@@ -184,13 +185,23 @@ public class AuditEventLoggerTest {
 
     @Test
     public void withUserSet_addsUserToEvents() {
-        AuditEventLogger auditEventLogger = new AuditEventLogger(new AuditConfig(null, null, null, false, true), testWriter, formController);
+        AuditEventLogger auditEventLogger = new AuditEventLogger(new AuditConfig.Builder().setMode(null).setLocationMinInterval(null).setLocationMaxAge(null).setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(true).setIsTrackChangesReasonEnabled(false).createAuditConfig(), testWriter, formController);
         auditEventLogger.setUser("Riker");
 
         auditEventLogger.logEvent(END_OF_FORM, false, 0);
         auditEventLogger.exitView(); // Triggers event writing
 
         assertEquals("Riker", testWriter.auditEvents.get(0).getUser());
+    }
+
+    @Test
+    public void logEvent_WithChangeReason_addsChangeReasonToEvent() {
+        AuditEventLogger auditEventLogger = new AuditEventLogger(new AuditConfig.Builder().setMode(null).setLocationMinInterval(null).setLocationMaxAge(null).setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(true).createAuditConfig(), testWriter, formController);
+
+        auditEventLogger.logEvent(CHANGE_REASON, null, false, null, 123L, "Blah");
+        auditEventLogger.exitView(); // Triggers event writing
+
+        assertEquals("Blah", testWriter.auditEvents.get(0).getChangeReason());
     }
 
     @Test

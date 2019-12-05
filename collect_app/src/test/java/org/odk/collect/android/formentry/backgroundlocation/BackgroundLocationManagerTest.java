@@ -10,9 +10,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.location.LocationTestUtils;
 import org.odk.collect.android.location.client.FakeLocationClient;
-import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.robolectric.RobolectricTestRunner;
 
@@ -132,7 +132,14 @@ public class BackgroundLocationManagerTest {
         when(locationHelper.arePlayServicesAvailable()).thenReturn(true);
         when(locationHelper.isBackgroundLocationPreferenceEnabled()).thenReturn(true);
         when(locationHelper.isAndroidLocationPermissionGranted()).thenReturn(true);
-        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo",  "2", "3", true, false));
+        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig.Builder()
+                .setMode("foo")
+                .setLocationMinInterval("2")
+                .setLocationMaxAge("3")
+                .setIsTrackingChangesEnabled(true)
+                .setIsIdentifyUserEnabled(false)
+                .setIsTrackChangesReasonEnabled(false)
+                .createAuditConfig());
 
         backgroundLocationManager.formFinishedLoading();
         backgroundLocationManager.activityDisplayed();
@@ -198,7 +205,14 @@ public class BackgroundLocationManagerTest {
         when(locationHelper.arePlayServicesAvailable()).thenReturn(true);
         when(locationHelper.isBackgroundLocationPreferenceEnabled()).thenReturn(true);
         when(locationHelper.isAndroidLocationPermissionGranted()).thenReturn(true);
-        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo",  "2", "3", true, false));
+        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig.Builder()
+                .setMode("foo")
+                .setLocationMinInterval("2")
+                .setLocationMaxAge("3")
+                .setIsTrackingChangesEnabled(true)
+                .setIsIdentifyUserEnabled(false)
+                .setIsTrackChangesReasonEnabled(false)
+                .createAuditConfig());
 
         fakeLocationClient.setLocationAvailable(false);
 
@@ -228,7 +242,14 @@ public class BackgroundLocationManagerTest {
         when(locationHelper.arePlayServicesAvailable()).thenReturn(true);
         when(locationHelper.isBackgroundLocationPreferenceEnabled()).thenReturn(true);
         when(locationHelper.isAndroidLocationPermissionGranted()).thenReturn(true);
-        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo", "2", "3", true, false));
+        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig.Builder()
+                .setMode("foo")
+                .setLocationMinInterval("2")
+                .setLocationMaxAge("3")
+                .setIsTrackingChangesEnabled(true)
+                .setIsIdentifyUserEnabled(false)
+                .setIsTrackChangesReasonEnabled(false)
+                .createAuditConfig());
 
         backgroundLocationManager.formFinishedLoading();
         backgroundLocationManager.activityDisplayed();
@@ -266,7 +287,14 @@ public class BackgroundLocationManagerTest {
         when(locationHelper.arePlayServicesAvailable()).thenReturn(true);
         when(locationHelper.isBackgroundLocationPreferenceEnabled()).thenReturn(true);
         when(locationHelper.isAndroidLocationPermissionGranted()).thenReturn(true);
-        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo", "2", "3", true, false));
+        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig.Builder()
+                .setMode("foo")
+                .setLocationMinInterval("2")
+                .setLocationMaxAge("3")
+                .setIsTrackingChangesEnabled(true)
+                .setIsIdentifyUserEnabled(false)
+                .setIsTrackChangesReasonEnabled(false)
+                .createAuditConfig());
 
         backgroundLocationManager.formFinishedLoading();
         backgroundLocationManager.activityDisplayed();
@@ -299,7 +327,14 @@ public class BackgroundLocationManagerTest {
         when(locationHelper.arePlayServicesAvailable()).thenReturn(true);
         when(locationHelper.isBackgroundLocationPreferenceEnabled()).thenReturn(true);
         when(locationHelper.isAndroidLocationPermissionGranted()).thenReturn(false);
-        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo", "2", "3", true, false));
+        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig.Builder()
+                .setMode("foo")
+                .setLocationMinInterval("2")
+                .setLocationMaxAge("3")
+                .setIsTrackingChangesEnabled(true)
+                .setIsIdentifyUserEnabled(false)
+                .setIsTrackChangesReasonEnabled(false)
+                .createAuditConfig());
 
         backgroundLocationManager.formFinishedLoading();
         backgroundLocationManager.activityDisplayed();
@@ -327,7 +362,14 @@ public class BackgroundLocationManagerTest {
         when(locationHelper.arePlayServicesAvailable()).thenReturn(true);
         when(locationHelper.isBackgroundLocationPreferenceEnabled()).thenReturn(true);
         when(locationHelper.isAndroidLocationPermissionGranted()).thenReturn(true);
-        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo", "2", "3", true, false));
+        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig.Builder()
+                .setMode("foo")
+                .setLocationMinInterval("2")
+                .setLocationMaxAge("3")
+                .setIsTrackingChangesEnabled(true)
+                .setIsIdentifyUserEnabled(false)
+                .setIsTrackChangesReasonEnabled(false)
+                .createAuditConfig());
 
         backgroundLocationManager.formFinishedLoading();
         backgroundLocationManager.activityDisplayed();
@@ -363,7 +405,14 @@ public class BackgroundLocationManagerTest {
         when(locationHelper.arePlayServicesAvailable()).thenReturn(true);
         when(locationHelper.isBackgroundLocationPreferenceEnabled()).thenReturn(true);
         when(locationHelper.isAndroidLocationPermissionGranted()).thenReturn(true);
-        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo", "2", "3", true, false));
+        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig.Builder()
+                .setMode("foo")
+                .setLocationMinInterval("2")
+                .setLocationMaxAge("3")
+                .setIsTrackingChangesEnabled(true)
+                .setIsIdentifyUserEnabled(false)
+                .setIsTrackChangesReasonEnabled(false)
+                .createAuditConfig());
 
         backgroundLocationManager.formFinishedLoading();
 
@@ -424,7 +473,14 @@ public class BackgroundLocationManagerTest {
         when(locationHelper.arePlayServicesAvailable()).thenReturn(true);
         when(locationHelper.isBackgroundLocationPreferenceEnabled()).thenReturn(true);
         when(locationHelper.isAndroidLocationPermissionGranted()).thenReturn(true);
-        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig("foo", "2", "3", true, false));
+        when(locationHelper.getCurrentFormAuditConfig()).thenReturn(new AuditConfig.Builder()
+                .setMode("foo")
+                .setLocationMinInterval("2")
+                .setLocationMaxAge("3")
+                .setIsTrackingChangesEnabled(true)
+                .setIsIdentifyUserEnabled(false)
+                .setIsTrackChangesReasonEnabled(false)
+                .createAuditConfig());
 
         backgroundLocationManager.activityDisplayed();
 
