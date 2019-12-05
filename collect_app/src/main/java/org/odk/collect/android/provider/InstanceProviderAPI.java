@@ -51,5 +51,7 @@ public final class InstanceProviderAPI {
         public static final String CAN_EDIT_WHEN_COMPLETE = "canEditWhenComplete";
         public static final String LAST_STATUS_CHANGE_DATE = "date";
         public static final String DELETED_DATE = "deletedDate";
+        public static final String GEOMETRY = "geometry";
+        public static final String GEOMETRY_TYPE = "geometryType";
     }
 }

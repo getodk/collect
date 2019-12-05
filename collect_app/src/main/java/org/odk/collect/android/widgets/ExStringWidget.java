@@ -108,7 +108,7 @@ public class ExStringWidget extends StringWidget implements BinaryWidget {
     }
 
     @Override
-    protected void setUpLayout() {
+    protected void setUpLayout(Context context) {
         answerText.setText(getFormEntryPrompt().getAnswerText());
         launchIntentButton = getSimpleButton(getButtonText());
 

@@ -6,8 +6,6 @@ import androidx.test.rule.ActivityTestRule;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.ActivityHelpers;
 
-import timber.log.Timber;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
@@ -50,6 +48,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public MainMenuPage clickSaveAndExit() {
         onView(withId(R.id.save_exit_button)).perform(click());
         return new MainMenuPage(rule).assertOnPage();
+    }
+
+    public FormMapPage clickSaveAndExitBackToMap() {
+        onView(withId(R.id.save_exit_button)).perform(click());
+        return new FormMapPage(rule).assertOnPage();
     }
 
     public FormEntryPage clickSaveAndExitWithError() {
@@ -100,7 +103,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage clickGoToIconInForm() {
+    public FormEntryPage clickGoToArrow() {
         onView(withId(R.id.menu_goto)).perform(click());
         return this;
     }
@@ -110,27 +113,8 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage clickSignatureButton() {
+    public FormEntryPage clickWidgetButton() {
         onView(withId(R.id.simple_button)).perform(click());
-        return this;
-    }
-
-    public FormEntryPage waitForRotationToEnd() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            Timber.i(e);
-        }
-        return this;
-    }
-
-    public FormEntryPage clickIgnoreChanges() {
-        onView(withText(getInstrumentation().getTargetContext().getString(R.string.do_not_save))).perform(click());
-        return this;
-    }
-
-    public FormEntryPage simplePressBack() {
-        Espresso.pressBack();
         return this;
     }
 
@@ -167,7 +151,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage clickJumpStartButton() {
+    public FormEntryPage clickGoToStart() {
         onView(withId(R.id.jumpBeginningButton)).perform(click());
         return this;
     }
@@ -202,4 +186,13 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    public ChangesReasonPromptPage clickSaveAndExitWithChangesReasonPrompt() {
+        onView(withId(R.id.save_exit_button)).perform(click());
+        return new ChangesReasonPromptPage(formName, rule).assertOnPage();
+    }
+
+    public ChangesReasonPromptPage clickSaveWithChangesReasonPrompt() {
+        onView(withId(R.id.menu_save)).perform(click());
+        return new ChangesReasonPromptPage(formName, rule).assertOnPage();
+    }
 }

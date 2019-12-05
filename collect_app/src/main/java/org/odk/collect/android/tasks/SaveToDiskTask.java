@@ -19,10 +19,26 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import androidx.annotation.NonNull;
+
+import org.javarosa.core.model.condition.EvaluationContext;
+import org.javarosa.core.model.data.GeoPointData;
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.instance.FormInstance;
+import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryController;
+import org.javarosa.xpath.XPathException;
+import org.javarosa.xpath.XPathNodeset;
+import org.javarosa.xpath.XPathParseTool;
+import org.javarosa.xpath.expr.XPathExpression;
+import org.javarosa.xpath.parser.XPathSyntaxException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.listeners.FormSavedListener;
@@ -144,10 +160,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     }
 
     private void updateInstanceDatabase(boolean incomplete, boolean canEditAfterCompleted) {
-
-        FormController formController = Collect.getInstance().getFormController();
-
-        // Update the instance database...
         ContentValues values = new ContentValues();
         if (instanceName != null) {
             values.put(InstanceColumns.DISPLAY_NAME, instanceName);
@@ -157,14 +169,22 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         } else {
             values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
         }
-        // update this whether or not the status is complete...
         values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(canEditAfterCompleted));
 
-        // If FormEntryActivity was started with an Instance, just update that instance
+        FormController formController = Collect.getInstance().getFormController();
+        FormInstance formInstance = formController.getFormDef().getInstance();
+
+        // If FormEntryActivity was started with an instance, update that instance
         if (Collect.getInstance().getContentResolver().getType(uri).equals(
                 InstanceColumns.CONTENT_ITEM_TYPE)) {
-            int updated = Collect.getInstance().getContentResolver().update(uri, values, null,
-                    null);
+            String geometryXpath = getGeometryXpathForInstance(uri);
+            ContentValues geometryContentValues = extractGeometryContentValues(formInstance, geometryXpath);
+            if (geometryContentValues != null) {
+                values.putAll(geometryContentValues);
+            }
+
+            int updated = Collect.getInstance().getContentResolver().update(
+                uri, values, null, null);
             if (updated > 1) {
                 Timber.w("Updated more than one entry, that's not good: %s", uri.toString());
             } else if (updated == 1) {
@@ -192,12 +212,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 // already existed and updated just fine
             } else {
                 Timber.i("No instance found, creating");
-                // Entry didn't exist, so create it.
-                Cursor c = null;
-                try {
+                try (Cursor c = Collect.getInstance().getContentResolver().query(uri, null, null, null, null)) {
                     // retrieve the form definition...
-                    c = Collect.getInstance().getContentResolver().query(uri, null, null, null,
-                            null);
                     c.moveToFirst();
                     String formname = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
                     String submissionUri = null;
@@ -217,14 +233,84 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                     String jrversion = c.getString(c.getColumnIndex(FormsColumns.JR_VERSION));
                     values.put(InstanceColumns.JR_FORM_ID, jrformid);
                     values.put(InstanceColumns.JR_VERSION, jrversion);
-                } finally {
-                    if (c != null) {
-                        c.close();
+
+                    String geometryXpath = c.getString(c.getColumnIndex(FormsColumns.GEOMETRY_XPATH));
+                    ContentValues geometryContentValues = extractGeometryContentValues(formInstance, geometryXpath);
+                    if (geometryContentValues != null) {
+                        values.putAll(geometryContentValues);
                     }
                 }
                 uri = new InstancesDao().saveInstance(values);
             }
         }
+    }
+
+    /**
+     * Extracts geometry information from the given xpath path in the given instance.
+     *
+     * Returns a ContentValues object with values set for {@link InstanceColumns.GEOMETRY} and
+     * {@link InstanceColumns.GEOMETRY_TYPE}. Those value are null if anything goes wrong with
+     * parsing the geometry and converting it to GeoJSON.
+     *
+     * Returns null if the given XPath path is null.
+     */
+    private ContentValues extractGeometryContentValues(FormInstance instance, String xpath) {
+        ContentValues values = new ContentValues();
+
+        if (xpath == null) {
+            Timber.w("Geometry XPath is missing for instance %s!", instance);
+            return null;
+        }
+
+        try {
+            XPathExpression expr = XPathParseTool.parseXPath(xpath);
+            EvaluationContext context = new EvaluationContext(instance);
+            Object result = expr.eval(instance, context);
+            if (result instanceof XPathNodeset) {
+                XPathNodeset nodes = (XPathNodeset) result;
+                // For now, only use the first node found.
+                TreeElement element = instance.resolveReference(nodes.getRefAt(0));
+                IAnswerData value = element.getValue();
+
+                if (value instanceof GeoPointData) {
+                    try {
+                        JSONObject json = toGeoJson((GeoPointData) value);
+                        Timber.i("Geometry for \"%s\" instance found at %s: %s",
+                            instance.getName(), xpath, json);
+
+                        values.put(InstanceColumns.GEOMETRY, json.toString());
+                        values.put(InstanceColumns.GEOMETRY_TYPE, json.getString("type"));
+                        return values;
+                    } catch (JSONException e) {
+                        Timber.w("Could not convert GeoPointData %s to GeoJSON", value);
+                    }
+                }
+            }
+        } catch (XPathException | XPathSyntaxException e) {
+            Timber.w(e, "Could not evaluate geometry XPath %s in instance", xpath);
+        }
+
+        values.put(InstanceColumns.GEOMETRY, (String) null);
+        values.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
+        return values;
+    }
+
+    @NonNull
+    private JSONObject toGeoJson(GeoPointData data) throws JSONException {
+        // For a GeoPointData object, the four fields exposed by getPart() are
+        // latitude, longitude, altitude, and accuracy radius, in that order.
+        double lat = data.getPart(0);
+        double lon = data.getPart(1);
+
+        // In GeoJSON, longitude comes before latitude.
+        JSONArray coordinates = new JSONArray();
+        coordinates.put(lon);
+        coordinates.put(lat);
+
+        JSONObject geometry = new JSONObject();
+        geometry.put("type", "Point");
+        geometry.put("coordinates", coordinates);
+        return geometry;
     }
 
     /**
@@ -355,6 +441,26 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 }
             }
         }
+    }
+
+    /**
+     * Returns the XPath path of the geo feature used for mapping that corresponds to the blank form
+     * that the instance with the given uri is an instance of.
+     */
+    private String getGeometryXpathForInstance(Uri uri) {
+        try (Cursor instanceCursor = Collect.getInstance().getContentResolver().query(
+            uri, new String[] {InstanceColumns.JR_FORM_ID, InstanceColumns.JR_VERSION}, null, null, null)) {
+            if (instanceCursor.moveToFirst()) {
+                String jrFormId = instanceCursor.getString(0);
+                String version = instanceCursor.getString(1);
+                try (Cursor formCursor = new FormsDao().getFormsCursor(jrFormId, version)) {
+                    if (formCursor.moveToFirst()) {
+                        return formCursor.getString(formCursor.getColumnIndex(FormsColumns.GEOMETRY_XPATH));
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     static void manageFilesAfterSavingEncryptedForm(File instanceXml, File submissionXml) throws IOException {

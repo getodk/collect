@@ -35,7 +35,7 @@ public class FormManagementTest extends BaseRegressionTest {
     @Test
     public void validationUponSwipe_ShouldDisplay() {
         //TestCase7,8
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("OnePageFormValid")
                 .inputText("Bla")
                 .swipeToNextQuestion()
@@ -45,8 +45,8 @@ public class FormManagementTest extends BaseRegressionTest {
                 .openFormManagement()
                 .openConstraintProcessing()
                 .clickOnString(R.string.constraint_behavior_on_finalize)
-                .pressBack(new GeneralSettingsPage(main))
-                .pressBack(new FormEntryPage("OnePageFormValid", main))
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new FormEntryPage("OnePageFormValid", rule))
                 .swipeToNextQuestion()
                 .clickSaveAndExitWithError()
                 .checkIsToastWithMessageDisplayed("Response length must be between 5 and 15");
@@ -55,14 +55,14 @@ public class FormManagementTest extends BaseRegressionTest {
     @Test
     public void guidanceForQuestion_ShouldDisplayAlways() {
         //TestCase10
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .openFormManagement()
                 .openShowGuidanceForQuestions()
                 .clickOnString(R.string.guidance_yes)
-                .pressBack(new GeneralSettingsPage(main))
-                .pressBack(new MainMenuPage(main))
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
                 .startBlankForm("hints textq")
                 .checkIsTextDisplayed("1 very very very very very very very very very very long text")
                 .swipeToNextQuestion()
@@ -72,14 +72,14 @@ public class FormManagementTest extends BaseRegressionTest {
     @Test
     public void guidanceForQuestion_ShouldBeCollapsed() {
         //TestCase11
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .openFormManagement()
                 .openShowGuidanceForQuestions()
                 .clickOnString(R.string.guidance_yes_collapsed)
-                .pressBack(new GeneralSettingsPage(main))
-                .pressBack(new MainMenuPage(main))
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
                 .startBlankForm("hints textq")
                 .checkIsIdDisplayed(R.id.help_icon)
                 .clickOnText("Hint 1")

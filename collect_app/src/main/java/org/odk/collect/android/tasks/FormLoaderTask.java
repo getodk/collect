@@ -26,7 +26,6 @@ import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.model.instance.utils.DefaultAnswerResolver;
 import org.javarosa.core.reference.ReferenceManager;
-import org.javarosa.core.reference.RootTranslator;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.xform.parse.XFormParser;
@@ -43,7 +42,6 @@ import org.odk.collect.android.external.ExternalDataReader;
 import org.odk.collect.android.external.ExternalDataReaderImpl;
 import org.odk.collect.android.external.handler.ExternalDataHandlerPull;
 import org.odk.collect.android.listeners.FormLoaderListener;
-import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormDefCache;
@@ -61,6 +59,8 @@ import java.util.Map;
 
 import au.com.bytecode.opencsv.CSVReader;
 import timber.log.Timber;
+
+import static org.odk.collect.android.forms.FormUtils.setupReferenceManagerForForm;
 
 /**
  * Background task for loading a form.
@@ -132,19 +132,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         final File formXml = new File(formPath);
         final File formMediaDir = FileUtils.getFormMediaDir(formXml);
 
-        final ReferenceManager referenceManager = ReferenceManager.instance();
-
-        // Remove previous forms
-        referenceManager.clearSession();
-
-        // This should get moved to the Application Class
-        if (referenceManager.getFactories().length == 0) {
-            // this is /sdcard/odk
-            referenceManager.addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
-        }
-
-        addSessionRootTranslators(referenceManager,
-                buildSessionRootTranslators(formMediaDir.getName(), enumerateHostStrings()));
+        setupReferenceManagerForForm(ReferenceManager.instance(), formMediaDir);
 
         FormDef formDef = null;
         try {
@@ -225,26 +213,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
         data = new FECWrapper(fc, usedSavepoint);
         return data;
-    }
-
-    protected static String[] enumerateHostStrings() {
-        return new String[] {"images", "image", "audio", "video", "file-csv", "file"};
-    }
-
-    protected List<RootTranslator> buildSessionRootTranslators(String formMediaDir, String[] hostStrings) {
-        List<RootTranslator> rootTranslators = new ArrayList<>();
-        // Set jr://... to point to /sdcard/odk/forms/formBasename-media/
-        final String translatedPrefix = String.format("jr://file/forms/" + formMediaDir + "/");
-        for (String t : hostStrings) {
-            rootTranslators.add(new RootTranslator(String.format("jr://%s/", t), translatedPrefix));
-        }
-        return rootTranslators;
-    }
-
-    private void addSessionRootTranslators(ReferenceManager referenceManager, List<RootTranslator> rootTranslators) {
-        for (RootTranslator rootTranslator : rootTranslators) {
-            referenceManager.addSessionRootTranslator(rootTranslator);
-        }
     }
 
     private FormDef createFormDefFromCacheOrXml(String formPath, File formXml) {

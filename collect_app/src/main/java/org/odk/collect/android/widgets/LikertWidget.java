@@ -58,6 +58,8 @@ public class LikertWidget extends ItemsWidget {
         setButtonListener();
         setSavedButton();
         addAnswerView(view);
+
+        analytics.logEvent("Likert", questionDetails.getFormAnalyticsID());
     }
 
     public void setMainViewLayoutParameters() {

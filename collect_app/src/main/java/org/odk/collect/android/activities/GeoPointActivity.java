@@ -77,6 +77,7 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
         super.onCreate(savedInstanceState);
 
         if (!areLocationPermissionsGranted(this)) {
+            ToastUtils.showLongToast(R.string.not_granted_permission);
             finish();
             return;
         }

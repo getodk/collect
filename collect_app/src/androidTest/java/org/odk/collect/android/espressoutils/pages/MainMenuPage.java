@@ -1,11 +1,11 @@
 package org.odk.collect.android.espressoutils.pages;
 
+import org.odk.collect.android.R;
+import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.support.ActivityHelpers;
+
 import androidx.test.espresso.Espresso;
 import androidx.test.rule.ActivityTestRule;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.provider.FormsProviderAPI;
-import org.odk.collect.android.support.ActivityHelpers;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -63,7 +63,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
 
     private void goToBlankForm(String formName) {
         onView(withId(R.id.enter_data)).perform(click());
-        onData(withRowString(FormsProviderAPI.FormsColumns.DISPLAY_NAME, formName)).perform(click());
+        onData(withRowString(FormsColumns.DISPLAY_NAME, formName)).perform(click());
     }
 
     public EditSavedFormPage clickEditSavedForm() {

@@ -10,7 +10,9 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 
+import org.odk.collect.android.espressoutils.pages.FormEntryPage;
 import org.odk.collect.android.espressoutils.pages.MainMenuPage;
+import org.odk.collect.android.espressoutils.pages.SaveOrIgnoreDialog;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 
@@ -31,16 +33,16 @@ public class FormValidationTest extends BaseRegressionTest {
     @Test
     public void invalidAnswer_ShouldDisplayAllQuestionsOnOnePage() {
 
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("OnePageFormShort")
                 .putTextOnIndex(0, "A")
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .clickJumpEndButton()
                 .clickSaveAndExitWhenValidationErrorIsExpected()
                 .checkIsToastWithMessageDisplayed("Response length must be between 5 and 15")
                 .checkIsTextDisplayed("Integer")
                 .putTextOnIndex(0, "Aaaaa")
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .clickJumpEndButton()
                 .clickSaveAndExit();
     }
@@ -49,14 +51,14 @@ public class FormValidationTest extends BaseRegressionTest {
     public void openHierarchyView_ShouldSeeShortForms() {
 
         //TestCase3
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("OnePageFormShort")
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .checkIsTextDisplayed("YY MM")
                 .checkIsTextDisplayed("YY")
-                .simplePressBack()
+                .pressBack(new FormEntryPage("OnePageFormShort", rule))
                 .closeSoftKeyboard()
-                .simplePressBack()
+                .pressBack(new SaveOrIgnoreDialog<>("OnePageFormShort", new MainMenuPage(rule), rule))
                 .clickIgnoreChanges();
     }
 }

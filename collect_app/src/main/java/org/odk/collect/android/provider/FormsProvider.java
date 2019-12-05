@@ -25,8 +25,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
-
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.database.helpers.FormsDatabaseHelper;
@@ -38,6 +36,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
 import timber.log.Timber;
 
 import static org.odk.collect.android.database.helpers.FormsDatabaseHelper.FORMS_TABLE_NAME;
@@ -235,7 +234,7 @@ public class FormsProvider extends ContentProvider {
                 Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI,
                         rowId);
                 getContext().getContentResolver().notifyChange(formUri, null);
-                getContext().getContentResolver().notifyChange(FormsProviderAPI.FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
+                getContext().getContentResolver().notifyChange(FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
                 return formUri;
             }
         }
@@ -508,7 +507,7 @@ public class FormsProvider extends ContentProvider {
             }
 
             getContext().getContentResolver().notifyChange(uri, null);
-            getContext().getContentResolver().notifyChange(FormsProviderAPI.FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
+            getContext().getContentResolver().notifyChange(FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
         }
 
         return count;
@@ -553,5 +552,6 @@ public class FormsProvider extends ContentProvider {
         sFormsProjectionMap.put(FormsColumns.AUTO_DELETE, FormsColumns.AUTO_DELETE);
         sFormsProjectionMap.put(FormsColumns.AUTO_SEND, FormsColumns.AUTO_SEND);
         sFormsProjectionMap.put(FormsColumns.LAST_DETECTED_FORM_VERSION_HASH, FormsColumns.LAST_DETECTED_FORM_VERSION_HASH);
+        sFormsProjectionMap.put(FormsColumns.GEOMETRY_XPATH, FormsColumns.GEOMETRY_XPATH);
     }
 }

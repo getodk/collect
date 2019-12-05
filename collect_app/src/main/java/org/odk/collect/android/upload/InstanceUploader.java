@@ -17,14 +17,16 @@ package org.odk.collect.android.upload;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.dto.Instance;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
 
 import java.util.ArrayList;
@@ -63,7 +65,7 @@ public abstract class InstanceUploader {
                 high = instanceDatabaseIds.length;
             }
 
-            StringBuilder selectionBuf = new StringBuilder(InstanceProviderAPI.InstanceColumns._ID + " IN (");
+            StringBuilder selectionBuf = new StringBuilder(InstanceColumns._ID + " IN (");
             String[] selectionArgs = new String[high - low];
             for (int i = 0; i < (high - low); i++) {
                 if (i > 0) {
@@ -86,20 +88,20 @@ public abstract class InstanceUploader {
     }
 
     void saveSuccessStatusToDatabase(Instance instance) {
-        Uri instanceDatabaseUri = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
+        Uri instanceDatabaseUri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI,
                 instance.getDatabaseId().toString());
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
+        contentValues.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
         Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
     }
 
     void saveFailedStatusToDatabase(Instance instance) {
-        Uri instanceDatabaseUri = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
+        Uri instanceDatabaseUri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI,
                 instance.getDatabaseId().toString());
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+        contentValues.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
         Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
     }
 

@@ -29,6 +29,8 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.annotation.Line;
 import com.mapbox.mapboxsdk.plugins.annotation.LineManager;
 import com.mapbox.mapboxsdk.plugins.annotation.LineOptions;
+import com.mapbox.mapboxsdk.plugins.annotation.OnLineClickListener;
+import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolClickListener;
 import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolDragListener;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
@@ -73,7 +75,6 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     MapboxMap.OnMapClickListener, MapboxMap.OnMapLongClickListener,
     LocationEngineCallback<LocationEngineResult> {
 
-    private static final String POINT_ICON_ID = "point-icon-id";
     private static final long LOCATION_INTERVAL_MILLIS = 1000;
     private static final long LOCATION_MAX_WAIT_MILLIS = 5000;
     private static final LocationEngineRequest LOCATION_REQUEST =
@@ -91,6 +92,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private PointListener gpsLocationListener;
     private PointListener clickListener;
     private PointListener longPressListener;
+    private FeatureListener featureClickListener;
     private FeatureListener dragEndListener;
 
     private LocationComponent locationComponent;
@@ -104,7 +106,6 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private boolean isDragging;
     private String styleUrl = Style.MAPBOX_STREETS;
     private File referenceLayerFile;
-    private final List<Layer> overlayLayers = new ArrayList<>();
     private final List<Source> overlaySources = new ArrayList<>();
     private static String lastLocationProvider;
 
@@ -145,7 +146,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         getMapAsync(map -> {
             this.map = map;  // signature of getMapAsync() ensures map is never null
 
-            map.setStyle(getDesiredStyleBuilder(), style -> {
+            map.setStyle(getStyleBuilder(), style -> {
                 map.getUiSettings().setCompassGravity(Gravity.TOP | Gravity.START);
                 map.getUiSettings().setCompassMargins(36, 36, 36, 36);
 
@@ -204,7 +205,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         String path = config.getString(KEY_REFERENCE_LAYER);
         referenceLayerFile = path != null ? new File(path) : null;
         if (map != null) {
-            map.setStyle(getDesiredStyleBuilder(), style -> {
+            map.setStyle(getStyleBuilder(), style -> {
                 loadReferenceOverlay();
             });
         }
@@ -277,6 +278,13 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         return featureId;
     }
 
+    @Override public void setMarkerIcon(int featureId, int drawableId) {
+        MapFeature feature = features.get(featureId);
+        if (feature instanceof MarkerFeature) {
+            ((MarkerFeature) feature).setIcon(drawableId);
+        }
+    }
+
     @Override public @Nullable MapPoint getMarkerPoint(int featureId) {
         MapFeature feature = features.get(featureId);
         return feature instanceof MarkerFeature ?
@@ -289,6 +297,10 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             return ((PolyFeature) feature).getPoints();
         }
         return new ArrayList<>();
+    }
+
+    @Override public void setFeatureClickListener(@Nullable FeatureListener listener) {
+        featureClickListener = listener;
     }
 
     @Override public void setDragEndListener(@Nullable FeatureListener listener) {
@@ -307,7 +319,12 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         if (clickListener != null && !isDragging) {
             clickListener.onPoint(fromLatLng(point));
         }
-        return true;
+
+        // MAPBOX ISSUE: Unfortunately, onMapClick is called before onAnnotationClick,
+        // which means that every click on a marker will also cause a click event on
+        // the map.  Returning true will consume the event and prevent the marker's
+        // onAnnotationClick from ever being called, so we have to return false.
+        return false;
     }
 
     @Override public boolean onMapLongClick(@NonNull LatLng latLng) {
@@ -431,7 +448,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private Symbol createSymbol(SymbolManager symbolManager, MapPoint point, boolean draggable) {
         return symbolManager.create(new SymbolOptions()
             .withLatLng(toLatLng(point))
-            .withIconImage(POINT_ICON_ID)
+            .withIconImage(addIconImage(R.drawable.ic_map_point))
             .withIconSize(1f)
             .withZIndex(10)
             .withDraggable(draggable)
@@ -471,11 +488,8 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             .build();
     }
 
-    private Style.Builder getDesiredStyleBuilder() {
-        Drawable pointIcon = ContextCompat.getDrawable(getContext(), R.drawable.ic_map_point);
-        return getBasemapStyleBuilder()
-            .withImage(POINT_ICON_ID, pointIcon)
-            .withTransition(new TransitionOptions(0, 0, false));
+    private Style.Builder getStyleBuilder() {
+        return getBasemapStyleBuilder().withTransition(new TransitionOptions(0, 0, false));
     }
 
     private Style.Builder getBasemapStyleBuilder() {
@@ -499,7 +513,6 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
      * is fully loaded, in setStyle()'s OnStyleLoaded callback.
      */
     private void loadReferenceOverlay() {
-        clearOverlays();
         if (referenceLayerFile != null) {
             addMbtiles(referenceLayerFile.getName(), referenceLayerFile);
         }
@@ -578,27 +591,8 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
         return tileSet;
     }
-
-    private void clearOverlays() {
-        Style style = map.getStyle();
-        for (Layer layer : overlayLayers) {
-            style.removeLayer(layer);
-        }
-        overlayLayers.clear();
-        // NOTE(ping): It would make sense to remove the overlaySources from
-        // the map here, but that can lead to a SEGV in libmapbox-gl.so.  See
-        // https://github.com/mapbox/mapbox-gl-native/issues/15182 for details.
-        /*
-        for (Source source : overlaySources) {
-            style.removeSource(source);
-        }
-        overlaySources.clear();
-        */
-    }
-
+    
     private void addOverlayLayer(Layer layer) {
-        overlayLayers.add(layer);
-
         // If there is a LocationComponent, it will have added some layers to the
         // style.  The SymbolManager and LineManager also add their own layers
         // where they place their symbols and lines.  We need to insert the new
@@ -631,6 +625,18 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private void addOverlaySource(Source source) {
         map.getStyle().addSource(source);
         overlaySources.add(source);
+    }
+
+    /** Adds an image to the style unless it's already present, and returns its ID. */
+    private String addIconImage(int drawableId) {
+        String imageId = "icon-" + drawableId;
+        map.getStyle(style -> {
+            if (style.getImage(imageId) == null) {
+                Drawable icon = ContextCompat.getDrawable(getContext(), drawableId);
+                style.addImage(imageId, icon);
+            }
+        });
+        return imageId;
     }
 
     private SymbolManager createSymbolManager() {
@@ -706,6 +712,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private class MarkerFeature implements MapFeature {
         private final int featureId;
         private final SymbolManager symbolManager;
+        private final ClickListener clickListener = new ClickListener();
         private final DragListener dragListener = new DragListener();
         private MapPoint point;
         private Symbol symbol;
@@ -715,7 +722,12 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             this.symbolManager = symbolManager;
             this.point = point;
             this.symbol = createSymbol(symbolManager, point, draggable);
+            symbolManager.addClickListener(clickListener);
             symbolManager.addDragListener(dragListener);
+        }
+
+        public void setIcon(int drawableId) {
+            symbol.setIconImage(addIconImage(drawableId));
         }
 
         public MapPoint getPoint() {
@@ -723,9 +735,18 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         }
 
         public void dispose() {
+            symbolManager.removeClickListener(clickListener);
             symbolManager.removeDragListener(dragListener);
             symbolManager.delete(symbol);
             symbol = null;
+        }
+
+        class ClickListener implements OnSymbolClickListener {
+            @Override public void onAnnotationClick(Symbol clickedSymbol) {
+                if (clickedSymbol.getId() == symbol.getId() && featureClickListener != null) {
+                    featureClickListener.onFeature(featureId);
+                }
+            }
         }
 
         class DragListener implements OnSymbolDragListener {
@@ -760,7 +781,9 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         private final int featureId;
         private final LineManager lineManager;
         private final SymbolManager symbolManager;
-        private final DragListener dragListener = new DragListener();
+        private final SymbolClickListener symbolClickListener = new SymbolClickListener();
+        private final LineClickListener lineClickListener = new LineClickListener();
+        private final SymbolDragListener symbolDragListener = new SymbolDragListener();
         private final List<MapPoint> points = new ArrayList<>();
         private final List<Symbol> symbols = new ArrayList<>();
         private final boolean closedPolygon;
@@ -782,7 +805,9 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 .withLatLngs(new ArrayList<>())
             );
             updateLine();
-            symbolManager.addDragListener(dragListener);
+            symbolManager.addClickListener(symbolClickListener);
+            symbolManager.addDragListener(symbolDragListener);
+            lineManager.addClickListener(lineClickListener);
         }
 
         public List<MapPoint> getPoints() {
@@ -790,11 +815,13 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         }
 
         public void dispose() {
+            symbolManager.removeClickListener(symbolClickListener);
+            symbolManager.removeDragListener(symbolDragListener);
+            lineManager.removeClickListener(lineClickListener);
             if (line != null) {
                 lineManager.delete(line);
                 line = null;
             }
-            symbolManager.removeDragListener(dragListener);
             for (Symbol symbol : symbols) {
                 symbolManager.delete(symbol);
             }
@@ -832,7 +859,26 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             lineManager.update(line);
         }
 
-        class DragListener implements OnSymbolDragListener {
+        class SymbolClickListener implements OnSymbolClickListener {
+            @Override public void onAnnotationClick(Symbol clickedSymbol) {
+                for (Symbol symbol : symbols) {
+                    if (clickedSymbol.getId() == symbol.getId()) {
+                        featureClickListener.onFeature(featureId);
+                        break;
+                    }
+                }
+            }
+        }
+
+        class LineClickListener implements OnLineClickListener {
+            @Override public void onAnnotationClick(Line clickedLine) {
+                if (clickedLine.getId() == line.getId()) {
+                    featureClickListener.onFeature(featureId);
+                }
+            }
+        }
+
+        class SymbolDragListener implements OnSymbolDragListener {
             @Override public void onAnnotationDragStarted(Symbol draggedSymbol) {
                 isDragging = true;
             }

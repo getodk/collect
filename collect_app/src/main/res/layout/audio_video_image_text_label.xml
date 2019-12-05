@@ -51,7 +51,12 @@
         android:layout_alignParentRight="true"
         android:gravity="end"
         android:orientation="vertical"
-        android:padding="@dimen/margin_standard">
+        android:paddingLeft="@dimen/margin_standard"
+        android:paddingStart="@dimen/margin_standard"
+        android:paddingRight="@dimen/margin_standard"
+        android:paddingEnd="@dimen/margin_standard"
+        android:paddingTop="@dimen/margin_extra_small"
+        android:paddingBottom="@dimen/margin_extra_small">
 
         <org.odk.collect.android.audio.AudioButton
             android:id="@+id/audioButton"

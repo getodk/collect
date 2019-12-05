@@ -22,7 +22,7 @@ limitations under the License.
         android:key="user_interface"
         android:title="@string/client" />
     <Preference
-        android:icon="@drawable/ic_map"
+        android:icon="@drawable/ic_map_accent_color"
         android:key="maps"
         android:title="@string/maps" />
     <Preference
