@@ -30,11 +30,11 @@ public class FormUtils {
                 buildSessionRootTranslators(formMediaDir.getName(), enumerateHostStrings()));
     }
 
-    protected static String[] enumerateHostStrings() {
+    public static String[] enumerateHostStrings() {
         return new String[] {"images", "image", "audio", "video", "file-csv", "file"};
     }
 
-    protected List<RootTranslator> buildSessionRootTranslators(String formMediaDir, String[] hostStrings) {
+    public static List<RootTranslator> buildSessionRootTranslators(String formMediaDir, String[] hostStrings) {
         List<RootTranslator> rootTranslators = new ArrayList<>();
         // Set jr://... to point to /sdcard/odk/forms/formBasename-media/
         final String translatedPrefix = String.format("jr://file/forms/" + formMediaDir + "/");
@@ -44,7 +44,7 @@ public class FormUtils {
         return rootTranslators;
     }
 
-    private void addSessionRootTranslators(ReferenceManager referenceManager, List<RootTranslator> rootTranslators) {
+    public static void addSessionRootTranslators(ReferenceManager referenceManager, List<RootTranslator> rootTranslators) {
         for (RootTranslator rootTranslator : rootTranslators) {
             referenceManager.addSessionRootTranslator(rootTranslator);
         }
