@@ -4,7 +4,6 @@ import android.Manifest;
 
 import androidx.test.rule.GrantPermissionRule;
 
-import org.javarosa.core.reference.RootTranslator;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,11 +11,9 @@ import org.junit.rules.RuleChain;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
-import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.List;
 
 public class FormLoaderTaskTest {
     private static final String EXTERNAL_CSV_FORM = "external_csv_form.xml";

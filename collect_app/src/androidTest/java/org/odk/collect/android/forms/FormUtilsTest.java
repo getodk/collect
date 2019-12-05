@@ -16,7 +16,6 @@ import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
 public class FormUtilsTest {
