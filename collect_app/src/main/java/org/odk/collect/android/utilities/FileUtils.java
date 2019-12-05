@@ -38,10 +38,13 @@ import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
@@ -60,6 +63,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.UUID;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import timber.log.Timber;
@@ -81,6 +85,7 @@ public class FileUtils {
     public static final String AUTO_DELETE = "autoDelete";
     public static final String AUTO_SEND = "autoSend";
     public static final String GEOMETRY_XPATH = "geometryXpath";
+    public static final String TEMPORARY_FILE_PREFIX = "temp";
 
     /** Suffix for the form media directory. */
     public static final String MEDIA_SUFFIX = "-media";
@@ -266,6 +271,67 @@ public class FileUtils {
             IOUtils.closeQuietly(src);
             IOUtils.closeQuietly(dst);
         }
+    }
+
+    public static boolean replaceHeaderRow(File existingFile, String header) {
+        return replaceHeaderRow(existingFile, header, "\n");
+    }
+
+    public static boolean replaceHeaderRow(File existingFile, String header, String lineEnding) {
+        if (existingFile == null || !existingFile.exists()) {
+            return false;
+        }
+
+        boolean insertSucceeded = false;
+        FileWriter newContents = null;
+        BufferedReader originalContents = null;
+
+        try {
+            String temporaryFileName = TEMPORARY_FILE_PREFIX + existingFile.getName() + UUID.randomUUID().toString();
+            String temporaryFilePath = existingFile.getParentFile().getAbsolutePath() + File.separator + temporaryFileName;
+            File originalFileRenamed = new File(temporaryFilePath);
+
+            // Attempt to rename the file first. If this fails because of locks or permissions issues
+            // then leave the original file intact.
+            if (!existingFile.renameTo(originalFileRenamed)) {
+                Timber.e("Unable to rename the file to be updated: " + originalFileRenamed.getAbsolutePath());
+            } else {
+                originalContents = new BufferedReader(new FileReader(originalFileRenamed));
+                newContents = new FileWriter(existingFile, false);
+
+                // Insert header & copy remaining contents
+                newContents.write(header + lineEnding);
+                String line = originalContents.readLine(); // consume and ignore the old header
+                while ((line = originalContents.readLine()) != null) {
+                    newContents.write(line);
+                    newContents.write(lineEnding);
+                }
+
+                // Cleanup
+                originalContents.close();
+                newContents.close();
+                if (!originalFileRenamed.delete()) {
+                    Timber.e("Unable to clean up the temporary copy of the original file at: " + originalFileRenamed.getAbsolutePath());
+                } else {
+                    insertSucceeded = true;
+                }
+            }
+        } catch (IOException e) {
+            Timber.e(e);
+        } finally {
+            try {
+                if (originalContents != null) {
+                    originalContents.close();
+                }
+                if (newContents != null) {
+                    newContents.close();
+                }
+            } catch (Exception e) {
+                Timber.e(e);
+            }
+        }
+
+        return insertSucceeded;
     }
 
     /**
