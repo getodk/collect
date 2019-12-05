@@ -31,12 +31,14 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
@@ -92,7 +94,7 @@ public class InstancesDaoTest {
 
     @Test
     public void getSavedInstancesCursorTest() {
-        Cursor cursor = instancesDao.getSavedInstancesCursor(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC");
+        Cursor cursor = instancesDao.getSavedInstancesCursor(InstanceColumns.DISPLAY_NAME + " ASC");
         List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
 
         assertEquals(5, instances.size());
@@ -156,7 +158,7 @@ public class InstancesDaoTest {
                 .lastStatusChangeDate(1487597090653L)
                 .build();
 
-        String where = InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + "=?";
+        String where = InstanceColumns.INSTANCE_FILE_PATH + "=?";
         String[] whereArgs = {Collect.INSTANCES_PATH + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml"};
 
         assertEquals(instancesDao.updateInstance(instancesDao.getValuesFromInstanceObject(biggestNOfSet2Instance), where, whereArgs), 1);

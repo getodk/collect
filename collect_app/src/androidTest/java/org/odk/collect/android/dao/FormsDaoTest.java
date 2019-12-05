@@ -17,8 +17,6 @@
 package org.odk.collect.android.dao;
 
 import android.database.Cursor;
-import androidx.test.InstrumentationRegistry;
-import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.After;
 import org.junit.Before;
@@ -26,13 +24,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.ResetUtility;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+
+import androidx.test.InstrumentationRegistry;
+import androidx.test.runner.AndroidJUnit4;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -99,7 +100,7 @@ public class FormsDaoTest {
         assertEquals(sampleForm, forms.get(5));
         assertEquals(birds2Form, forms.get(6));
 
-        String sortOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " COLLATE NOCASE DESC";
+        String sortOrder = FormsColumns.DISPLAY_NAME + " COLLATE NOCASE DESC";
 
         cursor = formsDao.getFormsCursor(null, null, null, sortOrder);
         forms = formsDao.getFormsFromCursor(cursor);
@@ -113,7 +114,7 @@ public class FormsDaoTest {
         assertEquals(sampleForm, forms.get(1));
         assertEquals(widgetsForm, forms.get(0));
 
-        String selection = FormsProviderAPI.FormsColumns.DISPLAY_NAME + "=?";
+        String selection = FormsColumns.DISPLAY_NAME + "=?";
         String[] selectionArgs = {"Miramare"};
 
         cursor = formsDao.getFormsCursor(null, selection, selectionArgs, null);
@@ -150,7 +151,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(Collect.ODK_ROOT + "/.cache/0eacc6333449e66826326eb5fcc75749.formdef")
                 .build();
 
-        String where = FormsProviderAPI.FormsColumns.DISPLAY_NAME + "=?";
+        String where = FormsColumns.DISPLAY_NAME + "=?";
         String[] whereArgs = {"Widgets"};
         assertEquals(formsDao.updateForm(formsDao.getValuesFromFormObject(widgetsForm), where, whereArgs), 1);
 

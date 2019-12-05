@@ -3,7 +3,7 @@ package org.odk.collect.android.instances;
 import android.database.Cursor;
 
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public List<Instance> getAllBy(String formId) {
-        Cursor c = dao.getInstancesCursor(InstanceProviderAPI.InstanceColumns.JR_FORM_ID + " = ?",
+        Cursor c = dao.getInstancesCursor(InstanceColumns.JR_FORM_ID + " = ?",
         new String[] {formId});
         return dao.getInstancesFromCursor(c);
     }
