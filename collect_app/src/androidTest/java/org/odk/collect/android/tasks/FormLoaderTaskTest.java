@@ -15,10 +15,12 @@ import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 public class FormLoaderTaskTest {
     private static final String BASIC_FORM = "basic.xml";
+    private static final String EXTERNAL_CSV_FORM = "external_csv_form.xml";
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -27,7 +29,9 @@ public class FormLoaderTaskTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             ))
             .around(new ResetStateRule())
-            .around(new CopyFormRule(BASIC_FORM));
+            .around(new CopyFormRule(BASIC_FORM))
+            .around(new CopyFormRule(EXTERNAL_CSV_FORM,
+                    Arrays.asList("external_csv_cities.csv", "external_csv_countries.csv", "external_csv_neighbourhoods.csv")));
 
     /* Verify that each host string matches only a single root translator, allowing for them to
      be defined in any order. See: https://github.com/opendatakit/collect/issues/3334
@@ -73,5 +77,13 @@ public class FormLoaderTaskTest {
                 Assert.assertFalse(subsequentHostString.contains(currentHostString));
             }
         }
+    }
+
+    @Test
+    public void loadFormWithSecondaryCSV() throws Exception {
+        final String formPath = Collect.FORMS_PATH + File.separator + EXTERNAL_CSV_FORM;
+        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null);
+        FormLoaderTask.FECWrapper wrapper = formLoaderTask.execute(formPath).get();
+        Assert.assertNotNull(wrapper);
     }
 }
