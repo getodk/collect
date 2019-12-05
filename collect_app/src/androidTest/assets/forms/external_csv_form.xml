@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head><!-- ODK Aggregate upload time: 2015-04-09T23:26:16.409+0000 on https://enketo-aggregate.appspot.com -->
+    <h:title>Form with external CSV files</h:title>
+    <model>
+      <instance>
+        <ecsv id="ecsv" version="">
+          <country/>
+          <city/>
+          <neighborhood/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </ecsv>
+      </instance>
+      <instance id="cities" src="jr://file-csv/external_csv_cities.csv" />
+      <instance id="neighborhoods" src="jr://file-csv/external_csv_neighbourhoods.csv" />
+      <instance id="countries" src="jr://file-csv/external_csv_countries.csv" />
+      <bind nodeset="/ecsv/country" type="select1"/>
+      <bind nodeset="/ecsv/city" type="select1"/>
+      <bind nodeset="/ecsv/neighborhood" type="select1"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/ecsv/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <select1 ref="/ecsv/country">
+      <label>Country</label>
+      <itemset nodeset="instance('countries')/root/item">
+          <value ref="name"/>
+          <label ref="label"/>
+      </itemset>
+    </select1>
+    <select1 ref="/ecsv/city">
+      <label>City</label>
+      <itemset nodeset="instance('cities')/root/item[country= /ecsv/country ]">
+        <value ref="name"/>
+        <label ref="label"/>
+      </itemset>
+    </select1>
+    <select1 ref="/ecsv/neighborhood">
+      <label>Neighborhood</label>
+      <itemset nodeset="instance('neighborhoods')/root/item[country= /ecsv/country  and city= /ecsv/city ]">
+        <value ref="name"/>
+        <label ref="label"/>
+      </itemset>
+    </select1>
+  </h:body>
+</h:html>
