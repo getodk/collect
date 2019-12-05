@@ -45,11 +45,10 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
         FileWriter fw = null;
         try {
             boolean newFile = !file.exists();
-            fw = new FileWriter(file, true);
             if (newFile) {
+                fw = new FileWriter(file, true);
                 fw.write(getHeader() + "\n");
             } else if (updateHeaderIfNeeded()) {
-                fw.close();
                 fw = new FileWriter(file.getAbsolutePath(), true);
             }
             if (params.length > 0) {
@@ -89,7 +88,17 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
                 while ((line = br.readLine()) != null) {
                     tfw.write(line + "\n");
                 }
-                temporaryFile.renameTo(file);
+                // When running tests using Android Studio on Windows, we must close before renaming
+                // in order for the pending changes to be flushed and appear in the renamed file.
+                br.close();
+                tfw.close();
+                // On Windows File.renameTo will not overwrite existing files. Purge the original before renaming.
+                if (!file.delete()) {
+                    Timber.e("Unable to delete the temporary audit file while inserting header row");
+                }
+                if (!temporaryFile.renameTo(file)) {
+                    Timber.e("Unable to overwrite the temporary audit file while inserting header row");
+                }
                 headerUpdated = true;
             }
         } catch (IOException e) {
