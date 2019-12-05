@@ -301,7 +301,8 @@ public class FileUtils {
 
                 // Insert header & copy remaining contents
                 newContents.write(header + lineEnding);
-                String line = originalContents.readLine(); // consume and ignore the old header
+                originalContents.readLine(); // consume and ignore the old header
+                String line;
                 while ((line = originalContents.readLine()) != null) {
                     newContents.write(line);
                     newContents.write(lineEnding);
