@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 
+import org.odk.collect.android.utilities.FileUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -76,40 +78,24 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
 
     private boolean updateHeaderIfNeeded() {
         boolean headerUpdated = false;
-        FileWriter tfw = null;
+        String header = readHeader();
+        if (shouldHeaderBeUpdated(header)) {
+            headerUpdated = FileUtils.replaceHeaderRow(file, getHeader(), "\n");
+        }
+        return headerUpdated;
+    }
+
+    private String readHeader() {
+        String header = null;
+
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(file));
-            if (shouldHeaderBeUpdated(br.readLine())) { // update header
-                File temporaryFile = new File(file.getParentFile().getAbsolutePath() + "/temporaryAudit.csv");
-                tfw = new FileWriter(temporaryFile, true);
-                tfw.write(getHeader() + "\n");
-                String line;
-                while ((line = br.readLine()) != null) {
-                    tfw.write(line + "\n");
-                }
-                // When running tests using Android Studio on Windows, we must close before renaming
-                // in order for the pending changes to be flushed and appear in the renamed file.
-                br.close();
-                tfw.close();
-                // On Windows File.renameTo will not overwrite existing files. Purge the original before renaming.
-                if (!file.delete()) {
-                    Timber.e("Unable to delete the temporary audit file while inserting header row");
-                }
-                if (!temporaryFile.renameTo(file)) {
-                    Timber.e("Unable to overwrite the temporary audit file while inserting header row");
-                }
-                headerUpdated = true;
-            }
+            header = br.readLine();
         } catch (IOException e) {
             Timber.e(e);
         } finally {
             try {
-                if (tfw != null) {
-                    tfw.close();
-                } else {
-                    Timber.e("Attempt to close null FileWriter for AuditEventLogger.");
-                }
                 if (br != null) {
                     br.close();
                 } else {
@@ -119,7 +105,8 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
                 Timber.e(e);
             }
         }
-        return headerUpdated;
+
+        return header;
     }
 
     private boolean shouldHeaderBeUpdated(String header) {
