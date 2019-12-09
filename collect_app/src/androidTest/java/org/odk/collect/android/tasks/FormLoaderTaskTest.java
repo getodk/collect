@@ -84,7 +84,7 @@ public class FormLoaderTaskTest {
         File mediaFolder = wrapper.getController().getMediaFolder();
         File dbFile = new File(mediaFolder + File.separator + SIMPLE_SEARCH_EXTERNAL_DB_FILE);
         Assert.assertTrue(dbFile.exists());
-        long dbLastModified = dbFile.lastModified();
+        final long dbLastModified = dbFile.lastModified();
 
         // subsequent load should succeed despite side effects from import
         formLoaderTask = new FormLoaderTask(formPath, null, null);
