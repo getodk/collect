@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
@@ -26,6 +26,8 @@
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/margin_standard"
             android:paddingLeft="@dimen/margin_standard"
+            android:paddingRight="@dimen/margin_standard"
+            android:paddingEnd="@dimen/margin_standard"
             android:paddingBottom="@dimen/margin_standard"
             android:scaleType="fitStart"
             android:visibility="gone" />
@@ -36,6 +38,8 @@
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/margin_standard"
             android:paddingLeft="@dimen/margin_standard"
+            android:paddingRight="@dimen/margin_standard"
+            android:paddingEnd="@dimen/margin_standard"
             android:paddingBottom="@dimen/margin_standard"
             android:visibility="gone"
             tools:text="media missing"
@@ -51,12 +55,12 @@
         android:layout_alignParentRight="true"
         android:gravity="end"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/margin_standard"
-        android:paddingStart="@dimen/margin_standard"
         android:paddingRight="@dimen/margin_standard"
         android:paddingEnd="@dimen/margin_standard"
         android:paddingTop="@dimen/margin_extra_small"
-        android:paddingBottom="@dimen/margin_extra_small">
+        android:paddingBottom="@dimen/margin_extra_small"
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <org.odk.collect.android.audio.AudioButton
             android:id="@+id/audioButton"
