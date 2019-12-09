@@ -29,4 +29,16 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
         new String[] {formId});
         return dao.getInstancesFromCursor(c);
     }
+
+    @Override
+    public Instance getByPath(String instancePath) {
+        Cursor c = dao.getInstancesCursor(InstanceColumns.INSTANCE_FILE_PATH + "=?",
+                new String[] {instancePath});
+        List<Instance> instances = dao.getInstancesFromCursor(c);
+        if (instances.size() == 1) {
+            return instances.get(0);
+        } else {
+            return null;
+        }
+    }
 }

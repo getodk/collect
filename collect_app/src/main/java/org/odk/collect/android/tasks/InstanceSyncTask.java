@@ -260,6 +260,8 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
 
                 values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(false));
+                values.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
+                values.put(InstanceColumns.GEOMETRY, (String) null);
                 instancesDao.updateInstance(values, InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{candidateInstance});
 
                 SaveToDiskTask.manageFilesAfterSavingEncryptedForm(instanceXml, submissionXml);

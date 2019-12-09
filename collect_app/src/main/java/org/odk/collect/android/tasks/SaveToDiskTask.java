@@ -41,6 +41,9 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.EncryptionException;
+import org.odk.collect.android.instances.DatabaseInstancesRepository;
+import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -159,6 +162,17 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         return saveResult;
     }
 
+    /**
+     * Updates the status and editability for the database row corresponding to the instance that is
+     * currently managed by the {@link FormController}. There are three cases:
+     * - the instance was opened for edit so its database row already exists
+     * - a new instance was just created so its database row doesn't exist and needs to be created
+     * - a new instance was created at the start of this editing session but the user has already
+     * saved it so its database row already exists
+     *
+     * Post-condition: the uri field is set to the URI of the instance database row that matches
+     * the instance currently managed by the {@link FormController}.
+     */
     private void updateInstanceDatabase(boolean incomplete, boolean canEditAfterCompleted) {
         ContentValues values = new ContentValues();
         if (instanceName != null) {
@@ -183,28 +197,31 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 values.putAll(geometryContentValues);
             }
 
-            int updated = Collect.getInstance().getContentResolver().update(
-                uri, values, null, null);
+            int updated = Collect.getInstance().getContentResolver().update(uri, values, null, null);
             if (updated > 1) {
                 Timber.w("Updated more than one entry, that's not good: %s", uri.toString());
             } else if (updated == 1) {
                 Timber.i("Instance successfully updated");
             } else {
-                Timber.e("Instance doesn't exist but we have its Uri!! %s", uri.toString());
+                Timber.w("Instance doesn't exist but we have its Uri!! %s", uri.toString());
             }
         } else if (Collect.getInstance().getContentResolver().getType(uri).equals(
                 FormsColumns.CONTENT_ITEM_TYPE)) {
             // If FormEntryActivity was started with a form, then it's likely the first time we're
-            // saving.
-            // However, it could be a not-first time saving if the user has been using the manual
-            // 'save data' option from the menu. So try to update first, then make a new one if that
-            // fails.
+            // saving. However, it could be a not-first time saving if the user has been using the
+            // manual 'save data' option from the menu. So try to update first, then make a new one
+            // if that fails.
             String instancePath = formController.getInstanceFile().getAbsolutePath();
+
             String where = InstanceColumns.INSTANCE_FILE_PATH + "=?";
-            String[] whereArgs = {
-                    instancePath
-            };
-            int updated = new InstancesDao().updateInstance(values, where, whereArgs);
+            int updated = new InstancesDao().updateInstance(values, where, new String[] {instancePath});
+
+            // Set uri to handle encrypted case (see exportData)
+            InstancesRepository instances = new DatabaseInstancesRepository();
+            Instance instance = instances.getByPath(instancePath);
+            if (instance != null) {
+                uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, instance.getDatabaseId().toString());
+            }
             if (updated > 1) {
                 Timber.w("Updated more than one entry, that's not good: %s", instancePath);
             } else if (updated == 1) {
@@ -436,6 +453,20 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             // if encrypted, delete all plaintext files
             // (anything not named instanceXml or anything not ending in .enc)
             if (isEncrypted) {
+                // Clear the geometry. Done outside of updateInstanceDatabase to avoid multiple
+                // branches and because it has no knowledge of encryption status.
+                ContentValues values = new ContentValues();
+                values.put(InstanceColumns.GEOMETRY, (String) null);
+                values.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
+                try {
+                    int updated = Collect.getInstance().getContentResolver().update(uri, values, null, null);
+                    if (updated < 1) {
+                        Timber.w("Instance geometry not cleared after encryption");
+                    }
+                } catch (IllegalArgumentException e) {
+                    Timber.w(e);
+                }
+
                 if (!EncryptionUtils.deletePlaintextFiles(instanceXml, new File(lastSavedPath))) {
                     Timber.e("Error deleting plaintext files for %s", instanceXml.getAbsolutePath());
                 }
@@ -447,7 +478,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
      * Returns the XPath path of the geo feature used for mapping that corresponds to the blank form
      * that the instance with the given uri is an instance of.
      */
-    private String getGeometryXpathForInstance(Uri uri) {
+    private static String getGeometryXpathForInstance(Uri uri) {
         try (Cursor instanceCursor = Collect.getInstance().getContentResolver().query(
             uri, new String[] {InstanceColumns.JR_FORM_ID, InstanceColumns.JR_VERSION}, null, null, null)) {
             if (instanceCursor.moveToFirst()) {
