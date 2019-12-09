@@ -192,6 +192,8 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         gridView.setScrollContainer(false);
         gridView.setStretchMode(GridView.NO_STRETCH);
         gridView.setAdapter(new ImageAdapter());
+        int paddingStartEnd = getContext().getResources().getDimensionPixelSize(R.dimen.margin_standard);
+        gridView.setPadding(paddingStartEnd, 0, paddingStartEnd, 0);
         addAnswerView(gridView);
     }
 
