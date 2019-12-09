@@ -191,6 +191,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         // If FormEntryActivity was started with an instance, update that instance
         if (Collect.getInstance().getContentResolver().getType(uri).equals(
                 InstanceColumns.CONTENT_ITEM_TYPE)) {
+            // TODO: reduce geometry duplication across three branches with different database queries
             String geometryXpath = getGeometryXpathForInstance(uri);
             ContentValues geometryContentValues = extractGeometryContentValues(formInstance, geometryXpath);
             if (geometryContentValues != null) {
@@ -207,21 +208,27 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             }
         } else if (Collect.getInstance().getContentResolver().getType(uri).equals(
                 FormsColumns.CONTENT_ITEM_TYPE)) {
-            // If FormEntryActivity was started with a form, then it's likely the first time we're
-            // saving. However, it could be a not-first time saving if the user has been using the
-            // manual 'save data' option from the menu. So try to update first, then make a new one
-            // if that fails.
+            // If FormEntryActivity was started with a form, then either:
+            // - it's the first time we're saving so we should create a new database row
+            // - the user has used the manual 'save data' option so the database row already exists
+            // Try to update first, then make a new row if that fails.
             String instancePath = formController.getInstanceFile().getAbsolutePath();
-
-            String where = InstanceColumns.INSTANCE_FILE_PATH + "=?";
-            int updated = new InstancesDao().updateInstance(values, where, new String[] {instancePath});
 
             // Set uri to handle encrypted case (see exportData)
             InstancesRepository instances = new DatabaseInstancesRepository();
             Instance instance = instances.getByPath(instancePath);
             if (instance != null) {
                 uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, instance.getDatabaseId().toString());
+
+                String geometryXpath = getGeometryXpathForInstance(uri);
+                ContentValues geometryContentValues = extractGeometryContentValues(formInstance, geometryXpath);
+                if (geometryContentValues != null) {
+                    values.putAll(geometryContentValues);
+                }
             }
+
+            String where = InstanceColumns.INSTANCE_FILE_PATH + "=?";
+            int updated = new InstancesDao().updateInstance(values, where, new String[] {instancePath});
             if (updated > 1) {
                 Timber.w("Updated more than one entry, that's not good: %s", instancePath);
             } else if (updated == 1) {
