@@ -89,6 +89,7 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
 
         try {
             onCreateNamed(db, ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME);
+            createAndPopulateMetadataTable(db, ExternalDataUtil.EXTERNAL_METADATA_TABLE_NAME, dataSetFile);
         } catch (Exception e) {
             throw new ExternalDataException(
                     Collect.getInstance().getString(R.string.ext_import_generic_error,
@@ -182,7 +183,7 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
             // populate the database
             String[] row = reader.readNext();
             int rowCount = 0;
-            while (row != null && !formLoaderTask.isCancelled()) {
+            while (row != null && !isCancelled()) {
                 // SCTO-894 - first we should make sure that this is not an empty line
                 if (!ExternalDataUtil.containsAnyData(row)) {
                     // yes, that is an empty row, ignore it
@@ -230,7 +231,7 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
                 }
             }
 
-            if (formLoaderTask.isCancelled()) {
+            if (isCancelled()) {
                 Timber.w("User canceled reading data from %s", dataSetFile.toString());
                 onProgress(Collect.getInstance().getString(R.string.ext_import_cancelled_message));
             } else {
@@ -255,6 +256,27 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
                 }
             }
         }
+    }
+
+    protected boolean isCancelled() {
+        return formLoaderTask != null && formLoaderTask.isCancelled();
+    }
+
+    // Create a metadata table with a simple schema as needed to address a bug. This metadata table
+    // is not meant to evolve since this is a legacy feature.
+    protected static void createAndPopulateMetadataTable(SQLiteDatabase db, String metadataTableName, File dataSetFile) throws Exception  {
+        StringBuilder createTableQuery = new StringBuilder("CREATE TABLE ");
+        createTableQuery.append(quoteTableName(metadataTableName)).append("(dataSetFilename TEXT, lastModified INTEGER);");
+        db.execSQL(createTableQuery.toString());
+
+        ContentValues metadata = new ContentValues();
+        metadata.put(ExternalDataUtil.COLUMN_DATASET_FILENAME, dataSetFile.getName());
+        metadata.put(ExternalDataUtil.COLUMN_LAST_MODIFIED, dataSetFile.lastModified());
+        db.insertOrThrow(metadataTableName, null, metadata);
+    }
+
+    protected static String quoteTableName(String tableName) {
+        return "\"" + tableName + "\"";
     }
 
     @Override

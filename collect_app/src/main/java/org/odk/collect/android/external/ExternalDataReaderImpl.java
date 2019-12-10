@@ -72,7 +72,7 @@ public class ExternalDataReaderImpl implements ExternalDataReader {
                 dbFile);
         externalSQLiteOpenHelper.importFromCSV(dataSetFile, this, formLoaderTask);
 
-        if (formLoaderTask.isCancelled()) {
+        if (formLoaderTask != null && formLoaderTask.isCancelled()) {
             Timber.w(
                     "The import was cancelled, so we need to rollback.");
 
