@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -75,6 +76,9 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     @BindView(R.id.text_container)
     FrameLayout textContainer;
+
+    @BindView(R.id.media_buttons)
+    LinearLayout mediaButtonsContainer;
 
     private TextView labelTextView;
     private String videoURI;
@@ -258,11 +262,13 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     private void setupVideoButton() {
         videoButton.setVisibility(VISIBLE);
+        mediaButtonsContainer.setVisibility(VISIBLE);
         videoButton.setOnClickListener(this);
     }
 
     private void setupAudioButton(String audioURI, AudioHelper audioHelper) {
         audioButton.setVisibility(VISIBLE);
+        mediaButtonsContainer.setVisibility(VISIBLE);
 
         ScreenContext activity = getScreenContext();
         String clipID = getTag() != null ? getTag().toString() : "";
