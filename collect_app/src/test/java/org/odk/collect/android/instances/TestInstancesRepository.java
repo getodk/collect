@@ -23,6 +23,23 @@ public final class TestInstancesRepository implements InstancesRepository {
         return result;
     }
 
+    @Override
+    public Instance getByPath(String instancePath) {
+        List<Instance> result = new ArrayList<>();
+
+        for (Instance instance : instances) {
+            if (instance.getInstanceFilePath().equals(instancePath)) {
+                result.add(instance);
+            }
+        }
+
+        if (result.size() == 1) {
+            return result.get(0);
+        } else {
+            return null;
+        }
+    }
+
     public void addInstance(Instance instance) {
         instances.add(instance);
     }
