@@ -27,6 +27,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
+import org.odk.collect.android.utilities.CustomSQLiteQueryExecutor;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -264,10 +266,15 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
 
     // Create a metadata table with a simple schema as needed to address a bug. This metadata table
     // is not meant to evolve since this is a legacy feature.
-    protected static void createAndPopulateMetadataTable(SQLiteDatabase db, String metadataTableName, File dataSetFile) throws Exception  {
-        StringBuilder createTableQuery = new StringBuilder("CREATE TABLE ");
-        createTableQuery.append(quoteTableName(metadataTableName)).append("(dataSetFilename TEXT, lastModified INTEGER);");
-        db.execSQL(createTableQuery.toString());
+    protected static void createAndPopulateMetadataTable(SQLiteDatabase db, String metadataTableName, File dataSetFile) throws Exception {
+        final String dataSetFilenameColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_DATASET_FILENAME);
+        final String lastModifiedColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_LAST_MODIFIED);
+
+        List<String> columnDefinitions = new ArrayList<>();
+        columnDefinitions.add(CustomSQLiteQueryBuilder.formatColumnDefinition(dataSetFilenameColumn, "TEXT"));
+        columnDefinitions.add(CustomSQLiteQueryBuilder.formatColumnDefinition(lastModifiedColumn, "INTEGER"));
+
+        CustomSQLiteQueryExecutor.begin(db).createTable(metadataTableName).columnsForCreate(columnDefinitions).end();
 
         ContentValues metadata = new ContentValues();
         metadata.put(ExternalDataUtil.COLUMN_DATASET_FILENAME, dataSetFile.getName());

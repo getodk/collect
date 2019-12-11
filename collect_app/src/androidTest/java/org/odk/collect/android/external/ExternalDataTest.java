@@ -13,7 +13,9 @@ import org.junit.rules.RuleChain;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.SQLiteUtils;
 
 import java.io.File;
 import java.util.Collections;
@@ -53,8 +55,8 @@ public class ExternalDataTest {
         SQLiteDatabase.OpenParams.Builder paramsBuilder = new SQLiteDatabase.OpenParams.Builder();
         SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFile, paramsBuilder.build());
         Assert.assertNotNull(db);
-        Assert.assertTrue(hasTable(db, ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME));
-        Assert.assertTrue(hasTable(db, ExternalDataUtil.EXTERNAL_METADATA_TABLE_NAME));
+        Assert.assertTrue(SQLiteUtils.doesTableExist(db, ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME));
+        Assert.assertTrue(SQLiteUtils.doesTableExist(db, ExternalDataUtil.EXTERNAL_METADATA_TABLE_NAME));
     }
 
     @Test
@@ -67,30 +69,17 @@ public class ExternalDataTest {
         SQLiteDatabase.OpenParams.Builder paramsBuilder = new SQLiteDatabase.OpenParams.Builder();
         SQLiteDatabase db = SQLiteDatabase.createInMemory(paramsBuilder.build());
         ExternalSQLiteOpenHelper.createAndPopulateMetadataTable(db, testMetadataTable, csvFile);
-        Assert.assertTrue(hasTable(db, testMetadataTable));
+        Assert.assertTrue(SQLiteUtils.doesTableExist(db, testMetadataTable));
 
         // Check expected metadata table contents
         final String[] columnNames = {ExternalDataUtil.COLUMN_LAST_MODIFIED};
-        final String selectCriteria = ExternalDataUtil.COLUMN_DATASET_FILENAME + " = " + quoteString(SIMPLE_SEARCH_EXTERNAL_CSV_FILENAME);
+        final String selectCriteria = CustomSQLiteQueryBuilder.formatCompareEquals(
+                ExternalDataUtil.COLUMN_DATASET_FILENAME,
+                CustomSQLiteQueryBuilder.quoteStringLiteral(SIMPLE_SEARCH_EXTERNAL_CSV_FILENAME));
         Cursor cursor = db.query(testMetadataTable, columnNames, selectCriteria, null, null, null, null);
         cursor.moveToFirst();
         long fileTimestamp = cursor.getLong(0);
 
         Assert.assertEquals(fileTimestamp, csvFile.lastModified());
-    }
-
-    protected boolean hasTable(SQLiteDatabase db, String tableName) {
-        final String[] columnNames = {"name"};
-        final String selectCriteria = "\"type\" = 'table' AND \"name\" = " + quoteString(tableName);
-        Cursor cursor = db.query("sqlite_master", columnNames, selectCriteria, null, null, null, null);
-        Assert.assertEquals(1, cursor.getCount());
-        int columnIndex = cursor.getColumnIndex("name");
-        cursor.moveToFirst();
-        String resultTableName = cursor.getString(columnIndex);
-        return tableName.equals(resultTableName);
-    }
-
-    protected String quoteString(String unquoted) {
-        return new StringBuilder("\'").append(unquoted).append("\'").toString();
     }
 }

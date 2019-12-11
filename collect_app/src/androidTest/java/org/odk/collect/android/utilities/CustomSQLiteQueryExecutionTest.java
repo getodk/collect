@@ -31,7 +31,7 @@ import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class CustomSQLiteQueryBuilderTestCase {
+public class CustomSQLiteQueryExecutionTest {
 
     private static final String DATABASE_PATH = new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA) + "/test.db";
     private static final String TEST_TABLE_NAME = "testTable";
@@ -52,7 +52,7 @@ public class CustomSQLiteQueryBuilderTestCase {
     public void dropTableTest() {
         createTestTable();
         assertTrue(tableExists(TEST_TABLE_NAME));
-        CustomSQLiteQueryBuilder
+        CustomSQLiteQueryExecutor
                 .begin(sqLiteDatabase)
                 .dropIfExists(TEST_TABLE_NAME)
                 .end();
@@ -66,7 +66,7 @@ public class CustomSQLiteQueryBuilderTestCase {
         assertTrue(tableExists(TEST_TABLE_NAME));
         assertFalse(tableExists(TEST_TABLE_NAME_2));
         checkValues(TEST_TABLE_NAME);
-        CustomSQLiteQueryBuilder
+        CustomSQLiteQueryExecutor
                 .begin(sqLiteDatabase)
                 .renameTable(TEST_TABLE_NAME)
                 .to(TEST_TABLE_NAME_2)
@@ -84,7 +84,7 @@ public class CustomSQLiteQueryBuilderTestCase {
         assertFalse(tableExists(TEST_TABLE_NAME_2));
         checkValues(TEST_TABLE_NAME);
 
-        CustomSQLiteQueryBuilder
+        CustomSQLiteQueryExecutor
                 .begin(sqLiteDatabase)
                 .renameTable(TEST_TABLE_NAME)
                 .to(TEST_TABLE_NAME_2)
@@ -96,7 +96,7 @@ public class CustomSQLiteQueryBuilderTestCase {
 
         createTestTable();
 
-        CustomSQLiteQueryBuilder
+        CustomSQLiteQueryExecutor
                 .begin(sqLiteDatabase)
                 .insertInto(TEST_TABLE_NAME)
                 .columnsForInsert(tableColumns)
@@ -107,7 +107,7 @@ public class CustomSQLiteQueryBuilderTestCase {
 
         checkValues(TEST_TABLE_NAME);
 
-        CustomSQLiteQueryBuilder
+        CustomSQLiteQueryExecutor
                 .begin(sqLiteDatabase)
                 .dropIfExists(TEST_TABLE_NAME_2)
                 .end();
@@ -121,7 +121,7 @@ public class CustomSQLiteQueryBuilderTestCase {
         createTestTable();
         assertTrue(tableExists(TEST_TABLE_NAME));
 
-        CustomSQLiteQueryBuilder
+        CustomSQLiteQueryExecutor
                 .begin(sqLiteDatabase)
                 .alter()
                 .table(TEST_TABLE_NAME)
@@ -139,7 +139,7 @@ public class CustomSQLiteQueryBuilderTestCase {
     }
 
     private void dropTable(String tableName) {
-        CustomSQLiteQueryBuilder
+        CustomSQLiteQueryExecutor
                 .begin(sqLiteDatabase)
                 .dropIfExists(tableName)
                 .end();
