@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.AppCompatRadioButton;
+import androidx.core.content.ContextCompat;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.reference.InvalidReferenceException;
@@ -60,9 +61,6 @@ import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayab
  * is calculated based on items size.
  */
 public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceWidget {
-
-    final int bgOrange = getResources().getColor(R.color.highContrastHighlight);
-
     private static final int PADDING = 7;
     private static final int SPACING = 2;
 
@@ -192,13 +190,15 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         gridView.setScrollContainer(false);
         gridView.setStretchMode(GridView.NO_STRETCH);
         gridView.setAdapter(new ImageAdapter());
+        int paddingStartEnd = getContext().getResources().getDimensionPixelSize(R.dimen.margin_standard);
+        gridView.setPadding(paddingStartEnd, 0, paddingStartEnd, 0);
         addAnswerView(gridView);
     }
 
     void selectItem(int index) {
         selectedItems.add(index);
         if (noButtonsMode) {
-            itemViews[index].setBackgroundColor(bgOrange);
+            itemViews[index].setBackground(ContextCompat.getDrawable(getContext(), R.drawable.select_item_border));
         } else {
             ((CompoundButton) itemViews[index]).setChecked(true);
         }
