@@ -11,7 +11,7 @@ import static org.odk.collect.android.utilities.StringUtils.isBlank;
 public class ChangesReasonPromptViewModel extends ViewModel {
 
     private final MutableLiveData<Boolean> requiresReasonToContinue = new MutableLiveData<>(false);
-    private final MutableLiveData<SaveRequest> saveRequests = new MutableLiveData<>(null);
+    private final MutableLiveData<SaveRequest> saveRequest = new MutableLiveData<>(null);
 
     private AuditEventLogger auditEventLogger;
     private String reason;
@@ -21,8 +21,8 @@ public class ChangesReasonPromptViewModel extends ViewModel {
         return requiresReasonToContinue;
     }
 
-    public LiveData<SaveRequest> saveRequests() {
-        return saveRequests;
+    public LiveData<SaveRequest> saveRequest() {
+        return saveRequest;
     }
 
     public void setAuditEventLogger(AuditEventLogger auditEventLogger) {
@@ -33,10 +33,14 @@ public class ChangesReasonPromptViewModel extends ViewModel {
         lastSaveRequest = new SaveRequest(complete, updatedSaveName, exitAfter);
 
         if (!requiresReasonToSave()) {
-            saveRequests.setValue(lastSaveRequest);
+            saveRequest.setValue(lastSaveRequest);
         } else {
             requiresReasonToContinue.setValue(true);
         }
+    }
+
+    public void saveComplete() {
+        saveRequest.setValue(null);
     }
 
     public void editingForm() {
@@ -55,7 +59,7 @@ public class ChangesReasonPromptViewModel extends ViewModel {
         if (reason != null && !isBlank(reason)) {
             this.auditEventLogger.logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, currentTime, reason);
             requiresReasonToContinue.setValue(false);
-            saveRequests.setValue(lastSaveRequest);
+            saveRequest.setValue(lastSaveRequest);
         }
     }
 

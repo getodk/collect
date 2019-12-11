@@ -430,8 +430,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 );
             }
         });
-        changesReasonPromptViewModel.saveRequests().observe(this, saveRequest -> {
+        changesReasonPromptViewModel.saveRequest().observe(this, saveRequest -> {
             if (saveRequest != null) {
+                showDialog(SAVING_DIALOG);
                 save(saveRequest.isComplete(), saveRequest.getUpdatedSaveName(), saveRequest.isExitAfter());
             }
         });
@@ -1892,7 +1893,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 updatedSaveName);
         saveToDiskTask.setFormSavedListener(this);
         autoSaved = true;
-        showDialog(SAVING_DIALOG);
         // show dialog before we execute...
         saveToDiskTask.execute();
     }
@@ -2548,6 +2548,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     public void savingComplete(SaveResult saveResult) {
         dismissDialog(SAVING_DIALOG);
+        changesReasonPromptViewModel.saveComplete();
 
         int saveStatus = saveResult.getSaveResult();
         FormController formController = getFormController();
