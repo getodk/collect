@@ -25,7 +25,9 @@ public class SQLiteUtils {
         };
 
         Cursor cursor = db.query(sqliteSystemTable, columnsToSelect, CustomSQLiteQueryBuilder.formatLogicalAnd(selectCriteria), null, null, null, null);
-        return cursor.getCount() == 1;
+        boolean foundTable = cursor.getCount() == 1;
+        cursor.close();
+        return foundTable;
     }
 
     public static boolean doesColumnExist(SQLiteDatabase db, String tableName, String columnName) {

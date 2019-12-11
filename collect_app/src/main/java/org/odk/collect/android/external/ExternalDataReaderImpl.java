@@ -60,11 +60,15 @@ public class ExternalDataReaderImpl implements ExternalDataReader {
         File dbFile = new File(dataSetFile.getParentFile().getAbsolutePath(),
                 dataSetName + ".db");
         if (dbFile.exists()) {
-            // this means the someone updated the csv file, so we need to reload it
-            boolean deleted = dbFile.delete();
-            if (!deleted) {
-                Timber.e("%s has changed but we could not delete the previous DB at %s",
-                        dataSetFile.getName(), dbFile.getAbsolutePath());
+            // Determine if we need to reimport
+            if (ExternalSQLiteOpenHelper.shouldUpdateDBforDataSet(dbFile, dataSetFile)) {
+                boolean deleted = dbFile.delete();
+                if (!deleted) {
+                    Timber.e("%s has changed but we could not delete the previous DB at %s",
+                            dataSetFile.getName(), dbFile.getAbsolutePath());
+                    return true;
+                }
+            } else {
                 return true;
             }
         }
@@ -96,18 +100,6 @@ public class ExternalDataReaderImpl implements ExternalDataReader {
             // then just exit and do not process any other CSVs.
             return false;
 
-        } else {
-            // rename the dataSetFile into "dataSetFile.csv.imported" in order not to be
-            // loaded again
-            File importedFile = new File(dataSetFile.getParentFile(),
-                    dataSetFile.getName() + ".imported");
-            boolean renamed = dataSetFile.renameTo(importedFile);
-            if (!renamed) {
-                Timber.e("%s could not be renamed to be archived. It will be re-imported "
-                        + "again! :(", dataSetFile.getName());
-            } else {
-                Timber.e("%s was renamed to %s", dataSetFile.getName(), importedFile.getName());
-            }
         }
         return true;
     }
