@@ -29,6 +29,8 @@ import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColor;
+
 /**
  * SelectMultiWidget handles multiple selection fields using checkboxes.
  *

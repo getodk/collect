@@ -53,6 +53,8 @@ import java.util.Date;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerTextView;
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog.DATE_PICKER_DIALOG;
 
 /**
@@ -80,8 +82,8 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
 
     protected void createWidget() {
         datePickerDetails = DateTimeUtils.getDatePickerDetails(getFormEntryPrompt().getQuestion().getAppearanceAttr());
-        dateButton = getSimpleButton(getContext().getString(R.string.select_date));
-        dateTextView = getAnswerTextView();
+        dateButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.select_date), getAnswerFontSize(), this);
+        dateTextView = createAnswerTextView(getContext(), getAnswerFontSize());
         addViews();
         if (getFormEntryPrompt().getAnswerValue() == null) {
             clearAnswer();

@@ -41,6 +41,9 @@ import java.math.BigDecimal;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerTextView;
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
+
 @SuppressWarnings("BigDecimalMethodWithoutRoundingCalled")
 public abstract class RangeWidget extends QuestionWidget implements ButtonWidget, SeekBar.OnSeekBarChangeListener {
 
@@ -229,9 +232,9 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
             loadAppearance(R.layout.range_widget_horizontal, R.id.seek_bar);
 
         } else if (appearance.contains(PICKER_APPEARANCE)) {
-            pickerButton = getSimpleButton(getContext().getString(R.string.select_value));
+            pickerButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.select_value), getAnswerFontSize(), this);
 
-            answerTextView = getAnswerTextView();
+            answerTextView = createAnswerTextView(getContext(), getAnswerFontSize());
             isPickerAppearance = true;
 
             view = new LinearLayout(getContext());

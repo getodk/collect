@@ -42,6 +42,9 @@ import java.util.Date;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerTextView;
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
+
 /**
  * Displays a TimePicker widget.
  *
@@ -63,7 +66,7 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
         super(context, prompt);
 
         createTimeButton();
-        timeTextView = getAnswerTextView();
+        timeTextView = createAnswerTextView(getContext(), getAnswerFontSize());
         createTimePickerDialog();
         addViews();
     }
@@ -104,7 +107,7 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
     }
 
     private void createTimeButton() {
-        timeButton = getSimpleButton(getContext().getString(R.string.select_time));
+        timeButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.select_time), getAnswerFontSize(), this);
     }
 
     private void addViews() {

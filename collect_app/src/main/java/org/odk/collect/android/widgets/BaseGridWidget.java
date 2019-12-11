@@ -54,7 +54,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 
 /**
  * GridWidget handles select-one/multiple fields using a grid options. The number of columns

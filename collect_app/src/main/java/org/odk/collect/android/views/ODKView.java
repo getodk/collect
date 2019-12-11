@@ -444,7 +444,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         });
 
         view.addView(getDividerView());
-
         view.addView(launchIntentButton, layout);
     }
 

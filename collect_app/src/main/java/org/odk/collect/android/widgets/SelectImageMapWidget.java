@@ -55,6 +55,8 @@ import javax.xml.transform.stream.StreamResult;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerTextView;
+
 /**
  * A base widget class which is responsible for sharing the code used by image map select widgets like
  * {@link SelectOneImageMapWidget} and {@link SelectMultiImageMapWidget}.
@@ -118,7 +120,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
     private void createLayout() {
         webView = new CustomWebView(getContext());
 
-        selectedAreasLabel = getAnswerTextView();
+        selectedAreasLabel = createAnswerTextView(getContext(), getAnswerFontSize());
         answerLayout.addView(webView);
         answerLayout.addView(selectedAreasLabel);
 

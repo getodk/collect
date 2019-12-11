@@ -16,24 +16,19 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
 
 import org.javarosa.core.model.FormIndex;
@@ -58,9 +53,7 @@ import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
-import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.utilities.ViewUtils;
-import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.Widget;
 
 import java.util.ArrayList;
@@ -73,8 +66,9 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
-import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getClipID;
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColor;
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 
 public abstract class QuestionWidget
@@ -432,72 +426,6 @@ public abstract class QuestionWidget
         warningText.setText(warningBody);
     }
 
-    protected Button getSimpleButton(String text, @IdRes final int withId) {
-        final Button button = new Button(getContext());
-
-        if (getFormEntryPrompt().isReadOnly()) {
-            button.setVisibility(GONE);
-        } else {
-            button.setId(withId);
-            button.setText(text);
-            button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-            button.setPadding(20, 20, 20, 20);
-
-            TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-            params.setMargins(7, 5, 7, 5);
-
-            button.setLayoutParams(params);
-
-            button.setOnClickListener(v -> {
-                if (Collect.allowClick(QuestionWidget.class.getName())) {
-                    ((ButtonWidget) this).onButtonClick(withId);
-                }
-            });
-        }
-
-        return button;
-    }
-
-    protected Button getSimpleButton(@IdRes int id) {
-        return getSimpleButton(null, id);
-    }
-
-    protected Button getSimpleButton(String text) {
-        return getSimpleButton(text, R.id.simple_button);
-    }
-
-    protected TextView getCenteredAnswerTextView() {
-        TextView textView = getAnswerTextView();
-        textView.setGravity(Gravity.CENTER);
-
-        return textView;
-    }
-
-    protected TextView getAnswerTextView() {
-        return getAnswerTextView("");
-    }
-
-    protected TextView getAnswerTextView(String text) {
-        TextView textView = new TextView(getContext());
-
-        textView.setId(R.id.answer_text);
-        textView.setTextColor(themeUtils.getColorOnSurface());
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        textView.setPadding(20, 20, 20, 20);
-        textView.setText(text);
-
-        return textView;
-    }
-
-    protected ImageView getAnswerImageView(Bitmap bitmap) {
-        final ImageView imageView = new ImageView(getContext());
-        imageView.setId(ViewIds.generateViewId());
-        imageView.setPadding(10, 10, 10, 10);
-        imageView.setAdjustViewBounds(true);
-        imageView.setImageBitmap(bitmap);
-        return imageView;
-    }
-
     //region Data waiting
 
     @Override
@@ -589,21 +517,6 @@ public abstract class QuestionWidget
 
     public ReferenceManager getReferenceManager() {
         return referenceManager;
-    }
-
-    public static int getPlayColor(FormEntryPrompt prompt, ThemeUtils themeUtils) {
-        int playColor = themeUtils.getAccentColor();
-
-        String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
-        if (playColorString != null) {
-            try {
-                playColor = Color.parseColor(playColorString);
-            } catch (IllegalArgumentException e) {
-                Timber.e(e, "Argument %s is incorrect", playColorString);
-            }
-        }
-
-        return playColor;
     }
 
     public PermissionUtils getPermissionUtils() {

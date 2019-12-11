@@ -39,6 +39,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -65,7 +66,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         textBackground = answer.getBackground();
         answer.setBackground(null);
 
-        getBearingButton = getSimpleButton(getContext().getString(R.string.get_bearing));
+        getBearingButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.get_bearing), getAnswerFontSize(), this);
 
         answerLayout.addView(getBearingButton);
         answerLayout.addView(answer);

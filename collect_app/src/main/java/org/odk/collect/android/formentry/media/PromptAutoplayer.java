@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
-import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
-import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getClipID;
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.NO_BUTTONS;
 
 public class PromptAutoplayer {

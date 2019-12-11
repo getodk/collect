@@ -37,6 +37,9 @@ import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerTextView;
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
+
 public class RankingWidget extends ItemsWidget implements BinaryWidget {
 
     private List<SelectChoice> savedItems;
@@ -132,7 +135,7 @@ public class RankingWidget extends ItemsWidget implements BinaryWidget {
 
         widgetLayout = new LinearLayout(getContext());
         widgetLayout.setOrientation(LinearLayout.VERTICAL);
-        showRankingDialogButton = getSimpleButton(getContext().getString(R.string.rank_items));
+        showRankingDialogButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.rank_items), getAnswerFontSize(), this);
         widgetLayout.addView(showRankingDialogButton);
         widgetLayout.addView(setUpAnswerTextView());
 
@@ -155,6 +158,6 @@ public class RankingWidget extends ItemsWidget implements BinaryWidget {
                 }
             }
         }
-        return getAnswerTextView(answerText.toString());
+        return createAnswerTextView(getContext(), answerText.toString(), getAnswerFontSize());
     }
 }

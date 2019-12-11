@@ -39,6 +39,7 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -71,9 +72,9 @@ public class ImageWidget extends BaseImageWidget {
         selfie = appearance != null && (appearance.equalsIgnoreCase(WidgetAppearanceUtils.SELFIE)
                 || appearance.equalsIgnoreCase(WidgetAppearanceUtils.NEW_FRONT));
 
-        captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
+        captureButton = createSimpleButton(getContext(), R.id.capture_image, getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.capture_image), getAnswerFontSize(), this);
 
-        chooseButton = getSimpleButton(getContext().getString(R.string.choose_image), R.id.choose_image);
+        chooseButton = createSimpleButton(getContext(), R.id.choose_image, getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.choose_image), getAnswerFontSize(), this);
 
         answerLayout.addView(captureButton);
         answerLayout.addView(chooseButton);

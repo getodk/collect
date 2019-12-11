@@ -29,6 +29,9 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCenteredAnswerTextView;
+
 /**
  * Widget that allows user to open URLs from within the form
  *
@@ -45,9 +48,9 @@ public class UrlWidget extends QuestionWidget implements ButtonWidget {
     public UrlWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
 
-        openUrlButton = getSimpleButton(context.getString(R.string.open_url));
+        openUrlButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), context.getString(R.string.open_url), getAnswerFontSize(), this);
 
-        stringAnswer = getCenteredAnswerTextView();
+        stringAnswer = getCenteredAnswerTextView(getContext(), getAnswerFontSize());
 
         String s = questionDetails.getPrompt().getAnswerText();
         if (s != null) {
