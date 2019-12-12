@@ -364,6 +364,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @Override public boolean onMarkerClick(Marker marker) {
         if (featureClickListener != null) {
             featureClickListener.onFeature(findFeature(marker));
+        } else {
+            onMapClick(marker.getPosition());
         }
         return true;  // consume the event (no default zoom and popup behaviour)
     }
