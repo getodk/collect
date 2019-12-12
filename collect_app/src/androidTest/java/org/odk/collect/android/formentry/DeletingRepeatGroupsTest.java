@@ -34,7 +34,7 @@ public class DeletingRepeatGroupsTest {
                     )
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule(TEST_FORM, null));
+            .around(new CopyFormRule(TEST_FORM, true));
 
     @Test
     public void requestingDeletionOfFirstRepeat_deletesFirstRepeat() {

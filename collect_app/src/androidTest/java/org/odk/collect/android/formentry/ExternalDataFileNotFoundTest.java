@@ -28,7 +28,7 @@ public class ExternalDataFileNotFoundTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule(EXTERNAL_DATA_QUESTIONS));
+            .around(new CopyFormRule(EXTERNAL_DATA_QUESTIONS, true));
 
     @Test
     public void questionsThatUseExternalFiles_ShouldDisplayFriendlyMessageWhenFilesAreMissing() {

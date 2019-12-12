@@ -29,7 +29,7 @@ public class SelectMinimalTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule("select_minimal.xml"));
+            .around(new CopyFormRule("select_minimal.xml", true));
 
     @Test
     public void longLabelsShouldBeDisplayed() {

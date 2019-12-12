@@ -62,7 +62,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     private void goToBlankForm(String formName) {
-        onView(withId(R.id.enter_data)).perform(click());
+        clickFillBlankForm();
         onData(withRowString(FormsColumns.DISPLAY_NAME, formName)).perform(click());
     }
 
