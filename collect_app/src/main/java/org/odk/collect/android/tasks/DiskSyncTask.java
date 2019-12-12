@@ -20,6 +20,7 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
@@ -36,6 +37,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.forms.FormUtils.setupReferenceManagerForForm;
 
 /**
  * Background task for adding to the forms content provider, any forms that have been added to the
@@ -257,6 +260,10 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
 
         HashMap<String, String> fields;
         try {
+            // If the form definition includes external secondary instances, they need to be resolved
+            final File formMediaDir = FileUtils.getFormMediaDir(formDefFile);
+            setupReferenceManagerForForm(ReferenceManager.instance(), formMediaDir);
+
             fields = FileUtils.getMetadataFromFormDefinition(formDefFile);
         } catch (RuntimeException e) {
             throw new IllegalArgumentException(formDefFile.getName() + " :: " + e.toString());
