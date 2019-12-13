@@ -20,6 +20,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
+import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
@@ -45,6 +46,8 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.forms.FormUtils.setupReferenceManagerForForm;
 
 public class FormDownloader {
 
@@ -168,6 +171,9 @@ public class FormDownloader {
             try {
                 final long start = System.currentTimeMillis();
                 Timber.w("Parsing document %s", fileResult.file.getAbsolutePath());
+                // If the form definition includes external secondary instances, they need to be resolved
+                setupReferenceManagerForForm(ReferenceManager.instance(), new File(tempMediaPath));
+
                 parsedFields = FileUtils.getMetadataFromFormDefinition(fileResult.file);
                 Timber.i("Parse finished in %.3f seconds.",
                         (System.currentTimeMillis() - start) / 1000F);
