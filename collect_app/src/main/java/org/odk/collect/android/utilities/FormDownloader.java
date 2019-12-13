@@ -171,8 +171,11 @@ public class FormDownloader {
             try {
                 final long start = System.currentTimeMillis();
                 Timber.w("Parsing document %s", fileResult.file.getAbsolutePath());
-                // If the form definition includes external secondary instances, they need to be resolved
-                setupReferenceManagerForForm(ReferenceManager.instance(), new File(tempMediaPath));
+                // If the form definition includes attachments, set up the reference manager in case
+                // one of them defines a secondary instance (required to build a FormDef)
+                if (tempMediaPath != null) {
+                    setupReferenceManagerForForm(ReferenceManager.instance(), new File(tempMediaPath));
+                }
 
                 parsedFields = FileUtils.getMetadataFromFormDefinition(fileResult.file);
                 Timber.i("Parse finished in %.3f seconds.",
