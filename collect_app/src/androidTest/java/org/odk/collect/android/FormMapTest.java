@@ -33,7 +33,8 @@ public class FormMapTest {
     @Rule public RuleChain copyFormChain = RuleChain
             .outerRule(GrantPermissionRule.grant(
                     Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
             ))
             .around(new ResetStateRule())
             .around(new CopyFormRule(SINGLE_GEOPOINT_FORM))
