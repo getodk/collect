@@ -54,7 +54,9 @@ We try to make sure that all issues in the issue tracker are as close to fully s
 
     If you prefer not to use the command line, you can use Android Studio to create a new project from version control using `https://github.com/YOUR-GITHUB-USERNAME/collect`.
 
-1. Open the project in the folder of your clone from Android Studio. To run the project, click on the green arrow at the top of the screen.
+1. Use Android Studio to import the project from its Gradle settings. To run the project, click on the green arrow at the top of the screen.
+
+1. Windows developers: continue configuring Android Studio with the steps in this document: [Developing ODK Collect on Windows](docs/WindowsDevSetup.md).
 
 1. Make sure you can run unit tests by running everything under `collect_app/src/test/java` in Android Studio or on the command line:
 
