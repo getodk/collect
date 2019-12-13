@@ -204,7 +204,7 @@ public class FormDownloader {
         return submission == null || Validator.isUrlValid(submission);
     }
 
-    private boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields) {
+    boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields) {
         UriResult uriResult = null;
         try {
             uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields);
@@ -325,7 +325,7 @@ public class FormDownloader {
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
      */
-    private FileResult downloadXform(String formName, String url)
+    FileResult downloadXform(String formName, String url)
             throws IOException, TaskCancelledException, Exception {
         // clean up friendly form name...
         String rootName = formName.replaceAll("[^\\p{L}\\p{Digit}]", " ");
@@ -504,12 +504,12 @@ public class FormDownloader {
         }
     }
 
-    private static class FileResult {
+    static class FileResult {
 
         private final File file;
         private final boolean isNew;
 
-        private FileResult(File file, boolean isNew) {
+        FileResult(File file, boolean isNew) {
             this.file = file;
             this.isNew = isNew;
         }
@@ -523,7 +523,7 @@ public class FormDownloader {
         }
     }
 
-    private String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
+    String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
                                                  FormDetails fd, int count,
                                                  int total) throws Exception {
         if (fd.getManifestUrl() == null) {
