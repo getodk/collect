@@ -68,24 +68,10 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
             File formDir = new File(Collect.FORMS_PATH);
             if (formDir.exists() && formDir.isDirectory()) {
                 // Get all the files in the /odk/foms directory
-                List<File> formsToAdd = new LinkedList<>();
+                File[] formDefs = formDir.listFiles();
 
                 // Step 1: assemble the candidate form files
-                //         discard files beginning with "."
-                //         discard files not ending with ".xml" or ".xhtml"
-                {
-                    File[] formDefs = formDir.listFiles();
-                    for (File addMe : formDefs) {
-                        // Ignore invisible files that start with periods.
-                        if (!addMe.getName().startsWith(".")
-                                && (addMe.getName().endsWith(".xml") || addMe.getName().endsWith(
-                                ".xhtml"))) {
-                            formsToAdd.add(addMe);
-                        } else {
-                            Timber.i("[%d] Ignoring: %s", instance, addMe.getAbsolutePath());
-                        }
-                    }
-                }
+                List<File> formsToAdd = filterFormsToAdd(formDefs, instance);
 
                 // Step 2: quickly run through and figure out what files we need to
                 // parse and update; this is quick, as we only calculate the md5
@@ -225,6 +211,29 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
         } finally {
             Timber.i("[%d] doInBackground ends!", instance);
         }
+    }
+
+    protected static List<File> filterFormsToAdd(File[] formDefs, int backgroundInstanceId) {
+        List<File> formsToAdd = new LinkedList<>();
+        if (formDefs != null) {
+            for (File candidate : formDefs) {
+                if (shouldAddFormFile(candidate.getName())) {
+                    formsToAdd.add(candidate);
+                } else {
+                    Timber.i("[%d] Ignoring: %s", backgroundInstanceId, candidate.getAbsolutePath());
+                }
+            }
+        }
+        return formsToAdd;
+    }
+
+    protected static boolean shouldAddFormFile(String fileName) {
+        // discard files beginning with "."
+        // discard files not ending with ".xml" or ".xhtml"
+        boolean ignoredFile = fileName.startsWith(".");
+        boolean xmlFile = fileName.endsWith(".xml");
+        boolean xhtmlFile = fileName.endsWith(".xhtml");
+        return !ignoredFile && (xmlFile || xhtmlFile);
     }
 
     private boolean isAlreadyDefined(File formDefFile) {
