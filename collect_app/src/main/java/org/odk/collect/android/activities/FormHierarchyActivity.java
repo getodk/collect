@@ -560,7 +560,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 // retrieve the current group
                 TreeReference curGroup = (visibleGroupRef == null) ? contextGroupRef : visibleGroupRef;
 
-                if (curGroup != null && !curGroup.isParentOf(currentRef, false)) {
+                if (curGroup != null && !curGroup.isAncestorOf(currentRef, false)) {
                     // We have left the current group
                     if (visibleGroupRef == null) {
                         // We are done.
@@ -611,7 +611,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         }
 
                         // Don't render other groups' children.
-                        if (contextGroupRef != null && !contextGroupRef.isParentOf(currentRef, false)) {
+                        if (contextGroupRef != null && !contextGroupRef.isAncestorOf(currentRef, false)) {
                             break;
                         }
 
@@ -643,7 +643,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         FormEntryCaption fc = formController.getCaptionPrompt();
 
                         // Don't render other groups' children.
-                        if (contextGroupRef != null && !contextGroupRef.isParentOf(currentRef, false)) {
+                        if (contextGroupRef != null && !contextGroupRef.isAncestorOf(currentRef, false)) {
                             break;
                         }
 
