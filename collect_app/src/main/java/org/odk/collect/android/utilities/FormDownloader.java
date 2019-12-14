@@ -328,9 +328,7 @@ public class FormDownloader {
     private FileResult downloadXform(String formName, String url)
             throws IOException, TaskCancelledException, Exception {
         // clean up friendly form name...
-        String rootName = formName.replaceAll("[^\\p{L}\\p{Digit}]", " ");
-        rootName = rootName.replaceAll("\\p{javaWhitespace}+", " ");
-        rootName = rootName.trim();
+        String rootName = FormNameUtils.formatFilenameFromFormName(formName);
 
         // proposed name of xml file...
         String path = Collect.FORMS_PATH + File.separator + rootName + ".xml";

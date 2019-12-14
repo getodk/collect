@@ -20,9 +20,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.odk.collect.android.utilities.RegexUtils.normalizeFormName;
+import static org.odk.collect.android.utilities.FormNameUtils.normalizeFormName;
 
-public class RegexUtilsTest {
+public class FormNameUtilsTest {
 
     @Test
     public void normalizeFormNameTest() {
@@ -39,5 +39,22 @@ public class RegexUtilsTest {
         assertEquals("Lorem ipsum", normalizeFormName("Lorem\nipsum", true));
         assertEquals("Lorem  ipsum", normalizeFormName("Lorem\n\nipsum", true));
         assertEquals(" Lorem ipsum ", normalizeFormName("\nLorem\nipsum\n", true));
+    }
+
+    @Test
+    public void formatFilenameFromFormNameTest() {
+        assertNull(FormNameUtils.formatFilenameFromFormName(null));
+        assertEquals("simple", FormNameUtils.formatFilenameFromFormName("simple"));
+        assertEquals("CamelCase", FormNameUtils.formatFilenameFromFormName("CamelCase"));
+        assertEquals("01234566789", FormNameUtils.formatFilenameFromFormName("01234566789"));
+
+        assertEquals("trimWhitespace", FormNameUtils.formatFilenameFromFormName(" trimWhitespace "));
+        assertEquals("keep internal spaces", FormNameUtils.formatFilenameFromFormName("keep internal spaces"));
+        assertEquals("other whitespace", FormNameUtils.formatFilenameFromFormName("other\n\twhitespace"));
+        assertEquals("repeated whitespace", FormNameUtils.formatFilenameFromFormName("repeated         whitespace"));
+
+        assertEquals("Turkish İ kept", FormNameUtils.formatFilenameFromFormName("Turkish İ kept"));
+        assertEquals("registered symbol stripped", FormNameUtils.formatFilenameFromFormName("registered symbol ® stripped"));
+        assertEquals("unicode fragment stripped", FormNameUtils.formatFilenameFromFormName("unicode fragment \ud800 stripped"));
     }
 }

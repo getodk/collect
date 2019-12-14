@@ -143,7 +143,7 @@ import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
-import org.odk.collect.android.utilities.RegexUtils;
+import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
@@ -1341,7 +1341,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         // disallow carriage returns in the name
         InputFilter returnFilter = (source, start, end, dest, dstart, dend)
-                -> RegexUtils.normalizeFormName(source.toString().substring(start, end), true);
+                -> FormNameUtils.normalizeFormName(source.toString().substring(start, end), true);
         saveAs.setFilters(new InputFilter[]{returnFilter});
 
         if (formController.getSubmissionMetadata().instanceName == null) {
