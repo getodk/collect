@@ -20,8 +20,6 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncTask;
 
-import androidx.annotation.NonNull;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;

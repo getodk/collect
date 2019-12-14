@@ -38,7 +38,7 @@ public class DiskSyncTaskTest {
 
     @Test
     public void filterEmptyListOfForms() {
-        File[] formDefs = new File[]{};
+        File[] formDefs = {};
         List<File> files = DiskSyncTask.filterFormsToAdd(formDefs, 0);
         Assert.assertEquals(0, files.size());
     }
