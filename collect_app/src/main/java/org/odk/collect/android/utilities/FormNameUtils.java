@@ -45,7 +45,7 @@ public class FormNameUtils {
         }
         // Keep alphanumerics, replace others with a space
         String fileName = formName.replaceAll("[^\\p{L}\\p{Digit}]", " ");
-        // Replace all whitespace with simple space
+        // Replace consecutive whitespace characters with single space
         fileName = fileName.replaceAll("\\p{javaWhitespace}+", " ");
         return fileName.trim();
     }
