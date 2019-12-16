@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.espressoutils.pages.FormEntryPage;
+import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;

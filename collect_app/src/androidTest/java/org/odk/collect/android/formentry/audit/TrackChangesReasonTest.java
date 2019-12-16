@@ -12,10 +12,10 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
-import org.odk.collect.android.espressoutils.pages.ChangesReasonPromptPage;
-import org.odk.collect.android.espressoutils.pages.FormEntryPage;
-import org.odk.collect.android.espressoutils.pages.MainMenuPage;
-import org.odk.collect.android.espressoutils.pages.SaveOrIgnoreDialog;
+import org.odk.collect.android.support.pages.ChangesReasonPromptPage;
+import org.odk.collect.android.support.pages.FormEntryPage;
+import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 

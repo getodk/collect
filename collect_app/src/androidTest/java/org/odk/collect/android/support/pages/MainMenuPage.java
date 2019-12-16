@@ -1,4 +1,4 @@
-package org.odk.collect.android.espressoutils.pages;
+package org.odk.collect.android.support.pages;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;

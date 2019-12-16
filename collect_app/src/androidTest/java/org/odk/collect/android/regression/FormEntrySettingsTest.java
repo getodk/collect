@@ -8,10 +8,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.espressoutils.pages.AdminSettingsPage;
-import org.odk.collect.android.espressoutils.pages.ExitFormDialog;
-import org.odk.collect.android.espressoutils.pages.GeneralSettingsPage;
-import org.odk.collect.android.espressoutils.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.AdminSettingsPage;
+import org.odk.collect.android.support.pages.ExitFormDialog;
+import org.odk.collect.android.support.pages.GeneralSettingsPage;
+import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 
