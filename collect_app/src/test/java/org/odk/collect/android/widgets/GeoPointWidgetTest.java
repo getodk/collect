@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Intent;
+import android.view.View;
 
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.GeoPointData;
@@ -16,6 +17,8 @@ import org.robolectric.annotation.Config;
 
 import androidx.annotation.NonNull;
 
+import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.when;
 
 /**
@@ -105,5 +108,13 @@ public class GeoPointWidgetTest extends BinaryWidgetTest<GeoPointWidget, GeoPoin
         stubAllRuntimePermissionsGranted(false);
 
         assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.simple_button));
+    }
+
+    @Test
+    public void readOnlyTest() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+
+        assertEquals(View.GONE, getWidget().startGeoButton.getVisibility());
+        assertEquals(View.VISIBLE, getWidget().answerDisplay.getVisibility());
     }
 }
