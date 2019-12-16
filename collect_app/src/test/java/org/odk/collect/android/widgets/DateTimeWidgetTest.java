@@ -1,6 +1,10 @@
 package org.odk.collect.android.widgets;
 
+import android.view.View;
+
 import androidx.annotation.NonNull;
+
+import junit.framework.TestCase;
 
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.DateData;
@@ -53,5 +57,16 @@ public class DateTimeWidgetTest extends GeneralDateTimeWidgetTest<DateTimeWidget
         assertFalse(widget.isWaitingForData());
         assertFalse(widget.getDateWidget().isNullAnswer);
         assertEquals(widget.getDateWidget().getAnswer().getDisplayText(), new DateData(date.toDate()).getDisplayText());
+    }
+
+    @Test
+    public void readOnlyTest() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+
+        TestCase.assertEquals(View.GONE, getWidget().dateWidget.dateButton.getVisibility());
+        TestCase.assertEquals(View.VISIBLE, getWidget().dateWidget.dateTextView.getVisibility());
+
+        TestCase.assertEquals(View.GONE, getWidget().timeWidget.timeButton.getVisibility());
+        TestCase.assertEquals(View.VISIBLE, getWidget().timeWidget.timeTextView.getVisibility());
     }
 }

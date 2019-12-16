@@ -37,8 +37,8 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 @SuppressLint("ViewConstructor")
 public class DateTimeWidget extends QuestionWidget implements BinaryWidget, WidgetValueChangedListener {
 
-    private DateWidget dateWidget;
-    private TimeWidget timeWidget;
+    DateWidget dateWidget;
+    TimeWidget timeWidget;
 
     public DateTimeWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
