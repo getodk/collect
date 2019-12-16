@@ -1,6 +1,8 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Intent;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 
 import net.bytebuddy.utility.RandomString;
@@ -12,6 +14,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
+
+import static junit.framework.TestCase.assertEquals;
+import static org.mockito.Mockito.when;
 
 /**
  * @author James Knight
@@ -62,5 +67,14 @@ public class BarcodeWidgetTest extends BinaryWidgetTest<BarcodeWidget, StringDat
         stubAllRuntimePermissionsGranted(false);
 
         assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.simple_button));
+    }
+
+    @Test
+    public void readOnlyTest() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+        when(formEntryPrompt.getAnswerText()).thenReturn("123456789");
+
+        assertEquals(View.GONE, getWidget().getBarcodeButton.getVisibility());
+        assertEquals(View.VISIBLE, getWidget().stringAnswer.getVisibility());
     }
 }

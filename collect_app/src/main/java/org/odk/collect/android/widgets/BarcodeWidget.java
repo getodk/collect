@@ -40,8 +40,8 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
-    private final Button getBarcodeButton;
-    private final TextView stringAnswer;
+    final Button getBarcodeButton;
+    final TextView stringAnswer;
 
     public BarcodeWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
