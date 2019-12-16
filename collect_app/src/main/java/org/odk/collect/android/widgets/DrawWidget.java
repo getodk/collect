@@ -34,7 +34,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 @SuppressLint("ViewConstructor")
 public class DrawWidget extends BaseImageWidget {
 
-    private Button drawButton;
+    Button drawButton;
 
     public DrawWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
