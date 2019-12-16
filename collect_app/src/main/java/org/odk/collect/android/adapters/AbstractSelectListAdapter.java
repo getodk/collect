@@ -202,7 +202,6 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             view = missingImage;
         }
 
-        view.setEnabled(!getFormEntryPrompt().isReadOnly());
         int itemPadding = context.getResources().getDimensionPixelSize(R.dimen.select_item_border);
         int paddingStartEnd = context.getResources().getDimensionPixelSize(R.dimen.margin_standard);
         view.setPadding(paddingStartEnd, itemPadding, paddingStartEnd, itemPadding);
@@ -244,6 +243,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                 view.removeAllViews();
                 view.addView(setUpNoButtonsView(index));
                 view.setOnClickListener(v -> onItemClick(filteredItems.get(index).selection(), v));
+                view.setEnabled(!getFormEntryPrompt().isReadOnly());
             } else {
                 addMediaFromChoice(audioVideoImageTextLabel, index, createButton(index, audioVideoImageTextLabel), filteredItems);
                 audioVideoImageTextLabel.setEnabled(!getFormEntryPrompt().isReadOnly());

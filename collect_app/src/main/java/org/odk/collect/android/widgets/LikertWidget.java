@@ -150,6 +150,7 @@ public class LikertWidget extends ItemsWidget {
 
             optionView.addView(choice);
 
+            optionView.setEnabled(!getFormEntryPrompt().isReadOnly());
             optionView.setOnClickListener(new OnClickListener() {
 
                 @Override
