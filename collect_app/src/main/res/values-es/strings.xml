@@ -702,4 +702,8 @@
   <string name="identity">Identidad</string>
   <string name="enter_identity_description">Este formulario requiere que te identifiques</string>
   <string name="close">Cerrar</string>
+  <string name="reason_for_changes">Motivo de los cambios</string>
+  <string name="reason">Motivo</string>
+  <string name="save">Guardar</string>
+  <string name="reason_for_changes_description">Favor explicar el motivo de los cambios para este formulario</string>
 </resources>
