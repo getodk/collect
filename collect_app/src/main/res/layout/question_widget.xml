@@ -3,13 +3,13 @@
     android:id="@+id/question_widget_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/margin_small"
     android:orientation="vertical">
 
     <org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel
         android:id="@+id/question_label"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_standard" />
+        android:layout_height="wrap_content" />
 
     <FrameLayout
         android:id="@+id/help_text"
@@ -25,7 +25,7 @@
         android:id="@+id/answer_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_standard">
+        android:layout_marginTop="@dimen/margin_small">
 
     </RelativeLayout>
 
