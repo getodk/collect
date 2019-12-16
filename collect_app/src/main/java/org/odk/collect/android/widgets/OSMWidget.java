@@ -46,11 +46,11 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
     private static final int OSM_GREEN = Color.rgb(126, 188, 111);
     private static final int OSM_BLUE = Color.rgb(112, 146, 255);
 
-    private final Button launchOpenMapKitButton;
+    final Button launchOpenMapKitButton;
     private final String instanceDirectory;
     private final TextView errorTextView;
     private final TextView osmFileNameHeaderTextView;
-    private final TextView osmFileNameTextView;
+    final TextView osmFileNameTextView;
 
     private final List<OSMTag> osmRequiredTags;
     private final String instanceId;
