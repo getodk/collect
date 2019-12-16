@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
@@ -21,6 +22,7 @@ import org.odk.collect.android.widgets.base.FileWidgetTest;
 
 import java.io.File;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -101,5 +103,15 @@ public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
         stubAllRuntimePermissionsGranted(false);
 
         assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.capture_audio));
+    }
+
+    @Test
+    public void readOnlyTest() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+        when(formEntryPrompt.getAnswerText()).thenReturn("testAudio.mp3");
+
+        assertEquals(View.GONE, getWidget().captureButton.getVisibility());
+        assertEquals(View.GONE, getWidget().chooseButton.getVisibility());
+        assertEquals(View.VISIBLE, getWidget().audioController.getVisibility());
     }
 }

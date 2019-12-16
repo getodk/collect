@@ -67,9 +67,9 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     @NonNull
     private MediaUtil mediaUtil;
 
-    private AudioControllerView audioController;
-    private Button captureButton;
-    private Button chooseButton;
+    AudioControllerView audioController;
+    Button captureButton;
+    Button chooseButton;
 
     private String binaryName;
 
