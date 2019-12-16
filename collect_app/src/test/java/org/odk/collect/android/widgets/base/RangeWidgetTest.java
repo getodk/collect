@@ -25,7 +25,7 @@ public abstract class RangeWidgetTest<W extends RangeWidget, A extends IAnswerDa
     private final BigDecimal rangeStep = BigDecimal.ONE;
 
     @Mock
-    private RangeQuestion rangeQuestion;
+    protected RangeQuestion rangeQuestion;
 
     @Override
     public void setUp() throws Exception {

@@ -57,17 +57,18 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
     protected int elementCount;
 
     @Nullable
-    protected TextView currentValue;
+    public
+    TextView currentValue;
 
     private int progress;
-    private SeekBar seekBar;
+    public SeekBar seekBar;
     private LinearLayout view;
 
     private boolean isPickerAppearance;
     private boolean suppressFlingGesture;
 
-    private Button pickerButton;
-    private TextView answerTextView;
+    public Button pickerButton;
+    public TextView answerTextView;
 
     public RangeWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
