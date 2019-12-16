@@ -248,14 +248,10 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         widgets.add(index, qw);
 
         int indexAccountingForDividers = index * 2;
-        // There may be a first TextView to display the group path. See addGroupText(FormEntryCaption[])
-        if (view.getChildCount() > 0 && view.getChildAt(0) instanceof TextView) {
-            indexAccountingForDividers += 1;
-        }
-
         if (index > 0) {
             view.addView(getDividerView(), indexAccountingForDividers - 1);
         }
+
         view.addView(qw, indexAccountingForDividers, layout);
     }
 

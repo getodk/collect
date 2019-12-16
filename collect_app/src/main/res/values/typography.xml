@@ -8,6 +8,10 @@
 
     </style>
 
+    <style name="TextAppearance.Collect.Subtitle1.MediumEmphasis" parent="TextAppearance.Collect.Subtitle1">
+        <item name="android:textColor">@color/color_on_surface_medium_emphasis</item>
+    </style>
+
     <style name="TextAppearance.Collect.Body1" parent="TextAppearance.MaterialComponents.Body1">
 
     </style>
@@ -16,7 +20,7 @@
 
     </style>
 
-    <style name="TextAppearance.Collect.Body2.MediumEmphasis" parent="TextAppearance.MaterialComponents.Body2">
+    <style name="TextAppearance.Collect.Body2.MediumEmphasis" parent="TextAppearance.Collect.Body2">
         <item name="android:textColor">@color/color_on_surface_medium_emphasis</item>
     </style>
 </resources>

@@ -20,10 +20,8 @@ limitations under the License.
     android:scrollbars="vertical">
 
     <LinearLayout
-        android:id="@+id/widgets"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="top"
         android:orientation="vertical">
 
         <TextView
@@ -34,8 +32,18 @@ limitations under the License.
             android:layout_marginTop="@dimen/margin_standard"
             android:layout_marginRight="@dimen/margin_standard"
             android:visibility="gone"
+            style="@style/TextAppearance.Collect.Subtitle1.MediumEmphasis"
             tools:text="Group text"
             tools:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/widgets"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:orientation="vertical">
+
+        </LinearLayout>
 
     </LinearLayout>
 
