@@ -1,6 +1,10 @@
 package org.odk.collect.android.widgets;
 
+import android.view.View;
+
 import androidx.annotation.NonNull;
+
+import junit.framework.TestCase;
 
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
@@ -12,6 +16,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.GeneralDateTimeWidgetTest;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 /**
  * @author James Knight
@@ -49,5 +54,13 @@ public class TimeWidgetTest extends GeneralDateTimeWidgetTest<TimeWidget, TimeDa
         DateTime answerDateTime = new DateTime(answer.getValue());
 
         assertEquals(dateTime, answerDateTime);
+    }
+
+    @Test
+    public void readOnlyTest() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+
+        TestCase.assertEquals(View.GONE, getWidget().timeButton.getVisibility());
+        TestCase.assertEquals(View.VISIBLE, getWidget().timeTextView.getVisibility());
     }
 }
