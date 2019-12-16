@@ -91,7 +91,7 @@ public abstract class QuestionWidget
     private Bundle state;
     protected final ThemeUtils themeUtils;
     protected final AudioHelper audioHelper;
-    private final RelativeLayout containerView;
+    private final ViewGroup containerView;
 
     private WidgetValueChangedListener valueChangedListener;
 
@@ -362,12 +362,6 @@ public abstract class QuestionWidget
         }
     }
 
-    /**
-     * Default place to put the answer
-     * (below the help text or question text if there is no help text)
-     * If you have many elements, use this first
-     * and use the standard addView(view, params) to place the rest
-     */
     protected final void addAnswerView(View v) {
         addAnswerView(v, null);
     }
@@ -375,28 +369,16 @@ public abstract class QuestionWidget
     protected final void addAnswerView(View v, Integer margin) {
         ViewGroup answerContainer = findViewById(R.id.answer_container);
 
-        if (answerContainer != null) {
-            if (margin != null) {
-                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                params.setMargins(ViewUtils.pxFromDp(getContext(), margin), 0, ViewUtils.pxFromDp(getContext(), margin), 0);
-                answerContainer.addView(v, params);
-            } else {
-                answerContainer.addView(v);
-            }
-        } else {
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-            params.addRule(RelativeLayout.BELOW, getHelpTextLayout().getId());
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
 
-            if (margin != null) {
-                params.setMargins(ViewUtils.pxFromDp(getContext(), margin), 0, ViewUtils.pxFromDp(getContext(), margin), 0);
-            }
-
-            containerView.addView(v, params);
+        if (margin != null) {
+            params.setMargins(ViewUtils.pxFromDp(getContext(), margin), 0, ViewUtils.pxFromDp(getContext(), margin), 0);
         }
-    }
+
+        answerContainer.addView(v, params);
+}
 
     /**
      * Register this widget's child views to pop up a context menu to clear the widget when the
