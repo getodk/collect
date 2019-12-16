@@ -85,9 +85,9 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     @NonNull
     private FileUtil fileUtil;
 
-    private Button captureButton;
-    private Button playButton;
-    private Button chooseButton;
+    Button captureButton;
+    Button playButton;
+    Button chooseButton;
     private String binaryName;
     private Uri nexus7Uri;
 
@@ -111,6 +111,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_video), R.id.choose_video);
 
         playButton = getSimpleButton(getContext().getString(R.string.play_video), R.id.play_video);
+        playButton.setVisibility(VISIBLE);
 
         // retrieve answer from data model and update ui
         binaryName = questionDetails.getPrompt().getAnswerText();

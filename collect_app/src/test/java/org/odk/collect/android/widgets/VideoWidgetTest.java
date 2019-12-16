@@ -3,6 +3,8 @@ package org.odk.collect.android.widgets;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 
 import net.bytebuddy.utility.RandomString;
@@ -19,6 +21,7 @@ import org.odk.collect.android.widgets.base.FileWidgetTest;
 
 import java.io.File;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.when;
 
 /**
@@ -119,5 +122,15 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
         stubAllRuntimePermissionsGranted(false);
 
         assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.capture_video));
+    }
+
+    @Test
+    public void readOnlyTest() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+        when(formEntryPrompt.getAnswerText()).thenReturn("testVideo.mp4");
+
+        assertEquals(View.GONE, getWidget().captureButton.getVisibility());
+        assertEquals(View.GONE, getWidget().chooseButton.getVisibility());
+        assertEquals(View.VISIBLE, getWidget().playButton.getVisibility());
     }
 }
