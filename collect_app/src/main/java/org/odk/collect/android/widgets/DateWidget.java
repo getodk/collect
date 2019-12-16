@@ -64,8 +64,8 @@ import static org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog.D
  */
 @SuppressLint("ViewConstructor")
 public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDateSetListener, BinaryWidget {
-    private Button dateButton;
-    private TextView dateTextView;
+    Button dateButton;
+    TextView dateTextView;
 
     boolean isNullAnswer;
 
