@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Intent;
+import android.view.View;
 
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_OSM;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE;
@@ -135,5 +137,13 @@ public class GeoTraceWidgetTest extends BinaryWidgetTest<GeoTraceWidget, StringD
         stubAllRuntimePermissionsGranted(false);
 
         assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.simple_button));
+    }
+
+    @Test
+    public void readOnlyTest() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+
+        assertEquals(View.GONE, getWidget().startGeoButton.getVisibility());
+        assertEquals(View.VISIBLE, getWidget().answerDisplay.getVisibility());
     }
 }
