@@ -39,6 +39,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.formentry.QuestionTextSizeHelper;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -80,7 +81,6 @@ public abstract class QuestionWidget
     private final AudioVideoImageTextLabel audioVideoImageTextLabel;
     private final QuestionDetails questionDetails;
     private final TextView helpTextView;
-    private final TextView guidanceTextView;
     private final View helpTextLayout;
     private final View guidanceTextLayout;
     private final View textLayout;
@@ -92,6 +92,7 @@ public abstract class QuestionWidget
     protected final ThemeUtils themeUtils;
     protected final AudioHelper audioHelper;
     private final ViewGroup containerView;
+    private final QuestionTextSizeHelper questionTextSizeHelper = new QuestionTextSizeHelper();
 
     private WidgetValueChangedListener valueChangedListener;
 
@@ -131,7 +132,7 @@ public abstract class QuestionWidget
         textLayout = helpTextLayout.findViewById(R.id.text_layout);
         warningText = helpTextLayout.findViewById(R.id.warning_text);
         helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), formEntryPrompt);
-        guidanceTextView = setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), formEntryPrompt);
+        setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), formEntryPrompt);
 
         if (context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
             registerToClearAnswerOnLongPress((FormEntryActivity) context);
@@ -144,7 +145,7 @@ public abstract class QuestionWidget
 
     private void setupQuestionLabel(AudioVideoImageTextLabel label, FormEntryPrompt prompt) {
         label.setTag(getClipID(prompt));
-        label.setText(prompt.getLongText(), prompt.isRequired(), getQuestionFontSize());
+        label.setText(prompt.getLongText(), prompt.isRequired(), questionTextSizeHelper.getHeadline6());
 
         String imageURI = this instanceof SelectImageMapWidget ? null : prompt.getImageText();
         String videoURI = prompt.getSpecialFormQuestionText("video");
@@ -224,12 +225,11 @@ public abstract class QuestionWidget
     }
 
     private TextView configureGuidanceTextView(TextView guidanceTextView, String guidance) {
-        guidanceTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize() - 3);
+        guidanceTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionTextSizeHelper.getSubtitle1());
         guidanceTextView.setHorizontallyScrolling(false);
 
         guidanceTextView.setText(StringUtils.textToHtml(guidance));
 
-        guidanceTextView.setTextColor(themeUtils.getColorOnSurface());
         guidanceTextView.setMovementMethod(LinkMovementMethod.getInstance());
         return guidanceTextView;
     }
@@ -345,15 +345,14 @@ public abstract class QuestionWidget
         String s = prompt.getHelpText();
 
         if (s != null && !s.equals("")) {
-            helpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize() - 3);
-            // wrap to the widget of view
+            helpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionTextSizeHelper.getSubtitle1());
+            // wrap to the widget of vi
             helpText.setHorizontallyScrolling(false);
             if (prompt.getLongText() == null || prompt.getLongText().isEmpty()) {
                 helpText.setText(StringUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(s, prompt.isRequired())));
             } else {
                 helpText.setText(StringUtils.textToHtml(s));
             }
-            helpText.setTextColor(themeUtils.getColorOnSurface());
             helpText.setMovementMethod(LinkMovementMethod.getInstance());
             return helpText;
         } else {
@@ -473,16 +472,8 @@ public abstract class QuestionWidget
         return formController.getInstanceFile().getParent();
     }
 
-    public int getQuestionFontSize() {
-        return questionFontSize;
-    }
-
     public int getAnswerFontSize() {
         return questionFontSize + 2;
-    }
-
-    public TextView getGuidanceTextView() {
-        return guidanceTextView;
     }
 
     public View getHelpTextLayout() {

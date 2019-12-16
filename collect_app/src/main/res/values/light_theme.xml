@@ -57,7 +57,6 @@
         <item name="dividerColor">#1e000000</item>
         <item name="rankItemColor">#EEEEEE</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
-        <item name="warningColor">@color/red_500</item>
         <item name="dividerCompat">@android:drawable/divider_horizontal_bright</item>
         <item name="android:tintMode" tools:targetApi="21">src_in</item>
         <item name="spinnerItemBackgroundColor">#F9F9F9</item>
