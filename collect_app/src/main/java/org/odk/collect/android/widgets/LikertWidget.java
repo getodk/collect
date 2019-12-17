@@ -37,7 +37,7 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class LikertWidget extends ItemsWidget {
 
-    private LinearLayout view;
+    LinearLayout view;
     private RadioButton checkedButton;
     private final LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1);
     private final LayoutParams textViewParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
