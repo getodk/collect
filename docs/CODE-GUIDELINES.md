@@ -3,6 +3,31 @@
 ## Java style guidelines
 Follow the [Android style rules](http://source.android.com/source/code-style.html) and the [Google Java style guide](https://google.github.io/styleguide/javaguide.html).
 
+## Java testing style guidelines
+Favor [Hamcrest](http://hamcrest.org/JavaHamcrest/) asserts over JUnit asserts for readability.
+
+Old JUnit style:
+```
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+...
+assertEquals("expected", ClassToTest.methodToTest("input"));
+assertNull(ClassToTest.methodReturnsNull());
+
+```
+
+Preferred style using Hamcrest:
+```
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsNull.nullValue;
+...
+assertThat(ClassToTest.methodToTest("input"), is("expected"));
+assertThat(ClassToTest.methodReturnsNull(), is(nullValue()));
+
+```
+
+
 ## XML style guidelines
 
 Follow these naming conventions in Android XML files:
