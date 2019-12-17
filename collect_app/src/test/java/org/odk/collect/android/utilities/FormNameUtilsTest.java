@@ -18,43 +18,45 @@ package org.odk.collect.android.utilities;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.odk.collect.android.utilities.FormNameUtils.normalizeFormName;
+import static org.odk.collect.android.utilities.FormNameUtils.formatFilenameFromFormName;
 
 public class FormNameUtilsTest {
 
     @Test
     public void normalizeFormNameTest() {
-        assertNull(normalizeFormName(null, false));
-        assertEquals("Lorem", normalizeFormName("Lorem", false));
-        assertEquals("Lorem ipsum", normalizeFormName("Lorem ipsum", false));
-        assertEquals("Lorem ipsum", normalizeFormName("Lorem\nipsum", false));
-        assertEquals("Lorem  ipsum", normalizeFormName("Lorem\n\nipsum", false));
-        assertEquals(" Lorem ipsum ", normalizeFormName("\nLorem\nipsum\n", false));
+        assertThat(normalizeFormName(null, false), is(nullValue()));
+        assertThat(normalizeFormName("Lorem", false), is("Lorem"));
+        assertThat(normalizeFormName("Lorem ipsum", false), is("Lorem ipsum"));
+        assertThat(normalizeFormName("Lorem\nipsum", false), is("Lorem ipsum"));
+        assertThat(normalizeFormName("Lorem\n\nipsum", false), is("Lorem  ipsum"));
+        assertThat(normalizeFormName("\nLorem\nipsum\n", false), is(" Lorem ipsum "));
 
-        assertNull(normalizeFormName(null, true));
-        assertNull(normalizeFormName("Lorem", true));
-        assertNull(normalizeFormName("Lorem ipsum", true));
-        assertEquals("Lorem ipsum", normalizeFormName("Lorem\nipsum", true));
-        assertEquals("Lorem  ipsum", normalizeFormName("Lorem\n\nipsum", true));
-        assertEquals(" Lorem ipsum ", normalizeFormName("\nLorem\nipsum\n", true));
+        assertThat(normalizeFormName(null, true), is(nullValue()));
+        assertThat(normalizeFormName("Lorem", true), is(nullValue()));
+        assertThat(normalizeFormName("Lorem ipsum", true), is(nullValue()));
+        assertThat(normalizeFormName("Lorem\nipsum", true), is("Lorem ipsum"));
+        assertThat(normalizeFormName("Lorem\n\nipsum", true), is("Lorem  ipsum"));
+        assertThat(normalizeFormName("\nLorem\nipsum\n", true), is(" Lorem ipsum "));
     }
 
     @Test
     public void formatFilenameFromFormNameTest() {
-        assertNull(FormNameUtils.formatFilenameFromFormName(null));
-        assertEquals("simple", FormNameUtils.formatFilenameFromFormName("simple"));
-        assertEquals("CamelCase", FormNameUtils.formatFilenameFromFormName("CamelCase"));
-        assertEquals("01234566789", FormNameUtils.formatFilenameFromFormName("01234566789"));
+        assertThat(formatFilenameFromFormName(null), is(nullValue()));
+        assertThat(formatFilenameFromFormName("simple"), is("simple"));
+        assertThat(formatFilenameFromFormName("CamelCase"), is("CamelCase"));
+        assertThat(formatFilenameFromFormName("01234566789"), is("01234566789"));
 
-        assertEquals("trimWhitespace", FormNameUtils.formatFilenameFromFormName(" trimWhitespace "));
-        assertEquals("keep internal spaces", FormNameUtils.formatFilenameFromFormName("keep internal spaces"));
-        assertEquals("other whitespace", FormNameUtils.formatFilenameFromFormName("other\n\twhitespace"));
-        assertEquals("repeated whitespace", FormNameUtils.formatFilenameFromFormName("repeated         whitespace"));
+        assertThat(formatFilenameFromFormName(" trimWhitespace "), is("trimWhitespace"));
+        assertThat(formatFilenameFromFormName("keep internal spaces"), is("keep internal spaces"));
+        assertThat(formatFilenameFromFormName("other\n\twhitespace"), is("other whitespace"));
+        assertThat(formatFilenameFromFormName("repeated         whitespace"), is("repeated whitespace"));
 
-        assertEquals("Turkish İ kept", FormNameUtils.formatFilenameFromFormName("Turkish İ kept"));
-        assertEquals("registered symbol stripped", FormNameUtils.formatFilenameFromFormName("registered symbol ® stripped"));
-        assertEquals("unicode fragment stripped", FormNameUtils.formatFilenameFromFormName("unicode fragment \ud800 stripped"));
+        assertThat(formatFilenameFromFormName("Turkish İ kept"), is("Turkish İ kept"));
+        assertThat(formatFilenameFromFormName("registered symbol ® stripped"), is("registered symbol stripped"));
+        assertThat(formatFilenameFromFormName("unicode fragment \ud800 stripped"), is("unicode fragment stripped"));
     }
 }
