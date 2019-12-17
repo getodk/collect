@@ -25,8 +25,9 @@ import android.os.Bundle;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
+
+import androidx.appcompat.widget.AppCompatCheckBox;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
@@ -41,12 +42,12 @@ import static org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialo
 import static org.odk.collect.android.utilities.ResetUtility.ResetAction.RESET_PREFERENCES;
 
 public class ResetDialogPreference extends DialogPreference implements CompoundButton.OnCheckedChangeListener {
-    private CheckBox preferences;
-    private CheckBox instances;
-    private CheckBox forms;
-    private CheckBox layers;
-    private CheckBox cache;
-    private CheckBox osmDroid;
+    private AppCompatCheckBox preferences;
+    private AppCompatCheckBox instances;
+    private AppCompatCheckBox forms;
+    private AppCompatCheckBox layers;
+    private AppCompatCheckBox cache;
+    private AppCompatCheckBox osmDroid;
     private ProgressDialog progressDialog;
 
     public ResetDialogPreference(Context context, AttributeSet attrs) {

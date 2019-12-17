@@ -17,7 +17,7 @@ import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.events.SmsRxEvent;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.InstanceProvider;
-import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
@@ -78,13 +78,13 @@ public class InstanceUploaderAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        long lastStatusChangeDate = getCursor().getLong(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE));
-        String status = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.STATUS));
+        long lastStatusChangeDate = getCursor().getLong(getCursor().getColumnIndex(InstanceColumns.LAST_STATUS_CHANGE_DATE));
+        String status = cursor.getString(cursor.getColumnIndex(InstanceColumns.STATUS));
 
-        viewHolder.formTitle.setText(cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME)));
+        viewHolder.formTitle.setText(cursor.getString(cursor.getColumnIndex(InstanceColumns.DISPLAY_NAME)));
         viewHolder.formSubtitle.setText(InstanceProvider.getDisplaySubtext(context, status, new Date(lastStatusChangeDate)));
 
-        long instanceId = cursor.getLong(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
+        long instanceId = cursor.getLong(cursor.getColumnIndex(InstanceColumns._ID));
 
         SmsSubmission model = submissionManager.getSubmissionModel(String.valueOf(instanceId));
 

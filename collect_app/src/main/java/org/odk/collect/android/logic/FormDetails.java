@@ -64,7 +64,7 @@ public class FormDetails implements Serializable {
         return manifestUrl;
     }
 
-    public String getFormID() {
+    public String getFormId() {
         return formID;
     }
 

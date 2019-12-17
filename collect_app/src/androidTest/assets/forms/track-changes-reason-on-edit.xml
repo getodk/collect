@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<h:html xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://www.w3.org/2002/xforms">
+    <h:head>
+        <h:title>Track Changes Reason</h:title>
+        <model>
+            <instance>
+                <data id="track-changes-reason">
+                    <what_up />
+                    <meta>
+                        <audit />
+                        <instanceID />
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/what_up" type="string" />
+            <bind nodeset="/data/meta/audit" type="binary" odk:track-changes="true" />
+            <bind nodeset="/data/meta/audit" type="binary" odk:track-changes-reasons="on-form-edit" />
+            <bind nodeset="/data/meta/instanceID" readonly="true()" type="string"
+                jr:preload="uid" />
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/what_up">
+            <label>What up?</label>
+        </input>
+    </h:body>
+</h:html>

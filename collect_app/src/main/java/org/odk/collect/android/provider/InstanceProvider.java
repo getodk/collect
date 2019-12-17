@@ -54,7 +54,7 @@ public class InstanceProvider extends ContentProvider {
     private static final UriMatcher URI_MATCHER;
 
     private static InstancesDatabaseHelper dbHelper;
-    
+
     private synchronized InstancesDatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
@@ -296,11 +296,16 @@ public class InstanceProvider extends ContentProvider {
                         }
                     }
 
-                    //We are going to update the status, if the form is submitted
-                    //We will not delete the record in table but we will delete the file
+                    // Keep sent instance database rows but delete corresponding files
                     if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
                         ContentValues cv = new ContentValues();
                         cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
+
+                        // Geometry fields represent data inside the form which can be very
+                        // sensitive so they are removed on delete.
+                        cv.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
+                        cv.put(InstanceColumns.GEOMETRY, (String) null);
+
                         count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
                     } else {
                         String[] newWhereArgs;
@@ -408,5 +413,7 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns.LAST_STATUS_CHANGE_DATE,
                 InstanceColumns.LAST_STATUS_CHANGE_DATE);
         sInstancesProjectionMap.put(InstanceColumns.DELETED_DATE, InstanceColumns.DELETED_DATE);
+        sInstancesProjectionMap.put(InstanceColumns.GEOMETRY, InstanceColumns.GEOMETRY);
+        sInstancesProjectionMap.put(InstanceColumns.GEOMETRY_TYPE, InstanceColumns.GEOMETRY_TYPE);
     }
 }

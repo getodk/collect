@@ -38,11 +38,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"/>
 
-    <!-- GeoPointWidget -->
-    <View android:id="@+id/get_location"
-        android:layout_width="0dp"
-        android:layout_height="0dp"/>
-
     <!-- VideoWidget -->
     <View android:id="@+id/capture_video"
         android:layout_width="0dp"

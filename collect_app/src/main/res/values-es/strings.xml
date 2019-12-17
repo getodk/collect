@@ -383,6 +383,7 @@
   <string name="discard">Descartar</string>
   <string name="geoshape_view_change_location">Ver o cambiar GeoArea</string>
   <string name="geotrace_view_change_location">Ver o cambiar GeoLínea</string>
+  <string name="geometry_status">Form. Guardados: %d (%d se muestran en el mapa)</string>
   <string name="bearing">Orientación: %.3f</string>
   <string name="direction">Dirección: %s</string>
   <string name="select_odk_shortcut">Seleccionar acceso directo</string>
@@ -697,4 +698,12 @@
   <string name="qr_code_not_found">Código QR no encontrado en la imagen seleccionada</string>
   <string name="not_granted_permission">La actividad que está intentando iniciar requiere un permiso que no se ha concedido.</string>
   <string name="basemap_source_unavailable">Lo sentimos, Los mapas base %s no están disponibles en este dispositivo. Por favor escoja otro mapa base en   Please choose another basemap in Cambiar la configuración &gt; Mapas.</string>
+  <string name="enter_identity">Ingrese su Identidad</string>
+  <string name="identity">Identidad</string>
+  <string name="enter_identity_description">Este formulario requiere que te identifiques</string>
+  <string name="close">Cerrar</string>
+  <string name="reason_for_changes">Motivo de los cambios</string>
+  <string name="reason">Motivo</string>
+  <string name="save">Guardar</string>
+  <string name="reason_for_changes_description">Favor explicar el motivo de los cambios para este formulario</string>
 </resources>

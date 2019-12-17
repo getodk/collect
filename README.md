@@ -31,7 +31,9 @@ ODK Collect renders forms that are compliant with the [ODK XForms standard](http
 * ODK developer Slack archive: [https://opendatakit.slackarchive.io](https://opendatakit.slackarchive.io) 
 
 ## Release cycle
-New versions of ODK Collect are generally released on the last Sunday of a month. We freeze commits to the master branch on the preceding Wednesday (except for bug fixes). Releases can be requested by any community member and generally happen every 2 months. [@yanokwa](https://github.com/yanokwa) pushes the releases to the Play Store.
+Releases can be requested by any community member and generally happen every 2 months.
+
+Before release we perform a "code freeze" (we stop merging pull requests) and then carry out regression testing. If any problems are found, the release is blocked until we can merge fixes. Once the process is complete, [@yanokwa](https://github.com/yanokwa) pushes the releases to the Play Store. The code is "unfrozen" after a short grace period to make hot fixing easier.
 
 At the beginning of each release cycle, [@grzesiek2010](https://github.com/grzesiek2010) updates all dependencies that have compatible upgrades available and ensures that the build targets the latest SDK.
 
@@ -52,7 +54,9 @@ We try to make sure that all issues in the issue tracker are as close to fully s
 
     If you prefer not to use the command line, you can use Android Studio to create a new project from version control using `https://github.com/YOUR-GITHUB-USERNAME/collect`.
 
-1. Open the project in the folder of your clone from Android Studio. To run the project, click on the green arrow at the top of the screen.
+1. Use Android Studio to import the project from its Gradle settings. To run the project, click on the green arrow at the top of the screen.
+
+1. Windows developers: continue configuring Android Studio with the steps in this document: [Developing ODK Collect on Windows](docs/WindowsDevSetup.md).
 
 1. Make sure you can run unit tests by running everything under `collect_app/src/test/java` in Android Studio or on the command line:
 
@@ -145,7 +149,7 @@ Any and all contributions to the project are welcome. ODK Collect is used across
 
 Issues tagged as [good first issue](https://github.com/opendatakit/collect/labels/good%20first%20issue) should be a good place to start. There are also currently many issues tagged as [needs reproduction](https://github.com/opendatakit/collect/labels/needs%20reproduction) which need someone to try to reproduce them with the current version of ODK Collect and comment on the issue with their findings.
 
-If you're ready to contribute code, see [the contribution guide](CONTRIBUTING.md).
+If you're ready to contribute code, see [the contribution guide](docs/CONTRIBUTING.md).
 
 ## Contributing translations
 If you know a language other than English, consider contributing translations through [Transifex](https://www.transifex.com/opendatakit/collect/). 

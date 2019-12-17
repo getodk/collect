@@ -378,6 +378,7 @@
   <string name="discard">破棄</string>
   <string name="geoshape_view_change_location">GeoShape を表示または変更</string>
   <string name="geotrace_view_change_location">GeoTrace を表示または変更</string>
+  <string name="geometry_status">保存したフォーム: %d (%d 地図上に表示)</string>
   <string name="bearing">方位: %.3f</string>
   <string name="direction">方角: %s</string>
   <string name="select_odk_shortcut">ODK ショートカットを選択</string>
@@ -691,4 +692,12 @@
   <string name="qr_code_not_found">選択した画像に QR コードが見つかりませんでした</string>
   <string name="not_granted_permission">開始しようとしているアクティビティは、必要なアクセス許可が付与されていません。</string>
   <string name="basemap_source_unavailable">申し訳ありません。 このデバイスでは %s ベースマップは利用できません。 一般設定 &gt; 地図 で別のベースマップを選択してください。</string>
+  <string name="enter_identity">IDの入力</string>
+  <string name="identity">ID</string>
+  <string name="enter_identity_description">このフォームはあなた自身のIDが必要です</string>
+  <string name="close">閉じる</string>
+  <string name="reason_for_changes">変更の理由</string>
+  <string name="reason">理由</string>
+  <string name="save">保存</string>
+  <string name="reason_for_changes_description">このフォームを変更する理由を説明する必要があります</string>
 </resources>

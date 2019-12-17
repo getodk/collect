@@ -381,6 +381,7 @@
   <string name="discard">Verwerfen</string>
   <string name="geoshape_view_change_location">GeoShape anzeigen oder ändern</string>
   <string name="geotrace_view_change_location">GeoTrace anzeigen oder ändern</string>
+  <string name="geometry_status">Gespeicherte Formulare: %d (%d auf der Karte angezeigt) </string>
   <string name="bearing">Kompass-Peilung: %.3f</string>
   <string name="direction">Himmelsrichtung: %s</string>
   <string name="select_odk_shortcut">ODK Verknüpfung auswählen</string>
@@ -695,4 +696,12 @@
   <string name="qr_code_not_found">Kein QR-Code im ausgewählten Bild gefunden</string>
   <string name="not_granted_permission">Die Aktivität, die du versuchst zu starten, benötigt eine Berechtigung, die nicht gewährt wurde. </string>
   <string name="basemap_source_unavailable">Entschuldigung, %s Basiskarten sind auf diesem Gerät nicht verfügbar. Bitte wählen Sie eine andere Basiskarten unter Allgemeine Einstellungen &gt; Karten. </string>
+  <string name="enter_identity">Identität eingeben</string>
+  <string name="identity">Identität</string>
+  <string name="enter_identity_description">Dieses Formular erfordert, dass Sie sich identifizieren</string>
+  <string name="close">Schließen</string>
+  <string name="reason_for_changes">Begründung für Änderungen</string>
+  <string name="reason">Begründung</string>
+  <string name="save">Speichern</string>
+  <string name="reason_for_changes_description">Sie müssen den Grund für die Änderungen am Formular erklären</string>
 </resources>

@@ -17,10 +17,13 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
+import androidx.core.content.ContextCompat;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
+import org.odk.collect.android.R;
 import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
@@ -65,7 +68,7 @@ public class GridMultiWidget extends BaseGridWidget {
         } else {
             selectedItems.add(index);
             if (noButtonsMode) {
-                itemViews[index].setBackgroundColor(bgOrange);
+                itemViews[index].setBackground(ContextCompat.getDrawable(getContext(), R.drawable.select_item_border));
 
                 SelectChoice item = items.get(index);
                 Clip clip = getClip(getFormEntryPrompt(), item, getReferenceManager());

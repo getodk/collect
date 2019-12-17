@@ -22,6 +22,7 @@ import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
 import org.odk.collect.android.tasks.sms.models.SmsProgress;
@@ -97,7 +98,7 @@ public class SmsService {
         int i = 0;
         while (it.hasNext()) {
             String id = it.next().toString();
-            selection.append(InstanceProviderAPI.InstanceColumns._ID + "=?");
+            selection.append(InstanceColumns._ID + "=?");
             selectionArgs[i++] = id;
             if (i != list.size()) {
                 selection.append(" or ");
@@ -109,11 +110,11 @@ public class SmsService {
                 results.moveToPosition(-1);
                 while (results.moveToNext()) {
                     String filePath = results.getString(results
-                            .getColumnIndex(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH));
-                    String instanceId = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
-                    String displayName = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME));
-                    String formId = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
-                    String formVersion = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_VERSION));
+                            .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+                    String instanceId = results.getString(results.getColumnIndex(InstanceColumns._ID));
+                    String displayName = results.getString(results.getColumnIndex(InstanceColumns.DISPLAY_NAME));
+                    String formId = results.getString(results.getColumnIndex(InstanceColumns.JR_FORM_ID));
+                    String formVersion = results.getString(results.getColumnIndex(InstanceColumns.JR_VERSION));
 
                     FormInfo info = new FormInfo(filePath, formId, formVersion);
 
@@ -131,7 +132,7 @@ public class SmsService {
     public boolean submitForm(String instanceId, FormInfo info, String displayName) {
         String text;
 
-        if (formsDao.isFormEncrypted(info.getFormID(), info.getFormVersion())) {
+        if (formsDao.isFormEncrypted(info.getFormId(), info.getFormVersion())) {
             SmsRxEvent event = new SmsRxEvent(instanceId, RESULT_ENCRYPTED);
             updateInstanceStatusFailedText(instanceId, event);
             rxEventBus.post(event);
@@ -316,11 +317,11 @@ public class SmsService {
     }
 
     private void markInstanceAsSubmittedOrDelete(String instanceId) {
-        String where = InstanceProviderAPI.InstanceColumns._ID + "=?";
+        String where = InstanceColumns._ID + "=?";
         String[] whereArgs = {instanceId};
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
+        contentValues.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
 
         try (Cursor cursor = instancesDao.getInstancesCursorForId(instanceId)) {
             cursor.moveToPosition(-1);
@@ -329,14 +330,14 @@ public class SmsService {
             String formId = null;
             String formVersion = null;
             while (cursor.moveToNext()) {
-                formId = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
-                formVersion = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_VERSION));
+                formId = cursor.getString(cursor.getColumnIndex(InstanceColumns.JR_FORM_ID));
+                formVersion = cursor.getString(cursor.getColumnIndex(InstanceColumns.JR_VERSION));
                 if (InstanceServerUploader.formShouldBeAutoDeleted(formId, isFormAutoDeleteOptionEnabled)) {
 
                     List<String> instancesToDelete = new ArrayList<>();
                     instancesToDelete.add(instanceId);
 
-                    instancesDao.deleteInstancesFromIDs(instancesToDelete);
+                    instancesDao.deleteInstancesFromInstanceFilePaths(instancesToDelete);
                 } else {
                     instancesDao.updateInstance(contentValues, where, whereArgs);
                 }
@@ -351,11 +352,11 @@ public class SmsService {
      * @param event      with the specific failed status that's gonna be persisted
      */
     public void updateInstanceStatusFailedText(String instanceId, SmsRxEvent event) {
-        String where = InstanceProviderAPI.InstanceColumns._ID + "=?";
+        String where = InstanceColumns._ID + "=?";
         String[] whereArgs = {instanceId};
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+        contentValues.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
 
         instancesDao.updateInstance(contentValues, where, whereArgs);
     }

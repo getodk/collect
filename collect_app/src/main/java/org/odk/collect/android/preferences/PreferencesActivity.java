@@ -37,6 +37,7 @@ public class PreferencesActivity extends CollectAbstractActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_preferences_layout);
         setTheme(new ThemeUtils(this).getSettingsTheme());
 
         setTitle(R.string.general_preferences);
@@ -45,7 +46,7 @@ public class PreferencesActivity extends CollectAbstractActivity {
             Fragment fragment = GeneralPreferencesFragment.newInstance(adminMode);
             getFragmentManager()
                     .beginTransaction()
-                    .add(android.R.id.content, fragment, TAG)
+                    .add(R.id.container, fragment, TAG)
                     .commit();
         }
     }

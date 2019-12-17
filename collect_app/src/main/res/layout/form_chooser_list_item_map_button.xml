@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/map_button"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:background="?selectableItemBackground"
+        android:focusable="false"
+        android:clickable="false"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        android:insetLeft="0sp"
+        android:insetRight="0sp"
+        android:insetTop="0sp"
+        android:insetBottom="0sp"
+        android:padding="8sp"
+        app:icon="@drawable/ic_map"
+        app:iconTint="?attr/colorOnSurface" />
+</merge>

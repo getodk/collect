@@ -190,6 +190,7 @@
   <string name="sending_failed_on_date_at_time">\'Invio fallito il\' EEE, MMM dd, yyyy \'alle\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time">\'Cancellato il\' EEE, MMM dd, yyyy \'alle\' HH:mm</string>
+  <string name="submission_deleted">Record inviato cancellato</string>
   <string name="version">Versione:</string>
   <string name="parent_form_not_present">Impossibile modificare questo modulo salvato perché il corrispondente modulo vuoto non esiste o è stato cancellato.\n\nModulo: %1$s</string>
   <string name="launch_app">Invio</string>
@@ -315,10 +316,18 @@
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">Mappa Base</string>
+  <string name="basemap_source">Origine</string>
+  <string name="map_style_label">%sstile mappa</string>
   <string name="streets">Streets - Stradale</string>
   <string name="terrain">Terrain - Territoriale</string>
   <string name="hybrid">Hybrid - Ibrida</string>
   <string name="satellite">Satellite - Satellitare</string>
+  <string name="light">Chiaro</string>
+  <string name="dark">Scuro</string>
+  <string name="outdoors">All\'aperto</string>
+  <string name="topographic">Topografico</string>
+  <string name="carto_map_style_positron">Posizione</string>
+  <string name="reference_layer">Livello di riferimento</string>
   <string name="save_point">Salva Geo-punto</string>
   <string name="get_point">Inizia Geo-punto</string>
   <string name="geopoint_view_read_only">Guarda Geo-punto</string>
@@ -329,6 +338,7 @@
   <string name="start">Inizia</string>
   <string name="enable_gps">Abilita GPS</string>
   <string name="geotrace_title">Geo-tracciatura</string>
+  <string name="gps_enable_message">Il GPS è disabilitato sul tuo dispositivo. Vuoi abilitarlo?</string>
   <string name="geo_clear_warning">Caratteristica già creata. Vuoi cancellarla?</string>
   <string name="geo_exit_warning">Vuoi scartare le modifiche e ritornare ad ODK?</string>
   <string name="polygon_validator">Devi avere almeno 3 punti per creare un Poligono</string>
@@ -353,6 +363,8 @@
     <item quantity="other">%d metri</item>
   </plurals>
   <string name="location_status_searching">Sto ricercando segnale GPS, prego attendere…</string>
+  <string name="location_status_accuracy">Precisione della localizzazione GPS%.2f m</string>
+  <string name="location_status_acceptable">Precisione localizzazione GPS: %.2fm (accettabile)</string>
   <string name="collection_status_paused">Punti inseriti: %d</string>
   <string name="collection_status_placement">Punti inseriti: %d (tocca per inserire punti)</string>
   <string name="collection_status_manual">Punti inseriti: %d (salvataggio manuale)</string>
@@ -560,6 +572,7 @@
   <string name="coptic_month_11">Epip</string>
   <string name="coptic_month_12">Mesori</string>
   <string name="coptic_month_13">Pi Kogi Enavot</string>
+  <string name="multiple_media_folders_detected_notification">Più di una cartella media rilevata, si prega di rimuovere una e riprovare</string>
   <string name="islamic_month_1">Muharram</string>
   <string name="islamic_month_2">Safar</string>
   <string name="islamic_month_3">Rabi\' al-awwal</string>
@@ -587,6 +600,7 @@
   <string name="get_accounts_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può accedere al tuo account. Prova di nuovo quando hai autorizzato l\'accesso al tuo account</string>
   <string name="send_sms_runtime_permission_denied_title">Autorizzazione invio SMS</string>
   <string name="send_sms_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può inviare SMS. Prova di nuovo quando hai autorizzato l\'invio di SMS</string>
+  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect non effettua chiamate ma necessita di accedere ad alcune propietà del tuo dispositivo quali ad esempio il numero telefonico e l\'Identificativo del dispositivo.</string>
   <string name="form_update_category">Aggiornamento Modulo</string>
   <string name="periodic_form_updates_check_title">Controllo periodico di aggiornamento questionari</string>
   <string name="never">Mai</string>
@@ -597,6 +611,10 @@
   <string name="form_updates_available">Aggiornamenti Modulo disponibili</string>
   <string name="automatic_download">Download automatico</string>
   <string name="automatic_download_summary">Scarica automaticamente i questionari aggiornati</string>
+  <string name="guidance_hint_title">Mostra i chiarimenti per le domande</string>
+  <string name="theme_light">Tema chiaro</string>
+  <string name="theme_dark">Tema scuro</string>
+  <string name="cannot_create_directory">Impossibile creare la cartella: %s</string>
   <string name="not_a_directory">%sesiste, ma non è una cartella</string>
   <string name="location_metadata">Satelliti disponibili:%1$d/24\n\nTempo trascorso: %2$s</string>
   <string name="hide_old_form_versions_setting_title">Nascondi le vecchie versioni dei questionario</string>
@@ -605,11 +623,15 @@
   <string name="sms_pref_title">Numero telefono destinatario</string>
   <string name="sms_invalid_phone_number">Numero di telefono non valido!</string>
   <!--Sms submission-->
+  <string name="sms_no_reception">\'Fallito il\' EEE, MMM dd, yyyy \'alle\' HH:mm \'causa nessuna rete rilevata\'</string>
+  <string name="sms_no_number">\'Fallito il\' EEE, MMM dd, yyyy \'alle\' HH:mm \'causa nessun numero di telefono\'</string>
+  <string name="sms_fatal_error">\'Fallito il\' EEE, MMM dd, yyyy \'alle\' HH:mm</string>
   <string name="sms_submission_queued">In coda per essere inviato</string>
   <string name="transport_type_sms">SMS</string>
   <string name="rank_items">Ordina gli elementi</string>
   <string name="notification_channel_name">Impostazioni Generali</string>
   <string name="go_to_settings">Vai a impostazioni</string>
+  <string name="track_location">Registra la posizione</string>
   <string name="open_file">Apri documento</string>
   <string name="read_details">Lettura dettagli</string>
   <string name="qr_code_not_found">Il codice QR non è stato rilevato nell\'immagine selezionata</string>

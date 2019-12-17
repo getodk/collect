@@ -16,15 +16,15 @@
 
 package org.odk.collect.android.http.openrosa;
 
-import java.util.Map;
+import org.odk.collect.android.http.CaseInsensitiveHeaders;
 
 public class HttpHeadResult {
 
     private final int statusCode;
 
-    private final Map<String, String> headers;
+    private final CaseInsensitiveHeaders headers;
 
-    public HttpHeadResult(int statusCode, Map<String, String> headers) {
+    public HttpHeadResult(int statusCode, CaseInsensitiveHeaders headers) {
         this.statusCode = statusCode;
         this.headers = headers;
     }
@@ -33,7 +33,7 @@ public class HttpHeadResult {
         return statusCode;
     }
 
-    public Map<String, String> getHeaders() {
+    public CaseInsensitiveHeaders getHeaders() {
         return headers;
     }
 }

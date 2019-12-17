@@ -387,6 +387,7 @@
   <string name="discard">Vyřadit</string>
   <string name="geoshape_view_change_location">Zobrazit nebo změnit GeoShape</string>
   <string name="geotrace_view_change_location">Zobrazit nebo změnit GeoTrace</string>
+  <string name="geometry_status">Uložené formuláře:%d (%d zobrazené na mapě)</string>
   <string name="bearing">Orientace: %.3f</string>
   <string name="direction">Pokyny: %s</string>
   <string name="select_odk_shortcut">Vybrat ODK zástupce</string>
@@ -703,4 +704,12 @@
   <string name="qr_code_not_found">QR kód nebyl nalezen ve vybraném snímku</string>
   <string name="not_granted_permission">Aktivita, kterou se pokoušíte spustit, vyžaduje oprávnění, které není uděleno.</string>
   <string name="basemap_source_unavailable">Litujeme, na tomto zařízení nejsou k dispozici základní mapy %s. Vyberte jiný základní soubor v části Obecné nastavení a Mapy.</string>
+  <string name="enter_identity">Zadat identitu</string>
+  <string name="identity">Identita</string>
+  <string name="enter_identity_description">Tento formulář vyžaduje, abyste se identifikovali</string>
+  <string name="close">Zavřít</string>
+  <string name="reason_for_changes">Důvod změn</string>
+  <string name="reason">Důvod</string>
+  <string name="save">Uložit</string>
+  <string name="reason_for_changes_description">Musíte vysvětlit důvod změn tohoto formuláře</string>
 </resources>

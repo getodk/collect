@@ -381,6 +381,7 @@
   <string name="discard">Hylkää</string>
   <string name="geoshape_view_change_location">Tarkastele tai Muuta GeoShape</string>
   <string name="geotrace_view_change_location">Tarkastele tai Muuta GeoTrace</string>
+  <string name="geometry_status">Tallennettuja lomakkeita: %d (%d näytetty kartalla)</string>
   <string name="bearing">Suuntima: %.3f</string>
   <string name="direction">Suunta: %s</string>
   <string name="select_odk_shortcut">Valitse ODK-oikotie</string>
@@ -695,4 +696,12 @@
   <string name="qr_code_not_found">Valitusta kuvasta ei löytynyt QR-koodia</string>
   <string name="not_granted_permission">Toiminto, jota yrität käynnistää, vaatii käyttöluvan jota ei ole myönnetty.</string>
   <string name="basemap_source_unavailable">Pahoittelut, %s pohjakarttoja ei ole käytettävissä tällä laitteella. Ole kyvä ja valitse toinen pohjakartta kohdassa Yleiset asetukset &gt; Kartat.</string>
+  <string name="enter_identity">Syötä käyttäjätunnus</string>
+  <string name="identity">Käyttäjätunnus</string>
+  <string name="enter_identity_description">Tämä lomake vaatii tunnistautumisen</string>
+  <string name="close">Sulje</string>
+  <string name="reason_for_changes">Muutosten selitys</string>
+  <string name="reason">Selitys</string>
+  <string name="save">Tallenna</string>
+  <string name="reason_for_changes_description">Tämän lomakkeen muutoksille tarvitaan selitys</string>
 </resources>

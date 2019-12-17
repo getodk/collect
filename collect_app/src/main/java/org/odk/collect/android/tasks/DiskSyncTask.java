@@ -20,6 +20,7 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
@@ -36,6 +37,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.forms.FormUtils.setupReferenceManagerForForm;
 
 /**
  * Background task for adding to the forms content provider, any forms that have been added to the
@@ -144,7 +147,8 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                 }
 
                 // Step3: go through uriToUpdate to parse and update each in turn.
-                // This is slow because buildContentValues(...) is slow.
+                // Note: buildContentValues calls getMetadataFromFormDefinition which parses the
+                // form XML. This takes time for large forms and/or slow devices.
                 Collections.shuffle(uriToUpdate); // Big win if multiple DiskSyncTasks running
                 for (UriFile entry : uriToUpdate) {
                     Uri updateUri = entry.uri;
@@ -241,20 +245,26 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
     }
 
     /**
-     * Attempts to parse the formDefFile as an XForm.
-     * This is slow because FileUtils.parseXML is slow
+     * Parses the given form definition file to get basic form identifiers as a ContentValues object.
+     *
+     * Note: takes time for complex forms and/or slow devices.
      *
      * @return key-value list to update or insert into the content provider
-     * @throws IllegalArgumentException if the file failed to parse or was missing fields
+     * @throws IllegalArgumentException if the file failed to parse, is missing title or form_id
+     * fields or includes an invalid submission URL.
      */
     private ContentValues buildContentValues(File formDefFile) throws IllegalArgumentException {
         // Probably someone overwrite the file on the sdcard
         // So re-parse it and update it's information
         ContentValues updateValues = new ContentValues();
 
-        HashMap<String, String> fields = null;
+        HashMap<String, String> fields;
         try {
-            fields = FileUtils.parseXML(formDefFile);
+            // If the form definition includes external secondary instances, they need to be resolved
+            final File formMediaDir = FileUtils.getFormMediaDir(formDefFile);
+            setupReferenceManagerForForm(ReferenceManager.instance(), formMediaDir);
+
+            fields = FileUtils.getMetadataFromFormDefinition(formDefFile);
         } catch (RuntimeException e) {
             throw new IllegalArgumentException(formDefFile.getName() + " :: " + e.toString());
         }
@@ -300,6 +310,8 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
         }
         updateValues.put(FormsColumns.AUTO_DELETE, fields.get(FileUtils.AUTO_DELETE));
         updateValues.put(FormsColumns.AUTO_SEND, fields.get(FileUtils.AUTO_SEND));
+        updateValues.put(FormsColumns.GEOMETRY_XPATH, fields.get(FileUtils.GEOMETRY_XPATH));
+
         // Note, the path doesn't change here, but it needs to be included so the
         // update will automatically update the .md5 and the cache path.
         updateValues.put(FormsColumns.FORM_FILE_PATH, formDefFile.getAbsolutePath());
