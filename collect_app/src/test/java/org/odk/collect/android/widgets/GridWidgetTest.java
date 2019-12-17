@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets;
 
 import android.app.Application;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
@@ -25,9 +26,12 @@ import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
 
 import static java.util.Arrays.asList;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.Helpers.createMockReference;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.NO_BUTTONS;
 
@@ -146,5 +150,15 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
     @Override
     public GridWidget createWidget() {
         return new GridWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), false);
+    }
+
+    @Test
+    public void readOnlyTest() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+
+        for (View view : getWidget().itemViews) {
+            assertEquals(View.VISIBLE, view.getVisibility());
+            assertFalse(view.isEnabled());
+        }
     }
 }
