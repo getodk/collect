@@ -89,7 +89,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     private String videoURI;
     private int playTextColor = Color.BLUE;
-    private CharSequence originalText;
+    private CharSequence questionText;
     private String bigImageURI;
     private ReferenceManager referenceManager;
 
@@ -108,7 +108,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     }
 
     public void setTextView(TextView questionText) {
-        originalText = questionText.getText();
+        this.questionText = questionText.getText();
 
         this.labelTextView = questionText;
         this.labelTextView.setId(ViewIds.generateViewId());
@@ -118,6 +118,8 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     }
 
     public void setText(String questionText, boolean isRequiredQuestion, float fontSize) {
+        this.questionText = questionText;
+
         if (questionText != null && !questionText.isEmpty()) {
             labelTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize);
             labelTextView.setText(StringUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(questionText, isRequiredQuestion)));
@@ -304,7 +306,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
             } else {
                 labelTextView.setTextColor(getThemeUtils().getColorOnSurface());
                 // then set the text to our original (brings back any html formatting)
-                labelTextView.setText(originalText);
+                labelTextView.setText(questionText);
             }
         });
     }
