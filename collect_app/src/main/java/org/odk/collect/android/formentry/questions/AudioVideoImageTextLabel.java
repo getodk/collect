@@ -189,6 +189,11 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         imageView.setEnabled(enabled);
     }
 
+    @Override
+    public boolean isEnabled() {
+        return labelTextView.isEnabled() && imageView.isEnabled();
+    }
+
     private void onImageClick() {
         if (bigImageURI != null) {
             openImage();

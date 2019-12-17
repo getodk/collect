@@ -28,6 +28,11 @@ public class MockFormEntryPromptBuilder {
         return this;
     }
 
+    public MockFormEntryPromptBuilder withReadOnly(boolean readOnly) {
+        when(prompt.isReadOnly()).thenReturn(readOnly);
+        return this;
+    }
+
     public MockFormEntryPromptBuilder withAudioURI(String audioURI) {
         when(prompt.getAudioText()).thenReturn(audioURI);
         return this;
