@@ -114,7 +114,7 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
  */
 public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
 
-    private final Button launchIntentButton;
+    final Button launchIntentButton;
 
     public ExPrinterWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
