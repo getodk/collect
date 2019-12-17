@@ -31,8 +31,8 @@ public class RatingWidget extends QuestionWidget {
 
     public static final int ASSUMED_TOTAL_MARGIN_AROUND_WIDGET = 40;
 
-    private final GridLayout gridLayout;
-    private Integer answer;
+    final GridLayout gridLayout;
+    Integer answer;
 
     public RatingWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
