@@ -50,21 +50,21 @@ public class CompressionTest {
     }
 
     @Test
-    public void decompress() throws IOException, DataFormatException {
+    public void decompress() throws IOException, DataFormatException, IllegalArgumentException {
         compressedText = CompressionUtils.compress(text);
         decompressedText = CompressionUtils.decompress(compressedText);
         assertEquals(text, decompressedText);
     }
 
     @Test
-    public void decompressNullText() throws IOException, DataFormatException {
+    public void decompressNullText() throws IOException, DataFormatException, IllegalArgumentException {
         String nullText = "";
         decompressedText = CompressionUtils.decompress(nullText);
         assertEquals(nullText, decompressedText);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void decompressRaiseException() throws IOException, DataFormatException {
+    public void decompressRaiseException() throws IOException, DataFormatException, IllegalArgumentException {
         String input = "Decoding this will raise an error";
         decompressedText = CompressionUtils.decompress(input);
     }

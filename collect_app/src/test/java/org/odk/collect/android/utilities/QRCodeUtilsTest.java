@@ -127,7 +127,7 @@ public class QRCodeUtilsTest {
         return md.digest();
     }
 
-    private void assertQRContains(Bitmap bitmap, String data) throws DataFormatException, FormatException, ChecksumException, NotFoundException, IOException {
+    private void assertQRContains(Bitmap bitmap, String data) throws DataFormatException, FormatException, ChecksumException, NotFoundException, IOException, IllegalArgumentException {
         assertNotNull(bitmap);
         String result = QRCodeUtils.decodeFromBitmap(bitmap);
         assertEquals(data, result);
