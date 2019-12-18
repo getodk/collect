@@ -1,11 +1,14 @@
 package org.odk.collect.android.activities.viewmodels;
 
+import android.net.Uri;
+
 import androidx.lifecycle.ViewModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.R;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
@@ -53,9 +56,10 @@ public class FormMapViewModel extends ViewModel {
 
     private final InstancesRepository instancesRepository;
 
-    public FormMapViewModel(Form form, InstancesRepository instancesRepository) {
+    public FormMapViewModel(Uri formUri, InstancesRepository instancesRepository) {
         this.instancesRepository = instancesRepository;
-        this.form = form;
+        FormsDao dao = new FormsDao();
+        this.form = dao.getFormsFromCursor(dao.getFormsCursor(formUri)).get(0);
     }
 
     public String getFormTitle() {
