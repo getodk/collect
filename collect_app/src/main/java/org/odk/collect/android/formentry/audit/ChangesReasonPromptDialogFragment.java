@@ -12,7 +12,6 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -21,19 +20,17 @@ import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
 
 public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogFragment {
 
-    public static final String TAG = "ChangesReasonPromptDialogFragment";
     private static final String ARG_FORM_NAME = "ArgFormName";
     private ChangesReasonPromptViewModel viewModel;
 
     public ViewModelProvider.Factory viewModelFactory = new ChangesReasonPromptViewModel.Factory();
 
-    public void show(String formName, FragmentManager fragmentManager) {
-        if (fragmentManager.findFragmentByTag(TAG) == null) {
-            Bundle bundle = new Bundle();
-            bundle.putString(ChangesReasonPromptDialogFragment.ARG_FORM_NAME, formName);
-            setArguments(bundle);
-            show(fragmentManager.beginTransaction(), TAG);
-        }
+    public static ChangesReasonPromptDialogFragment create(String formName) {
+        ChangesReasonPromptDialogFragment fragment = new ChangesReasonPromptDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(ChangesReasonPromptDialogFragment.ARG_FORM_NAME, formName);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Nullable

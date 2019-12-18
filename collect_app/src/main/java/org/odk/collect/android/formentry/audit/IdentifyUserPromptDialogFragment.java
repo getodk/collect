@@ -17,7 +17,6 @@ import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
 
 public class IdentifyUserPromptDialogFragment extends MaterialFullScreenDialogFragment {
 
-    public static final String TAG = "IdentifyUserPromptDialogFragment";
     private static final String ARG_FORM_NAME = "ArgFormName";
 
     private IdentityPromptViewModel viewModel;

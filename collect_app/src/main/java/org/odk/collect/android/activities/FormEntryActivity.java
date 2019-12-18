@@ -59,7 +59,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -406,9 +405,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         identityPromptViewModel = ViewModelProviders.of(this).get(IdentityPromptViewModel.class);
         identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
             if (requiresIdentity) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
                 IdentifyUserPromptDialogFragment dialog = IdentifyUserPromptDialogFragment.create(getFormController().getFormTitle());
-                dialog.show(fragmentManager.beginTransaction(), IdentifyUserPromptDialogFragment.TAG);
+                DialogUtils.showIfNotShowing(dialog, getSupportFragmentManager());
             }
         });
         identityPromptViewModel.isFormEntryCancelled().observe(this, isFormEntryCancelled -> {
@@ -424,10 +422,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         changesReasonPromptViewModel.requiresReasonToContinue().observe(this, requiresReason -> {
             if (requiresReason) {
-                new ChangesReasonPromptDialogFragment().show(
-                        getFormController().getFormTitle(),
-                        getSupportFragmentManager()
-                );
+                ChangesReasonPromptDialogFragment dialog = ChangesReasonPromptDialogFragment.create(getFormController().getFormTitle());
+                DialogUtils.showIfNotShowing(dialog, getSupportFragmentManager());
             }
         });
         changesReasonPromptViewModel.saveRequest().observe(this, saveRequest -> {
