@@ -59,7 +59,8 @@ public class FormMapViewModel extends ViewModel {
     public FormMapViewModel(Uri formUri, InstancesRepository instancesRepository) {
         this.instancesRepository = instancesRepository;
         FormsDao dao = new FormsDao();
-        this.form = dao.getFormsFromCursor(dao.getFormsCursor(formUri)).get(0);
+        List<Form> forms = dao.getFormsFromCursor(dao.getFormsCursor(formUri));
+        form = forms.size() == 1 ? forms.get(0) : null;
     }
 
     public String getFormTitle() {
@@ -68,6 +69,10 @@ public class FormMapViewModel extends ViewModel {
 
     public String getFormId() {
         return form.getJrFormId();
+    }
+
+    public boolean mappedFormFound() {
+        return form != null;
     }
 
     public int getInstanceCount() {

@@ -61,6 +61,13 @@ public class FormMapActivity extends BaseGeoMapActivity {
 
         viewModel = ViewModelProviders.of(this,
                 new FormMapActivity.FormMapViewModelFactory(getIntent().getData(), new DatabaseInstancesRepository())).get(FormMapViewModel.class);
+
+        if (!viewModel.mappedFormFound()) {
+            Timber.e("Couldn't find a form for given uri: %s", getIntent().getData());
+            finish();
+            return;
+        }
+
         Timber.i("Starting FormMapActivity for form \"%s\" (jrFormId = \"%s\")",
                 viewModel.getFormTitle(),
                 viewModel.getFormId());
