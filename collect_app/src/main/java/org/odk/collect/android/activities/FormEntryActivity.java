@@ -1816,7 +1816,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * Creates and displays dialog with the given errorMsg.
      */
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
-
         if (alertDialog != null && alertDialog.isShowing()) {
             errorMsg = errorMessage + "\n\n" + errorMsg;
             errorMessage = errorMsg;
@@ -2547,7 +2546,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     @Override
     public void savingComplete(SaveResult saveResult) {
-        dismissDialog(SAVING_DIALOG);
+        try {
+            dismissDialog(SAVING_DIALOG);
+        } catch (IllegalArgumentException ignored) {
+            // For some reason the dialog wasn't shown
+        }
+
         changesReasonPromptViewModel.saveComplete();
 
         int saveStatus = saveResult.getSaveResult();
