@@ -1,7 +1,10 @@
 package org.odk.collect.android.widgets;
 
 import android.database.Cursor;
+import android.widget.LinearLayout;
+
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -29,12 +32,14 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.support.RobolectricHelpers.populateRecyclerView;
 
 /**
  * @author James Knight
@@ -155,6 +160,14 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
 
         StringData answer = (StringData) widget.getAnswer();
         assertEquals(answer.getDisplayText(), selectedChoice);
+    }
+
+    @Test
+    public void readOnlyTest() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+        populateRecyclerView(getActualWidget());
+        LinearLayout layout = (LinearLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0);
+        assertFalse(layout.getChildAt(0).isEnabled());
     }
 
     private Map<String, String> createChoices() {
