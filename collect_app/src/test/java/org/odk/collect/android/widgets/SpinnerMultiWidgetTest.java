@@ -4,8 +4,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import junit.framework.TestCase;
-
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
@@ -16,6 +14,8 @@ import org.odk.collect.android.widgets.base.GeneralSelectMultiWidgetTest;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 /**
@@ -47,7 +47,7 @@ public class SpinnerMultiWidgetTest extends GeneralSelectMultiWidgetTest<Spinner
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        TestCase.assertEquals(View.GONE, getWidget().button.getVisibility());
-        TestCase.assertEquals(View.VISIBLE, getWidget().selectionText.getVisibility());
+        assertThat(getWidget().button.getVisibility(), is(View.GONE));
+        assertThat(getWidget().selectionText.getVisibility(), is(View.VISIBLE));
     }
 }

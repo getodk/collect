@@ -2,7 +2,6 @@ package org.odk.collect.android.widgets;
 
 import android.app.Application;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
@@ -31,7 +30,8 @@ import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.base.GeneralSelectMultiWidgetTest;
 
 import static java.util.Arrays.asList;
-import static junit.framework.TestCase.assertFalse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -145,7 +145,7 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
 
         populateRecyclerView(getActualWidget());
 
-        assertFalse(((RecyclerView) getWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0).isEnabled());
+        assertThat(((RecyclerView) getWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0).isEnabled(), is(Boolean.FALSE));
     }
 
     @Test
@@ -163,6 +163,6 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
         populateRecyclerView(getActualWidget());
 
         FrameLayout layout = (FrameLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0);
-        assertFalse(layout.isEnabled());
+        assertThat(layout.isEnabled(), is(Boolean.FALSE));
     }
 }

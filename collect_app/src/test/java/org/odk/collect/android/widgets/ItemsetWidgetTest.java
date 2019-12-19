@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets;
 
 import android.database.Cursor;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -32,7 +33,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import static junit.framework.TestCase.assertFalse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -166,8 +168,9 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
         populateRecyclerView(getActualWidget());
+
         LinearLayout layout = (LinearLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0);
-        assertFalse(layout.getChildAt(0).isEnabled());
+        assertThat(layout.getChildAt(0).isEnabled(), is(Boolean.FALSE));
     }
 
     private Map<String, String> createChoices() {

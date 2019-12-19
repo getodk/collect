@@ -4,8 +4,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import junit.framework.TestCase;
-
 import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
@@ -13,6 +11,8 @@ import org.junit.Test;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.QuestionWidgetTest;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 /**
@@ -41,7 +41,7 @@ public class UrlWidgetTest extends QuestionWidgetTest<UrlWidget, StringData> {
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        TestCase.assertEquals(View.GONE, getWidget().openUrlButton.getVisibility());
-        TestCase.assertEquals(View.VISIBLE, getWidget().stringAnswer.getVisibility());
+        assertThat(getWidget().openUrlButton.getVisibility(), is(View.GONE));
+        assertThat(getWidget().stringAnswer.getVisibility(), is(View.VISIBLE));
     }
 }

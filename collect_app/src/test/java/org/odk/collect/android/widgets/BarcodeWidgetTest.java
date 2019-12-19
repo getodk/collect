@@ -15,7 +15,8 @@ import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 /**
@@ -74,7 +75,7 @@ public class BarcodeWidgetTest extends BinaryWidgetTest<BarcodeWidget, StringDat
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
         when(formEntryPrompt.getAnswerText()).thenReturn("123456789");
 
-        assertEquals(View.GONE, getWidget().getBarcodeButton.getVisibility());
-        assertEquals(View.VISIBLE, getWidget().stringAnswer.getVisibility());
+        assertThat(getWidget().getBarcodeButton.getVisibility(), is(View.GONE));
+        assertThat(getWidget().stringAnswer.getVisibility(), is(View.VISIBLE));
     }
 }

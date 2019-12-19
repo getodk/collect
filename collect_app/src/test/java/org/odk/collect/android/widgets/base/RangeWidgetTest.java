@@ -14,7 +14,8 @@ import org.odk.collect.android.widgets.RangeWidget;
 
 import java.math.BigDecimal;
 
-import static junit.framework.TestCase.assertFalse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
@@ -82,8 +83,8 @@ public abstract class RangeWidgetTest<W extends RangeWidget, A extends IAnswerDa
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
         when(rangeQuestion.getAppearanceAttr()).thenReturn(null);
 
-        TestCase.assertEquals(View.VISIBLE, getWidget().seekBar.getVisibility());
-        assertFalse(getWidget().seekBar.isEnabled());
-        TestCase.assertEquals(View.VISIBLE, getWidget().currentValue.getVisibility());
+        assertThat(getWidget().seekBar.getVisibility(), is(View.VISIBLE));
+        assertThat(getWidget().seekBar.isEnabled(), is(Boolean.FALSE));
+        assertThat(getWidget().currentValue.getVisibility(), is(View.VISIBLE));
     }
 }

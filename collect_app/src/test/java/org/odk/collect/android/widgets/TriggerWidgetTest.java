@@ -5,14 +5,14 @@ import androidx.annotation.NonNull;
 import android.view.View;
 import android.widget.CheckBox;
 
-import junit.framework.TestCase;
-
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.junit.Test;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.QuestionWidgetTest;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -61,7 +61,7 @@ public class TriggerWidgetTest extends QuestionWidgetTest<TriggerWidget, StringD
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        TestCase.assertEquals(View.VISIBLE, getWidget().triggerButton.getVisibility());
-        TestCase.assertFalse(getWidget().triggerButton.isEnabled());
+        assertThat(getWidget().triggerButton.getVisibility(), is(View.VISIBLE));
+        assertThat(getWidget().triggerButton.isEnabled(), is(Boolean.FALSE));
     }
 }

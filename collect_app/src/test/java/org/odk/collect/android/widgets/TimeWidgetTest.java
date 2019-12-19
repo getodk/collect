@@ -4,8 +4,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import junit.framework.TestCase;
-
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.TimeData;
@@ -15,6 +13,8 @@ import org.mockito.Mock;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.GeneralDateTimeWidgetTest;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -60,7 +60,7 @@ public class TimeWidgetTest extends GeneralDateTimeWidgetTest<TimeWidget, TimeDa
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        TestCase.assertEquals(View.GONE, getWidget().timeButton.getVisibility());
-        TestCase.assertEquals(View.VISIBLE, getWidget().timeTextView.getVisibility());
+        assertThat(getWidget().timeButton.getVisibility(), is(View.GONE));
+        assertThat(getWidget().timeTextView.getVisibility(), is(View.VISIBLE));
     }
 }

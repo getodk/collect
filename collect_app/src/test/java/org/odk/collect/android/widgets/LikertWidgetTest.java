@@ -22,6 +22,8 @@ import java.util.Map;
 import static java.util.Arrays.asList;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 public class LikertWidgetTest extends QuestionWidgetTest<LikertWidget, SelectOneData> {
     private List<SelectChoice> options = new ArrayList<>();
@@ -58,13 +60,13 @@ public class LikertWidgetTest extends QuestionWidgetTest<LikertWidget, SelectOne
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         for (int i = 0; i < getWidget().view.getChildCount(); i++) {
             LinearLayout optionView = (LinearLayout) getWidget().view.getChildAt(0);
-            assertEquals(View.VISIBLE, optionView.getVisibility());
-            assertFalse(optionView.isEnabled());
+            assertThat(optionView.getVisibility(), is(View.VISIBLE));
+            assertThat(optionView.isEnabled(), is(Boolean.FALSE));
         }
 
         for (Map.Entry<RadioButton, String> radioButtonStringEntry : getWidget().buttonsToName.entrySet()) {
-            assertEquals(View.VISIBLE, ((RadioButton) ((Map.Entry) radioButtonStringEntry).getKey()).getVisibility());
-            assertFalse(((RadioButton) ((Map.Entry) radioButtonStringEntry).getKey()).isEnabled());
+            assertThat(((RadioButton) ((Map.Entry) radioButtonStringEntry).getKey()).getVisibility(), is(View.VISIBLE));
+            assertThat(((RadioButton) ((Map.Entry) radioButtonStringEntry).getKey()).isEnabled(), is(Boolean.FALSE));
         }
     }
 }

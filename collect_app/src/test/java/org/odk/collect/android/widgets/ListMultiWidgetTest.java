@@ -11,6 +11,8 @@ import org.odk.collect.android.widgets.base.GeneralSelectMultiWidgetTest;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 /**
@@ -29,8 +31,8 @@ public class ListMultiWidgetTest extends GeneralSelectMultiWidgetTest<ListMultiW
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
         for(CheckBox checkBox : getWidget().checkBoxes) {
-            assertEquals(View.VISIBLE, checkBox.getVisibility());
-            assertFalse(checkBox.isEnabled());
+            assertThat(checkBox.getVisibility(), is(View.VISIBLE));
+            assertThat(checkBox.isEnabled(), is(Boolean.FALSE));
         }
     }
 }

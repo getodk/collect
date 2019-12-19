@@ -6,8 +6,8 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.junit.Test;
 import org.odk.collect.android.widgets.ExStringWidget;
 
-import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 /**
@@ -25,8 +25,8 @@ public abstract class GeneralExStringWidgetTest<W extends ExStringWidget, A exte
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertEquals(View.GONE, getWidget().launchIntentButton.getVisibility());
-        assertEquals(View.VISIBLE, getWidget().answerText.getVisibility());
-        assertFalse(getWidget().answerText.isEnabled());
+        assertThat(getWidget().launchIntentButton.getVisibility(), is(View.GONE));
+        assertThat(getWidget().answerText.getVisibility(), is(View.VISIBLE));
+        assertThat(getWidget().answerText.isEnabled(), is(Boolean.FALSE));
     }
 }

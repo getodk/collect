@@ -12,7 +12,8 @@ import org.junit.Test;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 /**
@@ -54,7 +55,7 @@ public class BearingWidgetTest extends BinaryWidgetTest<BearingWidget, StringDat
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertEquals(View.GONE, getWidget().getBearingButton.getVisibility());
-        assertEquals(View.VISIBLE, getWidget().answer.getVisibility());
+        assertThat(getWidget().getBearingButton.getVisibility(), is(View.GONE));
+        assertThat(getWidget().answer.getVisibility(), is(View.VISIBLE));
     }
 }

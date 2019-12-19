@@ -9,8 +9,8 @@ import org.junit.Test;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 /**
@@ -29,8 +29,8 @@ public class ListWidgetTest extends GeneralSelectOneWidgetTest<ListWidget> {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
         for(RadioButton radioButton : getWidget().buttons) {
-            assertEquals(View.VISIBLE, radioButton.getVisibility());
-            assertFalse(radioButton.isEnabled());
+            assertThat(radioButton.getVisibility(), is(View.VISIBLE));
+            assertThat(radioButton.isEnabled(), is(Boolean.FALSE));
         }
     }
 }

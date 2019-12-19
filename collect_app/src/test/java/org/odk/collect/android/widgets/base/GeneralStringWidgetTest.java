@@ -2,16 +2,15 @@ package org.odk.collect.android.widgets.base;
 
 import android.view.View;
 
-import junit.framework.TestCase;
-
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.widgets.StringWidget;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.when;
 
 /**
@@ -66,7 +65,7 @@ public abstract class GeneralStringWidgetTest<W extends StringWidget, A extends 
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        TestCase.assertEquals(View.VISIBLE, getWidget().answerText.getVisibility());
-        assertFalse(getWidget().answerText.isEnabled());
+        assertThat(getWidget().answerText.getVisibility(), is(View.VISIBLE));
+        assertThat(getWidget().answerText.isEnabled(), is(Boolean.FALSE));
     }
 }

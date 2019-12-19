@@ -17,8 +17,8 @@ import org.robolectric.annotation.Config;
 
 import androidx.annotation.NonNull;
 
-import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 /**
@@ -114,7 +114,7 @@ public class GeoPointWidgetTest extends BinaryWidgetTest<GeoPointWidget, GeoPoin
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertEquals(View.GONE, getWidget().startGeoButton.getVisibility());
-        assertEquals(View.VISIBLE, getWidget().answerDisplay.getVisibility());
+        assertThat(getWidget().startGeoButton.getVisibility(), is(View.GONE));
+        assertThat(getWidget().answerDisplay.getVisibility(), is(View.VISIBLE));
     }
 }

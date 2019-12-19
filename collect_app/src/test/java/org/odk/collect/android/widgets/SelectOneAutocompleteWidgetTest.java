@@ -14,7 +14,8 @@ import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
 
 import static java.util.Arrays.asList;
-import static junit.framework.TestCase.assertFalse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.odk.collect.android.support.RobolectricHelpers.populateRecyclerView;
 
 /**
@@ -42,7 +43,7 @@ public class SelectOneAutocompleteWidgetTest extends GeneralSelectOneWidgetTest<
         populateRecyclerView(getActualWidget());
 
         LinearLayout layout = (LinearLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(1)).getLayoutManager().getChildAt(0);
-        assertFalse(layout.getChildAt(0).isEnabled());
+        assertThat(layout.getChildAt(0).isEnabled(), is(Boolean.FALSE));
     }
 
     @Test
@@ -60,6 +61,6 @@ public class SelectOneAutocompleteWidgetTest extends GeneralSelectOneWidgetTest<
         populateRecyclerView(getActualWidget());
 
         FrameLayout layout = (FrameLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(1)).getLayoutManager().getChildAt(0);
-        assertFalse(layout.isEnabled());
+        assertThat(layout.isEnabled(), is(Boolean.FALSE));
     }
 }

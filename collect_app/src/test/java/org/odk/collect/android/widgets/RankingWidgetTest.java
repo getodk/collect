@@ -4,8 +4,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import junit.framework.TestCase;
-
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.MultipleItemsData;
 import org.javarosa.core.model.data.SelectMultiData;
@@ -17,6 +15,8 @@ import org.odk.collect.android.widgets.base.SelectWidgetTest;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 public class RankingWidgetTest extends SelectWidgetTest<RankingWidget, MultipleItemsData> {
@@ -44,7 +44,7 @@ public class RankingWidgetTest extends SelectWidgetTest<RankingWidget, MultipleI
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        TestCase.assertEquals(View.GONE, getWidget().showRankingDialogButton.getVisibility());
-        TestCase.assertEquals(View.VISIBLE, getWidget().answerText.getVisibility());
+        assertThat(getWidget().showRankingDialogButton.getVisibility(), is(View.GONE));
+        assertThat(getWidget().answerText.getVisibility(), is(View.VISIBLE));
     }
 }

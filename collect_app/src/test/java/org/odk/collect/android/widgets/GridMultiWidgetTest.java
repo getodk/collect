@@ -31,8 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -219,8 +219,8 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
         for (View view : getWidget().itemViews) {
-            assertEquals(View.VISIBLE, view.getVisibility());
-            assertFalse(view.isEnabled());
+            assertThat(view.getVisibility(), is(View.VISIBLE));
+            assertThat(view.isEnabled(), is(Boolean.FALSE));
         }
     }
 }

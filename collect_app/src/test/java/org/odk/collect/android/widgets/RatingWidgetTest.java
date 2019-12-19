@@ -13,8 +13,8 @@ import org.odk.collect.android.widgets.base.QuestionWidgetTest;
 
 import java.math.BigDecimal;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 public class RatingWidgetTest extends QuestionWidgetTest<RatingWidget, IntegerData> {
@@ -54,8 +54,8 @@ public class RatingWidgetTest extends QuestionWidgetTest<RatingWidget, IntegerDa
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
         for (int i =0; i < getWidget().gridLayout.getChildCount(); i++) {
-            assertEquals(View.VISIBLE, getWidget().gridLayout.getChildAt(i).getVisibility());
-            assertFalse(getWidget().gridLayout.getChildAt(i).isEnabled());
+            assertThat(getWidget().gridLayout.getChildAt(i).getVisibility(), is(View.VISIBLE));
+            assertThat(getWidget().gridLayout.getChildAt(i).isEnabled(), is(Boolean.FALSE));
         }
     }
 }

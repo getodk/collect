@@ -4,8 +4,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import junit.framework.TestCase;
-
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.DateData;
 import org.joda.time.LocalDateTime;
@@ -14,6 +12,8 @@ import org.mockito.Mock;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.GeneralDateTimeWidgetTest;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.when;
@@ -62,7 +62,7 @@ public class DateWidgetTest extends GeneralDateTimeWidgetTest<DateWidget, DateDa
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        TestCase.assertEquals(View.GONE, getWidget().dateButton.getVisibility());
-        TestCase.assertEquals(View.VISIBLE, getWidget().dateTextView.getVisibility());
+        assertThat(getWidget().dateButton.getVisibility(), is(View.GONE));
+        assertThat(getWidget().dateTextView.getVisibility(), is(View.VISIBLE));
     }
 }

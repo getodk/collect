@@ -23,7 +23,8 @@ import org.odk.collect.android.widgets.base.BinaryWidgetTest;
 
 import java.io.File;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 /**
@@ -97,7 +98,7 @@ public class OSMWidgetTest extends BinaryWidgetTest<OSMWidget, StringData> {
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertEquals(View.GONE, getWidget().launchOpenMapKitButton.getVisibility());
-        assertEquals(View.VISIBLE, getWidget().osmFileNameTextView.getVisibility());
+        assertThat(getWidget().launchOpenMapKitButton.getVisibility(), is(View.GONE));
+        assertThat(getWidget().osmFileNameTextView.getVisibility(), is(View.VISIBLE));
     }
 }

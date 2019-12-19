@@ -21,7 +21,8 @@ import org.odk.collect.android.widgets.base.FileWidgetTest;
 
 import java.io.File;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 /**
@@ -129,8 +130,8 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
         when(formEntryPrompt.getAnswerText()).thenReturn("testVideo.mp4");
 
-        assertEquals(View.GONE, getWidget().captureButton.getVisibility());
-        assertEquals(View.GONE, getWidget().chooseButton.getVisibility());
-        assertEquals(View.VISIBLE, getWidget().playButton.getVisibility());
+        assertThat(getWidget().captureButton.getVisibility(), is(View.GONE));
+        assertThat(getWidget().chooseButton.getVisibility(), is(View.GONE));
+        assertThat(getWidget().playButton.getVisibility(), is(View.VISIBLE));
     }
 }

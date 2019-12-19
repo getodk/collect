@@ -21,7 +21,8 @@ import org.odk.collect.android.widgets.base.FileWidgetTest;
 
 import java.io.File;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -92,8 +93,8 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
         when(formEntryPrompt.getAnswerText()).thenReturn("testFile.pdf");
 
-        assertEquals(View.GONE, getWidget().chooseFileButton.getVisibility());
-        assertEquals(View.VISIBLE, getWidget().chosenFileNameTextView.getVisibility());
+        assertThat(getWidget().chooseFileButton.getVisibility(), is(View.GONE));
+        assertThat(getWidget().chosenFileNameTextView.getVisibility(), is(View.VISIBLE));
     }
 
     public void prepareForSetAnswer() {

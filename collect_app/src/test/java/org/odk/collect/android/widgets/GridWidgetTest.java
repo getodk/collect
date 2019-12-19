@@ -28,6 +28,8 @@ import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
 import static java.util.Arrays.asList;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -157,8 +159,8 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
         for (View view : getWidget().itemViews) {
-            assertEquals(View.VISIBLE, view.getVisibility());
-            assertFalse(view.isEnabled());
+            assertThat(view.getVisibility(), is(View.VISIBLE));
+            assertThat(view.isEnabled(), is(Boolean.FALSE));
         }
     }
 }

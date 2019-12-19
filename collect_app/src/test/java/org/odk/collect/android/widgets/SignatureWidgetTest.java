@@ -18,7 +18,8 @@ import org.odk.collect.android.widgets.base.FileWidgetTest;
 
 import java.io.File;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 /**
@@ -74,7 +75,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
         when(formEntryPrompt.getAnswerText()).thenReturn("testPhoto.jpg");
 
-        assertEquals(View.GONE, getWidget().signButton.getVisibility());
-        assertEquals(View.VISIBLE, getWidget().imageView.getVisibility());
+        assertThat(getWidget().signButton.getVisibility(), is(View.GONE));
+        assertThat(getWidget().imageView.getVisibility(), is(View.VISIBLE));
     }
 }

@@ -19,7 +19,8 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_OSM;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE;
@@ -143,7 +144,7 @@ public class GeoTraceWidgetTest extends BinaryWidgetTest<GeoTraceWidget, StringD
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertEquals(View.GONE, getWidget().startGeoButton.getVisibility());
-        assertEquals(View.VISIBLE, getWidget().answerDisplay.getVisibility());
+        assertThat(getWidget().startGeoButton.getVisibility(), is(View.GONE));
+        assertThat(getWidget().answerDisplay.getVisibility(), is(View.VISIBLE));
     }
 }

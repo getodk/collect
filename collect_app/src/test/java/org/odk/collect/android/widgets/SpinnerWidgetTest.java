@@ -4,12 +4,12 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import junit.framework.TestCase;
-
 import org.junit.Test;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 /**
@@ -27,7 +27,7 @@ public class SpinnerWidgetTest extends GeneralSelectOneWidgetTest<SpinnerWidget>
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        TestCase.assertEquals(View.VISIBLE, getWidget().spinner.getVisibility());
-        TestCase.assertFalse(getWidget().spinner.isEnabled());
+        assertThat(getWidget().spinner.getVisibility(), is(View.VISIBLE));
+        assertThat(getWidget().spinner.isEnabled(), is(Boolean.FALSE));
     }
 }

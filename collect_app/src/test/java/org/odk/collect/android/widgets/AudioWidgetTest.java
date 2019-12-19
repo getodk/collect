@@ -22,7 +22,8 @@ import org.odk.collect.android.widgets.base.FileWidgetTest;
 
 import java.io.File;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -110,8 +111,8 @@ public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
         when(formEntryPrompt.getAnswerText()).thenReturn("testAudio.mp3");
 
-        assertEquals(View.GONE, getWidget().captureButton.getVisibility());
-        assertEquals(View.GONE, getWidget().chooseButton.getVisibility());
-        assertEquals(View.VISIBLE, getWidget().audioController.getVisibility());
+        assertThat(getWidget().captureButton.getVisibility(), is(View.GONE));
+        assertThat(getWidget().chooseButton.getVisibility(), is(View.GONE));
+        assertThat(getWidget().audioController.getVisibility(), is(View.VISIBLE));
     }
 }
