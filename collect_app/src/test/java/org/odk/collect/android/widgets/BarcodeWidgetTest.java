@@ -73,9 +73,7 @@ public class BarcodeWidgetTest extends BinaryWidgetTest<BarcodeWidget, StringDat
     @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
-        when(formEntryPrompt.getAnswerText()).thenReturn("123456789");
 
         assertThat(getWidget().getBarcodeButton.getVisibility(), is(View.GONE));
-        assertThat(getWidget().stringAnswer.getVisibility(), is(View.VISIBLE));
     }
 }

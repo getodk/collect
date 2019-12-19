@@ -26,6 +26,5 @@ public abstract class BaseGeoWidgetTest <W extends BaseGeoWidget, A extends IAns
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
         assertThat(getWidget().startGeoButton.getVisibility(), is(View.GONE));
-        assertThat(getWidget().answerDisplay.getVisibility(), is(View.VISIBLE));
     }
 }

@@ -64,8 +64,6 @@ public class DateTimeWidgetTest extends GeneralDateTimeWidgetTest<DateTimeWidget
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
         assertThat(getWidget().dateWidget.dateButton.getVisibility(), is(View.GONE));
-        assertThat(getWidget().dateWidget.dateTextView.getVisibility(), is(View.VISIBLE));
         assertThat(getWidget().timeWidget.timeButton.getVisibility(), is(View.GONE));
-        assertThat(getWidget().timeWidget.timeTextView.getVisibility(), is(View.VISIBLE));
     }
 }

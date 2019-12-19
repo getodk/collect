@@ -109,10 +109,8 @@ public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
     @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
-        when(formEntryPrompt.getAnswerText()).thenReturn("testAudio.mp3");
 
         assertThat(getWidget().captureButton.getVisibility(), is(View.GONE));
         assertThat(getWidget().chooseButton.getVisibility(), is(View.GONE));
-        assertThat(getWidget().audioController.getVisibility(), is(View.VISIBLE));
     }
 }

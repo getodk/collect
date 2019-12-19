@@ -75,7 +75,6 @@ public abstract class RangeWidgetTest<W extends RangeWidget, A extends IAnswerDa
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
         TestCase.assertEquals(View.GONE, getWidget().pickerButton.getVisibility());
-        TestCase.assertEquals(View.VISIBLE, getWidget().answerTextView.getVisibility());
     }
 
     @Test
@@ -85,6 +84,5 @@ public abstract class RangeWidgetTest<W extends RangeWidget, A extends IAnswerDa
 
         assertThat(getWidget().seekBar.getVisibility(), is(View.VISIBLE));
         assertThat(getWidget().seekBar.isEnabled(), is(Boolean.FALSE));
-        assertThat(getWidget().currentValue.getVisibility(), is(View.VISIBLE));
     }
 }

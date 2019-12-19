@@ -75,11 +75,9 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
-        when(formEntryPrompt.getAnswerText()).thenReturn("testPhoto.jpg");
 
         assertThat(getWidget().captureButton.getVisibility(), is(View.GONE));
         assertThat(getWidget().chooseButton.getVisibility(), is(View.GONE));
         assertThat(getWidget().annotateButton.getVisibility(), is(View.GONE));
-        assertThat(getWidget().imageView.getVisibility(), is(View.VISIBLE));
     }
 }

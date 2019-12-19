@@ -56,6 +56,5 @@ public class BearingWidgetTest extends BinaryWidgetTest<BearingWidget, StringDat
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
         assertThat(getWidget().getBearingButton.getVisibility(), is(View.GONE));
-        assertThat(getWidget().answer.getVisibility(), is(View.VISIBLE));
     }
 }

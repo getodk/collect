@@ -99,6 +99,5 @@ public class OSMWidgetTest extends BinaryWidgetTest<OSMWidget, StringData> {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
         assertThat(getWidget().launchOpenMapKitButton.getVisibility(), is(View.GONE));
-        assertThat(getWidget().osmFileNameTextView.getVisibility(), is(View.VISIBLE));
     }
 }

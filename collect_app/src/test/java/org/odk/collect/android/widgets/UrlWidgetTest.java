@@ -42,6 +42,5 @@ public class UrlWidgetTest extends QuestionWidgetTest<UrlWidget, StringData> {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
         assertThat(getWidget().openUrlButton.getVisibility(), is(View.GONE));
-        assertThat(getWidget().stringAnswer.getVisibility(), is(View.VISIBLE));
     }
 }

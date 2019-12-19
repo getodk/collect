@@ -45,6 +45,5 @@ public class RankingWidgetTest extends SelectWidgetTest<RankingWidget, MultipleI
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
         assertThat(getWidget().showRankingDialogButton.getVisibility(), is(View.GONE));
-        assertThat(getWidget().answerText.getVisibility(), is(View.VISIBLE));
     }
 }

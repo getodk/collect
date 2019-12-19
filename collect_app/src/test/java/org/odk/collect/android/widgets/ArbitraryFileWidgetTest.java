@@ -91,10 +91,8 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
     @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
-        when(formEntryPrompt.getAnswerText()).thenReturn("testFile.pdf");
 
         assertThat(getWidget().chooseFileButton.getVisibility(), is(View.GONE));
-        assertThat(getWidget().chosenFileNameTextView.getVisibility(), is(View.VISIBLE));
     }
 
     public void prepareForSetAnswer() {
