@@ -31,6 +31,7 @@ public class SelectOneAutocompleteWidgetTest extends GeneralSelectOneWidgetTest<
 
     @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
+        // No appearance
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
                 .withSelectChoices(asList(
@@ -44,10 +45,10 @@ public class SelectOneAutocompleteWidgetTest extends GeneralSelectOneWidgetTest<
 
         LinearLayout layout = (LinearLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(1)).getLayoutManager().getChildAt(0);
         assertThat(layout.getChildAt(0).isEnabled(), is(Boolean.FALSE));
-    }
 
-    @Test
-    public void testReadOnlyWithNoButtons() {
+        resetWidget();
+
+        // No-buttons appearance
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
                 .withSelectChoices(asList(
@@ -60,7 +61,7 @@ public class SelectOneAutocompleteWidgetTest extends GeneralSelectOneWidgetTest<
 
         populateRecyclerView(getActualWidget());
 
-        FrameLayout layout = (FrameLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(1)).getLayoutManager().getChildAt(0);
-        assertThat(layout.isEnabled(), is(Boolean.FALSE));
+        FrameLayout fl = (FrameLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(1)).getLayoutManager().getChildAt(0);
+        assertThat(fl.isEnabled(), is(Boolean.FALSE));
     }
 }

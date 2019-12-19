@@ -134,6 +134,7 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
 
     @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
+        // No appearance
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
                 .withSelectChoices(asList(
@@ -146,10 +147,10 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
         populateRecyclerView(getActualWidget());
 
         assertThat(((RecyclerView) getWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0).isEnabled(), is(Boolean.FALSE));
-    }
 
-    @Test
-    public void testReadOnlyWithNoButtons() {
+        resetWidget();
+
+        // No-buttons appearance
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
                 .withSelectChoices(asList(

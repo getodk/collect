@@ -2,8 +2,6 @@ package org.odk.collect.android.widgets.base;
 
 import android.view.View;
 
-import junit.framework.TestCase;
-
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
@@ -71,15 +69,15 @@ public abstract class RangeWidgetTest<W extends RangeWidget, A extends IAnswerDa
     }
 
     @Test
-    public void readOnlyPickerAppearanceTest() {
-        when(formEntryPrompt.isReadOnly()).thenReturn(true);
-
-        TestCase.assertEquals(View.GONE, getWidget().pickerButton.getVisibility());
-    }
-
-    @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
+        // Picker appearance
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
+
+        assertThat(getWidget().pickerButton.getVisibility(), is(View.GONE));
+
+        resetWidget();
+
+        // No appearance
         when(rangeQuestion.getAppearanceAttr()).thenReturn(null);
 
         assertThat(getWidget().seekBar.getVisibility(), is(View.VISIBLE));

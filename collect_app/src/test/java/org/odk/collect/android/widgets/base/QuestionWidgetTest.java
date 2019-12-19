@@ -76,6 +76,11 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
         return widget;
     }
 
+    public void resetWidget() {
+        actualWidget = null;
+        widget = null;
+    }
+
     public void setUp() throws Exception {
         super.setUp();
 
