@@ -59,7 +59,7 @@ public class DateWidgetTest extends GeneralDateTimeWidgetTest<DateWidget, DateDa
     }
 
     @Test
-    public void readOnlyTest() {
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
         TestCase.assertEquals(View.GONE, getWidget().dateButton.getVisibility());

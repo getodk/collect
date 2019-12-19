@@ -55,7 +55,7 @@ public class LikertWidgetTest extends QuestionWidgetTest<LikertWidget, SelectOne
     }
 
     @Test
-    public void readOnlyTest() {
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         for (int i = 0; i < getWidget().view.getChildCount(); i++) {
             LinearLayout optionView = (LinearLayout) getWidget().view.getChildAt(0);
             assertEquals(View.VISIBLE, optionView.getVisibility());

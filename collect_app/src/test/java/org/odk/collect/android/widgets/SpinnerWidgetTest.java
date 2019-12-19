@@ -24,7 +24,7 @@ public class SpinnerWidgetTest extends GeneralSelectOneWidgetTest<SpinnerWidget>
     }
 
     @Test
-    public void readOnlyTest() {
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
         TestCase.assertEquals(View.VISIBLE, getWidget().spinner.getVisibility());

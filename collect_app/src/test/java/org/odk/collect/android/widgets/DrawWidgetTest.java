@@ -74,7 +74,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
     }
 
     @Test
-    public void readOnlyTest() {
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
         when(formEntryPrompt.getAnswerText()).thenReturn("testPhoto.jpg");
 

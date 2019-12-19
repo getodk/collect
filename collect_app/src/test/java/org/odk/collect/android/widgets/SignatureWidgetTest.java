@@ -70,7 +70,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
     }
 
     @Test
-    public void readOnlyTest() {
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
         when(formEntryPrompt.getAnswerText()).thenReturn("testPhoto.jpg");
 

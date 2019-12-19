@@ -41,7 +41,7 @@ public class RankingWidgetTest extends SelectWidgetTest<RankingWidget, MultipleI
     }
 
     @Test
-    public void readOnlyTest() {
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
         TestCase.assertEquals(View.GONE, getWidget().showRankingDialogButton.getVisibility());

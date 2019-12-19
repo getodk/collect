@@ -139,7 +139,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<AbstractSele
     }
 
     @Test
-    public void readOnlyTest() {
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
                 .withSelectChoices(asList(

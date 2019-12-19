@@ -50,7 +50,7 @@ public class RatingWidgetTest extends QuestionWidgetTest<RatingWidget, IntegerDa
     }
 
     @Test
-    public void readOnlyTest() {
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
         for (int i =0; i < getWidget().gridLayout.getChildCount(); i++) {

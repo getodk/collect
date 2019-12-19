@@ -78,7 +78,7 @@ public abstract class RangeWidgetTest<W extends RangeWidget, A extends IAnswerDa
     }
 
     @Test
-    public void readOnlyTest() {
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
         when(rangeQuestion.getAppearanceAttr()).thenReturn(null);
 

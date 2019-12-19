@@ -25,7 +25,7 @@ public class ListMultiWidgetTest extends GeneralSelectMultiWidgetTest<ListMultiW
     }
 
     @Test
-    public void readOnlyTest() {
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
         for(CheckBox checkBox : getWidget().checkBoxes) {

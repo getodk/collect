@@ -153,7 +153,7 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
     }
 
     @Test
-    public void readOnlyTest() {
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
         for (View view : getWidget().itemViews) {

@@ -81,6 +81,6 @@ public class BooleanWidgetTest extends WidgetTest {
     }
 
     @Test
-    public void readOnlyTest() {
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
     }
 }

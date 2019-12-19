@@ -82,7 +82,7 @@ public class ImageWidgetTest extends FileWidgetTest<ImageWidget> {
     }
 
     @Test
-    public void readOnlyTest() {
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
         when(formEntryPrompt.getAnswerText()).thenReturn("testPhoto.jpg");
 

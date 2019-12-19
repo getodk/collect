@@ -58,7 +58,7 @@ public class TriggerWidgetTest extends QuestionWidgetTest<TriggerWidget, StringD
     }
 
     @Test
-    public void readOnlyTest() {
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
         TestCase.assertEquals(View.VISIBLE, getWidget().triggerButton.getVisibility());

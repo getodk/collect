@@ -63,7 +63,7 @@ public abstract class GeneralStringWidgetTest<W extends StringWidget, A extends 
     }
 
     @Test
-    public void readOnlyTest() {
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
         TestCase.assertEquals(View.VISIBLE, getWidget().answerText.getVisibility());
