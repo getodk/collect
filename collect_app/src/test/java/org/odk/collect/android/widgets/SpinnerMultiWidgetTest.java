@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.GeneralSelectMultiWidgetTest;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,18 +34,17 @@ public class SpinnerMultiWidgetTest extends GeneralSelectMultiWidgetTest<Spinner
         super.setUp();
 
         List<SelectChoice> selectChoices = getSelectChoices();
-        List<Selection> selections = new ArrayList<>();
         for (SelectChoice selectChoice : selectChoices) {
-            selections.add(selectChoice.selection());
             when(formEntryPrompt.getSelectChoiceText(selectChoice))
                     .thenReturn(selectChoice.getValue());
         }
-        when(formEntryPrompt.getAnswerValue()).thenReturn(new SelectMultiData(selections));
     }
 
     @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
+        List<Selection> selectedOptions = Collections.singletonList(getSelectChoices().get(0).selection());
+        when(formEntryPrompt.getAnswerValue()).thenReturn(new SelectMultiData(selectedOptions));
 
         assertThat(getWidget().button.getVisibility(), is(View.GONE));
         assertThat(getWidget().selectionText.getVisibility(), is(View.VISIBLE));
