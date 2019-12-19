@@ -133,7 +133,7 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
     }
 
     @Test
-    public void testReadOnly() {
+    public void readOnlyTest() {
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
                 .withSelectChoices(asList(

@@ -29,7 +29,7 @@ public class SelectOneAutocompleteWidgetTest extends GeneralSelectOneWidgetTest<
     }
 
     @Test
-    public void testReadOnly() {
+    public void readOnlyTest() {
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
                 .withSelectChoices(asList(

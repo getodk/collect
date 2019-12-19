@@ -139,7 +139,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<AbstractSele
     }
 
     @Test
-    public void testReadOnly() {
+    public void readOnlyTest() {
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
                 .withSelectChoices(asList(

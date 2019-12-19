@@ -79,4 +79,8 @@ public class BooleanWidgetTest extends WidgetTest {
         assertTrue(widget.isChecked());
         assertTrue((Boolean) widget.getAnswer().getValue());
     }
+
+    @Test
+    public void readOnlyTest() {
+    }
 }
