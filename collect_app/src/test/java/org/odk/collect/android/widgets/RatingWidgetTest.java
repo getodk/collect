@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 
 public class RatingWidgetTest extends QuestionWidgetTest<RatingWidget, IntegerData> {
 
-    private IntegerData answer = new IntegerData(4);
+    private final IntegerData answer = new IntegerData(4);
 
     @Before
     public void setUp() throws Exception {
@@ -53,7 +53,7 @@ public class RatingWidgetTest extends QuestionWidgetTest<RatingWidget, IntegerDa
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        for (int i =0; i < getWidget().gridLayout.getChildCount(); i++) {
+        for (int i = 0; i < getWidget().gridLayout.getChildCount(); i++) {
             assertThat(getWidget().gridLayout.getChildAt(i).getVisibility(), is(View.VISIBLE));
             assertThat(getWidget().gridLayout.getChildAt(i).isEnabled(), is(Boolean.FALSE));
         }

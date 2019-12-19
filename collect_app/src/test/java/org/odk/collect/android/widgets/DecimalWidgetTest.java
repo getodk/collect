@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.GeneralStringWidgetTest;
-import org.odk.collect.android.widgets.base.QuestionWidgetTest;
 
 import java.text.NumberFormat;
 import java.util.Locale;

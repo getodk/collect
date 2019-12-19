@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets;
 
 import android.database.Cursor;
-import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;

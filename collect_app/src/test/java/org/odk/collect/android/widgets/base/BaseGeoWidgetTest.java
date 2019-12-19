@@ -11,7 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
-public abstract class BaseGeoWidgetTest <W extends BaseGeoWidget, A extends IAnswerData>
+public abstract class BaseGeoWidgetTest<W extends BaseGeoWidget, A extends IAnswerData>
         extends BinaryWidgetTest<W, A> {
 
     @Test

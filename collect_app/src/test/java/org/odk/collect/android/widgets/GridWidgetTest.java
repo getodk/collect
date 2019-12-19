@@ -26,8 +26,6 @@ import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
 
 import static java.util.Arrays.asList;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;

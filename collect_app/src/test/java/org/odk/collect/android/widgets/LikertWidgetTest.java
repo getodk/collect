@@ -20,10 +20,9 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.when;
 
 public class LikertWidgetTest extends QuestionWidgetTest<LikertWidget, SelectOneData> {
     private List<SelectChoice> options = new ArrayList<>();
@@ -40,7 +39,6 @@ public class LikertWidgetTest extends QuestionWidgetTest<LikertWidget, SelectOne
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
                 .withSelectChoices(options)
-                .withReadOnly(true)
                 .build();
     }
 
@@ -58,6 +56,8 @@ public class LikertWidgetTest extends QuestionWidgetTest<LikertWidget, SelectOne
 
     @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+
         for (int i = 0; i < getWidget().view.getChildCount(); i++) {
             LinearLayout optionView = (LinearLayout) getWidget().view.getChildAt(0);
             assertThat(optionView.getVisibility(), is(View.VISIBLE));
