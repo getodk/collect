@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Intent;
-import android.view.View;
 
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
@@ -11,7 +10,7 @@ import org.odk.collect.android.ShadowPlayServicesUtil;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.preferences.PrefUtils;
-import org.odk.collect.android.widgets.base.BinaryWidgetTest;
+import org.odk.collect.android.widgets.base.BaseGeoWidgetTest;
 import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
@@ -19,8 +18,6 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_OSM;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE;
@@ -30,7 +27,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE
  */
 
 @Config(shadows = {ShadowPlayServicesUtil.class})
-public class GeoTraceWidgetTest extends BinaryWidgetTest<GeoTraceWidget, StringData> {
+public class GeoTraceWidgetTest extends BaseGeoWidgetTest<GeoTraceWidget, StringData> {
 
     private List<double[]> initialDoubles;
     private List<double[]> answerDoubles;
@@ -131,20 +128,5 @@ public class GeoTraceWidgetTest extends BinaryWidgetTest<GeoTraceWidget, StringD
 
         Intent intent = getIntentLaunchedByClick(R.id.simple_button);
         assertComponentEquals(activity, GeoPolyActivity.class, intent);
-    }
-
-    @Test
-    public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
-        stubAllRuntimePermissionsGranted(false);
-
-        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.simple_button));
-    }
-
-    @Test
-    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
-        when(formEntryPrompt.isReadOnly()).thenReturn(true);
-
-        assertThat(getWidget().startGeoButton.getVisibility(), is(View.GONE));
-        assertThat(getWidget().answerDisplay.getVisibility(), is(View.VISIBLE));
     }
 }

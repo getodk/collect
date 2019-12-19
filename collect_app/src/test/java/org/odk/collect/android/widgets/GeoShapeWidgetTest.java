@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Intent;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 
@@ -13,14 +12,12 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.ShadowPlayServicesUtil;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.widgets.base.BinaryWidgetTest;
+import org.odk.collect.android.widgets.base.BaseGeoWidgetTest;
 import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 /**
@@ -28,7 +25,7 @@ import static org.mockito.Mockito.when;
  */
 
 @Config(shadows = {ShadowPlayServicesUtil.class})
-public class GeoShapeWidgetTest extends BinaryWidgetTest<GeoShapeWidget, StringData> {
+public class GeoShapeWidgetTest extends BaseGeoWidgetTest<GeoShapeWidget, StringData> {
 
     private ArrayList<double[]> initialDoubles;
     private ArrayList<double[]> answerDoubles;
@@ -123,20 +120,5 @@ public class GeoShapeWidgetTest extends BinaryWidgetTest<GeoShapeWidget, StringD
 
         Intent intent = getIntentLaunchedByClick(R.id.simple_button);
         assertComponentEquals(activity, GeoPolyActivity.class, intent);
-    }
-
-    @Test
-    public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
-        stubAllRuntimePermissionsGranted(false);
-
-        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.simple_button));
-    }
-
-    @Test
-    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
-        when(formEntryPrompt.isReadOnly()).thenReturn(true);
-
-        assertThat(getWidget().startGeoButton.getVisibility(), is(View.GONE));
-        assertThat(getWidget().answerDisplay.getVisibility(), is(View.VISIBLE));
     }
 }
