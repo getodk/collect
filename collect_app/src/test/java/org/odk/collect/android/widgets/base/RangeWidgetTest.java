@@ -1,5 +1,9 @@
 package org.odk.collect.android.widgets.base;
 
+import android.view.View;
+
+import junit.framework.TestCase;
+
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
@@ -10,6 +14,7 @@ import org.odk.collect.android.widgets.RangeWidget;
 
 import java.math.BigDecimal;
 
+import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
@@ -62,5 +67,23 @@ public abstract class RangeWidgetTest<W extends RangeWidget, A extends IAnswerDa
         }
 
         assertEquals(answer.getDisplayText(), compareTo.getDisplayText());
+    }
+
+    @Test
+    public void readOnlyPickerAppearanceTest() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+
+        TestCase.assertEquals(View.GONE, getWidget().pickerButton.getVisibility());
+        TestCase.assertEquals(View.VISIBLE, getWidget().answerTextView.getVisibility());
+    }
+
+    @Test
+    public void readOnlyNoAppearanceTest() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+        when(rangeQuestion.getAppearanceAttr()).thenReturn(null);
+
+        TestCase.assertEquals(View.VISIBLE, getWidget().seekBar.getVisibility());
+        assertFalse(getWidget().seekBar.isEnabled());
+        TestCase.assertEquals(View.VISIBLE, getWidget().currentValue.getVisibility());
     }
 }
