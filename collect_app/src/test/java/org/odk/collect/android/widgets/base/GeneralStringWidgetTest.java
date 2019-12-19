@@ -1,5 +1,9 @@
 package org.odk.collect.android.widgets.base;
 
+import android.view.View;
+
+import junit.framework.TestCase;
+
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
 import org.junit.Test;
@@ -7,6 +11,7 @@ import org.mockito.Mock;
 import org.odk.collect.android.widgets.StringWidget;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.when;
 
 /**
@@ -55,5 +60,13 @@ public abstract class GeneralStringWidgetTest<W extends StringWidget, A extends 
         IAnswerData computedAnswer = widget.getAnswer();
 
         assertEquals(answer.getDisplayText(), computedAnswer.getDisplayText());
+    }
+
+    @Test
+    public void readOnlyTest() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+
+        TestCase.assertEquals(View.VISIBLE, getWidget().answerText.getVisibility());
+        assertFalse(getWidget().answerText.isEnabled());
     }
 }
