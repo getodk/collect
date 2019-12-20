@@ -43,6 +43,11 @@ public class MockFormEntryPromptBuilder {
         return this;
     }
 
+    public MockFormEntryPromptBuilder withImageURI(String imageURI) {
+        when(prompt.getImageText()).thenReturn(imageURI);
+        return this;
+    }
+
     public MockFormEntryPromptBuilder withAdditionalAttribute(String name, String value) {
         when(prompt.getFormElement().getAdditionalAttribute(null, name)).thenReturn(value);
         return this;

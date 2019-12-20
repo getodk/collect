@@ -17,6 +17,7 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.text.Html;
 import android.view.MotionEvent;
@@ -29,9 +30,7 @@ import android.widget.TextView;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.reference.InvalidReferenceException;
-import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.views.CustomWebView;
@@ -70,7 +69,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
                     "</html>";
     private final boolean isSingleSelect;
     protected List<Selection> selections = new ArrayList<>();
-    private CustomWebView webView;
+    CustomWebView webView;
     private TextView selectedAreasLabel;
     private String imageMapFilePath;
 
@@ -80,7 +79,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         isSingleSelect = this instanceof SelectOneImageMapWidget;
 
         try {
-            imageMapFilePath = ReferenceManager.instance().DeriveReference(prompt.getPrompt().getImageText()).getLocalURI();
+            imageMapFilePath = getReferenceManager().deriveReference(prompt.getPrompt().getImageText()).getLocalURI();
         } catch (InvalidReferenceException e) {
             Timber.w(e);
         }
@@ -147,7 +146,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
             webView.getSettings().setUseWideViewPort(true);
             int height = (int) (getResources().getDisplayMetrics().heightPixels / 1.7); // about 60% of a screen
             webView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
-            webView.setOnTouchListener((v, event) -> getFormEntryPrompt().isReadOnly());
+            webView.setEnabled(!getFormEntryPrompt().isReadOnly());
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public void onPageFinished(WebView view, String url) {
@@ -272,7 +271,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
             }
         }
 
-        ((FormEntryActivity) getContext()).runOnUiThread(() ->
+        ((Activity) getContext()).runOnUiThread(() ->
                 selectedAreasLabel.setText(Html.fromHtml(stringBuilder.toString())));
     }
 
