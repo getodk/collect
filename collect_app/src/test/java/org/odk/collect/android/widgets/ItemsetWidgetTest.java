@@ -23,6 +23,7 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.odk.collect.android.database.ItemsetDbAdapter;
+import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.XPathParseTool;
@@ -168,8 +169,8 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
         populateRecyclerView(getActualWidget());
 
-        LinearLayout layout = (LinearLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0);
-        assertThat(layout.getChildAt(0).isEnabled(), is(Boolean.FALSE));
+        AudioVideoImageTextLabel avitLabel = (AudioVideoImageTextLabel) ((LinearLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0)).getChildAt(0);
+        assertThat(avitLabel.isEnabled(), is(Boolean.FALSE));
     }
 
     private Map<String, String> createChoices() {

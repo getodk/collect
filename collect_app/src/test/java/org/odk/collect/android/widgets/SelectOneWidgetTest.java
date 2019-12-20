@@ -23,6 +23,7 @@ import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
+import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
@@ -147,25 +148,19 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<AbstractSele
 
         populateRecyclerView(getActualWidget());
 
-        LinearLayout layout = (LinearLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0);
-        assertThat(layout.getChildAt(0).isEnabled(), is(Boolean.FALSE));
+        AudioVideoImageTextLabel avitLabel = (AudioVideoImageTextLabel) ((LinearLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0)).getChildAt(0);
+        assertThat(avitLabel.isEnabled(), is(Boolean.FALSE));
 
         resetWidget();
 
         // No-buttons appearance
-        formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withIndex("i am index")
-                .withSelectChoices(asList(
-                        new SelectChoice("1", "1"),
-                        new SelectChoice("2", "2")
-                ))
-                .withReadOnly(true)
+        formEntryPrompt = new MockFormEntryPromptBuilder(formEntryPrompt)
                 .withAppearance(WidgetAppearanceUtils.NO_BUTTONS)
                 .build();
 
         populateRecyclerView(getActualWidget());
 
-        FrameLayout fl = (FrameLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0);
-        assertThat(fl.isEnabled(), is(Boolean.FALSE));
+        FrameLayout view = (FrameLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0);
+        assertThat(view.isEnabled(), is(Boolean.FALSE));
     }
 }

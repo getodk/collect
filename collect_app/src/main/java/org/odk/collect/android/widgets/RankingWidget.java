@@ -42,7 +42,6 @@ public class RankingWidget extends ItemsWidget implements BinaryWidget {
     private List<SelectChoice> savedItems;
     private LinearLayout widgetLayout;
     Button showRankingDialogButton;
-    TextView answerText;
 
     public RankingWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
@@ -158,8 +157,7 @@ public class RankingWidget extends ItemsWidget implements BinaryWidget {
         widgetLayout.setOrientation(LinearLayout.VERTICAL);
         showRankingDialogButton = getSimpleButton(getContext().getString(R.string.rank_items));
         widgetLayout.addView(showRankingDialogButton);
-        answerText = setUpAnswerTextView();
-        widgetLayout.addView(answerText);
+        widgetLayout.addView(setUpAnswerTextView());
 
         addAnswerView(widgetLayout);
         SpacesInUnderlyingValuesWarning
