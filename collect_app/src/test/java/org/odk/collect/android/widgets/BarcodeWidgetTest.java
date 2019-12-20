@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.R;
@@ -62,5 +63,13 @@ public class BarcodeWidgetTest extends BinaryWidgetTest<BarcodeWidget, StringDat
         stubAllRuntimePermissionsGranted(false);
 
         assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.simple_button));
+    }
+
+    @Test
+    public void stripInvalidCharacters() {
+        Assert.assertEquals("all valid", BarcodeWidget.stripInvalidCharacters("all valid"));
+        Assert.assertEquals("control char ()", BarcodeWidget.stripInvalidCharacters("control char (\b)"));
+        Assert.assertEquals("unicode surrogate fragment ()", BarcodeWidget.stripInvalidCharacters("unicode surrogate fragment (\ud800)"));
+        Assert.assertNull(BarcodeWidget.stripInvalidCharacters(null));
     }
 }

@@ -24,6 +24,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
+import org.jetbrains.annotations.Contract;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
@@ -88,12 +89,18 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         String response = (String) answer;
-        if (response != null) {      // It looks like the answer is not set to null even if no barcode captured, however it seems prudent to check
-            response = response.replaceAll("\\p{C}", "");
-        }
-        stringAnswer.setText(response);
+        stringAnswer.setText(stripInvalidCharacters(response));
 
         widgetValueChanged();
+    }
+
+    // Remove control characters, invisible characters and unused code points.
+    @Contract("null -> null; !null -> !null")
+    protected static String stripInvalidCharacters(String data) {
+        if (data == null) {
+            return null;
+        }
+        return data.replaceAll("\\p{C}", "");
     }
 
     @Override
