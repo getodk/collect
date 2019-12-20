@@ -78,6 +78,13 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
+    public T checkIsTextDisplayed(String...  text) {
+        for (String s : text) {
+            onView(withText(s)).check(matches(isDisplayed()));
+        }
+        return (T) this;
+    }
+
     public T checkIsTranslationDisplayed(String... text) {
         for (String s : text) {
             try {
