@@ -1,4 +1,4 @@
-package org.odk.collect.android.espressoutils.pages;
+package org.odk.collect.android.support.pages;
 
 import android.database.Cursor;
 

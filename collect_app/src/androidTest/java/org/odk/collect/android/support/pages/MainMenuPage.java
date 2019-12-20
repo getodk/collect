@@ -1,4 +1,4 @@
-package org.odk.collect.android.espressoutils.pages;
+package org.odk.collect.android.support.pages;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -62,7 +62,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     private void goToBlankForm(String formName) {
-        onView(withId(R.id.enter_data)).perform(click());
+        clickFillBlankForm();
         onData(withRowString(FormsColumns.DISPLAY_NAME, formName)).perform(click());
     }
 

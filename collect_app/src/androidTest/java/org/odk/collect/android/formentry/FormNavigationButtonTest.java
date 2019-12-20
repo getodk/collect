@@ -74,7 +74,7 @@ public class FormNavigationButtonTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule(ALL_WIDGETS_FORM));
+            .around(new CopyFormRule(ALL_WIDGETS_FORM, true));
 
     @Before
     public void resetAllPreferences() {
