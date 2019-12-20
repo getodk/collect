@@ -90,8 +90,14 @@ public class MapsPreferences extends BasePreferenceFragment {
         );
         onBasemapSourceChanged(MapProvider.getConfigurator());
         basemapSourcePref.setOnPreferenceChangeListener((pref, value) -> {
-            onBasemapSourceChanged(MapProvider.getConfigurator(value.toString()));
-            return true;
+            MapConfigurator cftor = MapProvider.getConfigurator(value.toString());
+            if (!cftor.isAvailable(context)) {
+                cftor.showUnavailableMessage(context);
+                return false;
+            } else {
+                onBasemapSourceChanged(cftor);
+                return true;
+            }
         });
     }
 
@@ -101,10 +107,7 @@ public class MapsPreferences extends BasePreferenceFragment {
         PreferenceCategory baseCategory = (PreferenceCategory) findPreference(CATEGORY_BASEMAP);
         baseCategory.removeAll();
         baseCategory.addPreference(basemapSourcePref);
-        if (!cftor.isAvailable(context)) {
-            cftor.showUnavailableMessage(context);
-            return;
-        }
+
         for (Preference pref : cftor.createPrefs(context)) {
             baseCategory.addPreference(pref);
         }

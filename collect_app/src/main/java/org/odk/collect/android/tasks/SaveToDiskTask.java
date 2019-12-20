@@ -292,6 +292,11 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             Object result = expr.eval(instance, context);
             if (result instanceof XPathNodeset) {
                 XPathNodeset nodes = (XPathNodeset) result;
+                if (nodes.size() == 0) {
+                    Timber.i("TreeElement is missing for xpath %s!, probably it's just not relevant", xpath);
+                    return null;
+                }
+
                 // For now, only use the first node found.
                 TreeElement element = instance.resolveReference(nodes.getRefAt(0));
                 IAnswerData value = element.getValue();

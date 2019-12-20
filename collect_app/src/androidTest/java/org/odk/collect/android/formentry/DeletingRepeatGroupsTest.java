@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.espressoutils.pages.FormEntryPage;
+import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
@@ -34,7 +34,7 @@ public class DeletingRepeatGroupsTest {
                     )
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule(TEST_FORM, null));
+            .around(new CopyFormRule(TEST_FORM, true));
 
     @Test
     public void requestingDeletionOfFirstRepeat_deletesFirstRepeat() {

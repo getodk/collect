@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<h:html
+	xmlns="http://www.w3.org/2002/xforms"
+	xmlns:ev="http://www.w3.org/2001/xml-events"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:jr="http://openrosa.org/javarosa"
+	xmlns:odk="http://www.opendatakit.org/xforms"
+	xmlns:orx="http://openrosa.org/xforms"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<h:head>
+		<h:title>ranking_widget</h:title>
+		<model>
+			<instance>
+				<ranking_widget id="ranking_widget">
+					<q1/>
+					<meta>
+						<instanceID/>
+					</meta>
+				</ranking_widget>
+			</instance>
+			<bind nodeset="/ranking_widget/q1" type="odk:rank"/>
+			<bind jr:preload="uid" nodeset="/ranking_widget/meta/instanceID" readonly="true()" type="string"/>
+		</model>
+	</h:head>
+	<h:body>
+		<odk:rank appearance="search('fruits')" ref="/ranking_widget/q1">
+			<label>Items from an external csv file</label>
+			<item>
+				<label>name</label>
+				<value>name_key</value>
+			</item>
+		</odk:rank>
+	</h:body>
+</h:html>

@@ -55,7 +55,7 @@ import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.RegexUtils;
+import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.views.ODKView;
 
 import java.io.File;
@@ -113,7 +113,7 @@ public class FormController {
 
         public InstanceMetadata(String instanceId, String instanceName, AuditConfig auditConfig) {
             this.instanceId = instanceId;
-            this.instanceName = RegexUtils.normalizeFormName(instanceName, false);
+            this.instanceName = FormNameUtils.normalizeFormName(instanceName, false);
             this.auditConfig = auditConfig;
         }
     }

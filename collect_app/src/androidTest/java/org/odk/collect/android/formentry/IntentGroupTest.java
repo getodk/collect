@@ -62,7 +62,7 @@ public class IntentGroupTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             ))
             .around(new ResetStateRule())
-            .around(new CopyFormRule(INTENT_GROUP_FORM));
+            .around(new CopyFormRule(INTENT_GROUP_FORM, true));
 
     // Verifies that a value given to the label text with form buttonText is used as the button text.
     @Test

@@ -76,6 +76,7 @@ import com.google.zxing.integration.android.IntentResult;
 import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryCaption;
@@ -143,7 +144,7 @@ import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
-import org.odk.collect.android.utilities.RegexUtils;
+import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
@@ -1341,7 +1342,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         // disallow carriage returns in the name
         InputFilter returnFilter = (source, start, end, dest, dstart, dend)
-                -> RegexUtils.normalizeFormName(source.toString().substring(start, end), true);
+                -> FormNameUtils.normalizeFormName(source.toString().substring(start, end), true);
         saveAs.setFilters(new InputFilter[]{returnFilter});
 
         if (formController.getSubmissionMetadata().instanceName == null) {
@@ -2821,11 +2822,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     @Override
-    public void onRankingChanged(List<String> values) {
+    public void onRankingChanged(List<SelectChoice> items) {
         ODKView odkView = getCurrentViewIfODKView();
         if (odkView != null) {
             QuestionWidget widgetGettingNewValue = getWidgetWaitingForBinaryData();
-            odkView.setBinaryData(values);
+            odkView.setBinaryData(items);
             widgetValueChanged(widgetGettingNewValue);
         }
     }

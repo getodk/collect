@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.espressoutils.pages.FormEntryPage;
+import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.test.FormLoadingUtils;
@@ -29,7 +29,7 @@ public class SelectMinimalTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule("select_minimal.xml"));
+            .around(new CopyFormRule("select_minimal.xml", true));
 
     @Test
     public void longLabelsShouldBeDisplayed() {

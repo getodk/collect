@@ -65,7 +65,7 @@ public class MediaUtils {
         // static methods only
     }
 
-    private static String escapePath(String path) {
+    protected static String escapePathForLikeSQLClause(String path) {
         String ep = path;
         ep = ep.replaceAll("\\!", "!!");
         ep = ep.replaceAll("_", "!_");
@@ -148,7 +148,7 @@ public class MediaUtils {
         Cursor imageCursor = null;
         try {
             String select = Images.Media.DATA + " like ? escape '!'";
-            String[] selectArgs = {escapePath(folder.getAbsolutePath())};
+            String[] selectArgs = {escapePathForLikeSQLClause(folder.getAbsolutePath())};
 
             String[] projection = {Images.ImageColumns._ID};
             imageCursor = cr
@@ -263,7 +263,7 @@ public class MediaUtils {
         Cursor audioCursor = null;
         try {
             String select = Audio.Media.DATA + " like ? escape '!'";
-            String[] selectArgs = {escapePath(folder.getAbsolutePath())};
+            String[] selectArgs = {escapePathForLikeSQLClause(folder.getAbsolutePath())};
 
             String[] projection = {Audio.AudioColumns._ID};
             audioCursor = cr
@@ -378,7 +378,7 @@ public class MediaUtils {
         Cursor videoCursor = null;
         try {
             String select = Video.Media.DATA + " like ? escape '!'";
-            String[] selectArgs = {escapePath(folder.getAbsolutePath())};
+            String[] selectArgs = {escapePathForLikeSQLClause(folder.getAbsolutePath())};
 
             String[] projection = {Video.VideoColumns._ID};
             videoCursor = cr

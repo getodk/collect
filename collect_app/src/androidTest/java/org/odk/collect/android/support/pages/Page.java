@@ -1,4 +1,4 @@
-package org.odk.collect.android.espressoutils.pages;
+package org.odk.collect.android.support.pages;
 
 import android.app.Activity;
 
@@ -75,6 +75,13 @@ abstract class Page<T extends Page<T>> {
 
     public T checkIsTextDisplayed(String text) {
         onView(withText(text)).check(matches(isDisplayed()));
+        return (T) this;
+    }
+
+    public T checkIsTextDisplayed(String...  text) {
+        for (String s : text) {
+            onView(withText(s)).check(matches(isDisplayed()));
+        }
         return (T) this;
     }
 

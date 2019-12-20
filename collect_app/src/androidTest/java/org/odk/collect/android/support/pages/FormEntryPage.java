@@ -1,4 +1,4 @@
-package org.odk.collect.android.espressoutils.pages;
+package org.odk.collect.android.support.pages;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.rule.ActivityTestRule;
@@ -114,6 +114,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage clickWidgetButton() {
+        onView(withId(R.id.simple_button)).perform(click());
+        return this;
+    }
+
+    public FormEntryPage clickRankingButton() {
         onView(withId(R.id.simple_button)).perform(click());
         return this;
     }
