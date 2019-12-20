@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.SelectChoice;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.RankingListAdapter.ItemViewHolder;
@@ -39,9 +40,11 @@ import java.util.List;
 public class RankingListAdapter extends Adapter<ItemViewHolder> {
 
     private final List<SelectChoice> items;
+    private final FormIndex formIndex;
 
-    public RankingListAdapter(List<SelectChoice> items) {
+    public RankingListAdapter(List<SelectChoice> items, FormIndex formIndex) {
         this.items = items;
+        this.formIndex = formIndex;
     }
 
     @NonNull
@@ -53,7 +56,7 @@ public class RankingListAdapter extends Adapter<ItemViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull final ItemViewHolder holder, int position) {
         FormController formController = Collect.getInstance().getFormController();
-        String itemName = String.valueOf(FormEntryPromptUtils.getItemText(formController.getQuestionPrompt(), items.get(position)));
+        String itemName = String.valueOf(FormEntryPromptUtils.getItemText(formController.getQuestionPrompt(formIndex), items.get(position)));
         holder.textView.setText(itemName);
     }
 
