@@ -24,6 +24,7 @@ import android.view.Window;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -63,7 +64,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
 
     private FormMapViewModel viewModel;
 
-    private MapFragment map;
+    @VisibleForTesting public MapFragment map;
 
     /**
      * Quick lookup of instance objects from map feature IDs.
@@ -81,13 +82,27 @@ public class FormMapActivity extends BaseGeoMapActivity {
      */
     private boolean viewportInitialized;
 
+    @VisibleForTesting public ViewModelProvider.Factory viewModelFactory;
+
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         FormsDao dao = new FormsDao();
-        Form form = dao.getFormsFromCursor(dao.getFormsCursor(getIntent().getData())).get(0);
-        viewModel = ViewModelProviders.of(this,
-                new FormMapActivity.FormMapViewModelFactory(form, new DatabaseInstancesRepository())).get(FormMapViewModel.class);
+        Form form = null;
+        List<Form> forms = dao.getFormsFromCursor(dao.getFormsCursor(getIntent().getData()));
+        if (forms.size() == 1) {
+            form = forms.get(0);
+        } else {
+            // This shouldn't be possible because the instance URI had to be used in the calling
+            // activity but it has been logged to Crashlytics.
+            finish();
+        }
+
+        if (viewModelFactory == null) { // tests set their factories directly
+            viewModelFactory = new FormMapActivity.FormMapViewModelFactory(form, new DatabaseInstancesRepository());
+        }
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(FormMapViewModel.class);
+
         Timber.i("Starting FormMapActivity for form \"%s\" (jrFormId = \"%s\")",
                 viewModel.getFormTitle(),
                 viewModel.getFormId());
@@ -98,9 +113,16 @@ public class FormMapActivity extends BaseGeoMapActivity {
         TextView titleView = findViewById(R.id.form_title);
         titleView.setText(viewModel.getFormTitle());
 
-        Context context = getApplicationContext();
-        MapProvider.createMapFragment(context)
-            .addTo(this, R.id.map_container, this::initMap, this::finish);
+        if (map == null) { // tests set their maps directly
+            Context context = getApplicationContext();
+            map = MapProvider.createMapFragment(context);
+        }
+
+        if (map != null) {
+            map.addTo(this, R.id.map_container, this::initMap, this::finish);
+        } else {
+            finish(); // The configured map provider is not available
+        }
     }
 
     @Override public void onResume() {

@@ -133,7 +133,7 @@ public class FormMapViewModelTest {
         assertThat(instances.get(6).getClickAction(), is(FormMapViewModel.ClickAction.OPEN_EDIT));
     }
 
-    private final Form testForm1 = new Form.Builder().id(0L)
+    static final Form testForm1 = new Form.Builder().id(0L)
             .jrFormId("formId1")
             .jrVersion("2019103104")
             .displayName("Form with ID 1")
@@ -147,7 +147,7 @@ public class FormMapViewModelTest {
             .geometryXpath("/data/my-point2")
             .build();
 
-    private static Instance[] testInstances = {
+    static Instance[] testInstances = {
             new Instance.Builder().databaseId(0L)
                     .jrFormId("formId1")
                     .jrVersion("2019103101")
