@@ -51,6 +51,7 @@ import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
+import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -85,9 +86,9 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     @NonNull
     private FileUtil fileUtil;
 
-    private Button captureButton;
-    private Button playButton;
-    private Button chooseButton;
+    Button captureButton;
+    Button playButton;
+    Button chooseButton;
     private String binaryName;
     private Uri nexus7Uri;
 
@@ -111,6 +112,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_video), R.id.choose_video);
 
         playButton = getSimpleButton(getContext().getString(R.string.play_video), R.id.play_video);
+        playButton.setVisibility(VISIBLE);
 
         // retrieve answer from data model and update ui
         binaryName = questionDetails.getPrompt().getAnswerText();
@@ -228,7 +230,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         // get the file path and create a copy in the instance folder
         if (object instanceof Uri) {
             String sourcePath = getSourcePathFromUri((Uri) object);
-            String destinationPath = getDestinationPathFromSourcePath(sourcePath);
+            String destinationPath = FileWidgetUtils.getDestinationPathFromSourcePath(sourcePath, getInstanceFolder(), fileUtil);
             File source = fileUtil.getFileAtPath(sourcePath);
             newVideo = fileUtil.getFileAtPath(destinationPath);
             fileUtil.copyFile(source, newVideo);
@@ -292,12 +294,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
 
     private String getSourcePathFromUri(@NonNull Uri uri) {
         return mediaUtil.getPathFromUri(getContext(), uri, Video.Media.DATA);
-    }
-
-    private String getDestinationPathFromSourcePath(@NonNull String sourcePath) {
-        String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
-        return getInstanceFolder() + File.separator
-                + fileUtil.getRandomFilename() + extension;
     }
 
     @Override

@@ -50,7 +50,7 @@ public abstract class SelectWidget extends ItemsWidget {
      */
     private static final int MAX_ITEMS_WITHOUT_SCREEN_BOUND = 40;
 
-    protected LinearLayout answerLayout;
+    LinearLayout answerLayout;
     protected int numColumns = 1;
 
     public SelectWidget(Context context, QuestionDetails questionDetails) {

@@ -103,9 +103,6 @@ public class WidgetFactory {
                             questionWidget = new StringWidget(context, questionDetails, readOnlyOverride);
                         }
                         break;
-                    case Constants.DATATYPE_BOOLEAN:
-                        questionWidget = new BooleanWidget(context, questionDetails);
-                        break;
                     default:
                         questionWidget = new StringWidget(context, questionDetails, readOnlyOverride);
                         break;

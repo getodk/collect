@@ -11,7 +11,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.ShadowPlayServicesUtil;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.widgets.base.BinaryWidgetTest;
+import org.odk.collect.android.widgets.base.BaseGeoWidgetTest;
 import org.robolectric.annotation.Config;
 
 import androidx.annotation.NonNull;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
  */
 
 @Config(shadows = {ShadowPlayServicesUtil.class})
-public class GeoPointWidgetTest extends BinaryWidgetTest<GeoPointWidget, GeoPointData> {
+public class GeoPointWidgetTest extends BaseGeoWidgetTest<GeoPointWidget, GeoPointData> {
 
     @Mock
     QuestionDef questionDef;
@@ -98,12 +98,5 @@ public class GeoPointWidgetTest extends BinaryWidgetTest<GeoPointWidget, GeoPoin
 
         Intent intent = getIntentLaunchedByClick(R.id.simple_button);
         assertComponentEquals(activity, GeoPointActivity.class, intent);
-    }
-
-    @Test
-    public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
-        stubAllRuntimePermissionsGranted(false);
-
-        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.simple_button));
     }
 }

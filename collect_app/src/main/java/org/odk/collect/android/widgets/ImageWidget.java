@@ -49,8 +49,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  */
 public class ImageWidget extends BaseImageWidget {
 
-    private Button captureButton;
-    private Button chooseButton;
+    Button captureButton;
+    Button chooseButton;
 
     private boolean selfie;
 

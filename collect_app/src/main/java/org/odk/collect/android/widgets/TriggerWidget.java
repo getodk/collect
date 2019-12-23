@@ -34,7 +34,7 @@ public class TriggerWidget extends QuestionWidget {
 
     public static final String OK_TEXT = "OK";
 
-    private final AppCompatCheckBox triggerButton;
+    final AppCompatCheckBox triggerButton;
 
     public TriggerWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);

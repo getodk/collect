@@ -52,8 +52,8 @@ import timber.log.Timber;
 public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePickerDialog.OnTimeSetListener {
     private TimePickerDialog timePickerDialog;
 
-    private Button timeButton;
-    private final TextView timeTextView;
+    Button timeButton;
+    final TextView timeTextView;
 
     private int hourOfDay;
     private int minuteOfHour;

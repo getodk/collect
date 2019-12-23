@@ -11,8 +11,8 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.widgets.interfaces.GeoWidget;
 
 public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget {
-    protected Button startGeoButton;
-    protected TextView answerDisplay;
+    public Button startGeoButton;
+    public TextView answerDisplay;
     protected boolean readOnly;
 
     public BaseGeoWidget(Context context, QuestionDetails questionDetails) {

@@ -52,7 +52,7 @@ public class StringWidget extends QuestionWidget {
     public static final int FIELD_HORIZONTAL_MARGIN_MODIFIER = 4;
 
     boolean readOnly;
-    protected final EditText answerText;
+    public final EditText answerText;
 
     protected StringWidget(Context context, QuestionDetails questionDetails, boolean readOnlyOverride) {
         super(context, questionDetails);

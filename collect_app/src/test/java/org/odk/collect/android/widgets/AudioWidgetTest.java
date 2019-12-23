@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
@@ -21,6 +22,8 @@ import org.odk.collect.android.widgets.base.FileWidgetTest;
 
 import java.io.File;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -101,5 +104,13 @@ public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
         stubAllRuntimePermissionsGranted(false);
 
         assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.capture_audio));
+    }
+
+    @Test
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+
+        assertThat(getWidget().captureButton.getVisibility(), is(View.GONE));
+        assertThat(getWidget().chooseButton.getVisibility(), is(View.GONE));
     }
 }

@@ -32,7 +32,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  */
 public class SignatureWidget extends BaseImageWidget {
 
-    private Button signButton;
+    Button signButton;
 
     public SignatureWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);

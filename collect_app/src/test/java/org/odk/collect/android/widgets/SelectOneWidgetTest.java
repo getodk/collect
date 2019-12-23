@@ -1,10 +1,13 @@
 package org.odk.collect.android.widgets;
 
 import android.app.Application;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 import androidx.lifecycle.MutableLiveData;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.reference.ReferenceManager;
@@ -20,13 +23,17 @@ import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
+import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
 
 import static java.util.Arrays.asList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -125,5 +132,35 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<AbstractSele
                 return analytics;
             }
         });
+    }
+
+    @Test
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
+        // No appearance
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withIndex("i am index")
+                .withSelectChoices(asList(
+                        new SelectChoice("1", "1"),
+                        new SelectChoice("2", "2")
+                ))
+                .withReadOnly(true)
+                .build();
+
+        populateRecyclerView(getActualWidget());
+
+        AudioVideoImageTextLabel avitLabel = (AudioVideoImageTextLabel) ((LinearLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0)).getChildAt(0);
+        assertThat(avitLabel.isEnabled(), is(Boolean.FALSE));
+
+        resetWidget();
+
+        // No-buttons appearance
+        formEntryPrompt = new MockFormEntryPromptBuilder(formEntryPrompt)
+                .withAppearance(WidgetAppearanceUtils.NO_BUTTONS)
+                .build();
+
+        populateRecyclerView(getActualWidget());
+
+        FrameLayout view = (FrameLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0);
+        assertThat(view.isEnabled(), is(Boolean.FALSE));
     }
 }

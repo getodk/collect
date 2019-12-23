@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets;
 
 import android.app.Application;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
@@ -30,11 +31,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.Helpers.createMockReference;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.NO_BUTTONS;
 
@@ -208,5 +212,15 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
         }
 
         return values;
+    }
+
+    @Test
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+
+        for (View view : getWidget().itemViews) {
+            assertThat(view.getVisibility(), is(View.VISIBLE));
+            assertThat(view.isEnabled(), is(Boolean.FALSE));
+        }
     }
 }

@@ -42,6 +42,7 @@ import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
+import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 
 import java.io.File;
 import java.util.Locale;
@@ -67,9 +68,9 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     @NonNull
     private MediaUtil mediaUtil;
 
-    private AudioControllerView audioController;
-    private Button captureButton;
-    private Button chooseButton;
+    AudioControllerView audioController;
+    Button captureButton;
+    Button chooseButton;
 
     private String binaryName;
 
@@ -148,7 +149,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         // get the file path and create a copy in the instance folder
         if (object instanceof Uri) {
             String sourcePath = getSourcePathFromUri((Uri) object);
-            String destinationPath = getDestinationPathFromSourcePath(sourcePath);
+            String destinationPath = FileWidgetUtils.getDestinationPathFromSourcePath(sourcePath, getInstanceFolder(), fileUtil);
             File source = fileUtil.getFileAtPath(sourcePath);
             newAudio = fileUtil.getFileAtPath(destinationPath);
             fileUtil.copyFile(source, newAudio);
@@ -212,12 +213,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
     private String getSourcePathFromUri(@NonNull Uri uri) {
         return mediaUtil.getPathFromUri(getContext(), uri, Audio.Media.DATA);
-    }
-
-    private String getDestinationPathFromSourcePath(@NonNull String sourcePath) {
-        String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
-        return getInstanceFolder() + File.separator
-                + fileUtil.getRandomFilename() + extension;
     }
 
     @Override

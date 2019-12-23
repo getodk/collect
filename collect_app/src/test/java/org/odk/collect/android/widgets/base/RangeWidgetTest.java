@@ -1,5 +1,7 @@
 package org.odk.collect.android.widgets.base;
 
+import android.view.View;
+
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
@@ -10,6 +12,8 @@ import org.odk.collect.android.widgets.RangeWidget;
 
 import java.math.BigDecimal;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
@@ -25,7 +29,7 @@ public abstract class RangeWidgetTest<W extends RangeWidget, A extends IAnswerDa
     private final BigDecimal rangeStep = BigDecimal.ONE;
 
     @Mock
-    private RangeQuestion rangeQuestion;
+    protected RangeQuestion rangeQuestion;
 
     @Override
     public void setUp() throws Exception {
@@ -62,5 +66,21 @@ public abstract class RangeWidgetTest<W extends RangeWidget, A extends IAnswerDa
         }
 
         assertEquals(answer.getDisplayText(), compareTo.getDisplayText());
+    }
+
+    @Test
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
+        // Picker appearance
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+
+        assertThat(getWidget().pickerButton.getVisibility(), is(View.GONE));
+
+        resetWidget();
+
+        // No appearance
+        when(rangeQuestion.getAppearanceAttr()).thenReturn(null);
+
+        assertThat(getWidget().seekBar.getVisibility(), is(View.VISIBLE));
+        assertThat(getWidget().seekBar.isEnabled(), is(Boolean.FALSE));
     }
 }

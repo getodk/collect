@@ -41,7 +41,7 @@ public class RankingWidget extends ItemsWidget implements BinaryWidget {
 
     private List<SelectChoice> savedItems;
     private LinearLayout widgetLayout;
-    private Button showRankingDialogButton;
+    Button showRankingDialogButton;
 
     public RankingWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
@@ -133,7 +133,6 @@ public class RankingWidget extends ItemsWidget implements BinaryWidget {
         widgetLayout = new LinearLayout(getContext());
         widgetLayout.setOrientation(LinearLayout.VERTICAL);
         showRankingDialogButton = getSimpleButton(getContext().getString(R.string.rank_items));
-        showRankingDialogButton.setEnabled(!getFormEntryPrompt().isReadOnly());
         widgetLayout.addView(showRankingDialogButton);
         widgetLayout.addView(setUpAnswerTextView());
 

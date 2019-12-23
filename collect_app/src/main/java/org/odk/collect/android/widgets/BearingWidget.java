@@ -48,9 +48,9 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  */
 @SuppressLint("ViewConstructor")
 public class BearingWidget extends QuestionWidget implements BinaryWidget {
-    private final Button getBearingButton;
+    final Button getBearingButton;
     private final boolean isSensorAvailable;
-    private final EditText answer;
+    final EditText answer;
     private final Drawable textBackground;
 
     public BearingWidget(Context context, QuestionDetails questionDetails) {

@@ -38,8 +38,8 @@ import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 public class UrlWidget extends QuestionWidget implements ButtonWidget {
 
     private Uri uri;
-    private final Button openUrlButton;
-    private final TextView stringAnswer;
+    final Button openUrlButton;
+    final TextView stringAnswer;
     private final CustomTabHelper customTabHelper;
 
     public UrlWidget(Context context, QuestionDetails questionDetails) {

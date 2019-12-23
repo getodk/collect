@@ -1,6 +1,8 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Intent;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 
 import net.bytebuddy.utility.RandomString;
@@ -18,6 +20,8 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 /**
@@ -68,5 +72,12 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
         Intent intent = getIntentLaunchedByClick(R.id.simple_button);
         assertComponentEquals(activity, DrawActivity.class, intent);
         assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_DRAW, intent);
+    }
+
+    @Test
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+
+        assertThat(getWidget().drawButton.getVisibility(), is(View.GONE));
     }
 }

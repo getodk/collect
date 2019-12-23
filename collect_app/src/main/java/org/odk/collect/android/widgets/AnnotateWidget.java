@@ -53,9 +53,9 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 @SuppressLint("ViewConstructor")
 public class AnnotateWidget extends BaseImageWidget {
 
-    private Button captureButton;
-    private Button chooseButton;
-    private Button annotateButton;
+    Button captureButton;
+    Button chooseButton;
+    Button annotateButton;
 
     public AnnotateWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);

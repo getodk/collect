@@ -43,7 +43,7 @@ import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
  */
 @SuppressLint("ViewConstructor")
 public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
-    private final ScrolledToTopSpinner spinner;
+    final ScrolledToTopSpinner spinner;
     private final SpinnerAdapter spinnerAdapter;
 
     // used to ascertain whether the user selected an item on spinner (not programmatically)
