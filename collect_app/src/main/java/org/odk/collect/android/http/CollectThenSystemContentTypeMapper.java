@@ -11,7 +11,6 @@ import org.odk.collect.android.utilities.FileUtils;
  * This covers types not included in Android's MimeTypeMap
  * Reference https://android.googlesource.com/platform/frameworks/base/+/61ae88e/core/java/android/webkit/MimeTypeMap.java
  */
-
 public class CollectThenSystemContentTypeMapper implements OpenRosaHttpInterface.FileToContentTypeMapper {
 
     private final MimeTypeMap androidTypeMap;
