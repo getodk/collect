@@ -420,13 +420,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formEntryViewModel = ViewModelProviders
                 .of(this, changesReasonViewModelFactory)
                 .get(FormEntryViewModel.class);
-
-        formEntryViewModel.requiresReasonToContinue().observe(this, requiresReason -> {
-            if (requiresReason) {
-                ChangesReasonPromptDialogFragment dialog = ChangesReasonPromptDialogFragment.create(getFormController().getFormTitle());
-                DialogUtils.showIfNotShowing(dialog, getSupportFragmentManager());
-            }
-        });
     }
 
     private void setupFields(Bundle savedInstanceState) {
@@ -1874,9 +1867,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         getFormController().getAuditEventLogger().exitView();
         formEntryViewModel.saveForm(complete, updatedSaveName, exit).observe(this, saveRequest -> {
-            if (saveRequest != null) {
-                showDialog(SAVING_DIALOG);
-                executeSaveToDiskTask(saveRequest.isComplete(), saveRequest.getUpdatedSaveName(), saveRequest.isExitAfter());
+            switch (saveRequest.getState()) {
+                case CHANGE_REASON_REQUIRED:
+                    ChangesReasonPromptDialogFragment dialog = ChangesReasonPromptDialogFragment.create(getFormController().getFormTitle());
+                    DialogUtils.showIfNotShowing(dialog, getSupportFragmentManager());
+                    break;
+
+                case SAVING:
+                    showDialog(SAVING_DIALOG);
+                    executeSaveToDiskTask(saveRequest.isFormComplete(), saveRequest.getUpdatedSaveName(), saveRequest.isDoneEditing());
+                    break;
             }
         });
 

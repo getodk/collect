@@ -38,11 +38,13 @@ public class FormEntryViewModel extends ViewModel {
         lastSaveRequest = new SaveRequest(complete, updatedSaveName, exitAfter);
 
         if (!requiresReasonToSave()) {
-            saveRequest.setValue(lastSaveRequest);
+            lastSaveRequest.setState(SaveRequest.State.SAVING);
         } else {
+            lastSaveRequest.setState(SaveRequest.State.CHANGE_REASON_REQUIRED);
             requiresReasonToContinue.setValue(true);
         }
 
+        saveRequest.setValue(lastSaveRequest);
         return saveRequest;
     }
 
@@ -73,6 +75,7 @@ public class FormEntryViewModel extends ViewModel {
             requiresReasonToContinue.setValue(false);
 
             if (saveRequest != null) {
+                lastSaveRequest.setState(SaveRequest.State.SAVING);
                 saveRequest.setValue(lastSaveRequest);
             }
         }
@@ -91,27 +94,41 @@ public class FormEntryViewModel extends ViewModel {
 
     public static class SaveRequest {
 
-        private final boolean complete;
+        private final boolean formComplete;
         private final String updatedSaveName;
-        private final boolean exitAfter;
+        private final boolean doneEditing;
 
-        public SaveRequest(boolean complete, String updatedSaveName, boolean exitAfter) {
+        private State state;
 
-            this.complete = complete;
+        public SaveRequest(boolean formComplete, String updatedSaveName, boolean doneEditing) {
+            this.formComplete = formComplete;
             this.updatedSaveName = updatedSaveName;
-            this.exitAfter = exitAfter;
+            this.doneEditing = doneEditing;
         }
 
-        public boolean isComplete() {
-            return complete;
+        public boolean isFormComplete() {
+            return formComplete;
         }
 
         public String getUpdatedSaveName() {
             return updatedSaveName;
         }
 
-        public boolean isExitAfter() {
-            return exitAfter;
+        public boolean isDoneEditing() {
+            return doneEditing;
+        }
+
+        public State getState() {
+            return state;
+        }
+
+        public void setState(State state) {
+            this.state = state;
+        }
+
+        public enum State {
+            CHANGE_REASON_REQUIRED,
+            SAVING
         }
     }
 
