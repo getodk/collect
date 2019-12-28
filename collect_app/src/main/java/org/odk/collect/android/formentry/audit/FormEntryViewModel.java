@@ -7,6 +7,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.odk.collect.android.tasks.SaveResult;
+
+import static org.odk.collect.android.tasks.SaveToDiskTask.SAVED;
 import static org.odk.collect.android.utilities.StringUtils.isBlank;
 
 public class FormEntryViewModel extends ViewModel {
@@ -48,8 +51,13 @@ public class FormEntryViewModel extends ViewModel {
         return saveRequest;
     }
 
-    public void saveComplete() {
-        saveRequest = null;
+    public void saveToDiskTaskComplete(SaveResult saveResult) {
+        switch (saveResult.getSaveResult()) {
+            case SAVED: {
+                lastSaveRequest.setState(SaveRequest.State.SAVED);
+                saveRequest.setValue(lastSaveRequest);
+            }
+        }
     }
 
     public void editingForm() {
@@ -128,7 +136,8 @@ public class FormEntryViewModel extends ViewModel {
 
         public enum State {
             CHANGE_REASON_REQUIRED,
-            SAVING
+            SAVING,
+            SAVED
         }
     }
 

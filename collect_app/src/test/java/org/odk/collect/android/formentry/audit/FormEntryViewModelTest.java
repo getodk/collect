@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.tasks.SaveResult;
+import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -13,6 +15,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.CHANGE_REASON_REQUIRED;
+import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.SAVED;
 import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.SAVING;
 
 @RunWith(RobolectricTestRunner.class)
@@ -63,6 +66,17 @@ public class FormEntryViewModelTest {
 
         LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(true, "", true);
         assertThat(saveRequest.getValue().getState(), equalTo(CHANGE_REASON_REQUIRED));
+    }
+
+    @Test
+    public void whenSaveToDiskFinishes_saved_setsSaveRequestState_toSaved() {
+        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(true, "", true);
+
+        SaveResult saveResult = new SaveResult();
+        saveResult.setSaveResult(SaveToDiskTask.SAVED, true);
+        viewModel.saveToDiskTaskComplete(saveResult);
+
+        assertThat(saveRequest.getValue().getState(), equalTo(SAVED));
     }
 
     @Test

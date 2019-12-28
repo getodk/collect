@@ -72,7 +72,7 @@ import static org.odk.collect.android.utilities.FileUtil.getSmsInstancePath;
 public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
     private FormSavedListener savedListener;
-    private final boolean save;
+    private final boolean saveAndExit;
     private final boolean markCompleted;
     private Uri uri;
     private String instanceName;
@@ -86,7 +86,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
     public SaveToDiskTask(Uri uri, boolean saveAndExit, boolean markCompleted, String updatedName) {
         this.uri = uri;
-        save = saveAndExit;
+        this.saveAndExit = saveAndExit;
         this.markCompleted = markCompleted;
         instanceName = updatedName;
     }
@@ -148,7 +148,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 removeSavepointFiles(formController.getInstanceFile().getName());
             }
 
-            saveResult.setSaveResult(save ? SAVED_AND_EXIT : SAVED, markCompleted);
+            saveResult.setSaveResult(saveAndExit ? SAVED_AND_EXIT : SAVED, markCompleted);
         } catch (EncryptionException e) {
             saveResult.setSaveErrorMessage(e.getMessage());
             saveResult.setSaveResult(ENCRYPTION_ERROR, markCompleted);
@@ -347,7 +347,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
      */
     static File getSavepointFile(String instanceName) {
         File tempDir = new File(Collect.CACHE_PATH);
-        return new File(tempDir, instanceName + ".save");
+        return new File(tempDir, instanceName + ".saveAndExit");
     }
 
     /**

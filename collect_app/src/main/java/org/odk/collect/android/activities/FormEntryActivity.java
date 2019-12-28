@@ -1877,6 +1877,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     showDialog(SAVING_DIALOG);
                     executeSaveToDiskTask(saveRequest.isFormComplete(), saveRequest.getUpdatedSaveName(), saveRequest.isDoneEditing());
                     break;
+
+                case SAVED:
+                    ToastUtils.showShortToast(R.string.data_saved_ok);
+                    getFormController().getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_SAVE, false, System.currentTimeMillis());
+                    break;
             }
         });
 
@@ -2548,14 +2553,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             // For some reason the dialog wasn't shown
         }
 
-        formEntryViewModel.saveComplete();
+        formEntryViewModel.saveToDiskTaskComplete(saveResult);
 
         int saveStatus = saveResult.getSaveResult();
         FormController formController = getFormController();
+
         switch (saveStatus) {
             case SaveToDiskTask.SAVED:
-                ToastUtils.showShortToast(R.string.data_saved_ok);
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_SAVE, false, System.currentTimeMillis());
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
