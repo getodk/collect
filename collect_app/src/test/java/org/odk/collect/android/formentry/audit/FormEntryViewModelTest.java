@@ -7,14 +7,12 @@ import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-public class ChangesReasonPromptViewModelTest {
+public class FormEntryViewModelTest {
 
     private AuditEventLogger logger;
 
@@ -25,10 +23,10 @@ public class ChangesReasonPromptViewModelTest {
     }
 
     @Test
-    public void save_logsChangeReasonAuditEvent() {
+    public void saveReason_logsChangeReasonAuditEvent() {
         when(logger.isChangeReasonRequired()).thenReturn(true);
 
-        ChangesReasonPromptViewModel viewModel = new ChangesReasonPromptViewModel();
+        FormEntryViewModel viewModel = new FormEntryViewModel();
         viewModel.setAuditEventLogger(logger);
 
         viewModel.setReason("Blah");
@@ -43,23 +41,12 @@ public class ChangesReasonPromptViewModelTest {
         when(logger.isChangesMade()).thenReturn(true);
         when(logger.isEditing()).thenReturn(true);
 
-        ChangesReasonPromptViewModel viewModel = new ChangesReasonPromptViewModel();
+        FormEntryViewModel viewModel = new FormEntryViewModel();
         viewModel.setAuditEventLogger(logger);
         viewModel.saveForm(true, "", true);
         assertThat(viewModel.requiresReasonToContinue().getValue(), equalTo(true));
 
         viewModel.promptDismissed();
         assertThat(viewModel.requiresReasonToContinue().getValue(), equalTo(false));
-    }
-
-    @Test
-    public void saveComplete_sets_saveRequest_null() {
-        ChangesReasonPromptViewModel viewModel = new ChangesReasonPromptViewModel();
-        viewModel.setAuditEventLogger(logger);
-        viewModel.saveForm(true, "", true);
-        assertThat(viewModel.saveRequest().getValue(), notNullValue());
-
-        viewModel.saveComplete();
-        assertThat(viewModel.saveRequest().getValue(), nullValue());
     }
 }

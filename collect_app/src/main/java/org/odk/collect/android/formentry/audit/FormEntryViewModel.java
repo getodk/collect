@@ -1,6 +1,7 @@
 package org.odk.collect.android.formentry.audit;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -8,28 +9,32 @@ import androidx.lifecycle.ViewModelProvider;
 
 import static org.odk.collect.android.utilities.StringUtils.isBlank;
 
-public class ChangesReasonPromptViewModel extends ViewModel {
+public class FormEntryViewModel extends ViewModel {
 
     private final MutableLiveData<Boolean> requiresReasonToContinue = new MutableLiveData<>(false);
-    private final MutableLiveData<SaveRequest> saveRequest = new MutableLiveData<>(null);
 
+    @Nullable
+    private MutableLiveData<SaveRequest> saveRequest;
+
+    @Nullable
     private AuditEventLogger auditEventLogger;
+
+    @Nullable
     private String reason;
+
+    @Nullable
     private SaveRequest lastSaveRequest;
 
     public LiveData<Boolean> requiresReasonToContinue() {
         return requiresReasonToContinue;
     }
 
-    public LiveData<SaveRequest> saveRequest() {
-        return saveRequest;
-    }
-
-    public void setAuditEventLogger(AuditEventLogger auditEventLogger) {
+    public void setAuditEventLogger(@Nullable AuditEventLogger auditEventLogger) {
         this.auditEventLogger = auditEventLogger;
     }
 
-    public void saveForm(boolean complete, String updatedSaveName, boolean exitAfter) {
+    public LiveData<SaveRequest> saveForm(boolean complete, String updatedSaveName, boolean exitAfter) {
+        saveRequest = new MutableLiveData<>(null);
         lastSaveRequest = new SaveRequest(complete, updatedSaveName, exitAfter);
 
         if (!requiresReasonToSave()) {
@@ -37,14 +42,18 @@ public class ChangesReasonPromptViewModel extends ViewModel {
         } else {
             requiresReasonToContinue.setValue(true);
         }
+
+        return saveRequest;
     }
 
     public void saveComplete() {
-        saveRequest.setValue(null);
+        saveRequest = null;
     }
 
     public void editingForm() {
-        auditEventLogger.setEditing(true);
+        if (auditEventLogger != null) {
+            auditEventLogger.setEditing(true);
+        }
     }
 
     public void promptDismissed() {
@@ -57,9 +66,15 @@ public class ChangesReasonPromptViewModel extends ViewModel {
 
     public void saveReason(Long currentTime) {
         if (reason != null && !isBlank(reason)) {
-            this.auditEventLogger.logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, currentTime, reason);
+            if (auditEventLogger != null) {
+                auditEventLogger.logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, currentTime, reason);
+            }
+
             requiresReasonToContinue.setValue(false);
-            saveRequest.setValue(lastSaveRequest);
+
+            if (saveRequest != null) {
+                saveRequest.setValue(lastSaveRequest);
+            }
         }
     }
 
@@ -105,7 +120,7 @@ public class ChangesReasonPromptViewModel extends ViewModel {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new ChangesReasonPromptViewModel();
+            return (T) new FormEntryViewModel();
         }
     }
 }

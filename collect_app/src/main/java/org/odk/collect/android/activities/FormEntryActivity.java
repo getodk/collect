@@ -97,7 +97,7 @@ import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.formentry.QuitFormDialog;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.ChangesReasonPromptDialogFragment;
-import org.odk.collect.android.formentry.audit.ChangesReasonPromptViewModel;
+import org.odk.collect.android.formentry.audit.FormEntryViewModel;
 import org.odk.collect.android.formentry.audit.IdentifyUserPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.IdentityPromptViewModel;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationHelper;
@@ -138,12 +138,12 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
-import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
@@ -317,7 +317,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private BackgroundLocationViewModel backgroundLocationViewModel;
     private IdentityPromptViewModel identityPromptViewModel;
-    private ChangesReasonPromptViewModel changesReasonPromptViewModel;
+    private FormEntryViewModel formEntryViewModel;
 
     /**
      * Called when the activity is first created.
@@ -416,21 +416,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        ChangesReasonPromptViewModel.Factory changesReasonViewModelFactory = new ChangesReasonPromptViewModel.Factory();
-        changesReasonPromptViewModel = ViewModelProviders
+        FormEntryViewModel.Factory changesReasonViewModelFactory = new FormEntryViewModel.Factory();
+        formEntryViewModel = ViewModelProviders
                 .of(this, changesReasonViewModelFactory)
-                .get(ChangesReasonPromptViewModel.class);
+                .get(FormEntryViewModel.class);
 
-        changesReasonPromptViewModel.requiresReasonToContinue().observe(this, requiresReason -> {
+        formEntryViewModel.requiresReasonToContinue().observe(this, requiresReason -> {
             if (requiresReason) {
                 ChangesReasonPromptDialogFragment dialog = ChangesReasonPromptDialogFragment.create(getFormController().getFormTitle());
                 DialogUtils.showIfNotShowing(dialog, getSupportFragmentManager());
-            }
-        });
-        changesReasonPromptViewModel.saveRequest().observe(this, saveRequest -> {
-            if (saveRequest != null) {
-                showDialog(SAVING_DIALOG);
-                save(saveRequest.isComplete(), saveRequest.getUpdatedSaveName(), saveRequest.isExitAfter());
             }
         });
     }
@@ -493,7 +487,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (getFormController(true) != null) {
                     FormController formController = getFormController();
                     identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
-                    changesReasonPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
+                    formEntryViewModel.setAuditEventLogger(formController.getAuditEventLogger());
                     refreshCurrentView();
                 } else {
                     Timber.w("Reloading form and restoring state.");
@@ -1879,12 +1873,17 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         getFormController().getAuditEventLogger().exitView();
-        changesReasonPromptViewModel.saveForm(complete, updatedSaveName, exit);
+        formEntryViewModel.saveForm(complete, updatedSaveName, exit).observe(this, saveRequest -> {
+            if (saveRequest != null) {
+                showDialog(SAVING_DIALOG);
+                executeSaveToDiskTask(saveRequest.isComplete(), saveRequest.getUpdatedSaveName(), saveRequest.isExitAfter());
+            }
+        });
 
         return true;
     }
 
-    private void save(boolean complete, String updatedSaveName, boolean exitAfter) {
+    private void executeSaveToDiskTask(boolean complete, String updatedSaveName, boolean exitAfter) {
         saveToDiskTask = new SaveToDiskTask(getIntent().getData(), exitAfter, complete,
                 updatedSaveName);
         saveToDiskTask.setFormSavedListener(this);
@@ -2420,7 +2419,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (formController.getInstanceFile() == null) {
                     createInstanceDirectory(formController);
                     identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
-                    changesReasonPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
+                    formEntryViewModel.setAuditEventLogger(formController.getAuditEventLogger());
 
                     identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                         if (!requiresIdentity) {
@@ -2437,7 +2436,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
                             identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
-                            changesReasonPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
+                            formEntryViewModel.setAuditEventLogger(formController.getAuditEventLogger());
 
                             identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                                 if (!requiresIdentity) {
@@ -2461,7 +2460,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                 }
                             });
 
-                            changesReasonPromptViewModel.editingForm();
+                            formEntryViewModel.editingForm();
                         } else {
                             if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
                                 startActivity(new Intent(this, ViewOnlyFormHierarchyActivity.class));
@@ -2470,7 +2469,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         }
                     } else {
                         identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
-                        changesReasonPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
+                        formEntryViewModel.setAuditEventLogger(formController.getAuditEventLogger());
 
                         identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                             if (!requiresIdentity) {
@@ -2549,7 +2548,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             // For some reason the dialog wasn't shown
         }
 
-        changesReasonPromptViewModel.saveComplete();
+        formEntryViewModel.saveComplete();
 
         int saveStatus = saveResult.getSaveResult();
         FormController formController = getFormController();

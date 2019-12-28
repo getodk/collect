@@ -21,9 +21,9 @@ import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
 public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogFragment {
 
     private static final String ARG_FORM_NAME = "ArgFormName";
-    private ChangesReasonPromptViewModel viewModel;
+    private FormEntryViewModel viewModel;
 
-    public ViewModelProvider.Factory viewModelFactory = new ChangesReasonPromptViewModel.Factory();
+    public ViewModelProvider.Factory viewModelFactory = new FormEntryViewModel.Factory();
 
     public static ChangesReasonPromptDialogFragment create(String formName) {
         ChangesReasonPromptDialogFragment fragment = new ChangesReasonPromptDialogFragment();
@@ -78,7 +78,7 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        viewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(ChangesReasonPromptViewModel.class);
+        viewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(FormEntryViewModel.class);
         viewModel.requiresReasonToContinue().observe(this, requiresReason -> {
             if (!requiresReason) {
                 dismiss();

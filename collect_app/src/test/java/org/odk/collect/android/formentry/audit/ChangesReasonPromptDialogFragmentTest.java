@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 public class ChangesReasonPromptDialogFragmentTest {
 
     private FragmentManager fragmentManager;
-    private ChangesReasonPromptViewModel viewModel;
+    private FormEntryViewModel viewModel;
     private ViewModelProvider.Factory testFactory;
 
     @Before
@@ -30,7 +30,7 @@ public class ChangesReasonPromptDialogFragmentTest {
         FragmentActivity activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class);
         fragmentManager = activity.getSupportFragmentManager();
 
-        viewModel = mock(ChangesReasonPromptViewModel.class);
+        viewModel = mock(FormEntryViewModel.class);
         when(viewModel.requiresReasonToContinue()).thenReturn(new MutableLiveData<>(true));
         testFactory = new TestFactory(viewModel);
     }
@@ -50,9 +50,9 @@ public class ChangesReasonPromptDialogFragmentTest {
 
     private static class TestFactory implements ViewModelProvider.Factory {
 
-        private final ChangesReasonPromptViewModel viewModel;
+        private final FormEntryViewModel viewModel;
 
-        TestFactory(ChangesReasonPromptViewModel viewModel) {
+        TestFactory(FormEntryViewModel viewModel) {
             this.viewModel = viewModel;
         }
 
