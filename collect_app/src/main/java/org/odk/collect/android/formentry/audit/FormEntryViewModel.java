@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.odk.collect.android.tasks.SaveResult;
 
 import static org.odk.collect.android.tasks.SaveToDiskTask.SAVED;
+import static org.odk.collect.android.tasks.SaveToDiskTask.SAVED_AND_EXIT;
 import static org.odk.collect.android.utilities.StringUtils.isBlank;
 
 public class FormEntryViewModel extends ViewModel {
@@ -51,11 +52,17 @@ public class FormEntryViewModel extends ViewModel {
         return saveRequest;
     }
 
-    public void saveToDiskTaskComplete(SaveResult saveResult) {
+    public void saveToDiskTaskComplete(SaveResult saveResult, long currentTime) {
         switch (saveResult.getSaveResult()) {
-            case SAVED: {
+            case SAVED:
+            case SAVED_AND_EXIT: {
+                if (auditEventLogger != null) {
+                    auditEventLogger.logEvent(AuditEvent.AuditEventType.FORM_SAVE, false, currentTime);
+                }
+
                 lastSaveRequest.setState(SaveRequest.State.SAVED);
                 saveRequest.setValue(lastSaveRequest);
+                break;
             }
         }
     }

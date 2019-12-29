@@ -74,7 +74,29 @@ public class FormEntryViewModelTest {
 
         SaveResult saveResult = new SaveResult();
         saveResult.setSaveResult(SaveToDiskTask.SAVED, true);
-        viewModel.saveToDiskTaskComplete(saveResult);
+        viewModel.saveToDiskTaskComplete(saveResult, 0L);
+
+        assertThat(saveRequest.getValue().getState(), equalTo(SAVED));
+    }
+
+    @Test
+    public void whenSaveToDiskFinishes_saved_logsFormSavedAuditEvent() {
+        viewModel.saveForm(true, "", true);
+
+        SaveResult saveResult = new SaveResult();
+        saveResult.setSaveResult(SaveToDiskTask.SAVED, true);
+        viewModel.saveToDiskTaskComplete(saveResult, 123L);
+
+        verify(logger).logEvent(AuditEvent.AuditEventType.FORM_SAVE, false, 123L);
+    }
+
+    @Test
+    public void whenSaveToDiskFinishes_savedAndExit_setsSaveRequestState_toSaved() {
+        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(true, "", true);
+
+        SaveResult saveResult = new SaveResult();
+        saveResult.setSaveResult(SaveToDiskTask.SAVED_AND_EXIT, true);
+        viewModel.saveToDiskTaskComplete(saveResult, 0L);
 
         assertThat(saveRequest.getValue().getState(), equalTo(SAVED));
     }

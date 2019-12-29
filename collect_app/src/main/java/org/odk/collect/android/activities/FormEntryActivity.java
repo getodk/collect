@@ -1879,8 +1879,29 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     break;
 
                 case SAVED:
+                    dismissDialog(SAVING_DIALOG);
                     ToastUtils.showShortToast(R.string.data_saved_ok);
-                    getFormController().getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_SAVE, false, System.currentTimeMillis());
+
+                    if (saveRequest.isDoneEditing()) {
+                        if (saveRequest.isFormComplete()) {
+                            getFormController().getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, System.currentTimeMillis());
+                            // Force writing of audit since we are exiting
+                            getFormController().getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, System.currentTimeMillis());
+
+                            // Request auto-send if app-wide auto-send is enabled or the form that was just
+                            // finalized specifies that it should always be auto-sent.
+                            String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
+                            if (AutoSendWorker.formShouldBeAutoSent(formId, GeneralSharedPreferences.isAutoSendEnabled())) {
+                                requestAutoSend();
+                            }
+                        } else {
+                            // Force writing of audit since we are exiting
+                            getFormController().getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, System.currentTimeMillis());
+                        }
+
+                        finishReturnInstance();
+                    }
+
                     break;
             }
         });
@@ -2553,35 +2574,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             // For some reason the dialog wasn't shown
         }
 
-        formEntryViewModel.saveToDiskTaskComplete(saveResult);
+        formEntryViewModel.saveToDiskTaskComplete(saveResult, System.currentTimeMillis());
 
         int saveStatus = saveResult.getSaveResult();
         FormController formController = getFormController();
 
         switch (saveStatus) {
-            case SaveToDiskTask.SAVED:
-                break;
-            case SaveToDiskTask.SAVED_AND_EXIT:
-                ToastUtils.showShortToast(R.string.data_saved_ok);
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_SAVE, false, System.currentTimeMillis());
-                if (saveResult.isComplete()) {
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, System.currentTimeMillis());
-                    // Force writing of audit since we are exiting
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, System.currentTimeMillis());
-
-                    // Request auto-send if app-wide auto-send is enabled or the form that was just
-                    // finalized specifies that it should always be auto-sent.
-                    String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
-                    if (AutoSendWorker.formShouldBeAutoSent(formId, GeneralSharedPreferences.isAutoSendEnabled())) {
-                        requestAutoSend();
-                    }
-                } else {
-                    // Force writing of audit since we are exiting
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, System.currentTimeMillis());
-                }
-
-                finishReturnInstance();
-                break;
             case SaveToDiskTask.SAVE_ERROR:
                 String message;
                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, System.currentTimeMillis());
