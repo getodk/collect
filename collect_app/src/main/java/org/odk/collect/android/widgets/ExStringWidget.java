@@ -114,14 +114,14 @@ public class ExStringWidget extends StringWidget implements BinaryWidget {
         answerText.setText(getFormEntryPrompt().getAnswerText());
         launchIntentButton = getSimpleButton(getButtonText());
 
-        Resources resources = context.getResources();
-        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
-        int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
-
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(launchIntentButton);
         answerLayout.addView(answerText);
+        
+        Resources resources = context.getResources();
+        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+        int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
         addAnswerView(answerLayout, margin);
 
         Collect.getInstance().logRemoteAnalytics("WidgetType", "ExternalApp", Collect.getCurrentFormIdentifierHash());
