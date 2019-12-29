@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.text.Editable;
 import android.text.Selection;
@@ -50,6 +51,7 @@ import timber.log.Timber;
 import static android.content.Intent.ACTION_SENDTO;
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
 
 /**
  * <p>Launch an external app to supply a string value. If the app
@@ -112,11 +114,15 @@ public class ExStringWidget extends StringWidget implements BinaryWidget {
         answerText.setText(getFormEntryPrompt().getAnswerText());
         launchIntentButton = getSimpleButton(getButtonText());
 
+        Resources resources = context.getResources();
+        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+        int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
+
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(launchIntentButton);
         answerLayout.addView(answerText);
-        addAnswerView(answerLayout);
+        addAnswerView(answerLayout, margin);
 
         Collect.getInstance().logRemoteAnalytics("WidgetType", "ExternalApp", Collect.getCurrentFormIdentifierHash());
     }
