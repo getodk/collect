@@ -121,14 +121,23 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
         return currentState == BackgroundLocationState.PENDING_PERMISSION_CHECK;
     }
 
+    public boolean isStateSetGeoPointOnly() {
+        return currentState == BackgroundLocationState.SETGEOPOINT_ONLY;
+    }
+
     public BackgroundLocationMessage locationPermissionGranted() {
         switch (currentState) {
             case PENDING_PERMISSION_CHECK:
                 if (!helper.currentFormAuditsLocation()) {
                     // Since setgeopoint actions manage their own location clients, we can't warn about
                     // providers turned off or any other failure state
+                    // We do warn that start-geopoint can't be retrieved if location is not available
                     currentState = BackgroundLocationState.SETGEOPOINT_ONLY;
-                    return BackgroundLocationMessage.COLLECTING_LOCATION;
+                    if (locationClient.isLocationAvailable()) {
+                        return BackgroundLocationMessage.COLLECTING_LOCATION;
+                    } else {
+                        return BackgroundLocationMessage.PROVIDERS_DISABLED;
+                    }
                 }
 
                 startLocationRequests();

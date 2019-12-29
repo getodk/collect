@@ -129,6 +129,7 @@
     <string name="send_selected_data">Send Selected</string>
     <string name="send_selected_data_internet">Send (Internet)</string>
     <string name="send_selected_data_sms">Send (SMS)</string>
+    <string name="error_start_geopoint">Trouble getting start-geopoint, Check location Settings!</string>
     <string name="view_sent_forms">View Sent Form</string>
     <string name="view_sent_forms_button">View Sent Form (%s)</string>
     <string name="server_auth_credentials">Invalid username or password for server: %s</string>

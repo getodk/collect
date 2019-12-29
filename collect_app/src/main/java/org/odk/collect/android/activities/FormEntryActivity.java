@@ -2906,7 +2906,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         if (backgroundLocationMessage == BackgroundLocationManager.BackgroundLocationMessage.PROVIDERS_DISABLED) {
-            new LocationProvidersDisabledDialog().show(getSupportFragmentManager(), LocationProvidersDisabledDialog.LOCATION_PROVIDERS_DISABLED_DIALOG_TAG);
+            // If current form doesn't audit location and we can't get background location
+            if (backgroundLocationViewModel.isStateSetGeoPointOnly()) {
+                ToastUtils.showLongToast(getString(R.string.error_start_geopoint));
+            } else {
+                // If current form audits location and we can't get background location
+                new LocationProvidersDisabledDialog().show(getSupportFragmentManager(), LocationProvidersDisabledDialog.LOCATION_PROVIDERS_DISABLED_DIALOG_TAG);
+            }
             return;
         }
 
