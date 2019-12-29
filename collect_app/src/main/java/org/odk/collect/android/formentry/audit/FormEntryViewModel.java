@@ -11,6 +11,7 @@ import org.odk.collect.android.tasks.SaveResult;
 
 import static org.odk.collect.android.tasks.SaveToDiskTask.SAVED;
 import static org.odk.collect.android.tasks.SaveToDiskTask.SAVED_AND_EXIT;
+import static org.odk.collect.android.tasks.SaveToDiskTask.SAVE_ERROR;
 import static org.odk.collect.android.utilities.StringUtils.isBlank;
 
 public class FormEntryViewModel extends ViewModel {
@@ -73,6 +74,17 @@ public class FormEntryViewModel extends ViewModel {
                 saveRequest.setValue(lastSaveRequest);
                 break;
             }
+
+            case SAVE_ERROR: {
+                if (auditEventLogger != null) {
+                    auditEventLogger.logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, currentTime);
+                }
+
+                lastSaveRequest.setState(SaveRequest.State.ERROR);
+                lastSaveRequest.setMessage(saveResult.getSaveErrorMessage());
+                saveRequest.setValue(lastSaveRequest);
+                break;
+            }
         }
     }
 
@@ -123,6 +135,7 @@ public class FormEntryViewModel extends ViewModel {
         private final boolean viewExiting;
 
         private State state;
+        private String message;
 
         public SaveRequest(boolean formComplete, String updatedSaveName, boolean viewExiting) {
             this.formComplete = formComplete;
@@ -150,10 +163,19 @@ public class FormEntryViewModel extends ViewModel {
             return viewExiting;
         }
 
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
         public enum State {
             CHANGE_REASON_REQUIRED,
             SAVING,
-            SAVED
+            SAVED,
+            ERROR
         }
     }
 

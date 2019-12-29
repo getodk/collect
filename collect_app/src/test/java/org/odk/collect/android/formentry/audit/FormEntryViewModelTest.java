@@ -15,6 +15,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.CHANGE_REASON_REQUIRED;
+import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.ERROR;
 import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.SAVED;
 import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.SAVING;
 
@@ -110,6 +111,23 @@ public class FormEntryViewModelTest {
     }
 
     @Test
+    public void whenSaveToDiskFinishes_saveError_setSaveRequestState_toErrorWithMessage() {
+        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(false, "", false);
+
+        whenSaveToDiskFinishes(SaveToDiskTask.SAVE_ERROR, 0L, "OH NO");
+        assertThat(saveRequest.getValue().getState(), equalTo(ERROR));
+        assertThat(saveRequest.getValue().getMessage(), equalTo("OH NO"));
+    }
+
+    @Test
+    public void whenSaveToDiskFinishes_saveError_logsSaveErrorAuditEvent() {
+        viewModel.saveForm(false, "", false);
+
+        whenSaveToDiskFinishes(SaveToDiskTask.SAVE_ERROR, 0L);
+        verify(logger).logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, 0L);
+    }
+
+    @Test
     public void whenReasonRequiredToSave_saveReason_setsSaveRequestState_toSaving() {
         whenReasonRequiredToSave();
         LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(false, "", false);
@@ -125,9 +143,14 @@ public class FormEntryViewModelTest {
         when(logger.isEditing()).thenReturn(true);
     }
 
-    private void whenSaveToDiskFinishes(int result, long l) {
+    private void whenSaveToDiskFinishes(int result, long time) {
+        whenSaveToDiskFinishes(result, time, null);
+    }
+
+    private void whenSaveToDiskFinishes(int result, long time, String message) {
         SaveResult saveResult = new SaveResult();
         saveResult.setSaveResult(result, true);
-        viewModel.saveToDiskTaskComplete(saveResult, l);
+        saveResult.setSaveErrorMessage(message);
+        viewModel.saveToDiskTaskComplete(saveResult, time);
     }
 }

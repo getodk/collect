@@ -1896,6 +1896,19 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
 
                     break;
+
+                case ERROR:
+                    String message;
+
+                    if (saveRequest.getMessage() != null) {
+                        message = getString(R.string.data_saved_error) + " "
+                                + saveRequest.getMessage();
+                    } else {
+                        message = getString(R.string.data_saved_error);
+                    }
+
+                    ToastUtils.showLongToast(message);
+                    break;
             }
         });
 
@@ -2577,17 +2590,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         FormController formController = getFormController();
 
         switch (saveStatus) {
-            case SaveToDiskTask.SAVE_ERROR:
-                String message;
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, System.currentTimeMillis());
-                if (saveResult.getSaveErrorMessage() != null) {
-                    message = getString(R.string.data_saved_error) + " "
-                            + saveResult.getSaveErrorMessage();
-                } else {
-                    message = getString(R.string.data_saved_error);
-                }
-                ToastUtils.showLongToast(message);
-                break;
             case SaveToDiskTask.ENCRYPTION_ERROR:
                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, System.currentTimeMillis());
                 ToastUtils.showLongToast(String.format(getString(R.string.encryption_error_message),
