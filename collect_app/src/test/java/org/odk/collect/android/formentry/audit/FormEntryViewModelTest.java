@@ -72,10 +72,7 @@ public class FormEntryViewModelTest {
     public void whenSaveToDiskFinishes_saved_setsSaveRequestState_toSaved() {
         LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(true, "", false);
 
-        SaveResult saveResult = new SaveResult();
-        saveResult.setSaveResult(SaveToDiskTask.SAVED, true);
-        viewModel.saveToDiskTaskComplete(saveResult, 0L);
-
+        whenSaveToDiskFinishes(SaveToDiskTask.SAVED, 0L);
         assertThat(saveRequest.getValue().getState(), equalTo(SAVED));
     }
 
@@ -83,10 +80,7 @@ public class FormEntryViewModelTest {
     public void whenSaveToDiskFinishes_saved_logsFormSavedAuditEvent() {
         viewModel.saveForm(true, "", false);
 
-        SaveResult saveResult = new SaveResult();
-        saveResult.setSaveResult(SaveToDiskTask.SAVED, true);
-        viewModel.saveToDiskTaskComplete(saveResult, 123L);
-
+        whenSaveToDiskFinishes(SaveToDiskTask.SAVED, 123L);
         verify(logger).logEvent(AuditEvent.AuditEventType.FORM_SAVE, false, 123L);
     }
 
@@ -94,10 +88,7 @@ public class FormEntryViewModelTest {
     public void whenSaveToDiskFinishes_whenViewExiting_logsFormExitAuditEvent() {
         viewModel.saveForm(false, "", true);
 
-        SaveResult saveResult = new SaveResult();
-        saveResult.setSaveResult(SaveToDiskTask.SAVED, true);
-        viewModel.saveToDiskTaskComplete(saveResult, 123L);
-
+        whenSaveToDiskFinishes(SaveToDiskTask.SAVED, 123L);
         verify(logger).logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, 123L);
     }
 
@@ -105,10 +96,7 @@ public class FormEntryViewModelTest {
     public void whenSaveToDiskFinishes_whenFormComplete_andViewExiting_logsFormExitAndFinalizeAuditEvents() {
         viewModel.saveForm(true, "", true);
 
-        SaveResult saveResult = new SaveResult();
-        saveResult.setSaveResult(SaveToDiskTask.SAVED, true);
-        viewModel.saveToDiskTaskComplete(saveResult, 123L);
-
+        whenSaveToDiskFinishes(SaveToDiskTask.SAVED, 123L);
         verify(logger).logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, 123L);
         verify(logger).logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, 123L);
     }
@@ -117,10 +105,7 @@ public class FormEntryViewModelTest {
     public void whenSaveToDiskFinishes_savedAndExit_setsSaveRequestState_toSaved() {
         LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(false, "", false);
 
-        SaveResult saveResult = new SaveResult();
-        saveResult.setSaveResult(SaveToDiskTask.SAVED_AND_EXIT, true);
-        viewModel.saveToDiskTaskComplete(saveResult, 0L);
-
+        whenSaveToDiskFinishes(SaveToDiskTask.SAVED_AND_EXIT, 0L);
         assertThat(saveRequest.getValue().getState(), equalTo(SAVED));
     }
 
@@ -138,5 +123,11 @@ public class FormEntryViewModelTest {
         when(logger.isChangeReasonRequired()).thenReturn(true);
         when(logger.isChangesMade()).thenReturn(true);
         when(logger.isEditing()).thenReturn(true);
+    }
+
+    private void whenSaveToDiskFinishes(int result, long l) {
+        SaveResult saveResult = new SaveResult();
+        saveResult.setSaveResult(result, true);
+        viewModel.saveToDiskTaskComplete(saveResult, l);
     }
 }
