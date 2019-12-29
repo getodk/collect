@@ -47,7 +47,7 @@ public class FormEntryViewModelTest {
     public void promptDismissed_sets_isChangeReasonRequired_false() {
         whenReasonRequiredToSave();
 
-        viewModel.saveForm(true, "", true);
+        viewModel.saveForm(true, "", false);
         assertThat(viewModel.requiresReasonToContinue().getValue(), equalTo(true));
 
         viewModel.promptDismissed();
@@ -56,7 +56,7 @@ public class FormEntryViewModelTest {
 
     @Test
     public void saveForm_returnsSaveRequest_inSavingState() {
-        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(true, "", true);
+        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(true, "", false);
         assertThat(saveRequest.getValue().getState(), equalTo(SAVING));
     }
 
@@ -64,13 +64,13 @@ public class FormEntryViewModelTest {
     public void saveForm_whenReasonRequiredToSave_returnsSaveRequest_inChangeReasonRequiredState() {
         whenReasonRequiredToSave();
 
-        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(true, "", true);
+        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(true, "", false);
         assertThat(saveRequest.getValue().getState(), equalTo(CHANGE_REASON_REQUIRED));
     }
 
     @Test
     public void whenSaveToDiskFinishes_saved_setsSaveRequestState_toSaved() {
-        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(true, "", true);
+        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(true, "", false);
 
         SaveResult saveResult = new SaveResult();
         saveResult.setSaveResult(SaveToDiskTask.SAVED, true);
@@ -81,7 +81,7 @@ public class FormEntryViewModelTest {
 
     @Test
     public void whenSaveToDiskFinishes_saved_logsFormSavedAuditEvent() {
-        viewModel.saveForm(true, "", true);
+        viewModel.saveForm(true, "", false);
 
         SaveResult saveResult = new SaveResult();
         saveResult.setSaveResult(SaveToDiskTask.SAVED, true);
@@ -91,8 +91,31 @@ public class FormEntryViewModelTest {
     }
 
     @Test
+    public void whenSaveToDiskFinishes_whenViewExiting_logsFormExitAuditEvent() {
+        viewModel.saveForm(false, "", true);
+
+        SaveResult saveResult = new SaveResult();
+        saveResult.setSaveResult(SaveToDiskTask.SAVED, true);
+        viewModel.saveToDiskTaskComplete(saveResult, 123L);
+
+        verify(logger).logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, 123L);
+    }
+
+    @Test
+    public void whenSaveToDiskFinishes_whenFormComplete_andViewExiting_logsFormExitAndFinalizeAuditEvents() {
+        viewModel.saveForm(true, "", true);
+
+        SaveResult saveResult = new SaveResult();
+        saveResult.setSaveResult(SaveToDiskTask.SAVED, true);
+        viewModel.saveToDiskTaskComplete(saveResult, 123L);
+
+        verify(logger).logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, 123L);
+        verify(logger).logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, 123L);
+    }
+
+    @Test
     public void whenSaveToDiskFinishes_savedAndExit_setsSaveRequestState_toSaved() {
-        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(true, "", true);
+        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(false, "", false);
 
         SaveResult saveResult = new SaveResult();
         saveResult.setSaveResult(SaveToDiskTask.SAVED_AND_EXIT, true);
@@ -104,7 +127,7 @@ public class FormEntryViewModelTest {
     @Test
     public void whenReasonRequiredToSave_saveReason_setsSaveRequestState_toSaving() {
         whenReasonRequiredToSave();
-        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(true, "", true);
+        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(false, "", false);
 
         viewModel.setReason("blah");
         viewModel.saveReason(0L);

@@ -1875,28 +1875,21 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 case SAVING:
                     showDialog(SAVING_DIALOG);
-                    executeSaveToDiskTask(saveRequest.isFormComplete(), saveRequest.getUpdatedSaveName(), saveRequest.isDoneEditing());
+                    executeSaveToDiskTask(complete, updatedSaveName, exit);
                     break;
 
                 case SAVED:
                     dismissDialog(SAVING_DIALOG);
                     ToastUtils.showShortToast(R.string.data_saved_ok);
 
-                    if (saveRequest.isDoneEditing()) {
-                        if (saveRequest.isFormComplete()) {
-                            getFormController().getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, System.currentTimeMillis());
-                            // Force writing of audit since we are exiting
-                            getFormController().getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, System.currentTimeMillis());
-
+                    if (exit) {
+                        if (complete) {
                             // Request auto-send if app-wide auto-send is enabled or the form that was just
                             // finalized specifies that it should always be auto-sent.
                             String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
                             if (AutoSendWorker.formShouldBeAutoSent(formId, GeneralSharedPreferences.isAutoSendEnabled())) {
                                 requestAutoSend();
                             }
-                        } else {
-                            // Force writing of audit since we are exiting
-                            getFormController().getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, System.currentTimeMillis());
                         }
 
                         finishReturnInstance();
@@ -1909,6 +1902,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         return true;
     }
 
+    /**
+     * AsyncTasks should be executed in ViewModels not in Activity/Fragment
+     */
+    @Deprecated
     private void executeSaveToDiskTask(boolean complete, String updatedSaveName, boolean exitAfter) {
         saveToDiskTask = new SaveToDiskTask(getIntent().getData(), exitAfter, complete,
                 updatedSaveName);

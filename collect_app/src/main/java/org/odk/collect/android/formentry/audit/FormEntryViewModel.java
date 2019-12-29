@@ -37,9 +37,9 @@ public class FormEntryViewModel extends ViewModel {
         this.auditEventLogger = auditEventLogger;
     }
 
-    public LiveData<SaveRequest> saveForm(boolean complete, String updatedSaveName, boolean exitAfter) {
+    public LiveData<SaveRequest> saveForm(boolean complete, String updatedSaveName, boolean viewExiting) {
         saveRequest = new MutableLiveData<>(null);
-        lastSaveRequest = new SaveRequest(complete, updatedSaveName, exitAfter);
+        lastSaveRequest = new SaveRequest(complete, updatedSaveName, viewExiting);
 
         if (!requiresReasonToSave()) {
             lastSaveRequest.setState(SaveRequest.State.SAVING);
@@ -58,6 +58,15 @@ public class FormEntryViewModel extends ViewModel {
             case SAVED_AND_EXIT: {
                 if (auditEventLogger != null) {
                     auditEventLogger.logEvent(AuditEvent.AuditEventType.FORM_SAVE, false, currentTime);
+
+                    if (lastSaveRequest.isViewExiting()) {
+                        if (lastSaveRequest.isFormComplete()) {
+                            auditEventLogger.logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, currentTime);
+                            auditEventLogger.logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, currentTime);
+                        } else {
+                            auditEventLogger.logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, currentTime);
+                        }
+                    }
                 }
 
                 lastSaveRequest.setState(SaveRequest.State.SAVED);
@@ -111,14 +120,14 @@ public class FormEntryViewModel extends ViewModel {
 
         private final boolean formComplete;
         private final String updatedSaveName;
-        private final boolean doneEditing;
+        private final boolean viewExiting;
 
         private State state;
 
-        public SaveRequest(boolean formComplete, String updatedSaveName, boolean doneEditing) {
+        public SaveRequest(boolean formComplete, String updatedSaveName, boolean viewExiting) {
             this.formComplete = formComplete;
             this.updatedSaveName = updatedSaveName;
-            this.doneEditing = doneEditing;
+            this.viewExiting = viewExiting;
         }
 
         public boolean isFormComplete() {
@@ -129,16 +138,16 @@ public class FormEntryViewModel extends ViewModel {
             return updatedSaveName;
         }
 
-        public boolean isDoneEditing() {
-            return doneEditing;
-        }
-
         public State getState() {
             return state;
         }
 
         public void setState(State state) {
             this.state = state;
+        }
+
+        public boolean isViewExiting() {
+            return viewExiting;
         }
 
         public enum State {
