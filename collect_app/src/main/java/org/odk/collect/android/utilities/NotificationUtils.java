@@ -63,7 +63,7 @@ public class NotificationUtils {
                 .setContentText(contentText)
                 .setSmallIcon(start ? R.drawable.notification_icon_go : IconUtils.getNotificationAppIcon())     // smap add start
                 .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
-                        R.drawable.ic_launcher))        // added for smap
+                        R.mipmap.ic_launcher))        // added for smap
                 .setAutoCancel(true)
                 .setChannelId(CHANNEL_ID);
 

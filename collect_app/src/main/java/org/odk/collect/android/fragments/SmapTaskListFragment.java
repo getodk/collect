@@ -180,7 +180,7 @@ public class SmapTaskListFragment extends ListFragment
     public void onResume() {
         super.onResume();
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_launcher);
+        toolbar.setNavigationIcon(R.mipmap.ic_launcher);
 
         if (bottomSheetDialog == null) {
             setupBottomSheet();

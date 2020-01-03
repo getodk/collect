@@ -387,7 +387,7 @@ public class SmapTaskMapFragment extends Fragment
         //    mHelper.setBasemap();
         //}
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_launcher);
+        toolbar.setNavigationIcon(R.mipmap.ic_launcher);
         super.onResume();
     }
 

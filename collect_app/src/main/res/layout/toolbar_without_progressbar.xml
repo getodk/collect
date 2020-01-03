@@ -8,5 +8,5 @@
     android:layout_height="?attr/actionBarSize"
     android:background="?attr/colorPrimary"
     android:minHeight="?attr/actionBarSize"
-    app:navigationIcon="@drawable/ic_launcher"
+    app:navigationIcon="@mipmap/ic_launcher"
     app:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
