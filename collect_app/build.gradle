@@ -82,6 +82,13 @@ android {
         archivesBaseName = 'collect'
     }
 
+    android {
+        lintOptions {
+            abortOnError false
+        }
+    }
+
+
     signingConfigs {
         release {
             if (secrets.getProperty('RELEASE_STORE_FILE')) {
