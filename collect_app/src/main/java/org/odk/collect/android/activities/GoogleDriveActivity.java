@@ -460,8 +460,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             return;
         }
 
-        myDrive = !myDrive;
-        if (myDrive) {
+        if (currentPath.peek().equals(getString(R.string.go_drive))) {
             rootButton.setText(getString(R.string.go_shared));
         } else {
             rootButton.setText(getString(R.string.go_drive));
@@ -555,7 +554,13 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.root_button:
+                myDrive = currentPath.peek().equals(getString(R.string.go_drive));
                 getResultsFromApi();
+                if (currentPath.peek().equals(getString(R.string.go_drive))) {
+                    rootButton.setText(getString(R.string.go_shared));
+                } else {
+                    rootButton.setText(getString(R.string.go_drive));
+                }
                 break;
 
             case R.id.back_button:
@@ -573,6 +578,11 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                     listFiles(parentId);
                     currentPath.pop();
                     // }
+                    if (currentPath.peek().equals(getString(R.string.go_drive))) {
+                        rootButton.setText(getString(R.string.go_shared));
+                    } else {
+                        rootButton.setText(getString(R.string.go_drive));
+                    }
                 } else {
                     createAlertDialog(getString(R.string.no_connection));
                 }
@@ -595,6 +605,11 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 listFiles(item.getDriveId());
                 folderIdStack.push(item.getDriveId());
                 currentPath.push(item.getName());
+                if (myDrive) {
+                    rootButton.setText(getString(R.string.go_shared));
+                } else {
+                    rootButton.setText(getString(R.string.go_drive));
+                }
             } else {
                 createAlertDialog(getString(R.string.no_connection));
             }
