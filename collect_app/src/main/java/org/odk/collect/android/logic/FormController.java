@@ -53,6 +53,7 @@ import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.formentry.audit.AsyncTaskAuditEventWriter;
 import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
+import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
@@ -77,6 +78,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.
  * @author carlhartung
  */
 public class FormController {
+
+    private boolean IS_REPEAT_RELEVANT = true;
 
     public static final boolean STEP_INTO_GROUP = true;
     public static final boolean STEP_OVER_GROUP = false;
@@ -543,6 +546,11 @@ public class FormController {
      * @return the next event that should be handled by a view.
      */
     public int stepToNextEvent(boolean stepIntoGroup) {
+
+        if (!IS_REPEAT_RELEVANT && formEntryController.stepToNextEvent() == formEntryController.EVENT_PROMPT_NEW_REPEAT && !stepIntoGroup) {
+            return stepOverGroup();
+        }
+
         if ((getEvent() == FormEntryController.EVENT_GROUP
                 || getEvent() == FormEntryController.EVENT_REPEAT)
                 && indexIsInFieldList() && !isGroupEmpty() && !stepIntoGroup) {
@@ -628,6 +636,34 @@ public class FormController {
         }
     }
 
+    private boolean isRepeatRelevant(){
+        boolean isindexrelev = true;
+        int countrelevants = 0;
+        formEntryController.newRepeat();
+        GroupDef groupDef = (GroupDef) formEntryController.getModel().getForm().getChild(getFormIndex());
+        FormIndex currentChildIndex = formEntryController.getModel().incrementIndex(getFormIndex(), true);
+        for (FormIndex index : getIndicesForGroup(groupDef, currentChildIndex, true)) {
+            if (formEntryController.getModel().isIndexRelevant(index)) {
+                countrelevants += 1;
+                break;
+            }
+        }
+        if(countrelevants == 0){
+            isindexrelev = false;
+        }
+
+        if(!isindexrelev) {
+            formEntryController.deleteRepeat();
+            IS_REPEAT_RELEVANT = false;
+            return false;
+        }else{
+            formEntryController.deleteRepeat();
+            IS_REPEAT_RELEVANT = true;
+            return true;
+        }
+
+    }
+
     /**
      * Move the current form index to the index of the next question in the form.
      * Stop if we should ask to create a new repeat group or if we reach the end of the form.
@@ -646,7 +682,12 @@ public class FormController {
                         case FormEntryController.EVENT_END_OF_FORM:
                             break group_skip;
                         case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
-                            break group_skip;
+                            if(!isRepeatRelevant()) {
+                                event = stepToNextEvent(FormController.STEP_OVER_GROUP);
+                                return event;
+                            }else{
+                                break group_skip;
+                            }
                         case FormEntryController.EVENT_GROUP:
                         case FormEntryController.EVENT_REPEAT:
                             if (indexIsInFieldList() && getQuestionPrompts().length != 0) {
