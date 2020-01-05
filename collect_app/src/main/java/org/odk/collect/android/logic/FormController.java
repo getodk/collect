@@ -645,7 +645,6 @@ public class FormController {
         return isindexrelev;
     }
 
-
     /**
      * Move the current form index to the index of the next question in the form.
      * Stop if we should ask to create a new repeat group or if we reach the end of the form.
@@ -664,7 +663,7 @@ public class FormController {
                         case FormEntryController.EVENT_END_OF_FORM:
                             break group_skip;
                         case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
-                            if(!isRepeatRelevant()) {
+                            if (!isRepeatRelevant()) {
                                 // skip Irrelevant repeat prompt
                                 return stepToNextScreenEvent();
                             }
