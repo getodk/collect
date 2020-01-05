@@ -666,7 +666,7 @@ public class FormController {
                         case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
                             if(!isRepeatRelevant()) {
                                 // skip Irrelevant repeat prompt
-                                return formEntryController.stepToNextEvent();
+                                return stepToNextScreenEvent();
                             }
                             break group_skip;
                         case FormEntryController.EVENT_GROUP:
