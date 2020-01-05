@@ -543,7 +543,6 @@ public class FormController {
      * @return the next event that should be handled by a view.
      */
     public int stepToNextEvent(boolean stepIntoGroup) {
-
         if ((getEvent() == FormEntryController.EVENT_GROUP
                 || getEvent() == FormEntryController.EVENT_REPEAT)
                 && indexIsInFieldList() && !isGroupEmpty() && !stepIntoGroup) {
@@ -558,7 +557,6 @@ public class FormController {
      * the group represented by the FormIndex.
      */
     public int stepOverGroup() {
-
         GroupDef gd =
                 (GroupDef) formEntryController.getModel().getForm()
                         .getChild(getFormIndex());
@@ -632,7 +630,7 @@ public class FormController {
 
     private boolean isRepeatRelevant() {
         boolean isindexrelev = false;
-        formEntryController.newRepeat();
+        newRepeat();
         GroupDef groupDef = (GroupDef) formEntryController.getModel().getForm().getChild(getFormIndex());
         FormIndex currentChildIndex = formEntryController.getModel().incrementIndex(getFormIndex(), true);
         for (FormIndex index : getIndicesForGroup(groupDef, currentChildIndex, true)) {
