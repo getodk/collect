@@ -53,7 +53,6 @@ import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.formentry.audit.AsyncTaskAuditEventWriter;
 import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
-import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
@@ -631,30 +630,19 @@ public class FormController {
         }
     }
 
-    private boolean isRepeatRelevant(){
-        boolean isindexrelev = true;
-        int countrelevants = 0;
+    private boolean isRepeatRelevant() {
+        boolean isindexrelev = false;
         formEntryController.newRepeat();
         GroupDef groupDef = (GroupDef) formEntryController.getModel().getForm().getChild(getFormIndex());
         FormIndex currentChildIndex = formEntryController.getModel().incrementIndex(getFormIndex(), true);
         for (FormIndex index : getIndicesForGroup(groupDef, currentChildIndex, true)) {
             if (formEntryController.getModel().isIndexRelevant(index)) {
-                countrelevants += 1;
+                isindexrelev = true;
                 break;
             }
         }
-        if(countrelevants == 0){
-            isindexrelev = false;
-        }
-
-        if(!isindexrelev) {
-            deleteRepeat();
-            return false;
-        }else{
-            deleteRepeat();
-            return true;
-        }
-
+        deleteRepeat();
+        return isindexrelev;
     }
 
 
@@ -677,10 +665,10 @@ public class FormController {
                             break group_skip;
                         case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
                             if(!isRepeatRelevant()) {
+                                // skip Irrelevant repeat prompt
                                 return formEntryController.stepToNextEvent();
-                            }else{
-                                break group_skip;
                             }
+                            break group_skip;
                         case FormEntryController.EVENT_GROUP:
                         case FormEntryController.EVENT_REPEAT:
                             if (indexIsInFieldList() && getQuestionPrompts().length != 0) {
