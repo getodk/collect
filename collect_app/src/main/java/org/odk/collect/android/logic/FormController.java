@@ -79,8 +79,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.
  */
 public class FormController {
 
-    private boolean IS_REPEAT_RELEVANT = true;
-
     public static final boolean STEP_INTO_GROUP = true;
     public static final boolean STEP_OVER_GROUP = false;
 
@@ -547,10 +545,6 @@ public class FormController {
      */
     public int stepToNextEvent(boolean stepIntoGroup) {
 
-        if (!IS_REPEAT_RELEVANT && formEntryController.stepToNextEvent() == formEntryController.EVENT_PROMPT_NEW_REPEAT && !stepIntoGroup) {
-            return stepOverGroup();
-        }
-
         if ((getEvent() == FormEntryController.EVENT_GROUP
                 || getEvent() == FormEntryController.EVENT_REPEAT)
                 && indexIsInFieldList() && !isGroupEmpty() && !stepIntoGroup) {
@@ -565,6 +559,7 @@ public class FormController {
      * the group represented by the FormIndex.
      */
     public int stepOverGroup() {
+
         GroupDef gd =
                 (GroupDef) formEntryController.getModel().getForm()
                         .getChild(getFormIndex());
@@ -653,16 +648,15 @@ public class FormController {
         }
 
         if(!isindexrelev) {
-            formEntryController.deleteRepeat();
-            IS_REPEAT_RELEVANT = false;
+            deleteRepeat();
             return false;
         }else{
-            formEntryController.deleteRepeat();
-            IS_REPEAT_RELEVANT = true;
+            deleteRepeat();
             return true;
         }
 
     }
+
 
     /**
      * Move the current form index to the index of the next question in the form.
@@ -683,8 +677,7 @@ public class FormController {
                             break group_skip;
                         case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
                             if(!isRepeatRelevant()) {
-                                event = stepToNextEvent(FormController.STEP_OVER_GROUP);
-                                return event;
+                                return formEntryController.stepToNextEvent();
                             }else{
                                 break group_skip;
                             }
