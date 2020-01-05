@@ -628,6 +628,10 @@ public class FormController {
         }
     }
 
+    /**
+     * Used to check if a repeat is relevant before showing a prompt to add its instance.
+     * Returns true if any child is relevant, otherwise false.
+     */
     private boolean isRepeatRelevant() {
         boolean isindexrelev = false;
         newRepeat();
