@@ -2,6 +2,7 @@ package org.odk.collect.android.formentry.audit;
 
 import androidx.lifecycle.LiveData;
 
+import org.javarosa.form.api.FormEntryController;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,9 +16,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.CHANGE_REASON_REQUIRED;
+import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.CONSTRAINT_ERROR;
 import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.FINALIZE_ERROR;
-import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.SAVE_ERROR;
 import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.SAVED;
+import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.SAVE_ERROR;
 import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.SAVING;
 
 @RunWith(RobolectricTestRunner.class)
@@ -143,6 +145,22 @@ public class FormEntryViewModelTest {
 
         whenSaveToDiskFinishes(SaveToDiskTask.ENCRYPTION_ERROR, 0L);
         verify(logger).logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, 0L);
+    }
+
+    @Test
+    public void whenSaveToDiskFinishes_answerConstraintViolated_setSaveRequestState_toConstraintError() {
+        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(false, "", false);
+
+        whenSaveToDiskFinishes(FormEntryController.ANSWER_CONSTRAINT_VIOLATED, 0L);
+        assertThat(saveRequest.getValue().getState(), equalTo(CONSTRAINT_ERROR));
+    }
+
+    @Test
+    public void whenSaveToDiskFinishes_answerRequiredButEmpty_setSaveRequestState_toConstraintError() {
+        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(false, "", false);
+
+        whenSaveToDiskFinishes(FormEntryController.ANSWER_REQUIRED_BUT_EMPTY, 0L);
+        assertThat(saveRequest.getValue().getState(), equalTo(CONSTRAINT_ERROR));
     }
 
     @Test

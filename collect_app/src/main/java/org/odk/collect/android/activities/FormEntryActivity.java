@@ -1917,6 +1917,28 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             saveRequest.getMessage()));
                     finishReturnInstance();
                     break;
+
+                case CONSTRAINT_ERROR: {
+                    getFormController().getAuditEventLogger().exitView();
+                    getFormController().getAuditEventLogger().logEvent(AuditEvent.AuditEventType.CONSTRAINT_ERROR, true, System.currentTimeMillis());
+                    refreshCurrentView();
+
+                    // get constraint behavior preference value with appropriate default
+                    String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
+                            .get(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR);
+
+                    // an answer constraint was violated, so we need to display the proper toast(s)
+                    // if constraint behavior is on_swipe, this will happen if we do a 'swipe' to the
+                    // next question
+                    if (constraintBehavior.equals(GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
+                        next();
+                    } else {
+                        // otherwise, we can get the proper toast(s) by saving with constraint check
+                        saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS);
+                    }
+
+                    break;
+                }
             }
         });
 
@@ -2593,33 +2615,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         formEntryViewModel.saveToDiskTaskComplete(saveResult, System.currentTimeMillis());
-
-        int saveStatus = saveResult.getSaveResult();
-        FormController formController = getFormController();
-
-        switch (saveStatus) {
-            case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
-            case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
-                formController.getAuditEventLogger().exitView();
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.CONSTRAINT_ERROR, true, System.currentTimeMillis());
-                refreshCurrentView();
-
-                // get constraint behavior preference value with appropriate default
-                String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
-                        .get(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR);
-
-                // an answer constraint was violated, so we need to display the proper toast(s)
-                // if constraint behavior is on_swipe, this will happen if we do a 'swipe' to the
-                // next question
-                if (constraintBehavior.equals(GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
-                    next();
-                } else {
-                    // otherwise, we can get the proper toast(s) by saving with constraint check
-                    saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS);
-                }
-
-                break;
-        }
     }
 
     @Override

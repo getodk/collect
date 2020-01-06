@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 
@@ -89,6 +90,12 @@ public class FormEntryViewModel extends ViewModel {
                 }
 
                 setSaveRequestState(saveResult, SaveRequest.State.FINALIZE_ERROR);
+                break;
+            }
+
+            case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
+            case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY: {
+                setSaveRequestState(saveResult, SaveRequest.State.CONSTRAINT_ERROR);
                 break;
             }
         }
@@ -184,7 +191,8 @@ public class FormEntryViewModel extends ViewModel {
             SAVING,
             SAVED,
             SAVE_ERROR,
-            FINALIZE_ERROR
+            FINALIZE_ERROR,
+            CONSTRAINT_ERROR
         }
     }
 
