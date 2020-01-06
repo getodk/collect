@@ -1,5 +1,7 @@
 package org.odk.collect.android.formentry.audit;
 
+import android.net.Uri;
+
 import androidx.lifecycle.LiveData;
 
 import org.javarosa.form.api.FormEntryController;
@@ -7,35 +9,46 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
+import org.odk.collect.android.formentry.FormEntryViewModel;
+import org.odk.collect.android.formentry.FormSaver;
 import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.CHANGE_REASON_REQUIRED;
-import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.CONSTRAINT_ERROR;
-import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.FINALIZE_ERROR;
-import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.SAVED;
-import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.SAVE_ERROR;
-import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.SAVING;
+import static org.odk.collect.android.formentry.FormEntryViewModel.SaveResult.State.CHANGE_REASON_REQUIRED;
+import static org.odk.collect.android.formentry.FormEntryViewModel.SaveResult.State.CONSTRAINT_ERROR;
+import static org.odk.collect.android.formentry.FormEntryViewModel.SaveResult.State.FINALIZE_ERROR;
+import static org.odk.collect.android.formentry.FormEntryViewModel.SaveResult.State.SAVED;
+import static org.odk.collect.android.formentry.FormEntryViewModel.SaveResult.State.SAVE_ERROR;
+import static org.odk.collect.android.formentry.FormEntryViewModel.SaveResult.State.SAVING;
 
 @RunWith(RobolectricTestRunner.class)
 public class FormEntryViewModelTest {
 
+    public static final long CURRENT_TIME = 123L;
     private AuditEventLogger logger;
     private FormEntryViewModel viewModel;
+    private FormSaver formSaver;
 
     @Before
     public void setup() {
+        Robolectric.getBackgroundThreadScheduler().pause();
+
         logger = mock(AuditEventLogger.class);
+        formSaver = mock(FormSaver.class);
+
         when(logger.isChangeReasonRequired()).thenReturn(false);
 
-        viewModel = new FormEntryViewModel();
+        viewModel = new FormEntryViewModel(() -> CURRENT_TIME, formSaver);
         viewModel.setAuditEventLogger(logger);
     }
 
@@ -44,16 +57,16 @@ public class FormEntryViewModelTest {
         when(logger.isChangeReasonRequired()).thenReturn(true);
 
         viewModel.setReason("Blah");
-        viewModel.saveReason(123L);
+        viewModel.saveReason(CURRENT_TIME);
 
-        verify(logger).logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, 123L, "Blah");
+        verify(logger).logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, CURRENT_TIME, "Blah");
     }
 
     @Test
     public void promptDismissed_sets_isChangeReasonRequired_false() {
         whenReasonRequiredToSave();
 
-        viewModel.saveForm(true, "", false);
+        viewModel.saveForm(Uri.parse("file://form"), true, "", false);
         assertThat(viewModel.requiresReasonToContinue().getValue(), equalTo(true));
 
         viewModel.promptDismissed();
@@ -61,129 +74,140 @@ public class FormEntryViewModelTest {
     }
 
     @Test
-    public void saveForm_returnsSaveRequest_inSavingState() {
-        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(true, "", false);
-        assertThat(saveRequest.getValue().getState(), equalTo(SAVING));
+    public void saveForm_returnsSaveResult_inSavingState() {
+        LiveData<FormEntryViewModel.SaveResult> saveResult = viewModel.saveForm(Uri.parse("file://form"), true, "", false);
+        assertThat(saveResult.getValue().getState(), equalTo(SAVING));
     }
 
     @Test
-    public void saveForm_whenReasonRequiredToSave_returnsSaveRequest_inChangeReasonRequiredState() {
+    public void saveForm_whenReasonRequiredToSave_returnsSaveResult_inChangeReasonRequiredState() {
         whenReasonRequiredToSave();
 
-        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(true, "", false);
-        assertThat(saveRequest.getValue().getState(), equalTo(CHANGE_REASON_REQUIRED));
+        LiveData<FormEntryViewModel.SaveResult> saveResult = viewModel.saveForm(Uri.parse("file://form"), true, "", false);
+        assertThat(saveResult.getValue().getState(), equalTo(CHANGE_REASON_REQUIRED));
     }
 
     @Test
-    public void whenSaveToDiskFinishes_saved_setsSaveRequestState_toSaved() {
-        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(true, "", false);
+    public void whenFormSaverFinishes_saved_setsSaveResultState_toSaved() {
+        LiveData<FormEntryViewModel.SaveResult> saveResult = viewModel.saveForm(Uri.parse("file://form"), true, "", false);
 
-        whenSaveToDiskFinishes(SaveToDiskTask.SAVED, 123L);
-        assertThat(saveRequest.getValue().getState(), equalTo(SAVED));
+        whenFormSaverFinishes(SaveToDiskTask.SAVED);
+        assertThat(saveResult.getValue().getState(), equalTo(SAVED));
     }
 
     @Test
-    public void whenSaveToDiskFinishes_saved_logsFormSavedAuditEvent() {
-        viewModel.saveForm(true, "", false);
+    public void whenFormSaverFinishes_saved_logsFormSavedAuditEvent() {
+        viewModel.saveForm(Uri.parse("file://form"), true, "", false);
 
-        whenSaveToDiskFinishes(SaveToDiskTask.SAVED, 123L);
-        verify(logger).logEvent(AuditEvent.AuditEventType.FORM_SAVE, false, 123L);
+        whenFormSaverFinishes(SaveToDiskTask.SAVED);
+        verify(logger).logEvent(AuditEvent.AuditEventType.FORM_SAVE, false, CURRENT_TIME);
     }
 
     @Test
-    public void whenSaveToDiskFinishes_whenViewExiting_logsFormExitAuditEvent() {
-        viewModel.saveForm(false, "", true);
+    public void whenFormSaverFinishes_whenViewExiting_logsFormExitAuditEvent() {
+        viewModel.saveForm(Uri.parse("file://form"), false, "", true);
 
-        whenSaveToDiskFinishes(SaveToDiskTask.SAVED, 123L);
-        verify(logger).logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, 123L);
+        whenFormSaverFinishes(SaveToDiskTask.SAVED);
+        verify(logger).logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, CURRENT_TIME);
     }
 
     @Test
-    public void whenSaveToDiskFinishes_whenFormComplete_andViewExiting_logsFormExitAndFinalizeAuditEvents() {
-        viewModel.saveForm(true, "", true);
+    public void whenFormSaverFinishes_whenFormComplete_andViewExiting_logsFormExitAndFinalizeAuditEvents() {
+        viewModel.saveForm(Uri.parse("file://form"), true, "", true);
 
-        whenSaveToDiskFinishes(SaveToDiskTask.SAVED, 123L);
-        verify(logger).logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, 123L);
-        verify(logger).logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, 123L);
+        whenFormSaverFinishes(SaveToDiskTask.SAVED);
+        verify(logger).logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, CURRENT_TIME);
+        verify(logger).logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, CURRENT_TIME);
     }
 
     @Test
-    public void whenSaveToDiskFinishes_savedAndExit_setsSaveRequestState_toSaved() {
-        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(false, "", false);
+    public void whenFormSaverFinishes_savedAndExit_setsSaveResultState_toSaved() {
+        LiveData<FormEntryViewModel.SaveResult> saveResult = viewModel.saveForm(Uri.parse("file://form"), false, "", false);
 
-        whenSaveToDiskFinishes(SaveToDiskTask.SAVED_AND_EXIT, 123L);
-        assertThat(saveRequest.getValue().getState(), equalTo(SAVED));
+        whenFormSaverFinishes(SaveToDiskTask.SAVED_AND_EXIT);
+        assertThat(saveResult.getValue().getState(), equalTo(SAVED));
     }
 
     @Test
-    public void whenSaveToDiskFinishes_saveError_setSaveRequestState_toSaveErrorWithMessage() {
-        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(false, "", false);
+    public void whenFormSaverFinishes_saveError_setSaveResultState_toSaveErrorWithMessage() {
+        LiveData<FormEntryViewModel.SaveResult> saveResult = viewModel.saveForm(Uri.parse("file://form"), false, "", false);
 
-        whenSaveToDiskFinishes(SaveToDiskTask.SAVE_ERROR, 123L, "OH NO");
-        assertThat(saveRequest.getValue().getState(), equalTo(SAVE_ERROR));
-        assertThat(saveRequest.getValue().getMessage(), equalTo("OH NO"));
+        whenFormSaverFinishes(SaveToDiskTask.SAVE_ERROR, "OH NO");
+        assertThat(saveResult.getValue().getState(), equalTo(SAVE_ERROR));
+        assertThat(saveResult.getValue().getMessage(), equalTo("OH NO"));
     }
 
     @Test
-    public void whenSaveToDiskFinishes_saveError_logsSaveErrorAuditEvent() {
-        viewModel.saveForm(false, "", false);
+    public void whenFormSaverFinishes_saveError_logsSaveErrorAuditEvent() {
+        viewModel.saveForm(Uri.parse("file://form"), false, "", false);
 
-        whenSaveToDiskFinishes(SaveToDiskTask.SAVE_ERROR, 123L);
-        verify(logger).logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, 123L);
+        whenFormSaverFinishes(SaveToDiskTask.SAVE_ERROR);
+        verify(logger).logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, CURRENT_TIME);
     }
 
     @Test
-    public void whenSaveToDiskFinishes_encryptionError_setSaveRequestState_toFinalizeErrorWithMessage() {
-        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(false, "", false);
+    public void whenFormSaverFinishes_encryptionError_setSaveResultState_toFinalizeErrorWithMessage() {
+        LiveData<FormEntryViewModel.SaveResult> saveResult = viewModel.saveForm(Uri.parse("file://form"), false, "", false);
 
-        whenSaveToDiskFinishes(SaveToDiskTask.ENCRYPTION_ERROR, 123L, "OH NO");
-        assertThat(saveRequest.getValue().getState(), equalTo(FINALIZE_ERROR));
-        assertThat(saveRequest.getValue().getMessage(), equalTo("OH NO"));
+        whenFormSaverFinishes(SaveToDiskTask.ENCRYPTION_ERROR, "OH NO");
+        assertThat(saveResult.getValue().getState(), equalTo(FINALIZE_ERROR));
+        assertThat(saveResult.getValue().getMessage(), equalTo("OH NO"));
     }
 
     @Test
-    public void whenSaveToDiskFinishes_encryptionError_logsFinalizeErrorAuditEvent() {
-        viewModel.saveForm(false, "", false);
+    public void whenFormSaverFinishes_encryptionError_logsFinalizeErrorAuditEvent() {
+        viewModel.saveForm(Uri.parse("file://form"), false, "", false);
 
-        whenSaveToDiskFinishes(SaveToDiskTask.ENCRYPTION_ERROR, 123L);
-        verify(logger).logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, 123L);
+        whenFormSaverFinishes(SaveToDiskTask.ENCRYPTION_ERROR);
+        verify(logger).logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, CURRENT_TIME);
     }
 
     @Test
-    public void whenSaveToDiskFinishes_answerConstraintViolated_setSaveRequestState_toConstraintError() {
-        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(false, "", false);
+    public void whenFormSaverFinishes_answerConstraintViolated_setSaveResultState_toConstraintError() {
+        LiveData<FormEntryViewModel.SaveResult> saveResult = viewModel.saveForm(Uri.parse("file://form"), false, "", false);
 
-        whenSaveToDiskFinishes(FormEntryController.ANSWER_CONSTRAINT_VIOLATED, 123L);
-        assertThat(saveRequest.getValue().getState(), equalTo(CONSTRAINT_ERROR));
+        whenFormSaverFinishes(FormEntryController.ANSWER_CONSTRAINT_VIOLATED);
+        assertThat(saveResult.getValue().getState(), equalTo(CONSTRAINT_ERROR));
     }
 
     @Test
-    public void whenSaveToDiskFinishes_answerConstraintViolated_finalizesAndLogsConstraintErrorAuditEvent() {
-        viewModel.saveForm(false, "", false);
+    public void whenFormSaverFinishes_answerConstraintViolated_finalizesAndLogsConstraintErrorAuditEvent() {
+        viewModel.saveForm(Uri.parse("file://form"), false, "", false);
 
-        whenSaveToDiskFinishes(FormEntryController.ANSWER_CONSTRAINT_VIOLATED, 123L);
+        whenFormSaverFinishes(FormEntryController.ANSWER_CONSTRAINT_VIOLATED);
 
         InOrder verifier = inOrder(logger);
         verifier.verify(logger).exitView();
-        verifier.verify(logger).logEvent(AuditEvent.AuditEventType.CONSTRAINT_ERROR, true, 123L);
+        verifier.verify(logger).logEvent(AuditEvent.AuditEventType.CONSTRAINT_ERROR, true, CURRENT_TIME);
     }
 
     @Test
-    public void whenSaveToDiskFinishes_answerRequiredButEmpty_setSaveRequestState_toConstraintError() {
-        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(false, "", false);
+    public void whenFormSaverFinishes_answerRequiredButEmpty_setSaveResultState_toConstraintError() {
+        LiveData<FormEntryViewModel.SaveResult> saveResult = viewModel.saveForm(Uri.parse("file://form"), false, "", false);
 
-        whenSaveToDiskFinishes(FormEntryController.ANSWER_REQUIRED_BUT_EMPTY, 123L);
-        assertThat(saveRequest.getValue().getState(), equalTo(CONSTRAINT_ERROR));
+        whenFormSaverFinishes(FormEntryController.ANSWER_REQUIRED_BUT_EMPTY);
+        assertThat(saveResult.getValue().getState(), equalTo(CONSTRAINT_ERROR));
     }
 
     @Test
-    public void whenReasonRequiredToSave_saveReason_setsSaveRequestState_toSaving() {
+    public void whenFormSaverFinishes_isSaving_returnsFalse() {
+        assertThat(viewModel.isSaving(), equalTo(false));
+
+        viewModel.saveForm(Uri.parse("file://form"), false, "", false);
+        assertThat(viewModel.isSaving(), equalTo(true));
+
+        whenFormSaverFinishes(SaveToDiskTask.SAVED);
+        assertThat(viewModel.isSaving(), equalTo(false));
+    }
+
+    @Test
+    public void whenReasonRequiredToSave_saveReason_setsSaveResultState_toSaving() {
         whenReasonRequiredToSave();
-        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(false, "", false);
+        LiveData<FormEntryViewModel.SaveResult> saveResult = viewModel.saveForm(Uri.parse("file://form"), false, "", false);
 
         viewModel.setReason("blah");
-        viewModel.saveReason(123L);
-        assertThat(saveRequest.getValue().getState(), equalTo(SAVING));
+        viewModel.saveReason(CURRENT_TIME);
+        assertThat(saveResult.getValue().getState(), equalTo(SAVING));
     }
 
     private void whenReasonRequiredToSave() {
@@ -192,14 +216,16 @@ public class FormEntryViewModelTest {
         when(logger.isEditing()).thenReturn(true);
     }
 
-    private void whenSaveToDiskFinishes(int result, long time) {
-        whenSaveToDiskFinishes(result, time, null);
+    private void whenFormSaverFinishes(int result) {
+        whenFormSaverFinishes(result, null);
     }
 
-    private void whenSaveToDiskFinishes(int result, long time, String message) {
+    private void whenFormSaverFinishes(int result, String message) {
         SaveResult saveResult = new SaveResult();
         saveResult.setSaveResult(result, true);
         saveResult.setSaveErrorMessage(message);
-        viewModel.saveToDiskTaskComplete(saveResult, time);
+
+        when(formSaver.save(any(), anyBoolean(), any(), anyBoolean(), any())).thenReturn(saveResult);
+        Robolectric.getBackgroundThreadScheduler().advanceToLastPostedRunnable();
     }
 }

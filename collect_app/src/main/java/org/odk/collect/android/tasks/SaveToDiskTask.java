@@ -17,7 +17,6 @@ package org.odk.collect.android.tasks;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 
@@ -33,6 +32,7 @@ import org.javarosa.xpath.XPathNodeset;
 import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.javarosa.xpath.parser.XPathSyntaxException;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,10 +41,10 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.EncryptionException;
+import org.odk.collect.android.formentry.FormSaver;
 import org.odk.collect.android.instances.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
-import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -69,9 +69,8 @@ import static org.odk.collect.android.utilities.FileUtil.getSmsInstancePath;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
+public class SaveToDiskTask {
 
-    private FormSavedListener savedListener;
     private final boolean saveAndExit;
     private final boolean markCompleted;
     private Uri uri;
@@ -89,18 +88,13 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         instanceName = updatedName;
     }
 
-    /**
-     * Initialize {@link FormEntryController} with {@link org.javarosa.core.model.FormDef} from binary or from XML. If
-     * given
-     * an instance, it will be used to fill the {@link org.javarosa.core.model.FormDef}.
-     */
-    @Override
-    protected SaveResult doInBackground(Void... nothing) {
+    @Nullable
+    public SaveResult saveForm(FormSaver.ProgressListener progressListener) {
         SaveResult saveResult = new SaveResult();
 
         FormController formController = Collect.getInstance().getFormController();
 
-        publishProgress(Collect.getInstance().getString(R.string.survey_saving_validating_message));
+        progressListener.onProgressUpdate(Collect.getInstance().getString(R.string.survey_saving_validating_message));
 
         try {
             int validateStatus = formController.validateAnswers(markCompleted);
@@ -120,11 +114,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             return saveResult;
         }
 
-        // check if the "Cancel" was hit and exit.
-        if (isCancelled()) {
-            return null;
-        }
-
         if (markCompleted) {
             formController.postProcessInstance();
         }
@@ -140,7 +129,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         }
 
         try {
-            exportData(markCompleted);
+            exportData(markCompleted, progressListener);
 
             if (formController.getInstanceFile() != null) {
                 removeSavepointFiles(formController.getInstanceFile().getName());
@@ -270,8 +259,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     /**
      * Extracts geometry information from the given xpath path in the given instance.
      *
-     * Returns a ContentValues object with values set for {@link InstanceColumns.GEOMETRY} and
-     * {@link InstanceColumns.GEOMETRY_TYPE}. Those value are null if anything goes wrong with
+     * Returns a ContentValues object with values set for InstanceColumns.GEOMETRY and
+     * InstanceColumns.GEOMETRY_TYPE. Those value are null if anything goes wrong with
      * parsing the geometry and converting it to GeoJSON.
      *
      * Returns null if the given XPath path is null.
@@ -368,10 +357,10 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
      * In theory we don't have to write to disk, and this is where you'd add
      * other methods.
      */
-    private void exportData(boolean markCompleted) throws IOException, EncryptionException {
+    private void exportData(boolean markCompleted, FormSaver.ProgressListener progressListener) throws IOException, EncryptionException {
         FormController formController = Collect.getInstance().getFormController();
 
-        publishProgress(Collect.getInstance().getString(R.string.survey_saving_collecting_message));
+        progressListener.onProgressUpdate(Collect.getInstance().getString(R.string.survey_saving_collecting_message));
 
         ByteArrayPayload payload = formController.getFilledInFormXml();
         // write out xml
@@ -379,7 +368,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
         MediaManager.INSTANCE.saveChanges();
 
-        publishProgress(Collect.getInstance().getString(R.string.survey_saving_saving_message));
+        progressListener.onProgressUpdate(Collect.getInstance().getString(R.string.survey_saving_saving_message));
 
         writeFile(payload, instancePath);
 
@@ -414,7 +403,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
             // write out submission.xml -- the data to actually submit to aggregate
 
-            publishProgress(
+            progressListener.onProgressUpdate(
                     Collect.getInstance().getString(R.string.survey_saving_finalizing_message));
 
             writeFile(payload, submissionXml.getAbsolutePath());
@@ -427,7 +416,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 canEditAfterCompleted = false;
                 // and encrypt the submission (this is a one-way operation)...
 
-                publishProgress(
+                progressListener.onProgressUpdate(
                         Collect.getInstance().getString(R.string.survey_saving_encrypting_message));
 
                 EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
@@ -564,32 +553,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                     }
                 }
             }
-        }
-    }
-
-    @Override
-    protected void onProgressUpdate(String... values) {
-        super.onProgressUpdate(values);
-
-        if (savedListener != null && values != null) {
-            if (values.length == 1) {
-                savedListener.onProgressStep(values[0]);
-            }
-        }
-    }
-
-    @Override
-    protected void onPostExecute(SaveResult result) {
-        synchronized (this) {
-            if (savedListener != null && result != null) {
-                savedListener.savingComplete(result);
-            }
-        }
-    }
-
-    public void setFormSavedListener(FormSavedListener fsl) {
-        synchronized (this) {
-            savedListener = fsl;
         }
     }
 }

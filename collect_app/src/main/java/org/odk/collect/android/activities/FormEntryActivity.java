@@ -94,10 +94,10 @@ import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.QuitFormDialog;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.ChangesReasonPromptDialogFragment;
-import org.odk.collect.android.formentry.audit.FormEntryViewModel;
 import org.odk.collect.android.formentry.audit.IdentifyUserPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.IdentityPromptViewModel;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationHelper;
@@ -112,7 +112,6 @@ import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
-import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
@@ -131,7 +130,6 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveFormIndexTask;
 import org.odk.collect.android.tasks.SavePointTask;
-import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -195,13 +193,11 @@ import static org.odk.collect.android.utilities.ToastUtils.showShortToast;
 
 @SuppressWarnings("PMD.CouplingBetweenObjects")
 public class FormEntryActivity extends CollectAbstractActivity implements AnimationListener,
-        FormLoaderListener, FormSavedListener, AdvanceToNextListener,
-        OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener,
-        CustomDatePickerDialog.CustomDatePickerDialogListener,
-        RankingWidgetDialog.RankingListener,
-        SaveFormIndexTask.SaveFormIndexListener, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
-        WidgetValueChangedListener,
-        ScreenContext,
+        FormLoaderListener, AdvanceToNextListener, OnGestureListener,
+        SavePointListener, NumberPickerDialog.NumberPickerListener,
+        CustomDatePickerDialog.CustomDatePickerDialogListener, RankingWidgetDialog.RankingListener,
+        SaveFormIndexTask.SaveFormIndexListener, WidgetValueChangedListener,
+        ScreenContext, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
         AudioControllerView.SwipableParent {
 
     // Defines for FormEntryActivity
@@ -271,7 +267,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     // used to limit forward/backward swipes to one per question
     private boolean beenSwiped;
     private FormLoaderTask formLoaderTask;
-    private SaveToDiskTask saveToDiskTask;
 
     private TextView nextButton;
     private TextView backButton;
@@ -475,8 +470,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         Object data = getLastCustomNonConfigurationInstance();
         if (data instanceof FormLoaderTask) {
             formLoaderTask = (FormLoaderTask) data;
-        } else if (data instanceof SaveToDiskTask) {
-            saveToDiskTask = (SaveToDiskTask) data;
         } else if (data == null) {
             if (!newForm) {
                 if (getFormController(true) != null) {
@@ -1029,7 +1022,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return true;
             case R.id.menu_save:
                 // don't exit
-                saveDataToDisk(DO_NOT_EXIT, InstancesDaoHelper.isInstanceComplete(false), null);
+                saveForm(DO_NOT_EXIT, InstancesDaoHelper.isInstanceComplete(false), null);
                 return true;
             case R.id.menu_goto:
                 state = null;
@@ -1162,12 +1155,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (formLoaderTask != null
                 && formLoaderTask.getStatus() != AsyncTask.Status.FINISHED) {
             return formLoaderTask;
-        }
-
-        // if a form is writing to disk, pass the save to disk task
-        if (saveToDiskTask != null
-                && saveToDiskTask.getStatus() != AsyncTask.Status.FINISHED) {
-            return saveToDiskTask;
         }
 
         // mFormEntryController is static so we don't need to pass it.
@@ -1410,7 +1397,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         if (saveAs.getText().length() < 1) {
                             showShortToast(R.string.save_as_error);
                         } else {
-                            saveDataToDisk(EXIT, instanceComplete
+                            saveForm(EXIT, instanceComplete
                                     .isChecked(), saveAs.getText()
                                     .toString());
                         }
@@ -1644,7 +1631,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
                         Collect.getInstance().logRemoteAnalytics("WidgetAttribute", "saveIncomplete", Collect.getCurrentFormIdentifierHash());
 
-                        saveDataToDisk(false, false, null, false);
+                        saveForm(false, false, null, false);
                         autoSaved = true;
                     }
                 }
@@ -1852,13 +1839,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * content provider is updated with the new name
      */
     // by default, save the current screen
-    private boolean saveDataToDisk(boolean exit, boolean complete, String updatedSaveName) {
-        return saveDataToDisk(exit, complete, updatedSaveName, true);
+    private boolean saveForm(boolean exit, boolean complete, String updatedSaveName) {
+        return saveForm(exit, complete, updatedSaveName, true);
     }
 
     // but if you want save in the background, can't be current screen
-    private boolean saveDataToDisk(boolean exit, boolean complete, String updatedSaveName,
-                                   boolean current) {
+    private boolean saveForm(boolean exit, boolean complete, String updatedSaveName,
+                             boolean current) {
         // save current answer
         if (current) {
             if (!saveAnswersForCurrentScreen(complete)) {
@@ -1868,16 +1855,21 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         getFormController().getAuditEventLogger().exitView();
-        formEntryViewModel.saveForm(complete, updatedSaveName, exit).observe(this, saveRequest -> {
-            switch (saveRequest.getState()) {
+        formEntryViewModel.saveForm(getIntent().getData(), complete, updatedSaveName, exit).observe(this, result -> {
+            switch (result.getState()) {
                 case CHANGE_REASON_REQUIRED:
                     ChangesReasonPromptDialogFragment dialog = ChangesReasonPromptDialogFragment.create(getFormController().getFormTitle());
                     DialogUtils.showIfNotShowing(dialog, getSupportFragmentManager());
                     break;
 
                 case SAVING:
+                    autoSaved = true;
+
                     showDialog(SAVING_DIALOG);
-                    executeSaveToDiskTask(complete, updatedSaveName, exit);
+                    if (result.getMessage() != null) {
+                        onProgressStep(result.getMessage());
+                    }
+
                     break;
 
                 case SAVED:
@@ -1900,11 +1892,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     break;
 
                 case SAVE_ERROR:
+                    dismissDialog(SAVING_DIALOG);
                     String message;
 
-                    if (saveRequest.getMessage() != null) {
+                    if (result.getMessage() != null) {
                         message = getString(R.string.data_saved_error) + " "
-                                + saveRequest.getMessage();
+                                + result.getMessage();
                     } else {
                         message = getString(R.string.data_saved_error);
                     }
@@ -1913,12 +1906,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     break;
 
                 case FINALIZE_ERROR:
+                    dismissDialog(SAVING_DIALOG);
                     showLongToast(String.format(getString(R.string.encryption_error_message),
-                            saveRequest.getMessage()));
+                            result.getMessage()));
                     finishReturnInstance();
                     break;
 
                 case CONSTRAINT_ERROR: {
+                    dismissDialog(SAVING_DIALOG);
                     refreshCurrentView();
 
                     // get constraint behavior preference value with appropriate default
@@ -1944,19 +1939,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     /**
-     * AsyncTasks should be executed in ViewModels not in Activity/Fragment
-     */
-    @Deprecated
-    private void executeSaveToDiskTask(boolean complete, String updatedSaveName, boolean exitAfter) {
-        saveToDiskTask = new SaveToDiskTask(getIntent().getData(), exitAfter, complete,
-                updatedSaveName);
-        saveToDiskTask.setFormSavedListener(this);
-        autoSaved = true;
-        // show dialog before we execute...
-        saveToDiskTask.execute();
-    }
-
-    /**
      * Create a dialog with options to save and exit or quit without
      * saving
      */
@@ -1964,7 +1946,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         alertDialog = QuitFormDialog.show(this, getFormController(), new QuitFormDialog.Listener() {
             @Override
             public void onSaveChangedClicked() {
-                saveDataToDisk(EXIT, InstancesDaoHelper.isInstanceComplete(false), null);
+                saveForm(EXIT, InstancesDaoHelper.isInstanceComplete(false), null);
                 alertDialog.dismiss();
             }
 
@@ -2133,11 +2115,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void cancelSaveToDiskTask() {
-        if (saveToDiskTask != null) {
-            saveToDiskTask.setFormSavedListener(null);
-            boolean cancelled = saveToDiskTask.cancel(true);
+        if (formEntryViewModel.isSaving()) {
+            boolean cancelled = formEntryViewModel.cancelSaving();
             Timber.w("Cancelled SaveToDiskTask! (%s)", cancelled);
-            saveToDiskTask = null;
         }
     }
 
@@ -2198,10 +2178,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     protected void onPause() {
         FormController formController = getFormController();
         dismissDialogs();
+
         // make sure we're not already saving to disk. if we are, currentPrompt
         // is getting constantly updated
-        if (saveToDiskTask == null
-                || saveToDiskTask.getStatus() == AsyncTask.Status.FINISHED) {
+        if (!formEntryViewModel.isSaving()) {
             if (currentView != null && formController != null
                     && formController.currentPromptIsQuestion()) {
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
@@ -2268,9 +2248,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        if (saveToDiskTask != null) {
-            saveToDiskTask.setFormSavedListener(this);
-        }
+        //      if (saveToDiskTask != null) {
+        //          saveToDiskTask.setFormSavedListener(this);
+        //      }
     }
 
     @Override
@@ -2331,15 +2311,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 t.destroy();
             }
         }
-        if (saveToDiskTask != null) {
-            saveToDiskTask.setFormSavedListener(null);
-            // We have to call cancel to terminate the thread, otherwise it
-            // lives on and retains the FEC in memory.
-            if (saveToDiskTask.getStatus() == AsyncTask.Status.FINISHED) {
-                saveToDiskTask.cancel(true);
-                saveToDiskTask = null;
-            }
-        }
+
         releaseOdkView();
         compositeDisposable.dispose();
 
@@ -2601,21 +2573,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    /**
-     * Called by SavetoDiskTask if everything saves correctly.
-     */
-    @Override
-    public void savingComplete(SaveResult saveResult) {
-        try {
-            dismissDialog(SAVING_DIALOG);
-        } catch (IllegalArgumentException ignored) {
-            // For some reason the dialog wasn't shown
-        }
-
-        formEntryViewModel.saveToDiskTaskComplete(saveResult, System.currentTimeMillis());
-    }
-
-    @Override
     public void onProgressStep(String stepMessage) {
         if (progressDialog != null) {
             progressDialog.setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
