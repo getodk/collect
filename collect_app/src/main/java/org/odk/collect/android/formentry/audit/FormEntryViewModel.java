@@ -8,10 +8,10 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.tasks.SaveResult;
+import org.odk.collect.android.tasks.SaveToDiskTask;
 
 import static org.odk.collect.android.tasks.SaveToDiskTask.SAVED;
 import static org.odk.collect.android.tasks.SaveToDiskTask.SAVED_AND_EXIT;
-import static org.odk.collect.android.tasks.SaveToDiskTask.SAVE_ERROR;
 import static org.odk.collect.android.utilities.StringUtils.isBlank;
 
 public class FormEntryViewModel extends ViewModel {
@@ -70,22 +70,34 @@ public class FormEntryViewModel extends ViewModel {
                     }
                 }
 
-                lastSaveRequest.setState(SaveRequest.State.SAVED);
-                saveRequest.setValue(lastSaveRequest);
+                setSaveRequestState(saveResult, SaveRequest.State.SAVED);
                 break;
             }
 
-            case SAVE_ERROR: {
+            case SaveToDiskTask.SAVE_ERROR: {
                 if (auditEventLogger != null) {
                     auditEventLogger.logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, currentTime);
                 }
 
-                lastSaveRequest.setState(SaveRequest.State.ERROR);
-                lastSaveRequest.setMessage(saveResult.getSaveErrorMessage());
-                saveRequest.setValue(lastSaveRequest);
+                setSaveRequestState(saveResult, SaveRequest.State.SAVE_ERROR);
+                break;
+            }
+
+            case SaveToDiskTask.ENCRYPTION_ERROR: {
+                if (auditEventLogger != null) {
+                    auditEventLogger.logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, currentTime);
+                }
+
+                setSaveRequestState(saveResult, SaveRequest.State.FINALIZE_ERROR);
                 break;
             }
         }
+    }
+
+    private void setSaveRequestState(SaveResult saveResult, SaveRequest.State finalizeError) {
+        lastSaveRequest.setState(finalizeError);
+        lastSaveRequest.setMessage(saveResult.getSaveErrorMessage());
+        saveRequest.setValue(lastSaveRequest);
     }
 
     public void editingForm() {
@@ -147,10 +159,6 @@ public class FormEntryViewModel extends ViewModel {
             return formComplete;
         }
 
-        public String getUpdatedSaveName() {
-            return updatedSaveName;
-        }
-
         public State getState() {
             return state;
         }
@@ -175,7 +183,8 @@ public class FormEntryViewModel extends ViewModel {
             CHANGE_REASON_REQUIRED,
             SAVING,
             SAVED,
-            ERROR
+            SAVE_ERROR,
+            FINALIZE_ERROR
         }
     }
 

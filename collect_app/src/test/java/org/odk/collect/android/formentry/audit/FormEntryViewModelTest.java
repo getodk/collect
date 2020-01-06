@@ -15,7 +15,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.CHANGE_REASON_REQUIRED;
-import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.ERROR;
+import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.FINALIZE_ERROR;
+import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.SAVE_ERROR;
 import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.SAVED;
 import static org.odk.collect.android.formentry.audit.FormEntryViewModel.SaveRequest.State.SAVING;
 
@@ -111,11 +112,11 @@ public class FormEntryViewModelTest {
     }
 
     @Test
-    public void whenSaveToDiskFinishes_saveError_setSaveRequestState_toErrorWithMessage() {
+    public void whenSaveToDiskFinishes_saveError_setSaveRequestState_toSaveErrorWithMessage() {
         LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(false, "", false);
 
         whenSaveToDiskFinishes(SaveToDiskTask.SAVE_ERROR, 0L, "OH NO");
-        assertThat(saveRequest.getValue().getState(), equalTo(ERROR));
+        assertThat(saveRequest.getValue().getState(), equalTo(SAVE_ERROR));
         assertThat(saveRequest.getValue().getMessage(), equalTo("OH NO"));
     }
 
@@ -125,6 +126,23 @@ public class FormEntryViewModelTest {
 
         whenSaveToDiskFinishes(SaveToDiskTask.SAVE_ERROR, 0L);
         verify(logger).logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, 0L);
+    }
+
+    @Test
+    public void whenSaveToDiskFinishes_encryptionError_setSaveRequestState_toFinalizeErrorWithMessage() {
+        LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(false, "", false);
+
+        whenSaveToDiskFinishes(SaveToDiskTask.ENCRYPTION_ERROR, 0L, "OH NO");
+        assertThat(saveRequest.getValue().getState(), equalTo(FINALIZE_ERROR));
+        assertThat(saveRequest.getValue().getMessage(), equalTo("OH NO"));
+    }
+
+    @Test
+    public void whenSaveToDiskFinishes_encryptionError_logsFinalizeErrorAuditEvent() {
+        viewModel.saveForm(false, "", false);
+
+        whenSaveToDiskFinishes(SaveToDiskTask.ENCRYPTION_ERROR, 0L);
+        verify(logger).logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, 0L);
     }
 
     @Test

@@ -181,6 +181,8 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOC
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
+import static org.odk.collect.android.utilities.ToastUtils.showLongToast;
+import static org.odk.collect.android.utilities.ToastUtils.showShortToast;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating
@@ -740,7 +742,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (intent == null && requestCode != RequestCodes.DRAW_IMAGE && requestCode != RequestCodes.ANNOTATE_IMAGE
                 && requestCode != RequestCodes.SIGNATURE_CAPTURE && requestCode != RequestCodes.IMAGE_CAPTURE) {
             Timber.w("The intent has a null value for requestCode: " + requestCode);
-            ToastUtils.showLongToast(getString(R.string.null_intent_value));
+            showLongToast(getString(R.string.null_intent_value));
             return;
         }
 
@@ -1406,7 +1408,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     public void onClick(View v) {
                         // Form is marked as 'saved' here.
                         if (saveAs.getText().length() < 1) {
-                            ToastUtils.showShortToast(R.string.save_as_error);
+                            showShortToast(R.string.save_as_error);
                         } else {
                             saveDataToDisk(EXIT, instanceComplete
                                     .isChecked(), saveAs.getText()
@@ -1860,7 +1862,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // save current answer
         if (current) {
             if (!saveAnswersForCurrentScreen(complete)) {
-                ToastUtils.showShortToast(R.string.data_saved_error);
+                showShortToast(R.string.data_saved_error);
                 return false;
             }
         }
@@ -1880,7 +1882,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 case SAVED:
                     dismissDialog(SAVING_DIALOG);
-                    ToastUtils.showShortToast(R.string.data_saved_ok);
+                    showShortToast(R.string.data_saved_ok);
 
                     if (exit) {
                         if (complete) {
@@ -1897,7 +1899,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                     break;
 
-                case ERROR:
+                case SAVE_ERROR:
                     String message;
 
                     if (saveRequest.getMessage() != null) {
@@ -1907,7 +1909,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         message = getString(R.string.data_saved_error);
                     }
 
-                    ToastUtils.showLongToast(message);
+                    showLongToast(message);
+                    break;
+
+                case FINALIZE_ERROR:
+                    showLongToast(String.format(getString(R.string.encryption_error_message),
+                            saveRequest.getMessage()));
+                    finishReturnInstance();
                     break;
             }
         });
@@ -2449,7 +2457,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 boolean hasUsedSavepoint = task.hasUsedSavepoint();
 
                 if (hasUsedSavepoint) {
-                    runOnUiThread(() -> ToastUtils.showLongToast(R.string.savepoint_used));
+                    runOnUiThread(() -> showLongToast(R.string.savepoint_used));
                 }
 
                 if (formController.getInstanceFile() == null) {
@@ -2519,7 +2527,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         } else {
             Timber.e("FormController is null");
-            ToastUtils.showLongToast(R.string.loading_form_failed);
+            showLongToast(R.string.loading_form_failed);
             finish();
         }
     }
@@ -2541,7 +2549,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         refreshCurrentView();
 
         if (warningMsg != null) {
-            ToastUtils.showLongToast(warningMsg);
+            showLongToast(warningMsg);
             Timber.w(warningMsg);
         }
     }
@@ -2590,12 +2598,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         FormController formController = getFormController();
 
         switch (saveStatus) {
-            case SaveToDiskTask.ENCRYPTION_ERROR:
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, System.currentTimeMillis());
-                ToastUtils.showLongToast(String.format(getString(R.string.encryption_error_message),
-                        saveResult.getSaveErrorMessage()));
-                finishReturnInstance();
-                break;
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
                 formController.getAuditEventLogger().exitView();
@@ -2787,14 +2789,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     public void onSavePointError(String errorMessage) {
         if (errorMessage != null && errorMessage.trim().length() > 0) {
-            ToastUtils.showLongToast(getString(R.string.save_point_error, errorMessage));
+            showLongToast(getString(R.string.save_point_error, errorMessage));
         }
     }
 
     @Override
     public void onSaveFormIndexError(String errorMessage) {
         if (errorMessage != null && errorMessage.trim().length() > 0) {
-            ToastUtils.showLongToast(getString(R.string.save_point_error, errorMessage));
+            showLongToast(getString(R.string.save_point_error, errorMessage));
         }
     }
 

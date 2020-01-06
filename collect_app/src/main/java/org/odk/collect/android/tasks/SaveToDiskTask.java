@@ -79,8 +79,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
     public static final int SAVED = 500;
     public static final int SAVE_ERROR = 501;
-    public static final int VALIDATE_ERROR = 502;
-    public static final int VALIDATED = 503;
     public static final int SAVED_AND_EXIT = 504;
     public static final int ENCRYPTION_ERROR = 505;
 
