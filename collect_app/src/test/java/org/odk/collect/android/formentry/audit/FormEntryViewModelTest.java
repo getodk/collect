@@ -6,12 +6,14 @@ import org.javarosa.form.api.FormEntryController;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InOrder;
 import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -76,7 +78,7 @@ public class FormEntryViewModelTest {
     public void whenSaveToDiskFinishes_saved_setsSaveRequestState_toSaved() {
         LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(true, "", false);
 
-        whenSaveToDiskFinishes(SaveToDiskTask.SAVED, 0L);
+        whenSaveToDiskFinishes(SaveToDiskTask.SAVED, 123L);
         assertThat(saveRequest.getValue().getState(), equalTo(SAVED));
     }
 
@@ -109,7 +111,7 @@ public class FormEntryViewModelTest {
     public void whenSaveToDiskFinishes_savedAndExit_setsSaveRequestState_toSaved() {
         LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(false, "", false);
 
-        whenSaveToDiskFinishes(SaveToDiskTask.SAVED_AND_EXIT, 0L);
+        whenSaveToDiskFinishes(SaveToDiskTask.SAVED_AND_EXIT, 123L);
         assertThat(saveRequest.getValue().getState(), equalTo(SAVED));
     }
 
@@ -117,7 +119,7 @@ public class FormEntryViewModelTest {
     public void whenSaveToDiskFinishes_saveError_setSaveRequestState_toSaveErrorWithMessage() {
         LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(false, "", false);
 
-        whenSaveToDiskFinishes(SaveToDiskTask.SAVE_ERROR, 0L, "OH NO");
+        whenSaveToDiskFinishes(SaveToDiskTask.SAVE_ERROR, 123L, "OH NO");
         assertThat(saveRequest.getValue().getState(), equalTo(SAVE_ERROR));
         assertThat(saveRequest.getValue().getMessage(), equalTo("OH NO"));
     }
@@ -126,15 +128,15 @@ public class FormEntryViewModelTest {
     public void whenSaveToDiskFinishes_saveError_logsSaveErrorAuditEvent() {
         viewModel.saveForm(false, "", false);
 
-        whenSaveToDiskFinishes(SaveToDiskTask.SAVE_ERROR, 0L);
-        verify(logger).logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, 0L);
+        whenSaveToDiskFinishes(SaveToDiskTask.SAVE_ERROR, 123L);
+        verify(logger).logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, 123L);
     }
 
     @Test
     public void whenSaveToDiskFinishes_encryptionError_setSaveRequestState_toFinalizeErrorWithMessage() {
         LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(false, "", false);
 
-        whenSaveToDiskFinishes(SaveToDiskTask.ENCRYPTION_ERROR, 0L, "OH NO");
+        whenSaveToDiskFinishes(SaveToDiskTask.ENCRYPTION_ERROR, 123L, "OH NO");
         assertThat(saveRequest.getValue().getState(), equalTo(FINALIZE_ERROR));
         assertThat(saveRequest.getValue().getMessage(), equalTo("OH NO"));
     }
@@ -143,23 +145,34 @@ public class FormEntryViewModelTest {
     public void whenSaveToDiskFinishes_encryptionError_logsFinalizeErrorAuditEvent() {
         viewModel.saveForm(false, "", false);
 
-        whenSaveToDiskFinishes(SaveToDiskTask.ENCRYPTION_ERROR, 0L);
-        verify(logger).logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, 0L);
+        whenSaveToDiskFinishes(SaveToDiskTask.ENCRYPTION_ERROR, 123L);
+        verify(logger).logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, 123L);
     }
 
     @Test
     public void whenSaveToDiskFinishes_answerConstraintViolated_setSaveRequestState_toConstraintError() {
         LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(false, "", false);
 
-        whenSaveToDiskFinishes(FormEntryController.ANSWER_CONSTRAINT_VIOLATED, 0L);
+        whenSaveToDiskFinishes(FormEntryController.ANSWER_CONSTRAINT_VIOLATED, 123L);
         assertThat(saveRequest.getValue().getState(), equalTo(CONSTRAINT_ERROR));
+    }
+
+    @Test
+    public void whenSaveToDiskFinishes_answerConstraintViolated_finalizesAndLogsConstraintErrorAuditEvent() {
+        viewModel.saveForm(false, "", false);
+
+        whenSaveToDiskFinishes(FormEntryController.ANSWER_CONSTRAINT_VIOLATED, 123L);
+
+        InOrder verifier = inOrder(logger);
+        verifier.verify(logger).exitView();
+        verifier.verify(logger).logEvent(AuditEvent.AuditEventType.CONSTRAINT_ERROR, true, 123L);
     }
 
     @Test
     public void whenSaveToDiskFinishes_answerRequiredButEmpty_setSaveRequestState_toConstraintError() {
         LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(false, "", false);
 
-        whenSaveToDiskFinishes(FormEntryController.ANSWER_REQUIRED_BUT_EMPTY, 0L);
+        whenSaveToDiskFinishes(FormEntryController.ANSWER_REQUIRED_BUT_EMPTY, 123L);
         assertThat(saveRequest.getValue().getState(), equalTo(CONSTRAINT_ERROR));
     }
 
@@ -169,7 +182,7 @@ public class FormEntryViewModelTest {
         LiveData<FormEntryViewModel.SaveRequest> saveRequest = viewModel.saveForm(false, "", false);
 
         viewModel.setReason("blah");
-        viewModel.saveReason(0L);
+        viewModel.saveReason(123L);
         assertThat(saveRequest.getValue().getState(), equalTo(SAVING));
     }
 

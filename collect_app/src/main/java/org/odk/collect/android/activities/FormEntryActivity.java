@@ -1919,8 +1919,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     break;
 
                 case CONSTRAINT_ERROR: {
-                    getFormController().getAuditEventLogger().exitView();
-                    getFormController().getAuditEventLogger().logEvent(AuditEvent.AuditEventType.CONSTRAINT_ERROR, true, System.currentTimeMillis());
                     refreshCurrentView();
 
                     // get constraint behavior preference value with appropriate default

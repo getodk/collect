@@ -95,6 +95,11 @@ public class FormEntryViewModel extends ViewModel {
 
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY: {
+                if (auditEventLogger != null) {
+                    auditEventLogger.exitView();
+                    auditEventLogger.logEvent(AuditEvent.AuditEventType.CONSTRAINT_ERROR, true, currentTime);
+                }
+
                 setSaveRequestState(saveResult, SaveRequest.State.CONSTRAINT_ERROR);
                 break;
             }
