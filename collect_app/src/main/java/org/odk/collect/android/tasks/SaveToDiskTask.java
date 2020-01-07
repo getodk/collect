@@ -163,7 +163,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         }
 
         try {
-    	    exportData(markCompleted, canUpdate);     // smap
+    	    exportData(markCompleted);     // smap
 
             if (formController.getInstanceFile() != null) {
                 removeSavepointFiles(formController.getInstanceFile().getName());
@@ -208,6 +208,9 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             }
         }
 
+        FormController formController = Collect.getInstance().getFormController();
+        FormInstance formInstance = formController.getFormDef().getInstance();
+
         // Smap Start
         if(canUpdate) {
             if (markCompleted) {
@@ -247,9 +250,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
         // update this whether or not the status is complete...
         values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(canEditAfterCompleted));
-
-        FormController formController = Collect.getInstance().getFormController();
-        FormInstance formInstance = formController.getFormDef().getInstance();
 
         // If FormEntryActivity was started with an instance, update that instance
         if (Collect.getInstance().getContentResolver().getType(uri).equals(
@@ -299,21 +299,22 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 // already existed and updated just fine
             } else {
                 Timber.i("No instance found, creating");
-                // Entry didn't exist, so create it.
-                Cursor c = null;
-                try {
-                    // smap cannot rely on retrieving the form definition as the URI may have changed - however just in case formDetail is null
-                    if(formInfo == null) {
-                        formInfo = ContentResolverHelper.getFormDetails(uri);
+                try (Cursor c = Collect.getInstance().getContentResolver().query(uri, null, null, null, null)) {
+                    // retrieve the form definition...
+                    c.moveToFirst();
+                    String formname = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
+                    String submissionUri = null;
+                    if (!c.isNull(c.getColumnIndex(FormsColumns.SUBMISSION_URI))) {
+                        submissionUri = c.getString(c.getColumnIndex(FormsColumns.SUBMISSION_URI));
                     }
 
 	                // add missing fields into values
 	                values.put(InstanceColumns.INSTANCE_FILE_PATH, instancePath);
-	                values.put(InstanceColumns.SUBMISSION_URI, formInfo.submissionUri); // smap get submission uri from form details
+                    values.put(InstanceColumns.SUBMISSION_URI, submissionUri);
 	                if (instanceName != null) {
 	                    values.put(InstanceColumns.DISPLAY_NAME, instanceName);
 	                } else {
-	                    values.put(InstanceColumns.DISPLAY_NAME, formInfo.name);  // smap get form name from form details
+                        values.put(InstanceColumns.DISPLAY_NAME, formname);
 	                }
 
                     // Smap Start
@@ -321,27 +322,19 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                     if (instanceName != null) {
                         values.put(InstanceColumns.T_TITLE, instanceName);
                     } else {
-                        values.put(InstanceColumns.T_TITLE, formInfo.name);  // smap get from name from form details
+                        values.put(InstanceColumns.T_TITLE, formname);  // smap get from name from form details
                     }
 
-                    //String jrformid = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));    smap
-                    //String jrversion = c.getString(c.getColumnIndex(FormsColumns.JR_VERSION));   smap
-                    values.put(InstanceColumns.JR_FORM_ID, formInfo.getFormID());           // smap get formId from form detail
-                    values.put(InstanceColumns.JR_VERSION, formInfo.getFormVersion());      // smap will be null
+                    String jrformid = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));
+                    String jrversion = c.getString(c.getColumnIndex(FormsColumns.JR_VERSION));
+                    values.put(InstanceColumns.JR_FORM_ID, jrformid);
+                    values.put(InstanceColumns.JR_VERSION, jrversion);
 
                     String geometryXpath = c.getString(c.getColumnIndex(FormsColumns.GEOMETRY_XPATH));
                     ContentValues geometryContentValues = extractGeometryContentValues(formInstance, geometryXpath);
                     if (geometryContentValues != null) {
                         values.putAll(geometryContentValues);
                     }
-
-                    // Smap End
-
-                } catch (Exception e) {   // smap
-                    Timber.e(e);        // Report Crashes
-                } finally {
-                    if (c != null) {
-                        c.close();
                 }
                 uri = new InstancesDao().saveInstance(values);
             }
@@ -449,7 +442,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
      * In theory we don't have to write to disk, and this is where you'd add
      * other methods.
      */
-    private void exportData(boolean markCompleted, boolean canUpdate) throws IOException, EncryptionException {     // smap
+    private void exportData(boolean markCompleted) throws IOException, EncryptionException {     // smap
         FormController formController = Collect.getInstance().getFormController();
 
         publishProgress(Collect.getInstance().getString(R.string.survey_saving_collecting_message));
