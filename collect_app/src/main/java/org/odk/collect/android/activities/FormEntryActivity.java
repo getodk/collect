@@ -2247,10 +2247,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return;
             }
         }
-
-        //      if (saveToDiskTask != null) {
-        //          saveToDiskTask.setFormSavedListener(this);
-        //      }
     }
 
     @Override
