@@ -56,7 +56,7 @@ public class FormEntryViewModelTest {
     @Test
     public void saveReason_logsChangeReasonAuditEvent() {
         viewModel.setReason("Blah");
-        viewModel.saveReason(CURRENT_TIME);
+        viewModel.saveReason();
 
         verify(logger).logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, CURRENT_TIME, "Blah");
     }
@@ -64,16 +64,16 @@ public class FormEntryViewModelTest {
     @Test
     public void saveReason_whenReasonIsValid_returnsTrue() {
         viewModel.setReason("Blah");
-        assertThat(viewModel.saveReason(CURRENT_TIME), equalTo(true));
+        assertThat(viewModel.saveReason(), equalTo(true));
     }
 
     @Test
     public void saveReason_whenReasonIsNotValid_returnsFalse() {
         viewModel.setReason("");
-        assertThat(viewModel.saveReason(CURRENT_TIME), equalTo(false));
+        assertThat(viewModel.saveReason(), equalTo(false));
 
         viewModel.setReason("  ");
-        assertThat(viewModel.saveReason(CURRENT_TIME), equalTo(false));
+        assertThat(viewModel.saveReason(), equalTo(false));
     }
 
     @Test
@@ -209,7 +209,7 @@ public class FormEntryViewModelTest {
         LiveData<FormEntryViewModel.SaveResult> saveResult = viewModel.saveForm(Uri.parse("file://form"), false, "", false);
 
         viewModel.setReason("blah");
-        viewModel.saveReason(CURRENT_TIME);
+        viewModel.saveReason();
         assertThat(saveResult.getValue().getState(), equalTo(SAVING));
     }
 

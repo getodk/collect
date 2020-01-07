@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
-import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.Clock;
 
@@ -73,13 +72,13 @@ public class FormEntryViewModel extends ViewModel {
         this.reason = reason;
     }
 
-    public boolean saveReason(Long currentTime) {
+    public boolean saveReason() {
         if (reason == null || isBlank(reason)) {
             return false;
         }
 
         if (auditEventLogger != null) {
-            auditEventLogger.logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, currentTime, reason);
+            auditEventLogger.logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, clock.getCurrentTime(), reason);
         }
 
         if (saveResult != null) {
