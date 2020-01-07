@@ -85,7 +85,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
     @Deprecated
     SelectWidget widget;
 
-    AbstractSelectListAdapter(List<SelectChoice> items, SelectWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, Context context, readOnlyOverride) {        // smap add readOnlyOverride
+    AbstractSelectListAdapter(List<SelectChoice> items, SelectWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, Context context, boolean readOnlyOverride) {        // smap add readOnlyOverride
         this.context = context;
         this.items = items;
         this.widget = widget;
