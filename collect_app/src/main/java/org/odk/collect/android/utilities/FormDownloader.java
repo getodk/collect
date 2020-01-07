@@ -224,7 +224,7 @@ public class FormDownloader {
     }
 
     boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields, 
-            FormDetails fd, String orgTempMediaPath, String orgMediaPath)   // smap add fd,  organisational paths
+            FormDetails fd, String orgTempMediaPath, String orgMediaPath)   {   // smap add fd,  organisational paths
         UriResult uriResult = null;
         try {
             uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields, STFileUtils.getSource(fd.getDownloadUrl()), fd.getTasksOnly());  // smap add source and tasks_only
@@ -415,6 +415,11 @@ public class FormDownloader {
                 String existingPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
                 f = new File(existingPath);
                 Timber.w("Will use %s", existingPath);
+            }
+            } finally {
+                if (c != null) {
+                    c.close();
+                }
             }
 
         } else {
