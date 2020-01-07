@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
-import androidx.annotation.Nullable;
-import android.view.View;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -62,18 +60,6 @@ public class FormMetadataFragment extends BasePreferenceFragment {
         initPrefFromProp(pm, prefs, PROPMGR_DEVICE_ID, null);
         initPrefFromProp(pm, prefs, PROPMGR_SUBSCRIBER_ID, null);
         initPrefFromProp(pm, prefs, PROPMGR_SIM_SERIAL, null);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        toolbar.setTitle(R.string.form_metadata_title);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        toolbar.setTitle(R.string.general_preferences);
     }
 
     /**

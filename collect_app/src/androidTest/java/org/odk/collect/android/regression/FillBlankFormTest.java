@@ -19,6 +19,7 @@ import org.odk.collect.android.espressoutils.pages.FillBlankFormPage;
 import org.odk.collect.android.espressoutils.pages.FormEntryPage;
 import org.odk.collect.android.espressoutils.pages.GeneralSettingsPage;
 import org.odk.collect.android.espressoutils.pages.MainMenuPage;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -64,13 +65,17 @@ public class FillBlankFormTest extends BaseRegressionTest {
             .around(new CopyFormRule("manyQ.xml"))
             .around(new CopyFormRule("nigeria-wards.xml"))
             .around(new CopyFormRule("t21257.xml"))
-            .around(new CopyFormRule("test_multiselect_cleared.xml"));
+            .around(new CopyFormRule("test_multiselect_cleared.xml"))
+            .around(new CopyFormRule("Birds-encrypted.xml"))
+            .around(new CopyFormRule("validate.xml"))
+            .around(new CopyFormRule("event-odk-new-repeat.xml"))
+            .around(new CopyFormRule("multiple-events.xml"));
 
     @Test
     public void subtext_ShouldDisplayAdditionalInformation() {
 
         //TestCase2
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickFillBlankForm()
                 .checkIsFormSubtextDisplayed();
 
@@ -80,9 +85,9 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void exitDialog_ShouldDisplaySaveAndIgnoreOptions() {
 
         //TestCase6 , TestCase9
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("All widgets")
-                .pressBack(new ExitFormDialog("All widgets", main))
+                .pressBack(new ExitFormDialog("All widgets", rule))
                 .checkIsStringDisplayed(R.string.keep_changes)
                 .checkIsStringDisplayed(R.string.do_not_save)
                 .clickOnString(R.string.do_not_save)
@@ -94,19 +99,19 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void searchBar_ShouldSearchForm() {
 
         //TestCase12
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickFillBlankForm()
                 .clickMenuFilter()
                 .searchInBar("Aaa")
-                .pressBack(new BlankFormSearchPage(main))
-                .pressBack(new FillBlankFormPage(main));
+                .pressBack(new BlankFormSearchPage(rule))
+                .pressBack(new FillBlankFormPage(rule));
     }
 
     @Test
     public void navigationButtons_ShouldBeVisibleWhenAreSetInTheMiddleOfForm() {
 
         //TestCase16
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("All widgets")
                 .swipeToNextQuestion()
                 .clickOptionsIcon()
@@ -114,8 +119,8 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickOnUserInterface()
                 .clickNavigation()
                 .clickUseSwipesAndButtons()
-                .pressBack(new GeneralSettingsPage(main))
-                .pressBack(new FormEntryPage("All widgets", main))
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new FormEntryPage("All widgets", rule))
                 .checkAreNavigationButtonsDisplayed();
     }
 
@@ -123,7 +128,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void formsWithDate_ShouldSaveFormsWithSuccess() {
 
         //TestCase17
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("1560_DateData")
                 .checkIsTranslationDisplayed("Jan 01, 1900", "01 ene. 1900")
                 .swipeToNextQuestion()
@@ -145,9 +150,9 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void answers_ShouldBeSuggestedInComplianceWithSelectedLetters() {
 
         //TestCase41
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankFormWithRepeatGroup("formulaire_adherent")
-                .clickOnAddGroup(new FormEntryPage("formulaire_adherent", main))
+                .clickOnAddGroup(new FormEntryPage("formulaire_adherent", rule))
                 .clickOnText("Plante")
                 .inputText("Abi")
                 .swipeToNextQuestion()
@@ -162,14 +167,14 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void sortByDialog_ShouldBeTranslatedAndDisplayProperIcons() {
 
         //TestCase37
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .clickOnUserInterface()
                 .clickOnLanguage()
                 .clickOnSelectedLanguage("Deutsch");
 
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickFillBlankForm()
                 .clickOnSortByButton()
                 .checkIsTextDisplayed("Sortieren nach");
@@ -208,7 +213,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         pressBack();
         pressBack();
 
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .clickOnUserInterface()
@@ -222,7 +227,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         //TestCase26
         // This form doesn't define an instanceID and also doesn't request encryption so this case
         // would catch regressions for https://github.com/opendatakit/collect/issues/3340
-        new MainMenuPage(main).startBlankForm("CSV error Form")
+        new MainMenuPage(rule).startBlankForm("CSV error Form")
                 .clickOnText("Greg Pommen")
                 .swipeToNextQuestion()
                 .clickOnText("Mountain pine beetle")
@@ -249,7 +254,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void predicateWarning_ShouldBeAbleToFillTheForm() {
 
         //TestCase24
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("predicate-warning")
                 .clickOnText("Apple")
                 .swipeToNextQuestion()
@@ -268,7 +273,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void searchAppearance_ShouldDisplayWhenSearchAppearanceIsSpecified() {
 
         //TestCase25
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("different-search-appearances")
                 .clickOnText("Mango")
                 .swipeToNextQuestion()
@@ -277,22 +282,27 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickOnText("Wolf")
                 .swipeToNextQuestion()
                 .inputText("w")
+                .closeSoftKeyboard()
                 .checkIsTextDisplayed("Wolf")
                 .checkIsTextDisplayed("Warthog")
                 .clickOnText("Wolf")
                 .swipeToNextQuestion()
                 .inputText("r")
+                .closeSoftKeyboard()
                 .checkIsTextDisplayed("Warthog")
                 .checkIsTextDisplayed("Raccoon")
                 .checkIsTextDisplayed("Rabbit")
+                .closeSoftKeyboard()
                 .clickOnText("Rabbit")
                 .swipeToNextQuestion()
                 .inputText("r")
+                .closeSoftKeyboard()
                 .checkIsTextDisplayed("Oranges")
                 .checkIsTextDisplayed("Strawberries")
                 .clickOnText("Oranges")
                 .swipeToNextQuestion()
                 .inputText("n")
+                .closeSoftKeyboard()
                 .checkIsTextDisplayed("Mango")
                 .checkIsTextDisplayed("Oranges")
                 .clickOnText("Mango")
@@ -304,6 +314,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickOnText("Rabbit")
                 .swipeToNextQuestion()
                 .inputText("w")
+                .closeSoftKeyboard()
                 .checkIsTextDisplayed("Wolf")
                 .checkIsTextDisplayed("Warthog")
                 .clickOnText("Wolf")
@@ -318,10 +329,12 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickOnText("Rabbit")
                 .swipeToNextQuestion()
                 .inputText("m")
+                .closeSoftKeyboard()
                 .checkIsTextDisplayed("Mango")
                 .clickOnText("Mango")
                 .swipeToNextQuestion()
                 .inputText("n")
+                .closeSoftKeyboard()
                 .closeSoftKeyboard()
                 .checkIsTextDisplayed("Mango")
                 .checkIsTextDisplayed("Oranges")
@@ -340,7 +353,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         List<String> secondQuestionAnswers = new ArrayList<>();
 
         for (int i = 1; i <= 3; i++) {
-            FormEntryPage formEntryPage = new MainMenuPage(main).startBlankForm("random");
+            FormEntryPage formEntryPage = new MainMenuPage(rule).startBlankForm("random");
             firstQuestionAnswers.add(getQuestionText());
             formEntryPage.swipeToNextQuestion();
             secondQuestionAnswers.add(getQuestionText());
@@ -359,7 +372,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         firstQuestionAnswers.clear();
 
         for (int i = 1; i <= 3; i++) {
-            FormEntryPage formEntryPage = new MainMenuPage(main).startBlankForm("random test");
+            FormEntryPage formEntryPage = new MainMenuPage(rule).startBlankForm("random test");
             formEntryPage.inputText("3");
             formEntryPage.swipeToNextQuestion();
             firstQuestionAnswers.add(getQuestionText());
@@ -376,29 +389,29 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void app_ShouldNotCrash() {
 
         //TestCase32
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankFormWithError("g6Error")
-                .clickOK(new FormEntryPage("g6Error", main))
+                .clickOK(new FormEntryPage("g6Error", rule))
                 .swipeToNextQuestion()
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
 
-        new MainMenuPage(main).startBlankForm("g6Error2")
+        new MainMenuPage(rule).startBlankForm("g6Error2")
                 .inputText("bla")
                 .swipeToNextQuestionWithError()
-                .clickOK(new FormEntryPage("g6Error2", main))
+                .clickOK(new FormEntryPage("g6Error2", rule))
                 .swipeToNextQuestion()
                 .inputText("ble")
                 .swipeToNextQuestion()
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
 
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("emptyGroupFieldList")
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
 
-        new MainMenuPage(main).startBlankForm("emptyGroupFieldList2")
+        new MainMenuPage(rule).startBlankForm("emptyGroupFieldList2")
                 .inputText("nana")
                 .swipeToNextQuestion()
                 .clickSaveAndExit()
@@ -409,7 +422,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void user_ShouldBeAbleToFillTheForm() {
 
         //TestCase27
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("metadata2")
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
@@ -419,11 +432,11 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void question_ShouldBeVisibleOnTheTopOfHierarchy() {
 
         //TestCase23
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("manyQ")
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .checkIsTextDisplayed("n1")
                 .checkIfTextDoesNotExist("t1")
                 .checkIfTextDoesNotExist("t2");
@@ -433,7 +446,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void bigForm_ShouldBeFilledSuccessfully() {
 
         //TestCase18
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("Nigeria Wards")
                 .clickOnString(R.string.select_one)
                 .clickOnText("Adamawa")
@@ -450,16 +463,15 @@ public class FillBlankFormTest extends BaseRegressionTest {
 
     private String getQuestionText() {
         FormEntryActivity formEntryActivity = (FormEntryActivity) ActivityHelpers.getActivity();
-        FrameLayout questionContainer = formEntryActivity.findViewById(R.id.select_container);
+        FrameLayout questionContainer = formEntryActivity.findViewById(R.id.text_container);
         TextView questionView = (TextView) questionContainer.getChildAt(0);
         return questionView.getText().toString();
     }
 
-    @Test
     public void questionValidation_ShouldShowToastOnlyWhenConditionsAreNotMet() {
 
         //TestCase43
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("t21257")
                 .clickOnText("mytext1")
                 .inputText("test")
@@ -488,15 +500,13 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .swipeToNextQuestion()
                 .inputText("test2")
                 .swipeToNextQuestion()
-                .swipeToNextQuestion()
-                .clickSaveAndExit();
+                .swipeToNextQuestion();
     }
 
-    @Test
     public void noDataLost_ShouldRememberAnswersForMultiSelectWidget() {
 
         //TestCase44
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("test_multiselect_cleared")
                 .clickOnText("a")
                 .clickOnText("c")
@@ -508,10 +518,97 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .swipeToPreviousQuestion()
                 .swipeToPreviousQuestion()
                 .swipeToPreviousQuestion()
-                .clickGoToIconInForm()
+                .clickGoToArrow()
                 .checkIsTextDisplayed("a, c")
                 .checkIsTextDisplayed("b, d")
                 .clickJumpEndButton()
-                .clickGoToIconInForm();
+                .clickGoToArrow();
     }
+
+    @Test
+    public void encryptedFormWithNoInstanceId_shouldNotBeFinalized() {
+
+        //TestCase47
+        new MainMenuPage(rule)
+                .startBlankForm("Birds")
+                .clickGoToArrow()
+                .clickJumpEndButton()
+                .clickSaveAndExit()
+                .checkIsToastWithMessageDisplayed("This form does not specify an instanceID. You must specify one to enable encryption. Form has not been saved as finalized.")
+                .clickEditSavedForm()
+                .checkInstanceState("Birds", InstanceProviderAPI.STATUS_INCOMPLETE);
+    }
+
+    @Test
+    public void typeMismatchErrorMessage_shouldBeDisplayed() {
+
+        //TestCase48
+        new MainMenuPage(rule)
+                .startBlankForm("validate")
+                .clearTheText("2019")
+                .swipeToNextQuestion()
+                .checkIsStringDisplayed(R.string.error_occured)
+                .checkIsTextDisplayedOnDialog("The value \"-01-01\" can't be converted to a date.")
+                .clickOKOnDialog()
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickSaveAndExit();
+    }
+
+    @Test
+    public void answers_shouldBeAutoFilled() {
+
+        //TestCase50
+        new MainMenuPage(rule)
+                .startBlankForm("Event: odk-new-repeat")
+                .inputText("3")
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .checkIsTextDisplayed("1")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("5")
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .checkIsTextDisplayed("2")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("5")
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .checkIsTextDisplayed("3")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("5")
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .checkIsTextDisplayed("4")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("5")
+                .swipeToNextQuestion()
+                .clickOnDoNotAddGroup()
+                .inputText("2")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("1")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("2")
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickOnDoNotAddGroup()
+                .clickSaveAndExit();
+    }
+
+    @Test
+    public void questions_shouldHavePrefilledValue() {
+
+        //TestCase51
+        new MainMenuPage(rule)
+                .startBlankForm("Space-separated event list")
+                .checkIsTextDisplayed("cheese")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("more cheese")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("5")
+                .swipeToNextQuestion()
+                .clickSaveAndExit();
+    }
+
 }

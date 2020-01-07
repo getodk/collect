@@ -304,6 +304,7 @@
   <string name="leave_a_review">Zostaw swoją opinię na Play Store</string>
   <string name="leave_a_review_msg">Twoja (mamy nadzieję pozytywna) recenzja przyczyni się do zwiększenia widoczności Aplikacji w Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="maps">Mapy</string>
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
       These strings are only being used to preserve compatibility with pre-existing
        tile caches, and are not shown in the UI.-->
@@ -314,10 +315,22 @@
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">Mapa bazowa</string>
+  <string name="basemap_source">Źródło</string>
+  <string name="map_style_label">%s styl mapy</string>
   <string name="streets">Ulice</string>
   <string name="terrain">Teren</string>
   <string name="hybrid">Hybryda</string>
   <string name="satellite">Satelita</string>
+  <string name="light">Jasny</string>
+  <string name="dark">Ciemny</string>
+  <string name="outdoors">Na zewnątrz</string>
+  <string name="topographic">Topograficzny</string>
+  <string name="carto_map_style_positron">Pozyton</string>
+  <string name="carto_map_style_dark_matter">Ciemna Materia</string>
+  <string name="reference_layer">Warstwa referencyjna</string>
+  <string name="layer_data_caption_none">Brak plików warstw w %1$s , które wspierane są przez mapę bazową %2$s .</string>
+  <string name="layer_data_caption">Powyższe pliki warstw w %1$s są wspierane przez mapę bazową %2$s .</string>
+  <string name="layer_data_file">Plik danych warstwy</string>
   <string name="save_point">Zapisz GeoPoint</string>
   <string name="get_point">Zacznij GeoPoint</string>
   <string name="geopoint_view_read_only">Pokaż GeoPoint</string>
@@ -328,6 +341,7 @@
   <string name="start">Zacznij</string>
   <string name="enable_gps">Włącz GPS</string>
   <string name="geotrace_title">GeoTrace</string>
+  <string name="gps_enable_message">GPS jest nieaktywne na twoim urządzeniu. Czy chcesz je włączyc?</string>
   <string name="geo_clear_warning">Właściwość już stworzona. Chcesz usunąć właściwość?</string>
   <string name="geo_exit_warning">Usunąć zmiany i wrócić do ODK?</string>
   <string name="polygon_validator">Wymagane są przynajmniej 3 punkty aby utworzyć wielokąt</string>
@@ -358,6 +372,9 @@
     <item quantity="other">%d metry</item>
   </plurals>
   <string name="location_status_searching">Wyszukiwanie lokalizacji GPS, proszę czekać…</string>
+  <string name="location_status_accuracy">Dokładność lokalizacji GPS: %.2f m</string>
+  <string name="location_status_acceptable">Dokładność lokalizacji GPS: %.2f m (dopuszczalna)</string>
+  <string name="location_status_unacceptable">Dokładność lokalizacji GPS: %.2f m (niedopuszczalna)</string>
   <string name="collection_status_paused">Wprowadzone punkty: %d</string>
   <string name="collection_status_placement">Wprowadzone punkty: %d (dotknij, by dodać)</string>
   <string name="collection_status_manual">Wprowadzone punkty: %d (wprowadzanie manualne)</string>
@@ -370,6 +387,7 @@
   <string name="discard">Usuń</string>
   <string name="geoshape_view_change_location">Pokaż lub Zmień GeoShape</string>
   <string name="geotrace_view_change_location">Pokaż lub Zmień GeoTrace</string>
+  <string name="geometry_status">Zapisane formularze: %d (%d pokazane na mapie)</string>
   <string name="bearing">Namiar: %.3f</string>
   <string name="direction">Kierunek: %s</string>
   <string name="select_odk_shortcut">Wybierz skrót ODK</string>
@@ -579,7 +597,18 @@
   <string name="islamic_month_10">Shawwal</string>
   <string name="islamic_month_11">Dhu al-Qidah</string>
   <string name="islamic_month_12">Dhu al-Hijjah</string>
+  <string name="persian_month_1">Farvardin</string>
+  <string name="persian_month_2">Ordibehesht</string>
+  <string name="persian_month_3">Khordad</string>
   <string name="persian_month_4">Tir</string>
+  <string name="persian_month_5">Mordad</string>
+  <string name="persian_month_6">Shahrivar</string>
+  <string name="persian_month_7">Mehr</string>
+  <string name="persian_month_8">Aban</string>
+  <string name="persian_month_9">Azar</string>
+  <string name="persian_month_10">Dey</string>
+  <string name="persian_month_11">Bahman</string>
+  <string name="persian_month_12">Esfand</string>
   <string name="moving_backwards_title">Cofanie się</string>
   <string name="moving_backwards_disabled_title">Cofanie się nie jest możliwe</string>
   <string name="moving_backwards_disabled_message">Skonfiguruj urządzenie, aby uniemożliwić użytkownikom ominięcie tego ustawienia? \n\nZmiany są następujące:\n\u2022 Wyłącz Edycję Zapisanego Formularzu\n\u2022 Wyłącz Zapis Fromularzu\n\u2022 Wyłącz podpowiedź Przejdź Do\n\u2022 Ustaw Przetwarzanie Ograniczeń na Sprawdź po przewinięciu do przodu</string>
@@ -674,4 +703,9 @@
   <string name="copying_media_files_failed">Kopiowanie plików mediów nie powiodło się</string>
   <string name="qr_code_not_found">Na wybranym zdjęciu nie odnaleziono kodu QR</string>
   <string name="not_granted_permission">Aktywność, którą próbujesz wykonać, wymaga autoryzacji, której nie posiadasz.</string>
+  <string name="basemap_source_unavailable">Przepraszamy, mapy bazowe %s nie są dostępne na tym urządzeniu.  Wybierz inną mapę bazową z Ustawień Ogólnych &gt; Mapy.</string>
+  <string name="enter_identity">Wprowadź swoje dane</string>
+  <string name="identity">Tożsamość</string>
+  <string name="enter_identity_description">Ten formularz wymaga podania twoich danych.</string>
+  <string name="close">Zamknij</string>
 </resources>

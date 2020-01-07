@@ -86,5 +86,8 @@ public final class InstanceProviderAPI {
         public static final String T_SHOW_DIST = "tShowDist";       // Distance at which task will be shown, 0 for always show
         public static final String T_HIDE = "tHide";                // Set true if task is to be hidden from view
         // Smap End
+
+        public static final String GEOMETRY = "geometry";
+        public static final String GEOMETRY_TYPE = "geometryType";
     }
 }

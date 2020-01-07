@@ -41,7 +41,7 @@
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.MaterialComponents.LargeComponent</item>
         <!--/Material theme attributes-->
 
-        <item name="primaryTextColor">#de000000</item>
+        <item name="primaryTextColor">?attr/colorOnSurface</item>
         <item name="secondaryTextColor">#99000000</item>
         <item name="android:scrollbarThumbHorizontal">@drawable/thumb</item>
         <item name="android:scrollbarThumbVertical">@drawable/thumb</item>

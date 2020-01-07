@@ -23,11 +23,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
+
 import org.odk.collect.android.utilities.SQLiteUtils;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,6 +36,8 @@ import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DELETED_DATE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DISPLAY_NAME;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.GEOMETRY;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.GEOMETRY_TYPE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_VERSION;
@@ -52,11 +53,16 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_PATH = Collect.METADATA_PATH + File.separator + DATABASE_NAME;
     public static final String INSTANCES_TABLE_NAME = "instances";
 
-    static final int DATABASE_VERSION = 5;
+    static final int DATABASE_VERSION = 6;
 
     private static final String[] COLUMN_NAMES_V5 = {_ID, DISPLAY_NAME, SUBMISSION_URI, CAN_EDIT_WHEN_COMPLETE,
             INSTANCE_FILE_PATH, JR_FORM_ID, JR_VERSION, STATUS, LAST_STATUS_CHANGE_DATE, DELETED_DATE};
-    static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V5;
+
+    private static final String[] COLUMN_NAMES_V6 = {_ID, DISPLAY_NAME, SUBMISSION_URI,
+        CAN_EDIT_WHEN_COMPLETE, INSTANCE_FILE_PATH, JR_FORM_ID, JR_VERSION, STATUS,
+        LAST_STATUS_CHANGE_DATE, DELETED_DATE, GEOMETRY, GEOMETRY_TYPE};
+
+    static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V6;
 
     private static boolean isDatabaseBeingMigrated;
 
@@ -67,6 +73,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         createInstancesTableV5(db, INSTANCES_TABLE_NAME);
+        upgradeToVersion6(db, INSTANCES_TABLE_NAME);
     }
 
     /**
@@ -89,7 +96,9 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
                 case 3:
                     upgradeToVersion4(db);
                 case 4:
-                    moveInstancesTableToVersion5(db);
+                    upgradeToVersion5(db);
+                case 5:
+                    upgradeToVersion6(db, INSTANCES_TABLE_NAME);
                     break;
                 default:
                     Timber.i("Unknown version %d", oldVersion);
@@ -107,8 +116,12 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         try {
             Timber.i("Downgrading database from version %d to %d", oldVersion, newVersion);
-            moveInstancesTableToVersion5(db);
 
+            String temporaryTableName = INSTANCES_TABLE_NAME + "_tmp";
+            createInstancesTableV5(db, temporaryTableName);
+            upgradeToVersion6(db, temporaryTableName);
+
+            dropObsoleteColumns(db, CURRENT_VERSION_COLUMN_NAMES, temporaryTableName);
             Timber.i("Downgrading database from version %d to %d completed with success.", oldVersion, newVersion);
             isDatabaseBeingMigrated = false;
         } catch (SQLException e) {
@@ -119,12 +132,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
 
     private void upgradeToVersion2(SQLiteDatabase db) {
         if (!SQLiteUtils.doesColumnExist(db, INSTANCES_TABLE_NAME, CAN_EDIT_WHEN_COMPLETE)) {
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .alter()
-                    .table(INSTANCES_TABLE_NAME)
-                    .addColumn(CAN_EDIT_WHEN_COMPLETE, "text")
-                    .end();
+            SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, CAN_EDIT_WHEN_COMPLETE, "text");
 
             db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET "
                     + CAN_EDIT_WHEN_COMPLETE + " = '" + true
@@ -135,77 +143,57 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void upgradeToVersion3(SQLiteDatabase db) {
-        if (!SQLiteUtils.doesColumnExist(db, INSTANCES_TABLE_NAME, JR_VERSION)) {
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .alter()
-                    .table(INSTANCES_TABLE_NAME)
-                    .addColumn(JR_VERSION, "text")
-                    .end();
-        }
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, JR_VERSION, "text");
     }
 
     private void upgradeToVersion4(SQLiteDatabase db) {
-        if (!SQLiteUtils.doesColumnExist(db, INSTANCES_TABLE_NAME, DELETED_DATE)) {
-            CustomSQLiteQueryBuilder
-                    .begin(db)
-                    .alter()
-                    .table(INSTANCES_TABLE_NAME)
-                    .addColumn(DELETED_DATE, "date")
-                    .end();
-        }
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, DELETED_DATE, "date");
     }
 
     /**
-     * Upgrade to version 5 by creating the new table with a temporary name, moving the contents of
-     * the existing instances table to that new table, dropping the old table and then renaming the
-     * new table to the permanent name.
-     *
-     * Prior versions of the instances table included a {@code displaySubtext} column which was
-     * redundant with the {@link InstanceProviderAPI.InstanceColumns#STATUS} and
+     * Upgrade to version 5. Prior versions of the instances table included a {@code displaySubtext}
+     * column which was redundant with the {@link InstanceProviderAPI.InstanceColumns#STATUS} and
      * {@link InstanceProviderAPI.InstanceColumns#LAST_STATUS_CHANGE_DATE} columns and included
      * unlocalized text. Version 5 removes this column.
-     *
-     * The move and copy strategy is used to overcome the fact that SQLITE does not directly support
-     * removing a column. See https://sqlite.org/lang_altertable.html
      */
-    private void moveInstancesTableToVersion5(SQLiteDatabase db) {
-        List<String> columnNamesPrev = SQLiteUtils.getColumnNames(db, INSTANCES_TABLE_NAME);
-
+    private void upgradeToVersion5(SQLiteDatabase db) {
         String temporaryTableName = INSTANCES_TABLE_NAME + "_tmp";
 
         // onDowngrade in Collect v1.22 always failed to clean up the temporary table so remove it now.
         // Going from v1.23 to v1.22 and back to v1.23 will result in instance status information
         // being lost.
-        CustomSQLiteQueryBuilder
-                .begin(db)
-                .dropIfExists(temporaryTableName)
-                .end();
+        SQLiteUtils.dropTable(db, temporaryTableName);
 
         createInstancesTableV5(db, temporaryTableName);
+        dropObsoleteColumns(db, COLUMN_NAMES_V5, temporaryTableName);
+    }
 
-        // Only select columns from the existing table that are also relevant to v5
-        columnNamesPrev.retainAll(new ArrayList<>(Arrays.asList(COLUMN_NAMES_V5)));
+    /**
+     * Use the existing temporary table with the provided name to only keep the given relevant
+     * columns, dropping all others.
+     *
+     * NOTE: the temporary table with the name provided is dropped.
+     *
+     * The move and copy strategy is used to overcome the fact that SQLITE does not directly support
+     * removing a column. See https://sqlite.org/lang_altertable.html
+     *
+     * @param db                    the database to operate on
+     * @param relevantColumns       the columns relevant to the current version
+     * @param temporaryTableName    the name of the temporary table to use and then drop
+     */
+    private void dropObsoleteColumns(SQLiteDatabase db, String[] relevantColumns, String temporaryTableName) {
+        List<String> columns = SQLiteUtils.getColumnNames(db, INSTANCES_TABLE_NAME);
+        columns.retainAll(Arrays.asList(relevantColumns));
+        String[] columnsToKeep = columns.toArray(new String[0]);
 
-        CustomSQLiteQueryBuilder
-                .begin(db)
-                .insertInto(temporaryTableName)
-                .columnsForInsert(columnNamesPrev.toArray(new String[0]))
-                .select()
-                .columnsForSelect(columnNamesPrev.toArray(new String[0]))
-                .from(INSTANCES_TABLE_NAME)
-                .end();
+        SQLiteUtils.copyRows(db, INSTANCES_TABLE_NAME, columnsToKeep, temporaryTableName);
+        SQLiteUtils.dropTable(db, INSTANCES_TABLE_NAME);
+        SQLiteUtils.renameTable(db, temporaryTableName, INSTANCES_TABLE_NAME);
+    }
 
-        CustomSQLiteQueryBuilder
-                .begin(db)
-                .dropIfExists(INSTANCES_TABLE_NAME)
-                .end();
-
-        CustomSQLiteQueryBuilder
-                .begin(db)
-                .renameTable(temporaryTableName)
-                .to(INSTANCES_TABLE_NAME)
-                .end();
+    private void upgradeToVersion6(SQLiteDatabase db, String name) {
+        SQLiteUtils.addColumn(db, name, GEOMETRY, "text");
+        SQLiteUtils.addColumn(db, name, GEOMETRY_TYPE, "text");
     }
 
     private void createInstancesTableV5(SQLiteDatabase db, String name) {

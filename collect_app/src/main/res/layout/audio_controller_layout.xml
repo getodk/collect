@@ -22,20 +22,20 @@ limitations under the License.
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/padding_large">
+        android:padding="@dimen/margin_standard">
 
         <ImageButton
             android:id="@+id/fastRewindBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_small"
-            android:layout_marginRight="@dimen/margin_small"
+            android:layout_marginLeft="@dimen/margin_extra_small"
+            android:layout_marginRight="@dimen/margin_extra_small"
             android:layout_toLeftOf="@id/playBtn"
             android:layout_toStartOf="@id/playBtn"
             android:background="?android:attr/selectableItemBackground"
             android:minHeight="@dimen/touch_target_size"
             android:minWidth="@dimen/touch_target_size"
-            android:padding="@dimen/padding_medium"
+            android:padding="@dimen/margin_small"
             app:srcCompat="@drawable/ic_replay_5_black_24dp" />
 
         <ImageButton
@@ -43,26 +43,26 @@ limitations under the License.
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginLeft="@dimen/margin_small"
-            android:layout_marginRight="@dimen/margin_small"
+            android:layout_marginLeft="@dimen/margin_extra_small"
+            android:layout_marginRight="@dimen/margin_extra_small"
             android:background="?android:attr/selectableItemBackground"
             android:minHeight="@dimen/touch_target_size"
             android:minWidth="@dimen/touch_target_size"
-            android:padding="@dimen/padding_medium"
+            android:padding="@dimen/margin_small"
             app:srcCompat="@drawable/ic_play_arrow_24dp" />
 
         <ImageButton
             android:id="@+id/fastForwardBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_small"
-            android:layout_marginRight="@dimen/margin_small"
+            android:layout_marginLeft="@dimen/margin_extra_small"
+            android:layout_marginRight="@dimen/margin_extra_small"
             android:layout_toEndOf="@id/playBtn"
             android:layout_toRightOf="@id/playBtn"
             android:background="?android:attr/selectableItemBackground"
             android:minHeight="@dimen/touch_target_size"
             android:minWidth="@dimen/touch_target_size"
-            android:padding="@dimen/padding_medium"
+            android:padding="@dimen/margin_small"
             app:srcCompat="@drawable/ic_forward_5_black_24dp" />
 
         <TextView

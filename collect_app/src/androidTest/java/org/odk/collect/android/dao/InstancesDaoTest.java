@@ -18,6 +18,8 @@ package org.odk.collect.android.dao;
 
 import android.Manifest;
 import android.database.Cursor;
+import android.net.Uri;
+
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
@@ -27,10 +29,15 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dto.Instance;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import java.util.List;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import static org.junit.Assert.assertEquals;
 
@@ -87,7 +94,7 @@ public class InstancesDaoTest {
 
     @Test
     public void getSavedInstancesCursorTest() {
-        Cursor cursor = instancesDao.getSavedInstancesCursor(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC");
+        Cursor cursor = instancesDao.getSavedInstancesCursor(InstanceColumns.DISPLAY_NAME + " ASC");
         List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
 
         assertEquals(5, instances.size());
@@ -151,7 +158,7 @@ public class InstancesDaoTest {
                 .lastStatusChangeDate(1487597090653L)
                 .build();
 
-        String where = InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + "=?";
+        String where = InstanceColumns.INSTANCE_FILE_PATH + "=?";
         String[] whereArgs = {Collect.INSTANCES_PATH + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml"};
 
         assertEquals(instancesDao.updateInstance(instancesDao.getValuesFromInstanceObject(biggestNOfSet2Instance), where, whereArgs), 1);
@@ -162,6 +169,27 @@ public class InstancesDaoTest {
 
         assertEquals(1, instances.size());
         assertEquals(biggestNOfSet2Instance, instances.get(0));
+    }
+
+    @Test public void deletingSentInstance_keepsItsDatabaseRow_butClearsItsGeometryFields() {
+        Instance formWithGeopointInstance = new Instance.Builder()
+                .jrFormId("fake")
+                .displayName("Form with geopoint")
+                .instanceFilePath("/my/fake/path")
+                .status(InstanceProviderAPI.STATUS_SUBMITTED)
+                .lastStatusChangeDate(1487595836793L)
+                .geometryType("Point")
+                .geometry("{\"type\":\"Point\",\"coordinates\":[127.6, 11.1]}")
+                .build();
+        Uri result = instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(formWithGeopointInstance));
+
+        Collect.getInstance().getContentResolver().delete(result, null, null);
+
+        Cursor cursor = instancesDao.getInstancesCursorForFilePath("/my/fake/path");
+        formWithGeopointInstance = instancesDao.getInstancesFromCursor(cursor).get(0);
+
+        assertThat(formWithGeopointInstance.getGeometryType(), is(nullValue()));
+        assertThat(formWithGeopointInstance.getGeometry(), is(nullValue()));
     }
 
     private void fillDatabase() {

@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.dto.Form;
+import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.SQLiteUtils;
 

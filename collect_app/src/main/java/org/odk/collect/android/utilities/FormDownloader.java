@@ -20,6 +20,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
+import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
@@ -31,6 +32,7 @@ import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -46,6 +48,8 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.forms.FormUtils.setupReferenceManagerForForm;
 
 public class FormDownloader {
 
@@ -183,7 +187,13 @@ public class FormDownloader {
             try {
                 final long start = System.currentTimeMillis();
                 Timber.w("Parsing document %s", fileResult.file.getAbsolutePath());
-                parsedFields = FileUtils.parseXML(fileResult.file);
+                // If the form definition includes attachments, set up the reference manager in case
+                // one of them defines a secondary instance (required to build a FormDef)
+                if (tempMediaPath != null) {
+                    setupReferenceManagerForForm(ReferenceManager.instance(), new File(tempMediaPath));
+                }
+
+                parsedFields = FileUtils.getMetadataFromFormDefinition(fileResult.file);
                 Timber.i("Parse finished in %.3f seconds.",
                         (System.currentTimeMillis() - start) / 1000F);
             } catch (RuntimeException e) {
@@ -213,9 +223,8 @@ public class FormDownloader {
         return submission == null || Validator.isUrlValid(submission);
     }
 
-    private boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String,
-            String> parsedFields, FormDetails fd, String orgTempMediaPath, String orgMediaPath)   // smap added organisational paths
-            throws TaskCancelledException {     // smap add fd
+    boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields, 
+            FormDetails fd, String orgTempMediaPath, String orgMediaPath)   // smap add fd,  organisational paths
         UriResult uriResult = null;
         try {
             uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields, STFileUtils.getSource(fd.getDownloadUrl()), fd.getTasksOnly());  // smap add source and tasks_only
@@ -330,9 +339,9 @@ public class FormDownloader {
                 uri = saveNewForm(formInfo, formFile, mediaPath, tasks_only, source);       // smap add tasks_only and source
             } else {
                 cursor.moveToFirst();
-                uri = Uri.withAppendedPath(FormsProviderAPI.FormsColumns.CONTENT_URI,
-                        cursor.getString(cursor.getColumnIndex(FormsProviderAPI.FormsColumns._ID)));
-                mediaPath = cursor.getString(cursor.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH));
+                uri = Uri.withAppendedPath(FormsColumns.CONTENT_URI,
+                        cursor.getString(cursor.getColumnIndex(FormsColumns._ID)));
+                mediaPath = cursor.getString(cursor.getColumnIndex(FormsColumns.FORM_MEDIA_PATH));
             }
         }
 
@@ -342,18 +351,19 @@ public class FormDownloader {
     private Uri saveNewForm(Map<String, String> formInfo, File formFile, String mediaPath,
                             boolean tasks_only, String source) {    // smap add tasks_only and source
         final ContentValues v = new ContentValues();
-        v.put(FormsProviderAPI.FormsColumns.FORM_FILE_PATH,          formFile.getAbsolutePath());
-        v.put(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH,         mediaPath);
-        v.put(FormsProviderAPI.FormsColumns.DISPLAY_NAME,            formInfo.get(FileUtils.TITLE));
-        v.put(FormsProviderAPI.FormsColumns.JR_VERSION,              formInfo.get(FileUtils.VERSION));
-        v.put(FormsProviderAPI.FormsColumns.JR_FORM_ID,              formInfo.get(FileUtils.FORMID));
-        v.put(FormsProviderAPI.FormsColumns.PROJECT,                 formInfo.get(FileUtils.PROJECT));      // smap
-        v.put(FormsProviderAPI.FormsColumns.TASKS_ONLY,              tasks_only ? "yes" : "no");            // smap
-        v.put(FormsProviderAPI.FormsColumns.SOURCE,                  source);                               // smap
-        v.put(FormsProviderAPI.FormsColumns.SUBMISSION_URI,          formInfo.get(FileUtils.SUBMISSIONURI));
-        v.put(FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY,   formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
-        v.put(FormsProviderAPI.FormsColumns.AUTO_DELETE,             formInfo.get(FileUtils.AUTO_DELETE));
-        v.put(FormsProviderAPI.FormsColumns.AUTO_SEND,             formInfo.get(FileUtils.AUTO_SEND));
+        v.put(FormsColumns.FORM_FILE_PATH,          formFile.getAbsolutePath());
+        v.put(FormsColumns.FORM_MEDIA_PATH,         mediaPath);
+        v.put(FormsColumns.DISPLAY_NAME,            formInfo.get(FileUtils.TITLE));
+        v.put(FormsColumns.JR_VERSION,              formInfo.get(FileUtils.VERSION));
+        v.put(FormsColumns.JR_FORM_ID,              formInfo.get(FileUtils.FORMID));
+        v.put(FormsColumns.PROJECT,                 formInfo.get(FileUtils.PROJECT));      // smap
+        v.put(FormsColumns.TASKS_ONLY,              tasks_only ? "yes" : "no");            // smap
+        v.put(FormsColumns.SOURCE,                  source);                               // smap
+        v.put(FormsColumns.SUBMISSION_URI,          formInfo.get(FileUtils.SUBMISSIONURI));
+        v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY,   formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
+        v.put(FormsColumns.AUTO_DELETE,             formInfo.get(FileUtils.AUTO_DELETE));
+        v.put(FormsColumns.AUTO_SEND,               formInfo.get(FileUtils.AUTO_SEND));
+        v.put(FormsColumns.GEOMETRY_XPATH,          formInfo.get(FileUtils.GEOMETRY_XPATH));
         return formsDao.saveForm(v);
     }
 
@@ -361,7 +371,7 @@ public class FormDownloader {
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
      */
-    public FileResult downloadXform(String formName, String url, boolean download, String formPath)      // smap add download flag and formPath
+    FileResult downloadXform(String formName, String url, boolean download, String formPath)      // smap add download flag and formPath
             throws IOException, TaskCancelledException, Exception {
         // clean up friendly form name...
         String rootName = formName.replaceAll("[^\\p{L}\\p{Digit}]", " ");
@@ -385,33 +395,26 @@ public class FormDownloader {
 
             downloadFile(f, url);
 
-            isNew = true;
+        // we've downloaded the file, and we may have renamed it
+        // make sure it's not the same as a file we already have
+        Cursor c = null;
+        try {
+            c = formsDao.getFormsCursorForMd5Hash(FileUtils.getMd5Hash(f));
+            if (c.getCount() > 0) {
+                // Should be at most, 1
+                c.moveToFirst();
 
-            // we've downloaded the file, and we may have renamed it
-            // make sure it's not the same as a file we already have
-            Cursor c = null;
-            try {
-                c = formsDao.getFormsCursorForMd5Hash(FileUtils.getMd5Hash(f));
-                if (c.getCount() > 0) {
-                    // Should be at most, 1
-                    c.moveToFirst();
+                isNew = false;
 
-                    isNew = false;
+                // delete the file we just downloaded, because it's a duplicate
+                Timber.w("A duplicate file has been found, we need to remove the downloaded file "
+                        + "and return the other one.");
+                FileUtils.deleteAndReport(f);
 
-                    // delete the file we just downloaded, because it's a duplicate
-                    Timber.w("A duplicate file has been found, we need to remove the downloaded file "
-                            + "and return the other one.");
-                    FileUtils.deleteAndReport(f);
-
-                    // set the file returned to the file we already had
-                    String existingPath = c.getString(c.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_FILE_PATH));
-                    f = new File(existingPath);
-                    Timber.w("Will use %s", existingPath);
-                }
-            } finally {
-                if (c != null) {
-                    c.close();
-                }
+                // set the file returned to the file we already had
+                String existingPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                f = new File(existingPath);
+                Timber.w("Will use %s", existingPath);
             }
 
         } else {
@@ -573,7 +576,7 @@ public class FormDownloader {
         }
     }
 
-    private String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
+    String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
                                                  FormDetails fd, int count,
                                                  int total,
                                                  String orgTempMediaPath,   // smap

@@ -90,8 +90,8 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
                     : new SelectOneData(new Selection(selectChoice));
     }
 
-    protected void createLayout(boolean readOnlyOverride) {     // smap add readOnlyOverride
-        adapter = new SelectOneListAdapter(items, selectedValue, this, numColumns, readOnlyOverride);	// smap add readOnlyOverride
+    protected void createLayout() {
+        adapter = new SelectOneListAdapter(items, selectedValue, this, numColumns, this.getFormEntryPrompt(), this.getReferenceManager(), this.getAnswerFontSize(), this.getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), this.getContext(), autoAdvance, readOnlyOverride);   // smap add readOnlyOverride
 
         if (items != null) {
             RecyclerView recyclerView = setUpRecyclerView();

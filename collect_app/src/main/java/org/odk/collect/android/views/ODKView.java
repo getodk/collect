@@ -161,8 +161,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         layout =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
-        layout.setMargins(10, 0, 10, 0);
-
         // display which group you are in as well as the question
         addGroupText(groups);
 
@@ -211,7 +209,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 final PlaybackFailedException playbackFailedException = (PlaybackFailedException) e;
                 Toast.makeText(
                         getContext(),
-                        getContext().getString(R.string.file_missing, playbackFailedException.getURI()),
+                        getContext().getString(playbackFailedException.getExceptionMsg(), playbackFailedException.getURI()),
                         Toast.LENGTH_SHORT
                 ).show();
 
@@ -499,7 +497,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             TextView tv = new TextView(getContext());
             tv.setText(path);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize() - 4);
-            tv.setPadding(0, 0, 0, 5);
+            tv.setPadding(getResources().getDimensionPixelSize(R.dimen.margin_standard),
+                    getResources().getDimensionPixelSize(R.dimen.margin_small), 0, 0);
             view.addView(tv, layout);
         }
     }
@@ -854,7 +853,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             view.removeViewAt(indexAccountingForDividers - 1);
         }
 
-        widgets.get(index).release();
         widgets.remove(index);
     }
 

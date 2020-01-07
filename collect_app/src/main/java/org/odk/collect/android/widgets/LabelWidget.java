@@ -196,7 +196,7 @@ public class LabelWidget extends ItemsWidget {
     }
 
     @Override
-    protected void addQuestionMediaLayout(View v) {
+    protected void addQuestionLabel(View v) {
         center = new View(getContext());
         RelativeLayout.LayoutParams centerParams = new RelativeLayout.LayoutParams(0, 0);
         centerParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);

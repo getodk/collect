@@ -10,7 +10,7 @@ the specific language governing permissions and limitations under the License. -
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/margin_large">
+    android:padding="@dimen/margin_standard">
 
     <!-- Material Design reference: https://material.io/design/components/lists.html#specs -->
 
@@ -28,8 +28,8 @@ the specific language governing permissions and limitations under the License. -
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/imageView"
-        android:layout_marginStart="@dimen/margin_large"
-        android:layout_marginLeft="@dimen/margin_large"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginLeft="@dimen/margin_standard"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_toStartOf="@id/selectView"

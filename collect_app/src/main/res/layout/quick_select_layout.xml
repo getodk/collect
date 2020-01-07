@@ -18,6 +18,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:paddingRight="@dimen/margin_standard"
+        android:paddingEnd="@dimen/margin_standard"
+        android:paddingLeft="@dimen/margin_standard"
+        android:paddingStart="@dimen/margin_standard"
         android:contentDescription="@string/select_answer"
         app:srcCompat="@drawable/expander_ic_right"/>
 

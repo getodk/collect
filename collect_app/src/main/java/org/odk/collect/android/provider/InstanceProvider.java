@@ -99,6 +99,7 @@ public class InstanceProvider extends ContentProvider {
 
     private static final UriMatcher URI_MATCHER;
 
+<<<<<<< HEAD
     private static final String[] COLUMN_NAMES_V16 = new String[] {
             _ID,
             DISPLAY_NAME,
@@ -176,6 +177,11 @@ public class InstanceProvider extends ContentProvider {
     private DatabaseHelper databaseHelper;
 
     private DatabaseHelper getDbHelper() {
+=======
+    private static InstancesDatabaseHelper dbHelper;
+
+    private synchronized InstancesDatabaseHelper getDbHelper() {
+>>>>>>> merge_master
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
             Collect.createODKDirs();
@@ -407,6 +413,7 @@ public class InstanceProvider extends ContentProvider {
                     }
                 }
 
+<<<<<<< HEAD
                 // smap we are only ever going to update the status
                 //We are going to update the status, if the form is submitted
                 //We will not delete the record in table but we will delete the file
@@ -423,6 +430,20 @@ public class InstanceProvider extends ContentProvider {
                 }
                 /* smap
                 } else {
+=======
+                    // Keep sent instance database rows but delete corresponding files
+                    if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
+                        ContentValues cv = new ContentValues();
+                        cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
+
+                        // Geometry fields represent data inside the form which can be very
+                        // sensitive so they are removed on delete.
+                        cv.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
+                        cv.put(InstanceColumns.GEOMETRY, (String) null);
+
+                        count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
+                    } else {
+>>>>>>> merge_master
                         String[] newWhereArgs;
                         if (whereArgs == null || whereArgs.length == 0) {
                             newWhereArgs = new String[] {instanceId};
@@ -544,6 +565,8 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(T_HIDE, T_HIDE);                // smap
         sInstancesProjectionMap.put(UUID, UUID);                    // smap
         sInstancesProjectionMap.put(InstanceColumns.DELETED_DATE, InstanceColumns.DELETED_DATE);
+        sInstancesProjectionMap.put(InstanceColumns.GEOMETRY, InstanceColumns.GEOMETRY);
+        sInstancesProjectionMap.put(InstanceColumns.GEOMETRY_TYPE, InstanceColumns.GEOMETRY_TYPE);
     }
 
 

@@ -71,6 +71,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.StringStartsWith.startsWith;
+import static org.odk.collect.android.support.actions.NestedScrollToAction.nestedScrollTo;
 import static org.odk.collect.android.test.CustomMatchers.withIndex;
 
 public class FieldListUpdateTest {
@@ -229,30 +230,32 @@ public class FieldListUpdateTest {
 
         // Selecting A1 for level 2 should reveal options for A1 at level 3
         onView(withText("A1")).perform(click());
+        onView(withText("A1A")).perform(nestedScrollTo());
         onView(withText("A1A")).check(matches(isDisplayed()));
         onView(withText("B1")).check(doesNotExist());
         onView(withText("C1")).check(doesNotExist());
     }
 
-        @Test
-        public void clearingParentSelect_ShouldUpdateAllDependentLevels() {
-            onView(withId(R.id.menu_goto)).perform(click());
-            onView(withId(R.id.menu_go_up)).perform(click());
-            onView(allOf(withText("Cascading select"), isDisplayed())).perform(click());
-            onView(withText(startsWith("Level1"))).perform(click());
+    @Test
+    public void clearingParentSelect_ShouldUpdateAllDependentLevels() {
+        onView(withId(R.id.menu_goto)).perform(click());
+        onView(withId(R.id.menu_go_up)).perform(click());
+        onView(allOf(withText("Cascading select"), isDisplayed())).perform(click());
+        onView(withText(startsWith("Level1"))).perform(click());
 
-            onView(withText("A")).perform(click());
-            onView(withText("A1")).perform(click());
-            onView(withText("A1B")).perform(click());
+        onView(withText("A")).perform(click());
 
-            onView(withText("A")).perform(longClick());
-            onView(withText(R.string.clear_answer)).perform(click());
-            onView(withText(R.string.discard_answer)).perform(click());
+        onView(withText("A1")).perform(nestedScrollTo(), click());
+        onView(withText("A1B")).perform(nestedScrollTo(), click());
 
-            onView(withIndex(withClassName(endsWith("RadioButton")), 0)).check(matches(isNotChecked()));
-            onView(withText("A1")).check(doesNotExist());
-            onView(withText("A1B")).check(doesNotExist());
-        }
+        onView(withText("A")).perform(nestedScrollTo(), longClick());
+        onView(withText(R.string.clear_answer)).perform(click());
+        onView(withText(R.string.discard_answer)).perform(click());
+
+        onView(withIndex(withClassName(endsWith("RadioButton")), 0)).check(matches(isNotChecked()));
+        onView(withText("A1")).check(doesNotExist());
+        onView(withText("A1B")).check(doesNotExist());
+    }
 
     @Test
     public void selectionChangeAtOneCascadeLevelWithMinimalAppearance_ShouldUpdateNextLevels() {

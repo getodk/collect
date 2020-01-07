@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    This file is for a Theme Overlay for Material Components that fixes colorPrimary
+    and colorSurface both being white. We should be able to remove this when we have
+    a proper colorPrimary.
+-->
+
+<resources>
+
+    <style name="Theme.Collect.MaterialComponents.Polyfill" parent="">
+        <item name="colorPrimary">?attr/colorOnSurface</item>
+    </style>
+
+</resources>

@@ -6,17 +6,17 @@ import androidx.test.rule.ActivityTestRule;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.ActivityHelpers;
 
-import timber.log.Timber;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-
+import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -40,11 +40,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage clickOnGoToIconInForm() {
-        onView(withId(R.id.menu_goto)).perform(click());
-        return this;
-    }
-
     public FormEntryPage clickJumpEndButton() {
         onView(withId(R.id.jumpEndButton)).perform(click());
         return this;
@@ -53,6 +48,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public MainMenuPage clickSaveAndExit() {
         onView(withId(R.id.save_exit_button)).perform(click());
         return new MainMenuPage(rule).assertOnPage();
+    }
+
+    public FormMapPage clickSaveAndExitBackToMap() {
+        onView(withId(R.id.save_exit_button)).perform(click());
+        return new FormMapPage(rule).assertOnPage();
     }
 
     public FormEntryPage clickSaveAndExitWithError() {
@@ -103,7 +103,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage clickGoToIconInForm() {
+    public FormEntryPage clickGoToArrow() {
         onView(withId(R.id.menu_goto)).perform(click());
         return this;
     }
@@ -113,27 +113,8 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage clickSignatureButton() {
+    public FormEntryPage clickWidgetButton() {
         onView(withId(R.id.simple_button)).perform(click());
-        return this;
-    }
-
-    public FormEntryPage waitForRotationToEnd() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            Timber.i(e);
-        }
-        return this;
-    }
-
-    public FormEntryPage clickIgnoreChanges() {
-        onView(withText(getInstrumentation().getTargetContext().getString(R.string.do_not_save))).perform(click());
-        return this;
-    }
-
-    public FormEntryPage simplePressBack() {
-        Espresso.pressBack();
         return this;
     }
 
@@ -145,5 +126,73 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public FormEntryPage clickSaveAndExitWhenValidationErrorIsExpected() {
         onView(withId(R.id.save_exit_button)).perform(click());
         return this;
+    }
+
+    public FormEntryPage deleteGroup(String questionText) {
+        onView(withText(questionText)).perform(longClick());
+        onView(withText(R.string.delete_repeat)).perform(click());
+        onView(withText(R.string.discard_group)).perform(click());
+        return this;
+    }
+
+    public FormEntryPage deleteGroup() {
+        onView(withId(R.id.menu_delete_child)).perform(click());
+        onView(withText(R.string.delete_repeat)).perform(click());
+        return this;
+    }
+
+    public FormEntryPage clickGoUpIcon() {
+        onView(withId(R.id.menu_go_up)).perform(click());
+        return this;
+    }
+
+    public FormEntryPage showSpinnerMultipleDialog() {
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.select_answer))).perform(click());
+        return this;
+    }
+
+    public FormEntryPage clickGoToStart() {
+        onView(withId(R.id.jumpBeginningButton)).perform(click());
+        return this;
+    }
+
+    public FormEntryPage clickForwardButton() {
+        onView(withText(getTranslatedString(R.string.form_forward))).perform(click());
+        return this;
+    }
+
+    public FormEntryPage clickBackwardButton() {
+        onView(withText(getTranslatedString(R.string.form_backward))).perform(click());
+        return this;
+    }
+
+    public FormEntryPage clickOnDoNotAddGroup() {
+        clickOnString(R.string.add_repeat_no);
+        return this;
+    }
+
+    public FormEntryPage clickOnAddGroup() {
+        clickOnString(R.string.add_another);
+        return this;
+    }
+
+    public FormEntryPage checkIfMarkFinishedIsSelected() {
+        onView(withId(R.id.mark_finished)).check(matches(isChecked()));
+        return this;
+    }
+
+    public FormEntryPage checkIfMarkFinishedIsNotSelected() {
+        onView(withId(R.id.mark_finished)).check(matches(isNotChecked()));
+        return this;
+    }
+
+    public ChangesReasonPromptPage clickSaveAndExitWithChangesReasonPrompt() {
+        onView(withId(R.id.save_exit_button)).perform(click());
+        return new ChangesReasonPromptPage(formName, rule).assertOnPage();
+    }
+
+    public ChangesReasonPromptPage clickSaveWithChangesReasonPrompt() {
+        onView(withId(R.id.menu_save)).perform(click());
+        return new ChangesReasonPromptPage(formName, rule).assertOnPage();
     }
 }

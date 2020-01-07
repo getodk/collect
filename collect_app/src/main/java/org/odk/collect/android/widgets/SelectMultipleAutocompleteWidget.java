@@ -24,7 +24,7 @@ import org.odk.collect.android.utilities.SoftKeyboardUtils;
 public class SelectMultipleAutocompleteWidget extends SelectMultiWidget {
     public SelectMultipleAutocompleteWidget(Context context, QuestionDetails prompt, boolean readOnlyOverride) {       // smap add readOnlyOverride
         super(context, prompt, readOnlyOverride);  // smap
-        setUpSearchBox();
+        setUpSearchBox(context);
     }
 
     @Override

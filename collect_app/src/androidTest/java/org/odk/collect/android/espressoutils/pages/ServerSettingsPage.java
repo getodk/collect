@@ -29,4 +29,15 @@ public class ServerSettingsPage extends Page<ServerSettingsPage> {
         onData(PreferenceMatchers.withKey("username")).perform(click());
         return this;
     }
+
+    public ServerSettingsPage clickFormListPath() {
+        onData(PreferenceMatchers.withKey("formlist_url")).perform(click());
+        return this;
+    }
+
+    public ServerSettingsPage clickSubmissionPath() {
+        onData(PreferenceMatchers.withKey("submission_url")).perform(click());
+        return this;
+    }
+
 }

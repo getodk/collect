@@ -8,5 +8,5 @@ import org.odk.collect.android.activities.MainMenuActivity;
 public class BaseRegressionTest {
 
     @Rule
-    public ActivityTestRule<MainMenuActivity> main = new ActivityTestRule<>(MainMenuActivity.class);
+    public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
 }

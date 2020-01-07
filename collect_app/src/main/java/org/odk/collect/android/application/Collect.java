@@ -63,6 +63,7 @@ import org.odk.collect.android.taskModel.FormLaunchDetail;
 import org.odk.collect.android.taskModel.FormRestartDetails;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PrefMigrator;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
@@ -119,7 +120,6 @@ public class Collect extends Application {
     @Nullable
     private FormController formController;
     private ExternalDataManager externalDataManager;
-    //private Tracker tracker;    // smap
     private FirebaseAnalytics firebaseAnalytics;
     private AppDependencyComponent applicationComponent;
 
@@ -301,8 +301,15 @@ public class Collect extends Application {
             Timber.plant(new Timber.DebugTree());
         }
 
+        setupRemoteAnalytics();
         setupLeakCanary();
         setupOSMDroid();
+    }
+
+    private void setupRemoteAnalytics() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isAnalyticsEnabled = settings.getBoolean(GeneralKeys.KEY_ANALYTICS, true);
+        setAnalyticsCollectionEnabled(isAnalyticsEnabled);
     }
 
     protected void setupOSMDroid() {
@@ -495,17 +502,7 @@ public class Collect extends Application {
     }
 
     public void logRemoteAnalytics(String event, String action, String label) {
-        // Google Analytics
-        /* smap
-        Collect.getInstance()
-                .getDefaultTracker()
-                .send(new HitBuilders.EventBuilder()
-                        .setCategory(event)
-                        .setAction(action)
-                        .setLabel(label)
-                        .build());
-
-        // Firebase Analytics
+	/* smap
         Bundle bundle = new Bundle();
         bundle.putString("action", action);
         bundle.putString("label", label);

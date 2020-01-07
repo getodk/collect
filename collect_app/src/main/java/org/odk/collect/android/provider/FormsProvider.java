@@ -25,8 +25,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
-
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
@@ -39,6 +37,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
 import timber.log.Timber;
 
 import static android.provider.BaseColumns._ID;
@@ -342,19 +341,13 @@ public class FormsProvider extends ContentProvider {
 
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
 
-        // first try to see if a record with this filename already exists...
-        String[] projection = {_ID, FORM_FILE_PATH};
-        String[] selectionArgs = {filePath};
-        String selection = FORM_FILE_PATH + "=?";
-        Cursor c = null;
-        try {
-            c = db.query(FORMS_TABLE_NAME, projection, selection,
-                    selectionArgs, null, null, null);
-            if (c.getCount() > 0) {
-                // already exists
-                throw new SQLException("FAILED Insert into " + uri
-                        + " -- row already exists for form definition file: "
-                        + filePath);
+            long rowId = db.insert(FORMS_TABLE_NAME, null, values);
+            if (rowId > 0) {
+                Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI,
+                        rowId);
+                getContext().getContentResolver().notifyChange(formUri, null);
+                getContext().getContentResolver().notifyChange(FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
+                return formUri;
             }
         } finally {
             if (c != null) {
@@ -627,8 +620,8 @@ public class FormsProvider extends ContentProvider {
                 }
                 break;
 
-            default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+            getContext().getContentResolver().notifyChange(uri, null);
+            getContext().getContentResolver().notifyChange(FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
         }
 
         getContext().getContentResolver().notifyChange(uri, null);
@@ -657,24 +650,25 @@ public class FormsProvider extends ContentProvider {
         URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, CONTENT_NEWEST_FORMS_BY_FORMID_URI.getPath().replaceAll("^/+", ""), NEWEST_FORMS_BY_FORM_ID);
 
         sFormsProjectionMap = new HashMap<>();
-        sFormsProjectionMap.put(_ID, _ID);
-        sFormsProjectionMap.put(DISPLAY_NAME, DISPLAY_NAME);
-        sFormsProjectionMap.put(DESCRIPTION, DESCRIPTION);
-        sFormsProjectionMap.put(JR_FORM_ID, JR_FORM_ID);
-        sFormsProjectionMap.put(JR_VERSION, JR_VERSION);
-        sFormsProjectionMap.put(SUBMISSION_URI, SUBMISSION_URI);
-        sFormsProjectionMap.put(PROJECT, PROJECT);                              // smap
-        sFormsProjectionMap.put(TASKS_ONLY, TASKS_ONLY);                        // smap
-        sFormsProjectionMap.put(SOURCE, SOURCE);                                // smap
-        sFormsProjectionMap.put(BASE64_RSA_PUBLIC_KEY, BASE64_RSA_PUBLIC_KEY);
-        sFormsProjectionMap.put(MD5_HASH, MD5_HASH);
-        sFormsProjectionMap.put(DATE, DATE);
-        sFormsProjectionMap.put(FORM_MEDIA_PATH, FORM_MEDIA_PATH);
-        sFormsProjectionMap.put(FORM_FILE_PATH, FORM_FILE_PATH);
-        sFormsProjectionMap.put(JRCACHE_FILE_PATH, JRCACHE_FILE_PATH);
-        sFormsProjectionMap.put(LANGUAGE, LANGUAGE);
-        sFormsProjectionMap.put(AUTO_DELETE, AUTO_DELETE);
-        sFormsProjectionMap.put(AUTO_SEND, AUTO_SEND);
-        sFormsProjectionMap.put(LAST_DETECTED_FORM_VERSION_HASH, LAST_DETECTED_FORM_VERSION_HASH);
+        sFormsProjectionMap.put(FormsColumns._ID, FormsColumns._ID);
+        sFormsProjectionMap.put(FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_NAME);
+        sFormsProjectionMap.put(FormsColumns.DESCRIPTION, FormsColumns.DESCRIPTION);
+        sFormsProjectionMap.put(FormsColumns.JR_FORM_ID, FormsColumns.JR_FORM_ID);
+        sFormsProjectionMap.put(FormsColumns.JR_VERSION, FormsColumns.JR_VERSION);
+        sFormsProjectionMap.put(FormsColumns.SUBMISSION_URI, FormsColumns.SUBMISSION_URI);
+        sFormsProjectionMap.put(FormsColumns.PROJECT, PROJECT);                              // smap
+        sFormsProjectionMap.put(FormsColumns.TASKS_ONLY, TASKS_ONLY);                        // smap
+        sFormsProjectionMap.put(FormsColumns.SOURCE, SOURCE);                                // smap
+        sFormsProjectionMap.put(FormsColumns.BASE64_RSA_PUBLIC_KEY, FormsColumns.BASE64_RSA_PUBLIC_KEY);
+        sFormsProjectionMap.put(FormsColumns.MD5_HASH, FormsColumns.MD5_HASH);
+        sFormsProjectionMap.put(FormsColumns.DATE, FormsColumns.DATE);
+        sFormsProjectionMap.put(FormsColumns.FORM_MEDIA_PATH, FormsColumns.FORM_MEDIA_PATH);
+        sFormsProjectionMap.put(FormsColumns.FORM_FILE_PATH, FormsColumns.FORM_FILE_PATH);
+        sFormsProjectionMap.put(FormsColumns.JRCACHE_FILE_PATH, FormsColumns.JRCACHE_FILE_PATH);
+        sFormsProjectionMap.put(FormsColumns.LANGUAGE, FormsColumns.LANGUAGE);
+        sFormsProjectionMap.put(FormsColumns.AUTO_DELETE, FormsColumns.AUTO_DELETE);
+        sFormsProjectionMap.put(FormsColumns.AUTO_SEND, FormsColumns.AUTO_SEND);
+        sFormsProjectionMap.put(FormsColumns.LAST_DETECTED_FORM_VERSION_HASH, FormsColumns.LAST_DETECTED_FORM_VERSION_HASH);
+        sFormsProjectionMap.put(FormsColumns.GEOMETRY_XPATH, FormsColumns.GEOMETRY_XPATH);
     }
 }

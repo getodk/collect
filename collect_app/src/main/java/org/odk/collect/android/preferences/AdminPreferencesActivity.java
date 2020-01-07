@@ -79,13 +79,14 @@ public class AdminPreferencesActivity extends CollectAbstractActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_preferences_layout);
         setTheme(new ThemeUtils(this).getSettingsTheme());
 
         setTitle(R.string.admin_preferences);
         if (savedInstanceState == null) {
             getFragmentManager()
                     .beginTransaction()
-                    .add(android.R.id.content, new AdminPreferencesFragment(), TAG)
+                    .add(R.id.container, new AdminPreferencesFragment(), TAG)
                     .commit();
         }
     }

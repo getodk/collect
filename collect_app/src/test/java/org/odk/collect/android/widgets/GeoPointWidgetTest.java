@@ -96,7 +96,7 @@ public class GeoPointWidgetTest extends BinaryWidgetTest<GeoPointWidget, GeoPoin
     public void buttonsShouldLaunchCorrectIntents() {
         stubAllRuntimePermissionsGranted(true);
 
-        Intent intent = getIntentLaunchedByClick(R.id.get_location);
+        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
         assertComponentEquals(activity, GeoPointActivity.class, intent);
     }
 
@@ -104,6 +104,6 @@ public class GeoPointWidgetTest extends BinaryWidgetTest<GeoPointWidget, GeoPoin
     public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
         stubAllRuntimePermissionsGranted(false);
 
-        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.get_location));
+        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.simple_button));
     }
 }

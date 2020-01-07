@@ -60,7 +60,7 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
     }
 
     private void createLayout(boolean readOnlyOverride) {    // smap add readOnlyOverride
-        adapter = new SelectMultipleListAdapter(items, ve, this, numColumns, readOnlyOverride);  // smap add readOnlyOverride
+        adapter = new SelectMultipleListAdapter(items, ve, this, numColumns, this.getFormEntryPrompt(), this.getReferenceManager(), this.getAnswerFontSize(), this.getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), this.getContext(), readOnlyOverride);	// smap add readOnlyOverride
 
         if (items != null) {
             // check if any values have spaces

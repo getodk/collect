@@ -35,7 +35,10 @@ import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.external.handler.ExternalDataHandlerSearch;
 import org.odk.collect.android.external.handler.SmapRemoteDataHandlerSearch;
 import org.odk.collect.android.logic.FormInfo;
+import org.odk.collect.android.logic.FormController;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -174,7 +177,7 @@ public final class ExternalDataUtil {
     }
 
     public static ArrayList<SelectChoice> populateExternalChoices(FormEntryPrompt formEntryPrompt,
-            XPathFuncExpr xpathfuncexpr) {
+            XPathFuncExpr xpathfuncexpr) throws FileNotFoundException {
         ArrayList<SelectChoice> returnedChoices = new ArrayList<SelectChoice>();        // smap
         try {
             List<SelectChoice> selectChoices = formEntryPrompt.getSelectChoices();
@@ -232,9 +235,21 @@ public final class ExternalDataUtil {
             }
             return returnedChoices;
         } catch (Exception e) {
-            Timber.e(e.getMessage());
+            String fileName = String.valueOf(xpathfuncexpr.args[0].eval(null, null));
+            if (!fileName.endsWith(".csv")) {
+                fileName = fileName + ".csv";
+            }
+            FormController formController = Collect.getInstance().getFormController();
+            String filePath = fileName;
+            if (formController != null) {
+                filePath = Collect.getInstance().getFormController().getMediaFolder() + File.separator + fileName;
+            }
+            if (!new File(filePath).exists()) {
+                throw new FileNotFoundException(filePath);
+            }
+
             return returnedChoices;  // smap
-            //throw new ExternalDataException(e.getMessage(), e);  smap
+            // throw new ExternalDataException(e.getMessage(), e);  // smap
         }
     }
 

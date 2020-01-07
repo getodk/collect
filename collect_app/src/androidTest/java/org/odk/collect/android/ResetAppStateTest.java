@@ -21,9 +21,6 @@ import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
-import androidx.test.InstrumentationRegistry;
-import androidx.test.rule.GrantPermissionRule;
-import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.After;
 import org.junit.Before;
@@ -33,16 +30,22 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.provider.FormsProviderAPI;
-import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ResetUtility;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.osmdroid.config.Configuration;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import androidx.test.InstrumentationRegistry;
+import androidx.test.rule.GrantPermissionRule;
+import androidx.test.runner.AndroidJUnit4;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -77,6 +80,9 @@ public class ResetAppStateTest {
 
     @Test
     public void resetSettingsTest() throws IOException {
+        WebCredentialsUtils webCredentialsUtils = new WebCredentialsUtils();
+        webCredentialsUtils.saveCredentials("https://opendatakit.appspot.com/", "admin", "admin");
+
         setupTestSettings();
         resetAppState(Collections.singletonList(ResetUtility.ResetAction.RESET_PREFERENCES));
 
@@ -87,6 +93,8 @@ public class ResetAppStateTest {
 
         assertEquals(0, getFormsCount());
         assertEquals(0, getInstancesCount());
+        assertEquals("", webCredentialsUtils.getCredentials(URI.create("https://opendatakit.appspot.com/")).getUsername());
+        assertEquals("", webCredentialsUtils.getCredentials(URI.create("https://opendatakit.appspot.com/")).getPassword());
     }
 
     @Test
@@ -160,28 +168,28 @@ public class ResetAppStateTest {
 
     private void setupTestFormsDatabase() {
         ContentValues values = new ContentValues();
-        values.put(FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH, Collect.ODK_ROOT + "/.cache/3a76a386464925b6f3e53422673dfe3c.formdef");
-        values.put(FormsProviderAPI.FormsColumns.JR_FORM_ID, "jrFormId");
-        values.put(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH, Collect.FORMS_PATH + "/testFile1-media");
-        values.put(FormsProviderAPI.FormsColumns.DATE, "1487077903756");
-        values.put(FormsProviderAPI.FormsColumns.DISPLAY_NAME, "displayName");
-        values.put(FormsProviderAPI.FormsColumns.FORM_FILE_PATH, Collect.FORMS_PATH + "/testFile1.xml");
+        values.put(FormsColumns.JRCACHE_FILE_PATH, Collect.ODK_ROOT + "/.cache/3a76a386464925b6f3e53422673dfe3c.formdef");
+        values.put(FormsColumns.JR_FORM_ID, "jrFormId");
+        values.put(FormsColumns.FORM_MEDIA_PATH, Collect.FORMS_PATH + "/testFile1-media");
+        values.put(FormsColumns.DATE, "1487077903756");
+        values.put(FormsColumns.DISPLAY_NAME, "displayName");
+        values.put(FormsColumns.FORM_FILE_PATH, Collect.FORMS_PATH + "/testFile1.xml");
         Collect.getInstance().getContentResolver()
-                .insert(FormsProviderAPI.FormsColumns.CONTENT_URI, values);
+                .insert(FormsColumns.CONTENT_URI, values);
 
         assertEquals(1, getFormsCount());
     }
 
     private void setupTestInstancesDatabase() {
         ContentValues values = new ContentValues();
-        values.put(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH, Collect.INSTANCES_PATH + "/testDir1/testFile1");
-        values.put(InstanceProviderAPI.InstanceColumns.SUBMISSION_URI, "submissionUri");
-        values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME, "displayName");
-        values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME, "formName");
-        values.put(InstanceProviderAPI.InstanceColumns.JR_FORM_ID, "jrformid");
-        values.put(InstanceProviderAPI.InstanceColumns.JR_VERSION, "jrversion");
+        values.put(InstanceColumns.INSTANCE_FILE_PATH, Collect.INSTANCES_PATH + "/testDir1/testFile1");
+        values.put(InstanceColumns.SUBMISSION_URI, "submissionUri");
+        values.put(InstanceColumns.DISPLAY_NAME, "displayName");
+        values.put(InstanceColumns.DISPLAY_NAME, "formName");
+        values.put(InstanceColumns.JR_FORM_ID, "jrformid");
+        values.put(InstanceColumns.JR_VERSION, "jrversion");
         Collect.getInstance().getContentResolver()
-                .insert(InstanceProviderAPI.InstanceColumns.CONTENT_URI, values);
+                .insert(InstanceColumns.CONTENT_URI, values);
 
         assertEquals(1, getInstancesCount());
     }
@@ -228,8 +236,8 @@ public class ResetAppStateTest {
     private int getFormsCount() {
         int forms = 0;
         Cursor cursor = Collect.getInstance().getContentResolver().query(
-                FormsProviderAPI.FormsColumns.CONTENT_URI, null, null, null,
-                FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC");
+                FormsColumns.CONTENT_URI, null, null, null,
+                FormsColumns.DISPLAY_NAME + " ASC");
         if (cursor != null) {
             try {
                 if (cursor.moveToFirst()) {
@@ -249,8 +257,8 @@ public class ResetAppStateTest {
     private int getInstancesCount() {
         int instances = 0;
         Cursor cursor = Collect.getInstance().getContentResolver().query(
-                InstanceProviderAPI.InstanceColumns.CONTENT_URI, null, null, null,
-                InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC");
+                InstanceColumns.CONTENT_URI, null, null, null,
+                InstanceColumns.DISPLAY_NAME + " ASC");
         if (cursor != null) {
             try {
                 if (cursor.moveToFirst()) {

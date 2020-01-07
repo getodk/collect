@@ -127,6 +127,6 @@ public class FormEntryPromptUtils {
 
     public static CharSequence getItemText(FormEntryPrompt formEntryPrompt, SelectChoice selectChoice) {
         String choiceName = formEntryPrompt.getSelectChoiceText(selectChoice);
-        return choiceName != null ? TextUtils.textToHtml(choiceName) : "";
+        return choiceName != null ? StringUtils.textToHtml(choiceName) : "";
     }
 }

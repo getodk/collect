@@ -39,9 +39,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
-
 //import com.google.android.gms.analytics.GoogleAnalytics;  // smap
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
@@ -263,52 +261,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
         adminPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
-
-        InstancesDao instancesDao = new InstancesDao();
-
-        // count for finalized instances
-        try {
-            finalizedCursor = instancesDao.getFinalizedInstancesCursor();
-        } catch (Exception e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
-        }
-
-        if (finalizedCursor != null) {
-            startManagingCursor(finalizedCursor);
-        }
-        completedCount = finalizedCursor != null ? finalizedCursor.getCount() : 0;
-        getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true,
-                contentObserver);
-        // finalizedCursor.registerContentObserver(contentObserver);
-
-        // count for saved instances
-        try {
-            savedCursor = instancesDao.getUnsentInstancesCursor();
-        } catch (Exception e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
-        }
-
-        if (savedCursor != null) {
-            startManagingCursor(savedCursor);
-        }
-        savedCount = savedCursor != null ? savedCursor.getCount() : 0;
-
-        //count for view sent form
-        try {
-            viewSentCursor = instancesDao.getSentInstancesCursor();
-        } catch (Exception e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
-        }
-        if (viewSentCursor != null) {
-            startManagingCursor(viewSentCursor);
-        }
-        viewSentCount = viewSentCursor != null ? viewSentCursor.getCount() : 0;
-
-        updateButtons();
-        // setupGoogleAnalytics();   smap disable
     }
 
     private void initToolbar() {
@@ -320,11 +272,20 @@ public class MainMenuActivity extends CollectAbstractActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        countSavedForms();
+        updateButtons();
+        getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true,
+                contentObserver);
+
+        setButtonsVisibility();
+    }
+
+    private void setButtonsVisibility() {
         SharedPreferences sharedPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
-        boolean edit = sharedPreferences.getBoolean(
-                AdminKeys.KEY_EDIT_SAVED, true);
+        boolean edit = sharedPreferences.getBoolean(AdminKeys.KEY_EDIT_SAVED, true);
         if (!edit) {
             if (reviewDataButton != null) {
                 reviewDataButton.setVisibility(View.GONE);
@@ -335,8 +296,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         }
 
-        boolean send = sharedPreferences.getBoolean(
-                AdminKeys.KEY_SEND_FINALIZED, true);
+        boolean send = sharedPreferences.getBoolean(AdminKeys.KEY_SEND_FINALIZED, true);
         if (!send) {
             if (sendDataButton != null) {
                 sendDataButton.setVisibility(View.GONE);
@@ -347,8 +307,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         }
 
-        boolean viewSent = sharedPreferences.getBoolean(
-                AdminKeys.KEY_VIEW_SENT, true);
+        boolean viewSent = sharedPreferences.getBoolean(AdminKeys.KEY_VIEW_SENT, true);
         if (!viewSent) {
             if (viewSentFormsButton != null) {
                 viewSentFormsButton.setVisibility(View.GONE);
@@ -359,8 +318,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         }
 
-        boolean getBlank = sharedPreferences.getBoolean(
-                AdminKeys.KEY_GET_BLANK, true);
+        boolean getBlank = sharedPreferences.getBoolean(AdminKeys.KEY_GET_BLANK, true);
         if (!getBlank) {
             if (getFormsButton != null) {
                 getFormsButton.setVisibility(View.GONE);
@@ -371,8 +329,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         }
 
-        boolean deleteSaved = sharedPreferences.getBoolean(
-                AdminKeys.KEY_DELETE_SAVED, true);
+        boolean deleteSaved = sharedPreferences.getBoolean(AdminKeys.KEY_DELETE_SAVED, true);
         if (!deleteSaved) {
             if (manageFilesButton != null) {
                 manageFilesButton.setVisibility(View.GONE);
@@ -396,6 +353,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         if (alertDialog != null && alertDialog.isShowing()) {
             alertDialog.dismiss();
         }
+        getContentResolver().unregisterContentObserver(contentObserver);
     }
 
     @Override
@@ -424,6 +382,48 @@ public class MainMenuActivity extends CollectAbstractActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void countSavedForms() {
+        InstancesDao instancesDao = new InstancesDao();
+
+        // count for finalized instances
+        try {
+            finalizedCursor = instancesDao.getFinalizedInstancesCursor();
+        } catch (Exception e) {
+            createErrorDialog(e.getMessage(), EXIT);
+            return;
+        }
+
+        if (finalizedCursor != null) {
+            startManagingCursor(finalizedCursor);
+        }
+        completedCount = finalizedCursor != null ? finalizedCursor.getCount() : 0;
+
+        // count for saved instances
+        try {
+            savedCursor = instancesDao.getUnsentInstancesCursor();
+        } catch (Exception e) {
+            createErrorDialog(e.getMessage(), EXIT);
+            return;
+        }
+
+        if (savedCursor != null) {
+            startManagingCursor(savedCursor);
+        }
+        savedCount = savedCursor != null ? savedCursor.getCount() : 0;
+
+        //count for view sent form
+        try {
+            viewSentCursor = instancesDao.getSentInstancesCursor();
+        } catch (Exception e) {
+            createErrorDialog(e.getMessage(), EXIT);
+            return;
+        }
+        if (viewSentCursor != null) {
+            startManagingCursor(viewSentCursor);
+        }
+        viewSentCount = viewSentCursor != null ? viewSentCursor.getCount() : 0;
     }
 
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
@@ -506,18 +506,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
         }
         return null;
     }
-
-    // This flag must be set each time the app starts up
-    /* smap
-    private void setupGoogleAnalytics() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
-                .getInstance());
-        //boolean isAnalyticsEnabled = settings.getBoolean(GeneralKeys.KEY_ANALYTICS, true);        // smap disable
-        boolean isAnalyticsEnabled = false;                                                                 // smap disable
-        GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getApplicationContext());
-        googleAnalytics.setAppOptOut(!isAnalyticsEnabled);
-    }
-    */
 
     private void updateButtons() {
         if (finalizedCursor != null && !finalizedCursor.isClosed()) {

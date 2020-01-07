@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -73,8 +74,11 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     @BindView(R.id.missingImage)
     TextView missingImage;
 
-    @BindView(R.id.select_container)
-    FrameLayout flContainer;
+    @BindView(R.id.text_container)
+    FrameLayout textContainer;
+
+    @BindView(R.id.media_buttons)
+    LinearLayout mediaButtonsContainer;
 
     private TextView labelTextView;
     private String videoURI;
@@ -97,6 +101,15 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         ButterKnife.bind(this);
     }
 
+    public void setText(TextView questionText) {
+        originalText = questionText.getText();
+
+        this.labelTextView = questionText;
+        this.labelTextView.setId(ViewIds.generateViewId());
+        textContainer.removeAllViews();
+        textContainer.addView(this.labelTextView);
+    }
+
     public void setAudio(String audioURI, AudioHelper audioHelper) {
         setupAudioButton(audioURI, audioHelper);
     }
@@ -105,15 +118,11 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
      * This should move to separate setters like {@link #setAudio(String, AudioHelper)}
      */
     @Deprecated
-    public void setTextImageVideo(TextView labelTextView, String imageURI, String videoURI,
-                                  String bigImageURI, ReferenceManager referenceManager) {
+    public void setImageVideo(String imageURI, String videoURI,
+                              String bigImageURI, ReferenceManager referenceManager) {
         this.bigImageURI = bigImageURI;
         this.videoURI = videoURI;
         this.referenceManager = referenceManager;
-
-        this.labelTextView = labelTextView;
-        originalText = labelTextView.getText();
-        this.labelTextView.setId(ViewIds.generateViewId());
 
         if (videoURI != null) {
             setupVideoButton();
@@ -122,9 +131,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         if (imageURI != null) {
             setupBigImage(imageURI);
         }
-
-        flContainer.removeAllViews();
-        flContainer.addView(this.labelTextView);
     }
 
     public void setPlayTextColor(int textColor) {
@@ -245,6 +251,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
             if (errorMsg != null) {
                 // errorMsg is only set when an error has occurred
                 Timber.e(errorMsg);
+                imageView.setVisibility(View.GONE);
                 missingImage.setVisibility(VISIBLE);
                 missingImage.setText(errorMsg);
             }
@@ -255,11 +262,13 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     private void setupVideoButton() {
         videoButton.setVisibility(VISIBLE);
+        mediaButtonsContainer.setVisibility(VISIBLE);
         videoButton.setOnClickListener(this);
     }
 
     private void setupAudioButton(String audioURI, AudioHelper audioHelper) {
         audioButton.setVisibility(VISIBLE);
+        mediaButtonsContainer.setVisibility(VISIBLE);
 
         ScreenContext activity = getScreenContext();
         String clipID = getTag() != null ? getTag().toString() : "";

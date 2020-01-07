@@ -84,6 +84,8 @@ public class ResetUtility {
     }
 
     private void resetPreferences(Context context) {
+        WebCredentialsUtils.clearAllCredentials();
+
         GeneralSharedPreferences.getInstance().loadDefaultPreferences();
         AdminSharedPreferences.getInstance().loadDefaultPreferences();
 

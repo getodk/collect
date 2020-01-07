@@ -181,6 +181,7 @@ the specific language governing permissions and limitations under the License.
         <activity
             android:name=".activities.GeoPolyActivity"
             android:configChanges="orientation" />
+        <activity android:name=".activities.FormMapActivity" />
         <activity android:name=".activities.BearingActivity" />
         <activity
             android:name="org.odk.collect.android.activities.NFCActivity"
@@ -272,10 +273,7 @@ the specific language governing permissions and limitations under the License.
 
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"
-            android:value="@bool/FIREBASE_ENABLED" />
-
-        <meta-data android:name="firebase_analytics_collection_enabled"
-            android:value="@bool/FIREBASE_ENABLED" />
+            android:value="@bool/CRASHLYTICS_ENABLED" />
 
         <uses-library
             android:name="com.google.android.maps"
