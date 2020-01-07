@@ -115,8 +115,8 @@ android {
 
 
             debuggable(true)
-            testCoverageEnabled(false)    // smap
-            resValue("bool", "FIREBASE_ENABLED", "false")
+            testCoverageEnabled(true)
+            resValue("bool", "CRASHLYTICS_ENABLED", "false")
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
         }
