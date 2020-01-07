@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.FormSaver;
-import org.odk.collect.android.tasks.SaveResult;
+import org.odk.collect.android.tasks.SaveToDiskTaskResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
@@ -224,11 +224,11 @@ public class FormEntryViewModelTest {
     }
 
     private void whenFormSaverFinishes(int result, String message) {
-        SaveResult saveResult = new SaveResult();
-        saveResult.setSaveResult(result, true);
-        saveResult.setSaveErrorMessage(message);
+        SaveToDiskTaskResult saveToDiskTaskResult = new SaveToDiskTaskResult();
+        saveToDiskTaskResult.setSaveResult(result, true);
+        saveToDiskTaskResult.setSaveErrorMessage(message);
 
-        when(formSaver.save(any(), anyBoolean(), any(), anyBoolean(), any())).thenReturn(saveResult);
+        when(formSaver.save(any(), anyBoolean(), any(), anyBoolean(), any())).thenReturn(saveToDiskTaskResult);
         Robolectric.getBackgroundThreadScheduler().advanceToLastPostedRunnable();
     }
 }

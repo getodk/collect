@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import org.odk.collect.android.utilities.Scheduler;
+import org.odk.collect.utilities.Scheduler;
 
 class AudioPlayerViewModelFactory implements ViewModelProvider.Factory {
 

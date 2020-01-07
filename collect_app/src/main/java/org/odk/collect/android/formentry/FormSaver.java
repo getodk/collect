@@ -2,10 +2,10 @@ package org.odk.collect.android.formentry;
 
 import android.net.Uri;
 
-import org.odk.collect.android.tasks.SaveResult;
+import org.odk.collect.android.tasks.SaveToDiskTaskResult;
 
 public interface FormSaver {
-    SaveResult save(Uri uri, boolean complete, String updatedSaveName, boolean exitAfter, ProgressListener progressListener);
+    SaveToDiskTaskResult save(Uri uri, boolean complete, String updatedSaveName, boolean exitAfter, ProgressListener progressListener);
 
     interface ProgressListener {
         void onProgressUpdate(String message);

@@ -2,6 +2,8 @@ package org.odk.collect.android.utilities;
 
 import android.os.Handler;
 
+import org.odk.collect.utilities.Scheduler;
+
 /**
  * An implementation of {@link Scheduler} that uses {@link Handler} to schedule work on the
  * scheduling thread.
