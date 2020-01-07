@@ -67,33 +67,30 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
             }
         });
 
-        reasonField.requestFocus();
-
         toolbar.setOnMenuItemClickListener(item -> {
-            viewModel.saveReason(System.currentTimeMillis());
+            if (viewModel.saveReason(System.currentTimeMillis())) {
+                dismiss();
+            }
+
             return true;
         });
+
+        reasonField.requestFocus();
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-
         viewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(FormEntryViewModel.class);
-        viewModel.requiresReasonToContinue().observe(this, requiresReason -> {
-            if (!requiresReason) {
-                dismiss();
-            }
-        });
     }
 
     @Override
     protected void onBackPressed() {
-        viewModel.promptDismissed();
+        dismiss();
     }
 
     @Override
     protected void onCloseClicked() {
-        viewModel.promptDismissed();
+        dismiss();
     }
 }

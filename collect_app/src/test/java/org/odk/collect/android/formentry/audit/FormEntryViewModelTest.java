@@ -41,6 +41,7 @@ public class FormEntryViewModelTest {
 
     @Before
     public void setup() {
+        // Useful given some methods will execute AsyncTasks
         Robolectric.getBackgroundThreadScheduler().pause();
 
         logger = mock(AuditEventLogger.class);
@@ -54,8 +55,6 @@ public class FormEntryViewModelTest {
 
     @Test
     public void saveReason_logsChangeReasonAuditEvent() {
-        when(logger.isChangeReasonRequired()).thenReturn(true);
-
         viewModel.setReason("Blah");
         viewModel.saveReason(CURRENT_TIME);
 
@@ -63,14 +62,18 @@ public class FormEntryViewModelTest {
     }
 
     @Test
-    public void promptDismissed_sets_isChangeReasonRequired_false() {
-        whenReasonRequiredToSave();
+    public void saveReason_whenReasonIsValid_returnsTrue() {
+        viewModel.setReason("Blah");
+        assertThat(viewModel.saveReason(CURRENT_TIME), equalTo(true));
+    }
 
-        viewModel.saveForm(Uri.parse("file://form"), true, "", false);
-        assertThat(viewModel.requiresReasonToContinue().getValue(), equalTo(true));
+    @Test
+    public void saveReason_whenReasonIsNotValid_returnsFalse() {
+        viewModel.setReason("");
+        assertThat(viewModel.saveReason(CURRENT_TIME), equalTo(false));
 
-        viewModel.promptDismissed();
-        assertThat(viewModel.requiresReasonToContinue().getValue(), equalTo(false));
+        viewModel.setReason("  ");
+        assertThat(viewModel.saveReason(CURRENT_TIME), equalTo(false));
     }
 
     @Test

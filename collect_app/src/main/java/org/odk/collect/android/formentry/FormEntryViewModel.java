@@ -24,7 +24,6 @@ import static org.odk.collect.android.utilities.StringUtils.isBlank;
 
 public class FormEntryViewModel extends ViewModel {
 
-    private final MutableLiveData<Boolean> requiresReasonToContinue = new MutableLiveData<>(false);
     private final Clock clock;
     private final FormSaver formSaver;
 
@@ -47,10 +46,6 @@ public class FormEntryViewModel extends ViewModel {
         this.formSaver = formSaver;
     }
 
-    public LiveData<Boolean> requiresReasonToContinue() {
-        return requiresReasonToContinue;
-    }
-
     public void setAuditEventLogger(@Nullable AuditEventLogger auditEventLogger) {
         this.auditEventLogger = auditEventLogger;
     }
@@ -62,7 +57,6 @@ public class FormEntryViewModel extends ViewModel {
         if (!requiresReasonToSave()) {
             saveToDisk(uri, complete, updatedSaveName, viewExiting);
         } else {
-            requiresReasonToContinue.setValue(true);
             saveResult.setValue(new SaveResult(SaveResult.State.CHANGE_REASON_REQUIRED));
         }
 
@@ -75,26 +69,24 @@ public class FormEntryViewModel extends ViewModel {
         }
     }
 
-    public void promptDismissed() {
-        requiresReasonToContinue.setValue(false);
-    }
-
     public void setReason(String reason) {
         this.reason = reason;
     }
 
-    public void saveReason(Long currentTime) {
-        if (reason != null && !isBlank(reason)) {
-            if (auditEventLogger != null) {
-                auditEventLogger.logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, currentTime, reason);
-            }
-
-            requiresReasonToContinue.setValue(false);
-
-            if (saveResult != null) {
-                saveToDisk(lastSaveRequest.uri, lastSaveRequest.formComplete, lastSaveRequest.updatedSaveName, lastSaveRequest.viewExiting);
-            }
+    public boolean saveReason(Long currentTime) {
+        if (reason == null || isBlank(reason)) {
+            return false;
         }
+
+        if (auditEventLogger != null) {
+            auditEventLogger.logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, currentTime, reason);
+        }
+
+        if (saveResult != null) {
+            saveToDisk(lastSaveRequest.uri, lastSaveRequest.formComplete, lastSaveRequest.updatedSaveName, lastSaveRequest.viewExiting);
+        }
+
+        return true;
     }
 
     public String getReason() {
