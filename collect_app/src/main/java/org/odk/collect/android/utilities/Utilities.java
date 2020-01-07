@@ -730,8 +730,8 @@ public class Utilities {
                 builder.append(coord);
                 builder.append(",");
             }
-            values.put(InstanceColumns.T_GEOM, builder.toString());
-            values.put(InstanceColumns.T_GEOM_TYPE, ta.location.geometry.type);
+            values.put(InstanceColumns.GEOMETRY, builder.toString());
+            values.put(InstanceColumns.GEOMETRY_TYPE, ta.location.geometry.type);
         }
 
         Collect.getInstance().getContentResolver().update(dbUri, values, selectClause, selectArgs);

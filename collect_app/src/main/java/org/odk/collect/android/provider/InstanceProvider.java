@@ -48,41 +48,7 @@ import java.util.Locale;
 import timber.log.Timber;
 
 import static android.provider.BaseColumns._ID;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.ACT_LAT;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.ACT_LON;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DELETED_DATE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DISPLAY_NAME;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.FORM_PATH;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_FORM_ID;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_VERSION;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SCHED_LAT;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SCHED_LON;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SOURCE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.STATUS;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SUBMISSION_URI;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_ACT_FINISH;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_ACT_START;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_ADDRESS;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_ASS_ID;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_GEOM;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_GEOM_TYPE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_HIDE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_IS_SYNC;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_LOCATION_TRIGGER;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_REPEAT;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_SCHED_START;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_SCHED_FINISH;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_SHOW_DIST;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_SURVEY_NOTES;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_TASK_COMMENT;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_TASK_STATUS;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_TITLE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_UPDATED;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_UPDATEID;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.UUID;
+
 import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 
 public class InstanceProvider extends ContentProvider {
@@ -99,44 +65,43 @@ public class InstanceProvider extends ContentProvider {
 
     private static final UriMatcher URI_MATCHER;
 
-<<<<<<< HEAD
     private static final String[] COLUMN_NAMES_V16 = new String[] {
             _ID,
-            DISPLAY_NAME,
-            SUBMISSION_URI,
-            CAN_EDIT_WHEN_COMPLETE,
-            INSTANCE_FILE_PATH,
-            JR_FORM_ID,
-            JR_VERSION,
-            STATUS,
-            LAST_STATUS_CHANGE_DATE,
-            DELETED_DATE,
-            SOURCE,             // smap
-            FORM_PATH,          // smap
-            ACT_LON,            // smap
-            ACT_LAT,            // smap
-            SCHED_LON,          // smap
-            SCHED_LAT,          // smap
-            T_TITLE,            // smap
-            T_SCHED_START,      // smap
-            T_SCHED_FINISH,      // smap
-            T_ACT_START,        // smap
-            T_ACT_FINISH,       // smap
-            T_ADDRESS,          // smap
-            T_GEOM,             // smap
-            T_GEOM_TYPE,        // smap
-            T_IS_SYNC,          // smap
-            T_ASS_ID,           // smap
-            T_TASK_STATUS,      // smap
-            T_TASK_COMMENT,     // smap
-            T_REPEAT,           // smap
-            T_UPDATEID,         // smap
-            T_LOCATION_TRIGGER, // smap
-            T_SURVEY_NOTES,     // smap
-            UUID,               // smap
-            T_UPDATED,          // smap
-            T_SHOW_DIST,        // smap
-            T_HIDE              // smap
+            InstanceColumns.DISPLAY_NAME,
+            InstanceColumns.SUBMISSION_URI,
+            InstanceColumns.CAN_EDIT_WHEN_COMPLETE,
+            InstanceColumns.INSTANCE_FILE_PATH,
+            InstanceColumns.JR_FORM_ID,
+            InstanceColumns.JR_VERSION,
+            InstanceColumns.STATUS,
+            InstanceColumns.LAST_STATUS_CHANGE_DATE,
+            InstanceColumns.DELETED_DATE,
+            InstanceColumns.SOURCE,             // smap
+            InstanceColumns.FORM_PATH,          // smap
+            InstanceColumns.ACT_LON,            // smap
+            InstanceColumns.ACT_LAT,            // smap
+            InstanceColumns.SCHED_LON,          // smap
+            InstanceColumns.SCHED_LAT,          // smap
+            InstanceColumns.T_TITLE,            // smap
+            InstanceColumns.T_SCHED_START,      // smap
+            InstanceColumns.T_SCHED_FINISH,      // smap
+            InstanceColumns.T_ACT_START,        // smap
+            InstanceColumns.T_ACT_FINISH,       // smap
+            InstanceColumns.T_ADDRESS,          // smap
+            InstanceColumns.GEOMETRY,             // smap
+            InstanceColumns.GEOMETRY_TYPE,        // smap
+            InstanceColumns.T_IS_SYNC,          // smap
+            InstanceColumns.T_ASS_ID,           // smap
+            InstanceColumns.T_TASK_STATUS,      // smap
+            InstanceColumns.T_TASK_COMMENT,     // smap
+            InstanceColumns.T_REPEAT,           // smap
+            InstanceColumns.T_UPDATEID,         // smap
+            InstanceColumns.T_LOCATION_TRIGGER, // smap
+            InstanceColumns.T_SURVEY_NOTES,     // smap
+            InstanceColumns. UUID,               // smap
+            InstanceColumns.T_UPDATED,          // smap
+            InstanceColumns.T_SHOW_DIST,        // smap
+            InstanceColumns.T_HIDE              // smap
 
     };
 
@@ -177,11 +142,6 @@ public class InstanceProvider extends ContentProvider {
     private DatabaseHelper databaseHelper;
 
     private DatabaseHelper getDbHelper() {
-=======
-    private static InstancesDatabaseHelper dbHelper;
-
-    private synchronized InstancesDatabaseHelper getDbHelper() {
->>>>>>> merge_master
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
             Collect.createODKDirs();
@@ -413,7 +373,6 @@ public class InstanceProvider extends ContentProvider {
                     }
                 }
 
-<<<<<<< HEAD
                 // smap we are only ever going to update the status
                 //We are going to update the status, if the form is submitted
                 //We will not delete the record in table but we will delete the file
@@ -425,25 +384,16 @@ public class InstanceProvider extends ContentProvider {
                     // smap Update the deleted date and also change the assignment status to rejected
                     ContentValues cv = new ContentValues();
                     cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
-                    cv.put(T_TASK_STATUS, Utilities.STATUS_T_REJECTED);
+                    cv.put(InstanceColumns.T_TASK_STATUS, Utilities.STATUS_T_REJECTED);
+                    // Geometry fields represent data inside the form which can be very
+                    // sensitive so they are removed on delete.
+                    cv.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
+                    cv.put(InstanceColumns.GEOMETRY, (String) null);
+
                     count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
                 }
                 /* smap
                 } else {
-=======
-                    // Keep sent instance database rows but delete corresponding files
-                    if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
-                        ContentValues cv = new ContentValues();
-                        cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
-
-                        // Geometry fields represent data inside the form which can be very
-                        // sensitive so they are removed on delete.
-                        cv.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
-                        cv.put(InstanceColumns.GEOMETRY, (String) null);
-
-                        count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
-                    } else {
->>>>>>> merge_master
                         String[] newWhereArgs;
                         if (whereArgs == null || whereArgs.length == 0) {
                             newWhereArgs = new String[] {instanceId};
@@ -537,36 +487,35 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns.JR_FORM_ID, InstanceColumns.JR_FORM_ID);
         sInstancesProjectionMap.put(InstanceColumns.JR_VERSION, InstanceColumns.JR_VERSION);
         sInstancesProjectionMap.put(InstanceColumns.STATUS, InstanceColumns.STATUS);
-        sInstancesProjectionMap.put(T_REPEAT, T_REPEAT);                // smap
-        sInstancesProjectionMap.put(T_UPDATEID, T_UPDATEID);            // smap
-        sInstancesProjectionMap.put(T_LOCATION_TRIGGER, T_LOCATION_TRIGGER);    // smap
-        sInstancesProjectionMap.put(T_SURVEY_NOTES, T_SURVEY_NOTES);    // smap
-        sInstancesProjectionMap.put(T_UPDATED, T_UPDATED);              // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_REPEAT, InstanceColumns.T_REPEAT);                // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_UPDATEID, InstanceColumns.T_UPDATEID);            // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_LOCATION_TRIGGER, InstanceColumns.T_LOCATION_TRIGGER);    // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_SURVEY_NOTES, InstanceColumns.T_SURVEY_NOTES);    // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_UPDATED, InstanceColumns.T_UPDATED);              // smap
         sInstancesProjectionMap.put(InstanceColumns.LAST_STATUS_CHANGE_DATE,
                 InstanceColumns.LAST_STATUS_CHANGE_DATE);
-        sInstancesProjectionMap.put(SOURCE, SOURCE);                // smap
-        sInstancesProjectionMap.put(FORM_PATH, FORM_PATH);          // smap
-        sInstancesProjectionMap.put(ACT_LON, ACT_LON);              // smap
-        sInstancesProjectionMap.put(ACT_LAT, ACT_LAT);              // smap
-        sInstancesProjectionMap.put(SCHED_LON, SCHED_LON);          // smap
-        sInstancesProjectionMap.put(SCHED_LAT, SCHED_LAT);          // smap
-        sInstancesProjectionMap.put(T_TITLE, T_TITLE);              // smap
-        sInstancesProjectionMap.put(T_SCHED_START, T_SCHED_START);  // smap
-        sInstancesProjectionMap.put(T_SCHED_FINISH, T_SCHED_FINISH);  // smap
-        sInstancesProjectionMap.put(T_ACT_FINISH, T_ACT_FINISH);    // smap
-        sInstancesProjectionMap.put(T_ADDRESS, T_ADDRESS);          // smap
-        sInstancesProjectionMap.put(T_GEOM, T_GEOM);                // smap
-        sInstancesProjectionMap.put(T_GEOM_TYPE, T_GEOM_TYPE);      // smap
-        sInstancesProjectionMap.put(T_IS_SYNC, T_IS_SYNC);          // smap
-        sInstancesProjectionMap.put(T_ASS_ID, T_ASS_ID);            // smap
-        sInstancesProjectionMap.put(T_TASK_STATUS, T_TASK_STATUS);  // smap
-        sInstancesProjectionMap.put(T_TASK_COMMENT, T_TASK_COMMENT);  // smap
-        sInstancesProjectionMap.put(T_SHOW_DIST, T_SHOW_DIST);      // smap
-        sInstancesProjectionMap.put(T_HIDE, T_HIDE);                // smap
-        sInstancesProjectionMap.put(UUID, UUID);                    // smap
+        sInstancesProjectionMap.put(InstanceColumns.SOURCE, InstanceColumns.SOURCE);                // smap
+        sInstancesProjectionMap.put(InstanceColumns.FORM_PATH, InstanceColumns.FORM_PATH);          // smap
+        sInstancesProjectionMap.put(InstanceColumns.ACT_LON, InstanceColumns.ACT_LON);              // smap
+        sInstancesProjectionMap.put(InstanceColumns.ACT_LAT, InstanceColumns.ACT_LAT);              // smap
+        sInstancesProjectionMap.put(InstanceColumns.SCHED_LON, InstanceColumns.SCHED_LON);          // smap
+        sInstancesProjectionMap.put(InstanceColumns.SCHED_LAT, InstanceColumns.SCHED_LAT);          // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_TITLE, InstanceColumns.T_TITLE);              // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_SCHED_START, InstanceColumns.T_SCHED_START);  // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_SCHED_FINISH, InstanceColumns.T_SCHED_FINISH);  // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_ACT_FINISH, InstanceColumns.T_ACT_FINISH);    // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_ADDRESS, InstanceColumns.T_ADDRESS);          // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_IS_SYNC, InstanceColumns.T_IS_SYNC);          // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_ASS_ID, InstanceColumns.T_ASS_ID);            // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_TASK_STATUS, InstanceColumns.T_TASK_STATUS);  // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_TASK_COMMENT, InstanceColumns.T_TASK_COMMENT);  // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_SHOW_DIST, InstanceColumns.T_SHOW_DIST);      // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_HIDE, InstanceColumns.T_HIDE);                // smap
+        sInstancesProjectionMap.put(InstanceColumns.UUID, InstanceColumns.UUID);                    // smap
         sInstancesProjectionMap.put(InstanceColumns.DELETED_DATE, InstanceColumns.DELETED_DATE);
         sInstancesProjectionMap.put(InstanceColumns.GEOMETRY, InstanceColumns.GEOMETRY);
         sInstancesProjectionMap.put(InstanceColumns.GEOMETRY_TYPE, InstanceColumns.GEOMETRY_TYPE);
+
     }
 
 
@@ -612,41 +561,41 @@ public class InstanceProvider extends ContentProvider {
     private static void createInstancesTableV16(SQLiteDatabase db, String name) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + name + " ("
                 + _ID + " integer primary key, "
-                + DISPLAY_NAME + " text not null, "
-                + SUBMISSION_URI + " text, "
-                + CAN_EDIT_WHEN_COMPLETE + " text, "
-                + INSTANCE_FILE_PATH + " text not null, "
-                + JR_FORM_ID + " text not null, "
-                + JR_VERSION + " text, "
-                + STATUS + " text not null, "
-                + LAST_STATUS_CHANGE_DATE + " date not null, "
-                + DELETED_DATE + " date, "
-                + SOURCE + " text, "		    // smap
-                + FORM_PATH + " text, "		    // smap
-                + ACT_LON + " double, "		    // smap
-                + ACT_LAT + " double, "		    // smap
-                + SCHED_LON + " double, "		// smap
-                + SCHED_LAT + " double, "		// smap
-                + T_TITLE + " text, "		    // smap
-                + T_SCHED_START + " long, "		// smap
-                + T_SCHED_FINISH + " long, "	// smap
-                + T_ACT_START + " long, "		// smap
-                + T_ACT_FINISH + " long, "		// smap
-                + T_ADDRESS + " text, "		    // smap
-                + T_GEOM + " text, "		    // smap
-                + T_GEOM_TYPE + " text, "		// smap
-                + T_IS_SYNC + " text, "		    // smap
-                + T_ASS_ID + " long, "		    // smap
-                + T_TASK_STATUS + " text, "		// smap
-                + T_TASK_COMMENT + " text, "    // smap
-                + T_REPEAT + " integer, "		// smap
-                + T_UPDATEID + " text, "		// smap
-                + T_LOCATION_TRIGGER + " text, " // smap
-                + T_SURVEY_NOTES + " text, "    // smap
-                + UUID + " text, "		        // smap
-                + T_UPDATED + " integer, "      // smap
-                + T_SHOW_DIST + " integer, "    // smap
-                + T_HIDE + " integer, "         // smap
+                + InstanceColumns.DISPLAY_NAME + " text not null, "
+                + InstanceColumns.SUBMISSION_URI + " text, "
+                + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text, "
+                + InstanceColumns.INSTANCE_FILE_PATH + " text not null, "
+                + InstanceColumns.JR_FORM_ID + " text not null, "
+                + InstanceColumns.JR_VERSION + " text, "
+                + InstanceColumns.STATUS + " text not null, "
+                + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
+                + InstanceColumns.DELETED_DATE + " date, "
+                + InstanceColumns.SOURCE + " text, "		    // smap
+                + InstanceColumns.FORM_PATH + " text, "		    // smap
+                + InstanceColumns.ACT_LON + " double, "		    // smap
+                + InstanceColumns.ACT_LAT + " double, "		    // smap
+                + InstanceColumns.SCHED_LON + " double, "		// smap
+                + InstanceColumns.SCHED_LAT + " double, "		// smap
+                + InstanceColumns.T_TITLE + " text, "		    // smap
+                + InstanceColumns.T_SCHED_START + " long, "		// smap
+                + InstanceColumns.T_SCHED_FINISH + " long, "	// smap
+                + InstanceColumns.T_ACT_START + " long, "		// smap
+                + InstanceColumns.T_ACT_FINISH + " long, "		// smap
+                + InstanceColumns.T_ADDRESS + " text, "		    // smap
+                + InstanceColumns.GEOMETRY + " text, "		    // smap
+                + InstanceColumns.GEOMETRY_TYPE + " text, "		// smap
+                + InstanceColumns.T_IS_SYNC + " text, "		    // smap
+                + InstanceColumns.T_ASS_ID + " long, "		    // smap
+                + InstanceColumns.T_TASK_STATUS + " text, "		// smap
+                + InstanceColumns.T_TASK_COMMENT + " text, "    // smap
+                + InstanceColumns.T_REPEAT + " integer, "		// smap
+                + InstanceColumns.T_UPDATEID + " text, "		// smap
+                + InstanceColumns.T_LOCATION_TRIGGER + " text, " // smap
+                + InstanceColumns.T_SURVEY_NOTES + " text, "    // smap
+                + InstanceColumns.UUID + " text, "		        // smap
+                + InstanceColumns.T_UPDATED + " integer, "      // smap
+                + InstanceColumns.T_SHOW_DIST + " integer, "    // smap
+                + InstanceColumns.T_HIDE + " integer, "         // smap
 
 
                 + "displaySubtext text "   // Smap keep for downgrading

@@ -71,8 +71,6 @@ public final class InstanceProviderAPI {
         public static final String T_ACT_START = "tActStart";       // Actual Start
         public static final String T_ACT_FINISH = "tActFinish";     // Actual Finish
         public static final String T_ADDRESS = "tAddress";          // Address of task
-        public static final String T_GEOM = "tGeom";                // Full geometry for location of task
-        public static final String T_GEOM_TYPE = "tGeomType";       // Geometry type; Polygon, linestring, point
         public static final String T_IS_SYNC = "tIsSync";           // Set if the instance has been synced
         public static final String T_ASS_ID = "tTaskId";            // Task Id
         public static final String T_TASK_STATUS = "tAssStatus";    // Assignment Status
@@ -87,7 +85,7 @@ public final class InstanceProviderAPI {
         public static final String T_HIDE = "tHide";                // Set true if task is to be hidden from view
         // Smap End
 
-        public static final String GEOMETRY = "geometry";
-        public static final String GEOMETRY_TYPE = "geometryType";
+        public static final String GEOMETRY = "tGeom";              // Full geometry for location of task - Smap Aligned with Collect
+        public static final String GEOMETRY_TYPE = "tGeomType";     // Geometry type; Polygon, linestring, - Smap Aligned with Collect
     }
 }
