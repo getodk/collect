@@ -32,7 +32,7 @@ import org.odk.collect.android.utilities.SoftKeyboardUtils;
 public class SelectOneAutocompleteWidget extends AbstractSelectOneWidget {
     public SelectOneAutocompleteWidget(Context context, QuestionDetails questionDetails, boolean autoAdvance, boolean readOnlyOverride) {  // smap readOnlyOverride
         super(context, questionDetails, autoAdvance, readOnlyOverride);  // smap
-        createLayout();
+        createLayout(readOnlyOverride);
         setUpSearchBox(context);
     }
 

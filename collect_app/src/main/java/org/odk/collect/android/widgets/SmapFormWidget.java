@@ -95,7 +95,7 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
             validForm = mfd.exists;
             if(!validForm) {
                 Toast.makeText(getContext(),
-                        Collect.getInstance().getString(R.string.smap_form_not_found, formIdent),
+                        Collect.getInstance().getString(R.string.smap_form_not_found).replace("%s", formIdent),
                         Toast.LENGTH_SHORT)
                         .show();
             }
@@ -108,7 +108,7 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
         answer.setLayoutParams(params);
         textBackground = answer.getBackground();
         answer.setBackground(null);
-        answer.setTextColor(themeUtils.getPrimaryTextColor());
+        answer.setTextColor(themeUtils.getColorOnSurface());
 
         answer.getText();
         // capitalize nothing
@@ -149,7 +149,7 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
         launching.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         launching.setLayoutParams(params);
         launching.setBackground(null);
-        launching.setTextColor(themeUtils.getPrimaryTextColor());
+        launching.setTextColor(themeUtils.getColorOnSurface());
         launching.setGravity(Gravity.CENTER);
         launching.setVisibility(GONE);
         String launchingText = context.getString(R.string.smap_starting_form).replace("%s", mfd.formName);

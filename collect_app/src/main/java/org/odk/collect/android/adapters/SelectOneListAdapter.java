@@ -48,7 +48,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
     private View selectedItem;
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
-    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, AbstractSelectOneWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context, Boolean autoAdvance, readOnlyOverride) {     // smap add readOnlyOverride
+    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, AbstractSelectOneWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context, Boolean autoAdvance, boolean readOnlyOverride) {     // smap add readOnlyOverride
         super(items, widget, numColumns, formEntryPrompt, referenceManager, answerFontSize, audioHelper, context, readOnlyOverride);     // smap add readOnlyOverride
         this.selectedValue = selectedValue;
         this.playColor = playColor;

@@ -48,9 +48,11 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -72,12 +74,14 @@ import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
+import com.google.common.collect.ImmutableList;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.TreeElement;
@@ -87,6 +91,8 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.IconMenuListAdapter;
+import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.dao.FormsDao;
@@ -98,7 +104,6 @@ import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.external.handler.SmapRemoteDataItem;
-import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.QuitFormDialog;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.ChangesReasonPromptDialogFragment;
@@ -198,7 +203,6 @@ import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivit
  *         option)
  */
 
-@SuppressWarnings("PMD.CouplingBetweenObjects")
 public class FormEntryActivity extends CollectAbstractActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
         OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener,
@@ -289,6 +293,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     // used to limit forward/backward swipes to one per question
     private boolean beenSwiped;
+
+    private final Object saveDialogLock = new Object();
+
     private FormLoaderTask formLoaderTask;
     private SaveToDiskTask saveToDiskTask;
 
@@ -346,14 +353,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD
 
         Collect.getInstance().setFormEntryActivity(this);   // smap
         Collect.getInstance().initRemoteServiceCaches();   // smap
-        viewModel = ViewModelProviders.of(this, new FormEntryViewModelFactory()).get(FormEntryViewModel.class);
-=======
         setupViewModels();
->>>>>>> merge_master
 
         setContentView(R.layout.form_entry);
 
@@ -361,12 +364,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         compositeDisposable
                 .add(eventBus
-                        .register(ReadPhoneStatePermissionRxEvent.class)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(event -> {
-                            readPhoneStatePermissionRequestNeeded = true;
-                        }));
+                .register(ReadPhoneStatePermissionRxEvent.class)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(event -> {
+                    readPhoneStatePermissionRequestNeeded = true;
+                }));
 
         errorMessage = null;
 
@@ -461,7 +464,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         changesReasonPromptViewModel.saveRequest().observe(this, saveRequest -> {
             if (saveRequest != null) {
                 showDialog(SAVING_DIALOG);
-                save(saveRequest.isComplete(), saveRequest.getUpdatedSaveName(), saveRequest.isExitAfter());
+                save(saveRequest.isComplete(), saveRequest.getUpdatedSaveName(), saveRequest.isExitAfter(), true);
             }
         });
     }
@@ -532,15 +535,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 } else {
                     Timber.w("Reloading form and restoring state.");
                     formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath);
-                    if(formInfo == null) { // smap
-                        formInfo = Collect.getInstance().getFormInfo();
-                    }
-
-                    if(formInfo == null) {      // Smap formInfo might still be null
-                        mFormId = formInfo.getFormID();
-                    }
                     showFormLoadingDialogFragment();
-                    formLoaderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, formPath, mFormId);        // smap execute on a different thread
+                    formLoaderTask.execute(formPath);
                 }
                 return;
             }
@@ -708,7 +704,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         mTaskId = intent.getLongExtra(KEY_TASK, -1);                   // smap
         mSurveyNotes = intent.getStringExtra(KEY_SURVEY_NOTES);                   // smap
         mCanUpdate = intent.getBooleanExtra(KEY_CAN_UPDATE, true);     // smap
-        mFormId = formInfo.getFormID();                                             // smap
+        mFormId = formInfo.getFormId();                                             // smap
 
         showFormLoadingDialogFragment();
         // show dialog before we execute...
@@ -1783,7 +1779,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
                         // Collect.getInstance().logRemoteAnalytics("WidgetAttribute", "saveIncomplete", Collect.getCurrentFormIdentifierHash());  // smap comment out
 
-                        saveDataToDisk(false, false, null, false, true);
+                        saveDataToDisk(false, false, null, false, true);   // Smap set save Mesasge true
                         autoSaved = true;
                     }
                 }
@@ -1995,7 +1991,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     // by default, save the current screen
     private boolean saveDataToDisk(boolean exit, boolean complete, String updatedSaveName) {
-        return saveDataToDisk(exit, complete, updatedSaveName, true, true);
+        return saveDataToDisk(exit, complete, updatedSaveName, true, true);  // smap add save message true
     }
 
     // but if you want save in the background, can't be current screen
@@ -2010,17 +2006,17 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-<<<<<<< HEAD
-        // Smap start
-        String surveyNotes = null;
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController != null) {
-            surveyNotes = formController.getSurveyNotes();
-        }
-        // Smap end
+        getFormController().getAuditEventLogger().exitView();
+        changesReasonPromptViewModel.saveForm(complete, updatedSaveName, exit);
 
+        return true;
+    }
+
+    private void save(boolean complete, String updatedSaveName, boolean exitAfter, boolean saveMessage) {
         synchronized (saveDialogLock) {
-            saveToDiskTask = new SaveToDiskTask(getIntent().getData(), exit, complete,
+            String surveyNotes = getFormController().getSurveyNotes();   // Smap
+
+            saveToDiskTask = new SaveToDiskTask(getIntent().getData(), exitAfter, complete,
                     updatedSaveName, mTaskId, formPath, surveyNotes, mCanUpdate, formInfo, saveMessage);    // smap added mTaskId, mFormPath, surveyNotes, saveMessage
             saveToDiskTask.setFormSavedListener(this);
             autoSaved = true;
@@ -2030,21 +2026,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             // show dialog before we execute...
             saveToDiskTask.execute();
         }
-=======
-        getFormController().getAuditEventLogger().exitView();
-        changesReasonPromptViewModel.saveForm(complete, updatedSaveName, exit);
->>>>>>> merge_master
-
-        return true;
-    }
-
-    private void save(boolean complete, String updatedSaveName, boolean exitAfter) {
-        saveToDiskTask = new SaveToDiskTask(getIntent().getData(), exitAfter, complete,
-                updatedSaveName);
-        saveToDiskTask.setFormSavedListener(this);
-        autoSaved = true;
-        // show dialog before we execute...
-        saveToDiskTask.execute();
     }
 
     /**
@@ -2055,7 +2036,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         alertDialog = QuitFormDialog.show(this, getFormController(), new QuitFormDialog.Listener() {
             @Override
             public void onSaveChangedClicked() {
-                saveDataToDisk(EXIT, InstancesDaoHelper.isInstanceComplete(false), null);
+                    saveDataToDisk(EXIT, InstancesDaoHelper.isInstanceComplete(false), null);
                 alertDialog.dismiss();
             }
 
@@ -2073,7 +2054,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
                 removeTempInstance();
                 MediaManager.INSTANCE.revertChanges();
-                finishReturnInstance();
+                finishReturnInstance(false);
 
                 alertDialog.dismiss();
             }
@@ -2224,11 +2205,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void cancelSaveToDiskTask() {
-        if (saveToDiskTask != null) {
-            saveToDiskTask.setFormSavedListener(null);
-            boolean cancelled = saveToDiskTask.cancel(true);
-            Timber.w("Cancelled SaveToDiskTask! (%s)", cancelled);
-            saveToDiskTask = null;
+        synchronized (saveDialogLock) {
+            if (saveToDiskTask != null) {
+                saveToDiskTask.setFormSavedListener(null);
+                boolean cancelled = saveToDiskTask.cancel(true);
+                Timber.w("Cancelled SaveToDiskTask! (%s)", cancelled);
+                saveToDiskTask = null;
+            }
         }
     }
 
@@ -2298,7 +2281,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
             }
         }
-
         if (progressBar != null) {    // smap
             progressBar.dismiss();
         }
@@ -2535,7 +2517,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 formLoaderTask = null;
                 t.cancel(true);
                 t.destroy();
-
                 Collect.getInstance().setFormController(formController);
                 supportInvalidateOptionsMenu();
                 backgroundLocationViewModel.formFinishedLoading();
@@ -2595,20 +2576,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     Intent reqIntent = getIntent();
                     boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
-<<<<<<< HEAD
                     if (!showFirst && mUpdated > 0) {   // smap check that the instance was edited on the phone before showing hierarchy
-                        if (!allowMovingBackwards) {
-                            FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile();
-                            if (formIndex != null) {
-                                formController.jumpToIndex(formIndex);
-                                refreshCurrentView();
-                                return;
-                            }
-                        }
-
-=======
-                    if (!showFirst) {
->>>>>>> merge_master
                         // we've just loaded a saved form, so start in the hierarchy view
                         String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
@@ -2648,32 +2616,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
                         changesReasonPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
 
-<<<<<<< HEAD
-                // start smap
-                FormRestartDetails frd = Collect.getInstance().getFormRestartDetails();
-                if(frd != null) {
-                    Collect.getInstance().setFormRestartDetails(null);
-                    formController.jumpToIndex(frd.initiatingQuestion);
-
-                    // Set answer for form launch question
-                    StringData sd = new StringData();
-                    sd.setValue(":::::" + frd.launchedFormInstanceId);
-                    try {
-                        formController.answerQuestion(frd.initiatingQuestion, sd);
-                    } catch (Exception e) {
-
-                    }
-                    next();
-                }
-
-                // end smap
-
-                // Register to receive location provider change updates and write them to the audit
-                // log. onStart has already run but the formController was null so try again.
-                if (formController.currentFormAuditsLocation()
-                        && PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
-                    registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
-=======
                         identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                             if (!requiresIdentity) {
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
@@ -2681,10 +2623,26 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             }
                         });
                     }
->>>>>>> merge_master
                 }
             }
 
+            // start smap
+            FormRestartDetails frd = Collect.getInstance().getFormRestartDetails();
+            if (frd != null) {
+                Collect.getInstance().setFormRestartDetails(null);
+                formController.jumpToIndex(frd.initiatingQuestion);
+
+                // Set answer for form launch question
+                StringData sd = new StringData();
+                sd.setValue(":::::" + frd.launchedFormInstanceId);
+                try {
+                    formController.answerQuestion(frd.initiatingQuestion, sd);
+                } catch (Exception e) {
+
+                }
+                next();
+            }
+            // end smap
         } else {
             Timber.e("FormController is null");
             ToastUtils.showLongToast(R.string.loading_form_failed);
@@ -2714,7 +2672,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    private void createInstanceDirectory(FormController formController) {
+    private void createInstanceDirectory (FormController formController){
         String time = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss",
                 Locale.ENGLISH).format(Calendar.getInstance().getTime());
         String file = formPath.substring(formPath.lastIndexOf('/') + 1,
@@ -2764,14 +2722,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_SAVE, false, System.currentTimeMillis());
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
-                if(showSaveMsg) {
-                    ToastUtils.showShortToast(R.string.data_saved_ok);
-                }
                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_SAVE, false, System.currentTimeMillis());
-
                 /*
                  * smap use the network receiver to synchronise rather than odk worker
-                if (saveResult.isComplete()) {
+              if (saveResult.isComplete()) {
                     formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, System.currentTimeMillis());
                     // Force writing of audit since we are exiting
                     formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, System.currentTimeMillis());
@@ -2779,18 +2733,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     // Request auto-send if app-wide auto-send is enabled or the form that was just
                     // finalized specifies that it should always be auto-sent.
                     String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
-
                     if (AutoSendWorker.formShouldBeAutoSent(formId, GeneralSharedPreferences.isAutoSendEnabled())) {
                         requestAutoSend();
                     }
-
                 } else {
                     // Force writing of audit since we are exiting
                     formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, System.currentTimeMillis());
                 }
                 */
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, false);    // smap
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true); // smap
                 sendBroadcast(new Intent("org.odk.collect.android.FormSaved"));     // smap - use network receiver to sync
 
                 finishReturnInstance(saveResult.isComplete());  // smap add isComplete
@@ -3051,11 +3001,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     @Override
-    public void onRankingChanged(List<String> values) {
+    public void onRankingChanged(List<SelectChoice> items) {
         ODKView odkView = getCurrentViewIfODKView();
         if (odkView != null) {
             QuestionWidget widgetGettingNewValue = getWidgetWaitingForBinaryData();
-            odkView.setBinaryData(values);
+            odkView.setBinaryData(items);
             widgetValueChanged(widgetGettingNewValue);
         }
     }

@@ -57,7 +57,7 @@ public class AboutPreferencesFragment extends BasePreferenceFragment implements 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        toolbar.setTitle(getString(R.string.about_preferences));
+        //toolbar.setTitle(getString(R.string.about_preferences));
     }
 
     @Override

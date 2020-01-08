@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class is used to encapsulate all access to the instances database
+ * This class is used to encapsulate all access to the instances database // smap
  * For more information about this pattern go to https://en.wikipedia.org/wiki/Data_access_object
  */
 public class InstancesDao {
@@ -361,7 +361,10 @@ public class InstancesDao {
                     int updateidColumnIndex = cursor.getColumnIndex(InstanceColumns.T_UPDATEID);                     // smap
                     int locationTriggerColumnIndex = cursor.getColumnIndex(InstanceColumns.T_LOCATION_TRIGGER);     // smap
                     int surveyNotesColumnIndex = cursor.getColumnIndex(InstanceColumns.T_SURVEY_NOTES);             // smap
-                    int assignmentIdColumnIndex = cursor.getColumnIndex(InstanceColumns.T_ASS_ID);                  // smap
+                    int assignmentIdColumnIndex = cursor.getColumnIndex(InstanceColumns.T_ASS_ID);
+                    // smap
+                    int geometryTypeColumnIndex = cursor.getColumnIndex(InstanceColumns.GEOMETRY_TYPE);
+                    int geometryColumnIndex = cursor.getColumnIndex(InstanceColumns.GEOMETRY);
 
                     int databaseIdIndex = cursor.getColumnIndex(InstanceColumns._ID);
 

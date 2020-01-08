@@ -18,6 +18,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Button;
 
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
@@ -48,7 +49,6 @@ public class GeoPointWidget extends BaseGeoWidget {
     public static final String DRAGGABLE_ONLY = "draggable";
 
     public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
-    public final Button getLocationButton;	// smap to auto record location
     private boolean useMap;
     private double accuracyThreshold;
     private boolean draggable = true;

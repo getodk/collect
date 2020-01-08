@@ -260,7 +260,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                     } else if (geopointPrompt != null) {    // Smap - launch gps collection
                         GeoPointWidget geopointWidget = (GeoPointWidget) widgets.get(0);
                         if (geopointWidget != null) {
-                            geopointWidget.getLocationButton.performClick();
+                            geopointWidget.startGeoButton.performClick();
                         }
                     } else if (imagePrompt != null) {    // Smap - launch image collection
                         ImageWidget imageWidget = (ImageWidget) widgets.get(0);
@@ -617,7 +617,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
         view.addView(launchIntentButton, layout);
 
-        return launchIntentButton;
+        return launchIntentButton;      // smap
     }
 
     public void setFocus(Context context) {
@@ -774,21 +774,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         super.cancelLongPress();
         for (QuestionWidget qw : widgets) {
             qw.cancelLongPress();
-        }
-    }
-
-    public void stopAudio() {
-        if(widgets.size() > 0) {        // smap
-            widgets.get(0).stopAudio();
-        }
-    }
-
-    /**
-     * Releases widget resources, such as {@link android.media.MediaPlayer}s
-     */
-    public void releaseWidgetResources() {
-        for (QuestionWidget w : widgets) {
-            w.release();
         }
     }
 

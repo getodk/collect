@@ -31,19 +31,19 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.RankingListAdapter.ItemViewHolder;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class RankingListAdapter extends Adapter<ItemViewHolder> {
 
-    private final List<String> values;
+    private final List<SelectChoice> items;
     private final FormIndex formIndex;
 
-    public RankingListAdapter(List<String> values, FormIndex formIndex) {
-        this.values = new ArrayList<>(values);
+    public RankingListAdapter(List<SelectChoice> items, FormIndex formIndex) {
+        this.items = items;
         this.formIndex = formIndex;
     }
 
@@ -56,33 +56,22 @@ public class RankingListAdapter extends Adapter<ItemViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull final ItemViewHolder holder, int position) {
         FormController formController = Collect.getInstance().getFormController();
-        String itemName = formController != null
-                ? formController.getQuestionPrompt(formIndex).getSelectChoiceText(getItem(formController, values.get(position)))
-                : values.get(position);
+        String itemName = String.valueOf(FormEntryPromptUtils.getItemText(formController.getQuestionPrompt(formIndex), items.get(position)));
         holder.textView.setText(itemName);
     }
 
-    private SelectChoice getItem(FormController formController, String value) {
-        for (SelectChoice item : formController.getQuestionPrompt(formIndex).getSelectChoices()) {
-            if (item.getValue().equals(value)) {
-                return item;
-            }
-        }
-        return null;
-    }
-
     public void onItemMove(int fromPosition, int toPosition) {
-        Collections.swap(values, fromPosition, toPosition);
+        Collections.swap(items, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
     }
 
     @Override
     public int getItemCount() {
-        return values.size();
+        return items.size();
     }
 
-    public List<String> getValues() {
-        return values;
+    public List<SelectChoice> getItems() {
+        return items;
     }
 
     public static class ItemViewHolder extends ViewHolder {

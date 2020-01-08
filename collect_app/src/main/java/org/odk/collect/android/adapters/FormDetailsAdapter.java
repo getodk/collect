@@ -54,7 +54,7 @@ public class FormDetailsAdapter implements SpinnerAdapter {
 
 	public long getItemId(int position) {
 		// TODO Auto-generated method stub
-		return Long.parseLong(data.get(position).getFormID());
+		return Long.parseLong(data.get(position).getFormId());
 	}
 
 	public int getItemViewType(int position) {

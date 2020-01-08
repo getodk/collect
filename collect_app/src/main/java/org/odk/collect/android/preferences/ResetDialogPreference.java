@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 import androidx.appcompat.widget.AppCompatCheckBox;
@@ -64,7 +65,7 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
         layers = view.findViewById(R.id.layers);
         cache = view.findViewById(R.id.cache);
         osmDroid = view.findViewById(R.id.osmdroid);
-        smapLocations = (CheckBox) view.findViewById(R.id.smaplocations);       // smap
+        smapLocations = view.findViewById(R.id.smaplocations);       // smap
         preferences.setOnCheckedChangeListener(this);
         instances.setOnCheckedChangeListener(this);
         forms.setOnCheckedChangeListener(this);
