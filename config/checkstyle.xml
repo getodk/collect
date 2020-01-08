@@ -99,6 +99,7 @@
             <property name="allowMultipleEmptyLines" value="false"/>
             <property name="allowMultipleEmptyLinesInsideClassMembers" value="false"/>
             <property name="allowNoEmptyLineBetweenFields" value="true" />
+            <property name="tokens" value="STATIC_INIT"/>
         </module>
         <module name="SeparatorWrap">
             <property name="id" value="SeparatorWrapDot" />
