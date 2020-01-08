@@ -23,14 +23,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import androidx.annotation.NonNull;
 import android.widget.ListView;
 
-import org.odk.collect.android.R;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.logic.FormController;
+
 import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
@@ -169,5 +172,13 @@ public final class DialogUtils {
         alertDialog.setButton(activity.getString(R.string.ok), errorListener);
 
         return alertDialog;
+    }
+
+    public static void showIfNotShowing(DialogFragment dialog, FragmentManager fragmentManager) {
+        String tag = dialog.getClass().getName();
+
+        if (fragmentManager.findFragmentByTag(tag) == null) {
+            dialog.show(fragmentManager.beginTransaction(), tag);
+        }
     }
 }
