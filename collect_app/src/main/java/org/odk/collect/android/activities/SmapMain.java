@@ -110,6 +110,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     private AlertDialog mAlertDialog;
     private ProgressDialog mProgressDialog;
     private String mAlertMsg;
+    private boolean mPaused = false;
 
     private MapEntry mData;
 
@@ -237,6 +238,8 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     @Override
     protected void onResume() {
         super.onResume();
+
+        mPaused = false;
 
         if (!listenerRegistered) {
             listener = new MainTaskListener(this);
@@ -706,110 +709,112 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
      */
     public void completeTask(TaskEntry entry) {
 
-        String surveyNotes = null;
-        String formPath = Collect.FORMS_PATH + entry.taskForm;
-        String instancePath = entry.instancePath;
-        long taskId = entry.id;
-        String status = entry.taskStatus;
+        if(!mPaused) {
+            String surveyNotes = null;
+            String formPath = Collect.FORMS_PATH + entry.taskForm;
+            String instancePath = entry.instancePath;
+            long taskId = entry.id;
+            String status = entry.taskStatus;
 
-        // set the adhoc location
-        boolean canUpdate = Utilities.canComplete(status);
-        boolean isSubmitted = Utilities.isSubmitted(status);
+            // set the adhoc location
+            boolean canUpdate = Utilities.canComplete(status);
+            boolean isSubmitted = Utilities.isSubmitted(status);
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean reviewFinal = sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_REVIEW_FINAL, true);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            boolean reviewFinal = sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_REVIEW_FINAL, true);
 
-        if(isSubmitted) {
-            Toast.makeText(
-                    SmapMain.this,
-                    getString(R.string.smap_been_submitted),
-                    Toast.LENGTH_LONG).show();
-        } else if (!canUpdate && reviewFinal) {
-            // Show a message if this task is read only
-            Toast.makeText(
-                    SmapMain.this,
-                    getString(R.string.read_only),
-                    Toast.LENGTH_LONG).show();
-        } else if (!canUpdate && !reviewFinal) {
-            // Show a message if this task is read only and cannot be reviewed
-            Toast.makeText(
-                    SmapMain.this,
-                    getString(R.string.no_review),
-                    Toast.LENGTH_LONG).show();
-        }
-
-        // Open the task if it is editable or reviewable
-        if ((canUpdate || reviewFinal) && !isSubmitted) {
-            // Get the provider URI of the instance
-            String where = InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + "=?";
-            String[] whereArgs = {
-                    instancePath
-            };
-
-            Timber.i("Complete Task: " + entry.id + " : " + entry.name + " : "
-                    + entry.taskStatus + " : " + instancePath);
-
-            Cursor cInstanceProvider = Collect.getInstance().getContentResolver().query(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
-                    null, where, whereArgs, null);
-
-            if (entry.repeat) {
-                entry.instancePath = duplicateInstance(formPath, entry.instancePath, entry);
+            if (isSubmitted) {
+                Toast.makeText(
+                        SmapMain.this,
+                        getString(R.string.smap_been_submitted),
+                        Toast.LENGTH_LONG).show();
+            } else if (!canUpdate && reviewFinal) {
+                // Show a message if this task is read only
+                Toast.makeText(
+                        SmapMain.this,
+                        getString(R.string.read_only),
+                        Toast.LENGTH_LONG).show();
+            } else if (!canUpdate && !reviewFinal) {
+                // Show a message if this task is read only and cannot be reviewed
+                Toast.makeText(
+                        SmapMain.this,
+                        getString(R.string.no_review),
+                        Toast.LENGTH_LONG).show();
             }
 
-            if(cInstanceProvider.moveToFirst()) {
-                long idx = cInstanceProvider.getLong(cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
-                if(idx > 0) {
-                    Uri instanceUri = ContentUris.withAppendedId(InstanceProviderAPI.InstanceColumns.CONTENT_URI, idx);
-                    surveyNotes = cInstanceProvider.getString(
-                            cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_SURVEY_NOTES));
-                    // Start activity to complete form
+            // Open the task if it is editable or reviewable
+            if ((canUpdate || reviewFinal) && !isSubmitted) {
+                // Get the provider URI of the instance
+                String where = InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + "=?";
+                String[] whereArgs = {
+                        instancePath
+                };
 
-                    // Use an explicit intent
-                    Intent i = new Intent(this, org.odk.collect.android.activities.FormEntryActivity.class);
-                    i.setData(instanceUri);
+                Timber.i("Complete Task: " + entry.id + " : " + entry.name + " : "
+                        + entry.taskStatus + " : " + instancePath);
 
-                    //Intent i = new Intent(Intent.ACTION_EDIT, instanceUri);
+                Cursor cInstanceProvider = Collect.getInstance().getContentResolver().query(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
+                        null, where, whereArgs, null);
 
-                    i.putExtra(FormEntryActivity.KEY_TASK, taskId);
-                    i.putExtra(FormEntryActivity.KEY_SURVEY_NOTES, surveyNotes);
-                    i.putExtra(FormEntryActivity.KEY_CAN_UPDATE, canUpdate);
-                    i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
-                    if(entry.formIndex != null) {
-                        FormRestartDetails frd = new FormRestartDetails();
-                        frd.initiatingQuestion = entry.formIndex;
-                        frd.launchedFormStatus = entry.formStatus;
-                        frd.launchedFormInstanceId = entry.instanceId;
-                        frd.launchedFormURI = entry.formURI;
-                        Collect.getInstance().setFormRestartDetails(frd);
-                    }
-                    if (instancePath != null) {    // TODO Don't think this is needed
-                        i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
-                    }
-                    startActivityForResult(i, COMPLETE_FORM);
-
-                    // If More than one instance is found pointing towards a single file path then report the error and delete the extrat
-                    int instanceCount = cInstanceProvider.getCount();
-                    if (instanceCount > 1) {
-                        Timber.e(new Exception("Unique instance not found: deleting extra, count is:" +
-                                cInstanceProvider.getCount()));
-                        /*
-                        cInstanceProvider.moveToNext();
-                        while(!cInstanceProvider.isAfterLast()) {
-
-                            Long id = cInstanceProvider.getLong(cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
-                            Uri taskUri = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, id.toString());
-                            Collect.getInstance().getContentResolver().delete(taskUri, null, null);
-
-                            cInstanceProvider.moveToNext();
-                        }
-                        */
-                    }
+                if (entry.repeat) {
+                    entry.instancePath = duplicateInstance(formPath, entry.instancePath, entry);
                 }
-            } else {
-                Timber.e(new Exception("Task not found for instance path:" + instancePath));
-            }
 
-            cInstanceProvider.close();
+                if (cInstanceProvider.moveToFirst()) {
+                    long idx = cInstanceProvider.getLong(cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
+                    if (idx > 0) {
+                        Uri instanceUri = ContentUris.withAppendedId(InstanceProviderAPI.InstanceColumns.CONTENT_URI, idx);
+                        surveyNotes = cInstanceProvider.getString(
+                                cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_SURVEY_NOTES));
+                        // Start activity to complete form
+
+                        // Use an explicit intent
+                        Intent i = new Intent(this, org.odk.collect.android.activities.FormEntryActivity.class);
+                        i.setData(instanceUri);
+
+                        //Intent i = new Intent(Intent.ACTION_EDIT, instanceUri);
+
+                        i.putExtra(FormEntryActivity.KEY_TASK, taskId);
+                        i.putExtra(FormEntryActivity.KEY_SURVEY_NOTES, surveyNotes);
+                        i.putExtra(FormEntryActivity.KEY_CAN_UPDATE, canUpdate);
+                        i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+                        if (entry.formIndex != null) {
+                            FormRestartDetails frd = new FormRestartDetails();
+                            frd.initiatingQuestion = entry.formIndex;
+                            frd.launchedFormStatus = entry.formStatus;
+                            frd.launchedFormInstanceId = entry.instanceId;
+                            frd.launchedFormURI = entry.formURI;
+                            Collect.getInstance().setFormRestartDetails(frd);
+                        }
+                        if (instancePath != null) {    // TODO Don't think this is needed
+                            i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
+                        }
+                        startActivityForResult(i, COMPLETE_FORM);
+
+                        // If More than one instance is found pointing towards a single file path then report the error and delete the extrat
+                        int instanceCount = cInstanceProvider.getCount();
+                        if (instanceCount > 1) {
+                            Timber.e(new Exception("Unique instance not found: deleting extra, count is:" +
+                                    cInstanceProvider.getCount()));
+                            /*
+                            cInstanceProvider.moveToNext();
+                            while(!cInstanceProvider.isAfterLast()) {
+
+                                Long id = cInstanceProvider.getLong(cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
+                                Uri taskUri = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, id.toString());
+                                Collect.getInstance().getContentResolver().delete(taskUri, null, null);
+
+                                cInstanceProvider.moveToNext();
+                            }
+                            */
+                        }
+                    }
+                } else {
+                    Timber.e(new Exception("Task not found for instance path:" + instancePath));
+                }
+
+                cInstanceProvider.close();
+            }
         }
 
     }
@@ -818,13 +823,15 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
      * The user has selected an option to edit / complete a form
      */
     public void completeForm(TaskEntry entry) {
-        Uri formUri = ContentUris.withAppendedId(FormsProviderAPI.FormsColumns.CONTENT_URI, entry.id);
+        if(!mPaused) {
+            Uri formUri = ContentUris.withAppendedId(FormsProviderAPI.FormsColumns.CONTENT_URI, entry.id);
 
-        // Use an explicit intent
-        Intent i = new Intent(this, org.odk.collect.android.activities.FormEntryActivity.class);
-        i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
-        i.setData(formUri);
-        startActivityForResult(i, COMPLETE_FORM);
+            // Use an explicit intent
+            Intent i = new Intent(this, org.odk.collect.android.activities.FormEntryActivity.class);
+            i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+            i.setData(formUri);
+            startActivityForResult(i, COMPLETE_FORM);
+        }
     }
 
     /*
@@ -985,6 +992,12 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     }
     public MapDataLoader getTaskLoader() {
         return mTaskLoader;
+    }
+
+    @Override
+    protected void onPause() {
+        mPaused = true;
+        super.onPause();
     }
 
 }

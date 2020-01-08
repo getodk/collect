@@ -257,21 +257,23 @@ public class SmapFormListFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long rowId) {
-        super.onListItemClick(l, v, position, rowId);
+        if (Collect.allowClick(getClass().getName())) {
+            super.onListItemClick(l, v, position, rowId);
 
-        TaskEntry entry = (TaskEntry) getListAdapter().getItem(position);
+            TaskEntry entry = (TaskEntry) getListAdapter().getItem(position);
 
-        if (entry.type.equals("task")) {
-            if (entry.locationTrigger != null && entry.locationTrigger.length() > 0) {
-                Toast.makeText(
-                        getActivity(),
-                        getString(R.string.smap_must_start_from_nfc),
-                        Toast.LENGTH_LONG).show();
+            if (entry.type.equals("task")) {
+                if (entry.locationTrigger != null && entry.locationTrigger.length() > 0) {
+                    Toast.makeText(
+                            getActivity(),
+                            getString(R.string.smap_must_start_from_nfc),
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    ((SmapMain) getActivity()).completeTask(entry);
+                }
             } else {
-                ((SmapMain) getActivity()).completeTask(entry);
+                ((SmapMain) getActivity()).completeForm(entry);
             }
-        } else {
-            ((SmapMain) getActivity()).completeForm(entry);
         }
     }
 
