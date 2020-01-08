@@ -113,7 +113,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
      * Start recording locations
      */
     private void startLocationUpdates() {
-        Timber.i("=================== Location Recording turned on");
+        //Timber.i("=================== Location Recording turned on");
         if(locationRequest == null) {
             locationRequest = LocationRequest.create();
         }
@@ -142,7 +142,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
      * Stop recoding locations
      */
     private void stopLocationUpdates() {
-        Timber.i("=================== Location Recording turned on");
+        //Timber.i("=================== Location Recording turned off");
         if(fusedLocationClient != null) {
             fusedLocationClient.removeLocationUpdates(locationCallback);
         }
@@ -164,7 +164,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
         if(isValidLocation(location) && isAccurateLocation(location)) {
 
-            Timber.i("+++++++++++++++++++++++++++++ location received");
+            //Timber.i("+++++++++++++++++++++++++++++ location received");
             Collect.getInstance().setLocation(location);
             LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("locationChanged"));  // update map
 
@@ -261,7 +261,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
                 @Override
                 public void run() {
-                    Timber.i("=================== Periodic check for user settings ");
+                    //Timber.i("=================== Periodic check for user settings ");
                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
                     enabledTracking = sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
 
