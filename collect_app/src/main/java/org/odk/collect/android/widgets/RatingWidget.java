@@ -16,6 +16,7 @@ package org.odk.collect.android.widgets;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.widget.GridLayout;
@@ -26,6 +27,9 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
 
 public class RatingWidget extends QuestionWidget {
 
@@ -56,7 +60,10 @@ public class RatingWidget extends QuestionWidget {
             }
         }
 
-        addAnswerView(gridLayout);
+        Resources resources = context.getResources();
+        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+        int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
+        addAnswerView(gridLayout, margin);
     }
 
     private void renderGrid(Context context, int numberOfStars, int columns, int rows) {

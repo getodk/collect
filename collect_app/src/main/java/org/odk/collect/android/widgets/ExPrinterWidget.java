@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.Button;
@@ -28,6 +29,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
 
 /**
  * <p>Use the ODK Sensors framework to print data to a connected printer.</p>
@@ -127,7 +131,11 @@ public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
         LinearLayout printLayout = new LinearLayout(getContext());
         printLayout.setOrientation(LinearLayout.VERTICAL);
         printLayout.addView(launchIntentButton);
-        addAnswerView(printLayout);
+
+        Resources resources = context.getResources();
+        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+        int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
+        addAnswerView(printLayout, margin);
     }
 
     protected void firePrintingActivity(String intentName) throws ActivityNotFoundException {

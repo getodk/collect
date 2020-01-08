@@ -18,6 +18,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -42,6 +43,8 @@ import timber.log.Timber;
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
 
 /**
  * Image widget that supports annotations on the image.
@@ -63,7 +66,11 @@ public class AnnotateWidget extends BaseImageWidget {
         imageCaptureHandler = new ImageCaptureHandler();
         setUpLayout();
         addCurrentImageToLayout();
-        addAnswerView(answerLayout);
+
+        Resources resources = context.getResources();
+        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+        int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
+        addAnswerView(answerLayout, margin);
     }
 
     @Override

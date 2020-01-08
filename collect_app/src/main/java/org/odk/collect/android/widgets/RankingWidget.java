@@ -17,6 +17,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,8 +38,12 @@ import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
+
 public class RankingWidget extends ItemsWidget implements BinaryWidget {
 
+    private int margin;
     private List<SelectChoice> savedItems;
     private LinearLayout widgetLayout;
     Button showRankingDialogButton;
@@ -46,6 +51,9 @@ public class RankingWidget extends ItemsWidget implements BinaryWidget {
     public RankingWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
 
+        Resources resources = context.getResources();
+        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+        margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
         setUpLayout(getOrderedItems());
     }
 
@@ -136,7 +144,7 @@ public class RankingWidget extends ItemsWidget implements BinaryWidget {
         widgetLayout.addView(showRankingDialogButton);
         widgetLayout.addView(setUpAnswerTextView());
 
-        addAnswerView(widgetLayout);
+        addAnswerView(widgetLayout, margin);
         SpacesInUnderlyingValuesWarning
                 .forQuestionWidget(this)
                 .renderWarningIfNecessary(items);

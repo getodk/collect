@@ -21,6 +21,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -62,6 +63,8 @@ import timber.log.Timber;
 
 import static android.os.Build.MODEL;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -124,7 +127,11 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         answerLayout.addView(captureButton);
         answerLayout.addView(chooseButton);
         answerLayout.addView(playButton);
-        addAnswerView(answerLayout);
+
+        Resources resources = context.getResources();
+        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+        int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
+        addAnswerView(answerLayout, margin);
 
         hideButtonsIfNeeded();
 

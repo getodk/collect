@@ -20,6 +20,7 @@ import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.provider.MediaStore.Audio;
 import android.view.View;
@@ -50,6 +51,8 @@ import java.util.Locale;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -95,7 +98,11 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         answerLayout.addView(captureButton);
         answerLayout.addView(chooseButton);
         answerLayout.addView(audioController);
-        addAnswerView(answerLayout);
+
+        Resources resources = context.getResources();
+        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+        int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
+        addAnswerView(answerLayout, margin);
 
         hideButtonsIfNeeded();
 

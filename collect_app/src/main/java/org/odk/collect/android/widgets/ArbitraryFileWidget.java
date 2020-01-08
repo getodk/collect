@@ -19,6 +19,7 @@ package org.odk.collect.android.widgets;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.provider.MediaStore;
 import androidx.annotation.NonNull;
@@ -48,6 +49,9 @@ import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import java.io.File;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
 
 public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
 
@@ -171,7 +175,10 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
         widgetLayout.addView(chooseFileButton);
         widgetLayout.addView(answerLayout);
 
-        addAnswerView(widgetLayout);
+        Resources resources = this.getResources();
+        int marginStandard = dpFromPx(getContext(), resources.getDimensionPixelSize(R.dimen.margin_standard));
+        int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
+        addAnswerView(widgetLayout, margin);
     }
 
     private void performFileSearch() {

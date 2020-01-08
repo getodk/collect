@@ -17,6 +17,8 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.Nullable;
+
+import android.content.res.Resources;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -33,6 +35,9 @@ import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.views.ScrolledToTopSpinner;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
+
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
 
 /**
  * SpinnerWidget handles select-one fields. Instead of a list of buttons it uses a spinner, wherein
@@ -87,7 +92,11 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
         });
 
         fillInPreviousAnswer(questionDetails.getPrompt());
-        addAnswerView(view);
+
+        Resources resources = context.getResources();
+        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+        int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
+        addAnswerView(view, margin);
     }
 
     @Override

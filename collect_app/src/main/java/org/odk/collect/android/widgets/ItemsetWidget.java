@@ -76,7 +76,7 @@ public class ItemsetWidget extends AbstractSelectOneWidget {
 
         items = getItems();
 
-        createLayout();
+        createLayout(context);
     }
 
     @Override

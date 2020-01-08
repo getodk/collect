@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +36,9 @@ import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
 
 /**
  * SpinnerMultiWidget, like SelectMultiWidget handles multiple selection fields using checkboxes,
@@ -110,7 +114,11 @@ public class SpinnerMultiWidget extends ItemsWidget implements ButtonWidget, Mul
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(button);
         answerLayout.addView(selectionText);
-        addAnswerView(answerLayout);
+
+        Resources resources = context.getResources();
+        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+        int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
+        addAnswerView(answerLayout, margin);
 
         SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
     }

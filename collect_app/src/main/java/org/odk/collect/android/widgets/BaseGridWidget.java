@@ -17,6 +17,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -55,6 +56,8 @@ import java.util.List;
 import timber.log.Timber;
 
 import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
 
 /**
  * GridWidget handles select-one/multiple fields using a grid options. The number of columns
@@ -81,7 +84,7 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         itemViews = new View[items.size()];
 
         setUpItems();
-        setUpGridView();
+        setUpGridView(context);
         fillInAnswer();
 
         logAnalytics(questionDetails);
@@ -179,7 +182,7 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         return item;
     }
 
-    private void setUpGridView() {
+    private void setUpGridView(Context context) {
         ExpandedHeightGridView gridView = new ExpandedHeightGridView(getContext());
         gridView.setNumColumns(GridView.AUTO_FIT);
         gridView.setColumnWidth(maxColumnWidth);
@@ -192,7 +195,11 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         gridView.setAdapter(new ImageAdapter());
         int paddingStartEnd = getContext().getResources().getDimensionPixelSize(R.dimen.margin_standard);
         gridView.setPadding(paddingStartEnd, 0, paddingStartEnd, 0);
-        addAnswerView(gridView);
+
+        Resources resources = context.getResources();
+        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+        int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
+        addAnswerView(gridView, margin);
     }
 
     void selectItem(int index) {

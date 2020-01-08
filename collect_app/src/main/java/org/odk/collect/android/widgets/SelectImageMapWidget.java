@@ -19,6 +19,7 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.text.Html;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -55,6 +56,9 @@ import javax.xml.transform.stream.StreamResult;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
+
 /**
  * A base widget class which is responsible for sharing the code used by image map select widgets like
  * {@link SelectOneImageMapWidget} and {@link SelectMultiImageMapWidget}.
@@ -84,7 +88,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
             Timber.w(e);
         }
 
-        createLayout();
+        createLayout(context);
     }
 
     private static String convertDocumentToString(Document doc) {
@@ -115,7 +119,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         return webView.suppressFlingGesture();
     }
 
-    private void createLayout() {
+    private void createLayout(Context context) {
         webView = new CustomWebView(getContext());
 
         selectedAreasLabel = getAnswerTextView();
@@ -129,7 +133,10 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         int paddingInPx = (int) (paddingInDp * scale + 0.5f);
         answerLayout.setPadding(0, 0, paddingInPx, 0);
 
-        addAnswerView(answerLayout);
+        Resources resources = context.getResources();
+        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+        int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
+        addAnswerView(answerLayout, margin);
         setUpWebView();
     }
 

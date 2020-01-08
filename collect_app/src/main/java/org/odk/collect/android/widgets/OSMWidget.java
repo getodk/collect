@@ -7,6 +7,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.View;
@@ -32,6 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
 
 /**
  * Widget that allows the user to launch OpenMapKit to get an OSM Feature with a
@@ -123,7 +126,11 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         answerLayout.addView(errorTextView);
         answerLayout.addView(osmFileNameHeaderTextView);
         answerLayout.addView(osmFileNameTextView);
-        addAnswerView(answerLayout);
+
+        Resources resources = context.getResources();
+        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+        int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
+        addAnswerView(answerLayout, margin);
 
         errorTextView.setVisibility(View.GONE);
     }

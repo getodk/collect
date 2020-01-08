@@ -16,6 +16,7 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -28,6 +29,9 @@ import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ViewIds;
+
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
 
 @SuppressLint("ViewConstructor")
 public class TriggerWidget extends QuestionWidget {
@@ -47,7 +51,11 @@ public class TriggerWidget extends QuestionWidget {
         triggerButton.setEnabled(!getFormEntryPrompt().isReadOnly());
         triggerButton.setChecked(OK_TEXT.equals(getFormEntryPrompt().getAnswerText()));
         triggerButton.setOnCheckedChangeListener((buttonView, isChecked) -> widgetValueChanged());
-        addAnswerView(answerView);
+
+        Resources resources = context.getResources();
+        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+        int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
+        addAnswerView(answerView, margin);
     }
 
     @Override

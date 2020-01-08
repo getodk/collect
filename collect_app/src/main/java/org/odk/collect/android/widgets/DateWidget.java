@@ -54,6 +54,8 @@ import java.util.Date;
 import timber.log.Timber;
 
 import static org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog.DATE_PICKER_DIALOG;
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
@@ -75,14 +77,15 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
 
     public DateWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
-        createWidget();
+        createWidget(context);
     }
 
-    protected void createWidget() {
+    protected void createWidget(Context context) {
         datePickerDetails = DateTimeUtils.getDatePickerDetails(getFormEntryPrompt().getQuestion().getAppearanceAttr());
         dateButton = getSimpleButton(getContext().getString(R.string.select_date));
         dateTextView = getAnswerTextView();
-        addViews();
+        addViews(context);
+
         if (getFormEntryPrompt().getAnswerValue() == null) {
             clearAnswer();
             setDateToCurrent();
@@ -147,12 +150,16 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
         return isNullAnswer;
     }
 
-    private void addViews() {
+    private void addViews(Context context) {
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.addView(dateButton);
         linearLayout.addView(dateTextView);
-        addAnswerView(linearLayout);
+
+        Resources resources = context.getResources();
+        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+        int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
+        addAnswerView(linearLayout, margin);
     }
 
     protected void setDateToCurrent() {

@@ -16,11 +16,14 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
+
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
+import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.SelectMultipleListAdapter;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
@@ -28,6 +31,9 @@ import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
 
 /**
  * SelectMultiWidget handles multiple selection fields using checkboxes.
@@ -45,7 +51,7 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
         //noinspection unchecked
         ve = getFormEntryPrompt().getAnswerValue() == null ? new ArrayList<>() :
                 (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
-        createLayout();
+        createLayout(context);
     }
 
     @Override
@@ -59,7 +65,7 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
         return vc.isEmpty() ? null : new SelectMultiData(vc);
     }
 
-    private void createLayout() {
+    private void createLayout(Context context) {
         adapter = new SelectMultipleListAdapter(items, ve, this, numColumns, this.getFormEntryPrompt(), this.getReferenceManager(), this.getAnswerFontSize(), this.getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), this.getContext());
 
         if (items != null) {
@@ -70,7 +76,11 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
             recyclerView.setAdapter(adapter);
             answerLayout.addView(recyclerView);
             adjustRecyclerViewSize(adapter, recyclerView);
-            addAnswerView(answerLayout);
+
+            Resources resources = context.getResources();
+            int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+            int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
+            addAnswerView(answerLayout, margin);
         }
     }
 

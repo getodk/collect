@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -43,6 +44,9 @@ import java.util.Date;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
+
 /**
  * Displays a TimePicker widget.
  *
@@ -68,7 +72,7 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
         createTimeButton();
         timeTextView = getAnswerTextView();
         createTimePickerDialog();
-        addViews();
+        addViews(context);
     }
 
     @Override
@@ -110,12 +114,16 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
         timeButton = getSimpleButton(getContext().getString(R.string.select_time));
     }
 
-    private void addViews() {
+    private void addViews(Context context) {
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.addView(timeButton);
         linearLayout.addView(timeTextView);
-        addAnswerView(linearLayout);
+
+        Resources resources = context.getResources();
+        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+        int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
+        addAnswerView(linearLayout, margin);
     }
 
     public void setTimeLabel() {

@@ -23,6 +23,6 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 public class SelectOneWidget extends AbstractSelectOneWidget {
     public SelectOneWidget(Context context, QuestionDetails prompt, boolean autoAdvance) {
         super(context, prompt, autoAdvance);
-        createLayout();
+        createLayout(context);
     }
 }

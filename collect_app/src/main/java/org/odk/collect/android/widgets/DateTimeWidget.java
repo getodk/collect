@@ -60,6 +60,7 @@ public class DateTimeWidget extends QuestionWidget implements BinaryWidget, Widg
         if (!dateWidget.isDayHidden()) {
             linearLayout.addView(timeWidget);
         }
+
         addAnswerView(linearLayout);
 
         timeWidget.setValueChangedListener(this);

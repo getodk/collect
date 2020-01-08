@@ -16,6 +16,7 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -28,6 +29,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
+
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
 
 /**
  * Widget that allows user to open URLs from within the form
@@ -60,7 +64,11 @@ public class UrlWidget extends QuestionWidget implements ButtonWidget {
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(openUrlButton);
         answerLayout.addView(stringAnswer);
-        addAnswerView(answerLayout);
+
+        Resources resources = context.getResources();
+        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+        int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
+        addAnswerView(answerLayout, margin);
 
         customTabHelper = new CustomTabHelper();
     }

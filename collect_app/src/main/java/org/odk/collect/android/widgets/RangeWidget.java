@@ -17,6 +17,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Build;
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
@@ -40,6 +41,9 @@ import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import java.math.BigDecimal;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
 
 @SuppressWarnings("BigDecimalMethodWithoutRoundingCalled")
 public abstract class RangeWidget extends QuestionWidget implements ButtonWidget, SeekBar.OnSeekBarChangeListener {
@@ -80,7 +84,10 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
             seekBar.setEnabled(false);
         }
 
-        addAnswerView(view);
+        Resources resources = context.getResources();
+        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+        int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
+        addAnswerView(view, margin);
     }
 
     @Override

@@ -18,6 +18,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.res.Resources;
 import android.widget.RadioButton;
 
 import org.javarosa.core.model.FormIndex;
@@ -26,6 +28,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.data.helper.Selection;
+import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.SelectOneListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -35,6 +38,9 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
 
 /**
  * SelectOneWidgets handles select-one fields using radio buttons.
@@ -90,7 +96,7 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
                     : new SelectOneData(new Selection(selectChoice));
     }
 
-    protected void createLayout() {
+    protected void createLayout(Context context) {
         adapter = new SelectOneListAdapter(items, selectedValue, this, numColumns, this.getFormEntryPrompt(), this.getReferenceManager(), this.getAnswerFontSize(), this.getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), this.getContext(), autoAdvance);
 
         if (items != null) {
@@ -98,7 +104,11 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
             recyclerView.setAdapter(adapter);
             answerLayout.addView(recyclerView);
             adjustRecyclerViewSize(adapter, recyclerView);
-            addAnswerView(answerLayout);
+
+            Resources resources = context.getResources();
+            int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+            int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
+            addAnswerView(answerLayout, margin);
         }
     }
 
