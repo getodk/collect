@@ -34,12 +34,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.commons.io.FilenameUtils;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
+import org.javarosa.core.reference.InvalidReferenceException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaManager;
@@ -156,6 +159,9 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             int screenHeight = metrics.heightPixels;
 
             File f = new File(getInstanceFolder() + File.separator + binaryName);
+            if (!f.exists()) {
+                f = addDefaultImageIfExists(f);
+            }
 
             Bitmap bmp = null;
             if (f.exists()) {
@@ -314,5 +320,33 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
                     Toast.LENGTH_SHORT).show();
             cancelWaitingForData();
         }
+    }
+
+    private File addDefaultImageIfExists(File f) {
+        File defaultFile = new File(getDefaultFilePath());
+        if (defaultFile.exists()) {
+            binaryName = System.currentTimeMillis() + "." + FilenameUtils.getExtension(defaultFile.getName());
+            FileUtils.copyFile(defaultFile, new File(getInstanceFolder() + File.separator + binaryName));
+            f = new File(getInstanceFolder() + File.separator + binaryName);
+        }
+        return f;
+    }
+
+    private String getDefaultFilePath() {
+        String defaultFilePath = null;
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController != null) {
+            if (binaryName.startsWith("jr://images/")) {
+                try {
+                    defaultFilePath = referenceManager.deriveReference(binaryName).getLocalURI();
+                } catch (InvalidReferenceException e) {
+                    Timber.w(e);
+                }
+            } else {
+                defaultFilePath = formController.getMediaFolder() + File.separator + binaryName;
+            }
+        }
+
+        return defaultFilePath;
     }
 }
