@@ -142,7 +142,7 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
         }
 
         launchIntentButton = getSimpleButton(buttonText);
-        launchIntentButton.setEnabled(validForm);
+        launchIntentButton.setEnabled(validForm && !readOnlyOverride);
 
         // set text formatting
         launching = new EditText(context);
