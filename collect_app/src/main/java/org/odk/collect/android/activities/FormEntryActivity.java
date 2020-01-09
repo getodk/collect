@@ -260,7 +260,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private View currentView;
 
     private AlertDialog alertDialog;
-    private ProgressDialog progressDialog;
+    private ProgressDialog savingDialog;
     private String errorMessage;
     private boolean shownAlertDialogIsGroupRepeat;
 
@@ -1865,7 +1865,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 case SAVING:
                     autoSaved = true;
 
-                    showDialog(SAVING_DIALOG);
+                    if (savingDialog == null || savingDialog.isShowing()) {
+                        showDialog(SAVING_DIALOG);
+                    }
+
                     if (result.getMessage() != null) {
                         onProgressStep(result.getMessage());
                     }
@@ -2098,17 +2101,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case SAVING_DIALOG:
-                progressDialog = new ProgressDialog(this);
-                progressDialog.setTitle(getString(R.string.saving_form));
-                progressDialog.setMessage(getString(R.string.please_wait));
-                progressDialog.setIndeterminate(true);
-                progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        cancelSaveToDiskTask();
-                    }
-                });
-                return progressDialog;
+                savingDialog = new ProgressDialog(this);
+                savingDialog.setTitle(getString(R.string.saving_form));
+                savingDialog.setMessage(getString(R.string.please_wait));
+                savingDialog.setIndeterminate(true);
+                savingDialog.setOnDismissListener(dialog -> cancelSaveToDiskTask());
+                return savingDialog;
 
         }
         return null;
@@ -2570,8 +2568,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     public void onProgressStep(String stepMessage) {
-        if (progressDialog != null) {
-            progressDialog.setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
+        if (savingDialog != null) {
+            savingDialog.setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
         } else {
             FormLoadingDialogFragment formLoadingDialogFragment = getFormLoadingDialogFragment();
             if (formLoadingDialogFragment != null) {
