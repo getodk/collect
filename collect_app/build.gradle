@@ -273,11 +273,11 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:2.1.0"
 
     // smap aws
-    implementation 'com.amazonaws:aws-android-sdk-core:2.15.+'
+    implementation 'com.amazonaws:aws-android-sdk-core:2.16.+'
     //implementation 'com.amazonaws:aws-android-sdk-core:2.4.2'
     // add the DynamoDB SDK and DynamoDB Object Mapper dependency
-    implementation 'com.amazonaws:aws-android-sdk-ddb:2.13.+'
-    implementation 'com.amazonaws:aws-android-sdk-ddb-mapper:2.13.+'
+    implementation 'com.amazonaws:aws-android-sdk-ddb:2.16.+'
+    implementation 'com.amazonaws:aws-android-sdk-ddb-mapper:2.16.+'
     implementation project(':AWSMobileHelper')
 
     // charts
