@@ -490,4 +490,21 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     public void doBack() {
         runGoogleAccountValidation();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        serverUrlPreference.setOnPreferenceClickListener(preference -> {
+            serverUrlPreference.getEditText().requestFocus();
+            return false;
+        });
+        usernamePreference.setOnPreferenceClickListener(preference -> {
+            usernamePreference.getEditText().requestFocus();
+            return false;
+        });
+        passwordPreference.setOnPreferenceClickListener(preference -> {
+            passwordPreference.getEditText().requestFocus();
+            return false;
+        });
+    }
 }
