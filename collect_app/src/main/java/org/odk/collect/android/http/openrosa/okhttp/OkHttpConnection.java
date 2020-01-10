@@ -268,11 +268,12 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         ResponseBody body = response.body();
         if (body != null) {
             try (InputStream is = body.byteStream()) {
+
                 while (is.read() != -1) {
                     // loop until all bytes read
                 }
             } catch (Exception e) {
-                Timber.i(e);
+                //Timber.i(e);      // Smap I don't think we need to know if this fails probably because the stream is closed
             }
         }
     }
