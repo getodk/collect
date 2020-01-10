@@ -6,6 +6,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FileReferenceFactory;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FormUtils {
 
@@ -24,15 +26,27 @@ public class FormUtils {
             referenceManager.addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
         }
 
-        addSessionRootTranslators(formMediaDir.getName(), referenceManager,
-                "images", "image", "audio", "video", "file");
+        addSessionRootTranslators(referenceManager,
+                buildSessionRootTranslators(formMediaDir.getName(), enumerateHostStrings()));
     }
 
-    private static void addSessionRootTranslators(String formMediaDir, ReferenceManager referenceManager, String... hostStrings) {
+    public static String[] enumerateHostStrings() {
+        return new String[] {"images", "image", "audio", "video", "file-csv", "file"};
+    }
+
+    public static List<RootTranslator> buildSessionRootTranslators(String formMediaDir, String[] hostStrings) {
+        List<RootTranslator> rootTranslators = new ArrayList<>();
         // Set jr://... to point to /sdcard/odk/forms/formBasename-media/
         final String translatedPrefix = String.format("jr://file/forms/" + formMediaDir + "/");
         for (String t : hostStrings) {
-            referenceManager.addSessionRootTranslator(new RootTranslator(String.format("jr://%s/", t), translatedPrefix));
+            rootTranslators.add(new RootTranslator(String.format("jr://%s/", t), translatedPrefix));
+        }
+        return rootTranslators;
+    }
+
+    public static void addSessionRootTranslators(ReferenceManager referenceManager, List<RootTranslator> rootTranslators) {
+        for (RootTranslator rootTranslator : rootTranslators) {
+            referenceManager.addSessionRootTranslator(rootTranslator);
         }
     }
 }

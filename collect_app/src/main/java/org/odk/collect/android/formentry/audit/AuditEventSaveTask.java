@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 
+import org.odk.collect.android.utilities.FileUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -45,11 +47,10 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
         FileWriter fw = null;
         try {
             boolean newFile = !file.exists();
-            fw = new FileWriter(file, true);
             if (newFile) {
+                fw = new FileWriter(file, true);
                 fw.write(getHeader() + "\n");
             } else if (updateHeaderIfNeeded()) {
-                fw.close();
                 fw = new FileWriter(file.getAbsolutePath(), true);
             }
             if (params.length > 0) {
@@ -77,30 +78,24 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
 
     private boolean updateHeaderIfNeeded() {
         boolean headerUpdated = false;
-        FileWriter tfw = null;
+        String header = readHeader();
+        if (shouldHeaderBeUpdated(header)) {
+            headerUpdated = FileUtils.replaceHeaderRow(file, getHeader(), "\n");
+        }
+        return headerUpdated;
+    }
+
+    private String readHeader() {
+        String header = null;
+
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(file));
-            if (shouldHeaderBeUpdated(br.readLine())) { // update header
-                File temporaryFile = new File(file.getParentFile().getAbsolutePath() + "/temporaryAudit.csv");
-                tfw = new FileWriter(temporaryFile, true);
-                tfw.write(getHeader() + "\n");
-                String line;
-                while ((line = br.readLine()) != null) {
-                    tfw.write(line + "\n");
-                }
-                temporaryFile.renameTo(file);
-                headerUpdated = true;
-            }
+            header = br.readLine();
         } catch (IOException e) {
             Timber.e(e);
         } finally {
             try {
-                if (tfw != null) {
-                    tfw.close();
-                } else {
-                    Timber.e("Attempt to close null FileWriter for AuditEventLogger.");
-                }
                 if (br != null) {
                     br.close();
                 } else {
@@ -110,7 +105,8 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
                 Timber.e(e);
             }
         }
-        return headerUpdated;
+
+        return header;
     }
 
     private boolean shouldHeaderBeUpdated(String header) {
