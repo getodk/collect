@@ -1,0 +1,419 @@
+<?xml version="1.0"?>
+<h:html xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://www.w3.org/2002/xforms">
+    <h:head>
+        <h:title>All widgets likert icon</h:title>
+        <model>
+            <itext>
+                <translation default="true()" lang="default">
+                    <text id="/likert_test/likert_image_widget/strongly_agree:label">
+                        <value>Strongly Agree</value>
+                        <value form="image">jr://images/famous.jpg</value>
+                    </text>
+                    <text id="/likert_test/likert_image_widget_error2/strongly_disagree:label">
+                        <value>Strongly Disagree</value>
+                        <value form="image">jr://images/famous.jpg</value>
+                    </text>
+                    <text id="/likert_test/likert_image_widget/agree:label">
+                        <value>Agree</value>
+                        <value form="image">jr://images/famous.jpg</value>
+                    </text>
+                    <text id="/likert_test/likert_image_widget_error2/agree:label">
+                        <value>Agree</value>
+                        <value form="image">jr://images/famous.jpg</value>
+                    </text>
+                    <text id="/likert_test/likert_image_widget_error/strongly_disagree:label">
+                        <value>Strongly Disagree</value>
+                        <value form="image">jr://images/famous.jpg</value>
+                    </text>
+                    <text id="/likert_test/likert_image_widget_error/agree:label">
+                        <value>Agree</value>
+                        <value form="image">jr://images/famous.jpg</value>
+                    </text>
+                    <text id="/likert_test/likert_image_widget_error2/strongly_agree:label">
+                        <value>Strongly Agree</value>
+                        <value form="image">jr://images/famous.jpg</value>
+                    </text>
+                    <text id="/likert_test/likert_image_widget/disagree:label">
+                        <value>Disagree</value>
+                        <value form="image">jr://images/famous.jpg</value>
+                    </text>
+                    <text id="/likert_test/likert_image_widget_error/strongly_agree:label">
+                        <value>Strongly Agree</value>
+                        <value form="image">jr://images/famous.jpg</value>
+                    </text>
+                    <text id="/likert_test/likert_image_widget_error2/neutral:label">
+                        <value>Neutral</value>
+                        <value form="image">jr://images/not_Found.jpg</value>
+                    </text>
+                    <text id="/likert_test/likert_image_widget_error2/disagree:label">
+                        <value>Disagree</value>
+                        <value form="image">jr://images/famous.jpg</value>
+                    </text>
+                    <text id="/likert_test/likert_image_widget/strongly_disagree:label">
+                        <value>Strongly Disagree</value>
+                        <value form="image">jr://images/famous.jpg</value>
+                    </text>
+                    <text id="/likert_test/likert_image_widget_error/disagree:label">
+                        <value>Disagree</value>
+                        <value form="image">jr://images/famous.jpg</value>
+                    </text>
+                    <text id="/likert_test/likert_image_widget/neutral:label">
+                        <value>Neutral</value>
+                        <value form="image">jr://images/famous.jpg</value>
+                    </text>
+                    <text id="static_instance-level1-0">
+                        <value>A</value>
+                    </text>
+                    <text id="static_instance-level1-1">
+                        <value>B</value>
+                    </text>
+                    <text id="static_instance-level1-2">
+                        <value>C</value>
+                    </text>
+                    <text id="static_instance-level2-0">
+                        <value>A1</value>
+                    </text>
+                    <text id="static_instance-level2-1">
+                        <value>A2</value>
+                    </text>
+                    <text id="static_instance-level2-2">
+                        <value>A3</value>
+                    </text>
+                    <text id="static_instance-level2-3">
+                        <value>B1</value>
+                    </text>
+                    <text id="static_instance-level2-4">
+                        <value>B2</value>
+                    </text>
+                    <text id="static_instance-level2-5">
+                        <value>B3</value>
+                    </text>
+                    <text id="static_instance-level2-6">
+                        <value>C1</value>
+                    </text>
+                    <text id="static_instance-level2-7">
+                        <value>C2</value>
+                    </text>
+                    <text id="static_instance-level2-8">
+                        <value>C3</value>
+                    </text>
+                    <text id="static_instance-level2-9">
+                        <value>C4</value>
+                    </text>
+                    <text id="static_instance-level3-0">
+                        <value>A1A</value>
+                    </text>
+                    <text id="static_instance-level3-1">
+                        <value>A1B</value>
+                    </text>
+                    <text id="static_instance-level3-2">
+                        <value>B1A</value>
+                    </text>
+                    <text id="static_instance-level3-3">
+                        <value>B1B</value>
+                    </text>
+                </translation>
+            </itext>
+            <instance>
+                <likert_test id="all-widgets-icon" version="2019051305">
+                    <likert_widget />
+                    <likert_image_widget />
+                    <likert_widget_error />
+                    <likert_image_widget_error />
+                    <likert_image_widget_error2 />
+                    <likert_error_missing_text />
+                    <cascading_select>
+                        <source1/>
+                        <target1/>
+                        <target1-1/>
+                    </cascading_select>
+                    <meta>
+                        <instanceID />
+                    </meta>
+                </likert_test>
+            </instance>
+            <instance id="level1">
+                <root>
+                    <item>
+                        <itextId>static_instance-level1-0</itextId>
+                        <name>a</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-level1-1</itextId>
+                        <name>b</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-level1-2</itextId>
+                        <name>c</name>
+                    </item>
+                </root>
+            </instance>
+            <instance id="level2">
+                <root>
+                    <item>
+                        <itextId>static_instance-level2-0</itextId>
+                        <level1>a</level1>
+                        <name>a1</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-level2-1</itextId>
+                        <level1>a</level1>
+                        <name>a2</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-level2-2</itextId>
+                        <level1>a</level1>
+                        <name>a3</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-level2-3</itextId>
+                        <level1>b</level1>
+                        <name>b1</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-level2-4</itextId>
+                        <level1>b</level1>
+                        <name>b2</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-level2-5</itextId>
+                        <level1>b</level1>
+                        <name>b3</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-level2-6</itextId>
+                        <level1>c</level1>
+                        <name>c1</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-level2-7</itextId>
+                        <level1>c</level1>
+                        <name>c2</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-level2-8</itextId>
+                        <level1>c</level1>
+                        <name>c3</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-level2-9</itextId>
+                        <level1>c</level1>
+                        <name>c4</name>
+                    </item>
+                </root>
+            </instance>
+            <instance id="level3">
+                <root>
+                    <item>
+                        <itextId>static_instance-level3-0</itextId>
+                        <name>a1a</name>
+                        <level2>a1</level2>
+                    </item>
+                    <item>
+                        <itextId>static_instance-level3-1</itextId>
+                        <name>a1b</name>
+                        <level2>a1</level2>
+                    </item>
+                    <item>
+                        <itextId>static_instance-level3-2</itextId>
+                        <name>b1a</name>
+                        <level2>b1</level2>
+                    </item>
+                    <item>
+                        <itextId>static_instance-level3-3</itextId>
+                        <name>b1b</name>
+                        <level2>b1</level2>
+                    </item>
+                </root>
+            </instance>
+            <bind nodeset="/likert_test/likert_widget" type="select1" />
+            <bind nodeset="/likert_test/likert_image_widget" type="select1" />
+            <bind nodeset="/likert_test/likert_widget_error" type="select1" />
+            <bind nodeset="/likert_test/likert_image_widget_error" type="select1" />
+            <bind nodeset="/likert_test/likert_image_widget_error2" type="select1" />
+            <bind nodeset="/likert_test/likert_error_missing_text" type="select1" />
+            <bind nodeset="/likert_test/cascading_select/source1" type="select1"/>
+            <bind nodeset="/likert_test/cascading_select/target1" type="select1"/>
+            <bind nodeset="/likert_test/cascading_select/target1-1" type="select1"/>
+            <bind nodeset="/likert_test/meta/instanceID" readonly="true()" type="string"
+                jr:preload="uid" />
+        </model>
+    </h:head>
+    <h:body>
+        <select1 appearance="likert" ref="/likert_test/likert_widget">
+            <label>Likert Widget</label>
+            <hint>Likert type widget (happy case)</hint>
+            <item>
+                <label>0</label>
+                <value>choice_0</value>
+            </item>
+            <item>
+                <label>1</label>
+                <value>choice_1</value>
+            </item>
+            <item>
+                <label>2</label>
+                <value>choice_2</value>
+            </item>
+            <item>
+                <label>3</label>
+                <value>choice_3</value>
+            </item>
+            <item>
+                <label>4</label>
+                <value>choice_4</value>
+            </item>
+        </select1>
+        <select1 appearance="likert" ref="/likert_test/likert_image_widget">
+            <label>Likert Image Widget</label>
+            <hint>Likert type widget with images (happy case)</hint>
+            <item>
+                <label ref="jr:itext('/likert_test/likert_image_widget/strongly_disagree:label')" />
+                <value>strongly_disagree</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/likert_test/likert_image_widget/disagree:label')" />
+                <value>disagree</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/likert_test/likert_image_widget/neutral:label')" />
+                <value>neutral</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/likert_test/likert_image_widget/agree:label')" />
+                <value>agree</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/likert_test/likert_image_widget/strongly_agree:label')" />
+                <value>strongly_agree</value>
+            </item>
+        </select1>
+        <select1 appearance="likert" ref="/likert_test/likert_widget_error">
+            <label>Likert Widget Error</label>
+            <hint>Insufficient text provided</hint>
+            <item>
+                <label>0</label>
+                <value>choice_0</value>
+            </item>
+            <item>
+                <label>1</label>
+                <value>choice_1</value>
+            </item>
+            <item>
+                <label>2</label>
+                <value>choice_2</value>
+            </item>
+            <item>
+                <label>3</label>
+                <value>choice_3</value>
+            </item>
+        </select1>
+        <select1 appearance="likert" ref="/likert_test/likert_image_widget_error">
+            <label>Likert Image Widget Error</label>
+            <hint>Insufficient images provided</hint>
+            <item>
+                <label
+                    ref="jr:itext('/likert_test/likert_image_widget_error/strongly_disagree:label')" />
+                <value>strongly_disagree</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/likert_test/likert_image_widget_error/disagree:label')" />
+                <value>disagree</value>
+            </item>
+            <item>
+                <label>Neutral</label>
+                <value>neutral</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/likert_test/likert_image_widget_error/agree:label')" />
+                <value>agree</value>
+            </item>
+            <item>
+                <label
+                    ref="jr:itext('/likert_test/likert_image_widget_error/strongly_agree:label')" />
+                <value>strongly_agree</value>
+            </item>
+        </select1>
+        <select1 appearance="likert" ref="/likert_test/likert_image_widget_error2">
+            <label>Likert Image Widget Error2</label>
+            <hint>Image cannot be found</hint>
+            <item>
+                <label
+                    ref="jr:itext('/likert_test/likert_image_widget_error2/strongly_disagree:label')" />
+                <value>strongly_disagree</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/likert_test/likert_image_widget_error2/disagree:label')" />
+                <value>disagree</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/likert_test/likert_image_widget_error2/neutral:label')" />
+                <value>neutral</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/likert_test/likert_image_widget_error2/agree:label')" />
+                <value>agree</value>
+            </item>
+            <item>
+                <label
+                    ref="jr:itext('/likert_test/likert_image_widget_error2/strongly_agree:label')" />
+                <value>strongly_agree</value>
+            </item>
+        </select1>
+        <select1 appearance="likert" ref="/likert_test/likert_error_missing_text">
+            <label>Likert Missing text Error</label>
+            <hint>When there is a missing Text</hint>
+            <item>
+                <label>0</label>
+                <value>choice_0</value>
+            </item>
+            <item>
+                <label></label>
+                <value>choice_1</value>
+            </item>
+            <item>
+                <label>2</label>
+                <value>choice_2</value>
+            </item>
+            <item>
+                <label>3</label>
+                <value>choice_3</value>
+            </item>
+        </select1>
+        <group appearance="field-list" ref="/likert_test/cascading_select">
+            <label>Cascading likert</label>
+            <select1 appearance="likert" ref="/likert_test/cascading_select/source1">
+                <label>Level1</label>
+                <item>
+                    <label>A</label>
+                    <value>a</value>
+                </item>
+                <item>
+                    <label>B</label>
+                    <value>b</value>
+                </item>
+                <item>
+                    <label>C</label>
+                    <value>c</value>
+                </item>
+            </select1>
+            <select1 appearance="likert" ref="/likert_test/cascading_select/target1">
+                <label>Level2</label>
+                <itemset nodeset="instance('level2')/root/item[level1 =  /likert_test/cascading_select/source1 ]">
+                    <value ref="name"/>
+                    <label ref="jr:itext(itextId)"/>
+                </itemset>
+            </select1>
+            <select1 appearance="likert" ref="/likert_test/cascading_select/target1-1">
+                <label>Level3</label>
+                <itemset nodeset="instance('level3')/root/item[level2 =  /likert_test/cascading_select/target1 ]">
+                    <value ref="name"/>
+                    <label ref="jr:itext(itextId)"/>
+                </itemset>
+            </select1>
+        </group>
+    </h:body>
+</h:html>

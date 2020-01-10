@@ -120,7 +120,7 @@ public class MainActivityTest {
 
         assertNotNull(reviewDataButton);
         assertEquals(View.VISIBLE, reviewDataButton.getVisibility());
-        assertEquals(mainMenuActivity.getString(R.string.review_data_button), reviewDataButton.getText());
+        assertEquals(mainMenuActivity.getString(R.string.review_data), reviewDataButton.getText());
 
         reviewDataButton.performClick();
         ShadowActivity shadowActivity = shadowOf(mainMenuActivity);
@@ -139,7 +139,7 @@ public class MainActivityTest {
 
         assertNotNull(sendDataButton);
         assertEquals(View.VISIBLE, sendDataButton.getVisibility());
-        assertEquals(mainMenuActivity.getString(R.string.send_data_button), sendDataButton.getText());
+        assertEquals(mainMenuActivity.getString(R.string.send_data), sendDataButton.getText());
 
         sendDataButton.performClick();
         ShadowActivity shadowActivity = shadowOf(mainMenuActivity);

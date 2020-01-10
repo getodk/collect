@@ -101,7 +101,7 @@ public class FormNavigationTestCase {
         FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), null, null);
         formLoaderTask.setFormLoaderListener(new FormLoaderListener() {
             @Override
-            public void loadingComplete(FormLoaderTask task, FormDef fd) {
+            public void loadingComplete(FormLoaderTask task, FormDef fd, String warningMsg) {
                 try {
                     // For each form, simulate swiping forward through screens until the end of the
                     // form and then swiping back once. Verify the expected indices before and after each swipe.

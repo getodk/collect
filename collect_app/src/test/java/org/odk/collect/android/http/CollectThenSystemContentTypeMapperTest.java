@@ -26,21 +26,10 @@ public class CollectThenSystemContentTypeMapperTest {
 
     @Test
     public void whenExtensionIsRecognized_returnsTypeForFile() {
-        assertEquals("text/xml", mapper.map("file.xml"));
-        assertEquals("audio/3gpp", mapper.map("file.3gpp"));
-        assertEquals("video/3gpp", mapper.map("file.3gp"));
-        assertEquals("video/avi", mapper.map("file.avi"));
         assertEquals("audio/amr", mapper.map("file.amr"));
-        assertEquals("text/csv", mapper.map("file.csv"));
-        assertEquals("image/jpeg", mapper.map("file.jpg"));
-        assertEquals("audio/mp3", mapper.map("file.mp3"));
-        assertEquals("video/mp4", mapper.map("file.mp4"));
         assertEquals("audio/ogg", mapper.map("file.oga"));
-        assertEquals("audio/ogg", mapper.map("file.ogg"));
         assertEquals("video/ogg", mapper.map("file.ogv"));
-        assertEquals("audio/wav", mapper.map("file.wav"));
         assertEquals("video/webm", mapper.map("file.webm"));
-        assertEquals("application/vnd.ms-excel", mapper.map("file.xls"));
     }
 
     @Test

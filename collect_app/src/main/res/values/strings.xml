@@ -22,8 +22,6 @@
     <string name="add_another_repeat">Add another \"%s\" group?</string>
     <string name="add_repeat">Add a new \"%s\" group?</string>
     <string name="add_repeat_no">Do Not Add</string>
-    <string name="audio_file_error">No audio file was specified.</string>
-    <string name="audio_file_invalid">File: %s is not a valid audio file.</string>
     <string name="cancel">Cancel</string>
     <string name="cancel_loading_form">Cancel</string>
     <string name="cancel_location">Cancel</string>
@@ -164,7 +162,6 @@
     <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
     <string name="manifest_tag_error">Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl</string>
     <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
-    <string name="file_fetch_failed">Error: %2$s (%3$s) at %1$s</string>
     <string name="fetching_manifest">%s. Getting manifest </string>
     <string name="success">Success</string>
     <string name="failures">Failures</string>
@@ -384,9 +381,9 @@
         <item quantity="other">%d meters</item>
     </plurals>
     <string name="location_status_searching">Searching for GPS location, please wait&#8230;</string>
-    <string name="location_status_accuracy">GPS location accuracy: %.1f m</string>
-    <string name="location_status_acceptable">GPS location accuracy: %.1f m (acceptable)</string>
-    <string name="location_status_unacceptable">GPS location accuracy: %.1f m (unacceptable)</string>
+    <string name="location_status_accuracy">GPS location accuracy: %.2f m</string>
+    <string name="location_status_acceptable">GPS location accuracy: %.2f m (acceptable)</string>
+    <string name="location_status_unacceptable">GPS location accuracy: %.2f m (unacceptable)</string>
     <string name="collection_status_paused">Points entered: %d</string>
     <string name="collection_status_placement">Points entered: %d (tap to place points)</string>
     <string name="collection_status_manual">Points entered: %d (manual recording)</string>
@@ -399,6 +396,7 @@
     <string name="discard">Discard</string>
     <string name="geoshape_view_change_location">View or Change GeoShape</string>
     <string name="geotrace_view_change_location">View or Change GeoTrace</string>
+    <string name="geometry_status">Saved forms: %d (%d shown on map)</string>
     <string name="bearing">Bearing: %.3f</string>
     <string name="direction">Direction: %s</string>
     <string name="select_odk_shortcut">Select ODK Shortcut</string>
@@ -718,4 +716,12 @@
     <string name="qr_code_not_found">QR Code not found in the selected image</string>
     <string name="not_granted_permission">The activity you are trying to start requires a permission which is not granted.</string>
     <string name="basemap_source_unavailable">Sorry, %s basemaps are not available on this device.  Please choose another basemap in General Settings &gt; Maps.</string>
+    <string name="enter_identity">Enter identity</string>
+    <string name="identity">Identity</string>
+    <string name="enter_identity_description">This form requires you to identify yourself</string>
+    <string name="close">Close</string>
+    <string name="reason_for_changes">Reason for changes</string>
+    <string name="reason">Reason</string>
+    <string name="save">Save</string>
+    <string name="reason_for_changes_description">You need to explain the reason for changes to this form</string>
 </resources>

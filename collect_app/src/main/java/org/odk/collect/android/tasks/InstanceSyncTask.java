@@ -35,7 +35,6 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.EncryptionUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,7 +45,6 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import timber.log.Timber;
 
@@ -77,7 +75,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         Timber.i("[%d] doInBackground begins!", instance);
 
         try {
-            List<String> candidateInstances = new LinkedList<String>();
+            List<String> candidateInstances = new LinkedList<>();
             File instancesPath = new File(Collect.INSTANCES_PATH);
             if (instancesPath.exists() && instancesPath.isDirectory()) {
                 File[] instanceFolders = instancesPath.listFiles();
@@ -138,7 +136,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                     }
                 }
 
-                instancesDao.deleteInstancesFromIDs(filesToRemove);
+                instancesDao.deleteInstancesFromInstanceFilePaths(filesToRemove);
 
                 final boolean instanceSyncFlag = PreferenceManager.getDefaultSharedPreferences(
                         Collect.getInstance().getApplicationContext()).getBoolean(
@@ -153,7 +151,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                         Cursor formCursor = null;
                         try {
                             String selection = FormsColumns.JR_FORM_ID + " = ? ";
-                            String[] selectionArgs = new String[]{instanceFormId};
+                            String[] selectionArgs = {instanceFormId};
                             // retrieve the form definition
                             formCursor = new FormsDao().getFormsCursor(selection, selectionArgs);
                             // TODO: optimize this by caching the previously found form definition
@@ -213,7 +211,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
             Document document = builder.parse(new File(instancePath));
             Element element = document.getDocumentElement();
             instanceFormId = element.getAttribute("id");
-        } catch (IOException | ParserConfigurationException | SAXException e) {
+        } catch (Exception | Error e) {
             Timber.w("Unable to read form id from %s", instancePath);
         }
         return instanceFormId;
@@ -227,7 +225,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
             Document document = builder.parse(new File(instancePath));
             Element element = document.getDocumentElement();
             instanceId = element.getAttribute("instanceID");
-        } catch (IOException | ParserConfigurationException | SAXException e) {
+        } catch (Exception | Error e) {
             Timber.w("Unable to read form instanceID from %s", instancePath);
         }
         return instanceId;
@@ -262,6 +260,8 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
 
                 values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(false));
+                values.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
+                values.put(InstanceColumns.GEOMETRY, (String) null);
                 instancesDao.updateInstance(values, InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{candidateInstance});
 
                 SaveToDiskTask.manageFilesAfterSavingEncryptedForm(instanceXml, submissionXml);

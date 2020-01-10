@@ -56,12 +56,12 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
     private ExternalDataReader externalDataReader;
     private FormLoaderTask formLoaderTask;
 
-    public ExternalSQLiteOpenHelper(File dbFile) {
+    ExternalSQLiteOpenHelper(File dbFile) {
         super(new DatabaseContext(dbFile.getParentFile().getAbsolutePath()), dbFile.getName(), null, VERSION);
     }
 
-    public void importFromCSV(File dataSetFile, ExternalDataReader externalDataReader,
-            FormLoaderTask formLoaderTask) {
+    void importFromCSV(File dataSetFile, ExternalDataReader externalDataReader,
+                       FormLoaderTask formLoaderTask) {
         this.dataSetFile = dataSetFile;
         this.externalDataReader = externalDataReader;
         this.formLoaderTask = formLoaderTask;
@@ -127,7 +127,7 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
                                 conflictingColumns));
             }
 
-            Map<String, String> columnNamesCache = new HashMap<String, String>();
+            Map<String, String> columnNamesCache = new HashMap<>();
 
             StringBuilder sb = new StringBuilder();
 
@@ -169,7 +169,7 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
             // create the indexes.
             // save the sql for later because inserts will be much faster if we don't have
             // indexes already.
-            List<String> createIndexesCommands = new ArrayList<String>();
+            List<String> createIndexesCommands = new ArrayList<>();
             for (String header : headerRow) {
                 if (header.endsWith("_key")) {
                     String indexSQL = "CREATE INDEX " + header + "_idx ON " + tableName + " ("

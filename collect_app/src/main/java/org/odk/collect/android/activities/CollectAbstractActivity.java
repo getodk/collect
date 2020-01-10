@@ -18,17 +18,19 @@ package org.odk.collect.android.activities;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.ThemeUtils;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.PermissionUtils.isEntryPointActivity;
-import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 
 public abstract class CollectAbstractActivity extends AppCompatActivity {
 
@@ -82,5 +84,13 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(new LocaleHelper().updateLocale(base));
+    }
+
+    public void initToolbar(CharSequence title) {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            toolbar.setTitle(title);
+            setSupportActionBar(toolbar);
+        }
     }
 }

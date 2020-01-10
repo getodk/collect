@@ -16,10 +16,6 @@ package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-import androidx.annotation.Nullable;
-import android.view.View;
-
-import com.google.android.gms.analytics.GoogleAnalytics;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -46,7 +42,7 @@ public class IdentityPreferences extends BasePreferenceFragment {
 
         findPreference("form_metadata").setOnPreferenceClickListener(preference -> {
             getActivity().getFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, new FormMetadataFragment())
+                    .replace(R.id.container, new FormMetadataFragment())
                     .addToBackStack(null)
                     .commit();
             return true;
@@ -55,28 +51,11 @@ public class IdentityPreferences extends BasePreferenceFragment {
         initAnalyticsPref();
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        toolbar.setTitle(R.string.user_and_device_identity_title);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        if (toolbar != null) {
-            toolbar.setTitle(R.string.general_preferences);
-        }
-    }
-
     private void initAnalyticsPref() {
         final CheckBoxPreference analyticsPreference = (CheckBoxPreference) findPreference(KEY_ANALYTICS);
 
         if (analyticsPreference != null) {
             analyticsPreference.setOnPreferenceClickListener(preference -> {
-                GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getActivity().getApplicationContext());
-                googleAnalytics.setAppOptOut(!analyticsPreference.isChecked());
-
                 Collect.getInstance().setAnalyticsCollectionEnabled(analyticsPreference.isChecked());
                 return true;
             });

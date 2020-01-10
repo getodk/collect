@@ -50,7 +50,8 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
         QuestionDef questionDef = XFormParser.ghettoGetQuestionDef(treeElement.getDataType(),
                 formDef, treeElement.getRef());
         if (questionDef != null && (questionDef.getControlType() == Constants.CONTROL_SELECT_ONE
-                || questionDef.getControlType() == Constants.CONTROL_SELECT_MULTI)) {
+                || questionDef.getControlType() == Constants.CONTROL_SELECT_MULTI
+                || questionDef.getControlType() == Constants.CONTROL_RANK)) {
             boolean containsSearchExpression = false;
 
             XPathFuncExpr xpathExpression = null;
@@ -93,7 +94,8 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                                 }
                                 break;
                             }
-                            case Constants.CONTROL_SELECT_MULTI: {
+                            case Constants.CONTROL_SELECT_MULTI:
+                            case Constants.CONTROL_RANK: {
                                 // we should search in a potential comma-separated string of
                                 // values for a match
                                 // copied from org.javarosa.xform.util.XFormAnswerDataParser
@@ -106,8 +108,7 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                                     if (selectChoiceValue.equals(textVal)) {
                                         // this means that the user selected ONLY the static
                                         // answer, so just return that
-                                        List<Selection> customSelections =
-                                                new ArrayList<Selection>();
+                                        List<Selection> customSelections = new ArrayList<>();
                                         customSelections.add(selection);
                                         return new SelectMultiData(customSelections);
                                     } else {
@@ -139,11 +140,12 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                                 customSelectChoice.setIndex(index);
                                 return new SelectOneData(customSelectChoice.selection());
                             }
-                            case Constants.CONTROL_SELECT_MULTI: {
+                            case Constants.CONTROL_SELECT_MULTI:
+                            case Constants.CONTROL_RANK: {
                                 // we should create multiple selections and add them to the pile
                                 List<SelectChoice> customSelectChoices = createCustomSelectChoices(
                                         textVal);
-                                List<Selection> customSelections = new ArrayList<Selection>();
+                                List<Selection> customSelections = new ArrayList<>();
                                 for (SelectChoice customSelectChoice : customSelectChoices) {
                                     customSelections.add(customSelectChoice.selection());
                                 }
@@ -178,7 +180,7 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                 XFormAnswerDataSerializer.DELIMITER, true);
 
         int index = 0;
-        List<SelectChoice> customSelectChoices = new ArrayList<SelectChoice>();
+        List<SelectChoice> customSelectChoices = new ArrayList<>();
         for (String textValue : textValues) {
             SelectChoice selectChoice = new SelectChoice(textValue, textValue, false);
             selectChoice.setIndex(index++);

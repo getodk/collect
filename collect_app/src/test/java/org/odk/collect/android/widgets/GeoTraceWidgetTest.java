@@ -8,8 +8,9 @@ import org.junit.Test;
 import org.odk.collect.android.R;
 import org.odk.collect.android.ShadowPlayServicesUtil;
 import org.odk.collect.android.activities.GeoPolyActivity;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.preferences.PrefUtils;
-import org.odk.collect.android.widgets.base.BinaryWidgetTest;
+import org.odk.collect.android.widgets.base.BaseGeoWidgetTest;
 import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE
  */
 
 @Config(shadows = {ShadowPlayServicesUtil.class})
-public class GeoTraceWidgetTest extends BinaryWidgetTest<GeoTraceWidget, StringData> {
+public class GeoTraceWidgetTest extends BaseGeoWidgetTest<GeoTraceWidget, StringData> {
 
     private List<double[]> initialDoubles;
     private List<double[]> answerDoubles;
@@ -39,7 +40,7 @@ public class GeoTraceWidgetTest extends BinaryWidgetTest<GeoTraceWidget, StringD
     @NonNull
     @Override
     public GeoTraceWidget createWidget() {
-        return new GeoTraceWidget(activity, formEntryPrompt);
+        return new GeoTraceWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @Override
@@ -127,12 +128,5 @@ public class GeoTraceWidgetTest extends BinaryWidgetTest<GeoTraceWidget, StringD
 
         Intent intent = getIntentLaunchedByClick(R.id.simple_button);
         assertComponentEquals(activity, GeoPolyActivity.class, intent);
-    }
-
-    @Test
-    public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
-        stubAllRuntimePermissionsGranted(false);
-
-        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.simple_button));
     }
 }

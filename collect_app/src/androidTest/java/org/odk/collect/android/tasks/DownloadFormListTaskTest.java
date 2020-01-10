@@ -43,7 +43,7 @@ public class DownloadFormListTaskTest extends MockedServerTest {
         assertEquals("The First Form", f1.getFormName());
         assertEquals("https://example.com/formXml?formId=one", f1.getDownloadUrl());
         assertNull(f1.getManifestUrl());
-        assertEquals("one", f1.getFormID());
+        assertEquals("one", f1.getFormId());
         assertNull(f1.getFormVersion());
         assertFalse(f1.isNewerFormVersionAvailable());
         assertFalse(f1.areNewerMediaFilesAvailable());
@@ -54,7 +54,7 @@ public class DownloadFormListTaskTest extends MockedServerTest {
         assertEquals("The Second Form", f2.getFormName());
         assertEquals("https://example.com/formXml?formId=two", f2.getDownloadUrl());
         assertNull(f2.getManifestUrl());
-        assertEquals("two", f2.getFormID());
+        assertEquals("two", f2.getFormId());
         assertNull(f2.getFormVersion());
         assertFalse(f1.isNewerFormVersionAvailable());
         assertFalse(f1.areNewerMediaFilesAvailable());

@@ -22,25 +22,25 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.FormListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.PermissionUtils;
-import org.odk.collect.android.adapters.VersionHidingCursorAdapter;
 
+import androidx.annotation.NonNull;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
@@ -134,9 +134,21 @@ public class FormChooserListActivity extends FormListActivity implements
                 intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                 startActivity(intent);
             }
-            
+
             finish();
         }
+    }
+
+    public void onMapButtonClick(AdapterView<?> parent, View view, int position, long id) {
+        final Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, id);
+        final Intent intent = new Intent(Intent.ACTION_EDIT, formUri, this, FormMapActivity.class);
+        new PermissionUtils().requestLocationPermissions(this, new PermissionListener() {
+            @Override public void granted() {
+                startActivity(intent);
+            }
+
+            @Override public void denied() { }
+        });
     }
 
     @Override
@@ -170,14 +182,22 @@ public class FormChooserListActivity extends FormListActivity implements
     }
 
     private void setupAdapter() {
-        String[] data = new String[]{
-                FormsColumns.DISPLAY_NAME, FormsColumns.JR_VERSION, hideOldFormVersions() ? FormsColumns.MAX_DATE : FormsColumns.DATE
+        String[] columnNames = {
+            FormsColumns.DISPLAY_NAME,
+            FormsColumns.JR_VERSION,
+            hideOldFormVersions() ? FormsColumns.MAX_DATE : FormsColumns.DATE,
+            FormsColumns.GEOMETRY_XPATH
         };
-        int[] view = new int[]{
-                R.id.form_title, R.id.form_subtitle, R.id.form_subtitle2
+        int[] viewIds = {
+            R.id.form_title,
+            R.id.form_subtitle,
+            R.id.form_subtitle2,
+            R.id.map_view
         };
 
-        listAdapter = new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.form_chooser_list_item, null, data, view);
+        listAdapter = new FormListAdapter(
+            listView, FormsColumns.JR_VERSION, this, R.layout.form_chooser_list_item,
+            this::onMapButtonClick, columnNames, viewIds);
         listView.setAdapter(listAdapter);
     }
 

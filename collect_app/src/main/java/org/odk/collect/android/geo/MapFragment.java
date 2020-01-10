@@ -108,9 +108,13 @@ public interface MapFragment {
     /**
      * Adds a marker to the map at the given location.  If draggable is true,
      * the user will be able to drag the marker to change its location.
+     * By default, the marker icon will be R.drawable.ic_map_point.
      * Returns a positive integer, the featureId for the newly added shape.
      */
     int addMarker(MapPoint point, boolean draggable);
+
+    /** Sets the icon for a marker. */
+    void setMarkerIcon(int featureId, int drawableId);
 
     /** Gets the location of an existing marker. */
     MapPoint getMarkerPoint(int featureId);
@@ -148,6 +152,9 @@ public interface MapFragment {
 
     /** Sets or clears the callback for a long press on the map. */
     void setLongPressListener(@Nullable PointListener listener);
+
+    /** Sets or clears the callback for a click on a feature. */
+    void setFeatureClickListener(@Nullable FeatureListener listener);
 
     /** Sets or clears the callback for when a drag is completed. */
     void setDragEndListener(@Nullable FeatureListener listener);

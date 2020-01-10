@@ -249,16 +249,18 @@ public class EncryptionUtils {
     /**
      * Retrieve the encryption information for this uri.
      *
-     * @param uri either an instance URI (if previously saved) or a form URI
-     * @throws EncryptionException if the record can't be encrypted
+     * @param   uri either an instance URI (if previously saved) or a form URI
+     * @param   instanceMetadata the metadata for this instance used to check if the form definition
+     *                           defines an instanceID
+     * @return  an {@link EncryptedFormInformation} object if the form definition requests encryption
+     *          and the record can be encrypted. {@code null} if the form definition does not request
+     *          encryption or if the BouncyCastle implementation is not present.
+     *
+     * @throws  EncryptionException if the form definition requests encryption but the record can't
+     *                              be encrypted
      */
     public static EncryptedFormInformation getEncryptedFormInformation(Uri uri,
             InstanceMetadata instanceMetadata) throws EncryptionException {
-        // submission must have an OpenRosa metadata block with a non-null instanceID
-        if (instanceMetadata.instanceId == null) {
-            throw new EncryptionException("This form does not specify an instanceID. You must specify one to enable encryption.", null);
-        }
-
         ContentResolver cr = Collect.getInstance().getContentResolver();
 
         // fetch the form information
@@ -356,6 +358,11 @@ public class EncryptionUtils {
             if (formCursor != null) {
                 formCursor.close();
             }
+        }
+
+        // submission must have an OpenRosa metadata block with a non-null instanceID
+        if (instanceMetadata.instanceId == null) {
+            throw new EncryptionException("This form does not specify an instanceID. You must specify one to enable encryption.", null);
         }
 
         // For now, prevent encryption if the BouncyCastle implementation is not present.
@@ -469,7 +476,7 @@ public class EncryptionUtils {
         // encrypt files that do not end with ".enc", and do not start with ".";
         // ignore directories
         File[] allFiles = instanceDir.listFiles();
-        List<File> filesToProcess = new ArrayList<File>();
+        List<File> filesToProcess = new ArrayList<>();
         for (File f : allFiles) {
             if (f.equals(instanceXml)) {
                 continue; // don't touch restore file

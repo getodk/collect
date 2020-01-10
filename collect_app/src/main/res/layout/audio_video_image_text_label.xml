@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@id/media_buttons"
+        android:layout_toLeftOf="@id/media_buttons"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/text_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/margin_standard"
+            android:paddingLeft="@dimen/margin_standard"
+            android:paddingRight="@dimen/margin_standard"
+            android:paddingEnd="@dimen/margin_standard"
+            android:paddingBottom="@dimen/margin_standard"
+            android:scaleType="fitStart"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/missingImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/margin_standard"
+            android:paddingLeft="@dimen/margin_standard"
+            android:paddingRight="@dimen/margin_standard"
+            android:paddingEnd="@dimen/margin_standard"
+            android:paddingBottom="@dimen/margin_standard"
+            android:visibility="gone"
+            tools:text="media missing"
+            tools:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/media_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:gravity="end"
+        android:orientation="vertical"
+        android:paddingRight="@dimen/margin_standard"
+        android:paddingEnd="@dimen/margin_standard"
+        android:paddingTop="@dimen/margin_extra_small"
+        android:paddingBottom="@dimen/margin_extra_small"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <org.odk.collect.android.audio.AudioButton
+            android:id="@+id/audioButton"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+            android:layout_width="@dimen/touch_target_size"
+            android:layout_height="@dimen/touch_target_size"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/videoButton"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+            android:layout_width="@dimen/touch_target_size"
+            android:layout_height="@dimen/touch_target_size"
+            android:visibility="gone"
+            app:icon="@drawable/ic_ondemand_video_black_24dp"
+            app:iconTint="?colorOnSurface"
+            tools:visibility="visible" />
+    </LinearLayout>
+</RelativeLayout>

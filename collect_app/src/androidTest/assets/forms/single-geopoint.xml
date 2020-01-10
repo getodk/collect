@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<h:html xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns="http://www.w3.org/2002/xforms">
+    <h:head>
+        <h:title>Single geopoint</h:title>
+        <model>
+            <instance>
+                <data id="single-geopoint">
+                    <name />
+                    <location />
+                    <meta>
+                        <instanceID />
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/name" type="string" />
+            <bind nodeset="/data/location" type="geopoint" />
+            <bind nodeset="/data/meta/instanceID" readonly="true()" type="string"
+                jr:preload="uid" />
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/name">
+            <label>Name</label>
+        </input>
+
+        <input ref="/data/location">
+            <label>Location</label>
+        </input>
+    </h:body>
+</h:html>

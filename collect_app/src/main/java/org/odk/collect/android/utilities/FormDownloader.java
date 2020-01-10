@@ -20,6 +20,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
+import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
@@ -29,7 +30,7 @@ import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.MediaFile;
-import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -45,6 +46,8 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.forms.FormUtils.setupReferenceManagerForForm;
 
 public class FormDownloader {
 
@@ -168,7 +171,13 @@ public class FormDownloader {
             try {
                 final long start = System.currentTimeMillis();
                 Timber.w("Parsing document %s", fileResult.file.getAbsolutePath());
-                parsedFields = FileUtils.parseXML(fileResult.file);
+                // If the form definition includes attachments, set up the reference manager in case
+                // one of them defines a secondary instance (required to build a FormDef)
+                if (tempMediaPath != null) {
+                    setupReferenceManagerForForm(ReferenceManager.instance(), new File(tempMediaPath));
+                }
+
+                parsedFields = FileUtils.getMetadataFromFormDefinition(fileResult.file);
                 Timber.i("Parse finished in %.3f seconds.",
                         (System.currentTimeMillis() - start) / 1000F);
             } catch (RuntimeException e) {
@@ -198,7 +207,7 @@ public class FormDownloader {
         return submission == null || Validator.isUrlValid(submission);
     }
 
-    private boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields) {
+    boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields) {
         UriResult uriResult = null;
         try {
             uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields);
@@ -291,9 +300,9 @@ public class FormDownloader {
                 uri = saveNewForm(formInfo, formFile, mediaPath);
             } else {
                 cursor.moveToFirst();
-                uri = Uri.withAppendedPath(FormsProviderAPI.FormsColumns.CONTENT_URI,
-                        cursor.getString(cursor.getColumnIndex(FormsProviderAPI.FormsColumns._ID)));
-                mediaPath = cursor.getString(cursor.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH));
+                uri = Uri.withAppendedPath(FormsColumns.CONTENT_URI,
+                        cursor.getString(cursor.getColumnIndex(FormsColumns._ID)));
+                mediaPath = cursor.getString(cursor.getColumnIndex(FormsColumns.FORM_MEDIA_PATH));
             }
         }
 
@@ -302,15 +311,16 @@ public class FormDownloader {
 
     private Uri saveNewForm(Map<String, String> formInfo, File formFile, String mediaPath) {
         final ContentValues v = new ContentValues();
-        v.put(FormsProviderAPI.FormsColumns.FORM_FILE_PATH,          formFile.getAbsolutePath());
-        v.put(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH,         mediaPath);
-        v.put(FormsProviderAPI.FormsColumns.DISPLAY_NAME,            formInfo.get(FileUtils.TITLE));
-        v.put(FormsProviderAPI.FormsColumns.JR_VERSION,              formInfo.get(FileUtils.VERSION));
-        v.put(FormsProviderAPI.FormsColumns.JR_FORM_ID,              formInfo.get(FileUtils.FORMID));
-        v.put(FormsProviderAPI.FormsColumns.SUBMISSION_URI,          formInfo.get(FileUtils.SUBMISSIONURI));
-        v.put(FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY,   formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
-        v.put(FormsProviderAPI.FormsColumns.AUTO_DELETE,             formInfo.get(FileUtils.AUTO_DELETE));
-        v.put(FormsProviderAPI.FormsColumns.AUTO_SEND,             formInfo.get(FileUtils.AUTO_SEND));
+        v.put(FormsColumns.FORM_FILE_PATH,          formFile.getAbsolutePath());
+        v.put(FormsColumns.FORM_MEDIA_PATH,         mediaPath);
+        v.put(FormsColumns.DISPLAY_NAME,            formInfo.get(FileUtils.TITLE));
+        v.put(FormsColumns.JR_VERSION,              formInfo.get(FileUtils.VERSION));
+        v.put(FormsColumns.JR_FORM_ID,              formInfo.get(FileUtils.FORMID));
+        v.put(FormsColumns.SUBMISSION_URI,          formInfo.get(FileUtils.SUBMISSIONURI));
+        v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY,   formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
+        v.put(FormsColumns.AUTO_DELETE,             formInfo.get(FileUtils.AUTO_DELETE));
+        v.put(FormsColumns.AUTO_SEND,               formInfo.get(FileUtils.AUTO_SEND));
+        v.put(FormsColumns.GEOMETRY_XPATH,          formInfo.get(FileUtils.GEOMETRY_XPATH));
         return formsDao.saveForm(v);
     }
 
@@ -318,12 +328,10 @@ public class FormDownloader {
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
      */
-    private FileResult downloadXform(String formName, String url)
+    FileResult downloadXform(String formName, String url)
             throws IOException, TaskCancelledException, Exception {
         // clean up friendly form name...
-        String rootName = formName.replaceAll("[^\\p{L}\\p{Digit}]", " ");
-        rootName = rootName.replaceAll("\\p{javaWhitespace}+", " ");
-        rootName = rootName.trim();
+        String rootName = FormNameUtils.formatFilenameFromFormName(formName);
 
         // proposed name of xml file...
         String path = Collect.FORMS_PATH + File.separator + rootName + ".xml";
@@ -356,7 +364,7 @@ public class FormDownloader {
                 FileUtils.deleteAndReport(f);
 
                 // set the file returned to the file we already had
-                String existingPath = c.getString(c.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_FILE_PATH));
+                String existingPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
                 f = new File(existingPath);
                 Timber.w("Will use %s", existingPath);
             }
@@ -497,12 +505,12 @@ public class FormDownloader {
         }
     }
 
-    private static class FileResult {
+    static class FileResult {
 
         private final File file;
         private final boolean isNew;
 
-        private FileResult(File file, boolean isNew) {
+        FileResult(File file, boolean isNew) {
             this.file = file;
             this.isNew = isNew;
         }
@@ -516,7 +524,7 @@ public class FormDownloader {
         }
     }
 
-    private String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
+    String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
                                                  FormDetails fd, int count,
                                                  int total) throws Exception {
         if (fd.getManifestUrl() == null) {
@@ -528,7 +536,7 @@ public class FormDownloader {
                     String.valueOf(count), String.valueOf(total));
         }
 
-        List<MediaFile> files = new ArrayList<MediaFile>();
+        List<MediaFile> files = new ArrayList<>();
 
         DocumentFetchResult result = collectServerClient.getXmlDocument(fd.getManifestUrl());
 

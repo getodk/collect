@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.data.GeoPointData;
@@ -10,7 +11,8 @@ import org.junit.Test;
 import org.odk.collect.android.R;
 import org.odk.collect.android.ShadowPlayServicesUtil;
 import org.odk.collect.android.activities.GeoPolyActivity;
-import org.odk.collect.android.widgets.base.BinaryWidgetTest;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.widgets.base.BaseGeoWidgetTest;
 import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ import static org.mockito.Mockito.when;
  */
 
 @Config(shadows = {ShadowPlayServicesUtil.class})
-public class GeoShapeWidgetTest extends BinaryWidgetTest<GeoShapeWidget, StringData> {
+public class GeoShapeWidgetTest extends BaseGeoWidgetTest<GeoShapeWidget, StringData> {
 
     private ArrayList<double[]> initialDoubles;
     private ArrayList<double[]> answerDoubles;
@@ -36,7 +38,7 @@ public class GeoShapeWidgetTest extends BinaryWidgetTest<GeoShapeWidget, StringD
     @NonNull
     @Override
     public GeoShapeWidget createWidget() {
-        return new GeoShapeWidget(activity, formEntryPrompt);
+        return new GeoShapeWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @Override
@@ -118,12 +120,5 @@ public class GeoShapeWidgetTest extends BinaryWidgetTest<GeoShapeWidget, StringD
 
         Intent intent = getIntentLaunchedByClick(R.id.simple_button);
         assertComponentEquals(activity, GeoPolyActivity.class, intent);
-    }
-
-    @Test
-    public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
-        stubAllRuntimePermissionsGranted(false);
-
-        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.simple_button));
     }
 }

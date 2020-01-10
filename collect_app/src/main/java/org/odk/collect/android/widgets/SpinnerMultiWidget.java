@@ -26,8 +26,9 @@ import android.widget.TextView;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
@@ -66,8 +67,8 @@ public class SpinnerMultiWidget extends ItemsWidget implements ButtonWidget, Mul
     TextView selectionText;
 
     @SuppressWarnings("unchecked")
-    public SpinnerMultiWidget(final Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+    public SpinnerMultiWidget(final Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails);
 
         selections = new boolean[items.size()];
         answerItems = new String[items.size()];
@@ -77,16 +78,16 @@ public class SpinnerMultiWidget extends ItemsWidget implements ButtonWidget, Mul
 
         // Build View
         for (int i = 0; i < items.size(); i++) {
-            answerItems[i] = prompt.getSelectChoiceText(items.get(i));
-            styledAnswerItems[i] = org.odk.collect.android.utilities.TextUtils.textToHtml(answerItems[i]);
+            answerItems[i] = questionDetails.getPrompt().getSelectChoiceText(items.get(i));
+            styledAnswerItems[i] = StringUtils.textToHtml(answerItems[i]);
         }
 
         selectionText = getAnswerTextView();
         selectionText.setVisibility(View.GONE);
 
         // Fill in previous answers
-        List<Selection> ve = prompt.getAnswerValue() != null
-                ? (List<Selection>) prompt.getAnswerValue().getValue()
+        List<Selection> ve = questionDetails.getPrompt().getAnswerValue() != null
+                ? (List<Selection>) questionDetails.getPrompt().getAnswerValue().getValue()
                 : new ArrayList<>();
 
         if (ve != null) {
@@ -183,7 +184,7 @@ public class SpinnerMultiWidget extends ItemsWidget implements ButtonWidget, Mul
         if (selectedValues.isEmpty()) {
             clearAnswer();
         } else {
-            CharSequence answerText = org.odk.collect.android.utilities.TextUtils.textToHtml(String.format(getContext().getString(R.string.selected_answer),
+            CharSequence answerText = StringUtils.textToHtml(String.format(getContext().getString(R.string.selected_answer),
                     TextUtils.join(", ", selectedValues)));
             selectionText.setText(answerText);
             selectionText.setVisibility(View.VISIBLE);

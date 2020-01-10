@@ -16,38 +16,45 @@
 
 package org.odk.collect.android.adapters;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatCheckBox;
-import androidx.core.content.ContextCompat;
-
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.core.content.ContextCompat;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.helper.Selection;
-import org.odk.collect.android.views.MediaLayout;
-import org.odk.collect.android.widgets.SelectWidget;
+import org.javarosa.core.reference.ReferenceManager;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
+import org.odk.collect.android.widgets.SelectWidget;
 
 import java.util.List;
 
 public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
 
     private final List<Selection> selectedItems;
+    private final int playColor;
 
-    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectWidget widget, int numColumns) {
-        super(items, widget, numColumns);
+    @SuppressWarnings("PMD.ExcessiveParameterList")
+    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context) {
+        super(items, widget, numColumns, formEntryPrompt, referenceManager, answerFontSize, audioHelper, context);
         this.selectedItems = selectedItems;
+        this.playColor = playColor;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(noButtonsMode
                 ? LayoutInflater.from(parent.getContext()).inflate(R.layout.select_item_layout, null)
-                : new MediaLayout(parent.getContext()));
+                : new AudioVideoImageTextLabel(parent.getContext()));
     }
 
     class ViewHolder extends AbstractSelectListAdapter.ViewHolder {
@@ -56,8 +63,8 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
             if (noButtonsMode) {
                 view = (FrameLayout) v;
             } else {
-                mediaLayout = (MediaLayout) v;
-                widget.initMediaLayoutSetUp(mediaLayout);
+                audioVideoImageTextLabel = (AudioVideoImageTextLabel) v;
+                audioVideoImageTextLabel.setPlayTextColor(playColor);
             }
         }
 
@@ -75,9 +82,11 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
     }
 
     @Override
-    CheckBox setUpButton(final int index) {
-        AppCompatCheckBox checkBox = new AppCompatCheckBox(widget.getContext());
-        adjustButton(checkBox, index);
+    CheckBox createButton(final int index, ViewGroup parent) {
+        AppCompatCheckBox checkBox = (AppCompatCheckBox) LayoutInflater.from(parent.getContext()).inflate(R.layout.select_multi_item, null);
+        setUpButton(checkBox, index);
+        checkCheckBoxIfNeeded(checkBox, index); // perform before setting onCheckedChangeListener to avoid redundant calls of its body
+
         checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 addItem(filteredItems.get(index).selection());
@@ -87,6 +96,10 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
             widget.widgetValueChanged();
         });
 
+        return checkBox;
+    }
+
+    private void checkCheckBoxIfNeeded(CheckBox checkBox, int index) {
         for (Selection selectedItem : selectedItems) {
             // match based on value, not key
             if (filteredItems.get(index).getValue().equals(selectedItem.getValue())) {
@@ -94,8 +107,6 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
                 break;
             }
         }
-
-        return checkBox;
     }
 
     @Override

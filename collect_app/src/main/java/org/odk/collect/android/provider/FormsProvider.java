@@ -25,19 +25,19 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
-
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.database.helpers.FormsDatabaseHelper;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.UriUtils;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
 import timber.log.Timber;
 
 import static org.odk.collect.android.database.helpers.FormsDatabaseHelper.FORMS_TABLE_NAME;
@@ -63,7 +63,11 @@ public class FormsProvider extends ContentProvider {
             return null;
         }
 
-        if (dbHelper == null) {
+        boolean databaseNeedsUpgrade = FormsDatabaseHelper.databaseNeedsUpgrade();
+        if (dbHelper == null || (databaseNeedsUpgrade && !FormsDatabaseHelper.isDatabaseBeingMigrated())) {
+            if (databaseNeedsUpgrade) {
+                FormsDatabaseHelper.databaseMigrationStarted();
+            }
             dbHelper = new FormsDatabaseHelper();
         }
 
@@ -231,7 +235,7 @@ public class FormsProvider extends ContentProvider {
                 Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI,
                         rowId);
                 getContext().getContentResolver().notifyChange(formUri, null);
-                getContext().getContentResolver().notifyChange(FormsProviderAPI.FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
+                getContext().getContentResolver().notifyChange(FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
                 return formUri;
             }
         }
@@ -504,7 +508,7 @@ public class FormsProvider extends ContentProvider {
             }
 
             getContext().getContentResolver().notifyChange(uri, null);
-            getContext().getContentResolver().notifyChange(FormsProviderAPI.FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
+            getContext().getContentResolver().notifyChange(FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
         }
 
         return count;
@@ -527,10 +531,10 @@ public class FormsProvider extends ContentProvider {
     // https://developer.android.com/reference/android/content/UriMatcher
     static {
         URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
-        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsColumns.CONTENT_URI.getPath().replaceAll("^/+", ""), FORMS);
-        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsColumns.CONTENT_URI.getPath().replaceAll("^/+", "") + "/#", FORM_ID);
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, UriUtils.stripLeadingUriSlashes(FormsColumns.CONTENT_URI.getPath()), FORMS);
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, UriUtils.stripLeadingUriSlashes(FormsColumns.CONTENT_URI.getPath()) + "/#", FORM_ID);
         // Only available for query and type
-        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI.getPath().replaceAll("^/+", ""), NEWEST_FORMS_BY_FORM_ID);
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, UriUtils.stripLeadingUriSlashes(FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI.getPath()), NEWEST_FORMS_BY_FORM_ID);
 
         sFormsProjectionMap = new HashMap<>();
         sFormsProjectionMap.put(FormsColumns._ID, FormsColumns._ID);
@@ -549,5 +553,6 @@ public class FormsProvider extends ContentProvider {
         sFormsProjectionMap.put(FormsColumns.AUTO_DELETE, FormsColumns.AUTO_DELETE);
         sFormsProjectionMap.put(FormsColumns.AUTO_SEND, FormsColumns.AUTO_SEND);
         sFormsProjectionMap.put(FormsColumns.LAST_DETECTED_FORM_VERSION_HASH, FormsColumns.LAST_DETECTED_FORM_VERSION_HASH);
+        sFormsProjectionMap.put(FormsColumns.GEOMETRY_XPATH, FormsColumns.GEOMETRY_XPATH);
     }
 }

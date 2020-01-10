@@ -60,7 +60,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
     private boolean distributeEvenly;
 
     private ViewPager viewPager;
-    private final SparseArray<String> contentDescriptions = new SparseArray<String>();
+    private final SparseArray<String> contentDescriptions = new SparseArray<>();
     private ViewPager.OnPageChangeListener viewPagerPageChangeListener;
     private int titleFontSize = -1;
     private int titleFontColor = -1;

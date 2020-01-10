@@ -1,40 +1,37 @@
 {
   "project_info": {
-    "project_number": "895206029843",
-    "project_id": "opendatakit-collect-forks"
+    "project_number": "640412404956",
+    "firebase_url": "https://opendatakit-forks.firebaseio.com",
+    "project_id": "opendatakit-forks",
+    "storage_bucket": "opendatakit-forks.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:895206029843:android:5e1d7c3c296329e8",
+        "mobilesdk_app_id": "1:640412404956:android:730483f389563845cb7819",
         "android_client_info": {
           "package_name": "org.odk.collect.android"
         }
       },
       "oauth_client": [
         {
-          "client_id": "895206029843-btufcdli1qptfd4sjrq5f0vdacsg68fj.apps.googleusercontent.com",
+          "client_id": "640412404956-ag8do5nic02k70qr2k1a0mv3du8222hv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAD_MRym4ELgrqCJ4IGkPAdkfPXYX1WDeI"
+          "current_key": "AIzaSyA5tuKwVrlKEs-7iMSpdTmAy6qSH-w0lik"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 2,
-          "analytics_property": {
-            "tracking_id": "UA-111083836-1"
-          }
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 1
+          "other_platform_oauth_client": [
+            {
+              "client_id": "640412404956-ag8do5nic02k70qr2k1a0mv3du8222hv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

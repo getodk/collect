@@ -19,11 +19,6 @@ package org.odk.collect.android.http.openrosa;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.odk.collect.android.http.HttpCredentialsInterface;
-import org.odk.collect.android.http.HttpGetResult;
-import org.odk.collect.android.http.HttpHeadResult;
-import org.odk.collect.android.http.HttpPostResult;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;

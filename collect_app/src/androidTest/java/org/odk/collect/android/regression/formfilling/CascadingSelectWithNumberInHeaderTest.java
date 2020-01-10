@@ -9,8 +9,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.espressoutils.FormEntry;
-import org.odk.collect.android.espressoutils.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.regression.BaseRegressionTest;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -33,18 +32,19 @@ public class CascadingSelectWithNumberInHeaderTest extends BaseRegressionTest {
     @Test
     public void fillForm_ShouldFillFormWithNumberInCsvHeader() {
 
-        new MainMenuPage(main).startBlankForm("numberInCSV");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnText("Venda de animais");
-        FormEntry.checkIsTextDisplayed("1a");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnText("Vendas agrícolas");
-        FormEntry.checkIsTextDisplayed("2a");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnText("Pensão");
-        FormEntry.checkIsTextDisplayed("3a");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickSaveAndExit();
+        new MainMenuPage(rule)
+                .startBlankForm("numberInCSV")
+                .swipeToNextQuestion()
+                .clickOnText("Venda de animais")
+                .checkIsTextDisplayed("1a")
+                .swipeToNextQuestion()
+                .clickOnText("Vendas agrícolas")
+                .checkIsTextDisplayed("2a")
+                .swipeToNextQuestion()
+                .clickOnText("Pensão")
+                .checkIsTextDisplayed("3a")
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickSaveAndExit();
     }
 }

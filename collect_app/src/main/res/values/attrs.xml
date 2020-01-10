@@ -9,6 +9,5 @@
         <attr name="rankItemColor" format="color" />
         <attr name="dividerCompat" format="reference" />
         <attr name="spinnerItemBackgroundColor" format="color" />
-        <attr name="colorOnSurfaceMediumEmphasis" format="color" />
     </declare-styleable>
 </resources>

@@ -1,6 +1,8 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Intent;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 
 import net.bytebuddy.utility.RandomString;
@@ -11,10 +13,13 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 
 import java.io.File;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 /**
@@ -30,7 +35,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
     @NonNull
     @Override
     public SignatureWidget createWidget() {
-        return new SignatureWidget(activity, formEntryPrompt);
+        return new SignatureWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @NonNull
@@ -63,5 +68,12 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
         Intent intent = getIntentLaunchedByClick(R.id.simple_button);
         assertComponentEquals(activity, DrawActivity.class, intent);
         assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_SIGNATURE, intent);
+    }
+
+    @Test
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+
+        assertThat(getWidget().signButton.getVisibility(), is(View.GONE));
     }
 }

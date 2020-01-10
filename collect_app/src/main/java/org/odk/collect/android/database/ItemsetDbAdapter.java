@@ -16,8 +16,6 @@ import timber.log.Timber;
 
 public class ItemsetDbAdapter {
 
-    public static final String KEY_ID = "_id";
-
     private DatabaseHelper dbHelper;
     private SQLiteDatabase db;
 

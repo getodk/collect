@@ -4,8 +4,8 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.odk.collect.android.http.HttpCredentials;
-import org.odk.collect.android.http.HttpCredentialsInterface;
+import org.odk.collect.android.http.openrosa.HttpCredentials;
+import org.odk.collect.android.http.openrosa.HttpCredentialsInterface;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 
@@ -53,6 +53,10 @@ public class WebCredentialsUtils {
         if (host != null) {
             HOST_CREDENTIALS.remove(host);
         }
+    }
+
+    static void clearAllCredentials() {
+        HOST_CREDENTIALS.clear();
     }
 
     public String getServerUrlFromPreferences() {

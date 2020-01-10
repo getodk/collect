@@ -2,6 +2,8 @@ package org.odk.collect.android.widgets;
 
 import android.content.Intent;
 import android.provider.MediaStore;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 
 import net.bytebuddy.utility.RandomString;
@@ -11,10 +13,13 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 
 import java.io.File;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 /**
@@ -28,7 +33,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     @NonNull
     @Override
     public AnnotateWidget createWidget() {
-        return new AnnotateWidget(activity, formEntryPrompt);
+        return new AnnotateWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
     @NonNull
@@ -65,5 +70,14 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
         stubAllRuntimePermissionsGranted(false);
 
         assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.capture_image));
+    }
+
+    @Test
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+
+        assertThat(getWidget().captureButton.getVisibility(), is(View.GONE));
+        assertThat(getWidget().chooseButton.getVisibility(), is(View.GONE));
+        assertThat(getWidget().annotateButton.getVisibility(), is(View.GONE));
     }
 }

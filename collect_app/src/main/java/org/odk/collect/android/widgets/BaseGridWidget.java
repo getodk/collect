@@ -31,15 +31,16 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.AppCompatRadioButton;
+import androidx.core.content.ContextCompat;
 
+import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalSelectChoice;
-import org.odk.collect.android.utilities.AudioHandler;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
@@ -53,14 +54,13 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
+
 /**
  * GridWidget handles select-one/multiple fields using a grid options. The number of columns
  * is calculated based on items size.
  */
 public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceWidget {
-
-    final int bgOrange = getResources().getColor(R.color.highContrastHighlight);
-
     private static final int PADDING = 7;
     private static final int SPACING = 2;
 
@@ -72,24 +72,23 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
 
     List<Integer> selectedItems = new ArrayList<>();
     View[] itemViews;
-    AudioHandler[] audioHandlers;
 
-    public BaseGridWidget(Context context, FormEntryPrompt prompt, boolean quickAdvance) {
-        super(context, prompt);
+    public BaseGridWidget(Context context, QuestionDetails questionDetails, boolean quickAdvance) {
+        super(context, questionDetails);
 
         this.quickAdvance = quickAdvance;
-        noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(prompt) || WidgetAppearanceUtils.isNoButtonsAppearance(prompt);
+        noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(questionDetails.getPrompt()) || WidgetAppearanceUtils.isNoButtonsAppearance(questionDetails.getPrompt());
         itemViews = new View[items.size()];
-        audioHandlers = new AudioHandler[items.size()];
 
         setUpItems();
         setUpGridView();
         fillInAnswer();
+
+        logAnalytics(questionDetails);
     }
 
     private void setUpItems() {
         for (int i = 0; i < items.size(); i++) {
-            setUpAudioHandler(i);
             View view = measureItem(noButtonsMode ? setUpNoButtonsItem(i) : setUpButtonsItem(i), i);
             int index = i;
             view.setOnClickListener(v -> onItemClick(index));
@@ -113,12 +112,6 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         }
         item.setMinimumHeight(maxCellHeight);
         return item;
-    }
-
-    private void setUpAudioHandler(int index) {
-        // Create an audioHandler if there is an audio prompt associated with this selection.
-        String audioURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_AUDIO);
-        audioHandlers[index] = audioURI != null ? new AudioHandler(audioURI, getPlayer()) : null;
     }
 
     private View setUpNoButtonsItem(int index) {
@@ -197,13 +190,15 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         gridView.setScrollContainer(false);
         gridView.setStretchMode(GridView.NO_STRETCH);
         gridView.setAdapter(new ImageAdapter());
+        int paddingStartEnd = getContext().getResources().getDimensionPixelSize(R.dimen.margin_standard);
+        gridView.setPadding(paddingStartEnd, 0, paddingStartEnd, 0);
         addAnswerView(gridView);
     }
 
     void selectItem(int index) {
         selectedItems.add(index);
         if (noButtonsMode) {
-            itemViews[index].setBackgroundColor(bgOrange);
+            itemViews[index].setBackground(ContextCompat.getDrawable(getContext(), R.drawable.select_item_border));
         } else {
             ((CompoundButton) itemViews[index]).setChecked(true);
         }
@@ -253,6 +248,19 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
     @Override
     public int getChoiceCount() {
         return selectedItems.size();
+    }
+
+    private void logAnalytics(QuestionDetails questionDetails) {
+        for (SelectChoice choice : items) {
+            if (noButtonsMode) {
+                String audioURI = getPlayableAudioURI(questionDetails.getPrompt(), choice, getReferenceManager());
+
+                if (audioURI != null) {
+                    analytics.logEvent("Prompt", "AudioChoiceGrid", questionDetails.getFormAnalyticsID());
+                    break;
+                }
+            }
+        }
     }
 
     class ImageAdapter extends BaseAdapter {

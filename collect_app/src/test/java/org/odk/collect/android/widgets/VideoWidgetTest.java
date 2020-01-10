@@ -3,6 +3,8 @@ package org.odk.collect.android.widgets;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 
 import net.bytebuddy.utility.RandomString;
@@ -12,12 +14,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.R;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 
 import java.io.File;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 /**
@@ -42,7 +47,7 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
     @NonNull
     @Override
     public VideoWidget createWidget() {
-        return new VideoWidget(activity, formEntryPrompt, fileUtil, mediaUtil);
+        return new VideoWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), fileUtil, mediaUtil);
     }
 
     @NonNull
@@ -91,7 +96,7 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
         ).thenReturn(String.format("%s.mp4", RandomString.make()));
 
         when(fileUtil.getRandomFilename()).thenReturn(destinationName);
-        when(fileUtil.getFileAtPath(String.format("/%s.mp4", destinationName)))
+        when(fileUtil.getFileAtPath(File.separator + destinationName + ".mp4"))
                 .thenReturn(file);
 
         when(file.getName()).thenReturn(destinationName);
@@ -118,5 +123,14 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
         stubAllRuntimePermissionsGranted(false);
 
         assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.capture_video));
+    }
+
+    @Test
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+
+        assertThat(getWidget().captureButton.getVisibility(), is(View.GONE));
+        assertThat(getWidget().chooseButton.getVisibility(), is(View.GONE));
+        assertThat(getWidget().playButton.getVisibility(), is(View.VISIBLE));
     }
 }

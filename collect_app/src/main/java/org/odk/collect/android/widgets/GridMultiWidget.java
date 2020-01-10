@@ -17,23 +17,27 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
+import androidx.core.content.ContextCompat;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
-import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
+import org.odk.collect.android.audio.Clip;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClip;
+
 @SuppressLint("ViewConstructor")
 public class GridMultiWidget extends BaseGridWidget {
 
-    int lastClickPosition; // need to remember the last click position for audio treatment
-
-    public GridMultiWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt, false);
+    public GridMultiWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails, false);
         SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
     }
 
@@ -59,21 +63,19 @@ public class GridMultiWidget extends BaseGridWidget {
             selectedItems.remove(Integer.valueOf(index));
             if (noButtonsMode) {
                 itemViews[index].setBackgroundColor(0);
-                if (audioHandlers[index] != null) {
-                    stopAudio();
-                }
+                getAudioHelper().stop();
             }
         } else {
             selectedItems.add(index);
             if (noButtonsMode) {
-                if (audioHandlers[lastClickPosition] != null) {
-                    stopAudio();
+                itemViews[index].setBackground(ContextCompat.getDrawable(getContext(), R.drawable.select_item_border));
+
+                SelectChoice item = items.get(index);
+                Clip clip = getClip(getFormEntryPrompt(), item, getReferenceManager());
+
+                if (clip != null) {
+                    getAudioHelper().play(clip);
                 }
-                itemViews[index].setBackgroundColor(bgOrange);
-                if (audioHandlers[index] != null) {
-                    audioHandlers[index].playAudio(getContext());
-                }
-                lastClickPosition = index;
             }
         }
         widgetValueChanged();

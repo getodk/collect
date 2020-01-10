@@ -50,10 +50,12 @@ import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.formentry.audit.AsyncTaskAuditEventWriter;
+import org.odk.collect.android.formentry.audit.AuditConfig;
+import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
-import org.odk.collect.android.utilities.AuditEventLogger;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.RegexUtils;
+import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.views.ODKView;
 
 import java.io.File;
@@ -111,7 +113,7 @@ public class FormController {
 
         public InstanceMetadata(String instanceId, String instanceName, AuditConfig auditConfig) {
             this.instanceId = instanceId;
-            this.instanceName = RegexUtils.normalizeFormName(instanceName, false);
+            this.instanceName = FormNameUtils.normalizeFormName(instanceName, false);
             this.auditConfig = auditConfig;
         }
     }
@@ -190,9 +192,16 @@ public class FormController {
     }
 
     public AuditEventLogger getAuditEventLogger() {
-        if (auditEventLogger == null) {
-            setAuditEventLogger(new AuditEventLogger(getInstanceFile(), getSubmissionMetadata().auditConfig));
+        if (auditEventLogger == null && instanceFile != null) {
+            AuditConfig auditConfig = getSubmissionMetadata().auditConfig;
+
+            if (auditConfig != null) {
+                setAuditEventLogger(new AuditEventLogger(auditConfig, new AsyncTaskAuditEventWriter(new File(instanceFile.getParentFile().getPath() + File.separator + AUDIT_FILE_NAME), auditConfig.isLocationEnabled(), auditConfig.isTrackingChangesEnabled(), auditConfig.isIdentifyUserEnabled(), auditConfig.isTrackChangesReasonEnabled()), this));
+            } else {
+                setAuditEventLogger(new AuditEventLogger(null, null, this));
+            }
         }
+
         return auditEventLogger;
     }
 
@@ -406,7 +415,7 @@ public class FormController {
     /**
      * Returns true if the question at the given FormIndex uses the search() appearance/function
      * of "fast itemset" feature.
-     *
+     * <p>
      * Precondition: there is a question at the given FormIndex.
      */
     public boolean usesDatabaseExternalDataFeature(@NonNull FormIndex index) {
@@ -748,7 +757,7 @@ public class FormController {
     /**
      * Returns true if the group has an XML `ref` attribute,
      * i.e. it's a "logical group".
-     *
+     * <p>
      * TODO: Improve this nasty way to recreate what XFormParser#parseGroup does for nodes without a `ref`.
      */
     private boolean isLogicalGroup(FormIndex groupIndex) {
@@ -895,12 +904,12 @@ public class FormController {
      * Returns an array of question prompts corresponding to the current {@link FormIndex}. These
      * are the prompts that should be displayed to the user and don't include any non-relevant
      * questions.
-     *
+     * <p>
      * The array has a single element if there is a question at this {@link FormIndex} or multiple
      * elements if there is a group.
      *
      * @throws RuntimeException if there is a group at this {@link FormIndex} and it contains
-     * elements that are not questions or regular (non-repeat) groups.
+     *                          elements that are not questions or regular (non-repeat) groups.
      */
     public FormEntryPrompt[] getQuestionPrompts() throws RuntimeException {
         // For questions, there is only one.
@@ -1277,8 +1286,17 @@ public class FormController {
                 String locationMinInterval = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-min-interval");
                 String locationMaxAge = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-max-age");
                 boolean isTrackingChangesEnabled = Boolean.parseBoolean(auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "track-changes"));
+                boolean isIdentifyUserEnabled = Boolean.parseBoolean(auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "identify-user"));
+                String trackChangesReason = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "track-changes-reasons");
 
-                auditConfig = new AuditConfig(locationPriority, locationMinInterval, locationMaxAge, isTrackingChangesEnabled);
+                auditConfig = new AuditConfig.Builder()
+                        .setMode(locationPriority)
+                        .setLocationMinInterval(locationMinInterval)
+                        .setLocationMaxAge(locationMaxAge)
+                        .setIsTrackingChangesEnabled(isTrackingChangesEnabled)
+                        .setIsIdentifyUserEnabled(isIdentifyUserEnabled)
+                        .setIsTrackChangesReasonEnabled(trackChangesReason != null && trackChangesReason.equals("on-form-edit"))
+                        .createAuditConfig();
 
                 IAnswerData answerData = new StringData();
                 answerData.setValue(AUDIT_FILE_NAME);

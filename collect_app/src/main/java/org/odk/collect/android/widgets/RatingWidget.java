@@ -24,18 +24,18 @@ import android.widget.ImageButton;
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 
 public class RatingWidget extends QuestionWidget {
 
     public static final int ASSUMED_TOTAL_MARGIN_AROUND_WIDGET = 40;
 
-    private final GridLayout gridLayout;
-    private Integer answer;
+    final GridLayout gridLayout;
+    Integer answer;
 
-    public RatingWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+    public RatingWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails);
 
         RangeQuestion rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
         int numberOfStars = rangeQuestion.getRangeEnd().intValue();
@@ -47,7 +47,7 @@ public class RatingWidget extends QuestionWidget {
 
         renderGrid(context, numberOfStars, columns, rows);
 
-        String answerText = prompt.getAnswerText();
+        String answerText = questionDetails.getPrompt().getAnswerText();
         if (answerText != null) {
             answer = Integer.parseInt(answerText);
             for (int i = 0; i < answer; i++) {

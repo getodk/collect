@@ -19,12 +19,13 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 
 import org.javarosa.core.model.SelectChoice;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
-import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalDataUtil;
-import org.odk.collect.android.utilities.ScreenContext;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,17 +34,11 @@ import java.util.List;
  * like: SelectOne, SelectMultiple, Ranking.
  */
 public abstract class ItemsWidget extends QuestionWidget {
-    List<SelectChoice> items;
 
-    public ItemsWidget(Context context, FormEntryPrompt prompt) {
-        this(context, prompt, new AudioHelper(
-                ((ScreenContext) context).getActivity(),
-                ((ScreenContext) context).getViewLifecycle()
-        ));
-    }
+    List<SelectChoice> items = new ArrayList<>();
 
-    public ItemsWidget(Context context, FormEntryPrompt prompt, AudioHelper audioHelper) {
-        super(context, prompt, audioHelper);
+    public ItemsWidget(Context context, QuestionDetails prompt) {
+        super(context, prompt);
         readItems();
     }
 
@@ -51,7 +46,11 @@ public abstract class ItemsWidget extends QuestionWidget {
         // SurveyCTO-added support for dynamic select content (from .csv files)
         XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(getFormEntryPrompt().getAppearanceHint());
         if (xpathFuncExpr != null) {
-            items = ExternalDataUtil.populateExternalChoices(getFormEntryPrompt(), xpathFuncExpr);
+            try {
+                items = ExternalDataUtil.populateExternalChoices(getFormEntryPrompt(), xpathFuncExpr);
+            } catch (FileNotFoundException e) {
+                showWarning(getContext().getString(R.string.file_missing, e.getMessage()));
+            }
         } else {
             items = getFormEntryPrompt().getSelectChoices();
         }

@@ -52,7 +52,7 @@ public class GuidanceHintFormTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             ))
             .around(new ResetStateRule())
-            .around(new CopyFormRule(GUIDANCE_SAMPLE_FORM));
+            .around(new CopyFormRule(GUIDANCE_SAMPLE_FORM, true));
 
     @Before
     public void resetPreferences() {

@@ -12,8 +12,6 @@
   <string name="add_another_repeat">別の \"%s\" グループを追加しますか?</string>
   <string name="add_repeat">新しい \"%s\" グループを追加しますか?</string>
   <string name="add_repeat_no">追加しない</string>
-  <string name="audio_file_error">オーディオファイルが指定されていません。</string>
-  <string name="audio_file_invalid">ファイル: %s は正しいオーディオファイルではありません。</string>
   <string name="cancel">キャンセル</string>
   <string name="cancel_loading_form">キャンセル</string>
   <string name="cancel_location">キャンセル</string>
@@ -154,7 +152,6 @@
   <string name="root_namespace_error">ルートエレメントのネームスペースが正しくありません: %s</string>
   <string name="manifest_tag_error">マニフェストのエントリー %s で1以上のタグがありません: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s。 メディア ファイルの取得中: %2$s / %3$s</string>
-  <string name="file_fetch_failed">エラー: %2$s (%3$s) at %1$s</string>
   <string name="fetching_manifest">%s。 マニフェストの取得中 </string>
   <string name="success">成功しました</string>
   <string name="failures">失敗</string>
@@ -366,9 +363,9 @@
     <item quantity="other">%d メートル</item>
   </plurals>
   <string name="location_status_searching">GPS の位置を検索しています、しばらくお待ちください…</string>
-  <string name="location_status_accuracy">GPS 位置精度: %.1f m</string>
-  <string name="location_status_acceptable">GPS位置精度: %.1f m (許容)</string>
-  <string name="location_status_unacceptable">GPS位置精度: %.1f m (許容不可)</string>
+  <string name="location_status_accuracy">GPS 位置精度: %.2f m</string>
+  <string name="location_status_acceptable">GPS位置精度: %.2f m (許容)</string>
+  <string name="location_status_unacceptable">GPS位置精度: %.2f m (許容不可)</string>
   <string name="collection_status_paused">入力された位置: %d</string>
   <string name="collection_status_placement">入力された位置: %d (タップして位置を配置)</string>
   <string name="collection_status_manual">入力された位置: %d (手動記録)</string>
@@ -381,6 +378,7 @@
   <string name="discard">破棄</string>
   <string name="geoshape_view_change_location">GeoShape を表示または変更</string>
   <string name="geotrace_view_change_location">GeoTrace を表示または変更</string>
+  <string name="geometry_status">保存したフォーム: %d (%d 地図上に表示)</string>
   <string name="bearing">方位: %.3f</string>
   <string name="direction">方角: %s</string>
   <string name="select_odk_shortcut">ODK ショートカットを選択</string>
@@ -694,4 +692,12 @@
   <string name="qr_code_not_found">選択した画像に QR コードが見つかりませんでした</string>
   <string name="not_granted_permission">開始しようとしているアクティビティは、必要なアクセス許可が付与されていません。</string>
   <string name="basemap_source_unavailable">申し訳ありません。 このデバイスでは %s ベースマップは利用できません。 一般設定 &gt; 地図 で別のベースマップを選択してください。</string>
+  <string name="enter_identity">IDの入力</string>
+  <string name="identity">ID</string>
+  <string name="enter_identity_description">このフォームはあなた自身のIDが必要です</string>
+  <string name="close">閉じる</string>
+  <string name="reason_for_changes">変更の理由</string>
+  <string name="reason">理由</string>
+  <string name="save">保存</string>
+  <string name="reason_for_changes_description">このフォームを変更する理由を説明する必要があります</string>
 </resources>

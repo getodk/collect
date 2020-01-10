@@ -8,8 +8,4 @@
     <!-- Allows changing locales -->
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" tools:ignore="ProtectedPermissions" />
 
-    <application
-        android:name=".application.TestCollect"
-        tools:replace="android:name" />
-
 </manifest>

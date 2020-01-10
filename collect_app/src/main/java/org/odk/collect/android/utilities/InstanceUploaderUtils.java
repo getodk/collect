@@ -22,7 +22,7 @@ import android.database.Cursor;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -60,7 +60,7 @@ public class InstanceUploaderUtils {
             }
 
             StringBuilder selection = new StringBuilder();
-            selection.append(InstanceProviderAPI.InstanceColumns._ID + " IN (");
+            selection.append(InstanceColumns._ID + " IN (");
 
             int i = 0;
             while (it.hasNext() && i < selectionArgs.length) {
@@ -96,8 +96,8 @@ public class InstanceUploaderUtils {
                 while (instancesProcessed.moveToNext()) {
                     String name =
                             instancesProcessed.getString(
-                                    instancesProcessed.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME));
-                    String id = instancesProcessed.getString(instancesProcessed.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
+                                    instancesProcessed.getColumnIndex(InstanceColumns.DISPLAY_NAME));
+                    String id = instancesProcessed.getString(instancesProcessed.getColumnIndex(InstanceColumns._ID));
                     String text = localizeDefaultAggregateSuccessfulText(resultMessagesByInstanceId.get(id));
                     queryMessage
                             .append(name)

@@ -32,17 +32,17 @@ import androidx.core.view.ViewCompat;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioControllerView;
-import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.audio.Clip;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
-import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
+import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 
 import java.io.File;
 import java.util.Locale;
@@ -68,18 +68,18 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     @NonNull
     private MediaUtil mediaUtil;
 
-    private AudioControllerView audioController;
-    private Button captureButton;
-    private Button chooseButton;
+    AudioControllerView audioController;
+    Button captureButton;
+    Button chooseButton;
 
     private String binaryName;
 
-    public AudioWidget(Context context, FormEntryPrompt prompt) {
+    public AudioWidget(Context context, QuestionDetails prompt) {
         this(context, prompt, new FileUtil(), new MediaUtil(), new AudioControllerView(context));
     }
 
-    AudioWidget(Context context, FormEntryPrompt prompt, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioControllerView audioController) {
-        super(context, prompt);
+    AudioWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioControllerView audioController) {
+        super(context, questionDetails);
 
         this.fileUtil = fileUtil;
         this.mediaUtil = mediaUtil;
@@ -99,7 +99,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
         hideButtonsIfNeeded();
 
-        binaryName = prompt.getAnswerText();
+        binaryName = questionDetails.getPrompt().getAnswerText();
         updatePlayerMedia();
     }
 
@@ -149,7 +149,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         // get the file path and create a copy in the instance folder
         if (object instanceof Uri) {
             String sourcePath = getSourcePathFromUri((Uri) object);
-            String destinationPath = getDestinationPathFromSourcePath(sourcePath);
+            String destinationPath = FileWidgetUtils.getDestinationPathFromSourcePath(sourcePath, getInstanceFolder(), fileUtil);
             File source = fileUtil.getFileAtPath(sourcePath);
             newAudio = fileUtil.getFileAtPath(destinationPath);
             fileUtil.copyFile(source, newAudio);
@@ -204,9 +204,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
     private void updatePlayerMedia() {
         if (binaryName != null) {
-            ScreenContext screenContext = (ScreenContext) getContext();
-            AudioHelper audioHelper = new AudioHelper(screenContext.getActivity(), screenContext.getViewLifecycle());
-            audioHelper.setAudio(audioController, getAudioFile().getAbsolutePath(), String.valueOf(ViewCompat.generateViewId()));
+            audioHelper.setAudio(audioController, new Clip(String.valueOf(ViewCompat.generateViewId()), getAudioFile().getAbsolutePath()));
             audioController.showPlayer();
         } else {
             audioController.hidePlayer();
@@ -215,12 +213,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
     private String getSourcePathFromUri(@NonNull Uri uri) {
         return mediaUtil.getPathFromUri(getContext(), uri, Audio.Media.DATA);
-    }
-
-    private String getDestinationPathFromSourcePath(@NonNull String sourcePath) {
-        String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
-        return getInstanceFolder() + File.separator
-                + fileUtil.getRandomFilename() + extension;
     }
 
     @Override

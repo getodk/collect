@@ -1,13 +1,28 @@
 package org.odk.collect.android.utilities;
 
+import static org.javarosa.core.model.Constants.DATATYPE_BARCODE;
+import static org.javarosa.core.model.Constants.DATATYPE_BINARY;
+import static org.javarosa.core.model.Constants.DATATYPE_BOOLEAN;
+import static org.javarosa.core.model.Constants.DATATYPE_CHOICE;
+import static org.javarosa.core.model.Constants.DATATYPE_DATE;
+import static org.javarosa.core.model.Constants.DATATYPE_DATE_TIME;
+import static org.javarosa.core.model.Constants.DATATYPE_DECIMAL;
+import static org.javarosa.core.model.Constants.DATATYPE_GEOPOINT;
+import static org.javarosa.core.model.Constants.DATATYPE_GEOSHAPE;
+import static org.javarosa.core.model.Constants.DATATYPE_GEOTRACE;
+import static org.javarosa.core.model.Constants.DATATYPE_INTEGER;
+import static org.javarosa.core.model.Constants.DATATYPE_LONG;
+import static org.javarosa.core.model.Constants.DATATYPE_MULTIPLE_ITEMS;
+import static org.javarosa.core.model.Constants.DATATYPE_TEXT;
+import static org.javarosa.core.model.Constants.DATATYPE_TIME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.javarosa.core.model.data.StringData;
+import org.javarosa.core.model.instance.TreeElement;
 import org.junit.Test;
 import org.odk.collect.android.upload.InstanceGoogleSheetsUploader;
-
-import java.util.HashMap;
 
 public class InstanceGoogleSheetsUploaderTest {
     @Test
@@ -25,36 +40,44 @@ public class InstanceGoogleSheetsUploaderTest {
     }
 
     @Test
-    public void makeAnswersFormattingResistantTests() {
-        HashMap<String, String> answers = new HashMap<>();
-        answers.put("testForm-instanceId", "uuid:748c574c-4aa5-4f80-a628-b96d0f052e92");
-        answers.put("testForm-text", "test string");
-        answers.put("testForm-number", "55");
-        answers.put("testForm-photo", "https://drive.google.com/open?id=1g7bWUq-raEAltOI2NX03jX4Ttt0AdAYA");
-        answers.put("testForm-time", "12:57");
-        answers.put("testForm-newGroup", "=HYPERLINK(\"https://docs.google.com/spreadsheets/d/1PObIXLRDBQjQOnRJLgKQJPOvRpl6cCPRDa99zWFLI60/edit#gid=938236033\", \"data-gr\")");
-        answers.put("testForm-date", "08/08/19");
-        answers.put("testForm-selectOne", "1");
-        answers.put("testForm-selectMultiple", "1, 2, 3");
-        answers.put("testForm-decimal", "7.5");
-        answers.put("testForm-geopoint", "54.38072481,18.6065263");
-        answers.put("testForm-geopoint-altitude", "128");
-        answers.put("testForm-geopoint-accuracy", "24");
+    public void getFormattingResistantAnswerTests() {
+        String originalAnswer = "Test answer";
+        String formattingResistantAnswer = "'" + originalAnswer;
 
-        HashMap<String, String> fixedAnswers = InstanceGoogleSheetsUploader.makeAnswersFormattingResistant(answers);
-        assertEquals(answers.size(), fixedAnswers.size());
-        assertEquals("'uuid:748c574c-4aa5-4f80-a628-b96d0f052e92", fixedAnswers.get("testForm-instanceId"));
-        assertEquals("'test string", fixedAnswers.get("testForm-text"));
-        assertEquals("'55", fixedAnswers.get("testForm-number"));
-        assertEquals("https://drive.google.com/open?id=1g7bWUq-raEAltOI2NX03jX4Ttt0AdAYA", fixedAnswers.get("testForm-photo"));
-        assertEquals("'12:57", fixedAnswers.get("testForm-time"));
-        assertEquals("=HYPERLINK(\"https://docs.google.com/spreadsheets/d/1PObIXLRDBQjQOnRJLgKQJPOvRpl6cCPRDa99zWFLI60/edit#gid=938236033\", \"data-gr\")", fixedAnswers.get("testForm-newGroup"));
-        assertEquals("'08/08/19", fixedAnswers.get("testForm-date"));
-        assertEquals("'1", fixedAnswers.get("testForm-selectOne"));
-        assertEquals("'1, 2, 3", fixedAnswers.get("testForm-selectMultiple"));
-        assertEquals("'7.5", fixedAnswers.get("testForm-decimal"));
-        assertEquals("'54.38072481,18.6065263", fixedAnswers.get("testForm-geopoint"));
-        assertEquals("'128", fixedAnswers.get("testForm-geopoint-altitude"));
-        assertEquals("'24", fixedAnswers.get("testForm-geopoint-accuracy"));
+        TreeElement treeElement = new TreeElement();
+        treeElement.setAnswer(new StringData(originalAnswer));
+
+        treeElement.setDataType(DATATYPE_TEXT);
+        assertEquals(formattingResistantAnswer, InstanceGoogleSheetsUploader.getFormattingResistantAnswer(treeElement));
+        treeElement.setDataType(DATATYPE_MULTIPLE_ITEMS);
+        assertEquals(formattingResistantAnswer, InstanceGoogleSheetsUploader.getFormattingResistantAnswer(treeElement));
+        treeElement.setDataType(DATATYPE_BARCODE);
+        assertEquals(formattingResistantAnswer, InstanceGoogleSheetsUploader.getFormattingResistantAnswer(treeElement));
+
+        treeElement.setDataType(DATATYPE_INTEGER);
+        assertEquals(originalAnswer, InstanceGoogleSheetsUploader.getFormattingResistantAnswer(treeElement));
+        treeElement.setDataType(DATATYPE_DECIMAL);
+        assertEquals(originalAnswer, InstanceGoogleSheetsUploader.getFormattingResistantAnswer(treeElement));
+        treeElement.setDataType(DATATYPE_DATE);
+        assertEquals(originalAnswer, InstanceGoogleSheetsUploader.getFormattingResistantAnswer(treeElement));
+        treeElement.setDataType(DATATYPE_TIME);
+        assertEquals(originalAnswer, InstanceGoogleSheetsUploader.getFormattingResistantAnswer(treeElement));
+        treeElement.setDataType(DATATYPE_DATE_TIME);
+        assertEquals(originalAnswer, InstanceGoogleSheetsUploader.getFormattingResistantAnswer(treeElement));
+        treeElement.setDataType(DATATYPE_CHOICE);
+        assertEquals(originalAnswer, InstanceGoogleSheetsUploader.getFormattingResistantAnswer(treeElement));
+        treeElement.setDataType(DATATYPE_BOOLEAN);
+        assertEquals(originalAnswer, InstanceGoogleSheetsUploader.getFormattingResistantAnswer(treeElement));
+        treeElement.setDataType(DATATYPE_GEOPOINT);
+        assertEquals(originalAnswer, InstanceGoogleSheetsUploader.getFormattingResistantAnswer(treeElement));
+        treeElement.setDataType(DATATYPE_BINARY);
+        assertEquals(originalAnswer, InstanceGoogleSheetsUploader.getFormattingResistantAnswer(treeElement));
+        treeElement.setDataType(DATATYPE_LONG);
+        assertEquals(originalAnswer, InstanceGoogleSheetsUploader.getFormattingResistantAnswer(treeElement));
+        treeElement.setDataType(DATATYPE_GEOSHAPE);
+        assertEquals(originalAnswer, InstanceGoogleSheetsUploader.getFormattingResistantAnswer(treeElement));
+        treeElement.setDataType(DATATYPE_GEOTRACE);
+        assertEquals(originalAnswer, InstanceGoogleSheetsUploader.getFormattingResistantAnswer(treeElement));
+
     }
 }

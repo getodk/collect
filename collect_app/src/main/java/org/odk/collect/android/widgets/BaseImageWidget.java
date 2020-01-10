@@ -36,10 +36,10 @@ import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaManager;
@@ -61,7 +61,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     protected ImageClickHandler imageClickHandler;
     protected ExternalImageCaptureHandler imageCaptureHandler;
 
-    public BaseImageWidget(Context context, FormEntryPrompt prompt) {
+    public BaseImageWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
     }
 

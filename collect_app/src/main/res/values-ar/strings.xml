@@ -12,8 +12,6 @@
   <string name="add_another_repeat">إضافة \"%s\" مجموعة أخرى؟</string>
   <string name="add_repeat">إضافة \"%s\" مجموعة جديدة؟</string>
   <string name="add_repeat_no">عدم الإضافة</string>
-  <string name="audio_file_error">لم يتم تحديد ملف الصوت</string>
-  <string name="audio_file_invalid">الملف: %s ملف صوتي غير صالح</string>
   <string name="cancel">إلغاء</string>
   <string name="cancel_loading_form">إلغاء</string>
   <string name="cancel_location">إلغاء</string>
@@ -154,7 +152,6 @@
   <string name="root_namespace_error">اسم العنصرالأساسي غير صحيح:%s</string>
   <string name="manifest_tag_error">ادخال المانيفست %s يفتقد واحد او أكثر من العلامات: اسم الملف، # أو رابط التحميل</string>
   <string name="form_download_progress">%1$s. الحصول على ملفات الوسائط المتعددة:  %2$s  من %3$s</string>
-  <string name="file_fetch_failed">خطأ: %2$s بمعنى %3$s عند %1$s</string>
   <string name="fetching_manifest">%s. الحصول على القائمة </string>
   <string name="success">نجاح</string>
   <string name="failures">فشل</string>
@@ -307,6 +304,7 @@
   <string name="leave_a_review">اترك تعليق في Play Store</string>
   <string name="leave_a_review_msg">رأيك (نأمل إيجابيا) يزيد من رؤية التطبيق في Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="maps">خرائط</string>
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
       These strings are only being used to preserve compatibility with pre-existing
        tile caches, and are not shown in the UI.-->
@@ -317,10 +315,17 @@
   <string name="openmap_cartodb_positron">خريطة CartoDB</string>
   <string name="openmap_cartodb_darkmatter">خريطة CartoDB</string>
   <string name="basemap">الخريطة</string>
+  <string name="basemap_source">المصدر</string>
+  <string name="map_style_label">%s نمط الخريطة</string>
   <string name="streets">الطرق</string>
   <string name="terrain">التضاريس</string>
   <string name="hybrid">الكل</string>
   <string name="satellite">اقمار اصطناعية</string>
+  <string name="dark">داكن</string>
+  <string name="outdoors">عراء</string>
+  <string name="topographic">طبوغرافي</string>
+  <string name="carto_map_style_positron">بوزيترون</string>
+  <string name="carto_map_style_dark_matter">المادة المظلمة</string>
   <string name="save_point">حفظ GeoPint</string>
   <string name="get_point">تشغيل GeoPoint</string>
   <string name="geopoint_view_read_only">عرض نقاط الخريطة</string>
@@ -367,9 +372,6 @@
     <item quantity="other">%dمتر </item>
   </plurals>
   <string name="location_status_searching">جارٍ البحث عن موقع GPS ، يرجى الانتظار …</string>
-  <string name="location_status_accuracy">دقة موقع m %.1f : GPS</string>
-  <string name="location_status_acceptable">دقة موقع m %.1f : GPS (مقبول)</string>
-  <string name="location_status_unacceptable">دقة موقع m %.1f : GPS (غير مقبول)</string>
   <string name="collection_status_paused">النقاط التي تم إدخالها: %d</string>
   <string name="collection_status_placement">النقاط التي تم إدخالها: %d (انقر لوضع نقاط)</string>
   <string name="collection_status_manual">النقاط التي تم إدخالها: %d (التسجيل اليدوي)</string>
@@ -382,6 +384,7 @@
   <string name="discard">تجاهل</string>
   <string name="geoshape_view_change_location">عرض التغييرات في الموقع لـ GeoShape</string>
   <string name="geotrace_view_change_location">عرض التغييرات في الموقع لـ GeoTrace</string>
+  <string name="geometry_status">الاستمارات المحفوظة: %d (%d يظهر على الخريطة)</string>
   <string name="bearing">تحمل %.3f</string>
   <string name="direction">الاتجاة: %s</string>
   <string name="select_odk_shortcut">اختيار الاختصار</string>
@@ -690,4 +693,9 @@
   <string name="too_complex_form">هذه الاستمارة معقدة جدًا لهذا الجهاز. حاول تبسيط التعبيرات أو طلب المساعدة في المنتدى.</string>
   <string name="reading_files">قراءة الملفات</string>
   <string name="copying_media_files_failed">فشل نسخ ملفات الوسائط</string>
+  <string name="qr_code_not_found">رمز الاستجابة السريعة غير موجود في الصورة المحددة</string>
+  <string name="enter_identity">أدخل الهوية</string>
+  <string name="identity">هوية</string>
+  <string name="enter_identity_description">هذا الاستمار يتطلب منك تحديد هويتك</string>
+  <string name="close">أغلق</string>
 </resources>

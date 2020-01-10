@@ -23,7 +23,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
-import androidx.appcompat.widget.Toolbar;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,6 +42,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.application.Collect;
@@ -85,7 +86,7 @@ public class ShowQRCodeFragment extends Fragment {
     private static final int SELECT_PHOTO = 111;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private final boolean[] checkedItems = new boolean[]{true, true};
+    private final boolean[] checkedItems = {true, true};
 
     @BindView(R.id.ivQRcode)
     ImageView ivQRCode;
@@ -101,10 +102,8 @@ public class ShowQRCodeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.show_qrcode_fragment, container, false);
+        ((CollectAbstractActivity) getActivity()).initToolbar(getString(R.string.import_export_settings));
         ButterKnife.bind(this, view);
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.import_export_settings));
-        ((AdminPreferencesActivity) getActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
         setRetainInstance(true);
         generateCode();
@@ -194,7 +193,7 @@ public class ShowQRCodeFragment extends Fragment {
     @OnClick(R.id.tvPasswordWarning)
     void passwordWarningClicked() {
         if (dialog == null) {
-            final String[] items = new String[]{
+            final String[] items = {
                     getString(R.string.admin_password),
                     getString(R.string.server_password)};
 
@@ -225,8 +224,9 @@ public class ShowQRCodeFragment extends Fragment {
             } else {
                 try {
                     applySettings(CompressionUtils.decompress(result.getContents()));
-                } catch (IOException | DataFormatException e) {
+                } catch (IOException | DataFormatException | IllegalArgumentException e) {
                     Timber.e(e);
+                    ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
                 }
                 return;
             }
@@ -256,7 +256,7 @@ public class ShowQRCodeFragment extends Fragment {
                 } catch (FormatException | NotFoundException | ChecksumException e) {
                     Timber.i(e);
                     ToastUtils.showLongToast(R.string.qr_code_not_found);
-                } catch (DataFormatException | IOException | OutOfMemoryError e) {
+                } catch (DataFormatException | IOException | OutOfMemoryError | IllegalArgumentException e) {
                     Timber.e(e);
                     ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
                 }

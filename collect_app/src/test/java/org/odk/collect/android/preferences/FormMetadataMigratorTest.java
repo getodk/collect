@@ -45,13 +45,13 @@ public class FormMetadataMigratorTest {
             KEY_SELECTED_GOOGLE_ACCOUNT);
 
     /** The inputs to the migration */
-    private final String[][] sourceKeyValuePairs = new String[][] {
+    private final String[][] sourceKeyValuePairs = {
             {KEY_USERNAME,                  "a user"},
             {KEY_SELECTED_GOOGLE_ACCOUNT,   "a Google email address"}
     };
 
     /** Changes to make to the metadata after the migration */
-    private final String[][] modifiedMetadataValuePairs = new String[][] {
+    private final String[][] modifiedMetadataValuePairs = {
             {KEY_METADATA_USERNAME,         "a user--changed"},
             {KEY_METADATA_PHONENUMBER,      "a phone number--changed"},
             {KEY_METADATA_EMAIL,            "an email--changed"},

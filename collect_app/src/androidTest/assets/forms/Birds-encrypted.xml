@@ -1,0 +1,331 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+  <h:head>
+    <h:title>Birds</h:title>
+    <model>
+      <itext>
+        <translation lang="English" default="">
+          <!-- Birds -->
+          <text id="bird_question">
+            <value form="long">What bird did you see?</value>
+            <value form="short">What bird did you see?</value>
+            <value form="audio">jr://audio/question.wav</value>
+          </text>
+          <text id="sparrow">
+            <value form="long">House sparrow</value>
+            <value form="short">House sparrow</value>
+            <value form="image">jr://images/sparrow.png</value>
+          </text>
+          <text id="pigeon">
+            <value form="long">Rock pigeon</value>
+            <value form="short">Rock pigeon</value>
+            <value form="image">jr://images/pigeon.png</value>
+          </text>
+          <text id="nuthatch">
+            <value form="long">European nuthatch</value>
+            <value form="short">European nuthatch</value>
+            <value form="image">jr://images/nuthatch.png</value>
+          </text>
+          <text id="robin">
+            <value form="long">European robin</value>
+            <value form="short">European robin</value>
+            <value form="image">jr://images/robin.png</value>
+            <value form="audio">jr://audio/european-robin.mp3</value>
+          </text>
+          <text id="tit">
+            <value form="long">Great tit</value>
+            <value form="short">Great tit</value>
+            <value form="image">jr://images/tit.png</value>
+          </text>
+          <text id="starling">
+            <value form="long">Common starling</value>
+            <value form="short">Common starling</value>
+            <value form="image">jr://images/starling.png</value>
+          </text>
+          <text id="hawfinch">
+            <value form="long">Hawfinch</value>
+            <value form="short">Hawfinch</value>
+            <value form="image">jr://images/hawfinch.png</value>
+          </text>
+          <text id="bluethroat">
+            <value form="long">Bluethroat</value>
+            <value form="short">Bluethroat</value>
+            <value form="image">jr://images/bluethroat.png</value>
+          </text>
+          <text id="wren">
+            <value form="long">Winter wren</value>
+            <value form="short">Winter wren</value>
+            <value form="image">jr://images/wren.png</value>
+          </text>
+          <text id="knot">
+            <value form="long">Red knot</value>
+            <value form="short">Red knot</value>
+            <value form="image">jr://images/knot.png</value>
+          </text>
+          <text id="jay">
+            <value form="long">Eurasian jay</value>
+            <value form="short">Eurasian jay</value>
+            <value form="image">jr://images/jay.png</value>
+          </text>
+          <text id="woodpecker">
+            <value form="long">Great spotted woodpecker</value>
+            <value form="short">Great spotted woodpecker</value>
+            <value form="image">jr://images/woodpecker.png</value>
+          </text>
+          <text id="eagle">
+            <value form="long">Golden eagle</value>
+            <value form="short">Golden eagle</value>
+            <value form="image">jr://images/eagle.png</value>
+            <value form="audio">jr://audio/goldeneagle.mp3</value>
+          </text>
+          <text id="kingfisher">
+            <value form="long">Kingfisher</value>
+            <value form="short">Kingfisher</value>
+            <value form="image">jr://images/kingfisher.png</value>
+            <value form="video">jr://video/kingfisher.3gp</value>
+          </text>
+          <text id="blackbird">
+            <value form="long">Blackbird</value>
+            <value form="short">Blackbird</value>
+            <value form="image">jr://images/blackbird.png</value>
+          </text>
+          <text id="crow">
+            <value form="long">Carrion crow</value>
+            <value form="short">Carrion crow</value>
+            <value form="image">jr://images/crow.png</value>
+            <value form="audio">jr://audio/carrioncrow.mp3</value>
+          </text>
+          <text id="gull">
+            <value form="long">Glaucous gull</value>
+            <value form="short">Glaucous gull</value>
+            <value form="image">jr://images/gull.png</value>
+          </text>
+          <text id="yellowgull">
+            <value form="long">Yellow-legged gull</value>
+            <value form="short">Yellow-legged gull</value>
+            <value form="image">jr://images/yellowgull.png</value>
+          </text>
+          <text id="shag">
+            <value form="long">European shag</value>
+            <value form="short">European shag</value>
+            <value form="image">jr://images/shag.png</value>
+          </text>
+          <text id="pelican">
+            <value form="long">Dalmatian pelican</value>
+            <value form="short">Dalmatian pelican</value>
+            <value form="image">jr://images/pelican.png</value>
+          </text>
+          <text id="heron">
+            <value form="long">Grey heron</value>
+            <value form="short">Grey heron</value>
+            <value form="image">jr://images/heron.png</value>
+          </text>
+          <text id="egret">
+            <value form="long">Grey egret</value>
+            <value form="short">Grey egret</value>
+            <value form="image">jr://images/egret.png</value>
+          </text>
+          <text id="goose">
+            <value form="long">Canada goose</value>
+            <value form="short">Canada goose</value>
+            <value form="image">jr://images/goose.png</value>
+          </text>
+          <text id="otherbird">
+            <value form="long">Other bird</value>
+            <value form="short">Other bird</value>
+          </text>
+        </translation>
+      </itext>
+      <instance>
+        <nm id="Birds" version="[encrypted:AWwScdcf]">
+          <name/>
+          <nationality/>
+          <temp/>
+          <humidity/>
+          <wind/>
+          <repeat_observation>
+            <habitat/>
+            <observe/>
+            <bird/>
+            <location/>
+            <image/>
+            <notes/>
+          </repeat_observation>
+        </nm>
+      </instance>
+      <bind nodeset="/nm/name" type="string"/>
+      <bind nodeset="/nm/nationality" type="string"/>
+      <bind nodeset="/nm/temp" type="integer"/>
+      <bind nodeset="/nm/humidity" type="select1"/>
+      <bind nodeset="/nm/wind" type="select1"/>
+      <bind nodeset="/nm/repeat_observation/habitat" type="select1"/>
+      <bind nodeset="/nm/repeat_observation/observe" type="select1"/>
+      <bind nodeset="/nm/repeat_observation/bird" type="select1"/>
+      <bind nodeset="/nm/repeat_observation/location" type="geopoint"/>
+      <bind nodeset="/nm/repeat_observation/image" type="binary"/>
+      <bind nodeset="/nm/repeat_observation/notes" type="string"/>
+    <submission base64RsaPublicKey="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsrq8xrFswX/Ht1X4UVeLjupqz8hCMo+GR3hwqZdx7BQjvw9KBcCL+J6CI/2yyTqprVmeWZZu/i9qjuYcyWir3ZonZIDaVvClP8LN7e0+0SgQgEV+v9bjGVTDMQIKY2vq2ZNEbuy4UAHFLJCwGaUE370w76r/Da4YbAgfGVQn1sHarJ8Zp1o/6RE1IckxA8L2spo8oSU23KnttLIaR2qIS7mY+BkZPItyyNjulpJUZlxf4AgO7T8S4grmOC5TW4laB25vjbPw4KzB3L8bm+oK5JjlocazOiyUVDz8UwYMQke4ybEwSJbu3gl7DJzlwwQ1u3AbtjZk2T7LKUotrkVzAQIDAQAB"/></model>
+  </h:head>
+  <h:body>
+    <group appearance="field-list">
+      <label>Demographic information</label>
+      <input ref="name">
+        <label>Please enter your name:</label>
+      </input>
+      <input ref="nationality">
+        <label>Please enter your country:</label>
+      </input>
+    </group>
+    <group appearance="field-list">
+      <label>Weather information</label>
+      <input ref="temp">
+        <label>Temperature:</label>
+      </input>
+      <select1 ref="humidity">
+        <label>Humidity:</label>
+        <item>
+          <label>Dry or low</label>
+          <value>low</value>
+        </item>
+        <item>
+          <label>Normal or medium</label>
+          <value>med</value>
+        </item>
+        <item>
+          <label>Wet or High</label>
+          <value>high</value>
+        </item>
+      </select1>
+      <select1 ref="wind">
+        <label>Wind conditions:</label>
+        <item>
+          <label>Little or no wind</label>
+          <value>low</value>
+        </item>
+        <item>
+          <label>Breezy or light wind</label>
+          <value>med</value>
+        </item>
+        <item>
+          <label>Strong or very windy</label>
+          <value>high</value>
+        </item>
+      </select1>
+    </group>
+    <group>
+      <label>observation</label>
+      <repeat nodeset="/nm/repeat_observation">
+        <upload ref="image" mediatype="image/*">
+          <label>If possible, please take a picture of your observation</label>
+        </upload>
+        <select1 ref="bird">
+          <label ref="jr:itext('bird_question')"/>
+          <hint>Some birds have included audio or video</hint>
+          <item>
+            <label ref="jr:itext('eagle')"/>
+            <value>eagle</value>
+          </item>
+          <item>
+            <label ref="jr:itext('kingfisher')"/>
+            <value>kingfisher</value>
+          </item>
+          <item>
+            <label ref="jr:itext('pigeon')"/>
+            <value>pigeon</value>
+          </item>
+          <item>
+            <label ref="jr:itext('nuthatch')"/>
+            <value>nuthatch</value>
+          </item>
+          <item>
+            <label ref="jr:itext('robin')"/>
+            <value>robin</value>
+          </item>
+          <item>
+            <label ref="jr:itext('tit')"/>
+            <value>tit</value>
+          </item>
+          <item>
+            <label ref="jr:itext('sparrow')"/>
+            <value>sparrow</value>
+          </item>
+          <item>
+            <label ref="jr:itext('starling')"/>
+            <value>starling</value>
+          </item>
+          <item>
+            <label ref="jr:itext('hawfinch')"/>
+            <value>hawfinch</value>
+          </item>
+          <item>
+            <label ref="jr:itext('bluethroat')"/>
+            <value>bluethroat</value>
+          </item>
+          <item>
+            <label ref="jr:itext('wren')"/>
+            <value>wren</value>
+          </item>
+          <item>
+            <label ref="jr:itext('knot')"/>
+            <value>knot</value>
+          </item>
+          <item>
+            <label ref="jr:itext('jay')"/>
+            <value>jay</value>
+          </item>
+          <item>
+            <label ref="jr:itext('woodpecker')"/>
+            <value>woodpecker</value>
+          </item>
+          <item>
+            <label ref="jr:itext('blackbird')"/>
+            <value>blackbird</value>
+          </item>
+          <item>
+            <label ref="jr:itext('crow')"/>
+            <value>crow</value>
+          </item>
+          <item>
+            <label ref="jr:itext('gull')"/>
+            <value>gull</value>
+          </item>
+          <item>
+            <label ref="jr:itext('yellowgull')"/>
+            <value>yellowgull</value>
+          </item>
+          <item>
+            <label ref="jr:itext('shag')"/>
+            <value>shag</value>
+          </item>
+          <item>
+            <label ref="jr:itext('pelican')"/>
+            <value>pelican</value>
+          </item>
+          <item>
+            <label ref="jr:itext('heron')"/>
+            <value>heron</value>
+          </item>
+          <item>
+            <label ref="jr:itext('egret')"/>
+            <value>egret</value>
+          </item>
+          <item>
+            <label ref="jr:itext('goose')"/>
+            <value>goose</value>
+          </item>
+          <item>
+            <label ref="jr:itext('otherbird')"/>
+            <value>otherbird</value>
+          </item>
+        </select1>
+        <input ref="location">
+          <label>Please record your location</label>
+        </input>
+        <input ref="notes">
+          <label>Please enter any notes about your observation</label>
+          <hint>This is optional, of course.</hint>
+        </input>
+      </repeat>
+    </group>
+  </h:body>
+</h:html>
