@@ -14,8 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -95,6 +93,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.formentry.FormSaveViewModel;
 import org.odk.collect.android.formentry.QuitFormDialog;
+import org.odk.collect.android.formentry.SaveFormProgressDialogFragment;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.ChangesReasonPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.IdentifyUserPromptDialogFragment;
@@ -241,8 +240,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public static final String EXTRA_TESTING_PATH = "testingPath";
     public static final String KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED = "readPhoneStatePermissionRequestNeeded";
 
-    private static final int SAVING_DIALOG = 2;
-
     private boolean autoSaved;
     private boolean allowMovingBackwards;
 
@@ -262,7 +259,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private View currentView;
 
     private AlertDialog alertDialog;
-    private ProgressDialog savingDialog;
     private String errorMessage;
     private boolean shownAlertDialogIsGroupRepeat;
 
@@ -857,7 +853,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                  * Android 1.6) we want to handle images the audio and video
                  */
 
-                ProgressDialogFragment.newInstance(getString(R.string.please_wait))
+                ProgressDialogFragment.create(null, getString(R.string.please_wait))
                         .show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
 
                 mediaLoadingFragment.beginMediaLoadingTask(intent.getData());
@@ -1642,18 +1638,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    // Hopefully someday we can use managed dialogs when the bugs are fixed
-    /*
-     * Ideally, we'd like to use Android to manage dialogs with onCreateDialog()
-     * and onPrepareDialog(), but dialogs with dynamic content are broken in 1.5
-     * (cupcake). We do use managed dialogs for our static loading
-     * ProgressDialog. The main issue we noticed and are waiting to see fixed
-     * is: onPrepareDialog() is not called after a screen orientation change.
-     * http://code.google.com/p/android/issues/detail?id=1639
-     */
-
-    //
-
     /**
      * Creates and displays a dialog displaying the violated constraint.
      */
@@ -1848,16 +1832,19 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 case SAVING:
                     autoSaved = true;
 
-                    showSavingDialog();
+                     SaveFormProgressDialogFragment progressDialog = (SaveFormProgressDialogFragment) DialogUtils.showIfNotShowing(
+                            new SaveFormProgressDialogFragment().setArguments(getString(R.string.saving_form), getString(R.string.please_wait)),
+                            getSupportFragmentManager()
+                    );
 
                     if (result.getMessage() != null) {
-                        onProgressStep(result.getMessage());
+                        progressDialog.setMessage(getString(R.string.please_wait) + "\n\n" + result.getMessage());
                     }
 
                     break;
 
                 case SAVED:
-                    dismissSavingDialog();
+                    DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
                     showShortToast(R.string.data_saved_ok);
 
                     if (exit) {
@@ -1876,7 +1863,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     break;
 
                 case SAVE_ERROR:
-                    dismissSavingDialog();
+                    DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
                     String message;
 
                     if (result.getMessage() != null) {
@@ -1890,14 +1877,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     break;
 
                 case FINALIZE_ERROR:
-                    dismissSavingDialog();
+                    DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
                     showLongToast(String.format(getString(R.string.encryption_error_message),
                             result.getMessage()));
                     finishReturnInstance();
                     break;
 
                 case CONSTRAINT_ERROR: {
-                    dismissSavingDialog();
+                    DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
                     refreshCurrentView();
 
                     // get constraint behavior preference value with appropriate default
@@ -1920,20 +1907,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         return true;
-    }
-
-    private void dismissSavingDialog() {
-        try {
-            dismissDialog(SAVING_DIALOG);
-        } catch (IllegalArgumentException ignored) {
-            // For some reason the dialog wasn't shown
-        }
-    }
-
-    private void showSavingDialog() {
-        if (savingDialog == null || savingDialog.isShowing()) {
-            showDialog(SAVING_DIALOG);
-        }
     }
 
     /**
@@ -2087,31 +2060,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .setTitle(getString(R.string.change_language))
                 .setNegativeButton(getString(R.string.do_not_change), null).create();
         alertDialog.show();
-    }
-
-    /**
-     * We use Android's dialog management for loading/saving progress dialogs
-     */
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case SAVING_DIALOG:
-                savingDialog = new ProgressDialog(this);
-                savingDialog.setTitle(getString(R.string.saving_form));
-                savingDialog.setMessage(getString(R.string.please_wait));
-                savingDialog.setIndeterminate(true);
-                savingDialog.setOnDismissListener(dialog -> cancelSaveToDiskTask());
-                return savingDialog;
-
-        }
-        return null;
-    }
-
-    private void cancelSaveToDiskTask() {
-        if (formSaveViewModel.isSaving()) {
-            boolean cancelled = formSaveViewModel.cancelSaving();
-            Timber.w("Cancelled form saving! (%s)", cancelled);
-        }
     }
 
     /**
@@ -2571,13 +2519,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     public void onProgressStep(String stepMessage) {
-        if (savingDialog != null) {
-            savingDialog.setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
-        } else {
-            FormLoadingDialogFragment formLoadingDialogFragment = getFormLoadingDialogFragment();
-            if (formLoadingDialogFragment != null) {
-                formLoadingDialogFragment.updateMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
-            }
+        FormLoadingDialogFragment formLoadingDialogFragment = getFormLoadingDialogFragment();
+        if (formLoadingDialogFragment != null) {
+            formLoadingDialogFragment.updateMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
         }
     }
 
