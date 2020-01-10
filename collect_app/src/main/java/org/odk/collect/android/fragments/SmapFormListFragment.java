@@ -269,10 +269,10 @@ public class SmapFormListFragment extends ListFragment {
                             getString(R.string.smap_must_start_from_nfc),
                             Toast.LENGTH_LONG).show();
                 } else {
-                    ((SmapMain) getActivity()).completeTask(entry);
+                    ((SmapMain) getActivity()).completeTask(entry, false);
                 }
             } else {
-                ((SmapMain) getActivity()).completeForm(entry);
+                ((SmapMain) getActivity()).completeForm(entry, false);
             }
         }
     }

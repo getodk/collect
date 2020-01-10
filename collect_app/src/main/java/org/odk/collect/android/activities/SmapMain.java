@@ -706,10 +706,12 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
     /*
      * The user has selected an option to edit / complete a task
+     * If the activity has been paused then a task has already been launched so ignore
+     * Unless this request comes not from a user click but from code in which case force the launch
      */
-    public void completeTask(TaskEntry entry) {
+    public void completeTask(TaskEntry entry, boolean force) {
 
-        if(!mPaused) {
+        if(!mPaused || force) {
             String surveyNotes = null;
             String formPath = Collect.FORMS_PATH + entry.taskForm;
             String instancePath = entry.instancePath;
@@ -815,15 +817,18 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
                 cInstanceProvider.close();
             }
+        } else {
+            Timber.i("##################: Task launch blocked");
         }
 
     }
 
     /*
      * The user has selected an option to edit / complete a form
+     * The force parameter can be used to force launching of the new form ven with the smap activity is paused
      */
-    public void completeForm(TaskEntry entry) {
-        if(!mPaused) {
+    public void completeForm(TaskEntry entry, boolean force) {
+        if(!mPaused || force) {
             Uri formUri = ContentUris.withAppendedId(FormsProviderAPI.FormsColumns.CONTENT_URI, entry.id);
 
             // Use an explicit intent
@@ -831,6 +836,8 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
             i.setData(formUri);
             startActivityForResult(i, COMPLETE_FORM);
+        } else {
+            Timber.i("################# form launch blocked");
         }
     }
 
@@ -853,7 +860,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 //        getString(R.string.smap_starting_form, fld.formName),
                 //        Toast.LENGTH_LONG).show();
 
-                completeForm(te);
+                completeForm(te, true);
             } else if(fld.instancePath != null) {
                 // Start a task or saved instance
                 te.id = 0;
@@ -872,7 +879,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 //        SmapMain.this,
                 //        getString(R.string.smap_restarting_form, fld.formName),
                 //        Toast.LENGTH_LONG).show();
-                completeTask(te);
+                completeTask(te, true);
             }
         }
     }
@@ -962,7 +969,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 if (position >= 0) {
                     TaskEntry entry = (TaskEntry) mTasks.get(position);
 
-                    mActivity.completeTask(entry);
+                    mActivity.completeTask(entry, true);
                 }
             }
         }
