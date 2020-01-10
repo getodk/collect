@@ -46,6 +46,7 @@ import timber.log.Timber;
 
 public class InstanceServerUploader extends InstanceUploader {
     private static final String URL_PATH_SEP = "/";
+    public static final String URL_ERROR = "explicit_url_error";
 
     private final OpenRosaHttpInterface httpInterface;
     private final WebCredentialsUtils webCredentialsUtils;
@@ -81,7 +82,7 @@ public class InstanceServerUploader extends InstanceUploader {
         } else {
             if (submissionUri.getHost() == null) {
                 saveFailedStatusToDatabase(instance);
-                throw new UploadException(FAIL + "Host name may not be null");
+                throw new UploadException(FAIL + "Host name may not be null" + URL_ERROR);
             }
 
             URI uri;
@@ -90,7 +91,7 @@ public class InstanceServerUploader extends InstanceUploader {
             } catch (IllegalArgumentException e) {
                 saveFailedStatusToDatabase(instance);
                 Timber.d(e.getMessage() != null ? e.getMessage() : e.toString());
-                throw new UploadException(Collect.getInstance().getString(R.string.url_error));
+                throw new UploadException(Collect.getInstance().getString(R.string.url_error) + URL_ERROR);
             }
 
             HttpHeadResult headResult;
@@ -111,7 +112,7 @@ public class InstanceServerUploader extends InstanceUploader {
             } catch (Exception e) {
                 saveFailedStatusToDatabase(instance);
                 throw new UploadException(FAIL
-                        + (e.getMessage() != null ? e.getMessage() : e.toString()));
+                        + (e.getMessage() != null ? e.getMessage() : e.toString()) + URL_ERROR);
             }
 
             if (headResult.getStatusCode() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
@@ -139,11 +140,11 @@ public class InstanceServerUploader extends InstanceUploader {
                             saveFailedStatusToDatabase(instance);
                             throw new UploadException(FAIL
                                     + "Unexpected redirection attempt to a different host: "
-                                    + newURI.toString());
+                                    + newURI.toString() + URL_ERROR);
                         }
                     } catch (Exception e) {
                         saveFailedStatusToDatabase(instance);
-                        throw new UploadException(FAIL + urlString + " " + e.toString());
+                        throw new UploadException(FAIL + urlString + " " + e.toString() + URL_ERROR);
                     }
                 }
             } else {
@@ -152,7 +153,7 @@ public class InstanceServerUploader extends InstanceUploader {
                         && headResult.getStatusCode() < HttpsURLConnection.HTTP_MULT_CHOICE) {
                     saveFailedStatusToDatabase(instance);
                     throw new UploadException(FAIL + "Invalid status code on Head request. If "
-                            + "you have a web proxy, you may need to log in to your network.");
+                            + "you have a web proxy, you may need to log in to your network." + URL_ERROR);
                 }
             }
         }
@@ -200,7 +201,7 @@ public class InstanceServerUploader extends InstanceUploader {
                     exception = new UploadException(FAIL + "Network login failure? Again?");
                 } else if (responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
                     exception = new UploadException(FAIL + postResult.getReasonPhrase()
-                            + " (" + responseCode + ") at " + urlString);
+                            + " (" + responseCode + ") at " + urlString + URL_ERROR);
                 } else {
                     if (messageParser.isValid()) {
                         exception = new UploadException(FAIL + messageParser.getMessageResponse());

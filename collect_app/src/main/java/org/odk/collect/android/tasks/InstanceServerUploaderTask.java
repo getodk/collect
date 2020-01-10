@@ -25,6 +25,7 @@ import org.odk.collect.android.upload.UploadException;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -54,6 +55,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
     @Override
     protected Outcome doInBackground(Long... instanceIdsToUpload) {
         Outcome outcome = new Outcome();
+        HashSet<String> badUrls = new HashSet<>();
 
         InstanceServerUploader uploader = new InstanceServerUploader(httpInterface, webCredentialsUtils, new HashMap<>());
         List<Instance> instancesToUpload = uploader.getInstancesFromIds(instanceIdsToUpload);
@@ -65,12 +67,19 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
             if (isCancelled()) {
                 return outcome;
             }
+            String destinationUrl = null;
             Instance instance = instancesToUpload.get(i);
 
             publishProgress(i + 1, instancesToUpload.size());
 
             try {
-                String destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, completeDestinationUrl);
+                destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, completeDestinationUrl);
+                if (badUrls.contains(destinationUrl)) {
+                    if (i == instancesToUpload.size() - 1) {
+                        return outcome;
+                    }
+                    continue;
+                }
                 String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
                 outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
                         customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
@@ -82,8 +91,11 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
                 // retry. Items present in the map are considered already attempted and won't be
                 // retried.
             } catch (UploadException e) {
+                if (e.getDisplayMessage().contains(InstanceServerUploader.URL_ERROR)) {
+                    badUrls.add(destinationUrl);
+                }
                 outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
-                        e.getDisplayMessage());
+                        e.getDisplayMessage().replace(InstanceServerUploader.URL_ERROR, ""));
             }
         }
         
