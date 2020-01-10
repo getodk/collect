@@ -43,7 +43,7 @@ import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARG
 
 public class RankingWidget extends ItemsWidget implements BinaryWidget {
 
-    private int margin;
+    private final int margin;
     private List<SelectChoice> savedItems;
     private LinearLayout widgetLayout;
     Button showRankingDialogButton;
