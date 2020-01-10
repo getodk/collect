@@ -19,10 +19,12 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.odk.collect.android.test.CustomMatchers.withIndex;
 
@@ -194,6 +196,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage clickMarkAsFinalized() {
         onView(withId(R.id.mark_finished)).perform(click());
+        return this;
+    }
+
+    public FormEntryPage checkIfImageViewIsDisplayed() {
+        onView(withTagValue(is("ImageView"))).check(matches(isDisplayed()));
         return this;
     }
 

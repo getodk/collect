@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>defaultImageAnswer</h:title>
+        <model>
+            <instance>
+                <defaultImageAnswer id="defaultImageAnswer">
+                    <annotate_image_widget>doc.png</annotate_image_widget>
+                    <signature_widget>doc.png</signature_widget>
+                    <signature_widget2>jr://images/doc.png</signature_widget2>
+                    <image_widget>doc.png</image_widget>
+                    <meta>
+                        <instanceID />
+                    </meta>
+                </defaultImageAnswer>
+            </instance>
+            <bind nodeset="/defaultImageAnswer/annotate_image_widget" type="binary" />
+            <bind nodeset="/defaultImageAnswer/signature_widget" type="binary" />
+            <bind nodeset="/defaultImageAnswer/signature_widget2" type="binary" />
+            <bind nodeset="/defaultImageAnswer/image_widget" type="binary" />
+            <bind jr:preload="uid" nodeset="/defaultImageAnswer/meta/instanceID" readonly="true()" type="string" />
+        </model>
+    </h:head>
+    <h:body>
+        <upload appearance="annotate" mediatype="image/*" ref="/defaultImageAnswer/annotate_image_widget">
+            <label>Annotate widget</label>
+            <hint>default: doc.png</hint>
+        </upload>
+        <upload appearance="signature" mediatype="image/*" ref="/defaultImageAnswer/signature_widget">
+            <label>Signature widget</label>
+            <hint>default: doc.png</hint>
+        </upload>
+        <upload appearance="signature" mediatype="image/*" ref="/defaultImageAnswer/signature_widget2">
+            <label>Signature widget</label>
+            <hint>default: jr://images/doc.png</hint>
+        </upload>
+        <upload mediatype="image/*" ref="/defaultImageAnswer/image_widget">
+            <label>Image widget</label>
+            <hint>default: doc.png</hint>
+        </upload>
+    </h:body>
+</h:html>
