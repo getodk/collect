@@ -163,26 +163,21 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
                 f = addDefaultImageIfExists(f);
             }
 
-            Bitmap bmp = null;
             if (f.exists()) {
-                bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
+                Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
                 if (bmp == null) {
                     errorTextView.setVisibility(View.VISIBLE);
+                } else {
+                    imageView = createAnswerImageView(getContext(), bmp);
+                    imageView.setOnClickListener(v -> {
+                        if (imageClickHandler != null) {
+                            imageClickHandler.clickImage("viewImage");
+                        }
+                    });
+
+                    answerLayout.addView(imageView);
                 }
             }
-
-            imageView = createAnswerImageView(getContext(), bmp);
-            imageView.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    if (imageClickHandler != null) {
-                        imageClickHandler.clickImage("viewImage");
-                    }
-                }
-            });
-
-            answerLayout.addView(imageView);
         }
     }
 
