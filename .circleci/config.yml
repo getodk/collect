@@ -177,7 +177,7 @@ jobs:
               --device model=Pixel2,version=27,locale=en,orientation=portrait \
               --results-bucket opendatakit-collect-test-results \
               --environment-variables coverage=true,coverageFile=/sdcard/coverage.ec \
-              --directories-to-pull /sdcard --timeout 20m
+              --directories-to-pull /sdcard --timeout 30m
             fi
           no_output_timeout: 60m
       - run:
