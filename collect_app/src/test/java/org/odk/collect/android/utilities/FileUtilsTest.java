@@ -1,12 +1,9 @@
 package org.odk.collect.android.utilities;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
@@ -278,49 +275,5 @@ public class FileUtilsTest {
         assertThat(metadataFromFormDefinition.get(FileUtils.TITLE), is("Setgeopoint before"));
         assertThat(metadataFromFormDefinition.get(FileUtils.FORMID), is("set-geopoint-before"));
         assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is("/data/location1"));
-    }
-
-    @Test
-    public void testInsertHeaderRowIntoEmptyFile() throws IOException {
-        final String headerRow = "header row";
-
-        // setup
-        File tempFile = File.createTempFile("testInsertHeaderRow", "");
-        tempFile.deleteOnExit();
-
-        Assert.assertTrue(FileUtils.replaceHeaderRow(tempFile, headerRow));
-
-        // check the results
-        StringBuilder results = new StringBuilder();
-        BufferedReader reader = new BufferedReader(new FileReader(tempFile));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            results.append(line);
-        }
-        assertEquals("header row", results.toString());
-    }
-
-    @Test
-    public void testReplaceHeaderRow() throws IOException {
-        final String headerRow = "new header row";
-
-        // setup
-        File tempFile = File.createTempFile("testInsertHeaderRow", "");
-        tempFile.deleteOnExit();
-        BufferedWriter out = new BufferedWriter(new FileWriter(tempFile));
-        out.write("old header row\n");
-        out.write("data row\n");
-        out.close();
-
-        Assert.assertTrue(FileUtils.replaceHeaderRow(tempFile, headerRow));
-
-        // check the results
-        StringBuilder results = new StringBuilder();
-        BufferedReader reader = new BufferedReader(new FileReader(tempFile));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            results.append(line + "\n");
-        }
-        assertEquals("new header row\ndata row\n", results.toString());
     }
 }
