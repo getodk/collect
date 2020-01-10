@@ -17,6 +17,7 @@
 package org.odk.collect.android.adapters;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -29,8 +30,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.logic.DriveListItem;
+import org.odk.collect.android.provider.FormsProviderAPI;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -42,6 +47,8 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
 
     private final List<DriveListItem> items;
 
+    private FormsDao formsDao;
+
     public FileArrayAdapter(Context context, List<DriveListItem> filteredDriveList) {
         super(context, R.layout.form_chooser_list_item_multiple_choice, filteredDriveList);
         items = filteredDriveList;
@@ -52,12 +59,14 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
         TextView formTitle;
         TextView formSubtitle;
         CheckBox checkBox;
+        TextView formUpdateAlert;
 
         ViewHolder(View view) {
             imageView = view.findViewById(R.id.image);
             formTitle = view.findViewById(R.id.form_title);
             formSubtitle = view.findViewById(R.id.form_subtitle);
             checkBox = view.findViewById(R.id.checkbox);
+            formUpdateAlert = view.findViewById(R.id.form_update_alert);
         }
 
         void onBind(DriveListItem item) {
@@ -76,6 +85,9 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
                 Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_blank);
                 imageView.setImageDrawable(d);
                 checkBox.setVisibility(View.VISIBLE);
+                if(isNewVersion(item)) {
+                    formUpdateAlert.setVisibility(View.VISIBLE);
+                }
             } else {
                 Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.ic_folder);
                 imageView.setImageDrawable(d);
@@ -102,5 +114,17 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
         }
         holder.onBind(items.get(position));
         return view;
+    }
+
+    private boolean isNewVersion(DriveListItem item) {
+        formsDao = new FormsDao();
+        Cursor cursor = formsDao.getFormsCursorForFormFilePath(Collect.FORMS_PATH + File.separator + item.getName());
+        if(cursor != null && cursor.getCount() > 0){
+            cursor.moveToNext();
+            Long savedTime = cursor.getLong(cursor.getColumnIndex(FormsProviderAPI.FormsColumns.DATE));
+            Long modifiedTime = item.getDate().getValue();
+            return modifiedTime > savedTime;
+        }
+        return false;
     }
 }
