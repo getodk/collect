@@ -120,6 +120,9 @@
         <Bug pattern="WMI_WRONG_MAP_ITERATOR" />
     </Match>
     <Match>
+        <Bug pattern="SBSC_USE_STRINGBUFFER_CONCATENATION" />
+    </Match>
+    <Match>
         <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
     </Match>
     <Match>
@@ -128,10 +131,22 @@
 
     <!-- Dodgy code Warnings -->
     <Match>
+        <Bug pattern="DB_DUPLICATE_SWITCH_CLAUSES" />
+    </Match>
+    <Match>
+        <Bug pattern="INT_BAD_REM_BY_1" />
+    </Match>
+    <Match>
         <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD" />
     </Match>
     <Match>
         <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE" />
+    </Match>
+    <Match>
+        <Bug pattern="NS_NON_SHORT_CIRCUIT" />
+    </Match>
+    <Match>
+        <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE" />
     </Match>
     <Match>
         <Bug pattern="SF_SWITCH_NO_DEFAULT" />
