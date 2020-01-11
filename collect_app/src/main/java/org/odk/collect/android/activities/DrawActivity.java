@@ -31,6 +31,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 
 import com.google.common.collect.ImmutableList;
 import com.rarepebble.colorpicker.ColorPickerView;
@@ -104,6 +105,8 @@ public class DrawActivity extends CollectAbstractActivity {
         fabActions = findViewById(R.id.fab_actions);
         final FloatingActionButton fabSetColor = findViewById(R.id.fab_set_color);
         final CardView cardViewSetColor = findViewById(R.id.cv_set_color);
+        final FloatingActionButton fabSetLineWidth = findViewById(R.id.fab_set_line_width);
+        final CardView cardViewSetLineWidth = findViewById(R.id.cv_set_line_width);
         final FloatingActionButton fabSaveAndClose = findViewById(R.id.fab_save_and_close);
         final CardView cardViewSaveAndClose = findViewById(R.id.cv_save_and_close);
         final FloatingActionButton fabClear = findViewById(R.id.fab_clear);
@@ -120,6 +123,8 @@ public class DrawActivity extends CollectAbstractActivity {
 
                     AnimateUtils.scaleInAnimation(fabSetColor, 50, 150, new OvershootInterpolator(), true);
                     AnimateUtils.scaleInAnimation(cardViewSetColor, 50, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.scaleInAnimation(fabSetLineWidth, 50, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.scaleInAnimation(cardViewSetLineWidth, 50, 150, new OvershootInterpolator(), true);
                     AnimateUtils.scaleInAnimation(fabSaveAndClose, 100, 150, new OvershootInterpolator(), true);
                     AnimateUtils.scaleInAnimation(cardViewSaveAndClose, 100, 150, new OvershootInterpolator(), true);
                     AnimateUtils.scaleInAnimation(fabClear, 150, 150, new OvershootInterpolator(), true);
@@ -127,6 +132,8 @@ public class DrawActivity extends CollectAbstractActivity {
 
                     fabSetColor.show();
                     cardViewSetColor.setVisibility(View.VISIBLE);
+                    fabSetLineWidth.show();
+                    cardViewSetLineWidth.setVisibility(View.VISIBLE);
                     fabSaveAndClose.show();
                     cardViewSaveAndClose.setVisibility(View.VISIBLE);
                     fabClear.show();
@@ -138,6 +145,8 @@ public class DrawActivity extends CollectAbstractActivity {
 
                     fabSetColor.hide();
                     cardViewSetColor.setVisibility(View.INVISIBLE);
+                    fabSetLineWidth.hide();
+                    cardViewSetLineWidth.setVisibility(View.INVISIBLE);
                     fabSaveAndClose.hide();
                     cardViewSaveAndClose.setVisibility(View.INVISIBLE);
                     fabClear.hide();
@@ -327,16 +336,35 @@ public class DrawActivity extends CollectAbstractActivity {
         if (view.getVisibility() == View.VISIBLE) {
             fabActions.performClick();
 
-            final ColorPickerView picker = new ColorPickerView(this);
-            picker.setColor(drawView.getColor());
-            picker.showAlpha(false);
-            picker.showHex(false);
+            final ColorPickerView colorPicker = new ColorPickerView(this);
+            colorPicker.setColor(drawView.getColor());
+            colorPicker.showAlpha(false);
+            colorPicker.showHex(false);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder
+                    .setView(colorPicker)
+                    .setPositiveButton(R.string.ok, (dialog, which) -> drawView.setColor(colorPicker.getColor()))
+                    .show();
+        }
+    }
+
+    public void setLineWidth(View view) {
+        if (view.getVisibility() == View.VISIBLE) {
+            fabActions.performClick();
+
+            final NumberPicker picker = new NumberPicker(this);
+            picker.setMaxValue(100);
+            picker.setMinValue(1);
+            picker.setValue((int) drawView.getStrokeWidth());
+            picker.setWrapSelectorWheel(true);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder
                     .setView(picker)
-                    .setPositiveButton(R.string.ok, (dialog, which) -> drawView.setColor(picker.getColor()))
+                    .setPositiveButton(R.string.ok, (dialog, which) -> drawView.setStrokeWidth(picker.getValue()))
                     .show();
         }
+
     }
 }

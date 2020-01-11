@@ -49,6 +49,7 @@ public class DrawView extends View {
     private float valueY;
 
     private int currentColor = 0xFF000000;
+    private float currentStrokeWidth = 10;
 
     public DrawView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -68,14 +69,14 @@ public class DrawView extends View {
         paint.setColor(currentColor);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeJoin(Paint.Join.ROUND);
-        paint.setStrokeWidth(10);
+        paint.setStrokeWidth(currentStrokeWidth);
 
         pointPaint = new Paint();
         pointPaint.setAntiAlias(true);
         pointPaint.setDither(true);
         pointPaint.setColor(currentColor);
         pointPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        pointPaint.setStrokeWidth(10);
+        pointPaint.setStrokeWidth(currentStrokeWidth);
     }
 
     public void reset() {
@@ -201,7 +202,17 @@ public class DrawView extends View {
         pointPaint.setColor(color);
     }
 
+    public void setStrokeWidth(float width) {
+        currentStrokeWidth = width;
+        paint.setStrokeWidth(width);
+        pointPaint.setStrokeWidth(width);
+    }
+
     public int getColor() {
         return currentColor;
+    }
+
+    public float getStrokeWidth() {
+        return currentStrokeWidth;
     }
 }

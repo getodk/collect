@@ -724,4 +724,5 @@
     <string name="reason">Reason</string>
     <string name="save">Save</string>
     <string name="reason_for_changes_description">You need to explain the reason for changes to this form</string>
+    <string name="set_line_width">Set Line Width</string>
 </resources>
